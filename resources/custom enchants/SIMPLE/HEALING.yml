@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Healing"
+lore:
+- "&eHeals friendly players hit with arrow"
+- "&eshot by this bow. Also has a chance"
+- "&eto increase durability of armor and"
+- "&egive absorption/health boost."
+#
+max level: 4
+applies to: "bow"
+#
+alchemist: "950:1400:1850"
+tinkerer: "54:63:72:81"
+#
+attributes:
+- ""

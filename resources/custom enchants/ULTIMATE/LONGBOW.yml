@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Longbow"
+lore:
+- "&eGreatly increases damage dealt to"
+- "&eenemy players that have a bow in"
+- "&etheir hands."
+#
+max level: 4
+applies to: "bow"
+#
+alchemist: "4500:5000:5500"
+tinkerer: "58:71:84:97"
+#
+attributes:
+- "ArrowHit;chance=45+(5*level);if{[victim]isHolding(BOW)->setDamage{dmg*(1+(0.12*level))}&&sendMessage{[damager]&e&l** LONGBOW **}}"

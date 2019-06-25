@@ -1,0 +1,37 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 8
+  #
+  item: "apple"
+  name: "Trickster Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHand of Harambe"
+  - "&f&l* &6&lFarcasting Bow of Nootaikok"
+  - " "
+  - "&7Troll the galaxy... with Harambe."
+  - "&6* April Fools 2015"
+#
+items:
+  bow:
+    item: "bow"
+    name: "&6&lFarcasting Bow of Nootaikok {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Power5;Unbreaking2;Infinity1}"
+    - "RPEnchants{Sniper;Hellfire;Farcast;Snare}"
+    - "&6&oAh yes, Nootaikok, the god of... bow spam?"
+  arrow:
+    item: "arrow"
+    name: "&fMeme Generator"
+    lore:
+    - "&7A legendary arrow that turns"
+    - "&7anything it touches into a meme..."
+    - " "
+    - "&7lol jk"
+#

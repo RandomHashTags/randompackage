@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Solitude"
+lore:
+- "&eIncreases chance and length of the"
+- "&eSilence enchantment procing on enemy"
+- "&eplayers by up to 3X."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: "4500:5200"
+tinkerer: "57:66:75"
+#
+attributes:
+- ""

@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Ghostly Ghost"
+lore:
+- "&e"
+#
+max level: 3
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Ghost;3"
+#
+attributes:
+- ""

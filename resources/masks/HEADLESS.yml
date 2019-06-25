@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/59dee2e814cd4b5e933d8f2b30a0bc2a583552cbe3dae581bec09fbb6eb07e"
+#
+item:
+  item: "player_head_item"
+  name: "&6&lHeadless Mask"
+  lore:
+  - "&7A terrifying Mask from the"
+  - "&7grave of the Headless Horseman."
+  - " &6&l*&r October 2018"
+#
+added lore:
+  - "&7&lATTACHED:&r &6&lHeadless Mask"

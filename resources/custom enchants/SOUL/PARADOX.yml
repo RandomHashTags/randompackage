@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Paradox"
+lore:
+- "&ePassive Soul Enchantment. Heals all"
+- "&enearby allies in a massive area"
+- "&earound you for a portion of all"
+- "&edamage dealt to you. Costs 5 souls"
+- "&eper use."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "7000:9000:11000:13000"
+tinkerer: "170:195:220:245:270"
+#
+attributes:
+- "isDamaged;DepleteRarityGem{SOUL:5};heal{nearbyAllies{victim:victim:75:75:75}dmg/2}"

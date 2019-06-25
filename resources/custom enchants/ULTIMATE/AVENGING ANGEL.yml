@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Avenging Angel"
+lore:
+- "&eHeal to full Hp when an ally dies"
+- "&ewithin up to 100 blocks of your"
+- "&elocation and receive absorption"
+- "&ehearts for up to 10 seconds (based on"
+- "&elevel)."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

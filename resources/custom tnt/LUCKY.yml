@@ -1,0 +1,12 @@
+# Made hy RandomHashTags
+item:
+  item: "tnt"
+  name: "&eLucky TNT"
+  lore:
+  - "&e&oIncreases chances of spawner drops."
+  - " "
+  - "&7200% the normal chance of a"
+  - "&7spawner dropping from explosion."
+#
+attributes:
+  - "INCREASE_SPAWNER_DROP;4.00"

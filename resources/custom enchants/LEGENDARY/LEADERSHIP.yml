@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Leadership"
+lore:
+- "&eThe more allies near you, the more"
+- "&edamage you deal."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "4000:5000:6000:7000"
+tinkerer: "63:75:87:99:111"
+#
+attributes:
+- "PvA;setDamage{dmg*(1+(.05*(nearbyAlliesSize{damager:damager:level+6:level+6:level+6}*(.25*level))))}"

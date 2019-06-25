@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Oxygenate"
+lore:
+- "&eRefills oxygen levels when breaking"
+- "&eblocks underwater."
+#
+max level: 1
+applies to: "pickaxe"
+#
+tinkerer: "73"
+#
+attributes:
+- "BlockBreak;chance=70+(5*level);if{[player]isUnderwater->refillAir{[player]40}}"

@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "$WonInCoinflip"
+  duration: 86400
+  type: "Money Won in Coinflips"
+#
+item:
+  item: "anvil"
+  name: "&a&lMost Money Won in Coinflips"
+#

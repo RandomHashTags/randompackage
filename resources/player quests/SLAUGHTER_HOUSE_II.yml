@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Slaughter House II"
+  completion: 10
+  expiration: 86400
+#
+lore:
+- "&7Kill 10 enemy faction players"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "KilledPlayer;isEnemy;+1"

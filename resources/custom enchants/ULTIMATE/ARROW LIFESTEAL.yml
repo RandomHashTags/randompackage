@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Arrow Lifesteal"
+lore:
+- "&eA chance to steal health from"
+- "&eopponent while fighting."
+#
+max level: 5
+applies to: "bow"
+#
+alchemist: "5800:6000:6200:6400"
+tinkerer: "53:65:77:89:101"
+#
+attributes:
+- "ArrowHit;chance=20+(8*level);damage{[victim]1h};heal{[shooter]1h};sendMessage{[shooter]&e&l** ARROW LIFESTEAL **}"

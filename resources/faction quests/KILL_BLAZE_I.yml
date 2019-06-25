@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Kill Blaze I"
+  completion: 1500
+#
+lore:
+- "&7Kill 1500 Blazes inside your claims"
+#
+rewards:
+- ""
+#
+trigger:
+- "KilledEntity;type=BLAZE;+1"

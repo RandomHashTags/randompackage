@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Rocket Escape"
+lore:
+- "&eBlast off into the air at low HP."
+#
+max level: 3
+applies to: "boots"
+#
+alchemist: "1250:1750"
+tinkerer: "128:139:150"
+#
+attributes:
+- "isDamaged;(Lucky*2)+(65+(5*level));if{[victim]healthIs<=:8:->addPotionEffect{[victim]jump:19+level:20+(20*level):true}&&addPotionEffect{[victim]regeneration:level:20+(20*level):true}"

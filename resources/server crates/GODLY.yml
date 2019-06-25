@@ -1,0 +1,232 @@
+# Made by RandomHashTags
+boss reward: "&c&l{AMOUNT}x GODLY"
+#
+settings:
+  title: "Godly Space Chest"
+  size: 45
+  redeemable items: 5
+  # - = background
+  # + = open-gui
+  format:
+    - "---------"
+    - "-+++++++-"
+    - "-+++++++-"
+    - "-+++++++-"
+    - "---------"
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  background 2: # Replaces the items when the items are revealed
+    item: "black_stained_glass"
+    name: " "
+#
+reveal chances:
+  LEGENDARY: 5
+  ULTIMATE: 10
+  ELITE: 15
+  UNIQUE: 20
+  SIMPLE: 25
+#
+item:
+  item: "trapped_chest:0"
+  name: "&c&lGodly Server Chest &7(Right Click)"
+  lore:
+  - "&7A cache of equipment packed by"
+  - "&7the Intergalactic Server Station."
+  - " "
+  - "&7Contains &c&n5 Godly rarity&r &7items..."
+  - "&c&l*&r &7Godly Equipment"
+  - "&c&l*&r &7Godly /gkit Items"
+  - "&c&l*&r &7Yijki / Plague Bloater Boss Eggs"
+  - "&c&l*&r &7200 Level mcMMO Voucher"
+  - "&c&l*&r &7$4,000,000 Money Notes"
+  - "&c&l*&r &7100,000-200,000XP Bottles"
+  - "&c&l*&r &7Legendary Enchantment Books"
+  - "&c&l*&r &7Cosmic Envoy Summon"
+  - "&c&l*&r &7Nether Mob Spawners"
+  - "&c&l*&r &7Lucky Creepers/TNT"
+  - "&c&l*&r &7Mystery Mob Spawners"
+  - "&c&l*&r &7Godly Randomization Scrolls"
+  - "&c&l*&r &711 Slot Enchantment Orbs"
+  - "&c&l*&r &7/gkit + /vkit Fallen Heroes"
+  - "&c&l*&r &7Soul Enchantment Books"
+  - "&c&l*&r &7Faction Crystals"
+  - "&c&l*&r &7Depth Strider Books"
+  - "&c&l*&r &7Mystery Cosmic Crate"
+  - "&c&l*&r &7Tier #5 Rank Quest"
+  - "&c&l*&r &7Heroic Rank Crystal"
+  - "&c... and much more!"
+#
+flare:
+  settings:
+    spawn radius: 12
+    spawn in delay: 6
+    nearby radius: 50
+  item: "torch"
+  name: "&c&lGodly Space Flare&r &7(Right Click)"
+  lore:
+  - "&7Drops a cache of equipment packaged by"
+  - "&7the &nIntergalactic Cosmonaut Station,"
+  - "&7near your character's current position."
+  #
+  request msg:
+  - "&c&l** Godly Space Flare **"
+  - "&7Your request for &61x Loot Cache(s) &7has been received"
+  - "&7Transmitting coordinates... &ax:{X} y:{Y} z:{Z}"
+  nearby spawn msg:
+  - "&3&l(!)&r &3A &c&nGodly Space Flare&r &3has been launched nearby!"
+#
+display:
+  rarity: "&cGodly"
+  item: "red_stained_glass_pane"
+  name: "&c&lGodly Mystery Item"
+  lore:
+  - "&7Click here to reveal a"
+  - "{LOOT_RARITY} &7item from the {SC_RARITY}"
+  - "&7loot table."
+  - " "
+  - "&c&l+100%&r &cRare Loot Chance"
+#
+open gui:
+  item: "red_stained_glass"
+  name: "&c&l???&r &7#{SLOT}"
+  lore:
+  - "&7Choose &c&n5 mystery items&r &7and,"
+  - "&7your &c&lGodly&r &7loot will be revealed."
+#
+selected: # When you select a "open-gui" item, this item replaces the clicked item
+  item: "trapped_chest"
+  name: "&c&lMystery Item &n#{SLOT}"
+  lore:
+  - "&7You have selected this mystery item."
+#
+reveal slot rarity:
+  item: "trapped_chest:0"
+  name: "&c&lMystery Item &n#{SLOT}"
+  lore:
+  - "&7You have selected this mystery item."
+  - " "
+  - "&7&nClick to reveal slot rarity..."
+  - "&f&l*&r &fSimple"
+  - "&a&l*&r &aUnique"
+  - "&b&l*&r &bElite"
+  - "&e&l*&r &eUltimate"
+  - "&6&l*&r &6Legendary"
+#
+rewards:
+  LEGENDARY:
+    - "customboss:BROOD_MOTHER"
+    - "customboss:KING_SLIME"
+    - "mcmmolevelvoucher:random:200"
+    - "banknote:4000000"
+    - "xpbottle:100000-200000"
+    - "raritybook:LEGENDARY;amount=3"
+    - "envoysummon"
+    - "blazespawner"
+    - "ghastspawner"
+    - "customcreeper:LUCKY;amount=10"
+    - "customtnt:LUCKY;amount=8"
+    - "mysterymobspawner"
+    - "randomizationscroll:GODLY"
+    - "enchantmentorb:weapon12:75"
+    - "enchantmentorb:armor12:75"
+    - "gkitfallenhero:random"
+    - "vkitfallenhero:random"
+    - "raritybook:SOUL"
+    - "factioncrystal;amount=16"
+    - "enchantedbook:depth_strider"
+    - "servercrate:random"
+    - "soultracker:random"
+  ULTIMATE:
+    - "customboss:BROOD_MOTHER"
+    - "customboss:KING_SLIME"
+    - "mcmmolevelvoucher:random:200"
+    - "banknote:4000000"
+    - "xpbottle:100000-200000"
+    - "raritybook:LEGENDARY;amount=3"
+    - "envoysummon"
+    - "blazespawner"
+    - "ghastspawner"
+    - "customcreeper:LUCKY;amount=10"
+    - "customtnt:LUCKY;amount=8"
+    - "mysterymobspawner"
+    - "randomizationscroll:GODLY"
+    - "enchantmentorb:weapon12:75"
+    - "enchantmentorb:armor12:75"
+    - "gkitfallenhero:random"
+    - "vkitfallenhero:random"
+    - "raritybook:SOUL"
+    - "factioncrystal;amount=16"
+    - "enchantedbook:depth_strider"
+    - "servercrate:random"
+    - "soultracker:random"
+  ELITE:
+    - "customboss:BROOD_MOTHER"
+    - "customboss:KING_SLIME"
+    - "mcmmolevelvoucher:random:200"
+    - "banknote:4000000"
+    - "xpbottle:100000-200000"
+    - "raritybook:LEGENDARY;amount=3"
+    - "envoysummon"
+    - "blazespawner"
+    - "ghastspawner"
+    - "customcreeper:LUCKY;amount=10"
+    - "customtnt:LUCKY;amount=8"
+    - "mysterymobspawner"
+    - "randomizationscroll:GODLY"
+    - "enchantmentorb:weapon12:75"
+    - "enchantmentorb:armor12:75"
+    - "gkitfallenhero:random"
+    - "vkitfallenhero:random"
+    - "raritybook:SOUL"
+    - "factioncrystal;amount=16"
+    - "enchantedbook:depth_strider"
+    - "servercrate:random"
+    - "soultracker:random"
+  UNIQUE:
+    - "customboss:BROOD_MOTHER"
+    - "customboss:KING_SLIME"
+    - "mcmmolevelvoucher:random:200"
+    - "banknote:4000000"
+    - "xpbottle:100000-200000"
+    - "raritybook:LEGENDARY;amount=3"
+    - "envoysummon"
+    - "blazespawner"
+    - "ghastspawner"
+    - "customcreeper:LUCKY;amount=10"
+    - "customtnt:LUCKY;amount=8"
+    - "mysterymobspawner"
+    - "randomizationscroll:GODLY"
+    - "enchantmentorb:weapon12:75"
+    - "enchantmentorb:armor12:75"
+    - "gkitfallenhero:random"
+    - "vkitfallenhero:random"
+    - "raritybook:SOUL"
+    - "factioncrystal;amount=16"
+    - "enchantedbook:depth_strider"
+    - "servercrate:random"
+    - "soultracker:random"
+  SIMPLE:
+    - "customboss:BROOD_MOTHER"
+    - "customboss:KING_SLIME"
+    - "mcmmolevelvoucher:random:200"
+    - "banknote:4000000"
+    - "xpbottle:100000-200000"
+    - "raritybook:LEGENDARY;amount=3"
+    - "envoysummon"
+    - "blazespawner"
+    - "ghastspawner"
+    - "customcreeper:LUCKY;amount=10"
+    - "customtnt:LUCKY;amount=8"
+    - "mysterymobspawner"
+    - "randomizationscroll:GODLY"
+    - "enchantmentorb:weapon12:75"
+    - "enchantmentorb:armor12:75"
+    - "gkitfallenhero:random"
+    - "vkitfallenhero:random"
+    - "raritybook:SOUL"
+    - "factioncrystal;amount=16"
+    - "enchantedbook:depth_strider"
+    - "servercrate:random"
+    - "soultracker:random"
+#

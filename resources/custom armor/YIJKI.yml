@@ -1,0 +1,50 @@
+# Made by RandomHashTags
+armor lore:
+- " "
+- "&f&lYIJKI SET BONUS"
+- "&f&l*&r &fEnemies deal 30% less damage to you."
+- "&f&l*&r &fRevenge of Yijki Passive Ability"
+- "&7&o(Requires all 4 yijki items.)"
+#
+helmet:
+  item: "diamond_helmet"
+  name: "&f&lMask of Yijki the Destroyer of Worlds&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Drunk;Armored;Enlighted;Deathbringer;Implants;Angelic;Tank;Hardened;Repair Guard;Dodge;Guardians;Valor;Pacify}"
+  - "&f&oThe god-mask of Yijki, imbued with"
+  - "&f&othe power of absolute destruction."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&f&lMantel of Yijki the Destroyer of Worlds&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Godly Overload;Blood Lust;Dodge;Angelic;Tank;Leadership;Aegis;Blood Link;Valor;Arrow Deflect;Spirit Link;Hardened;Deathbringer}"
+  - "&f&oThe forebidden mantel of Yijki,"
+  - "&f&owoven from the dust of fallen stars."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&f&lRobeset of Yijki the Destroyer of Worlds&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Obsidianshield;Tank;Angelic;Cactus;Natures Wrath;Valor;Dodge;Lucky;Hardened;Death God;Metaphyiscal}"
+  - "&f&oThe fabled robes of Yijki,"
+  - "&f&ohalf angelic, half demonic."
+#
+boots:
+  item: "diamond_boots"
+  name: "&f&lFootwraps of Yijki the Destroyer of Worlds&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape;Sticky;Hardened;Guardians;Dodge;Valor;Ender Walker;Diminish;Angelic}"
+  - "&f&oLight as a feather, heavy as"
+  - "&f&oa mountain - the footwraps of Yijki."
+#
+attributes:
+  - "isDamaged;setDamage{dmg*0.70}"
+  - "isDamaged;chance=10;{lightning;10;10;3},{message=&5&l** REVENGE OF YIJKI (&r&c<PLAYER> [1.5s]&5&l) **;radius=10}"
+#
+activate message:
+  - "&c&l(!) MOTHER OF YIJKI SET BONUS: &C-30% DMG"

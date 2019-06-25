@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/29ec534213a29e4dc818dbe7f93ac6d573186e456588ba454aa48c651db15d"
+#
+item:
+  item: "player_head_item"
+  name: "&b&lZeus Mask"
+  lore:
+  - "&cImmune to Natures Wrath"
+  - "&7Channel the powers of the"
+  - "&7King of the Greek Gods"
+  - " &6&l*&r &6April Showers Lootbox Release"
+#
+attributes:
+  - ""
+#
+added lore:
+  - "&7&lATTACHED:&r &b&lZeus Mask&r &f(&cImmune to Natures Wrath&f)"

@@ -1,0 +1,58 @@
+# Made by RandomHashTags
+armor lore:
+  - " "
+  - "&4&lSUPREME SET BONUS"
+  - "&4&l*&r &4Gears IV"
+  - "&4&l*&r &4No Fall Damage / Food Loss"
+  - "&4&l*&r &4Deal +15% damage to all enemies"
+  - "&4&l*&r &4Enemy arrows deal 10% more damage to you."
+  - "&4&l*&r &4+200% Clout"
+  - "&7&o(Requires all 4 supreme items.)"
+#
+helmet:
+  item: "diamond_helmet"
+  name: "&c&lSupreme Headgear&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Enlighted;Deathbringer;Drunk;Armored;Dodge;Marksman;Heavy;Spirits;Valor;Angelic;Tank;Smoke Bomb;Hardened}"
+  - "&c&oA lightweight headpiece"
+  - "&c&ofit for take off."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&c&lSupreme Vest&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Blood Link;Enlighted;Diminish;Deathbringer;Aegis;Leadership;Armored;Overload;Blood Lust;Marksman;Angelic;Tank;Repair Guard}"
+  - "&c&oAn aerodynamic vest that"
+  - "&c&ois capable of sustaining flight."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&c&lSupreme Chaps&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Enlighted;Deathbringer;Armored;Protection;Clarity;Obsidianshield;Lucky;Guardians;Sticky;Valor;Angelic;Tank;Cactus}"
+  - "&c&oLightweight and clout powered,"
+  - "&c&oprovides enough thrust to boost"
+  - "&c&oeven the most feeble into the skies."
+#
+boots:
+  item: "diamond_boots"
+  name: "&c&lSupreme Thruster Boots&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;DepthStrider3;Unbreaking3}"
+  - "RPEnchants{Enlighted;Deathbringer;Armored;Gears;Marksman;Heavy;Ender Walker;Angelic;Tank;Ghost;Springs;Hardened;Rocket Escape}"
+  - "&c&oSupreme boots capable of"
+  - "&c&oconverting clout into flight."
+#
+attributes:
+  - "ArmorSetEquip;removePotionEffect{speed:false}"
+  - "ArmorSetEquip;addPotionEffect{speed:3:99999:false}"
+  - "ArmorSetUnequip;removePotionEffect{speed:false}"
+  - "ArmorPieceBreak;removePotionEffect{speed:false}"
+  - "DamagedBy(FALL);cancel"
+  - "FoodLevelLost;cancel"
+  - "PvA;setDamage{dmg*1.15}"
+  - "HitByArrow;setDamage{dmg*1.10}"
+#

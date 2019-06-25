@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Protection"
+lore:
+- "&eAutomatically heals and buffs all"
+- "&enearby faction allies."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "7000:8000:9000:10000"
+tinkerer: "65:76:87:98:109"
+#
+attributes:
+- "Timer(120);heal{nearbyAllies{player:player:5*level:5*level:5*level}1h}"

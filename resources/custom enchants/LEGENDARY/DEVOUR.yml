@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Devour"
+lore:
+- "&eMultiplies damage dealt to players"
+- "&ewith active bleed stacks from the"
+- "&eBleed enchantment."
+#
+max level: 4
+applies to: "_axe"
+#
+alchemist: "6000:7000:8000"
+tinkerer: "108:117:126:135"
+#
+attributes:
+- "PvP;if{hasBleedStacks->setDamage{dmg*(1+(0.05*level))}}"

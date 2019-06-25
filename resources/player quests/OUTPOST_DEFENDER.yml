@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Outpost Defender"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Cap an Outpost"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "OutpostCapture;+1"

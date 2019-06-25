@@ -1,0 +1,174 @@
+# Made by RandomHashTags
+messages:
+  no longer available:
+    - "&cCoin Flip Match no longer available!"
+  cannot afford:
+    - "&c&l(!)&r &cYou cannot afford this Coin Flip wager!"
+    - "&7Current Balance: &l$&r&7{BAL}"
+  wager needs to be more:
+    - "&c&l(!)&r &cYou must wager at least ${MIN}!"
+  cancel dont have one:
+    - "&c&l(!)&r &cYou are not in a Coin Flip Match!"
+  cancelled:
+    - "&c&l(!)&r &cYour Coin Flip Match has been cancelled!"
+  must enter valid amount:
+    - "&c&l(!)&r &cYou must enter a valid wager amount!"
+  already in a match:
+    - "&c&l(!)&r &cYou are already in a Coin Flip match!"
+  #
+  created:
+    - "&a&l(!)&r &aCoin Flip queued, waiting for opponent to /coinflip."
+    - "&7To cancel your Coin Flip match, use '/coinflip cancel'"
+  winner:
+    - "&7&l**&r {WINNING_COLOR}&l■&r &a{WINNER} &7has defeated {LOSING_COLOR}&l■&r &c{LOSER} &7in a &n${WAGER}&r &7/coinflip!"
+  #
+  stats:
+    - " "
+    - "&e&lCoin Flip Stats"
+    - "&eTotal Wins: &b&n{WINS}&r &7- &b&l$&r&b{WON$}"
+    - "&eTotal Losses: &b&n{LOSSES}&r &7- &b&l$&r&b{LOST$}"
+    - "&eTaxes Paid: &l$&r&e{TAXES}"
+    - " "
+#
+min wager: 10000
+#
+wager:
+  tax: 0.05
+  #
+  status:
+    cannot afford:
+      - "&7You can &c&lNOT&r &7afford this wager!"
+    can afford:
+      - "&7Click to accept this coin flip wager"
+  #
+  name: "&a&l{PLAYER}"
+  lore:
+    - " "
+    - "&e&lWager"
+    - " &7&l$&r&7{WAGER}"
+    - " &7&o-5% Tax&r &7(${TAX})"
+    - " "
+    - "&e&lColor Chosen"
+    - "{CHOSEN}"
+    - " "
+    - "{STATUS}"
+#
+challenge:
+  title: "Coin Flip Match (${WAGER})"
+  size: 9
+  your selection: "{COLOR}Your Color"
+  opponent selection: "{COLOR}{PLAYER}'s Color"
+  countdown:
+    item: "white_stained_glass_pane"
+    name: "&7&l{TIME}s"
+    lore:
+      - "&7Rolling in {TIME}s..."
+  #
+  rolling:
+    name: "{SELECTION_COLOR}"
+    lore:
+      - "&7Rolling..."
+  #
+  creator:
+    slot: 0
+  creator selection:
+    slot: 1
+  #
+  winner:
+    slot: 4
+    name: "{COLOR}&l{PLAYER}"
+    lore:
+      - "{COLOR}{PLAYER} &7has won the Coin Flip!"
+  #
+  challenger selection:
+    slot: 7
+  challenger:
+    slot: 8
+  #
+#
+gui:
+  title: "Coin Flip Matches"
+  #
+  options:
+    title: "Choose a Color"
+    size: 9
+    #
+    countdown: 3
+    added lore:
+      - "&7Click to select this color"
+      - "&7and start the coin flip for"
+      - "&a&l$&r&a{WAGER}"
+    #
+    one:
+      slot: 0
+      chosen: "&d&lPurple"
+      item: "magenta_wool"
+      name: "&dPurple"
+      selection:
+        item: "magenta_stained_glass_pane"
+        color: "&d"
+    two:
+      slot: 1
+      chosen: "&b&lBlue"
+      item: "cyan_wool"
+      name: "&bBlue"
+      selection:
+        item: "cyan_stained_glass_pane"
+        color: "&b"
+    three:
+      slot: 2
+      chosen: "&c&lRed"
+      item: "red_wool"
+      name: "&cRed"
+      selection:
+        item: "red_stained_glass_pane"
+        color: "&c"
+    four:
+      slot: 3
+      chosen: "&a&lGreen"
+      item: "lime_wool"
+      name: "&aGreen"
+      selection:
+        item: "lime_stained_glass_pane"
+        color: "&a"
+    five:
+      slot: 4
+      chosen: "&0&lBlack"
+      item: "black_wool"
+      name: "&0Black"
+      selection:
+        item: "black_stained_glass_pane"
+        color: "&0"
+    six:
+      slot: 5
+      chosen: "&e&lYellow"
+      item: "yellow_wool"
+      name: "&eYellow"
+      selection:
+        item: "yellow_stained_glass_pane"
+        color: "&e"
+    seven:
+      slot: 6
+      chosen: "&6&lOrange"
+      item: "orange_wool"
+      name: "&6Orange"
+      selection:
+        item: "orange_stained_glass_pane"
+        color: "&6"
+    eight:
+      slot: 7
+      chosen: "&f&lWhite"
+      item: "white_wool"
+      name: "&fWhite"
+      selection:
+        item: "white_stained_glass_pane"
+        color: "&f"
+    nine:
+      slot: 8
+      chosen: "&7&lGray"
+      item: "gray_wool"
+      name: "&7Gray"
+      selection:
+        item: "gray_stained_glass_pane"
+        color: "&7"
+#

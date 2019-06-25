@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Kill Boss Brood Mother I"
+  completion: 1
+#
+lore:
+- "&7Kill a &5&lBrood Mother"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Mighty Cleave"
+lore:
+- "&eThe heroic v of Cleave. Deals"
+- "&eup to 8 damage in up to a 4.25 block"
+- "&eradius."
+#
+max level: 4
+applies to: "_axe"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Cleave;7"
+#
+attributes:
+- "PvA;chance=4+(3*level);damage{nearby{damager:victim:1.0625*level:1.0625*level:1.0625*level}level*2}"

@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Rage"
+lore:
+- "&eFor every combo hit you land, your"
+- "&edamage is multiplied by 1.1x."
+#
+max level: 6
+applies to: "sword;_axe;bow"
+#
+alchemist: "6000:7000:8000:9000:10000"
+tinkerer: "139:151:163:175:187:199"
+#
+attributes:
+- "PvA;setDamage{dmg*combo{Rage}};createCombo{Rage:1.0};addCombo{Rage:0.1};wait{80};depleteCombo{Rage:0.1}}"

@@ -1,0 +1,87 @@
+# Made by RandomHashTags
+category: 2017
+category slot: 8
+title: "Server Crate: SEPTEMBER_2017"
+#
+item:
+  item: "ender_chest"
+  name: "&9&l*&3&l*&9&l*&r &3&lSERVER CRATE:&r &9&l&nSEPTEMBER 2017&r &9&l*&3&l*&9&l*"
+  lore:
+    - "&9Unlocked by &l{UNLOCKED_BY}&r &9at &3&nbuy.yourserver.com"
+    - " "
+    - "&f&l&nADMIN ITEMS"
+    - "&f&l*&r &fIntergalactic Fidget Spinner"
+    - " "
+    - "&e&l&nCOSMETIC ITEMS"
+    - "&e&l*&r &eLimited Edition Titles"
+    - "&e&l*&r &e4x Transmog Scrolls"
+    - "&e&l*&r &e1-2x Max Home Increase &nOR&r &eShowcase Expanders"
+    - " "
+    - "&6&l&nTREASURE ITEMS"
+    - "&6&l*&r &62x Legendary &nOR&r &6Godly Space Chests"
+    - "&6&l*&r &62-4x White &nOR&r &6Black Scrolls (100%)"
+    - "&6&l*&r &65x15m Faction XP Booster"
+    - "&6&l*&r &61x 50-75% Weapon/Armor Orb (&l12 slot&r&6)"
+    - " "
+    - "&9&l&nBONUS ITEMS"
+    - "&9&l*&r &9Mystery Server Crate"
+    - "&9&l*&r &91-2x Heroic Boss Eggs"
+    - "&9&l*&r &9Heroic Rank Crystal"
+#
+rewards:
+  - "Intergalactic Fidget Spinner"
+  - "title:188||title:193"
+  - "transmogscroll;amount=4"
+  - "maxhomeincrease;amount=1-2"
+  - "showcaseexpansion;amount=1-2"
+  - "spacechest:GODLY;amount=2||spacechest:LEGENDARY;amount=2"
+  - "whitescroll;amount=2-4||blackscroll:REGULAR:100;amount=2-4"
+  - "factionxpbooster:5.0:900||factionmcmmobooster:5.0:900"
+  - "factioncrystal;amount=10-25"
+  - "enchantmentorb:armor12:50-75||enchantmentorb:weapon12:50-75"
+#
+bonus:
+  - "mysterycrate"
+#
+# background item is represented as "=" in the redeem-format
+# bonus-1 item is represented as "-" in the redeem-bonus-format
+# bonus-2 item is represented as "=" in the redeem-bonus-format
+inventory:
+  size: 54
+  redeem format:
+    - "========="
+    - "===---==="
+    - "===---==="
+    - "===---==="
+    - "========="
+    - "====+===="
+  redeem bonus format:
+    - "=-=-=-=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-=-=-=-"
+    - "=-=-x=-=-"
+  background: # Represented as "=" in the "redeem format"
+    item: "black_stained_glass_pane"
+    name: "&7..."
+  redeem: # Represented as "-" in the "redeem format"
+    item: "ender_chest"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus: # Represented as "x" in the "redeem bonus format"
+    item: "red_stained_glass_pane"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus 1:
+    item: "lime_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  bonus 2:
+    item: "green_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  # Replaces the background items with this name when the player is about to reveal the bonus item(s)
+  unlocking name: "&a&lUNLOCKING..."

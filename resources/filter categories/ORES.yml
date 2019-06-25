@@ -1,0 +1,90 @@
+# Made by RandomHashTags
+title: "Item Filter: Ores"
+size: 27
+#
+gui:
+  iron ore:
+    slot: 0
+    item: "iron_ore"
+    name: "Iron Ore"
+  iron ingot:
+    slot: 1
+    item: "iron_ingot"
+    name: "Iron Ingot"
+  iron block:
+    slot: 2
+    item: "iron_block"
+    name: "Iron Block"
+  gold ore:
+    slot: 3
+    item: "gold_ore"
+    name: "Gold Ore"
+  gold ingot:
+    slot: 4
+    item: "gold_ingot"
+    name: "Gold Ingot"
+  gold block:
+    slot: 5
+    item: "gold_block"
+    name: "Gold Block"
+  redstone ore:
+    slot: 6
+    item: "redstone_ore"
+    name: "Redstone Ore"
+  redstone:
+    slot: 7
+    item: "redstone"
+    name: "Redstone"
+  redstone block:
+    slot: 8
+    item: "redstone_block"
+    name: "Redstone Block"
+  lapis ore:
+    slot: 9
+    item: "lapis_ore"
+    name: "Lapis Ore"
+  lapis lazuli:
+    slot: 10
+    item: "lapis_lazuli"
+    name: "Lapis Lazuli"
+  lapis block:
+    slot: 11
+    item: "lapis_block"
+    name: "Lapis Block"
+  coal ore:
+    slot: 12
+    item: "coal_ore"
+    name: "Coal Ore"
+  coal:
+    slot: 13
+    item: "coal"
+    name: "Coal"
+  coal block:
+    slot: 14
+    item: "coal_block"
+    name: "Coal Block"
+  emerald ore:
+    slot: 15
+    item: "emerald_ore"
+    name: "Emerald Ore"
+  emerald:
+    slot: 16
+    item: "emerald"
+    name: "Emerald"
+  emerald block:
+    slot: 17
+    item: "emerald_block"
+    name: "Emerald Block"
+  diamond ore:
+    slot: 18
+    item: "diamond_ore"
+    name: "Diamond Ore"
+  diamond:
+    slot: 19
+    item: "diamond"
+    name: "Diamond"
+  diamond block:
+    slot: 20
+    item: "diamond_block"
+    name: "Diamond Block"
+#

@@ -1,0 +1,143 @@
+# Made by RandomHashTags
+balance:
+  view self:
+    - "&e&lYour Balance: &f${INT}&7{DECIMALS}"
+    - "&7Use /withdraw or /pay to transfer funds"
+  view other:
+    - "&e&l{TARGET}'s Balance: &f${INT}&7{DECIMALS}"
+    - "&7Use /withdraw or /pay to transfer funds"
+    - "{RICHER}"
+  #
+  richer than self: "&7They're richer than you!"
+  richer than other: "&7You're richer than them!"
+#
+bless:
+  removed potion effects:
+    - BLINDNESS
+    - SLOWNESS
+    - WITHER
+    - POISON
+    - WEAKNESS
+    - SLOW_FALLING
+  msg:
+    - "&e&l*** BLESSED ***"
+#
+combine:
+  combine ores:
+    - "COAL"
+    - "DIAMOND"
+    - "EMERALD"
+    - "GOLD_INGOT"
+    - "IRON_INGOT"
+    - "QUARTZ"
+    - "REDSTONE"
+  #
+  format: "&e&l*&r &c{AMOUNT_ITEM}x {ITEM_ORE} &e&l>&r&e=&l<&r &a{AMOUNT_BLOCK}x {ITEM_BLOCK}"
+  success:
+    - "{SUCCESS}"
+    - "&e&l(!)&r &eSuccessfully combined and organized inventory."
+#
+confirm:
+  title: "Your Unclaimed Purchases"
+  #
+  self no unclaimed items:
+    - "&cYou have no unclaimed packages at this time."
+  other no unclaimed items:
+    - "&cThat player has no unclaimed packages at this time."
+#
+roll:
+  block radius: 50.00
+  # {PLAYER} = The player's name that executed the command
+  # {ROLLED} = The number the player that rolled got
+  # {MAX} = The max number you can roll
+  message:
+    - "&7&l **&r &7{PLAYER} has rolled a &l&n{ROLLED}&r &7out of &l&n{MAX}."
+  nobody heard roll:
+    - "&7&l ** &c&lNobody is around to hear you roll!"
+#
+withdraw:
+  argument 0:
+    - "&c/withdraw <$>"
+    - "&7This will create a bank note with the equivalent value of <$>."
+    - "&7You can use keywords 'million', billion', 'trillion' for withdrawls."
+  cannot withdraw zero:
+    - "&cYou must /withdraw atleast $1 at a time."
+  cannot withdraw more than balance:
+    - "&cYou do not have enough $ to sign a bank note that large!"
+    - "&e&lYour Balance:&r &f${BALANCE}"
+    - "&7Use /withdraw or /pay to transfer funds."
+  success:
+    - "&c&l-${VALUE}"
+    - "&aYou have signed a bank note for ${VALUE}"
+  deposit:
+    - "&a&l+${VALUE}"
+#
+xpbottle:
+  sounds:
+    redeem: "BLOCK_GLASS_BREAK:1:1"
+    withdraw: "ENTITY_EXPERIENCE_ORB_PICKUP:1:0"
+  #
+  delayed commands:
+    - "/spawn"
+    - "/warp"
+    - "/tpaccept"
+    - "/home"
+  #
+  min bottle:
+    - "world=25"
+    - "world_nether=25"
+    - "world_the_nether=25"
+  # Measured in minutes. Set to -1 to disable.
+  exp exhaustion:
+    - "world=17"
+    - "world_nether=17"
+    - "world_the_end=17"
+  # Measured in seconds. Set teleport-delay to -1 to disable.
+  teleportation delay:
+    - "world=7.000"
+    - "world_nether=7.000"
+    - "world_the_end=7.000"
+  teleport min delay:
+    - "world=3.000"
+    - "world_nether=3.000"
+    - "world_the_end=3.000"
+  teleportation variable: ## Teleport delay = (default delay - (player xp / teleportation variable))
+    - "world=25000"
+    - "world_nether=25000"
+    - "world_the_end=25000"
+  # EXP Exhaustion works when the player is teleported from these causes. Causes: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/player/PlayerTeleportEvent.TeleportCause.html
+  teleport causes:
+    - "COMMAND"
+    - "PLUGIN"
+  # Messages
+  withdraw at least:
+    - "&cYou must withdraw at least {MIN}XP points per bottle."
+  pending teleport:
+    - "&e&l(!)&r &eYou will be teleported in &n{SECS}s&r&e... DON'T MOVE!"
+    - "&7Decrease this wait time by increasing your enchanting level."
+  teleport cancelled:
+    - "&4&l(!)&r &4Pending teleport request cancelled due to movement."
+  cannot teleport:
+    - "&c&l(!)&r &cYou cannot teleport for &c{TIME} due to EXP exhaustion."
+    - "&7Upgrade your rank at &nbuy.yourserver.com&r &7to decrease this delay."
+  cannot xpbottle:
+    - "&c&l(!)&r &cYou cannot create another XP Bottle for {TIME}"
+    - "&7Complete a Rank Quest from buy.yourserver.com to decrease this delay."
+  afflict:
+    - "&eYou are now afflicted with &nEXP Exhaustion&r &efor {MIN} minute(s)."
+    - "&eYou &ncannot&r &euse /xpbottle or teleport while EXP Exhausted."
+  invalid amount:
+    - '&c&l(!)&r &cInvalid xpbottle amount: "{VALUE}"'
+  not enough to bottle:
+    - "&c&l(!)&r &cYou do not have enough experience to bottle this much!"
+  withdraw:
+    - "&c&l-{VALUE} xp"
+  deposit:
+    - "&a&l+ {VALUE} xp"
+  ## Taken directly from the | Beast-XpWithdraw |  plugin ##
+  argument zero:
+    - "&e/xpbottle <amount>"
+    - "&7Convert <amount> xp into bottle form."
+    - "&7Use &e/xp &7to view your current exp points."
+  ########################################################
+#

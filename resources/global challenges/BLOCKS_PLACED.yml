@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "BlocksPlaced"
+  duration: 86400
+  type: "Blocks Placed"
+#
+item:
+  item: "workbench"
+  name: "&a&lMost Blocks Placed"
+#

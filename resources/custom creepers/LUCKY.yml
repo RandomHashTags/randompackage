@@ -1,0 +1,11 @@
+# Made by RandomHashTags
+creeper name: "&e&lLucky Creeper"
+#
+item:
+  item: "creeper_spawn_egg"
+  name: "&eLucky Creeper"
+  lore:
+  - "&7&oIncreases chances of spawner drops."
+#
+attributes:
+  - "INCREASE_SPAWNER_DROP;4.00"

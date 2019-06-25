@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Telepathy"
+lore:
+- "&eAutomatically places blocks broken by tools"
+- "&ein your inventory."
+#
+max level: 4
+applies to: "axe;spade;shears"
+#
+alchemist: "2000:2650:3300"
+tinkerer: "50:61:72:83"
+#
+attributes:
+- "BlockBreak;chance=25*level;giveDrops{[player]}"

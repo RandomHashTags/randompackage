@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Koth Capturer I"
+  completion: 1
+#
+lore:
+- "&7Capture a KOTH"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

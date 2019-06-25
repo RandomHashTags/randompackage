@@ -1,0 +1,167 @@
+# Made by RandomHashTags
+title: "Shop Items (Wool)"
+size: 36
+gui:
+  white wool:
+    slot: 0
+    item: "white_wool"
+    name: "&e&lWool"
+    prices: 2.34;1.25
+  orange wool:
+    slot: 1
+    item: "orange_wool"
+    name: "&e&lOrange Wool"
+    prices: 2.34;1.25
+  magenta wool:
+    slot: 2
+    item: "magenta_wool"
+    name: "&e&lMagenta Wool"
+    prices: 2.34;1.25
+  light blue wool:
+    slot: 3
+    item: "light_blue_wool"
+    name: "&e&lLight Blue Wool"
+    prices: 2.34;1.25
+  yellow wool:
+    slot: 4
+    item: "yellow_wool"
+    name: "&e&lYellow Wool"
+    prices: 2.34;1.25
+  lime wool:
+    slot: 5
+    item: "lime_wool"
+    name: "&e&lLime Wool"
+    prices: 2.34;1.25
+  pink wool:
+    slot: 6
+    item: "pink_wool"
+    name: "&e&lPink Wool"
+    prices: 2.34;1.25
+  gray wool:
+    slot: 7
+    item: "gray_wool"
+    name: "&e&lGray Wool"
+    prices: 2.34;1.25
+  light gray wool:
+    slot: 8
+    item: "light_gray_wool"
+    name: "&e&lLight Gray Wool"
+    prices: 2.34;1.25
+  cyan wool:
+    slot: 9
+    item: "cyan_wool"
+    name: "&e&lCyan Wool"
+    prices: 2.34;1.25
+  purple wool:
+    slot: 10
+    item: "purple_wool"
+    name: "&e&lPurple Wool"
+    prices: 2.34;1.25
+  blue wool:
+    slot: 11
+    item: "blue_wool"
+    name: "&e&lBlue Wool"
+    prices: 2.34;1.25
+  brown wool:
+    slot: 12
+    item: "brown_wool"
+    name: "&e&lBrown Wool"
+    prices: 2.34;1.25
+  green wool:
+    slot: 13
+    item: "green_wool"
+    name: "&e&lGreen Wool"
+    prices: 2.34;1.25
+  red wool:
+    slot: 14
+    item: "red_wool"
+    name: "&e&lRed Wool"
+    prices: 2.34;1.25
+  black wool:
+    slot: 15
+    item: "black_wool"
+    name: "&e&lBlack Wool"
+    prices: 2.34;1.25
+  white carpet:
+    slot: 16
+    item: "white_carpet"
+    name: "&e&lCarpet"
+    prices: 1.56;0
+  orange carpet:
+    slot: 17
+    item: "orange_carpet"
+    name: "&e&lOrange Carpet"
+    prices: 1.56;0
+  magenta carpet:
+    slot: 18
+    item: "magenta_carpet"
+    name: "&e&lMagenta Carpet"
+    prices: 1.56;0
+  light blue carpet:
+    slot: 19
+    item: "light_blue_carpet"
+    name: "&e&lLight Blue Carpet"
+    prices: 1.56;0
+  yellow carpet:
+    slot: 20
+    item: "yellow_carpet"
+    name: "&e&lYellow Carpet"
+    prices: 1.56;0
+  lime carpet:
+    slot: 21
+    item: "lime_carpet"
+    name: "&e&lLime Carpet"
+    prices: 1.56;0
+  pink carpet:
+    slot: 22
+    item: "pink_carpet"
+    name: "&e&lPink Carpet"
+    prices: 1.56;0
+  gray carpet:
+    slot: 23
+    item: "gray_carpet"
+    name: "&e&lGray Carpet"
+    prices: 1.56;0
+  light gray carpet:
+    slot: 24
+    item: "light_gray_carpet"
+    name: "&e&lLight Gray Carpet"
+    prices: 1.56;0
+  cyan carpet:
+    slot: 25
+    item: "cyan_carpet"
+    name: "&e&lCyan Carpet"
+    prices: 1.56;0
+  purple carpet:
+    slot: 26
+    item: "purple_carpet"
+    name: "&e&lPurple Carpet"
+    prices: 1.56;0
+  blue carpet:
+    slot: 27
+    item: "blue_carpet"
+    name: "&e&lBlue Carpet"
+    prices: 1.56;0
+  brown carpet:
+    slot: 28
+    item: "brown_carpet"
+    name: "&e&lBrown Carpet"
+    prices: 1.56;0
+  green carpet:
+    slot: 29
+    item: "green_carpet"
+    name: "&e&lGreen Carpet"
+    prices: 1.56;0
+  red carpet:
+    slot: 30
+    item: "red_carpet"
+    name: "&e&lRed Carpet"
+    prices: 1.56;0
+  black carpet:
+    slot: 31
+    item: "black_carpet"
+    name: "&e&lBlack Carpet"
+    prices: 1.56;0
+  back:
+    slot: 35
+    item: "back"

@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/5f8aebcf4b72d73d1d5dc3ccbded532ce4ec3d585ce72154c42229638b45c4de"
+#
+item:
+  item: "player_head_item"
+  name: "&c&lLover Mask"
+  lore:
+  - "&cImmune to Mortal Coil"
+  - "&7Make love, not Minecraft..."
+  - "&7or maybe its the other way around?"
+  - " &6&l*&r &6Valentine's Day 2019"
+#
+attributes:
+  - ""
+#
+added lore:
+  - "&7&lATTACHED:&r &c&lLover Mask&r &f(&cImmune to Mortal Coil&f)"

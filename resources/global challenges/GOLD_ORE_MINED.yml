@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "GOLD_ORE:0_Mined"
+  duration: 86400
+  type: "Gold Ore Mined"
+#
+item:
+  item: "gold_ore"
+  name: "&a&lMost Gold Ore Mined"
+#

@@ -1,0 +1,78 @@
+# Made by RandomHashTags
+settings:
+  max level: 10
+  upgrade chance: 10
+  cooldown: 259200
+  fallen hero: VKIT
+#
+gui settings:
+  slot: 5
+  #
+  item: "diamond_axe"
+  name: "&8&lJudgement Kit"
+  lore:
+  - "&e&lKit Level: &r&e&n{LEVEL}&r &e&l/ 10"
+  - " "
+  - "&8&l* The Banhammer"
+  - "&8&l* Divine Robes of Judgement"
+  - "&8&l* Boots of Karma"
+  - "&8&l* mcMMO Credits"
+  - "&8&l* EXP"
+  - " "
+  - "&7Will you use this kit for good, or evil?"
+  - "&6* Spring 2018"
+#
+items:
+  axe:
+    item: "diamond_axe"
+    name: "&8&lThe Banhammer (&r&cLVL {LEVEL}&8&l)&r {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking4}"
+    - "RPEnchants{Anti Gank;Devour;Cleave;Arrow Break;Blessed;Bleed;Pummel;Ravenous}"
+    - "{Master Blacksmith}:reqlevel=7"
+    - "{Insanity}:reqlevel=5"
+    - "{Lifesteal}:reqlevel=8"
+    - "{Silence}:reqlevel=8"
+    - "&8For eons thought to be nothing more than Cosmonaut folklore,"
+    - "&8the very weapon used by admins to banish criminals"
+    - "&8to the furthest reaches of the galaxies."
+    - " "
+    - "&8&lKit Level: &r&c{LEVEL} / 10"
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&8&lDivine Robes of Judgement (&r&cLVL {LEVEL}&8&l)&r {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking4;ProjectileProtection2}"
+    - "RPEnchants{Overload;Destruction;Enlighted;Armored;Obsidianshield;Creeper Armor;Lucky;Angelic;Marksman;Voodoo}"
+    - "{Diminish}:reqlevel=6"
+    - "{Leadership}:reqlevel=8"
+    - "{Deathbringer}:reqlevel=6"
+    - "{Heavy}:reqlevel=4"
+    - "&8A firey shroud that echoes absolute"
+    - "&8power and domination. No mere human"
+    - "&8would dare stand against its owner."
+    - " "
+    - "&8&lKit Level: &r&c{LEVEL} / 10"
+  boots:
+    item: "diamond_boots"
+    name: "&8&lBoots of Karma (&r&cLVL {LEVEL}&8&l}&r {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Feather Falling2;Unbreaking3}"
+    - "RPEnchants{Phoenix;Enlighted;Deathbringer;Gears;Heavy;Tank;Marksman;Rocket Escape;Stormcaller;Hardened;Springs}"
+    - "{Angelic}:reqlevel=4"
+    - "{Ender Walker}:reqlevel=6"
+    - "&8Both acts of great good and great evil"
+    - "&8have been committed in these boots."
+    - "&8What type of acts will you commit?"
+    - " "
+    - "&8&lKit Level: &r&c{LEVEL} / 10"
+  xp:
+    item: "xpbottle:2000000"
+#
+upgrade gem:
+  item: "red_dye"
+  name: "&2&lEvolution Gem &r&2(&8&lJudgement&r&2)"
+  lore:
+    - "&7Right-click this evolution gem to"
+    - "&7increase the power of the"
+    - "&8&lJudgement&r &7/vkit by 1 level."

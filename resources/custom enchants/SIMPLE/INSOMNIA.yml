@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Insomnia"
+lore:
+- "&eGives slowness, slow swinging, and"
+- "&econfusion."
+#
+max level: 7
+applies to: "sword"
+#
+alchemist: "1000:1500:2000:2500:3000:3500"
+tinkerer: "52:63:74:85:96:107:118"
+#
+attributes:
+- "PvA;chance=4+(2*level);addPotionEffect{[victim]slowness:level-1:40*level:false};addPotionEffect{[victim]mining_fatigue:level-1:40*level:false};addPotionEffect{[victim]confusion:level-1:20+(40*level):false}"

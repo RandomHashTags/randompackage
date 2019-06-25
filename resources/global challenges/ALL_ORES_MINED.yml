@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "AllOresMined"
+  duration: 86400
+  type: "Most Ores Mined"
+#
+item:
+  item: "stone"
+  name: "&a&lMost Ores Mined"
+#

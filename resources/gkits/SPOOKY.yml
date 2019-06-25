@@ -1,0 +1,61 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 0
+  #
+  item: "carved_pumpkin"
+  name: "Spooky Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Headless Blade of Horror"
+  - "&f&l* &6&lHeroic Grim Reaper Shroud"
+  - "&f&l* &eHeroic Headless Chestplate of Nightmares"
+  - "&f&l* &eHeroic Headless Leggings of Nightmares"
+  - "&f&l* &eHeroic Headless Boots of Nightmares"
+  - " "
+  - "&7Petrify your enemies in fear."
+  - "&6* Halloween 2015"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&6&lHeroic Grim Reaper Shroud"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Molten;Deathbringer;Spirits;Voodoo;Curse;Overload}"
+    - "&6&oAn onyx shroud, eminating death."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&eHeroic Headless Chestplate of Nightmares"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Tank}"
+    - "&e&oA chestplate with a VERY spooky aura."
+  leggings:
+    item: "diamond_leggings"
+    name: "&eHeroic Headless Leggings of Nightmares"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Wither;Plague Carrier}"
+    - "&e&oA pair of leggings with a VERY spooky aura."
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Headless Boots of Nightmares"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Undead Ruse;Armored;Gears;Ender Shift}"
+    - "&e&oA pair of boots with a VERY spooky aura."
+  sword:
+    item: "diamond_sword"
+    name: "&6&lHeroic Headless Blade of Horror"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking2}"
+    - "RPEnchants{Rage;Thundering Blow;Paralyze;Trap;Deep Wounds;Demonforged;Execute;Lifesteal;Vampire;Blind;Headless}"
+    - "&6&oAn ancient blade imbued with the nightmares"
+    - "&6&oof all who have fallen before it."
+#

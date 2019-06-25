@@ -1,0 +1,20 @@
+# Made by RandomHashTags
+settings:
+  radius: 7;128;7
+  cooldown: 300
+#
+item:
+  item: "nether_star"
+  name: "&3&lEMP Pulse&r &7(Right Click)"
+  lore:
+    - "&7Emits a large Electromagnetic Pulse,"
+    - "&7combat tagging ALL players within the"
+    - "&7device's radius. Players can only be"
+    - "&7affected by 1 EMP every 3 minutes"
+    - " "
+    - "&3&nRadius:&r &b7x128x7"
+    - "&3&nSoul Cost:&r &b300 souls"
+    - "&3&nCooldown:&r &b300s"
+#
+attributes:
+  - ""

@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Hardened"
+lore:
+- "&eArmor takes less durability damage."
+#
+max level: 3
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "4500:6500"
+tinkerer: "91:105:119"
+#
+attributes:
+- "isDurabilityDamaged;chance=16+(8*level);cancel"

@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Thirsty"
+  completion: 3
+  expiration: 86400
+#
+lore:
+- "&7Kill 3 players at an Outpost"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "KilledPlayer;inOutpost;+1"

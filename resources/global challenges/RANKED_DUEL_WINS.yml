@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "RankedDuelWins"
+  duration: 86400
+  type: "Ranked Duels Won"
+#
+item:
+  item: "diamond_sword"
+  name: "&a&lMost Ranked Duels Won"
+#

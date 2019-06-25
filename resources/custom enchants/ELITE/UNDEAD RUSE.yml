@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Undead Ruse"
+lore:
+- "&eWhen hit, you have a chance to spawn"
+- "&ezombie hordes to distract and"
+- "&edisorient your opponents."
+#
+max level: 10
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "1250:2250:3350:4350:5350:6350:7350:8350:9350"
+tinkerer: "63:74:85:96:107:118:129:140:151:162"
+#
+attributes:
+- "isDamaged;chance=2+level;spawnEntity{[victim]undead_ruse:random{1:level}:damager}"

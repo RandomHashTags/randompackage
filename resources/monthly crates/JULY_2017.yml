@@ -1,0 +1,88 @@
+# Made by RandomHashTags
+category: 2017
+category slot: 6
+title: "Server Crate: JULY_2017"
+#
+item:
+  item: "ender_chest"
+  name: "&4&l*&f&l*&b&l*&r &4&lSERVER CRATE:&r &f&l&nJULY &r&b&l&n2017&r &4&l*&f&l*&b&l*"
+  lore:
+    - "&fUnlocked by &l{UNLOCKED_BY}&r &fat &b&nbuy.yourserver.com"
+    - " "
+    - "&f&l&nADMIN ITEMS"
+    - "&f&l*&r &fIllegal Fireworks"
+    - " "
+    - "&e&l&nCOSMETIC ITEMS"
+    - "&e&l*&r &eLimited Edition Titles"
+    - "&e&l*&r &e3x Transmog Scrolls &nOR&r &eItem Nametags"
+    - " "
+    - "&6&l&nTREASURE ITEMS"
+    - "&6&l*&r &6Rank Quest"
+    - "&6&l*&r &61-2x Godly Space Flare"
+    - "&6&l*&r &61-3x /vkit Fallen Hero"
+    - "&6&l*&r &63-4x Godly Randomization Scrolls"
+    - "&6&l*&r &67.4x10m Faction XP/mcMMO Booster"
+    - "&6&l*&r &61-2x 25% Random Weapon/Armor Orb (11 slot)"
+    - " "
+    - "&b&l&nBONUS ITEMS"
+    - "&b&l*&r &bOgre /vkit Crystal"
+    - "&b&l*&r &bHeroic Rank Crystal"
+    - "&b&l*&r &bJuly 2016 Server Crate"
+#
+rewards:
+  - "Illegal Fireworks"
+  - "title:101||title:136"
+  - "transmogscroll;amount=3||itemnametag;amount=3"
+  - "paper"
+  - "spaceflare:GODLY;amount=1-2"
+  - "vkitfallenhero;amount=1-3"
+  - "randomizationscroll:GODLY;amount=3-4"
+  - "factionxpbooster:7.4:600||factionmcmmobooster:7.4:600"
+  - "enchantmentorb:armor11:25;amount=1-2||enchantmentorb:armor11:25;amount=1-2"
+#
+bonus:
+  - "vkitgem:OGRE"
+  - "monthlycrate:JULY_2016"
+#
+# background item is represented as "=" in the redeem-format
+# bonus-1 item is represented as "-" in the redeem-bonus-format
+# bonus-2 item is represented as "=" in the redeem-bonus-format
+inventory:
+  size: 54
+  redeem format:
+    - "========="
+    - "===---==="
+    - "===---==="
+    - "===---==="
+    - "========="
+    - "====+===="
+  redeem bonus format:
+    - "=-=-=-=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-=-=-=-"
+    - "=-=-x=-=-"
+  background: # Represented as "=" in the "redeem format"
+    item: "black_stained_glass_pane"
+    name: "&7..."
+  redeem: # Represented as "-" in the "redeem format"
+    item: "ender_chest"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus: # Represented as "x" in the "redeem bonus format"
+    item: "red_stained_glass_pane"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus 1:
+    item: "lime_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  bonus 2:
+    item: "green_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  # Replaces the background items with this name when the player is about to reveal the bonus item(s)
+  unlocking name: "&a&lUNLOCKING..."

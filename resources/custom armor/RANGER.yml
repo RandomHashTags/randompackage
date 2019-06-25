@@ -1,0 +1,66 @@
+# Made by RandomHashTags
+armor lore:
+  - " "
+  - "&a&lRANGER SET BONUS"
+  - "&a&l*&r &aEnemies bows deal 25% less damage to you."
+  - "&a&l*&r &aRanger Bow grants 30% increased bow damage."
+  - "&7&o(Requires all 4 ranger items.)"
+#
+weapon lore:
+  - " "
+  - "&a&lRANGER WEAPON BONUS"
+  - "&a&l*&r &aRanger Bow grants 30% increased bow damage."
+  - "&7(Requires all 4 ranger armor items.)"
+#
+helmet:
+  item: "diamond_helmet"
+  name: "&a&lRanger Hood&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Drunk;Dodge;Marksman;Tank;Angelic;Heavy;Implants;Sticky;Hardened}"
+  - "&a&oThe hood of a legendary"
+  - "&a&oRanger lost with time itself."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&a&lRanger Cuirass&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Aegis;Overload;Blood Lust;Marksman;Tank;Angelic;Heavy;Arrow Deflect;Hardened}"
+  - "&a&oThe lost cuirass of the"
+  - "&a&olast known legendary archer."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&a&lRanger Greaves&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Marksman;Tank;Angelic;Heavy;Obsidianshield;Lucky;Cactus;Hardened}"
+  - "&a&oThe fabled shin protectors"
+  - "&a&oof an ancient agile Ranger."
+#
+boots:
+  item: "diamond_boots"
+  name: "&a&lRanger Slippers&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Gears;Enlighted;Deathbringer;Marksman;Tank;Angelic;Heavy;Metaphysical;Springs;Hardened;Rocket Escape}"
+  - "&a&oLightweight footgear for"
+  - "&a&oan ancient nimble Ranger."
+#
+attributes:
+  - "ArrowHit;setDamage{dmg*1.30}"
+  - "HitByArrow;setDamage{dmg*0.75}"
+#
+heroic upgrade:
+  item: "yellow_dye"
+  name: "&6&lHeroic&r &6(&a&lRanger&r&6) &lUpgrade"
+  lore:
+  - " "
+  - "&7Apply to any &a&lRanger&r &7armor"
+  - "&7for a &6{PERCENT}% &7chance to imbue it"
+  - "&7with the power of Heroic Armor!"
+  - " "
+  - "&7This will increase the armor's base"
+  - "&7stats as well as add a &612.5% negation"
+  - "&7to enemy &6Infinite Luck &7enchantments."

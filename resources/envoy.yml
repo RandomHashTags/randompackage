@@ -1,0 +1,68 @@
+# Made by RandomHashTags
+messages:
+  view next:
+    - ""
+  envoy no permission:
+    - "&c&l(!)&r &cOnly the highest tier ranks of each planet may use the /envoy command."
+    - "&7Unlock access today with a rank quest at &cbuy.yourserver.com"
+  envoy help:
+    - " "
+    - "&b&lCOSMIC ENVOY HELP"
+    - "&7Cosmic Envoys occur every &n25-40 minutes.&r &7Chests filled with random tier loot spawn at &b50-100 random locations throughout the planet's warzone and warps. More chests spawn whereever there is a higher density of players."
+    - "&b* &oCosmic Envoys are a great way for new players to get some starting loot."
+    - " "
+  #
+  default summon type: "&f&l&l***&r &a&l&nSERVER ENVOY&r &f&l***"
+  item summon type: "&f&lServer Envoy Summoner:&r &a&l{PLAYER}!"
+  broadcast:
+    - " "
+    - "&f&l***&r &a&l&nSERVER ENVOY&r &f&l***"
+    - " "
+    - "&fA &a&lServer Envoy&r &fhas appeared underneath the main &n/spawn&r &fand all PvP &n/warps&r&f, supply crates can be seen falling all over the &a&lWarzone!"
+    - " "
+    - "&f(( &7Chests filled with random tier loot have spawned at 50-100 random locations throughout"
+    - " &7the planet's warzone and warps, go get some loot! Remember, more chests spawn wherever"
+    - " &7there are more players. &f))"
+    - " "
+    - "{SUMMON_TYPE}"
+    - " "
+#
+items:
+  envoy summon:
+    item: "redstone_torch_on"
+    name: "&6Server Envoy Summon &7(Right Click)"
+    lore:
+    - "&7Spawns a Server Envoy at the warzone!"
+#
+settings:
+  default tier: SIMPLE
+  # When enabled, the envoy crate can be opened upon the selected options
+  left click: true
+  right click: true
+  # Measured in seconds. <min spawn time>-<max spawn time> OR <spawn every>
+  repeats: 1500-2400
+  type: WARZONE
+  # How many envoy crates are spawned
+  amount spawned: 50-100
+  # How long the envoy chests are available to be obtained. Measured in seconds.
+  availability: 60
+  # Time between each firework. Measured in seconds.
+  firework delay: 5
+#
+# h = hours. m = minutes. s = seconds
+# -1 = don't broadcast any messages
+broadcasts:
+  - "-1"
+  #- "45m"
+  #- "30m"
+  #- "15m"
+  #- "5m"
+  #- "1m"
+  #- "30s"
+  #- "15s"
+  #- "5s"
+  #- "4s"
+  #- "3s"
+  #- "2s"
+  #- "1s"
+#

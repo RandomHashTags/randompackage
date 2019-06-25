@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Bleed"
+lore:
+- "&eApplies bleed stacks to enemies that"
+- "&edecrease their movement speed. Use in"
+- "&ecombination with Devour and Blood"
+- "&eLust."
+#
+max level: 6
+applies to: "_axe"
+#
+alchemist: "5000:5500:6000:6500:7000"
+tinkerer: "56:65:74:83:92:101"
+#
+attributes:
+- "PvA;chance=5+(5*level);"

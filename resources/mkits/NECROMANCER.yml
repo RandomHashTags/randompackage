@@ -1,0 +1,82 @@
+# Made by RandomHashTags
+settings:
+  loses required kits: true
+  name: "&2&lNecromancer"
+#
+gui settings:
+  slot: 4
+  #
+  item: "wither_skeleton_skull"
+  name: "&2&lNecromancer Mastery Kit"
+  lore:
+  - " "
+  - "&7The cursed robes of the universally feared"
+  - "&7puppeteer of the undead, the Necromancer."
+  - "&7Death is no longer your enemy."
+  - " "
+  - "&6&lRequirements:"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+#
+shard:
+  item: "green_dye"
+  name: "&6&lMastery Shard&r &6(&1&lNecromancer&r&6)"
+  lore:
+  - "&7Apply to an enchantment book"
+  - "&7to imbue it with the power to"
+  - "&7affect &1&lNecromancer&r &7Mastery Kit items."
+#
+items:
+  helmet:
+    item: "leather_helmet"
+    name: " {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{protection4;unbreaking3}"
+  chestplate:
+    item: "leather_chestplate"
+  leggings:
+    item: "leather_leggings"
+  boots:
+    item: "leather_boots"
+#
+kit bundle:
+  item: "chest"
+  name: "&1&lNecromancer Kit Bundle"
+  lore:
+  - "&7Right-click to reveal the"
+  - "&7following Fallen Heroes!"
+  - " "
+  - "&6Contains the following..."
+  - "&7* 5x {REQUIREMENT}"
+  - "&7* 5x {REQUIREMENT}"
+  - "&7* 5x {REQUIREMENT}"
+  rewards:
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+#
+required kits:
+  - "gkit;DIABLO;3"
+  - "gkit;VOIDWALKER;3"
+  - "gkit;WARLOCK;3"
+#
+anti crystal:
+  item: "yellow_dye"
+  name: "&6&lAnti M-Kit Crystal (&r&2&lNecromancer&r&6&l)"
+  lore:
+    - "&a{PERCENT}% Success Rate"
+    - "&7Apply to any piece of armor"
+    - "&7to negate the following"
+    - "&7custom Mastery Enchantments:"
+    - " &6&l*&r &4Soul Siphon"
+    - " &6&l*&r &4Mortal Coil"
+    - " &6&l*&r &4Rot and Decay"
+    - " &6&l*&r &4Demonic Gateway"
+  added lore:
+  - "&6&lAnti M-Kit Crystal (&r&2&lNecromancer&r&6&l)"
+  negate enchants:
+    - SOUL SIPHON
+    - MORTAL COIL
+    - ROT AND DECAY
+    - DEMONIC GATEWAY

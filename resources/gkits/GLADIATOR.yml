@@ -1,0 +1,60 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 7
+  #
+  item: "diamond_sword"
+  name: "Gladiator Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lAres Greatsword of Conquering"
+  - "&f&l* &6&lArena Champion Mask"
+  - "&f&l* &6&lHeroic Gladiator Platemail"
+  - "&f&l* &eHeroic Gladiator Platelegs"
+  - "&f&l* &eHeroic Gladiator Warboots"
+  - " "
+  - "&7Become a ruthless warlord!"
+  - "&6* Arena Update"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&eArena Champion Mask {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Deathbringer;Clarity;Tank;Armored}"
+    - "&e&oA leatherclad mask that strikes fear into all."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&6&lHeavy Gladiator Platemail {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Overload;Tank;Guardians;Armored}"
+    - "&6&oSpiked shoulders, a huge hunk of metal."
+  leggings:
+    item: "diamond_leggings"
+    name: "&eHeroic Gladiator Platelegs {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Protection;Enlighted;Tank;Armored}"
+    - "&e&oA pair of battle-worn leather shorts."
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Gladiator Warboots {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Gears;Tank;Armored;Rocket Escape;Springs}"
+    - "&e&oSturdy, agile, powerful. What more do you want?"
+  sword:
+    item: "diamond_sword"
+    name: "&6&lHeroic Ares Greatsword of Conquering {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking2}"
+    - "RPEnchants{Lifesteal;Rage;Greatsword;Silence}"
+    - "&6&oA weapon unrivaled in conquest."
+#

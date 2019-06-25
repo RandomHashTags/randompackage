@@ -1,0 +1,11 @@
+# Made by RandomHashTags
+creeper name: "&b&lGigantic Creeper"
+#
+item:
+  item: "creeper_spawn_egg"
+  name: "&bGigantic Creeper"
+  lore:
+  - "&7&oExplodes in a much larger radius."
+#
+attributes:
+  - "instant_explode;y+1;1"

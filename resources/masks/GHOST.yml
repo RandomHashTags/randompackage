@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/a876328ecba8d49cc3c6f27308670d97f39dca94edc086515fc16b31bafe4755"
+#
+item:
+  item: "player_head_item"
+  name: "&3&lGhost Mask"
+  lore:
+  - "&7The deviant mask of the spectre,"
+  - "&7a metaphysical monstrosity."
+  - " &6&l*&r &6Ghost Mastery Kit"
+#
+added lore:
+  - "&7&lATTACHED:&r &3&lGhost Mask"

@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Blessed"
+lore:
+- "&eA chance of removing debuffs."
+#
+max level: 4
+applies to: "_axe"
+#
+alchemist: "5000:6000:7000"
+tinkerer: "53:67:81:95"
+#
+attributes:
+- "PvA;chance=2*level;sendMessage{[damager]&e&l**BLESSED**};removePotionEffect{[damager]blindness:false};removePotionEffect{[damager]confusion:false};removePotionEffect{[damager]poison:false};removePotionEffect{[damager]slow:false};removePotionEffect{[damager]slow_digging:false};removePotionEffect{[damager]weakness:false};removePotionEffect{[damager]wither:false}"

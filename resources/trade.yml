@@ -1,0 +1,50 @@
+# Made by RandomHashTags
+messages:
+  commands:
+    - "&6&l&nTrade Commands"
+    - "&6/trade <player>"
+    - "&7Sends a trade request to the specified <player>."
+  not within range:
+    - "&c&l(!)&r &cYou aren't close enough to {TARGET} to send a /trade."
+    - "&7Move within 10 blocks of them and try again."
+  send self:
+    - "&c'If a man loves the labour of his trade, apart from any quest of success or fame, the gods have called him.'"
+  cannot trade blacklisted material:
+    - "&cYou cannot trade this item!"
+  #
+  accepted:
+    - "&a&lTrade accepted."
+  cancelled:
+    - "&e&lTrade cancelled."
+  #
+  send request:
+    - "&6&l(!)&r &6You have sent a trade request to {TARGET}!"
+  receive request:
+    - "&6&lTRADE&r &e{SENDER}&r &6wants to trade with you. &e/trade {SENDER}"
+  accept request:
+    - "&eTrading with &l{PLAYER}..."
+## Measured in blocks
+# -1 = Global
+# -2 = Only within the same world
+radius: 10
+#
+gui:
+  title: " You         {PLAYER}"
+  size: 54
+  # Measured in seconds
+  countdown start: 10
+  #
+  divider:
+    item: "thin_glass"
+    name: " "
+  accept:
+    item: "red_stained_glass_pane"
+    name: "&eClick to ACCEPT Trade"
+  accepting:
+    item: "lime_stained_glass_pane"
+    name: "&aTrade ACCEPTING..."
+    lore:
+    - "&7Modify the trade to cancel."
+#
+blacklisted materials:
+  - "AIR"

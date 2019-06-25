@@ -1,0 +1,66 @@
+# Made by RandomHashTags
+priority: 1
+name: "&f&lLootbox:&r &3&lS&b&ln&3&lo&b&lw&r &f&lDay!"
+# Measured in seconds. Default is 259200 (3 days)
+available for: 259200
+#
+gui:
+  title: "Lootbox: &3&lS&b&ln&3&lo&b&lw&r &f&lDay!"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  ## C = Background item with the countdown amount
+  ## X = Background item
+  ## L = Random Jackpot or Regular loot
+  ## B = Bonus item
+  format:
+  - "CXLLLBBXC"
+#
+preview title: "Lootbox: &3&lS&b&ln&3&lo&b&lw&r &f&lDay!"
+#
+lore formats:
+  regular loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  jackpot loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  bonus loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+#
+lootbox:
+  item: "beacon"
+  name: "&f&lLootbox:&r &3&lS&b&ln&3&lo&b&lw&r &f&lDay!"
+  lore:
+  - "&7Winter does have its perks..."
+  - " "
+  - "&f&lRandom Loot (&r&73 items&f&l)"
+  - "{REGULAR_LOOT}"
+  - " "
+  - "&f&lJackpot Loot"
+  - "{JACKPOT_LOOT}"
+  - " "
+  - "&f&lBonus Loot (&r&72 items&f&l)"
+  - "{BONUS_LOOT}"
+#
+regular loot size: 3
+regular loot:
+  - "mask:DEATH_KNIGHT"
+  - "blackscroll:HEROIC"
+  - "equipmentlootbox"
+  - "superiorcrate"
+  - "enchantmentorb:weapon13"
+  #- "dungeonlootbag:destroyed outpost"
+  - "servercrate:GODLY"
+  - "randomizationscroll:GODLY;amount=2"
+  #- "Yijki, World Destroyer"
+  - "raritygem:SOUL:5000"
+#
+jackpot loot:
+  - "soultracker:GODLY"
+  - "mask:RIFT"
+#
+bonus loot size: 2
+bonus loot:
+  - "mask:BEANIE__"
+  - "title:205"
+#

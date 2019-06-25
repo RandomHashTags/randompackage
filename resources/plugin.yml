@@ -1,0 +1,94 @@
+name: RandomPackage
+version: 16.2.0
+main: me.randomhashtags.randompackage.RandomPackage
+load: POSTWORLD
+api-version: 1.13
+depend: [Vault]
+softdepend: [PlaceholderAPI, EpicSpawners, SilkSpawners, mcMMO, Factions]
+commands:
+  alchemist:
+    description: Exchange the same 2 enchants/dust for a higher level up tier.
+  auctionhouse:
+    description: Auction items in a chest-like shop.
+  balance:
+    description: View your economy balance.
+  bless:
+    description: Remove a list of negative potion effects.
+  brag:
+    description: Used to open brag inventories.
+  bump:
+    description: Used to unglitch players stuck in a block.
+  challenge:
+    description: View the active global challenges.
+  coinflip:
+    description: Challenge another player in a game of luck, winner takes all.
+  collectionfilter:
+    description: Edit owned collection chests.
+  combine:
+    description: Combine your ores into blocks.
+  confirm:
+    description: Claim unclaimed items while you were offline.
+  conquest:
+    description: View last conquest info.
+  disabledenchants:
+    description: View disabled custom enchants.
+  duel:
+    description: Duels!
+  enchanter:
+    description: Purchase givedp items.
+  enchants:
+    description: View custom enchant tiers and lores.
+  envoy:
+    description: View the next envoy info.
+  filter:
+    description: Filter items that you can pickup.
+  fund:
+    description: View the server fund info.
+  givedp:
+    description: Admin command.
+  gkit:
+    description: Claim owned Global Kits.
+  home:
+    description: View, edit, and delete your homes via a GUI.
+  jackpot:
+    description: View the active Jackpot info.
+  kingofthehill:
+    description: View the active KOTH info.
+  lastmanstanding:
+    description: Last Man Standing!
+  lootbox:
+    description: View, claim, and preview the latest Lootbox.
+  mkit:
+    description: Claim owned Mastery Kits.
+  monthlycrate:
+    description: View and claim unlocked monthly crates.
+  outpost:
+    description: Outposts!
+  quest:
+    description: Player Quests!
+  randompackage:
+    description: Admin command.
+  roll:
+    description: Roll a die with some friends.
+  sethome:
+    description: Set a home at your current location.
+  shop:
+    description: Purchase/sell your items to the server shop.
+  showcase:
+    description: View your/someone's showcase, where you show off your best items via a GUI.
+  splitsouls:
+    description: Split collected souls from Soul Trackers into Soul Gems.
+  tinkerer:
+    description: Exchange enchanted gear and custom enchants for XP and other items.
+  title:
+    description: Equip/unequip your owned titles.
+  trade:
+    description: Trade items with another player.
+  vkit:
+    description: Claim your Evolution Kits.
+  wildpvp:
+    description: PvP against another player in the Wilderness.
+  withdraw:
+    description: Withdraw some of your economy into a physical item.
+  xpbottle:
+    description: Withdraw some of your EXP into a physical item.

@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Unfocus"
+lore:
+- "&eChance to Unfocus target player,"
+- "&ereducing their outgoing bow damage by"
+- "&e50% for up to 10 seconds."
+#
+max level: 5
+applies to: "bow"
+#
+alchemist: "2300:2600:2900:3200"
+tinkerer: "60:72:84:96:108"
+#
+attributes:
+- ""

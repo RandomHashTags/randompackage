@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Skill Booster I"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Successfully use 1 mcMMO Booster"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- ""

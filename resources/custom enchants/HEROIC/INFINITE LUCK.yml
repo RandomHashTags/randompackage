@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Infinite Luck"
+lore:
+- "&eNegates incoming Armor Set bonuses"
+- "&edepending on enchantment level.."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Lucky;10"
+#
+attributes:
+- ""

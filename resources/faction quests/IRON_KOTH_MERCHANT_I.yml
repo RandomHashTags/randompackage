@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Iron Koth Merchant I"
+  completion: 1000
+#
+lore:
+- "&7Sell 1,000 Iron Blocks at Vanilla Outpost"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

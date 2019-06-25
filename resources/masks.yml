@@ -1,0 +1,52 @@
+# Made by RandomHashTags
+items:
+  generator:
+    item: "ender_chest"
+    name: "&6&lMask Generator&r &7(Right Click)"
+    lore:
+    - " "
+    - "&7Click to generate one of"
+    - "&7the following player masks:"
+    - " &6&l*&r &7Purge Mask"
+    - " &6&l*&r &7Scarecrow Mask"
+    - " &6&l*&r &7Turkey Mask"
+    - " &6&l*&r &7Pilgrim Mask"
+    - " &6&l*&r &7Monopoly Mask"
+    - " &6&l*&r &7Necromancer Mask"
+    - " &6&l*&r &7Santa"
+    - " &6&l*&r &7Reindeer"
+    - " &6&l*&r &7Party Hat"
+    - " &6&l*&r &7Death Knight"
+    - " &6&l*&r &7Rift Mask"
+    - " &6&l*&r &7Lover"
+    - " &6&l*&r &7Glitch"
+    - " &6&l*&r &7Zeus"
+    - " &6&l*&r &7Bunny"
+    - " &6&l*&r &7Joker"
+    -
+    can obtain:
+      - "PURGE"
+      - "SCARECROW"
+      - "TURKEY"
+      - "PILGRIM"
+      - "MONOPOLY"
+      - "NECROMANCER"
+      - "SANTA"
+      - "REINDEER"
+      - "PARTY_HAT"
+      - "DEATH_KNIGHT"
+      - "RIFT"
+      - "LOVER"
+      - "GLITCH"
+      - "ZEUS"
+      - "BUNNY"
+      - "JOKER"
+#
+added lore:
+  - " "
+  - "&7&oAttach this mask to any helmet"
+  - "&7&oto give it a visual override!"
+  - " "
+  - "&7To equip, place this mask on a helmet."
+  - "&7To remove, right-click helmet with mask attached."
+#

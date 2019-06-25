@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Hold Cosmonaut Outpost I"
+  completion: 3h
+#
+lore:
+- "&7Hold Cosmonaut Outpost for 3h"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

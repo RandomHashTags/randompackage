@@ -1,0 +1,40 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 22
+  #
+  item: "diamond_chestplate"
+  name: "&b&lCosmonaut &5&lKit"
+  lore:
+  - " "
+  - "&f&l*&r &6&lHeroic Armor Pieces"
+  - "&f&l*&r &6&lHeroic Enchantments"
+  - " "
+  - "&7Reinventing the definition of a \"godset\"."
+  - "&6* Immortal Enchant Release"
+#
+items:
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&6&l{PLAYER}'s Cosmonaut Spacesuit {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection5;Unbreaking3}"
+    - "{Immortal}:chance=40"
+    - "RPEnchants{Deathbringer;Enlighted;Leadership;Overload;Creeper Armor;Ghost;Guardians;Obsidianshield}"
+    - "&6&oForged of the finest materials in all"
+    - "&6&othe galaxy. A timeless, unique piece."
+  leggings:
+    item: "diamond_leggings"
+    name: "&6&l{PLAYER}'s Cosmonaut Pantaloons {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection5;Unbreaking3}"
+    - "{Immortal};chance=40"
+    - "RPEnchants{Deathbringer;Enlighted;Overload;Creeper Armor;Ghost;Guardians}"
+    - "&6&oCreated out of the richest materials"
+    - "&6&oin all the galaxy. So fabulous."
+#

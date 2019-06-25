@@ -1,0 +1,62 @@
+#
+messages:
+  unlock access:
+    - "&cUnlock access to disguises at &nbuy.yourserver.com&r&c!"
+#
+item:
+  item: "bone"
+  name: "&a&lPlayer Disguise \"&r&a{TYPE}&l\""
+  lore:
+  - " "
+  - "&7Click to unlock this cosmetic /disguise!"
+#
+allowed types:
+  - BAT
+  - BLAZE
+  - CAVE_SPIDER
+  - CHICKEN
+  - COW
+  - CREEPER
+  - DONKEY
+  - ENDER_DRAGON
+  - ENDERMAN
+  - GHAST
+  - GIANT
+  - HORSE
+  - IRON_GOLEM
+  - MAGMA_CUBE
+  - MULE
+  - MUSHROOM_COW
+  - OCELOT
+  - PIG
+  - ZOMBIE_PIGMAN
+  - PRIMED_TNT
+  - SHEEP
+  - SILVERFISH
+  - SKELETON
+  - SKELETON_HORSE
+  - SLIME
+  - SNOWMAN
+  - SPIDER
+  - SQUID
+  - UNDEAD_HORSE
+  - VILLAGER
+  - WITCH
+  - WITHER
+  - WITHER_SKELETON
+  - WOLF
+  - ZOMBIE
+  - ZOMBIE_VILLAGER
+#
+locked:
+  prefix: "&c&l"
+  added lore:
+    - " "
+    - "&c&lLOCKED"
+    - " "
+    - "&7Unlock disguises at &nbuy.yourserver.com&r&7!"
+unlocked:
+  prefix: "&a&l"
+  added lore:
+    - " "
+    - "&a&lUNLOCKED"

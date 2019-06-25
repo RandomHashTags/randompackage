@@ -1,0 +1,66 @@
+# Made by RandomHashTags
+messages:
+  summon:
+  - " "
+  - "&f&l*** {NAME}&r &f&l***"
+  - "&7You have summoned a Fallen Hero! Defeat it to claim its treasures and a chance to &nunlock its /vkit!"
+  - " "
+  #
+  receive kit:
+  - "&6&l(!) &r&6{PLAYER} has unlocked the {NAME} &r&6from a Fallen Hero!"
+#
+settings:
+  type: WITHER_SKELETON
+  name: "{NAME}"
+  spawnable: WARZONE
+#
+potion effects:
+  - ""
+#
+equipment:
+  helmet:
+    item: "{HELMET}"
+  chestplate:
+    item: "{CHESTPLATE}"
+  leggings:
+    item: "{LEGGINGS}"
+  boots:
+    item: "{BOOTS}"
+  weapon:
+    item: "{WEAPON}"
+#
+spawn item:
+  item: "bone"
+  name: "&f&l&nFallen Hero:&r {NAME}"
+  lore:
+  - "&7Summons a fallen hero equipped with"
+  - "&7the {NAME} &7equipment."
+  - " "
+  - "&7Defeat this hero for a &nguaranteed"
+  - "&7drop of the &f/vkit item set &7and a"
+  - "&f&nchance&r &7to get a &f/vkit Redemption Gem"
+  - "&7that can be used to &nunlock the /vkit"
+  - "&7on your own account for regular use!"
+  - " "
+  - "&f&lUSE: &7To summon this fallen hero"
+  - "&fRight-Click &7this item inside the Warzone."
+  - " "
+  - "&c&lWARNING: &7Whoever defeats the Fallen Hero"
+  - "&7will receive its legendary treasures."
+  - "&7Do &c&nnot&r &7place in confined spaces,"
+  - "&7as minecraft mobs tend to block glitch."
+#
+gem:
+  chance: 20
+  item: "diamond"
+  name: '&f&lKIT &r&f"{NAME}&r&f"'
+  lore:
+  - "&7Right-click this gem to unlock"
+  - "&7the {NAME} &7/vkit on this server."
+  - " "
+  - "&7If you already have this /vkit unlocked,"
+  - "&7you can redeem this gem to increase"
+  - "&7the &e&lKit Tier&r &7which will increase"
+  - "&7the enchantment levels on the /vkit"
+  - "&7items each time you claim it."
+#

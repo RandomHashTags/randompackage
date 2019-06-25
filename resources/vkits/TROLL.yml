@@ -1,0 +1,64 @@
+# Made by RandomHashTags
+settings:
+  max level: 10
+  upgrade chance: 10
+  cooldown: 259200
+  fallen hero: VKIT
+#
+gui settings:
+  slot: 1
+  #
+  item: "bone"
+  name: "&3&lTroll Kit"
+  lore:
+  - '&e&lKit Level: &r&e&n{LEVEL}&r &e/ 10'
+  - ' '
+  - '&3&l* Trollolololo"L"'
+  - '&3&l* Axe of ( ͡° ͜ʖ ͡°)'
+  - ' '
+  - '&7Who needs love when you can meme?'
+  - '&6* Valentine 2017'
+#
+items:
+  leggings:
+    item: "diamond_leggings"
+    name: '&3&lTrollolololo"L" (&bLVL {LEVEL}&3&l) {ENCHANT_SIZE}'
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "{Natures Wrath}:chance=50"
+    - "RPEnchants{Protection;Enlighted;Clarity;Deathbringer;Tank}"
+    - "{Angelic}:reqlevel=8"
+    - "RPEnchants{Guardians;Obsidianshield}"
+    - "{Lucky}:reqlevel=3"
+    - "RPEnchants{Armored}"
+    - "{Dodge}:reqlevel=5"
+    - "RPEnchants{Cactus}"
+    - "&3Everywhere you go, you can hear the faint"
+    - "&3humm of your leggings as they whisper... \"Trololo\"."
+    - " "
+    - "&3&lKit Level: &b{LEVEL} / 10"
+  axe:
+    item: "diamond_axe"
+    name: "&3&lAxe of ( ͡° ͜ʖ ͡°)"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking3}"
+    - "{Soul Trap}:chance=50"
+    - "{Insanity}:reqlevel=3"
+    - "RPEnchants{Devour}"
+    - "{Lifesteal}:reqlevel=5"
+    - "RPEnchants{Rage;Barbarian;Cleave;Blessed}"
+    - "{Silence}:reqlevel=10"
+    - "RPEnchants{Pummel;Confusion}"
+    - "&3An axe believed to be unrivalved in cringe"
+    - "&3in all of the Serververse; lemme axe you a"
+    - "&3question, does it hurt to hold it in your hands?"
+    - " "
+    - "&3&lKit Level: &b{LEVEL} / 10"
+#
+upgrade gem:
+  item: "red_dye"
+  name: "&2&lEvolution Gem &r&2(&3&lTroll&r&2)"
+  lore:
+  - "&7Right-click this evolution gem to"
+  - "&7increase the power of the"
+  - "&3&lTroll&r &7/vkit by 1 level."

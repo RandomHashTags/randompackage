@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Trap"
+lore:
+- "&eA chance to give buffed slowness"
+- "&eeffect."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: "3500:4000"
+tinkerer: "62:71:80"
+#
+attributes:
+- "PvA;chance=6+(2*level);addPotionEffect{[victim]slowness:level:20+(40*level):false}"

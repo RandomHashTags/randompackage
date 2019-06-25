@@ -1,0 +1,73 @@
+# Made by RandomHashTags
+settings:
+  name: "Servonaut"
+  warp location: "outpost_4;100;200;100;0;0"
+  center: "outpost_4;0;165;0;0;0"
+  claim radius: 5
+  claim radius type: CIRCLE
+#
+messages:
+  lost control:
+    - " "
+    - "&c&l(!) &n{FACTION}&r &c&lhave lost the &nServonaut Outpost!&r &c&lThey had control for &n{TIME}!"
+    - "&7Use &c&l/outpost&r &7to view more information."
+    - " "
+  claimed:
+    - " "
+    - "&a&l(!) &n{FACTION}&r &a&lhave claimed the &nServonaut Outpost!"
+    - "&7Use &a&/outpost&r &7to view more information."
+    - " "
+#
+gui:
+  slot: 7
+  item: "gold_chestplate"
+  name: "&6&l&nServonaut Outpost"
+  lore:
+    - " "
+    - "&6&l(!)&r &fClick to {TYPE}&r &fthis outpost!"
+    - " "
+    - "&6&lStatus:&r {STATUS}"
+    - "&6&lAttacking:&r &f{ATTACKING}"
+    - "&6&lControlling:&r &f{CONTROLLING} &7[&f{TIME}&7]"
+    - "&6&lCap %:&r &f{CAP%}"
+    - " "
+    - "&6&lLimits:"
+    - "&6&l*&r &f<= &6&nLegendary&r &fenchantments"
+    - " "
+    - "&6&lRewards:"
+    - "&6&l*&r &f2x XP"
+    - "&6&l*&r &f2x mcMMO"
+    - "&6&l*&r &f50% Soul Costs"
+    - "&6&l*&r &fSoul Demon Spawns"
+    - "&6&l*&r &fSoul Reaper Boss"
+    - "&6&l*&r &fCustom Sell Signs"
+    - "&6&l*&r &fAble to use /warp end exist portal in combat"
+    - "&6&l*&r &f10% chance to negate Holy White Scrolls"
+#
+limits:
+  - "AllowedEnchantRarities{SIMPLE;UNIQUE;ELITE;ULTIMATE;LEGENDARY}"
+#
+rewards:
+  - "XPBoostMultiplier=2"
+  - "MCMMOBoostMultiplier=2"
+  - "RarityGem:SOUL:CostMultiplier=0.5"
+#
+scoreboard:
+  title: "&b&l&nServer&r &d&l&nOutpost"
+  score start: 15
+  scores:
+    - "&a"
+    - "&6&lAttacking"
+    - "&f{ATTACKING}"
+    - "&b"
+    - "&6&lControlling"
+    - "&f{CONTROLLING}"
+    - "&c"
+    - "&6&lCap %"
+    - "&f{CAP%}%"
+    - "&d"
+    - "&6&lStatus"
+    - "{STATUS}"
+    - "&e"
+    - "&6&lLimits"
+    - "&6<= Legendary"

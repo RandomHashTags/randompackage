@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "EndMobsKilled"
+  duration: 86400
+  type: "Mobs Killed"
+#
+item:
+  item: "ender_portal_frame"
+  name: "&a&lMost Ender Monsters Killed"
+#

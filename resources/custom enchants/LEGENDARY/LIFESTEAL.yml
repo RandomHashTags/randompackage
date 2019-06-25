@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Lifesteal"
+lore:
+- "&eA chance to regain health when"
+- "&eattacking."
+#
+max level: 5
+applies to: "sword"
+#
+alchemist: "6500:8000:9500:11000"
+tinkerer: "124:136:148:160:172"
+#
+attributes:
+- "PvA;chance=2*level;heal{[damager]1h};setHealth{[victim]healthOf(VICTIM)-1};sendMessage{[damager]&6&l** LIFESTEAL **}"

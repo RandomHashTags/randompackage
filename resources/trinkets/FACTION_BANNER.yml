@@ -1,0 +1,21 @@
+# Made by RandomHashTags
+settings:
+  soul cost: 500
+  duration: 10
+#
+item:
+  item: "white_banner"
+  name: "&5&lFaction Banner&r &7(Right Click)"
+  lore:
+    - " "
+    - "&5&lCOST:&r &f500 souls"
+    - "&5&lDURATION:&r &f10s"
+    - " "
+    - "&7Place down to create an"
+    - "&7inter-dimensional rift"
+    - "&7that allows faction members"
+    - "&7to travel to your location"
+    - "&7by using the /f assist command."
+#
+attributes:
+  - ""

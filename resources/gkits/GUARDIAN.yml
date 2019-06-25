@@ -1,0 +1,67 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 3
+  #
+  item: "eye_of_ender"
+  name: "Guardian Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Divine Bow of Valhalla"
+  - "&f&l* &6&lHeroic Halo of the Guardian"
+  - "&f&l* &eHeroic Sandals of the Divine"
+  - "&f&l* &eHeroic Divine Guardian Chestplate"
+  - "&f&l* &eHeroic Guardian Leggings"
+  - " "
+  - "&7Protect and serve the galaxy you love."
+  - "&6* Heart of Darkness"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&6&lHeroic Halo of the Guardian"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Ender Shift;Glowing;Clarity;Implants;Protection}"
+    - "&6&oA glowing, warm, light halo."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&eHeroic Divine Guardian Chestplate"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Spirit Link;Guardians;Curse;Shockwave}"
+    - "&e&oA glimmering, bright chestplate."
+  leggings:
+    item: "diamond_leggings"
+    name: "&eHeroic Divine Guardian Leggings"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Self Destruct;Nutrition}"
+    - "&e&oA glowing pair of heavingly leggings."
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Sandals of the Divine"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Anti Gravity;Gears}"
+    - "&e&oForged out of pure light essence."
+  bow:
+    item: "bow"
+    name: "&6&lHeroic Divine Bow of Valhalla"
+    lore:
+    - "VEnchants{Power5;Punch2;Unbreaking3;Infinity1}"
+    - "RPEnchants{Silence;Rage;Piercing;Lightning;Arrow Lifesteal;Snare;Sniper}"
+    - "&6&oProtect and heal the galaxy,"
+    - "&6&oand maintain law and order."
+  arrow:
+    item: "arrow"
+  clarity custom enchant:
+    item: "ce:CLARITY:random:random:random"
+  christmas candy:
+    item: "christmascandy;amount=32"
+#

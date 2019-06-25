@@ -1,0 +1,44 @@
+# Made by RandomHashTags
+armor lore:
+  - " "
+  - "&c&lPHANTOM SET BONUS"
+  - "&cDeal +25% damage to all enemies."
+  - "&7&o(Requires all 4 phantom items.)"
+#
+helmet:
+  item: "diamond_helmet"
+  name: "&c&lPhantom Hood&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Drunk;Armored;Enlighted;Deathbringer;Implants;Angelic;Tank}"
+  - "&cThe fabled hood of the Phantom."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&c&lPhantom Shroud&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Overload;Blood Lust;Dodge;Angelic;Tank}"
+  - "&cThe legendary shroud of the Phantom."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&c&lPhantom Robeset&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Obsidianshield;Tank;Angelic;Cactus}"
+  - "&cThe demonic robe of the Phantom."
+#
+boots:
+  item: "diamond_boots"
+  name: "&c&lPhantom Sandals&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape}"
+  - "&cThe silent sandals of the Phantom."
+#
+attributes:
+  - "PvA;setDamage{dmg*1.25}"
+#
+activate message:
+  - "&c&lPHANTOM SET BONUS&r&c: +25% DMG"

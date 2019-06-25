@@ -1,0 +1,20 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Corrupt"
+lore:
+- "&eDeals damage over time to enemy"
+- "&eplayers, unless enemy player has"
+- "&eInversion. If enemy player has"
+- "&eInversion, strikes that would"
+- "&enormally heal them from Inversion"
+- "&ewill damage them instead."
+#
+max level: 4
+applies to: "_axe"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

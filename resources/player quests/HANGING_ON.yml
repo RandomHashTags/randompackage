@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Hanging On"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Die with a Holy Whitescrolled Piece"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- ""

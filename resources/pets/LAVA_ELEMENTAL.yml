@@ -1,0 +1,33 @@
+# Made by RandomHashTags
+settings:
+  cooldown:
+    1: 300
+  exp to level:
+    2: 2000
+#
+item:
+  texture: ""
+  item: "player_head_item"
+  name: "&e&lLava Elemental Pet&r &7[LVL {LEVEL}]"
+  lore:
+  - "&7A fiery pet that is"
+  - "&7capable of conjuring lava"
+  - "&7and giving it to its owner."
+  - " "
+  - "&f&lAbility"
+  - "&7Fills up to 32x"
+  - "&7empty buckets in your"
+  - "&7inventory into lava!"
+  - "     &f&l+"
+  - "&7Adds 25x Fat Bucket"
+  - "&7charges to all Fat Buckets!"
+  - " "
+  - "&f&lCooldown"
+  - " &7{COOLDOWN}"
+  - " "
+  - "&f&lLevel"
+  - " &7{LEVEL}"
+  - " "
+  - "&f&lEXP"
+  - "{EXP}"
+  - " &7({XP}/{COMPLETION})"

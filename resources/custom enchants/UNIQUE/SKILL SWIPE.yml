@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Skill Swipe"
+lore:
+- "&eA chance to steal some of your"
+- "&eenemy's EXP every time you damage"
+- "&ethem."
+#
+max level: 5
+applies to: "sword"
+#
+alchemist: "2150:2600:2950:3200"
+tinkerer: "63:74:85:96:107"
+#
+attributes:
+- "PvP;"

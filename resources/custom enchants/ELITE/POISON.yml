@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Poison"
+lore:
+- "&eA chance of giving the poison effect."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: "2500:3000"
+tinkerer: "75:84:93"
+#
+attributes:
+- "PvA;chance=7+level;addPotionEffect{[victim]poison:level-1:40+(40*level):false}"

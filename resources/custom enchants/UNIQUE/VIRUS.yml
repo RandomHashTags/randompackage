@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Virus"
+lore:
+- "&eMultiplies all Wither and Poison"
+- "&edamage the affected target receives,"
+- "&eand has a chance to remove"
+- "&eregeneration effects on hit."
+#
+max level: 4
+applies to: "bow"
+#
+alchemist: "2450:2650:2850"
+tinkerer: "71:80:89:98"
+#
+attributes:
+- ""

@@ -1,0 +1,78 @@
+# Made by RandomHashTags
+title: "Shop Items (Ores and Gems)"
+size: 18
+gui:
+  iron block:
+    slot: 0
+    item: "iron_block"
+    name: "&e&lIron Block"
+    prices: 1170;350
+  iron ingot:
+    slot: 1
+    item: "iron_ingot"
+    name: "&e&lIron Ingot"
+    prices: 130;40
+  gold ingot:
+    slot: 2
+    item: "gold_ingot"
+    name: "&e&lGold Ingot"
+    prices: 100;50
+  coal:
+    slot: 3
+    item: "coal"
+    name: "&e&lCoal"
+    prices: 9.06;0.94
+  coal block:
+    slot: 4
+    item: "coal_block"
+    name: "&e&lBlock of Coal"
+    prices: 80;8
+  gold block:
+    slot: 5
+    item: "gold_block"
+    name: "&e&lGold Block"
+    prices: 1850;450
+  lapis lazuli:
+    slot: 6
+    item: "lapis_lazuli"
+    name: "&e&lLapis Lazuli"
+    prices: 18.12;1.25
+  lapis block:
+    slot: 7
+    item: "lapis_block"
+    name: "&e&lLapis Lazuli Block"
+    prices: 160;9
+  redstone:
+    slot: 8
+    item: "redstone"
+    name: "&e&lRedstone"
+    prices: 16.25;0.94
+  redstone block:
+    slot: 9
+    item: "redstone_block"
+    name: "&e&lRedstone Block"
+    prices: 195;10
+  diamond:
+    slot: 10
+    item: "diamond"
+    name: "&e&lDiamond"
+    prices: 390;100
+  diamond block:
+    slot: 11
+    item: "diamond_block"
+    name: "&e&lDiamond Block"
+    prices: 3500;800
+  emerald:
+    slot: 12
+    item: "emerald"
+    name: "&e&lEmerald"
+    prices: 1150;200
+  emerald block:
+    slot: 13
+    item: "emerald_block"
+    name: "&e&lEmerald Block"
+    prices: 8775;1250
+  back:
+    slot: 17
+    item: "back"
+#

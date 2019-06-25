@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Randomizer III"
+  completion: 20
+  expiration: 86400
+#
+lore:
+- "&7Use 20 Randomization Scrolls"
+#
+rewards:
+- "questtokens=3: 3x Quest Tokens"
+#
+trigger:
+- "RandomizationScrollUsed;+1"

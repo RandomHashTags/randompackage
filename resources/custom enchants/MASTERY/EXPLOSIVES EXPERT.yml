@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Explosives Expert"
+lore:
+- "&eAllows Atomic Detonate to work on all"
+- "&eblock types for pickaxes, spades, and"
+- "&eaxes irregardless of the tool being"
+- "&eused."
+#
+max level: 1
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

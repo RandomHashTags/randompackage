@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/80f69c1d611d64722866f5991de3bbd7c6f7f0585c5ecf88bdb5f6afb4c78d"
+#
+item:
+  item: "player_head_item"
+  name: "&e&lTurkey Mask"
+  lore:
+  - "&c+2% Dodge"
+  - "&7Stay numble and fast, or the"
+  - "&7Pilgrims will catch and cook you!"
+  - " &6&l*&r &6Thanksgiving 2018"
+#
+attributes:
+  - ""
+#
+added lore:
+  - "&7&lATTACHED:&r &e&lTurkey Mask&r &f(&c+2% Dodge&f)"

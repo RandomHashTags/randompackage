@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Immortal"
+lore:
+- "&ePassive Soul Enchant. Prevents your"
+- "&earmor from taking durability damage"
+- "&ein exchange for souls. Costs 5-20"
+- "&esouls per use."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "10000:17500:25000"
+tinkerer: "183:197:211:225"
+#
+attributes:
+- "isDurabilityDamaged;DepleteRarityGem{SOUL:random{5:20}};cancel"

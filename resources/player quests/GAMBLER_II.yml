@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Gambler II"
+  completion: 500
+  expiration: 86400
+#
+lore:
+- "&7Buy 500 Jackpot Tickets"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "JackpotPurchaseTickets;+amount"

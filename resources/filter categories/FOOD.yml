@@ -1,0 +1,62 @@
+# Made by RandomHashTags
+title: "Item Filter: Food"
+size: 18
+#
+gui:
+  bone:
+    slot: 0
+    item: "bone"
+    name: "Bone"
+  carrot:
+    slot: 1
+    item: "carrot_item"
+    name: "Carrot"
+  pumpkin:
+    slot: 2
+    item: "pumpkin"
+    name: "Pumpkin"
+  melon block:
+    slot: 3
+    item: "melon_block"
+    name: "Melon Block"
+  melon slice:
+    slot: 4
+    item: "melon_slice"
+    name: "Melon"
+  raw beef:
+    slot: 5
+    item: "raw_beef"
+    name: "Raw Beef"
+  sugar cane:
+    slot: 6
+    item: "sugar_cane"
+    name: "Sugar Cane"
+  cactus:
+    slot: 7
+    item: "cactus"
+    name: "Cactus"
+  raw porkchop:
+    slot: 8
+    item: "pork"
+    name: "Raw Porkchop"
+  cooked porkchop:
+    slot: 9
+    item: "grilled_pork"
+    name: "Cooked Porkchop"
+  golden apple:
+    slot: 10
+    item: "golden_apple"
+    name: "Golden Apple"
+  pumpkin seeds:
+    slot: 11
+    item: "pumpkin_seeds"
+    name: "Pumpkin Seeds"
+  melon seeds:
+    slot: 12
+    item: "melon_seeds"
+    name: "Melon Seeds"
+  wheat seeds:
+    slot: 13
+    item: "wheat_seeds"
+    name: "Seeds"
+#

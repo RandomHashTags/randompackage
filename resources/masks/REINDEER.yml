@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/ebd46b38b21b342caf917ad9ca42afb68388a5591bcc9aded1e8e346e18890"
+#
+item:
+  item: "player_head_item"
+  name: "&a&lReindeer"
+  lore:
+  - "&cSPEED IV"
+  - "&7The decapitated and stuffed"
+  - "&7head of one of Santa's"
+  - "&7magical reindeer... yikes!"
+  - " &6&l*&r &6Christmas 2018"
+#
+attributes:
+  - "MaskEquip;addPotionEffect{speed:3:99999}"
+  - "MaskUnequip;removePotionEffect{speed:false}"
+#
+added lore:
+  - "&7&lATTACHED:&r &a&lReindeer Mask&r &f(&cSPEED IV&f)"

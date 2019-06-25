@@ -1,0 +1,206 @@
+# Made by RandomHashTags
+messages:
+  delete:
+  - "&6Home &c{HOME} &6has been removed."
+  save icon:
+  - "&a&l(!)&r &aSaved home {HOME} icon to &n{ICON}"
+  #
+  cannot set more than:
+  - "&cError: &4You cannot set more than {MAX} &chomes."
+  set home:
+  - "&6Home &b{HOME} &6set to current location."
+  unlocked new home slot:
+  - "&a&l(!) +1 Max Homes"
+#
+menu:
+  title: "Your Homes ({SET}/{MAX})"
+  name: "&b&l{HOME}"
+  lore:
+  - "&7Location: &f{X}x, {Y}y, {Z}z"
+  - "&7World: &f{WORLD}"
+  - " "
+  - "&7Left-Click to teleport"
+  - "&7Middle-Click to delete home"
+  - "&7Right-Click to edit icon"
+#
+settings:
+  default max: 1
+  default name: "Home"
+  default icon: "grass_block"
+#
+items:
+  max home increaser:
+    adds slots: 1
+    item: "bed"
+    name: "&e&lMax Home Increase &r&7(Right Click)"
+    lore:
+    - "&7Adds +1 &e/home &7slots to your player."
+#
+edit icon:
+  title: "Select Home Icon"
+  size: 54
+  added lore:
+  - "&7Click to select material."
+  #
+  dirt:
+    slot: 0
+    item: "dirt"
+  stone:
+    slot: 1
+    item: "stone"
+  custom name:
+    slot: 2
+    item: "cobblestone"
+  log:
+    slot: 3
+    item: "log"
+  log2:
+    slot: 4
+    item: "log_2"
+  workbench:
+    slot: 5
+    item: "workbench"
+  piston:
+    slot: 6
+    item: "piston"
+  note block:
+    slot: 7
+    item: "note_block"
+  mob spawner:
+    slot: 8
+    item: "mob_spawner"
+  bookshelf:
+    slot: 9
+    item: "bookshelf"
+  tnt:
+    slot: 10
+    item: "tnt"
+  stone slab:
+    slot: 11
+    item: "stone_slab"
+  anvil:
+    slot: 12
+    item: "anvil"
+  iron block:
+    slot: 13
+    item: "iron_block"
+  gold block:
+    slot: 14
+    item: "gold_block"
+  diamond block:
+    slot: 15
+    item: "diamond_block"
+  nether brick:
+    slot: 16
+    item: "nether_brick"
+  netherrack:
+    slot: 17
+    item: "netherrack"
+  end stone:
+    slot: 18
+    item: "end_stone"
+  chest:
+    slot: 19
+    item: "chest"
+  ender chest:
+    slot: 20
+    item: "ender_chest"
+  smooth bricks:
+    slot: 21
+    item: "smooth_brick"
+  another custom name:
+    slot: 22
+    item: "snow_block"
+  soul sand:
+    slot: 23
+    item: "soul_sand"
+  quartz block:
+    slot: 24
+    item: "quartz_block"
+  diamond sword:
+    slot: 25
+    item: "diamond_sword"
+  diamond axe:
+    slot: 26
+    item: "diamond_axe"
+  diamond pickaxe:
+    slot: 27
+    item: "diamond_pickaxe"
+  diamond shovel:
+    slot: 28
+    item: "diamond_spade"
+  diamond hoe:
+    slot: 29
+    item: "diamond_hoe"
+  ice:
+    slot: 30
+    item: "ice"
+  packed ice:
+    slot: 31
+    item: "packed_ice"
+  dispenser:
+    slot: 32
+    item: "dispenser"
+  furnance:
+    slot: 33
+    item: "furnace"
+  hopper:
+    slot: 34
+    item: "hopper"
+  glass:
+    slot: 35
+    item: "glass"
+  sand:
+    slot: 36
+    item: "sand"
+  sponge:
+    slot: 37
+    item: "sponge"
+  obsidian:
+    slot: 38
+    item: "obsidian"
+  bedrock:
+    slot: 39
+    item: "bedrock"
+  enchanting table:
+    slot: 40
+    item: "enchantment_table"
+  cactus:
+    slot: 41
+    item: "cactus"
+  glowstone:
+    slot: 42
+    item: "glowstone"
+  diamond:
+    slot: 43
+    item: "diamond"
+  emerald:
+    slot: 44
+    item: "emerald"
+  gold ingot:
+    slot: 45
+    item: "gold_ingot"
+  iron ingot:
+    slot: 46
+    item: "iron_ingot"
+  redstone:
+    slot: 47
+    item: "redstone"
+  bucket:
+    slot: 48
+    item: "bucket"
+  lava bucket:
+    slot: 49
+    item: "lava_bucket"
+  water bucket:
+    slot: 50
+    item: "water_bucket"
+  golden apple:
+    slot: 51
+    item: "golden_apple"
+  experience bottle:
+    slot: 52
+    item: "experience_bottle"
+  white bed:
+    slot: 53
+    item: "bed"

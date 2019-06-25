@@ -1,0 +1,73 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&b&lItem Filter Commands"
+    - "&f/filter toggle"
+    - "&7Toggle item pickup filter."
+    - " "
+    - "&f/filter edit"
+    - "&7Edit items you pickup while the item filter is enabled."
+    - " "
+  #
+  enable:
+    - "&a&l(!)&r &a&lItem Filter &nEnabled"
+    - "&7Use &n/filter edit&r &7to edit the items you will pickup."
+  disable:
+    - "&c&l(!)&r &c&lItem Filter &nDisabled"
+  #
+#
+settings:
+  categories added lore:
+    - "&7Click to view category items."
+  #
+  enabled prefix: "&a"
+  enabled lore:
+    - "&a&lWILL&r &7be picked up"
+    - "&7when item filter is &nenabled."
+  disabled prefix: "&c"
+  disabled lore:
+    - "&c&lWILL NOT&r &7be picked up"
+    - "&7when item filter is &nenabled."
+  # When a player exists a filter category, open the filter menu?
+  reopen menu: true
+#
+categories:
+  title: "Item Filter Categories"
+  size: 9
+  equipment:
+    slot: 1
+    opens: EQUIPMENT
+    item: "diamond_chestplate"
+    name: "&b&lEquipment"
+  potion supplies:
+    slot: 2
+    opens: POTION_SUPPLIES
+    item: "potion"
+    name: "&b&lPotion Supplies"
+  raiding:
+    slot: 3
+    opens: RAIDING
+    item: "redstone"
+    name: "&b&lRaiding"
+  food:
+    slot: 4
+    opens: FOOD
+    item: "bread"
+    name: "&b&lFood"
+  specialty:
+    slot: 5
+    opens: SPECIALTY
+    item: "mob_spawner"
+    name: "&b&lSpecialty"
+  ores:
+    slot: 6
+    opens: ORES
+    item: "emerald_ore"
+    name: "&b&lOres"
+  other blocks:
+    slot: 7
+    opens: OTHER
+    item: "sand"
+    name: "&b&lOther Blocks"
+#

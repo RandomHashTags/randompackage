@@ -1,0 +1,90 @@
+# Made by RandomHashTags
+title: "Item Filter: Potion Supplies"
+size: 27
+#
+gui:
+  spider eye:
+    slot: 0
+    item: "spider_eye"
+    name: "Spider Eye"
+  magma cream:
+    slot: 1
+    item: "magma_cream"
+    name: "Magma Cream"
+  ghast tear:
+    slot: 2
+    item: "ghast_tear"
+    name: "Ghast Tear"
+  slime ball:
+    slot: 3
+    item: "slime_ball"
+    name: "Slime Ball"
+  nether stalk:
+    slot: 4
+    item: "nether_stalk"
+    name: "Nether Wart"
+  speckled melon:
+    slot: 5
+    item: "speckled_melon"
+    name: "Speckled Melon"
+  sugar:
+    slot: 6
+    item: "sugar"
+    name: "Sugar"
+  glowstone dust:
+    slot: 7
+    item: "glowstone_dust"
+    name: "Glowstone Dust"
+  glowstone:
+    slot: 8
+    item: "glowstone"
+    name: "Glowstone"
+  golden carrot:
+    slot: 9
+    item: "golden_carrot"
+    name: "Golden Carrot"
+  potion:
+    slot: 10
+    item: "potion_water"
+    name: "Potion"
+  glass bottle:
+    slot: 11
+    item: "glass_bottle"
+    name: "Glass Bottle"
+  water lily:
+    slot: 12
+    item: "water_lily"
+    name: "Lily Pad"
+  carrot:
+    slot: 13
+    item: "carrot_item"
+    name: "Carrot"
+  quartz:
+    slot: 14
+    item: "quartz"
+    name: "Quartz"
+  red mushroom:
+    slot: 15
+    item: "red_mushroom"
+    name: "Red Mushroom"
+  apple:
+    slot: 16
+    item: "apple"
+    name: "Apple"
+  brown mushroom:
+    slot: 17
+    item: "brown_mushroom"
+    name: "Brown Mushroom"
+  ink sack:
+    slot: 18
+    item: "ink_sack"
+    name: "Ink Sack"
+  poisonous potato:
+    slot: 19
+    item: "poisonous_potato"
+    name: "Poisonous Potato"
+  golden apple:
+    slot: 20
+    item: "golden_apple"
+    name: "Golden Apple"
+#

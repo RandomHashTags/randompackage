@@ -1,0 +1,29 @@
+# Made by RandomHashTags
+settings:
+  cooldown:
+    1: 120
+  exp to level:
+    2: 1000
+#
+item:
+  texture: ""
+  item: "player_head_item"
+  name: "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]"
+  lore:
+  - "&7An elusive creature that"
+  - "&7ha the power to negate"
+  - "&7curses that prevent the use"
+  - "&7of enderpearl teleportation."
+  - " "
+  - "&f&lAbility"
+  - "&7Removes [&cTeleblock&7]"
+  - " "
+  - "&f&lCooldown"
+  - " &7{COOLDOWN}"
+  - " "
+  - "&f&lLevel"
+  - " &7{LEVEL}"
+  - " "
+  - "&f&lEXP"
+  - "{EXP}"
+  - " &7({XP}/{COMPLETION})"

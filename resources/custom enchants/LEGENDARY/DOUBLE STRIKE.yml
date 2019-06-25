@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Double Strike"
+lore:
+- "&eA chance to attack twice in one"
+- "&eswing. All your enchantments can"
+- "&ere-proc on this second attack, and it"
+- "&eoccurs instantly."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: "3000:7000"
+tinkerer: "51:66:81"
+#
+attributes:
+- "PvA;chance=8+(2*level);procEnchants{[damager]};sendMessage{[damager]&6&l* DOUBLE STRIKE *}"

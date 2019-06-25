@@ -1,0 +1,233 @@
+# Made by RandomHashTags
+messages:
+  no access:
+  - "&c&l(!)&r &cYou do not have access to this Server Crate! Purchase it (when available) at &nbuy.yourserver.com"
+  reset:
+    target no online:
+    - "&c&l(!)&r &cThat player isn't online!"
+    success:
+    - "&e&l(!)&r &eSuccessfully reset &n{TARGET}&r&e's monthly crates!"
+#
+gui:
+  title: "Server Crate Storage"
+  size: 27
+  background:
+    item: "black_stained_glass_pane"
+    name: "&f&l???"
+  #
+  2015:
+    slot: 0
+    item: "ender_chest"
+    name: "&9&l&n2015&r &9&lServer Crates"
+    lore:
+    - " "
+    - "&9&l2015 Crates:"
+    - " &9&l*&r {CRATE}"
+    - " "
+    - "&7Click to view Monthly Crates from &n2015&r&7!"
+  2016:
+    slot: 1
+    item: "ender_chest"
+    name: "&b&l&n2016&r &b&lServer Crates"
+    lore:
+    - " "
+    - "&b&l2016 Crates:"
+    - " &b&l*&r {CRATE}"
+    - " "
+    - "&7Click to view Monthly Crates from &n2016&r&7!"
+  2017:
+    slot: 2
+    item: "ender_chest"
+    name: "&e&l&n2017&r &e&lMonthly Crates"
+    lore:
+    - " "
+    - "&e&l2017 Crates:"
+    - " &e&l*&r {CRATE}"
+    - " "
+    - "&7Click to view Monthly Crates from &n2017&r&7!"
+  2018:
+    slot: 3
+    item: "ender_chest"
+    name: "&d&l&n2018&r &d&lMonthly Crates"
+    lore:
+    - " "
+    - "&d&l2018 Crates:"
+    - " &d&l*&r {CRATE}"
+    - " "
+    - "&7Click to view Monthly Crates from &n2018&r&7!"
+  #
+  jan 2019:
+    slot: 18
+    item: "monthlycrate:JANUARY_2019"
+  feb 2019:
+    slot: 19
+    item: "monthlycrate:FEBRUARY_2019"
+  mar 2019:
+    slot: 20
+    item: "monthlycrate:MARCH_2019"
+  apr 2019:
+    slot: 21
+    item: "monthlycrate:APRIL_2019"
+  may 2019:
+    slot: 22
+    item: "monthlycrate:MAY_2019"
+#
+category view:
+  title: "{CATEGORY} Monthly Crates"
+  background:
+    item: "black_stained_glass_pane"
+    name: "&f&l???"
+  locked:
+    item: "red_stained_glass_pane"
+    name: "&4&lLOCKED:&r {NAME}"
+    lore:
+    - "&7Unlock at &nbuy.yourserver.com"
+    - "{LORE}"
+  already claimed:
+    item: "lime_stained_glass_pane"
+    name: "&a&lCLAIMED:&r {NAME}"
+    lore:
+    - "{LORE}"
+  main menu:
+    item: "arrow"
+    name: "&cMain Menu"
+    lore:
+    - "&7Click to view main Monthly Crate category!"
+#
+items:
+  mystery crate:
+    item: "ender_chest"
+    name: "&e+&6&l?&r&e- &6&lMystery Server Crate &r&e-&6&l?&r&e+"
+    lore:
+      - " "
+      - "&7&nRight-click&r &7(in your hand) to recieve"
+      - "&7a random 2016 /cc from this list!"
+      - " "
+      - "&6&l*&e&l*&6&l* &nJANUARY 2016&r &6&l*&e&l*&6&l*"
+      - "&4&l*&c&l*&4&l* &nFEBRUARY 2016&r &4&l*&c&l*&4&l*"
+      - "&a&l*&2&l*&a&l* &nMARCH 2016&r &a&l*&2&l*&a&l*"
+      - "&e&l*&d&l*&e&l* &nAPRIL 2016&r &e&l*&5&l*&e&l*"
+      - "&c&l*&f&l*&9&l* &f&l&nJULY &r&9&l&n2016&r &c&l*&f&l*&9&l*"
+      - "&3&l*&b&l*&3&l* &nAUGUST 2016&r &3&l*&b&l*&3&l*"
+      - "&6&l*&f&l*&6&l* &nBACK TO SCHOOL&r &6&l*&f&l*&6&l*"
+      - "&c&l*&8&l*&c&l* &nOCTOBER 2016&r &c&l*&8&l*&c&l*"
+      - "&6&l*&4&l*&6&l* &nHALLOWEEN 2016&r &6&l*&4&l*&6&l*"
+      - "&5&l*&d&l*&5&l* &nNOVEMBER 2016&r &5&l*&d&l*&5&l*"
+      - "&8&l*&f&l*&8&l* &nBLACK FRIDAY 2016&r &8&l*&f&l*&8&l*"
+      - "&9&l*&b&l*&9&l* &b&l&nDECEMBER 2016&r &9&l*&b&l*&9&l*"
+      - "&a&l*&4&l*&a&l* &nHOLIDAY 2016&r &a&l*&4&l*&a&l*"
+      - " "
+      - "&7&oA mysterious chest that needs"
+      - "&7&oto be inspected to determine"
+      - "&7&oits exact contents."
+    can obtain:
+      - "JANUARY_2016"
+      - "FEBRUARY_2016"
+      - "MARCH_2016"
+      - "APRIL_2016"
+      - "JULY_2016"
+      - "AUGUST_2016"
+      - "SCHOOL_2016"
+      - "OCTOBER_2016"
+      - "NOVEMBER_2016"
+      - "DECEMBER_2016"
+      - "HALLOWEEN_2016"
+      - "BLACK_FRIDAY_2016"
+      - "HOLIDAY_2016"
+  heroic mystery crate:
+    item: "ender_chest"
+    name: "&c+&4&l?&r&c- &4&lHeroic Mystery Server Crate &r&c-&4&l?&r&c+"
+    lore:
+      - " "
+      - "&7&nRight-click&r &7(in your hand) to recieve"
+      - "&7a random 2017 /cc from this list!"
+      - " "
+      - "&f&l*&3&l*&f&l* &nJANUARY 2017&r &f&l*&3&l*&f&l*"
+      - "&c&l*&4&l*&c&l* &nVALENTINE 2017&r &c&l*&4&l*&c&l*"
+      - "&b&l*&a&l*&b&l* &nMARCH 2017&r &b&l*&a&l*&b&l*"
+      - "&5&l*&6&l*&5&l* &nAPRIL 2017&r &5&l*&6&l*&5&l*"
+      - "&2&l*&a&l*&2&l*&r &a&l&nMAY 2017&r &2&l*&a&l*&2&l*"
+      - "&d&l*&c&l*&d&l*&r &c&l&nJUNE 2017&r &d&l*&c&l*&d&l*"
+      - "&4&l*&f&l*&b&l* &f&l&nJULY &r&b&l&n2017&r &4&l*&f&l*&b&l*"
+      - "&9&l*&b&l*&9&l* &nAUGUST 2017&r &9&l*&b&l*&9&l*"
+      - "&9&l*&3&l*&9&l*&r &nSEPTEMBER 2017&r &9&l*&3&l*&9&l"
+      - "&6&l*&7&l*&6&l* &nBACK TO SCHOOL... AGAIN&r &6&l*&7&l*&6&l*"
+      - "&6&l*&8&l*&6&l* &nOCTOBER 2017&r &6&l*&8&l*&6&l*"
+      - "&5&l*&f&l*&5&l* &nNOVEMBER 2017&r &5&l*&f&l*&5&l*"
+      - "&e&l*&6&l*&e&l*&r &nTHANKSGIVING 2017&r &e&l*&6&l*&e&l*"
+      - "&c&l*&4&l*&c&l* &nHALLOWEEN 2017&r &c&l*&4&l*&c&l*"
+      - "&1&l*&9&l*&1&l*&r &9&l&nDECEMBER 2017&r &1&l*&9&l*&1&l*"
+      - "&4&l*&a&l*&4&l* HOLIDAY 2017&r &4&l*&a&l*&4&l*"
+      - " "
+      - "&7&oA mysterious chest that needs"
+      - "&7&oto be inspected to determine"
+      - "&7&oits exact contents."
+    can obtain:
+      - "JANUARY_2017"
+      - "VALENTINE_2017"
+      - "MARCH_2017"
+      - "APRIL_2017"
+      - "MAY_2017"
+      - "JUNE_2017"
+      - "JULY_2017"
+      - "AUGUST_2017"
+      - "SEPTEMBER_2017"
+      - "OCTOBER_2017"
+      - "NOVEMBER_2017"
+      - "DECEMBER_2017"
+      - "SCHOOL_2017"
+      - "HALLOWEEN_2017"
+      - "THANKSGIVING_2017"
+      - "HOLIDAY_2017"
+  superior mystery crate:
+    item: "ender_chest"
+    name: "&c+&5&l?&r&c- &5&lSuperior Mystery Crate&r &c-&5&l?&r&c+"
+    lore:
+      - " "
+      - "&7&nRight-click&r &7(in your hand) to receive"
+      - "&7a random 2018 /cc from this list!"
+      - " "
+      - "&3&l*&b&l*&3&l*&r &3&l&nJANUARY 2018&r &3&l*&b&l*&3&l*"
+      - "&5&l*&d&l*&5&l*&r &5&l&nFEBRUARY 2018&r &5&l*&d&l*&5&l*"
+      - "&2&l*&a&l*&2&l*&r &2&l&nMARCH 2018&r &2&l*&a&l*&2&l*"
+      - "&d&l*&e&l*&d&l*&r &d&l&nAPRIL 2018&r &d&l*&e&l*&d&l"
+      - "&a&l*&b&l*&a&l*&r &b&l&nMAY 2018&r &a&l*&b&l*&a&l*"
+      - "&c&l*&4&l*&c&l*&r &4&l&nJUNE 2018&r &c&l*&4&l*&c&l*"
+      - " "
+      - "&7&oAn extremely mysterious crate that"
+      - "&7&ohas a powerful aura emanating from it."
+    can obtain:
+      - "JANUARY_2018"
+      - "FEBRUARY_2018"
+      - "MARCH_2018"
+      - "APRIL_2018"
+      - "MAY_2018"
+      - "JUNE_2018"
+      - "JULY_2018"
+      - "AUGUST_2018"
+      - "SEPTEMBER_2018"
+      - "OCTOBER_2018"
+      - "HALLOWEEN_2018"
+      - "NOVEMBER_2018"
+      - "DECEMBER_2018"
+#
+animations:
+  reward:
+    duration: 5
+    cycles thru: # this is in a random order
+      - "stained_glass_pane:0:1;name{&f&l...}"
+      - "stained_glass_pane:1:1;name{&6&l...}"
+      - "stained_glass_pane:2:1;name{&5&l...}"
+      - "stained_glass_pane:3:1;name{&b&l...}"
+      - "stained_glass_pane:4:1;name{&e&l...}"
+      - "stained_glass_pane:5:1;name{&a&l...}"
+      - "stained_glass_pane:6:1;name{&d&l...}"
+  bonus reward:
+    duration: 6
+    cycles thru: # This is from top to bottom
+      - "stained_glass_pane:0:1;name{&f&l...}"
+      - "stained_glass_pane:5:1;name{&a&l...}"
+      - "stained_glass_pane:3:1;name{&b&l...}"
+      - "stained_glass_pane:4:1;name{&e&l...}"
+      - "stained_glass_pane:1:1;name{&6&l...}"
+#

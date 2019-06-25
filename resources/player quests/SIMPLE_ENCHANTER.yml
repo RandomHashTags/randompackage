@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Simple Enchanter"
+  completion: 240
+  expiration: 86400
+#
+lore:
+- "&7Purchase 240 Simple Books"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "EnchanterPurchase;isRarityBook;rarity=SIMPLE;+1"

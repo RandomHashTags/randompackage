@@ -1,0 +1,76 @@
+# Made by RandomHashTags
+settings:
+  name: "Trainee"
+  warp location: "outpost_2;100;200;100;0;0"
+  center: "outpost_2;0;165;0;0;0"
+  claim radius: 5
+  claim radius type: CIRCLE
+#
+messages:
+  lost control:
+    - " "
+    - "&c&l(!) &n{FACTION}&r &c&lhave lost the &nTrainee Outpost!&r &c&lThey had control for &n{TIME}!"
+    - "&7Use &c&l/outpost&r &7to view more information."
+    - " "
+  claimed:
+    - " "
+    - "&a&l(!) &n{FACTION}&r &a&lhave claimed the &nTrainee Outpost!"
+    - "&7Use &a&/outpost&r &7to view more information."
+    - " "
+#
+gui:
+  slot: 3
+  item: "chainmail_chestplate"
+  name: "&8&l&nTrainee Outpost"
+  lore:
+    - " "
+    - "&8&l(!)&r &fClick to {TYPE}&r &fthis outpost!"
+    - " "
+    - "&8&lStatus:&r {STATUS}"
+    - "&8&lAttacking:&r &f{ATTACKING}"
+    - "&8&lControlling:&r &f{CONTROLLING} &7[&f{TIME}&7]"
+    - "&8&lCap %:&r &f{CAP%}"
+    - " "
+    - "&8&lLimits:"
+    - "&8&l*&r &fNo Armor Set Bonuses"
+    - "&8&l*&r &f<= &a&nUnique&r &fenchantments"
+    - " "
+    - "&8&lRewards:"
+    - "&8&l*&r &f1.25x XP"
+    - "&8&l*&r &f1.25x mcMMO"
+    - "&8&l*&r &f2x Mobs from Spawners"
+    - "&8&l*&r &f+$25k /f money per 5m"
+    - "&8&l*&r &f-35% /alchemist cost"
+    - "&8&l*&r &fCustom Sell Signs"
+    - "&8&l*&r &f+25% DMG to players in heroic armor"
+    - "&8&l*&r &fLarger /f map for members"
+#
+limits:
+  - "AllowedEnchantRarities{SIMPLE;UNIQUE}"
+#
+rewards:
+  - "XPBoostMultiplier=1.25"
+  - "MCMMOBoostMultiplier=1.25"
+  - "SpawnerRateMultiplier=2.00"
+  - "AlchemistCostMultiplier=0.65"
+  - "PvP;hasArmorSet{HEROIC};setDamage{dmg*1.25}"
+#
+scoreboard:
+  title: "&b&l&nServer&r &d&l&nOutpost"
+  score start: 15
+  scores:
+    - "&a"
+    - "&7&lAttacking"
+    - "&f{ATTACKING}"
+    - "&b"
+    - "&7&lControlling"
+    - "&f{CONTROLLING}"
+    - "&c"
+    - "&7&lCap %"
+    - "&f{CAP%}%"
+    - "&d"
+    - "&7&lStatus"
+    - "{STATUS}"
+    - "&e"
+    - "&7&lLimits"
+    - "&a<= Unique"

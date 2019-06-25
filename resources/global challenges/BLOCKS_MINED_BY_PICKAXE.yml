@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "BlocksMinedByMaterial_pickaxe"
+  duration: 86400
+  type: "Blocks Broken"
+#
+item:
+  item: "smooth_brick"
+  name: "&a&lMost Blocks Mined Using Pick"
+#

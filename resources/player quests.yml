@@ -1,0 +1,173 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&e&l&nPlayer Quests"
+    - " "
+    - "&7Complete Player &e/quests &7every day to earn &6&nQuest Tokens&r&7, earn more Quest Tokens for a quest depending on its difficulty."
+    - "&6&lDifficulties:&r &aEasy (1)&7, &eMedium (2)&7, &cHard (3)"
+    - " "
+    - "&7Quest Tokens can be spent at the &e/questmaster &7and &eMystery Merchant &7to unlock epic rewards and treasure!"
+    - " "
+    - "&7The &eMystery Merchant &7arrives weekly on Saturday. &e&n12PM&r &eCST"
+    - "&7A new &emystery item &7will be available for purchase for &e25h &7after his arrival every week!"
+    - " "
+  #
+  not completed:
+    - "&c&l(!)&r &cYou have not completed this quest!"
+  already claimed:
+    - "&c&l(!)&r &cYou already claimed this quest!"
+  #
+  not enough tokens:
+    - "&c&l(!)&r &cYou do not have enough Quest Tokens for this item!"
+    - "&cCurrent: &7{TOKENS} Quest Token(s)"
+    - "&cRequired: &7{COST} Quest Token(s)"
+#
+status:
+  available:
+    - "&e&lAVAILABLE"
+    - "&eExpires in &l{TIME}"
+  completed:
+    - "&a&lCOMPLETED"
+    - "&7Click to claim rewards!"
+  claimed:
+    - "&a&lCLAIMED"
+#
+gui:
+  title: "Quests"
+  size: 9
+  #
+  quest slots: 0,1,2,3,4,5
+  active:
+    item: "white_stained_glass_pane"
+    name: "&e&l{NAME}"
+    lore:
+    - "{LORE}"
+    - " "
+    - "&a&lQuest Progress"
+    - " &f{PROGRESS} / {COMPLETION}"
+    - " "
+    - "&e&lRewards"
+    - "&f{REWARDS}"
+    - " "
+    - "{STATUS}"
+  claim:
+    item: "orange_stained_glass_pane"
+    name: "&6&l{NAME}"
+    lore:
+    - "{LORE}"
+    - " "
+    - "&a&lQuest Progress"
+    - " &f{PROGRESS} / {COMPLETION}"
+    - " "
+    - "&e&lRewards"
+    - "&f{REWARDS}"
+    - " "
+    - "{STATUS}"
+  claimed:
+    item: "lime_stained_glass_pane"
+    name: "&a&l{NAME}"
+    lore:
+    - "{LORE}"
+    - " "
+    - "&a&lQuest Progress"
+    - " &f{PROGRESS} / {COMPLETION}"
+    - " "
+    - "&e&lRewards"
+    - "&f{REWARDS}"
+    - " "
+    - "{STATUS}"
+  locked:
+    item: "red_stained_glass_pane"
+    name: "&c&lDaily Quest #{SLOT}"
+    lore:
+      - "&7You do not have access to this quest slot!"
+      - "&7Unlock a higher rank at &nbuy.yourserver.com&r&7!"
+  #
+  quest tokens:
+    slot: 7
+    item: "book"
+    name: "&6&lQuest Tokens: &n{TOKENS}"
+    lore:
+    - "&7Quest Tokens can be claimed by"
+    - "&7completing quests of various difficulties!"
+  quest master shop:
+    slot: 8
+    item: "chest"
+    name: "&a&lQuest Master Shop"
+    lore:
+    - "&7Click to view the /quests shop!"
+#
+shop:
+  title: "Quest Shop"
+  size: 27
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  return to quests:
+    slot: 0
+    item: "arrow"
+    name: "&a&lReturn to Quests"
+    lore:
+    - "&7Click to return to the /quests menu!"
+    - " "
+    - "&a&lQuest Tokens"
+    - " &f{TOKENS}"
+  added lore:
+    - " "
+    - "&6&lCOST&r &f{COST} Quest Tokens"
+  #
+  default settings:
+    starting slot: 9
+    cost: 1
+  #
+  xpbottle:
+    item: "xpbottle:25000:Quest Prize"
+  faction points:
+    item: "factionpoints:4"
+  soul gem:
+    item: "raritygem:SOUL:50"
+  gigantic tnt:
+    item: "customtnt:GIGANTIC;amount=64"
+  lethal tnt:
+    item: "customtnt:LETHAL;amount=32"
+  lucky creeper:
+    item: "customcreeper:LUCKY"
+  gigantic creeper:
+    item: "customcreeper:GIGANTIC;amount=2"
+  white scroll:
+    item: "whitescroll"
+    cost: 5
+  ultimate fireball:
+    item: "rarityfireball:ULTIMATE;amount=5"
+  legendary fireball:
+    item: "rarityfireball:LEGENDARY;amount=2"
+  item nametag:
+    item: "itemnametag"
+    cost: 2
+  item lore crystal:
+    item: "itemlorecrystal"
+    cost: 2
+  transmog scroll:
+    item: "transmogscroll"
+    cost: 2
+  showcase expansion:
+    item: "showcaseexpansion"
+    cost: 3
+  max home increase:
+    item: "maxhomeincrease"
+    cost: 4
+  legendary crate:
+    item: "servercrate:LEGENDARY"
+    cost: 5
+  faction crystal:
+    item: "factioncrystal"
+    cost: 5
+  mystery mob spawner:
+    item: "mysterymobspawner"
+    cost: 7
+  #heroic mystery crate:
+    #slot: 31
+    #item: "heroicmysterycrate"
+    #cost: 25
+#

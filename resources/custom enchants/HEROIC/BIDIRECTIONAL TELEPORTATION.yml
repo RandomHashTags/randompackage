@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Bidirectional Teleportation"
+lore:
+- "&e"
+#
+max level: 5
+applies to: "bow"
+requires: "Teleportation;5"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

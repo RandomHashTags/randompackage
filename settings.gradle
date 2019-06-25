@@ -1,0 +1,3 @@
+rootProject.name = 'randompackage'
+
+include 'randompackage-common', 'randompackage-spigot', 'randompackage-sponge'

@@ -1,0 +1,237 @@
+# Made by RandomHashTags
+boss reward: "&f&l{AMOUNT}x SIMPLE"
+#
+settings:
+  title: "Simple Space Chest"
+  size: 45
+  redeemable items: 5
+  # - = background
+  # + = open-gui
+  format:
+  - "---------"
+  - "-+++++++-"
+  - "-+++++++-"
+  - "-+++++++-"
+  - "---------"
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  background 2: # Replaces the items when the items are revealed
+    item: "black_stained_glass"
+    name: " "
+#
+reveal chances:
+  LEGENDARY: 5
+  ULTIMATE: 10
+  ELITE: 15
+  UNIQUE: 20
+  SIMPLE: 25
+#
+item:
+  item: "trapped_chest"
+  name: "&f&lSimple Server Chest &7(Right Click)"
+  lore:
+  - "&7A cache of equipment packed by"
+  - "&7the Intergalactic Server Station."
+  - " "
+  - "&7Contains &f&n5 Simple rarity&r &7items..."
+  - "&f&l* &r&7Vanilla Equipment"
+  - "&f&l* &r&7Vanilla Potions"
+  - "&f&l* &r&7Sheep Spawners"
+  - "&f&l* &r&7Food"
+  - "&f&l* &r&7Buckets"
+  - "&f&l* &r&7Exploding Cake"
+  - "&f&l* &r&7$10,000 Money Notes"
+  - "&f&l* &r&71,00XP Bottles"
+  - "&f&l* &r&7Simple Player Titles"
+  - "&f&l* &r&7Simple Secret Dust"
+  - "&f&l* &r&7Simple Enchantment Book"
+  - "&f&l* &r&7Simple Randomization Scroll"
+  - "&f&l* &r&7Tier #1 Rank Quest"
+#
+flare:
+  settings:
+    spawn radius: 12
+    spawn in delay: 6
+    nearby radius: 50
+  item: "torch"
+  name: "&f&lSimple Space Flare&r &7(Right Click)"
+  lore:
+  - "&7Drops a cache of equipment packaged by"
+  - "&7the &nIntergalactic Cosmonaut Station,"
+  - "&7near your character's current position."
+  request msg:
+  - "&f&l** Simple Space Flare **"
+  - "&7Your request for &61x Loot Cache(s) &7has been received"
+  - "&7Transmitting coordinates... &ax:{X} y:{Y} z:{Z}"
+  nearby spawn msg:
+  - "&3&l(!)&r &3A &f&nSimple Space Flare&r &3has been launched nearby!"
+#
+display:
+  rarity: "&fSimple"
+  item: "white_stained_glass_pane"
+  name: "&f&lSimple Mystery Item"
+  lore:
+  - "&7Click here to reveal a"
+  - "{LOOT_RARITY} &7item from the {SC_RARITY}"
+  - "&7loot table."
+  - " "
+  - "&f&l+0%&r &fRare Loot Chance"
+#
+open gui:
+  item: "white_stained_glass"
+  name: "&f&l???&r &7#{SLOT}"
+  lore:
+  - "&7Choose &f&n5 mystery items&r &7and,"
+  - "&7your &f&lSimple&r &7loot will be revealed."
+#
+selected: # When you select a "open-gui" item, this item replaces the clicked item
+  item: "trapped_chest"
+  name: "&f&lMystery Item &n#{SLOT}"
+  lore:
+  - "&7You have selected this mystery item."
+#
+reveal slot rarity:
+  item: "trapped_chest"
+  name: "&f&lMystery Item &n#{SLOT}"
+  lore:
+  - "&7You have selected this mystery item."
+  - " "
+  - "&7&nClick to reveal slot rarity..."
+  - "&f&l*&r &fSimple"
+  - "&a&l*&r &aUnique"
+  - "&b&l*&r &bElite"
+  - "&e&l*&r &eUltimate"
+  - "&6&l*&r &6Legendary"
+#
+rewards:
+  LEGENDARY:
+    - "sheepspawner"
+    - "cooked_chicken;amount=16"
+    - "cookie;amount=64"
+    - "water_bucket"
+    - "lava_bucket"
+    - "bucket"
+    - "explosivecake;amount=1-16"
+    - "banknote:10000"
+    - "xpbottle:1000"
+    - "raritybook:SIMPLE"
+    - "randomizationscroll:SIMPLE"
+    - "rarityfireball:SIMPLE;amount=1-32"
+    - "emerald_block"
+    - "golden_apple;amount=24"
+    - "cooked_beef;amount=16"
+    - "diamond_helmet"
+    - "diamond_chestplate"
+    - "diamond_leggings"
+    - "diamond_boots"
+    - "diamond_sword"
+    - "diamond_pickaxe"
+    - "diamond_axe"
+    - "arrow;amount=64"
+    - "tnt;amount=32"
+    - "golden_carrot;amount=16"
+  ULTIMATE:
+    - "sheepspawner"
+    - "cooked_chicken;amount=16"
+    - "cookie;amount=64"
+    - "water_bucket"
+    - "lava_bucket"
+    - "bucket"
+    - "explosivecake;amount=1-16"
+    - "banknote:10000"
+    - "xpbottle:1000"
+    - "raritybook:SIMPLE"
+    - "randomizationscroll:SIMPLE"
+    - "rarityfireball:SIMPLE;amount=1-32"
+    - "emerald_block"
+    - "golden_apple;amount=24"
+    - "cooked_beef;amount=16"
+    - "diamond_helmet"
+    - "diamond_chestplate"
+    - "diamond_leggings"
+    - "diamond_boots"
+    - "diamond_sword"
+    - "diamond_pickaxe"
+    - "diamond_axe"
+    - "arrow;amount=64"
+    - "tnt;amount=32"
+    - "golden_carrot;amount=16"
+  ELITE:
+    - "sheepspawner"
+    - "cooked_chicken;amount=16"
+    - "cookie;amount=64"
+    - "water_bucket"
+    - "lava_bucket"
+    - "bucket"
+    - "explosivecake;amount=1-16"
+    - "banknote:10000"
+    - "xpbottle:1000"
+    - "raritybook:SIMPLE"
+    - "randomizationscroll:SIMPLE"
+    - "rarityfireball:SIMPLE;amount=1-32"
+    - "emerald_block"
+    - "golden_apple;amount=24"
+    - "cooked_beef;amount=16"
+    - "diamond_helmet"
+    - "diamond_chestplate"
+    - "diamond_leggings"
+    - "diamond_boots"
+    - "diamond_sword"
+    - "diamond_pickaxe"
+    - "diamond_axe"
+    - "arrow;amount=64"
+    - "tnt;amount=32"
+    - "golden_carrot;amount=16"
+  UNIQUE:
+    - "sheepspawner"
+    - "cooked_chicken;amount=16"
+    - "cookie;amount=64"
+    - "water_bucket"
+    - "lava_bucket"
+    - "bucket"
+    - "explosivecake;amount=1-16"
+    - "banknote:10000"
+    - "xpbottle:1000"
+    - "raritybook:SIMPLE"
+    - "randomizationscroll:SIMPLE"
+    - "rarityfireball:SIMPLE;amount=1-32"
+    - "emerald_block"
+    - "golden_apple;amount=24"
+    - "cooked_beef;amount=16"
+    - "diamond_helmet"
+    - "diamond_chestplate"
+    - "diamond_leggings"
+    - "diamond_boots"
+    - "diamond_sword"
+    - "diamond_pickaxe"
+    - "diamond_axe"
+    - "arrow;amount=64"
+    - "tnt;amount=32"
+    - "golden_carrot;amount=16"
+  SIMPLE:
+    - "sheepspawner"
+    - "cooked_chicken;amount=16"
+    - "cookie;amount=64"
+    - "water_bucket"
+    - "lava_bucket"
+    - "bucket"
+    - "explosivecake;amount=1-16"
+    - "banknote:10000"
+    - "xpbottle:1000"
+    - "raritybook:SIMPLE"
+    - "randomizationscroll:SIMPLE"
+    - "rarityfireball:SIMPLE;amount=1-32"
+    - "emerald_block"
+    - "golden_apple;amount=24"
+    - "cooked_beef;amount=16"
+    - "diamond_helmet"
+    - "diamond_chestplate"
+    - "diamond_leggings"
+    - "diamond_boots"
+    - "diamond_sword"
+    - "diamond_pickaxe"
+    - "diamond_axe"
+    - "arrow;amount=64"
+    - "tnt;amount=32"
+    - "golden_carrot;amount=16"

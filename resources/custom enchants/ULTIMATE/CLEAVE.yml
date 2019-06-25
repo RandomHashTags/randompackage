@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Cleave"
+lore:
+- "&eDamages players within a radius that"
+- "&eincreases with the level of enchant."
+#
+max level: 7
+applies to: "_axe"
+#
+alchemist: "4000:4400:4800:5200:5600:6000"
+tinkerer: "52:64:76:88:100:112:124"
+#
+attributes:
+- "PvA;chance=4+(3*level);damage{nearby{damager:victim:3+level:3+level:3+level}dmg*0.25}"

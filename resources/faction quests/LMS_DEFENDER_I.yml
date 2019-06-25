@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "LMS Defender I"
+  completion: 15m
+#
+lore:
+- "&7Hold LMS for 15 Minutes"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

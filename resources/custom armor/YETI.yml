@@ -1,0 +1,46 @@
+# Made by RandomHashTags
+armor lore:
+  - " "
+  - "&b&lYETI SET BONUS"
+  - "&b&l*&r &bDeal +10% damage to all enemies."
+  - "&b&l*&r &bEnemies deal 10% less damage to you."
+  - "&7&o(Requires all 4 yeti items.)"
+#
+helmet:
+  item: "diamond_helmet"
+  name: "&b&lYeti Facemask&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Drunk;Armored;Enlighted;Deathbringer;Implants;Angelic;Tank;Protection;Valor;Arrow Deflect;Hardened;Ender Shift}"
+  - "&bThe savage mask of the Yeti."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&b&lBloody Yeti Torso&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Godly Overload;Enlighted;Armored;Aegis;Dodge;Angelic;Tank;Leadership;Blood Link;Blood Lust;Guardians;Spirit Link}"
+  - "&bThe impermeable chestplate of the Yeti."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&b&lFuzzy Yeti Leggings&R {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Obsidianshield;Tank;Angelic;Cactus;Lucky;Valor;Sticky;Dodge;Repair Guard}"
+  - "&bThe cozy yet monstrous legs of the Yeti."
+#
+boots:
+  item: "diamond_boots"
+  name: "&b&lBig-Yeti Boots&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape;Ender Walker;Repair Guard;Hardened;Valor;Angelic}"
+  - "&bBigfoot has nothing on these boots."
+#
+attributes:
+  - "PvA=setDamage{dmg*1.10}"
+  - "isDamaged;setDamage{dmg*0.90}"
+#
+activate message:
+  - "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"

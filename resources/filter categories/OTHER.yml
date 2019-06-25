@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+title: "Item Filter: Features Blocks"
+size: 9
+#
+gui:
+  sand:
+    slot: 0
+    item: "sand"
+    name: "Sand"
+  gravel:
+    slot: 1
+    item: "gravel"
+    name: "Gravel"
+  music disc:
+    slot: 2
+    item: "record_10"
+    name: "Discs"
+  dragon egg:
+    slot: 3
+    item: "dragon_egg"
+    name: "All Features Blocks"
+#

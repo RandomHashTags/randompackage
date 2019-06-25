@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Ice Freeze"
+lore:
+- "&eA chance to freeze enemy in place."
+#
+max level: 1
+applies to: "sword;_axe"
+#
+tinkerer: "92"
+#
+attributes:
+- "PvA;chance=6+(5*level);freeze{[victim]60};sendMessage{[victim]&b&l** YOU'VE BEEN FROZEN **};sendMessage{[damager]&b&l** ICE FREEZE **}"

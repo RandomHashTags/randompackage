@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Hex"
+lore:
+- "&eOnce a target is afflicted with Hex,"
+- "&ea portion of all their outgoing"
+- "&edamage is reflected back onto them"
+- "&efor up to 4 seconds."
+#
+max level: 5
+applies to: "_axe"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

@@ -1,0 +1,66 @@
+# Made by RandomHashTags
+priority: 6
+name: "&f&lLootbox:&r &1&l#&r&a&lLucky"
+# Measured in seconds. Default is 259200 (3 days)
+available for: 259200
+#
+gui:
+  title: "Lootbox: &1&l#&r&a&lLucky"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  ## C = Background item with the countdown amount
+  ## X = Background item
+  ## L = Random Jackpot or Regular loot
+  ## B = Bonus item
+  format:
+  - "CXLLLBBXC"
+#
+preview title: "Lootbox: &1&l#&r&a&lLucky"
+#
+lore formats:
+  regular loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  jackpot loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  bonus loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+#
+lootbox:
+  item: "beacon"
+  name: "&f&lLootbox:&r &1&l#&r&a&lLucky"
+  lore:
+  - "&7Down on your luck?"
+  - "&7This lootbox should cheer you up!"
+  - " "
+  - "&f&lRandom Loot (&r&73 items&f&l)"
+  - "{REGULAR_LOOT}"
+  - " "
+  - "&f&lJackpot Loot"
+  - "{JACKPOT_LOOT}"
+  - " "
+  - "&f&lBonus Loot (&r&72 items&f&l)"
+  - "{BONUS_LOOT}"
+#
+regular loot size: 3
+regular loot:
+  #- "vkitfallenherobundle"
+  - "enchantmentorb:armor12;amount=2"
+  - "gkitfallenherobundle"
+  #- "randommkitgenerator"
+  - "vkitgem:LUCKY"
+  - "spacedrink;amount=16"
+  - "raritygem:SOUL:7500"
+  #- "customboss:PLAGUE_BLOATER"
+#
+jackpot loot:
+  - "enchantmentorb:weapon14;amount=2"
+  - "raritybook:HEROIC;amount=2"
+  - "mask:GLITCH"
+#
+bonus loot size: 1
+bonus loot:
+  - "title:208"
+  - "Four Leaf Clover"
+#

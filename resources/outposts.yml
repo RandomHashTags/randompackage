@@ -1,0 +1,43 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&b&l&nServer:&r &d&lOUTPOSTS"
+    - " "
+    - "&7** Outposts are &n24/7 running, capturable PvP zones.&r &7Once your faction"
+    - " &7controls an Outpost, you will receive powerful &nglobal buffs and perks&r &7for as long as"
+    - " &7your faction controls it. Use &d&l/warp outpost&r &7to view, assault, or defend the active"
+    - " &7Outpost campaigns."
+    - " "
+    - "&7*** Note that Outposts are special PvP zones. They &nlimit the rarity&r &7of enchantments that"
+    - " &7can be used within them."
+  view current:
+    - " "
+    - "&b&l&nServer:&r &d&lOUTPOSTS"
+    - " "
+    - "&b&l{OUTPOST} Outpost:&r {STATUS}"
+    - " "
+    - "&b&l*&r &7Use &b/warp outpost &7to select an outpost to teleport to. Or use &b/outpost help &7for more information."
+    - " "
+#
+status:
+  # {CONTROLLING_FACTION} = The controlling faction's name
+  # {ATTACKING_FACTION} = The attacking faction's name
+  controlled: "&a&lCONTROLLED&r &7(&a{CONTROLLING_FACTION}&7) [{CAP%}%]"
+  securing: "&a&lSECURING&r &a[{CAP%}%]"
+  under attack: "&c&lUNDER ATTACK&r &7[{CAP%}%]"
+  contested: "&e&lCONTESTED&r &7[{CAP%}%]"
+  uncontested: "&f&lUNCONTESTED&r &7[0.0%]"
+  capturing: "&e&lCAPTURING&r &7[{CAP%}%]"
+#
+click type:
+  assault: "&c&l&nASSAULT"
+  defend: "&a&l&nDEFEND"
+#
+gui:
+  title: "Outposts"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+#

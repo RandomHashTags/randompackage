@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/e799350985fb163c1cb764c8b119dbd2f37bfc0d6fb0301bbae3746f1aecf81c"
+#
+item:
+  item: "player_head_item"
+  name: "&d&lRift Mask"
+  lore:
+  - "&c50% Mastery Enchant Negation"
+  - "&7A mysterious mask with a strange"
+  - "&7aura of power found scattered among"
+  - "&7a select few random lootboxes."
+  - " &6&l*&r &6Snow Day Lootbox Release"
+#
+attributes:
+  - ""
+#
+added lore:
+  - "&7&lATTACHED:&r &d&lRift Mask&r &f(&c50% Mastery Enchant Negation&f)"

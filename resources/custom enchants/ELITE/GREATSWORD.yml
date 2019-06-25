@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Greatsword"
+lore:
+- "&eMultiplies damage against players who"
+- "&eare wielding a BOW at the time they"
+- "&eare hit."
+#
+max level: 5
+applies to: "sword"
+#
+alchemist: "6000:7000:8000:9000"
+tinkerer: "118:127:136:145:154"
+#
+attributes:
+- "PvA;chance=12+level;if{[victim]isHolding(SWORD)->setDamage{dmg*(1+(.15*level))}&&sendMessage{[damager]&b&l** GREATSWORD **}}"

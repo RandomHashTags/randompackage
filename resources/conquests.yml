@@ -1,0 +1,67 @@
+# Made by RandomHashTags
+messages:
+  min format: "{MIN} minutes"
+  sec format: "{SEC} seconds"
+  #
+  help:
+    - " "
+    - "&b&lSERVER CONQUEST HELP"
+    - "&7Server Conquests occur every couple of hours. A /wild location is chosen at random, the"
+    - " &7coordinates are announced, and a &nConquest Chest&r &7spawns there 5 minutes later. This"
+    - " &7chest is defended by high level, powerful Server Bosses and is often highly contested by"
+    - " &7enemy players too. The chest can only be opened after its &b150HP &7has been depleted by"
+    - " &7hitting it). Server Conquest chests drop Faction Tokens used for /f upgrade, Depth"
+    - " &7Strider books, and &nother high tier loot."
+    - " "
+    - "&7If you are &nTier 4 Rank+&r &7you can use &b&n/conquest&r &7to view more information about recent"
+    - " &7Server Conquests."
+  #
+  command:
+    - " "
+    - "&b&l&nSERVER CONQUEST INFORMATION"
+    - "&d&lLast Conquest:&r &b{LAST}&r &7ago"
+    - "&d&lLast Location:&r &b{LOCATION}"
+    - "&d&lLast Conquerer:&r &b{CONQUERER}"
+#
+bosses:
+  skeleton:
+    type: SKELETON
+    name: "&5&lCosmic Marksman"
+    equipment:
+    - "helmet=golden_helmet:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "chestplate=golden_chestplate:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "leggings=golden_leggings:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "boots=golden_boots:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "weapon=bow:0:1;lore{e:punch5\ne:power5\ne:flame1}"
+    attributes:
+    - "health=600"
+    - "pe=speed:4:99999"
+    drops:
+    - "servercrate:ULTIMATE;amount=1-2"
+  zombie:
+    type: ZOMBIE
+    name: "&e&lCosmic Enforcer"
+    equipment:
+    - "helmet=diamond_helmet:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "chestplate=diamond_chestplate:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "leggings=diamond_leggings:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "boots=diamond_boots:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "weapon=diamond_sword:0:1;lore{e:sharpness5}"
+    attributes:
+    - "health=1500"
+    drops:
+    - "servercrate:LEGENDARY;amount=1-3"
+  baby pigman:
+    type: PIG_ZOMBIE:true
+    name: "&d&lCosmic Exterminator"
+    equipment:
+    - "helmet=diamond_helmet:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "chestplate=diamond_chestplate:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "leggings=diamond_leggings:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "boots=diamond_boots:0:1;lore{e:protection4\ne:unbreaking3}"
+    - "weapon=diamond_sword:0:1;lore{e:sharpness5}"
+    attributes:
+    - "health=1000"
+    drops:
+    - "servercrate:ULTIMATE;chance=50"
+#

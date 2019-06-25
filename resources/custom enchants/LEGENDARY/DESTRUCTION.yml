@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Destruction"
+lore:
+- "&eAutomatically damages and debuffs all"
+- "&enearby enemies."
+#
+max level: 5
+applies to: "helmet"
+#
+alchemist: "6000:7000:8000:9000"
+tinkerer: "81:93:105:117:129"
+#
+attributes:
+- "Timer(20*12);damage{nearby{player:player:30:30:30}level}"

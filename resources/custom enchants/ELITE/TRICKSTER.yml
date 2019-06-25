@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Trickster"
+lore:
+- "&eWhen hit, you have a chance to"
+- "&eteleport directly behind your"
+- "&eopponent and take them by surprise."
+#
+max level: 8
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "2000:2150:2300:2450:2600:2750:2900"
+tinkerer: "63:74:85:96:107:118:129:140"
+#
+attributes:
+- ""

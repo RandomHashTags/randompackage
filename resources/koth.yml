@@ -1,0 +1,212 @@
+# Made by RandomHashTags
+messages:
+  status:
+    open: "&a&lOPEN"
+    closed: "&c&lCLOSED"
+  flag:
+    captured: "&a&lCAPTURED"
+    capturing: "&e&lCAPTURING"
+    uncontested: "&3&lUNCONTESTED"
+  #
+  join event: "&b&l(!)&r &7Use &d&n/warp koth&r &7to join the event!"
+  # If the line of the message contains {PLAYERS}, {RUNTIME}, {FLAG}, {PLAYER}, {TIME_LEFT}, or {JOIN_EVENT} when there is no active KOTH, the message won't be sent.
+  # If the line of the message contains {PLAYERS}, {RUNTIME}, {FLAG}, or {PLAYER}, and the KOTH is captured, the message will send. Otherwise it won't be.
+  # If the line of the message contains {NEXT_KOTH_TIME} when there is an active KOTH, the message will not be sent.
+  command:
+    - ' '
+    - '&b&l*** Server: &d&lKING OF THE HILL &b&l***'
+    - ' '
+    - '&b&lKOTH Status:&r {STATUS}'
+    - '&b&lNext Scheduled KOTH:&r {NEXT_KOTH_TIME}'
+    - '&b&lPlayers:&r &d{PLAYERS}'
+    - '&b&lRuntime:&r &d{RUNTIME}'
+    - '&b&lFlag:&r {FLAG}&r &7(&d{FACTION}{PLAYER}&7) [&d{TIME_LEFT}&7 left]'
+    - '{JOIN_EVENT}'
+    - '&b&l(!)&r &7This KOTH has been capped by &d&n{CAPTURED_BY}!'
+    - ' '
+    - '&7** Server KOTH is held at set times every Tuesday, Thursday, Friday, and Sunday. KOTH,'
+    - ' &7or &n"King of the Hill"&r &7is a popular factions minigame where players compete for control of a'
+    - ' &7central capturable region. If you can keep control of the region for &n15 minutes&r&7, you will'
+    - ' &7be rewarded with some of the &nbest loot available in the Serververse.&r &7Use &d&l/koth loot&r &7to'
+    - ' &7view an example reward.'
+    - ' '
+  no event running:
+    - "&c&l(!)&r &cNo KOTH events are currently running."
+    - "&7Use /koth to find the next scheduled KOTH."
+  already capped:
+    - "&c&l(!)&r &cThe current KOTH event has already been capped."
+    - "&7You can no longer teleport in to this KOTH event."
+  event running:
+    - " "
+    - "&b&l*** A KOTH EVENT IS RUNNING ***"
+    - "&7Use &b/koth &7to view event information!"
+    - " "
+  monsters spawned:
+    - " "
+    - "&c&l*** KOTH MONSTERS HAVE SPAWNED ***"
+    - "&7The longer the KOTH lasts, the more minions spawn!"
+    - " "
+  start capping:
+    - "&6&l(!) {PLAYER}&r &6is capping KOTH! &7[{TIME} left]"
+  no longer capping:
+    - "&c&l(!) {PLAYER}&r &cis no longer capping KOTH!"
+  #
+  blocked command:
+    - "&c&l(!)&r &cYou cannot execute this command in this world!"
+  teleport:
+    - "&e&l(!)&r &eTeleporting to {KOTH}&r&e..."
+  capping:
+    - "&6&l(!) {PLAYER}&r &6is capping KOTH! &7[{TIME} left]"
+  captured:
+    - " "
+    - "&a&l*** KOTH CAPTURED BY: &n{PLAYER}&r &a&l***"
+    - "&7A &nServer KOTH Lootbag&r &7has been added to {PLAYER}'s inventory."
+    - "&7Prevent them from escaping the /warp koth arena alive to steal the rewards!"
+    - " "
+  #
+  enter edit mode:
+    - "&e&l(!)&r &eYou have entered edit mode for {KOTH}&r"
+  edit was finished:
+    - " "
+    - "&e&l(!)&r &eEdits for {KOTH}&r &ewere concluded."
+    - "&a&l(!)&r &aYour inventory has been restored."
+  set center:
+    - "&a&l(!)&r &aK.O.T.H. center set to &f({LOCATION})"
+  #
+  reward format: "&b&l*&r &d&l{AMOUNT}x&r {NAME}"
+  open loot bag:
+    - " "
+    - "&b&l(!) {PLAYER}&r &bhas opened a &nKOTH Lootbag!"
+    - "&b&l&nRewards:"
+    - "{REWARDS}"
+    - " "
+#
+items:
+  lootbag:
+    title: "KOTH Loot Preview"
+    size: 18
+    #
+    item: "ender_chest"
+    name: "&6&lServer KOTH Lootbag"
+    lore:
+      - "&7A legendary loot filled satchel,"
+      - "&7only obtainable by completing an"
+      - "&7official Server KOTH event."
+      - " "
+      - "&7Right-Click to open."
+      - " "
+      - "&6Captured by &n{PLAYER}"
+    rewards:
+      - "spaceflare:GODLY"
+      - "spaceflare:LEGENDARY;amount=2;chance=30"
+      - "factionxpbooster:5.0:15;chance=35"
+      - "factionmcmmobooster:5.0:15;amount=1-2;chance=35"
+      - "chance=25->mcmmolevelvoucher:swords:200||mcmmocreditvoucher:200"
+      - "mysterymobspawner;amount=4;chance=25"
+      - "chance=60->title:106||title:125||title:167||title:176||title:184||title:185"
+      - "chance=40->title:10||title:11||title:83||title:87"
+      - "chance=20->customtnt:GIGANTIC;amount=64||customtnt:LUCKY;amount=32||customtnt:SILENT;amount=128"
+      - "raritybook:SOUL;amount=1-2;chance=15"
+      - "raritybook:LEGENDARY;amount=3;chance=60"
+      - "raritybook:LEGENDARY;amount=6;chance=30"
+      - "raritybook:LEGENDARY;amount=3;chance=20"
+      - "raritybook:LEGENDARY;amount=3;chance=10"
+      - "mcmmolevelvoucher:random:200;chance=25"
+      - "mcmmolevelvoucher:random:200;chance=25"
+      - "chance=20->customcreeper:LUCKY;amount=10||creeper_spawn_egg;amount=48"
+      - "transmogscroll;chance=45"
+      - "mcmmolevelvoucher:unarmed:200;chance=15"
+      - "envoysummon;chance=35"
+      - "banknote:4000000;chance=25"
+      - "xpbottle:1000000;chance=20"
+      - "xpbottle:2000000;chance=20"
+      - "whitescroll;amount=2-4;chance=35"
+      - "itemnametag;chance=35"
+      - "blackscroll:REGULAR:95;amount=3;chance=35"
+      - "soultracker:REGULAR;chance=20"
+      - "randomizationscroll:GODLY;amount=1-2;chance=20"
+      - "hopper;amount=64;chance=30"
+      - "factioncrystal;amount=50;chance=15"
+      - "enchantedbook:depth_strider:random;chance=25"
+      - "maxhomeincrease;amount=1-5;chance=45"
+      - "enchantmentorb:armor10:90-100||enchantmentorb:armor11:90-100||enchantmentorb:weapon10:90-100||enchantmentorb:weapon11:90-100"
+      - "showcaseexpansion;amount=1-3;chance=35"
+      #- "enchantedobsidian;chance=25"
+      #- "fuelcell;chance=25"
+#
+# These commands are the only commands that can be execute while in the KOTH world.
+limited commands:
+  - "/koth"
+  - "/ptime"
+  - "/near"
+  - "/feed"
+  - "/fix"
+  - "/fly"
+  - "/heal"
+  - "/workbench"
+  - "/warp"
+  - "/spawn"
+  - "/f"
+  - "/home"
+  - "/lag"
+  - "/bump"
+  - "/kit"
+  - "/gkit"
+  - "/vkit"
+  - "/envoy"
+  - "/xp"
+  - "/seen"
+  - "/trade"
+  - "/withdraw"
+  - "/bal"
+  - "/stats"
+  - "/inspect"
+  - "/msg"
+  - "/tell"
+  - "/staff"
+  - "/find"
+  - "/help"
+  - "/shop"
+#
+settings:
+  name: "K.O.T.H."
+  # Players within this distance to the center of the KOTH will be able to capture it.
+  capture radius: 12
+  type: CIRCLE
+  # Measured in seconds
+  time to cap: 900
+  start cap countdown: 10
+  #
+  allow afk capturing: false
+  #
+  scoreboards:
+    title: "&b&l&nServer&r &d&l&nKOTH"
+    # Display slots can be BELOW_NAME, PLAYER_LIST, or SIDEBAR
+    display slot: SIDEBAR
+    # Measured in ticks. 20 ticks = 1 second
+    update delay: 20
+    score start: 15
+    capping:
+      - "&a"
+      - "&b&lFlag"
+      - "&e&lCAPTURING"
+      - "&b"
+      - "&b&lCapping"
+      - "{PLAYER}"
+      - "&c"
+      - "&b&lTime Left"
+      - "{TIME}"
+      - "&d"
+      - "&b&lDistance"
+      - "{DISTANCE}m"
+    captured:
+      - "&a"
+      - "&b&lFlag"
+      - "&c&lCAPTURED"
+      - "&b"
+      - "&b&lCapped by"
+      - "&f{PLAYER}"
+  #
+  rewards:
+    - "kothlootbag"
+#

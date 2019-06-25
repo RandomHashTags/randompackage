@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+settings:
+  cooldown: 90
+#
+item:
+  item: "nether_star"
+  name: "&3&lSpeed Trinket&r &7(Right Click)"
+  lore:
+    - "&7A mythic soul trinket that imbues"
+    - "&7the owner with extreme speed."
+    - " "
+    - "&3&nEffect:&r &bSPEED IV &7(7s)"
+    - "&3&nSoul Cost:&r &b100/use"
+    - "&3&nCooldown:&r &b90s"
+#
+attributes:
+  - ""

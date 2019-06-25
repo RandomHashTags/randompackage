@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Hold Hero Outpost I"
+  completion: 1
+#
+lore:
+- "&7Hold Hero Outpost I"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

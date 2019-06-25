@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Curse"
+lore:
+- "&eGives strength, slowness, and"
+- "&eresistance at low hp."
+#
+max level: 5
+applies to: "chestplate"
+#
+alchemist: "1000:1500:2000:2500"
+tinkerer: "113:134:155:176:197"
+#
+attributes:
+- "PvA;chance=Lucky+8+(2*level);if{[victim]healthIs<=:10:->addPotionEffect{[victim]slowness:level-1:80+(20*level):true}&&addPotionEffect{[victim]strength:level-1:80+(20*level):true}&&addPotionEffect{[victim]damage_resistance:level-1:80+(20*level):true}}"

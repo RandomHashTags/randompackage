@@ -1,0 +1,89 @@
+# Made by RandomHashTags
+category: 2018
+category slot: 12
+title: "Server Crate: VALENTINES_2018"
+#
+item:
+  item: "ender_chest"
+  name: "&4&l*&c&l*&4&l*&r &c&lSERVER CRATE:&r &4&l&nVALENTINE 2018&r &4&l*&c&l*&4&l*"
+  lore:
+    - "&4Unlocked by &l{UNLOCKED_BY}&r &4at &c&nbuy.yourserver.com"
+    - " "
+    - "&f&l&nADMIN ITEMS"
+    - "&f&l*&r &fCupid's Broken Heart"
+    - " "
+    - "&e&l&nCOSMETIC ITEMS"
+    - "&e&l*&r &eLimited Edition Titles"
+    - "&e&l*&r &e1-3x Lore Crystals &nOR&r &eItem Nametags"
+    - "&e&l*&r &e2-3x Ultimate+ Randomization Scrolls"
+    - " "
+    - "&6&l&nTREASURE ITEMS"
+    - "&6&l*&r &6Random Evolution Kit Gem"
+    - "&6&l*&r &6Valentines 2018 Monthly Crate"
+    - "&6&l*&r &6Rank Quest"
+    - "&6&l*&r &62-4x 70-95% Weapon/Armor Orb (&l12 Slot&r&6)"
+    - "&6&l*&r &61-3x Godly &nOR&r &6Legendary Space Flares"
+    - " "
+    - "&c&l&nBONUS ITEMS"
+    - "&c&l*&r &cRandom Phantom &nOR&r &cMother Of Yijki &nOR&r &cYeti Gear"
+    - "&c&l*&r &cHeroic Rank Crystal"
+    - "&c&l*&r &cAbandoned Spaceship Dungeon Lootbag"
+#
+rewards:
+  - "Cupids Broken Heart"
+  - "title"
+  - "itemlorecrystal;amount=1-3||itemnametag;amount=1-3"
+  - "randomizationscroll:ULTIMATE;amount-2-3||randomizationscroll:LEGENDARY;amount=2-3||randomizationscroll:SOUL;amount=2-3||randomizationscroll:GODLY;amount=2-3"
+  - "vkitgem"
+  - "monthlycrate:VALENTINES_2017"
+  - "paper"
+  - "enchantmentorb:armor12:70-95;amount=2-4||enchantmentorb:weapon12:70-95;amount=2-4"
+  - "spaceflare:GODLY;amount=1-3||spaceflare:LEGENDARY;amount=1-3"
+#
+bonus:
+  - "customarmor:PHANTOM||customarmor:YIJKI||customarmor:YETI"
+  - "paper"
+  #- "dungeonlootbag:ABANDONED_SPACESHIP"
+#
+# background item is represented as "=" in the redeem-format
+# bonus-1 item is represented as "-" in the redeem-bonus-format
+# bonus-2 item is represented as "=" in the redeem-bonus-format
+inventory:
+  size: 54
+  redeem format:
+    - "========="
+    - "===---==="
+    - "===---==="
+    - "===---==="
+    - "========="
+    - "====+===="
+  redeem bonus format:
+    - "=-=-=-=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-=-=-=-"
+    - "=-=-x=-=-"
+  background: # Represented as "=" in the "redeem format"
+    item: "black_stained_glass_pane"
+    name: "&7..."
+  redeem: # Represented as "-" in the "redeem format"
+    item: "ender_chest"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus: # Represented as "x" in the "redeem bonus format"
+    item: "red_stained_glass_pane"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus 1:
+    item: "light_blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  bonus 2:
+    item: "blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  # Replaces the background items with this name when the player is about to reveal the bonus item(s)
+  unlocking name: "&a&lUNLOCKING..."

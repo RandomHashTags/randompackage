@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Venom"
+lore:
+- "&eA chance of dealing poison."
+#
+max level: 3
+applies to: "bow"
+#
+alchemist: "2500:2750"
+tinkerer: "75:84:93"
+#
+attributes:
+- "PvA;chance=4*level;addPotionEffect{[victim]poison:level-1:40+(40*level):false}"

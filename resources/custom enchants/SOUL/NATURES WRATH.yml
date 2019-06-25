@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Natures Wrath"
+lore:
+- "&ePassive Soul Enchantment. Temporarily"
+- "&efreeze all enemies in a massive area"
+- "&earound you, pushing them back and"
+- "&edealing massive nature damage. Costs"
+- "&e75 souls per use."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "7500:15000:22500"
+tinkerer: "180:205:230:255"
+#
+attributes:
+- "isDamaged;chance=level;DepleteRarityGem{SOUL:75};smite{nearbyEnemies{victim:victim:45:45:45}11};sendMessage{nearbyEnemies{victim:victim:45:45:45}&2&l** NATURE'S WRATH **}"

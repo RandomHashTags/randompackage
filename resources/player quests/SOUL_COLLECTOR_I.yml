@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Soul Collector I"
+  completion: 10
+  expiration: 86400
+#
+lore:
+- "&7Collect 10 souls with a melee weapon"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- ""

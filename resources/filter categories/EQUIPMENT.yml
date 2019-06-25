@@ -1,0 +1,110 @@
+# Made by RandomHashTags
+title: "Item Filter: Equipment"
+size: 27
+#
+gui:
+  iron helmet:
+    slot: 0
+    item: "iron_helmet"
+    name: "Iron Helmet"
+  golden helmet:
+    slot: 1
+    item: "gold_helmet"
+    name: "Gold Helmet"
+  diamond helmet:
+    slot: 2
+    item: "diamond_helmet"
+    name: "Diamond Helmet"
+  iron chestplate:
+    slot: 3
+    item: "iron_chestplate"
+    name: "Iron Chestplate"
+  golden chestplate:
+    slot: 4
+    item: "gold_chestplate"
+    name: "Gold Chestplate"
+  diamond chestplate:
+    slot: 5
+    item: "diamond_chestplate"
+    name: "Diamond Chestplate"
+  iron leggings:
+    slot: 6
+    item: "iron_leggings"
+    name: "Iron Leggings"
+  golden leggings:
+    slot: 7
+    item: "gold_leggings"
+    name: "Gold Leggings"
+  diamond leggings:
+    slot: 8
+    item: "diamond_leggings"
+    name: "Diamond Leggings"
+  iron boots:
+    slot: 9
+    item: "iron_boots"
+    name: "Iron Boots"
+  golden boots:
+    slot: 10
+    item: "gold_boots"
+    name: "Gold Boots"
+  diamond boots:
+    slot: 11
+    item: "diamond_boots"
+    name: "Diamond Boots"
+  iron sword:
+    slot: 12
+    item: "iron_sword"
+    name: "Iron Sword"
+  golden sword:
+    slot: 13
+    item: "gold_sword"
+    name: "Gold Sword"
+  diamond sword:
+    slot: 14
+    item: "diamond_sword"
+    name: "Diamond Sword"
+  iron axe:
+    slot: 15
+    item: "iron_axe"
+    name: "Iron Axe"
+  golden axe:
+    slot: 16
+    item: "gold_axe"
+    name: "Gold Axe"
+  diamond axe:
+    slot: 17
+    item: "diamond_axe"
+    name: "Diamond Axe"
+  bow:
+    slot: 18
+    item: "bow"
+    name: "Bow"
+  iron hoe:
+    slot: 19
+    item: "iron_hoe"
+    name: "Iron Hoe"
+  golden hoe:
+    slot: 20
+    item: "gold_hoe"
+    name: "Gold Hoe"
+  diamond hoe:
+    slot: 21
+    item: "diamond_hoe"
+    name: "Diamond Hoe"
+  arrow:
+    slot: 22
+    item: "arrow"
+    name: "Arrow"
+  ender pearl:
+    slot: 23
+    item: "ender_pearl"
+    name: "Ender Pearl"
+  potions:
+    slot: 24
+    item: "potion_water"
+    name: "Potions"
+  player skulls:
+    slot: 25
+    item: "player_head_item"
+    name: "Player Skulls"
+#

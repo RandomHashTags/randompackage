@@ -1,0 +1,90 @@
+# Made by RandomHashTags
+category: 2016
+category slot: 12
+title: "Server Crate: HALLOWEEN_2016"
+#
+item:
+  item: "ender_chest"
+  name: "&6&l*&4&l*&6&l*&r &4&lSERVER CRATE:&r &6&l&nHALLOWEEN 2016&r &6&l*&4&l*&6&l*"
+  lore:
+    - "&4Unlocked by &l{UNLOCKED_BY}&r &4at &6&nbuy.yourserver.com"
+    - " "
+    - "&f&l&nADMIN ITEMS"
+    - "&f&l*&r &fBag of Candy"
+    - "&f&l*&r &fClown Mask"
+    - " "
+    - "&e&l&nCOSMETIC ITEMS"
+    - "&e&l*&r &eLimited Edition Titles"
+    - "&e&l*&r &eDisguise Nametag"
+    - " "
+    - "&6&l&nTREASURE ITEMS"
+    - "&6&l*&r &66.66x6m Faction XP/mcMMO Booster"
+    - "&6&l*&r &6Fallen Hero"
+    - "&6&l*&r &62x Mystery Mob Spawner"
+    - "&6&l*&r &64x Mystery Soul Dust"
+    - "&6&l*&r &666% Black Scroll (6x)"
+    - " "
+    - "&4&l&nBONUS ITEMS"
+    - "&4&l*&r &46.66x66m Faction XP Booster"
+    - "&4&l*&r &42x Soul Enchantment Book"
+    - "&4&l*&r &4Legendary Boss Egg"
+    - "&4&l*&r &4Rank Quest"
+#
+rewards:
+  - "Bag od Candy"
+  - "Clown Mask"
+  - "title:62||title:189"
+  - "itemnametag"
+  - "factionxpbooster:6.66:360||factionmcmmobooster:6.66:360"
+  - "gkitfallenhero:GUARDIAN||gkitfallenhero:HYPERDRIVE"
+  - "mysterymobspawner;amount=2"
+  - "dust:SOUL_PRIMAL;amount=4||dust:SOUL_REGULAR;amount=4"
+  - "blackscroll:REGULAR:66;amount=6"
+#
+bonus:
+  - "factionxpbooster:6.66:3960"
+  - "raritybook:SOUL;amount=2"
+  - "customboss:BROOD_MOTHER"
+#
+# background item is represented as "=" in the redeem-format
+# bonus-1 item is represented as "-" in the redeem-bonus-format
+# bonus-2 item is represented as "=" in the redeem-bonus-format
+inventory:
+  size: 54
+  redeem format:
+    - "========="
+    - "===---==="
+    - "===---==="
+    - "===---==="
+    - "========="
+    - "====+===="
+  redeem bonus format:
+    - "=-=-=-=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-=-=-=-"
+    - "=-=-x=-=-"
+  background: # Represented as "=" in the "redeem format"
+    item: "black_stained_glass_pane"
+    name: "&7..."
+  redeem: # Represented as "-" in the "redeem format"
+    item: "ender_chest"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus: # Represented as "x" in the "redeem bonus format"
+    item: "red_stained_glass_pane"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus 1:
+    item: "light_blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  bonus 2:
+    item: "blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  # Replaces the background items with this name when the player is about to reveal the bonus item(s)
+  unlocking name: "&a&lUNLOCKING..."

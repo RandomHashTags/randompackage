@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/4c6570f1242992f6eba23ee582598c39e3e745383273deef8b3977583fe3cf5"
+#
+item:
+  item: "player_head_item"
+  name: "&6&lPumpkin Monster"
+  lore:
+  - "&7The severed head of a fabled Halloween"
+  - "&7nightmare known as the Pumpkin Monster"
+  - " &6&l*&r &6Halloween Quests"
+#
+added lore:
+  - "&7&lATTACHED:&r &6&lPumpkin Mask"

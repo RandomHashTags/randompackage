@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Shadow Assassin"
+lore:
+- "&eHeroic Enchantment. The closer you"
+- "&eare to your enemy, the more damage"
+- "&eyou deal (up to 1.875x). However, if"
+- "&eyou are more than 2 blocks away, you"
+- "&ewill deal LESS damage than normal."
+- "&eRequires Assassin V enchant on item"
+- "&eto apply. Cannot be black-scrolled."
+#
+max level: 4
+applies to: "sword"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Assassin;5"
+#
+attributes:
+- "PvA;"

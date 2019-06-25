@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "TimeSpentIn_End"
+  duration: 86400
+  type: "Time Spent in End"
+#
+item:
+  item: "dragon_egg"
+  name: "&a&lMost Time Spent in End"
+#

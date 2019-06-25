@@ -1,0 +1,41 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 16
+  #
+  item: "ender_pearl"
+  name: "Voidwalker Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Chaois Executioner"
+  - "&f&l* &6&lHeroic erebus' Sandals of the Void"
+  - " "
+  - "&7Walk the path of the true void."
+  - "&6* Demon Planet Release"
+#
+items:
+  boots:
+    item: "diamond_boots"
+    name: "&6&lHeroic Erebus' Sandals of the Void {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Gears;Deathbringer;Tank;Ender Walker;Armored;Voodoo;Stormcaller;Anti Gravity;Nimble;Ender Shift}"
+    - "&6&oYou walk on the thin line between"
+    - "&6&oexistence and extinction, do your"
+    - "&6&oenemies dare to follow?"
+  sword:
+    item: "diamond_sword"
+    name: "&6&lHeroic Chaos Executioner {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Sharpness5;Smite2;Unbreaking3}"
+    - "RPEnchants{Disarmor;Lifesteal;Rage;Greatsword;Silence;Demonforged;Execute;Trap}"
+    - "&6&oA demon forged greatsword,"
+    - "&6wieldable only to those the blade"
+    - "&6itself deems worthy, and to kill"
+    - "&6those it deems unworthy."
+#

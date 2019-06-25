@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "REDSTONE_ORE:0_Mined"
+  duration: 86400
+  type: "Redstone Ore Mined"
+#
+item:
+  item: "redstone_ore"
+  name: "&a&lMost Redstone Ore Mined"
+#

@@ -1,0 +1,187 @@
+# Made by RandomHashTags
+title: "Shop Items (Building Blocks)"
+size: 45
+gui:
+  grass:
+    slot: 0
+    item: "grass_block"
+    name: "&e&lGrass Block"
+    prices: 3;0.69
+  oak wood:
+    slot: 1
+    item: "oak_wood"
+    name: "&e&lOak Wood"
+    prices: 8.12;2.03
+  spruce wood:
+    slot: 2
+    item: "spruce_wood"
+    name: "&e&lSpruce Wood"
+    prices: 8.12;2.03
+  birch wood:
+    slot: 3
+    item: "birch_wood"
+    name: "&e&lBirch Wood"
+    prices: 8.12;2.03
+  jungle wood:
+    slot: 4
+    item: "jungle_wood"
+    name: "e&lJungle Wood"
+    prices: 8.12;2.03
+  acacia wood:
+    slot: 5
+    item: "acacia_wood"
+    name: "&e&lAcacia Wood"
+    prices: 8.12;2.03
+  dark oak wood:
+    slot: 6
+    item: "dark_oak_wood"
+    name: "&e&lDark Oak Wood"
+    prices: 8.12;2.03
+  dirt:
+    slot: 7
+    item: "dirt"
+    name: "&e&lDirt"
+    prices: 3;0.69
+  podzol:
+    slot: 8
+    item: "podzol"
+    name: "&e&lPodzol"
+    prices: 10.94;3.75
+  mycelium:
+    slot: 9
+    item: "mycelium"
+    name: "&e&lMycelium"
+    prices: 10.16;3.75
+  stone:
+    slot: 10
+    item: "stone"
+    name: "&e&lStone"
+    prices: 5.47;1.48
+  cobblestone:
+    slot: 11
+    item: "cobblestone"
+    name: "&e&lCobblestone"
+    prices: 4.06;1.02
+  stone bricks:
+    slot: 12
+    item: "stone_bricks"
+    name: "&e&lStone Bricks"
+    prices: 6.56;0
+  mossy stone bricks:
+    slot: 13
+    item: "mossy_stone_bricks"
+    name: "&e&lMossy Stone Bricks"
+    prices: 6.56;0
+  cracked stone bricks:
+    slot: 14
+    item: "cracked_stone_bricks"
+    name: "&e&lCracked Stone Bricks"
+    prices: 6.56;0
+  chiseled stone bricks:
+    slot: 15
+    item: "chiseled_stone_bricks"
+    name: "&e&lChiseled Stone Bricks"
+    prices: 6.56;0
+  sandstone:
+    slot: 16
+    item: "sandstone"
+    name: "&e&lSandstone"
+    prices: 12.19;0
+  chiseled sandstone:
+    slot: 17
+    item: "chiseled_sandstone"
+    name: "&e&lChiseled Sandstone"
+    prices: 12.19;0
+  smooth sandstone:
+    slot: 18
+    item: "smooth_sandstone"
+    name: "&e&lSmooth Sandstone"
+    prices: 48.75;0
+  quartz block:
+    slot: 19
+    item: "quartz_block"
+    name: "&e&lQuartz Block"
+    prices: 12.19;0
+  chiseled quartz block:
+    slot: 20
+    item: "chiseled_quartz_block"
+    name: "&e&lChiseled Quartz Block"
+    prices: 48.75;0
+  quartz pillar:
+    slot: 21
+    item: "quartz_pillar"
+    name: "&e&lPillar Quartz Block"
+    prices: 12.19;0
+  netherrack:
+    slot: 22
+    item: "netherrack"
+    name: "&e&lNetherrack"
+    prices: 2.34;0.94
+  nether brick:
+    slot: 23
+    item: "nether_brick"
+    name: "&e&lNether Brick"
+    prices: 5.47;0
+  glowstone:
+    slot: 24
+    item: "glowstone"
+    name: "&e&lGlowstone"
+    prices: 7.03;2.50
+  soul sand:
+    slot: 25
+    item: "soul_sand"
+    name: "&e&lSoul Sand"
+    prices: 7.06;0
+  end stone:
+    slot: 26
+    item: "ender_stone"
+    name: "&e&lEnd Stone"
+    prices: 7.03;0
+  sand:
+    slot: 27
+    item: "sand"
+    name: "&e&lSand"
+    prices: 4.06;0
+  red sand:
+    slot: 28
+    item: "red_sand"
+    name: "&e&lRed Sand"
+    prices: 3.05;0
+  gravel:
+    slot: 29
+    item: "gravel"
+    name: "&e&lGravel"
+    prices: 3.52;0
+  obsidian:
+    slot: 30
+    item: "obsidian"
+    name: "&e&lObsidian"
+    prices: 14.84;5.47
+  ice:
+    slot: 31
+    item: "ice"
+    name: "&e&lIce"
+    prices: 50;0
+  packed ice:
+    slot: 32
+    item: "packed_ice"
+    name: "&e&lPacked Ice"
+    prices: 75;0
+  snow block:
+    slot: 33
+    item: "snow_block"
+    name: "&e&lSnow Block"
+    prices: 250;0
+  clay:
+    slot: 34
+    item: "clay_ball"
+    name: "&e&lClay"
+    prices: 5;0.01
+  clay block:
+    slot: 35
+    item: "clay"
+    name: "&e&lClay Block"
+    prices: 20;0.04
+  back:
+    slot: 44
+    item: "back"

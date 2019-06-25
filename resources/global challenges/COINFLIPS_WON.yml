@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "CoinflipsWon"
+  duration: 86400
+  type: "Coinflips Won"
+#
+item:
+  item: "emerald"
+  name: "&a&lMost Coinflips Won"
+#

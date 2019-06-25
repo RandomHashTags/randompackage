@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Barbarian"
+lore:
+- "&eMultiplies damage against players who"
+- "&eare wielding an AXE at the time they"
+- "&eare hit."
+#
+max level: 4
+applies to: "_axe"
+#
+alchemist: "6000:7000:8000"
+tinkerer: "82:97:112:127"
+#
+attributes:
+- "PvP;chance=6*level;if{[victim]isHolding(_AXE)->setDamage{dmg*(1.10+(0.05*level))}}"

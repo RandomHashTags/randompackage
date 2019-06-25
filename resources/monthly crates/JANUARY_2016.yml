@@ -1,0 +1,89 @@
+# Made by RandomHashTags
+category: 2016
+category slot: 0
+title: "Server Crate: JANUARY_2016"
+#
+item:
+  item: "ender_chest"
+  name: "&6&l*&e&l*&6&l*&r &e&lSERVER CRATE:&r &6&l&nJANUARY 2016&r &6&l*&e&l*&6&l*"
+  lore:
+    - "&eUnlocked by &l{UNLOCKED_BY}&r &eat &6&nbuy.yourserver.com"
+    - " "
+    - "&f&l&nADMIN ITEMS"
+    - "&f&l*&r &fNew Years Party Mask"
+    - "&f&l*&r &fExecutive Storage Chest"
+    - " "
+    - "&e&l&nCOSMETIC ITEMS"
+    - "&e&l*&r &eExplosive Cake"
+    - "&e&l*&r &eNew Years Fireworks"
+    - "&e&l*&r &eLimited Edition Titles"
+    - " "
+    - "&6&l&nTREASURE ITEMS"
+    - "&6&l*&r &6Player Souls (10-100x)"
+    - "&6&l*&r &6Lucky TNT (8-16x)"
+    - "&6&l*&r &6Holy White Scroll (100%)"
+    - "&6&l*&r &6Premium Monster Spawners (2x)"
+    - " "
+    - "&a&l&nBONUS ITEMS"
+    - "&a&l*&r &aRandom Soul Tracker"
+    - "&a&l*&r &aSoul Enchantment Book"
+    - "&a&l*&r &aLimited Edition Kits"
+#
+rewards:
+  - "New Years Party Mask"
+  - "Executive Storage Chest"
+  - "title:111||title:116"
+  - "explosivecake;amount=38"
+  - "blazespawner;amount=2"
+  - "raritygem:SOUL:10-100"
+  - "customtnt:LUCKY;amount=8-16"
+  - "whitescroll"
+  - "spacefirework;amount=30"
+#
+bonus:
+  - "soultracker"
+  - "raritybook:SOUL"
+  - "gkitgem:SPOOKY"
+#
+# background item is represented as "=" in the redeem-format
+# bonus-1 item is represented as "-" in the redeem-bonus-format
+# bonus-2 item is represented as "=" in the redeem-bonus-format
+inventory:
+  size: 54
+  redeem format:
+    - "========="
+    - "===---==="
+    - "===---==="
+    - "===---==="
+    - "========="
+    - "====+===="
+  redeem bonus format:
+    - "=-=-=-=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-+++=-="
+    - "-=-=-=-=-"
+    - "=-=-x=-=-"
+  background: # Represented as "=" in the "redeem format"
+    item: "black_stained_glass_pane"
+    name: "&7..."
+  redeem: # Represented as "-" in the "redeem format"
+    item: "ender_chest"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus: # Represented as "x" in the "redeem bonus format"
+    item: "red_stained_glass_pane"
+    name: "&f&l???"
+    lore:
+    - "&7Click to redeem an item from"
+    - "&7your &n{PATH}&r &7Monthly Crate!"
+  bonus 1:
+    item: "light_blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  bonus 2:
+    item: "blue_stained_glass_pane"
+    name: "&a&lUNLOCKING..."
+  # Replaces the background items with this name when the player is about to reveal the bonus item(s)
+  unlocking name: "&a&lUNLOCKING..."

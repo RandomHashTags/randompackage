@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Tank"
+lore:
+- "&eDecreases damage from enemy axes by"
+- "&e1.85% per level, this enchantment is"
+- "&estackable."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "4500:5000:5500"
+tinkerer: "59:68:77:86"
+#
+attributes:
+  - "isDamaged;chance=Lucky+(6*level);if{[damager]isHolding(_AXE)->setDamage{dmg-(dmg*(.0185*level))}}"

@@ -1,0 +1,49 @@
+# Made by RandomHashTags
+messages:
+  not unlocked:
+    - "&c&l(!)&r &cYou have not unlocked this Mastery Kit!"
+    - "&7Use a Mastery Kit Gem to unlock it!"
+  #
+  unlocked lost gkits:
+    - "&c&l(!)&r &cYou have lost access to the following Global Kits:"
+    - " &6- {KIT}"
+  unlocked lost vkits:
+  - "&c&l(!)&r &cYou have lost access to the following Evolution Kits:"
+  - " &6- {KIT}"
+  unlocked:
+    - "&6&l(!)&r &6You UNLOCKED access to the {KIT}&r &6Mastery Kit!"
+    - "&7Use /mkit to redeem your new kit!"
+  #
+  unlock missing required gkit:
+    - "&c&l(!)&r &cYou do not have the required '{KIT}&r&c' Tier {TIER} /gkit unlocked!"
+    - "&7Purchase a Fallen Hero at &nbuy.yourserver.com&r &7to unlock and level-up your /gkit!"
+  unlock missing required vkit:
+    - "&c&l(!)&r &cYou do not have the required '{KIT}&r&c' Tier {TIER} /vkit unlocked!"
+    - "&7Purchase a Fallen Hero at &nbuy.yourserver.com&r &7to unlock and level-up your /vkit!"
+#
+gui:
+  title: "Mastery Kits"
+  size: 9
+  #
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  #
+  locked:
+    item: "red_stained_glass_pane"
+    name: "{NAME}"
+    lore:
+      - "{LORE}"
+      - "&c&l{LOCKED}"
+      - "&7Unlock at &nbuy.yourserver.com"
+  unlocked lore:
+    - "&a&lUNLOCKED"
+  preview lore:
+    - "&7Right-click to preview kit items."
+  redeem added lore:
+    - " "
+    - "&7Right-click to unlock this Mastery Kit!"
+#
+settings:
+  max anti crystals on item: 1
+#

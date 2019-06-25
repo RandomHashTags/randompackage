@@ -1,0 +1,103 @@
+# Made by RandomHashTags
+spawnable region: "warzone"
+type: GIANT
+name: "&2&lPlague Bloater"
+spawn item:
+  item: "monster_egg:54"
+  name: "&2&lPlague Bloater"
+  lore:
+  - "&7This monster egg contains a"
+  - "&c&ndangerous&r &7warzone boss"
+  - " "
+  - "&2&lLORE"
+  - "&7&oThe host vessel of the most deadly"
+  - "&7&oplague virus strain ever"
+  - "&7&odiscovered. Wherever this"
+  - "&7&oabomination goes, death soon"
+  - "&7&ofollows."
+  - " "
+  - "&2&lDIFFICULTY"
+  - "&2Legendary+"
+#
+scoreboard:
+  title: "&2&lPlague Bloater"
+  score start: 15
+  display slot: "SIDEBAR"
+  scores:
+    - "&a"
+    - "&c&lHealth"
+    - "&c{HEALTH}"
+    - "&b"
+    - "&e&lMinions"
+    - "&e{MINIONS}"
+    - "&c"
+    - "&a&lDamage Dealt"
+    - "&a{DAMAGE_DEALT} &7[{DAMAGE_DEALT%}%]"
+#
+attributes:
+  - "maxhealth=2000"
+  - "helmet=diamond_helmet{&2&lPlague Bloater Helmet},{e:protection1;unbreakable:true}"
+  - "chestplate=diamond_chestplate{&2&lPlague Bloater Chestplate},{e:protection1;unbreakable:true}"
+  - "leggings=diamond_leggings{&2&lPlague Bloater Leggings},{e:protection1;unbreakable:true}"
+  - "boots=diamond_boots{&2&lPlague Bloater Boots},{e:protection1;unbreakable:true}"
+#
+rewards:
+  - "top1;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+  - "top1;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top2;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top3;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+#
+attacks:
+  0:
+    chance: 10
+    radius: 0
+    attacks:
+    - "delay=0{summonminions}"
+    - "delay=0{MESSAGE0}"
+  1:
+    chance: 15
+    radius: 25
+    attacks:
+    - "delay=0{}"
+#
+messages:
+  radius: 100
+  summon:
+    - "&2&lPlague Bloater >>&r &f&oYour presence irritates me, I shall turn you to dust!"
+  summon broadcast:
+    - " "
+    - "&2&l(!)&r &5A &l&nPlague Bloater&r &2Boss has been summoned to the /spawn WarZone, at {X}x, {Y}y, {Z}z&r &2defend the planet!"
+    - " "
+  defeated:
+    - "&2&lPlague Bloater >>&r &f&oArggh.. I suppose this planets time has not yet come... I will.. return."
+  defeated broadcast:
+    - " "
+    - "&c&lThe Plague Bloater has been defeated!"
+    - "&cDefeated by {TOP_PLAYERS}"
+    - " "
+    - "&c&lTOP DAMAGE DEALT"
+    - "&a&l1.&r &a{TOP1} - &l{TOP1%}%&r &a- {REWARDS}"
+    - "&a&l2.&r &a{TOP2} - &l{TOP2%}%&r &a- {REWARDS}"
+    - "&a&l3.&r &a{TOP3} - &l{TOP3%}%&r &a- {REWARDS}"
+    - "&a&l4.&r &a{TOP4} - &l{TOP4%}%&r &a- {REWARDS}"
+    - "&a&l5.&r &a{TOP5} - &l{TOP5%}%"
+    - " "
+  0:
+    - "&2&lPlague Bloater >>&r &f&oGo forth my Plague Carriers, defile this land with the power of the plague."
+  1:
+    - "&2&lPlague Bloater >>&r &fPlague Bomb Dropped"
+  2:
+    - "&2&lPlague Bloater >>&r &fYou've been infected!"
+  3:
+    - "&2&lPlague Bloater >>&r &f&oCome, breathe in my black fog and see your body crumble"
+  4:
+    - "&2&lPlague Bloater >>&r &f&oYou cannot kill a plague."
+  5:
+    - "&2&lPlague Bloater >>&r &f&oIf you had not committed great offenses, the galaxy would not have sent a curse as vile as me upon you."
+#
+minion:
+  max: 14
+  type: ZOMBIE
+  name: "&2&lPlague Bloater Minion"
+  attributes:
+  - ""

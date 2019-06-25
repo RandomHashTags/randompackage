@@ -1,0 +1,42 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 20
+  #
+  item: "raw_beef"
+  name: "Butcher Kit"
+  lore:
+  - " "
+  - "&f&l*&r &c&lThe Butcher's Cleaver"
+  - "&f&l*&r &6&lBlood-soaked Apron of the Butcher"
+  - "&f&l*&r &e64x Halloween Candy"
+  - " "
+  - "&7A monster from the depths of the Nether."
+  - "&6Halloween Weekend 2015"
+#
+items:
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&6&lBlood-soaked Apron of the Butcher {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection5;Unbreaking3}"
+      - "RPEnchants{Blood Lust;Overload;Enlighted;Angelic;Arrow Deflect;Hardened;Tank;Dodge}"
+      - "&6&oA heavy leather apron, soaked with the"
+      - "&6&oblood of all who have dared stand before you."
+  axe:
+    item: "diamond_axe"
+    name: "&c&lThe Butcher's Cleaver {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Sharpness5;Unbreaking3}"
+      - "RPEnchants{Blacksmith;Devour;Arrow BREAK;Bleed;Blessed;Cleave}"
+      - "&c&oThe cleaver of The Butcher, a demonic"
+      - "&c&oabomination from the deepest, darkest"
+      - "&c&odepths of the known Nether."
+  halloween candy:
+    item: "halloweencandy;amount=64"
+#

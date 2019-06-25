@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "A Little Grind"
+  completion: 2500
+  expiration: 86400
+#
+lore:
+- "&7Kill 2,500 Blazes"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "KilledEntity;type=BLAZE;+1"

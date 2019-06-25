@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Molten"
+lore:
+- "&eChance to light your attacker."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "1250:2500:3750"
+tinkerer: "104:116:128:140"
+#
+attributes:
+- "isDamaged;chance=8*level;ignite{[damager]60*level}"

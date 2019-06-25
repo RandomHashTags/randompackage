@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "UniquePlayerKills"
+  duration: 86400
+  type: "Unique Player Kills"
+#
+item:
+  item: "diamond_sword"
+  name: "&a&lMost Unique Player Kills"
+#

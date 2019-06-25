@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Berserk"
+lore:
+- "&eA chance of strength and mining"
+- "&efatigue."
+#
+max level: 5
+applies to: "_axe"
+#
+alchemist: "5600:6400:7200:8000"
+tinkerer: "67:81:105:114:129"
+#
+attributes:
+- "PvA;chance=4*level;addPotionEffect{[damager]strength:level-1:40+(20*level):true};addPotionEffect{[damager]mining_fatigue:level-1:40+(20*level):true}"

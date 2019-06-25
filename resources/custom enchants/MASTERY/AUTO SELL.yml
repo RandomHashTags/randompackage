@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Auto Sell"
+lore:
+- "&eAutomatically sells all blocks broken"
+- "&eby your pickaxe for /shop value."
+#
+max level: 1
+applies to: "pickaxe"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

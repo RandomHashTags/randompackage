@@ -1,0 +1,78 @@
+# Made by RandomHashTags
+title: "Shop Categories"
+size: 18
+# Add "perm: <permission to access the category>" to set a permission to view that category
+# If it doesn't have "perm:" or perm equals "none", then there is no permission to view it
+gui:
+  potion shop:
+    slot: 0
+    perm: "none"
+    opens: POTIONS
+    item: "potion"
+    name: "&e&lPotion Shop"
+  raid shop:
+    slot: 1
+    opens: RAID
+    item: "redstone"
+    name: "&e&lRaid Shop"
+  spawner shop:
+    slot: 2
+    opens: SPAWNERS
+    item: "mob_spawner"
+    name: "&e&lSpawners"
+  building shop:
+    slot: 3
+    opens: BUILDING_BLOCKS
+    item: "smooth_brick"
+    name: "&e&lBuilding Blocks"
+  ores and gems shop:
+    slot: 4
+    opens: ORES_AND_GEMS
+    item: "emerald"
+    name: "&e&lOres and Gems"
+  food and farming shop:
+    slot: 5
+    opens: FOOD_AND_FARMING
+    item: "cooked_beef"
+    name: "&e&lFood and Farming"
+  mob drops shop:
+    slot: 6
+    opens: MOB_DROPS
+    item: "blaze_rod"
+    name: "&e&lMob Drops"
+  specialty shop:
+    slot: 7
+    opens: SPECIALTY
+    item: "eye_of_ender"
+    name: "&e&lSpecialty"
+  brewing shop:
+    slot: 8
+    opens: BREWING
+    item: "brewing_stand_item"
+    name: "&e&lBrewing"
+  wool shop:
+    slot: 11
+    opens: WOOL
+    item: "white_wool"
+    name: "&e&lWool"
+  glass shop:
+    slot: 12
+    opens: GLASS
+    item: "green_stained_glass"
+    name: "&e&lGlass"
+  base grind shop:
+    slot: 13
+    opens: BASE_GRIND
+    item: "obsidian"
+    name: "&e&lBase Grind"
+  clay shop:
+    slot: 14
+    opens: CLAY
+    item: "white_terracotta"
+    name: "&e&lClay"
+  flower shop:
+    slot: 15
+    opens: FLOWERS
+    item: "red_rose"
+    name: "&e&lFlowers"
+#

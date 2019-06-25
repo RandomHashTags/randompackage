@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Mob Examiner II"
+  completion: 3
+  expiration: 86400
+#
+lore:
+- "&7Open 3 Mystery Mob Spawners"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- ""

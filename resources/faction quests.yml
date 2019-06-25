@@ -1,0 +1,24 @@
+# Made by RandomHashTags
+messages:
+  need min faction members to claim rewards:
+    - "&c&l(!)&r &cYou must have at least 4 Faction Members to claim Quest Rewards!"
+  new faction quests are available once per day:
+    - "&c&l(!)&r &cNew Faction Quests are available once per day!"
+    - "&7Each faction quest completed will increase your next faction quest reward!"
+#
+settings:
+  min lifespan of faction: 43200
+  min members to claim rewards: 4
+  min f top to claim rewards: 50
+  can claim rewards:
+    - LEADER
+    - COLEADER
+#
+items:
+  reroll:
+    item: "paper"
+    name: "&a&lFaction Quest Re-roll"
+    lore:
+    - " "
+    - "&7Re-roll a selected daily Faction Quest."
+#

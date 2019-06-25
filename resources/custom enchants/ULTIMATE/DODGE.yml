@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Dodge"
+lore:
+- "&eChance to dodge physical enemy"
+- "&eattacks, increased chance if"
+- "&esneaking."
+#
+max level: 5
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "5000:5800:6600:7400"
+tinkerer: "58:67:76:85:94"
+#
+attributes:
+- "isDamaged;chance=Lucky+(3+(4*level));if{[victim]isSneaking->cancel&&sendMessage{[victim]&e*DODGE*}}"
+- "isDamaged;chance=Lucky+(3+(2*level));if{didntproc->cancel&&sendMessage{[victim]&e*DODGE*}}"

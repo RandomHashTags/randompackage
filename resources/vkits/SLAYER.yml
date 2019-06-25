@@ -1,0 +1,88 @@
+# Made by RandomHashTags
+settings:
+  max level: 10
+  upgrade chance: 10
+  cooldown: 259200
+  fallen hero: VKIT
+#
+gui settings:
+  slot: 4
+  #
+  item: "gold_sword"
+  name: "&4&lSlayer Kit"
+  lore:
+  - "&e&lKit Level: &r&e&n{LEVEL}&r &e&l / 10"
+  - " "
+  - "&4&l* Glitched Sword"
+  - "&4&l* Shroud of War"
+  - "&4&l* The Terraformer"
+  - "&4&l*&r &c&lA chance of..."
+  - "   &4- &cCustom Potions"
+  - "   &4- Enderpearls"
+  - "   &4- &cFaction Crystals"
+  - " "
+  - "&7Quality over quantity: Anti-Gank."
+  - "&6* Back to School 2017"
+#
+items:
+  sword:
+    item: "diamond_sword"
+    name: "&4&lGlitched Sword (&cLVL {LEVEL}&4&l) {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Sharpness5;Smite5;Unbreaking4}"
+    - "RPEnchants{Rage;Disarmor;Double Strike;Lifesteal;Silence;Enrage;Assassin;Block;Paralyze}"
+    - "{Divine Immolation}:reqlevel=8:chance=50"
+    - "{Disintegrate}:reqlevel=7"
+    - "{Inversion}:reqlevel=4"
+    - "{Solitude}:reqlevel=3"
+    - "&4A corrupted v of the most"
+    - "&4powerful holy weapon in the galaxy."
+    - " "
+    - "&4&lKit Level: &c{LEVEL} / 10"
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&4&lShroud of War (&cLVL {LEVEL}&4&l) {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;FeatherFalling2;Unbreaking3;ProjectileProtection2}"
+    - "RPEnchants{Overload;Ghost;Aegis;Enlighted;Protection;Deathbringer;Tank;Heavy;Armored;Dodge;Repair Guard}"
+    - "{Immortal}:reqlevel=9:chance=50"
+    - "{Guardians}:reqlevel=9"
+    - "{Resilience}:reqlevel=4"
+    - "{ArrowDeflect}:reqlevel=6"
+    - "&4A firey shroud that echoes absolute"
+    - "&4power and domination. No mere human"
+    - "&4would dare stand against its owner."
+    - " "
+    - "&4&lKit Level: &c{LEVEL} / 10"
+  pickaxe:
+    item: "diamond_pickaxe"
+    name: "&4&lThe Terraformer (&cLVL {LEVEL}&4&l) {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Efficiency5;Unbreaking3;Fortune2}"
+    - "RPEnchants{Fuse;Detonate;Telepathy;Auto Smelt;Haste;Oxygenate}"
+    - "{Skilling}:reqlevel=4"
+    - "{ObsidianDestroyer}:reqlevel=8"
+    - "&4A highly advanced space-age fusion tool"
+    - "&4used to quickly harvest rare materials."
+    - " "
+    - "&4&lKit Level: &c{LEVEL} / 10"
+  instant health potion 1:
+    item: "splash_potion_healing_2"
+  instant health potion 2:
+    item: "splash_potion_healing_2"
+  instant health potion 3:
+    item: "splash_potion_healing_2"
+  instant health potion 4:
+    item: "splash_potion_healing_2"
+  instant health potion 5:
+    item: "factioncrystal;amount=1-4"
+  ender pearl:
+    item: "ender_pearl;amount=64"
+#
+upgrade gem:
+  item: "red_dye"
+  name: "&2&lEvolution Gem &r&2(&4&lSlayer&r&2)"
+  lore:
+    - "&7Right-click this evolution gem to"
+    - "&7increase the power of the"
+    - "&4&lSlayer&r &7/vkit by 1 level."

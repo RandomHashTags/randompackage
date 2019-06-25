@@ -1,0 +1,57 @@
+# Made by RandomHashTags
+settings:
+  max level: 10
+  upgrade chance: 10
+  cooldown: 259200
+  fallen hero: VKIT
+#
+gui settings:
+  slot: 3
+  #
+  item: "skull_item:2"
+  name: "&2&lOgre Kit"
+  lore:
+  - "&e&lKit Level: &r&e&n{LEVEL}&r &e&l / 10"
+  - " "
+  - "&2&l* Ogre Mask"
+  - "&2&l* Fat Tummy"
+  - " "
+  - "&7The best offense is... a fat defence?"
+  - "&6* Summer BREAK 2017"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&2&lOgre Mask (&aLVL {LEVEL}&2&l) {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Destruction;Clarity;Deathbringer;Tank;Resilience;Lucky;Voodoo}"
+    - "{Ghost}:reqlevel=9"
+    - "{Angelic}:reqlevel=7"
+    - "{Armored}:reqlevel=3"
+    - "&2Learn to tame your monster inside,"
+    - "&2before it eats you alive..."
+    - " "
+    - "&2&lKit Level: &a{LEVEL} / 10"
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&2&lFat Tummy (&aLVL {LEVEL}&2&l) {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;FeatherFalling2;Unbreaking4;ProjectileProtection2}"
+    - "RPEnchants{Enlighted;Overload;Protection;Deathbringer;Blood Link;Guardians;Tank;Sticky;Shockwave}"
+    - "{ArrowDeflect}:reqlevel=6"
+    - "{Angelic}:reqlevel=8"
+    - "{Armored}:reqlevel=5"
+    - "&2There's no getting around it, it's"
+    - "&2a huge lump of thick, nasty orge fat."
+    - "&2Unconventional, yet amazingly effective."
+    - " "
+    - "&2&lKit Level: &a{LEVEL} / 10"
+#
+upgrade gem:
+  item: "red_dye"
+  name: "&2&lEvolution Gem &r&2(&2&lOgre&r&2)"
+  lore:
+    - "&7Right-click this evolution gem to"
+    - "&7increase the power of the"
+    - "&2&lOgre&r &7/vkit by 1 level."

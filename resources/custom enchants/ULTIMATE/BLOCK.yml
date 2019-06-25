@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Block"
+lore:
+- "&eA chance to increase damage and"
+- "&eredirect an attack."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: "3000:5000"
+tinkerer: "45:54:63"
+#
+attributes:
+- "isDamaged;chance=8*level;if{[victim]isBlocking->cancel&&[damager]damage{dmg*(1.05*level)}}"

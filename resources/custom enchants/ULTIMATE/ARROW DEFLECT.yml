@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Arrow Deflect"
+lore:
+- "&ePrevents you from being damaged by"
+- "&eenemy arrows more often than once"
+- "&eevery level x 400 milliseconds."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "5400:5700:6000"
+tinkerer: "51:64:77:90"
+#
+attributes:
+- "isDamaged;chance=15*level;"

@@ -1,0 +1,71 @@
+# Made by RandomHashTags
+priority: 5
+name: "&f&lLootbox:&r &c&lBAKED"
+# Measured in seconds. Default is 259200 (3 days)
+available for: 259200
+#
+gui:
+  title: "Lootbox: &c&lBAKED"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  ## C = Background item with the countdown amount
+  ## X = Background item
+  ## L = Random Jackpot or Regular loot
+  ## B = Bonus item
+  format:
+  - "CXLLLBBXC"
+#
+preview title: "Lootbox: &c&lBAKED"
+#
+lore formats:
+  regular loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  jackpot loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  bonus loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+#
+lootbox:
+  item: "beacon"
+  name: "&f&lLootbox:&r &c&lBAKED"
+  lore:
+  - "&7All your problems melt away"
+  - "&7whenever you feel this toasty..."
+  - "&7or maybe this is about cookies?"
+  - " "
+  - "&f&lRandom Loot (&r&73 items&f&l)"
+  - "{REGULAR_LOOT}"
+  - " "
+  - "&f&lJackpot Loot"
+  - "{JACKPOT_LOOT}"
+  - " "
+  - "&f&lBonus Loot (&r&72 items&f&l)"
+  - "{BONUS_LOOT}"
+#
+regular loot size: 3
+regular loot:
+  #- "Fat Bucket;amount=2"
+  #- "resettoolkit"
+  - "gkitfallenherobundle"
+  - "vkitfallenhero:SLAYER;amount=3"
+  #- "heroicequipmentlootbox"
+  - "mysterymobspawner;amount=3"
+  - "customboss:PLAGUE_BLOATER"
+  - "servercrate:LEGENDARY;amount=3"
+  - "servercrate:GODLY;amount=2"
+  #- "heroicgkitgenerator"
+  - "soultracker:MONSTER;amount=2"
+  - "enchantmentorb:armor13"
+#
+jackpot loot:
+  - "ce:Auto Sell1"
+  - "mask:SPECTRAL"
+  #- "dungeonportal:abandoned spaceship"
+#
+bonus loot size: 1
+bonus loot:
+  #- "Mystery Brownie"
+  - "title:206"
+#

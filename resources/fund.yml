@@ -1,0 +1,85 @@
+# Made by RandomHashTags
+unlock:
+  - "/vkit;25000000;Unlock /vkit;command /vkit"
+  - "/warp end;250000000;Unlock /warp end;End Dimension"
+  - "/gkit;500000000;Unlock /gkit;command /gkit"
+  - "/mkit;1000000000;Unlock Mastery Kits /mkit;command /gkit"
+#
+allows decimals: false
+min deposit: 50000
+max fund: 1000000000
+#
+messages:
+  view:
+    - " "
+    - "&6&l<&r&e&l*&r&6&l> Server World Fund <&r&e&l*&r&6&l>"
+    - "     &6&l:  $&r&e{BALANCE}&r  &6&l:"
+    - " "
+    - "&7Add $ to the /fund and unlock new content for your entire planet with &n/fund deposit <$>"
+    - " "
+    - "{CONTENT}"
+    - " "
+  # {AMOUNT} = the target amount the player is trying to deposit into the server fund
+  # {REQ} = The amount it requires, and the appropriate abbreviation
+  # {REQ$} = The amount it requires, and nothing else
+  # {UNLOCK%} = The (total fund / required amount). If more than 100, it is 100.
+  less than min:
+    - "&c&l(!)&r &cYou must deposit at least ${AMOUNT} at a time."
+  need more money:
+    - "&c&l(!)&r &cYou do not have ${AMOUNT} in your /bal."
+  deposited:
+    - "&6&l<*>&r &6[&7{FACTION}&6] &7{PLAYER} &6added &n${AMOUNT}&r &6to the planet /fund!"
+  needs to reach:
+    - "&c&l(!)&r &cYour planet has not yet unlocked access to the {ARG1}. To unlock, your planet needs to reach the &n${REQ$} /fund&r &cgoal."
+    - "&7* Until the goal is met, NO PLAYERS can use {ARG2}"
+  already complete:
+    - "&c&l(!)&r &cYour planet's Server /fund is already complete!"
+  cannot include decimals:
+    - "&c&l(!)&r &cYou cannot include decimal values in /f deposit."
+  trillion: "tr"
+  billion: "b"
+  million: "m"
+  thousand: "th"
+  progress bar:
+    symbol: ":"
+    length: 100
+    achieved: "&e"
+    not achieved: "&7"
+  # {COMPLETED} only shows up if the fund is reached for that unlock
+  # {UNLOCK} is the 3rd option in the unlock format (x;x;THIS;x)
+  # {PROGRESS_BAR} is the progress bar
+  content:
+    - "&6&l{COMPLETED}{UNLOCK} [&r&7{UNLOCK%}%&6&l]"
+    - "{PROGRESS_BAR} &6&l{REQ}"
+  completed: "&m"
+  unlock percent digits: 3
+  #
+  help:
+    - "&6&l&nServer Fund Help"
+    - " "
+    - "&6/fund"
+    - "&7View the current Server Fund status."
+    - " "
+    - "&6/fund deposit <#>"
+    - "&7Deposit $# /bal into the Server Fund."
+    - " "
+    - "&6/fund top"
+    - "&7View the top contributors to the Server Fund."
+    - " "
+    - "&6/fund help"
+    - "&7View this menu."
+  # How many contributors should be shown per page?
+  show per page: 10
+  loading top funders:
+    - "&eLoading top world funders...."
+  number1 funder format: "&e&l{PLACE}.&r &6{PLAYER}: &e${CONTRIBUTION}&r &f&l/ #1 REWARD"
+  number2 funder format: "&e&l{PLACE}.&r &6{PLAYER}: &e${CONTRIBUTION}&r &f&l/ #2 REWARD"
+  number3 funder format: "&e&l{PLACE}.&r &6{PLAYER}: &e${CONTRIBUTION}&r &f&l/ #3 REWARD"
+  funder format: "&e&l{PLACE}.&r &6{PLAYER}: &e${CONTRIBUTION}"
+  top:
+    - " "
+    - "&e&lTop Funders (&6&l{PAGE}&r&e&l/&r&6&l{PAGE_MAX}&r&e&l)"
+    - " "
+    - "{FUNDERS}"
+    - " "
+#

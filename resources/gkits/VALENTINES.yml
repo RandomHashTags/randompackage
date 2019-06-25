@@ -1,0 +1,78 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 5
+  #
+  item: "red_rose"
+  name: "Valentines Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Knife of Love"
+  - "&f&l* &6&lHeroic Short shorts"
+  - "&f&l* &6&lHeroic 6-pack Abs"
+  - "&f&l* &eHeroic Valentine Day Hat"
+  - "&f&l* &eHeroic Bunny Slippers"
+  - " "
+  - "&7The ultimate support kit!"
+  - "&6* Valentines 2015"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&eHeroic Valentine Day Hat {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Clarity;Enlighted;Hardened;Glowing}"
+    - "&e&oImmunization to false love."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&6&lHeroic 6-pack Abs {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Overload;Deathbringer;Enlighted;Hardened;Creeper Armor;Guardians}"
+    - "&6&oBoy, you are SUPER HOT."
+  leggings:
+    item: "diamond_leggings"
+    name: "&6&lHeroic Short shorts {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Overload;Enlighted;Obsidianshield;Implants;Cactus}"
+    - "&6&oShow off your yoked quads n glutes."
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Bunny Slippers {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Ghost;Gears;Enlighted;Hardened;Angelic;Anti Gravity}"
+    - "&e&oComfortable AND functional!"
+  sword:
+    item: "diamond_sword"
+    name: "&6&lHeroic Knife of Love {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking2}"
+    - "RPEnchants{Disarmor;Double Strike;Silence;Paralyze;Trap;Deep Wounds;Featherweight;Headless;Insomnia}"
+    - "&6&oA blade that pierces even"
+    - "&6&othe coldest and lonely of hearts."
+  golden apple:
+    item: "golden_apple"
+    amount: 8
+    name: "&fWhite Chocolate Apple"
+    lore:
+    - "&7Rich chocolate cut with sour apple."
+  love letter:
+    item: "paper"
+    name: "&fEpic Love Letter"
+    lore:
+    - "&7Written in an alien language..."
+    - "&7but someone loves you!"
+  mooshroom spawn egg:
+    item: "mooshroom_spawn_egg"
+    name: "&fMooshroom Spawner Egg"
+    lore:
+    - "&7Almost as cute as you in that outfit!"
+#

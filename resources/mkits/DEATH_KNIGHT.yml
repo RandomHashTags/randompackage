@@ -1,0 +1,103 @@
+# Made by RandomHashTags
+settings:
+  loses required kits: true
+  name: "&9&lDeath Knight"
+#
+gui settings:
+  slot: 5
+  #
+  item: "eye_of_ender"
+  name: "&9&lDeath Knight Mastery Kit"
+  lore:
+  - " "
+  - "&7The cursed runeforged set of armor"
+  - "&7created for the Death Knight,"
+  - "&7a master in both melee combat"
+  - "&7and the use of offensive dark"
+  - "&7magic. How can you kill"
+  - "&7what is already dead?"
+  - " "
+  - "&6&lRequirements:"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+  - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+#
+shard:
+  item: "cyan_dye"
+  name: "&6&lMastery Shard&r &6(&9&lDeath Knight&r&6)"
+  lore:
+  - "&7Apply to an enchantment book"
+  - "&7to imbue it with the power to"
+  - "&7affect &9&lDeath Knight&r &7Mastery Kit items."
+  applied lore:
+  - "&6&l* Mastery Shard&r &6(&9&lDeath Knight&r&6)"
+#
+kit bundle:
+  item: "chest"
+  name: "&9&lDeath Knight Kit Bundle"
+  lore:
+  - "&7Right-click to reveal the"
+  - "&7following Fallen Heroes!"
+  - " "
+  - "&6Contains the following..."
+  - "&7* 5x {REQUIREMENT}"
+  - "&7* 5x {REQUIREMENT}"
+  - "&7* 5x {REQUIREMENT}"
+  rewards:
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+#
+required kits:
+  - "gkit;GLADIATOR;3"
+  - "gkit;LOKI;3"
+  - "gkit;TEMPLAR;3"
+#
+items:
+  helmet:
+    item: "leather_helmet"
+    name: "&9&lCrown of the Lich King&r {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{CHAIN LIFESTEAL;DEATH PACT;PERMAFROST;IMMORTAL;PROTECTION;ARMORED;DRUNK;DEATH GOD;ANGELIC;TANK;IMPLANTS;ARROW DEFLECT;REPAIR GUARD;ENDER SHIFT;AQUATIC}"
+      - "ArmorValues{2;810}"
+  chestplate:
+    item: "leather_chestplate"
+    name: "&9&lDeath Knight Platebody&r {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{DEATH PACT;GODLY OVERLOAD;PLANETARY DEATHBRINGER;VENGEFUL DIMINISH;DIVINE ENLIGHTED;OVERLOAD;AEGIS;DEATHBRINGER;LEADERSHIP;BLOOD LUST;DIMINISH;BLOOD LINK;ENLIGHTED;ARMORED;TANK;VALOR}"
+  leggings:
+    item: "leather_leggings"
+    name: "&9&lDeath Knight Leggings&r {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{TOMBSTONE;DEATH PACT;PERMAFROST;PALADIN ARMORED;NATURES WRATH;IMMORTAL;ARMORED;ANGELIC;VALOR;TANK;OBSIDIANSHIELD;LUCKY;DODGE;SPIRITS;CACTUS;VOODOO}"
+  boots:
+    item: "leather_boots"
+    name: "&9&lBoots of the Scourge&r {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{DEATH PACT;ETHEREAL DODGE;GUIDED ROCKET ESCAPE;PHOENIX;GEARS;CLARITY;ARMORED;ANGELIC;VALOR;ENDER WALKER;GUARDIANS;METAPHYSICAL;ROCKET ESCAPE;SPRINGS}"
+  mask:
+    item: "mask:DEATH_KNIGHT"
+#
+anti crystal:
+  item: "yellow_dye"
+  name: "&6&lAnti M-Kit Crystal (&r&9&lDeath Knight&r&6&l)"
+  lore:
+    - "&a{PERCENT}% Success Rate"
+    - "&7Apply to any piece of armor"
+    - "&7to negate the following"
+    - "&7custom Mastery Enchantments:"
+    - " &6&l*&r &4Death Pact"
+    - " &6&l*&r &4Permafrost"
+    - " &6&l*&r &4Tombstone"
+    - " &6&l*&r &4Chain Lifesteal"
+  added lore:
+  - "&6&lAnti M-Kit Crystal (&r&9&lDeath Knight&r&6&l)"
+  negate enchants:
+    - DEATH PACT
+    - PERMAFROST
+    - TOMBSTONE
+    - CHAIN LIFESTEAL

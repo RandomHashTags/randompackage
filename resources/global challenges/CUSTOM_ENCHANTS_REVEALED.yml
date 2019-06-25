@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "CustomEnchantsRevealed"
+  duration: 86400
+  type: "Custom Enchant Books Opened"
+#
+item:
+  item: "book"
+  name: "&a&lMost Custom Enchant Books Opened"
+#

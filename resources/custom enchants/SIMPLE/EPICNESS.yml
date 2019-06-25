@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Epicness"
+lore:
+- "&eGives particles and sound effects."
+#
+max level: 3
+applies to: "sword;_axe"
+#
+alchemist: "750:1250"
+tinkerer: "54:62:70"
+#
+attributes:
+- ""

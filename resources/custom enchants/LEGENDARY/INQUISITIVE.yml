@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Inquisitive"
+lore:
+- "&eIncreases EXP drops from mobs."
+#
+max level: 4
+applies to: "sword"
+#
+alchemist: "9000:11000:14000"
+tinkerer: "121:144:167:190"
+#
+attributes:
+- "KilledEntity;setDroppedExp{3+(droppedxp*level)}"

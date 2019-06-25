@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "A Medium Grind"
+  completion: 5000
+  expiration: 86400
+#
+lore:
+- "&7Kill 5,000 Blazes"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "KilledEntity;type=BLAZE;+1"

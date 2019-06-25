@@ -1,0 +1,42 @@
+# Made by RandomHashTags
+settings:
+  max stack size:
+    - "world=-1"
+    - "world_nether=-1"
+    - "world_the_end=-1"
+  #
+  tick rate check:
+    - "world=20"
+    - "world_nether=20"
+    - "world_the_end=20"
+  #
+  stack radius:
+    - "world=5"
+    - "world_nether=5"
+    - "world_the_end=5"
+  #
+  slays stack:
+    - "world=false"
+    - "world_nether=false"
+    - "world_the_end=false"
+  #
+  stacks same meta: false
+  stacks babies: false
+  stacks via natural: false
+  stacks via spawner: true
+  stacks via egg: true
+  stackable:
+    - "BLAZE"
+    - "CREEPER"
+    - "SKELETON"
+    - "ZOMBIE"
+    - "IRON_GOLEM"
+#
+names:
+  ## {TYPE} = The formatted upper cased entity's EntityType name
+  default: "&e&l{SS}X {TYPE}"
+  #
+  # <ENTITY_TYPE>: "<custom name>"
+  #BLAZE: "&e&l{SS}X BLAZE"
+  #COW: "&e&l{SS}X COW"
+#

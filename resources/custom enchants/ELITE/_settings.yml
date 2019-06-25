@@ -1,0 +1,31 @@
+# Made by RandomHashTags
+reveal item:
+  item: "book"
+  name: "&b&lElite Enchantment Book &7(Right Click)"
+  lore:
+  - "&7Examine to receive a random"
+  - "&belite &7enchantment book."
+#
+reveals enchant rarities: "ELITE"
+reveal enchant msg:
+- "&e&l(!) &eYou examine the &b&lElite Enchantment Book..."
+- "&eand discovered {ENCHANT}"
+#
+revealed item:
+  item: "book"
+  name colors: "&b&l&n"
+  apply colors: "&b"
+  firework: "ball:aqua:fuchsia:1"
+#
+settings:
+  success+destroy=100: false
+  #
+  success: "&a{PERCENT}% Success Rate"
+  destroy: "&c{PERCENT}% Destroy Rate"
+  lore format:
+  - "{SUCCESS}"
+  - "{DESTROY}"
+  - "{ENCHANT_LORE}"
+  - "{ENCHANT_TYPE}"
+  - "&7Drop onto item to enchant"
+#

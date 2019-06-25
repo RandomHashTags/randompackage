@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Last Noob Standing"
+  completion: 15m
+  expiration: 86400
+#
+lore:
+- "&7Hold LMS for 15m in a row"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- ""

@@ -1,0 +1,78 @@
+# Made by RandomHashTags
+messages:
+  receive loot from Equipment Lootbox: # This is broadcasted
+  - "&6&l(!)&r &6{PLAYER} received a {ITEM}&r &6from a Equipment Lootbox!"
+#
+items:
+  equipment lootbox:
+    item: "chest:0"
+    name: "&6&lEquipment Lootbox&r &7(Right Click)"
+    lore:
+    - " "
+    - "&7&nRight-click&r &7to receive a random"
+    - "&7item from one of these armor sets!"
+    - " "
+    - "&6&lAvailable Armor Sets"
+    - " &6&l*&r &c&lPhantom Armor Set"
+    - " &6&l*&r &b&lYeti Armor Set"
+    - " &6&l*&r &f&lMother Of Yijki Armor Set"
+    - " &6&l*&r &a&lRanger Armor Set"
+    - " &6&l*&r &4&lSupreme Armor Set"
+    - " &6&l*&r &5&lDimensional Traveler Armor Set"
+    reveal amount: 1
+    reveal display: 8 # Amount of seconds for the rewards to be shown, and the randomization stops
+    gui:
+      title: "&lEquipment Lootbox"
+      size: 9
+      background:
+        item: "stained_glass_pane:7"
+        name: " "
+      slots: "4"
+    rewards:
+    - "customarmor:PHANTOM:helmet||customarmor:PHANTOM:chestplate||customarmor:PHANTOM:leggings||customarmor:PHANTOM:boots"
+    - "customarmor:YETI:helmet||customarmor:YETI:chestplate||customarmor:YETI:leggings||customarmor:YETI:boots"
+    - "customarmor:YIJKI:helmet||customarmor:YIJKI:chestplate||customarmor:YIJKI:leggings||customarmor:YIJKI:boots"
+    - "customarmor:RANGER:helmet||customarmor:RANGER:chestplate||customarmor:RANGER:leggings||customarmor:RANGER:boots"
+    - "customarmor:SUPREME:helmet||customarmor:SUPREME:chestplate||customarmor:SUPREME:leggings||customarmor:SUPREME:boots"
+    - "customarmor:TRAVELER:helmet||customarmor:TRAVELER:chestplate||customarmor:TRAVELER:leggings||customarmor:TRAVELER:boots"
+#
+# Armor only works when all 4 armor pieces are worn.
+
+# Lightning feature
+### chance=<chance of causing the lightning effect>;{lightning;<radius of strikes>;<how many strikes per 10 ticks>;<how many times lightning strikes>}
+#
+armor:
+  heroic:
+    armor lore:
+    - " "
+    - "&7+{ADDED_ARMOR_VALUE} Armor Value"
+    - "&7{DURABILITY} Durability"
+    - "&4This armor is stronger than diamond."
+    helmet:
+      item: "leather_helmet"
+      name: "&3&lGhostly Hood&r {ENCHANT_SIZE}"
+      lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{Valor;Angelic;Tank;Armored;Drunk;Implants;Arrow Deflect;Death God;Resilience;Protection;Frozen}"
+      - "{Immortal}:chance=40"
+      - "SetArmorValue{3}"
+      - "SetDurability{810}"
+    chestplate:
+      item: "leather_chestplate"
+      name: "&3&lGhostly Shroud&r {ENCHANT_SIZE}"
+      lore:
+      - "SetArmorValue{8}"
+      - "SetDurability{1000}"
+    leggings:
+      item: "leather_leggings"
+      name: "&3&lGhostly Robes&r {ENCHANT_SIZE}"
+      lore:
+      - "SetArmorValue{6}"
+      - "SetDurability{935}"
+    boots:
+      item: "leather_boots"
+      name: "&3&lGhostly Whisp"
+      lore:
+      - "SetArmorValue{3}"
+      - "SetDurability{686}"
+#

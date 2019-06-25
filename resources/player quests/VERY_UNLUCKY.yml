@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Very Unlucky"
+  completion: 25000000
+  expiration: 86400
+#
+lore:
+- "&7Lose $25,000,000 in /coinflip"
+#
+rewards:
+- "questtokens=3: 3x Quest Tokens"
+#
+trigger:
+- ""

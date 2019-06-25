@@ -1,0 +1,67 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 2
+  #
+  item: "blaze_powder"
+  name: "Destroyer Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Destructive Bow of Oblivion"
+  - "&f&l* &6&lHeroic Demon Stalker Greathelm"
+  - "&f&l* &eHeroic Demon Stalker Harness"
+  - "&f&l* &eHeroic Demon Stalker Greaves"
+  - "&f&l* &eHeroic Boots of the Destroyer"
+  - " "
+  - "&7Wreak havoc and destruction on the galaxy."
+  - "&6* Heart of Darkness"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&6&lHeroic Demon Stalker Greathelm"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Frozen;Deathbringer;Obsidianshield;Trickster;Implants;Commander;Destruction}"
+    - "&6&oA spiked, firey helmet of destruction."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&eHeroic Demon Stalker Harness"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Frozen;Deathbringer;Spirits;Curse;Overload;Shockwave}"
+    - "&e&oA chillingly cold, dark chestplate."
+  leggings:
+    item: "diamond_leggings"
+    name: "&eHeroic Demon Stalker Greaves"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Frozen;Deathbringer;Plague Carrier;Nutrition}"
+    - "&e&oAn extremly heavy pair of onyx leggings"
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Boots of the Destroyer"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Frozen;Deathbringer;Undead Ruse;Springs;Gears}"
+    - "&e&oEncrusted with onyx and black diamond."
+  bow:
+    item: "bow"
+    name: "&6&lHeroic Destructive Bow of Oblivion"
+    lore:
+    - "VEnchants{Power5;Punch2;Flame2;Unbreaking3;Infinity1}"
+    - "RPEnchants{Piercing;Silence;Rage;Hellfire;Blind;Sniper}"
+    - "&6&oBecome one with your inner darkness,"
+    - "&6&oand usher in the end of the galaxy."
+  arrow:
+    item: "arrow"
+  blind custom enchant:
+    item: "ce:BLIND:random:random:random"
+  christmas eggnog:
+    item: "christmaseggnog;amount=16"
+#

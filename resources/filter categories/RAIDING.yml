@@ -1,0 +1,86 @@
+# Made by RandomHashTags
+title: "Item Filter: Raiding"
+size: 27
+#
+gui:
+  redstone:
+    slot: 0
+    item: "redstone"
+    name: "Redstone"
+  redstone lamp:
+    slot: 1
+    item: "redstone_lamp_off"
+    name: "Redstone Lamp"
+  redstone torch:
+    slot: 2
+    item: "redstone_torch_on"
+    name: "Redstone Torch"
+  redstone ore:
+    slot: 3
+    item: "redstone_ore"
+    name: "Redstone Ore"
+  redstone comparator:
+    slot: 4
+    item: "redstone_comparator"
+    name: "Redstone Comparator"
+  redstone repeater:
+    slot: 5
+    item: "repeater"
+    name: "Redstone Repeater"
+  lava bucket:
+    slot: 6
+    item: "lava_bucket"
+    name: "Lava Bucket"
+  water bucket:
+    slot: 7
+    item: "water_bucket"
+    name: "Water Bucket"
+  tnt:
+    slot: 8
+    item: "tnt"
+    name: "TNT"
+  web:
+    slot: 9
+    item: "web"
+    name: "Cobweb"
+  sponge:
+    slot: 10
+    item: "sponge"
+    name: "Sponge"
+  ice:
+    slot: 11
+    item: "ice"
+    name: "Ice"
+  packed ice:
+    slot: 12
+    item: "packed_ice"
+    name: "Packed Ice"
+  dispenser:
+    slot: 13
+    item: "dispenser"
+    name: "Dispenser"
+  dropper:
+    slot: 14
+    item: "dropper"
+    name: "Dropper"
+  creeper egg:
+    slot: 15
+    item: "creeper_spawn_egg"
+    name: "Creeper Egg"
+  piston:
+    slot: 16
+    item: "piston_base"
+    name: "Piston"
+  sticky piston:
+    slot: 17
+    item: "piston_sticky_base"
+    name: "Sticky Piston"
+  hopper:
+    slot: 18
+    item: "hopper"
+    name: "Hopper"
+  flint and steel:
+    slot: 19
+    item: "flint_and_steel"
+    name: "Flint and Steel"
+#

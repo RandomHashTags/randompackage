@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "UniquePlayerHeadsCollected"
+  duration: 86400
+  type: "Unique Player Heads Collected"
+#
+item:
+  item: "player_head_item"
+  name: "&a&lMost Unique Player Heads Collected"
+#

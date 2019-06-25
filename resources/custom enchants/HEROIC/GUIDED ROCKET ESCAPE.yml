@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Guided Rocket Escape"
+lore:
+- "&e"
+#
+max level: 3
+applies to: "boots"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Rocket Escape;3"
+#
+attributes:
+- "isDamaged;(Lucky*2)+(65+(5*level));if{[victim]healthIs<=:10:->addPotionEffect{[victim]jump:24+level:20+(20*level):true}&&addPotionEffect{[victim]regeneration:level+2:20+(20*level):true}"

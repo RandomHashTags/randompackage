@@ -1,0 +1,563 @@
+# Made by RandomHashTags
+banknote:
+  item: "paper"
+  name: "&b&lBank Note &7(Right Click)"
+  # {VALUE} = The amount the banknote is worth. Required in the lore somewhere.
+  # {SIGNER} = The player that withdrew the displayed amount.
+  lore:
+  - "&dValue &f${VALUE}"
+  - "&dSigner &7{SIGNER}"
+  server crate: "Server Crate"
+  monthly crate: "Monthly Crate"
+#
+christmas eggnog:
+  item: "potion_water"
+  name: "&eChristmas Eggnog"
+  lore:
+  - "&7Also known as \"egg milk punch\","
+  - "&7a chilled, sweetened, alcoholic"
+  - "&7beverage perfect for the holidays!"
+#
+# When a command is revealed when revealing loot
+## Requires "{COMMAND}" in the first lore slot to work!
+command reward:
+  item: "paper"
+  name: "&7Executes Command"
+  lore:
+  - "{COMMAND}"
+  - "&7Command Executes when inventory closes."
+#
+explosive cake:
+  sounds:
+    placed: "ENTITY_GENERIC_EXPLODE:1:1"
+  item: "cake"
+  name: "&f&lExplosive Cake &7(Right Click)"
+  lore:
+  - "&7What? have you not seen an"
+  - "&7&nEXPLODING&r &7cake before?!"
+#
+explosive snowball:
+  sounds:
+    placed: "ENTITY_GENERIC_EXPLODE:1:1"
+  item: "snow_ball"
+  name: "&b&lExplosive Snowball"
+  lore:
+  - "&7Yes, this is a snowball with TNT inside."
+  - "&7Seriously, Happy Holidays!"
+#
+halloween candy:
+  item: "magma_cream"
+  name: "&eHalloween Candy &7(Right Click)"
+  lore:
+  - "&7A yummy piece of space candy, only"
+  - "&7obtainable during &nHalloween Events!"
+#
+item name tag:
+  sounds:
+    cannot rename item: "ENTITY_VILLAGER_NO:1:1"
+    cannot rename name: "ENTITY_VILLAGER_NO:1:1"
+    rename item: "ENTITY_VILLAGER_YES:1:1"
+  item: "name_tag"
+  name: "&6&lItem Nametag &7(Right Click)"
+  lore:
+    - "&7Rename and customize your equipment."
+  # Adding an item to the blacklist will make that item unable to be renamed using the ItemNameTag
+  blacklisted items:
+    - "name_tag"
+    - "paper"
+    - "fireball"
+    - "book"
+    - "trapped_chest"
+  blacklisted names:
+  - "blacklisted item name"
+  # Messages
+  cannot rename air:
+  - "&c&l(!)&r &cYou need to be holding an item to rename!"
+  cannot rename item:
+  - "&c&l(!)&r &cYou cannot rename this item!"
+  already in rename process:
+  - "&c&l(!)&r &cYour next message will already try to rename your item!"
+  enter rename:
+  - "&a&l(!)&r &aYour next message will try to rename your item."
+  rename item:
+  - "&e&l(!)&r &eYour item has been renamed to '{NAME}&r&e'!"
+#
+item lore crystal:
+  item: "red_dye"
+  name: "&6&lItem Lore Crystal&r &7(Right Click)"
+  lore:
+  - "&7Apply a custom line of lore"
+  - "&7to customize your equipment."
+  - " "
+  - "&6&l*&r &7Limited to 1 custom line fo lore per item."
+  # This is added before the applied lore
+  apply: "&6&l~&r&6"
+  # Messages
+  cannot addlore air:
+  - "&c&l(!)&r &cYou need to be holding an item to add lore!"
+  cannot addlore item:
+  - "&c&l(!)&r &cYou cannot add custom lore to this item!"
+  already in process:
+  - "&c&l(!)&r &cYour next message will already try to add lore to your item!"
+  enter addlore:
+  - "&a&l(!)&r &aYour next message will try to add lore to your item."
+  add lore:
+  - "&e&l(!)&r &eYour item's lore has successfully added '{LORE}&r&e'"
+#
+mcmmo vouchers:
+  # {AMOUNT} = The amount of xp/levels the voucher contains
+  # {SKILL} = The skill the xp/levels will be applied to
+  messages:
+    redeem level:
+    - "&a&l+{AMOUNT} {SKILL}"
+    redeem xp:
+    - "&a&l+{AMOUNT} {SKILL} XP!"
+  sounds:
+    redeem credit: "ENTITY_PLAYER_LEVELUP:1:1"
+    redeem level: "ENTITY_PLAYER_LEVELUP:1:1"
+    redeem xp: "ENTITY_PLAYER_LEVELUP:1:1"
+  #
+  credit:
+    item: "paper"
+    name: "&6&lMCMMO Voucher &7(Right Click)"
+    lore:
+    - "&6{AMOUNT} credit(s)"
+    - "&7Use /redeem after depositing voucher."
+  level:
+    item: "paper"
+    name: "&6&lSkill Voucher &7(Right Click)"
+    lore:
+    - "&6Skill {SKILL}"
+    - "&6+{AMOUNT} Level(s)"
+    - "&7Automatically applies level on use."
+  xp:
+    item: "paper"
+    name: "&6&lMCMMO XP VOUCHER &7(Right Click)"
+    lore:
+    - "&6Skill {SKILL}"
+    - "&6+{AMOUNT} &7XP"
+    - "&6Trainer &7{PLAYER}"
+    - "&7Applies mcMMO experience on use."
+  server crate: "Server Crate"
+  tinkerer: "Tinkerer"
+  #
+  skill names:
+    acrobatics: "&7Acrobatics"
+    alchemy: "&7Alchemy"
+    archery: "&7Archery"
+    axes: "&7Axes"
+    combat: "&7Combat"
+    excavation: "&7Excavation"
+    fishing: "&7Fishing"
+    gathering: "&7Gathering"
+    herbalism: "&7Herbalism"
+    mining: "&7Mining"
+    repair: "&7Repair"
+    salvage: "&7Salvage"
+    smelting: "&7Smelting"
+    swords: "&7Swords"
+    taming: "&7Taming"
+    unarmed: "&7Unarmed"
+    woodcutting: "&7Wood Cutting"
+#
+mystery mob spawner:
+  receive message:
+    - "&b&l(!)&r &b&n{PLAYER}&r &bhas just received a &d&l{TYPE}&r &bfrom a Mystery Mob Spawner!"
+  #
+  item: "mob_spawner"
+  name: "&6&lMystery Mob Spawner"
+  lore:
+  - "&7Right-click in hand to reveal one"
+  - "&7of the following mob spawner types:"
+  - " "
+  - "&6&l* &7Endermen"
+  - "&6&l* &7Pigzombie"
+  - "&6&l* &7Creeper"
+  - "&6&l* &7Blaze"
+  - "&6&l* &7Iron Golem"
+  - "&6&l* &eMooshroom Cow"
+  - "&6&l* &eMagma Cube"
+  - "&6&l* &eGhast"
+  #
+  reward:
+    - "endermanspawner"
+    - "zombiepigmanspawner"
+    - "creeperspawner"
+    - "blazespawner"
+    - "irongolemspawner"
+    - "mushroomcowspawner"
+    - "magmacubespawner"
+    - "ghastspawner"
+#
+space drink:
+  item: "potion_water"
+  name: "&bSpace Drink"
+  lore:
+  - "&7Smuggled in from a mysterious galaxy,"
+  - "&7it is the Server partying drink of choice!"
+  # Duration measured in ticks! 20 ticks = 1 second.
+  ## The amount of space drink's you have to drink to be...
+  tipsy:
+    drinks: 3
+    attributes:
+    - "PotionDrink;addPotionEffect{confusion:1:240};sendMessage{&e&l(!) &eYou are feeling tipsy, time to party, drink up!}"
+  smashed:
+    drinks: 5
+    attributes:
+    - "PotionDrink;addPotionEffect{confusion:2:460};sendMessage{&e&l(!) &eYou are completely smashed. What a party!}"
+  poisoned: # Damage measured in health points. A player at max health has 20. A player at half health has 10.
+    drinks: 9
+    attributes:
+    - "PotionDrink;damage{2};sendMessage{&c&l(!) &cYou are getting space drink poisoning, sober up!}"
+  #
+  smash drink msg:
+    - "&eYou finish the drink, smash the glass on the ground, and feel"
+    - " &ean unstoppable sense of rage fill your body."
+#
+space firework:
+  item: "fireball"
+  name: "&e&lSpace Firework &7(Right Click)"
+  lore:
+  - "&7A firework specially designed to"
+  - "&7detonate in intergalatic space."
+#
+xpbottle:
+  item: "exp_bottle"
+  name: "&a&lExperience Bottle &7(Throw)"
+  lore:
+  - "&dValue &f{VALUE} XP"
+  - "&dEnchanter &f{ENCHANTER}"
+  tinkerer: "Tinkerer"
+  gkit: "Gkit"
+  server crate: "Server Crate"
+  # Cooldown till the player can do /xpbottle again. Format: <minutes>:<seconds>
+  cooldown: "17:00"
+#
+custom items:
+  Santas Little Helper:
+    item: "cookie"
+    name: "&c&lS&a&la&c&lnt&a&la&c&l's&r &7&oLittle&r &d&l[HELPER]!"
+    lore:
+    - "&7It is dangerous to go alone, so"
+    - "&7take this freshly baked cookie."
+  Candycane Cake:
+    item: "cake"
+    name: "&f&lC&c&lA&f&lN&c&lD&f&lY&c&lC&f&lA&c&lN&f&lE&r &f&l&nCake"
+    lore:
+    - "&7The perfect mix of sugary goodness"
+    - "&7and minty freshness."
+  New Years Party Mask:
+    item: "carved_pumpkin"
+    name: "&e&lNew&r &6&lYears&r &f&l&nParty Mask"
+    lore:
+    - "&7The best way to party?\n&7Anonymously. Go wild."
+  Executive Storage Chest:
+    item: "chest"
+    name: "&c&lExecutive Storage Chest"
+    lore:
+    - "&7A chest with the inventory name"
+    - "&7of 'Executive Storage Chest', so"
+    - "&7people know you mean business."
+  Valentines Day Card:
+    item: "paper"
+    name: "&4&lValentine's Day&r &c&nCard"
+    lore:
+    - "&7Show that special someone"
+    - "&7that you really do care."
+  Box of Chocolates:
+    item: "clay_brick"
+    name: "&e&lBox of&r &6&l&nChocolates"
+    lore:
+    - "&7They say love is no different"
+    - "&7than the feeling you get while"
+    - "&7consuming large amounts of chocolate."
+  Flower Bouquet:
+    item: "azure_bluet"
+    name: "&a&lF&d&ll&a&lo&d&lw&a&le&d&lr&r &a&lBouquet"
+    lore:
+    - "&7The most beautiful bouquet of"
+    - "&7seasonal spring flowers in all"
+    - "&7of the Servoverse. So pretty..."
+  Pot of Gold:
+    item: "glass_bottle"
+    name: "&e&lPot of&r &6&l&nGold"
+    lore:
+    - "&7Quick, run! They're after your"
+    - "&7&lucky charms... and gold!"
+  Troll Letter:
+    item: "book_and_quill"
+    name: "&f&lT&r&f&nr&r&f&oo&r&f&ml&r&f&ll L&r&f&ke&r&f&ltt&e&r&f&lr"
+    lore:
+    - "&7You've always been a bit of a"
+    - "&7prankster, who is this letter for?"
+  Colorful Umbrella:
+    item: "hopper"
+    name: "&c&lC&6&lo&e&l&a&lo&b&lr&9&lf&d&lu&5&ll&r &e&l&nUmbrella"
+    lore:
+    - "&7Spring is notorious for its"
+    - "&7sporadic rain and storms, be"
+    - "&7stylishly prepared for any climate!"
+  Independence Flag:
+    item: "water_lily"
+    name: "&f&lI&c&ln&9&ld&f&le&c&lp&9&le&f&ln&c&ld&9&le&f&ln&c&lc&9&le&r &f&l&nFlag"
+    lore:
+    - "&7Wave this flag loud and proud,"
+    - "&7for you are FREE."
+  Declaration of Freedom:
+    item: "item_frame"
+    name: "&c&lDeclaration&r &9&lof&r &f&l&nFREEDOM"
+    lore:
+    - "&7An ancient document rumored to"
+    - "&7predate the Servonauts themselves,"
+    - "&7it outlines the basic rights of"
+    - "&7every humanoid creature in the galaxy."
+  Mojang EULA:
+    item: "paper"
+    name: "&c&lMojang&r &4&l&n#EULA"
+    lore:
+    - "&7Ah yes, the #EULA, commonly mistaken as"
+    - "&7the \"End of User Love Agreement\"."
+  Freshly Squeezed Lemonade:
+    item: "lava_bucket"
+    name: "&a&lFreshly&r &6&l&nSqueezed&r &e&lLEMONADE!"
+    lore:
+    - "&7Wait, what do you mean this is not"
+    - "&7lemonade? It says so right in"
+    - "&7the item name!"
+  Cheat Sheet:
+    item: "paper"
+    name: "&6&l&nCheat&r &f&lSheet"
+    lore:
+    - "&7They can't punish you if they"
+    - "&7can't catch you."
+  Meme Backpack:
+    item: "chest"
+    name: "&f&l&nMeme&r &7BACKPACK"
+    lore:
+    - "&7Your mom disagreed, but you just"
+    - "&7know this backpack is going to make"
+    - "&7you the coolest kid in school this year!"
+  Lucky Leaf:
+    item: "oak_leaves"
+    name: "&6&lLucky&r &a&nLeaf"
+    lore:
+    - "&7For whatever reason, you feel unusually"
+    - "&7lucky while holding this leaf."
+  Space Pumpkin:
+    item: "carved_pumpkin"
+    name: "&8&l&nSpace&r &e&lPumpkin"
+    lore:
+    - "&7A pumpkin discovered by the"
+    - "&7Servonauts while exploring space!"
+    - "&7What secret recipes might it hold?!"
+  Thanksgiving Horn:
+    item: "ink_sack:11"
+    name: "&eThanks&f-&6&l&nGIVING&r &cHorn"
+    lore:
+    - "&7An plentiful amount of freshly harvested"
+    - "&7fruits, space vegetables, and meats"
+    - "&7wrapped in an enchanted weaved basket."
+  Pilgram Hat:
+    item: "chainmail_helmet"
+    name: "&5&l&nPilgram&r &d&l&nHat"
+    lore:
+    - "&7A timeless classic in the world"
+    - "&7of high fashion -- worn by"
+    - "&7farmers and presidents alike!"
+  Winter Wonderland:
+    item: "milk_bucket"
+    name: "&f&l&nWinter&r &9&lW7b&lo&9&n&b&ld&9&le&b&lr&9&l&b&la&9&ln&b&ld"
+    lore:
+    - "&7A mystical, icy cold bucket of..."
+    - "&7Winter Wonder? Whatever it is,"
+    - "&7it has a chilling aura around it."
+  Cozy Space Mittens:
+    item: "leather_boots"
+    name: "&c&lCozy&r &6&lSpace&r &c&lMittens"
+    lore:
+    - "&7Guaranteed to keep your ligiments warm"
+    - "&7at temperatures as low as -270.45C!"
+  Bag of Candy:
+    item: "ink_sack:0"
+    name: "e&lBag of...&r &d&lC&a&lA&d&lN&a&lD&d&lY"
+    lore:
+    - "&7A giant halloween bag stuffed full of"
+    - "&7yummy, sugar-coated, delicious pieces"
+    - "&7of 2016 CANDY!!"
+  Clown Mask:
+    item: "jack_o_lantern"
+    name: "&4&lClown&r &f&lMask"
+    lore:
+    - "&7An eerie and chilling mask"
+    - "&7used to hide one's true identity"
+    - "&7while committing unspeakable acts."
+  A Good Deal:
+    item: "book"
+    name: "&f&lA&r &a&l&nGood&r &f&lDeal"
+    lore:
+    - "&7This book supposedly contains a"
+    - "&7very good business deal. Perhaps"
+    - "&7President trump would be interested?"
+  Fake 100% Off Coupon:
+    item: "paper"
+    name: "&4&l&nFake&r &f&l&n100%&r &f&l-Off Coupon"
+    lore:
+    - "&7We had to put 'Fake' in the"
+    - "&7name of this item because we"
+    - "&7knew players would riot about not"
+    - "&7actually getting 100% off everything"
+    - "&7in the server store. So yes, it is fake."
+  Holiday Spirit:
+    item: "diamond"
+    name: "&a&lH&4&lo&a&ll&4&li&a&ld&4&lay&r &f&l&nSpirit"
+    lore:
+    - "&7All the holiday spirit of a planet,"
+    - "&7captured and trapped within a beautiful,"
+    - "&7soul crystal. Oh, how very jolly indeed."
+  New Years Resolution:
+    item: "paper"
+    name: "&3&l&nNew Years&r &f&lResolution"
+    lore:
+    - "&7This thin piece of paper represents"
+    - "&7your determination to change absolutely,"
+    - "&7nothing about yourself from last year..."
+    - "&7or something like that."
+  2017:
+    item: "gold_helmet"
+    name: "&a&l2&b&l0&e&l1&d&l7"
+    lore:
+    - "&7The year has only just started,"
+    - "&7but you know you have already won."
+  Forever Alone Card:
+    item: "paper"
+    name: "&f&lForever&r &4&l&nAlone&r &f&lCard"
+    lore:
+    - "&7This card is your official membership to"
+    - "&7the exclusive \"Forever Alone\" club..."
+    - "&7Mom would be so proud of you."
+  Box of Memes:
+    item: "chest"
+    name: "&f&lBox of&r &0&l&nMemes"
+    lore:
+    - "&7The only box ever constructed with more,"
+    - "&7(dank) power than Pandora's Box."
+  Spring Totem:
+    item: "stick"
+    name: "&a&l&nSpring&r &b&lTotem"
+    lore:
+    - "&7An enchanted wooden totem that"
+    - "&7echoes the spirits of the ancients..."
+    - "&7how bout that?"
+  Luck of the Irish:
+    item: "emerald"
+    name: "&e&nLuck of the...&r &a&lIrish"
+    lore:
+    - "&7A magical gem imbued with countless"
+    - "&7generations of some of the luckiest"
+    - "&7blockmen and women to ever live."
+  Fool of April:
+    item: "raw_fish:3"
+    name: "&e&lFool of&r &d&l&nApril"
+    lore:
+    - "&7Quite possibly the most derpy item in Minecraft."
+    - "&7... :/"
+  Spring is coming:
+    item: "red_rose:8"
+    name: "&a&lSpring...&r &2&lis coming."
+    lore:
+    - "&7You knew winter was coming, but no one"
+    - "&7prepared you for... SPRING 2017!"
+  Vitamin D:
+    item: "ink_sack:9"
+    name: "&f&lVitamin&r &e&l&nD"
+    lore:
+    - "&7Spending all your days indoors"
+    - "&7slaying monsters is tough work,"
+    - "&7replenish yourself with some Vitamin D!"
+  Detention Slip:
+    item: "paper"
+    name: "&c&l&nDetention&r &f&lSlip"
+    lore:
+    - "&7You tried to explain, but they"
+    - "&7did not understand that it was"
+    - "&7&njust a prank, bro."
+  Illegal Fireworks:
+    item: "firework"
+    name: "&4&l&mIllegal&r &c&lFire&r&cworks"
+    lore:
+    - "&7Smuggled from the furthest reaches"
+    - "&7of the Cosmoverse, these are some"
+    - "&7&nBIG.&r &7ASS. FIREWORKS."
+  Summer Vibes:
+    item: "yellow_flower"
+    name: "&f&lSummer&r &a&n&oVibes"
+    lore:
+    - "&7You cannot help it, school is"
+    - "&7out. It's summer everyday, bro."
+  Intergalactic Fidget Spinner:
+    item: "record_11"
+    name: "&8&lInter&r&f&ngalactic&r &3&lFidget Spinner"
+    lore:
+    - "&7Confusingly addictive... &o*SPIN* *SPIN* *SPIN*"
+  Creepy Eye:
+    item: "eye_of_ender"
+    name: "&d&l&oCreepy&r &c&lEye"
+    lore:
+    - "&7You can't shake this feeling..."
+    - "&7that something is &nwatching&r &7you."
+  Seasonal Discombobulator:
+    item: "quartz_ore"
+    name: "&f&lSeasonal&r &8&lD&7&li&8&ls&7&lc&8&lo&7&lm&8&lb&7&lo&8&lb&7&lu&8&ll&7&la&8&lt&7&lo&8&lr"
+    lore:
+    - "&7A servonaut piece of tinkering genius"
+    - "&7used to control planetary seasons."
+  Space Snowman:
+    item: "snow_block"
+    name: "&f&lSpace&r &b&l&nSnowman"
+    lore:
+    - "&7Just your usual snowman made"
+    - "&7out of... SPACE SNOW! Happy Holidays!"
+  Player Mixtape:
+    item: "flint_and_steel"
+    name: "&7%player%'s... &c&l&nMIXTAPE"
+    lore:
+    - "&6&lCAUTION:&r &7Material is \"fire af\"."
+  Bottle o Spooky:
+    item: "glass_bottle"
+    name: "&f&lBottle O'&r &c&lS&4&lp&c&lo&4&lo&c&lk&4&ly"
+    lore:
+    - "&7Highly dense and compounded spooky"
+    - "&7sealed within a glass bottle."
+  Turkey of Diplomacy:
+    item: "cooked_chicken"
+    name: "&f&lTurkey of&r &a&l&nDiplomacy"
+    lore:
+    - "&7Who knew a dead bird could do so much for intergalactic relations?"
+  2018 Patch Notes:
+    item: "book"
+    name: "&c&l&n2018&r &f&lPatch Notes"
+    lore:
+    - "&7A list of all the updates and"
+    - "&7changes planned for the anticipated"
+    - "&72018 IRL gameplay update."
+  Old Christmas Cookies:
+    item: "cookie"
+    name: "&8&lOld&r &a&lC&c&lh&a&lr&c&li&a&ls&c&lt&a&lm&c&la&a&ls&r &6&l&nCookies"
+    lore:
+    - "&7An ancient relic of Christmas-past,"
+    - "&7do you dare consume such treasure?"
+  Icey Flame:
+    item: "flint_and_steel"
+    name: "&b&lIcey&r &c&lFlame"
+    lore:
+    - "&7Is it hot? Is it cold?"
+    - "&7Touch it and find out!"
+  Four Leaf Clover:
+    item: "long_grass:2"
+    name: "&a&lFour-Leaf&r &2Clover"
+    lore:
+    - " "
+    - "&7A clover passed down for"
+    - "&7generations, its said to bestow"
+    - "&7great fortune to the beholder."
+#

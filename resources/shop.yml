@@ -1,0 +1,60 @@
+# Made by RandomHashTags
+messages:
+  purchase:
+    - "&c&l- ${TOTAL}"
+    - "&aSuccessfully purchased &l{AMOUNT}x&r &a{ITEM}!"
+  purchase incomplete:
+    - "&c&l(!)&r &cYou do not have enough money to purchase this!"
+    - "&7Price ${PRICE}/ea"
+  sell:
+    - "&a&l+ ${TOTAL}"
+    - "&aSuccessfully sold &l{AMOUNT}x&r &a{ITEM} for ${PRICE}/ea"
+  sell incomplete:
+    - "&cYou do not have any to sell!"
+  no permission:
+    - "&c&l(!)&r &cYou do not have permission to view this category!"
+#
+sounds:
+  buy: "ENTITY_PLAYER_LEVELUP:1:2"
+  not enough balance: "ENTITY_VILLAGER_NO:1:1"
+  not buyable: "ENTITY_PLAYER_LEVELUP:1:1"
+  sell: "ENTITY_PLAYER_LEVELUP:1:1"
+  not enough to sell: "ENTITY_VILLAGER_NO:1:1"
+  not sellable: "ENTITY_VILLAGER_NO:1:1"
+#
+lores:
+  view category: "&7Click to view this category."
+  # {BUY} = The price the item is worth. Displayed as 2 decimal places.
+  purchase:
+    - " "
+    - "&aBuy Price"
+    - "&a${BUY}/ea"
+    - " "
+  # {SELL} = The price the item is worth to sell. Displayed as 2 decimal places.
+  sell:
+    - "&cSell Price"
+    - "&c${SELL}/ea"
+    - " "
+  # {LEFT_CLICK} = The amount purchased via left click. click-options.left.
+  # {SHIFT_LEFT_CLICK} = The amount purchased via shift-left click. click-options.shift-left.
+  left clicks:
+    - "&7&l&m--------------------"
+    - "&eLeft-Click &7to buy &e{LEFT_CLICK}x"
+    - "&eShift Left-Click &7to buy &e{SHIFT_LEFT_CLICK}x"
+  # {RIGHT_CLICK} = The amount sold via right click. click-options.right.
+  # {SHIFT_RIGHT_CLICK} = The amount sold via shift-right click. click-options.shift-right.
+  right clicks:
+    - " "
+    - "&eRight-Click &7to sell &e{RIGHT_CLICK}x"
+    - "&eShift Right-Click &7to sell &e{SHIFT_RIGHT_CLICK}x"
+#
+items:
+  back to categories:
+    item: "arrow"
+    name: "&a&lBack"
+    lore:
+    - "&7Click to return to categories."
+#
+settings:
+  /shop opens: MENU
+#

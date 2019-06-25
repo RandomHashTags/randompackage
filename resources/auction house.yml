@@ -1,0 +1,322 @@
+# Made by RandomHashTags
+messages:
+  sell:
+    - "&cUsage: &7/ah sell <price>"
+  help:
+    - " "
+    - "&e&l&nAuction House Commands"
+    - "&e/auction"
+    - "&7Opens the auction house."
+    - " "
+    - "&e/ah sell <price>"
+    - "&7List the item you are holding on the auction house."
+    - " "
+    - "&e/ah expired"
+    - "&7View and manage your cancelled and expired items."
+    - " "
+    - "&e/ah help"
+    - "&7View this help menu."
+    - " "
+    - "&e/ah collect"
+    - "&7Collection items from previous bid auctions."
+    - " "
+  #
+  must enter valid price:
+    - "&c&l(!)&r &cPlace enter a valid price between $1 - $2 billion"
+  start listing:
+    - "&e&l(!)&r &eTo list an item for sale on the &6/ah &euse &6/ah sell <price>&e."
+  listed:
+    - "&e&l(!)&r &eYou have listed your {ITEM} on the auction house for &6&l$&r&6{PRICE}&r&e!"
+  cancelled listing:
+    - "&a&l(!)&r &aYou have cancelled an auction listing. Return cancelled and expired listings in &6/ah expired&a."
+  claimed expired listing:
+    - "&e&l(!)&r &eYou have re-claimed your {ITEM}&r &efrom the auction house!"
+  sold auction:
+    - "&a&l+ $&r&a{PRICE}"
+    - "&e&l(!)&r &e{PURCHASER} has purchased your {ITEM}!"
+  purchased auction:
+    - "&c&l- $&r&c{PRICE}"
+    - "&eYou have purchased {ITEM}&r &efrom {SELLER}!"
+  auction sell cancelled:
+    - "&c&l(!)&r &cAuction Sell - &lCANCELLED"
+  auction purchase cancelled:
+    - "&c&l(!)&r &cAuction Purchase - &lCANCELLED"
+  cannot afford:
+    - "&c&l(!)&r &cYou cannot afford &l$&r&c{PRICE} for this auction item!"
+  need to be holding item:
+    - "&c&l(!)&r &cYou must be holding a valid item to auction!"
+  item no longer exists:
+    - "&c&l(!)&r &cItem no longer exists!"
+  cannot purchase own item:
+    - "&c&l(!)&r &cYou cannot purchase your own item!"
+    - "&7Shift Right-Click to stop selling this item!"
+  #
+  no permission:
+  - "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
+#
+auction house:
+  title: "Auction House"
+  size: 54
+  # "item slots" APPLIES TO ALL AUCTION HOUSE INVENTORIES!
+  item slots: "0-44"
+  organization: NEWEST
+  # Measured in seconds. Default is 86400 (24 hours)
+  auction expiration: 86400
+  collection bin expiration: 86400
+  #
+  format: # For an auctioned item
+    - " "
+    - "&7&l&m-------------------------"
+    - "{STATUS}"
+    - " "
+    - "&6Price: &e$&r&e{PRICE}"
+    - "&6Seller: &e{SELLER}"
+    - "&7&l&m-------------------------"
+  status:
+    click to buy:
+      - "&e&lClick&r &7item to buy!"
+    cancel:
+      - "&e&lShift Right-Click&r &7to cancel auction!"
+  #
+  previous page: # {PREVIOUS_PAGE}
+    slot: 48
+    item: "arrow"
+    name: "&c&lPrevious Page (&r&7{PREV_PAGE} &c/ &7{MAX_PAGE}&c&l)"
+    lore:
+    - "&7Click to view previous auction page."
+  next page: # {NEXT_PAGE}
+    slot: 50
+    item: "arrow"
+    name: "&a&lNext Page (&r&7{NEXT_PAGE} &a/ &7{MAX_PAGE}&a&l)"
+    lore:
+    - "&7Click to view next auction page."
+  category view: # {CATEGORY_VIEW}
+    slot: 53
+    item: "knowledge_book"
+    name: "&e&lCategory View"
+    lore:
+    - "&7Click to view all current"
+    - "&7auction item categories!"
+  #
+  refresh:
+    slot: 49
+    item: "{REFRESH}"
+  collection bin:
+    slot: 45
+    item: "{COLLECTION_BIN}"
+#
+categories:
+  title: "Auction Categories"
+  size: 54
+  #
+  collection bin:
+    slot: 45
+    item: "{COLLECTION_BIN}"
+  refresh:
+    slot: 49
+    item: "{REFRESH}"
+  return to main ah:
+    slot: 53
+    item: "{RETURN_TO_AH}"
+  #
+  format:
+    - " "
+    - "&6&lListings:&r &e{LISTINGS}"
+    - " &6Lowest Price: &e&l$&r&e{LOWEST_PRICE}"
+  #
+  groups:
+    enchanted books:
+      item: "enchanted_book"
+      included materials: []
+      included names: []
+#
+category items:
+  title: "Category Items"
+  size: 54
+  #
+  main category view: # {MAIN_CATEGORY_VIEW}
+    slot: 53
+    item: "barrier"
+    name: "&c&lMain Category Menu"
+    lore:
+    - "&7Click to view all current"
+    - "&7auction item categories."
+  #
+  collection bin:
+    slot: 45
+    item: "{COLLECTION_BIN}"
+  #
+#
+player collection bin: # {COLLECTION_BIN}
+  item: "ender_chest"
+  name: "&e&lCollection Bin"
+  lore:
+  - "&7Click to view and collect"
+  - "&7all of your active, cancelled,"
+  - "&7or expired Auction items."
+  - " "
+  - "&e&l{ITEMS} Item(s)"
+#
+refresh: # {REFRESH}
+  item: "watch"
+  name: "&a&lRefresh"
+  lore:
+  - "&7Click to refresh the auction page!"
+#
+return to ah: # {RETURN_TO_AH}
+  item: "chest"
+  name: "&e&lMain Auction Menu"
+  lore:
+  - "&7Click to view the main auction menu."
+#
+listings:
+  title: "Your Current Listings"
+  size: 54
+  #
+  lore:
+  - "&7&l-------------------------"
+  - "&c&lClick item to cancel auction."
+  - " "
+  - "&6Price: &e${PRICE}"
+  - "&6Expires: &e{TIME}"
+  - "&7&l-------------------------"
+  #
+  '45':
+    item: "{RETURN_TO_AH}"
+  '53':
+    item: "book:0:1;name{&e&lTutorial}"
+    lore:
+    - "&7These are your current listings, all of"
+    - "&7the items you currently have listed on"
+    - "&7the auction house are displayed here."
+    - " "
+    - "&7You can cancel and view your listing's"
+    - "&7expire time here."
+#
+collection bin:
+  title: "Auction Collection Bin"
+  size: 54
+  #
+  not enough inventory space:
+    # Replaces the clicked item for X amount of seconds, then sets it back to the item.
+    visible for: 1
+    item: "red_stained_glass_pane"
+    name: "&cYou do not have enough inventory space!"
+  #
+  in auction:
+    - "&7&l-------------------------"
+    - "&e&lIN AUCTION"
+    - " "
+    - "&6Price:&r &e&l$&r&e{PRICE}"
+    - "&7Click to &c&ncancel&r &7this auction!"
+    - " "
+    - "&6Expires: &e{TIME}"
+    - "&7&l-------------------------"
+  claim:
+    - "&7&l-------------------------"
+    - "&e&lClick item to claim!"
+    - " "
+    - "&6Item Deletion: &e{TIME}"
+    - "&7&l-------------------------"
+  #
+  refresh:
+    slot: 49
+    item: "{REFRESH}"
+  return to ah:
+    slot: 53
+    item: "{RETURN_TO_AH}"
+#
+purchase item:
+  title: "Buy for ${PRICE}"
+  size: 9
+  #
+  confirm:
+    item: "lime_stained_glass_pane"
+    name: "&a&lConfirm Buy"
+    lore:
+    - "&7Confirm purchase of"
+    - "&7{ITEM} for"
+    - "&a&l$&r&a{PRICE}!"
+  cancel:
+    item: "red_stained_glass_pane"
+    name: "&a&lCancel Buy"
+    lore:
+    - "&7Cancel purchase of"
+    - "&7{ITEM} for"
+    - "&c&l$&r&c{PRICE}!"
+  #
+  confirm 1:
+    slot: 0
+    item: "confirm"
+  confirm 2:
+    slot: 1
+    item: "confirm"
+  confirm 3:
+    slot: 2
+    item: "confirm"
+  confirm 4:
+    slot: 3
+    item: "confirm"
+  item display:
+    slot: 4
+    item: "{ITEM}"
+  cancel 1:
+    slot: 5
+    item: "cancel"
+  cancel 2:
+    slot: 6
+    item: "cancel"
+  cancel 3:
+    slot: 7
+    item: "cancel"
+  cancel 4:
+    slot: 8
+    item: "cancel"
+#
+confirm auction:
+  title: "Confirm Auction"
+  size: 9
+  #
+  accept:
+    item: "lime_stained_glass_pane"
+    name: "&a&lConfirm Sell"
+    lore:
+    - "&7Confirm selling of"
+    - "&7{ITEM} for"
+    - "&a&l$&r&a{PRICE}!"
+  decline:
+    item: "red_stained_glass_pane"
+    name: "&a&lCancel Sell"
+    lore:
+    - "&7Cancel selling of"
+    - "&7{ITEM} for"
+    - "&c&l$&r&c{PRICE}!"
+  #
+  accept 1:
+    slot: 0
+    item: "accept"
+  accept 2:
+    slot: 1
+    item: "accept"
+  accept 3:
+    slot: 2
+    item: "accept"
+  accept 4:
+    slot: 3
+    item: "accept"
+  auction item:
+    slot: 4
+    item: "{ITEM}"
+  decline 1:
+    slot: 5
+    item: "decline"
+  decline 2:
+    slot: 6
+    item: "decline"
+  decline 3:
+    slot: 7
+    item: "decline"
+  decline 4:
+    slot: 8
+    item: "decline"
+#

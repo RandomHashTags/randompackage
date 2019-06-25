@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Eagle Eye"
+lore:
+- "&eChance to deal 1-4 durability damage"
+- "&eto ALL armor pieces of enemy player."
+#
+max level: 5
+applies to: "bow"
+#
+alchemist: "6000:6350:6700:7050"
+tinkerer: "120:132:147:153:171"
+#
+attributes:
+- "ArrowHit;chance=8*level;setDurability{[victim]all:durability+random{1:4}}"

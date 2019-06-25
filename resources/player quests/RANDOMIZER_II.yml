@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Randomizer II"
+  completion: 10
+  expiration: 86400
+#
+lore:
+- "&7Use 10 Randomization Scrolls"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "RandomizationScrollUsed;+1"

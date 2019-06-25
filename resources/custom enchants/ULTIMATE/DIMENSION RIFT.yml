@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Dimension Rift"
+lore:
+- "&eChance to turn blocks underneath"
+- "&etarget to soul sand, and possibly"
+- "&ewebs ontop."
+#
+max level: 4
+applies to: "bow"
+#
+alchemist: "2350:2500:2750"
+tinkerer: "102:117:131:142"
+#
+attributes:
+- "ArrowHit;chance=10+(5*level);replaceBlock{VICTIMX:VICTIMY-1:VICTIMZ:SOUL_SAND:0:60}"
+- "ArrowHit;didProc;chance=30+(5*level);replaceBlock{VICTIMX:VICTIMY:VICTIMZ:WEB:0:60}"

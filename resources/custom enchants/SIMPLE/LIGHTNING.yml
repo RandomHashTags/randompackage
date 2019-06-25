@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Lightning"
+lore:
+- "&eA chance to strike lightning where"
+- "&eyou strike."
+#
+max level: 3
+applies to: "bow"
+#
+alchemist: "1000:2000"
+tinkerer: "77:89:101"
+#
+attributes:
+- "ArrowLand;chance=16+(8*level);smite{[arrowloc]1}"

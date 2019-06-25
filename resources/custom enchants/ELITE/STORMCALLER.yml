@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Stormcaller"
+lore:
+- "&eStrikes lightning on attacking"
+- "&eplayers."
+#
+max level: 4
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "3000:3500:4000"
+tinkerer: "104:115:126:137"
+#
+attributes:
+- "isDamaged;chance=Lucky+13+(2*level);smite([damage]1)"

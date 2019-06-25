@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "MobsKilled"
+  duration: 86400
+  type: "Mobs Killed"
+#
+item:
+  item: "bone"
+  name: "&a&lMost Mobs Killed"
+#

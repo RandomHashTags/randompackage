@@ -1,0 +1,67 @@
+# Made by RandomHashTags
+fireballs:
+  SOUL:
+    exchangeable rarities: "SOUL"
+    reveals:
+      - "chance=5;dust:SOUL_PRIMAL"
+      - "chance=10;dust:SOUL_REGULAR"
+      - "else;mysterydust"
+    item: "fireball"
+    name: "&c&lSoul Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."
+  LEGENDARY:
+    exchangeable rarities: "LEGENDARY"
+    reveals:
+      - "chance=5;dust:LEGENDARY_PRIMAL"
+      - "chance=10;dust:LEGENDARY_REGULAR"
+      - "else;mysterydust"
+    item: "fireball"
+    name: "&6&lLegendary Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."
+  ULTIMATE:
+    exchangeable rarities: "ULTIMATE"
+    reveals:
+      - "chance=5;dust:ULTIMATE_PRIMAL"
+      - "chance=10;dust:ULTIMATE_REGULAR"
+    item: "fireball"
+    name: "&e&lUltimate Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."
+  ELITE:
+    exchangeable rarities: "ELITE"
+    reveals:
+      - "chance=5;dust:ELITE_PRIMAL"
+      - "chance=10;dust:ELITE_REGULAR"
+      - "else;mysterydust"
+    item: "fireball"
+    name: "&b&lElite Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."
+  UNIQUE:
+    exchangeable rarities: "UNIQUE"
+    reveals:
+      - "chance=5;dust:UNIQUE_PRIMAL"
+      - "chance=10;dust:UNIQUE_PRIMAL"
+      - "else;mysterydust"
+    item: "fireball"
+    name: "&a&lUnique Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."
+  SIMPLE:
+    exchangeable rarities: "SIMPLE"
+    reveals:
+      - "chance=5;dust:SIMPLE_PRIMAL"
+      - "chance=10;dust:SIMPLE_REGULAR"
+      - "else;mysterydust"
+    item: "fireball"
+    name: "&f&lSimple Secret Dust"
+    lore:
+    - "&7Contains: &bMagic, &ePrimal, &7or &fMystery &7dust."
+    - "&7An unidentified satchel of dust."

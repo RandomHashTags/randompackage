@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Anti Gravity"
+lore:
+- "&eSuper jump but does not negate fall"
+- "&edamage."
+#
+max level: 3
+applies to: "boots"
+#
+alchemist: "2000:5000"
+tinkerer: "47:58:69"
+#
+attributes:
+- "ArmorEquip;addPotionEffect{[player]jump:level+2:99999:true}"
+- "ArmorUnequip;removePotionEffect{[player]jump:true}"
+- "ArmorPieceBreak;removePotionEffect{[player]jump:true}"

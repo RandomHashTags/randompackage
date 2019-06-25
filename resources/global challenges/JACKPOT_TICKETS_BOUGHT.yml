@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "JackpotTicketsBought"
+  duration: 86400
+  type: "Jackpot Tickets Bought"
+#
+item:
+  item: "paper"
+  name: "&a&lMost Jackpot Tickets Bought"
+#

@@ -1,0 +1,200 @@
+# Made by RandomHashTags
+messages:
+  new challenges started:
+    - "     &a&l** NEW CHALLENGES HAVE STARTED! **"
+    - "         &7Use '/challenge' to view rankings!"
+  ended:
+    - " "
+    - "{CHALLENGES}"
+    - "&a&l(!)&r &aNew Challenges have started, use /challenges to view rankings!"
+  challenge format:
+    - "&2&l{NAME}"
+    - "&a&l. {TOP} - {VALUE}"
+    - "&a&2. {TOP} - {VALUE}"
+    - "&a&3. {TOP} - {VALUE}"
+  #
+  join pending prizes:
+    - " "
+    - "&a&l(!)&r &aYou have &l&n{AMOUNT}&r &apending Challenge prizes!"
+    - "&7Use &a/challenge claim &7to claim your prizes!"
+  claimed prize:
+    - "&a&l(!)&r &aYou have successfully claimed your {PLACING} Place Challenge Prize!"
+  #
+  taken lead:
+    - "&a&l(!) {PLAYER}&r &7has taken the lead in the &a&l\"{CHALLENGE}\"&r &a/challenge &7with &a{VALUE} {CHALLENGE_DESC}&7, the challenge ends in &n{TIME}&r&a!"
+#
+challenge settings:
+  # Max challenges that can be active at the same time
+  max at once: 5
+  date format: "MMMMM dd, yyyy"
+  time left format: "{HOUR}h {MIN}m {SEC}s"
+  faction format: "&7[{FACTION}] "
+  top format: "{FACTION}&a{PLAYER} &7- {VALUE}"
+  #
+  added lore:
+    - "&7{DATE}"
+    - "&7ends in ... &a{TIME_LEFT}"
+    - " "
+    - "&a&l1.&r {TOP} - {VALUE}"
+    - "&a&l2.&r {TOP} - {VALUE}"
+    - "&a&l3.&r {TOP} - {VALUE}"
+    - " "
+    - "&7&l-------------------"
+    - " "
+    - "&e&l{TYPE}"
+    - " &7{YOUR_VALUE}"
+    - " "
+    - "&e&lRanking"
+    - " &7{YOUR_RANKING}"
+#
+challenge leaderboard:
+  title: "Challenge Leaderboard"
+  how many: 50
+  #
+  name: "&a&l{PLAYER}"
+  lore:
+  - " "
+  - "&e&lRanking"
+  - " &7{RANKING}"
+  - " "
+  - "&e&l{CHALLENGE}"
+  - " &7{VALUE}"
+#
+rewards:
+  title: "Challenge Prizes"
+  #
+  # Any prizes without a "chance=<chance>;" will be counted as 1 amount.
+  # They will also not be able to be obtained again by the random selector.
+  1:
+    prize:
+      item: "chest"
+      name: "&a&lChallenge Prize (&r&71st&r&a&l)"
+      lore:
+      - "&7Click to unlock and claim this prize."
+    amount: 10
+    prizes:
+    - "chance=25;title"
+    - "chance=25;raritybook:HEROIC;amount=1-2"
+    - "chance=30;banknote:4000000"
+    - "chance=30;banknote:3000000"
+    - "chance=30;vkitgem"
+    - "chance=30;raritybook:SOUL;amount=1-2"
+    - "chance=30;banknote:2000000"
+    - "chance=35;banknote:1000000"
+    - "chance=35;xpbottle:25000"
+    - "chance=35;xpbottle:10000"
+    - "chance=35;raritybook:LEGENDARY;amount=2-4"
+    - "chance=35;raritybook:ULTIMATE;amount=2-4"
+    - "chance=40;enchantmentorb:armor11:95"
+    - "chance=40;rarityfireball:LEGENDARY;amount=10-16"
+    - "chance=40;gkitgem"
+    - "chance=40;customtnt:GIGANTIC;amount=16"
+    - "chance=40;customcreeper:LUCKY;amount=3-6"
+    - "chance=45;ghastspawner"
+    - "chance=45;endermanspawner"
+    - "chance=45;blazespawner"
+    - "chance=50;blackscroll:REGULAR:95;amount=1-3"
+    - "chance=50;whitescroll;amount=1-2"
+    - "chance=50;transmogscroll"
+    - "chance=50;itemnametag;amount=1-3"
+    - "chance=50;mcmmolevelvoucher:unarmed:200||mcmmolevelvoucher:unarmed:75"
+    - "chance=50;mcmmolevelvoucher:swords:200||mcmmolevelvoucher:swords:75"
+    - "chance=50;mcmmolevelvoucher:archery:200||mcmmolevelvoucher:archery:75"
+    - "chance=50;mcmmocreditvoucher:200||mcmmocreditvoucher:100||mcmmocreditvoucher:50;amount=1-2"
+    - "chance=55;mysterymobspawner;amount=1-2"
+    - "chance=55;soultracker:GODLY"
+    - "xpbottle:70000"
+  2:
+    prize:
+      item: "chest"
+      name: "&a&lChallenge Prize (&r&72nd&r&a&l)"
+      lore:
+      - "&7Click to unlock and claim this prize."
+    amount: 7
+    prizes:
+    - "chance=30;title"
+    - "chance=30;gkitfallenhero"
+    - "chance=35;mcmmolevelvoucher:unarmed:125||mcmmolevelvoucher:unarmed:75"
+    - "chance=35;mcmmolevelvoucher:swords:125||mcmmolevelvoucher:swords:75"
+    - "chance=35;mcmmolevelvoucher:archery:125||mcmmolevelvoucher:archery:75"
+    - "chance=35;mcmmocreditvoucher:200||mcmmocreditvoucher:100||mcmmocreditvoucher:50"
+    - "chance=35;gkitgem"
+    - "chance=40;mysterymobspawner"
+    - "chance=40;rarityfireball:LEGENDARY;amount=5-10"
+    - "chance=40;raritybook:LEGENDARY;amount=2-3"
+    - "chance=40;raritybook:ULTIMATE;amount=1-3"
+    - "chance=45;enchantmentorb:armor10:85"
+    - "chance=50;blackscroll:REGULAR:85;amount=2-3"
+    - "chance=50;whitescroll"
+    - "chance=50;transmogscroll"
+    - "chance=50;itemnametag;amount=1-2"
+    - "chance=50;endermanspawner"
+    - "chance=55;soultracker:SOUL||soultracker:LEGENDARY"
+    - "xpbottle:30000"
+  3:
+    prize:
+      item: "chest"
+      name: "&a&lChallenge Prize (&r&73rd&r&a&l)"
+      lore:
+      - "&7Click to unlock and claim this prize."
+    amount: 4
+    prizes:
+    - "chance=35;mcmmolevelvoucher:unarmed:75"
+    - "chance=35;mcmmolevelvoucher:swords:75"
+    - "chance=35;mcmmolevelvoucher:archery:75"
+    - "chance=35;mcmmocreditvoucher:200||mcmmocreditvoucher:100||mcmmocreditvoucher:50"
+    - "chance=35;mysterymobspawner"
+    - "chance=35;gkitfallenhero"
+    - "chance=35;hopper;amount=32"
+    - "chance=40;endermanspawner"
+    - "chance=40;banknote:1000000"
+    - "chance=40;xpbottle:10000"
+    - "chance=40;title"
+    - "chance=40;enchantmentorb:0:10:75"
+    - "chance=45;banknote:750000"
+    - "chance=45;raritybook:LEGENDARY;amount=1-2"
+    - "chance=45;raritybook:ULTIMATE;amount=1-2"
+    - "chance=50;rarityfireball:LEGENDARY;amount=5-10"
+    - "chance=50;gkitgem"
+    - "chance=50;soultracker:SOUL||soultracker:LEGENDARY"
+    - "chance=55;whitescroll"
+    - "chance=55;blackscroll:REGULAR:75;amount=1-3"
+    - "chance=55;itemnametag"
+    - "chance=55;transmogscroll"
+    - "xpbottle:15000"
+#
+gui:
+  title: "Daily Challenges"
+  size: 27
+  #
+  0:
+    item: "emerald"
+    name: "&a&l&n1st&r &aPlace Prize"
+    lore:
+    - " &c&l*&r &c1x Godly Item"
+    - " &6&l*&r &68x Legendary Items"
+    - " &e&l*&r &e70,000 EXP"
+  9:
+    item: "diamond"
+    amount: 2
+    name: "&a&l&n2nd&r &aPlace Prize"
+    lore:
+    - " &6&l*&r &66x Legendary Items"
+    - " &e&l*&r &e30,000 EXP"
+  11:
+    item: "{CHALLENGE}"
+  12:
+    item: "{CHALLENGE}"
+  13:
+    item: "{CHALLENGE}"
+  14:
+    item: "{CHALLENGE}"
+  15:
+    item: "{CHALLENGE}"
+  18:
+    item: "iron_ingot"
+    amount: 3
+    name: "&a&l&n3rd&r &aPlace Prize"
+    lore:
+    - " &6&l*&r &63x Legendary Items"
+    - " &e&l*&r &e15,000 EXP"

@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Insanity"
+lore:
+- "&eYou swing your axe like a maniac."
+- "&eMultiplies damage against players who"
+- "&eare wielding a SWORD at the time they"
+- "&eare hit."
+#
+max level: 8
+applies to: "_axe"
+#
+alchemist: "6000:7000:8000:9000:10000:11000:12000"
+tinkerer: "76:88:100:112:124:136:148:160"
+#
+attributes:
+- "PvP;chance=4+(2*level);if{[victim]isHolding(SWORD)->setDamage{dmg*(.5*level)}}"

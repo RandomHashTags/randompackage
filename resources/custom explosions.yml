@@ -1,0 +1,11 @@
+# Made by RandomHashTags
+tnt:
+  cannot break:
+    - "obsidian"
+    - "bedrock"
+#
+creepers:
+  cannot break:
+    - "obsidian"
+    - "bedrock"
+#

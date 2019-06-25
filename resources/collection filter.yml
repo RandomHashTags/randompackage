@@ -1,0 +1,197 @@
+# Made by RandomHashTags
+messages:
+  invalid filter type:
+  - "&c&lInvalid Filter Type!&r &cValid Filters: &7All, Iron Ingot, Emerald, Gold Ingot, Iron Block, Ender Pearl, Gold Nugget, Gunpowder, Spider Eye, Rotten Flesh, Bone, Arrow, String"
+  need to be holding cc:
+  - "&c&l(!)&r &cYou must be holding a Collection Chest!"
+  - "&c/collectionfilter [itemType/ALL] [ALL] &7Modifies Collection Chests in your hand or inventory."
+  - " &7If ALL is given at the end, then every Collection Chest in your inventory will be set to the given filter."
+  updated cc:
+  - "&e&l(!)&r &eUpdated &l{AMOUNT}&r&ex Collection Chest filters to &n{ITEM}&r&e!"
+  placed:
+  - "&a&l(!)&r &aCollection Chest placed, mob deaths will cause compatible mob drops in this chunk to be automatically collected!"
+  - "&7Shift Right-Click the chest to modify the filter!"
+  set:
+  - "&a&l(!)&r &aCollection Chest filter set to &n{ITEM}&r&a!"
+  view filter:
+  - "&a&l(!)&r &aCollection Chest Filter: &n{ITEM}"
+  item already being filtered:
+  - "&c&l(!)&r &cThis item is already being filtered!"
+# Worlds where the collection chests can collect items
+enabled worlds:
+  - "world"
+  - "world_nether"
+  - "world_the_end"
+#
+collection chests:
+  chest:
+    title: "Collection Chest"
+    size: 27
+    #
+    filter types:
+      default: "All (/collectionfilter to set)"
+      all: "All"
+      item: "{ITEM}"
+    # The collection chest that was broken keeps its contents and gives you the chest, but in item form, ready to be placed again.
+    keeps meta: true
+    # The max amount of collection chests can hold in 1 slot
+    max stack: 1
+    allows double chest: true
+    #
+    item: "chest"
+    name: "&e&lCollection Chest"
+    lore:
+    - " "
+    - "&7Create a chest that will"
+    - "&7automatically collect specified"
+    - "&7mob drops when a creature dies"
+    - "&7within the same chunk."
+    - " "
+    - "&6&lFilter Type"
+    - " &f{FILTER_TYPE}"
+  # 
+  # Available mob names can be found at
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
+  mobs:
+    - "blaze"
+    - "cave_spider"
+    - "creeper"
+    - "enderman"
+    - "ghast"
+    - "iron_golem"
+    - "skeleton"
+    - "spider"
+    - "zombie"
+  collects drops via:
+    # Should they collect drops when the mob is killed by ...?
+    player: false
+    fire: true
+    tnt explosion: true
+    creeper explosion: true
+    drowning: true
+    fall damage: true
+    poison: true
+    potion: true
+    melting: true  # Snowman
+    lightning: true
+    dragon-breath: true
+    contact: true  # Cactus
+    magma: true    # 1.10+
+    falling block: true
+    wither effect: true
+    cramming: true
+    suffocation: true
+#
+gui:
+  title: "Collection Filter"
+  size: 45
+  #
+  selected:
+    enchanted: true
+    prefix: "&a&l"
+    added lore:
+    - " &a&lSELECTED"
+  not selected:
+    enchanted: false
+    prefix: "&c&l"
+    added lore:
+    - " &c&lNOT SELECTED"
+  #
+  background:
+    item: "AIR"
+    #name: " "
+    #lore:
+    #- " "
+  #
+  '4':
+    item: "paper"
+    name: "All"
+    lore:
+    - "&7Click to pickup all mob drops!"
+    - " "
+    picks up: "ALL"
+  '12':
+    item: "iron_ingot"
+    name: "Iron Ingot"
+    lore:
+    - "&7Click to only pickup Iron Ingots!"
+    - " "
+    picks up: "iron_ingot"
+  '13':
+    item: "emerald"
+    name: "Emerald"
+    lore:
+    - "&7Click to only pickup Emeralds!"
+    - " "
+    picks up: "emerald"
+  '14':
+    item: "gold_ingot"
+    name: "Gold Ingot"
+    lore:
+    - "&7Click to only pickup Gold Ingots!"
+    - " "
+    picks up: "gold_ingot"
+  '21':
+    item: "iron_block"
+    name: "Iron Block"
+    lore:
+    - "&7Click to only pickup Iron Blocks!"
+    - " "
+    picks up: "iron_block"
+  '22':
+    item: "ender_pearl"
+    name: "Ender Pearl"
+    lore:
+    - "&7Click to only pickup Ender Pearls!"
+    - " "
+    picks up: "ender_pearl"
+  '23':
+    item: "gold_nugget"
+    name: "Gold Nuggets"
+    lore:
+    - "&7Click to only pickup Gold Nuggets!"
+    - " "
+    picks up: "gold_nugget"
+  '30':
+    item: "sulphur"
+    name: "Gunpowder"
+    lore:
+    - "&7Click to only pickup Gunpowder!"
+    - " "
+    picks up: "sulphur"
+  '31':
+    item: "spider_eye"
+    name: "Spider Eye"
+    lore:
+    - "&7Click to only pickup Spider Eye!"
+    - " "
+    picks up: "spider_eye"
+  '32':
+    item: "rotten_flesh"
+    name: "Rotten Flesh"
+    lore:
+    - "&7Click to only pickup Rotten Flesh!"
+    - " "
+    picks up: "rotten_flesh"
+  '39':
+    item: "bone"
+    name: "Bone"
+    lore:
+    - "&7Click to only pickup Bones!"
+    - " "
+    picks up: "bone"
+  '40':
+    item: "arrow"
+    name: "Arrows"
+    lore:
+    - "&7Click to only pickup Arrows!"
+    - " "
+    picks up: "arrow"
+  '41':
+    item: "string"
+    name: "String"
+    lore:
+    - "&7Click to only pickup Strings!"
+    - " "
+    picks up: "string"
+#

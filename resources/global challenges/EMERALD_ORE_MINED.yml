@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "EMERALD_ORE:0_Mined"
+  duration: 86400
+  type: "Emerald Ore Mined"
+#
+item:
+  item: "emerald_ore"
+  name: "&a&lMost Emerald Ore Mined"
+#

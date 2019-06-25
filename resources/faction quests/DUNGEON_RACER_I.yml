@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Dungeon Racer I"
+  completion: <=15m
+#
+lore:
+- "&7Complete Dungeon in 15m or less"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

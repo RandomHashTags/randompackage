@@ -1,0 +1,240 @@
+# Made by RandomHashTags
+chat cmds:
+  # {F_TAG}
+  ## = If the player is in a faction --> The player's relation color to recipient + The player's faction role + The player's faction tag + a space
+  ## = Player isn't in a faction --> nothing
+  # {DISPLAYNAME} = The player's display name
+  # {MESSAGE} = The sent message
+  # {TITLE} = The player's formatted active title. If one is active, a space is added before it.
+  format: "{F_TAG}{DISPLAYNAME}{TITLE}&r: {MESSAGE}"
+  brag:
+    enabled: true
+    hover message: "&7Click to view &n{PLAYER}&r&7's inventory!"
+    display: "&6&o{PLAYER}'s Inventory&r"
+    invalid:
+      - "&cInvalid!"
+    no perm:
+      - "&cYou do not have permission to link items in chat with [BRAG]!"
+      - "&7Purchase a rank at &nbuy.yourserver.com&r &7and try again!"
+  item:
+    enabled: true
+    display: "\u00BB &r{ITEM_NAME} &7({ITEM_AMOUNT}x) &f\u00AB&r "
+    no perm:
+      - "&cYou do not have permission to link items in chat with [ITEM]!"
+      - "&7Purchase a rank at &nbuy.yourserver.com&r &7and try again!"
+#
+alchemist:
+  enabled: true
+#
+auction house:
+  enabled: true
+  aliases:
+    - "ah"
+    - "auction"
+#
+balance:
+  enabled: true
+  aliases:
+    - "bal"
+#
+bless:
+  enabled: true
+#
+bump:
+  enabled: true
+#
+coinflip:
+  enabled: true
+  aliases:
+    - "cf"
+#
+combine:
+  enabled: true
+#
+confirm:
+  enabled: true
+#
+collection filter:
+  enabled: true
+#
+conquest:
+  enabled: true
+#
+custom armor:
+  enabled: true
+#
+custom bosses:
+  enabled: true
+#
+custom enchants:
+  enabled: true
+  #
+  black scrolls: true
+  dusts: true
+  enchantment orbs: true
+  fireballs: true
+  randomization scrolls: true
+  rarity gems: true
+  soul trackers: true
+#
+custom creepers:
+  enabled: true
+#
+custom tnt:
+  enabled: true
+#
+duels:
+  enabled: false
+  aliases:
+    - "duels"
+#
+dungeons:
+  enabled: false
+#
+enchants:
+  enabled: true
+  format: "{ENCHANT}&r &7[Level 1-{MAX}]"
+  description color: "&7"
+  hover:
+    - "&7&nTier"
+    - "{TIER}"
+    - " "
+    - "&7&nDescription"
+    - "{DESC}"
+  msg:
+    - " "
+    - "&b&lEnchantment Guide (&r&d&l{PAGE}&r&b&l/&r&d&l{MAX_PAGE}&r&b&l)"
+    - " "
+    - "{ENCHANTS}"
+    - " "
+    - "&e&l(!)&r &eHover over and Enchantment to learn more about it."
+    - "&7Use &n/enchants <page>&r &7to browse other enchantments."
+    - " "
+#
+enchanter:
+  enabled: true
+#
+envoy:
+  enabled: true
+#
+faction additions:
+  enabled: true
+  aliases:
+    - "f upgrade"
+#
+fund:
+  enabled: true
+#
+gkits:
+  enabled: true
+  aliases:
+    - "gkits"
+#
+global challenges:
+  enabled: true
+  aliases:
+    - "challenges"
+#
+home:
+  enabled: true
+#
+item filter:
+  enabled: true
+#
+jackpot:
+  enabled: true
+#
+kingofthehill:
+  enabled: true
+  aliases:
+    - "koth"
+#
+last man standing:
+  enabled: false
+  aliases:
+    - "lms"
+    - "warzone"
+#
+lootboxes:
+  enabled: true
+  aliases:
+    - "lootboxes"
+#
+masks:
+  enabled: true
+#
+mkits:
+  enabled: true
+  aliases:
+    - "mkits"
+#
+mob stacker:
+  enabled: true
+#
+monthly crates:
+  enabled: true
+  aliases:
+    - "cc"
+    - "mc"
+#
+outposts:
+  enabled: false
+  aliases:
+    - "outposts"
+#
+pets:
+  enabled: false
+#
+player quests:
+  enabled: true
+  aliases:
+    - "quests"
+#
+wild pvp:
+  enabled: true
+  aliases:
+    - "pvp"
+#
+roll:
+  enabled: true
+#
+server crates:
+  enabled: true
+#
+shop:
+  enabled: true
+#
+showcase:
+  enabled: true
+#
+randompackage:
+  aliases:
+    - "rp"
+#
+tinkerer:
+  enabled: true
+#
+title:
+  enabled: true
+  aliases:
+    - "titles"
+#
+trade:
+  enabled: true
+#
+trinkets:
+  enabled: false
+#
+vkits:
+  enabled: true
+  aliases:
+    - "vkits"
+#
+withdraw:
+  enabled: true
+#
+xpbottle:
+  enabled: true
+#
+no permission:
+  - "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."

@@ -1,0 +1,132 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&b&lJackpot Commands"
+    - "&f/jackpot"
+    - "&7View current Jackpot information."
+    - " "
+    - "&f/jackpot buy &7<x>"
+    - "&7Buy X tickets for the current Jackpot."
+    - " "
+    - "&f/jackpot top"
+    - "&7View top Jackpot Winners!"
+    - " "
+    - "&f/jackpot stats"
+    - "&7View your Jackpot stats!"
+    - " "
+  #
+  enter valid ticket amount:
+    - "&cPlease enter a ticket amount between 1 and 10,000!"
+  cannot afford:
+    - "&cYou cannot afford the total price of ${$} for {AMOUNT} tickets!"
+  confirm purchase:
+    - " "
+    - "&aConfirm purchase of &b&l&n{AMOUNT}&r &bJackpot Ticket(s)"
+    - "&afor &b&l$&r&b{$}"
+    - " "
+  purchased:
+    - "&a&l(!)&r &aYou have purchase {AMOUNT} ticket(s) for &l$&r&a{$}"
+    - "&7Use &n/jackpot&r &7to view current Jackpot information!"
+    - " "
+  #
+  countdowns:
+    - "5m"
+    - "2m"
+    - "1m"
+    - "30s"
+    - "10s"
+    - "5s"
+    - "4s"
+    - "3s"
+    - "2s"
+    - "1s"
+  countdown:
+    - " "
+    - "&e&l(!)&r &eServer Jackpot (&l$&r&e{$}) drawing in &l{TIME}&r&e!"
+    - "&7Use &b/jackpot buy &7to purchase a ticket!"
+    - " "
+  won:
+    - " "
+    - "&a&l(!) {PLAYER}&r &ahas won the &n/jackpot&r &aand received"
+    - "&2&l$&r&2{$}&a! &aThey purchased {TICKETS} ({TICKETS%}%) ticket(s) out of the"
+    - "&a{TOTAL_TICKETS} ticket(s) sold!"
+    - " "
+  #
+  view:
+    - " "
+    - "&e&lServer Jackpot"
+    - "  &b&lJackpot Value:&r &e&l$&r&e{VALUE} &7(-10% tax)"
+    - "  &b&lTickets Sold:&r &e{TICKETS}"
+    - "  &b&lYour Tickets:&r &a{YOUR_TICKETS} &7({YOUR_TICKETS%}%)"
+    - " "
+    - "&b&l(!)&r &bNext Winner in &n{TIME}"
+    - " "
+    - "&7Use &n/jackpot help&r &7for more commands!"
+  stats:
+    - " "
+    - "&e&lServer Jackpot Stats"
+    - "&bTotal Winnings: &e&l$&r&e{$}"
+    - "&bTotal Tickets Purchased: &e{TICKETS}"
+    - "&bTotal Jackpot Wins: &e{WINS}"
+    - " "
+  #
+  players per page: 11
+  top:
+    - " "
+    - "&e7lTop Jackpot Winners (&r&b&l{PAGE}&r&e&l/&r&b&l{MAX_PAGE}&r&e&l)"
+    - " &b&l{PLACE}.&r &e{PLAYER}: &b&l{WINS}&r &bWins &l(&r&e&l$&r&e{WON}&b&l)"
+    - " "
+
+#
+settings:
+  # Measured in seconds
+  winner picked every: 7200
+  #
+  tax: 0.10
+  ticket cost: 10000
+  #
+  min tickets: 1
+  max tickets: 10000
+#
+gui:
+  title: "Confirm {AMOUNT} tickets"
+  size: 9
+  #
+  confirm:
+    item: "lime_stained_glass_pane"
+    name: "&a&lConfirm Purchase"
+    lore:
+      - "&7Click to &aconfirm &7purchase of"
+      - "&a{AMOUNT} &7ticket(s) for &a&l$&r&a{$}"
+  cancel:
+    item: "red_stained_glass_pane"
+    name: "&c&lCancel Purchase"
+    lore:
+      - "&7Click to &ccancel &7ticket purchase."
+  #
+  confirm 1:
+    slot: 0
+    item: "confirm"
+  confirm 2:
+    slot: 1
+    item: "confirm"
+  confirm 3:
+    slot: 2
+    item: "confirm"
+  confirm 4:
+    slot: 3
+    item: "confirm"
+  cancel 1:
+    slot: 5
+    item: "cancel"
+  cancel 2:
+    slot: 6
+    item: "cancel"
+  cancel 3:
+    slot: 7
+    item: "cancel"
+  cnacel 4:
+    slot: 8
+    item: "cancel"
+#

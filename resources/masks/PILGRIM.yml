@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/a876328ecba8d49cc3c6f27308670d97f39dca94edc086515fc16b31bafe4755"
+#
+item:
+  item: "player_head_item"
+  name: "&e&lPilgrim Mask"
+  lore:
+  - "&c+25% XP/Drops"
+  - "&7tHiS iS oUr lAnD nOw!"
+  - " &6&l*&r &6Thanksgiving 2018"
+#
+attributes:
+  - "KilledEntity;setDroppedExp{droppedxp*1.25}"
+#
+added lore:
+  - "&7&lATTACHED:&r &e&lPilgrim Mask&r &f(&c+25% XP/Drops&f)"

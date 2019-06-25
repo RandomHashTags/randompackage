@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Deathbringer"
+lore:
+- "&eChance to deal double damage."
+#
+max level: 3
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "6000:7000"
+tinkerer: "143:157:171"
+#
+attributes:
+- "PvA;chance=Lucky+(2*level);setDamage{dmg*2};sendMessage{[damager]&6&l** DEATHBRINGER **}"

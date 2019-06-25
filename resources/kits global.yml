@@ -1,0 +1,137 @@
+# Made by RandomHashTags
+messages:
+  cannot withdraw:
+    - "&c&l(!)&r &cYou cannot withdraw items from the kit preview."
+    - "&7Unlock access by defeating a Fallen Hero purchased at:"
+    - "&7&nbuy.yourserver.com"
+  not unlocked kit:
+    - "&c&l(!)&r &cYou have &nnot&r &cunlocked that Gkit!"
+    - "&7Unlock access by defeating a Fallen Hero purchased at &nbuy.yourserver.com"
+    - "&7** You can preview the contents of this kit by right-clicking it in the /gkit menu."
+  cooldown:
+    - "&eYou can obtain this gkit again in &7{TIME}"
+  # Reset
+  target doesnt exist:
+    - "&c&l(!)&r &cThat player isn't online!"
+  success:
+    - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's gkits!"
+  # Fallen Heroes
+  already have:
+    - "&c&l(!) &cYou already have this &f/gkit&c!"
+  not in warzone:
+    - "&c&l(!) &r&cYou can only summon Fallen Heros in the &4WarZone!"
+  redeem:
+    - "&b&l(!) &r&bYou've UNLOCKED the &r{NAME}&r &b&lGKIT!"
+  upgrade:
+    - "&a&l(!)&r &a\"{NAME}&r&a\" /gkit upgraded to &aKit Tier {TIER}&r&a!"
+    - "&7You will have an increased chance of receiving higher level enchantments!"
+
+#
+items:
+  cooldown:
+    item: "yellow_stained_glass_pane"
+    name: "&c&lGkit Unavailable"
+    lore:
+    - "{LORE}"
+    - " "
+    - "&eYou can obtain this gkit again in"
+    - "&7{TIME}"
+  heroic: # These settings are added to heroic gkits
+    prefix: "&b&kiii&f&l&nHeroic&d&kiii&r &f&l{NAME}"
+    enchanted effect: true
+  preview:
+    title: "Global Kit Preview"
+    item: "black_stained_glass_pane"
+    name: " "
+    added gui lore: # Added to the gkit's lore in /gkit
+    - "&7Right-click to preview kit"
+  #
+  omni gem:
+    item: "diamond"
+    name: "&6&lOmni Gem (&r&6/gkit&6&l)"
+    lore:
+    - "&7Right click to select any"
+    - "&6/gkit &7to level up or"
+    - "&7redeem if not unlocked!"
+  fallen hero bundle:
+    item: "chest"
+    name: "&6&lHeroic Fallen Hero Bundle"
+    lore:
+    - "&7Right-click to reveal &n10 random"
+    - "&7heroic fallen hero items!"
+    - " "
+    - "&6Contains 10 of the following..."
+    - "&7* Heroic Butcher"
+    - "&7* Heroic Warlock"
+    - "&7* Heroic Independence"
+    - "&7* Heroic Paladin"
+    - "&7* Heroic Spooky"
+    - "&7* Heroic Hyperdrive"
+    - "&7* Heroic Destroyer"
+    - "&7* Heroic Guardian"
+    - "&7* Heroic Diablo"
+    - "&7* Heroic Valentine"
+    - "&7* Heroic Arcane"
+    - "&7* Heroic Gladiator"
+    - "&7* Heroic Trickster"
+    - "&7* Heroic Templar"
+    - "&7* Heroic Viking"
+    - "&7* Heroic Tinkermaster"
+    - "&7* Heroic Admiral"
+    - "&7* Heroic Party Animal"
+    - "&7* Heroic Enchantment"
+    - "&7* Heroic Grand Master"
+    - "&7* Heroic Void Walker"
+    - "&7* Heroic Master Builder"
+    #
+    reveal amount: 10
+    reveals:
+      - "SPOOKY"
+      - "HYPERDRIVE"
+      - "DESTROYER"
+      - "GUARDIAN"
+      - "DIABLO"
+      - "VALENTINES"
+      - "ARCANE"
+      - "GLADIATOR"
+      - "TRICKSTER"
+      - "TEMPLAR"
+      - "VIKING"
+      - "TINKERMASTER"
+      - "ADMIRAL"
+      - "PARTY_ANIMAL"
+      - "ENCHANTMENT"
+      - "GRAND_MASTER"
+      - "VOIDWALKER"
+      - "MASTER_BUILDER"
+      - "INDEPENDENCE"
+      - "BUTCHER"
+      - "PALADIN"
+      - "WARLOCK"
+      - "LOKI"
+      - "GRIM_REAPER"
+#
+# How to create your own gkit tutorial!
+## <youtube link>
+#
+gui:
+  title: "Gkits"
+  size: 27
+  # Size needs to be a multiple of 9 to work!
+  settings:
+    use tiers: true
+    tier zero enchant effect: false
+    tier custom enchant multiplier:
+      1: 0.30
+      2: 0.50
+      3: 0.80
+    locked: # Added before the pre-lore if the player doesn't own the gkit
+    - " "
+    - "&c&lLOCKED"
+    - "&7Unlock at &nbuy.yourserver.com"
+    unlocked: # Added before the pre-lore if the player does own the gkit
+    - " "
+    - "&a&lUNLOCKED"
+    pre lore: # This is added before all other gkit gui item's lore, ONLY if use-tiers is true
+    - "&e&lKit Tier:&r &e{TIER} &l/&r &e{MAX_TIER}"
+  #

@@ -1,0 +1,20 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Skilling"
+lore:
+- "&eIncreases mcMMO XP gained in all"
+- "&eGATHERING skills while equipped."
+#
+max level: 10
+applies to: "pickaxe"
+#
+alchemist: "1750:1850:1950:2050:2150:2250:2350:2450:2550"
+tinkerer: "58:69:80:91:102:113:124:135:146:157"
+#
+attributes:
+- "mcMMOXpGained:EXCAVATION;setGainedXP{xp*(.05*level)}"
+- "mcMMOXpGained:REPAIR;setGainedXP{xp*(.05*level)}"
+- "mcMMOXpGained:MINING;setGainedXP{xp*(.05*level)}"
+- "mcMMOXpGained:HERBALISM;setGainedXP{xp*(.05*level)}"
+- "mcMMOXpGained:MINING;setGainedXP{xp*(.05*level)}"

@@ -1,0 +1,118 @@
+# Made by RandomHashTags
+spawnable region: "warzone"
+type: SLIME
+name: "&e&lKing Slime"
+spawn item:
+  item: "monster_egg:55"
+  name: "&e&lKing Slime"
+  lore:
+  - "&7This monster egg contains a"
+  - "&c&ndangerous&r &7warzone boss"
+  - " "
+  - "&e&lLORE"
+  - "&7&oAn enormous slime, rumored to be"
+  - "&7&othe king of all slimes in the"
+  - "&7&oServoverse. Apparently he has anger"
+  - "&7&oissues."
+  - " "
+  - "&e&lDIFFICULTY"
+  - "&eUltimate+"
+#
+scoreboard:
+  title: "&e&lKing Slime"
+  score start: 15
+  display slot: "SIDEBAR"
+  scores:
+    - "&a"
+    - "&c&lHealth"
+    - "&c{HEALTH}"
+    - "&b"
+    - "&e&lMinions"
+    - "&e{MINIONS}"
+    - "&c"
+    - "&a&lDamage Dealt"
+    - "&a{DAMAGE_DEALT} &7[{DAMAGE_DEALT%}%]"
+#
+attributes:
+  - "size=8"
+  - "maxhealth=1200"
+  - "split=false"
+  - "addPotionEffect{fire_resistance:1:99999}"
+  - "addPotionEffect{regeneration:4:99999}"
+#
+rewards:
+  # "<who>;{<item>};<amount>;<what it shows as in chat>"
+  - "top1;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+  - "top1;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top2;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top3;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+  - "top4;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+#
+attacks:
+  0:
+    chance: 10
+    radius: 0
+    attack:
+    - "delay=0{summonminions}"
+    - "delay=0{MESSAGE0}"
+  1:
+    chance: 15
+    radius: 25
+    attack:
+    - "delay=0{MESSAGE2}"
+    - "delay=0{surround:1:2:1:-1:-1:-1:stained_glass:air}"
+    - "delay=1{surround:0:0:0:0:1:0:air:stained_glass}"
+    - "delay=100{surround:1:2:1:-1:-1:-1:air:stained_glass}"
+  2:
+    chance: 10
+    radius: 0
+    attack:
+    - "delay=0{minionheal:10:5:MESSAGE1}"
+#
+messages:
+  radius: 100
+  summon:
+    - "&e&lKing Slime >>&r &f&oAh, so you are {SUMMONER}, the infamous slime killer. Prepare to meet your doom!"
+  summon broadcast:
+    - " "
+    - "&e&l(!)&r &eA &l&nKing Slime&r &eBoss has been summoned to the /spawn WarZone, at {X}x, {Y}y, {Z}z&r &edefend the planet!"
+    - " "
+  defeated:
+    - "&e&lKing Slime >>&r &f&oYou... have defeated me."
+  defeated broadcast:
+    - " "
+    - "&c&lThe King Slime has been defeated!"
+    - "&cDefeated by {TOP_PLAYERS}"
+    - " "
+    - "&c&lTOP DAMAGE DEALT"
+    - "&a&l1.&r &a{TOP1} - &l{TOP1%}%&r &a- {REWARDS}"
+    - "&a&l2.&r &a{TOP2} - &l{TOP2%}%&r &a- {REWARDS}"
+    - "&a&l3.&r &a{TOP3} - &l{TOP3%}%&r &a- {REWARDS}"
+    - "&a&l4.&r &a{TOP4} - &l{TOP4%}%&r &a- {REWARDS}"
+    - "&a&l5.&r &a{TOP5} - &l{TOP5%}%"
+    - " "
+  #
+  0:
+    - "&e&lKing Slime >>&r &f&oCome to me my children, heal me so we can crush these Cosmonauts!"
+  1:
+    - "&e&lKing Slime >>&r &a&l+ {HP} HP (SOURCE: Minion)"
+  2:
+    - "&e&lKing Slime >>&r &f&oBreathe it in!"
+  3:
+    - "&e&lKing Slime >>&r &f&oBehold the power of the Slime King!"
+    - "&f&oExplosive slimes, attack these cosmonaut scum!"
+  4:
+    - "&e&lKing Slime >>&r &f&oYou have slayed your last slime."
+  5:
+   - "&e&lKing Slime >>&r &f&oAre you challenging my rule?"
+#
+minion:
+  max: 10
+  type: "slime"
+  name: "&e&lKing Slime's Minion"
+  attributes:
+    - "size=2"
+    - "maxhealth=32"
+    - "split=false"
+    - "addPotionEffect{fire_resistance:1:99999}"
+    - "addPotionEffect{regeneration:1:99999}"

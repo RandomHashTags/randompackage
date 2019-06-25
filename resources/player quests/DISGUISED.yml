@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Disguised"
+  completion: 30m
+  expiration: 86400
+#
+lore:
+- "&7Equip a disguise for 30m"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- ""

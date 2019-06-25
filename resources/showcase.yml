@@ -1,0 +1,112 @@
+# Made by RandomHashTags
+messages:
+  no access:
+    - "&cYou do not have access to use Showcases!"
+    - "&cYou can unlock access at buy.yourserver.com!"
+  #
+  doesnt have showcases:
+    - "&c&l(!)&r &cYour showcases are empty!"
+  target doesnt have showcases:
+    - "&c&l(!)&r &c{TARGET} does not have a Showcase!"
+#
+settings:
+  default showcases: 1
+  default showcase size: 9 # ^ NEEDS TO BE A MULTIPLE OF 9 TO WORK!
+  #
+  other title: "{PLAYER}'s Showcase ({PAGE} / {MAX})"
+  self title: "{PLAYER}'s Showcase ({PAGE} / {MAX})"
+  #
+  time color: "&6&l"
+#
+sounds:
+#
+items:
+  expansion:
+    # How many rows are added to their existing showcase. 1 = 9 slots. 2 = 18 slots. ect.
+    added rows: 1
+    item: "painting"
+    name: "&e&lShowcase Expansion&r &7(Right Click)"
+    lore:
+    - "&7Adds &e+9 slots to your &n/showcase"
+#
+add item:
+  title: "Confirm Item Addition"
+  size: 9
+  confirm:
+    enchanted: true
+    item: "lime_stained_glass_pane"
+    name: "&a&lConfirm Item Addition"
+    lore:
+    - "&7Click to confirm your decision."
+    - " "
+    - "&c&lWARNING:&r &7Once placed inside your"
+    - "&7Showcase this item can never"
+    - "&7be withdrawn and it can only"
+    - "&7be destroyed."
+  cancel:
+    enchanted: true
+    item: "red_stained_glass_pane"
+    name: "&c&lCancel Item Addition"
+    lore:
+    - "&7Click to cancel your action."
+  # {ITEM} = The item the player wants to remove from their showcase
+  # {CONFIRM} = The confirm item
+  # {CANCEL} = The cancel item
+  '0':
+    item: "{CONFIRM}"
+  '1':
+    item: "{CONFIRM}"
+  '2':
+    item: "{CONFIRM}"
+  '3':
+    item: "{CONFIRM}"
+  '4':
+    item: "{ITEM}"
+  '5':
+    item: "{CANCEL}"
+  '6':
+    item: "{CANCEL}"
+  '7':
+    item: "{CANCEL}"
+  '8':
+    item: "{CANCEL}"
+#
+remove item:
+  title: "Removal Confirmation"
+  size: 9
+  confirm:
+    enchanted: true
+    item: "lime_stained_glass_pane"
+    name: "&a&lConfirm Item Destruction"
+    lore:
+    - "&7Click to confirm your decision."
+    - " "
+    - "&c&lWARNING:&r &7This item will be removed &c&nforever!"
+  cancel:
+    enchanted: true
+    item: "red_stained_glass_pane"
+    name: "&c&lCancel Item Destruction"
+    lore:
+    - "&7Click to cancel your action."
+  # {ITEM} = The item the player wants to remove from their showcase
+  # {CONFIRM} = The confirm item
+  # {CANCEL} = The cancel item
+  '0':
+    item: "{CONFIRM}"
+  '1':
+    item: "{CONFIRM}"
+  '2':
+    item: "{CONFIRM}"
+  '3':
+    item: "{CONFIRM}"
+  '4':
+    item: "{ITEM}"
+  '5':
+    item: "{CANCEL}"
+  '6':
+    item: "{CANCEL}"
+  '7':
+    item: "{CANCEL}"
+  '8':
+    item: "{CANCEL}"
+#

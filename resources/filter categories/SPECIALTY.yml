@@ -1,0 +1,94 @@
+# Made by RandomHashTags
+title: "Item Filter: Specialty"
+size: 27
+#
+gui:
+  mob spawner:
+    slot: 0
+    item: "mob_spawner"
+    name: "Mob Spawners"
+  spawner egg:
+    slot: 1
+    item: "monster_egg"
+    name: "Spawner Eggs"
+  name tag:
+    slot: 2
+    item: "name_tag"
+    name: "Name Tag"
+  chest:
+    slot: 3
+    item: "chest"
+    name: "Chest"
+  trapped chest:
+    slot: 4
+    item: "trapped_chest"
+    name: "Trapped Chest"
+  ender chest:
+    slot: 5
+    item: "ender_chest"
+    name: "Ender Chest"
+  paper:
+    slot: 6
+    item: "paper"
+    name: "Paper"
+  map:
+    slot: 7
+    item: "map"
+    name: "Map"
+  experience bottle:
+    slot: 8
+    item: "exp_bottle"
+    name: "Exp Bottle"
+  redstone torch:
+    slot: 9
+    item: "redstone_torch_on"
+    name: "Redstone Torch"
+  book:
+    slot: 10
+    item: "book"
+    name: "Book"
+  ink sack:
+    slot: 11
+    item: "ink_sack"
+    name: "Ink Sack"
+  torch:
+    slot: 12
+    item: "torch"
+    name: "Torch"
+  emerald:
+    slot: 13
+    item: "emerald"
+    name: "Emerald"
+  magma cream:
+    slot: 14
+    item: "magma_cream"
+    name: "Magma Cream"
+  golden apple:
+    slot: 15
+    item: "golden_apple"
+    name: "Golden Apple"
+  diamond:
+    slot: 16
+    item: "diamond"
+    name: "Diamond"
+  bone:
+    slot: 17
+    item: "bone"
+    name: "Bone"
+  ender pearl:
+    slot: 18
+    item: "ender_pearl"
+    name: "Ender Pearl"
+  blaze rod:
+    slot: 19
+    item: "blaze_rod"
+    name: "Blaze Rod"
+  nether star:
+    slot: 20
+    item: "nether_star"
+    name: "Nether Star"
+  firework charge:
+    slot: 21
+    item: "firework_charge"
+    name: "Firework Charge"
+#

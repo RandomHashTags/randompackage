@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Implants"
+lore:
+- "&ePassively heals +1 health and"
+- "&erestores +1 hunger every few seconds."
+#
+max level: 3
+applies to: "helmet"
+#
+alchemist: "3500:5000"
+tinkerer: "79:90:101"
+#
+attributes:
+- "Timer(180);chance=40+(10*level);heal{[player]1h};healHunger{[player]1}"

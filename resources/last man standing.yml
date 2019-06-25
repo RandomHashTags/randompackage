@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&e&l&nWarzone Rewards"
+    - " "
+    - "&7Whenever you enter the planet's main &e&lWARZONE&r &7(located directly under /spawn) you"
+    - " &7will start to &eautomatically recieve $ and EXP. &7The longer you stay in this PvP-enabled"
+    - " &7area, and the closer you are to the center of the area (&e190x, 40z&7), the more $ and XP"
+    - " &7you will receive &nevery minute!"
+    - " "
+    - "&7If you manage to reach the &e#1 &7rank on &e/warzone top &7you will also recieve a 5.0x \"Last"
+    - " &7Man Standing\" multiplier."
+    - " "
+    - "&e* You need to &nKEEP MOVING&r &eand not /fly to stay eligible for the rewards."
+    - " "
+  top survivors:
+    - " "
+    - "&e&lTop Warzone Survivors (&r&6&l{PAGE}&r&e&l/&r&6&l{MAX_PAGE}&r&e&l)"
+    - " "
+    - "{SURVIVOR}"
+    - " "
+#
+rewards:
+  - ""

@@ -1,0 +1,31 @@
+# Made by RandomHashTags
+settings:
+  cooldown:
+    1: 300
+  exp to level:
+    2: 1000
+#
+item:
+  texture: ""
+  item: "player_head_item"
+  name: "&e&lWater Elemental Pet&r &7[LVL {LEVEL}]"
+  lore:
+  - "&7A watery pet that is"
+  - "&7capable of extracting water"
+  - "&7from the air and condensing it."
+  - " "
+  - "&f&lAbility"
+  - "&7Fills up to 32x"
+  - "&7empty buckets in your"
+  - "&7inventory into water!"
+  - "     &f&l+"
+  - " "
+  - "&f&lCooldown"
+  - " &7{COOLDOWN}"
+  - " "
+  - "&f&lLevel"
+  - " &7{LEVEL}"
+  - " "
+  - "&f&lEXP"
+  - "{EXP}"
+  - " &7({XP}/{COMPLETION})"

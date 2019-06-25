@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+scrolls:
+  # Lore needs to have {PERCENT} to work!
+  # {PERCENT} = Black Scroll percent that corresponds with the settings below the lore.
+  # percents: "<min percent>;<max percent>"
+  REGULAR:
+    applies to: "SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "ink_sack"
+    name: "&f&lBlack Scroll"
+    lore:
+    - "&7Removes a random enchantment"
+    - "&7from an item and converts"
+    - "&7it into a &f{PERCENT}% success book."
+    - "&fPlace scroll on item to extract."
+    percents: "30;100"
+  HEROIC:
+    applies to: "HEROIC;SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "ink_sack"
+    name: "&d&lHeroic Black Scroll"
+    lore:
+    - "&7Removes a random enchantment"
+    - "&7from an item and converts"
+    - "&7it into a &d{MIN}%-{MAX}% &7success book."
+    - "&d&l(!)&r &dChance to extract Heroic Enchantments"
+    percents: "10;45"

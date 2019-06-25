@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Auto Smelt"
+lore:
+- "&eOres are automatically smelted when"
+- "&emined."
+#
+max level: 3
+applies to: "pickaxe"
+#
+alchemist: "1000:1500"
+tinkerer: "76:84:92"
+#
+attributes:
+- "BlockBreak;chance=20+(20*level);"

@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Dominate"
+lore:
+- "&eChance to weaken enemy players on"
+- "&ehit, causing them to deal (level x"
+- "&e5%) less damage for (level x 2)"
+- "&eseconds."
+#
+max level: 4
+applies to: "sword"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

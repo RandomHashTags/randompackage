@@ -1,0 +1,83 @@
+# Made by RandomHashTags
+title: "Shop Items (Mob Drops)"
+size: 18
+gui:
+  gunpowder:
+    slot: 0
+    item: "sulphur"
+    name: "&e&lGunpowder"
+    prices: 25;4.38
+  bow:
+    slot: 1
+    item: "bow"
+    name: "&e&lBow"
+    prices: 40;20
+  arrow:
+    slot: 2
+    item: "arrow"
+    name: "&e&lArrow"
+    prices: 6.25;2.19
+  feather:
+    slot: 3
+    item: "feather"
+    name: "&e&lFeather"
+    prices: 8.12;1.09
+  blaze rod:
+    slot: 4
+    item: "blaze_rod"
+    name: "&e&lBlaze Rod"
+    prices: 62.50;28.75
+  lily pad:
+    slot: 5
+    item: "water_lily"
+    name: "&e&lLily Pad"
+    prices: 20;0
+  rotten flesh:
+    slot: 6
+    item: "rotten_flesh"
+    name: "&e&lRotten Flesh"
+    prices: 2.50;1.09
+  string:
+    slot: 7
+    item: "string"
+    name: "&e&lString"
+    prices: 8.12;1.88
+  leather:
+    slot: 8
+    item: "leather"
+    name: "&e&lLeather"
+    prices: 16.25;5.62
+  ender pearl:
+    slot: 9
+    item: "ender_pearl"
+    name: "&e&lEnder Pearl"
+    prices: 50;25
+  bone:
+    slot: 10
+    item: "bone"
+    name: "&e&lBone"
+    prices: 6.25;.50
+  iron ingot:
+    slot: 11
+    item: "iron_ingot"
+    name: "&e&lIron Ingot"
+    prices: 130;40
+  emerald:
+    slot: 12
+    item: "emerald"
+    name: "&e&lEmerald"
+    prices: 1150;200
+  diamond:
+    slot: 13
+    item: "diamond"
+    name: "&e&lDiamond"
+    prices: 390;100
+  gold ingot:
+    slot: 14
+    item: "gold_ingot"
+    name: "&e&lGold Ingot"
+    prices: 100;50
+  back:
+    slot: 17
+    item: "back"
+#

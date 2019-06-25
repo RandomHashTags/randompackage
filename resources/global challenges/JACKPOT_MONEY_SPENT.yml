@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "Jackpot$Spent"
+  duration: 86400
+  type: "Money Put in Jackpot"
+#
+item:
+  item: "gold_ingot"
+  name: "&a&lMost Money Put in Jackpot"
+#

@@ -1,0 +1,58 @@
+# Made by RandomHashTags
+default settings:
+  colors:
+    less than 100: "&f"
+    100s: "&a"
+    200s: "&a"
+    300s: "&a"
+    400s: "&a"
+    500s: "&b"
+    600s: "&b"
+    700s: "&b"
+    800s: "&b"
+    900s: "&b"
+    1000s: "&6&l"
+    2000s: "&b&l"
+    # If the soul gem amount doesn't fall under one of these, this is the color
+    else: "&6&l"
+  cooldown msg:
+    - "&c&l(!)&r &cYou can collect {VICTIM}'s Soul again in {TIME}!"
+# {SOULS} = The number of souls the soul gem contains. CAN ONLY BE IN THE ITEM NAME!
+gems:
+  SOUL:
+    works for rarities: "SOUL"
+    item: "emerald"
+    name: "&c&lSoul Gem [&6{SOULS}&c&l]"
+    lore:
+    - "&c&l* &cClick this item to activate &nSoul Mode"
+    - "&7While in 'Soul Mode', your ACTIVE god tier"
+    - "&7enchantment will activate and drain souls"
+    - "&7for as long as this mode is enabled"
+    - " "
+    - "&c&l* &7Use &c&n/splitsouls&r &7with this item"
+    - "&7to split souls off of it"
+    - " "
+    - "&c&l* &7Stack other &cSoul Gems &7ontop of this"
+    - "&7one to combine their soul counts"
+    #
+    toggle on:
+      - "&a&l** SOUL MODE: &nON&r &a&l**"
+      - "&7Active soul enchantments will now drain soul gkit gems."
+    toggle off:
+      interact:
+        - "&c&l** SOUL MODE: &nOFF&r &c&l**"
+        - "&7Soul enchantments will no longer drain soul gkit gems."
+      dropped:
+        - "&c&l** SOUL MODE: &nOFF&r &c&l**"
+        - "&7You have left Soul Mode, because you have dropped the Soul Gem!"
+      moved:
+        - "&c&l** SOUL MODE: &nOFF&r &c&l**"
+        - "&7You have left Soul Mode, because you have moved the active Soul Gem!"
+      ran out:
+        - "&c&l** SOUL MODE: &nOFF&r &c&l**"
+        - "&7You ran out of souls to use! Collect more to activate Soul Enchants!"
+    split msg:
+      - "&eYour Soul Gem has been split into two soul gems successfully."
+      - "&a&l+ {AMOUNT} Soul Gem(s)"
+    # Time in seconds
+    time between same kills: 18000

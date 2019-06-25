@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "FishCaught"
+  duration: 86400
+  type: "Fish Caught"
+#
+item:
+  item: "raw_fish"
+  name: "&a&lMost Fish Caught"
+#

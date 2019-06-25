@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Novice Merchant"
+  completion: 500000
+  expiration: 86400
+#
+lore:
+- "&7Make $500,000 in /shop"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "ShopSellItem;+profit"

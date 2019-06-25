@@ -1,0 +1,76 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&e&lFaction Points Help"
+    - "&e&lPoint Multiplier:&r &f{POINT_MULTIPLIER}%"
+    - "&7Faction Points are what determines your faction's /f top ranking on this planet. Faction"
+    - " &7Points can be purchase in exchange for /balance, but they can also be obtained"
+    - " &7through wold events such as: KOTH, Conquests, Outposts, Bosses, Dungeons, and of"
+    - " &7course by Raiding the Core Chunks of enemy factions!"
+    - " "
+    - " &e/fp buy"
+    - "  &fBuy Faction Points with in-game /balance."
+    - " "
+    - " &e/fp claims"
+    - "  &fView all claims of your Faction that are at risk of expiring."
+    - " "
+    - " &e/factionpoints"
+    - "  &fView your faction's current Faction Point total."
+    - " "
+  #
+  cannot afford faction points:
+    - "&c&l(!)&r &cYou cannot afford {AMOUNT}x Faction Points for &l$&r&c{PRICE}!"
+  #
+  view points:
+    - "&a&l{FACTION}'s Faction Points:&r &a&n{POINTS}"
+  no expiring claims found:
+    - "&c&l(!)&r &cNo expiring claims found to display!"
+#
+item:
+  item: "paper"
+  name: "&6&lFaction Points Note&r &7(Right Click)"
+  lore:
+  - "&6Value &f{VALUE}"
+  - "&7Click to apply faction points"
+  - "&7to your faction's /f top value!"
+#
+purchase:
+  title: "Purchase Faction Points"
+  size: 9
+  #
+  daily purchases: 8363
+  cost per point: 100000
+  #
+  added lore:
+    - "&7Click to purchase &a{AMOUNT}&7x Faction Points"
+    - "&7for &a&l$&r&a{PRICE}&7!"
+    - " "
+    - "&a&lCurrent Faction Points"
+    - " &f{POINTS}"
+    - " "
+    - "&c&lDaily Purchases"
+    - " &f{DAILY_BOUGHT} / {DAILY_MAX}"
+    - " "
+    - " &cDaily limit resets in {RESETS_IN}"
+    - " "
+    - "&a&lWhat are Faction Points?"
+    - "&7Faction points are used in /f top"
+    - "&7to determine the #1 Faction!"
+  #
+  1:
+    slot: 3
+    item: "paper"
+    name: "&a&l1x Faction Points"
+    points: 1
+  10:
+    slot: 4
+    item: "paper"
+    name: "&a&l10x Faction Points"
+    points: 10
+  100:
+    slot: 5
+    item: "paper"
+    name: "&a&l100x Faction Points"
+    points: 100
+#

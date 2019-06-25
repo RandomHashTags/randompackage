@@ -1,0 +1,103 @@
+# Made by RandomHashTags
+messages:
+  created broadcast:
+    - "&c&l>&r &f{PLAYER} &7has created a /pvp match. &cDefeat them!"
+  created:
+    - "&a&l(!)&r &aYou have entered into the Wild PvP queue!"
+    - "&7Please wait for an opponent to join."
+  cannot modify inventory:
+    - "&c&l(!)&r &cYou cannot modify your inventory while waiting for a Wild PvP queue!"
+    - "&7Use &c/pvp leave &7to leave the queue!"
+  cannot use blocked command:
+    - "&c&l(!)&r &cYou cannot use that command while in the Wild PvP Queue!"
+    - "&7Use &c/pvp leave &7to leave the queue!"
+  left due to executing command:
+    - "&c&l(!)&r &cYou have left the Wild PvP queue to executing '/spawn'."
+  leave:
+    - "&a&l(!)&r &aYou have left the Wild PvP queue!"
+  leave not in queue:
+    - "&c&l(!)&r &cYou are not currently in the Wild PvP Queue!"
+  already in queue:
+    - "&c&l(!)&r &cYou are already in a pending PvP Queue!"
+  must be in wilderness:
+    - "&cYou must be inside a Wilderness Chunk to enter the Wild PvP queue!"
+  left due to leaving chunk:
+    - "&c&l(!)&r &cYou left the Wild PvP queue due to leaving the chunk it was started in."
+  left due to taken damage:
+    - "&c&l(!)&r &cYou left the Wild PvP queue due to taking damage."
+  hazardous block at center:
+    - "&c&l(!)&r &cThere is a hazardous block at the center of this chunk."
+    - "&7Please try again in a different chunk or make modifications."
+  #
+  invincibility enabled:
+    - "&a&lINVINCIBILITY - ENABLED"
+    - "&7Use &c&l/pvp leave&r &7to cancel this fight within 7 seconds!"
+  invincibility expiring:
+    - "&aInvincibility - &lExpiring in {SEC}..."
+  invincibility expired:
+    - "&aInvincibility - &lEXPIRED"
+#
+settings:
+  invincibility duration: 7
+  nearby radius: 100
+  requeue if opponent left: true
+  #
+  blocked commands:
+    - "/f claim"
+#
+gui:
+  title: "Wild PvP Queue"
+  size: 9
+  #
+  enter queue:
+    slot: 8
+    item: "lime_stained_glass_pane"
+    name: "&a&lEnter Wild PvP Queue"
+    lore:
+    - " "
+    - "&7Click to create a &nWild PvP"
+    - "&7match at your current location."
+    - " "
+    - "&a&lWhat is Wild PvP?"
+    - "&7Wild PvP is when a player or"
+    - "&7players fight inside Wilderness"
+    - "&7chunks (unclaimed land) to"
+    - "&7ensure the most fair fight."
+    - " "
+    - "&7Once an opponent accepts your Wild PvP"
+    - "&7match they will be teleported to your"
+    - "&7location and you will each receive"
+    - "&77 seconds of immunity - then you fight!"
+#
+request:
+  item: "player_head_item"
+  name: "&f&l{PLAYER}"
+  lore:
+  - " "
+  - "&a&lPlayer HP:&r &n{HP}"
+  - " "
+  - "&a&lFaction"
+  - "&f{FACTION}"
+  - " "
+  - "&a&lNearby"
+  - " &7{NEARBY_PLAYERS} Player(s)"
+  - " "
+  - "&7Left-Click to accept their request"
+  - "&7Right-Click to view their inventory"
+#
+view inventory:
+  title: "{PLAYER}'s Inventory"
+  # Size is always 54
+  helmet slot: 47
+  chestplate slot: 48
+  leggings slot: 49
+  boots slot: 50
+  #
+  return to queue:
+    slot: 45
+    item: "arrow"
+    name: "&a&lReturn to Queue"
+    lore:
+      - " "
+      - "&7Click to return to the"
+      - "&7Wild PvP queue menu."

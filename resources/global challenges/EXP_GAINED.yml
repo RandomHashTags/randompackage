@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "ExpGained"
+  duration: 86400
+  type: "EXP Gained"
+#
+item:
+  item: "experience_bottle"
+  name: "&a&lMost EXP Gained"
+#

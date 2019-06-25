@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "XP Boosted I"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Successfully use 1 XP Booster"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- ""

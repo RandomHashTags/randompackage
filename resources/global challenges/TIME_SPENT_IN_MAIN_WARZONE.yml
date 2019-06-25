@@ -1,0 +1,10 @@
+# Made by RandomHashTags
+settings:
+  tracks: "TimeSpentInMainWarZone"
+  duration: 86400
+  type: "Time Spent in Main Warzone"
+#
+item:
+  item: "diamond_axe"
+  name: "&a&lMost Time Spent in Main Warzone"
+#

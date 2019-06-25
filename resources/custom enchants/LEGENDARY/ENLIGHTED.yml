@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Enlighted"
+lore:
+- "&eCan heal hearts while taking damage."
+#
+max level: 3
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: "10000:15000"
+tinkerer: "106:127:148"
+#
+attributes:
+- "PvA;chance=Lucky+7+(8*level);heal{[victim]2h};sendMessage{[victim]&6&l** ENLIGHTED **}"

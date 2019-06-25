@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  name: "Soul Enchanter"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Successfully apply 1 Soul Book"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "CustomEnchantApplied;result=SUCCESS_APPLY;rarity=SOUL;+1"
+- "CustomEnchantApplied;result=SUCCESS_UPGRADE;rarity=SOUL;+1"

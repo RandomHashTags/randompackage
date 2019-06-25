@@ -1,0 +1,43 @@
+# Made by RandomHashTags
+armor lore:
+  - " "
+  - "&d&lKOTH SET BONUS"
+  - "&d&l*&r &d+20% PvP Damage"
+  - "&d&l*&r &d+50% PvE Damage"
+  - "&d&l*&r &dAuto Bless"
+  - "&d&l*&r &dNo Fall Damage"
+  - "&7&o(Requires all 4 koth items)"
+#
+helmet:
+  item: "leather_helmet"
+  name: "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nHelmet&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection5;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Drunk;Angelic;Tank;Implants}"
+#
+chestplate:
+  item: "leather_chestplate"
+  name: "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nChestplate&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Deathbringer;Overload;Blood Lust;Dodge;Tank;Angelic}"
+#
+leggings:
+  item: "leather_leggings"
+  name: "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nLeggings&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Valor;Angelic;Tank;Cactus}"
+#
+boots:
+  item: "leather_boots"
+  name: "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nBoots&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;;Unbreaking3}"
+  - "RPEnchants{Armored;Gears;Enlighted;Deathbringer;Angelic;Tank;Rocket Escape}"
+#
+attributes:
+  - "PvP;setDamage{dmg*1.20}"
+  - "PvE;setDamage{dmg*1.50}"
+  - "DamagedBy(FALL);cancel"
+#

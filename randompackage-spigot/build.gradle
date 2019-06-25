@@ -1,0 +1,18 @@
+repositories {
+}
+
+dependencies {
+    compile project(':randompackage-common')
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'version': project.version
+    }
+}
+
+shadowJar {
+    dependencies {
+        include(dependency(':randompackage-common'))
+    }
+}

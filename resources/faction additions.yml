@@ -1,0 +1,620 @@
+# Made by RandomHashTags
+messages:
+  # Boosters
+  xp booster activate:
+    - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} XP&r &aFaction Booster! &7[{TIME} left]"
+  xp booster expired:
+    - "&c&l(!) {MULTIPLIER}x&r &cEXP Booster from &l{PLAYER}&r &chas expired!"
+    - "&cPurchase another booster at &nbuy.yourserver.com!"
+  xp booster:
+    - "&a&l+ {MULTIPLIER}x EXP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
+  # Faction Upgrades
+  dont have item:
+  - "&c&l(!)&r &cYou do not have {ITEM}!"
+  dont have cash:
+  - "&c&lYou do no have enough /bal $ to purchase this upgrade!"
+  - "&7Upgrade Cost: &n${COST}"
+  dont have f upgrade:
+  - "&c&l(!)&r &cYou must have &6&l{UPGRADE}&r &cto unlock this Upgrade!"
+  upgrade:
+  - ""
+  unlock:
+  - ""
+#
+items:
+  heroic faction crystal:
+    item: "orange_dye"
+    name: "&6&lHeroic Faction Crystal"
+    lore:
+    - "&7This heroic crystal can be used to purchase"
+    - "&b/f upgrades &7for your Faction."
+  faction crystal:
+    item: "quartz"
+    name: "&b&lFaction Crystal"
+    lore:
+    - "&7This crystal can be used to purchase"
+    - "&b/f upgrades &7for your Faction."
+  # {MULTIPLIER} = A double (1.00, 1.91, 0.59, 15.00); The number that is multiplied for the final xp amount.
+  # {TIME} = The amount of time how long the xp boost lasts. Uses the format in the messages.
+  faction mcmmo booster:
+    item: "emerald"
+    name: "&b&lFaction &nmcMMO&r &b&lBooster"
+    lore:
+    - "&7Multiplies mcMMO XP gained by all"
+    - "&7faction members while active."
+    - " "
+    - "&7Right-Click to activate."
+    - " "
+    - "&d&lMULTIPLIER"
+    - "&7{MULTIPLIER}x"
+    - " "
+    - "&d&lDURATION"
+    - "&7{TIME}"
+  faction xp booster:
+    item: "emerald"
+    name: "&b&lFaction &nXP&r &b&lBooster"
+    lore:
+    - "&7Multiplies XP gained by all faction"
+    - "&7members from killing mobs while active."
+    - " "
+    - "&7Right-Click to activate."
+    - " "
+    - "&d&lMULTIPLIER"
+    - "&7{MULTIPLIER}x"
+    - " "
+    - "&d&lDURATION"
+    - "&7{TIME}"
+#
+f upgrades:
+  title: "Faction Upgrades"
+  size: 45
+  #
+  tier: " &7{TIER} / {MAX_TIER}"
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  locked:
+    item: "red_stained_glass_pane"
+    tier: " &c&lLOCKED"
+#
+upgrades:
+  default settings:
+    max tier: 4
+    type: DEFAULT
+    item amount=tier: true
+  types:
+    DEFAULT:
+      perk achieved prefix: "&a&l*&r &a&m"
+      perk unachieved prefix: "&c&l*&r &7"
+      requirements prefix: " &b&l*&r &b"
+      unlock:
+        - "&a&lClick to &nUnlock"
+      upgrade:
+        - "&a&lClick to &nUpgrade"
+      maxed:
+        - "&a&lUpgrade is &nMAXED!"
+      format:
+        - "{DESC}"
+        - " "
+        - "&d&lTier"
+        - "{TIER}"
+        - " "
+        - "&d&lPerks"
+        - "{PERKS}"
+        - " "
+        - "&d&lPrice"
+        - "{REQUIREMENTS}"
+        - " "
+    HEROIC:
+      perk achieved prefix: "&a&l*&r &a&m"
+      perk unachieved prefix: "&c&l*&r &7"
+      requirements prefix: " &6&l*&r &6"
+      unlock:
+        - "&6&lClick to &nUnlock"
+      upgrade:
+        - "&6&lClick to &nUpgrade"
+      maxed:
+        - "&6&lUpgrade is &nMAXED!"
+      format:
+        - "{DESC}"
+        - " "
+        - "&e&lTier"
+        - "{TIER}"
+        - " "
+        - "&e&lPerks"
+        - "{PERKS}"
+        - " "
+        - "&e&lRequirements"
+        - "{REQUIREMENTS}"
+        - " "
+  #
+  enhanced flight:
+    slot: 0
+    max tier: 3
+    item: "feather"
+    name: "&b&lEnhanced Flight"
+    desc:
+      - "&7Increased flight abilities in your claims!"
+    perks:
+      - "Tier1;AllowFactionFlight{members};Faction Members can fly."
+      - "Tier2;AllowFactionFlight{members&&allies};All allies can fly."
+      - "Tier3;AllowFactionFlight{members&&allies&&truces};All truces can fly."
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=120};120x Faction Crystals"
+      - "Tier1;Cash{1000000};$1,000,000"
+      - "Tier2;Item{factioncrystal;amount=120};120x Faction Crystals"
+      - "Tier2;Cash{1000000};$1,500,000"
+      - "Tier3;Item{factioncrystal;amount=120};120x Faction Crystals"
+      - "Tier3;Cash{1000000};$2,000,000"
+  explosives expert:
+    slot: 1
+    item: "tnt"
+    name: "&b&lExplosives Expert"
+    desc:
+      - "&7Smelt Gun Powder into TNT."
+    perks:
+      - "Tier1;AllowSmeltable{sulphur13->tnt};Costs 13gp/per TNT"
+      - "Tier2;AllowSmeltable{sulphur10->tnt};Costs 10gp/per TNT"
+      - "Tier3;AllowSmeltable{sulphur8->tnt};Costs 8gp/per TNT"
+      - "Tier4;AllowSmeltable{chance=20{sulphur8->customtnt:random}else{sulphur8->tnt}};Chance to get Custom TNT"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=120};120x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=160};160x Faction Crystals"
+      - "Tier2;Cash{25000000};$25,000,000"
+  warp master:
+    slot: 2
+    max tier: 12
+    item: "ender_pearl"
+    name: "&b&lWarp Master"
+    desc:
+      - "&7Create more /f warps"
+    perks:
+      - "Tier#;IncreaseMaxFactionWarps{#};+# Max Faction Warps"
+    requirements:
+      - "Tier1;Cash{150000};$150,000"
+      - "Tier2;Item{factioncrystal;amount=16};16x Faction Crystals"
+      - "Tier2;Cash{300000};$300,000"
+      - "Tier3;Cash{300000};$450,000"
+      - "Tier4;Cash{300000};$600,000"
+      - "Tier5;Cash{300000};$750,000"
+      - "Tier6;Cash{300000};$900,000"
+      - "Tier7;Cash{300000};$1,050,000"
+      - "Tier8;Cash{300000};$1,200,000"
+      - "Tier9;Cash{300000};$1,350,000"
+      - "Tier10;Cash{300000};$1,500,000"
+      - "Tier11;Cash{300000};$1,650,000"
+      - "Tier12;Cash{300000};$1,800,000"
+  max faction size:
+    slot: 3
+    max tier: 10
+    item: "emerald"
+    name: "&b&lMax Faction Size"
+    desc:
+      - "&7Increases max faction size."
+    perks:
+      - "Tier#;IncreaseMaxFactionSize{#};+# Max Faction Size"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
+      - "Tier1;Cash{1000000};$1,000,000"
+  faction power boost:
+    slot: 4
+    max tier: 5
+    item: "diamond"
+    name: "&b&lFaction Power Boost"
+    desc:
+      - "&7Adds passive faction power boosts."
+    perks:
+      - "Tier#;IncreaseFactionPower{(20*#)};+(20*#) Faction Power"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier1;Cash{5000000};$5,000,000"
+  mcmmo mastery:
+    slot: 5
+    item: "book"
+    name: "&b&lmcMMO Mastery"
+    desc:
+      - "&7Shorter mcMMO Active Ability Cooldowns"
+    perks:
+      - "Tier1;ReduceMCMMOCooldown{all:2.5};-2.5% mcMMO Cooldown"
+      - "Tier2;ReduceMCMMOCooldown{all:5.0};-5.0% mcMMO Cooldown"
+      - "Tier3;ReduceMCMMOCooldown{all:12.5};-12.5% mcMMO Cooldown"
+      - "Tier4;ReduceMCMMOCooldown{all:15.0};-15.0% mcMMO Cooldown"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{5000000};$5,000,000"
+  monster farm:
+    slot: 6
+    item: "blaze_rod"
+    name: "&b&lMonster Farm"
+    desc:
+      - "&7Increased mob spawn rates in claims."
+    perks:
+      - "Tier1;SetMobSpawnRate{1.05};1.05x Spawn Rate"
+      - "Tier2;SetMobSpawnRate{1.15};1.15x Spawn Rate"
+      - "Tier3;SetMobSpawnRate{1.25};1.25x Spawn Rate"
+      - "Tier4;SetMobSpawnRate{1.50};1.50x Spawn Rate"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=120};120x Faction Crystals"
+      - "Tier2;Cash{25000000};$25,000,000"
+  xp harvest:
+    slot: 7
+    max tier: 3
+    item: "exp_bottle"
+    name: "&b&lXP Harvest"
+    desc:
+      - "&7Increases Vanilla XP gained from monsters."
+    perks:
+      - "Tier#;SetMobXPMultiplier{1+(.05*#)};1+(.05*#)x XP Drops"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier1;Cash{15000000};$15,000,000"
+      - "Tier2;Item{factioncrystal;amount=160};160x Faction Crystals"
+      - "Tier2;Cash{25000000};$25,000,000"
+  tp mastery:
+    slot: 8
+    item: "book"
+    name: "&b&lTP Mastery"
+    desc:
+      - "&7Decreases teleportation casting time."
+    perks:
+      - "Tier1;SetTeleportDelayMultiplier{0.9};-10% Teleport Delay"
+      - "Tier2;SetTeleportDelayMultiplier{0.85};-15% Teleport Delay"
+      - "Tier3;SetTeleportDelayMultiplier{0.75};-25% Teleport Delay"
+      - "Tier4;SetTeleportDelayMultiplier{0.65};-35% Teleport Delay"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{2500000};$2,500,000"
+  well fed:
+    slot: 9
+    item: "cooked_beef"
+    name: "&b&lWell Fed"
+    desc:
+      - "&7Reduces rate at which faction members"
+      - "&7get hungry and need to /feed."
+    perks:
+      - "Tier1;SetHungerMultiplier{0.95};-5% Hunger increase rate"
+      - "Tier2;SetHungerMultiplier{0.90};-10% Hunger increase rate"
+      - "Tier3;SetHungerMultiplier{0.85};-15% Hunger increase rate"
+      - "Tier4;SetHungerMultiplier{0.75};-25% Hunger increase rate"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystal"
+      - "Tier1;Cash{500000};$500,000"
+      - "Tier2;Item{factioncrystal;amount=32};32x Faction Crystal"
+      - "Tier2;Cash{2000000};$2,000,000"
+  natural growth:
+    slot: 10
+    max tier: 5
+    item: "wheat"
+    name: "&b&lNatural Growth"
+    desc:
+      - "&7Increase growth speed of crops in claims."
+    perks:
+      - "Tier1;SetCropGrowthMultiplier{1.25};125% Growth Speed"
+      - "Tier2;SetCropGrowthMultiplier{1.50};150% Growth Speed"
+      - "Tier3;SetCropGrowthMultiplier{2.00};200% Growth Speed"
+      - "Tier4;SetCropGrowthMultiplier{2.50};250% Growth Speed"
+      - "Tier5;SetCropGrowthMultiplier{3.00};300% Growth Speed"
+    requirements:
+      - "Tier1;Cash{5000000};$5,000,000"
+      - "Tier2;Cash{10000000};$10,000,000"
+      - "Tier3;Cash{15000000};$15,000,000"
+      - "Tier4;Cash{20000000};$20,000,000"
+      - "Tier5;Cash{25000000};$25,000,000"
+  home advantage:
+    slot: 11
+    max tier: 3
+    item: "gold_chestplate"
+    name: "&b&lHome Advantage"
+    desc:
+      - "&7Decrease enemy damage dealt to"
+      - "&7friendly players in your faction claims."
+    perks:
+      - "Tier1;SetEnemyDamageMultiplier{0.90};10% Damage Reduction"
+      - "Tier2;SetEnemyDamageMultiplier{0.80};20% Damage Reduction"
+      - "Tier3;SetEnemyDamageMultiplier{0.70};30% Damage Reduction"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=100};100x Faction Crystals"
+      - "Tier2;Cash{25000000};$25,000,000"
+  soul mastery:
+    slot: 12
+    max tier: 3
+    item: "nether_star"
+    name: "&b&lSoul Mastery"
+    desc:
+      - "&7Decreases soul cost of passive soul enchantment."
+    perks:
+      - "Tier1;DecreaseRarityGemCost{SOUL:0.05};-5% Soul Cost"
+      - "Tier2;DecreaseRarityGemCost{SOUL:0.10};-10% Soul Cost"
+      - "Tier3;DecreaseRarityGemCost{SOUL:0.25};-25% Soul Cost"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier2;Cash{20000000};$20,000,000"
+  warzone control:
+    slot: 13
+    max tier: 3
+    item: "diamond_sword"
+    name: "&b&lWarzone Control"
+    desc:
+      - "&7Increases /warzone \"Last Man Standing\""
+      - "&7$ and XP payouts."
+    perks:
+      - "Tier1;LMSMultiplier{1.25};+1.25x LMS Rewards"
+      - "Tier2;LMSMultiplier{1.50};+1.50x LMS Rewards"
+      - "Tier3;LMSMultiplier{2.00};+2.00x LMS Rewards"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=32};32x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=64};64x Faction Crystals"
+      - "Tier2;Cash{20000000};$20,000,000"
+  outpost control:
+    slot: 14
+    max tier: 5
+    item: "diamond_chestplate"
+    name: "&b&lOutpost Control"
+    desc:
+      - "&7Capture and Assult /outposts faster."
+    perks:
+      - "Tier1;SetOutpostCapMultiplier{1.10};+10% Outpost Cap Speed"
+      - "Tier2;SetOutpostCapMultiplier{1.25};+25% Outpost Cap Speed"
+      - "Tier3;SetOutpostCapMultiplier{1.50};+50% Outpost Cap Speed"
+      - "Tier4;SetOutpostCapMultiplier{2.00};+100% Outpost Cap Speed"
+      - "Tier5;SetOutpostCapMultiplier{2.25};+125% Outpost Cap Speed"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
+      - "Tier1;Cash{2500000};$2,500,000"
+      - "Tier2;Item{factioncrystal;amount=32};32x Faction Crystals"
+      - "Tier2;Cash{5000000};$5,000,000"
+  conquest mastery:
+    slot: 15
+    item: "chest"
+    name: "&b&lConquest Mastery"
+    desc:
+      - "&7Deal more damage to Conquest Chest bosses."
+    perks:
+      - "Tier1;SetConquestMobDamageMultiplier{2.50};+150% Conquest Mob Damage"
+      - "Tier2;SetConquestMobDamageMultiplier{3.00};+200% Conquest Mob Damage"
+      - "Tier3;SetConquestMobDamageMultiplier{3.50};+250% Conquest Mob Damage"
+      - "Tier4;SetConquestMobDamageMultiplier{4.00};+300% Conquest Mob Damage"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{4000000};$4,000,000"
+      - "Tier2;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier2;Cash{8000000};$8,000,000"
+  ender farming:
+    slot: 16
+    max tier: 3
+    item: "ender_portal_frame"
+    name: "&b&lEnder Farming"
+    desc:
+      - "&7Multiplies Ender Monster killstreak rewards."
+    perks:
+      - "Tier1;;2.0x Killstreak Multiplier"
+      - "Tier2;;3.0x Killstreak Multiplier"
+      - "Tier3;;5.0x Killstreak Multiplier"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+      - "Tier1;Cash{10000000};$10,000,000"
+      - "Tier2;Item{factioncrystal;amount=80};80x Faction Crystals"
+      - "Tier2;Cash{20000000};$20,000,000"
+  boss mastery:
+    slot: 17
+    item: "player_head_item"
+    name: "&b&lBoss Mastery"
+    desc:
+      - "&7Increases damage dealt to Boss monsters."
+    perks:
+      - "Tier1;SetBossDamageMultiplier{1.25};+25% Boss Damage"
+      - "Tier2;SetBossDamageMultiplier{1.50};+50% Boss Damage"
+      - "Tier3;SetBossDamageMultiplier{1.75};+75% Boss Damage"
+      - "Tier4;SetBossDamageMultiplier{2.00};+100% Boss Damage"
+    requirements:
+      - "Tier1;Item{factioncrystal;amount=32};32x Faction Crystals"
+      - "Tier1;Cash{5000000};$5,000,000"
+      - "Tier2;Item{factioncrystal;amount=64};64x Faction Crystals"
+      - "Tier2;Cash{10000000};$10,000,000"
+  #
+  heroic well fed:
+    slot: 29
+    type: HEROIC
+    item: "cooked_beef"
+    name: "&6&lHeroic Well Fed"
+    desc:
+      - "&7Reduces rate at which faction members"
+      - "&7get hungry and need to /feed."
+    perks:
+      - "Tier1;SetHungerMultiplier{0.70};-30% Hunger increase rate"
+      - "Tier2;SetHungerMultiplier{0.65};-35% Hunger increase rate"
+      - "Tier3;SetHungerMultiplier{0.55};-45% Hunger increase rate"
+      - "Tier4;SetHungerMultiplier{0.50};-50% Hunger increase rate"
+    requirements:
+      - "Tier1;FactionUpgrade{well-fed:level=4};Well Fed IV /f upgrade"
+      - "Tier1;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      - "Tier1;Cash{5000000};$5,000,000"
+      - "Tier2;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+  escape artist:
+    slot: 30
+    type: HEROIC
+    item: "watch"
+    name: "&6&lEscape Artist"
+    desc:
+      - "&7Reduces Combat Tag Timer"
+    perks:
+      - "Tier1;ReduceCombatTagTimer{0.25};-0.25s Combat Tag Timer"
+      - "Tier2;ReduceCombatTagTimer{0.50};-0.5s Combat Tag Timer"
+      - "Tier3;ReduceCombatTagTimer{1.00};-1.0s Combat Tag Timer"
+      - "Tier4;ReduceCombatTagTimer{2.00};-2.0s Combat Tag Timer"
+    requirements:
+      - "Tier1;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=8};8x Heroic Faction Crystals"
+      - "Tier1;Cash{20000000};$20,000,000"
+      - "Tier2;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+  fast enderpearl:
+    slot: 31
+    type: HEROIC
+    item: "ender_pearl"
+    name: "&6&lFast Enderpearl"
+    desc:
+      - "&7Reduces Enderpearl Cooldown"
+    perks:
+      - "Tier1;ReduceEnderpearlCooldown{0.50};-0.5s Enderpearl Cooldown"
+      - "Tier2;ReduceEnderpearlCooldown{1.00};-1.0s Enderpearl Cooldown"
+      - "Tier3;ReduceEnderpearlCooldown{1.25};-1.25s Enderpearl Cooldown"
+      - "Tier4;ReduceEnderpearlCooldown{2.00};-2.0s Enderpearl Cooldown"
+    requirements:
+      - "Tier1;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals"
+      - "Tier1;Cash{25000000};$25,000,000"
+      - "Tier2;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+  dungeon runner:
+    slot: 32
+    max tier: 3
+    type: HEROIC
+    item: "eye_of_ender"
+    name: "&6&lDungeon Runner"
+    desc:
+      - "&7Reduces the time it takes for"
+      - "&7a Dungeons Portal to close."
+    perks:
+      - "Tier1;SetDungeonPortalAppearanceTime{90.00};90s Dungeons Portal Close Time"
+      - "Tier2;SetDungeonPortalAppearanceTime{80.00};80s Dungeons Portal Close Time"
+      - "Tier3;SetDungeonPortalAppearanceTime{45.00};45s Dungeons Portal Close Time"
+    requirements:
+      - "Tier1;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals"
+      - "Tier1;Cash{25000000};$25,000,000"
+      - "Tier2;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+  dungeon looter:
+    slot: 33
+    max tier: 6
+    type: HEROIC
+    item: "chest"
+    name: "&6&lDungeon Looter"
+    desc:
+      - "&7Reduces the time it takes to"
+      - "&7receive loot for completing a dungeon."
+    perks:
+      - "Tier1;ReduceDungeonLootRedeemable{4:0:0};-4h Loot Cooldown"
+      - "Tier2;ReduceDungeonLootRedeemable{8:0:0};-8h Loot Cooldown"
+      - "Tier3;ReduceDungeonLootRedeemable{12:0:0};-12h Loot Cooldown"
+      - "Tier4;ReduceDungeonLootRedeemable{18:0:0};-18h Loot Cooldown"
+      - "Tier5;ReduceDungeonLootRedeemable{24:0:0};-24h Loot Cooldown"
+      - "Tier6;ReduceDungeonLootRedeemable{36:0:0};-36h Loot Cooldown"
+    requirements:
+      - "Tier1;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=10};10x Heroic Faction Crystals"
+      - "Tier1;Cash{50000000};$50,000,000"
+      - "Tier2;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+      - "Tier5;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+      - "Tier6;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  heroic soul mastery:
+    slot: 38
+    max tier: 2
+    type: HEROIC
+    item: "nether_star"
+    name: "&6&lHeroic Soul Mastery"
+    desc:
+      - "&7Decreases soul cost of passive soul enchantments."
+    perks:
+      - "Tier1;DecreaseRarityGemCost{SOUL:30};-30% Soul Cost"
+      - "Tier2;DecreaseRarityGemCost{SOUL:45};-45% Soul Cost"
+    requirements:
+      - "Tier1;FactionUpgrade{soul mastery:level=3};Soul Mastery III /f upgrade"
+      - "Tier1;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=15};15x Heroic Faction Crystals"
+      - "Tier1;Cash{75000000};$75,000,000"
+      - "Tier2;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
+  kit evolution:
+    slot: 39
+    max tier: 5
+    type: HEROIC
+    item: "diamond_axe"
+    name: "&6&lKit Evolution"
+    desc:
+      - "&7Increases the chance to level up a /vkit."
+    perks:
+      - "Tier1;IncreaseVkitLevelingChance{10};+10% chance of leveling /vkit"
+      - "Tier2;IncreaseVkitLevelingChance{15};+15% chance of leveling /vkit"
+      - "Tier3;IncreaseVkitLevelingChance{20};+20% chance of leveling /vkit"
+      - "Tier4;IncreaseVkitLevelingChance{30};+30% chance of leveling /vkit"
+      - "Tier5;IncreaseVkitLevelingChance{45};+45% chance of leveling /vkit"
+    requirements:
+      - "Tier1;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      - "Tier1;Cash{50000000};$50,000,000"
+      - "Tier2;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      - "Tier5;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+  dungeon master:
+    slot: 40
+    type: HEROIC
+    item: "chest"
+    name: "&6&lDungeon Master"
+    desc:
+      - "&7Gain an increasing chance to unlock"
+      - "&7a bonus item from a Dungeons Lootbag."
+    perks:
+      - "Tier1;SetDungeonLootbagBonus{5:1};5% chance for +1 Lootbag item"
+      - "Tier2;SetDungeonLootbagBonus{8:1};8% chance for +1 Lootbag item"
+      - "Tier3;SetDungeonLootbagBonus{15:1};15% chance for +1 Lootbag item"
+      - "Tier4;SetDungeonLootbagBonus{25:1};25% chance for +1 Lootbag item"
+    requirements:
+      - "Tier1;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
+      - "Tier1;Cash{100000000};$100,000,000"
+      - "Tier2;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
+  heroic boss mastery:
+    slot: 41
+    max tier: 3
+    type: HEROIC
+    item: "player_head_item"
+    name: "&6&lHeroic Boss Mastery"
+    desc:
+      - "&7Increases damage dealt to Boss monsters."
+    perks:
+      - "Tier1;SetBossDamageMultiplier{2.05};+105% Boss Damage"
+      - "Tier2;SetBossDamageMultiplier{2.15};+115% Boss Damage"
+      - "Tier3;SetBossDamageMultiplier{2.25};+125% Boss Damage"
+    requirements:
+      - "Tier1;FactionUpgrade{boss mastery:level=4};Boss Mastery IV /f upgrade"
+      - "Tier1;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=16};16x Heroic Faction Crystals"
+      - "Tier2;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+  maverick:
+    slot: 42
+    type: HEROIC
+    item: "diamond_chestplate"
+    name: "&6&lMaverick"
+    desc:
+      - "&7Reduces damage received from Armor Set"
+      - "&7bonuses and passive abilities."
+    perks:
+      - "Tier1;SetIncomingArmorSetDamageMultiplier{0.90};-10% Damage from Armor Sets"
+      - "Tier2;SetIncomingArmorSetDamageMultiplier{0.85};-15% Damage from Armor Sets"
+      - "Tier3;SetIncomingArmorSetDamageMultiplier{0.75};-25% Damage from Armor Sets"
+      - "Tier4;SetIncomingArmorSetDamageMultiplier{0.55};-45% Damage from Armor Sets"
+    requirements:
+      - "Tier1;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+      - "Tier1;Item{heroicfactioncrystal;amount=25};25x Heroic Faction Crystals"
+      - "Tier1;Cash{150000000};$150,000,000"
+      - "Tier2;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+      - "Tier3;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+      - "Tier4;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+#

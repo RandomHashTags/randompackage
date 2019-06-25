@@ -1,0 +1,79 @@
+# Made by RandomHashTags
+messages:
+  cannot withdraw:
+    - "&c&l(!)&r &cYou cannot withdraw items from the kit preview."
+    - "&7Unlock access by defeating a Fallen Hero purchased at:"
+    - "&7&nbuy.yourserver.com"
+  not unlocked kit:
+    - "&c&l(!)&r &cYou have &nnot&r &cunlocked that Vkit!"
+    - "&7Unlock access by defeating a Fallen Hero purchased at &nbuy.yourserver.com"
+    - "&7** You can preview the contents of this kit by right-clicking it in the /vkit menu."
+  cooldown:
+    - "&eYou can obtain this vkit again in &7{TIME}"
+  # Reset
+  target doesnt exist:
+    - "&c&l(!)&r &cThat player isn't online!"
+  success:
+    - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's vkits!"
+  # Fallen Heros
+  already have max:
+    - "&c&l(!) &cYou already have this &9&l/VKIT&c at max level!"
+  not in warzone:
+    - "&c&l(!) &r&cYou can only summon Fallen Heroes in the &4WarZone!"
+  redeem:
+    - "&9&l(!) You've UNLOCKED the &r{NAME}&r &9&l/VKIT!"
+  #
+  upgrade broadcast:
+    - "&7&l**&r &f{PLAYER}'s {VKIT}&r &7/vkit has evolved to level &f&n{LEVEL}&r&7!"
+  upgrade:
+    - " "
+    - "&e&l>>&r &eCongratulations! Your &r{VKIT}&r &e/vkit is now level &n{LEVEL}&r&e!"
+    - "&7You will now receive higher enchantment levels the next time you claim this /vkit!"
+#
+items:
+  cooldown:
+    item: "yellow_stained_glass_pane"
+    name: "&c&lVkit Unavailable"
+    lore:
+    - "{LORE}"
+    - " "
+    - "&eYou can obtain this vkit again in"
+    - "&7{TIME}"
+  preview:
+    title: "Server Kit Preview"
+    item: "black_stained_glass_pane"
+    name: " "
+  previous menu: # Opens /vkit
+    item: "arrow"
+    name: "&c&lPrevious Menu"
+    lore:
+    - "&7Click to return to the"
+    - "&7Evolution Kit main menu!"
+  #
+  omni gem:
+    item: "diamond"
+    name: "&6&lOmni Gem (&r&d/vkit&6&l)"
+    lore:
+    - "&7Right click to select any"
+    - "&d/vkit &7to level up or"
+    - "&7redeem if not unlocked!"
+#
+permissions:
+  unlocked:
+  - " "
+  - "&a&lUNLOCKED"
+  - "&7Click to receive kit."
+  #
+  locked:
+    item: "red_stained_glass_pane"
+    lore:
+    - " "
+    - "&c&lLOCKED"
+    - "&7Unlock at &nbuy.yourserver.com"
+  preview:
+  - "&7Right-click to preview kit"
+#
+gui:
+  title: "Evolution Kits"
+  size: 9
+#

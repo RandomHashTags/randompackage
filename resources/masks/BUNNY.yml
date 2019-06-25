@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+texture: "http://textures.minecraft.net/texture/234cd6bbec5b4976f93e3f2415567248626877f17baf89a37220506f5957b97c"
+#
+item:
+  item: "player_head_item"
+  name: "&d&lBunny Mask"
+  lore:
+  - "&c1.5x Mobs from Spawners in Chunk"
+  - "&7And so the gods declared to all"
+  - "&7the easter bunnies: be fruitful"
+  - "&7and multiply."
+  - " &6&l*&r &6Easter 2019"
+#
+attributes:
+  - ""
+#
+added lore:
+  - "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.5x Mobs from Spawners in Chunk&f)"

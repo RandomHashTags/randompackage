@@ -1,0 +1,14 @@
+# Made by RandomHashTags
+settings:
+  name: "Bigger Spender"
+  completion: 3000000
+  expiration: 86400
+#
+lore:
+- "&7Spend $3,000,000 in /shop"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "ShopPurchaseItem;+cost"

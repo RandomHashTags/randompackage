@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Smoke Bomb"
+lore:
+- "&eWhen you are near death, you will"
+- "&espawn a smoke bomb to distract your"
+- "&eenemies."
+#
+max level: 8
+applies to: "helmet"
+#
+alchemist: "2100:2300:2500:2700:2900:3100:3300"
+tinkerer: "59:68:77:86:95:104:113:122"
+#
+attributes:
+- ""

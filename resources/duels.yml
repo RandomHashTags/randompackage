@@ -1,0 +1,128 @@
+# Made by RandomHashTags
+messages:
+  help:
+    - " "
+    - "&e&l&nDuel Commands"
+    - "&e/duel <name>"
+    - "&7Invite a player to a settings specific duel."
+    - "&e/duel ranked"
+    - "&7Enter the duel ranked queue."
+    - "&e/duel godset"
+    - "&7Access the Duel Godset edit menu."
+    - "&e/duel top"
+    - "&7View top Duel ELO players."
+    - "&e/duel toggle"
+    - "&7Toggle duel invites from other players."
+    - "&e/duel collect"
+    - "&7Access your Stake Collection Bin."
+    - "&e/duel spectate"
+    - "&7Access the duel spectate menu."
+    - "&e/duel unranked"
+    - "&7Enter the Global Duel Queue to duel a random opponent."
+    - "&e/duel custom"
+    - "&7Customize your duel kit loadouts."
+    - " "
+  #
+  spectate arena no active duel:
+    - "&cThis arena does not have an active duel."
+  #
+  toggle off:
+    - "&e&l(!)&r &eDuels have been toggled &c&lOFF"
+  toggle on:
+    - "&e&l(!)&r &eDuels have been toggled &a&lON"
+  #
+  cannot duel self:
+    - "&cYou cannot duel yourself."
+  cannot duel you toggled off:
+    - "&c&l(!)&r &cYou have duels toggled off."
+  cannot duel player toggled off:
+    - "&c&l(!)&r &cThat player has duels toggled off."
+  cannot duel nonexistent player:
+    - "&cThe player '{INPUT}' does not exist."
+  #
+  top:
+    - " "
+    - "&b&lTop Ranked Players (&r&d{PAGE}&b&l/&r&d{MAX_PAGE}&b&l)"
+    - "&d&l{RANKING}.&r &b{PLAYER} &7({ELO} ELO)"
+    - " "
+  #
+  godset:
+    save:
+      - "&aDuel Godset changes saved."
+    item doesnt have any custom enchants:
+      - "&cThis item does not have any Custom Enchants."
+    added enchant:
+      - "{COLOR}&l+&r {COLOR}{ENCHANT} {LEVEL} [{ITEM}] ({SLOTS_LEFT} slots left)"
+    removed enchant:
+      - "{COLOR}&l-&r {COLOR}{ENCHANT} {LEVEL} [{ITEM}] ({SLOTS_LEFT} slots left)"
+  #
+  joined ranked queue:
+    - "&a&l(!)&r &aYou have been placed in the &lRANKED&r &aduel queue!"
+    - "&aUse &n/duel leave&r &ato leave the queue."
+    - "&7Searching for an opponent..."
+  left ranked queue:
+    - "&cYou have been removed from the Ranked Duel Queue."
+  #
+  no players found in unranked queue:
+    - "&c&l(!)&r &cNo players found in queue, please create a duel."
+  #
+  canelled duel due to closing selection:
+    - "&e&l(!)&r &eYou closed the &n{SELECTION}&r &eselection."
+    - "&7The duel has been cancelled."
+  #
+  duel collection empty:
+    - "&cYou do not have any items in your stake collection bin."
+#
+top settings:
+  show each page: 10
+  record top: 90
+#
+type:
+  title: "Duel Type"
+  size: 9
+  #
+  ranked:
+    slot: 3
+    item: "diamond_sword"
+    name: "&a&lRanked&r &7(&a&n{QUEUE}&r &7in queue)"
+    lore:
+    - "&a&lELO:&r &a{ELO}"
+    - "&a&lRank:&r &a{RANK}"
+    - "&7Click to enter Ranked Duel Mode."
+    - "&7Fight using your custom &n/duel godset&r&7!"
+  unranked:
+    slot: 5
+    item: "diamond_chestplate"
+    name: "&a&lUnranked"
+    lore:
+    - "&7Click to enter the Unranked Duel Queue."
+#
+godset:
+  title: "Duel God Set"
+  size: 9
+#
+settings:
+  title: "Duel Settings"
+  size: 27
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  status:
+    enabled: "&a&lENABLED"
+    disabled: "&c&lDISABLED"
+    setting enabled: "&a&lON"
+    setting disabled: "&c&lOFF"
+  #
+  added lore:
+    - "{STATUS}"
+    - " "
+    - "&7Click to &ntoggle&r &7this setting."
+  #
+  confirm settings:
+    slot: 22
+    item: "lime_stained_glass_pane"
+    name: "&e&lConfirm Settings"
+    lore:
+    - " "
+    - "&eGolden Apples: {STATUS}"
+#

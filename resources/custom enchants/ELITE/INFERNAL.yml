@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Infernal"
+lore:
+- "&eExplosive fire effect."
+#
+max level: 3
+applies to: "bow"
+#
+alchemist: "3500:4500"
+tinkerer: "75:83:91"
+#
+attributes:
+- "ShootBow;ignite{[arrow]200}"
+- "ArrowHit;chance=30+(10*level);ignite{nearbyEnemies{shooter:shooter:5+(level*2):5+(level*2):5+(level*2)}random{40*level:60+(40*level)}}"

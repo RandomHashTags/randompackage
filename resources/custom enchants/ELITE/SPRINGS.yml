@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Springs"
+lore:
+- "&eGives jump boost."
+#
+max level: 3
+applies to: "boots"
+#
+alchemist: "2000:3500"
+tinkerer: "78:86:94"
+#
+attributes:
+- "ArmorEquip;addPotionEffect{[player]jump:level-1:99999:true}"
+- "ArmorUnequip;removePotionEffect{[player]jump:true}"
+- "ArmorPieceBreak;removePotionEffect{[player]jump:true}"

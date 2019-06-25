@@ -1,0 +1,8 @@
+.idea/**
+gradle/**
+.gradle/**
+randompackage-common/build/**
+randompackage-spigot/build/**
+randompackage-spigot/out/**
+randompackage-sponge/build/**
+randompackage-sponge/out/**

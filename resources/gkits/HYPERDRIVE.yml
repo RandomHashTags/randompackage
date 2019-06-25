@@ -1,0 +1,59 @@
+# Made by RandomHashTags
+settings:
+  heroic: true
+  max tier: 3
+  cooldown: 259200
+  fallen hero: GKIT
+#
+gui settings:
+  slot: 1
+  #
+  item: "feather"
+  name: "Hyperdrive Kit"
+  lore:
+  - " "
+  - "&f&l* &6&lHeroic Hermes Blade of Swiftness"
+  - "&f&l* &6&lHeroic Hyper Helmet of Hermes"
+  - "&f&l* &eHeroic Hyper Chestplate of Mercury"
+  - "&f&l* &eHeroic Hyper Leggings of Nike"
+  - " "
+  - "&7The most agile equipment in the galaxy."
+  - "&6* Thanksgiving 2015"
+#
+items:
+  helmet:
+    item: "diamond_helmet"
+    name: "&6&lHeroic Hyper Helmet of Hermes"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Valor;Smoke Bomb;Trickster;Angelic;Clarity;Overload}"
+    - "&6&oA legendary agile helmet."
+  chestplate:
+    item: "diamond_chestplate"
+    name: "&eHeroic Hyper Chestplate of Mercury"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Shockwave;Guardians;Tank}"
+    - "&e&oAn extremely light chestpiece."
+  leggings:
+    item: "diamond_leggings"
+    name: "&eHeroic Hyper Leggings of Nike"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Obsidianshield}"
+    - "&e&oSo light, you forget you are wearing them!"
+  boots:
+    item: "diamond_boots"
+    name: "&eHeroic Hyper Boots of Hermes"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Enlighted;Ender Shift;Springs;Gears}"
+    - "&e&oThe legendary boots of Hermes."
+  sword:
+    item: "diamond_sword"
+    name: "&6&lHeroic Hermes Blade of Swiftness"
+    lore:
+    - "VEnchants{Sharpness5;FireAspect2;Unbreaking2}"
+    - "RPEnchants{Rage;Trap;Skill Swipe;Poison;Paralyze;Lifesteal;Inquisitive;Featherweight;Execute;Disarmor;Double Strike}"
+    - "&6&oA weapon unrivaled in destructive speed."
+#

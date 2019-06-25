@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+enabled: true
+#
+name: "Ender Shift"
+lore:
+- "&eGives a speed/health boost at low hp."
+#
+max level: 3
+applies to: "helmet"
+#
+alchemist: "2500:3000"
+tinkerer: "103:119:135"
+#
+attributes:
+- "PvA;Lucky+15+level;if{[victim]healthIs<=:5+level:->addPotionEffect{[victim]speed:level-1:80+(20*level)}&&addPotionEffect{[victim]health_boost:level-1:80+(20*level)}}"
