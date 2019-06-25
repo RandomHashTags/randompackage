@@ -5,7 +5,7 @@ messages:
 #
 items:
   equipment lootbox:
-    item: "chest:0"
+    item: "chest"
     name: "&6&lEquipment Lootbox&r &7(Right Click)"
     lore:
     - " "

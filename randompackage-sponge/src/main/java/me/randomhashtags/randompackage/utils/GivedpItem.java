@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
-import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.api.Kits;
-import me.randomhashtags.randompackage.api.Titles;
+import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
 import me.randomhashtags.randompackage.utils.classes.*;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
@@ -15,8 +14,8 @@ import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
 import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
 import me.randomhashtags.randompackage.utils.classes.servercrate.ServerCrate;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
-import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
+import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
@@ -85,7 +84,7 @@ public class GivedpItem extends RandomPackageAPI {
         if(isEnabled) return;
         save(null, "items.yml");
         itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         customitems = new HashMap<>();
         final ConfigurationSection cs = itemsConfig.getConfigurationSection("custom items");
         if(cs != null) {
@@ -123,7 +122,7 @@ public class GivedpItem extends RandomPackageAPI {
         items = null;
         customitems = null;
         air = null;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public ItemStack valueOf(String input) {
@@ -151,15 +150,26 @@ public class GivedpItem extends RandomPackageAPI {
             final CollectionFilter cf = CollectionFilter.getCollectionFilter();
             return cf.isEnabled ? cf.getCollectionChest("all") : air;
         } else if(input.startsWith("customarmor:")) {
-            final String[] b = input.split(":");
-            String type = b.length == 2 ? "random" : b[2];
-            final HashMap<String, ArmorSet> L = ArmorSet.sets;
-            final ArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
-            if(a != null) {
-                final int R = random.nextInt(4);
-                type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
+            if(CustomArmor.getCustomArmor().isEnabled) {
+                final String[] b = input.split(":");
+                String type = b.length == 2 ? "random" : b[2];
+                final HashMap<String, ArmorSet> L = ArmorSet.sets;
+                final ArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
+                if(a != null) {
+                    final int R = random.nextInt(4);
+                    type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
+                }
+                item = a != null && type != null ? type.equals("helmet") ? a.getHelmet() : type.equals("chestplate") ? a.getChestplate() : type.equals("leggings") ? a.getLeggings() : a.getBoots() : null;
+                if(item != null) {
+                    itemMeta = item.getItemMeta(); lore.clear();
+                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                    lore.addAll(a.getArmorLore());
+                    itemMeta.setLore(lore); lore.clear();
+                    item.setItemMeta(itemMeta);
+                }
+                return item;
             }
-            return a != null && type != null ? type.equals("helmet") ? a.getHelmet() : type.equals("chestplate") ? a.getChestplate() : type.equals("leggings") ? a.getLeggings() : a.getBoots() : air;
+            return air;
         } else if(input.startsWith("customboss")) {
             final HashMap<String, CustomBoss> L = CustomBoss.bosses;
             final CustomBoss b = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;

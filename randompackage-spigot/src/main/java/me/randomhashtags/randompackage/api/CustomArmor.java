@@ -195,7 +195,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
-		if(i != null && i.hasItemMeta() && i.getItemMeta().equals(equipmentLootbox.getItemMeta()) && i.getType().equals(equipmentLootbox.getType())) {
+		if(i != null && i.isSimilar(equipmentLootbox)) {
 			final Player player = event.getPlayer();
 			event.setCancelled(true);
 			player.updateInventory();
@@ -205,7 +205,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	}
 
 	public ItemStack getRandomEquipmentLootboxLoot() {
-		final List<String> r = config.getStringList("items.equipment-lootbox.rewards");
+		final List<String> r = config.getStringList("items.equipment lootbox.rewards");
 		String l = r.get(random.nextInt(r.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[random.nextInt(l.split("\\|\\|").length)];
 		return givedpitem.valueOf(l).clone();

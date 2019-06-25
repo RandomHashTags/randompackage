@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class RPEvents extends RandomPackageAPI {
     public void enable() {
         if(isEnabled) return;
         isEnabled = true;
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
 
         for(Player p : Sponge.getServer().getOnlinePlayers()) {
             RPPlayer.get(p.getUniqueId()).load();
@@ -32,20 +33,19 @@ public class RPEvents extends RandomPackageAPI {
             p.unload();
         }
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void backup() {
         for(RPPlayer p : RPPlayer.players.values()) p.backup();
     }
 
-
     @Listener
-    private void playerJoinEvent(PlayerJoinEvent event) {
-        RPPlayer.get(event.getPlayer().getUniqueId()).load();
+    private void playerJoinEvent(ClientConnectionEvent.Join event) {
+        RPPlayer.get(event.getTargetEntity().getUniqueId()).load();
     }
     @Listener
-    private void playerQuitEvent(PlayerQuitEvent event) {
-        RPPlayer.get(event.getPlayer().getUniqueId()).unload();
+    private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+        RPPlayer.get(event.getTargetEntity().getUniqueId()).unload();
     }
 }

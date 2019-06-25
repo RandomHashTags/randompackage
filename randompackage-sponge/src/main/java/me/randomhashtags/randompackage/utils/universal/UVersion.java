@@ -10,10 +10,16 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.Firework;
+import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.InventoryArchetype;
+import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.property.InventoryDimension;
+import org.spongepowered.api.item.inventory.property.InventoryTitle;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
@@ -38,6 +44,7 @@ public class UVersion {
 
     public final RandomPackage randompackage = RandomPackage.getPlugin;
     public final PluginManager pluginmanager = Sponge.getPluginManager();
+    public final EventManager eventmanager = Sponge.getEventManager();
     public final Random random = new Random();
 
     public final String version = Sponge.getVersion();
@@ -98,6 +105,14 @@ public class UVersion {
             l += getRemainingDouble(input.split("s")[0])*1000;
         }
         return l;
+    }
+    public String getTitle(InventoryArchetype type) {
+        final InventoryTitle t = (InventoryTitle) type.getProperty(InventoryTitle.PROPERTY_NAME).get().getValue();
+        return t.getValue().toPlain();
+    }
+    public int getSize(InventoryArchetype type) {
+        final InventoryDimension t = (InventoryDimension) type.getProperty(InventoryDimension.PROPERTY_NAME).get().getValue();
+        return t.getColumns()*t.getRows();
     }
     public void spawnFirework(Firework firework, Location loc) {
         if(firework != null) {

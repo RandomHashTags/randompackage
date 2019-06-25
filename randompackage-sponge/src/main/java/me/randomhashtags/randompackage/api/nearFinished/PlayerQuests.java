@@ -13,7 +13,11 @@ import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.playerquests.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.classes.playerquests.PlayerQuest;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
+import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -59,7 +63,7 @@ public class PlayerQuests extends EventAttributes {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "player quests.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "player quests.yml"));
@@ -172,7 +176,7 @@ public class PlayerQuests extends EventAttributes {
         shopitems = null;
         tokencost = null;
         PlayerQuest.deleteAll();
-        eventmanager.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {
@@ -310,7 +314,7 @@ public class PlayerQuests extends EventAttributes {
     }
 
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final String t = event.getView().getTitle(), s = shop.getTitle();
@@ -384,7 +388,7 @@ public class PlayerQuests extends EventAttributes {
         }
     }
 
-    @EventHandler
+    @Listener
     private void entityDeathEvent(EntityDeathEvent event) {
         final Player player = event.getEntity().getKiller();
         if(player != null) {
@@ -394,7 +398,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler
+    @Listener
     private void shopPurchaseEvent(ShopPurchaseEvent event) {
         final Player player = event.player;
         if(player != null) {
@@ -404,7 +408,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler
+    @Listener
     private void shopSellEvent(ShopSellEvent event) {
         final Player player = event.player;
         if(player != null) {
@@ -414,7 +418,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler
+    @Listener
     private void jackpotPurchaseTicketsEvent(JackpotPurchaseTicketsEvent event) {
         final Player player = event.player;
         if(player != null) {
@@ -424,7 +428,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void serverCrateOpenEvent(ServerCrateOpenEvent event) {
         final Player player = event.player;
         if(player != null) {
@@ -434,7 +438,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         if(player != null) {
@@ -444,9 +448,9 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler
+    @Listener
     private void fallenHeroSlainEvent(FallenHeroSlainEvent event) {
-        final LivingEntity l = event.killer;
+        final Living l = event.killer;
         if(l instanceof Player) {
             final Player player = (Player) l;
             final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
@@ -455,7 +459,7 @@ public class PlayerQuests extends EventAttributes {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void randomizationScrollUseEvent(RandomizationScrollUseEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
@@ -463,7 +467,7 @@ public class PlayerQuests extends EventAttributes {
             doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void playerClaimEnvoyCrateEvent(PlayerClaimEnvoyCrateEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
@@ -471,7 +475,7 @@ public class PlayerQuests extends EventAttributes {
             doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
         }
     }
-    @EventHandler
+    @Listener
     private void playerApplyCustomEnchantEvent(PlayerApplyCustomEnchantEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
@@ -479,7 +483,7 @@ public class PlayerQuests extends EventAttributes {
             doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();

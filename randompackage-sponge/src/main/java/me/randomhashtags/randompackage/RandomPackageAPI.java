@@ -1,15 +1,21 @@
 package me.randomhashtags.randompackage;
 
+import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.utils.GivedpItem;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.InventoryArchetype;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.property.InventoryTitle;
 
 import java.io.File;
 import java.util.*;
@@ -134,7 +140,7 @@ public class RandomPackageAPI extends UVersion {
         eco = null;
         givedp = null;
         givedpCategories = null;
-        eventmanager.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
     public void saveOtherData() {
         try {
@@ -209,7 +215,7 @@ public class RandomPackageAPI extends UVersion {
             if(B == null) B = givedpitem.valueOf(P);
             if(B != null) {
                 item = B.copy();
-                item.setAmount(amount);
+                item.setQuantity(amount);
                 return item;
             }
             boolean enchanted = config != null && config.getBoolean(path + ".enchanted");
@@ -345,11 +351,13 @@ public class RandomPackageAPI extends UVersion {
         final ItemStack c = event.getCurrentItem();
         if(!event.isCancelled() && c != null && !c.getType().equals(Material.AIR)) {
             final Player player = (Player) event.getWhoClicked();
-            final Inventory top = player.getOpenInventory().getTopInventory();
+            final InventoryArchetype inv = event.getTargetInventory().getArchetype();
+            final String title = getTitle(inv);
+            final int size = getSize(inv);
             final int r = event.getRawSlot();
-            if(event.getView().getTitle().equals(givedp.getTitle()) && r < top.getSize()) {
+            if(title.equals(givedp.getTitle()) && r < size) {
                 player.openInventory(givedpCategories.get(r));
-            } else if(givedpCategories.contains(event.getClickedInventory()) && r < top.getSize()) {
+            } else if(givedpCategories.contains(event.getClickedInventory()) && r < size) {
                 giveItem(player, c);
             } else return;
             event.setCancelled(true);

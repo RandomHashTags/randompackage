@@ -14,10 +14,13 @@ import org.spongepowered.api.plugin.Plugin;
 )
 public class RandomPackage {
 
+    public static RandomPackage getPlugin;
+
     @Inject
     private Logger logger;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
+        getPlugin = this;
     }
 }

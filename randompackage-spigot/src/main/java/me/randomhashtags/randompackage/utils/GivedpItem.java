@@ -161,15 +161,26 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
             final CollectionFilter cf = CollectionFilter.getCollectionFilter();
             return cf.isEnabled ? cf.getCollectionChest("all") : air;
         } else if(input.startsWith("customarmor:")) {
-            final String[] b = input.split(":");
-            String type = b.length == 2 ? "random" : b[2];
-            final HashMap<String, ArmorSet> L = ArmorSet.sets;
-            final ArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
-            if(a != null) {
-                final int R = random.nextInt(4);
-                type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
+            if(CustomArmor.getCustomArmor().isEnabled) {
+                final String[] b = input.split(":");
+                String type = b.length == 2 ? "random" : b[2];
+                final HashMap<String, ArmorSet> L = ArmorSet.sets;
+                final ArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
+                if(a != null) {
+                    final int R = random.nextInt(4);
+                    type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
+                }
+                item = a != null && type != null ? type.equals("helmet") ? a.getHelmet() : type.equals("chestplate") ? a.getChestplate() : type.equals("leggings") ? a.getLeggings() : a.getBoots() : null;
+                if(item != null) {
+                    itemMeta = item.getItemMeta(); lore.clear();
+                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                    lore.addAll(a.getArmorLore());
+                    itemMeta.setLore(lore); lore.clear();
+                    item.setItemMeta(itemMeta);
+                }
+                return item;
             }
-            return a != null && type != null ? type.equals("helmet") ? a.getHelmet() : type.equals("chestplate") ? a.getChestplate() : type.equals("leggings") ? a.getLeggings() : a.getBoots() : air;
+            return air;
         } else if(input.startsWith("customboss")) {
             final HashMap<String, CustomBoss> L = CustomBoss.bosses;
             final CustomBoss b = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
