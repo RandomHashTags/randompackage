@@ -3,14 +3,10 @@ plugins {
 }
 
 dependencies {
-    compile project(':randompackage-common')
     compile 'org.spongepowered:spongeapi:7.0.0'
 }
 
 sponge.plugin.id = pluginId
 
 shadowJar {
-    dependencies {
-        include(dependency(':randompackage-common'))
-    }
 }
