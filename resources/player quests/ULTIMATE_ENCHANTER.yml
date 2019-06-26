@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   name: "Ultimate Enchanter"
   completion: 50
   expiration: 86400

@@ -12,38 +12,19 @@ import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarit
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallenge;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerFishEvent.State;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 
-public class GlobalChallenges extends RandomPackageAPI implements CommandExecutor, Listener {
+public class GlobalChallenges extends RandomPackageAPI {
 
 	public boolean isEnabled = false;
 	private static GlobalChallenges instance;
@@ -377,7 +358,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		return g.get(random.nextInt(g.size()));
 	}
 	
-	@EventHandler
+	@Listener
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
@@ -424,7 +405,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		if(!event.isCancelled()) {
 			final UUID damager = event.getDamager().getUniqueId();
@@ -433,13 +414,13 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 				increase(event, "pvadamage", damager, dmg);
 				final Entity e = event.getEntity();
 				if(e instanceof Player) increase(event, "pvpdamage", damager, dmg);
-				else if(e instanceof LivingEntity) increase(event, "pvedamage", damager, dmg);
+				else if(e instanceof Living) increase(event, "pvedamage", damager, dmg);
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void entityDeathEvent(EntityDeathEvent event) {
-		final LivingEntity e = event.getEntity();
+		final Living e = event.getEntity();
 		final UUID u = e.getUniqueId();
 		if(e instanceof Player) {
 			increase(event, "playerdeaths", u, 1);
@@ -453,7 +434,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
             }
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void blockPlaceEvent(BlockPlaceEvent event) {
 		if(!event.isCancelled()) {
 			final UUID player = event.getPlayer().getUniqueId();
@@ -462,7 +443,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			increase(event, b.getType().name() + ":" + b.getData() + "_placed", player, 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void blockBreakEvent(BlockBreakEvent event) {
 		if(!event.isCancelled()) {
 			final Player player = event.getPlayer();
@@ -474,7 +455,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			increase(event, "blocksminedbymaterial_" + m, u, 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void playerFishEvent(PlayerFishEvent event) {
 		final State s = event.getState();
 		final UUID player = event.getPlayer().getUniqueId();
@@ -489,7 +470,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void playerExpChangeEvent(PlayerExpChangeEvent event) {
 		if(event.getAmount() > 0) {
 			increase(event, "expgained", event.getPlayer().getUniqueId(), event.getAmount());
@@ -498,13 +479,13 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 	/*
 	 * RandomPackage Events
 	 */
-	@EventHandler
+	@Listener
 	private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
 		if(!event.isCancelled()) {
 			increase(event, "alchemistexchanges", event.player.getUniqueId(), 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void playerRevealCustomEnchantEvent(PlayerRevealCustomEnchantEvent event) {
 		if(!event.isCancelled()) {
 			final UUID player = event.player.getUniqueId();
@@ -512,7 +493,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			increase(event, "customenchantsrevealed_" + EnchantRarity.valueOf(event.enchant).getName(), player, 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void coinFlipChallengeEndEvent(CoinFlipEndEvent event) {
 		final UUID winner = event.winner, loser = event.loser;
 		final long wager = event.wager, total = (long) (wager*2*event.tax);
@@ -521,13 +502,13 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		increase(event, "$wonincoinflip", winner, total);
 		increase(event, "$lostincoinflip", loser, total);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void fundDepositEvent(FundDepositEvent event) {
 		if(!event.isCancelled()) {
 			increase(event, "$funddeposited", event.player.getUniqueId(), event.amount);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void customEnchantProcEvent(CustomEnchantProcEvent event) {
 		if(event.player != null && !event.isCancelled()) {
 			final UUID player = event.player.getUniqueId();
@@ -539,20 +520,20 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			increase(event, "customenchantmprocs_" + i.getType().name() + ":" + i.getData().getData(), player, 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void customEnchantApplyEvent(PlayerApplyCustomEnchantEvent event) {
 		final UUID player = event.player.getUniqueId();
 		increase(event, "customenchantsapplied", player, 1);
 		increase(event, "customenchantsapplied_" + EnchantRarity.valueOf(event.enchant).getName(), player, 1);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
 		if(!event.isCancelled()) {
 			final UUID player = event.getPlayer().getUniqueId();
 			increase(event, "enchanterpurchases", player, 1);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void tinkererTradeEvent(TinkererTradeEvent event) {
 		if(!event.isCancelled()) {
 			final UUID player = event.player.getUniqueId();

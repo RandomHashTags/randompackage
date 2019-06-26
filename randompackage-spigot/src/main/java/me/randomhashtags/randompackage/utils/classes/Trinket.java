@@ -12,23 +12,23 @@ public class Trinket {
     public static HashMap<String, Trinket> trinkets;
     private static RandomPackageAPI api;
 
+    private File f;
     private YamlConfiguration yml;
-    private String ymlName, radius, cooldown;
+    private String radius, cooldown;
     private ItemStack item;
-    private List<String> attributes;
 
     public Trinket(File f) {
         if(trinkets == null) {
             trinkets = new HashMap<>();
             api = RandomPackageAPI.getAPI();
         }
+        this.f = f;
         yml = YamlConfiguration.loadConfiguration(f);
-        ymlName = f.getName().split("\\.yml")[0];
-        trinkets.put(ymlName, this);
+        trinkets.put(getYamlName(), this);
     }
 
     public YamlConfiguration getYaml() { return yml; }
-    public String getYamlName() { return ymlName; }
+    public String getYamlName() { return f.getName().split("\\.yml")[0]; }
 
     public String getRadius() {
         if(radius == null) {
@@ -51,8 +51,7 @@ public class Trinket {
         return item.clone();
     }
     public List<String> getAttributes() {
-        if(attributes == null) attributes = yml.getStringList("attributes");
-        return attributes;
+        return yml.getStringList("attributes");
     }
 
     public static void deleteAll() {

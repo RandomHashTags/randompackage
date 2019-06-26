@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -30,11 +31,11 @@ public class ChatEvents extends RandomPackageAPI {
 	public void enable() {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
-		bragDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.display"));
-		itemDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.item.display"));
+		bragDisplay = translateColorCodes(randompackage.getConfig().getString("chat cmds.brag.display"));
+		itemDisplay = translateColorCodes(randompackage.getConfig().getString("chat cmds.item.display"));
 
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
@@ -50,7 +51,7 @@ public class ChatEvents extends RandomPackageAPI {
 		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
 		bragInventories = null;
 		viewingBrag = null;
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 	@Listener
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
@@ -59,7 +60,7 @@ public class ChatEvents extends RandomPackageAPI {
 		if(message.contains("[brag]") || message.contains("[item]")) {
 			final ArrayList<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
 			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			final String format = translateColorCodes(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", event.getMessage().split("\\[").length > 0 ? event.getMessage().split("\\[")[0] : "")), suffix = new TextComponent(event.getMessage().split("]").length > 1 ? event.getMessage().split("]")[1] : "");
 			if(message.contains("[brag]")) {
 				event.setCancelled(true);
@@ -84,7 +85,7 @@ public class ChatEvents extends RandomPackageAPI {
 	public void sendBragMessage(Player player, String message, TextComponent prefix, TextComponent suffix, ArrayList<Player> recipients) {
 		bragInventories.put(player.getUniqueId(), player.getInventory());
 		final TextComponent m = new TextComponent(message);
-		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
+		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateColorCodes(randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
 		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId().toString()));
 		for(Player p : recipients)
 			send(player, p, prefix, m, suffix);
@@ -115,7 +116,7 @@ public class ChatEvents extends RandomPackageAPI {
             hover = hover.replace(s, replacement);
         }
         TextComponent m = new TextComponent(message);
-	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', hover)).create()));
+	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateColorCodes(hover)).create()));
 	    player.spigot().sendMessage(m);
     }
 	
@@ -143,7 +144,7 @@ public class ChatEvents extends RandomPackageAPI {
 			return true;
 		}
 		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.keySet().contains(v)) {
-			player.openInventory(Bukkit.createInventory(player, 45, ChatColor.stripColor(bragDisplay.replace("{PLAYER}", Bukkit.getOfflinePlayer(v).getName()))));
+			player.openInventory(Bukkit.createInventory(player, 45, stripColor(bragDisplay.replace("{PLAYER}", Bukkit.getOfflinePlayer(v).getName()))));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final PlayerInventory bi = bragInventories.get(v);
 			final ItemStack[] con = bi.getContents();
@@ -187,8 +188,8 @@ public class ChatEvents extends RandomPackageAPI {
 		viewingBrag.remove(event.getPlayer().getUniqueId());
 	}
 	@Listener
-	private void playerQuitEvent(PlayerQuitEvent event) {
-		viewingBrag.remove(event.getPlayer().getUniqueId());
+	private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+		viewingBrag.remove(event.getTargetEntity().getUniqueId());
 	}
 
 	private String asNMSCopy(ItemStack itemstack) {

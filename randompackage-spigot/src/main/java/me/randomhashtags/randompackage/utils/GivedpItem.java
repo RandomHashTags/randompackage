@@ -3,6 +3,8 @@ package me.randomhashtags.randompackage.utils;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
+import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
 import me.randomhashtags.randompackage.utils.classes.*;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;
@@ -362,13 +364,18 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
             if(i.isSimilar(items.get("mysterymobspawner"))) {
                 event.setCancelled(true);
                 final List<String> s = itemsConfig.getStringList("mystery mob spawner.reward"), receivemsg = colorizeListString(itemsConfig.getStringList("mystery mob spawner.receive message"));
-                removeItem(player, i, 1);
-                final ItemStack r = d(null, s.get(random.nextInt(s.size())));
-                giveItem(player, r);
-                player.updateInventory();
-                if(!receivemsg.isEmpty()) {
-                    final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner");
-                    for(String a : receivemsg) Bukkit.broadcastMessage(a.replace("{TYPE}", type));
+                final String spawner = s.get(random.nextInt(s.size()));
+                final MysteryMobSpawnerOpenEvent e = new MysteryMobSpawnerOpenEvent(player, spawner);
+                pluginmanager.callEvent(e);
+                if(!e.isCancelled()) {
+                    removeItem(player, i, 1);
+                    final ItemStack r = d(null, spawner);
+                    giveItem(player, r);
+                    player.updateInventory();
+                    if(!receivemsg.isEmpty()) {
+                        final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner");
+                        for(String a : receivemsg) Bukkit.broadcastMessage(a.replace("{TYPE}", type));
+                    }
                 }
             } else if(i.isSimilar(items.get("itemnametag"))) {
                 if(itemnametag.contains(player)) {
@@ -416,20 +423,24 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
         if(itemnametag.contains(player)) {
             itemnametag.remove(player);
             event.setCancelled(true);
-            String message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
-            item = getItemInHand(event.getPlayer());
+            final String message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
+            item = getItemInHand(player);
             if(item == null || item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
             } else if(item.getType().name().endsWith("BOW") || item.getType().name().endsWith("_AXE") || item.getType().name().endsWith("SWORD") || item.getType().name().endsWith("HELMET") || item.getType().name().endsWith("CHESTPLATE") || item.getType().name().endsWith("LEGGINGS") || item.getType().name().endsWith("BOOTS")) {
-                itemMeta = item.getItemMeta(); lore.clear();
-                itemMeta.setDisplayName(message);
-                item.setItemMeta(itemMeta);
-                player.updateInventory();
-                playSound(itemsConfig, "item name tag.sounds.rename item", player, player.getLocation(), false);
-                for(String string : itemsConfig.getStringList("item name tag.rename item")) {
-                    if(string.contains("{NAME}")) string = string.replace("{NAME}", itemMeta.getDisplayName());
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                final ItemNameTagUseEvent e = new ItemNameTagUseEvent(player, item, message);
+                pluginmanager.callEvent(e);
+                if(!e.isCancelled()) {
+                    itemMeta = item.getItemMeta(); lore.clear();
+                    itemMeta.setDisplayName(message);
+                    item.setItemMeta(itemMeta);
+                    player.updateInventory();
+                    playSound(itemsConfig, "item name tag.sounds.rename item", player, player.getLocation(), false);
+                    for(String string : itemsConfig.getStringList("item name tag.rename item")) {
+                        if(string.contains("{NAME}")) string = string.replace("{NAME}", itemMeta.getDisplayName());
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                    }
                 }
             } else {
                 sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename item"), null);

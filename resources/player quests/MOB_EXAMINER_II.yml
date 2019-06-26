@@ -11,4 +11,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- ""
+- "MysteryMobSpawnerOpened;cancelled=false;+1"

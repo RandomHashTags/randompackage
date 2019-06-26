@@ -2,8 +2,10 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.ActiveTrade;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -23,7 +25,7 @@ public class Trade extends RandomPackageAPI {
 	public YamlConfiguration config;
 	private int radius = 0, countdown = 0;
 	private String title = null;
-	private UInventory q = null;
+	private UInventory q;
 	private ItemStack divider, accept, accepting;
 
 	private HashMap<UUID, UUID> requests;

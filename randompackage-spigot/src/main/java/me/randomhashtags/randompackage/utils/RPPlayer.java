@@ -1,8 +1,9 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.Homes;
+import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestExpireEvent;
+import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.nearFinished.PlayerQuests;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
@@ -34,16 +35,21 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+
 public class RPPlayer {
-    private static final String s = File.separator, folder = RandomPackage.getPlugin.getDataFolder() + s + "_Data" + s + "players";
+    private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
     private static final RandomPackageAPI api = RandomPackageAPI.getAPI();
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
+    private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
 
     public static YamlConfiguration fadditions;
 
@@ -274,6 +280,10 @@ public class RPPlayer {
             vkitCooldowns = null;
             mkitCooldowns = null;
             quests = null;
+
+            final BukkitScheduler s = api.scheduler;
+            for(int i : questTasks.get(uuid)) s.cancelTask(i);
+            questTasks.remove(uuid);
 
             jackpotWonCash = 0;
             jackpotTickets = 0;
@@ -766,14 +776,21 @@ public class RPPlayer {
 
     private void loadQuests() {
         if(quests == null) {
-            final Random random = new Random();
             quests = new HashMap<>();
+            questTasks.put(uuid, new ArrayList<>());
             final ConfigurationSection c = yml.getConfigurationSection("quests");
             if(c != null) {
+                final long time = System.currentTimeMillis();
+                final BukkitScheduler scheduler = api.scheduler;
+                final PluginManager pm = api.pluginmanager;
                 for(String s : c.getKeys(false)) {
-                    final PlayerQuest q = PlayerQuest.quests.get(s);
+                    final PlayerQuest q = PlayerQuest.enabled.get(s);
                     final String[] b = yml.getString("quests." + s).split(";");
-                    quests.put(q, new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3])));
+                    final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
+                    if(!a.isExpired()) {
+                        quests.put(q, a);
+                        startExpire(time, scheduler, pm, q, a);
+                    }
                 }
             }
             int permfor = 0;
@@ -784,20 +801,45 @@ public class RPPlayer {
                     permfor = i;
                 }
             }
-            final HashMap<String, PlayerQuest> pq = new HashMap<>(PlayerQuest.quests);
-            for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
-            final int pqs = pq.size();
-            final long startedTime = System.currentTimeMillis();
-            for(int i = 1; i <= permfor && quests.size() < permfor; i++) {
-                for(int z = 1; z <= 10; z++) {
-                    final PlayerQuest ran = (PlayerQuest) pq.values().toArray()[random.nextInt(pqs)];
-                    if(ran != null) {
-                        quests.put(ran, new ActivePlayerQuest(startedTime, ran, 0, false, false));
-                        break;
-                    }
+            if(quests.size() != max) {
+                final long time = System.currentTimeMillis();
+                final Random random = new Random();
+                final HashMap<String, PlayerQuest> pq = new HashMap<>(PlayerQuest.enabled);
+                for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
+                for(int i = 1; i <= permfor && quests.size() <= permfor-1; i++) {
+                    loadNewQuest(time, random);
                 }
             }
         }
+    }
+    private void loadNewQuest(long time, Random random) {
+        final HashMap<String, PlayerQuest> pq = new HashMap<>(PlayerQuest.enabled);
+        for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getYamlName());
+        final int pqs = pq.size();
+        final BukkitScheduler s = api.scheduler;
+        final PluginManager pm = api.pluginmanager;
+        for(int z = 1; z <= 100; z++) {
+            final PlayerQuest ran = (PlayerQuest) pq.values().toArray()[random.nextInt(pqs)];
+            if(ran != null) {
+                final ActivePlayerQuest a = new ActivePlayerQuest(time, ran, 0, false, false);
+                final PlayerQuestStartEvent e = new PlayerQuestStartEvent(uuid, a);
+                pm.callEvent(e);
+                if(!e.isCancelled()) {
+                    quests.put(ran, a);
+                    startExpire(time, s, pm, ran, a);
+                    break;
+                }
+            }
+        }
+    }
+    private void startExpire(long time, BukkitScheduler s, PluginManager pm, PlayerQuest q, ActivePlayerQuest a) {
+        final long ticks = ((a.getExpirationTime()-time)/1000)*20;
+        questTasks.get(uuid).add(s.scheduleSyncDelayedTask(getPlugin, () -> {
+            final PlayerQuestExpireEvent ee = new PlayerQuestExpireEvent(uuid, a);
+            pm.callEvent(ee);
+            quests.remove(q);
+            loadNewQuest(System.currentTimeMillis(), new Random());
+        }, ticks));
     }
     public HashMap<PlayerQuest, ActivePlayerQuest> getQuests() {
         loadQuests();

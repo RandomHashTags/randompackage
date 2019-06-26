@@ -5,8 +5,10 @@ import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateCloseE
 import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.utils.classes.servercrate.LivingServerCrate;
 import me.randomhashtags.randompackage.utils.classes.servercrate.ServerCrate;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.world.Location;
 
@@ -34,7 +36,7 @@ public class ServerCrates extends RandomPackageAPI {
 	public void enable() {
 	    final long started = System.currentTimeMillis();
 		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		canRevealRarities = new ArrayList<>();
@@ -80,7 +82,7 @@ public class ServerCrates extends RandomPackageAPI {
 
 		ServerCrate.deleteAll();
 		LivingServerCrate.deleteAll(true);
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 
 	@Listener

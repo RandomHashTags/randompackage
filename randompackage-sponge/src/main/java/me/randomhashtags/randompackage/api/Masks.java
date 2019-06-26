@@ -11,6 +11,7 @@ import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEven
 import me.randomhashtags.randompackage.utils.classes.Mask;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class Masks extends CustomEnchants {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "masks.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "masks.yml"));
 
@@ -75,14 +76,14 @@ public class Masks extends CustomEnchants {
         }
         equippedMasks = null;
         Mask.deleteAll();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     @Listener
-    private void playerQuitEvent(PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
+    private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+        final Player player = event.getTargetEntity();
         if(equippedMasks.containsKey(player)) {
-            player.getInventory().setHelmet(equippedMasks.get(player));
+            player.setHelmet(equippedMasks.get(player));
             player.updateInventory();
             equippedMasks.remove(player);
         }
@@ -102,9 +103,9 @@ public class Masks extends CustomEnchants {
                 event.setCancelled(true);
                 apply(m, current);
                 item = m.getItem();
-                final int a = item.getAmount()-mask.getAmount();
+                final int a = item.getQuantity()-mask.getQuantity();
                 if(a <= 0) item = new ItemStack(Material.AIR);
-                else       item.setAmount(a);
+                else       item.setQuantity(a);
                 event.setCursor(item);
             } else if(click.equals("RIGHT") && onitem != null) {
                 item = current; itemMeta = item.getItemMeta(); lore.clear();

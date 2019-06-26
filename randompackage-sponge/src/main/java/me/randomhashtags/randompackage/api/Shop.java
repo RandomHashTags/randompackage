@@ -7,8 +7,10 @@ import me.randomhashtags.randompackage.api.events.shop.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.api.events.shop.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.classes.shop.ShopCategory;
 import me.randomhashtags.randompackage.utils.classes.shop.ShopItem;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -18,7 +20,7 @@ import java.util.List;
 public class Shop extends RandomPackageAPI {
 
 	private static Shop instance;
-	public static final Shop getShop() {
+	public static Shop getShop() {
 	    if(instance == null) instance = new Shop();
 	    return instance;
 	}
@@ -34,7 +36,7 @@ public class Shop extends RandomPackageAPI {
 	    final long started = System.currentTimeMillis();
 	    if(isEnabled) return;
 	    save(null, "shop.yml");
-	    pluginmanager.registerEvents(this, randompackage);
+	    eventmanager.registerListeners(randompackage, this);
 	    isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "shop.yml"));
@@ -54,7 +56,7 @@ public class Shop extends RandomPackageAPI {
             titles.put(c.getInventoryTitle(), c);
         }
         final HashMap<String, ShopCategory> S = ShopCategory.categories;
-        sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void disable() {
 	    if(!isEnabled) return;
@@ -62,7 +64,7 @@ public class Shop extends RandomPackageAPI {
 	    back = null;
 	    ShopCategory.deleteAll();
 	    isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -171,7 +173,7 @@ public class Shop extends RandomPackageAPI {
                                         if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", amts);
                                         if(string.contains("{PRICE}")) string = string.replace("{PRICE}", pr);
                                         if(string.contains("{ITEM}")) string = string.replace("{ITEM}", n);
-                                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                                        player.sendMessage(translateColorCodes(string));
                                     }
                                 } else {
                                     playSound(config, "sounds.not sellable", player, player.getLocation(), false);
@@ -219,14 +221,14 @@ public class Shop extends RandomPackageAPI {
                         buy = true;
                         for(String string : buylore) {
                             if(string.contains("{BUY}")) string = string.replace("{BUY}", b);
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(translateColorCodes(string).toString());
                         }
                     }
                     if(sellPrice > 0.00) {
                         sell = true;
                         for(String string : selllore) {
                             if(string.contains("{SELL}")) string = string.replace("{SELL}", formatDouble(sellPrice));
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(translateColorCodes(string).toString());
                         }
                     }
                     final String single = Integer.toString(item.getQuantity()), shift = Integer.toString(item.getMaxStackQuantity());
@@ -234,7 +236,7 @@ public class Shop extends RandomPackageAPI {
                         if(q.equals("LEFT") && buy || q.equals("RIGHT") && sell) {
                             for(String string : config.getStringList("lores." + q.toLowerCase() + " clicks")) {
                                 string = string.replace("{" + q + "_CLICK}", single).replace("{SHIFT_" + q + "_CLICK}", shift);
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                                lore.add(translateColorCodes(string).toString());
                             }
                         }
                     }

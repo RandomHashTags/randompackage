@@ -9,20 +9,17 @@ import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantEnt
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.classes.ArmorSet;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CustomArmor extends CustomEnchants implements Listener {
+public class CustomArmor extends CustomEnchants {
 	
 	public boolean isEnabled = false;
 	private static CustomArmor instance;
@@ -39,7 +36,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "custom armor.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		inEquipmentLootbox = new ArrayList<>();
@@ -70,10 +67,10 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		inEquipmentLootbox = null;
 		isEnabled = false;
 		ArmorSet.deleteAll();
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void playerArmorEvent(PlayerArmorEvent event) {
 		if(!event.isCancelled()) {
 			final Player player = event.player;
@@ -102,18 +99,18 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		final Entity e = event.getEntity(), d = event.getDamager();
 		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
 		if(d instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) d));
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void entityDamageEvent(EntityDamageEvent event) {
 		final Entity e = event.getEntity();
 		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
 		final HumanEntity e = event.getEntity();
 		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
@@ -189,7 +186,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		}
 	}
 
-	@EventHandler
+	@Listener
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getItemMeta().equals(equipmentLootbox.getItemMeta()) && i.getType().equals(equipmentLootbox.getType())) {

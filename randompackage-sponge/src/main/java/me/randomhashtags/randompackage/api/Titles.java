@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -58,10 +59,10 @@ public class Titles extends RandomPackageAPI {
 		for(String s : config.getStringList("titles")) {
 			new Title(s);
 		}
-		selftitle = ChatColor.translateAlternateColorCodes('&', config.getString("gui.self title"));
-		//othertitle = ChatColor.translateAlternateColorCodes('&', config.getString("gui.other-title"));
-		chatformat = ChatColor.translateAlternateColorCodes('&', config.getString("chat.format"));
-		tabformat = ChatColor.translateAlternateColorCodes('&', config.getString("tab.format"));
+		selftitle = translateColorCodes(config.getString("gui.self title"));
+		//othertitle = translateColorCodes(config.getString("gui.other-title"));
+		chatformat = translateColorCodes(config.getString("chat.format"));
+		tabformat = translateColorCodes(config.getString("tab.format"));
 		Title.titleChatFormat = chatformat;
 		Title.titleTabFormat = tabformat;
 		final HashMap<String, Title> T = Title.titles;
@@ -98,8 +99,8 @@ public class Titles extends RandomPackageAPI {
 				final boolean has = pdata.getTitles().contains(T);
 				final List<String> m = config.getStringList("messages." + (has ? "already own" : "redeem"));
 				for(String s : m) {
-					s = s.replace("{TITLE}", ChatColor.translateAlternateColorCodes('&', T.getTitle()));
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+					s = s.replace("{TITLE}", translateColorCodes(T.getTitle()));
+					player.sendMessage(translateColorCodes(s));
 				}
 				if(!has) {
 					pdata.addTitle(T);
@@ -129,7 +130,7 @@ public class Titles extends RandomPackageAPI {
 			} else if(titles.size() > Z) {
 				final String q = (a != null && a.equals(titles.get(Z).getTitle()) ? "un" : "") + "equip";
 				final List<String> s = config.getStringList("messages." + q);
-				for(String h : s) player.sendMessage(ChatColor.translateAlternateColorCodes('&', h.replace("{TITLE}", titles.get(Z).getTitle())));
+				for(String h : s) player.sendMessage(translateColorCodes(h.replace("{TITLE}", titles.get(Z).getTitle())));
 				pdata.setActiveTitle(q.equals("unequip") ? null : titles.get(Z));
 				update(player, pdata);
 			}

@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Last Noob Standing"
   completion: 15m
   expiration: 86400

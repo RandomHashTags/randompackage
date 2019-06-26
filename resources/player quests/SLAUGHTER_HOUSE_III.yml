@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   name: "Slaughter House III"
   completion: 25
   expiration: 86400

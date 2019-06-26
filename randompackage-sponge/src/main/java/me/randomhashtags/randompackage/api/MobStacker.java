@@ -36,14 +36,14 @@ public class MobStacker extends RandomPackageAPI {
         if(isEnabled) return;
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "mob stacker.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         stackable = new ArrayList<>();
         customNames = new HashMap<>();
         lastDamager = new HashMap<>();
 
-        defaultName = ChatColor.translateAlternateColorCodes('&', config.getString("names.default"));
+        defaultName = translateColorCodes(config.getString("names.default"));
         for(String s : config.getStringList("settings.stackable")) {
             stackable.add(EntityType.valueOf(s.toUpperCase()));
         }
@@ -93,7 +93,7 @@ public class MobStacker extends RandomPackageAPI {
         lastDamager = null;
 
         backup();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void backup() {

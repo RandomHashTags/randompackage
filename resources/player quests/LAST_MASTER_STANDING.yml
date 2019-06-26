@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Last Master Standing"
   completion: 1h
   expiration: 86400

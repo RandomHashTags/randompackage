@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Disguised"
   completion: 30m
   expiration: 86400

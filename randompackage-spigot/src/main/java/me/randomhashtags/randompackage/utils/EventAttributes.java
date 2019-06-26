@@ -2,9 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.EnchanterPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.PlayerApplyCustomEnchantEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.RandomizationScrollUseEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.envoy.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.api.events.jackpot.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateOpenEvent;
@@ -279,6 +277,57 @@ public class EventAttributes extends RandomPackageAPI {
                             completion = completion.concat(A + "&&");
                         }
                         i++;
+                    }
+                }
+            }
+        }
+        return completion.isEmpty() ? null : completion.substring(0, completion.length()-2);
+    }
+    public String executeAttributes(Player player, ItemNameTagUseEvent event, List<String> attributes) {
+        String completion = "";
+        if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
+            final String material = event.item.getType().name(), renamedto = event.renamedTo;
+            final boolean cancelled = event.isCancelled();
+            for(String s : attributes) {
+                final String a = s.toLowerCase();
+                boolean did = true;
+                if(a.startsWith("itemnametagused;")) {
+                    final String[] original = s.split(s.split(";")[0] + ";")[1].split(";");
+                    int i = 0;
+                    for(String A : a.split("itemnametagused;")[1].split(";")) {
+                        if(A.startsWith("cancelled=")) {
+                            did = cancelled && Boolean.parseBoolean(A.split("=")[1]);
+                        } else if(A.startsWith("material=")) {
+                            did = material.endsWith(A.split("=")[1].toUpperCase());
+                        } else if(A.startsWith("renamedto=")) {
+                            did = renamedto.equals(original[i].split("=")[1]);
+                        } else if(did) {
+                            completion = completion.concat(A + "&&");
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+        return completion.isEmpty() ? null : completion.substring(0, completion.length()-2);
+    }
+    public String executeAttributes(Player player, MysteryMobSpawnerOpenEvent event, List<String> attributes) {
+        String completion = "";
+        if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
+            final String entity = event.entity.toUpperCase();
+            final boolean cancelled = event.isCancelled();
+            for(String s : attributes) {
+                final String a = s.toLowerCase();
+                boolean did = true;
+                if(a.startsWith("mysterymobspawneropened;")) {
+                    for(String A : a.split("mysterymobspawneropened;")[1].split(";")) {
+                        if(A.startsWith("cancelled=")) {
+                            did = cancelled && Boolean.parseBoolean(A.split("=")[1]);
+                        } else if(A.startsWith("entity=")) {
+                            did = entity.equals(A.split("=")[1].toUpperCase());
+                        } else if(did) {
+                            completion = completion.concat(A + "&&");
+                        }
                     }
                 }
             }

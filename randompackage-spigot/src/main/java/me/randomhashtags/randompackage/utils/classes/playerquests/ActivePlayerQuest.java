@@ -14,6 +14,8 @@ public class ActivePlayerQuest {
     }
     public long getStartedTime() { return startedTime; }
     public void setStartedTime(long startedTime) { this.startedTime = startedTime; }
+    public boolean isExpired() { return System.currentTimeMillis() >= getExpirationTime(); }
+    public long getExpirationTime() { return startedTime+quest.getExpiration()*1000; }
     public PlayerQuest getQuest() { return quest; }
     public double getProgress() { return progress; }
     public void setProgress(double progress) { this.progress = progress; }

@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Thirsty"
   completion: 3
   expiration: 86400

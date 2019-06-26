@@ -2,35 +2,26 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.scoreboard.Scoreboard;
+import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
+import org.spongepowered.api.scoreboard.objective.Objective;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor {
+public class KOTH extends RandomPackageAPI {
 
 	private static KOTH instance;
-	public static final KOTH getKOTH() {
+	public static KOTH getKOTH() {
 	    if(instance == null) instance = new KOTH();
 	    return instance;
 	}
@@ -76,18 +67,18 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "koth.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "koth.yml"));
-		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), ChatColor.translateAlternateColorCodes('&', config.getString("items.lootbag.title")));
+		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), translateColorCodes(config.getString("items.lootbag.title")));
 
 		lootbag = d(config, "items.lootbag");
 		givedpitem.items.put("kothlootbag", lootbag);
 
 		displaySlot = DisplaySlot.valueOf(config.getString("settings.scoreboards.display slot").toUpperCase());
-		kothtitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.scoreboards.title"));
-		kothname = ChatColor.translateAlternateColorCodes('&', config.getString("settings.name"));
+		kothtitle = translateColorCodes(config.getString("settings.scoreboards.title"));
+		kothname = translateColorCodes(config.getString("settings.name"));
 
 		status = "Not Active";
 
@@ -96,7 +87,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		startCapCountdown = config.getInt("settings.start cap countdown");
 		captureRadius = config.getInt("settings.capture radius");
 		captured = config.getStringList("messages.captured");
-		rewardformat = ChatColor.translateAlternateColorCodes('&', config.getString("messages.reward format"));
+		rewardformat = translateColorCodes(config.getString("messages.reward format"));
 		capturedscoreboard = config.getStringList("settings.scoreboards.captured");
 		cappingscoreboard = config.getStringList("settings.scoreboards.capping");
 		scorestart = config.getInt("settings.scoreboards.score start");
@@ -152,7 +143,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		previouscapturer = null;
 
 		isEnabled = false;
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 	
 	public ArrayList<ItemStack> getRandomLootbagContents() {
@@ -242,7 +233,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 								|| i.contains("{TIME_LEFT}") || i.contains("{FLAG}") || i.contains("{NEXT_KOTH_TIME}") || i.contains("{CAPTURED_BY}"))
 							i = null;
 					}
-					if(i != null) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', i));
+					if(i != null) sender.sendMessage(translateColorCodes(i));
 				}
 			}
 		}
@@ -254,13 +245,13 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		}
 	}
 
-	@EventHandler
+	@Listener
 	private void playerJoinEvent(PlayerJoinEvent event) {
 		if(status.equals("ACTIVE")) {
 			sendStringListMessage(event.getPlayer(), config.getStringList("messages.event running"), null);
 		}
 	}
-	@EventHandler
+	@Listener
 	private void playerTeleportEvent(PlayerTeleportEvent event) {
 		final World w = center != null ? center.getWorld() : null;
 		final Player player = event.getPlayer();
@@ -310,7 +301,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 			for(String string : m) {
 				if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
 				if(string.contains("{TIME}")) string = string.replace("{TIME}", t);
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+				player.sendMessage(translateColorCodes(string));
 			}
 		}
 	}
@@ -347,7 +338,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 				for(Player player : center.getWorld().getPlayers()) {
 					for(String string : this.captured) {
 						if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+						player.sendMessage(translateColorCodes(string));
 					}
 				}
 				item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
@@ -395,7 +386,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 			obj.setDisplaySlot(displaySlot);
 			final String dis = Double.toString(player.getLocation().distance(center)).split("\\.")[0];
 			for(int i = 0; i < liststring.size(); i++) {
-				String score = ChatColor.translateAlternateColorCodes('&', liststring.get(i));
+				String score = translateColorCodes(liststring.get(i));
 				if(score.contains("{DISTANCE}")) score = score.replace("{DISTANCE}", dis);
 				if(score.contains("{TIME}")) score = score.replace("{TIME}", time);
 				if(score.contains("{PLAYER}")) score = score.replace("{PLAYER}", closestPlayerToKOTH);
@@ -406,12 +397,12 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 	}
 
 
-	@EventHandler
-	private void playerQuitEvent(PlayerQuitEvent event) {
-		final Player player = event.getPlayer();
+	@Listener
+	private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+		final Player player = event.getTargetEntity();
 		if(center != null && player.getWorld().equals(center.getWorld())) player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
-	@EventHandler(priority = EventPriority.LOWEST)
+	@Listener(priority = EventPriority.LOWEST)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
 		if(!event.isCancelled() && center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED")) {
@@ -421,12 +412,12 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 			if(!did) {
 				sendStringListMessage(player, null, config.getStringList("messages.blocked command"), -1, null);
 				if(!player.isOp()) event.setCancelled(true);
-				else player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eSince you're OP, the command has been executed."));
+				else player.sendMessage(translateColorCodes("&e&l(!)&r &eSince you're OP, the command has been executed."));
 				return;
 			}
 		}
 	}
-	@EventHandler
+	@Listener
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
@@ -436,7 +427,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 			player.closeInventory();
 		}
 	}
-	@EventHandler
+	@Listener
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
@@ -467,7 +458,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 					if(is != null && !is.getType().equals(Material.AIR)) {
 						final ItemMeta mm = is.getItemMeta();
 						final String n = mm.hasDisplayName() ? mm.getDisplayName() : toMaterial(is.getType().name(), false);
-						a.add(rewardformat.replace("{NAME}", n).replace("{AMOUNT}", "" + is.getAmount()));
+						a.add(rewardformat.replace("{NAME}", n).replace("{AMOUNT}", "" + is.getQuantity()));
 					}
 				}
 
@@ -479,7 +470,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 							sendStringListMessage(p, a, null);
 						}
 					} else  {
-						string = ChatColor.translateAlternateColorCodes('&', string);
+						string = translateColorCodes(string);
 						for(Player p : online) p.sendMessage(string);
 					}
 				}
@@ -502,7 +493,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 			if(string.contains("{TARGET}")) string = string.replace("{TARGET}", target.getName());
 			if(string.contains("{LOCATION}")) string = string.replace("{LOCATION}", location.getBlockX() + "x " + location.getBlockY() + "y " + location.getBlockZ() + "z");
 			if(string.contains("{KOTH}")) string = string.replace("{KOTH}", "" + kothname);
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+			sender.sendMessage(translateColorCodes(string));
 		}
 	}
 }

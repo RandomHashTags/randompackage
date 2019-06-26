@@ -7,10 +7,16 @@ messages:
     - "&7Complete Player &e/quests &7every day to earn &6&nQuest Tokens&r&7, earn more Quest Tokens for a quest depending on its difficulty."
     - "&6&lDifficulties:&r &aEasy (1)&7, &eMedium (2)&7, &cHard (3)"
     - " "
-    - "&7Quest Tokens can be spent at the &e/questmaster &7and &eMystery Merchant &7to unlock epic rewards and treasure!"
+    - "&7Quest Tokens can be spent at the &e/quest shop &7and &eMystery Merchant &7to unlock epic rewards and treasure!"
     - " "
     - "&7The &eMystery Merchant &7arrives weekly on Saturday. &e&n12PM&r &eCST"
     - "&7A new &emystery item &7will be available for purchase for &e25h &7after his arrival every week!"
+    - " "
+  #
+  completed:
+    - " "
+    - "&a&lPlayer Quest \"&6&l{NAME}&r&a&l\" Completed"
+    - "&7Claim its rewards in &e/quests&7 before it expires!"
     - " "
   #
   not completed:
@@ -22,6 +28,9 @@ messages:
     - "&c&l(!)&r &cYou do not have enough Quest Tokens for this item!"
     - "&cCurrent: &7{TOKENS} Quest Token(s)"
     - "&cRequired: &7{COST} Quest Token(s)"
+  purchase:
+    - "&c&l-{COST} Quest Token(s)"
+    - "&aQuest Tokens Left: &6&l{TOKENS}"
 #
 status:
   available:
@@ -30,8 +39,10 @@ status:
   completed:
     - "&a&lCOMPLETED"
     - "&7Click to claim rewards!"
+    - "&eNew Quest in &l{TIME}"
   claimed:
     - "&a&lCLAIMED"
+    - "&eNew Quest in &l{TIME}"
 #
 gui:
   title: "Quests"

@@ -4,33 +4,18 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.MonthlyCrate;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MonthlyCrates extends RandomPackageAPI implements Listener, CommandExecutor {
+public class MonthlyCrates extends RandomPackageAPI {
 
     private static MonthlyCrates instance;
     public static final MonthlyCrates getMonthlyCrates() {
@@ -63,11 +48,11 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         if(isEnabled) return;
         save(null, "monthly crates.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "monthly crates.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        categoryView = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("category view.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), translateColorCodes(config.getString("gui.title")));
+        categoryView = new UInventory(null, 54, translateColorCodes(config.getString("category view.title")));
         regularRewardsLeft = new HashMap<>();
         bonusRewardsLeft = new HashMap<>();
         playertimers = new HashMap<>();
@@ -190,7 +175,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         playertimers = null;
         isEnabled = false;
         MonthlyCrate.deleteAll();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void viewCrates(Player player) {
@@ -390,7 +375,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         return -1;
     }
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
@@ -458,7 +443,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
             }
         }
     }
-    @EventHandler
+    @Listener
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack i = event.getItem();
         if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
@@ -492,7 +477,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
             }
         }
     }
-    @EventHandler
+    @Listener
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Inventory i = event.getInventory();
         final Player player = (Player) event.getPlayer();
@@ -503,9 +488,9 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
             }
         }
     }
-    @EventHandler
-    private void playerQuitEvent(PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
+    @Listener
+    private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+        final Player player = event.getTargetEntity();
         final Inventory top = player.getOpenInventory().getTopInventory();
         final MonthlyCrate m = MonthlyCrate.valueOf(player.getOpenInventory().getTitle());
         if(m != null)

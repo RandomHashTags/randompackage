@@ -2,30 +2,18 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.fund.FundDepositEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Fund extends RandomPackageAPI implements CommandExecutor, Listener {
+public class Fund extends RandomPackageAPI {
 
 	private static Fund instance;
-	public static final Fund getFund() {
+	public static Fund getFund() {
 		if(instance == null) instance = new Fund();
 		return instance;
 	}
@@ -55,7 +43,7 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "fund.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "fund.yml"));
 
@@ -128,7 +116,7 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		if(!event.isCancelled()) {
 			final Player player = event.getPlayer();
@@ -174,15 +162,15 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 					ss = ss.replace(r, R);
 				}
 			}
-			if(broadcasted) Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', ss));
-			else            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ss));
+			if(broadcasted) Bukkit.broadcastMessage(translateColorCodes(ss));
+			else            sender.sendMessage(translateColorCodes(ss));
 			return;
 		}
 	}
 
 	public void reset(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.reset", true)) {
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
+			Bukkit.broadcastMessage(translateColorCodes("&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
 			total = 0;
 			deposits.clear();
 		}
@@ -190,7 +178,7 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 	public void view(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund", true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
-			final String symbol = config.getString("messages.progress bar.symbol"), achieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.achieved")), notachieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.not achieved"));
+			final String symbol = config.getString("messages.progress bar.symbol"), achieved = translateColorCodes(config.getString("messages.progress bar.achieved")), notachieved = translateColorCodes(config.getString("messages.progress bar.not achieved"));
 			for(String s : config.getStringList("messages.view")) {
 				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatDouble(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
@@ -199,7 +187,7 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 						final int q = (int) req;
 						final String percent = roundDoubleString((total / req) * 100 > 100.000 ? 100 : (total / req) * 100, pdigits), abb = getAbbreviation(req), qq = formatInt(q);
 						for(String k : config.getStringList("messages.content")) {
-							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", total >= req ? ChatColor.translateAlternateColorCodes('&', config.getString("messages.completed")) : "");
+							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", total >= req ? translateColorCodes(config.getString("messages.completed")) : "");
 							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
 							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
 							if(k.contains("{PROGRESS_BAR}")) {
@@ -209,11 +197,11 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 							}
 							if(k.contains("{REQ}")) k = k.replace("{REQ}", abb);
 							if(k.contains("{REQ$}")) k = k.replace("{REQ$}", qq);
-							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', k));
+							sender.sendMessage(translateColorCodes(k));
 						}
 					}
 				}
-				if(!s.equals("{CONTENT}")) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+				if(!s.equals("{CONTENT}")) sender.sendMessage(translateColorCodes(s));
 			}
 		}
 	}
@@ -227,6 +215,6 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 		if(ll.contains(",")) ll = ll.split(",")[0] + "." + ll.split(",")[1];
 		String d = Double.toString(Double.parseDouble(ll));
 		if(d.endsWith(".0") && d.split("\\.")[1].length() == 1) d = d.split("\\.")[0];
-		return d + ChatColor.translateAlternateColorCodes('&', config.getString("messages." + (l >= 13 && l <= 15 ? "trillion" : l >= 10 && l <= 12 ? "billion" : l >= 7 && l <= 9 ? "million" : l >= 4 && l <= 6 ? "thousand" : "")));
+		return d + translateColorCodes(config.getString("messages." + (l >= 13 && l <= 15 ? "trillion" : l >= 10 && l <= 12 ? "billion" : l >= 7 && l <= 9 ? "million" : l >= 4 && l <= 6 ? "thousand" : "")));
 	}
 }

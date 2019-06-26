@@ -2,23 +2,19 @@ package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.inventory.Inventory;
 
 import java.io.File;
 
-public class Duels extends RandomPackageAPI implements Listener, CommandExecutor {
+public class Duels extends RandomPackageAPI implements CommandExecutor {
 
     private static Duels instance;
-    public static final Duels getDuels() {
+    public static Duels getDuels() {
         if(instance == null) instance = new Duels();
         return instance;
     }
@@ -28,33 +24,36 @@ public class Duels extends RandomPackageAPI implements Listener, CommandExecutor
 
     private UInventory type, godset;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if(!(sender instanceof Player)) return true;
-        final Player player = (Player) sender;
-        final int l = args.length;
-        if(l == 0) {
-            viewTypes(player);
-        } else {
-            final String a = args[0];
-            if(a.equals("godset")) {
-                viewGodset(player);
+    public CommandResult execute(CommandSource src, CommandContext args) {
+        if(src instanceof Player) {
+            final Player player = (Player) src;
+            final int l = args.length;
+            if(l == 0) {
+                viewTypes(player);
             } else {
+                final String a = args[0];
+                if(a.equals("godset")) {
+                    viewGodset(player);
+                } else {
 
+                }
             }
         }
-        return true;
+        return CommandResult.success();
     }
+
     public void enable() {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
+        addCommand(this, "RandomPackage.duels", "Duels!", "duel", "duels");
         save(null, "duels.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "duels.yml"));
 
-        type = new UInventory(null, config.getInt("type.size"), ChatColor.translateAlternateColorCodes('&', config.getString("type.title")));
-        godset = new UInventory(null, config.getInt("godset.size"), ChatColor.translateAlternateColorCodes('&', config.getString("godset.title")));
+        type = new UInventory(null, config.getInt("type.size"), translateColorCodes(config.getString("type.title")));
+        godset = new UInventory(null, config.getInt("godset.size"), translateColorCodes(config.getString("godset.title")));
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Duels &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -64,7 +63,7 @@ public class Duels extends RandomPackageAPI implements Listener, CommandExecutor
         config = null;
         type = null;
         godset = null;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void viewTypes(Player player) {

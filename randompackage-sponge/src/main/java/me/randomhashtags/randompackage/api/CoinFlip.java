@@ -6,8 +6,10 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipMatch;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipOption;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -72,7 +74,7 @@ public class CoinFlip extends RandomPackageAPI {
         if(isEnabled) return;
         save(null, "coinflip.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "coinflip.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
@@ -81,20 +83,20 @@ public class CoinFlip extends RandomPackageAPI {
         tax = config.getDouble("wager.tax");
         wagerAvailable = colorizeListString(config.getStringList("wager.status.can afford"));
         wagerUnavailable = colorizeListString(config.getStringList("wager.status.cannot afford"));
-        wagerName = ChatColor.translateAlternateColorCodes('&', config.getString("wager.name"));
+        wagerName = translateColorCodes(config.getString("wager.name"));
         wagerLore = colorizeListString(config.getStringList("wager.lore"));
 
-        yourSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.your selection"));
-        opponentSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.opponent selection"));
-        winnerName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.winner.name"));
+        yourSelection = translateColorCodes(config.getString("challenge.your selection"));
+        opponentSelection = translateColorCodes(config.getString("challenge.opponent selection"));
+        winnerName = translateColorCodes(config.getString("challenge.winner.name"));
         winnerLore = colorizeListString(config.getStringList("challenge.winner.lore"));
         countdown = d(config, "challenge.countdown");
-        rollingName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name"));
+        rollingName = translateColorCodes(config.getString("challenge.rolling.name"));
         rollingLore = colorizeListString(config.getStringList("challenge.rolling.lore"));
 
-        gui = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        options = new UInventory(null, config.getInt("gui.options.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.options.title")));
-        challenge = new UInventory(null, config.getInt("challenge.size"), ChatColor.translateAlternateColorCodes('&', config.getString("challenge.title")));
+        gui = new UInventory(null, 54, translateColorCodes(config.getString("gui.title")));
+        options = new UInventory(null, config.getInt("gui.options.size"), translateColorCodes(config.getString("gui.options.title")));
+        challenge = new UInventory(null, config.getInt("challenge.size"), translateColorCodes(config.getString("challenge.title")));
         countdownStart = config.getInt("gui.options.countdown");
         addedlore = colorizeListString(config.getStringList("gui.options.added lore"));
         optionz = new LinkedHashMap<>();
@@ -108,7 +110,7 @@ public class CoinFlip extends RandomPackageAPI {
                 itemMeta = dis.getItemMeta();
                 itemMeta.setLore(addedlore);
                 dis.setItemMeta(itemMeta);
-                final CoinFlipOption o = new CoinFlipOption(s, slot, ChatColor.translateAlternateColorCodes('&', config.getString(p + "chosen")), dis, d(config, p + "selection"), ChatColor.translateAlternateColorCodes('&', config.getString(p + "selection.color")));
+                final CoinFlipOption o = new CoinFlipOption(s, slot, translateColorCodes(config.getString(p + "chosen")), dis, d(config, p + "selection"), translateColorCodes(config.getString(p + "selection.color")));
                 optionz.put(slot, o);
                 oi.setItem(slot, dis);
             }

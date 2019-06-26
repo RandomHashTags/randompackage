@@ -2,8 +2,10 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -64,7 +66,7 @@ public class Showcase extends RandomPackageAPI {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "showcase.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "showcase.yml"));
@@ -77,11 +79,11 @@ public class Showcase extends RandomPackageAPI {
 		inOther = new ArrayList<>();
 		deleteSlot = new HashMap<>();
 
-		additems = new UInventory(null, config.getInt("add item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("add item.title")));
-		removeitems = new UInventory(null, config.getInt("remove item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("remove item.title")));
+		additems = new UInventory(null, config.getInt("add item.size"), translateColorCodes(config.getString("add item.title")));
+		removeitems = new UInventory(null, config.getInt("remove item.size"), translateColorCodes(config.getString("remove item.title")));
 
-		othertitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.other title"));
-		selftitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.self title"));
+		othertitle = translateColorCodes(config.getString("settings.other title"));
+		selftitle = translateColorCodes(config.getString("settings.self title"));
 		TCOLOR = config.getString("settings.time color");
 
 		addItemConfirm = d(config, "add item.confirm");
@@ -95,8 +97,8 @@ public class Showcase extends RandomPackageAPI {
 				String s = config.getString((i == 1 ? "add item." : "remove item.") + o + ".item");
 				if(s != null) {
 					if(s.equals("{CONFIRM}")) {
-						if(i == 1) ai.setItem(o, addItemConfirm.clone());
-						else       ri.setItem(o, removeItemConfirm.clone());
+						if(i == 1) ai.setItem(o, addItemConfirm.copy());
+						else       ri.setItem(o, removeItemConfirm.copy());
 					} else if(s.equals("{CANCEL}")) {
 						(i == 1 ? ai : ri).setItem(o, i == 1 ? addItemCancel : removeItemCancel);
 					} else if(s.equals("{ITEM}")) itemslots.add(o);
@@ -109,11 +111,11 @@ public class Showcase extends RandomPackageAPI {
 		if(!isEnabled) return;
 
 		for(Player p : new ArrayList<>(inSelf)) {
-			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
+			p.sendMessage(translateColorCodes("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
 		for(Player p : new ArrayList<>(inOther)) {
-			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
+			p.sendMessage(translateColorCodes("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
 
@@ -134,7 +136,7 @@ public class Showcase extends RandomPackageAPI {
 		inOther = null;
 		deleteSlot = null;
 		isEnabled = false;
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 
 	public void resetShowcases(OfflinePlayer player) {
@@ -240,7 +242,7 @@ public class Showcase extends RandomPackageAPI {
 			final String format = toReadableDate(new Date(), "MMMM dd, yyyy");
 			itemMeta = item.getItemMeta(); lore.clear();
 			if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-			lore.add(ChatColor.translateAlternateColorCodes('&', TCOLOR + format));
+			lore.add(translateColorCodes(TCOLOR + format));
 			itemMeta.setLore(lore); lore.clear();
 			item.setItemMeta(itemMeta);
 

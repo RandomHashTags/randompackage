@@ -4,8 +4,11 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.spongepowered.api.effect.potion.PotionEffectType;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -59,7 +62,7 @@ public class SecondaryEvents extends RandomPackageAPI {
                 if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
                 if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
                 if(s.contains("{TARGET}")) s = s.replace("{TARGET}", Bukkit.getOfflinePlayer(args[0]).getName());
-                if(!s.equals("{RICHER}")) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                if(!s.equals("{RICHER}")) sender.sendMessage(translateColorCodes(s));
             }
         } else if(player != null) {
             if(n.equals("bless") && hasPermission(player, "RandomPackage.bless", true)) {
@@ -99,7 +102,7 @@ public class SecondaryEvents extends RandomPackageAPI {
                     for(String string : config.getStringList(m)) {
                         if(string.contains("{VALUE}")) string = string.replace("{VALUE}", formattedAmount);
                         if(string.contains("{BALANCE}")) string = string.replace("{BALANCE}", formatDouble(eco.getBalance(player)));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                        player.sendMessage(translateColorCodes(string));
                     }
                 }
             } else if(n.equals("xpbottle") && hasPermission(sender, "RandomPackage.xpbottle", true)) {
@@ -121,7 +124,7 @@ public class SecondaryEvents extends RandomPackageAPI {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "secondary.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "secondary.yml"));
@@ -164,7 +167,7 @@ public class SecondaryEvents extends RandomPackageAPI {
             i++;
         }
 
-        confirm = ChatColor.translateAlternateColorCodes('&', config.getString("confirm.title"));
+        confirm = translateColorCodes(config.getString("confirm.title"));
         combineores = new ArrayList<>();
         for(String string : config.getStringList("combine.combine ores")) combineores.add(string.toUpperCase());
         delayed = new HashMap<>();
@@ -184,7 +187,7 @@ public class SecondaryEvents extends RandomPackageAPI {
         teleportMinDelay = null;
         teleportationVariable = null;
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
 
@@ -222,7 +225,7 @@ public class SecondaryEvents extends RandomPackageAPI {
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
                 for(String s : config.getStringList("xpbottle.teleport cancelled"))
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    player.sendMessage(translateColorCodes(s));
                 tel.setCancelled(true);
                 scheduler.cancelTask(events.get(player).task);
                 events.remove(player);
@@ -230,8 +233,8 @@ public class SecondaryEvents extends RandomPackageAPI {
         }
     }
     @Listener
-    private void playerQuitEvent(PlayerQuitEvent event) {
-        final PlayerTeleportDelayEvent tel = PlayerTeleportDelayEvent.teleporting.getOrDefault(event.getPlayer(), null);
+    private void playerQuitEvent(ClientConnectionEvent.Disconnect event) {
+        final PlayerTeleportDelayEvent tel = PlayerTeleportDelayEvent.teleporting.getOrDefault(event.getTargetEntity(), null);
         if(tel != null) tel.setCancelled(true);
     }
     @Listener(priority = EventPriority.HIGHEST)
@@ -262,7 +265,7 @@ public class SecondaryEvents extends RandomPackageAPI {
                 final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
                 for(String s : config.getStringList("xpbottle.cannot teleport")) {
                     if(s.contains("{TIME}")) s = s.replace("{TIME}", remaining);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    player.sendMessage(translateColorCodes(s));
                 }
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
@@ -281,7 +284,7 @@ public class SecondaryEvents extends RandomPackageAPI {
                 if(!e.isCancelled()) {
                     for(String s : config.getStringList("xpbottle.pending teleport")) {
                         if(s.contains("{SECS}")) s = s.replace("{SECS}", roundDoubleString(e.delay, 3));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                        player.sendMessage(translateColorCodes(s));
                     }
                 } else {
                     scheduler.cancelTask(events.get(player).task);
@@ -371,14 +374,14 @@ public class SecondaryEvents extends RandomPackageAPI {
                     amount = (getTotalAmount(inventory, UMaterial.match(material.name())) / 9) * 9;
                     if(amount != 0) {
                         amountb = amount / 9;
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', f.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", material.name()).replace("{AMOUNT_BLOCK}", "" + amountb).replace("{ITEM_BLOCK}", material.name().replace("ORE", "BLOCK"))));
+                        player.sendMessage(translateColorCodes(f.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", material.name()).replace("{AMOUNT_BLOCK}", "" + amountb).replace("{ITEM_BLOCK}", material.name().replace("ORE", "BLOCK"))));
                         for(int z = 1; z <= amount; z++) inventory.removeItem(new ItemStack(material, 1, (byte) 0));
                         inventory.addItem(new ItemStack(block, amountb));
                         if(chest != null) chest.update(); else player.updateInventory();
                     }
                 }
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                player.sendMessage(translateColorCodes(string));
             }
         }
     }
@@ -394,7 +397,7 @@ public class SecondaryEvents extends RandomPackageAPI {
     }
     public void roll(Player player, String arg0) {
         final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = random.nextInt(maxroll);
-        final List<Entity> nearby = player.getNearbyEntities(radius, radius, radius);
+        final List<Entity> nearby = player.getNearbyEntities(radius);
         final List<Player> p = new ArrayList<>();
         for(Entity entity : nearby) {
             if(entity instanceof Player) {

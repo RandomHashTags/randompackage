@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Skill Booster III"
   completion: 5
   expiration: 86400

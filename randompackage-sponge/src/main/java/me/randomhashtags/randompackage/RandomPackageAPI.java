@@ -2,20 +2,22 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.GivedpItem;
+import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
-import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryArchetype;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.inventory.property.InventoryTitle;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
 import java.io.File;
 import java.util.*;
@@ -31,7 +33,6 @@ public class RandomPackageAPI extends UVersion {
     private boolean isEnabled = false;
     public boolean mcmmoIsEnabled = false;
 
-    private static ConsoleCommandSender console;
     public static GivedpItem givedpitem;
     public static FactionsAPI fapi;
     public static String separator;
@@ -64,13 +65,13 @@ public class RandomPackageAPI extends UVersion {
                             "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/",
                             "&6&m&l---------------------------------------------",
                             " "))
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                        sender.sendMessage(translateColorCodes(string));
                 }
             } else if(args[0].equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
                 RandomPackage.getPlugin.reload();
             } else if(args[0].equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
                 RPEvents.getRPEvents().backup();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3[RandomPackage] &aPlayer backup complete!"));
+                sender.sendMessage(translateColorCodes("&3[RandomPackage] &aPlayer backup complete!"));
             }
         }
         return true;
@@ -110,7 +111,6 @@ public class RandomPackageAPI extends UVersion {
 
 
         eco = VaultAPI.getVaultAPI().economy;
-        console = Bukkit.getConsoleSender();
 
         givedpitem = GivedpItem.getGivedpItem();
         givedpitem.load();
@@ -128,7 +128,6 @@ public class RandomPackageAPI extends UVersion {
         if(!isEnabled) return;
         isEnabled = false;
 
-        console = null;
         givedpitem = null;
         fapi = null;
         rpd = null;
@@ -159,7 +158,7 @@ public class RandomPackageAPI extends UVersion {
     }
     public void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
         item = m.getItemStack(); itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
+        itemMeta.setDisplayName(TextColors.YELLOW + "" + TextStyles.BOLD + what);
         item.setItemMeta(itemMeta);
         givedp.getInventory().addItem(item);
         final int size = items.size();
@@ -167,11 +166,8 @@ public class RandomPackageAPI extends UVersion {
         for(ItemStack is : items) if(is != null) inv.addItem(is);
         givedpCategories.add(inv);
     }
-    public void sendConsoleMessage(String message) {
-        console.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-    }
-    public boolean hasPermission(Player sender, String permission, boolean sendNoPermMessage) {
-        if(sender.hasPermission(permission)) return true;
+    public boolean hasPermission(CommandSource sender, String permission, boolean sendNoPermMessage) {
+        if(sender instanceof ConsoleSource || sender.hasPermission(permission)) return true;
         else if(sendNoPermMessage) {
             sendStringListMessage(sender, randompackage.getConfig().getStringList("no permission"), null);
         }
@@ -236,7 +232,7 @@ public class RandomPackageAPI extends UVersion {
                         m = (SkullMeta) itemMeta;
                         if(item.getData().getData() == 3) m.setOwner(P.split(":").length == 4 ? P.split(":")[3].split("}")[0] : "RandomHashTags");
                     }
-                    (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
+                    (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? translateColorCodes(name) : null);
 
                     if(enchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     final HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -261,7 +257,7 @@ public class RandomPackageAPI extends UVersion {
                                     }
                                 }
                             } else {
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                                lore.add(translateColorCodes(string));
                             }
                         }
                     }

@@ -20,7 +20,7 @@ import java.util.UUID;
 public class CustomBosses extends RandomPackageAPI {
 
 	private static CustomBosses instance;
-	public static final CustomBosses getCustomBosses() {
+	public static CustomBosses getCustomBosses() {
 		if(instance == null) instance = new CustomBosses();
 		return instance;
 	}
@@ -31,7 +31,7 @@ public class CustomBosses extends RandomPackageAPI {
 	public void enable() {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		deadBosses = new HashMap<>();
@@ -61,7 +61,7 @@ public class CustomBosses extends RandomPackageAPI {
 		CustomBoss.deleteAll();
 		deadBosses = null;
 		isEnabled = false;
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 
 	public void backup() {

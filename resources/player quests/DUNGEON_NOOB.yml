@@ -1,15 +1,15 @@
 # Made by RandomHashTags
 settings:
   enabled: false
-  name: "Rigged"
-  completion: 25000000
+  name: "Dungeon Noob"
+  completion: 3
   expiration: 86400
 #
 lore:
-- "&7Win $25,000,000 in /coinflip"
+- "&7Die in a dungeon 3 times"
 #
 rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CoinFlipWin;+woncash"
+- ""

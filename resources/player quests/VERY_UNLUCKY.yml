@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Very Unlucky"
   completion: 25000000
   expiration: 86400

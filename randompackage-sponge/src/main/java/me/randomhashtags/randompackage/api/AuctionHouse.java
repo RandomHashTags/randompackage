@@ -3,26 +3,9 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.auctionhouse.AuctionedItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,10 +14,10 @@ import java.util.*;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toMap;
 
-public class AuctionHouse extends RandomPackageAPI implements Listener, CommandExecutor {
+public class AuctionHouse extends RandomPackageAPI {
 
     private static AuctionHouse instance;
-    public static final AuctionHouse getAuctionHouse() {
+    public static AuctionHouse getAuctionHouse() {
         if(instance == null) instance = new AuctionHouse();
         return instance;
     }
@@ -103,7 +86,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         save("_Data", "auctions.yml");
         dataF = new File(rpd + separator + "_Data", "auctions.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         purchasing = new HashMap<>();
@@ -141,7 +124,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         collectionBinClaim = colorizeListString(config.getStringList("collection bin.claim"));
         collectionBinInAuction = colorizeListString(config.getStringList("collection bin.in auction"));
 
-        ah = new UInventory(null, config.getInt("auction house.size"), ChatColor.translateAlternateColorCodes('&', config.getString("auction house.title")));
+        ah = new UInventory(null, config.getInt("auction house.size"), translateColorCodes(config.getString("auction house.title")));
         previousPage = d(config, "auction house.previous page");
         previousPageSlot = config.getInt("auction house.previous page.slot");
         nextPage = d(config, "auction house.next page");
@@ -160,7 +143,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         ahi.setItem(previousPageSlot, previousPage);
         ahi.setItem(nextPageSlot, nextPage);
 
-        purchaseItem = new UInventory(null, config.getInt("purchase item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("purchase item.title")));
+        purchaseItem = new UInventory(null, config.getInt("purchase item.size"), translateColorCodes(config.getString("purchase item.title")));
         final Inventory pii = purchaseItem.getInventory();
         final ItemStack confirmPurchase = d(config, "purchase item.confirm"), cancelPurchase = d(config, "purchase item.cancel");
         for(String s : config.getConfigurationSection("purchase item").getKeys(false)) {
@@ -175,7 +158,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
             }
         }
 
-        confirmAuction = new UInventory(null, config.getInt("confirm auction.size"), ChatColor.translateAlternateColorCodes('&', config.getString("confirm auction.title")));
+        confirmAuction = new UInventory(null, config.getInt("confirm auction.size"), translateColorCodes(config.getString("confirm auction.title")));
         final Inventory cai = confirmAuction.getInventory();
         final ItemStack confirmAuctionAccept = d(config, "confirm auction.accept"), confirmAuctionDecline = d(config, "confirm auction.decline");
         for(String s : config.getConfigurationSection("confirm auction").getKeys(false)) {
@@ -190,7 +173,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
             }
         }
 
-        categories = new UInventory(null, config.getInt("categories.size"), ChatColor.translateAlternateColorCodes('&', config.getString("categories.title")));
+        categories = new UInventory(null, config.getInt("categories.size"), translateColorCodes(config.getString("categories.title")));
         final Inventory ci = categories.getInventory();
         for(String s : config.getConfigurationSection("categories").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("format") && !s.equals("groups")) {
@@ -201,7 +184,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
             }
         }
 
-        categoryItems = new UInventory(null, config.getInt("category items.size"), ChatColor.translateAlternateColorCodes('&', config.getString("category items.title")));
+        categoryItems = new UInventory(null, config.getInt("category items.size"), translateColorCodes(config.getString("category items.title")));
         final Inventory cii = categoryItems.getInventory();
         for(String s : config.getConfigurationSection("category items").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size")) {
@@ -212,7 +195,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
             }
         }
 
-        collectionbin = new UInventory(null, config.getInt("collection bin.size"), ChatColor.translateAlternateColorCodes('&', config.getString("collection bin.title")));
+        collectionbin = new UInventory(null, config.getInt("collection bin.size"), translateColorCodes(config.getString("collection bin.title")));
         final Inventory cbi = collectionbin.getInventory();
         for(String s : config.getConfigurationSection("collection bin").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("not enough inventory space") && !s.equals("in auction") && !s.equals("claim")) {
@@ -369,7 +352,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         viewing = null;
         viewingCategory = null;
         task = null;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
 
@@ -434,7 +417,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
                             if(s.equals("{STATUS}")) {
                                 lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
                             } else {
-                                lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", pr).replace("{SELLER}", seller)));
+                                lore.add(translateColorCodes(s.replace("{PRICE}", pr).replace("{SELLER}", seller)).toString());
                             }
                         }
                         itemMeta.setLore(lore); lore.clear();
@@ -490,7 +473,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
                 if(s.equals("{STATUS}")) {
                     lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
                 } else {
-                    lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", price).replace("{SELLER}", seller)));
+                    lore.add(translateColorCodes(s.replace("{PRICE}", price).replace("{SELLER}", seller)));
                 }
             }
             itemMeta.setLore(lore); lore.clear();
@@ -504,7 +487,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
     private void setPages(String type, int size, Inventory top, ItemStack air, int p) {
         final int maxpage = ((type.equals("AUCTION_HOUSE") ? auctionHouse.size() : size)/(slots.size()+1))+1;
         final String max = Integer.toString(maxpage);
-        final ItemStack prev = p <= 1 ? air : previousPage.clone(), next = p < maxpage ? nextPage.clone() : air;
+        final ItemStack prev = p <= 1 ? air : previousPage.copy(), next = p < maxpage ? nextPage.copy() : air;
         if(prev != air) {
             itemMeta = prev.getItemMeta(); lore.clear();
             itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PREV_PAGE}", Integer.toString(p-1)).replace("{MAX_PAGE}", max));
@@ -690,7 +673,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
     }
     public ItemStack getPlayerCollectionBin(Player player) {
         final String size = Integer.toString(getCollectionBin(player).size());
-        item = collectionBin.clone(); itemMeta = item.getItemMeta();
+        item = collectionBin.copy(); itemMeta = item.getItemMeta();
         for(String s : itemMeta.getLore()) {
             lore.add(s.replace("{ITEMS}", size));
         }
@@ -718,7 +701,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         return null;
     }
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final Player player = (Player) event.getWhoClicked();
@@ -842,7 +825,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         }
     }
 
-    @EventHandler
+    @Listener
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
         viewing.remove(player);

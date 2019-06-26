@@ -11,4 +11,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- ""
+- "ItemNameTagUsed;cancelled=false;+1"

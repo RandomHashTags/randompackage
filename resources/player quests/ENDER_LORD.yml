@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Ender Lord"
   completion: 1h30m
   expiration: 86400

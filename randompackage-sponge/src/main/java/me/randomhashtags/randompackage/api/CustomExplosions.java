@@ -3,27 +3,12 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomCreeper;
 import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomTNT;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Dispenser;
+import org.spongepowered.api.block.tileentity.carrier.Dispenser;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.world.Location;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,10 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomExplosions extends RandomPackageAPI implements Listener {
+public class CustomExplosions extends RandomPackageAPI {
 
 	private static CustomExplosions instance;
-	public static final CustomExplosions getCustomExplosions() {
+	public static CustomExplosions getCustomExplosions() {
 		if(instance == null) instance = new CustomExplosions();
 		return instance;
 	}
@@ -47,7 +32,7 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "custom explosions.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(this, randompackage);
 		isEnabled = true;
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "custom explosions.yml"));
 		cannotBreakTNT = new ArrayList<>();
@@ -155,10 +140,10 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 
 		CustomCreeper.deleteAll();
 		CustomTNT.deleteAll();
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void blockBreakEvent(BlockBreakEvent event) {
 		final Block b = event.getBlock();
 		if(!event.isCancelled() && b.getType().equals(Material.TNT)) {
@@ -172,7 +157,7 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void blockPlaceEvent(BlockPlaceEvent event) {
 		if(!event.isCancelled()) {
 			final ItemStack i = event.getItemInHand();
@@ -184,7 +169,7 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 			}
 		}
 	}
-	@EventHandler
+	@Listener
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -210,7 +195,7 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 			}
 		}
 	}
-	@EventHandler
+	@Listener
 	private void blockDispenseEvent(BlockDispenseEvent event) {
 		if(!event.isCancelled()) {
 			final ItemStack it = event.getItem();
@@ -245,8 +230,8 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 							final int e = d;
 							scheduler.scheduleSyncDelayedTask(randompackage, () -> {
 								final ItemStack a = i.getItem(e);
-								if(a.getAmount() == 1) i.setItem(e, new ItemStack(Material.AIR));
-								else                   a.setAmount(a.getAmount() - 1);
+								if(a.getQuantity() == 1) i.setItem(e, new ItemStack(Material.AIR));
+								else                   a.setQuantity(a.getQuantity() - 1);
 								dis.update();
 							}, 0);
 							return;
@@ -256,7 +241,7 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@Listener(priority = EventPriority.HIGHEST)
 	private void entityExplodeEvent(EntityExplodeEvent event) {
 		if(!event.isCancelled() && fapi.isNotWarZoneOrSafeZone(event.getLocation())) {
 			final Entity e = event.getEntity();

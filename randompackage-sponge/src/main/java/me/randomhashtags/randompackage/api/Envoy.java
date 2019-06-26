@@ -20,7 +20,7 @@ import static me.randomhashtags.randompackage.utils.classes.envoy.EnvoyCrate.get
 public class Envoy extends RandomPackageAPI {
 
 	private static Envoy instance;
-	public static final Envoy getEnvoy() {
+	public static Envoy getEnvoy() {
 		if(instance == null) instance = new Envoy();
 		return instance;
 	}
@@ -46,7 +46,7 @@ public class Envoy extends RandomPackageAPI {
 			if(a.equals("help")) viewHelp(sender);
 			else if(a.equals("spawn") || a.equals("summon") || a.equals("begin") || a.equals("start")) {
 				if(hasPermission(sender, "RandomPackage.envoy.start", true))
-					spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
+					spawnEnvoy(translateColorCodes(config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
 			} else if(a.equals("stop") || a.equals("end")) {
 				if(hasPermission(sender, "RandomPackage.envoy.stop", true)) stopAllEnvoys();
             } else if(player != null && a.equals("preset")) {
@@ -60,7 +60,7 @@ public class Envoy extends RandomPackageAPI {
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "envoy.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		preset = new ArrayList<>();
@@ -99,7 +99,7 @@ public class Envoy extends RandomPackageAPI {
 			tiers.add(e.getItem());
 		}
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
-		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
+		final String defaul = translateColorCodes(config.getString("messages.default summon type"));
 
 		spawnTask = scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(defaul, true, type), getRandomTime());
 		task = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
@@ -139,7 +139,7 @@ public class Envoy extends RandomPackageAPI {
 		active = null;
 		isEnabled = false;
 		EnvoyCrate.deleteAll();
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 
 	public void stopAllEnvoys() {
@@ -169,7 +169,7 @@ public class Envoy extends RandomPackageAPI {
 			event.setCancelled(true);
 			player.updateInventory();
 			removeItem(player, i, 1);
-			spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.item summon type").replace("{PLAYER}", player.getName())), false, type);
+			spawnEnvoy(translateColorCodes(config.getString("messages.item summon type").replace("{PLAYER}", player.getName())), false, type);
 		} else if(event.getClickedBlock() != null) {
 			final Location l = event.getClickedBlock().getLocation();
 			final LivingEnvoyCrate c = LivingEnvoyCrate.valueOf(l);
@@ -257,11 +257,11 @@ public class Envoy extends RandomPackageAPI {
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
 		for(String s : config.getStringList("messages.broadcast")) {
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{SUMMON_TYPE}", summonType)));
+			Bukkit.broadcastMessage(translateColorCodes(s.replace("{SUMMON_TYPE}", summonType)));
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
 		if(natural) {
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), true, where), getRandomTime());
+			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(translateColorCodes(config.getString("messages.default summon type")), true, where), getRandomTime());
 		}
 	}
 	public void stopEnvoy(int envoyID, boolean dropItems) {

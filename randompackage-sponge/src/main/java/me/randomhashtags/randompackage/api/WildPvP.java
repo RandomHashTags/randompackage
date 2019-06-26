@@ -4,33 +4,24 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPCountdownMatch;
 import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPMatch;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.entity.teleport.TeleportTypes;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.world.Chunk;
+import org.spongepowered.api.world.Location;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class WildPvP extends RandomPackageAPI implements Listener, CommandExecutor {
+public class WildPvP extends RandomPackageAPI {
 
     private static WildPvP instance;
-    public static final WildPvP getWildPvP() {
+    public static WildPvP getWildPvP() {
         if(instance == null) instance = new WildPvP();
         return instance;
     }
@@ -74,7 +65,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "wild pvp.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
@@ -132,7 +123,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
         }
         PvPMatch.matches = null;
         PvPCountdownMatch.countdowns = null;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void viewQueue(Player player) {
@@ -154,7 +145,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
                     final Inventory i = gui.getInventory();
                     final int slot = i.firstEmpty();
                     int nearby = 0;
-                    for(Entity e : player.getNearbyEntities(nearbyRadius, nearbyRadius, nearbyRadius)) {
+                    for(Entity e : player.getNearbyEntities(nearbyRadius)) {
                         if(e instanceof Player) {
                             nearby++;
                         }
@@ -196,7 +187,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
     }
     public void leaveCountdown(Player player) {
         if(countdown.containsKey(player) && hasPermission(player, "RandomPackage.wildpvp.leave.countdown", true)) {
-            player.teleport(countdown.get(player), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            player.teleport(countdown.get(player), TeleportTypes.UNKNOWN);
             countdown.remove(player);
             final PvPCountdownMatch c = PvPCountdownMatch.valueOf(player);
             if(c != null) {
@@ -231,7 +222,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
 
             countdown.put(player, player.getLocation());
 
-            player.teleport(c.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            player.teleport(c.getLocation(), TeleportTypes.UNKNOWN);
 
             final List<String> e = colorizeListString(config.getStringList("messages.invincibility enabled")), expire = colorizeListString(config.getStringList("messages.invincibility expired")), cd = colorizeListString(config.getStringList("messages.invincibility expiring"));
             final HashMap<String, String> r = new HashMap<>();
@@ -283,11 +274,11 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
         }
         m.delete();
     }
-    @EventHandler
+    @Listener
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         viewing.remove((Player) event.getPlayer());
     }
-    @EventHandler
+    @Listener
     private void playerQuitEvent(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final PvPMatch m = PvPMatch.valueOf(player);
@@ -300,7 +291,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @Listener(priority = EventPriority.LOWEST)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final PvPMatch match = PvPMatch.valueOf(player);
@@ -315,7 +306,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @Listener(priority = EventPriority.LOWEST)
     private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final Player player = (Player) event.getWhoClicked();
@@ -355,14 +346,14 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @Listener(priority = EventPriority.LOWEST)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final PvPMatch m = PvPMatch.valueOf(event.getPlayer());
         if(m != null) {
             event.setCancelled(true);
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
         if(!event.isCancelled()) {
             final Entity e = event.getEntity();
@@ -381,7 +372,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
             }
         }
     }
-    @EventHandler
+    @Listener
     private void playerMoveEvent(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
         final PvPMatch m = PvPMatch.valueOf(player);

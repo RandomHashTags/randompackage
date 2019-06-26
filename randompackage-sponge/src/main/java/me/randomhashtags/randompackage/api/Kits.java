@@ -6,28 +6,11 @@ import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchan
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.world.Location;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,13 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Kits extends RandomPackageAPI implements Listener, CommandExecutor, TabCompleter {
+public class Kits extends RandomPackageAPI {
 
     public boolean gkitsAreEnabled = false, vkitsAreEnabled = false, mkitsAreEnabled = false;
     private boolean isRegistered = false;
 
     private static Kits instance;
-    public static final Kits getKits() {
+    public static Kits getKits() {
         if(instance == null) instance = new Kits();
         return instance;
     }
@@ -117,7 +100,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
 
     private void tryRegistering() {
         if(isRegistered) return;
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isRegistered = true;
         editing = new HashMap<>();
         customenchants = CustomEnchants.getCustomEnchants();
@@ -149,7 +132,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         if(gkitsAreEnabled) return;
         save(null, "kits global.yml");
         gkitEvents = new gkitevents();
-        pluginmanager.registerEvents(gkitEvents, randompackage);
+        eventmanager.registerListeners(randompackage, gkitEvents);
         tryRegistering();
         gkitsAreEnabled = true;
 
@@ -171,12 +154,12 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         gkitFallenHeroBundle = d(gkits, "items.fallen hero bundle");
         givedpitem.items.put("gkitfallenherobundle", gkitFallenHeroBundle);
         heroicEnchantedEffect = gkits.getBoolean("items.heroic.enchanted effect");
-        gkit = new UInventory(null, gkits.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', gkits.getString("gui.title")));
-        gkitPreview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', gkits.getString("items.preview.title")));
+        gkit = new UInventory(null, gkits.getInt("gui.size"), translateColorCodes(gkits.getString("gui.title")));
+        gkitPreview = new UInventory(null, 54, translateColorCodes(gkits.getString("items.preview.title")));
         gkitPreviewBackground = d(gkits, "items.preview");
         gkitUsesTiers = gkits.getBoolean("gui.settings.use tiers");
         tierZeroEnchantEffect = gkits.getBoolean("gui.settings.tier zero enchant effect");
-        GlobalKit.heroicprefix = ChatColor.translateAlternateColorCodes('&', gkits.getString("items.heroic.prefix"));
+        GlobalKit.heroicprefix = translateColorCodes(gkits.getString("items.heroic.prefix"));
 
         gkitPaths = new ArrayList<>();
 
@@ -217,7 +200,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             }
         }
         GlobalKit.deleteAll();
-        HandlerList.unregisterAll(gkitEvents);
+        eventmanager.unregisterListeners(gkitEvents);
     }
 
     public void enableVkits() {
@@ -227,7 +210,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         vkitsAreEnabled = true;
         vkits = YamlConfiguration.loadConfiguration(new File(rpd, "kits evolution.yml"));
         vkitEvents = new vkitevents();
-        pluginmanager.registerEvents(vkitEvents, randompackage);
+        eventmanager.registerListeners(randompackage, vkitEvents);
         tryRegistering();
 
         final YamlConfiguration a = otherdata;
@@ -239,8 +222,8 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         }
 
         vkitCooldown = d(vkits, "items.cooldown");
-        vkit = new UInventory(null, vkits.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', vkits.getString("gui.title")));
-        vkitPreview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', vkits.getString("items.preview.title")));
+        vkit = new UInventory(null, vkits.getInt("gui.size"), translateColorCodes(vkits.getString("gui.title")));
+        vkitPreview = new UInventory(null, 54, translateColorCodes(vkits.getString("items.preview.title")));
         vkitPreviewBackground = d(vkits, "items.preview");
         vkitLocked = d(vkits, "permissions.locked");
 
@@ -265,8 +248,6 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         vkitsAreEnabled = false;
         vkits = null;
         vkitPaths = null;
-        HandlerList.unregisterAll(vkitEvents);
-        vkitEvents = null;
         for(int i = 0; i < EditedKit.editing.size(); i++) {
             final EditedKit e = (EditedKit) EditedKit.editing.values().toArray()[i];
             final Player p = e.player;
@@ -285,6 +266,8 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             }
         }
         EvolutionKit.deleteAll();
+        eventmanager.unregisterListeners(vkitEvents);
+        vkitEvents = null;
     }
 
     public void enableMkits() {
@@ -294,7 +277,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         mkitsAreEnabled = true;
         mkits = YamlConfiguration.loadConfiguration(new File(rpd, "kits mastery.yml"));
         mkitEvents = new mkitevents();
-        pluginmanager.registerEvents(mkitEvents, randompackage);
+        eventmanager.registerListeners(randompackage, mkitEvents);
         tryRegistering();
 
         final YamlConfiguration a = otherdata;
@@ -305,7 +288,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             saveOtherData();
         }
 
-        mkit = new UInventory(null, mkits.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', mkits.getString("gui.title")));
+        mkit = new UInventory(null, mkits.getInt("gui.size"), translateColorCodes(mkits.getString("gui.title")));
         mkitBackground = d(mkits, "gui.background");
         final Inventory mi = mkit.getInventory();
         for(File f : new File(rpd + separator + "mkits").listFiles()) {
@@ -323,7 +306,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         mkitsAreEnabled = false;
         mkits = null;
         MasteryKit.deleteAll();
-        HandlerList.unregisterAll(mkitEvents);
+        eventmanager.unregisterListeners(mkitEvents);
         mkitEvents = null;
     }
 
@@ -363,11 +346,11 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
                             if(hasPerm) {
                                 if(!cooldown)
                                     for(String s : vkits.getStringList("permissions.unlocked"))
-                                        lore.add(ChatColor.translateAlternateColorCodes('&', s));
-                                for(String s : vkits.getStringList("permissions.preview")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                                        lore.add(translateColorCodes(s).toString());
+                                for(String s : vkits.getStringList("permissions.preview")) lore.add(translateColorCodes(s).toString());
                             } else {
                                 for(String s : vkitLocked.getItemMeta().getLore())
-                                    lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                                    lore.add(translateColorCodes(s).toString());
                             }
                             itemMeta.setLore(lore); lore.clear();
                             item.setItemMeta(itemMeta);
@@ -399,10 +382,10 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
                             final boolean isheroic = k.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(n) && !(tier < 1));
                             if(gkitUsesTiers)
                                 for(String s : gkits.getStringList("gui.settings.pre lore"))
-                                    lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxTier()))));
+                                    lore.add(translateColorCodes(s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxTier()))).toString());
                             if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                            for(String s : gkits.getStringList("gui.settings." + (has ? "un" : "") + "locked")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
-                            for(String s : gkits.getStringList("items.preview.added gui lore")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                            for(String s : gkits.getStringList("gui.settings." + (has ? "un" : "") + "locked")) lore.add(translateColorCodes(s));
+                            for(String s : gkits.getStringList("items.preview.added gui lore")) lore.add(translateColorCodes(s));
                             itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                             if(q) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             itemMeta.setLore(lore); lore.clear();
@@ -486,12 +469,12 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             if(hasPerm) {
                 if(!cooldown)
                     for(String s : yml.getStringList("permissions.unlocked"))
-                        lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                        lore.add(translateColorCodes(s).toString());
             } else {
                 for(String s : yml.getStringList("permissions.locked"))
-                    lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                    lore.add(translateColorCodes(s).toString());
             }
-            for(String s : yml.getStringList("permissions.preview")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+            for(String s : yml.getStringList("permissions.preview")) lore.add(translateColorCodes(s).toString());
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
             player.getOpenInventory().getTopInventory().setItem(slot, item);
@@ -576,7 +559,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         editing.put(ek, type);
     }
 
-    @EventHandler
+    @Listener
     private void playerChatEvent(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         final EditedKit ek = EditedKit.editing.getOrDefault(player, null);
@@ -635,7 +618,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             sendStringListMessage(sender, yml.getStringList("messages.target doesnt exist"), null);
         } else {
             for(String s : yml.getStringList("messages.success")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", p.getName())));
+                sender.sendMessage(translateColorCodes(s.replace("{PLAYER}", p.getName())));
             }
         }
         return pdata;
@@ -782,9 +765,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             final String name = vkit.getItem().getItemMeta().getDisplayName();
             pdata.getKitLevels(KitType.EVOLUTION).put(n, newlvl);
             for(String s : vkits.getStringList("messages.upgrade"))
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
+                player.sendMessage(translateColorCodes(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
             for(String s : vkits.getStringList("messages.upgrade broadcast"))
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+                Bukkit.broadcastMessage(translateColorCodes(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
         }
     }
     private ItemStack d(YamlConfiguration category, FileConfiguration config, String path, int tier) {
@@ -814,7 +797,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         return item;
     }
 
-    @EventHandler
+    @Listener
     private void entityDeathEvent(EntityDeathEvent event) {
         final LivingEntity e = event.getEntity();
         if(!(e instanceof Player)) {
@@ -827,7 +810,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack is = event.getItem();
@@ -885,9 +868,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         }
     }
 
-    private class gkitevents extends RandomPackageAPI implements Listener {
+    private class gkitevents extends RandomPackageAPI {
 
-        @EventHandler
+        @Listener
         private void inventoryClickEvent(InventoryClickEvent event) {
             final Player player = (Player) event.getWhoClicked();
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -943,7 +926,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             }
         }
 
-        @EventHandler
+        @Listener
         private void playerInteractEvent(PlayerInteractEvent event) {
             final ItemStack is = event.getItem();
             if(is != null && is.hasItemMeta() && is.isSimilar(gkitFallenHeroBundle)) {
@@ -960,9 +943,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         }
     }
 
-    private class vkitevents extends RandomPackageAPI implements Listener {
+    private class vkitevents extends RandomPackageAPI {
 
-        @EventHandler
+        @Listener
         private void inventoryClickEvent(InventoryClickEvent event) {
             if(!event.isCancelled() && event.getWhoClicked().getOpenInventory().getTopInventory().getHolder() == event.getWhoClicked()) {
                 final String t = event.getView().getTitle();
@@ -1001,7 +984,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
                 }
             }
         }
-        @EventHandler
+        @Listener
         private void playerInteractEvent(PlayerInteractEvent event) {
             final ItemStack i = event.getItem();
             if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
@@ -1023,9 +1006,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
                         }
                         removeItem(player, i, 1);
                         for(String s : vkits.getStringList("messages.upgrade"))
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
+                            player.sendMessage(translateColorCodes(s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
                         for(String s : vkits.getStringList("messages.upgrade broadcast"))
-                            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
+                            Bukkit.broadcastMessage(translateColorCodes(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
                     }
                     player.updateInventory();
                 }
@@ -1035,7 +1018,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
 
     private class mkitevents extends RandomPackageAPI implements Listener {
 
-        @EventHandler
+        @Listener
         private void inventoryClickEvent(InventoryClickEvent event) {
             final Player player = (Player) event.getWhoClicked();
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -1062,7 +1045,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             }
         }
 
-        @EventHandler
+        @Listener
         private void playerInteractEvent(PlayerInteractEvent event) {
             final ItemStack is = event.getItem();
             if(is != null) {

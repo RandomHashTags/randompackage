@@ -4,35 +4,19 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.FilterCategory;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemFilter extends RandomPackageAPI implements Listener, CommandExecutor {
+public class ItemFilter extends RandomPackageAPI {
 
     private static ItemFilter instance;
-    public static final ItemFilter getItemFilter() {
+    public static ItemFilter getItemFilter() {
         if(instance == null) instance = new ItemFilter();
         return instance;
     }
@@ -66,7 +50,7 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         if(isEnabled) return;
         save(null, "item filter.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "item filter.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         categorySlots = new HashMap<>();
@@ -74,12 +58,12 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         categoryTitles = new HashMap<>();
 
         addedLore = colorizeListString(config.getStringList("settings.categories added lore"));
-        enablePrefix = ChatColor.translateAlternateColorCodes('&', config.getString("settings.enabled prefix"));
+        enablePrefix = translateColorCodes(config.getString("settings.enabled prefix"));
         enable = colorizeListString(config.getStringList("settings.enabled lore"));
-        disabledPrefix = ChatColor.translateAlternateColorCodes('&', config.getString("settings.disabled prefix"));
+        disabledPrefix = translateColorCodes(config.getString("settings.disabled prefix"));
         disable = colorizeListString(config.getStringList("settings.disabled lore"));
 
-        gui = new UInventory(null, config.getInt("categories.size"), ChatColor.translateAlternateColorCodes('&', config.getString("categories.title")));
+        gui = new UInventory(null, config.getInt("categories.size"), translateColorCodes(config.getString("categories.title")));
         final Inventory gi = gui.getInventory();
         for(String s : config.getConfigurationSection("categories").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size")) {
@@ -123,7 +107,7 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         FilterCategory.deleteAll();
         categories = null;
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void viewHelp(Player player) {
@@ -181,7 +165,7 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
     }
 
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final Player player = (Player) event.getWhoClicked();
@@ -216,7 +200,7 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @Listener(priority = EventPriority.NORMAL)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         if(!event.isCancelled()) {
             final Player player = event.getPlayer();
@@ -228,7 +212,7 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
             }
         }
     }
-    @EventHandler
+    @Listener
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
         final FilterCategory c = categoryTitles.getOrDefault(event.getView().getTitle(), null);

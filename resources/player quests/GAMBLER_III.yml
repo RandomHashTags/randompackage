@@ -1,15 +1,15 @@
 # Made by RandomHashTags
 settings:
   enabled: true
-  name: "Master Miner"
-  completion: 20000
+  name: "Gambler III"
+  completion: 1000
   expiration: 86400
 #
 lore:
-- "&7Mine 20,000 blocks with a pickaxe"
+- "&7Buy 1,000 Jackpot Tickets"
 #
 rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "BlockMined;material=_PICKAXE;+1"
+- "JackpotPurchaseTickets;+amount"

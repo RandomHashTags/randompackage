@@ -4,32 +4,18 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.homes.Home;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.world.Location;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Homes extends RandomPackageAPI implements CommandExecutor, Listener {
+public class Homes extends RandomPackageAPI {
 	private static Homes instance;
 	public static final Homes getHomes() {
 		if(instance == null) instance = new Homes();
@@ -49,7 +35,7 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 		final long started = System.currentTimeMillis();
 		if(isEnabled) return;
 		save(null, "homes.yml");
-		pluginmanager.registerEvents(this, randompackage);
+		eventmanager.registerListeners(randompackage, this);
 		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "homes.yml"));
@@ -87,7 +73,7 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 		viewingHomes = null;
 		editingIcons = null;
 		isEnabled = false;
-		HandlerList.unregisterAll(this);
+		eventmanager.unregisterListeners(this);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -156,13 +142,13 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 		player.updateInventory();
 		editingIcons.put(player, home);
 	}
-	@EventHandler
+	@Listener
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
 		final Player p = (Player) event.getPlayer();
 		viewingHomes.remove(p);
 		if(editingIcons.keySet().contains(p)) editingIcons.remove(p);
 	}
-	@EventHandler
+	@Listener
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		if(!event.isCancelled()) {
 			final Player player = (Player) event.getWhoClicked();
@@ -205,7 +191,7 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 			}
 		}
 	}
-	@EventHandler
+	@Listener
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack is = event.getItem();
 		if(is != null && is.isSimilar(maxHomeIncreaser)) {

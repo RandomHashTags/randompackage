@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.jackpot.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -67,10 +68,10 @@ public class Jackpot extends RandomPackageAPI {
         if(isEnabled) return;
         save(null, "jackpot.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "jackpot.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), translateColorCodes(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
         final ItemStack confirm = d(config, "gui.confirm"), cancel = d(config, "gui.cancel");
         confirmSlots = new ArrayList<>();
@@ -144,7 +145,7 @@ public class Jackpot extends RandomPackageAPI {
         top = null;
         purchasing = null;
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void pickWinner() {
@@ -176,7 +177,7 @@ public class Jackpot extends RandomPackageAPI {
             final Collection<? extends Player> o = Bukkit.getOnlinePlayers();
             for(String s : config.getStringList("messages.won")) {
                 for(String r : replacements.keySet()) s = s.replace(r, replacements.get(r));
-                s = ChatColor.translateAlternateColorCodes('&', s);
+                s = translateColorCodes(s);
                 for(Player p : o) {
                     p.sendMessage(s);
                 }

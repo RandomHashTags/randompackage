@@ -2,11 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.CollectionChest;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
@@ -43,7 +45,7 @@ public class CollectionFilter extends RandomPackageAPI {
                 if(q.getType().equals(collectionchest.getType()) && q.getData().getData() == collectionchest.getData().getData()
                         && q.hasItemMeta() && q.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
                     if(a.equals("default"))  setFilter(player, q, defaultType);
-                    else if(a.equals("all")) setFilter(player, q, ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all")));
+                    else if(a.equals("all")) setFilter(player, q, translateColorCodes(config.getString("collection chests.chest.filter types.all")));
                     else {
                         if(args.length == 0)
                             editFilter(player, null);
@@ -72,7 +74,7 @@ public class CollectionFilter extends RandomPackageAPI {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "collection filter.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "collection filter.yml"));
 
@@ -80,11 +82,11 @@ public class CollectionFilter extends RandomPackageAPI {
         editingfilter = new HashMap<>();
 
         collectionchest = d(config, "collection chests.chest");
-        allType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all"));
-        defaultType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.default"));
-        itemType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.item"));
+        allType = translateColorCodes(config.getString("collection chests.chest.filter types.all"));
+        defaultType = translateColorCodes(config.getString("collection chests.chest.filter types.default"));
+        itemType = translateColorCodes(config.getString("collection chests.chest.filter types.item"));
 
-        collectionchestgui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        collectionchestgui = new UInventory(null, config.getInt("gui.size"), translateColorCodes(config.getString("gui.title")));
         final Inventory cci = collectionchestgui.getInventory();
         final ItemStack background = d(config, "gui.background");
         for(int i = 0; i < collectionchestgui.getSize(); i++) {
@@ -141,7 +143,7 @@ public class CollectionFilter extends RandomPackageAPI {
             }
         }
         CollectionChest.deleteAll();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     @Listener
@@ -195,7 +197,7 @@ public class CollectionFilter extends RandomPackageAPI {
             final String f = u == null ? defaultType : toMaterial(u.getMaterial().name(), false);
             for(String s : config.getStringList("messages.set")) {
                 if(s.contains("{ITEM}")) s = s.replace("{ITEM}", f);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                player.sendMessage(translateColorCodes(s));
             }
         }
     }
@@ -256,7 +258,7 @@ public class CollectionFilter extends RandomPackageAPI {
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(collectionchestgui.getInventory().getContents());
         player.updateInventory();
-        final String selected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.selected.prefix")), notselected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.not selected.prefix"));
+        final String selected = translateColorCodes(config.getString("gui.selected.prefix")), notselected = translateColorCodes(config.getString("gui.not selected.prefix"));
         final boolean selectedEnchanted = config.getBoolean("gui.selected.enchanted"), notselectedEnchanted = config.getBoolean("gui.not selected.enchanted");
         final CollectionChest cc = CollectionChest.valueOf(clickedblock);
         final UMaterial filter = cc.getFilter();
@@ -273,7 +275,7 @@ public class CollectionFilter extends RandomPackageAPI {
                 itemMeta.setDisplayName(itemMeta.getDisplayName() + q);
                 lore.clear();
                 if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                for(String r : config.getStringList("gui." + (sel ? "selected" : "not selected") + ".added lore")) lore.add(ChatColor.translateAlternateColorCodes('&', r));
+                for(String r : config.getStringList("gui." + (sel ? "selected" : "not selected") + ".added lore")) lore.add(translateColorCodes(r));
                 if(sel && selectedEnchanted || !sel && notselectedEnchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
@@ -303,7 +305,7 @@ public class CollectionFilter extends RandomPackageAPI {
         final String m = toMaterial(picksup.get(rawslot).name(), false);
         for(int i = 0; i < l.size(); i++) {
             if(i == filtertypeSlot) {
-                lore.add(ChatColor.translateAlternateColorCodes('&', l.get(i).replace("{FILTER_TYPE}", m)));
+                lore.add(translateColorCodes(l.get(i).replace("{FILTER_TYPE}", m)).toString());
             } else {
                 lore.add(l.get(i));
             }
@@ -312,9 +314,9 @@ public class CollectionFilter extends RandomPackageAPI {
         is.setItemMeta(itemMeta);
         lore.clear();
         for(String string : config.getStringList("messages.updated cc")) {
-            if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
+            if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", Integer.toString(is.getQuantity()));
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", m);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+            player.sendMessage(translateColorCodes(string));
         }
         if(player != null) player.updateInventory();
     }
@@ -326,12 +328,12 @@ public class CollectionFilter extends RandomPackageAPI {
         lore.clear();
         for(String string : config.getStringList("messages.set")) {
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", filter);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+            player.sendMessage(translateColorCodes(string));
         }
     }
 
     public UMaterial getFiltered(ItemStack is) {
-        final String u = collectionchest.copy().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), a = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
+        final String u = collectionchest.copy().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), a = stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
         for(UMaterial s : picksup.values()) {
             if(s == null) return null;
             if(a.equals(toMaterial(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))), false))) {
@@ -344,7 +346,7 @@ public class CollectionFilter extends RandomPackageAPI {
         final String u = collectionchest.copy().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType);
         for(UMaterial s : picksup.values()) {
             if(s == null) return null;
-            if(ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase()).equals(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))))) {
+            if(ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase()).equals(stripColor(u.replace("{ITEM}", s.name().replace("_", " "))))) {
                 return s.getItemStack();
             }
         }

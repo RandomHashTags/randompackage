@@ -4,31 +4,17 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Lootbox;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Lootboxes extends RandomPackageAPI implements Listener, CommandExecutor {
+public class Lootboxes extends RandomPackageAPI {
 
     private static Lootboxes instance;
     public static final Lootboxes getLootboxes() {
@@ -62,7 +48,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         if(isEnabled) return;
         save(null, "lootboxes.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "lootboxes.yml"));
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         started = new HashMap<>();
@@ -75,7 +61,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         viewing = new ArrayList<>();
         tasks = new HashMap<>();
 
-        final String title = ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")), type = config.getString("gui.type");
+        final String title = translateColorCodes(config.getString("gui.title")), type = config.getString("gui.type");
         final int size = config.getInt("gui.size");
         if(type != null) {
             final InventoryType i = InventoryType.valueOf(type);
@@ -143,7 +129,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         started = null;
         Lootbox.deleteAll();
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
     public void viewLootbox(Player player) {
@@ -217,8 +203,8 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
                 if(s.equals("X"))  {
                     top.setItem(slot, background);
                 } else if(s.equals("C")) {
-                    item = background.clone();
-                    item.setAmount(countdownStart);
+                    item = background.copy();
+                    item.setQuantity(countdownStart);
                     top.setItem(slot, item);
                     countdownSlots.add(slot);
                 } else if(s.equals("B")) {
@@ -254,8 +240,8 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         for(int i = 1; i <= countdownStart; i++) {
             final int k = i;
             T.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-                item = background.clone();
-                item.setAmount(countdownStart-k);
+                item = background.copy();
+                item.setQuantity(countdownStart-k);
                 for(int c : countdownSlots) {
                     top.setItem(c, item);
                 }
@@ -293,7 +279,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         }
     }
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final Player player = (Player) event.getWhoClicked();
@@ -324,7 +310,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
             }
         }
     }
-    @EventHandler
+    @Listener
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack i = event.getItem();
@@ -336,7 +322,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
             openLootbox(player, l);
         }
     }
-    @EventHandler
+    @Listener
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
         viewing.remove(player);
@@ -355,7 +341,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
             for(String s : opened) {
                 if(s.equals("{REWARDS}")) {
                     for(ItemStack is : rewards) {
-                        final String amount = Integer.toString(is.getAmount()), itemname = is.hasItemMeta() && is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : toMaterial(is.getType().name(), false);
+                        final String amount = Integer.toString(is.getQuantity()), itemname = is.hasItemMeta() && is.getItemMeta().hasDisplayName() ? is.getItemMeta().getDisplayName() : toMaterial(is.getType().name(), false);
                         for(String m : rewardFormat) {
                             Bukkit.broadcastMessage(m.replace("{AMOUNT}", amount).replace("{ITEM_NAME}", itemname));
                         }

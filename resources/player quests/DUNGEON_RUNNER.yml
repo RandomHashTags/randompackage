@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   name: "Dungeon Runner"
   completion: 1
   expiration: 86400

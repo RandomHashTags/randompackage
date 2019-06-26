@@ -2,20 +2,17 @@ package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.Trinket;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Trinkets extends RandomPackageAPI implements Listener {
+public class Trinkets extends RandomPackageAPI {
 
     private static Trinkets instance;
-    public static final Trinkets getTrinkets() {
+    public static Trinkets getTrinkets() {
         if(instance == null) instance = new Trinkets();
         return instance;
     }
@@ -25,7 +22,7 @@ public class Trinkets extends RandomPackageAPI implements Listener {
     public void enable() {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
 
         if(!otherdata.getBoolean("saved default trinkets")) {
@@ -47,6 +44,6 @@ public class Trinkets extends RandomPackageAPI implements Listener {
         if(!isEnabled) return;
         isEnabled = false;
         Trinket.deleteAll();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 }

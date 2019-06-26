@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestChe
 import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestMob;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -49,7 +50,7 @@ public class Conquest extends RandomPackageAPI {
         final long started = System.currentTimeMillis();
         if(isEnabled) return;
         save(null, "conquests.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "conquests.yml"));
 
@@ -64,7 +65,7 @@ public class Conquest extends RandomPackageAPI {
 
         for(String s : config.getConfigurationSection("bosses").getKeys(false)) {
             final String p = "bosses." + s + ".";
-            new ConquestMob(s, config.getString(p + "type").toUpperCase(), ChatColor.translateAlternateColorCodes('&', config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
+            new ConquestMob(s, config.getString(p + "type").toUpperCase(), translateColorCodes(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
         for(File f : new File(rpd + separator + "conquests").listFiles()) {
             final ConquestChest c = new ConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
@@ -112,7 +113,7 @@ public class Conquest extends RandomPackageAPI {
         ConquestChest.deleteAll();
         ConquestMob.deleteAll();
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
     public void destroyConquests() {
         final List<LivingConquestChest> C = LivingConquestChest.living;

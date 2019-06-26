@@ -1,17 +1,11 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 
-public class Disguises extends RandomPackageAPI implements Listener, CommandExecutor {
+public class Disguises extends RandomPackageAPI {
 
     private static Disguises instance;
-    public static final Disguises getDisguises() {
+    public static Disguises getDisguises() {
         if(instance == null) instance = new Disguises();
         return instance;
     }
@@ -27,13 +21,13 @@ public class Disguises extends RandomPackageAPI implements Listener, CommandExec
         if(isEnabled) return;
         isEnabled = true;
         save(null, "disguises.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void disable() {
         if(!isEnabled) return;
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 }

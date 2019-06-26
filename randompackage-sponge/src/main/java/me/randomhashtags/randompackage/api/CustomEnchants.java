@@ -4,11 +4,22 @@ import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
+import me.randomhashtags.randompackage.utils.universal.UInventory;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.monster.Creeper;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameMode;
+import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.arrow.Arrow;
+import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.world.Location;
 
 import java.io.File;
 import java.util.*;
@@ -36,7 +47,7 @@ public class CustomEnchants extends CustomEnchantUtils {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
         if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true))
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CustomEnchant.disabled.keySet().toString()));
+            sender.sendMessage(translateColorCodes(CustomEnchant.disabled.keySet().toString()));
         else if(player != null && n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true))viewAlchemist(player);
         else if(player != null && n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true))viewEnchanter(player);
         else if(player != null && n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true))  viewTinkerer(player);
@@ -57,7 +68,7 @@ public class CustomEnchants extends CustomEnchantUtils {
         if(isEnabled) return;
         final CustomEnchantUtils ceu = CustomEnchantUtils.getCustomEnchantUtils();
         ceu.enable();
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
@@ -83,9 +94,9 @@ public class CustomEnchants extends CustomEnchantUtils {
         enchanterpurchase = new HashMap<>();
         invAccepting = new ArrayList<>();
 
-        alchemist = new UInventory(null, 27, ChatColor.translateAlternateColorCodes('&', config.getString("alchemist.title")));
-        enchanter = new UInventory(null, config.getInt("enchanter.size"), ChatColor.translateAlternateColorCodes('&', config.getString("enchanter.title")));
-        tinkerer = new UInventory(null, config.getInt("tinkerer.size"), ChatColor.translateAlternateColorCodes('&', config.getString("tinkerer.title")));
+        alchemist = new UInventory(null, 27, translateColorCodes(config.getString("alchemist.title")));
+        enchanter = new UInventory(null, config.getInt("enchanter.size"), translateColorCodes(config.getString("enchanter.title")));
+        tinkerer = new UInventory(null, config.getInt("tinkerer.size"), translateColorCodes(config.getString("tinkerer.title")));
         setupInventory(alchemist);
         setupInventory(tinkerer);
         mysterydust = d(config, "items.mystery dust");
@@ -302,7 +313,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                 int increm = increment;
                 for(int k = starting; k <= yml.getInt("orbs." + A + ".final max slots"); k += increment) {
                     if(k != starting) increm += increment;
-                    final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', yml.getString("orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
+                    final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = translateColorCodes(yml.getString("orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
                     item = iii.copy(); itemMeta = item.getItemMeta(); lore.clear();
                     itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
                     if(itemMeta.hasLore()) {
@@ -352,11 +363,11 @@ public class CustomEnchants extends CustomEnchantUtils {
                 RarityGem.defaultColors = new HashMap<>();
                 final HashMap<Integer, String> d = RarityGem.defaultColors;
                 final ConfigurationSection C = r.getConfigurationSection("default settings.colors");
-                d.put(-1, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.else")));
-                d.put(0, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.less than 100")));
+                d.put(-1, translateColorCodes(r.getString("default settings.colors.else")));
+                d.put(0, translateColorCodes(r.getString("default settings.colors.less than 100")));
                 for(String s : C.getKeys(false)) {
                     if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                        d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors." + s)));
+                        d.put(Integer.parseInt(s.split("s")[0]), translateColorCodes(r.getString("default settings.colors." + s)));
                     }
                 }
                 for(String s : cs.getKeys(false)) {
@@ -458,7 +469,7 @@ public class CustomEnchants extends CustomEnchantUtils {
         Fireball.deleteAll();
         MagicDust.deleteAll();
         isEnabled = false;
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
 
@@ -478,7 +489,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getName()));
                         replacements.put("{DESC}", ce.getLore());
-                        final String msg = ChatColor.translateAlternateColorCodes('&', format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
+                        final String msg = translateColorCodes(format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {
                             lore.clear();
                             lore.addAll(L);
@@ -491,7 +502,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                     }
                 }
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{MAX_PAGE}", Integer.toString(maxpage)).replace("{PAGE}", Integer.toString(page))));
+                sender.sendMessage(translateColorCodes(s.replace("{MAX_PAGE}", Integer.toString(maxpage)).replace("{PAGE}", Integer.toString(page))));
             }
         }
     }
@@ -557,11 +568,11 @@ public class CustomEnchants extends CustomEnchantUtils {
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if(event.isCancelled()) {
 
-        } else if(event.getEntity() instanceof LivingEntity && canProcOn(event.getEntity())) {
+        } else if(event.getEntity() instanceof Living && canProcOn(event.getEntity())) {
             final Entity entity = event.getEntity();
             Player damager = event.getDamager() instanceof Player ? (Player) event.getDamager() : null;
             if(damager != null) {
-                final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
+                final PvAnyEvent e = new PvAnyEvent(damager, (Living) entity, event.getDamage());
                 pluginmanager.callEvent(e);
                 if(!e.isCancelled()) {
                     event.setDamage(e.damage);
@@ -572,7 +583,7 @@ public class CustomEnchants extends CustomEnchantUtils {
             final UUID u = event.getDamager().getUniqueId();
             if(damager == null && event.getDamager() instanceof Arrow && shotbows.keySet().contains(u)) {
                 damager = shotbows.get(u);
-                final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage(), (Projectile) event.getDamager());
+                final PvAnyEvent e = new PvAnyEvent(damager, (Living) entity, event.getDamage(), (Projectile) event.getDamager());
                 pluginmanager.callEvent(e);
                 if(!event.isCancelled()) {
                     procPlayerArmor(e, damager);
@@ -582,9 +593,9 @@ public class CustomEnchants extends CustomEnchantUtils {
                     event.setDamage(e.damage);
                 }
             }
-            if(entity instanceof Player && event.getDamager() instanceof LivingEntity && !(event.getDamager() instanceof TNTPrimed) && !(event.getDamager() instanceof Creeper)) {
+            if(entity instanceof Player && event.getDamager() instanceof Living && !(event.getDamager() instanceof TNTPrimed) && !(event.getDamager() instanceof Creeper)) {
                 final Player victim = (Player) entity;
-                final LivingEntity d = (LivingEntity) event.getDamager();
+                final Living d = (Living) event.getDamager();
                 final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
                 pluginmanager.callEvent(e);
                 if(!e.isCancelled()) {
@@ -601,7 +612,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                         final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, event.getDamager(), event.getFinalDamage(), event.getDamage());
                         pluginmanager.callEvent(e);
                         if(!e.isCancelled()) {
-                            final LivingEntity le = cee.getSummoner();
+                            final Living le = cee.getSummoner();
                             final Player player = le instanceof Player ? (Player) le : null;
                             procPlayerArmor(e, player);
                             procPlayerItem(e, player, getItemInHand(player));
@@ -647,16 +658,16 @@ public class CustomEnchants extends CustomEnchantUtils {
         final List<String> l = enchant.getLore();
         for(String r : rarity.getLoreFormat()) {
             if(r.equals("{SUCCESS}")) {
-                if(success != -1) lore.add(ChatColor.translateAlternateColorCodes('&', S.replace("{PERCENT}", Integer.toString(success))));
+                if(success != -1) lore.add(translateColorCodes(S.replace("{PERCENT}", Integer.toString(success))).toString());
             } else if(r.equals("{DESTROY}")) {
-                if(destroy != -1) lore.add(ChatColor.translateAlternateColorCodes('&', D.replace("{PERCENT}", Integer.toString(destroy))));
+                if(destroy != -1) lore.add(translateColorCodes(D.replace("{PERCENT}", Integer.toString(destroy))).toString());
             } else if(r.equals("{ENCHANT_LORE}")) {
                 lore.addAll(l);
             } else if(r.equals("{ENCHANT_TYPE}") && showEnchantType) {
                 final String path = enchant.getAppliesTo().toString().toLowerCase().replace(",", ";").replace("[", "").replace("]", "").replaceAll("\\p{Z}", "");
-                lore.add(ChatColor.translateAlternateColorCodes('&', config.getString("enchant types." + path)));
+                lore.add(translateColorCodes(config.getString("enchant types." + path)));
             } else if(showOtherLore)
-                lore.add(ChatColor.translateAlternateColorCodes('&', r));
+                lore.add(translateColorCodes(r).toString());
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);
@@ -678,7 +689,7 @@ public class CustomEnchants extends CustomEnchantUtils {
             if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
             if(s.equals("{ENCHANT_LORE}")) lore.addAll(enchant.getLore());
             if(s.equals("{ENCHANT_TYPE}")) s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
-            if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+            if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(translateColorCodes(s));
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);
@@ -745,7 +756,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                 giveItem(player, r);
                 spawnFirework(rarity.getFirework(), player.getLocation());
                 player.updateInventory();
-                for(String s : rarity.getRevealedEnchantMsg()) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{ENCHANT}", displayname)));
+                for(String s : rarity.getRevealedEnchantMsg()) player.sendMessage(translateColorCodes(s.replace("{ENCHANT}", displayname)));
             }
         } else if(fireball != null) {
             event.setCancelled(true);
@@ -771,7 +782,7 @@ public class CustomEnchants extends CustomEnchantUtils {
             } else {
                 final CustomEnchant enchant = CustomEnchant.valueOf(I);
                 if(enchant != null)
-                    for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    for(String s : config.getStringList("rarities.apply info")) player.sendMessage(translateColorCodes(s));
             }
         }
     }
@@ -816,7 +827,7 @@ public class CustomEnchants extends CustomEnchantUtils {
     }
     @Listener(priority = EventPriority.HIGH)
     private void entityDeathEvent(EntityDeathEvent event) {
-        final LivingEntity e = event.getEntity();
+        final Living e = event.getEntity();
         final Player k = e.getKiller();
         final UUID u = e.getUniqueId();
         spawnedFromSpawner.remove(u);
@@ -836,7 +847,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                 if(entity.getType().dropsItemsUponDeath()) {
                     event.getDrops().clear(); event.setDroppedExp(0);
                 }
-                final LivingEntity s = entity.getSummoner();
+                final Living s = entity.getSummoner();
                 if(s instanceof Player) {
                     final RPPlayer pdata = RPPlayer.get(s.getUniqueId());
                     pdata.removeCustomEnchantEntity(u);
@@ -1257,7 +1268,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                 event.setCancelled(true);
                 item = cursor.getItem();
                 itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', cursor.getColors(combinedTotal)) + combinedTotal));
+                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", translateColorCodes(cursor.getColors(combinedTotal)) + combinedTotal));
                 item.setItemMeta(itemMeta);
                 event.setCurrentItem(item);
                 if(cursorAmount == 1) event.setCursor(new ItemStack(Material.AIR));
@@ -1309,7 +1320,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                         for(String string : itemMeta.getLore()) {
                             if(string.equals(s.replace("{PERCENT}", "" + getRemainingInt(string))))        string = s.replace("{PERCENT}", "" + newSuccess);
                             else if(string.equals(d.replace("{PERCENT}", "" + getRemainingInt(string))))   string = d.replace("{PERCENT}", "" + newDestroy);
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(translateColorCodes(string));
                         }
                         itemMeta.setLore(lore); lore.clear();
                         success = true;
@@ -1369,7 +1380,7 @@ public class CustomEnchants extends CustomEnchantUtils {
                                     else if(r + percent > 100) { r = 50; percent = 50; }
                                     string = SUCCESS.replace("{PERCENT}", "" + (r + percent));
                                 }
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                                lore.add(translateColorCodes(string).toString());
                             }
                             itemMeta.setLore(lore); lore.clear();
                             success = true;
@@ -1453,10 +1464,10 @@ public class CustomEnchants extends CustomEnchantUtils {
         }
     }
     @Listener(priority = EventPriority.HIGH)
-    private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
+    private void entityTargetLivingEvent(EntityTargetLivingEvent event) {
         final Entity E = event.getEntity();
-        final LivingEntity EE = event.getTarget();
-        if(!event.isCancelled() && E instanceof LivingEntity && EE instanceof Player) {
+        final Living EE = event.getTarget();
+        if(!event.isCancelled() && E instanceof Living && EE instanceof Player) {
             final UUID u = E.getUniqueId();
             final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
             if(L != null) {
@@ -1530,7 +1541,7 @@ public class CustomEnchants extends CustomEnchantUtils {
             if(did) {
                 for(String string : soultracker.getApplyMessage()) {
                     if(string.contains("{ITEM}")) string = string.replace("{ITEM}", is.getType().name());
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                    player.sendMessage(translateColorCodes(string));
                 }
                 itemMeta.setLore(lore); lore.clear();
                 is.setItemMeta(itemMeta);
@@ -1692,14 +1703,14 @@ public class CustomEnchants extends CustomEnchantUtils {
                     g = appliedst.getConvertsTo();
                 }
                 item = g.getItem().copy(); itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', g.getColors(gems)) + gems));
+                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", translateColorCodes(g.getColors(gems)) + gems));
                 if(gems != 0) item.setAmount(1);
                 item.setItemMeta(itemMeta);
                 giveItem(player, item);
                 for(String string : split) {
                     if(string.contains("{SOULS}")) string = string.replace("{SOULS}", Integer.toString(collectedsouls));
                     if(string.contains("{GEMS}")) string = string.replace("{GEMS}", Integer.toString(gems));
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                    player.sendMessage(translateColorCodes(string));
                 }
                 player.updateInventory();
             }

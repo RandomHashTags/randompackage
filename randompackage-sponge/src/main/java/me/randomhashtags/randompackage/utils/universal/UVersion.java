@@ -1,8 +1,14 @@
 package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.utils.GivedpItem;
 import me.randomhashtags.randompackage.utils.supported.SpawnerAPI;
+import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.source.ConsoleSource;
+import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -16,13 +22,14 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryArchetype;
-import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -34,6 +41,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+
 public class UVersion {
 
     private static UVersion instance;
@@ -42,14 +51,16 @@ public class UVersion {
         return instance;
     }
 
-    public final RandomPackage randompackage = RandomPackage.getPlugin;
+    public final RandomPackage randompackage = getPlugin;
     public final PluginManager pluginmanager = Sponge.getPluginManager();
+    public final CommandManager commandmanager = Sponge.getCommandManager();
     public final EventManager eventmanager = Sponge.getEventManager();
     public final Random random = new Random();
 
-    public final String version = Sponge.getVersion();
+    public final Server server = Sponge.getServer();
+    public final String version = Sponge.getPlatform().getMinecraftVersion().getName();
     public final Scheduler scheduler = Sponge.getScheduler();
-    public final ConsoleCommandSender console = Bukkit.getConsoleSender();
+    public final ConsoleSource console = server.getConsole();
     public ItemStack item = ItemTypes.APPLE.getTemplate().createStack();
     public ItemMeta itemMeta = item.getItemMeta();
     public List<String> lore = new ArrayList<>();
@@ -66,6 +77,10 @@ public class UVersion {
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
         }
     }
+    public void addCommand(CommandExecutor executor, String permission, String description, String...cmds) {
+        final CommandSpec c = CommandSpec.builder().description(Text.of(description)).permission(permission).executor(executor).build();
+        commandmanager.register(getPlugin, c, cmds);
+    }
     public String formatDouble(double d) {
         String decimals = Double.toString(d).split("\\.")[1];
         if(decimals.equals("0")) { decimals = ""; } else { decimals = "." + decimals; }
@@ -78,10 +93,16 @@ public class UVersion {
         decimals = c ? decimals.equals("0") ? "" : "." + decimals : "";
         return formatInt((int) l) + decimals;
     }
+    public Text translateColorCodes(String string) {
+        return Text.of(TextSerializers.FORMATTING_CODE.serialize(Text.of(string)));
+    }
+    public Text stripColor(String string) {
+        return TextSerializers.PLAIN.deserialize(string);
+    }
     public String formatInt(int integer) { return String.format("%,d", integer); }
     public int getRemainingInt(String string) {
-        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
-        return string == null || string.equals("") ? -1 : Integer.parseInt(string);
+        string = translateColorCodes(string).toPlain().replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
+        return string.equals("") ? -1 : Integer.parseInt(string);
     }
     public long getDelay(String input) {
         input = input.toLowerCase();
@@ -158,10 +179,10 @@ public class UVersion {
 
     }
     public void sendConsoleMessage(String msg) {
-        console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        console.sendMessage(translateColorCodes(msg));
     }
     public Double getRemainingDouble(String string) {
-        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
+        string = translateColorCodes(string).toPlain().replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
         return string == null || string.equals("") ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
     }
     public String toMaterial(String input, boolean realitem) {
@@ -245,18 +266,10 @@ public class UVersion {
     public List<String> colorizeListString(List<String> input) {
         final List<String> i = new ArrayList<>();
         for(String s : input)
-            i.add(ChatColor.translateAlternateColorCodes('&', s));
+            i.add(translateColorCodes(s).toString());
         return i;
     }
     public int indexOf(Set<? extends Object> collection, Object value) {
-        int i = 0;
-        for(Object o : collection) {
-            if(value.equals(o)) return i;
-            i++;
-        }
-        return -1;
-    }
-    public int indexOf(Collection<? extends Object> collection, Object value) {
         int i = 0;
         for(Object o : collection) {
             if(value.equals(o)) return i;
@@ -345,7 +358,7 @@ public class UVersion {
         int amount = 0;
         for(ItemStack is : inventory.getContents()) {
             if(is != null && is.isSimilar(i)) {
-                amount += is.getAmount();
+                amount += is.getQuantity();
             }
         }
         return amount;
@@ -370,7 +383,7 @@ public class UVersion {
     public ItemStack getSpawner(String input) {
         String pi = input.toLowerCase(), type = null;
         if(pi.equals("mysterymobspawner")) {
-            return GivedpItem.getGivedpItem().valueOf("mysterymobspawner").clone();
+            return GivedpItem.getGivedpItem().valueOf("mysterymobspawner").copy();
         } else {
             final Plugin plugin = RandomPackage.spawnerPlugin;
             if(plugin != null) {
@@ -388,7 +401,7 @@ public class UVersion {
                 if(is != null) {
                     return is;
                 } else {
-                    console.sendMessage("[RandomPackage] SilkSpawners or EpicSpawners is required to use this feature!");
+                    sendConsoleMessage("[RandomPackage] SilkSpawners or EpicSpawners is required to use this feature!");
                 }
             }
         }
@@ -403,11 +416,11 @@ public class UVersion {
                         s = s.replace(r, replacements.get(r));
                     }
                 }
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                sender.sendMessage(translateColorCodes(s));
             }
         }
     }
-    public LivingEntity getHitEntity(ProjectileHitEvent event) {
+    public Living getHitEntity(ProjectileHitEvent event) {
         final List<Entity> n = event.getEntity().getNearbyEntities(0.0, 0.0, 0.0);
         return n.size() > 0 && n.get(0) instanceof LivingEntity ? (LivingEntity) n.get(0) : null;
     }
@@ -483,7 +496,7 @@ public class UVersion {
                 l.add(new Location(world, xx, 0, zz));
         return l;
     }
-    public ItemStack getItemInHand(LivingEntity entity) {
+    public ItemStack getItemInHand(Living entity) {
         if(entity == null) return null;
         else {
             final EntityEquipment e = entity.getEquipment();

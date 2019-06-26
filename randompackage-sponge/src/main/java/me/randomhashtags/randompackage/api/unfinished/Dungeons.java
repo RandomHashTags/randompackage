@@ -3,32 +3,26 @@ package me.randomhashtags.randompackage.api.unfinished;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.classes.dungeons.Dungeon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.Text;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Dungeons extends RandomPackageAPI implements CommandExecutor, Listener {
+public class Dungeons extends RandomPackageAPI implements CommandExecutor {
 
     private static Dungeons instance;
-    public static final Dungeons getDungeons() {
+    public static Dungeons getDungeons() {
         if(instance == null) instance = new Dungeons();
         return instance;
     }
@@ -40,18 +34,18 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
 
     public ItemStack dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        final Player player = sender instanceof Player ? (Player) sender : null;
-        if(player != null && args.length == 0 && hasPermission(player, "RandomPackage.dungeons", true)) {
-            viewDungeons(player);
+    public CommandResult execute(CommandSource src, CommandContext args) {
+        if(src instanceof Player && args.length == 0 && hasPermission(src, "RandomPackage.dungeons", true)) {
+            viewDungeons((Player) src);
         }
-        return true;
+        return CommandResult.success();
     }
 
     public void enable() {
         if(isEnabled) return;
+        addCommand(this, "RandomPackage.dungeons", "Dungeons!", "dungeon", "dungeons");
         save(null, "dungeons.yml");
-        pluginmanager.registerEvents(this, randompackage);
+        eventmanager.registerListeners(randompackage, this);
         isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "dungeons.yml"));
 
@@ -63,8 +57,8 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
         soulpearl = d(config, "items.soul pearl");
         addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
-        dungeons = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        master = new UInventory(null, config.getInt("master.size"), ChatColor.translateAlternateColorCodes('&', config.getString("master.title")));
+        dungeons = new UInventory(null, config.getInt("gui.size"), translateColorCodes(config.getString("gui.title")));
+        master = new UInventory(null, config.getInt("master.size"), translateColorCodes(config.getString("master.title")));
         background = d(config, "gui.background");
         final ItemStack undisDungeon = d(config, "gui.undiscovered.dungeon"), undisKey = d(config, "gui.undiscovered.key");
         final Inventory di = dungeons.getInventory();
@@ -73,7 +67,7 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
                 final int slot = config.getInt("gui." + s + ".slot");
                 final String i = config.getString("gui." + s + ".item").toUpperCase();
                 //if(i.startsWith("KEY:")) keys.put(slot, Dungeon.valueOf(config.getString("gui." + s + ".item").split(":")[1]));
-                di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.clone() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.clone() : d(config, "gui." + s));
+                di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.copy() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.copy() : d(config, "gui." + s));
             }
         }
         for(int i = 0; i < dungeons.getSize(); i++)
@@ -90,10 +84,10 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
         master = null;
         background = null;
         Dungeon.deleteAll();
-        HandlerList.unregisterAll(this);
+        eventmanager.unregisterListeners(this);
     }
 
-    @EventHandler
+    @Listener
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
@@ -109,7 +103,7 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
         }
     }
 
-    @EventHandler
+    @Listener
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack i = event.getItem();
         if(i != null && i.hasItemMeta()) {

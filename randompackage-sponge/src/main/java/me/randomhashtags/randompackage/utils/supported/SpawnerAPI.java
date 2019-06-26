@@ -1,9 +1,6 @@
 package me.randomhashtags.randompackage.utils.supported;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.utils.supported.plugins.epicSpawners5;
-import me.randomhashtags.randompackage.utils.supported.plugins.epicSpawners6;
-import me.randomhashtags.randompackage.utils.supported.plugins.silkSpawners;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 public class SpawnerAPI {

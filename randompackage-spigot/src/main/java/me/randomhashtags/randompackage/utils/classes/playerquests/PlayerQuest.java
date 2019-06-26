@@ -9,21 +9,24 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class PlayerQuest {
-    public static TreeMap<String, PlayerQuest> quests;
+    public static TreeMap<String, PlayerQuest> enabled, disabled;
     private static PlayerQuests api;
     private File f;
     private YamlConfiguration yml;
     public PlayerQuest(File f) {
-        if(quests == null) {
-            quests = new TreeMap<>();
+        if(enabled == null) {
+            enabled = new TreeMap<>();
+            disabled = new TreeMap<>();
             api = PlayerQuests.getPlayerQuests();
         }
         this.f = f;
         yml = YamlConfiguration.loadConfiguration(f);
-        quests.put(f.getName().split("\\.yml")[0], this);
+        (isEnabled() ? enabled : disabled).put(getYamlName(), this);
     }
     public File getFile() { return f; }
     public YamlConfiguration getYaml() { return yml; }
+    public String getYamlName() { return f.getName().split("\\.yml")[0]; }
+    public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public long getExpiration() { return yml.getLong("settings.expiration"); }
     public String getCompletion() { return yml.getString("settings.completion"); }
@@ -57,7 +60,8 @@ public class PlayerQuest {
     public List<String> getTrigger() { return yml.getStringList("trigger"); }
 
     public static void deleteAll() {
-        quests = null;
+        enabled = null;
+        disabled = null;
         api = null;
     }
 }

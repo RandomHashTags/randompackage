@@ -1,11 +1,8 @@
 package me.randomhashtags.randompackage.utils.classes;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,15 +38,15 @@ public class Lootbox {
     public YamlConfiguration getYaml() { return yml; }
     public String getYamlName() { return ymlName; }
     public String getName() {
-        if(name == null) name = ChatColor.translateAlternateColorCodes('&', yml.getString("name"));
+        if(name == null) name = TextColors.translateAlternateColorCodes('&', yml.getString("name"));
         return name;
     }
     public String getGuiTitle() {
-        if(guiTitle == null) guiTitle = ChatColor.translateAlternateColorCodes('&', yml.getString("gui.title"));
+        if(guiTitle == null) guiTitle = TextColors.translateAlternateColorCodes('&', yml.getString("gui.title"));
         return guiTitle;
     }
     public String getPreviewTitle() {
-        if(previewTitle == null) previewTitle = ChatColor.translateAlternateColorCodes('&', yml.getString("preview title"));
+        if(previewTitle == null) previewTitle = TextColors.translateAlternateColorCodes('&', yml.getString("preview title"));
         return previewTitle;
     }
     public String getRegularLootSize() {
@@ -136,11 +133,11 @@ public class Lootbox {
             i.setItemMeta(itemMeta);
             this.item = i;
         }
-        return item.clone();
+        return item.copy();
     }
     public ItemStack getBackground() {
         if(background == null) background = api.d(yml, "gui.background");;
-        return background.clone();
+        return background.copy();
     }
 
 
@@ -165,9 +162,9 @@ public class Lootbox {
     }
     public static Lootbox valueof(String previewTitle) {
         if(lootboxes != null) {
-            previewTitle = ChatColor.stripColor(previewTitle);
+            previewTitle = TextColors.stripColor(previewTitle);
             for(Lootbox l : lootboxes.values()) {
-                if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
+                if(TextColors.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
                     return l;
                 }
             }
