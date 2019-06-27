@@ -358,8 +358,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     giveItem(player, r);
                     player.updateInventory();
                     if(!receivemsg.isEmpty()) {
-                        final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner");
-                        for(String a : receivemsg) Bukkit.broadcastMessage(a.replace("{TYPE}", type));
+                        final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner"), n = player.getName();
+                        for(String a : receivemsg) Bukkit.broadcastMessage(a.replace("{PLAYER}", n).replace("{TYPE}", type));
                     }
                 }
             } else if(i.isSimilar(items.get("itemnametag"))) {

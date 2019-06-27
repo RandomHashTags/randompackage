@@ -43,10 +43,11 @@ public class ShopCategory {
             for(String s : yml.getConfigurationSection("gui").getKeys(false)) {
                 final String p = yml.getString("gui." + s + ".prices");
                 final String[] o = p != null ? p.split(";") : null;
-                final String custom = yml.getString("gui." + s + ".custom.item"), d = yml.getString("gui." + s + ".item").toUpperCase();
+                final String custom = yml.getString("gui." + s + ".custom.item"), i = yml.getString("gui." + s + ".item"), d = i.toUpperCase();
                 final boolean isBack = d.equals("BACK");
                 final ItemStack display = isBack ? back : shop.d(yml, "gui." + s);
-                final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : null : null;
+                final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : shop.d(null, i) : null;
+                if(!isBack && custom == null) purchased.setAmount(display.getAmount());
                 final int slot = yml.getInt("gui." + s + ".slot");
                 items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? Double.parseDouble(o[0]) : 0, o != null ? Double.parseDouble(o[1]) : 0));
                 ii.setItem(slot, display);
