@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customexplosions;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.ChatColor;
@@ -24,12 +23,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
 public class CustomCreeper {
     public static HashMap<String, CustomCreeper> creepers;
     public static HashMap<UUID, CustomCreeper> living;
-    private static RandomPackageAPI api;
     private static Random random;
 
     private YamlConfiguration yml;
@@ -40,7 +39,6 @@ public class CustomCreeper {
         if(creepers == null) {
             creepers = new HashMap<>();
             living = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             random = new Random();
         }
         this.yml = YamlConfiguration.loadConfiguration(f);
@@ -192,7 +190,6 @@ public class CustomCreeper {
     public static void deleteAll() {
         creepers = null;
         living = null;
-        api = null;
         random = null;
     }
 }

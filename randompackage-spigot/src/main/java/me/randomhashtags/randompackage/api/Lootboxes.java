@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Lootbox;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -14,8 +14,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -28,15 +26,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Lootboxes extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class Lootboxes extends RPFeature implements CommandExecutor {
     private static Lootboxes instance;
-    public static final Lootboxes getLootboxes() {
+    public static Lootboxes getLootboxes() {
         if(instance == null) instance = new Lootboxes();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private UInventory gui;
@@ -57,13 +52,10 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long sc = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "lootboxes.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "lootboxes.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
@@ -92,8 +84,11 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
             a.set("saved default lootboxes", true);
             saveOtherData();
         }
-        for(File f : new File(rpd + separator + "lootboxes").listFiles()) {
-            new Lootbox(f);
+        final File folder = new File(rpd + separator + "lootboxes");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                new Lootbox(f);
+            }
         }
 
         final Inventory gi = gui.getInventory();
@@ -124,8 +119,7 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         final HashMap<String, Lootbox> L = Lootbox.lootboxes;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (L != null ? L.size() : 0) + " lootboxes &e(took " + (System.currentTimeMillis()-sc) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         for(Lootbox l : started.keySet()) {
             otherdata.set("lootboxes.started." + l.getYamlName(), started.get(l));
         }
@@ -142,8 +136,6 @@ public class Lootboxes extends RandomPackageAPI implements Listener, CommandExec
         tasks = null;
         started = null;
         Lootbox.deleteAll();
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewLootbox(Player player) {

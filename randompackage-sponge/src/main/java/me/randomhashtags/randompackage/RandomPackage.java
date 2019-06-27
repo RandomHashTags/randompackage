@@ -1,11 +1,6 @@
 package me.randomhashtags.randompackage;
 
 import com.google.inject.Inject;
-import me.randomhashtags.randompackage.api.*;
-import me.randomhashtags.randompackage.api.nearFinished.PlayerQuests;
-import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
-import me.randomhashtags.randompackage.api.unfinished.*;
-import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
@@ -37,45 +32,6 @@ public class RandomPackage {
 
     public static Optional<PluginContainer> rpg;
 
-    private AuctionHouse auctionhouse;
-    private ChatEvents chatevents;
-    private CoinFlip coinflip;
-    private CollectionFilter collectionfilter;
-    private Conquest conquest;
-    private CustomArmor customarmor;
-    private CustomBosses custombosses;
-    private CustomEnchants customenchants;
-    private CustomExplosions customexplosions;
-    private Duels duels;
-    private Envoy envoy;
-    private FactionAdditions factionadditions;
-    private Fund fund;
-    private GlobalChallenges globalchallenges;
-    private Homes homes;
-    private ItemFilter itemfilter;
-    private Jackpot jackpot;
-    private Kits kits;
-    private KOTH koth;
-    private LastManStanding lastmanstanding;
-    private Lootboxes lootboxes;
-    private Masks masks;
-    private MobStacker mobstacker;
-    private MonthlyCrates monthlycrates;
-    private Outposts outposts;
-    private Pets pets;
-    private PlayerQuests playerquests;
-    private ServerCrates servercrates;
-    private Shop shop;
-    private Showcase showcase;
-    private Titles titles;
-    private Trade trade;
-    private Trinkets trinkets;
-    private WildPvP wildpvp;
-
-    private RandomPackageAPI api;
-    private RPEvents rpevents;
-    private SecondaryEvents secondaryevents;
-
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         enable();
@@ -86,23 +42,24 @@ public class RandomPackage {
         final UVersion uv = UVersion.getUVersion();
         enableMetrics();
 
-        auctionhouse = AuctionHouse.getAuctionHouse();
-
         enableSoftDepends();
     }
     private void enableSoftDepends() {
 
     }
-    private Optional<PluginContainer> getPlugin(String id) {
+    private PluginContainer getPlugin(String id) {
         final PluginManager pm = Sponge.getPluginManager();
-        final boolean enabled = pm.isLoaded(id);
-        return enabled ? pm.getPlugin(id) : Optional.empty();
+        final boolean enabled = pm.isLoaded(id) && pm.getPlugin(id).isPresent();
+        return enabled ? pm.getPlugin(id).get() : null;
     }
 
 
     private void enableMetrics() {
-        metrics.addCustomChart(new Metrics2.SimplePie("sponge_server_version", () -> Sponge.getPlatform().getMinecraftVersion().getName()));
-        metrics.addCustomChart(new Metrics2.AdvancedPie("sponge_features_used", settings));
-        metrics.addCustomChart(new Metrics2.SimplePie("sponge_players", () -> Integer.toString(Sponge.getServer().getOnlinePlayers().size())));
+        final PluginContainer p = getPlugin("Metrics");
+        if(p != null) {
+            metrics.addCustomChart(new Metrics2.SimplePie("sponge_server_version", () -> Sponge.getPlatform().getMinecraftVersion().getName()));
+            metrics.addCustomChart(new Metrics2.AdvancedPie("sponge_features_used", settings));
+            metrics.addCustomChart(new Metrics2.SimplePie("sponge_players", () -> Integer.toString(Sponge.getServer().getOnlinePlayers().size())));
+        }
     }
 }

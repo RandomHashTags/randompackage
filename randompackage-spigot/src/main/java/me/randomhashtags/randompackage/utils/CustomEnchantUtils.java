@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetUnequipEvent;
@@ -37,13 +36,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class CustomEnchantUtils extends RandomPackageAPI {
-
-    private static CustomEnchantUtils instance;
-    public static final CustomEnchantUtils getCustomEnchantUtils() {
-        if(instance == null) instance = new CustomEnchantUtils();
-        return instance;
-    }
+public abstract class CustomEnchantUtils extends RPFeature {
 
     private enum RomanNumeralValues {
         I(1), X(10), C(100), M(1000), V(5), L(50), D(500);
@@ -65,7 +58,7 @@ public class CustomEnchantUtils extends RandomPackageAPI {
         return intNum;
     }
 
-    public boolean isEnabled = false;
+    private static boolean isEnabled = false;
     public static YamlConfiguration config;
 
     public static String TRANSMOG, WHITE_SCROLL;
@@ -80,11 +73,11 @@ public class CustomEnchantUtils extends RandomPackageAPI {
     public static HashMap<UUID, ItemStack> shotBows;
     public static HashMap<UUID, Player> shotbows;
 
-    public void enable() {
+    public void loadUtils() {
         if(isEnabled) return;
+        isEnabled = true;
         save(null, "custom enchants.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
-        isEnabled = true;
 
         TRANSMOG = ChatColor.translateAlternateColorCodes('&', config.getString("items.transmog scroll.apply"));
         WHITE_SCROLL = ChatColor.translateAlternateColorCodes('&', config.getString("items.white scroll.apply"));
@@ -100,8 +93,9 @@ public class CustomEnchantUtils extends RandomPackageAPI {
         shotBows = new HashMap<>();
         shotbows = new HashMap<>();
     }
-    public void disable() {
+    public void unloadUtils() {
         if(!isEnabled) return;
+        isEnabled = false;
         config = null;
         transmog_organization = null;
         spawnedFromSpawner = null;
@@ -114,7 +108,6 @@ public class CustomEnchantUtils extends RandomPackageAPI {
         temporayblocks = null;
         shotBows = null;
         shotbows = null;
-        isEnabled = false;
     }
 
     public int getEnchantmentLevel(String string) {
@@ -212,12 +205,67 @@ public class CustomEnchantUtils extends RandomPackageAPI {
                     || event instanceof PluginEnableEvent && A.startsWith("timer(")
                     || attr.toLowerCase().contains(";didproc;") && e.didProc
 
-                    || mcmmoIsEnabled && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
+                    || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
 
             ) {
                 doAttribute(e, attr, enchant, P);
             }
         }
+    }
+
+    public double oldevaluate(String chancestring) {
+        chancestring = chancestring.replace("\\p{L}", "").replaceAll("\\p{Z}", "");
+        String parentheses = null;
+        double prockchance = 0;
+        if(chancestring.contains("(") && chancestring.contains(")")) {
+            for(int z = 1; z <= 5; z++) {
+                int startp = -1, endp = -1;
+                for(int i = 0; i < chancestring.length(); i++) {
+                    if(chancestring.substring(i, i + 1).equals("(")) {
+                        startp = i;
+                    } else if(chancestring.substring(i, i + 1).equals(")")) {
+                        endp = i + 1;
+                    }
+                    if(startp != -1 && endp != -1) {
+                        parentheses = chancestring.substring(startp, endp);
+                        prockchance = evaluate(parentheses.substring(1, parentheses.length() - 1));
+                        chancestring = chancestring.replace(parentheses, "" + prockchance);
+                        if(chancestring.endsWith("+") || chancestring.endsWith("-") || chancestring.endsWith("*") || chancestring.endsWith("/")) {
+                            chancestring = chancestring.substring(0, chancestring.length() - 1);
+                        }
+                        if(chancestring.startsWith("+") || chancestring.startsWith("-") || chancestring.startsWith("*") || chancestring.startsWith("/")) {
+                            chancestring = chancestring.substring(1);
+                        }
+                        startp = -1; endp = -1;
+                    }
+                }
+            }
+        }
+        return evaluate(chancestring);
+    }
+    private double evaluate(String input) {
+        double chance = 0.00;
+        if(input.equals("-1")) return chance;
+        for(int i = 1; i <= 5; i++) {
+            String sign = null;
+            if(input.contains("*")) {
+                sign = input.split("\\*")[0] + "*" + input.split("\\*")[1];
+                chance = Double.parseDouble(input.split("\\*")[0]) * Double.parseDouble(input.split("\\*")[1]);
+            } else if(input.contains("/")) {
+                sign = input.split("/")[0] + "/" + input.split("/")[1];
+                chance = Double.parseDouble(input.split("\\/")[0]) / Double.parseDouble(input.split("\\/")[1]);
+            } else if(input.contains("+")) {
+                sign = input.split("\\+")[0] + "+" + input.split("\\+")[1];
+                chance = Double.parseDouble(input.split("\\+")[0]) + Double.parseDouble(input.split("\\+")[1]);
+            } else if(input.contains("-") && !input.startsWith("-")) {
+                sign = input.split("-")[0] + "-" + input.split("-")[1];
+                chance = Double.parseDouble(input.split("\\-")[0]) - Double.parseDouble(input.split("\\-")[1]);
+            } else if(!input.equals("")) {
+                return Double.valueOf(input);
+            }
+            if(sign != null) input = input.replace(sign, "" + chance);
+        }
+        return chance;
     }
 
     private void doAttribute(CustomEnchantProcEvent e, String attribute, CustomEnchant enchant, Player P) {
@@ -542,7 +590,7 @@ public class CustomEnchantUtils extends RandomPackageAPI {
             if(event instanceof PlayerInteractEvent) y = y.replace("player", ((PlayerInteractEvent) event).getPlayer().getName());
             for(LivingEntity l : recipients)
                 dropItem(l, d(null, y));
-        } else if(a.toLowerCase().startsWith("setgainedxp{") && mcmmoIsEnabled) {
+        } else if(a.toLowerCase().startsWith("setgainedxp{") && mcmmoIsEnabled()) {
             a = a.toLowerCase();
             if(event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) {
                 final com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent M = (com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event;

@@ -19,7 +19,7 @@ messages:
   already have:
     - "&c&l(!) &cYou already have this &f/gkit&c!"
   not in warzone:
-    - "&c&l(!) &r&cYou can only summon Fallen Heros in the &4WarZone!"
+    - "&c&l(!) &r&cYou can only summon Fallen Heroes in the &4WarZone!"
   redeem:
     - "&b&l(!) &r&bYou've UNLOCKED the &r{NAME}&r &b&lGKIT!"
   upgrade:

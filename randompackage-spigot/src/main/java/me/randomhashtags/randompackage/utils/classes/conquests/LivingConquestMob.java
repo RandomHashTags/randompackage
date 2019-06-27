@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.conquests;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,8 +12,9 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class LivingConquestMob {
-    private static RandomPackageAPI api;
     public static HashMap<UUID, LivingConquestMob> living;
     private static boolean isLegacy;
 
@@ -23,7 +23,6 @@ public class LivingConquestMob {
     public LivingConquestMob(LivingEntity entity, ConquestMob type) {
         if(living == null) {
             living = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             isLegacy = api.version.contains("1.8");
         }
 
@@ -93,7 +92,6 @@ public class LivingConquestMob {
     }
 
     public static void deleteAll() {
-        api = null;
         living = null;
         isLegacy = false;
     }

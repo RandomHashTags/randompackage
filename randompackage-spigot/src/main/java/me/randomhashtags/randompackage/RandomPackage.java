@@ -5,14 +5,15 @@ import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.nearFinished.PlayerQuests;
+import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Updater;
 import me.randomhashtags.randompackage.utils.supported.Metrics;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
-import me.randomhashtags.randompackage.utils.supported.plugins.PlaceholderAPI;
+import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -47,7 +48,6 @@ import java.util.concurrent.Callable;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
 public final class RandomPackage extends JavaPlugin implements Listener {
-
     public static RandomPackage getPlugin;
 
     private FileConfiguration config;
@@ -134,13 +134,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(pc != null) Y.put(pc.getPlugin().getName() + ":" + s, pc);
         }
 
-        api = RandomPackageAPI.getAPI();
+        api = RandomPackageAPI.api;
         rpevents = RPEvents.getRPEvents();
 
         vapi = VaultAPI.getVaultAPI();
         vapi.setupEconomy();
 
-        api.load();
+        api.enable();
         getCommand("randompackage").setExecutor(api);
         getCommand("randompackage").setTabCompleter(api);
         try {
@@ -259,42 +259,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         final Callable<Map<String, Integer>> settings = () -> {
             final Map<String, Integer> m = new HashMap<>();
-            m.put("AUCTION HOUSE", auctionhouse.isEnabled ? 1 : 0);
-            m.put("CHAT EVENTS", chatevents.isEnabled ? 1 : 0);
-            m.put("COIN FLIP", coinflip.isEnabled ? 1 : 0);
-            m.put("COLLECTION FILTER", collectionfilter.isEnabled ? 1 : 0);
-            m.put("CONQUEST", conquest.isEnabled ? 1 : 0);
-            m.put("CUSTOM ARMOR", customarmor.isEnabled ? 1 : 0);
-            m.put("CUSTOM BOSSES", custombosses.isEnabled ? 1 : 0);
-            m.put("CUSTOM ENCHANTS", customenchants.isEnabled ? 1 : 0);
-            m.put("CUSTOM EXPLOSIONS", customexplosions.isEnabled ? 1 : 0);
-            m.put("DUELS", duels.isEnabled ? 1 : 0);
-            m.put("ENVOY", envoy.isEnabled ? 1 : 0);
-            m.put("FACTION ADDITIONS", factionadditions.isEnabled ? 1 : 0);
-            m.put("FUND", fund.isEnabled ? 1 : 0);
-            m.put("GLOBAL CHALLENGES", globalchallenges.isEnabled ? 1 : 0);
-            m.put("HOMES", homes.isEnabled ? 1 : 0);
-            m.put("ITEM FILTER", itemfilter.isEnabled ? 1 : 0);
-            m.put("LOOTBOXES", lootboxes.isEnabled ? 1 : 0);
-            m.put("JACKPOT", jackpot.isEnabled ? 1 : 0);
-            m.put("KITS EVOLUTION", kits.vkitsAreEnabled ? 1 : 0);
-            m.put("KITS GLOBAL", kits.gkitsAreEnabled ? 1 : 0);
-            m.put("KITS MASTERY", kits.mkitsAreEnabled ? 1 : 0);
-            m.put("KING OF THE HILL", koth.isEnabled ? 1 : 0);
-            m.put("LAST MAN STANDING", lastmanstanding.isEnabled ? 1 : 0);
-            m.put("MASKS", masks.isEnabled ? 1 : 0);
-            m.put("MOB STACKER", mobstacker.isEnabled ? 1 : 0);
-            m.put("MONTHLY CRATES", monthlycrates.isEnabled ? 1 : 0);
-            m.put("OUTPOSTS", outposts.isEnabled ? 1 : 0);
-            m.put("PETS", pets.isEnabled ? 1 : 0);
-            m.put("PLAYER QUESTS", playerquests.isEnabled ? 1 : 0);
-            m.put("SERVER CRATES", servercrates.isEnabled ? 1 : 0);
-            m.put("SHOP", shop.isEnabled ? 1 : 0);
-            m.put("SHOWCASE", showcase.isEnabled ? 1 : 0);
-            m.put("TITLES", titles.isEnabled ? 1 : 0);
-            m.put("TRADE", trade.isEnabled ? 1 : 0);
-            m.put("TRINKETS", trinkets.isEnabled ? 1 : 0);
-            m.put("WILD PVP", wildpvp.isEnabled ? 1 : 0);
+            for(Feature f : Feature.values()) {
+                m.put(f.name().replace("_", " "), getfeature(f).isEnabled() ? 1 : 0);
+            }
             return m;
         };
 
@@ -313,6 +280,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private void loadSoftDepends() {
         final PluginManager pm = Bukkit.getPluginManager();
         mcmmo = pm.isPluginEnabled("mcMMO") ? pm.getPlugin("mcMMO") : null;
+        tryLoadingSpawner();
+    }
+    public void tryLoadingSpawner() {
         final String es = pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
         final String ss = pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
         spawnerPlugin = es != null || ss != null ? pm.getPlugin(es != null ? "EpicSpawners" : "SilkSpawners") : null;
@@ -356,7 +326,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         }
     }
     public void tryDisabling(Feature f) {
-        final RandomPackageAPI a = getfeature(f);
+        final RPFeature a = getfeature(f);
         if(a != null) {
             try {
                 a.disable();
@@ -366,7 +336,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
         }
     }
-    private RandomPackageAPI getfeature(Feature f) {
+    private RPFeature getfeature(Feature f) {
         switch(f) {
             case AUCTION_HOUSE: return auctionhouse;
             case CHAT_BRAG: return chatevents;
@@ -506,7 +476,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
         } else if(f.equals(Feature.FACTION_ADDITIONS)) {
             enabled = config.getBoolean("faction additions.enabled");
-            ce = factionadditions;
             if(enabled) {
                 factionadditions.enable();
             }

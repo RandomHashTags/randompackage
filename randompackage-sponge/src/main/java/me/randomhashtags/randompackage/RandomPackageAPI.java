@@ -1,10 +1,7 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.GivedpItem;
 import me.randomhashtags.randompackage.utils.RPEvents;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
-import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UVersion;

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.ActiveTrade;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -13,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -26,29 +24,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Trade extends RandomPackageAPI implements Listener, CommandExecutor {
-	public boolean isEnabled = false;
+public class Trade extends RPFeature implements CommandExecutor {
 	private static Trade instance;
-	public static final Trade getTrade() {
+	public static Trade getTrade() {
 		if(instance == null) instance = new Trade();
 		return instance;
 	}
 
 	public YamlConfiguration config;
 	private int radius = 0, countdown = 0;
-	private String title = null;
-	private UInventory q = null;
+	private String title;
+	private UInventory q;
 	private ItemStack divider, accept, accepting;
 
 	private HashMap<UUID, UUID> requests;
 	private List<String> blacklistedMaterials;
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "trade.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		requests = new HashMap<>();
 
@@ -72,8 +66,7 @@ public class Trade extends RandomPackageAPI implements Listener, CommandExecutor
 		lore.clear();
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Trade &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		config = null;
 		radius = 0;
 		countdown = 0;
@@ -84,8 +77,6 @@ public class Trade extends RandomPackageAPI implements Listener, CommandExecutor
 		accepting = null;
 		requests = null;
 		blacklistedMaterials = null;
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

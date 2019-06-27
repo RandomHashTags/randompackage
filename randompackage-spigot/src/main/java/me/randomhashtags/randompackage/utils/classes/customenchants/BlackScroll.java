@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -12,9 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class BlackScroll {
 	public static HashMap<String, BlackScroll> scrolls;
-	private static RandomPackageAPI api;
 	private static YamlConfiguration yml;
 	private static Random random;
 	private String path;
@@ -24,9 +25,8 @@ public class BlackScroll {
 	public BlackScroll(String path) {
 		if(scrolls == null) {
 			scrolls = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 			random = api.random;
-			yml = YamlConfiguration.loadConfiguration(new File(RandomPackageAPI.rpd + File.separator + "custom enchants", "black scrolls.yml"));
+			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + File.separator + "custom enchants", "black scrolls.yml"));
 		}
 		this.path = path;
 		final String[] p = yml.getString("scrolls." + path + ".percents").split(";");
@@ -99,7 +99,6 @@ public class BlackScroll {
 
 	public static void deleteAll() {
 		scrolls = null;
-		api = null;
 		yml = null;
 		random = null;
 	}

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.needsRecode;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.factionadditions.FactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.factionadditions.FactionUpgradeType;
@@ -17,8 +17,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,10 +33,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class FactionAdditions extends RandomPackageAPI implements Listener {
-	public boolean isEnabled = false;
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+
+public class FactionAdditions extends RPFeature {
 	private static FactionAdditions instance;
-	public static final FactionAdditions getFactionAdditions() {
+	public static FactionAdditions getFactionAdditions() {
 	    if(instance == null) instance = new FactionAdditions();
 	    return instance;
 	}
@@ -110,9 +109,8 @@ public class FactionAdditions extends RandomPackageAPI implements Listener {
 		}
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "faction additions.yml");
 		save("_Data", "faction additions.yml");
 
@@ -125,8 +123,6 @@ public class FactionAdditions extends RandomPackageAPI implements Listener {
 		fadditionsF = new File(rpd + separator + "_Data", "faction additions.yml");
 		fadditions = YamlConfiguration.loadConfiguration(fadditionsF);
 
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 		aliases = randompackage.getConfig().getStringList("faction additions.aliases");
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "faction additions.yml"));
 		FactionUpgrade.yml = config;
@@ -170,10 +166,8 @@ public class FactionAdditions extends RandomPackageAPI implements Listener {
 		loadBackup();
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		backup();
-		isEnabled = false;
 		aliases = null;
 		fapi.vkitLevelingChances = null;
 		fapi.decreaseRarityGemCost = null;
@@ -184,7 +178,6 @@ public class FactionAdditions extends RandomPackageAPI implements Listener {
 		cropGrowthRate = null;
 		FactionUpgradeType.deleteAll();
 		FactionUpgrade.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 
 	@EventHandler

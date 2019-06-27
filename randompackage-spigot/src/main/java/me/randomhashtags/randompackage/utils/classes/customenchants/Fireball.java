@@ -1,18 +1,16 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.rpd;
-import static me.randomhashtags.randompackage.RandomPackageAPI.separator;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class Fireball {
 	public static HashMap<String, Fireball> fireballs;
-	private static RandomPackageAPI api;
 	private static Random random;
 	private static YamlConfiguration config;
 	
@@ -24,9 +22,8 @@ public class Fireball {
 	public Fireball(String path) {
 		if(fireballs == null) {
 			fireballs = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 			random = api.random;
-			config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "fireballs.yml"));
+			config = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + File.separator + "custom enchants", "fireballs.yml"));
 		}
 		this.path = path;
 		fireballs.put(path, this);
@@ -87,7 +84,6 @@ public class Fireball {
 
 	public static void deleteAll() {
 		fireballs = null;
-		api = null;
 		random = null;
 		config = null;
 	}

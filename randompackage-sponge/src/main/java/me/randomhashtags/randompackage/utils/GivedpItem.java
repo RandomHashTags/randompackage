@@ -1,8 +1,6 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.api.*;
-import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
 import me.randomhashtags.randompackage.utils.classes.*;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;

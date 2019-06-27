@@ -40,15 +40,16 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.File;
 import java.util.*;
 
-public class CustomEnchants extends CustomEnchantUtils implements Listener, CommandExecutor {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class CustomEnchants extends CustomEnchantUtils implements CommandExecutor {
     private static CustomEnchants instance;
-    public static final CustomEnchants getCustomEnchants() {
+    public static CustomEnchants getCustomEnchants() {
         if(instance == null) instance = new CustomEnchants();
         return instance;
     }
 
-    public boolean isEnabled = false, levelZeroRemoval;
+    public boolean levelZeroRemoval;
     private String alchemistcurrency, enchantercurrency;
     private int alchemistCostSlot;
     private UInventory alchemist, enchanter, tinkerer;
@@ -79,13 +80,9 @@ public class CustomEnchants extends CustomEnchantUtils implements Listener, Comm
         }
         return true;
     }
-    public void enable() {
+    public void load() {
+        loadUtils();
         long started = System.currentTimeMillis();
-        if(isEnabled) return;
-        final CustomEnchantUtils ceu = CustomEnchantUtils.getCustomEnchantUtils();
-        ceu.enable();
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
         enchantercurrency = config.getString("enchanter.currency").toUpperCase();
@@ -259,23 +256,26 @@ public class CustomEnchants extends CustomEnchantUtils implements Listener, Comm
         }
         final String p = rpd + separator + "custom enchants";
         final List<ItemStack> raritybooks = new ArrayList<>();
-        for(File f : new File(p).listFiles()) {
-            if(f.isDirectory()) {
-                final File[] files = new File(p + separator + f.getName()).listFiles();
-                if(files != null) {
-                    EnchantRarity rarity = null;
-                    final List<File> F = Arrays.asList(files);
-                    for(File k : F) {
-                        if(k.getName().contains("_settings")) {
-                            rarity = new EnchantRarity(f, k);
-                            raritybooks.add(rarity.getRevealItem());
+        final File folder = new File(p);
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                if(f.isDirectory()) {
+                    final File[] files = new File(p + separator + f.getName()).listFiles();
+                    if(files != null) {
+                        EnchantRarity rarity = null;
+                        final List<File> F = Arrays.asList(files);
+                        for(File k : F) {
+                            if(k.getName().contains("_settings")) {
+                                rarity = new EnchantRarity(f, k);
+                                raritybooks.add(rarity.getRevealItem());
+                            }
                         }
-                    }
-                    if(rarity != null) {
-                        for(File ff : files) {
-                            if(!ff.getName().startsWith("_settings")) {
-                                final CustomEnchant e = new CustomEnchant(ff);
-                                if(e.isEnabled()) rarity.getEnchants().add(e);
+                        if(rarity != null) {
+                            for(File ff : files) {
+                                if(!ff.getName().startsWith("_settings")) {
+                                    final CustomEnchant e = new CustomEnchant(ff);
+                                    if(e.isEnabled()) rarity.getEnchants().add(e);
+                                }
                             }
                         }
                     }
@@ -459,8 +459,8 @@ public class CustomEnchants extends CustomEnchantUtils implements Listener, Comm
             }
         }
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
+        unloadUtils();
         alchemist = null;
         enchanter = null;
         tinkerer = null;
@@ -484,8 +484,6 @@ public class CustomEnchants extends CustomEnchantUtils implements Listener, Comm
         BlackScroll.deleteAll();
         Fireball.deleteAll();
         MagicDust.deleteAll();
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
 

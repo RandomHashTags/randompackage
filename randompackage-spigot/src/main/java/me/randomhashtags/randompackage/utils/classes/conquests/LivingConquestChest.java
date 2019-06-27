@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.conquests;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.conquest.ConquestDamageEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,9 +12,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class LivingConquestChest {
     public static List<LivingConquestChest> living;
-    private static RandomPackageAPI api;
     private static PluginManager pluginmanager;
 
     private Random random = new Random();
@@ -53,7 +53,6 @@ public class LivingConquestChest {
     private void q(boolean spawnBosses) {
         if(living == null) {
             living = new ArrayList<>();
-            api = RandomPackageAPI.getAPI();
             pluginmanager = Bukkit.getPluginManager();
         }
         final World w = location.getWorld();
@@ -144,7 +143,6 @@ public class LivingConquestChest {
         conquerer = null;
         if(living.isEmpty()) {
             living = null;
-            api = null;
             pluginmanager = null;
         }
     }
@@ -157,7 +155,7 @@ public class LivingConquestChest {
         for(int i = 1; i <= amount; i++) {
             final String reward = rewards.get(random.nextInt(rewards.size()));
             final ItemStack is = api.d(null, reward);
-            if(is != null) r.add(is);
+            if(is != null && !is.getType().equals(Material.AIR)) r.add(is);
             rewards.remove(reward);
         }
         return r;
@@ -187,7 +185,6 @@ public class LivingConquestChest {
                 iter.remove();
             }
             living = null;
-            api = null;
             pluginmanager = null;
         }
     }

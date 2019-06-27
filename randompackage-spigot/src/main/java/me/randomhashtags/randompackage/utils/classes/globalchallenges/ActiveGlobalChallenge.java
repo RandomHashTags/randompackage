@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.api.events.globalchallenges.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
@@ -9,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
+
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class ActiveGlobalChallenge {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
@@ -22,15 +23,15 @@ public class ActiveGlobalChallenge {
     public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, Double> participants) {
         if(active == null) {
             active = new HashMap<>();
-            pm = Bukkit.getPluginManager();
             globalchallenges = GlobalChallenges.getChallenges();
+            pm = globalchallenges.pluginmanager;
         }
         this.started = started;
         this.type = type;
         this.participants = participants;
         long remainingTime = getRemainingTime();
         if(remainingTime < 0) remainingTime = 0;
-        task = Bukkit.getScheduler().scheduleSyncDelayedTask(RandomPackage.getPlugin, () -> end(true, 3), remainingTime);
+        task = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin, () -> end(true, 3), remainingTime);
         active.put(type, this);
     }
 

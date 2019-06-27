@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.servercrate.LivingServerCrate;
 import me.randomhashtags.randompackage.utils.classes.servercrate.ServerCrate;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -15,8 +15,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -29,11 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class ServerCrates extends RandomPackageAPI implements Listener {
-	
-	public boolean isEnabled = false;
+public class ServerCrates extends RPFeature {
 	private static ServerCrates instance;
-	public static final ServerCrates getServerCrates() {
+	public static ServerCrates getServerCrates() {
 	    if(instance == null) instance = new ServerCrates();
 	    return instance;
 	}
@@ -44,12 +40,8 @@ public class ServerCrates extends RandomPackageAPI implements Listener {
 	private HashMap<UUID, List<ItemStack>> revealingloot;
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
-	public void enable() {
+	public void load() {
 	    final long started = System.currentTimeMillis();
-		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
-
 		canRevealRarities = new ArrayList<>();
 		revealingLoot = new HashMap<>();
 		selectedSlots = new HashMap<>();
@@ -65,20 +57,20 @@ public class ServerCrates extends RandomPackageAPI implements Listener {
 			saveOtherData();
 		}
 		final List<ItemStack> flares = new ArrayList<>(), crates = new ArrayList<>();
-		for(File f : new File(rpd + separator + "server crates").listFiles()) {
-			final ServerCrate sc = new ServerCrate(f);
-			crates.add(sc.getPhyiscalItem());
-			flares.add(sc.getFlare().getItem());
+		final File folder = new File(rpd + separator + "server crates");
+		if(folder.exists()) {
+			for(File f : folder.listFiles()) {
+				final ServerCrate sc = new ServerCrate(f);
+				crates.add(sc.getPhyiscalItem());
+				flares.add(sc.getFlare().getItem());
+			}
 		}
 		addGivedpCategory(crates, UMaterial.CHEST, "Server Crates", "Givedp: Server Crates");
 		addGivedpCategory(flares, UMaterial.TORCH, "Server Crate Flares", "Givedp: Server Crate Flares");
 		final HashMap<String, ServerCrate> S = ServerCrate.crates;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " server crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
-		isEnabled = false;
-
+	public void unload() {
 		canRevealRarities = null;
 		for(UUID uuid : revealingLoot.keySet()) {
 			final OfflinePlayer o = Bukkit.getOfflinePlayer(uuid);
@@ -90,10 +82,8 @@ public class ServerCrates extends RandomPackageAPI implements Listener {
 		for(UUID u : tasks.keySet()) stopTasks(u);
 		tasks = null;
 		revealedslots = null;
-
 		ServerCrate.deleteAll();
 		LivingServerCrate.deleteAll(true);
-		HandlerList.unregisterAll(this);
 	}
 
 	@EventHandler

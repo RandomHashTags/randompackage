@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,12 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.rpd;
-import static me.randomhashtags.randompackage.RandomPackageAPI.separator;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class RandomizationScroll {
 	public static HashMap<String, RandomizationScroll> scrolls;
-	private static RandomPackageAPI api;
 	private static YamlConfiguration yml;
 	private String path;
 	private ItemStack is;
@@ -23,8 +21,7 @@ public class RandomizationScroll {
 	public RandomizationScroll(String path) {
 		if(scrolls == null) {
 			scrolls = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
-			yml = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "randomization scrolls.yml"));
+			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + File.separator + "custom enchants", "randomization scrolls.yml"));
 		}
 		this.path = path;
 		scrolls.put(path, this);
@@ -58,7 +55,6 @@ public class RandomizationScroll {
 
 	public static void deleteAll() {
 		scrolls = null;
-		api = null;
 		yml = null;
 	}
 }

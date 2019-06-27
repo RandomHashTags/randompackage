@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.utils.classes;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -15,10 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class Mask {
     private static HashMap<String, ItemStack> maskOwners;
     public static HashMap<String, Mask> masks;
-    private static RandomPackageAPI api;
     private static String version;
 
     private YamlConfiguration yml;
@@ -30,7 +30,6 @@ public class Mask {
         if(masks == null) {
             maskOwners = new HashMap<>();
             masks = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             version = api.version;
         }
         yml = YamlConfiguration.loadConfiguration(f);
@@ -128,7 +127,6 @@ public class Mask {
     public static void deleteAll() {
         maskOwners = null;
         masks = null;
-        api = null;
         version = null;
     }
 }

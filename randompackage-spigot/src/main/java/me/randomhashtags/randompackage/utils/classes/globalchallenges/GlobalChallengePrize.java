@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -8,16 +7,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class GlobalChallengePrize {
     public static List<GlobalChallengePrize> prizes;
-    private static RandomPackageAPI api;
     private final ItemStack display;
     private final int placement, amount;
     private final List<String> rewards;
     public GlobalChallengePrize(ItemStack display, int amount, int placement, List<String> rewards) {
         if(prizes == null) {
             prizes = new ArrayList<>();
-            api = RandomPackageAPI.getAPI();
         }
         this.display = display;
         this.amount = amount;
@@ -83,6 +82,5 @@ public class GlobalChallengePrize {
     }
     public static void deleteAll() {
         prizes = null;
-        api = null;
     }
 }

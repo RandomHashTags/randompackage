@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -12,40 +12,22 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MasteryKit {
+public class MasteryKit extends AbstractCustomKit {
     public static HashMap<String, MasteryKit> kits;
     private static CustomEnchants customenchants;
-    private YamlConfiguration yml;
-    private String ymlName, name;
-    private int slot, antiCrystalPercentSlot;
-    private long cooldown;
+    private int antiCrystalPercentSlot;
     private ItemStack item, redeem, shard, antiCrystal;
     private LinkedHashMap<Object, Integer> requiredKits;
-    private boolean losesKitsUponUnlocking;
-    private List<KitItem> items;
-    private List<String> antiCrystalNegatedEnchants, antiCrystalAddedLore;
+    private List<String> antiCrystalAddedLore;
     public MasteryKit(File f) {
         if(kits == null) {
             kits = new HashMap<>();
             customenchants = CustomEnchants.getCustomEnchants();
         }
-        this.yml = YamlConfiguration.loadConfiguration(f);
-        this.ymlName = f.getName().split("\\.yml")[0];
-        losesKitsUponUnlocking = yml.getBoolean("settings.loses required kits");
-        slot = yml.getInt("gui settings.slot");
-        kits.put(ymlName, this);
+        load(f);
+        kits.put(getYamlName(), this);
     }
-    public YamlConfiguration getYaml() { return yml; }
-    public String getYamlName() { return ymlName; }
-    public int getSlot() { return slot; }
-    public long getCooldown() {
-        if(cooldown == 0) cooldown = yml.getLong("settings.cooldown");
-        return cooldown;
-    }
-    public String getName() {
-        if(name == null) name = ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name"));
-        return name;
-    }
+    public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public ItemStack getItem() {
         if(item == null) {
             item = customenchants.d(yml, "gui settings");
@@ -96,19 +78,6 @@ public class MasteryKit {
         }
         return redeem != null ? redeem.clone() : null;
     }
-    public List<KitItem> getItems() {
-        if(items == null) {
-            items = new ArrayList<>();
-            for(String i : yml.getConfigurationSection("items").getKeys(false)) {
-                final String t = yml.getString("items." + i + ".item");
-                if(t != null) {
-                    final int chance = yml.get("items." + i + ".chance") != null ? yml.getInt("items." + i + ".chance") : 100;
-                    items.add(new KitItem(this, i, yml.getString("items." + i + ".item"), yml.getString("items." + i + ".name"), yml.getStringList("items." + i + ".lore"), chance, "1", false, yml.getInt("items." + i + ".reqlevel")));
-                }
-            }
-        }
-        return items;
-    }
     public LinkedHashMap<Object, Integer> getRequiredKits() {
         if(requiredKits == null) {
             requiredKits = new LinkedHashMap<>();
@@ -125,7 +94,7 @@ public class MasteryKit {
         }
         return requiredKits;
     }
-    public boolean losesKitsUponUnlocking() { return losesKitsUponUnlocking; }
+    public boolean losesRequiredKits() { return yml.getBoolean("settings.loses required kits"); }
     public ItemStack getShard() {
         if(shard == null) shard = customenchants.d(yml, "shard");
         return shard.clone();
@@ -154,10 +123,7 @@ public class MasteryKit {
         i.setItemMeta(m);
         return i;
     }
-    public List<String> getAntiCrystalNegatedEnchants() {
-        if(antiCrystalNegatedEnchants == null) antiCrystalNegatedEnchants = yml.getStringList("anti crystal.negate enchants");
-        return antiCrystalNegatedEnchants;
-    }
+    public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }
     public List<String> getAntiCrystalAddedLore() {
         if(antiCrystalAddedLore == null) antiCrystalAddedLore = customenchants.colorizeListString(yml.getStringList("anti crystal.added lore"));
         return antiCrystalAddedLore;

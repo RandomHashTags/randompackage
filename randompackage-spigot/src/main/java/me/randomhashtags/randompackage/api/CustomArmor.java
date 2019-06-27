@@ -25,11 +25,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+
 public class CustomArmor extends CustomEnchants implements Listener {
-	
 	public boolean isEnabled = false;
 	private static CustomArmor instance;
-	public static final CustomArmor getCustomArmor() {
+	public static CustomArmor getCustomArmor() {
 		if(instance == null) instance = new CustomArmor();
 		return instance;
 	}
@@ -38,15 +39,12 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	public ItemStack equipmentLootbox;
 	private List<Player> inEquipmentLootbox;
 
-	public void enable() {
+	@Override
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "custom armor.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		inEquipmentLootbox = new ArrayList<>();
-
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "custom armor.yml"));
 		equipmentLootbox = d(config, "items.equipment lootbox");
 
@@ -59,21 +57,21 @@ public class CustomArmor extends CustomEnchants implements Listener {
 			a.set("saved default custom armor", true);
 			saveOtherData();
 		}
-
-		for(File f : new File(rpd + separator + "custom armor").listFiles()) {
-			new ArmorSet(f);
+		final File folder = new File(rpd + separator + "custom armor");
+		if(folder.exists()) {
+			for(File f : folder.listFiles()) {
+				new ArmorSet(f);
+			}
 		}
 		final HashMap<String, ArmorSet> A = ArmorSet.sets;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (A != null ? A.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	@Override
+	public void unload() {
 		config = null;
 		equipmentLootbox = null;
 		inEquipmentLootbox = null;
-		isEnabled = false;
 		ArmorSet.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -170,8 +168,8 @@ public class CustomArmor extends CustomEnchants implements Listener {
 
                 || event instanceof PluginEnableEvent && A.startsWith("timer(")
 
-                || mcmmoIsEnabled && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && A.equals("mcmmoxpgained")
-                || mcmmoIsEnabled && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase())
+                || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && A.equals("mcmmoxpgained")
+                || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase())
             ) {
                 executeAttributes(event, attr);
             }

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,9 +9,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class ArmorSet {
 	public static HashMap<String, ArmorSet> sets;
-	private static RandomPackageAPI api;
 
 	private YamlConfiguration yml;
 	private String ymlName;
@@ -22,7 +22,6 @@ public class ArmorSet {
 	public ArmorSet(File f) {
 		if(sets == null) {
 			sets = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 		}
 		yml = YamlConfiguration.loadConfiguration(f);
 		ymlName = f.getName().split("\\.yml")[0];
@@ -84,6 +83,5 @@ public class ArmorSet {
 
 	public static void deleteAll() {
 		sets = null;
-		api = null;
 	}
 }

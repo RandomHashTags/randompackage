@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -16,8 +16,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -31,45 +29,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class ChatEvents extends RandomPackageAPI implements CommandExecutor, Listener {
-
-	public boolean isEnabled = false;
+public class ChatEvents extends RPFeature implements CommandExecutor {
 	private static ChatEvents instance;
-	public static final ChatEvents getChatEvents() {
+	public static ChatEvents getChatEvents() {
 		if(instance == null) instance = new ChatEvents();
 		return instance;
 	}
-	
+
 	private String bragDisplay, itemDisplay, chatformat;
-	
 	private HashMap<UUID, PlayerInventory> bragInventories;
 	private ArrayList<UUID> viewingBrag;
 
-
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
-
 		bragDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.display"));
 		itemDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.item.display"));
-
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
-
 		chatformat = randompackage.getConfig().getString("chat cmds.format");
 		sendConsoleMessage("&6[RandomPackage] &aLoaded ChatEvents &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
-		isEnabled = false;
+	public void unload() {
 		bragDisplay = null;
 		itemDisplay = null;
 		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
 		bragInventories = null;
 		viewingBrag = null;
-		HandlerList.unregisterAll(this);
 	}
 	@EventHandler
 	private void playerChatEvent(AsyncPlayerChatEvent event) {

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,21 +9,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 
-public class Duels extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class Duels extends RPFeature implements CommandExecutor {
     private static Duels instance;
-    public static final Duels getDuels() {
+    public static Duels getDuels() {
         if(instance == null) instance = new Duels();
         return instance;
     }
-
-    public boolean isEnabled;
     public YamlConfiguration config;
 
     private UInventory type, godset;
@@ -44,27 +39,20 @@ public class Duels extends RandomPackageAPI implements Listener, CommandExecutor
         }
         return true;
     }
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "duels.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "duels.yml"));
-
         type = new UInventory(null, config.getInt("type.size"), ChatColor.translateAlternateColorCodes('&', config.getString("type.title")));
         godset = new UInventory(null, config.getInt("godset.size"), ChatColor.translateAlternateColorCodes('&', config.getString("godset.title")));
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Duels &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
         type = null;
         godset = null;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewTypes(Player player) {

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,9 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class CustomEnchant {
     public static TreeMap<String, CustomEnchant> enabled, disabled;
-    private static RandomPackageAPI api;
 
     private YamlConfiguration yml;
     private String ymlName, name, value, requiredEnchant;
@@ -25,7 +25,6 @@ public class CustomEnchant {
         if(enabled == null) {
             enabled = new TreeMap<>();
             disabled = new TreeMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         yml = YamlConfiguration.loadConfiguration(f);
         ymlName = f.getName().split("\\.yml")[0];
@@ -130,6 +129,5 @@ public class CustomEnchant {
     public static void deleteAll() {
         enabled = null;
         disabled = null;
-        api = null;
     }
 }

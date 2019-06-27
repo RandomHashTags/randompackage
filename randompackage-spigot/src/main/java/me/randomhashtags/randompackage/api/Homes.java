@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.classes.homes.Home;
+import me.randomhashtags.randompackage.utils.classes.Home;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -15,8 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -29,15 +27,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Homes extends RandomPackageAPI implements CommandExecutor, Listener {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+
+public class Homes extends RPFeature implements CommandExecutor {
 	private static Homes instance;
-	public static final Homes getHomes() {
+	public static Homes getHomes() {
 		if(instance == null) instance = new Homes();
 		return instance;
 	}
 
 	public YamlConfiguration config;
-	public boolean isEnabled = false;
 	public int defaultMax;
 	public ItemStack maxHomeIncreaser;
 
@@ -45,12 +44,9 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 	private HashMap<Player, Home> editingIcons;
 	private UInventory editicon;
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "homes.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
@@ -75,8 +71,7 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Homes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		config = null;
 		editicon = null;
 		defaultMax = 0;
@@ -86,8 +81,6 @@ public class Homes extends RandomPackageAPI implements CommandExecutor, Listener
 		for(Player player : editingIcons.keySet()) player.closeInventory();
 		viewingHomes = null;
 		editingIcons = null;
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

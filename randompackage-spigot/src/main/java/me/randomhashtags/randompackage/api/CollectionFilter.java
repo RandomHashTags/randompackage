@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.CollectionChest;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -15,8 +15,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -34,11 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CollectionFilter extends RandomPackageAPI implements Listener, CommandExecutor {
-
-    public boolean isEnabled = false;
+public class CollectionFilter extends RPFeature implements CommandExecutor {
     private static CollectionFilter instance;
-    public static final CollectionFilter getCollectionFilter() {
+    public static CollectionFilter getCollectionFilter() {
         if(instance == null) instance = new CollectionFilter();
         return instance;
     }
@@ -87,12 +83,9 @@ public class CollectionFilter extends RandomPackageAPI implements Listener, Comm
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "collection filter.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "collection filter.yml"));
 
         picksup = new HashMap<>();
@@ -133,9 +126,7 @@ public class CollectionFilter extends RandomPackageAPI implements Listener, Comm
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + (c != null ? c.size() : 0) + " collection chests &e[async]");
         });
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         for(UUID u : editingfilter.keySet()) {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
             if(o.isOnline()) o.getPlayer().closeInventory();
@@ -160,7 +151,6 @@ public class CollectionFilter extends RandomPackageAPI implements Listener, Comm
             }
         }
         CollectionChest.deleteAll();
-        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

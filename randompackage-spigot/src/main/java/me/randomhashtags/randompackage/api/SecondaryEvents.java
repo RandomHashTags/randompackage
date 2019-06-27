@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.PlayerTeleportDelayEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
@@ -15,8 +15,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
@@ -29,16 +27,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class SecondaryEvents extends RandomPackageAPI implements CommandExecutor, Listener {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private static SecondaryEvents instance;
-    public static final SecondaryEvents getSecondaryEvents() {
+    public static SecondaryEvents getSecondaryEvents() {
         if(instance == null) instance = new SecondaryEvents();
         return instance;
     }
 
     public YamlConfiguration config;
-    public boolean isEnabled = false;
 
     private List<String> combineores;
     private List<PotionEffectType> removedPotionEffects;
@@ -130,12 +128,9 @@ public class SecondaryEvents extends RandomPackageAPI implements CommandExecutor
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "secondary.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "secondary.yml"));
         xpbottle = givedpitem.items.get("xpbottle");
@@ -183,8 +178,7 @@ public class SecondaryEvents extends RandomPackageAPI implements CommandExecutor
         delayed = new HashMap<>();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Secondary Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         combineores = null;
         confirm = null;
         removedPotionEffects = null;
@@ -196,8 +190,6 @@ public class SecondaryEvents extends RandomPackageAPI implements CommandExecutor
         teleportationDelay = null;
         teleportMinDelay = null;
         teleportationVariable = null;
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
 

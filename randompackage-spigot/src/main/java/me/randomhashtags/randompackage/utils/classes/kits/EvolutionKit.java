@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -10,36 +9,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class EvolutionKit {
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
+public class EvolutionKit extends AbstractCustomKit {
 	public static HashMap<String, EvolutionKit> kits;
-	private static RandomPackageAPI api;
-	private YamlConfiguration yml;
-	private String ymlName, fallenheroname;
-	private FallenHero fallenhero;
-	private int slot, maxLevel, upgradeChance;
-	private long cooldown;
+	private int upgradeChance;
 	private ItemStack item, fallenherospawnitem, fallenherogem, upgradegem;
-	private List<KitItem> items;
 	public EvolutionKit(File f) {
-		if(kits == null) {
-			kits = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
-		}
-		this.yml = YamlConfiguration.loadConfiguration(f);
-		this.ymlName = f.getName().split("\\.yml")[0];
-		slot = yml.getInt("gui settings.slot");
-		maxLevel = yml.getInt("settings.max level");
+		if(kits == null) kits = new HashMap<>();
+		load(f);
 		upgradeChance = yml.getInt("settings.upgrade chance");
-		cooldown = yml.getLong("settings.cooldown");
-		kits.put(ymlName, this);
+		kits.put(getYamlName(), this);
 	}
 
-	public YamlConfiguration getYaml() { return yml; }
-	public String getYamlName() { return ymlName; }
-	public FallenHero getFallenHero() {
-		if(fallenhero == null) fallenhero = FallenHero.heroes.getOrDefault(yml.getString("settings.fallen hero"), null);
-		return fallenhero;
-	}
 	public ItemStack getFallenHeroSpawnItem() {
 		if(fallenherospawnitem == null) {
 			final String n = getItem().getItemMeta().getDisplayName();
@@ -72,14 +54,9 @@ public class EvolutionKit {
 		}
 		return fallenherogem.clone();
 	}
-	public String getFallenHeroName() {
-		if(fallenheroname == null) fallenheroname = getFallenHero().getName().replace("{NAME}", getItem().getItemMeta().getDisplayName());
-		return fallenheroname;
-	}
-	public int getSlot() { return slot; }
-	public int getMaxLevel() { return maxLevel; }
+	public String getFallenHeroName() { return getFallenHero().getName().replace("{NAME}", getItem().getItemMeta().getDisplayName()); }
 	public int getUpgradeChance() { return upgradeChance; }
-	public long getCooldown() { return cooldown; }
+	public void setUpgradeChance(int chance) { upgradeChance = chance; }
 	public ItemStack getItem() {
 		if(item == null) item = api.d(yml, "gui settings");
 		return item.clone();
@@ -88,24 +65,11 @@ public class EvolutionKit {
 		if(upgradegem == null) upgradegem = api.d(yml, "upgrade gem");
 		return upgradegem != null ? upgradegem.clone() : null;
 	}
-	public List<KitItem> getItems() {
-		if(items == null) {
-			items = new ArrayList<>();
-			for(String i : yml.getConfigurationSection("items").getKeys(false)) {
-				final String t = yml.getString("items." + i + ".item");
-				if(t != null) {
-					final int chance = yml.get("items." + i + ".chance") != null ? yml.getInt("items." + i + ".chance") : 100;
-					items.add(new KitItem(this, i, yml.getString("items." + i + ".item"), yml.getString("items." + i + ".name"), yml.getStringList("items." + i + ".lore"), chance, "1", false, yml.getInt("items." + i + ".reqlevel")));
-				}
-			}
-		}
-		return items;
-	}
 
 	public static EvolutionKit valueOf(int slot) {
 		if(kits != null) {
 			for(EvolutionKit k : kits.values()) {
-				if(k.slot == slot) {
+				if(k.getSlot() == slot) {
 					return k;
 				}
 			}
@@ -147,6 +111,5 @@ public class EvolutionKit {
 
 	public static void deleteAll() {
 		kits = null;
-		api = null;
 	}
 }

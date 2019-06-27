@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.shop.ShopPrePurchaseEvent;
 import me.randomhashtags.randompackage.api.events.shop.ShopPreSellEvent;
 import me.randomhashtags.randompackage.api.events.shop.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.api.events.shop.ShopSellEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.shop.ShopCategory;
 import me.randomhashtags.randompackage.utils.classes.shop.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -18,8 +18,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,27 +26,21 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class Shop extends RandomPackageAPI implements CommandExecutor, Listener {
-
+public class Shop extends RPFeature implements CommandExecutor {
 	private static Shop instance;
-	public static final Shop getShop() {
+	public static Shop getShop() {
 	    if(instance == null) instance = new Shop();
 	    return instance;
 	}
 
-    public boolean isEnabled = false;
 	public YamlConfiguration config;
 	public ItemStack back;
 	private String defaultShop;
-
 	private HashMap<String, ShopCategory> titles;
 
-	public void enable() {
+	public void load() {
 	    final long started = System.currentTimeMillis();
-	    if(isEnabled) return;
 	    save(null, "shop.yml");
-	    pluginmanager.registerEvents(this, randompackage);
-	    isEnabled = true;
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "shop.yml"));
         back = d(config, "items.back to categories");
@@ -62,20 +54,20 @@ public class Shop extends RandomPackageAPI implements CommandExecutor, Listener 
         }
 
         titles = new HashMap<>();
-        for(File f : new File(rpd + separator + "shops").listFiles()) {
-            final ShopCategory c = new ShopCategory(f);
-            titles.put(c.getInventoryTitle(), c);
+        final File folder = new File(rpd + separator + "shops");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final ShopCategory c = new ShopCategory(f);
+                titles.put(c.getInventoryTitle(), c);
+            }
         }
         final HashMap<String, ShopCategory> S = ShopCategory.categories;
         sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
-    public void disable() {
-	    if(!isEnabled) return;
+    public void unload() {
 	    config = null;
 	    back = null;
 	    ShopCategory.deleteAll();
-	    isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

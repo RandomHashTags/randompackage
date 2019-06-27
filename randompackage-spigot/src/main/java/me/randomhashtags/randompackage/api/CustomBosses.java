@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.custombosses.*;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
@@ -11,8 +11,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -27,23 +25,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomBosses extends RandomPackageAPI implements Listener {
-
+public class CustomBosses extends RPFeature {
 	private static CustomBosses instance;
-	public static final CustomBosses getCustomBosses() {
+	public static CustomBosses getCustomBosses() {
 		if(instance == null) instance = new CustomBosses();
 		return instance;
 	}
 
-	public boolean isEnabled = false;
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
-
 		deadBosses = new HashMap<>();
 
 		final YamlConfiguration a = otherdata;
@@ -54,24 +46,24 @@ public class CustomBosses extends RandomPackageAPI implements Listener {
 			saveOtherData();
 		}
 		final List<ItemStack> j = new ArrayList<>();
-		for(File f : new File(rpd + separator + "custom bosses").listFiles()) {
-			final CustomBoss b = new CustomBoss(f);
-			j.add(b.getSpawnItem());
+		final File folder = new File(rpd + separator + "custom bosses");
+		if(folder.exists()) {
+			for(File f : folder.listFiles()) {
+				final CustomBoss b = new CustomBoss(f);
+				j.add(b.getSpawnItem());
+			}
 		}
 		loadBackup();
 		addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
 		final HashMap<String, CustomBoss> C = CustomBoss.bosses;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (C != null ? C.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		backup();
 		LivingCustomBoss.deleteAll();
 		LivingCustomMinion.deleteAll();
 		CustomBoss.deleteAll();
 		deadBosses = null;
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 
 	public void backup() {

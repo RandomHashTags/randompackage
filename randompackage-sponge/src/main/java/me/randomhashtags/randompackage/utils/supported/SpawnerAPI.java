@@ -17,9 +17,6 @@ public class SpawnerAPI {
 
     public ItemStack getItem(String entitytype) {
         if(plugin != null) {
-            if(plugin.equals("EpicSpawners5")) return epicSpawners5.getEpicSpawners5().getItem(entitytype);
-            else if(plugin.equals("EpicSpawners6")) return epicSpawners6.getEpicSpawners6().getItem(entitytype);
-            else if(plugin.equals("SilkSpawners")) return silkSpawners.getSilkSpawners().getItem(entitytype);
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.MonthlyCrate;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -15,8 +15,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,15 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MonthlyCrates extends RandomPackageAPI implements Listener, CommandExecutor {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class MonthlyCrates extends RPFeature implements CommandExecutor {
     private static MonthlyCrates instance;
-    public static final MonthlyCrates getMonthlyCrates() {
+    public static MonthlyCrates getMonthlyCrates() {
         if(instance == null) instance = new MonthlyCrates();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private UInventory gui, categoryView;
@@ -58,13 +55,10 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "monthly crates.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "monthly crates.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         categoryView = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("category view.title")));
@@ -133,12 +127,15 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
             saveOtherData();
         }
         final HashMap<Integer, HashMap<Integer, ItemStack>> K = new HashMap<>();
-        for(File f : new File(rpd + separator + "monthly crates").listFiles()) {
-            final MonthlyCrate m = new MonthlyCrate(f);
-            final int z = m.getCategory();
-            if(categoriez.containsKey(z)) {
-                if(!K.containsKey(z)) K.put(z, new HashMap<>());
-                K.get(z).put(m.getCategorySlot(), m.getItem());
+        final File folder = new File(rpd + separator + "monthly crates");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final MonthlyCrate m = new MonthlyCrate(f);
+                final int z = m.getCategory();
+                if(categoriez.containsKey(z)) {
+                    if(!K.containsKey(z)) K.put(z, new HashMap<>());
+                    K.get(z).put(m.getCategorySlot(), m.getItem());
+                }
             }
         }
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> M = MonthlyCrate.categorySlots;
@@ -172,8 +169,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         final HashMap<String, MonthlyCrate> MC = MonthlyCrate.crates;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (MC != null ? MC.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         config = null;
         mysterycrate = null;
         heroicmysterycrate = null;
@@ -188,9 +184,7 @@ public class MonthlyCrates extends RandomPackageAPI implements Listener, Command
         categoryViewBackground = null;
         for(Player p : playertimers.keySet()) p.closeInventory();
         playertimers = null;
-        isEnabled = false;
         MonthlyCrate.deleteAll();
-        HandlerList.unregisterAll(this);
     }
 
     public void viewCrates(Player player) {

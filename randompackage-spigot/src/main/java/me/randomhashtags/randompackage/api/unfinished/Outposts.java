@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.Outpost;
 import me.randomhashtags.randompackage.utils.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -12,8 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,15 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-public class Outposts extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class Outposts extends RPFeature implements CommandExecutor {
     private static Outposts instance;
-    public static final Outposts getOutposts() {
+    public static Outposts getOutposts() {
         if(instance == null) instance = new Outposts();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private UInventory gui;
@@ -54,12 +49,9 @@ public class Outposts extends RandomPackageAPI implements Listener, CommandExecu
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "outposts.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         if(!otherdata.getBoolean("saved default outposts")) {
             final String[] o = new String[]{"HERO", "SERVONAUT", "TRAINEE", "VANILLA"};
@@ -76,11 +68,13 @@ public class Outposts extends RandomPackageAPI implements Listener, CommandExecu
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
             statuses.put(s.toUpperCase().replace(" ", "_"), ChatColor.translateAlternateColorCodes('&', config.getString("status." + s)));
         }
-
-        for(File f : new File(rpd + separator + "outposts").listFiles()) {
-            final Outpost o = new Outpost(f);
-            o.setOutpostStatus(OutpostStatus.UNCONTESTED);
-            gi.setItem(o.getSlot(), o.getDisplay());
+        final File folder = new File(rpd + separator + "outposts");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final Outpost o = new Outpost(f);
+                o.setOutpostStatus(OutpostStatus.UNCONTESTED);
+                gi.setItem(o.getSlot(), o.getDisplay());
+            }
         }
         background = d(config, "gui.background");
         int i = 0;
@@ -91,15 +85,12 @@ public class Outposts extends RandomPackageAPI implements Listener, CommandExecu
         final TreeMap<String, Outpost> O = Outpost.outposts;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (O != null ? O.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
         gui = null;
         background = null;
         statuses = null;
         Outpost.deleteAll();
-        HandlerList.unregisterAll(this);
     }
 
 

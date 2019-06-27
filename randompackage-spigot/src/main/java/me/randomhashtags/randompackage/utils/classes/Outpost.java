@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.enums.OutpostStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,12 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.api.unfinished.Outposts.statuses;
 
 public class Outpost {
     public static TreeMap<String, Outpost> outposts;
     public static HashMap<Integer, Outpost> slots;
-    private static RandomPackageAPI api;
 
     private YamlConfiguration yml;
     private String ymlName;
@@ -38,7 +37,6 @@ public class Outpost {
         if(outposts == null) {
             outposts = new TreeMap<>();
             slots = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         yml = YamlConfiguration.loadConfiguration(f);
         ymlName = f.getName().split("\\.yml")[0];
@@ -101,6 +99,5 @@ public class Outpost {
     public static void deleteAll() {
         outposts = null;
         slots = null;
-        api = null;
     }
 }

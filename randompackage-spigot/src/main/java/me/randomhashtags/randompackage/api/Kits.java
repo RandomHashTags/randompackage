@@ -1,13 +1,16 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
+import me.randomhashtags.randompackage.utils.enums.KitType;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,23 +34,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public class Kits extends RandomPackageAPI implements Listener, CommandExecutor, TabCompleter {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
-    public boolean gkitsAreEnabled = false, vkitsAreEnabled = false, mkitsAreEnabled = false;
-    private boolean isRegistered = false;
+public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
 
     private static Kits instance;
-    public static final Kits getKits() {
+    public static Kits getKits() {
         if(instance == null) instance = new Kits();
         return instance;
     }
 
-    private static CustomEnchants customenchants;
+    public boolean gkitsAreEnabled = false, vkitsAreEnabled = false, mkitsAreEnabled = false;
 
     private gkitevents gkitEvents;
     private vkitevents vkitEvents;
@@ -55,7 +54,6 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
     public YamlConfiguration gkits, vkits, mkits;
     private UInventory gkit, vkit, mkit, gkitPreview, vkitPreview, mkitPreview;
     private ArrayList<String> gkitPaths, vkitPaths;
-
 
     private ItemStack gkitCooldown, gkitPreviewBackground, vkitCooldown, vkitPreviewBackground, vkitLocked, mkitBackground;
     public boolean heroicEnchantedEffect = false, gkitUsesTiers, tierZeroEnchantEffect;
@@ -116,12 +114,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         return paths;
     }
 
-    private void tryRegistering() {
-        if(isRegistered) return;
-        pluginmanager.registerEvents(this, randompackage);
-        isRegistered = true;
+    public void load() {
+        final long started = System.currentTimeMillis();
         editing = new HashMap<>();
-        customenchants = CustomEnchants.getCustomEnchants();
         EditedKit.editing = new HashMap<>();
 
         final YamlConfiguration a = otherdata;
@@ -131,17 +126,20 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             a.set("saved default fallen heroes", true);
             saveOtherData();
         }
-
-        for(File f : new File(rpd + separator + "fallen heroes").listFiles()) {
-            new FallenHero(f);
+        final File folder = new File(rpd + separator + "fallen heroes");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                new FallenHero(f);
+            }
+            final HashMap<String, FallenHero> f = FallenHero.heroes;
+            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (f != null ? f.size() : 0) + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
-    public void disable() {
-        if(!isRegistered) return;
-        isRegistered = false;
+    public void unload() {
         disableGkits();
         disableMkits();
         disableVkits();
+        FallenHero.deleteAll();
         LivingFallenHero.deleteAll();
     }
 
@@ -151,7 +149,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         save(null, "kits global.yml");
         gkitEvents = new gkitevents();
         pluginmanager.registerEvents(gkitEvents, randompackage);
-        tryRegistering();
+        load();
         gkitsAreEnabled = true;
 
         final YamlConfiguration a = otherdata;
@@ -183,13 +181,16 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
 
         final Inventory gi = gkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
-        for(File f : new File(rpd + separator + "gkits").listFiles()) {
-            final String n = f.getName().split("\\.yml")[0];
-            final GlobalKit g = new GlobalKit(f);
-            gi.setItem(g.getSlot(), g.getItem());
-            gkitPaths.add(n);
-            gems.add(g.getFallenHeroGem());
-            fallenheroes.add(g.getFallenHeroSpawnItem());
+        final File folder = new File(rpd + separator + "gkits");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final String n = f.getName().split("\\.yml")[0];
+                final GlobalKit g = new GlobalKit(f);
+                gi.setItem(g.getSlot(), g.getItem());
+                gkitPaths.add(n);
+                gems.add(g.getFallenHeroGem());
+                fallenheroes.add(g.getFallenHeroSpawnItem());
+            }
         }
         addGivedpCategory(gems, UMaterial.DIAMOND, "Gkit Gems", "Givedp: Gkit Gems");
         addGivedpCategory(fallenheroes, UMaterial.BONE, "Gkit Fallen Heroes", "Givedp: Gkit Fallen Heroes");
@@ -229,7 +230,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         vkits = YamlConfiguration.loadConfiguration(new File(rpd, "kits evolution.yml"));
         vkitEvents = new vkitevents();
         pluginmanager.registerEvents(vkitEvents, randompackage);
-        tryRegistering();
+        load();
 
         final YamlConfiguration a = otherdata;
         if(!a.getBoolean("saved default vkits")) {
@@ -248,13 +249,16 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         vkitPaths = new ArrayList<>();
         final Inventory vi = vkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
-        for(File f : new File(rpd + separator + "vkits").listFiles()) {
-            final String n = f.getName().split("\\.yml")[0];
-            final EvolutionKit e = new EvolutionKit(f);
-            vi.setItem(e.getSlot(), e.getItem());
-            vkitPaths.add(n);
-            gems.add(e.getFallenHeroGem());
-            fallenheroes.add(e.getFallenHeroSpawnItem());
+        final File folder = new File(rpd + separator + "vkits");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final String n = f.getName().split("\\.yml")[0];
+                final EvolutionKit e = new EvolutionKit(f);
+                vi.setItem(e.getSlot(), e.getItem());
+                vkitPaths.add(n);
+                gems.add(e.getFallenHeroGem());
+                fallenheroes.add(e.getFallenHeroSpawnItem());
+            }
         }
         addGivedpCategory(gems, UMaterial.DIAMOND, "Vkit Gems", "Givedp: Vkit Gems");
         addGivedpCategory(fallenheroes, UMaterial.BONE, "Vkit Fallen Heroes", "Givedp: Vkit Fallen Heroes");
@@ -296,7 +300,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         mkits = YamlConfiguration.loadConfiguration(new File(rpd, "kits mastery.yml"));
         mkitEvents = new mkitevents();
         pluginmanager.registerEvents(mkitEvents, randompackage);
-        tryRegistering();
+        load();
 
         final YamlConfiguration a = otherdata;
         if(!a.getBoolean("saved default mkits")) {
@@ -309,9 +313,12 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         mkit = new UInventory(null, mkits.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', mkits.getString("gui.title")));
         mkitBackground = d(mkits, "gui.background");
         final Inventory mi = mkit.getInventory();
-        for(File f : new File(rpd + separator + "mkits").listFiles()) {
-            final MasteryKit m = new MasteryKit(f);
-            mi.setItem(m.getSlot(), m.getItem());
+        final File folder = new File(rpd + separator + "mkits");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final MasteryKit m = new MasteryKit(f);
+                mi.setItem(m.getSlot(), m.getItem());
+            }
         }
         for(int i = 0; i < mkit.getSize(); i++)
             if(mi.getItem(i) == null)
@@ -686,9 +693,9 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             if(gkit == null && vkit == null && mkit == null) return;
 
             final boolean g = gkit != null, v = vkit != null;
-            final int max = g ? gkit.getMaxTier() : v ? vkit.getMaxLevel() : 0;
+            final int max = g || v ? (g ? gkit : vkit).getMaxTier() : 0;
             final YamlConfiguration yml = g ? gkit.getYaml() : v ? vkit.getYaml() : mkit.getYaml();
-            final List<KitItem> kitItems = g ? gkit.getItems() : v ? vkit.getItems() : null;
+            final Set<KitItem> kitItems = g ? gkit.getItems() : v ? vkit.getItems() : null;
             if(kitItems == null) return;
             final YamlConfiguration typeYML = g ? gkits : v ? vkits : mkits;
             final String pn = player.getName(), t = Integer.toString(tier), mt = Integer.toString(max);
@@ -779,7 +786,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         upgradechance += a;
         if(!preview && random.nextInt(100) <= upgradechance) {
             final int newlvl = vkitlvl+1;
-            if(newlvl > vkit.getMaxLevel()) return;
+            if(newlvl > vkit.getMaxTier()) return;
             final String name = vkit.getItem().getItemMeta().getDisplayName();
             pdata.getKitLevels(KitType.EVOLUTION).put(n, newlvl);
             for(String s : vkits.getStringList("messages.upgrade"))
@@ -792,7 +799,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         item = d(config, path, category.getDouble("gui.settings.tier custom enchant multiplier." + tier));
         itemMeta = item.getItemMeta();
         if(itemMeta != null && itemMeta.hasLore()) {
-            final boolean levelzeroremoval = customenchants.levelZeroRemoval;
+            final boolean levelzeroremoval = CustomEnchants.getCustomEnchants().levelZeroRemoval;
             lore.clear();
             for(String string : itemMeta.getLore()) {
                 final String sl = string.toLowerCase();
@@ -834,18 +841,22 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
         final ItemStack is = event.getItem();
         final GlobalKit g = GlobalKit.valueOfFallenHeroSpawnItem(is), gem = g == null ? GlobalKit.valueOfFallenHeroGem(is) : null;
         final EvolutionKit v = gem == null ? EvolutionKit.valueOfFallenHeroSpawnItem(is) : null, vgem = v == null ? EvolutionKit.valueOfFallenHeroGem(is) : null;
-        if(g != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            final FallenHero h = g.getFallenHero();
+        if((g != null || v != null) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            final boolean isG = g != null;
+            final Block b = event.getClickedBlock();
+            final FallenHero h = (isG ? g : v).getFallenHero();
             final String spawnloc = h.getSpawnable().toLowerCase();
             if(!spawnloc.equals("anywhere")) {
-                if(spawnloc.equals("warzone") && !fapi.locationIsWarZone(event.getClickedBlock()))
+                if(spawnloc.equals("warzone") && !fapi.locationIsWarZone(b)) {
+                    sendStringListMessage(player, (isG ? gkits : vkits).getStringList("messages.not in warzone"), null);
                     return;
+                }
             }
             removeItem(player, is, 1);
-            final Location c = event.getClickedBlock().getLocation();
+            final Location c = b.getLocation();
             h.spawn(player, new Location(c.getWorld(), c.getX(), c.getY()+1, c.getZ()), g);
             final HashMap<String, String> r = new HashMap<>();
-            r.put("{NAME}", g.getFallenHeroName());
+            r.put("{NAME}", isG ? g.getFallenHeroName() : v.getFallenHeroName());
             sendStringListMessage(player, h.getSummonMsg(), r);
         } else if(gem != null || vgem != null) {
             final boolean gkit = gem != null;
@@ -870,7 +881,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
             } else {
                 if(tiers.containsKey(n)) {
                     final int l = tiers.get(n);
-                    if(l != vgem.getMaxLevel()) {
+                    if(l != vgem.getMaxTier()) {
                         tiers.put(n, l+1);
                     } else {
                         sendStringListMessage(player, vkits.getStringList("messages.already have max"), null);
@@ -1019,7 +1030,7 @@ public class Kits extends RandomPackageAPI implements Listener, CommandExecutor,
                     } else {
                         final int lvl = kits.get(n);
                         final String name = e.getItem().getItemMeta().getDisplayName(), newl = Integer.toString(lvl+1);
-                        if(lvl < e.getMaxLevel()) {
+                        if(lvl < e.getMaxTier()) {
                             kits.put(n, lvl+1);
                         }
                         removeItem(player, i, 1);

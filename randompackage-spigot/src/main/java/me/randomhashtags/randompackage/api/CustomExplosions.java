@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomCreeper;
 import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomTNT;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -13,8 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
@@ -31,24 +29,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomExplosions extends RandomPackageAPI implements Listener {
-
+public class CustomExplosions extends RPFeature {
 	private static CustomExplosions instance;
-	public static final CustomExplosions getCustomExplosions() {
+	public static CustomExplosions getCustomExplosions() {
 		if(instance == null) instance = new CustomExplosions();
 		return instance;
 	}
-
-	public boolean isEnabled = false;
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "custom explosions.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "custom explosions.yml"));
 		cannotBreakTNT = new ArrayList<>();
 		cannotBreakCreepers = new ArrayList<>();
@@ -132,12 +124,10 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 			if(loadedLiving != 0) sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedLiving + " custom living creepers");
 		}
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		config = null;
 		cannotBreakTNT = null;
 		cannotBreakCreepers = null;
-		isEnabled = false;
 		final HashMap<Location, CustomTNT> tnt = CustomTNT.placed;
 		final HashMap<UUID, CustomCreeper> creepers = CustomCreeper.living;
 		final HashMap<UUID, CustomTNT> primed = CustomTNT.primed;
@@ -155,7 +145,6 @@ public class CustomExplosions extends RandomPackageAPI implements Listener {
 
 		CustomCreeper.deleteAll();
 		CustomTNT.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

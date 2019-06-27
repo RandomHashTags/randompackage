@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.utils.classes.dungeons.Dungeon;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.classes.Dungeon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -13,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -23,17 +21,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.TreeMap;
 
-public class Dungeons extends RandomPackageAPI implements CommandExecutor, Listener {
-
+public class Dungeons extends RPFeature implements CommandExecutor {
     private static Dungeons instance;
-    public static final Dungeons getDungeons() {
+    public static Dungeons getDungeons() {
         if(instance == null) instance = new Dungeons();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
     private UInventory dungeons, master;
     private ItemStack background;
@@ -48,11 +43,8 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
         return true;
     }
 
-    public void enable() {
-        if(isEnabled) return;
+    public void load() {
         save(null, "dungeons.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "dungeons.yml"));
 
         dimensionweb = d(config, "items.dimension web");
@@ -79,18 +71,15 @@ public class Dungeons extends RandomPackageAPI implements CommandExecutor, Liste
         for(int i = 0; i < dungeons.getSize(); i++)
             if(di.getItem(i) == null)
                 di.setItem(i, background);
-        final HashMap<String, Dungeon> d = Dungeon.dungeons;
+        final TreeMap<String, Dungeon> d = Dungeon.dungeons;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (d != null ? d.size() : 0) + " dungeons");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
         dungeons = null;
         master = null;
         background = null;
         Dungeon.deleteAll();
-        HandlerList.unregisterAll(this);
     }
 
     @EventHandler

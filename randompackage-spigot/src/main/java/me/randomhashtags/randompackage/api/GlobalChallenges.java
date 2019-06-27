@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.coinflip.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.fund.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.globalchallenges.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
@@ -45,11 +45,9 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 
-public class GlobalChallenges extends RandomPackageAPI implements CommandExecutor, Listener {
-
-	public boolean isEnabled = false;
+public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private static GlobalChallenges instance;
-	public static final GlobalChallenges getChallenges() {
+	public static GlobalChallenges getChallenges() {
 		if(instance == null) instance = new GlobalChallenges();
 		return instance;
 	}
@@ -85,17 +83,14 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 	    final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "global challenges.yml");
 		save("_Data", "global challenges.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 		if(RandomPackage.mcmmo != null) {
 			final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
 			m.gcIsEnabled = true;
-			m.enable();
+			m.unload();
 		}
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "global challenges.yml"));
 		dataF = new File(rpd + separator + "_Data", "global challenges.yml");
@@ -124,9 +119,11 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}
-
-		for(File f : new File(rpd + separator + "global challenges").listFiles()) {
-			new GlobalChallenge(f, new ArrayList<>());
+		final File folder = new File(rpd + separator + "global challenges");
+		if(folder.exists()) {
+			for(File f : folder.listFiles()) {
+				new GlobalChallenge(f, new HashSet<>());
+			}
 		}
 
 		inv = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
@@ -145,9 +142,7 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (G != null ? G.size() : 0) + " global challenges and " + (P != null ? P.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		reloadChallenges();
 	}
-	public void disable() {
-		if(!isEnabled) return;
-		isEnabled = false;
+	public void unload() {
 		data.set("active global challenges", null);
 		for(ActiveGlobalChallenge c : ActiveGlobalChallenge.active.values()) {
 			final String p = c.getType().getYamlName();
@@ -164,10 +159,8 @@ public class GlobalChallenges extends RandomPackageAPI implements CommandExecuto
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		GlobalChallenge.deleteAll();
 		GlobalChallengePrize.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");

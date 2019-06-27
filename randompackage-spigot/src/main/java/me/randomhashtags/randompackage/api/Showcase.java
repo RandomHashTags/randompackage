@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -13,8 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,15 +25,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Showcase extends RandomPackageAPI implements CommandExecutor, Listener {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class Showcase extends RPFeature implements CommandExecutor {
 	private static Showcase instance;
 	public static final Showcase getShowcase() {
 		if(instance == null) instance = new Showcase();
 		return instance;
 	}
 
-	public boolean isEnabled = false;
 	public YamlConfiguration config;
 	
 	private ItemStack addItemConfirm, addItemCancel, removeItemConfirm, removeItemCancel, expansion;
@@ -75,12 +73,9 @@ public class Showcase extends RandomPackageAPI implements CommandExecutor, Liste
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "showcase.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "showcase.yml"));
 		expansion = d(config, "items.expansion");
@@ -120,9 +115,7 @@ public class Showcase extends RandomPackageAPI implements CommandExecutor, Liste
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Showcase &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
-
+	public void unload() {
 		for(Player p : new ArrayList<>(inSelf)) {
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
@@ -131,7 +124,6 @@ public class Showcase extends RandomPackageAPI implements CommandExecutor, Liste
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
-
 		config = null;
 		addItemConfirm = null;
 		addItemCancel = null;
@@ -148,8 +140,6 @@ public class Showcase extends RandomPackageAPI implements CommandExecutor, Liste
 		inSelf = null;
 		inOther = null;
 		deleteSlot = null;
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 
 	public void resetShowcases(OfflinePlayer player) {

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.servercrate;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,9 +11,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class ServerCrate {
 	public static HashMap<String, ServerCrate> crates;
-	private static RandomPackageAPI api;
 	private static Random random;
 
 	private YamlConfiguration yml;
@@ -30,7 +30,6 @@ public class ServerCrate {
 	public ServerCrate(File f) {
 		if(crates == null) {
 			crates = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 			random = api.random;
 		}
 		yml = YamlConfiguration.loadConfiguration(f);
@@ -175,7 +174,6 @@ public class ServerCrate {
 
 	public static void deleteAll() {
 		crates = null;
-		api = null;
 		random = null;
 	}
 }

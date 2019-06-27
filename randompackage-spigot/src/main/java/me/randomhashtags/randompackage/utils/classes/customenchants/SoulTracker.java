@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -10,10 +9,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class SoulTracker {
 	private static YamlConfiguration yml;
 	public static HashMap<String, SoulTracker> trackers;
-	private static RandomPackageAPI api;
 
 	private String path, tracks, appliedlore;
 	private String[] appliesto;
@@ -25,8 +26,7 @@ public class SoulTracker {
 	public SoulTracker(String path) {
 		if(trackers == null) {
 			trackers = new HashMap<>();
-			yml = YamlConfiguration.loadConfiguration(new File(RandomPackageAPI.rpd + File.separator + "custom enchants", "soul trackers.yml"));
-			api = RandomPackageAPI.getAPI();
+			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + File.separator + "custom enchants", "soul trackers.yml"));
 		}
 		this.path = path;
 		soulsPerKill = yml.getDouble("trackers." + path + ".souls per kill");
@@ -96,6 +96,5 @@ public class SoulTracker {
 	public static void deleteAll() {
 		yml = null;
 		trackers = null;
-		api = null;
 	}
 }

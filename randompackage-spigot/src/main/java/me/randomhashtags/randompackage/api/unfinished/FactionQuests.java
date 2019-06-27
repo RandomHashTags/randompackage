@@ -1,29 +1,28 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.EventAttributes;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 
 import java.io.File;
 
-public class FactionQuests extends EventAttributes implements Listener, CommandExecutor {
-
+public class FactionQuests extends EventAttributes implements CommandExecutor {
     private static FactionQuests instance;
-    public static final FactionQuests getFactionQuests() {
+    public static FactionQuests getFactionQuests() {
         if(instance == null) instance = new FactionQuests();
         return instance;
     }
 
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
-    public void enable() {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        return true;
+    }
+
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
-        isEnabled = true;
-        pluginmanager.registerEvents(this, randompackage);
         save(null, "faction quests.yml");
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "faction quests.yml"));
@@ -51,16 +50,14 @@ public class FactionQuests extends EventAttributes implements Listener, CommandE
             otherdata.set("saved default faction quests", true);
             saveOtherData();
         }
-
-        for(File f : new File(rpd + separator + "faction quests").listFiles()) {
+        final File folder = new File(rpd + separator + "faction quests");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+            }
         }
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
-        HandlerList.unregisterAll(this);
     }
 }

@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customexplosions;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
@@ -22,13 +21,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
 public class CustomTNT {
     public static HashMap<String, CustomTNT> tnt;
     public static HashMap<Location, CustomTNT> placed;
     public static HashMap<UUID, CustomTNT> primed;
-    private static RandomPackageAPI api;
     private static Random random;
 
     public YamlConfiguration yml;
@@ -40,7 +39,6 @@ public class CustomTNT {
             tnt = new HashMap<>();
             placed = new HashMap<>();
             primed = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             random = new Random();
         }
         this.yml = YamlConfiguration.loadConfiguration(f);
@@ -188,7 +186,6 @@ public class CustomTNT {
         tnt = null;
         placed = null;
         primed = null;
-        api = null;
         random = null;
     }
 }

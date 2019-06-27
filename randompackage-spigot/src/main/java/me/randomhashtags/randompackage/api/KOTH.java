@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -11,8 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -29,15 +27,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class KOTH extends RPFeature implements CommandExecutor {
 	private static KOTH instance;
-	public static final KOTH getKOTH() {
+	public static KOTH getKOTH() {
 	    if(instance == null) instance = new KOTH();
 	    return instance;
 	}
 
-	public boolean isEnabled = false;
 	public YamlConfiguration config;
 
 	private UInventory lootbagInv;
@@ -74,12 +72,9 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "koth.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "koth.yml"));
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), ChatColor.translateAlternateColorCodes('&', config.getString("items.lootbag.title")));
@@ -114,8 +109,7 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 
 		sendConsoleMessage("&6[RandomPackage] &aLoaded King of the Hill &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		final YamlConfiguration a = otherdata;
 		a.set("koth.center", center != null ? toString(center) : "");
 		a.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
@@ -152,9 +146,6 @@ public class KOTH extends RandomPackageAPI implements Listener, CommandExecutor 
 		cappingStartedTime = 0;
 		currentPlayerCapturing = null;
 		previouscapturer = null;
-
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 	
 	public ArrayList<ItemStack> getRandomLootbagContents() {

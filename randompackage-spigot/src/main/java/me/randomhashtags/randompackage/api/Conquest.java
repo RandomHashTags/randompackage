@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.conquest.ConquestDamageEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.conquests.ConquestChest;
 import me.randomhashtags.randompackage.utils.classes.conquests.ConquestMob;
 import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestChest;
@@ -16,8 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -30,9 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Conquest extends RandomPackageAPI implements Listener, CommandExecutor {
+public class Conquest extends RPFeature implements CommandExecutor {
 
-    public boolean isEnabled = false;
     private static Conquest instance;
     public static Conquest getConquest() {
         if(instance == null) instance = new Conquest();
@@ -58,12 +55,9 @@ public class Conquest extends RandomPackageAPI implements Listener, CommandExecu
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "conquests.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "conquests.yml"));
 
         final YamlConfiguration a = otherdata;
@@ -79,17 +73,20 @@ public class Conquest extends RandomPackageAPI implements Listener, CommandExecu
             final String p = "bosses." + s + ".";
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), ChatColor.translateAlternateColorCodes('&', config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
-        for(File f : new File(rpd + separator + "conquests").listFiles()) {
-            final ConquestChest c = new ConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
-            final int spawninterval = c.getSpawnInterval()*20;
-            tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
-                final String[] sr = c.getSpawnRegion().split(";");
-                final World w = Bukkit.getWorld(sr[0]);
-                final int xMin = Integer.parseInt(sr[1].split(":")[0]), xMax = Integer.parseInt(sr[1].split(":")[1]), x = xMin + random.nextInt(xMax-xMin+1), zMin = Integer.parseInt(sr[2].split(":")[0]), zMax = Integer.parseInt(sr[2].split(":")[1]), z = zMin + random.nextInt(zMax-zMin+1);
-                final Location l = new Location(w, x, 256, z);
-                l.setY(w.getHighestBlockYAt(l));
-                last = c.spawn(l);
-            }, spawninterval, spawninterval));
+        final File folder = new File(rpd + separator + "conquests");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final ConquestChest c = new ConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
+                final int spawninterval = c.getSpawnInterval()*20;
+                tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+                    final String[] sr = c.getSpawnRegion().split(";");
+                    final World w = Bukkit.getWorld(sr[0]);
+                    final int xMin = Integer.parseInt(sr[1].split(":")[0]), xMax = Integer.parseInt(sr[1].split(":")[1]), x = xMin + random.nextInt(xMax-xMin+1), zMin = Integer.parseInt(sr[2].split(":")[0]), zMax = Integer.parseInt(sr[2].split(":")[1]), z = zMin + random.nextInt(zMax-zMin+1);
+                    final Location l = new Location(w, x, 256, z);
+                    l.setY(w.getHighestBlockYAt(l));
+                    last = c.spawn(l);
+                }, spawninterval, spawninterval));
+            }
         }
 
         final List<String> conquests = a.getStringList("conquests");
@@ -103,8 +100,7 @@ public class Conquest extends RandomPackageAPI implements Listener, CommandExecu
         final HashMap<String, ConquestMob> CM = ConquestMob.bosses;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (cc != null ? cc.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         config = null;
         for(int i : tasks) scheduler.cancelTask(i);
         tasks = null;
@@ -124,8 +120,6 @@ public class Conquest extends RandomPackageAPI implements Listener, CommandExecu
         LivingConquestChest.deleteAll(false);
         ConquestChest.deleteAll();
         ConquestMob.deleteAll();
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
     public void destroyConquests() {
         final List<LivingConquestChest> C = LivingConquestChest.living;

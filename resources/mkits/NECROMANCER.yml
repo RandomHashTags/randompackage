@@ -2,6 +2,7 @@
 settings:
   loses required kits: true
   name: "&2&lNecromancer"
+  cooldown: 259200
 #
 gui settings:
   slot: 4

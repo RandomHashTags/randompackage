@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
@@ -27,8 +26,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -41,15 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-public class GivedpItem extends RandomPackageAPI implements Listener, CommandExecutor {
+public class GivedpItem extends RPFeature implements CommandExecutor {
+    public static final GivedpItem givedpitem = new GivedpItem();
 
-    private static GivedpItem instance;
-    public static final GivedpItem getGivedpItem() {
-        if(instance == null) instance = new GivedpItem();
-        return instance;
-    }
-
-    private boolean isEnabled = false;
     public YamlConfiguration itemsConfig;
     public HashMap<String, ItemStack> customitems;
 
@@ -94,10 +85,8 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
         return true;
     }
     public void load() {
-        if(isEnabled) return;
         save(null, "items.yml");
         itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
-        pluginmanager.registerEvents(this, randompackage);
         customitems = new HashMap<>();
         final ConfigurationSection cs = itemsConfig.getConfigurationSection("custom items");
         if(cs != null) {
@@ -121,21 +110,17 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
         items.put("spacedrink", d(itemsConfig, "space drink"));
         items.put("spacefirework", d(itemsConfig, "space firework"));
         items.put("xpbottle", d(itemsConfig, "xpbottle"));
-        isEnabled = true;
         air = new ItemStack(Material.AIR);
 
         itemnametag = new ArrayList<>();
         itemlorecrystal = new ArrayList<>();
         explosivesnowball = new ArrayList<>();
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         itemsConfig = null;
         items = null;
         customitems = null;
         air = null;
-        HandlerList.unregisterAll(this);
     }
 
     public ItemStack valueOf(String input) {
@@ -161,7 +146,7 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
             return b != null ? b.getItem(amount) : air;
         } else if(input.equals("collectionchest")) {
             final CollectionFilter cf = CollectionFilter.getCollectionFilter();
-            return cf.isEnabled ? cf.getCollectionChest("all") : air;
+            return cf.isEnabled() ? cf.getCollectionChest("all") : air;
         } else if(input.startsWith("customarmor:")) {
             if(CustomArmor.getCustomArmor().isEnabled) {
                 final String[] b = input.split(":");
@@ -214,7 +199,7 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
             final String[] a = Q.split(":");
             String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(random.nextInt(101));
             EnchantmentOrb o = L != null && L.containsKey(p) ? L.get(p) : null;
-            if(o == null) {
+            if(o != null) {
                 final List<String> paths = new ArrayList<>();
                 for(String s : L.keySet()) {
                     if(s.startsWith(p)) {
@@ -229,7 +214,7 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
         } else if(input.startsWith("factionmcmmobooster:") || input.startsWith("factionxpbooster:")) {
             final FactionAdditions f = FactionAdditions.getFactionAdditions();
             final String[] a = Q.split(":");
-            return f.isEnabled ? f.getBooster(Double.parseDouble(a[1]), Long.parseLong(a[2])*1000, input.startsWith("factionxpbooster")) : air;
+            return f.isEnabled() ? f.getBooster(Double.parseDouble(a[1]), Long.parseLong(a[2])*1000, input.startsWith("factionxpbooster")) : air;
         } else if(input.equals("gkitfallenhero") || input.startsWith("gkitfallenhero:")) {
             final HashMap<String, GlobalKit> L = GlobalKit.kits;
             final GlobalKit g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
@@ -247,9 +232,9 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
             final Mask m = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return m != null ? m.getItem() : air;
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
-            if(mcmmoIsEnabled) {
+            if(mcmmoIsEnabled()) {
                 final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
-                if(m.isEnabled) {
+                if(m.isEnabled()) {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
                     final ItemStack i = lvl ? items.get("mcmmolevelvoucher").clone() : xp ? items.get("mcmmoxpvoucher").clone() : items.get("mcmmocreditvoucher").clone();
                     final String[] a = input.split(":");
@@ -310,7 +295,7 @@ public class GivedpItem extends RandomPackageAPI implements Listener, CommandExe
         } else if(input.startsWith("title")) {
             final Titles t = Titles.getTitles();
             final HashMap<Integer, Title> L = Title.numbers;
-            final int a = t.isEnabled && L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? random.nextInt(L.size()) : getRemainingInt(input.split(":")[1]) : -1;
+            final int a = t.isEnabled() && L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? random.nextInt(L.size()) : getRemainingInt(input.split(":")[1]) : -1;
             final Title ti = L != null? L.getOrDefault(a, null) : null;
             return ti != null ? ti.getItem() : air;
         } else if(input.startsWith("vkitfallenhero")) {

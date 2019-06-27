@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.FilterCategory;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -16,8 +16,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -29,15 +27,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemFilter extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class ItemFilter extends RPFeature implements CommandExecutor {
     private static ItemFilter instance;
-    public static final ItemFilter getItemFilter() {
+    public static ItemFilter getItemFilter() {
         if(instance == null) instance = new ItemFilter();
         return instance;
     }
 
-    public boolean isEnabled = false;
     public YamlConfiguration config;
     private UInventory gui;
     private String enablePrefix, disabledPrefix;
@@ -61,13 +57,10 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         }
         return true;
     }
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "item filter.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "item filter.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         categorySlots = new HashMap<>();
         categories = new HashMap<>();
@@ -101,17 +94,19 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
             a.set("saved default filter categories", true);
             saveOtherData();
         }
-        for(File f : new File(rpd + separator + "filter categories").listFiles()) {
-            final FilterCategory fc = new FilterCategory(f);
-            categories.put(f.getName(), fc);
-            categoryTitles.put(fc.getInventoryTitle(), fc);
+        final File folder = new File(rpd + separator + "filter categories");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final FilterCategory fc = new FilterCategory(f);
+                categories.put(f.getName(), fc);
+                categoryTitles.put(fc.getInventoryTitle(), fc);
+            }
         }
 
         final HashMap<String, FilterCategory> F = FilterCategory.categories;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (F != null ? F.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         config = null;
         gui = null;
         enablePrefix = null;
@@ -122,8 +117,6 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
         categorySlots = null;
         FilterCategory.deleteAll();
         categories = null;
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewHelp(Player player) {
@@ -131,8 +124,6 @@ public class ItemFilter extends RandomPackageAPI implements Listener, CommandExe
             sendStringListMessage(player, config.getStringList("messages.help"), null);
         }
     }
-
-
     public void viewCategories(Player player) {
         if(hasPermission(player, "RandomPackage.filter.view", true)) {
             player.closeInventory();

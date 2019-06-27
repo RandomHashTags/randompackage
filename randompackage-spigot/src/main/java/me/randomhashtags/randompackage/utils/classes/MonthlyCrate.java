@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,10 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class MonthlyCrate {
     public static HashMap<String, MonthlyCrate> crates;
     public static HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots;
-    private static RandomPackageAPI api;
     private static Random random;
     public static HashMap<Player, List<String>> revealedRegular, revealedBonus;
 
@@ -33,7 +33,6 @@ public class MonthlyCrate {
     public MonthlyCrate(File f) {
         if(crates == null) {
             crates = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             random = api.random;
             revealedRegular = new HashMap<>();
             revealedBonus = new HashMap<>();
@@ -186,7 +185,6 @@ public class MonthlyCrate {
 
     public static void deleteAll() {
         crates = null;
-        api = null;
         random = null;
         revealedRegular = null;
         revealedBonus = null;

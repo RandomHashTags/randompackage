@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,9 +7,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class Trinket {
     public static HashMap<String, Trinket> trinkets;
-    private static RandomPackageAPI api;
 
     private File f;
     private YamlConfiguration yml;
@@ -20,7 +20,6 @@ public class Trinket {
     public Trinket(File f) {
         if(trinkets == null) {
             trinkets = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         this.f = f;
         yml = YamlConfiguration.loadConfiguration(f);
@@ -56,6 +55,5 @@ public class Trinket {
 
     public static void deleteAll() {
         trinkets = null;
-        api = null;
     }
 }

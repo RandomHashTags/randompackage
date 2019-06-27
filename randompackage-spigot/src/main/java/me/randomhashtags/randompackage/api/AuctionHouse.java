@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.utils.classes.auctionhouse.AuctionedItem;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.classes.AuctionedItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -16,8 +16,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -31,15 +29,12 @@ import java.util.*;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toMap;
 
-public class AuctionHouse extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class AuctionHouse extends RPFeature implements CommandExecutor {
     private static AuctionHouse instance;
-    public static final AuctionHouse getAuctionHouse() {
+    public static AuctionHouse getAuctionHouse() {
         if(instance == null) instance = new AuctionHouse();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private File dataF;
@@ -96,15 +91,12 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         return true;
     }
 
-    public void enable() {
-        if(isEnabled) return;
+    public void load() {
         save(null, "auction house.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "auction house.yml"));
         save("_Data", "auctions.yml");
         dataF = new File(rpd + separator + "_Data", "auctions.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         purchasing = new HashMap<>();
         confirmAuctionSlots = new ArrayList<>();
@@ -230,7 +222,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         else loadAH(false);
     }
     private void loadAH(boolean async) {
-        if(!isEnabled) return;
+        if(!isEnabled()) return;
         final ConfigurationSection au = data.getConfigurationSection("auctions");
         int ah = 0, cb = 0, d = 0;
         if(au != null) {
@@ -288,7 +280,7 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         else dobackup();
     }
     private void dobackup() {
-        if(!isEnabled) return;
+        if(!isEnabled()) return;
         data.set("auctions", null);
         for(UUID u : auctions.keySet()) {
             final String s = u.toString(), p = "auctions." + s + ".";
@@ -321,10 +313,8 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         save();
     }
 
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         backup(false);
-        isEnabled = false;
         for(Player p : page.keySet()) p.closeInventory();
         for(Player p : viewingCategory.keySet()) p.closeInventory();
         for(AuctionedItem i : task.keySet()) scheduler.cancelTask(task.get(i));
@@ -369,7 +359,6 @@ public class AuctionHouse extends RandomPackageAPI implements Listener, CommandE
         viewing = null;
         viewingCategory = null;
         task = null;
-        HandlerList.unregisterAll(this);
     }
 
 

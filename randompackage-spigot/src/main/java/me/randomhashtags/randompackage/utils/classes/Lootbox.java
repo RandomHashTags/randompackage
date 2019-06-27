@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -13,10 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class Lootbox {
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
+public class Lootbox {
     public static HashMap<String, Lootbox> lootboxes;
-    private static RandomPackageAPI api;
     private static Random random;
 
     private YamlConfiguration yml;
@@ -28,7 +26,6 @@ public class Lootbox {
     public Lootbox(File f) {
         if(lootboxes == null) {
             lootboxes = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
             random = new Random();
         }
         yml = YamlConfiguration.loadConfiguration(f);
@@ -247,10 +244,8 @@ public class Lootbox {
         return items;
     }
 
-
     public static void deleteAll() {
         lootboxes = null;
-        api = null;
         random = null;
     }
 }

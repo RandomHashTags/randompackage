@@ -1,20 +1,19 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestStartEvent;
-import me.randomhashtags.randompackage.api.nearFinished.PlayerQuests;
+import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
 import me.randomhashtags.randompackage.utils.classes.customenchants.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.classes.factionadditions.FactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
-import me.randomhashtags.randompackage.utils.classes.homes.Home;
+import me.randomhashtags.randompackage.utils.classes.Home;
 import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
 import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
-import me.randomhashtags.randompackage.utils.classes.kits.KitType;
+import me.randomhashtags.randompackage.utils.enums.KitType;
 import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
 import me.randomhashtags.randompackage.utils.classes.playerquests.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.classes.playerquests.PlayerQuest;
@@ -43,10 +42,10 @@ import java.io.IOException;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class RPPlayer {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
-    private static final RandomPackageAPI api = RandomPackageAPI.getAPI();
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
@@ -191,9 +190,11 @@ public class RPPlayer {
 
         final HashMap<PlayerQuest, ActivePlayerQuest> apq = getQuests();
         yml.set("quests", null);
-        for(PlayerQuest q : apq.keySet()) {
-            final ActivePlayerQuest A = apq.get(q);
-            yml.set("quests." + q.getFile().getName().split("\\.yml")[0], A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
+        if(apq != null) {
+            for(PlayerQuest q : apq.keySet()) {
+                final ActivePlayerQuest A = apq.get(q);
+                yml.set("quests." + q.getFile().getName().split("\\.yml")[0], A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
+            }
         }
 
         final HashMap<Integer, ItemStack[]> showcase = getShowcases();
@@ -418,7 +419,6 @@ public class RPPlayer {
         if(showcases == null && showcaseSizes == null) {
             showcases = new HashMap<>();
             showcaseSizes = new HashMap<>();
-            final RandomPackageAPI api = RandomPackageAPI.getAPI();
             final ConfigurationSection c = yml.getConfigurationSection("showcases");
             if(c != null) {
                for(String s : c.getKeys(false)) {
@@ -775,7 +775,8 @@ public class RPPlayer {
 
 
     private void loadQuests() {
-        if(quests == null) {
+        final PlayerQuests QQ = PlayerQuests.getPlayerQuests();
+        if(QQ.isEnabled() && quests == null) {
             quests = new HashMap<>();
             questTasks.put(uuid, new ArrayList<>());
             final ConfigurationSection c = yml.getConfigurationSection("quests");
@@ -794,7 +795,7 @@ public class RPPlayer {
                 }
             }
             int permfor = 0;
-            final int max = PlayerQuests.getPlayerQuests().questSlots.size();
+            final int max = QQ.questSlots.size();
             final Player p = Bukkit.getPlayer(uuid);
             for(int i = 1; i <= max; i++) {
                 if(p.hasPermission("RandomPackage.playerquests." + i)) {

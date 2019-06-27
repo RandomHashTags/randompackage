@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.factionadditions;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.rpd;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class FactionUpgrade {
     public static YamlConfiguration yml;
-    private static RandomPackageAPI api;
     public static HashMap<String, FactionUpgrade> upgrades;
 
     private String path;
@@ -25,8 +24,7 @@ public class FactionUpgrade {
     public FactionUpgrade(String path, FactionUpgradeType type) {
         if(upgrades == null) {
             upgrades = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
-            yml = YamlConfiguration.loadConfiguration(new File(rpd, "faction additions.yml"));
+            yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction additions.yml"));
         }
         this.path = path;
         this.type = type;
@@ -80,7 +78,6 @@ public class FactionUpgrade {
 
     public static void deleteAll() {
         yml = null;
-        api = null;
         upgrades = null;
     }
 }

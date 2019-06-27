@@ -32,26 +32,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Masks extends CustomEnchants implements Listener {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class Masks extends CustomEnchants implements Listener {
     private static Masks instance;
-    public static final Masks getMasks() {
+    public static Masks getMasks() {
         if(instance == null) instance = new Masks();
         return instance;
     }
 
-    public boolean isEnabled = false;
     public YamlConfiguration config;
     private HashMap<Player, ItemStack> equippedMasks;
     public ItemStack maskgenerator;
     private List<String> maskCanObtain;
 
-    public void enable() {
+    @Override
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "masks.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "masks.yml"));
 
         equippedMasks = new HashMap<>();
@@ -71,25 +69,25 @@ public class Masks extends CustomEnchants implements Listener {
             a.set("saved default masks", true);
             saveOtherData();
         }
-
-        for(File f : new File(rpd + separator + "masks").listFiles()) {
-            final Mask m = new Mask(f);
-            ms.add(m.getItem());
+        final File folder = new File(rpd + separator + "masks");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final Mask m = new Mask(f);
+                ms.add(m.getItem());
+            }
         }
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         final HashMap<String, Mask> M = Mask.masks;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (M != null ? M.size() : 0) + " masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    @Override
+    public void unload() {
         for(Player p : equippedMasks.keySet()) {
             p.getInventory().setHelmet(equippedMasks.get(p));
             p.updateInventory();
         }
         equippedMasks = null;
         Mask.deleteAll();
-        HandlerList.unregisterAll(this);
     }
 
     @EventHandler
@@ -253,7 +251,7 @@ public class Masks extends CustomEnchants implements Listener {
                     || event instanceof MaskEquipEvent && A.equals("maskequip")
                     || event instanceof MaskUnequipEvent && A.equals("maskunequip")
 
-                    || mcmmoIsEnabled && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
+                    || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
             ) {
                 executeAttributes(player, event, attr);
             }

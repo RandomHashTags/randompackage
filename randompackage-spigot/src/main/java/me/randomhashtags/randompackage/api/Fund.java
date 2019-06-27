@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.fund.FundDepositEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,8 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.io.File;
@@ -22,16 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Fund extends RandomPackageAPI implements CommandExecutor, Listener {
-
+public class Fund extends RPFeature implements CommandExecutor {
 	private static Fund instance;
-	public static final Fund getFund() {
+	public static Fund getFund() {
 		if(instance == null) instance = new Fund();
 		return instance;
 	}
-	
 	public YamlConfiguration config;
-	public boolean isEnabled = false;
 
 	private HashMap<String, String> unlockstring;
 	private HashMap<String, Long> needed_unlocks;
@@ -51,12 +46,9 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "fund.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "fund.yml"));
 
 		unlockstring = new HashMap<>();
@@ -78,25 +70,20 @@ public class Fund extends RandomPackageAPI implements CommandExecutor, Listener 
 				deposits.put(UUID.fromString(s), otherdata.getLong("fund.depositors." + s));
 			}
 		}
-
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Server Fund &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		final YamlConfiguration a = otherdata;
 		a.set("fund.total", total);
 		for(UUID u : deposits.keySet()) {
 			a.set("fund.depositors." + u.toString(), deposits.get(u));
 		}
 		saveOtherData();
-
 		config = null;
 		unlockstring = null;
 		needed_unlocks = null;
 		maxfund = 0;
 		total = 0;
-		isEnabled = false;
-		HandlerList.unregisterAll(this);
 	}
 	
 	public void deposit(Player player, String arg) {

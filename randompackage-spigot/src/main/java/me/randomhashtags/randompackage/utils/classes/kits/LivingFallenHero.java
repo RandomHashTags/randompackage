@@ -2,47 +2,40 @@ package me.randomhashtags.randompackage.utils.classes.kits;
 
 import me.randomhashtags.randompackage.api.Kits;
 import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
+import me.randomhashtags.randompackage.utils.interfaces.ILivingFallenHero;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.*;
 
-public class LivingFallenHero {
+public class LivingFallenHero implements ILivingFallenHero {
     public static HashMap<UUID, LivingFallenHero> living;
     private static Kits kits;
-    private static Random random;
-    private static PluginManager pluginmanager;
-    private Object kit;
+
+    private AbstractCustomKit kit;
     private FallenHero type;
+    private UUID summoner;
     private LivingEntity fallenhero;
-    private UUID summoner, fallenherouuid;
     private Location spawnedLocation;
-    public LivingFallenHero(Object kit, FallenHero type, UUID summoner, Location spawnedLocation) {
+    public LivingFallenHero(AbstractCustomKit kit, FallenHero type, UUID summoner, Location spawnedLocation) {
         if(living == null) {
             living = new HashMap<>();
             kits = Kits.getKits();
-            random = kits.random;
-            pluginmanager = kits.pluginmanager;
         }
         this.kit = kit;
         this.type = type;
         this.summoner = summoner;
         this.spawnedLocation = spawnedLocation;
-        fallenhero = kits.getEntity(type.getType(), spawnedLocation, true);
-        final String N = kit instanceof GlobalKit ? ((GlobalKit) kit).getItem().getItemMeta().getDisplayName() : ((EvolutionKit) kit).getItem().getItemMeta().getDisplayName();
-        fallenhero.setCustomName(type.getName().replace("{NAME}", N));
-        fallenherouuid = fallenhero.getUniqueId();
-        fallenhero.addPotionEffects(type.getPotionEffects());
-        living.put(fallenherouuid, this);
+        fallenhero = kits.getEntity(getFallenHero().getType(), getSpawnedLocation(), true);
+        living.put(fallenhero.getUniqueId(), this);
     }
-    public Object getKit() { return kit; }
-    public FallenHero getType() { return type; }
-    public LivingEntity getFallenHero() { return fallenhero; }
+    public AbstractCustomKit getKit() { return kit; }
+    public FallenHero getFallenHero() { return type; }
     public UUID getSummoner() { return summoner; }
     public Location getSpawnedLocation() { return spawnedLocation; }
 
@@ -56,6 +49,7 @@ public class LivingFallenHero {
             event.getDrops().clear();
 
             final World w = fallenhero.getWorld();
+            final Random random = new Random();
             final boolean droppedGem = random.nextInt(100) <= type.getGemDropChance();
             if(droppedGem) {
                 final HashMap<String, String> r = new HashMap<>();
@@ -71,30 +65,20 @@ public class LivingFallenHero {
                 final EvolutionKit E = K == null && kit instanceof EvolutionKit ? (EvolutionKit) kit : null;
                 final List<KitItem> items = new ArrayList<>(K != null? K.getItems() : E.getItems());
                 final YamlConfiguration yml = K != null ? K.getYaml() : E.getYaml();
-                w.dropItem(fallenhero.getLocation(), kits.d(yml, "items." + items.get(random.nextInt(items.size())).path, random.nextInt(K != null ? K.getMaxTier() : E.getMaxLevel())));
+                w.dropItem(fallenhero.getLocation(), kits.d(yml, "items." + items.get(random.nextInt(items.size())).path, random.nextInt(K != null ? K.getMaxTier() : E.getMaxTier())));
             }
             final FallenHeroSlainEvent e = new FallenHeroSlainEvent(event.getEntity().getKiller(), this, droppedGem);
-            pluginmanager.callEvent(e);
+            kits.pluginmanager.callEvent(e);
         }
-
-        living.remove(fallenherouuid);
-        kit = null;
-        type = null;
-        fallenhero = null;
-        fallenherouuid = null;
-        summoner = null;
-        spawnedLocation = null;
+        living.remove(fallenhero.getUniqueId());
         if(living.isEmpty()) {
             living = null;
             kits = null;
-            random = null;
         }
     }
 
     public static void deleteAll() {
         living = null;
         kits = null;
-        random = null;
-        pluginmanager = null;
     }
 }

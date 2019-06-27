@@ -12,13 +12,19 @@ public class VaultAPI {
         if(instance == null) instance = new VaultAPI();
         return instance;
     }
-
-    public Economy economy = null;
+    private boolean didSetupEco = false;
+    private Economy economy = null;
     public Chat chat = null;
     public Permission perms = null;
     public boolean setupEconomy() {
+        didSetupEco = true;
         final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if(economyProvider != null) { economy = economyProvider.getProvider(); } return (economy != null);
+        if(economyProvider != null) economy = economyProvider.getProvider();
+        return (economy != null);
+    }
+    public Economy getEconomy() {
+        if(!didSetupEco) setupEconomy();
+        return economy;
     }
     public boolean setupChat() {
         final RegisteredServiceProvider<Chat> rsp = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);

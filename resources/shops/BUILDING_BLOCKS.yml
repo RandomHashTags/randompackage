@@ -25,7 +25,7 @@ gui:
   jungle wood:
     slot: 4
     item: "jungle_wood"
-    name: "e&lJungle Wood"
+    name: "&e&lJungle Wood"
     prices: 8.12;2.03
   acacia wood:
     slot: 5

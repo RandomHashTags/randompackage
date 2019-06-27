@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,12 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.otherdata;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.utils.RPFeature.otherdata;
 
 public class CollectionChest {
-	
 	public static HashMap<UUID, CollectionChest> chests;
-	private static RandomPackageAPI api;
 
 	private UUID uuid;
 	private UMaterial filter;
@@ -35,7 +33,6 @@ public class CollectionChest {
 	public CollectionChest(UUID uuid, String placer, Location location, UMaterial filter) {
 		if(chests == null) {
 			chests = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 		}
 		this.uuid = uuid;
 		this.placer = placer;
@@ -123,6 +120,5 @@ public class CollectionChest {
 			}
 		}
 		chests = null;
-		api = null;
 	}
 }

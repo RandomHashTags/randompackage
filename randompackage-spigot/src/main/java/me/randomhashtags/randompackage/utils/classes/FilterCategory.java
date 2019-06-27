@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,9 +8,10 @@ import org.bukkit.inventory.Inventory;
 import java.io.File;
 import java.util.HashMap;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class FilterCategory {
     public static HashMap<String, FilterCategory> categories;
-    private static RandomPackageAPI api;
 
     private File f;
     private YamlConfiguration yml;
@@ -20,7 +20,6 @@ public class FilterCategory {
     public FilterCategory(File f) {
         if(categories == null) {
             categories = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         this.f = f;
         ymlName = f.getName().split("\\.yml")[0];
@@ -49,6 +48,5 @@ public class FilterCategory {
     }
     public static void deleteAll() {
         categories = null;
-        api = null;
     }
 }

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.StackedEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,8 +12,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -25,15 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class MobStacker extends RandomPackageAPI implements Listener {
+public class MobStacker extends RPFeature {
 
     private static MobStacker instance;
-    public static final MobStacker getMobStacker() {
+    public static MobStacker getMobStacker() {
         if(instance == null) instance = new MobStacker();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private String defaultName;
@@ -46,12 +42,9 @@ public class MobStacker extends RandomPackageAPI implements Listener {
     private HashMap<String, Double> stackRadius;
     private HashMap<String, Boolean> slaysStack;
 
-    public void enable() {
-        if(isEnabled) return;
+    public void load() {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "mob stacker.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         stackable = new ArrayList<>();
         customNames = new HashMap<>();
@@ -88,12 +81,9 @@ public class MobStacker extends RandomPackageAPI implements Listener {
             final String[] a = s.split("=");
             slaysStack.put(a[0], Boolean.parseBoolean(a[1]));
         }
-
         loadBackup();
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         for(int i : tasks) scheduler.cancelTask(i);
 
         config = null;
@@ -107,7 +97,6 @@ public class MobStacker extends RandomPackageAPI implements Listener {
         lastDamager = null;
 
         backup();
-        HandlerList.unregisterAll(this);
     }
 
     public void backup() {

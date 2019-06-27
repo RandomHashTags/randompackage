@@ -1,25 +1,21 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.List;
 
-public class LastManStanding extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class LastManStanding extends RPFeature implements CommandExecutor {
     private static LastManStanding instance;
     public static LastManStanding getLastManStanding() {
         if(instance == null) instance = new LastManStanding();
         return instance;
     }
 
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -34,22 +30,14 @@ public class LastManStanding extends RandomPackageAPI implements Listener, Comma
         }
         return true;
     }
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
-        isEnabled = true;
-        pluginmanager.registerEvents(this, randompackage);
         save(null, "last man standing.yml");
-
         config = YamlConfiguration.loadConfiguration(new File(rpd, "last man standing.yml"));
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewHelp(CommandSender sender) {

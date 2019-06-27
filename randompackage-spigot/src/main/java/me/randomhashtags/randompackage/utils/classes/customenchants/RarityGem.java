@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,9 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class RarityGem {
 	public static HashMap<String, RarityGem> gems;
-	private static RandomPackageAPI api;
 	public static HashMap<Integer, String> defaultColors;
 
 	private YamlConfiguration yml;
@@ -27,7 +27,6 @@ public class RarityGem {
 	public RarityGem(YamlConfiguration yml, String path) {
 		if(gems == null) {
 			gems = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 		}
 		this.yml = yml;
 		this.path = path;
@@ -132,7 +131,6 @@ public class RarityGem {
 
 	public static void deleteAll() {
 		gems = null;
-		api = null;
 		defaultColors = null;
 	}
 }

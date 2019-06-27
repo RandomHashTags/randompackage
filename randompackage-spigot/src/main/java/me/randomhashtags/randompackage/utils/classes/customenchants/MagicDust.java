@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -11,13 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.rpd;
-import static me.randomhashtags.randompackage.RandomPackageAPI.separator;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class MagicDust {
 	public static HashMap<String, MagicDust> dust;
 	private static YamlConfiguration dusts;
-	private static RandomPackageAPI api;
 
 	private String path;
 	private MagicDust upgradesto;
@@ -27,8 +25,7 @@ public class MagicDust {
 	public MagicDust(String path) {
 		if(dust == null) {
 			dust = new HashMap<>();
-			dusts = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "dusts.yml"));
-			api = RandomPackageAPI.getAPI();
+			dusts = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + File.separator + "custom enchants", "dusts.yml"));
 		}
 		this.path = path;
 		chance = dusts.getInt("dusts." + path + ".chance");
@@ -94,6 +91,5 @@ public class MagicDust {
 	public static void deleteAll() {
 		dust = null;
 		dusts = null;
-		api = null;
 	}
 }

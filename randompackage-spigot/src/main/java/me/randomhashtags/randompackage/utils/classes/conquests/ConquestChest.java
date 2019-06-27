@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.conquests;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -9,8 +8,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class ConquestChest {
-    private static RandomPackageAPI api;
     public static HashMap<String, ConquestChest> types;
 
     public YamlConfiguration yml;
@@ -26,7 +26,6 @@ public class ConquestChest {
     public ConquestChest(YamlConfiguration yml, String ymlName) {
         if(types == null) {
             types = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         this.yml = yml;
         this.ymlName = ymlName;
@@ -110,7 +109,6 @@ public class ConquestChest {
     }
 
     public static void deleteAll() {
-        api = null;
         types = null;
     }
 }

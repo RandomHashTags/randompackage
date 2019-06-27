@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,9 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class EnchantRarity {
     public static HashMap<String, EnchantRarity> rarities;
-    private static RandomPackageAPI api;
 
     private YamlConfiguration settingsYaml;
     private String[] revealedEnchantRarities;
@@ -28,7 +28,6 @@ public class EnchantRarity {
     public EnchantRarity(File folder, File f) {
         if(rarities == null) {
             rarities = new HashMap<>();
-            api = RandomPackageAPI.getAPI();
         }
         settingsYaml = YamlConfiguration.loadConfiguration(f);
         name = folder.getName().split("\\.yml")[0];
@@ -118,6 +117,5 @@ public class EnchantRarity {
     }
     public static void deleteAll() {
         rarities = null;
-        api = null;
     }
 }

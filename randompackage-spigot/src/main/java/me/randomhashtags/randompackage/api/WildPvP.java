@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPCountdownMatch;
 import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPMatch;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -14,8 +14,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -29,15 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class WildPvP extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class WildPvP extends RPFeature implements CommandExecutor {
     private static WildPvP instance;
-    public static final WildPvP getWildPvP() {
+    public static WildPvP getWildPvP() {
         if(instance == null) instance = new WildPvP();
         return instance;
     }
 
-    public boolean isEnabled = false;
     public YamlConfiguration config;
     private UInventory gui, viewInventory;
     private ItemStack enterQueue, request;
@@ -72,12 +68,9 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
         }
         return true;
     }
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "wild pvp.yml");
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "wild pvp.yml"));
@@ -101,9 +94,7 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Wild PvP &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
-        isEnabled = false;
+    public void unload() {
         config = null;
         gui = null;
         enterQueue = null;
@@ -134,7 +125,6 @@ public class WildPvP extends RandomPackageAPI implements Listener, CommandExecut
         }
         PvPMatch.matches = null;
         PvPCountdownMatch.countdowns = null;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewQueue(Player player) {

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.events.fund;
 
-import me.randomhashtags.randompackage.api.Fund;
 import me.randomhashtags.randompackage.api.events.RandomPackageEvent;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Cancellable;

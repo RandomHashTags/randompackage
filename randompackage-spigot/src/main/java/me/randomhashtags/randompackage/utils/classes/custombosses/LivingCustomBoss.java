@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.custombosses;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDeathEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossSpawnEvent;
@@ -23,6 +22,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class LivingCustomBoss extends UVersion {
     public static HashMap<UUID, LivingCustomBoss> living;
@@ -181,7 +181,6 @@ public class LivingCustomBoss extends UVersion {
             final HashMap<UUID, Double> top = getDamageRankings();
             final HashMap<Integer, List<ItemStack>> rewards = new HashMap<>();
             final HashMap<Integer, List<String>> rewardNames = new HashMap<>();
-            final RandomPackageAPI api = RandomPackageAPI.getAPI();
             for(String s : type.getRewards()) {
                 final int target = getRemainingInt(s.split(";")[0]), amount = getRemainingInt(s.split(";")[s.split(";").length-1]);
                 if(!rewards.containsKey(target)) {

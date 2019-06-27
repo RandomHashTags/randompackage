@@ -29,8 +29,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class UVersion {
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
+public class UVersion {
     private static UVersion instance;
     public static UVersion getUVersion() {
         if(instance == null) instance = new UVersion();
@@ -357,7 +358,7 @@ public class UVersion {
     public ItemStack getSpawner(String input) {
         String pi = input.toLowerCase(), type = null;
         if(pi.equals("mysterymobspawner")) {
-            return GivedpItem.getGivedpItem().valueOf("mysterymobspawner").clone();
+            return givedpitem.valueOf("mysterymobspawner").clone();
         } else {
             final Plugin plugin = RandomPackage.spawnerPlugin;
             if(plugin != null) {

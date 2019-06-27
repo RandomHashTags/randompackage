@@ -1,16 +1,15 @@
 package me.randomhashtags.randompackage.utils.classes.factionadditions;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.utils.classes.factionadditions.FactionUpgrade.yml;
 
 public class FactionUpgradeType {
 	public static HashMap<String, FactionUpgradeType> types;
-	private static RandomPackageAPI api;
 
 	private String path, perkAchievedPrefix, perkUnachievedPrefix, requirementsPrefix;
 	private List<String> unlock, upgrade, maxed, format;
@@ -18,7 +17,6 @@ public class FactionUpgradeType {
 	public FactionUpgradeType(String path, boolean itemAmountEqualsTier) {
 		if(types == null) {
 			types = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 		}
 		this.path = path;
 		this.itemAmountEqualsTier = itemAmountEqualsTier;
@@ -56,6 +54,5 @@ public class FactionUpgradeType {
 
 	public static void deleteAll() {
 		types = null;
-		api = null;
 	}
 }

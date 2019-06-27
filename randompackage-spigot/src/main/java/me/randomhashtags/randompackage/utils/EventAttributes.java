@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.envoy.PlayerClaimEnvoyCrateEvent;
@@ -20,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.UUID;
 
-public class EventAttributes extends RandomPackageAPI {
+public abstract class EventAttributes extends RPFeature {
 
     public String executeAttributes(Player player, EntityDeathEvent event, List<String> attributes) {
         String completion = "";

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.custombosses;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,9 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+
 public class CustomBoss extends UVersion {
 	public static HashMap<String, CustomBoss> bosses;
-	private static RandomPackageAPI api;
 
 	private YamlConfiguration yml;
 	private String ymlName, spawnableRegion, type, name, scoreboardTitle;
@@ -31,7 +31,6 @@ public class CustomBoss extends UVersion {
 	public CustomBoss(File f) {
 		if(bosses == null) {
 			bosses = new HashMap<>();
-			api = RandomPackageAPI.getAPI();
 		}
 		yml = YamlConfiguration.loadConfiguration(f);
 		ymlName = f.getName().split("\\.yml")[0];
@@ -126,7 +125,6 @@ public class CustomBoss extends UVersion {
 		return null;
 	}
 	public static void deleteAll() {
-		api = null;
 		bosses = null;
 	}
 }

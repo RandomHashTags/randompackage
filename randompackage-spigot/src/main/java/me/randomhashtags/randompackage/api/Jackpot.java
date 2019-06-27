@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.jackpot.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -15,8 +15,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -26,15 +24,12 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class Jackpot extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class Jackpot extends RPFeature implements CommandExecutor {
     private static Jackpot instance;
-    public static final Jackpot getJackpot() {
+    public static Jackpot getJackpot() {
         if(instance == null) instance = new Jackpot();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
     public int task;
     public List<Integer> countdownTasks;
@@ -77,13 +72,10 @@ public class Jackpot extends RandomPackageAPI implements Listener, CommandExecut
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "jackpot.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "jackpot.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
@@ -130,8 +122,7 @@ public class Jackpot extends RandomPackageAPI implements Listener, CommandExecut
         startTask(started);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Jackpot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         final YamlConfiguration a = otherdata;
         a.set("jackpot", null);
         a.set("jackpot.pick next winner", pickNextWinner);
@@ -158,8 +149,6 @@ public class Jackpot extends RandomPackageAPI implements Listener, CommandExecut
         ticketsSold = null;
         top = null;
         purchasing = null;
-        isEnabled = false;
-        HandlerList.unregisterAll(this);
     }
 
     public void pickWinner() {

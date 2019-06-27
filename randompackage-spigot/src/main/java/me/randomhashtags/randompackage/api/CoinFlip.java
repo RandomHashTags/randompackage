@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.coinflip.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipMatch;
 import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipOption;
@@ -19,8 +19,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -30,15 +28,12 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.io.File;
 import java.util.*;
 
-public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecutor {
-
+public class CoinFlip extends RPFeature implements CommandExecutor {
     private static CoinFlip instance;
-    public static final CoinFlip getCoinFlip() {
+    public static CoinFlip getCoinFlip() {
         if(instance == null) instance = new CoinFlip();
         return instance;
     }
-
-    public boolean isEnabled = false;
     public YamlConfiguration config;
 
     private boolean isLegacy = false;
@@ -47,17 +42,15 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
     private ItemStack countdown;
     private double tax;
     private long minWager;
-    private String wagerName, yourSelection, opponentSelection, winnerName, rollingName;
+    private String wagerName, yourSelection, opponentSelection;
     private List<String> addedlore, wagerLore, wagerAvailable, wagerUnavailable, winnerLore, rollingLore;
+    private List<CoinFlipMatch> available;
+
     private LinkedHashMap<Integer, CoinFlipOption> optionz;
     private HashMap<String, Integer> challengeSlots;
-
     private HashMap<OfflinePlayer, Long> picking;
     private HashMap<CoinFlipMatch, List<Integer>> tasks;
-
     private HashMap<Player, CoinFlipMatch> goingToChallenge, active;
-
-    private List<CoinFlipMatch> available;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
@@ -84,13 +77,10 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
         return true;
     }
 
-    public void enable() {
+    public void load() {
         final long started = System.currentTimeMillis();
-        if(isEnabled) return;
         save(null, "coinflip.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "coinflip.yml"));
-        pluginmanager.registerEvents(this, randompackage);
-        isEnabled = true;
 
         isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
 
@@ -103,10 +93,8 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
 
         yourSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.your selection"));
         opponentSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.opponent selection"));
-        winnerName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.winner.name"));
         winnerLore = colorizeListString(config.getStringList("challenge.winner.lore"));
         countdown = d(config, "challenge.countdown");
-        rollingName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name"));
         rollingLore = colorizeListString(config.getStringList("challenge.rolling.lore"));
 
         gui = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
@@ -152,11 +140,9 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
                 available.add(m);
             }
         }
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded Coin Flip &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public void disable() {
-        if(!isEnabled) return;
+    public void unload() {
         tax = 0;
         countdownStart = 0;
         config = null;
@@ -168,9 +154,7 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
         wagerUnavailable = null;
         wagerName = null;
         wagerLore = null;
-        winnerName = null;
         winnerLore = null;
-        rollingName = null;
         rollingLore = null;
         yourSelection = null;
         opponentSelection = null;
@@ -201,10 +185,8 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
         goingToChallenge = null;
         active = null;
         available = null;
-        isEnabled = false;
         CoinFlipOption.paths = null;
         CoinFlipMatch.matches = null;
-        HandlerList.unregisterAll(this);
     }
 
     public void viewCoinFlips(Player player) {
@@ -362,7 +344,8 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
         final Inventory inv = Bukkit.createInventory(null, size, T);
         final ItemStack creator = UMaterial.PLAYER_HEAD_ITEM.getItemStack(), challenger = creator.clone();
         final SkullMeta y = (SkullMeta) creator.getItemMeta(), z = (SkullMeta) challenger.getItemMeta();
-        y.setOwningPlayer(a);
+        if(isLegacy) y.setOwner(a.getName());
+        else y.setOwningPlayer(a);
         y.setDisplayName(c+an);
         z.setDisplayName(cc+bn);
         z.setOwningPlayer(b);
@@ -440,7 +423,7 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
                             t.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> chooseWinner(m), d));
                         } else {
                             item = option.clone(); itemMeta = item.getItemMeta();
-                            itemMeta.setDisplayName(rollingName);
+                            itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name")));
                             itemMeta.setLore(rollingLore);
                             item.setItemMeta(itemMeta);
                             t.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
@@ -493,7 +476,7 @@ public class CoinFlip extends RandomPackageAPI implements Listener, CommandExecu
         final String winnerName = winner.getName(), color = winningOption.selectionColor, Lcolor = losingOption.selectionColor;
         eco.depositPlayer(winner, total-taxed);
         item = winningOption.appear(); itemMeta = item.getItemMeta(); lore.clear();
-        itemMeta.setDisplayName(this.winnerName.replace("{COLOR}", color).replace("{PLAYER}", winnerName));
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("challenge.winner.name")).replace("{COLOR}", color).replace("{PLAYER}", winnerName));
         for(String s : winnerLore) {
             lore.add(s.replace("{PLAYER}", winnerName).replace("{COLOR}", color));
         }

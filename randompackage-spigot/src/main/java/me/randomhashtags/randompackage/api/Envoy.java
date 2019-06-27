@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.events.envoy.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.envoy.EnvoyCrate;
 import me.randomhashtags.randompackage.utils.classes.envoy.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -13,8 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,18 +22,16 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.*;
 
+import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 import static me.randomhashtags.randompackage.utils.classes.envoy.EnvoyCrate.getRandomCrate;
 
-public class Envoy extends RandomPackageAPI implements CommandExecutor, Listener {
-
+public class Envoy extends RPFeature implements CommandExecutor {
 	private static Envoy instance;
-	public static final Envoy getEnvoy() {
+	public static Envoy getEnvoy() {
 		if(instance == null) instance = new Envoy();
 		return instance;
 	}
-	
 	public YamlConfiguration config;
-	public boolean isEnabled = false;
 
 	public ItemStack envoySummon, presetLocationPlacer;
 	private int spawnTask, task, totalEnvoys = 0;
@@ -65,12 +61,9 @@ public class Envoy extends RandomPackageAPI implements CommandExecutor, Listener
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
 		save(null, "envoy.yml");
-		pluginmanager.registerEvents(this, randompackage);
-		isEnabled = true;
 
 		preset = new ArrayList<>();
 		settingPreset = new ArrayList<>();
@@ -102,10 +95,12 @@ public class Envoy extends RandomPackageAPI implements CommandExecutor, Listener
 		}
 
 		final List<ItemStack> tiers = new ArrayList<>();
-
-		for(File f : new File(rpd + separator + "envoy tiers").listFiles()) {
-			final EnvoyCrate e = new EnvoyCrate(f);
-			tiers.add(e.getItem());
+		final File folder = new File(rpd + separator + "envoy tiers");
+		if(folder.exists()) {
+			for(File f : folder.listFiles()) {
+				final EnvoyCrate e = new EnvoyCrate(f);
+				tiers.add(e.getItem());
+			}
 		}
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
@@ -123,8 +118,7 @@ public class Envoy extends RandomPackageAPI implements CommandExecutor, Listener
 		final HashMap<String, EnvoyCrate> E = EnvoyCrate.crates;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (E != null ? E.size() : 0) + " envoy tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
+	public void unload() {
 		final List<String> p = new ArrayList<>();
 		for(Location l : preset) p.add(toString(l));
 		otherdata.set("envoy.preset", p);
@@ -146,9 +140,7 @@ public class Envoy extends RandomPackageAPI implements CommandExecutor, Listener
 		preset = null;
 		settingPreset = null;
 		active = null;
-		isEnabled = false;
 		EnvoyCrate.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 
 	public void stopAllEnvoys() {

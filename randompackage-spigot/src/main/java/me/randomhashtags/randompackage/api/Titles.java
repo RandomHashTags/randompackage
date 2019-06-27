@@ -1,17 +1,17 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,15 +22,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class Titles extends RandomPackageAPI {
-
+public class Titles extends RPFeature implements CommandExecutor {
 	private static Titles instance;
-	public static final Titles getTitles() {
+	public static Titles getTitles() {
 		if(instance == null) instance = new Titles();
 		return instance;
 	}
 
-	public boolean isEnabled = false;
 	public YamlConfiguration config;
 	
 	public ItemStack interactableItem;
@@ -50,12 +48,9 @@ public class Titles extends RandomPackageAPI {
 		return true;
 	}
 
-	public void enable() {
+	public void load() {
 		final long started = System.currentTimeMillis();
-		if(isEnabled) return;
-		pluginmanager.registerEvents(this, randompackage);
 		save(null, "titles.yml");
-		isEnabled = true;
 
 		pages = new HashMap<>();
 
@@ -78,10 +73,7 @@ public class Titles extends RandomPackageAPI {
 		final HashMap<String, Title> T = Title.titles;
  		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (T != null ? T.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	public void disable() {
-		if(!isEnabled) return;
-		isEnabled = false;
-
+	public void unload() {
 		config = null;
 		interactableItem = null;
 		nextpage = null;
@@ -93,7 +85,6 @@ public class Titles extends RandomPackageAPI {
 		for(Player p : pages.keySet()) p.closeInventory();
 		pages = null;
 		Title.deleteAll();
-		HandlerList.unregisterAll(this);
 	}
 
 	@EventHandler
