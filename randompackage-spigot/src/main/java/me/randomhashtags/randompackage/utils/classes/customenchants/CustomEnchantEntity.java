@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;

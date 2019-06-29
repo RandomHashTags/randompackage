@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 0
+  max tier: 3
+  item amount=tier: true
+#
+item:
+  item: "feather"
+  name: "&b&lEnhanced Flight"
+  lore:
+  - "&7Increased flight abilities in your claims!"
+#
+perks:
+  - "Tier1;AllowFactionFlight{members};Faction Members can fly."
+  - "Tier2;AllowFactionFlight{members&&allies};All allies can fly."
+  - "Tier3;AllowFactionFlight{members&&allies&&truces};All truces can fly."
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=120};120x Faction Crystals"
+  - "Tier1;Cash{1000000};$1,000,000"
+  - "Tier2;Item{factioncrystal;amount=120};120x Faction Crystals"
+  - "Tier2;Cash{1000000};$1,500,000"
+  - "Tier3;Item{factioncrystal;amount=120};120x Faction Crystals"
+  - "Tier3;Cash{1000000};$2,000,000"

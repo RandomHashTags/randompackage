@@ -35,7 +35,7 @@ public class ASkyblock {
     public String getIslandName(UUID player) {
         return api.getIslandName(player);
     }
-    public boolean canBreakBlock(UUID player, Location location) {
+    public boolean canModify(UUID player, Location location) {
         final Island i = api.getIslandAt(location);
         return i != null && (i.getMembers().contains(player) || areTeammates(i.getOwner(), player));
     }

@@ -70,7 +70,7 @@ public class factionsUUID implements Listener {
 		}
 	}
 
-	public boolean canBreakBlock(Player player, Location blockLocation) {
+	public boolean canModify(Player player, Location blockLocation) {
 		final Faction p = fi.getByPlayer(player).getFaction(), f = b.getFactionAt(new FLocation(blockLocation));
 		return f.isWilderness() || p != null && p.equals(f);
 	}

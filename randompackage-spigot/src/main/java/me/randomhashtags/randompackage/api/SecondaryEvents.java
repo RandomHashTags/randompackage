@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.PlayerTeleportDelayEvent;
+import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -275,7 +276,8 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 delay -= getTotalExperience(player) / getTeleportationVariable(w);
                 delay = round(delay, 3);
                 if(delay < mindelay) delay = mindelay;
-                final double uu = delay*fapi.getTeleportDelayMultiplier(fapi.getFaction(player));
+                final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
+                final double m = fu.isEnabled() ? fu.getTeleportDelayMultiplier(fapi.getFaction(player)) : 1.00, uu = delay*m;
                 if(events.containsKey(player)) {
                     events.get(player).setCancelled(true);
                     scheduler.cancelTask(events.get(player).task);

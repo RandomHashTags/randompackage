@@ -12,7 +12,16 @@ messages:
 settings:
   type: WITHER_SKELETON
   name: "{NAME}"
-  spawnable: WARZONE
+#
+spawnable regions:
+  faction claims:
+    - world;warzone
+    - world_nether;warzone
+    - world_the_end;warzone
+  skyblock:
+    own island: true
+    coop islands: true
+    while visiting: false
 #
 potion effects:
   - ""

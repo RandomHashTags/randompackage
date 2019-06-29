@@ -1,0 +1,26 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 30
+  max tier: 4
+  item amount=tier: true
+#
+item:
+  item: "watch"
+  name: "&6&lEscape Artist"
+  desc:
+  - "&7Reduces Combat Tag Timer"
+#
+perks:
+  - "Tier1;ReduceCombatTagTimer{0.25};-0.25s Combat Tag Timer"
+  - "Tier2;ReduceCombatTagTimer{0.50};-0.5s Combat Tag Timer"
+  - "Tier3;ReduceCombatTagTimer{1.00};-1.0s Combat Tag Timer"
+  - "Tier4;ReduceCombatTagTimer{2.00};-2.0s Combat Tag Timer"
+#
+requirements:
+  - "Tier1;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=8};8x Heroic Faction Crystals"
+  - "Tier1;Cash{20000000};$20,000,000"
+  - "Tier2;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"
+  - "Tier4;SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value"

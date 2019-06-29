@@ -132,7 +132,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
 
         if(!otherdata.getBoolean("saved default player quests")) {
-            final String[] q = new String[]{
+            final String[] q = new String[] {
                     "A_LITTLE_GRIND", "A_MEDIUM_GRIND",
                     "BIGGER_SPENDER", "BIGGEST_SPENDER",
                     "DISGUISED",
@@ -143,6 +143,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "GAMBLER_I", "GAMBLER_II", "GAMBLER_III",
                     "HANGING_ON",
                     "HERO_DOMINATOR",
+                    "HEROIC_ENCHANTER",
                     "HEROIC_ENVOY_LOOTER_II",
                     "ITEM_CUSTOMIZATION",
                     "LAST_NOOB_STANDING", "LAST_MASTER_STANDING",
@@ -150,7 +151,10 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "MASTER_KIT_LEVELING",
                     "MASTER_MINER",
                     "MOB_EXAMINER_II",
+                    "NOVICE_ALCHEMIST",
+                    "NOVICE_EXCAVATOR",
                     "NOVICE_MERCHANT",
+                    "NOVICE_MINER",
                     "OUTPOST_DEFENDER",
                     "QUEST_MASTER",
                     "RANDOMIZER_II", "RANDOMIZER_III",
@@ -523,6 +527,14 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
+        final Player player = event.player;
+        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
+        for(ActivePlayerQuest quest : a) {
+            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {

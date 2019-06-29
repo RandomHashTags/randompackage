@@ -6,12 +6,11 @@ import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
+import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Updater;
-import me.randomhashtags.randompackage.utils.supported.Metrics;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -43,9 +42,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
+import static me.randomhashtags.randompackage.utils.RPFeature.givedp;
+import static me.randomhashtags.randompackage.utils.RPFeature.givedpCategories;
 
 public final class RandomPackage extends JavaPlugin implements Listener {
     public static RandomPackage getPlugin;
@@ -68,7 +68,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private CustomExplosions customexplosions;
     private Duels duels;
     private Envoy envoy;
-    private FactionAdditions factionadditions;
+    private FactionUpgrades factionupgrades;
     private Fund fund;
     private GlobalChallenges globalchallenges;
     private Homes homes;
@@ -186,8 +186,8 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         envoy = Envoy.getEnvoy();
         tryLoading(Feature.ENVOY);
 
-        factionadditions = FactionAdditions.getFactionAdditions();
-        tryLoading(Feature.FACTION_ADDITIONS);
+        factionupgrades = FactionUpgrades.getFactionUpgrades();
+        tryLoading(Feature.FACTION_UPGRADES);
 
         fund = Fund.getFund();
         tryLoading(Feature.FUND);
@@ -257,18 +257,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         wildpvp = WildPvP.getWildPvP();
         tryLoading(Feature.WILD_PVP);
 
-        final Callable<Map<String, Integer>> settings = () -> {
-            final Map<String, Integer> m = new HashMap<>();
-            for(Feature f : Feature.values()) {
-                m.put(f.name().replace("_", " "), getfeature(f).isEnabled() ? 1 : 0);
-            }
-            return m;
-        };
-
-        final Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("server_version", () -> Bukkit.getVersion()));
-        metrics.addCustomChart(new Metrics.AdvancedPie("features_used", settings));
-
         if(pm.isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderAPI();
         }
@@ -298,6 +286,8 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         secondaryevents.disable();
         api.disable();
+        givedp = null;
+        givedpCategories = null;
         HandlerList.unregisterAll((Listener) this);
         Bukkit.getScheduler().cancelTasks(this);
     }
@@ -311,7 +301,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
     enum Feature {
         AUCTION_HOUSE, CHAT_BRAG, COINFLIP, COLLECTION_FILTER, CONQUEST, CUSTOM_ARMOR, CUSTOM_BOSSES, CUSTOM_ENCHANTS, CUSTOM_CREEPERS, CUSTOM_TNT,
-        DUELS, ENVOY, FACTION_ADDITIONS, FUND, GLOBAL_CHALLENGES,
+        DUELS, ENVOY, FACTION_UPGRADES, FUND, GLOBAL_CHALLENGES,
         HOMES, ITEM_FILTER, JACKPOT,
         KITS_EVOLUTION, KITS_GLOBAL, KITS_MASTERY,
         KOTH, LAST_MAN_STANDING, LOOTBOXES, MASKS, MOB_STACKER, MONTHLY_CRATES, OUTPOSTS, PLAYER_QUESTS, PETS,
@@ -350,7 +340,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             case CUSTOM_TNT: return customexplosions;
             case DUELS: return duels;
             case ENVOY: return envoy;
-            case FACTION_ADDITIONS: return factionadditions;
+            case FACTION_UPGRADES: return factionupgrades;
             case FUND: return fund;
             case GLOBAL_CHALLENGES: return globalchallenges;
             case HOMES: return homes;
@@ -474,10 +464,10 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(enabled) {
                 envoy.enable();
             }
-        } else if(f.equals(Feature.FACTION_ADDITIONS)) {
+        } else if(f.equals(Feature.FACTION_UPGRADES)) {
             enabled = config.getBoolean("faction additions.enabled");
             if(enabled) {
-                factionadditions.enable();
+                factionupgrades.enable();
             }
         } else if(f.equals(Feature.FUND)) {
             enabled = config.getBoolean("fund.enabled");

@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 32
+  max tier: 3
+  item amount=tier: true
+#
+item:
+  item: "eye_of_ender"
+  name: "&6&lDungeon Runner"
+  lore:
+  - "&7Reduces the time it takes for"
+  - "&7a Dungeons Portal to close."
+#
+perks:
+  - "Tier1;SetDungeonPortalAppearanceTime{90.00};90s Dungeons Portal Close Time"
+  - "Tier2;SetDungeonPortalAppearanceTime{80.00};80s Dungeons Portal Close Time"
+  - "Tier3;SetDungeonPortalAppearanceTime{45.00};45s Dungeons Portal Close Time"
+#
+requirements:
+  - "Tier1;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals"
+  - "Tier1;Cash{25000000};$25,000,000"
+  - "Tier2;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"

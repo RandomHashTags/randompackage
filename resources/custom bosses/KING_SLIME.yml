@@ -1,5 +1,14 @@
 # Made by RandomHashTags
-spawnable region: "warzone"
+spawnable regions:
+  faction claims:
+    - world;warzone
+    - world_nether;warzone
+    - world_the_end;warzone
+  skyblock:
+    own island: true
+    coop islands: true
+    while visiting: false
+#
 type: SLIME
 name: "&e&lKing Slime"
 spawn item:

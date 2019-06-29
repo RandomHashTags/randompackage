@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.servercrates;
 
-import me.randomhashtags.randompackage.utils.classes.servercrate.ServerCrate;
+import me.randomhashtags.randompackage.utils.classes.ServerCrate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -8,9 +8,10 @@ import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.mask.MaskEquipEvent;
 import me.randomhashtags.randompackage.api.events.mask.MaskUnequipEvent;
 import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchantEntity;
-import me.randomhashtags.randompackage.utils.classes.customenchants.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
@@ -69,7 +70,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     public static HashMap<CustomEnchant, Integer> timerenchants;
     public static HashMap<Player, HashMap<CustomEnchant, Integer>> stoppedEnchants;
     public static HashMap<Player, HashMap<CustomEnchant, Double>> combos;
-    public static HashMap<Location, HashMap<ItemStack, HashMap<Block, Integer>>> temporayblocks; // <block location <original block, <temporary new block, ticks>>>>
+    public static HashMap<Location, HashMap<ItemStack, HashMap<Block, Integer>>> temporaryblocks; // <block location <original block, <temporary new block, ticks>>>>
     public static HashMap<UUID, ItemStack> shotBows;
     public static HashMap<UUID, Player> shotbows;
 
@@ -89,7 +90,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         timerenchants = new HashMap<>();
         stoppedEnchants = new HashMap<>();
         combos = new HashMap<>();
-        temporayblocks = new HashMap<>();
+        temporaryblocks = new HashMap<>();
         shotBows = new HashMap<>();
         shotbows = new HashMap<>();
     }
@@ -105,7 +106,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         frozen = null;
         stoppedEnchants = null;
         combos = null;
-        temporayblocks = null;
+        temporaryblocks = null;
         shotBows = null;
         shotbows = null;
     }
@@ -666,27 +667,30 @@ public abstract class CustomEnchantUtils extends RPFeature {
 
             }
         } else if(a.toLowerCase().startsWith("depleteraritygem{")) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final RarityGem gem = RarityGem.gems.get(a.split("\\{")[1].split(":")[0]);
-            if(!pdata.hasActiveRarityGem(gem)) {
-                ev.didProc = false;
-                return;
-            }
-            final ItemStack g = getRarityGem(gem, player);
-            if(g != null) {
-                itemMeta = g.getItemMeta();
-                final int amount = getRemainingInt(itemMeta.getDisplayName());
-                final String fn = fapi.getFaction(player);
-                int depleteAmount = Integer.parseInt(a.split(":")[1].split("}")[0]);
-                depleteAmount -= depleteAmount * fapi.getDecreaseRarityGemPercent(fn, gem);
-                if(amount - depleteAmount <= 0) {
-                    depleteAmount = amount;
-                    pdata.toggleRarityGem(ev, gem);
+            final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
+            if(fu.isEnabled()) {
+                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                final RarityGem gem = RarityGem.gems.get(a.split("\\{")[1].split(":")[0]);
+                if(!pdata.hasActiveRarityGem(gem)) {
+                    ev.didProc = false;
+                    return;
                 }
-                itemMeta = g.getItemMeta();
-                itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
-                g.setItemMeta(itemMeta);
-                player.updateInventory();
+                final ItemStack g = getRarityGem(gem, player);
+                if(g != null) {
+                    itemMeta = g.getItemMeta();
+                    final int amount = getRemainingInt(itemMeta.getDisplayName());
+                    final String fn = fapi.getFaction(player);
+                    int depleteAmount = Integer.parseInt(a.split(":")[1].split("}")[0]);
+                    depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(fn, gem);
+                    if(amount - depleteAmount <= 0) {
+                        depleteAmount = amount;
+                        pdata.toggleRarityGem(ev, gem);
+                    }
+                    itemMeta = g.getItemMeta();
+                    itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
+                    g.setItemMeta(itemMeta);
+                    player.updateInventory();
+                }
             }
         } else if(a.toLowerCase().startsWith("depletestacksize{") && event instanceof MobStackDepleteEvent) {
             final int amount = Integer.parseInt(a.split("\\{")[1].split("}")[0]);
@@ -733,7 +737,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         else if(input.startsWith("healthIs>=:")) return healthIsGreaterThanOrEqualTo(entity, oldevaluate(input.split(":")[1].split(":")[0]));
         else if(input.startsWith("isUnderwater")) return entity.getRemainingAir() < entity.getMaximumAir();
         else if(input.startsWith("hitBlock(")) return event instanceof PlayerInteractEvent && hitBlock((PlayerInteractEvent) event, input.split("hitBlock\\(")[1].split("\\)")[0].toUpperCase());
-        else if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && fapi.canBreakBlock(((PlayerInteractEvent) event).getPlayer(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
+        else if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && fapi.canModify(((PlayerInteractEvent) event).getPlayer(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
         else if(input.startsWith("isHeadshot")) {
             final PvAnyEvent eve = event instanceof PvAnyEvent ? (PvAnyEvent) event : null;
             final Projectile p = eve != null ? eve.proj : null;
@@ -795,8 +799,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
             recipients.put("PLAYER", ((FoodLevelChangeEvent) event).getEntity());
         } else if(event instanceof EntityDeathEvent) {
             final EntityDeathEvent e = (EntityDeathEvent) event;
-            recipients.put("VICTIM", e.getEntity());
-            recipients.put("DAMAGER", e.getEntity().getKiller());
+            final LivingEntity en = e.getEntity();
+            recipients.put("VICTIM", en);
+            recipients.put("DAMAGER", en.getKiller());
         } else if(event instanceof CEAApplyPotionEffectEvent) {
             final CEAApplyPotionEffectEvent e = (CEAApplyPotionEffectEvent) event;
             recipients.put("VICTIM", e.appliedto);
@@ -1046,17 +1051,18 @@ public abstract class CustomEnchantUtils extends RPFeature {
         final Block prev = w.getBlockAt(l);
         final Material prevm = prev.getType();
         final byte prevd = prev.getState().getRawData();
-        if(!temporayblocks.containsKey(l)) {
-            temporayblocks.put(l, new HashMap<>());
-            temporayblocks.get(l).put(new ItemStack(prevm, 1, prevd), new HashMap<>());
+        if(!temporaryblocks.containsKey(l)) {
+            temporaryblocks.put(l, new HashMap<>());
+            final ItemStack a = new ItemStack(prevm, 1, prevd);
+            temporaryblocks.get(l).put(a, new HashMap<>());
             final Block b = w.getBlockAt(l);
             b.setType(m);
             b.getState().setRawData(data);
-            temporayblocks.get(l).get(prev).put(b, ticks);
+            temporaryblocks.get(l).get(a).put(b, ticks);
             scheduler.scheduleSyncDelayedTask(randompackage, () -> {
                 w.getBlockAt(l).setType(prevm);
                 w.getBlockAt(l).getState().setRawData(prevd);
-                temporayblocks.remove(l);
+                temporaryblocks.remove(l);
             }, ticks);
         }
     }

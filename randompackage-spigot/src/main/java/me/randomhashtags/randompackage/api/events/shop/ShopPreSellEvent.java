@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.shop;
 
-import me.randomhashtags.randompackage.utils.classes.shop.ShopItem;
+import me.randomhashtags.randompackage.utils.classes.ShopItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

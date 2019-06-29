@@ -2,6 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.custombosses.*;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomBoss;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -116,8 +118,7 @@ public class CustomBosses extends RPFeature {
 				event.setCancelled(true);
 				player.updateInventory();
 				final Location l = event.getClickedBlock().getLocation();
-				final String s = c.getSpawnableRegion();
-				if(s.equals("ANYWHERE") || s.equals("WARZONE") && fapi.getWarZoneChunks().contains(l.getChunk())) {
+				if(c.canSpawnAt(l)) {
 					removeItem(player, I, 1);
 					c.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
 				}

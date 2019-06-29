@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 3
+  max tier: 10
+  item amount=tier: true
+#
+item:
+  item: "emerald"
+  name: "&b&lMax Faction Size"
+  lore:
+  - "&7Increases max faction size."
+#
+perks:
+  - "Tier#;IncreaseMaxFactionSize{#};+# Max Faction Size"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
+  - "Tier1;Cash{1000000};$1,000,000"

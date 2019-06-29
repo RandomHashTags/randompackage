@@ -1,0 +1,27 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 39
+  max tier: 5
+  item amount=tier: true
+#
+item:
+  item: "diamond_axe"
+  name: "&6&lKit Evolution"
+  lore:
+  - "&7Increases the chance to level up a /vkit."
+#
+perks:
+  - "Tier1;IncreaseVkitLevelingChance{10};+10% chance of leveling /vkit"
+  - "Tier2;IncreaseVkitLevelingChance{15};+15% chance of leveling /vkit"
+  - "Tier3;IncreaseVkitLevelingChance{20};+20% chance of leveling /vkit"
+  - "Tier4;IncreaseVkitLevelingChance{30};+30% chance of leveling /vkit"
+  - "Tier5;IncreaseVkitLevelingChance{45};+45% chance of leveling /vkit"
+#
+requirements:
+  - "Tier1;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+  - "Tier1;Cash{50000000};$50,000,000"
+  - "Tier2;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+  - "Tier4;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+  - "Tier5;SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"

@@ -1,0 +1,31 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 33
+  max tier: 6
+  item amount=tier: true
+#
+item:
+  item: "chest"
+  name: "&6&lDungeon Looter"
+  lore:
+  - "&7Reduces the time it takes to"
+  - "&7receive loot for completing a dungeon."
+#
+perks:
+  - "Tier1;ReduceDungeonLootRedeemable{4:0:0};-4h Loot Cooldown"
+  - "Tier2;ReduceDungeonLootRedeemable{8:0:0};-8h Loot Cooldown"
+  - "Tier3;ReduceDungeonLootRedeemable{12:0:0};-12h Loot Cooldown"
+  - "Tier4;ReduceDungeonLootRedeemable{18:0:0};-18h Loot Cooldown"
+  - "Tier5;ReduceDungeonLootRedeemable{24:0:0};-24h Loot Cooldown"
+  - "Tier6;ReduceDungeonLootRedeemable{36:0:0};-36h Loot Cooldown"
+#
+requirements:
+  - "Tier1;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=10};10x Heroic Faction Crystals"
+  - "Tier1;Cash{50000000};$50,000,000"
+  - "Tier2;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  - "Tier4;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  - "Tier5;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"
+  - "Tier6;SpawnerValue{600000000};$600,000,000 &nFaction Spawner Value"

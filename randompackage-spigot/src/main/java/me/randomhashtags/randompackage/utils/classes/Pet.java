@@ -1,22 +1,17 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractPet;
 
 import java.io.File;
 import java.util.HashMap;
 
-public class Pet {
+public class Pet extends AbstractPet {
     public static HashMap<String, Pet> pets;
 
-    private YamlConfiguration yml;
-    private String ymlName;
     public Pet(File f) {
-        if(pets == null) {
-            pets = new HashMap<>();
-        }
-        yml = YamlConfiguration.loadConfiguration(f);
-        ymlName = f.getName();
-        pets.put(ymlName, this);
+        if(pets == null) pets = new HashMap<>();
+        load(f);
+        pets.put(getYamlName(), this);
     }
 
     public static void deleteAll() {

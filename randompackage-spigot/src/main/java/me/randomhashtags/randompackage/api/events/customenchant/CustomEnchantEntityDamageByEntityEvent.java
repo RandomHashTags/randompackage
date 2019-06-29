@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.customenchant;
 
-import me.randomhashtags.randompackage.utils.classes.customenchants.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

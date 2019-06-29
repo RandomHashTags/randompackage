@@ -4,7 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.Title;
-import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
+import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

@@ -9,7 +9,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public abstract class AbstractFallenHero extends Saveable {
+public abstract class AbstractFallenHero extends Spawnable {
 
     private List<String> summonMsg, receiveKitMsg, potioneffects;
     private ItemStack spawnitem, gem;
@@ -25,7 +25,6 @@ public abstract class AbstractFallenHero extends Saveable {
     }
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
-    public String getSpawnable() { return yml.getString("settings.spawnable").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() {
         final List<PotionEffect> e = new ArrayList<>();
         if(potioneffects == null) potioneffects = yml.getStringList("potion effects");

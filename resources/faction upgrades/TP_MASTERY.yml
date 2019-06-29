@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 8
+  max tier: 4
+  item amount=tier: true
+#
+item:
+  item: "book"
+  name: "&b&lTP Mastery"
+  lore:
+  - "&7Decreases teleportation casting time."
+#
+perks:
+  - "Tier1;SetTeleportDelayMultiplier{0.9};-10% Teleport Delay"
+  - "Tier2;SetTeleportDelayMultiplier{0.85};-15% Teleport Delay"
+  - "Tier3;SetTeleportDelayMultiplier{0.75};-25% Teleport Delay"
+  - "Tier4;SetTeleportDelayMultiplier{0.65};-35% Teleport Delay"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+  - "Tier1;Cash{2500000};$2,500,000"

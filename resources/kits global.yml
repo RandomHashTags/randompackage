@@ -16,6 +16,8 @@ messages:
   success:
     - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's gkits!"
   # Fallen Heroes
+  already have max:
+    - "&c&l(!) &cYou already have this &b&l/GKIT&r &cat max level!"
   already have:
     - "&c&l(!) &cYou already have this &f/gkit&c!"
   not in warzone:

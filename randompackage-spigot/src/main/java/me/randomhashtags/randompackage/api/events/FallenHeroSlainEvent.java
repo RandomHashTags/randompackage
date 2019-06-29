@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.classes.kits.LivingFallenHero;
+import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

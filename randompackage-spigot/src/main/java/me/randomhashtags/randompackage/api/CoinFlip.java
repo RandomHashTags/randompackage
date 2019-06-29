@@ -3,9 +3,9 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.api.events.coinflip.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipMatch;
-import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipOption;
-import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
+import me.randomhashtags.randompackage.utils.classes.CoinFlipMatch;
+import me.randomhashtags.randompackage.utils.classes.CoinFlipOption;
+import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -348,7 +348,8 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         else y.setOwningPlayer(a);
         y.setDisplayName(c+an);
         z.setDisplayName(cc+bn);
-        z.setOwningPlayer(b);
+        if(isLegacy) z.setOwner(b.getName());
+        else z.setOwningPlayer(b);
         creator.setItemMeta(y);
         challenger.setItemMeta(z);
 

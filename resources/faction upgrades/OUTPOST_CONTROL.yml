@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 14
+  max tier: 5
+  item amount=tier: true
+#
+item:
+  item: "diamond_chestplate"
+  name: "&b&lOutpost Control"
+  lore:
+  - "&7Capture and Assult /outposts faster."
+#
+perks:
+  - "Tier1;SetOutpostCapMultiplier{1.10};+10% Outpost Cap Speed"
+  - "Tier2;SetOutpostCapMultiplier{1.25};+25% Outpost Cap Speed"
+  - "Tier3;SetOutpostCapMultiplier{1.50};+50% Outpost Cap Speed"
+  - "Tier4;SetOutpostCapMultiplier{2.00};+100% Outpost Cap Speed"
+  - "Tier5;SetOutpostCapMultiplier{2.25};+125% Outpost Cap Speed"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
+  - "Tier1;Cash{2500000};$2,500,000"
+  - "Tier2;Item{factioncrystal;amount=32};32x Faction Crystals"
+  - "Tier2;Cash{5000000};$5,000,000"

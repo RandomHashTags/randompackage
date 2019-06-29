@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.conquest;
 
-import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestChest;
+import me.randomhashtags.randompackage.utils.classes.living.LivingConquestChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

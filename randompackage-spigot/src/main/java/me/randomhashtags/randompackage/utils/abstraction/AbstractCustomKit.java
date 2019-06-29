@@ -3,19 +3,19 @@ package me.randomhashtags.randompackage.utils.abstraction;
 import me.randomhashtags.randompackage.utils.classes.kits.FallenHero;
 import me.randomhashtags.randompackage.utils.classes.kits.KitItem;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractCustomKit extends Saveable {
-    private Set<KitItem> items;
+    private List<KitItem> items;
 
     public int getSlot() { return yml.getInt("gui settings.slot"); }
-    public int getMaxTier() { return yml.getInt("settings.max level"); }
+    public int getMaxLevel() { return yml.getInt("settings.max level"); }
     public long getCooldown() { return yml.getLong("settings.cooldown"); }
     public FallenHero getFallenHero() { return FallenHero.heroes.getOrDefault(yml.getString("settings.fallen hero"), null); }
-    public Set<KitItem> getItems() {
+    public List<KitItem> getItems() {
         if(items == null) {
-            items = new HashSet<>();
+            items = new ArrayList<>();
             for(String i : yml.getConfigurationSection("items").getKeys(false)) {
                 final String t = yml.getString("items." + i + ".item");
                 if(t != null) {
@@ -26,5 +26,5 @@ public abstract class AbstractCustomKit extends Saveable {
         }
         return items;
     }
-    public void setItems(Set<KitItem> items) { this.items = items; }
+    public void setItems(List<KitItem> items) { this.items = items; }
 }

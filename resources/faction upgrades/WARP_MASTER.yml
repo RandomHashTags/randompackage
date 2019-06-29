@@ -1,0 +1,30 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 2
+  max tier: 12
+  item amount=tier: true
+#
+item:
+  item: "ender_pearl"
+  name: "&b&lWarp Master"
+  lore:
+  - "&7Create more /f warps"
+#
+perks:
+  - "Tier#;IncreaseMaxFactionWarps{#};+# Max Faction Warps"
+#
+requirements:
+  - "Tier1;Cash{150000};$150,000"
+  - "Tier2;Item{factioncrystal;amount=16};16x Faction Crystals"
+  - "Tier2;Cash{300000};$300,000"
+  - "Tier3;Cash{300000};$450,000"
+  - "Tier4;Cash{300000};$600,000"
+  - "Tier5;Cash{300000};$750,000"
+  - "Tier6;Cash{300000};$900,000"
+  - "Tier7;Cash{300000};$1,050,000"
+  - "Tier8;Cash{300000};$1,200,000"
+  - "Tier9;Cash{300000};$1,350,000"
+  - "Tier10;Cash{300000};$1,500,000"
+  - "Tier11;Cash{300000};$1,650,000"
+  - "Tier12;Cash{300000};$1,800,000"

@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPCountdownMatch;
-import me.randomhashtags.randompackage.utils.classes.wildpvp.PvPMatch;
+import me.randomhashtags.randompackage.utils.classes.PvPCountdownMatch;
+import me.randomhashtags.randompackage.utils.classes.PvPMatch;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;

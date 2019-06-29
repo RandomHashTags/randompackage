@@ -282,6 +282,32 @@ public abstract class EventAttributes extends RPFeature {
         }
         return completion.isEmpty() ? null : completion.substring(0, completion.length()-2);
     }
+    public String executeAttributes(Player player, AlchemistExchangeEvent event, List<String> attributes) {
+        String completion = "";
+        if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
+            final boolean cancelled = event.isCancelled();
+            final String rarity = EnchantRarity.valueOf(CustomEnchant.valueOf(event.result)).getName();
+            for(String s : attributes) {
+                final String a = s.toLowerCase();
+                boolean did = true;
+                if(a.startsWith("alchemistexchange;")) {
+                    final String[] original = s.split(s.split(";")[0] + ";")[1].split(";");
+                    int i = 0;
+                    for(String A : a.split("alchemistexchange;")[1].split(";")) {
+                        if(A.startsWith("cancelled=")) {
+                            did = cancelled && Boolean.parseBoolean(A.split("=")[1]);
+                        } else if(A.startsWith("rarity=")) {
+                            did = original[i].split("=")[1].equals(rarity);
+                        } else if(did) {
+                            completion = completion.concat(A + "&&");
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+        return completion.isEmpty() ? null : completion.substring(0, completion.length()-2);
+    }
     public String executeAttributes(Player player, ItemNameTagUseEvent event, List<String> attributes) {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {

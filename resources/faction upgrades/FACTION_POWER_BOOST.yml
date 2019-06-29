@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 4
+  max tier: 5
+  item amount=tier: true
+#
+item:
+  item: "diamond"
+  name: "&b&lFaction Power Boost"
+  lore:
+  - "&7Adds passive faction power boosts."
+#
+perks:
+  - "Tier#;IncreaseFactionPower{(20*#)};+(20*#) Faction Power"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
+  - "Tier1;Cash{5000000};$5,000,000"

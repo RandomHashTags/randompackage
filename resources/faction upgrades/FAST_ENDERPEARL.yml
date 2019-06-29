@@ -1,0 +1,26 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 31
+  max tier: 4
+  item amount=tier: true
+#
+item:
+  item: "ender_pearl"
+  name: "&6&lFast Enderpearl"
+  lore:
+  - "&7Reduces Enderpearl Cooldown"
+#
+perks:
+  - "Tier1;ReduceEnderpearlCooldown{0.50};-0.5s Enderpearl Cooldown"
+  - "Tier2;ReduceEnderpearlCooldown{1.00};-1.0s Enderpearl Cooldown"
+  - "Tier3;ReduceEnderpearlCooldown{1.25};-1.25s Enderpearl Cooldown"
+  - "Tier4;ReduceEnderpearlCooldown{2.00};-2.0s Enderpearl Cooldown"
+#
+requirements:
+  - "Tier1;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals"
+  - "Tier1;Cash{25000000};$25,000,000"
+  - "Tier2;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"
+  - "Tier4;SpawnerValue{375000000};$375,000,000 &nFaction Spawner Value"

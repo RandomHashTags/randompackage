@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomCreeper;
-import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomTNT;
+import me.randomhashtags.randompackage.utils.classes.CustomCreeper;
+import me.randomhashtags.randompackage.utils.classes.CustomTNT;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -135,9 +135,9 @@ public class CustomExplosions extends RPFeature {
 		a.set("tnt", null);
 		a.set("creepers", null);
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
-		for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).ymlName);
+		for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getYamlName());
 		a.set("tnt.placed", placedtnt);
-		for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).ymlName);
+		for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getYamlName());
 		a.set("tnt.primed", primedtnt);
 		for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getYamlName());
 		a.set("creepers", cree);
@@ -212,12 +212,12 @@ public class CustomExplosions extends RPFeature {
 					double x = bl.getBlockX(), y = bl.getBlockY(), z = bl.getBlockZ();
 					final Dispenser disp = (Dispenser) b.getState().getData();
 					final BlockFace bf = disp.getFacing();
-					if (bf.equals(BlockFace.DOWN)) y -= 1.0;
-					else if (bf.equals(BlockFace.UP)) y += 1.0;
-					else if (bf.equals(BlockFace.NORTH)) z -= 0.5;
-					else if (bf.equals(BlockFace.SOUTH)) z += 1.5;
-					else if (bf.equals(BlockFace.WEST)) x -= 0.5;
-					else if (bf.equals(BlockFace.EAST)) x += 1.5;
+					if(bf.equals(BlockFace.DOWN)) y -= 1.0;
+					else if(bf.equals(BlockFace.UP)) y += 1.0;
+					else if(bf.equals(BlockFace.NORTH)) z -= 0.5;
+					else if(bf.equals(BlockFace.SOUTH)) z += 1.5;
+					else if(bf.equals(BlockFace.WEST)) x -= 0.5;
+					else if(bf.equals(BlockFace.EAST)) x += 1.5;
 					else {
 						Bukkit.broadcastMessage("[RandomPackage.CustomExplosions] Different direction! \"" + disp.getFacing().name() + "\"");
 						return;
@@ -247,7 +247,7 @@ public class CustomExplosions extends RPFeature {
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityExplodeEvent(EntityExplodeEvent event) {
-		if(!event.isCancelled() && fapi.isNotWarZoneOrSafeZone(event.getLocation())) {
+		if(!event.isCancelled()) {
 			final Entity e = event.getEntity();
 			final UUID uuid = e.getUniqueId();
 			final HashMap<UUID, CustomCreeper> CC = CustomCreeper.living;

@@ -1,0 +1,85 @@
+# Made by RandomHashTags
+messages:
+  dont have item:
+    - "&c&l(!)&r &cYou do not have {ITEM}!"
+  dont have cash:
+    - "&c&lYou do no have enough /bal $ to purchase this upgrade!"
+    - "&7Upgrade Cost: &n${COST}"
+  dont have f upgrade:
+    - "&c&l(!)&r &cYou must have &6&l{UPGRADE}&r &cto unlock this Upgrade!"
+  upgrade:
+    - ""
+  unlock:
+    - ""
+#
+items:
+  heroic faction crystal:
+    item: "orange_dye"
+    name: "&6&lHeroic Faction Crystal"
+    lore:
+    - "&7This heroic crystal can be used to purchase"
+    - "&b/f upgrades &7for your Faction."
+  faction crystal:
+    item: "quartz"
+    name: "&b&lFaction Crystal"
+    lore:
+    - "&7This crystal can be used to purchase"
+    - "&b/f upgrades &7for your Faction."
+#
+types:
+  DEFAULT:
+    perk achieved prefix: "&a&l*&r &a&m"
+    perk unachieved prefix: "&c&l*&r &7"
+    requirements prefix: " &b&l*&r &b"
+    unlock:
+      - "&a&lClick to &nUnlock"
+    upgrade:
+      - "&a&lClick to &nUpgrade"
+    maxed:
+      - "&a&lUpgrade is &nMAXED!"
+    format:
+      - "{DESC}"
+      - " "
+      - "&d&lTier"
+      - "{TIER}"
+      - " "
+      - "&d&lPerks"
+      - "{PERKS}"
+      - " "
+      - "&d&lPrice"
+      - "{REQUIREMENTS}"
+      - " "
+  HEROIC:
+    perk achieved prefix: "&a&l*&r &a&m"
+    perk unachieved prefix: "&c&l*&r &7"
+    requirements prefix: " &6&l*&r &6"
+    unlock:
+      - "&6&lClick to &nUnlock"
+    upgrade:
+      - "&6&lClick to &nUpgrade"
+    maxed:
+      - "&6&lUpgrade is &nMAXED!"
+    format:
+      - "{DESC}"
+      - " "
+      - "&e&lTier"
+      - "{TIER}"
+      - " "
+      - "&e&lPerks"
+      - "{PERKS}"
+      - " "
+      - "&e&lRequirements"
+      - "{REQUIREMENTS}"
+      - " "
+#
+gui:
+  title: "Faction Upgrades"
+  size: 45
+  #
+  tier: " &7{TIER} / {MAX_TIER}"
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  locked:
+    item: "red_stained_glass_pane"
+    tier: " &c&lLOCKED"

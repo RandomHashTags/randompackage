@@ -1,0 +1,27 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 42
+  max tier: 4
+  item amount=tier: true
+#
+item:
+  item: "diamond_chestplate"
+  name: "&6&lMaverick"
+  lore:
+  - "&7Reduces damage received from Armor Set"
+  - "&7bonuses and passive abilities."
+#
+perks:
+  - "Tier1;SetIncomingArmorSetDamageMultiplier{0.90};-10% Damage from Armor Sets"
+  - "Tier2;SetIncomingArmorSetDamageMultiplier{0.85};-15% Damage from Armor Sets"
+  - "Tier3;SetIncomingArmorSetDamageMultiplier{0.75};-25% Damage from Armor Sets"
+  - "Tier4;SetIncomingArmorSetDamageMultiplier{0.55};-45% Damage from Armor Sets"
+#
+requirements:
+  - "Tier1;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=25};25x Heroic Faction Crystals"
+  - "Tier1;Cash{150000000};$150,000,000"
+  - "Tier2;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"
+  - "Tier4;SpawnerValue{1250000000};$1,250,000,000 &nFaction Spawner Value"

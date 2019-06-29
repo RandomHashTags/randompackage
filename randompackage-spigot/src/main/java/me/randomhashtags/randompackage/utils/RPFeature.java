@@ -48,8 +48,8 @@ public abstract class RPFeature extends UVersion implements Listener {
 
     public static YamlConfiguration otherdata;
     private static File otherdataF;
-    public static final UInventory givedp = new UInventory(null, 27, "Givedp Categories");
-    public static final List<Inventory> givedpCategories = new ArrayList<>();
+    public static UInventory givedp = new UInventory(null, 27, "Givedp Categories");
+    public static List<Inventory> givedpCategories = new ArrayList<>();
 
     public void enable() {
         if(otherdataF == null) {
@@ -176,57 +176,57 @@ public abstract class RPFeature extends UVersion implements Listener {
             final UMaterial U = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
             try {
                 item = U.getItemStack();
-                final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
-                if(!i.equals(Material.AIR)) {
-                    item.setAmount(amount);
-                    itemMeta = item.getItemMeta();
-                    if(i.equals(skullitem)) {
-                        m = (SkullMeta) itemMeta;
-                        if(item.getData().getData() == 3) m.setOwner(P.split(":").length == 4 ? P.split(":")[3].split("}")[0] : "RandomHashTags");
-                    }
-                    (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
-
-                    if(enchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    final HashMap<Enchantment, Integer> enchants = new HashMap<>();
-                    final CustomEnchants ce = CustomEnchants.getCustomEnchants();
-                    final boolean levelzeroremoval = ce.levelZeroRemoval;
-                    if(config != null && config.get(path + ".lore") != null) {
-                        lore.clear();
-                        for(String string : config.getStringList(path + ".lore")) {
-                            final String sl = string.toLowerCase();
-                            if(sl.startsWith("venchants{")) {
-                                for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                    enchants.put(getEnchantment(s), getRemainingInt(s));
-                                }
-                            } else if(sl.startsWith("rpenchants{")) {
-                                for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                    final CustomEnchant e = CustomEnchant.valueOf(s);
-                                    if(e != null) {
-                                        int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
-                                        l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
-                                        if(l != 0 || !levelzeroremoval)
-                                            lore.add(EnchantRarity.valueOf(e).getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
-                                    }
-                                }
-                            } else {
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
-                            }
-                        }
-                    }
-                    (!i.equals(skullitem) ? itemMeta : m).setLore(lore);
-                    item.setItemMeta(!item.getType().equals(skullitem) ? itemMeta : m);
-                    lore.clear();
-                    if(enchanted) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
-                    for(Enchantment enchantment : enchants.keySet()) {
-                        if(enchantment != null) {
-                            item.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
-                        }
-                    }
-                    if(name != null && name.contains("{ENCHANT_SIZE}")) ce.applyTransmogScroll(item);
-                }
             } catch(Exception e) {
                 System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (U != null ? U.getVersionName() : null) + ";getMaterial()=" + (U != null ? U.getMaterial() : null));
                 return null;
+            }
+            final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
+            if(!i.equals(Material.AIR)) {
+                item.setAmount(amount);
+                itemMeta = item.getItemMeta();
+                if(i.equals(skullitem)) {
+                    m = (SkullMeta) itemMeta;
+                    if(item.getData().getData() == 3) m.setOwner(P.split(":").length == 4 ? P.split(":")[3].split("}")[0] : "RandomHashTags");
+                }
+                (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
+
+                if(enchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                final HashMap<Enchantment, Integer> enchants = new HashMap<>();
+                final CustomEnchants ce = CustomEnchants.getCustomEnchants();
+                final boolean levelzeroremoval = ce.levelZeroRemoval;
+                if(config != null && config.get(path + ".lore") != null) {
+                    lore.clear();
+                    for(String string : config.getStringList(path + ".lore")) {
+                        final String sl = string.toLowerCase();
+                        if(sl.startsWith("venchants{")) {
+                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                                enchants.put(getEnchantment(s), getRemainingInt(s));
+                            }
+                        } else if(sl.startsWith("rpenchants{")) {
+                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                                final CustomEnchant e = CustomEnchant.valueOf(s);
+                                if(e != null) {
+                                    int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
+                                    l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
+                                    if(l != 0 || !levelzeroremoval)
+                                        lore.add(EnchantRarity.valueOf(e).getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                }
+                            }
+                        } else {
+                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                        }
+                    }
+                }
+                (!i.equals(skullitem) ? itemMeta : m).setLore(lore);
+                item.setItemMeta(!item.getType().equals(skullitem) ? itemMeta : m);
+                lore.clear();
+                if(enchanted) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                for(Enchantment enchantment : enchants.keySet()) {
+                    if(enchantment != null) {
+                        item.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
+                    }
+                }
+                if(name != null && name.contains("{ENCHANT_SIZE}")) ce.applyTransmogScroll(item);
             }
         }
         return item;

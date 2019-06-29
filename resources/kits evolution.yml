@@ -17,7 +17,7 @@ messages:
     - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's vkits!"
   # Fallen Heros
   already have max:
-    - "&c&l(!) &cYou already have this &9&l/VKIT&c at max level!"
+    - "&c&l(!) &cYou already have this &9&l/VKIT&r &cat max level!"
   not in warzone:
     - "&c&l(!) &r&cYou can only summon Fallen Heroes in the &4WarZone!"
   redeem:
@@ -76,4 +76,19 @@ permissions:
 gui:
   title: "Evolution Kits"
   size: 9
+  #
+  settings:
+    use tiers: true
+    tier zero enchant effect: false
+    tier custom enchant multiplier:
+      1: 0.30
+      2: 0.35
+      3: 0.40
+      4: 0.45
+      5: 0.50
+      6: 0.55
+      7: 0.60
+      8: 0.65
+      9: 0.70
+      10: 0.75
 #

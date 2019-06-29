@@ -1,0 +1,26 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 10
+  max tier: 5
+  item amount=tier: true
+#
+item:
+  item: "wheat"
+  name: "&b&lNatural Growth"
+  lore:
+  - "&7Increase growth speed of crops in claims."
+#
+perks:
+  - "Tier1;SetCropGrowthMultiplier{1.25};125% Growth Speed"
+  - "Tier2;SetCropGrowthMultiplier{1.50};150% Growth Speed"
+  - "Tier3;SetCropGrowthMultiplier{2.00};200% Growth Speed"
+  - "Tier4;SetCropGrowthMultiplier{2.50};250% Growth Speed"
+  - "Tier5;SetCropGrowthMultiplier{3.00};300% Growth Speed"
+#
+requirements:
+  - "Tier1;Cash{5000000};$5,000,000"
+  - "Tier2;Cash{10000000};$10,000,000"
+  - "Tier3;Cash{15000000};$15,000,000"
+  - "Tier4;Cash{20000000};$20,000,000"
+  - "Tier5;Cash{25000000};$25,000,000"

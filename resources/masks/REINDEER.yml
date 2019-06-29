@@ -6,6 +6,7 @@ item:
   name: "&a&lReindeer"
   lore:
   - "&cSPEED IV"
+  - "&cFlight regardless of rank"
   - "&7The decapitated and stuffed"
   - "&7head of one of Santa's"
   - "&7magical reindeer... yikes!"
@@ -16,4 +17,4 @@ attributes:
   - "MaskUnequip;removePotionEffect{speed:false}"
 #
 added lore:
-  - "&7&lATTACHED:&r &a&lReindeer Mask&r &f(&cSPEED IV&f)"
+  - "&7&lATTACHED:&r &a&lReindeer Mask&r &f(&cSPEED IV, Flight regardless of rank&f)"

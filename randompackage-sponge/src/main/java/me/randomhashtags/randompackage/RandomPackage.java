@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage;
 
 import com.google.inject.Inject;
-import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -11,6 +10,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.plugin.PluginManager;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -39,7 +39,6 @@ public class RandomPackage {
 
     public void enable() {
         getPlugin = this;
-        final UVersion uv = UVersion.getUVersion();
         enableMetrics();
 
         enableSoftDepends();
@@ -53,13 +52,13 @@ public class RandomPackage {
         return enabled ? pm.getPlugin(id).get() : null;
     }
 
-
     private void enableMetrics() {
         final PluginContainer p = getPlugin("Metrics");
         if(p != null) {
-            metrics.addCustomChart(new Metrics2.SimplePie("sponge_server_version", () -> Sponge.getPlatform().getMinecraftVersion().getName()));
+            final Map<String, Integer> players = new HashMap<>();
+            players.put("Sponge", Sponge.getServer().getOnlinePlayers().size());
             metrics.addCustomChart(new Metrics2.AdvancedPie("sponge_features_used", settings));
-            metrics.addCustomChart(new Metrics2.SimplePie("sponge_players", () -> Integer.toString(Sponge.getServer().getOnlinePlayers().size())));
+            metrics.addCustomChart(new Metrics2.AdvancedPie("server_software_player_counts", () -> players));
         }
     }
 }

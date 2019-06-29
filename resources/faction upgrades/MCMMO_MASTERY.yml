@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 5
+  max tier: 4
+  item amount=tier: true
+#
+item:
+  item: "book"
+  name: "&b&lmcMMO Mastery"
+  lore:
+  - "&7Shorter mcMMO Active Ability Cooldowns"
+#
+perks:
+  - "Tier1;ReduceMCMMOCooldown{all:2.5};-2.5% mcMMO Cooldown"
+  - "Tier2;ReduceMCMMOCooldown{all:5.0};-5.0% mcMMO Cooldown"
+  - "Tier3;ReduceMCMMOCooldown{all:12.5};-12.5% mcMMO Cooldown"
+  - "Tier4;ReduceMCMMOCooldown{all:15.0};-15.0% mcMMO Cooldown"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
+  - "Tier1;Cash{5000000};$5,000,000"

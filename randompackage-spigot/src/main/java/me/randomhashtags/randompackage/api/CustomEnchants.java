@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
 import me.randomhashtags.randompackage.utils.classes.customenchants.Fireball;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;

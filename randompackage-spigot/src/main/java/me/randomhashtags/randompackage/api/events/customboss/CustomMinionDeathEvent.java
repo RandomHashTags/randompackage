@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.customboss;
 
-import me.randomhashtags.randompackage.utils.classes.custombosses.LivingCustomMinion;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomMinion;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

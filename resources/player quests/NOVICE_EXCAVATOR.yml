@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Novice Excavator"
+  completion: 5000
+  expiration: 86400
+#
+lore:
+- "&7Mine 5,000 blocks with a shovel"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "BlockMined;material=_SHOVEL;+1"

@@ -1,10 +1,10 @@
 name: RandomPackage
-version: 16.2.1
+version: 16.2.2
 main: me.randomhashtags.randompackage.RandomPackage
 load: POSTWORLD
 api-version: 1.13
 depend: [Vault]
-softdepend: [PlaceholderAPI, EpicSpawners, SilkSpawners, mcMMO, Factions]
+softdepend: [PlaceholderAPI, EpicSpawners, SilkSpawners, mcMMO, Factions, ASkyblock, SuperiorSkyblock2]
 commands:
   alchemist:
     description: Exchange the same 2 enchants/dust for a higher level up tier.

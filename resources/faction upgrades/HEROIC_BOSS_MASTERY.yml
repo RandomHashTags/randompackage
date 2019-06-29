@@ -1,0 +1,24 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 41
+  max tier: 3
+  item amount=tier: true
+#
+item:
+  item: "player_head_item"
+  name: "&6&lHeroic Boss Mastery"
+  lore:
+  - "&7Increases damage dealt to Boss monsters."
+#
+perks:
+  - "Tier1;SetBossDamageMultiplier{2.05};+105% Boss Damage"
+  - "Tier2;SetBossDamageMultiplier{2.15};+115% Boss Damage"
+  - "Tier3;SetBossDamageMultiplier{2.25};+125% Boss Damage"
+#
+requirements:
+  - "Tier1;FactionUpgrade{boss mastery:level=4};Boss Mastery IV /f upgrade"
+  - "Tier1;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=16};16x Heroic Faction Crystals"
+  - "Tier2;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+  - "Tier3;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"

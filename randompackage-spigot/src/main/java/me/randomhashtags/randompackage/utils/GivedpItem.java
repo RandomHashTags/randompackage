@@ -4,16 +4,16 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.MysteryMobSpawnerOpenEvent;
-import me.randomhashtags.randompackage.api.needsRecode.FactionAdditions;
+import me.randomhashtags.randompackage.api.unfinished.Boosters;
 import me.randomhashtags.randompackage.utils.classes.*;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
-import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomCreeper;
-import me.randomhashtags.randompackage.utils.classes.customexplosions.CustomTNT;
+import me.randomhashtags.randompackage.utils.classes.CustomCreeper;
+import me.randomhashtags.randompackage.utils.classes.CustomTNT;
 import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
 import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
 import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
-import me.randomhashtags.randompackage.utils.classes.servercrate.ServerCrate;
+import me.randomhashtags.randompackage.utils.classes.ServerCrate;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
@@ -212,7 +212,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+random.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
             return o != null ? o.getItem(P) : air;
         } else if(input.startsWith("factionmcmmobooster:") || input.startsWith("factionxpbooster:")) {
-            final FactionAdditions f = FactionAdditions.getFactionAdditions();
+            final Boosters f = Boosters.getFactionAdditions();
             final String[] a = Q.split(":");
             return f.isEnabled() ? f.getBooster(Double.parseDouble(a[1]), Long.parseLong(a[2])*1000, input.startsWith("factionxpbooster")) : air;
         } else if(input.equals("gkitfallenhero") || input.startsWith("gkitfallenhero:")) {

@@ -1,0 +1,21 @@
+# Made by RandomHashTags
+settings:
+  type: DEFAULT
+  slot: 7
+  max tier: 3
+  item amount=tier: true
+#
+item:
+  item: "exp_bottle"
+  name: "&b&lXP Harvest"
+  lore:
+  - "&7Increases Vanilla XP gained from monsters."
+#
+perks:
+  - "Tier#;SetMobXPMultiplier{1+(.05*#)};1+(.05*#)x XP Drops"
+#
+requirements:
+  - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
+  - "Tier1;Cash{15000000};$15,000,000"
+  - "Tier2;Item{factioncrystal;amount=160};160x Faction Crystals"
+  - "Tier2;Cash{25000000};$25,000,000"

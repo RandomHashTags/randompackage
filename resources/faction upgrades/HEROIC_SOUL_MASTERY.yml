@@ -1,0 +1,23 @@
+# Made by RandomHashTags
+settings:
+  type: HEROIC
+  slot: 38
+  max tier: 2
+  item amount=tier: true
+#
+item:
+  item: "nether_star"
+  name: "&6&lHeroic Soul Mastery"
+  lore:
+  - "&7Decreases soul cost of passive soul enchantments."
+#
+perks:
+  - "Tier1;DecreaseRarityGemCost{SOUL:30};-30% Soul Cost"
+  - "Tier2;DecreaseRarityGemCost{SOUL:45};-45% Soul Cost"
+#
+requirements:
+  - "Tier1;FactionUpgrade{soul mastery:level=3};Soul Mastery III /f upgrade"
+  - "Tier1;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
+  - "Tier1;Item{heroicfactioncrystal;amount=15};15x Heroic Faction Crystals"
+  - "Tier1;Cash{75000000};$75,000,000"
+  - "Tier2;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"

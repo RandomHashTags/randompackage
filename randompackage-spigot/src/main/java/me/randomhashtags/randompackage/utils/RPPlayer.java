@@ -5,10 +5,10 @@ import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestExpire
 import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.utils.classes.Title;
-import me.randomhashtags.randompackage.utils.classes.coinflip.CoinFlipStats;
-import me.randomhashtags.randompackage.utils.classes.customenchants.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
+import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
-import me.randomhashtags.randompackage.utils.classes.factionadditions.FactionUpgrade;
+import me.randomhashtags.randompackage.utils.classes.FactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
 import me.randomhashtags.randompackage.utils.classes.Home;
 import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
@@ -143,12 +143,15 @@ public class RPPlayer {
         final List<UUID> cee = getCustomEnchantEntities();
         yml.set("custom enchant entities", null);
         for(UUID u : cee) {
-            final LivingCustomEnchantEntity l = LivingCustomEnchantEntity.living.get(u);
-            if(l != null) {
-                final String p = "custom enchant entities." + u.toString() + ".";
-                final LivingEntity summoner = l.getSummoner();
-                yml.set(p + "type", l.getType().getPath());
-                yml.set(p + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
+            final HashMap<UUID, LivingCustomEnchantEntity> e = LivingCustomEnchantEntity.living;
+            if(e != null) {
+                final LivingCustomEnchantEntity l = e.get(u);
+                if(l != null) {
+                    final String p = "custom enchant entities." + u.toString() + ".";
+                    final LivingEntity summoner = l.getSummoner();
+                    yml.set(p + "type", l.getType().getPath());
+                    yml.set(p + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
+                }
             }
         }
 
@@ -253,7 +256,7 @@ public class RPPlayer {
         if(isLoaded) {
             try {
                 backup();
-            } catch (Exception e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
             isLoaded = false;
@@ -780,6 +783,7 @@ public class RPPlayer {
             quests = new HashMap<>();
             questTasks.put(uuid, new ArrayList<>());
             final ConfigurationSection c = yml.getConfigurationSection("quests");
+            final boolean isEnabled = getPlugin.isEnabled();
             if(c != null) {
                 final long time = System.currentTimeMillis();
                 final BukkitScheduler scheduler = api.scheduler;
@@ -790,7 +794,7 @@ public class RPPlayer {
                     final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
                     if(!a.isExpired()) {
                         quests.put(q, a);
-                        startExpire(time, scheduler, pm, q, a);
+                        if(isEnabled) startExpire(time, scheduler, pm, q, a);
                     }
                 }
             }
@@ -819,6 +823,7 @@ public class RPPlayer {
         final int pqs = pq.size();
         final BukkitScheduler s = api.scheduler;
         final PluginManager pm = api.pluginmanager;
+        final boolean isEnabled = getPlugin.isEnabled();
         for(int z = 1; z <= 100; z++) {
             final PlayerQuest ran = (PlayerQuest) pq.values().toArray()[random.nextInt(pqs)];
             if(ran != null) {
@@ -827,7 +832,7 @@ public class RPPlayer {
                 pm.callEvent(e);
                 if(!e.isCancelled()) {
                     quests.put(ran, a);
-                    startExpire(time, s, pm, ran, a);
+                    if(isEnabled) startExpire(time, s, pm, ran, a);
                     break;
                 }
             }

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.events.envoy;
 
-import me.randomhashtags.randompackage.utils.classes.envoy.LivingEnvoyCrate;
+import me.randomhashtags.randompackage.utils.classes.living.LivingEnvoyCrate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

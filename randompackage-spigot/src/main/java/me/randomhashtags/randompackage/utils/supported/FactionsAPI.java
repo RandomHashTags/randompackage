@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.supported;
 
-import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.supported.plugins.ASkyblock;
+import me.randomhashtags.randompackage.utils.supported.plugins.SuperiorSkyblock;
 import me.randomhashtags.randompackage.utils.supported.plugins.factionsUUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -11,7 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FactionsAPI {
@@ -23,8 +22,6 @@ public class FactionsAPI {
     }
 
     public String factions;
-    public HashMap<String, Double> teleportDelayMultipliers = new HashMap<>(), cropGrowthMultipliers = new HashMap<>(), enemyDamageMultipliers = new HashMap<>(), bossDamageMultipliers = new HashMap<>(), vkitLevelingChances = new HashMap<>();
-    public HashMap<String, HashMap<RarityGem, Double>> decreaseRarityGemCost = new HashMap<>();
 
     public boolean relationIsEnemyOrNull(Player player1, Player player2) {
         if(factions == null)                  return true;
@@ -60,10 +57,11 @@ public class FactionsAPI {
         else if(factions.equals("ASkyblock")) return ASkyblock.getASkyblock().getIslandName(player.getUniqueId());
         else return null;
     }
-    public boolean canBreakBlock(Player player, Location blockLocation) {
+    public boolean canModify(Player player, Location location) {
         if(factions == null) return true;
-        else if(factions.contains("Factions")) return factionsUUID.getInstance().canBreakBlock(player, blockLocation);
-        else if(factions.equals("ASkyblock")) return ASkyblock.getASkyblock().canBreakBlock(player.getUniqueId(), blockLocation);
+        else if(factions.contains("Factions")) return factionsUUID.getInstance().canModify(player, location);
+        else if(factions.equals("ASkyblock")) return ASkyblock.getASkyblock().canModify(player.getUniqueId(), location);
+        else if(factions.equals("SuperiorSkyblock")) return SuperiorSkyblock.getSuperiorSkylock().canModify(player.getUniqueId(), location);
         else return true;
     }
     public boolean isNotWarZoneOrSafeZone(Location l) {
@@ -90,6 +88,7 @@ public class FactionsAPI {
     public String getRole(Player player) {
         if(factions == null) return null;
         else if(factions.contains("Factions")) return factionsUUID.getInstance().getPlayerRole(player);
+        else if(factions.equals("SuperiorSkyblock")) return SuperiorSkyblock.getSuperiorSkylock().getRole(player);
         else return null;
     }
     public String getFactionAt(Location l) {
@@ -115,56 +114,4 @@ public class FactionsAPI {
         }
     }
 
-    public double getTeleportDelayMultiplier(String factionName) {
-        if(factions == null) return 1.00;
-        else if(factions.contains("Factions")) return teleportDelayMultipliers.getOrDefault(factionName, 1.00);
-        else return 1.00;
-    }
-    public void setTeleportDelayMultiplier(String factionName, double multiplier) {
-        teleportDelayMultipliers.put(factionName, multiplier);
-    }
-    public void resetTeleportDelayMultiplier(String factionName) {
-        if(factionName != null) {
-            teleportDelayMultipliers.put(factionName, 1.00);
-        }
-    }
-
-    public double getCropGrowthMultiplier(String factionName) {
-        if(factions == null || factionName == null) return 1.00;
-        else if(factions.contains("Factions")) return cropGrowthMultipliers.getOrDefault(factionName, 1.00);
-        else return 1.00;
-    }
-    public void setCropGrowthMultiplier(String factionName, double multiplier) {
-        if(factions != null && factionName != null) {
-            cropGrowthMultipliers.put(factionName, multiplier);
-        }
-    }
-    public double getBossDamageMultiplier(String factionName) {
-        return factionName != null ? bossDamageMultipliers.getOrDefault(factionName, 1.00) : 1.00;
-    }
-    public void setBossDamageMultiplier(String factionName, double multiplier) {
-        if(factionName != null) {
-            bossDamageMultipliers.put(factionName, multiplier);
-        }
-    }
-    public double getEnemyDamageMultiplier(String factionName) {
-        final HashMap<String, Double> e = enemyDamageMultipliers;
-        return factionName != null ? e.getOrDefault(factionName, 1.00) : 1.00;
-    }
-    public void setEnemyDamageMultiplier(String factionName, double multiplier) {
-        if(factionName != null) enemyDamageMultipliers.put(factionName, multiplier);
-    }
-
-    public double getDecreaseRarityGemPercent(String factionName, RarityGem gem) {
-        final HashMap<String, HashMap<RarityGem, Double>> d = decreaseRarityGemCost;
-        return factionName != null && gem != null && d.containsKey(factionName) ? d.get(factionName).getOrDefault(gem, 0.00) : 0;
-    }
-    public double getVkitLevelingChance(String factionName) {
-        return factionName != null ? vkitLevelingChances.getOrDefault(factionName, 0.00) : 0.00;
-    }
-    public void setVkitLevelingChance(String factionName, double chance) {
-        if(factionName != null) {
-            vkitLevelingChances.put(factionName, chance);
-        }
-    }
 }

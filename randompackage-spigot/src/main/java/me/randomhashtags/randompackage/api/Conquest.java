@@ -2,10 +2,10 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.conquest.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.conquests.ConquestChest;
-import me.randomhashtags.randompackage.utils.classes.conquests.ConquestMob;
-import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestChest;
-import me.randomhashtags.randompackage.utils.classes.conquests.LivingConquestMob;
+import me.randomhashtags.randompackage.utils.classes.ConquestChest;
+import me.randomhashtags.randompackage.utils.classes.ConquestMob;
+import me.randomhashtags.randompackage.utils.classes.living.LivingConquestChest;
+import me.randomhashtags.randompackage.utils.classes.living.LivingConquestMob;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
