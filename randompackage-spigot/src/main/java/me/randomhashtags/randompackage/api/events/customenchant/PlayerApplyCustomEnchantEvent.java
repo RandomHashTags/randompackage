@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.api.events.customenchant;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
+import me.randomhashtags.randompackage.utils.enums.CustomEnchantApplyResult;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
-public class PlayerApplyCustomEnchantEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
+public class PlayerApplyCustomEnchantEvent extends AbstractEvent {
 	public final Player player;
 	public final CustomEnchant enchant;
 	public final int level;
@@ -17,6 +16,4 @@ public class PlayerApplyCustomEnchantEvent extends Event {
 		this.level = level;
 		this.result = result;
 	}
-	public HandlerList getHandlers() { return handlers; }
-	public static HandlerList getHandlerList() { return handlers; }
 }

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.PlayerTeleportDelayEvent;
-import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
         if(n.equals("balance")) {
-            String q, qq = "", bal = player != null ? formatDouble(eco.getBalance(player)) : "0.00";
+            String q, qq = "", bal = player != null ? formatBigDecimal(BigDecimal.valueOf(eco.getBalance(player))) : "0.00";
             if(player != null && args.length == 0 && hasPermission(sender, "RandomPackage.balance", true)) {
                 q = "self";
             } else if(args.length >= 1 && hasPermission(sender, "RandomPackage.balance-other", true) && Bukkit.getOfflinePlayer(args[0]) != null) {

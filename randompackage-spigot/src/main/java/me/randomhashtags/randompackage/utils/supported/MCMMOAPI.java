@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +37,6 @@ public class MCMMOAPI extends GlobalChallenges implements Listener {
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
-	@Override
 	public void load() {
 		pluginmanager.registerEvents(this, randompackage);
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
@@ -92,8 +92,8 @@ public class MCMMOAPI extends GlobalChallenges implements Listener {
 				final Object S = event.skill;
 				final String skill = (isClassic ? ((com.gmail.nossr50.datatypes.skills.SkillType) S).name() : ((com.gmail.nossr50.datatypes.skills.PrimarySkillType) S).name()).toLowerCase();
 				final float xp = event.xp;
-				increase(event, "mcmmoxpgained", p, xp);
-				increase(event, "mcmmoxpgainedin_" + skill, p, xp);
+				increase(event, "mcmmoxpgained", p, BigDecimal.valueOf(xp));
+				increase(event, "mcmmoxpgainedin_" + skill, p, BigDecimal.valueOf(xp));
 			}
 		}
 	}
@@ -102,8 +102,9 @@ public class MCMMOAPI extends GlobalChallenges implements Listener {
 	private void mcmmoAbilityActivateEvent(McMMOPlayerAbilityActivateEvent event) {
 		if(!event.isCancelled() && gcIsEnabled) {
 			final UUID player = event.getPlayer().getUniqueId();
-			increase(event, "mcmmoabilityused", player, 1);
-			increase(event, "mcmmoabilityused_" + event.getAbility().name(), player, 1);
+			final BigDecimal one = BigDecimal.ONE;
+			increase(event, "mcmmoabilityused", player, one);
+			increase(event, "mcmmoabilityused_" + event.getAbility().name(), player, one);
 		}
 	}
 	

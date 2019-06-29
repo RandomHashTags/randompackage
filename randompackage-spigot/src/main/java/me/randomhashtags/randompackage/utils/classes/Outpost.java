@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-import static me.randomhashtags.randompackage.api.unfinished.Outposts.statuses;
+import static me.randomhashtags.randompackage.api.nearFinished.Outposts.statuses;
 
 public class Outpost {
     public static TreeMap<String, Outpost> outposts;

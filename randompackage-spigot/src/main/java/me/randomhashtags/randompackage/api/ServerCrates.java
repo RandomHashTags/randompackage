@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateCloseEvent;
-import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.api.events.ServerCrateCloseEvent;
+import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.living.LivingServerCrate;
 import me.randomhashtags.randompackage.utils.classes.ServerCrate;

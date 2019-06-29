@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.CEAApplyPotionEffectEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.classes.ArmorSet;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;

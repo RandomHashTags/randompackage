@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.conquest.ConquestDamageEvent;
+import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.ConquestChest;
 import me.randomhashtags.randompackage.utils.classes.ConquestMob;

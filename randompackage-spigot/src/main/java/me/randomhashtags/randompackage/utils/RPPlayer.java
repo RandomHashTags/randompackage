@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.api.Homes;
-import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestExpireEvent;
-import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestStartEvent;
+import me.randomhashtags.randompackage.api.events.PlayerQuestExpireEvent;
+import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
@@ -39,6 +39,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
@@ -319,9 +320,10 @@ public class RPPlayer {
             final String c = yml.getString("coinflip stats");
             if(c != null && !c.isEmpty()) {
                 final String[] s = c.split(";");
-                coinflipStats = new CoinFlipStats(Long.parseLong(s[0]), Long.parseLong(s[1]), Long.parseLong(s[2]), Long.parseLong(s[3]), Long.parseLong(s[4]));
+                coinflipStats = new CoinFlipStats(api.getBigDecimal(s[0]), api.getBigDecimal(s[1]), api.getBigDecimal(s[2]), api.getBigDecimal(s[3]), api.getBigDecimal(s[4]));
             } else {
-               coinflipStats = new CoinFlipStats(0, 0,0 ,0, 0);
+                final BigDecimal z = BigDecimal.ZERO;
+               coinflipStats = new CoinFlipStats(z, z, z ,z, z);
             }
         }
         return coinflipStats;

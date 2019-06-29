@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 public enum UParticle {
     /*
-        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.0)
+        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.3)
     */
     BARRIER(null, "BARRIER"),
     BLOCK_CRACK("TILE_BREAK", "BLOCK_CRACK"),

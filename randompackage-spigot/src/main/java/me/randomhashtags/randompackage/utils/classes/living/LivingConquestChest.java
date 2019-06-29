@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes.living;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.api.events.conquest.ConquestDamageEvent;
+import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.classes.ConquestChest;
 import me.randomhashtags.randompackage.utils.classes.ConquestMob;
 import org.bukkit.*;

@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
@@ -36,10 +37,10 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return "";
         } else if(identifier.startsWith("coinflip_")) {
             final CoinFlipStats s = pdata.getCoinFlipStats();
-            if(identifier.endsWith("_wins")) return Long.toString(s.wins);
-            else if(identifier.endsWith("_won$")) return Long.toString(s.wonCash);
-            else if(identifier.endsWith("_losses")) return Long.toString(s.losses);
-            else if(identifier.endsWith("_lost$")) return Long.toString(s.lostCash);
+            if(identifier.endsWith("_wins")) return s.wins.toString();
+            else if(identifier.endsWith("_won$")) return s.wonCash.toString();
+            else if(identifier.endsWith("_losses")) return s.losses.toString();
+            else if(identifier.endsWith("_lost$")) return s.lostCash.toString();
         } else if(identifier.equals("coinflip_notifications")) {
             return Boolean.toString(pdata.coinflipNotifications);
 

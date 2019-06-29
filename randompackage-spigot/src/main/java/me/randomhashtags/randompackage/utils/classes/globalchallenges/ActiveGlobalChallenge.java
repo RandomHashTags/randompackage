@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 
 import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.api.events.globalchallenges.GlobalChallengeEndEvent;
+import me.randomhashtags.randompackage.api.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
@@ -16,11 +17,11 @@ public class ActiveGlobalChallenge {
     private static PluginManager pm;
     private static GlobalChallenges globalchallenges;
     private GlobalChallenge type;
-    private HashMap<UUID, Double> participants;
+    private HashMap<UUID, BigDecimal> participants;
     private int task;
     private long started;
 
-    public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, Double> participants) {
+    public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
         if(active == null) {
             active = new HashMap<>();
             globalchallenges = GlobalChallenges.getChallenges();
@@ -37,19 +38,19 @@ public class ActiveGlobalChallenge {
 
     public long getStartedTime() { return started; }
     public GlobalChallenge getType() { return type; }
-    public HashMap<UUID, Double> getParticipants() { return participants; }
+    public HashMap<UUID, BigDecimal> getParticipants() { return participants; }
 
     public long getRemainingTime() {
         return started+(type.getDuration()*1000)-System.currentTimeMillis();
     }
-    public void increaseValue(UUID player, double value) {
-        final Map<UUID, Double> a = globalchallenges.getPlacing(participants, 1);
-        final double before = participants.getOrDefault(player, 0.00), after = before+value;
+    public void increaseValue(UUID player, BigDecimal value) {
+        final Map<UUID, BigDecimal> a = globalchallenges.getPlacing(participants, 1);
+        final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
         if(!a.isEmpty()) {
             final UUID first = (UUID) a.keySet().toArray()[0];
             if(!first.equals(player)) {
-                final double v = (Double) a.values().toArray()[0];
-                if(before <= v && after > v) {
+                final double v = ((BigDecimal) a.values().toArray()[0]).doubleValue();
+                if(before.doubleValue() <= v && after.doubleValue() > v) {
                     final HashMap<String, String> replacements = new HashMap<>();
                     final String time = globalchallenges.getRemainingTime(getRemainingTime());
                     replacements.put("{TIME}", time);
@@ -60,10 +61,10 @@ public class ActiveGlobalChallenge {
         }
         participants.put(player, after);
     }
-    public double getValue(UUID player) {
-        return participants.getOrDefault(player, 0.00);
+    public BigDecimal getValue(UUID player) {
+        return participants.getOrDefault(player, BigDecimal.ZERO);
     }
-    public void setValue(UUID player, double value) {
+    public void setValue(UUID player, BigDecimal value) {
         participants.put(player, value);
     }
 
@@ -71,7 +72,7 @@ public class ActiveGlobalChallenge {
         final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
         pm.callEvent(e);
         globalchallenges.reloadInventory();
-        final Map<UUID, Double> placements = globalchallenges.getPlacing(participants);
+        final Map<UUID, BigDecimal> placements = globalchallenges.getPlacing(participants);
         if(task != -1) Bukkit.getScheduler().cancelTask(task);
         active.remove(type);
         if(giveRewards) {

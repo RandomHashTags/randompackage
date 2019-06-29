@@ -6,7 +6,8 @@ import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -465,7 +466,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 envoy.enable();
             }
         } else if(f.equals(Feature.FACTION_UPGRADES)) {
-            enabled = config.getBoolean("faction additions.enabled");
+            enabled = config.getBoolean("faction upgrades.enabled");
             if(enabled) {
                 factionupgrades.enable();
             }

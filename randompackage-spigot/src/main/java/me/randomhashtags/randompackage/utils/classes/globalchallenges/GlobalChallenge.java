@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class GlobalChallenge extends AbstractGlobalChallenge {
@@ -18,7 +19,7 @@ public class GlobalChallenge extends AbstractGlobalChallenge {
 	public ActiveGlobalChallenge start() {
 		return start(System.currentTimeMillis(), new HashMap<>());
 	}
-	public ActiveGlobalChallenge start(long started, HashMap<UUID, Double> participants) {
+	public ActiveGlobalChallenge start(long started, HashMap<UUID, BigDecimal> participants) {
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
 		return a != null ? a.getOrDefault(this, new ActiveGlobalChallenge(started, this, participants)) : new ActiveGlobalChallenge(started, this, participants);
 	}

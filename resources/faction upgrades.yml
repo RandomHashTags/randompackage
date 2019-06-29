@@ -38,7 +38,7 @@ types:
     maxed:
       - "&a&lUpgrade is &nMAXED!"
     format:
-      - "{DESC}"
+      - "{LORE}"
       - " "
       - "&d&lTier"
       - "{TIER}"
@@ -60,7 +60,7 @@ types:
     maxed:
       - "&6&lUpgrade is &nMAXED!"
     format:
-      - "{DESC}"
+      - "{LORE}"
       - " "
       - "&e&lTier"
       - "{TIER}"

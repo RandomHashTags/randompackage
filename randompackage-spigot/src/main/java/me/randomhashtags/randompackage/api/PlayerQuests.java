@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.envoy.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.api.events.jackpot.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.api.events.playerquests.PlayerQuestCompleteEvent;
-import me.randomhashtags.randompackage.api.events.servercrates.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.api.events.shop.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.shop.ShopSellEvent;
+import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.api.events.PlayerQuestCompleteEvent;
+import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.api.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.classes.playerquests.ActivePlayerQuest;

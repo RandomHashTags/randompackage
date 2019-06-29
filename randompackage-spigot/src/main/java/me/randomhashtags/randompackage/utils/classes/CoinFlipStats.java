@@ -1,8 +1,10 @@
 package me.randomhashtags.randompackage.utils.classes;
 
+import java.math.BigDecimal;
+
 public class CoinFlipStats {
-    public long wins, losses, wonCash, lostCash, taxesPaid;
-    public CoinFlipStats(long wins, long losses, long wonCash, long lostCash, long taxesPaid) {
+    public BigDecimal wins, losses, wonCash, lostCash, taxesPaid;
+    public CoinFlipStats(BigDecimal wins, BigDecimal losses, BigDecimal wonCash, BigDecimal lostCash, BigDecimal taxesPaid) {
         this.wins = wins;
         this.losses = losses;
         this.wonCash = wonCash;

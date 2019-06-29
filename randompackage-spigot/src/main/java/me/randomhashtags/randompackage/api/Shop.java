@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.shop.ShopPrePurchaseEvent;
-import me.randomhashtags.randompackage.api.events.shop.ShopPreSellEvent;
-import me.randomhashtags.randompackage.api.events.shop.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.shop.ShopSellEvent;
+import me.randomhashtags.randompackage.api.events.ShopPrePurchaseEvent;
+import me.randomhashtags.randompackage.api.events.ShopPreSellEvent;
+import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.api.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.ShopCategory;
 import me.randomhashtags.randompackage.utils.classes.ShopItem;

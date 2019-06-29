@@ -1,14 +1,12 @@
 package me.randomhashtags.randompackage.api.events.customenchant;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
-public class PvAnyEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+public class PvAnyEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
     public final Player damager;
     public final LivingEntity victim;
@@ -29,6 +27,4 @@ public class PvAnyEvent extends Event implements Cancellable {
 
     public void setCancelled(boolean cancel) { cancelled = cancel; }
     public boolean isCancelled() { return cancelled; }
-    public HandlerList getHandlers() { return handlers; }
-    public static HandlerList getHandlerList() { return handlers; }
 }

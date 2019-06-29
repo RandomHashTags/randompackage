@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.utils.classes;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.api.events.mobstacker.MobStackMergeEvent;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.api.events.MobStackMergeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

@@ -117,7 +117,7 @@ enchanter:
 envoy:
   enabled: true
 #
-faction additions:
+faction upgrades:
   enabled: true
   aliases:
     - "f upgrade"

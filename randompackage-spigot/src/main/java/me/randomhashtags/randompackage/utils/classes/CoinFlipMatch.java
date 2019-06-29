@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils.classes;
 
 import org.bukkit.OfflinePlayer;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class CoinFlipMatch {
@@ -12,8 +13,8 @@ public class CoinFlipMatch {
     public OfflinePlayer challenger;
     private CoinFlipOption option;
     public CoinFlipOption challengerOption;
-    private long wager;
-    public CoinFlipMatch(long created, OfflinePlayer creator, CoinFlipOption option, long wager) {
+    private BigDecimal wager;
+    public CoinFlipMatch(long created, OfflinePlayer creator, CoinFlipOption option, BigDecimal wager) {
         if(matches == null) {
             matches = new HashMap<>();
         }
@@ -27,7 +28,7 @@ public class CoinFlipMatch {
     public long created() { return created; }
     public OfflinePlayer creator() { return creator; }
     public CoinFlipOption option() { return option; }
-    public long wager() { return wager; }
+    public BigDecimal wager() { return wager; }
 
     public void delete() {
         matches.remove(created);

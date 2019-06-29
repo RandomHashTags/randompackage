@@ -89,6 +89,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor, TabC
     }
     public void unload() {
         spawnerchance = 0;
+        otherdataF = null;
     }
     @EventHandler
     private void pluginEnableEvent(PluginEnableEvent event) {

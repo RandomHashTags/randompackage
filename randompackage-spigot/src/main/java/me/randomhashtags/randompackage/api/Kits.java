@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;

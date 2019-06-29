@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.api.events.customarmor.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.mask.MaskEquipEvent;
-import me.randomhashtags.randompackage.api.events.mask.MaskUnequipEvent;
-import me.randomhashtags.randompackage.api.events.mobstacker.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.api.needsRecode.FactionUpgrades;
+import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
+import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;

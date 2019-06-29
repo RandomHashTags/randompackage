@@ -1,12 +1,10 @@
 package me.randomhashtags.randompackage.api.events;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
 import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
-public class FallenHeroSlainEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+public class FallenHeroSlainEvent extends AbstractEvent {
     public final LivingEntity killer;
     public final LivingFallenHero hero;
     public final boolean didDropGem;
@@ -15,6 +13,4 @@ public class FallenHeroSlainEvent extends Event {
         this.hero = hero;
         this.didDropGem = didDropGem;
     }
-    public HandlerList getHandlers() { return handlers; }
-    public static HandlerList getHandlerList() { return handlers; }
 }

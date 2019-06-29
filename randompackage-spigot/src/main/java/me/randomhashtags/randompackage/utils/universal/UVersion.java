@@ -25,6 +25,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +61,15 @@ public class UVersion {
             f.getParentFile().mkdirs();
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
         }
+    }
+    public String formatBigDecimal(BigDecimal b) {
+        return formatBigDecimal(b, false);
+    }
+    public String formatBigDecimal(BigDecimal b, boolean currency) {
+        return (currency ? NumberFormat.getCurrencyInstance() : NumberFormat.getInstance()).format(b);
+    }
+    public BigDecimal getBigDecimal(String value) {
+        return BigDecimal.valueOf(Double.parseDouble(value));
     }
     public String formatDouble(double d) {
         String decimals = Double.toString(d).split("\\.")[1];

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.fund.FundDepositEvent;
+import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -29,10 +30,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public YamlConfiguration config;
 
 	private HashMap<String, String> unlockstring;
-	private HashMap<String, Long> needed_unlocks;
-	private HashMap<UUID, Long> deposits;
+	private HashMap<String, BigDecimal> needed_unlocks;
+	private HashMap<UUID, BigDecimal> deposits;
 	
-	public long maxfund = 0, total = 0;
+	public BigDecimal maxfund, total;
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(args.length == 0) {
@@ -54,20 +55,21 @@ public class Fund extends RPFeature implements CommandExecutor {
 		unlockstring = new HashMap<>();
 		needed_unlocks = new HashMap<>();
 		deposits = new HashMap<>();
+		maxfund = BigDecimal.ZERO;
 
 		for(String s : config.getStringList("unlock")) {
 			final String[] a = s.split(";");
-			final long v = Long.parseLong(a[1]);
+			final BigDecimal v = BigDecimal.valueOf(Double.parseDouble(a[1]));
 			unlockstring.put(a[0], s);
 			needed_unlocks.put(a[2], v);
-			if(v > maxfund) maxfund = v;
+			if(v.doubleValue() > maxfund.doubleValue()) maxfund = v;
 		}
 
-		total = otherdata.getLong("fund.total");
+		total = BigDecimal.valueOf(otherdata.getDouble("fund.total"));
 		final ConfigurationSection cs = otherdata.getConfigurationSection("fund.depositors");
 		if(cs != null) {
 			for(String s : cs.getKeys(false)) {
-				deposits.put(UUID.fromString(s), otherdata.getLong("fund.depositors." + s));
+				deposits.put(UUID.fromString(s), BigDecimal.valueOf(otherdata.getDouble("fund.depositors." + s)));
 			}
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Server Fund &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -82,23 +84,24 @@ public class Fund extends RPFeature implements CommandExecutor {
 		config = null;
 		unlockstring = null;
 		needed_unlocks = null;
-		maxfund = 0;
-		total = 0;
+		maxfund = BigDecimal.ZERO;
+		total = BigDecimal.ZERO;
 	}
 	
 	public void deposit(Player player, String arg) {
 		if(hasPermission(player, "RandomPackage.fund.deposit", true)) {
-			if(total >= maxfund) {
+			if(total.doubleValue() >= maxfund.doubleValue()) {
 				sendStringListMessage(player, config.getStringList("messages.already complete"), null);
 			} else if(arg.contains(".") && !config.getBoolean("allows decimals")) {
 				sendStringListMessage(player, config.getStringList("messages.cannot include decimals"), null);
 			} else {
 				final double q = getRemainingDouble(arg), min = config.getDouble("min deposit");
 				if(q == -1) return;
-				long Q = (long) q;
-				final String a = Q < config.getDouble("min deposit") ? "less than min" : Q > eco.getBalance(player) ? "need more money" : null;
+				BigDecimal Q = BigDecimal.valueOf(q);
+				final double d = Q.doubleValue();
+				final String a = d < config.getDouble("min deposit") ? "less than min" : d > eco.getBalance(player) ? "need more money" : null;
 				if(a != null) {
-					sendMessage(player, a, null, a.equals("less than min") ? min : Q, false);
+					sendMessage(player, a, null, a.equals("less than min") ? min : d, false);
 					return;
 				}
 				final FundDepositEvent e = new FundDepositEvent(player, Q);
@@ -106,10 +109,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 				if(!e.isCancelled()) {
 					Q = e.amount;
 					final UUID u = player.getUniqueId();
-					deposits.put(u, deposits.getOrDefault(u, 0l)+Q);
-					eco.withdrawPlayer(player, Q);
-					total += Q;
-					sendMessage(player, "deposited", null, Q, true);
+					deposits.put(u, deposits.getOrDefault(u, BigDecimal.ZERO).add(Q));
+					eco.withdrawPlayer(player, d);
+					total = total.add(Q);
+					sendMessage(player, "deposited", null, d, true);
 				}
 			}
 		}
@@ -126,7 +129,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 				final List<String> a = p.getAliases();
 				for(String s : unlockstring.keySet()) {
 					final String us = unlockstring.get(s);
-					if(total < Double.parseDouble(us.split(";")[1])) {
+					if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
 						if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
 								|| m.equals(s.toLowerCase())
 								|| m.equals(s.replace(pl, cmd).toLowerCase())) {
@@ -170,7 +173,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public void reset(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.reset", true)) {
 			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
-			total = 0;
+			total = BigDecimal.ZERO;
 			deposits.clear();
 		}
 	}
@@ -179,14 +182,15 @@ public class Fund extends RPFeature implements CommandExecutor {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
 			final String symbol = config.getString("messages.progress bar.symbol"), achieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.achieved")), notachieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.not achieved"));
 			for(String s : config.getStringList("messages.view")) {
-				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatDouble(total).split("\\.")[0]);
+				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
 					for(String i : config.getStringList("unlock")) {
-						final double req = needed_unlocks.get(i.split(";")[2]);
-						final int q = (int) req;
-						final String percent = roundDoubleString((total / req) * 100 > 100.000 ? 100 : (total / req) * 100, pdigits), abb = getAbbreviation(req), qq = formatInt(q);
+						final BigDecimal req = needed_unlocks.get(i.split(";")[2]);
+						final double d = req.doubleValue(), t = total.doubleValue();
+						final int q = req.intValue();
+						final String percent = roundDoubleString((t/d) * 100 > 100.000 ? 100 : (t/d) * 100, pdigits), abb = getAbbreviation(d), qq = formatInt(q);
 						for(String k : config.getStringList("messages.content")) {
-							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", total >= req ? ChatColor.translateAlternateColorCodes('&', config.getString("messages.completed")) : "");
+							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", t >= d ? ChatColor.translateAlternateColorCodes('&', config.getString("messages.completed")) : "");
 							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
 							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
 							if(k.contains("{PROGRESS_BAR}")) {

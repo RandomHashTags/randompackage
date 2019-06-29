@@ -47,9 +47,9 @@ public abstract class RPFeature extends UVersion implements Listener {
     private static final TreeMap<Integer, String> treemap = new TreeMap<>();
 
     public static YamlConfiguration otherdata;
-    private static File otherdataF;
-    public static UInventory givedp = new UInventory(null, 27, "Givedp Categories");
-    public static List<Inventory> givedpCategories = new ArrayList<>();
+    protected static File otherdataF;
+    public static UInventory givedp;
+    public static List<Inventory> givedpCategories;
 
     public void enable() {
         if(otherdataF == null) {
@@ -59,6 +59,9 @@ public abstract class RPFeature extends UVersion implements Listener {
 
             treemap.put(1000, "M"); treemap.put(900, "CM"); treemap.put(500, "D"); treemap.put(400, "CD"); treemap.put(100, "C"); treemap.put(90, "XC");
             treemap.put(50, "L"); treemap.put(40, "XL"); treemap.put(10, "X"); treemap.put(9, "IX"); treemap.put(5, "V"); treemap.put(4, "IV"); treemap.put(1, "I");
+
+            givedp = new UInventory(null, 27, "Givedp Categories");
+            givedpCategories = new ArrayList<>();
 
             mcmmoIsEnabled = pluginmanager.isPluginEnabled("mcMMO");
         }

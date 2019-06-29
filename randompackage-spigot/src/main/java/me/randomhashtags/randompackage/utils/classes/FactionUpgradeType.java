@@ -19,7 +19,7 @@ public class FactionUpgradeType {
 	public FactionUpgradeType(String path) {
 		if(types == null) {
 			types = new HashMap<>();
-			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction additions.yml"));
+			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
 		}
 		this.path = path;
 		types.put(path, this);
