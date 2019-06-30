@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallenge;
@@ -531,7 +531,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private void customEnchantProcEvent(CustomEnchantProcEvent event) {
 		if(event.player != null && !event.isCancelled()) {
 			final UUID player = event.player.getUniqueId();
-			final CustomEnchant enchant = event.enchant;
+			final AbstractCustomEnchant enchant = event.enchant;
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantprocs", player, one);
 			increase(event, "customenchantprocs_" + EnchantRarity.valueOf(enchant).getName(), player, one);

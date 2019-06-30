@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils.abstraction;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +14,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractMask extends Saveable {
+public abstract class AbstractMask extends AbstractRPFeature {
     private static TreeMap<String, ItemStack> maskOwners = new TreeMap<>();
     private static String version = Bukkit.getVersion();
 

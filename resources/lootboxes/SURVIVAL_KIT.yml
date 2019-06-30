@@ -54,7 +54,7 @@ regular loot:
   #- "heroicequipmentlootbox"
   - "raritybook:HEROIC;amount=2"
   - "kothlootbag"
-  - "customcreeper:STUN;amount=8"
+  - "customexplosion:CREEPER_STUN;amount=8"
   - "soultracker:LEGENDARY;amount=2"
   - "randomizationscroll:GODLY;amount=3"
   - "servercrate:GODLY;amount=2"

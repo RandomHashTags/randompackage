@@ -36,7 +36,7 @@ rewards:
   - "explosivecake;amount=38"
   - "blazespawner;amount=2"
   - "raritygem:SOUL:10-100"
-  - "customtnt:LUCKY;amount=8-16"
+  - "customexplosion:TNT_LUCKY;amount=8-16"
   - "whitescroll"
   - "spacefirework;amount=30"
 #

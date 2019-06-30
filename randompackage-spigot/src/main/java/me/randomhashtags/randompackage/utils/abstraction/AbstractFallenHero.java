@@ -7,8 +7,6 @@ import org.bukkit.potion.PotionEffect;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
 public abstract class AbstractFallenHero extends Spawnable {
 
     private List<String> summonMsg, receiveKitMsg, potioneffects;

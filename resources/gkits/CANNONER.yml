@@ -57,11 +57,11 @@ items:
     item: "arrow"
   custom tnt 1:
     chances: "50:50"
-    items: "customtnt:LUCKY;customtnt:GIGANTIC"
+    items: "customexplosion:TNT_LUCKY;customexplosion:TNT_GIGANTIC"
     amount: 8
   custom tnt 2:
     chances: "50:50"
-    items: "customtnt:MIMIC;customtnt:TACTICAL"
+    items: "customexplosion:TNT_MIMIC;customtnt:TNT_TACTICAL"
     amount: 16
   creeper spawn egg:
     item: "creeper_spawn_egg"

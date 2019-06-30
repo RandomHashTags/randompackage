@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Skilled Merchant"
+  completion: 1000000
+  expiration: 86400
+#
+lore:
+- "&7Make $1,000,000 in /shop"
+#
+rewards:
+- "questtokens=2: 2x Quest Token"
+#
+trigger:
+- "ShopSellItem;+profit"

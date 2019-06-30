@@ -20,10 +20,6 @@ messages:
     - " "
     - "&fA &a&lServer Envoy&r &fhas appeared underneath the main &n/spawn&r &fand all PvP &n/warps&r&f, supply crates can be seen falling all over the &a&lWarzone!"
     - " "
-    - "&f(( &7Chests filled with random tier loot have spawned at 50-100 random locations throughout"
-    - " &7the planet's warzone and warps, go get some loot! Remember, more chests spawn wherever"
-    - " &7there are more players. &f))"
-    - " "
     - "{SUMMON_TYPE}"
     - " "
 #

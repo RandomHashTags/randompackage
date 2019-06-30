@@ -4,12 +4,10 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.MysteryMobSpawnerOpenEvent;
-import me.randomhashtags.randompackage.api.unfinished.Boosters;
+import me.randomhashtags.randompackage.api.nearFinished.Boosters;
+import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.classes.*;
-import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
-import me.randomhashtags.randompackage.utils.classes.CustomCreeper;
-import me.randomhashtags.randompackage.utils.classes.CustomTNT;
 import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
 import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
 import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
@@ -169,27 +167,28 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             return air;
         } else if(input.startsWith("customboss")) {
-            final HashMap<String, CustomBoss> L = CustomBoss.bosses;
-            final CustomBoss b = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
+            final String[] k = Q.split(":");
+            final int l = k.length;
+            final String plugin = l == 3 ? k[1] : null, key = l >= 2 ? l == 2 ? k[1] : k[2] : null;
+            final AbstractCustomBoss b = getCustomBoss(plugin, key);
             return b != null ? b.getSpawnItem() : air;
-        } else if(input.startsWith("customcreeper")) {
-            final HashMap<String, CustomCreeper> L = CustomCreeper.creepers;
-            final CustomCreeper cc = L != null ? !input.contains(":") || Q.split(":").equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return cc != null ? cc.getItem() : air;
+        } else if(input.startsWith("customexplosion")) {
+            final String[] k = Q.split(":");
+            final int l = k.length;
+            final String plugin = l == 3 ? k[1] : null, key = l >= 2 ? l == 2 ? k[1] : k[2] : null;
+            final AbstractCustomExplosion e = getCustomExplosion(plugin, key);
+            return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
-            final TreeMap<String, CustomEnchant> L = CustomEnchant.enabled;
-            final HashMap<String, EnchantRarity> LL = EnchantRarity.rarities;
+            final TreeMap<String, AbstractCustomEnchant> L = CustomEnchant.enabled;
+            final HashMap<String, AbstractEnchantRarity> LL = EnchantRarity.rarities;
             final String[] a = Q.split(":"), b = input.split(":");
             final String a1 = a[1].replace("_", " ");
-            final EnchantRarity G = LL.getOrDefault(a1, null);
-            final CustomEnchant e = L != null ? L.containsKey(a1) ? L.get(a1) : G != null ? G.getEnchants().get(random.nextInt(G.getEnchants().size())) : null : null;
+            final AbstractEnchantRarity G = LL.getOrDefault(a1, null);
+            final AbstractCustomEnchant e = L != null ? L.containsKey(a1) ? L.get(a1) : G != null ? G.getEnchants().get(random.nextInt(G.getEnchants().size())) : null : null;
             final int le = a.length, level = e != null ? le >= 3 ? b[2].equals("random") ? 1+random.nextInt(e.getMaxLevel()) : Integer.parseInt(b[2]) : 1+random.nextInt(e.getMaxLevel()) : 0;
             final int success = level != 0 ? le >= 4 ? b[3].equals("random") ? random.nextInt(101) : Integer.parseInt(b[3]) : random.nextInt(101) : 0;
             final int destroy = level != 0 ? le >= 5 ? b[4].equals("random") ? random.nextInt(101) : Integer.parseInt(b[4]) : random.nextInt(101) : 0;
             return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
-        } else if(input.startsWith("customtnt:")) {
-            final CustomTNT tnt = CustomTNT.tnt.getOrDefault(Q.split(":")[1], null);
-            return tnt != null ? tnt.getItem() : air;
         } else if(input.startsWith("dust:")) {
             final HashMap<String, MagicDust> m = MagicDust.dust;
             final MagicDust d = m != null ? m.get(Q.split(":")[1]) : null;
@@ -211,10 +210,13 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final boolean h = percent.contains("-");
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+random.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
             return o != null ? o.getItem(P) : air;
-        } else if(input.startsWith("factionmcmmobooster:") || input.startsWith("factionxpbooster:")) {
-            final Boosters f = Boosters.getFactionAdditions();
-            final String[] a = Q.split(":");
-            return f.isEnabled() ? f.getBooster(Double.parseDouble(a[1]), Long.parseLong(a[2])*1000, input.startsWith("factionxpbooster")) : air;
+        } else if(input.startsWith("booster:")) {
+            final Boosters f = Boosters.getBoosters();
+            if(f.isEnabled()) {
+                final String[] a = Q.split(":");
+                return AbstractBooster.valueOf(a[0]).getItem(Long.parseLong(a[2])*1000, Double.parseDouble(a[1]));
+            }
+            return air;
         } else if(input.equals("gkitfallenhero") || input.startsWith("gkitfallenhero:")) {
             final HashMap<String, GlobalKit> L = GlobalKit.kits;
             final GlobalKit g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
@@ -267,7 +269,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final RandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return R != null ? R.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
-            final EnchantRarity r = EnchantRarity.rarities != null ? EnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
+            final AbstractEnchantRarity r = EnchantRarity.rarities != null ? AbstractEnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
             return r != null ? r.getRevealItem() : air;
         } else if(input.startsWith("rarityfireball")) {
             final HashMap<String, Fireball> L = Fireball.fireballs;

@@ -48,7 +48,7 @@ regular loot:
   - "servercrate:GODLY"
   - "raritybook:SOUL;amount=3"
   - "mysterymobspawner;amount=3"
-  - "customcreeper:STUN;amount=8"
+  - "customexplosion:CREEPER_STUN;amount=8"
   #- "Holiday Spirit"
   #- "fuelcell"
   #- "holywhitescroll"
@@ -63,6 +63,6 @@ jackpot loot:
 #
 bonus loot size: 2
 bonus loot:
-  - "customcreeper:STUN;amount=2"
+  - "customexplosion:CREEPER_STUN;amount=2"
   #- "Special Snowflakes"
 #

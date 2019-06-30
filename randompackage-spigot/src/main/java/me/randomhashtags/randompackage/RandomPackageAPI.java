@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import org.bukkit.ChatColor;
@@ -9,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.Inventory;
@@ -66,7 +66,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor, TabC
                 if(l == 2) {
                     for(String s : CustomEnchant.enabled.keySet()) lore.add(s.replace(" ", "_"));
                 } else if(l == 3) {
-                    final CustomEnchant e = CustomEnchant.enabled.getOrDefault(args[1].toUpperCase().replace("_", " "), null);
+                    final AbstractCustomEnchant e = AbstractCustomEnchant.enabled.getOrDefault(args[1].toUpperCase().replace("_", " "), null);
                     if(e != null) for(int i = 1; i <= e.getMaxLevel(); i++) lore.add(Integer.toString(i));
                 }
             }

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -13,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractEnvoyCrate extends Saveable {
+public abstract class AbstractEnvoyCrate extends AbstractRPFeature {
     private UMaterial block, fallingblock;
     private List<UMaterial> cannotLandAbove;
     private ItemStack item;

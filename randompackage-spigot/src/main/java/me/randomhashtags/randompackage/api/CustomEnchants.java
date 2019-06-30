@@ -6,6 +6,8 @@ import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
 import me.randomhashtags.randompackage.utils.classes.customenchants.Fireball;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
@@ -135,7 +137,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     "_settings",
                     "ALIEN IMPLANTS", "ATOMIC DETONATE",
                     "BIDIRECTIONAL TELEPORTATION",
-                    "DEEP BLEED", "DIVINE ENLIGHTED",
+                    "DEEP BLEED", "DEMONIC_LIFESTEAL", "DIVINE ENLIGHTED",
                     "ETHEREAL DODGE",
                     "GHOSTLY GHOST", "GODLY OVERLOAD", "GUIDED ROCKET ESCAPE",
                     "INFINITE LUCK",
@@ -478,8 +480,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
-        CustomEnchant.deleteAll();
-        EnchantRarity.deleteAll();
+        AbstractCustomEnchant.deleteAll();
+        AbstractEnchantRarity.deleteAll();
         RarityGem.deleteAll();
         SoulTracker.deleteAll();
         RandomizationScroll.deleteAll();
@@ -501,7 +503,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
                         final CustomEnchant ce = (CustomEnchant) CustomEnchant.enabled.values().toArray()[i];
-                        final EnchantRarity rarity = EnchantRarity.valueOf(ce);
+                        final AbstractEnchantRarity rarity = AbstractEnchantRarity.valueOf(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getName()));
                         replacements.put("{DESC}", ce.getLore());
@@ -573,7 +575,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             final ItemStack itemstack = event.getItem();
             if(itemstack != null && itemstack.hasItemMeta() && itemstack.getItemMeta().hasLore()) {
                 for(String s : itemstack.getItemMeta().getLore()) {
-                    final CustomEnchant enchant = CustomEnchant.valueOf(s);
+                    final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s);
                     if(enchant != null)
                         procEnchant(event, enchant, getEnchantmentLevel(s), itemstack, null);
                 }
@@ -638,7 +640,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
             if(damager != null && combos.containsKey(damager)) {
                 final double d = event.getDamage();
-                for(CustomEnchant enchant : combos.get(damager).keySet()) {
+                for(AbstractCustomEnchant enchant : combos.get(damager).keySet()) {
                     event.setDamage(d*combos.get(damager).get(enchant));
                 }
             }
@@ -666,8 +668,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
     }
 
-    public ItemStack getRevealedItem(CustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
-        final EnchantRarity rarity = EnchantRarity.valueOf(enchant);
+    public ItemStack getRevealedItem(AbstractCustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
+        final AbstractEnchantRarity rarity = AbstractEnchantRarity.valueOf(enchant);
         item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
         itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level));
         final String S = rarity.getSuccess(), D = rarity.getDestroy();
@@ -689,12 +691,12 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         item.setItemMeta(itemMeta);
         return item;
     }
-    public ItemStack getRandomEnabledEnchant(EnchantRarity rarity) {
+    public ItemStack getRandomEnabledEnchant(AbstractEnchantRarity rarity) {
         final String[] r = rarity.getRevealedEnchantRarities();
         final int l = r.length;
-        final EnchantRarity rar = EnchantRarity.rarities.get(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
-        final List<CustomEnchant> enchants = rar.getEnchants();
-        final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
+        final AbstractEnchantRarity rar = AbstractEnchantRarity.rarities.get(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
+        final List<AbstractCustomEnchant> enchants = rar.getEnchants();
+        final AbstractCustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
         final int level = random.nextInt(enchant.getMaxLevel()+1);
         item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
         itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
@@ -756,14 +758,14 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             procPlayerArmor(event, player);
             procPlayerItem(event, player, item);
         }
-        EnchantRarity rarity = EnchantRarity.valueOf(I);
+        AbstractEnchantRarity rarity = AbstractEnchantRarity.valueOf(I);
         final Fireball fireball = rarity == null ? Fireball.valueOf(I) : null;
         final RarityGem gem = fireball == null ? RarityGem.valueOf(I) : null;
         final EnchantmentOrb eo = gem == null ? EnchantmentOrb.valueOf(I) : null;
         if(rarity != null) {
             final ItemStack r = getRandomEnabledEnchant(rarity);
             final String displayname = r.getItemMeta().getDisplayName();
-            final CustomEnchant enchant = CustomEnchant.valueOf(r);
+            final AbstractCustomEnchant enchant = CustomEnchant.valueOf(r);
             final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, I, enchant, getEnchantmentLevel(displayname));
             pluginmanager.callEvent(e);
             if(!e.isCancelled()) {
@@ -796,7 +798,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 event.setCancelled(true);
                 player.updateInventory();
             } else {
-                final CustomEnchant enchant = CustomEnchant.valueOf(I);
+                final AbstractCustomEnchant enchant = CustomEnchant.valueOf(I);
                 if(enchant != null)
                     for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
             }
@@ -900,7 +902,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final String c = event.getClick().name(), cu = cur != null ? cur.getType().name() : null;
                 if(r < 0 || !c.contains("LEFT") && !c.contains("RIGHT") || cu == null || cu.equals("AIR")) return;
 
-                final CustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? CustomEnchant.valueOf(cur.getItemMeta().getDisplayName()) : null;
+                final AbstractCustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? AbstractCustomEnchant.valueOf(cur.getItemMeta().getDisplayName()) : null;
                 if(r >= 4 && r <= 8
                         || r >= 13 && r <= 17
                         || r >= 22 && r <= 26
@@ -919,7 +921,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 } else if(top.firstEmpty() < 0) {
                     return;
                 } else if(e != null) {
-                    final EnchantRarity R = EnchantRarity.valueOf(e);
+                    final AbstractEnchantRarity R = AbstractEnchantRarity.valueOf(e);
                     final Fireball f = Fireball.valueOf(Arrays.asList(R));
                     if(f != null) {
                         final ItemStack itemstack = f.getItem();
@@ -933,8 +935,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     for(Enchantment enchant : cur.getEnchantments().keySet())
                         xp += Integer.parseInt(config.getString("tinkerer.enchant values." + enchant.getName().toLowerCase()));
                     if(cur.hasItemMeta() && cur.getItemMeta().hasLore()) {
-                        final HashMap<CustomEnchant, Integer> enchants = getEnchants(cur);
-                        for(CustomEnchant enchant : enchants.keySet()) xp += enchant.getTinkererValue(enchants.get(enchant));
+                        final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(cur);
+                        for(AbstractCustomEnchant enchant : enchants.keySet()) xp += enchant.getTinkererValue(enchants.get(enchant));
                     }
                     if(xp != 0) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
                 } else {
@@ -1023,7 +1025,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                 } else if(current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore()) {
                     final ItemMeta cm = current.getItemMeta();
-                    final CustomEnchant enchant = CustomEnchant.valueOf(cm.getDisplayName());
+                    final AbstractCustomEnchant enchant = CustomEnchant.valueOf(cm.getDisplayName());
                     final MagicDust dust = enchant == null ? MagicDust.valueOf(event.getCurrentItem()) : null;
                     final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, d = cm.getDisplayName();
                     final int F = top.firstEmpty();
@@ -1067,7 +1069,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                                     }
                                 }
                             } else {
-                                final EnchantRarity rar = EnchantRarity.valueOf(enchant);
+                                final AbstractEnchantRarity rar = AbstractEnchantRarity.valueOf(enchant);
                                 final String SUCCESS = rar.getSuccess(), DESTROY = rar.getDestroy();
                                 final int level = getEnchantmentLevel(cm.getDisplayName());
                                 if(level >= enchant.getMaxLevel()) return;
@@ -1156,7 +1158,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final ItemMeta cm = cursor.getItemMeta();
                 final String d = cm.getDisplayName();
 
-                final CustomEnchant enchant = CustomEnchant.valueOf(d);
+                final AbstractCustomEnchant enchant = CustomEnchant.valueOf(d);
                 final int level = getEnchantmentLevel(d);
                 int enchantsize = 0;
                 final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(d), current);
@@ -1173,7 +1175,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                     CustomEnchantApplyResult result = null;
                     if(enchant != null) {
-                        final EnchantRarity rar = EnchantRarity.valueOf(enchant);
+                        final AbstractEnchantRarity rar = AbstractEnchantRarity.valueOf(enchant);
                         final List<String> cml = cm.getLore();
                         final int success = getRemainingInt(cml.get(rar.getSuccessSlot())), destroy = getRemainingInt(cml.get(rar.getDestroySlot()));
                         int prevlevel = -1, prevslot = -1, haspermfor = 0, eoIncrement = 0;
@@ -1181,7 +1183,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             if(player.hasPermission("RandomPackage.levelcap." + i))
                                 haspermfor = i;
                         for(int z = 0; z < lore.size(); z++) {
-                            final CustomEnchant e = CustomEnchant.valueOf(lore.get(z));
+                            final AbstractCustomEnchant e = CustomEnchant.valueOf(lore.get(z));
                             if(e != null) {
                                 enchantsize += 1;
                                 if(e.equals(enchant)) {
@@ -1199,9 +1201,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             return;
                         } else {
                             final String requires = enchant.getRequiredEnchant();
-                            final CustomEnchant replaces = requires != null ? CustomEnchant.valueOf(requires.split(";")[0]) : null;
+                            final AbstractCustomEnchant replaces = requires != null ? AbstractCustomEnchant.valueOf(requires.split(";")[0]) : null;
                             final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
-                            final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchants(current) : null;
+                            final HashMap<AbstractCustomEnchant, Integer> enchants = replaces != null ? getEnchants(current) : null;
                             if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) return;
                             //
                             if(random.nextInt(100) <= success) {
@@ -1214,7 +1216,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                                     final ArrayList<String> newlore = new ArrayList<>();
                                     for(String s : lore) {
                                         if(!did) R += 1;
-                                        final CustomEnchant ce = CustomEnchant.valueOf(s);
+                                        final AbstractCustomEnchant ce = CustomEnchant.valueOf(s);
                                         if(ce != null) {
                                             if(ce.equals(replaces)) did = true;
                                             newlore.add(s);
@@ -1304,11 +1306,11 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         if(event.isCancelled()) return;
         else if(top.getType().equals(InventoryType.ANVIL)) {
             if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore() || event.getClick().equals(ClickType.NUMBER_KEY)) {
-                CustomEnchant enchant = null;
+                AbstractCustomEnchant enchant = null;
                 final int hb = event.getHotbarButton();
                 item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
                 if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-                    enchant = CustomEnchant.valueOf(item.getItemMeta().getDisplayName());
+                    enchant = AbstractCustomEnchant.valueOf(item.getItemMeta().getDisplayName());
                 if(enchant != null) {
                     event.setCancelled(true);
                     player.updateInventory();
@@ -1322,10 +1324,10 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             int enchantcount = -1;
             if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
                 item = current; itemMeta = current.getItemMeta(); lore.clear();
-                final CustomEnchant enchant = CustomEnchant.valueOf(current);
+                final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(current);
                 final RandomizationScroll randomizationscroll = RandomizationScroll.valueOf(cursor);
                 if(enchant != null && randomizationscroll != null) {
-                    final EnchantRarity r = EnchantRarity.valueOf(enchant);
+                    final AbstractEnchantRarity r = AbstractEnchantRarity.valueOf(enchant);
                     if(randomizationscroll.getAppliesToRarities().contains(r)) {
                         final String s = r.getSuccess(), d = r.getDestroy();
                         int newSuccess = random.nextInt(101), newDestroy = random.nextInt(101);
@@ -1342,7 +1344,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                         success = true;
                     }
                 }
-                HashMap<CustomEnchant, Integer> enchantmentsonitem = null;
+                HashMap<AbstractCustomEnchant, Integer> enchantmentsonitem = null;
                 if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
                 if(cursor.getItemMeta().equals(whitescroll.getItemMeta())) {
                     final String t = item.getType().name();
@@ -1380,7 +1382,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                     final MagicDust dust = bs == null ? MagicDust.valueOf(cursor) : null;
                     if(dust != null && enchant != null) {
-                        final EnchantRarity ra = EnchantRarity.valueOf(enchant);
+                        final AbstractEnchantRarity ra = AbstractEnchantRarity.valueOf(enchant);
                         if(dust.getAppliesTo().contains(ra)) {
                             final String SUCCESS = ra.getSuccess();
                             int percent = -1;
@@ -1501,15 +1503,15 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     }
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
         item = null;
-        final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
+        final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(is);
         if(is != null && enchants.size() > 0) {
-            final Set<CustomEnchant> key = enchants.keySet();
+            final Set<AbstractCustomEnchant> key = enchants.keySet();
             CustomEnchant enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
-            final List<EnchantRarity> a = bs.getAppliesTo();
+            final List<AbstractEnchantRarity> a = bs.getAppliesTo();
             int successP = -1;
             for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
             for(int f = 1; f <= 5; f++) {
-                final EnchantRarity r = EnchantRarity.valueOf(enchant);
+                final AbstractEnchantRarity r = AbstractEnchantRarity.valueOf(enchant);
                 if(a.contains(r)) {
                     int enchantlevel = enchants.get(enchant);
                     itemMeta = is.getItemMeta(); lore.clear(); lore.addAll(itemMeta.getLore());
@@ -1567,16 +1569,16 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     public boolean applyTransmogScroll(ItemStack is) {
         final String currentitem = is != null ? is.getType().name() : null;
         if(currentitem != null && (currentitem.endsWith("AXE") || currentitem.endsWith("SWORD") || currentitem.endsWith("SPADE") || currentitem.equals("BOW") || currentitem.endsWith("HELMET") || currentitem.endsWith("CHESTPLATE") || currentitem.endsWith("LEGGINGS") || currentitem.endsWith("BOOTS"))) {
-            final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
+            final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(is);
             final int size = enchants.keySet().size(), prevsize = enchants.keySet().size();
             itemMeta = is.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) {
                 final List<String> l = itemMeta.getLore();
                 for(String ss : transmog_organization) {
-                    final EnchantRarity r = EnchantRarity.rarities.get(ss);
+                    final AbstractEnchantRarity r = AbstractEnchantRarity.rarities.get(ss);
                     for(String s : l) {
-                        final CustomEnchant enchant = CustomEnchant.valueOf(s);
-                        if(enchant != null && EnchantRarity.valueOf(enchant).equals(r)) lore.add(s);
+                        final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s);
+                        if(enchant != null && AbstractEnchantRarity.valueOf(enchant).equals(r)) lore.add(s);
                     }
                 }
                 String soultracker = null;

@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
@@ -10,19 +12,24 @@ import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public abstract class AbstractCustomExplosion extends Saveable {
-
+public abstract class AbstractCustomExplosion extends AbstractRPFeature {
+    public static HashMap<NamespacedKey, AbstractCustomExplosion> explosions;
     private static Random random = new Random();
+
+    public void created(NamespacedKey key) {
+        if(explosions == null) explosions = new HashMap<>();
+        explosions.put(key, this);
+    }
+
+    public abstract ItemStack getItem();
     public abstract List<String> getAttributes();
     public abstract void didExplode(UUID uuid, List<Block> blockList);
 
@@ -125,5 +132,15 @@ public abstract class AbstractCustomExplosion extends Saveable {
                 if(!mobspawner) block.breakNaturally();
             }
         }
+    }
+    public static AbstractCustomExplosion valueOf(ItemStack is) {
+        if(explosions != null) {
+            for(AbstractCustomExplosion c : explosions.values()) {
+                if(c.getItem().isSimilar(is)) {
+                    return c;
+                }
+            }
+        }
+        return null;
     }
 }

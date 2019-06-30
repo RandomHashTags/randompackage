@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events.customenchant;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RandomizationScroll;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,11 +9,11 @@ import org.bukkit.event.Cancellable;
 public class RandomizationScrollUseEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
     public final Player player;
-    public final CustomEnchant customenchant;
+    public final AbstractCustomEnchant customenchant;
     public final int enchantlevel;
     public final RandomizationScroll scroll;
     private int newSuccess, newDestroy;
-    public RandomizationScrollUseEvent(Player player, CustomEnchant customenchant, int enchantlevel, RandomizationScroll scroll, int newSuccess, int newDestroy) {
+    public RandomizationScrollUseEvent(Player player, AbstractCustomEnchant customenchant, int enchantlevel, RandomizationScroll scroll, int newSuccess, int newDestroy) {
         this.player = player;
         this.customenchant = customenchant;
         this.enchantlevel = enchantlevel;

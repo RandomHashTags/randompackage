@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.classes.kits.FallenHero;
 import me.randomhashtags.randompackage.utils.classes.kits.KitItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCustomKit extends Saveable {
+public abstract class AbstractCustomKit extends AbstractRPFeature {
     private List<KitItem> items;
 
     public int getSlot() { return yml.getInt("gui settings.slot"); }

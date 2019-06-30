@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,37 +15,25 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public class EnchantRarity {
-    public static HashMap<String, EnchantRarity> rarities;
-
+public class EnchantRarity extends AbstractEnchantRarity {
     private YamlConfiguration settingsYaml;
-    private String[] revealedEnchantRarities;
     private List<String> revealedEnchantMsg, loreFormat;
     private ItemStack revealItem, revealedItem;
     private boolean successDestroy100;
-    private String name, nameColors, applyColors, success, destroy;
+    private String name;
     private Firework firework;
-    private int successSlot, destroySlot;
-    protected List<CustomEnchant> enchants;
+    protected List<AbstractCustomEnchant> enchants;
     public EnchantRarity(File folder, File f) {
-        if(rarities == null) {
-            rarities = new HashMap<>();
-        }
+        if(rarities == null) rarities = new HashMap<>();
         settingsYaml = YamlConfiguration.loadConfiguration(f);
         name = folder.getName().split("\\.yml")[0];
         successDestroy100 = settingsYaml.getBoolean("settings.success+destroy=100");
-        successSlot = -1;
-        destroySlot = -1;
         enchants = new ArrayList<>();
         rarities.put(name, this);
     }
-
     public YamlConfiguration getSettingsYaml() { return settingsYaml; }
     public String getName() { return name; }
-    public String[] getRevealedEnchantRarities() {
-        if(revealedEnchantRarities == null) revealedEnchantRarities = settingsYaml.getString("reveals enchant rarities").split(";");
-        return revealedEnchantRarities;
-    }
+    public String[] getRevealedEnchantRarities() { return settingsYaml.getString("reveals enchant rarities").split(";"); }
     public List<String> getRevealedEnchantMsg() {
         if(revealedEnchantMsg == null) revealedEnchantMsg = api.colorizeListString(settingsYaml.getStringList("reveal enchant msg"));
         return revealedEnchantMsg;
@@ -56,35 +46,17 @@ public class EnchantRarity {
         if(revealedItem == null) revealedItem = api.d(settingsYaml, "revealed item");
         return revealedItem != null ? revealedItem.clone() : null;
     }
-    public String getNameColors() {
-        if(nameColors == null) nameColors = ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("revealed item.name colors"));
-        return nameColors;
-    }
-    public String getApplyColors() {
-        if(applyColors == null) applyColors = ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("revealed item.apply colors"));
-        return applyColors;
-    }
+    public String getNameColors() { return ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("revealed item.name colors")); }
+    public String getApplyColors() { return ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("revealed item.apply colors")); }
     public boolean percentsAddUpto100() { return successDestroy100; }
-    public String getSuccess() {
-        if(success == null) success = ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("settings.success"));
-        return success;
-    }
-    public String getDestroy() {
-        if(destroy == null) destroy = ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("settings.destroy"));
-        return destroy;
-    }
+    public String getSuccess() { return ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("settings.success")); }
+    public String getDestroy() { return ChatColor.translateAlternateColorCodes('&', settingsYaml.getString("settings.destroy")); }
     public List<String> getLoreFormat() {
         if(loreFormat == null) loreFormat = api.colorizeListString(settingsYaml.getStringList("settings.lore format"));
         return loreFormat;
     }
-    public int getSuccessSlot() {
-        if(successSlot == -1) successSlot = getLoreFormat().indexOf("{SUCCESS}");
-        return successSlot;
-    }
-    public int getDestroySlot() {
-        if(destroySlot == -1) destroySlot = getLoreFormat().indexOf("{DESTROY}");
-        return destroySlot;
-    }
+    public int getSuccessSlot() { return getLoreFormat().indexOf("{SUCCESS}"); }
+    public int getDestroySlot() { return getLoreFormat().indexOf("{DESTROY}"); }
     public Firework getFirework() {
         if(firework == null) {
             final String[] a = settingsYaml.getString("revealed item.firework").split(":");
@@ -92,30 +64,6 @@ public class EnchantRarity {
         }
         return firework;
     }
-    public List<CustomEnchant> getEnchants() { return enchants; }
+    public List<AbstractCustomEnchant> getEnchants() { return enchants; }
 
-    public static EnchantRarity valueOf(ItemStack is) {
-        if(is != null && rarities != null) {
-            for(EnchantRarity r : rarities.values()) {
-                final ItemStack re = r.getRevealItem();
-                if(re != null && re.isSimilar(is)) {
-                    return r;
-                }
-            }
-        }
-        return null;
-    }
-    public static EnchantRarity valueOf(CustomEnchant enchant) {
-        if(rarities != null) {
-            for(EnchantRarity e : rarities.values()) {
-                if(e.enchants.contains(enchant)) {
-                    return e;
-                }
-            }
-        }
-        return null;
-    }
-    public static void deleteAll() {
-        rarities = null;
-    }
 }

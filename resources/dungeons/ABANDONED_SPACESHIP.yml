@@ -12,6 +12,26 @@ messages:
     - "&6The portal has closed, &n{PLAYERS}&r &6player(s) made it into the"
     - "&5&l&nAbandoned Spaceship&r &6/dungeon!"
     - " "
+  #
+  completed:
+    - " "
+    - "&6&l*-*-* DUNGEON COMPLETE! *-*-*"
+    - "&6The &5&l&nAbandoned Spaceship&r &6has been cleared by: &7{PLAYERS} &6in {TIME}"
+    - " "
+    - "&6&l(!)&r &6Their team has completed &l&n{COMPLETED}&r &6Dungeon Challenges:"
+    - "&6&l*&r &a{CHALLENGE}"
+    - "&7Loot the challenge chests for bonus dungeon items!"
+    - " "
+#
+challenges:
+  guardian:
+    name: "Guardian"
+  nimble feet:
+    name: "Nimble Feet"
+  on a roll:
+    name: "On a Roll"
+  overload:
+    name: "Overload"
 #
 settings:
   location: "world;300;100;300;0;0"

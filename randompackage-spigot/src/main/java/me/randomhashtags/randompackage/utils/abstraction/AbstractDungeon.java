@@ -1,13 +1,12 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractDungeon extends Saveable {
+public abstract class AbstractDungeon extends AbstractRPFeature {
     private long fastestCompletion;
     private ItemStack display, key, keyLocked, lootbag;
 

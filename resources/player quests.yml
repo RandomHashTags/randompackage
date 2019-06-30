@@ -139,13 +139,13 @@ shop:
   soul gem:
     item: "raritygem:SOUL:50"
   gigantic tnt:
-    item: "customtnt:GIGANTIC;amount=64"
+    item: "customexplosion:TNT_GIGANTIC;amount=64"
   lethal tnt:
-    item: "customtnt:LETHAL;amount=32"
+    item: "customexplosion:TNT_LETHAL;amount=32"
   lucky creeper:
-    item: "customcreeper:LUCKY"
+    item: "customexplosion:CREEPER_LUCKY"
   gigantic creeper:
-    item: "customcreeper:GIGANTIC;amount=2"
+    item: "customexplosion:CREEPER_GIGANTIC;amount=2"
   white scroll:
     item: "whitescroll"
     cost: 5

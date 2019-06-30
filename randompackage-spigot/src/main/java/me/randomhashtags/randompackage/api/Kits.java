@@ -4,8 +4,8 @@ import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
 import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
@@ -759,14 +759,14 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                             if(s.startsWith("{") && s.contains("reqlevel=")) {
                                 final String[] a = s.split(":");
                                 final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
-                                final CustomEnchant enchant = CustomEnchant.valueOf(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(random.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
                                     lore.add(EnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
                                 final String r = s.split(":")[random.nextInt(s.split(":").length)];
                                 int level = getRemainingInt(s.split("\\{")[1].split("}")[0]);
-                                final CustomEnchant enchant = CustomEnchant.valueOf(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
 
                                 if(enchant != null) {
                                     if(level == -1) level = random.nextInt(enchant.getMaxLevel());
@@ -813,7 +813,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             for(String string : itemMeta.getLore()) {
                 final String sl = string.toLowerCase();
                 if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
-                    final CustomEnchant en = CustomEnchant.valueOf(string.split("\\{")[1].split("}")[0]);
+                    final AbstractCustomEnchant en = AbstractCustomEnchant.valueOf(string.split("\\{")[1].split("}")[0]);
                     final boolean c = string.contains("chance=");
                     if(en != null && !c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1])) {
                         final int lvl = random.nextInt(en.getMaxLevel()+1);

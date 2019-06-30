@@ -1,10 +1,11 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.classes.FactionUpgradeType;
 
 import java.util.List;
 
-public abstract class AbstractFactionUpgrade extends Saveable {
+public abstract class AbstractFactionUpgrade extends AbstractRPFeature {
 
     public FactionUpgradeType getType() { return FactionUpgradeType.types.getOrDefault(yml.getString("settings.type"), null); }
     public int getSlot() { return yml.getInt("settings.slot"); }

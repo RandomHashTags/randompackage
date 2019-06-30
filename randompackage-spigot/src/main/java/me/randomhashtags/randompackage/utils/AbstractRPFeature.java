@@ -1,11 +1,13 @@
-package me.randomhashtags.randompackage.utils.abstraction;
+package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public abstract class Saveable {
-    protected File file;
+public abstract class AbstractRPFeature {
+    public static final RandomPackageAPI api = RandomPackageAPI.api;
+    private File file;
     protected YamlConfiguration yml;
     public void load(File file) {
         if(!file.exists()) {

@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "A Big Grind"
+  completion: 5000
+  expiration: 86400
+#
+lore:
+- "&7Kill 5,000 Magma Cubes"
+#
+rewards:
+- "questtokens=3: 3x Quest Tokens"
+#
+trigger:
+- "KilledEntity;type=MAGMA_CUBE;+1"

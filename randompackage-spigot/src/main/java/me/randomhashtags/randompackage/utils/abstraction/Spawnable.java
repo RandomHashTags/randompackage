@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -8,7 +9,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
 
-public abstract class Spawnable extends Saveable {
+public abstract class Spawnable extends AbstractRPFeature {
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
     public boolean canSpawnAtFactionClaim(Location l) { return canSpawnAtFactionClaim(null, l); }
@@ -28,7 +29,7 @@ public abstract class Spawnable extends Saveable {
         }
         return true;
     }
-    private RegionPlugin getSpawnType() {
+    public RegionPlugin getSpawnType() {
         if(spawnType == null) {
             final PluginManager pm = Bukkit.getPluginManager();
             if(pm.isPluginEnabled("Factions")) {
@@ -46,7 +47,7 @@ public abstract class Spawnable extends Saveable {
     public boolean canSpawnAtCoopIsland() { return yml.getBoolean("spawnable regions.skyblock.coop island"); }
     public boolean canSpawnAtVisitingIsland() { return yml.getBoolean("spawnable regions.skyblock.while visiting"); }
 
-    private boolean canSpawnSkyblock(RegionPlugin type, Location l) {
+    public boolean canSpawnSkyblock(RegionPlugin type, Location l) {
         // TODO
         return false;
     }
@@ -60,7 +61,6 @@ public abstract class Spawnable extends Saveable {
             default: return true;
         }
     }
-
     private enum RegionPlugin {
         FACTIONS_UUID, ASKYBLOCK, SUPERIOR_SKYBLOCK
     }

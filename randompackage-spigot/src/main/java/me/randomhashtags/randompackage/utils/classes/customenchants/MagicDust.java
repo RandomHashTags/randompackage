@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ public class MagicDust {
 	private MagicDust upgradesto;
 	private ItemStack is;
 	private int chance, minpercent, maxpercent, upgradecost;
-	private List<EnchantRarity> appliesto;
+	private List<AbstractEnchantRarity> appliesto;
 	public MagicDust(String path) {
 		if(dust == null) {
 			dust = new HashMap<>();
@@ -58,11 +59,11 @@ public class MagicDust {
 	public int getChance() { return chance; }
 	public int getMinPercent() { return minpercent; }
 	public int getMaxPercent() { return maxpercent; }
-	public List<EnchantRarity> getAppliesTo() {
+	public List<AbstractEnchantRarity> getAppliesTo() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : dusts.getString("dusts." + path + ".applies to").split(";")) {
-				appliesto.add(EnchantRarity.rarities.get(s));
+				appliesto.add(AbstractEnchantRarity.rarities.get(s));
 			}
 		}
 		return appliesto;

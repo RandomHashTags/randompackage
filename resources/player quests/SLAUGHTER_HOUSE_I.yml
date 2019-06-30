@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Slaughter House I"
+  completion: 5
+  expiration: 86400
+#
+lore:
+- "&7Kill 5 enemy faction players"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "KilledPlayer;isEnemy;+1"

@@ -1,0 +1,12 @@
+# Made by RandomHashTags
+settings:
+  slot: 4
+#
+teleport locations:
+  - world;100;100;100;0;0
+  - world;100;100;-100;90;0
+#
+item:
+  item: "snowball"
+  name: "&b&lIce Arena"
+#

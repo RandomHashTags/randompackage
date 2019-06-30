@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomBoss;
 import me.randomhashtags.randompackage.utils.classes.custombosses.*;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomMinion;
@@ -22,10 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CustomBosses extends RPFeature {
 	private static CustomBosses instance;
@@ -57,14 +56,15 @@ public class CustomBosses extends RPFeature {
 		}
 		loadBackup();
 		addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
-		final HashMap<String, CustomBoss> C = CustomBoss.bosses;
+		final HashMap<NamespacedKey, AbstractCustomBoss> C = AbstractCustomBoss.bosses;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (C != null ? C.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		backup();
-		LivingCustomBoss.deleteAll();
+		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
-		CustomBoss.deleteAll();
+		AbstractCustomBoss.bosses = null;
+		AbstractCustomBoss.spawnType = null;
 		deadBosses = null;
 	}
 
@@ -112,7 +112,7 @@ public class CustomBosses extends RPFeature {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack I = event.getItem();
 		if(I != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			final CustomBoss c = CustomBoss.valueOf(I);
+			final AbstractCustomBoss c = AbstractCustomBoss.valueOf(I);
 			if(c != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);

@@ -155,12 +155,14 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			final boolean c = S.contains(";chance"), C = s.startsWith("chance=");
 			final int i = C ? Integer.parseInt(S.split("chance=")[1].split("-")[0]) : c ? Integer.parseInt(S.split(";chance=")[1]) : 100;
 			if(random.nextInt(101) <= i) {
+				final String original = C ? s.split("chance=" + i + "->")[1] : c ? s.split(";chance=")[0] : s;
 				String r = C ? S.split("chance=" + i + "->")[1] : c ? S.split(";chance=")[0] : s;
 				if(r.contains("||")) {
 					final String[] a = r.split("\\|\\|");
-					r = a[random.nextInt(a.length)];
+					r = original.split("\\|\\|")[random.nextInt(a.length)];
 				}
-				L.add(d(null, r));
+				final ItemStack is = d(null, r);
+				if(is != null && !is.getType().equals(Material.AIR)) L.add(is);
 			}
 		}
 		return L;

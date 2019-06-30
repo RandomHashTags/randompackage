@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractPlayerQuest extends Saveable {
+public abstract class AbstractPlayerQuest extends AbstractRPFeature {
     public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public long getExpiration() { return yml.getLong("settings.expiration"); }

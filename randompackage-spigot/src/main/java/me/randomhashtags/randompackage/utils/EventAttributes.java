@@ -7,6 +7,8 @@ import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.api.events.ShopSellEvent;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -206,10 +208,10 @@ public abstract class EventAttributes extends RPFeature {
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
-                if(a.startsWith("envoycrateclaim;")) {
+                if(a.startsWith("envoycratelooted;")) {
                     final String[] original = s.split(s.split(";")[0] + ";")[1].split(";");
                     int i = 0;
-                    for(String A : a.split("envoycrateclaim;")[1].split(";")) {
+                    for(String A : a.split("envoycratelooted;")[1].split(";")) {
                         if(A.startsWith("cancelled=")) {
                             did = cancelled && Boolean.parseBoolean(A.split("=")[1]);
                         } else if(A.startsWith("tier=")) {
@@ -227,7 +229,7 @@ public abstract class EventAttributes extends RPFeature {
     public String executeAttributes(Player player, PlayerApplyCustomEnchantEvent event, List<String> attributes) {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
-            final CustomEnchant enchant = event.enchant;
+            final AbstractCustomEnchant enchant = event.enchant;
             final String rarity = EnchantRarity.valueOf(enchant).getName(), name = enchant.getYamlName(), result = event.result.name();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
@@ -256,7 +258,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final ItemStack is = event.purchased;
-            final EnchantRarity r = EnchantRarity.valueOf(is);
+            final AbstractEnchantRarity r = EnchantRarity.valueOf(is);
             final boolean cancelled = event.isCancelled(), isRarityBook = r != null;
             final String rarity = isRarityBook ? r.getName() : null;
             for(String s : attributes) {

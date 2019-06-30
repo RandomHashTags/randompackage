@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomExplosion;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,24 +14,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class CustomTNT extends AbstractCustomExplosion {
-    public static HashMap<String, CustomTNT> tnt;
     public static HashMap<Location, CustomTNT> placed;
     public static HashMap<UUID, CustomTNT> primed;
-    private static Random random;
 
     private ItemStack item;
     public CustomTNT(File f) {
-        if(tnt == null) {
-            tnt = new HashMap<>();
+        if(placed == null) {
             placed = new HashMap<>();
             primed = new HashMap<>();
-            random = new Random();
         }
         load(f);
-        tnt.put(getYamlName(), this);
+        created(new NamespacedKey(getPlugin, "TNT_" + getYamlName()));
     }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
@@ -41,6 +38,7 @@ public class CustomTNT extends AbstractCustomExplosion {
         primed.remove(uuid);
         final HashMap<Location, CustomTNT> p = CustomTNT.placed;
         if(p != null) {
+            final Random random = api.random;
             for(Block b : blockList) {
                 final Location lo = b.getLocation();
                 if(p.containsKey(lo)) {
@@ -66,21 +64,8 @@ public class CustomTNT extends AbstractCustomExplosion {
         placed.remove(l);
         return spawn(l);
     }
-
-    public static CustomTNT valueOf(ItemStack is) {
-        if(tnt != null) {
-            for(CustomTNT t : tnt.values()) {
-                if(t.getItem().isSimilar(is)) {
-                    return t;
-                }
-            }
-        }
-        return null;
-    }
     public static void deleteAll() {
-        tnt = null;
         placed = null;
         primed = null;
-        random = null;
     }
 }

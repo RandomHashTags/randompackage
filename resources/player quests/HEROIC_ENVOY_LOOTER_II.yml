@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "EnvoyCrateClaim;tier=LEGENDARY;+1"
+- "EnvoyCrateLooted;tier=LEGENDARY;+1"

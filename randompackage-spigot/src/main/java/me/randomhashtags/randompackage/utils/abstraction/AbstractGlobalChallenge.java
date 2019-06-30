@@ -1,13 +1,12 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractGlobalChallenge extends Saveable {
+public abstract class AbstractGlobalChallenge extends AbstractRPFeature {
     private ItemStack display;
     private Set<UUID> participants;
     public long started;

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,9 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractMonthlyCrate extends Saveable {
+public abstract class AbstractMonthlyCrate extends AbstractRPFeature {
     protected static Random random = new Random();
     public static HashMap<Player, List<String>> revealedRegular, revealedBonus;
 

@@ -1,0 +1,28 @@
+# Made by RandomHashTags
+messages:
+  activate:
+    - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} XP&r &aFaction Booster! &7[{TIME} left]"
+  expired:
+    - "&c&l(!) {MULTIPLIER}x&r &cEXP Booster from &l{PLAYER}&r &chas expired!"
+    - "&cPurchase another booster at &nbuy.yourserver.com!"
+  notify:
+    - "&a&l+ {MULTIPLIER}x EXP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
+#
+settings:
+  type: FACTION_XP
+#
+item:
+  item: "emerald"
+  name: "&b&lFaction &nXP&r &b&lBooster"
+  lore:
+  - "&7Multiplies XP gained by all faction"
+  - "&7members from killing mobs while active."
+  - " "
+  - "&7Right-Click to activate."
+  - " "
+  - "&d&lMULTIPLIER"
+  - "&7{MULTIPLIER}x"
+  - " "
+  - "&d&lDURATION"
+  - "&7{TIME}"
+#

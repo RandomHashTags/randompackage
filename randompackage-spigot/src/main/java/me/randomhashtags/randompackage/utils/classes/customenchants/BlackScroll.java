@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ public class BlackScroll {
 	private String path;
 	private int min, max;
 	private ItemStack is;
-	private List<EnchantRarity> appliesto;
+	private List<AbstractEnchantRarity> appliesto;
 	public BlackScroll(String path) {
 		if(scrolls == null) {
 			scrolls = new HashMap<>();
@@ -73,11 +74,11 @@ public class BlackScroll {
 	public int getMinPercent() { return min; }
 	public int getMaxPercent() { return max; }
 	public int getRandomPercent() { return min + random.nextInt(max-min+1); }
-	public List<EnchantRarity> getAppliesTo() {
+	public List<AbstractEnchantRarity> getAppliesTo() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : yml.getString("scrolls." + path + ".applies to").split(";")) {
-				appliesto.add(EnchantRarity.rarities.get(s));
+				appliesto.add(AbstractEnchantRarity.rarities.get(s));
 			}
 		}
 		return appliesto;

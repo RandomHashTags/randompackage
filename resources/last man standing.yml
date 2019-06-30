@@ -20,6 +20,12 @@ messages:
     - " "
     - "{SURVIVOR}"
     - " "
+  has faction format: "&e{FACTION} &l{PLAYER}"
+  new last man standing:
+    - "&6&lLMS >&r &e&l{PLAYER}&r &e is the new &nWarzone LMS,&r &ethey have survived in the main /spawn warzone for &6{MIN} minute(s) &eat: &6&l{X}x, {Y}y, {Z}z!"
+  have gained conjunction: " &eand "
+  have gained:
+    - "&6&lLMS >&r &eThey have gained {REWARDS}"
 #
 rewards:
   - ""

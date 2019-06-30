@@ -1,0 +1,20 @@
+# Made by RandomHashTags
+enabled: false
+#
+name: "Demonic Lifesteal"
+lore:
+- "&eHeals much more HP at a greatly"
+- "&eincreased rate compared to normal"
+- "&eLifesteal. Once applied this"
+- "&eenchantment can only be extracted"
+- "&efrom items with heroic black scrolls."
+#
+max level: 3
+applies to: "sword"
+#
+alchemist: ""
+tinkerer: ""
+requires: "Lifesteal;3"
+#
+attributes:
+- ""

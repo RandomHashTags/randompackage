@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.utils.classes.living;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDeathEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossSpawnEvent;
-import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBoss;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomBoss;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBossAttack;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomMinion;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -31,10 +31,10 @@ public class LivingCustomBoss extends UVersion {
     public static HashMap<UUID, LivingCustomBoss> living;
 
     public LivingEntity summoner, entity;
-    public CustomBoss type;
+    public AbstractCustomBoss type;
     public List<LivingCustomMinion> minions;
     public HashMap<UUID, Double> damagers;
-    public LivingCustomBoss(LivingEntity summoner, LivingEntity entity, CustomBoss type) {
+    public LivingCustomBoss(LivingEntity summoner, LivingEntity entity, AbstractCustomBoss type) {
         if(living == null) {
             living = new HashMap<>();
         }
@@ -284,8 +284,5 @@ public class LivingCustomBoss extends UVersion {
             }
         }
         return total != 0.00 ? (dmg/total)*100 : 0.00;
-    }
-    public static void deleteAll() {
-        living = null;
     }
 }

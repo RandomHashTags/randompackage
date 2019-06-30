@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomExplosion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,20 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class CustomCreeper extends AbstractCustomExplosion {
-    public static HashMap<String, CustomCreeper> creepers;
     public static HashMap<UUID, CustomCreeper> living;
 
     private ItemStack item;
     public CustomCreeper(File f) {
-        if(creepers == null) {
-            creepers = new HashMap<>();
-            living = new HashMap<>();
-        }
+        if(living == null) living = new HashMap<>();
         load(f);
-        creepers.put(getYamlName(), this);
+        created(new NamespacedKey(getPlugin, "CREEPER_" + getYamlName()));
     }
     public String getCreeperName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("creeper name")); }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
@@ -43,18 +40,7 @@ public class CustomCreeper extends AbstractCustomExplosion {
         living.remove(uuid);
     }
 
-    public static CustomCreeper valueOf(ItemStack is) {
-        if(creepers != null) {
-            for(CustomCreeper c : creepers.values()) {
-                if(c.getItem().isSimilar(is)) {
-                    return c;
-                }
-            }
-        }
-        return null;
-    }
     public static void deleteAll() {
-        creepers = null;
         living = null;
     }
 }

@@ -1,5 +1,12 @@
 # Made by RandomHashTags
 messages:
+  portal placed:
+    - " "
+    - "&6&l*** DUNGEON PORTAL ***"
+    - "{PLAYER} &6has placed a dungeon portal to"
+    - "&4&l&nDestroyed Outpost&r &6at: &e{X}x, {Y}y, {Z}z"
+    - "&6The portal will close in &n{TIME},&r &6queue up fast!"
+    - " "
   portal closes in:
     - " "
     - "&6&l*** DUNGEON PORTAL ***"

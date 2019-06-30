@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,7 +17,7 @@ public class Fireball {
 	
 	private String path;
 	private ItemStack is;
-	private List<EnchantRarity> exchangeablerarities;
+	private List<AbstractEnchantRarity> exchangeablerarities;
 	private List<String> reveals;
 
 	public Fireball(String path) {
@@ -48,12 +49,12 @@ public class Fireball {
 		}
 		return null;
 	}
-	public List<EnchantRarity> getExchangeableRarities() {
+	public List<AbstractEnchantRarity> getExchangeableRarities() {
 		if(exchangeablerarities == null) {
 			exchangeablerarities = new ArrayList<>();
 			final String e = config.getString("fireballs." + path + ".exchangeable rarities");
 			for(String s : e.split(";")) {
-				exchangeablerarities.add(EnchantRarity.rarities.get(s));
+				exchangeablerarities.add(AbstractEnchantRarity.rarities.get(s));
 			}
 		}
 		return exchangeablerarities;
@@ -71,7 +72,7 @@ public class Fireball {
 		}
 		return null;
 	}
-	public static Fireball valueOf(List<EnchantRarity> exchangeablerarities) {
+	public static Fireball valueOf(List<AbstractEnchantRarity> exchangeablerarities) {
 		if(fireballs != null) {
 			for(Fireball f : fireballs.values()) {
 				if(f.getExchangeableRarities().equals(exchangeablerarities)) {

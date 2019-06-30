@@ -1,69 +1,66 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
-import java.util.Arrays;
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
 import java.util.List;
+import java.util.TreeMap;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+public abstract class AbstractCustomEnchant extends AbstractRPFeature {
+    public static TreeMap<String, AbstractCustomEnchant> enabled, disabled;
 
-public abstract class AbstractCustomEnchant extends Saveable {
-    private List<String> lore;
-    private String value;
-    private List<String> appliesto;
-    private int[] alchemist, tinkerer;
-
-    public boolean isEnabled() { return yml.getBoolean("enabled"); }
-    public String getName() { return yml.getString("name"); }
-    public List<String> getLore() {
-        if(lore == null) lore = api.colorizeListString(yml.getStringList("lore"));
-        return lore;
+    @Override
+    public void load(File f) {
+        super.load(f);
+        if(enabled == null) {
+            enabled = new TreeMap<>();
+            disabled = new TreeMap<>();
+        }
+        (isEnabled() ? enabled : disabled).put(getYamlName(), this);
     }
-    public int getMaxLevel() { return yml.getInt("max level"); }
-    public List<String> getAppliesTo() {
-        if(appliesto == null) appliesto = Arrays.asList(yml.getString("applies to").split(";"));
-        return appliesto;
-    }
-    public String getRequiredEnchant() { return yml.getString("requires"); }
-    public int[] getAlchemist() {
-        if(alchemist == null) {
-            final String[] a = yml.getString("alchemist").split(":");
-            final int[] alchemist = new int[a.length];
-            int i = 0;
-            for(String s : a) {
-                alchemist[i] = Integer.parseInt(s);
-                i++;
+    public abstract boolean isEnabled();
+    public abstract String getName();
+    public abstract List<String> getLore();
+    public abstract int getMaxLevel();
+    public abstract List<String> getAppliesTo();
+    public abstract String getRequiredEnchant();
+    public abstract int[] getAlchemist();
+    public abstract int getAlchemistUpgradeCost(int level);
+    public abstract int[] getTinkerer();
+    public abstract int getTinkererValue(int level);
+    public abstract String getEnchantProcValue();
+    public abstract List<String> getAttributes();
+
+    public static AbstractCustomEnchant valueOf(String string) { return valueOf(string, false); }
+    public static AbstractCustomEnchant valueOf(String string, boolean checkDisabledEnchants) {
+        if(disabled != null && enabled != null && string != null) {
+            final String s = ChatColor.stripColor(string);
+            for(AbstractCustomEnchant ce : enabled.values()) {
+                if(s.startsWith(ChatColor.stripColor(ce.getName())))
+                    return ce;
             }
-            this.alchemist = alchemist;
-        }
-        return alchemist;
-    }
-    public int getAlchemistUpgradeCost(int level) {
-        final int i = level-1;
-        return i < getAlchemist().length ? alchemist[i] : 0;
-    }
-    public int[] getTinkerer() {
-        if(tinkerer == null) {
-            final String[] t = yml.getString("tinkerer").split(":");
-            final int[] tinkerer = new int[t.length];
-            int i = 0;
-            for(String s : t) {
-                tinkerer[i] = Integer.parseInt(s);
-                i++;
+            if(checkDisabledEnchants) {
+                for(AbstractCustomEnchant ce : disabled.values()) {
+                    if(s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
             }
-            this.tinkerer = tinkerer;
         }
-        return tinkerer;
+        return null;
     }
-    public int getTinkererValue(int level) {
-        final int i = level-1;
-        return i < getTinkerer().length ? tinkerer[i] : 0;
-    }
-    public String getEnchantProcValue() {
-        if(value == null) {
-            for(String s : getAttributes())
-                if(s.toLowerCase().startsWith("enchantproc;value="))
-                    value = s.toLowerCase().split("enchantproc;value=")[1];
+    public static AbstractCustomEnchant valueOf(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final AbstractCustomEnchant e = valueOf(is.getItemMeta().getDisplayName());
+            final AbstractEnchantRarity r = AbstractEnchantRarity.valueOf(e);
+            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
         }
-        return value;
+        return null;
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public static void deleteAll() {
+        enabled = null;
+        disabled = null;
+    }
 }

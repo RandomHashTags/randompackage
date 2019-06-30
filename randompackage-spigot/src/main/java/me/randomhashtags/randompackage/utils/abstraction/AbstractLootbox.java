@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -8,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public abstract class AbstractLootbox extends Saveable {
+public abstract class AbstractLootbox extends AbstractRPFeature {
     private static Random random = new Random();
 
     private List<String> regularLootFormat, jackpotLootFormat, bonusLootFormat;

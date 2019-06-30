@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomExplosion;
 import me.randomhashtags.randompackage.utils.classes.CustomCreeper;
 import me.randomhashtags.randompackage.utils.classes.CustomTNT;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -24,10 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Dispenser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CustomExplosions extends RPFeature {
 	private static CustomExplosions instance;
@@ -77,17 +76,13 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 
-		final HashMap<String, CustomCreeper> C = CustomCreeper.creepers;
-		final HashMap<String, CustomTNT> T = CustomTNT.tnt;
+		final HashMap<NamespacedKey, AbstractCustomExplosion> e = AbstractCustomExplosion.explosions;
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (e != null ? e.size() : null) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (C != null ? C.size() : 0) + " Custom Creepers & " + (T != null ? T.size() : 0) + " Custom TNT &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		final ArrayList<ItemStack> explosions = new ArrayList<>();
+		if(e != null) for(AbstractCustomExplosion ae : e.values()) explosions.add(ae.getItem());
 
-		final ArrayList<ItemStack> creepers = new ArrayList<>(), tnt = new ArrayList<>();
-		if(T != null) for(CustomTNT c : T.values()) tnt.add(c.getItem());
-		if(C != null) for(CustomCreeper c : C.values()) creepers.add(c.getItem());
-
-		addGivedpCategory(creepers, UMaterial.CREEPER_SPAWN_EGG, "Custom Creepers", "Givedp: Custom Creepers");
-		addGivedpCategory(tnt, UMaterial.TNT, "Custom TNT", "Givedp: Custom TNT");
+		addGivedpCategory(explosions, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 
 		int loadedPlaced = 0, loadedPrimed = 0, loadedLiving = 0;
 		final List<String> placedtnt = a.getStringList("tnt.placed"), primedtnt = a.getStringList("tnt.primed"), livingcreepers = a.getStringList("creepers");
@@ -95,7 +90,7 @@ public class CustomExplosions extends RPFeature {
 			for(String s : placedtnt) {
 				final Location l = toLocation(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
-					CustomTNT.placed.put(l, CustomTNT.tnt.get(s.split(":")[1]));
+					CustomTNT.placed.put(l, (CustomTNT) getCustomExplosion(null, "TNT_" + s.split(":")[1]));
 					loadedPlaced += 1;
 				}
 			}
@@ -104,9 +99,9 @@ public class CustomExplosions extends RPFeature {
 		if(primedtnt != null && !primedtnt.isEmpty()) {
 			for(String s : primedtnt) {
 				final UUID u = UUID.fromString(s.split(":")[0]);
-				final Entity e = getEntity(u);
-				if(e != null && !e.isDead()) {
-					CustomTNT.primed.put(u, CustomTNT.tnt.get(s.split(":")[1]));
+				final Entity en = getEntity(u);
+				if(en != null && !en.isDead()) {
+					CustomTNT.primed.put(u, (CustomTNT) getCustomExplosion(null, "TNT_" + s.split(":")[1]));
 					loadedPrimed += 1;
 				}
 			}
@@ -115,9 +110,9 @@ public class CustomExplosions extends RPFeature {
 		if(livingcreepers != null && !livingcreepers.isEmpty()) {
 			for(String s : livingcreepers) {
 				final UUID u = UUID.fromString(s.split(":")[0]);
-				final Entity e = getEntity(u);
-				if(e != null && !e.isDead()) {
-					CustomCreeper.living.put(u, CustomCreeper.creepers.get(s.split(":")[1]));
+				final Entity en = getEntity(u);
+				if(en != null && !en.isDead()) {
+					CustomCreeper.living.put(u, (CustomCreeper) getCustomExplosion(null, "CREEPER_" + s.split(":")[1]));
 					loadedLiving += 1;
 				}
 			}
@@ -166,9 +161,9 @@ public class CustomExplosions extends RPFeature {
 		if(!event.isCancelled()) {
 			final ItemStack i = event.getItemInHand();
 			if(i != null && i.getType().equals(Material.TNT) && i.hasItemMeta()) {
-				final CustomTNT ce = CustomTNT.valueOf(i);
-				if(ce != null) {
-					ce.place(event.getBlockPlaced().getLocation());
+				final AbstractCustomExplosion ce = AbstractCustomExplosion.valueOf(i);
+				if(ce instanceof CustomTNT) {
+					((CustomTNT) ce).place(event.getBlockPlaced().getLocation());
 				}
 			}
 		}
@@ -189,12 +184,12 @@ public class CustomExplosions extends RPFeature {
 					ce.ignite(l);
 				}
 			} else {
-				final CustomCreeper c = CustomCreeper.valueOf(i);
-				if(c != null) {
+				final AbstractCustomExplosion c = AbstractCustomExplosion.valueOf(i);
+				if(c instanceof CustomCreeper) {
 					final Location lo = l.clone().add(0, 1, 0);
 					event.setCancelled(true);
 					removeItem(event.getPlayer(), i, 1);
-					c.spawn(lo);
+					((CustomCreeper) c).spawn(lo);
 				}
 			}
 		}
@@ -204,8 +199,8 @@ public class CustomExplosions extends RPFeature {
 		if(!event.isCancelled()) {
 			final ItemStack it = event.getItem();
 			if(it != null && it.hasItemMeta()) {
-				final CustomTNT ce = CustomTNT.valueOf(it);
-				if(ce != null) {
+				final AbstractCustomExplosion ce = AbstractCustomExplosion.valueOf(it);
+				if(ce instanceof CustomTNT) {
 					event.setCancelled(true);
 					final Block b = event.getBlock();
 					final Location bl = b.getLocation();
@@ -225,7 +220,7 @@ public class CustomExplosions extends RPFeature {
 					if(!bf.equals(BlockFace.EAST) && !bf.equals(BlockFace.WEST)) x += 0.5;
 					if(!bf.name().endsWith("TH")) z += 0.5;
 					final Location l = new Location(b.getWorld(), x, y, z);
-					ce.spawn(l);
+					((CustomTNT) ce).spawn(l);
 
 					org.bukkit.block.Dispenser dis = (org.bukkit.block.Dispenser) b.getState();
 					final Inventory i = dis.getInventory();

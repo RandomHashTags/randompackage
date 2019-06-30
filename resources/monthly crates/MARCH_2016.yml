@@ -36,14 +36,14 @@ rewards:
   - "transmogscroll"
   - "title:38"
   - "mysterymobspawner"
-  - "customcreeper:TACTICAL;amount=1-3"
-  - "customcreeper:GIGANTIC;amount=2-5"
+  - "customexplosion:CREEPER_TACTICAL;amount=1-3"
+  - "customexplosion:CREEPER_GIGANTIC;amount=2-5"
   - "blackscroll:HEROIC:100"
 #
 bonus:
   - "blazespawner"
   - "ghastspawner"
-  - "customcreeper:LUCKY;amount=4-8"
+  - "customexplosion:CREEPER_LUCKY;amount=4-8"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

@@ -52,7 +52,7 @@ regular loot:
   - "vkitgem:LUCKY"
   - "spacedrink;amount=16"
   - "raritygem:SOUL:7500"
-  #- "customboss:PLAGUE_BLOATER"
+  - "customboss:PLAGUE_BLOATER"
 #
 jackpot loot:
   - "enchantmentorb:weapon14;amount=2"
