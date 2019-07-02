@@ -1,7 +1,10 @@
 package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.GivedpItem;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
+import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.supported.SpawnerAPI;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -61,6 +64,96 @@ public class UVersion {
             f.getParentFile().mkdirs();
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
         }
+    }
+    private List<? extends AbstractRPFeature> getFeatures(String plugin, Set<me.randomhashtags.randompackage.utils.NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
+        if(plugin != null) {
+            final List<AbstractRPFeature> a = new ArrayList<>();
+            int i = 0;
+            for(me.randomhashtags.randompackage.utils.NamespacedKey k : keys) {
+                if(k.plugin.getName().equalsIgnoreCase(plugin)) {
+                    a.add((AbstractRPFeature) values.toArray()[i]);
+                }
+                i++;
+            }
+            return a;
+        }
+        return null;
+    }
+    private AbstractRPFeature getFeature(String plugin, String key, Set<me.randomhashtags.randompackage.utils.NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
+        if(key != null) {
+            if(key.equalsIgnoreCase("random")) {
+                if(plugin != null) {
+                    final List<? extends AbstractRPFeature> a = getFeatures(plugin, keys, values);
+                    return a.get(random.nextInt(a.size()));
+                } else {
+                    return new ArrayList<>(values).get(random.nextInt(values.size()));
+                }
+            }
+            int i = 0;
+            for(me.randomhashtags.randompackage.utils.NamespacedKey n : keys) {
+                if(key.equals(n.key) && (plugin == null || plugin.equalsIgnoreCase(n.plugin.getName()))) {
+                    return (AbstractRPFeature) values.toArray()[i];
+                }
+                i++;
+            }
+        }
+        return null;
+    }
+    public AbstractCustomBoss getCustomBoss(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractCustomBoss> b = AbstractCustomBoss.bosses;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractCustomBoss) f : null;
+        }
+        return null;
+    }
+    public AbstractCustomExplosion getCustomExplosion(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractCustomExplosion> b = AbstractCustomExplosion.explosions;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractCustomExplosion) f : null;
+        }
+        return null;
+    }
+    public AbstractCustomEnchant getCustomEnchant(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractCustomEnchant> b = AbstractCustomEnchant.enabled;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractCustomEnchant) f : null;
+        }
+        return null;
+    }
+    public AbstractEnchantRarity getEnchantRarity(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractEnchantRarity> b = AbstractEnchantRarity.rarities;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractEnchantRarity) f : null;
+        }
+        return null;
+    }
+    public AbstractGlobalChallenge getGlobalChallenge(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractGlobalChallenge> b = AbstractGlobalChallenge.challenges;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractGlobalChallenge) f : null;
+        }
+        return null;
+    }
+    public AbstractLootbox getLootbox(String plugin, String key) {
+        final HashMap<NamespacedKey, AbstractLootbox> b = AbstractLootbox.lootboxes;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractLootbox) f : null;
+        }
+        return null;
+    }
+    public AbstractFallenHero getFallenHero(String plugin, String key) {
+        final HashMap<NamespacedKey, AbstractFallenHero> b = AbstractFallenHero.heroes;
+        if(b != null) {
+            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
+            return f != null ? (AbstractFallenHero) f : null;
+        }
+        return null;
     }
     public String formatBigDecimal(BigDecimal b) {
         return formatBigDecimal(b, false);

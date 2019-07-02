@@ -1,8 +1,11 @@
 .idea/**
-gradle/**
 .gradle/**
 randompackage-common/**
 randompackage-spigot/build/**
 randompackage-spigot/out/**
 randompackage-sponge/build/**
 randompackage-sponge/out/**
+randompackage-libs/sponge/**
+randompackage-libs/spigot/**
+randompackage-libs/nukkit/**
+randompackage-nukkit/build/**

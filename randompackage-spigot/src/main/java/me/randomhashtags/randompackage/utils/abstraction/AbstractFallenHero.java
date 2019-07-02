@@ -1,42 +1,45 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
-import org.bukkit.ChatColor;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractFallenHero extends Spawnable {
+    public static HashMap<NamespacedKey, AbstractFallenHero> heroes;
 
-    private List<String> summonMsg, receiveKitMsg, potioneffects;
-    private ItemStack spawnitem, gem;
+    public void created(NamespacedKey key) {
+        if(heroes == null) heroes = new HashMap<>();
+        heroes.put(key, this);
+    }
 
-    public int getGemDropChance() { return yml.getInt("gem.chance"); }
-    public List<String> getSummonMsg() {
-        if(summonMsg == null) summonMsg = api.colorizeListString(yml.getStringList("messages.summon"));
-        return summonMsg;
-    }
-    public List<String> getReceiveKitMsg() {
-        if(receiveKitMsg == null) receiveKitMsg = api.colorizeListString(yml.getStringList("messages.receive kit"));
-        return receiveKitMsg;
-    }
-    public String getType() { return yml.getString("settings.type").toUpperCase(); }
-    public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
-    public List<PotionEffect> getPotionEffects() {
-        final List<PotionEffect> e = new ArrayList<>();
-        if(potioneffects == null) potioneffects = yml.getStringList("potion effects");
-        for(String s : potioneffects) {
+    public abstract int getGemDropChance();
+    public abstract List<String> getSummonMsg();
+    public abstract List<String> getReceiveKitMsg();
+    public abstract String getType();
+    public abstract String getName();
+    public abstract List<PotionEffect> getPotionEffects();
+    public abstract ItemStack getSpawnItem();
+    public abstract ItemStack getGem();
+    public abstract void spawn(LivingEntity summoner, Location loc, AbstractCustomKit kit);
 
-        }
-        return e;
+    public static AbstractFallenHero valueOf(ItemStack spawnitem) {
+        if(heroes != null && spawnitem != null && spawnitem.hasItemMeta())
+            for(AbstractFallenHero h : heroes.values())
+                if(h.getSpawnItem().isSimilar(spawnitem)) return h;
+        return null;
     }
-    public ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
-        return spawnitem.clone();
+    public static AbstractFallenHero valueOF(ItemStack gem) {
+        if(heroes != null && gem != null && gem.hasItemMeta())
+            for(AbstractFallenHero h : heroes.values())
+                if(h.getGem().isSimilar(gem)) return h;
+        return null;
     }
-    public ItemStack getGem() {
-        if(gem == null) gem = api.d(yml, "gem");
-        return gem.clone();
+    public static void deleteAll() {
+        heroes = null;
     }
 }

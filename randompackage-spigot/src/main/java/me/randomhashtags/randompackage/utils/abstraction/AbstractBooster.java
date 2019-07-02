@@ -9,11 +9,11 @@ import java.util.TreeMap;
 public abstract class AbstractBooster extends AbstractRPFeature {
     public static TreeMap<NamespacedKey, AbstractBooster> boosters;
 
-    public void created(NamespacedKey key) {
+    public void created() {
         if(boosters == null) boosters = new TreeMap<>();
-        boosters.put(key, this);
+        boosters.put(getNamespacedKey(), this);
     }
-
+    public abstract NamespacedKey getNamespacedKey();
     public abstract String getType();
     public abstract ItemStack getItem();
     public abstract ItemStack getItem(long duration, double multiplier);

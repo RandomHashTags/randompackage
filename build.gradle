@@ -1,25 +1,86 @@
 buildscript {
     repositories {
+        mavenCentral()
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url = "https://plugins.gradle.org/m2/"}
         jcenter()
     }
 
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+        classpath 'com.fipsoft.gradle:maven-repo-settings:0.3.2'
     }
 }
 
+allprojects {
+    group = pluginGroup
+    version = pluginVersion
+}
+
 subprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 5, 'minutes'
+        }
+    }
+}
+
+configure(['spigot', 'sponge'].collect { project(":randompackage-$it") }) {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.fipsoft.maven-repo-settings'
 
-    group = project.pluginGroup
-    version = project.pluginVersion
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    if (JavaVersion.current().isJava8Compatible()) {
+        // Java 8 turns on doclint which we fail
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
 
-    repositories {
-        mavenCentral()
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives jar
+        archives javadocJar
+    }
+
+    if (!(name.equals('randompackage-sponge'))) {
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        artifacts {
+            archives sourcesJar
+        }
+
+        build.dependsOn(sourcesJar)
+    }
+
+    build.dependsOn(javadocJar)
+}
+
+configure(['spigot', 'sponge'].collect { project(":randompackage-$it") }) {
+    shadowJar {
+        classifier 'dist'
+        dependencies {
+            include(project(":randompackage-libs:${project.name.replace("randompackage-", "")}"))
+        }
+
+        exclude 'GradleStart**'
+        exclude '.cache'
+        exclude 'LICENSE*'
     }
 }

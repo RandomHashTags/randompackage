@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractEnchantRarity extends AbstractRPFeature {
-    public static HashMap<String, AbstractEnchantRarity> rarities;
+    public static HashMap<NamespacedKey, AbstractEnchantRarity> rarities;
+
+    public void created(NamespacedKey key) {
+        if(rarities == null) rarities = new HashMap<>();
+        rarities.put(key, this);
+    }
 
     public abstract YamlConfiguration getSettingsYaml();
     public abstract String getName();

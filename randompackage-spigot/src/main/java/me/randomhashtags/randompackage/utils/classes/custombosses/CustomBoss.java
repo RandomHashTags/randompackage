@@ -15,7 +15,7 @@ import java.util.List;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class CustomBoss extends AbstractCustomBoss {
-
+	private NamespacedKey key;
 	private ItemStack spawnitem;
 	private HashMap<Integer, List<String>> messages;
 	private List<CustomBossAttack> attacks;
@@ -23,9 +23,12 @@ public class CustomBoss extends AbstractCustomBoss {
 
 	public CustomBoss(File f) {
 		load(f);
-		created(new NamespacedKey(getPlugin, getYamlName()));
+		created();
 	}
-
+	public NamespacedKey getNamespacedKey() {
+		if(key == null) key = new NamespacedKey(getPlugin, getYamlName());
+		return key;
+	}
 	public String getType() { return yml.getString("type").toUpperCase(); }
 	public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
 	public String getScoreboardTitle() { return ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title")); }

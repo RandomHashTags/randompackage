@@ -5,9 +5,11 @@ import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallenge;
@@ -66,7 +68,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		    viewCurrent(player);
 		else if(args.length >= 2 && args[0].equals("stop")) {
 			if(hasPermission(player, "RandomPackage.globalchallenges.stop", true))
-				stopChallenge(GlobalChallenge.challenges.get(args[1].replace("_", " ")), false);
+				stopChallenge(getGlobalChallenge(null, args[1].replace("_", " ")), false);
 		} else if(player != null && args.length >= 1 && args[0].equals("claim"))
 			viewPrizes(player);
 		else if(args.length >= 1 && args[0].equals("reload")) {
@@ -138,7 +140,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			}
 		}
 
-		final TreeMap<String, GlobalChallenge> G = GlobalChallenge.challenges;
+		final HashMap<NamespacedKey, AbstractGlobalChallenge> G = GlobalChallenge.challenges;
 		final List<GlobalChallengePrize> P = GlobalChallengePrize.prizes;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (G != null ? G.size() : 0) + " global challenges and " + (P != null ? P.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		reloadChallenges();
@@ -160,13 +162,13 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		GlobalChallenge.deleteAll();
-		GlobalChallengePrize.deleteAll();
+		GlobalChallenge.challenges = null;
+		GlobalChallengePrize.prizes = null;
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");
 		int maxAtOnce = max;
-		final TreeMap<String, GlobalChallenge> gc = GlobalChallenge.challenges;
+		final HashMap<NamespacedKey, AbstractGlobalChallenge> gc = GlobalChallenge.challenges;
 		final ConfigurationSection EEE = data.getConfigurationSection("active global challenges");
 		if(gc != null && EEE != null) {
 		    final long started = System.currentTimeMillis();
@@ -174,7 +176,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			for(String s : EEE.getKeys(false)) {
 				if(maxAtOnce > 0) {
 					loadeD += 1;
-					final GlobalChallenge g = gc.getOrDefault(s, null);
+					final AbstractGlobalChallenge g = gc.getOrDefault(s, null);
 					if(g != null) {
 						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
 						final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
@@ -194,7 +196,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		if(maxAtOnce > 0) {
 			final long started = System.currentTimeMillis();
 			for(int i = 1; i <= maxAtOnce; i++) {
-				final GlobalChallenge r = getRandomChallenge();
+				final AbstractGlobalChallenge r = getRandomChallenge();
 				if(!r.isActive()) r.start();
 				else i-=1;
 			}
@@ -212,7 +214,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 				if(p.toUpperCase().equals("{CHALLENGE}")) {
 					ActiveGlobalChallenge z = f < ActiveGlobalChallenge.active.size() ? (ActiveGlobalChallenge) ActiveGlobalChallenge.active.values().toArray()[f] : null;
 					if(z == null) z = getRandomChallenge().start();
-					final GlobalChallenge T = z.getType();
+					final AbstractGlobalChallenge T = z.getType();
 					final String n = T.getType();
 					item = T.getDisplayItem().clone();
 					itemMeta = item.getItemMeta(); lore.clear();
@@ -337,8 +339,8 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 		}
 	}
-	public void stopChallenge(GlobalChallenge chall, boolean giveRewards) {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
+	public void stopChallenge(AbstractGlobalChallenge chall, boolean giveRewards) {
+		final HashMap<AbstractGlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
 		if(a != null && a.containsKey(chall)) {
 			a.get(chall).end(giveRewards, 3);
 		}
@@ -368,9 +370,8 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		}
 		player.updateInventory();
 	}
-	public GlobalChallenge getRandomChallenge() {
-		final ArrayList<GlobalChallenge> g = new ArrayList<>(GlobalChallenge.challenges.values());
-		return g.get(random.nextInt(g.size()));
+	public AbstractGlobalChallenge getRandomChallenge() {
+		return getGlobalChallenge(null, "random");
 	}
 	
 	@EventHandler

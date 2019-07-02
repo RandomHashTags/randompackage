@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes;
 
+import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -7,19 +9,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class FactionUpgrade extends AbstractFactionUpgrade {
-    public static TreeMap<String, FactionUpgrade> upgrades;
-
     private ItemStack item;
 
     public FactionUpgrade(File f) {
-        if(upgrades == null) upgrades = new TreeMap<>();
         load(f);
-        upgrades.put(getYamlName(), this);
+        created(new NamespacedKey(getPlugin, getYamlName()));
     }
 
     public ItemStack getItem() {
@@ -39,23 +37,14 @@ public class FactionUpgrade extends AbstractFactionUpgrade {
         }
         return item.clone();
     }
+    public FactionUpgradeType getType() { return FactionUpgradeType.types.getOrDefault(yml.getString("settings.type"), null); }
+    public int getSlot() { return yml.getInt("settings.slot"); }
+    public int getMaxTier() { return yml.getInt("settings.max tier"); }
+    public boolean itemAmountEqualsTier() { return yml.getBoolean("settings.item amount=tier"); }
+    public List<String> getPerks() { return yml.getStringList("perks"); }
+    public List<String> getRequirements() { return yml.getStringList("requirements"); }
 
-    public void setPerks(String faction) {
-
-    }
-
-    public static FactionUpgrade valueOf(int slot) {
-        if(upgrades != null) {
-            for(FactionUpgrade f : upgrades.values()) {
-                if(f.getSlot() == slot) {
-                    return f;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static void deleteAll() {
-        upgrades = null;
+    public void didLevelup(FactionUpgradeLevelupEvent event) {
+        if(event.isCancelled()) return;
     }
 }

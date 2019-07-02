@@ -143,7 +143,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         api.enable();
         getCommand("randompackage").setExecutor(api);
-        getCommand("randompackage").setTabCompleter(api);
         try {
             addAliases("randompackage");
         } catch (Exception e) {

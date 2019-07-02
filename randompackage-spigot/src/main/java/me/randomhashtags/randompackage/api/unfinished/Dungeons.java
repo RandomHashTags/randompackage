@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractDungeon;
 import me.randomhashtags.randompackage.utils.classes.Dungeon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -21,7 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Dungeons extends RPFeature implements CommandExecutor {
     private static Dungeons instance;
@@ -71,7 +73,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         for(int i = 0; i < dungeons.getSize(); i++)
             if(di.getItem(i) == null)
                 di.setItem(i, background);
-        final TreeMap<String, Dungeon> d = Dungeon.dungeons;
+        final HashMap<NamespacedKey, AbstractDungeon> d = Dungeon.dungeons;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (d != null ? d.size() : 0) + " dungeons");
     }
     public void unload() {
@@ -79,7 +81,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         dungeons = null;
         master = null;
         background = null;
-        Dungeon.deleteAll();
+        AbstractDungeon.dungeons = null;
     }
 
     @EventHandler

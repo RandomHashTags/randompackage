@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MasteryKit extends AbstractCustomKit {
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+
+public class MasteryKit extends CustomKit {
     public static HashMap<String, MasteryKit> kits;
     private static CustomEnchants customenchants;
     private int antiCrystalPercentSlot;
@@ -26,6 +28,7 @@ public class MasteryKit extends AbstractCustomKit {
         }
         load(f);
         kits.put(getYamlName(), this);
+        created(new NamespacedKey(getPlugin, "MASTERY_" + getYamlName()));
     }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public ItemStack getItem() {

@@ -1,26 +1,24 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 public abstract class AbstractCustomEnchant extends AbstractRPFeature {
-    public static TreeMap<String, AbstractCustomEnchant> enabled, disabled;
-
-    @Override
-    public void load(File f) {
-        super.load(f);
+    public static HashMap<NamespacedKey, AbstractCustomEnchant> enabled, disabled;
+    public void created(boolean isEnabled) {
         if(enabled == null) {
-            enabled = new TreeMap<>();
-            disabled = new TreeMap<>();
+           enabled = new HashMap<>();
+           disabled = new HashMap<>();
         }
-        (isEnabled() ? enabled : disabled).put(getYamlName(), this);
+        (isEnabled ? enabled : disabled).put(getNamespacedKey(), this);
     }
+    public abstract NamespacedKey getNamespacedKey();
     public abstract boolean isEnabled();
     public abstract String getName();
     public abstract List<String> getLore();

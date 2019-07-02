@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class EvolutionKit extends AbstractCustomKit {
+public class EvolutionKit extends CustomKit {
 	public static HashMap<String, EvolutionKit> kits;
 	private int upgradeChance;
 	private ItemStack item, fallenherospawnitem, fallenherogem, upgradegem;
@@ -20,6 +20,7 @@ public class EvolutionKit extends AbstractCustomKit {
 		load(f);
 		upgradeChance = yml.getInt("settings.upgrade chance");
 		kits.put(getYamlName(), this);
+		created(new NamespacedKey(getPlugin, "EVOLUTION_" + getYamlName()));
 	}
 
 	public ItemStack getFallenHeroSpawnItem() {

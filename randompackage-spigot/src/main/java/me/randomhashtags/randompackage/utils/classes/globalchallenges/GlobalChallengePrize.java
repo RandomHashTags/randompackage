@@ -15,9 +15,7 @@ public class GlobalChallengePrize {
     private final int placement, amount;
     private final List<String> rewards;
     public GlobalChallengePrize(ItemStack display, int amount, int placement, List<String> rewards) {
-        if(prizes == null) {
-            prizes = new ArrayList<>();
-        }
+        if(prizes == null) prizes = new ArrayList<>();
         this.display = display;
         this.amount = amount;
         this.placement = placement;
@@ -79,8 +77,5 @@ public class GlobalChallengePrize {
             }
 
         return null;
-    }
-    public static void deleteAll() {
-        prizes = null;
     }
 }

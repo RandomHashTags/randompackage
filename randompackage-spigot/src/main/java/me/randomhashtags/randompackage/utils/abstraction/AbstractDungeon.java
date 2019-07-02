@@ -1,37 +1,37 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractDungeon extends AbstractRPFeature {
-    private long fastestCompletion;
-    private ItemStack display, key, keyLocked, lootbag;
+    public static HashMap<NamespacedKey, AbstractDungeon> dungeons;
 
-    public ItemStack getDisplay() {
-        if(display == null) display = api.d(yml, "gui");
-        return display.clone();
+    public void created(NamespacedKey key) {
+        if(dungeons == null) dungeons = new HashMap<>();
+        dungeons.put(key, this);
     }
-    public ItemStack getKey() {
-        if(key == null) key = api.d(yml, "key");
-        return key.clone();
-    }
-    public ItemStack getKeyLocked() {
-        if(keyLocked == null) keyLocked = api.d(yml, "gui.key locked");
-        return keyLocked.clone();
-    }
-    public ItemStack getLootbag() {
-        if(lootbag == null) lootbag = api.d(yml, "lootbag");
-        return lootbag.clone();
-    }
-    public List<String> getLootbagRewards() {
-        return yml.getStringList("lootbag.rewards");
-    }
+    public abstract ItemStack getDisplay();
+    public abstract ItemStack getKey();
+    public abstract ItemStack getKeyLocked();
+    public abstract ItemStack getLootbag();
+    public abstract List<String> getLootbagRewards();
+    public abstract int getSlot();
+    public abstract Location getTeleportLocation();
+    public abstract long getFastestCompletion();
 
-    public int getSlot() { return yml.getInt("gui.slot"); }
-    public Location getTeleportLocation() { return api.toLocation(yml.getString("settings.warp location")); }
-    public long getFastestCompletion() { return fastestCompletion; }
-    public void setFastestCompletion(long fastestCompletion) { this.fastestCompletion = fastestCompletion; }
+    public static AbstractDungeon valueOf(ItemStack key) {
+        if(dungeons != null && key != null) {
+            for(AbstractDungeon d : dungeons.values()) {
+                if(d.getKey().isSimilar(key)) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
 }

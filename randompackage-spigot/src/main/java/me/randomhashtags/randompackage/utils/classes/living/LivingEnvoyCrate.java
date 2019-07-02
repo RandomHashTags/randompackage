@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.living;
 
-import me.randomhashtags.randompackage.utils.classes.EnvoyCrate;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Effect;
@@ -18,9 +18,9 @@ public class LivingEnvoyCrate {
     public static HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living;
     private static UVersion uv;
     private int envoyID;
-    private EnvoyCrate type;
+    private AbstractEnvoyCrate type;
     private Location location;
-    public LivingEnvoyCrate(int envoyID, EnvoyCrate type, Location location) {
+    public LivingEnvoyCrate(int envoyID, AbstractEnvoyCrate type, Location location) {
         if(living == null) {
             living = new HashMap<>();
             uv = UVersion.getUVersion();
@@ -36,7 +36,7 @@ public class LivingEnvoyCrate {
         living.get(envoyID).put(location, this);
     }
     public int getEnvoyID() { return envoyID; }
-    public EnvoyCrate getType() { return type; }
+    public AbstractEnvoyCrate getType() { return type; }
     public Location getLocation() { return location; }
     public void delete(boolean dropItems) {
         final HashMap<Location, LivingEnvoyCrate> l = living.get(envoyID);

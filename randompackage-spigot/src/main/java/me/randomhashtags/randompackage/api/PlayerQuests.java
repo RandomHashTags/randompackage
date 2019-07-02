@@ -105,7 +105,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                 final int slot = d ? SLOT : config.getInt("shop." + s + ".slot"), cost = config.getInt("shop." + s + ".cost", defaultCost);
                 if(d) SLOT++;
                 final ItemStack r = d(config, "shop." + s);
-                if(r != null) {
+                if(r != null && !r.getType().equals(Material.AIR)) {
                     item = r.clone();
                     if(!rtq) {
                         itemMeta = item.getItemMeta(); lore.clear();

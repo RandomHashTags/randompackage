@@ -1,19 +1,31 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
+import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.classes.FactionUpgradeType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractFactionUpgrade extends AbstractRPFeature {
+    public static HashMap<NamespacedKey, AbstractFactionUpgrade> upgrades;
 
-    public FactionUpgradeType getType() { return FactionUpgradeType.types.getOrDefault(yml.getString("settings.type"), null); }
-    public int getSlot() { return yml.getInt("settings.slot"); }
-    public int getMaxTier() { return yml.getInt("settings.max tier"); }
-    public boolean itemAmountEqualsTier() { return yml.getBoolean("settings.item amount=tier"); }
+    public void created(NamespacedKey key) {
+        if(upgrades == null) upgrades = new HashMap<>();
+        upgrades.put(key, this);
+    }
+    public abstract ItemStack getItem();
+    public abstract FactionUpgradeType getType();
+    public abstract int getSlot();
+    public abstract int getMaxTier();
+    public abstract boolean itemAmountEqualsTier();
+    public abstract List<String> getPerks();
+    public abstract List<String> getRequirements();
 
-    public List<String> getPerks() { return yml.getStringList("perks"); }
-    public List<String> getRequirements() { return yml.getStringList("requirements"); }
+    public abstract void didLevelup(FactionUpgradeLevelupEvent event);
 
     private String getPerkValue(int tier, String key) {
         key = key.toLowerCase();
@@ -26,7 +38,7 @@ public abstract class AbstractFactionUpgrade extends AbstractRPFeature {
         return null;
     }
     public double getCropGrowMultiplier(int tier) {
-        final String v = getPerkValue(tier, "CropGrowthMultiplier");
+        final String v = getPerkValue(tier, "CropGrowMultiplier");
         return v != null ? Double.parseDouble(v) : 1.00;
     }
     public double getTeleportDelayMultiplier(int tier) {
@@ -48,5 +60,16 @@ public abstract class AbstractFactionUpgrade extends AbstractRPFeature {
     public double getVkitLevelingChance(int tier) {
         final String v = getPerkValue(tier, "VkitLevelingChance");
         return v != null ? Double.parseDouble(v) : 1.00;
+    }
+
+    public static AbstractFactionUpgrade valueOf(int slot) {
+        if(upgrades != null) {
+            for(AbstractFactionUpgrade f : upgrades.values()) {
+                if(f.getSlot() == slot) {
+                    return f;
+                }
+            }
+        }
+        return null;
     }
 }

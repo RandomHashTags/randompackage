@@ -138,6 +138,7 @@ public class CustomExplosions extends RPFeature {
 		a.set("creepers", cree);
 		saveOtherData();
 
+		AbstractCustomExplosion.explosions = null;
 		CustomCreeper.deleteAll();
 		CustomTNT.deleteAll();
 	}

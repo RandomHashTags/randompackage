@@ -2,10 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractFallenHero;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
 import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
@@ -136,7 +138,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             for(File f : folder.listFiles()) {
                 new FallenHero(f);
             }
-            final HashMap<String, FallenHero> f = FallenHero.heroes;
+            final HashMap<NamespacedKey, AbstractFallenHero> f = FallenHero.heroes;
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + (f != null ? f.size() : 0) + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
@@ -856,7 +858,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     }
     private void trySpawning(Player player, ItemStack is, AbstractCustomKit kit, Location l) {
         final boolean gkit = kit instanceof GlobalKit;
-        final FallenHero h = (gkit ? (GlobalKit) kit : (EvolutionKit) kit).getFallenHero();
+        final AbstractFallenHero h = (gkit ? (GlobalKit) kit : (EvolutionKit) kit).getFallenHero();
         if(h.canSpawnAt(l)) {
             removeItem(player, is, 1);
             h.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), kit);

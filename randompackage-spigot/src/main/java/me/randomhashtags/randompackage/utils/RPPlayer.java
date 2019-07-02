@@ -4,11 +4,11 @@ import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.Title;
 import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
-import me.randomhashtags.randompackage.utils.classes.FactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
 import me.randomhashtags.randompackage.utils.classes.Home;
 import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
@@ -48,7 +48,7 @@ import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 public class RPPlayer {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
-    private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
+    private static final HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
 
     public static YamlConfiguration fadditions;
@@ -286,9 +286,11 @@ public class RPPlayer {
             mkitCooldowns = null;
             quests = null;
 
-            final BukkitScheduler s = api.scheduler;
-            for(int i : questTasks.get(uuid)) s.cancelTask(i);
-            questTasks.remove(uuid);
+            if(questTasks.containsKey(uuid)) {
+                final BukkitScheduler s = api.scheduler;
+                for(int i : questTasks.get(uuid)) s.cancelTask(i);
+                questTasks.remove(uuid);
+            }
 
             jackpotWonCash = 0;
             jackpotTickets = 0;
@@ -749,11 +751,11 @@ public class RPPlayer {
         if(fadditions != null) {
             final String F = FactionsAPI.getFactionsAPI().getFaction(getOfflinePlayer());
             if(F != null && !factionUpgrades.containsKey(F)) {
-                final HashMap<FactionUpgrade, Integer> upgrades = new HashMap<>();
+                final HashMap<AbstractFactionUpgrade, Integer> upgrades = new HashMap<>();
                 final ConfigurationSection c = fadditions.getConfigurationSection(F);
                 if(c != null) {
                     for(String s : c.getKeys(false)) {
-                        upgrades.put(FactionUpgrade.upgrades.get(s), fadditions.getInt("factions." + F + "." + s));
+                        upgrades.put(AbstractFactionUpgrade.upgrades.getOrDefault(s, null), fadditions.getInt("factions." + F + "." + s));
                     }
                 }
                 factionUpgrades.put(F, upgrades);
@@ -862,7 +864,7 @@ public class RPPlayer {
     }
 
 
-    public static HashMap<FactionUpgrade, Integer> getFactionUpgrades(OfflinePlayer player) {
+    public static HashMap<AbstractFactionUpgrade, Integer> getFactionUpgrades(OfflinePlayer player) {
         final String F = FactionsAPI.getFactionsAPI().getFaction(player);
         if(F != null) {
             if(!factionUpgrades.containsKey(F)) factionUpgrades.put(F, new HashMap<>());
@@ -870,7 +872,7 @@ public class RPPlayer {
         }
         return new HashMap<>();
     }
-    public static HashMap<String, HashMap<FactionUpgrade, Integer>> getFactionUpgrades() {
+    public static HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> getFactionUpgrades() {
         return factionUpgrades;
     }
 

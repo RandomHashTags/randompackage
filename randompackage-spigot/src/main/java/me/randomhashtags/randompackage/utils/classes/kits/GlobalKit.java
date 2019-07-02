@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class GlobalKit extends AbstractCustomKit {
+public class GlobalKit extends CustomKit {
 	public static HashMap<String, GlobalKit> kits;
 	public static String heroicprefix;
 
@@ -24,6 +24,7 @@ public class GlobalKit extends AbstractCustomKit {
 		load(f);
 		isHeroic = yml.getBoolean("settings.heroic");
 		kits.put(getYamlName(), this);
+		created(new NamespacedKey(getPlugin, "GLOBAL_" + getYamlName()));
 	}
 	public boolean isHeroic() { return isHeroic; }
 	public ItemStack getFallenHeroSpawnItem() {

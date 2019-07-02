@@ -1,7 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractEnvoyCrate;
 import me.randomhashtags.randompackage.utils.classes.EnvoyCrate;
 import me.randomhashtags.randompackage.utils.classes.living.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -75,7 +77,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			for(String s : c)
 				preset.add(toLocation(s));
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "envoy.yml"));
-		EnvoyCrate.defaultTier = config.getString("settings.default tier");
 		type = config.getString("settings.type");
 		envoySummon = d(config, "items.envoy summon");
 
@@ -102,6 +103,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				tiers.add(e.getItem());
 			}
 		}
+		AbstractEnvoyCrate.defaultTier = new NamespacedKey(randompackage, config.getString("settings.default tier"));
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
 
@@ -115,8 +117,8 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			}
 		}, 0, 20*config.getInt("settings.firework delay"));
 
-		final HashMap<String, EnvoyCrate> E = EnvoyCrate.crates;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (E != null ? E.size() : 0) + " envoy tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		final HashMap<NamespacedKey, AbstractEnvoyCrate> E = EnvoyCrate.crates;
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (E != null ? E.size() : 0) + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		final List<String> p = new ArrayList<>();
@@ -140,7 +142,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		preset = null;
 		settingPreset = null;
 		active = null;
-		EnvoyCrate.deleteAll();
+		AbstractEnvoyCrate.deleteAll();
 	}
 
 	public void stopAllEnvoys() {
@@ -158,7 +160,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
-		final EnvoyCrate ec = EnvoyCrate.valueOf(i);
+		final AbstractEnvoyCrate ec = AbstractEnvoyCrate.valueOf(i);
 		final Player player = event.getPlayer();
 		if(ec != null) {
 			event.setCancelled(true);
@@ -225,7 +227,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			if(!c.isEmpty()) {
 				for(int i = 1; i <= amount; i++) {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
-					final EnvoyCrate crate = getRandomCrate(true);
+					final AbstractEnvoyCrate crate = getRandomCrate(true);
 					final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 					if(lec == null && crate.canLand(loc)) {
@@ -242,7 +244,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				final Location r = preset.get(random.nextInt(preset.size()));
 				final World w = r.getWorld();
 				final Location newl = new Location(w, r.getBlockX(), r.getBlockY()-1, r.getBlockZ());
-				final EnvoyCrate crate = getRandomCrate(true);
+				final AbstractEnvoyCrate crate = getRandomCrate(true);
 				LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 				if(lec == null && crate.canLand(r)) {
 					lec = new LivingEnvoyCrate(totalEnvoys, crate, r);

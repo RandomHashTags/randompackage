@@ -1,11 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractBooster;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomBoss;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomExplosion;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
+import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
@@ -234,54 +230,5 @@ public abstract class RPFeature extends UVersion implements Listener {
             }
         }
         return item;
-    }
-    private List<? extends AbstractRPFeature> getFeatures(String plugin, Set<NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
-        if(plugin != null) {
-            final List<AbstractRPFeature> a = new ArrayList<>();
-            int i = 0;
-            for(NamespacedKey k : keys) {
-                if(k.plugin.getName().equalsIgnoreCase(plugin)) {
-                    a.add((AbstractRPFeature) values.toArray()[i]);
-                }
-                i++;
-            }
-            return a;
-        }
-        return null;
-    }
-    private AbstractRPFeature getFeature(String plugin, String key, Set<NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
-        if(key == null) return null;
-        if(key.equalsIgnoreCase("random")) {
-            if(plugin != null) {
-                final List<? extends AbstractRPFeature> a = getFeatures(plugin, keys, values);
-                return a.get(random.nextInt(a.size()));
-            } else {
-                return new ArrayList<>(values).get(values.size());
-            }
-        }
-        int i = 0;
-        for(NamespacedKey n : keys) {
-            if(key.equals(n.key) && (plugin == null || plugin.equalsIgnoreCase(n.plugin.getName()))) {
-                return (AbstractRPFeature) values.toArray()[i];
-            }
-            i++;
-        }
-        return null;
-    }
-    public AbstractCustomBoss getCustomBoss(String plugin, String key) {
-        final HashMap<NamespacedKey, AbstractCustomBoss> b = AbstractCustomBoss.bosses;
-        if(b != null) {
-            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
-            return f != null ? (AbstractCustomBoss) f : null;
-        }
-        return null;
-    }
-    public AbstractCustomExplosion getCustomExplosion(String plugin, String key) {
-        final HashMap<NamespacedKey, AbstractCustomExplosion> b = AbstractCustomExplosion.explosions;
-        if(b != null) {
-            final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
-            return f != null ? (AbstractCustomExplosion) f : null;
-        }
-        return null;
     }
 }

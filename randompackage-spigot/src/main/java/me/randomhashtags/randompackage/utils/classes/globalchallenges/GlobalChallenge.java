@@ -1,34 +1,29 @@
 package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.*;
 
-public class GlobalChallenge extends AbstractGlobalChallenge {
-	public static TreeMap<String, GlobalChallenge> challenges;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
+public class GlobalChallenge extends AbstractGlobalChallenge {
+
+	private ItemStack display;
 	public long started;
 	public GlobalChallenge(File f, Set<UUID> participants) {
-		if(challenges == null) challenges = new TreeMap<>();
 		load(f);
+		created(new NamespacedKey(getPlugin, getYamlName()));
 		setParticipants(participants);
-		challenges.put(getYamlName(), this);
-	}
-	public ActiveGlobalChallenge start() {
-		return start(System.currentTimeMillis(), new HashMap<>());
-	}
-	public ActiveGlobalChallenge start(long started, HashMap<UUID, BigDecimal> participants) {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
-		return a != null ? a.getOrDefault(this, new ActiveGlobalChallenge(started, this, participants)) : new ActiveGlobalChallenge(started, this, participants);
-	}
-	public boolean isActive() {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
-		return a != null && a.containsKey(this);
 	}
 
-	public static void deleteAll() {
-		challenges = null;
+	public ItemStack getDisplayItem() {
+		if(display == null) display = api.d(yml, "item");
+		return display.clone();
 	}
+	public String getTracks() { return yml.getString("settings.tracks"); }
+	public long getDuration() { return yml.getLong("settings.duration"); }
+	public String getType() { return yml.getString("settings.type"); }
 }

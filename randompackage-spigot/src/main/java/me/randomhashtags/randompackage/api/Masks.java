@@ -78,7 +78,7 @@ public class Masks extends CustomEnchants implements Listener {
         }
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         final HashMap<String, Mask> M = Mask.masks;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (M != null ? M.size() : 0) + " masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (M != null ? M.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

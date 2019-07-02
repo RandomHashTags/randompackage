@@ -1,3 +1,8 @@
 rootProject.name = 'randompackage'
 
-include 'randompackage-spigot', 'randompackage-sponge'
+include 'randompackage-libs'
+
+['spigot', 'sponge'].forEach {
+    include "randompackage-libs:$it"
+    include "randompackage-$it"
+}

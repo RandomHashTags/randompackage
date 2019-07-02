@@ -15,11 +15,11 @@ import java.util.List;
 public abstract class AbstractCustomBoss extends Spawnable {
     public static HashMap<NamespacedKey, AbstractCustomBoss> bosses;
 
-    public void created(NamespacedKey key) {
+    public void created() {
         if(bosses == null) bosses = new HashMap<>();
-        bosses.put(key, this);
+        bosses.put(getNamespacedKey(), this);
     }
-
+    public abstract NamespacedKey getNamespacedKey();
     public abstract String getType();
     public abstract String getName();
     public abstract String getScoreboardTitle();

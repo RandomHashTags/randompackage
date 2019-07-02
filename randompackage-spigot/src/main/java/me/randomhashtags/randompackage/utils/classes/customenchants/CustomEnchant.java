@@ -1,21 +1,34 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class CustomEnchant extends AbstractCustomEnchant {
+    private NamespacedKey key;
     private List<String> lore;
     private String value;
     private List<String> appliesto;
     private int[] alchemist, tinkerer;
 
     public CustomEnchant(File f) {
-        load(f);
+        super.load(f);
+        if(enabled == null) {
+            enabled = new HashMap<>();
+            disabled = new HashMap<>();
+        }
+        created(isEnabled());
+    }
+    public NamespacedKey getNamespacedKey() {
+        if(key == null) key = new NamespacedKey(getPlugin, getYamlName());
+        return key;
     }
     public boolean isEnabled() { return yml.getBoolean("enabled"); }
     public String getName() { return yml.getString("name"); }

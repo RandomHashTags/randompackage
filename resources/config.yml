@@ -118,7 +118,7 @@ envoy:
   enabled: true
 #
 faction upgrades:
-  enabled: true
+  enabled: false
   aliases:
     - "f upgrade"
 #

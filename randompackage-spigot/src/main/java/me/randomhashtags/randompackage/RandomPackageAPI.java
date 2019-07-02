@@ -2,8 +2,6 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchant;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,7 +19,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
-public class RandomPackageAPI extends RPFeature implements CommandExecutor, TabCompleter {
+public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     public static final RandomPackageAPI api = new RandomPackageAPI();
 
     public static int spawnerchance = 0;
@@ -57,22 +55,6 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor, TabC
             }
         }
         return true;
-    }
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        final int l = args.length;
-        if(cmd.getName().equals("randompackage") && sender.hasPermission("RandomPackage.customenchant.enchant") && l >= 1) {
-            final List<String> lore = new ArrayList<>();
-            if(args[0].equals("enchant")) {
-                if(l == 2) {
-                    for(String s : CustomEnchant.enabled.keySet()) lore.add(s.replace(" ", "_"));
-                } else if(l == 3) {
-                    final AbstractCustomEnchant e = AbstractCustomEnchant.enabled.getOrDefault(args[1].toUpperCase().replace("_", " "), null);
-                    if(e != null) for(int i = 1; i <= e.getMaxLevel(); i++) lore.add(Integer.toString(i));
-                }
-            }
-            return lore;
-        }
-        return null;
     }
 
     public void load() {

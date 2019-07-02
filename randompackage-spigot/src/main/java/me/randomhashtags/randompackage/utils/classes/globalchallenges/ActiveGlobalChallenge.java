@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -13,15 +14,15 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class ActiveGlobalChallenge {
-    public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
+    public static HashMap<AbstractGlobalChallenge, ActiveGlobalChallenge> active;
     private static PluginManager pm;
     private static GlobalChallenges globalchallenges;
-    private GlobalChallenge type;
+    private AbstractGlobalChallenge type;
     private HashMap<UUID, BigDecimal> participants;
     private int task;
     private long started;
 
-    public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
+    public ActiveGlobalChallenge(long started, AbstractGlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
         if(active == null) {
             active = new HashMap<>();
             globalchallenges = GlobalChallenges.getChallenges();
@@ -37,7 +38,7 @@ public class ActiveGlobalChallenge {
     }
 
     public long getStartedTime() { return started; }
-    public GlobalChallenge getType() { return type; }
+    public AbstractGlobalChallenge getType() { return type; }
     public HashMap<UUID, BigDecimal> getParticipants() { return participants; }
 
     public long getRemainingTime() {

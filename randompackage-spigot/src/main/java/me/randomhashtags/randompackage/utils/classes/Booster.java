@@ -13,9 +13,14 @@ import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class Booster extends AbstractBooster {
     private ItemStack item;
+    private NamespacedKey key;
     public Booster(File f) {
         load(f);
-        created(new NamespacedKey(getPlugin, getYamlName()));
+        created();
+    }
+    public NamespacedKey getNamespacedKey() {
+        if(key == null) key = new NamespacedKey(getPlugin, getYamlName());
+        return key;
     }
     public String getType() { return yml.getString("settings.type"); }
     public ItemStack getItem() {

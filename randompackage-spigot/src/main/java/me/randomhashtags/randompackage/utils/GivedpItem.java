@@ -121,6 +121,15 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         air = null;
     }
 
+    private int getInt(String input, int max) {
+        input = input.toLowerCase();
+        return input.equalsIgnoreCase("random") ? 1+random.nextInt(max) : Integer.parseInt(input);
+    }
+    private int getInt(String input) {
+        input = input.toLowerCase();
+        return input.equalsIgnoreCase("random") ? random.nextInt(101) : Integer.parseInt(input);
+    }
+
     public ItemStack valueOf(String input) {
         final String Q = input.split(";")[0];
         input = input.toLowerCase();
@@ -179,15 +188,21 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final AbstractCustomExplosion e = getCustomExplosion(plugin, key);
             return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
-            final TreeMap<String, AbstractCustomEnchant> L = CustomEnchant.enabled;
-            final HashMap<String, AbstractEnchantRarity> LL = EnchantRarity.rarities;
-            final String[] a = Q.split(":"), b = input.split(":");
-            final String a1 = a[1].replace("_", " ");
-            final AbstractEnchantRarity G = LL.getOrDefault(a1, null);
-            final AbstractCustomEnchant e = L != null ? L.containsKey(a1) ? L.get(a1) : G != null ? G.getEnchants().get(random.nextInt(G.getEnchants().size())) : null : null;
-            final int le = a.length, level = e != null ? le >= 3 ? b[2].equals("random") ? 1+random.nextInt(e.getMaxLevel()) : Integer.parseInt(b[2]) : 1+random.nextInt(e.getMaxLevel()) : 0;
-            final int success = level != 0 ? le >= 4 ? b[3].equals("random") ? random.nextInt(101) : Integer.parseInt(b[3]) : random.nextInt(101) : 0;
-            final int destroy = level != 0 ? le >= 5 ? b[4].equals("random") ? random.nextInt(101) : Integer.parseInt(b[4]) : random.nextInt(101) : 0;
+            // ce:<enchant>:<level>:<success>:<destroy>
+            // ce:<plugin>:<enchant>:<level>:<success>:<destroy>
+            final String[] k = Q.split(":");
+            final int l = k.length;
+            if(l < 5) return air;
+            final String plugin = l == 6 ? k[1] : null, key = l == 6 ? k[2] : k[1];
+            AbstractCustomEnchant e = getCustomEnchant(plugin, key.replace("_", " "));
+            final AbstractEnchantRarity r = e == null ? getEnchantRarity(plugin, key) : null;
+            if(r != null) {
+                final List<AbstractCustomEnchant> a = r.getEnchants();
+                e = a.get(random.nextInt(a.size()));
+            }
+            final int level = e != null ? l == 6 ? getInt(k[3], e.getMaxLevel()) : getInt(k[2]) : 0;
+            final int success = level != 0 ? l == 6 ? getInt(k[4]) : getInt(k[3]) : 0;
+            final int destroy = level != 0 ? l == 6 ? getInt(k[5]) : getInt(k[4]) : 0;
             return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
         } else if(input.startsWith("dust:")) {
             final HashMap<String, MagicDust> m = MagicDust.dust;
@@ -226,9 +241,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final GlobalKit g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return g != null ? g.getFallenHeroGem() : air;
         } else if(input.startsWith("lootbox:")) {
-            final HashMap<String, Lootbox> L = Lootbox.lootboxes;
-            final Lootbox lb = L != null ? input.equals("lootbox:latest") ? Lootbox.latest() : L.getOrDefault(Q.split(":")[1], null) : null;
-            return lb != null ? lb.getItem() : air;
+            final String[] k = Q.split(":");
+            final int l = k.length;
+            final String plugin = l == 3 ? k[1] : null, key = l >= 2 ? l == 2 ? k[1] : k[2] : null;
+            final AbstractLootbox L = key != null ? key.equalsIgnoreCase("latest") ? AbstractLootbox.latest() : getLootbox(plugin, key) : null;
+            return L != null ? L.getItem() : air;
         } else if(input.startsWith("mask") && !input.equals("maskgenerator")) {
             final HashMap<String, Mask> L = Mask.masks;
             final Mask m = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;

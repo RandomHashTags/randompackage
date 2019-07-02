@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
+import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.ChatColor;
@@ -10,10 +11,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public class EnchantRarity extends AbstractEnchantRarity {
     private YamlConfiguration settingsYaml;
@@ -24,12 +24,11 @@ public class EnchantRarity extends AbstractEnchantRarity {
     private Firework firework;
     protected List<AbstractCustomEnchant> enchants;
     public EnchantRarity(File folder, File f) {
-        if(rarities == null) rarities = new HashMap<>();
         settingsYaml = YamlConfiguration.loadConfiguration(f);
         name = folder.getName().split("\\.yml")[0];
         successDestroy100 = settingsYaml.getBoolean("settings.success+destroy=100");
         enchants = new ArrayList<>();
-        rarities.put(name, this);
+        created(new NamespacedKey(getPlugin, getName()));
     }
     public YamlConfiguration getSettingsYaml() { return settingsYaml; }
     public String getName() { return name; }
