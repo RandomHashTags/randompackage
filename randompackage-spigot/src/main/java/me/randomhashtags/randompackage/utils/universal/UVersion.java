@@ -2,8 +2,6 @@ package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.GivedpItem;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.supported.SpawnerAPI;
 import org.bukkit.*;
@@ -65,12 +63,12 @@ public class UVersion {
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
         }
     }
-    private List<? extends AbstractRPFeature> getFeatures(String plugin, Set<me.randomhashtags.randompackage.utils.NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
+    private List<? extends AbstractRPFeature> getFeatures(String plugin, Set<String> keys, Collection<? extends AbstractRPFeature> values) {
         if(plugin != null) {
             final List<AbstractRPFeature> a = new ArrayList<>();
             int i = 0;
-            for(me.randomhashtags.randompackage.utils.NamespacedKey k : keys) {
-                if(k.plugin.getName().equalsIgnoreCase(plugin)) {
+            for(String k : keys) {
+                if(k.equalsIgnoreCase(plugin)) {
                     a.add((AbstractRPFeature) values.toArray()[i]);
                 }
                 i++;
@@ -79,7 +77,7 @@ public class UVersion {
         }
         return null;
     }
-    private AbstractRPFeature getFeature(String plugin, String key, Set<me.randomhashtags.randompackage.utils.NamespacedKey> keys, Collection<? extends AbstractRPFeature> values) {
+    private AbstractRPFeature getFeature(String plugin, String key, Set<String> keys, Collection<? extends AbstractRPFeature> values) {
         if(key != null) {
             if(key.equalsIgnoreCase("random")) {
                 if(plugin != null) {

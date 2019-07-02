@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractEnvoyCrate;
 import me.randomhashtags.randompackage.utils.classes.EnvoyCrate;

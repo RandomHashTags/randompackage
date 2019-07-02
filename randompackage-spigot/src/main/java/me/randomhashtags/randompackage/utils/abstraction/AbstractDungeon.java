@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractDungeon extends AbstractRPFeature {
-    public static HashMap<NamespacedKey, AbstractDungeon> dungeons;
+    public static HashMap<String, AbstractDungeon> dungeons;
 
-    public void created(NamespacedKey key) {
+    public void created(String identifier) {
         if(dungeons == null) dungeons = new HashMap<>();
-        dungeons.put(key, this);
+        dungeons.put(identifier, this);
     }
     public abstract ItemStack getDisplay();
     public abstract ItemStack getKey();

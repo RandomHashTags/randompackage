@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
 import org.bukkit.inventory.ItemStack;
 

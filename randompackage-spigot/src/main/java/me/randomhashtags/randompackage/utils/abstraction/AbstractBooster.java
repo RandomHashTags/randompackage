@@ -1,19 +1,17 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.TreeMap;
 
 public abstract class AbstractBooster extends AbstractRPFeature {
-    public static TreeMap<NamespacedKey, AbstractBooster> boosters;
+    public static TreeMap<String, AbstractBooster> boosters;
 
-    public void created() {
+    public void created(String identifier) {
         if(boosters == null) boosters = new TreeMap<>();
-        boosters.put(getNamespacedKey(), this);
+        boosters.put(identifier, this);
     }
-    public abstract NamespacedKey getNamespacedKey();
     public abstract String getType();
     public abstract ItemStack getItem();
     public abstract ItemStack getItem(long duration, double multiplier);
@@ -22,9 +20,9 @@ public abstract class AbstractBooster extends AbstractRPFeature {
 
     public static AbstractBooster valueOf(String key) {
         if(boosters != null) {
-            for(NamespacedKey k : boosters.keySet()) {
-                if(k.key.equals(key)) {
-                    return boosters.get(k);
+            for(String i : boosters.keySet()) {
+                if(i.equals(key)) {
+                    return boosters.get(i);
                 }
             }
         }

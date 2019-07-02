@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFallenHero;
 import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;

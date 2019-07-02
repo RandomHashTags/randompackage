@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.FireworkEffect;

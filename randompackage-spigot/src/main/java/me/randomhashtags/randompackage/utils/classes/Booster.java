@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractBooster;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -9,18 +8,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-
 public class Booster extends AbstractBooster {
     private ItemStack item;
-    private NamespacedKey key;
     public Booster(File f) {
         load(f);
-        created();
-    }
-    public NamespacedKey getNamespacedKey() {
-        if(key == null) key = new NamespacedKey(getPlugin, getYamlName());
-        return key;
+        created(getYamlName());
     }
     public String getType() { return yml.getString("settings.type"); }
     public ItemStack getItem() {

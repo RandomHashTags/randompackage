@@ -2,9 +2,7 @@ package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.classes.FactionUpgradeType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

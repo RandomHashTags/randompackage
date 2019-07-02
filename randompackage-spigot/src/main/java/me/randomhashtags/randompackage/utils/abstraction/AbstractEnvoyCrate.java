@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
@@ -12,12 +11,12 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class AbstractEnvoyCrate extends AbstractRPFeature {
-    public static HashMap<NamespacedKey, AbstractEnvoyCrate> crates;
-    public static NamespacedKey defaultTier;
+    public static HashMap<String, AbstractEnvoyCrate> crates;
+    public static String defaultTier;
 
-    public void created(NamespacedKey key) {
+    public void created(String identifier) {
         if(crates == null) crates = new HashMap<>();
-        crates.put(key, this);
+        crates.put(identifier, this);
     }
     public abstract Firework getFirework();
     public abstract int getChance();

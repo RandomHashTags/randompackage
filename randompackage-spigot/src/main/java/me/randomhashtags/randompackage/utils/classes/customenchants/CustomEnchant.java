@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 
 import java.io.File;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public class CustomEnchant extends AbstractCustomEnchant {
     private NamespacedKey key;

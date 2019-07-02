@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;

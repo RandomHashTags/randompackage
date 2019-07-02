@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
 import org.bukkit.ChatColor;

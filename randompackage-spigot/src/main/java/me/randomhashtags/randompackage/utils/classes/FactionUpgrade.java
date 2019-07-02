@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes;
 
 import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

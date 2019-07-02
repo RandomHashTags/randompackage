@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.custombosses;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomBoss;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,7 +24,7 @@ public class CustomBoss extends AbstractCustomBoss {
 		load(f);
 		created();
 	}
-	public NamespacedKey getNamespacedKey() {
+	public NamespacedKey getIdentifier() {
 		if(key == null) key = new NamespacedKey(getPlugin, getYamlName());
 		return key;
 	}

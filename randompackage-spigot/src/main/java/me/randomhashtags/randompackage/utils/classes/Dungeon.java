@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractDungeon;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;

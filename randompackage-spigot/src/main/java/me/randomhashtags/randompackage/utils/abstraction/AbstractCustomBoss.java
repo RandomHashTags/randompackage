@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.abstraction;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomBossAttack;
 import me.randomhashtags.randompackage.utils.classes.custombosses.CustomMinion;
 import me.randomhashtags.randompackage.utils.classes.living.LivingCustomBoss;
@@ -13,13 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractCustomBoss extends Spawnable {
-    public static HashMap<NamespacedKey, AbstractCustomBoss> bosses;
+    public static HashMap<String, AbstractCustomBoss> bosses;
 
     public void created() {
         if(bosses == null) bosses = new HashMap<>();
-        bosses.put(getNamespacedKey(), this);
+        bosses.put(getIdentifier(), this);
     }
-    public abstract NamespacedKey getNamespacedKey();
+    public abstract String getIdentifier();
     public abstract String getType();
     public abstract String getName();
     public abstract String getScoreboardTitle();

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomExplosion;
 import me.randomhashtags.randompackage.utils.classes.CustomCreeper;
@@ -76,7 +75,7 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 
-		final HashMap<NamespacedKey, AbstractCustomExplosion> e = AbstractCustomExplosion.explosions;
+		final HashMap<String, AbstractCustomExplosion> e = AbstractCustomExplosion.explosions;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (e != null ? e.size() : null) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
 		final ArrayList<ItemStack> explosions = new ArrayList<>();

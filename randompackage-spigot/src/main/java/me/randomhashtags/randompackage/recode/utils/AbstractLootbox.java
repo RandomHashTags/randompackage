@@ -1,24 +1,11 @@
-package me.randomhashtags.randompackage.utils.abstraction;
+package me.randomhashtags.randompackage.recode.utils;
 
-import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public abstract class AbstractLootbox extends AbstractRPFeature {
-    public static HashMap<NamespacedKey, AbstractLootbox> lootboxes;
-    private static Random random = new Random();
-
-    public void created(NamespacedKey key) {
-        if(lootboxes == null) lootboxes = new HashMap<>();
-        lootboxes.put(key, this);
-    }
-
-    public abstract NamespacedKey getNamespacedKey();
     public abstract String getName();
     public abstract String getGuiTitle();
     public abstract String getPreviewTitle();
@@ -90,59 +77,5 @@ public abstract class AbstractLootbox extends AbstractRPFeature {
         for(String s : getJackpotLoot()) items.add(api.d(null, s));
         for(String s : getBonusLoot()) items.add(api.d(null, s));
         return items;
-    }
-
-    public static AbstractLootbox valueOf(String guiTitle) {
-        if(lootboxes != null) {
-            for(AbstractLootbox l : lootboxes.values())
-                if(l.getGuiTitle().equals(guiTitle))
-                    return l;
-        }
-        return null;
-    }
-    public static AbstractLootbox valueof(String previewTitle) {
-        if(lootboxes != null) {
-            previewTitle = ChatColor.stripColor(previewTitle);
-            for(AbstractLootbox l : lootboxes.values()) {
-                if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
-                    return l;
-                }
-            }
-        }
-        return null;
-    }
-    public static AbstractLootbox valueOf(ItemStack is) {
-        if(lootboxes != null && is != null && is.hasItemMeta())
-            for(AbstractLootbox l : lootboxes.values())
-                if(l.getItem().isSimilar(is))
-                    return l;
-        return null;
-    }
-    public static AbstractLootbox valueOf(int priority) {
-        if(lootboxes != null) {
-            for(AbstractLootbox l : lootboxes.values())
-                if(l.getPriority() == priority)
-                    return l;
-        }
-        return null;
-    }
-    public static AbstractLootbox latest() {
-        int p = 0;
-        AbstractLootbox lo = null;
-        if(lootboxes != null) {
-            for(AbstractLootbox l : lootboxes.values()) {
-                final int P = l.getPriority();
-                if(lo == null || P > p) {
-                    p = P;
-                    lo = l;
-                }
-            }
-        }
-        return lo;
-    }
-
-    public static void deleteAll() {
-        lootboxes = null;
-        random = null;
     }
 }

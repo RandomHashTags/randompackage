@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

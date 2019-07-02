@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.utils.abstraction;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
@@ -21,12 +20,12 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
 public abstract class AbstractCustomExplosion extends AbstractRPFeature {
-    public static HashMap<NamespacedKey, AbstractCustomExplosion> explosions;
+    public static HashMap<String, AbstractCustomExplosion> explosions;
     private static Random random = new Random();
 
-    public void created(NamespacedKey key) {
+    public void created(String identifier) {
         if(explosions == null) explosions = new HashMap<>();
-        explosions.put(key, this);
+        explosions.put(identifier, this);
     }
 
     public abstract ItemStack getItem();

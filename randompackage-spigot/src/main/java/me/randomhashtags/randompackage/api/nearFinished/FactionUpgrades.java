@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.classes.globalchallenges;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
 import org.bukkit.inventory.ItemStack;
 

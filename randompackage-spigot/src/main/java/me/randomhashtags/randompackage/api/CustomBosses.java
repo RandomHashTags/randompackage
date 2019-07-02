@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.utils.NamespacedKey;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomBoss;
 import me.randomhashtags.randompackage.utils.classes.custombosses.*;
@@ -56,7 +55,7 @@ public class CustomBosses extends RPFeature {
 		}
 		loadBackup();
 		addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
-		final HashMap<NamespacedKey, AbstractCustomBoss> C = AbstractCustomBoss.bosses;
+		final HashMap<String, AbstractCustomBoss> C = AbstractCustomBoss.bosses;
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (C != null ? C.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {

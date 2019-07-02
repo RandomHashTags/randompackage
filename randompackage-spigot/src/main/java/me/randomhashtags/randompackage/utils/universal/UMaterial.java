@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionType;
 import java.util.*;
 
 /*
-    UMaterial Version: 7
+    UMaterial Version: 8
 
     This software is created and owned by RandomHashTags, and is licensed under the GNU Affero General Public License v3.0 (https://choosealicense.com/licenses/agpl-3.0/)
     You can only find this software at https://gitlab.com/RandomHashTags/umaterial
@@ -81,6 +81,7 @@ public enum UMaterial {
     BEETROOT_SEEDS(null, null, null, null, "BEETROOT_SEEDS"),
     BEETROOT_SOUP(null, null, null, null, "BEETROOT_SOUP"),
     BEETROOTS(null, null, null, null, null, "BEETROOTS"),
+    BELL(null, null, null, null, null, null, "BELL"),
     BIRCH_BOAT("BOAT", null, null, null, "BOAT_BIRCH", "BIRCH_BOAT"),
     BIRCH_BUTTON("WOOD_BUTTON", null, null, null, null, "BIRCH_BUTTON"),
     BIRCH_DOOR("BIRCH_DOOR_ITEM", null, null, null, null, "BIRCH_DOOR"),
@@ -753,6 +754,7 @@ public enum UMaterial {
     LINGERING_POTION_WEAKNESS(PotionBase.LINGERING, "WEAKNESS", false, false, null, "LINGERING_POTION"),
     LINGERING_POTION_WEAKNESS_EXTENDED(PotionBase.LINGERING, "WEAKNESS", true, false, null, "LINGERING_POTION"),
     LLAMA_SPAWN_EGG(103, null, null, null, "MONSTER_EGG", null, "LLAMA_SPAWN_EGG"),
+    LOOM(null, null, null, null, null, null, "LOOM"),
     MAGENTA_BANNER(13, "BANNER", null, null, null, null, "MAGENTA_BANNER"),
     MAGENTA_BED(2, "BED", null, null, null, null, "MAGENTA_BED"),
     MAGENTA_CARPET(2, "CARPET", null, null, null, null, "MAGENTA_CARPET"),
