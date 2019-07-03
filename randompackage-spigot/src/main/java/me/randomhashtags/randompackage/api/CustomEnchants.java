@@ -1,17 +1,17 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
-import me.randomhashtags.randompackage.recode.utils.CustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.objects.customenchants.*;
+import me.randomhashtags.randompackage.addons.objects.customenchants.Fireball;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
+import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
-import me.randomhashtags.randompackage.utils.classes.customenchants.*;
-import me.randomhashtags.randompackage.utils.classes.customenchants.Fireball;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.enums.CustomEnchantApplyResult;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

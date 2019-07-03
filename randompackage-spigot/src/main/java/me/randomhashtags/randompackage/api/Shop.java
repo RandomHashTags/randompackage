@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.ShopPrePurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopPreSellEvent;
-import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopSellEvent;
+import me.randomhashtags.randompackage.events.ShopPrePurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopPreSellEvent;
+import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.ShopCategory;
-import me.randomhashtags.randompackage.recode.utils.ShopItem;
+import me.randomhashtags.randompackage.addons.usingfile.FileShopCategory;
+import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -36,7 +36,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public YamlConfiguration config;
 	public ItemStack back;
 	private String defaultShop;
-	private HashMap<String, ShopCategory> titles;
+	private HashMap<String, FileShopCategory> titles;
 
 	public void load() {
 	    final long started = System.currentTimeMillis();
@@ -57,17 +57,17 @@ public class Shop extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "shops");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final ShopCategory c = new ShopCategory(f);
+                final FileShopCategory c = new FileShopCategory(f);
                 titles.put(c.getInventoryTitle(), c);
             }
         }
-        final HashMap<String, ShopCategory> S = ShopCategory.categories;
+        final HashMap<String, FileShopCategory> S = FileShopCategory.categories;
         sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
 	    config = null;
 	    back = null;
-	    ShopCategory.deleteAll();
+	    FileShopCategory.deleteAll();
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -88,7 +88,7 @@ public class Shop extends RPFeature implements CommandExecutor {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
 		if(!event.isCancelled() && top.getHolder() == player) {
-			final ShopCategory s = titles.getOrDefault(event.getView().getTitle(), null);
+			final FileShopCategory s = titles.getOrDefault(event.getView().getTitle(), null);
 			if(s != null) {
                 event.setCancelled(true);
                 player.updateInventory();
@@ -191,14 +191,14 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public void view(Player player) {
 	    if(hasPermission(player, "RandomPackage.shop", true)) {
             player.closeInventory();
-            final UInventory inv = ShopCategory.categories.get(defaultShop).getInventory();
+            final UInventory inv = FileShopCategory.categories.get(defaultShop).getInventory();
             player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
             player.getOpenInventory().getTopInventory().setContents(inv.getInventory().getContents());
             player.updateInventory();
         }
 	}
 	public void viewCategory(Player player, String yml) {
-	    final ShopCategory s = ShopCategory.categories.getOrDefault(yml, null);
+	    final FileShopCategory s = FileShopCategory.categories.getOrDefault(yml, null);
 	    if(player != null && s != null) {
 	        player.closeInventory();
 	        final UInventory inv = s.getInventory();

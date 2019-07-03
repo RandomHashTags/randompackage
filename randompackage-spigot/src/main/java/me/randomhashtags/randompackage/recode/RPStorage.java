@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.recode;
 
-import me.randomhashtags.randompackage.recode.api.addons.*;
-import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.*;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.utils.enums.Feature;
 import org.bukkit.Bukkit;
 
@@ -27,6 +27,8 @@ public abstract class RPStorage {
     protected static TreeMap<String, EnvoyCrate> envoycrates;
     protected static TreeMap<String, CustomExplosion> explosions;
     protected static TreeMap<String, FactionUpgrade> factionupgrades;
+    protected static TreeMap<String, FactionUpgradeType> factionupgradetypes;
+    protected static TreeMap<String, FilterCategory> filtercategories;
     protected static TreeMap<String, GlobalChallenge> globalchallenges;
     protected static TreeMap<String, GlobalChallengePrize> globalchallengeprizes;
     protected static TreeMap<String, CustomKit> kits;
@@ -37,6 +39,7 @@ public abstract class RPStorage {
     protected static TreeMap<String, Pet> pets;
     protected static TreeMap<String, PlayerQuest> playerquests;
     protected static TreeMap<String, ServerCrate> servercrates;
+    protected static TreeMap<String, ShopCategory> shopcategories;
     protected static TreeMap<String, Title> titles;
     protected static TreeMap<String, Trinket> trinkets;
 
@@ -56,7 +59,6 @@ public abstract class RPStorage {
             players.remove(player);
         }
     }
-
 
     public ArmorSet getArmorSet(String identifier) {
         return armorsets != null ? armorsets.getOrDefault(identifier, null) : null;
@@ -139,6 +141,22 @@ public abstract class RPStorage {
         factionupgrades.put(identifier, e);
     }
 
+    public FactionUpgradeType getFactionUpgradeType(String identifier) {
+        return factionupgradetypes != null ? factionupgradetypes.getOrDefault(identifier, null) : null;
+    }
+    public void addFactionUpgradeType(String identifier, FactionUpgradeType e) {
+        if(factionupgradetypes == null) factionupgradetypes = new TreeMap<>();
+        factionupgradetypes.put(identifier, e);
+    }
+
+    public FilterCategory getFilterCategory(String identifier) {
+        return filtercategories != null ? filtercategories.getOrDefault(identifier, null) : null;
+    }
+    public void addFilterCategory(String identifier, FilterCategory e) {
+        if(filtercategories == null) filtercategories = new TreeMap<>();
+        filtercategories.put(identifier, e);
+    }
+
     public GlobalChallenge getGlobalChallenge(String identifier) {
         return globalchallenges != null ? globalchallenges.getOrDefault(identifier, null) : null;
     }
@@ -219,6 +237,14 @@ public abstract class RPStorage {
         servercrates.put(identifier, l);
     }
 
+    public ShopCategory getShopCategory(String identifier) {
+        return shopcategories != null ? shopcategories.getOrDefault(identifier, null) : null;
+    }
+    public void addShopCategory(String identifier, ShopCategory l) {
+        if(shopcategories == null) shopcategories = new TreeMap<>();
+        shopcategories.put(identifier, l);
+    }
+
     public Title getTitle(String identifier) {
         return titles != null ? titles.getOrDefault(identifier, null) : null;
     }
@@ -242,15 +268,21 @@ public abstract class RPStorage {
         else if(f.equals(Feature.CUSTOM_ENCHANTS)) {
             enabled = null;
             disabled = null;
+            rarities = null;
         } else if(f.equals(Feature.DUELS)) duelArenas = null;
         else if(f.equals(Feature.DUNGEONS)) dungeons = null;
-        else if(f.equals(Feature.FACTION_UPGRADES)) factionupgrades = null;
+        else if(f.equals(Feature.ENVOY)) envoycrates = null;
+        else if(f.equals(Feature.FACTION_UPGRADES)) {
+            factionupgrades = null;
+            factionupgradetypes = null;
+        } else if(f.equals(Feature.ITEM_FILTER)) filtercategories = null;
         else if(f.equals(Feature.MASKS)) masks = null;
         else if(f.equals(Feature.LOOTBOXES)) lootboxes = null;
         else if(f.equals(Feature.MONTHLY_CRATES)) monthlycrates = null;
         else if(f.equals(Feature.OUTPOSTS)) outposts = null;
         else if(f.equals(Feature.PLAYER_QUESTS)) playerquests = null;
         else if(f.equals(Feature.SERVER_CRATES)) servercrates = null;
+        else if(f.equals(Feature.SHOP)) shopcategories = null;
         else if(f.equals(Feature.TITLES)) titles = null;
         else if(f.equals(Feature.TRINKETS)) trinkets = null;
     }

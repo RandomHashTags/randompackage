@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
-import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.utils.classes.FactionUpgradeType;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileFactionUpgrade;
-import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
+import me.randomhashtags.randompackage.addons.FactionUpgrade;
+import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
+import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgrade;
+import me.randomhashtags.randompackage.addons.objects.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -85,7 +85,7 @@ public class FactionUpgrades extends RPFeature {
         }
         config = YamlConfiguration.loadConfiguration(new File(rpd, "faction upgrades.yml"));
         for(String s : config.getConfigurationSection("types").getKeys(false)) {
-            new FactionUpgradeType(s);
+            new FileFactionUpgradeType(s);
         }
         factionUpgrades = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         final Inventory fi = factionUpgrades.getInventory();
@@ -138,7 +138,7 @@ public class FactionUpgrades extends RPFeature {
         bossDamageMultipliers = null;
         vkitLevelingChances = null;
         decreaseRarityGemCost = null;
-        FactionUpgradeType.deleteAll();
+        FileFactionUpgradeType.deleteAll();
         FactionUpgrade.upgrades = null;
     }
 
@@ -208,7 +208,7 @@ public class FactionUpgrades extends RPFeature {
             final int tier = upgrades != null ? upgrades.getOrDefault(f, 0) : 0;
             item = f.getItem();
             itemMeta = item.getItemMeta(); lore.clear();
-            final FactionUpgradeType type = f.getType();
+            final FileFactionUpgradeType type = f.getType();
             final String perkAchived = type.getPerkAchievedPrefix(), perkUnachived = type.getPerkUnachievedPrefix(), requirementsPrefix = type.getRequirementsPrefix();
             if(item.hasItemMeta() && itemMeta.hasLore()) {
                 for(String s : itemMeta.getLore()) {

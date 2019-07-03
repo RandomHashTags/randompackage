@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.utils.supported;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
-import me.randomhashtags.randompackage.recode.utils.CoinFlipStats;
+import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

@@ -1,18 +1,20 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.PlayerQuest;
 import me.randomhashtags.randompackage.api.Homes;
-import me.randomhashtags.randompackage.api.events.PlayerQuestExpireEvent;
-import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
+import me.randomhashtags.randompackage.events.PlayerQuestExpireEvent;
+import me.randomhashtags.randompackage.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.recode.api.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
-import me.randomhashtags.randompackage.recode.utils.CoinFlipStats;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
-import me.randomhashtags.randompackage.recode.utils.GlobalChallengePrize;
-import me.randomhashtags.randompackage.recode.utils.Home;
+import me.randomhashtags.randompackage.addons.FactionUpgrade;
+import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
+import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.objects.customenchants.RarityGem;
+import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
+import me.randomhashtags.randompackage.addons.objects.Home;
+import me.randomhashtags.randompackage.recode.RPStorage;
 import me.randomhashtags.randompackage.utils.enums.KitType;
-import me.randomhashtags.randompackage.recode.api.addons.active.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -41,7 +43,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public class RPPlayer {
+public class RPPlayer extends RPStorage {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();

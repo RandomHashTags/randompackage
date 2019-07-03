@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.interfaces;
 
-import me.randomhashtags.randompackage.utils.classes.kits.FallenHero;
 import org.bukkit.Location;
 
 import java.util.UUID;

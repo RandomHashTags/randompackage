@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
+import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

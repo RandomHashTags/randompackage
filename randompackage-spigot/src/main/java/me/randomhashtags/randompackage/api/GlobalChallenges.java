@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.FundDepositEvent;
-import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.FundDepositEvent;
+import me.randomhashtags.randompackage.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
-import me.randomhashtags.randompackage.recode.api.addons.active.ActiveGlobalChallenge;
-import me.randomhashtags.randompackage.recode.utils.GlobalChallengePrize;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
+import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

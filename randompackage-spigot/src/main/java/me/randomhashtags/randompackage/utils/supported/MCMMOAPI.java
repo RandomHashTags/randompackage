@@ -4,7 +4,7 @@ import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.api.events.MCMMOXpGainEvent;
+import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
 import org.bukkit.ChatColor;

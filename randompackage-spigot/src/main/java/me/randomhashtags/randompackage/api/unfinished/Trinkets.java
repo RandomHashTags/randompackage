@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTrinket;
+import me.randomhashtags.randompackage.addons.usingfile.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.inventory.ItemStack;
 

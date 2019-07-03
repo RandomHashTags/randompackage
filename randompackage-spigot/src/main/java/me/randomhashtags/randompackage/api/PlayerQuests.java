@@ -1,16 +1,16 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.api.events.PlayerQuestCompleteEvent;
-import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopSellEvent;
+import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.events.PlayerQuestCompleteEvent;
+import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.api.addons.active.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

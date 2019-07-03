@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.recode.utils.StackedEntity;
+import me.randomhashtags.randompackage.addons.objects.StackedEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

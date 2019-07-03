@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.recode.utils.CoinFlipMatch;
-import me.randomhashtags.randompackage.recode.utils.CoinFlipOption;
-import me.randomhashtags.randompackage.recode.utils.CoinFlipStats;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipMatch;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipOption;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;

@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
+import me.randomhashtags.randompackage.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.ConquestChest;
-import me.randomhashtags.randompackage.recode.utils.ConquestMob;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingConquestChest;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingConquestMob;
+import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
+import me.randomhashtags.randompackage.addons.objects.ConquestMob;
+import me.randomhashtags.randompackage.addons.active.LivingConquestChest;
+import me.randomhashtags.randompackage.addons.active.LivingConquestMob;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -76,7 +76,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "conquests");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final ConquestChest c = new ConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
+                final FileConquestChest c = new FileConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
                 final int spawninterval = c.getSpawnInterval()*20;
                 tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
                     final String[] sr = c.getSpawnRegion().split(";");
@@ -90,7 +90,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
 
         final List<String> conquests = a.getStringList("conquests");
-        final HashMap<String, ConquestChest> cc = ConquestChest.types;
+        final HashMap<String, FileConquestChest> cc = FileConquestChest.types;
         if(conquests != null && !conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");
@@ -118,7 +118,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         saveOtherData();
 
         LivingConquestChest.deleteAll(false);
-        ConquestChest.deleteAll();
+        FileConquestChest.deleteAll();
         ConquestMob.deleteAll();
     }
     public void destroyConquests() {
@@ -195,7 +195,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public void spawn(Player player) {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
-            final List<ConquestChest> chests = new ArrayList<>(ConquestChest.types.values());
+            final List<FileConquestChest> chests = new ArrayList<>(FileConquestChest.types.values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
             last = chests.get(random.nextInt(chests.size())).spawn(l);
         }

@@ -1,8 +1,7 @@
 package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
-import me.randomhashtags.randompackage.utils.AbstractRPFeature;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.supported.SpawnerAPI;
 import org.bukkit.*;

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.utils.supported.plugins;
 
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import me.randomhashtags.randompackage.api.events.MCMMOXpGainEvent;
+import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;

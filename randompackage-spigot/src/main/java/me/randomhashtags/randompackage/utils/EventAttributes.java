@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopSellEvent;
-import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
+import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopSellEvent;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

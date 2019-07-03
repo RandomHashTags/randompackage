@@ -1,16 +1,16 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.objects.customenchants.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
-import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.MysteryMobSpawnerOpenEvent;
+import me.randomhashtags.randompackage.events.customenchant.ItemNameTagUseEvent;
+import me.randomhashtags.randompackage.events.customenchant.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.nearFinished.Boosters;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileArmorSet;
-import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
-import me.randomhashtags.randompackage.utils.classes.customenchants.*;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileServerCrate;
+import me.randomhashtags.randompackage.addons.usingfile.FileArmorSet;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
+import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
+import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;

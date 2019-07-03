@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomBoss;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomMinion;
+import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
+import me.randomhashtags.randompackage.addons.active.LivingCustomMinion;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;

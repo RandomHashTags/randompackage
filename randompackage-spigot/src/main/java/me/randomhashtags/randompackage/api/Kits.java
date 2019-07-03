@@ -2,13 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.recode.utils.KitItem;
+import me.randomhashtags.randompackage.addons.objects.EditedKit;
+import me.randomhashtags.randompackage.addons.objects.KitItem;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractFallenHero;
-import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
-import me.randomhashtags.randompackage.recode.api.addons.active.LivingFallenHero;
+import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.utils.enums.KitType;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

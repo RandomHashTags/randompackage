@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
