@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes;
 
-import me.randomhashtags.randompackage.utils.classes.living.LivingConquestChest;
+import me.randomhashtags.randompackage.recode.utils.ConquestMob;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingConquestChest;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

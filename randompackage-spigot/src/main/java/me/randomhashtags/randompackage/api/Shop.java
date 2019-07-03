@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.api.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.classes.ShopCategory;
-import me.randomhashtags.randompackage.utils.classes.ShopItem;
+import me.randomhashtags.randompackage.recode.utils.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;

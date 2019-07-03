@@ -9,9 +9,8 @@ import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
 import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
 import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
-import me.randomhashtags.randompackage.utils.classes.customenchants.CustomEnchantEntity;
-import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.recode.utils.CustomEnchantEntity;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
@@ -929,7 +928,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-    public HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> getEnchants(Player player) { // <Inventory Slot, <CustomEnchant, CustomEnchant level>>
+    public HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> getEnchants(Player player) { // <Inventory Slot, <FileCustomEnchant, FileCustomEnchant level>>
         final HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> L = new HashMap<>();
         if(player != null) {
             final PlayerInventory pi = player.getInventory();
@@ -941,7 +940,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return L;
     }
-    public HashMap<AbstractCustomEnchant, Integer> getEnchants(ItemStack is) { // <CustomEnchant, CustomEnchant level>
+    public HashMap<AbstractCustomEnchant, Integer> getEnchants(ItemStack is) { // <FileCustomEnchant, FileCustomEnchant level>
         final HashMap<AbstractCustomEnchant, Integer> enchants = new HashMap<>();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {

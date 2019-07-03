@@ -4,19 +4,15 @@ import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
-import me.randomhashtags.randompackage.utils.classes.Title;
-import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
-import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.recode.api.addons.FactionUpgrade;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
+import me.randomhashtags.randompackage.recode.utils.CoinFlipStats;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
-import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
-import me.randomhashtags.randompackage.utils.classes.Home;
-import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
-import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
+import me.randomhashtags.randompackage.recode.utils.GlobalChallengePrize;
+import me.randomhashtags.randompackage.recode.utils.Home;
 import me.randomhashtags.randompackage.utils.enums.KitType;
-import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
-import me.randomhashtags.randompackage.utils.classes.playerquests.ActivePlayerQuest;
-import me.randomhashtags.randompackage.utils.classes.playerquests.PlayerQuest;
+import me.randomhashtags.randompackage.recode.api.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -48,7 +44,7 @@ import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 public class RPPlayer {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
-    private static final HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
+    private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
 
     public static YamlConfiguration fadditions;
@@ -58,7 +54,7 @@ public class RPPlayer {
     public YamlConfiguration yml = null;
 
     private CoinFlipStats coinflipStats;
-    private Title activeTitle;
+    private FileTitle activeTitle;
     public long jackpotWonCash = 0, xpExhaustionExpiration = 0;
     public int jackpotTickets = 0, jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
     public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
@@ -66,7 +62,7 @@ public class RPPlayer {
 
     private List<Home> homes;
     private List<UMaterial> filteredItems;
-    private List<Title> ownedTitles;
+    private List<FileTitle> ownedTitles;
     private List<String> ownedMonthlyCrates, claimedMonthlyCrates;
     private List<ItemStack> unclaimedPurchases;
     private List<UUID> customEnchantEntities;
@@ -106,7 +102,7 @@ public class RPPlayer {
     public static RPPlayer get(UUID player) { return players.getOrDefault(player, new RPPlayer(player)); }
     public void backup() {
         yml.set("name", Bukkit.getOfflinePlayer(uuid).getName());
-        final Title T = getActiveTitle();
+        final FileTitle T = getActiveTitle();
         final String strings = T != null ? T.getTitle() : "null";
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
         final String ints = jackpotTickets + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
@@ -121,7 +117,7 @@ public class RPPlayer {
         for(Home h : getHomes()) homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
         yml.set("homes", homez);
         yml.set("filtered items", getFilteredItemz());
-        for(Title t : getTitles()) titles.add(t.getTitle());
+        for(FileTitle t : getTitles()) titles.add(t.getTitle());
         yml.set("owned titles", titles);
         yml.set("owned monthly crates", getMonthlyCrates());
         yml.set("claimed monthly crates", getClaimedMonthlyCrates());
@@ -557,22 +553,22 @@ public class RPPlayer {
     }
 
     private void loadActiveTitle() {
-        if(!activeTitleIsLoaded && activeTitle == null && Title.titles != null) {
+        if(!activeTitleIsLoaded && activeTitle == null && FileTitle.titles != null) {
             activeTitleIsLoaded = true;
             final String s = yml.getString("strings");
             if(s != null && !s.isEmpty()) {
                 final String a = s.split(";")[0];
                 if(a != null && !a.equals("null")) {
-                    activeTitle = Title.titles.get(a);
+                    activeTitle = FileTitle.titles.get(a);
                 }
             }
         }
     }
-    public Title getActiveTitle() {
+    public FileTitle getActiveTitle() {
         loadActiveTitle();
         return activeTitle;
     }
-    public void setActiveTitle(Title title) {
+    public void setActiveTitle(FileTitle title) {
         activeTitle = title;
     }
 
@@ -581,15 +577,15 @@ public class RPPlayer {
             ownedTitles = new ArrayList<>();
             final List<String> O = yml.getStringList("owned titles");
             for(String s : O) {
-                ownedTitles.add(Title.titles.get(s));
+                ownedTitles.add(FileTitle.titles.get(s));
             }
         }
     }
-    public List<Title> getTitles() {
+    public List<FileTitle> getTitles() {
         loadTitles();
         return ownedTitles;
     }
-    public void addTitle(Title title) {
+    public void addTitle(FileTitle title) {
         loadTitles();
         if(!ownedTitles.contains(title)) {
             ownedTitles.add(title);
@@ -751,11 +747,11 @@ public class RPPlayer {
         if(fadditions != null) {
             final String F = FactionsAPI.getFactionsAPI().getFaction(getOfflinePlayer());
             if(F != null && !factionUpgrades.containsKey(F)) {
-                final HashMap<AbstractFactionUpgrade, Integer> upgrades = new HashMap<>();
+                final HashMap<FactionUpgrade, Integer> upgrades = new HashMap<>();
                 final ConfigurationSection c = fadditions.getConfigurationSection(F);
                 if(c != null) {
                     for(String s : c.getKeys(false)) {
-                        upgrades.put(AbstractFactionUpgrade.upgrades.getOrDefault(s, null), fadditions.getInt("factions." + F + "." + s));
+                        upgrades.put(FactionUpgrade.upgrades.getOrDefault(s, null), fadditions.getInt("factions." + F + "." + s));
                     }
                 }
                 factionUpgrades.put(F, upgrades);
@@ -864,7 +860,7 @@ public class RPPlayer {
     }
 
 
-    public static HashMap<AbstractFactionUpgrade, Integer> getFactionUpgrades(OfflinePlayer player) {
+    public static HashMap<FactionUpgrade, Integer> getFactionUpgrades(OfflinePlayer player) {
         final String F = FactionsAPI.getFactionsAPI().getFaction(player);
         if(F != null) {
             if(!factionUpgrades.containsKey(F)) factionUpgrades.put(F, new HashMap<>());
@@ -872,7 +868,7 @@ public class RPPlayer {
         }
         return new HashMap<>();
     }
-    public static HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> getFactionUpgrades() {
+    public static HashMap<String, HashMap<FactionUpgrade, Integer>> getFactionUpgrades() {
         return factionUpgrades;
     }
 

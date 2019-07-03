@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.playerquests.ActivePlayerQuest;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.active.ActivePlayerQuest;
 
 import java.util.UUID;
 

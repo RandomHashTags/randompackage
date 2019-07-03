@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.ServerCrate;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileServerCrate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class ServerCrateOpenEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
     public final Player player;
-    public final ServerCrate crate;
-    public ServerCrateOpenEvent(Player player, ServerCrate crate) {
+    public final FileServerCrate crate;
+    public ServerCrateOpenEvent(Player player, FileServerCrate crate) {
         this.player = player;
         this.crate = crate;
     }

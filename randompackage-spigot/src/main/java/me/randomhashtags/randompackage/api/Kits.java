@@ -2,14 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.recode.utils.KitItem;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFallenHero;
-import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
-import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.utils.enums.KitType;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -80,7 +79,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
         if(c.equals("gkit") && args.length == 2) {
             final String arg = args[0], argg = args[1];
             //if(arg.equals("edit") && hasPermission(sender, "RandomPackage.gkit.edit", true))
-                //edit(player, GlobalKit.kits.getOrDefault(argg.toUpperCase().split("\\.yml")[0], null), true);
+                //edit(player, FileKitGlobal.kits.getOrDefault(argg.toUpperCase().split("\\.yml")[0], null), true);
         }
         return true;
     }
@@ -516,7 +515,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
         }
     }
     /*
-    public void edit(Player player, GlobalKit kit, boolean editOriginalItems) {
+    public void edit(Player player, FileKitGlobal kit, boolean editOriginalItems) {
         final String k = kit.getYamlName();
         final List<KitItem> items = kit.getItems();
         player.openInventory(Bukkit.createInventory(player, 54, "Edit gkit: " + k));
@@ -548,7 +547,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     public void editKitItem(Player player, EditedKit ek, int slot) {
         ek.selected = slot;
         final KitItem ki = ek.edited.get(slot);
-        final GlobalKit gkit = (GlobalKit) ki.kit;
+        final FileKitGlobal gkit = (FileKitGlobal) ki.kit;
         final YamlConfiguration yml = gkit.getYaml();
         final ItemStack it = d(yml, "items." + ki.path, gkit.getMaxLevel());
         player.openInventory(Bukkit.createInventory(player, 9, "Editing kit item: " + ki.path));
@@ -762,7 +761,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                                 final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
                                 final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(random.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
-                                    lore.add(EnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
+                                    lore.add(FileEnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
                                 final String r = s.split(":")[random.nextInt(s.split(":").length)];
@@ -771,7 +770,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
 
                                 if(enchant != null) {
                                     if(level == -1) level = random.nextInt(enchant.getMaxLevel());
-                                    lore.add(EnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
+                                    lore.add(FileEnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
                                 }
                             } else
                                 lore.add(s.replace("{LEVEL}", Integer.toString(vkitlvl)));
@@ -819,7 +818,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     if(en != null && !c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1])) {
                         final int lvl = random.nextInt(en.getMaxLevel()+1);
                         if(lvl != 0 || !levelzeroremoval) {
-                            lore.add(EnchantRarity.valueOf(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
+                            lore.add(FileEnchantRarity.valueOf(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
                         }
                     }
                 } else {
@@ -944,7 +943,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                         else if(r == 4) editKitLore(ek);
                         else if(r == 5) editKitChance(ek);
                         else if(r == 8) {
-                            final GlobalKit gkit = (GlobalKit) ek.original.get(0).kit;
+                            final FileKitGlobal gkit = (FileKitGlobal) ek.original.get(0).kit;
                             ek.delete();
                             edit(player, gkit, false);
                         }*/

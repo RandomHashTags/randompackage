@@ -7,12 +7,9 @@ import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomEnchant;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractGlobalChallenge;
-import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
-import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
-import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallenge;
-import me.randomhashtags.randompackage.utils.classes.globalchallenges.GlobalChallengePrize;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.recode.utils.GlobalChallengePrize;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -508,7 +505,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final UUID player = event.player.getUniqueId();
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantsrevealed", player, one);
-			increase(event, "customenchantsrevealed_" + EnchantRarity.valueOf(event.enchant).getName(), player, one);
+			increase(event, "customenchantsrevealed_" + FileEnchantRarity.valueOf(event.enchant).getName(), player, one);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -534,7 +531,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final AbstractCustomEnchant enchant = event.enchant;
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantprocs", player, one);
-			increase(event, "customenchantprocs_" + EnchantRarity.valueOf(enchant).getName(), player, one);
+			increase(event, "customenchantprocs_" + FileEnchantRarity.valueOf(enchant).getName(), player, one);
 			increase(event, "customenchantproc'd_" + enchant.getYamlName(), player, one);
 			final ItemStack i = event.itemWithEnchant;
 			increase(event, "customenchantmprocs_" + i.getType().name() + ":" + i.getData().getData(), player, one);
@@ -545,7 +542,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		final UUID player = event.player.getUniqueId();
 		final BigDecimal one = BigDecimal.ONE;
 		increase(event, "customenchantsapplied", player, one);
-		increase(event, "customenchantsapplied_" + EnchantRarity.valueOf(event.enchant).getName(), player, one);
+		increase(event, "customenchantsapplied_" + FileEnchantRarity.valueOf(event.enchant).getName(), player, one);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {

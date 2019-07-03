@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events.customenchant;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.living.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingCustomEnchantEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 

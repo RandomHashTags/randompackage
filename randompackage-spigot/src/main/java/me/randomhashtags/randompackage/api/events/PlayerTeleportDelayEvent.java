@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

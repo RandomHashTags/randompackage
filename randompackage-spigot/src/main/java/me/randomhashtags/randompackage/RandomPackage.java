@@ -12,6 +12,7 @@ import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Updater;
+import me.randomhashtags.randompackage.utils.enums.Feature;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -298,14 +299,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     public void reload() {
         disable();
         enable();
-    }
-    enum Feature {
-        AUCTION_HOUSE, CHAT_BRAG, COINFLIP, COLLECTION_FILTER, CONQUEST, CUSTOM_ARMOR, CUSTOM_BOSSES, CUSTOM_ENCHANTS, CUSTOM_CREEPERS, CUSTOM_TNT,
-        DUELS, ENVOY, FACTION_UPGRADES, FUND, GLOBAL_CHALLENGES,
-        HOMES, ITEM_FILTER, JACKPOT,
-        KITS_EVOLUTION, KITS_GLOBAL, KITS_MASTERY,
-        KOTH, LAST_MAN_STANDING, LOOTBOXES, MASKS, MOB_STACKER, MONTHLY_CRATES, OUTPOSTS, PLAYER_QUESTS, PETS,
-        SECONDARY_EVENTS, SERVER_CRATES, SHOP, SHOWCASE, TITLES, TRADE, TRINKETS, WILD_PVP,
     }
     public void tryLoading(Feature f) {
         try {

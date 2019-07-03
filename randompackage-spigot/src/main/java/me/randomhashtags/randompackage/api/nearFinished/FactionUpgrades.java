@@ -4,9 +4,9 @@ import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.api.events.customboss.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
-import me.randomhashtags.randompackage.utils.classes.FactionUpgrade;
+import me.randomhashtags.randompackage.recode.api.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.FactionUpgradeType;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileFactionUpgrade;
 import me.randomhashtags.randompackage.utils.classes.customenchants.RarityGem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -92,7 +92,7 @@ public class FactionUpgrades extends RPFeature {
         final File folder = new File(rpd + separator + "faction upgrades");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final FactionUpgrade fu = new FactionUpgrade(f);
+                final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                 fi.setItem(fu.getSlot(), fu.getItem());
             }
         }
@@ -125,7 +125,7 @@ public class FactionUpgrades extends RPFeature {
         }
 
         loadBackup();
-        final HashMap<NamespacedKey, AbstractFactionUpgrade> u = FactionUpgrade.upgrades;
+        final HashMap<NamespacedKey, FactionUpgrade> u = FileFactionUpgrade.upgrades;
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (u != null ? u.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -139,14 +139,14 @@ public class FactionUpgrades extends RPFeature {
         vkitLevelingChances = null;
         decreaseRarityGemCost = null;
         FactionUpgradeType.deleteAll();
-        AbstractFactionUpgrade.upgrades = null;
+        FactionUpgrade.upgrades = null;
     }
 
 
     private void backup() {
-        final HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> upgrades = RPPlayer.getFactionUpgrades();
+        final HashMap<String, HashMap<FactionUpgrade, Integer>> upgrades = RPPlayer.getFactionUpgrades();
         for(String F : upgrades.keySet()) {
-            for(AbstractFactionUpgrade u : upgrades.get(F).keySet()) {
+            for(FactionUpgrade u : upgrades.get(F).keySet()) {
                 fupgrades.set("factions." + F, null);
                 fupgrades.set("factions." + F + "." + u.getYamlName(), upgrades.get(F).get(u));
             }
@@ -162,12 +162,12 @@ public class FactionUpgrades extends RPFeature {
     private void loadBackup() {
         final ConfigurationSection c = fupgrades.getConfigurationSection("factions");
         if(c != null) {
-            final HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> L = RPPlayer.getFactionUpgrades();
+            final HashMap<String, HashMap<FactionUpgrade, Integer>> L = RPPlayer.getFactionUpgrades();
             for(String s : c.getKeys(false)) {
                 final ConfigurationSection f = fupgrades.getConfigurationSection("factions." + s);
-                final HashMap<AbstractFactionUpgrade, Integer> b = new HashMap<>();
+                final HashMap<FactionUpgrade, Integer> b = new HashMap<>();
                 for(String a : f.getKeys(false)) {
-                    final AbstractFactionUpgrade u = AbstractFactionUpgrade.upgrades.getOrDefault(a, null);
+                    final FactionUpgrade u = FactionUpgrade.upgrades.getOrDefault(a, null);
                     if(u != null) {
                         b.put(u, fupgrades.getInt("factions." + s + "." + a));
                     }
@@ -202,8 +202,8 @@ public class FactionUpgrades extends RPFeature {
 
 
 
-    private ItemStack getUpgrade(HashMap<AbstractFactionUpgrade, Integer> upgrades, int slot, String W, String L) {
-        final AbstractFactionUpgrade f = AbstractFactionUpgrade.valueOf(slot);
+    private ItemStack getUpgrade(HashMap<FactionUpgrade, Integer> upgrades, int slot, String W, String L) {
+        final FactionUpgrade f = FactionUpgrade.valueOf(slot);
         if(f != null) {
             final int tier = upgrades != null ? upgrades.getOrDefault(f, 0) : 0;
             item = f.getItem();
@@ -265,7 +265,7 @@ public class FactionUpgrades extends RPFeature {
     public void viewFactionUpgrades(Player player) {
         if(fapi != null && fapi.getFaction(player) != null) {
             player.closeInventory();
-            final HashMap<AbstractFactionUpgrade, Integer> u = RPPlayer.getFactionUpgrades(player);
+            final HashMap<FactionUpgrade, Integer> u = RPPlayer.getFactionUpgrades(player);
             player.openInventory(Bukkit.createInventory(player, factionUpgrades.getSize(), factionUpgrades.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(factionUpgrades.getInventory().getContents());
@@ -282,8 +282,8 @@ public class FactionUpgrades extends RPFeature {
             player.updateInventory();
         }
     }
-    public HashMap<String, String> getValues(String factionName, AbstractFactionUpgrade upgrade) {
-        final HashMap<AbstractFactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades().getOrDefault(factionName, null);
+    public HashMap<String, String> getValues(String factionName, FactionUpgrade upgrade) {
+        final HashMap<FactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades().getOrDefault(factionName, null);
         final HashMap<String, String> values = new HashMap<>();
         final List<String> attributes = new ArrayList<>(Arrays.asList(
                 "allowfactionflight", "allowsmeltable", "increasemaxfactionwarps", "increasemaxfactionsize", "increasefactionpower", "reducemcmmocooldown", "setmobspawnrate", "setmobxpmultiplier", "setteleportdelaymultiplier",
@@ -303,11 +303,11 @@ public class FactionUpgrades extends RPFeature {
         }
         return values;
     }
-    public void tryToUpgrade(Player player, AbstractFactionUpgrade fu) {
+    public void tryToUpgrade(Player player, FactionUpgrade fu) {
         final String f = fapi.getFaction(player);
-        final HashMap<String, HashMap<AbstractFactionUpgrade, Integer>> U = RPPlayer.getFactionUpgrades();
+        final HashMap<String, HashMap<FactionUpgrade, Integer>> U = RPPlayer.getFactionUpgrades();
         if(!U.containsKey(f)) U.put(f, new HashMap<>());
-        final HashMap<AbstractFactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades(player);
+        final HashMap<FactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades(player);
         final int ti = upgrades.getOrDefault(fu, 0);
         if(ti >= fu.getMaxTier()) return;
         BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
@@ -338,7 +338,7 @@ public class FactionUpgrades extends RPFeature {
                     return;
                 } else if(target.startsWith("factionupgrade{")) {
                     final String p = target.split("\\{")[1].split("}")[0];
-                    final AbstractFactionUpgrade fuu = AbstractFactionUpgrade.upgrades.get(p.split(":")[0]);
+                    final FactionUpgrade fuu = FactionUpgrade.upgrades.get(p.split(":")[0]);
                     final int lvl = Integer.parseInt(p.split(":")[1].split("=")[1]);
                     if(!upgrades.containsKey(fuu)) {
                         final String di = ChatColor.stripColor(fuu.getItem().getItemMeta().getDisplayName());
@@ -465,7 +465,7 @@ public class FactionUpgrades extends RPFeature {
                 player.updateInventory();
                 final String c = event.getClick().name();
                 if(r < 0 || r >= top.getSize() || !c.contains("LEFT") && !c.contains("RIGHT") || event.getCurrentItem() == null) return;
-                final AbstractFactionUpgrade f = AbstractFactionUpgrade.valueOf(r);
+                final FactionUpgrade f = FactionUpgrade.valueOf(r);
                 if(f != null) tryToUpgrade(player, f);
             }
         }

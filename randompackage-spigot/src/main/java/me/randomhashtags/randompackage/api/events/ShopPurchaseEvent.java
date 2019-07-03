@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.ShopItem;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.utils.ShopItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

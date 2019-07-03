@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingFallenHero;
 import org.bukkit.entity.LivingEntity;
 
 public class FallenHeroSlainEvent extends AbstractEvent {

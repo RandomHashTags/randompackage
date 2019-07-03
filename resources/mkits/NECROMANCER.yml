@@ -58,9 +58,9 @@ kit bundle:
   - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
-  - "gkit;DIABLO;3"
-  - "gkit;VOIDWALKER;3"
-  - "gkit;WARLOCK;3"
+  - "GLOBAL_DIABLO;3"
+  - "GLOBAL_VOIDWALKER;3"
+  - "GLOBAL_WARLOCK;3"
 #
 anti crystal:
   item: "yellow_dye"

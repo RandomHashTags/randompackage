@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
+import me.randomhashtags.randompackage.recode.utils.KitItem;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes;
 
 import me.randomhashtags.randompackage.api.Shop;
+import me.randomhashtags.randompackage.recode.utils.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1470,7 +1470,7 @@ public enum UMaterial {
     public static UMaterial match(String name, byte data) {
         name = name.toUpperCase();
         if(inUMemory.containsKey(name + data)) return inUMemory.get(name + data);
-        for(UMaterial u : UMaterial.values()) {
+        for(UMaterial u : values()) {
             if(u.getData() == data) {
                 for(String n : u.names) {
                     if(n != null && n.equals(name)) {
@@ -1486,7 +1486,7 @@ public enum UMaterial {
     public static ItemStack valueOf(String name, byte data) {
         name = name.toUpperCase();
         if(inMemory.keySet().contains(name + data)) return inMemory.get(name + data).clone();
-        for(UMaterial u : UMaterial.values()) {
+        for(UMaterial u : values()) {
             if(u.getData() == data) {
                 for(String n : u.names) {
                     if(n != null && n.equals(name)) {
@@ -1674,7 +1674,7 @@ public enum UMaterial {
             final byte d = name.contains(":") ? Byte.parseByte(name.split(":")[1]) : 0;
             name = name.split(":")[0].toUpperCase();
             if(inUMemory.containsKey(name + d)) return inUMemory.get(name + d);
-            for(UMaterial u : UMaterial.values()) {
+            for(UMaterial u : values()) {
                 if(u.name().equals(name)) {
                     inUMemory.put(name, u);
                     return u;

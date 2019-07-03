@@ -63,9 +63,9 @@ kit bundle:
   - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
-  - "gkit;SPOOKY;3"
-  - "gkit;BUTCHER;3"
-  - "gkit;GRIM_REAPER;3"
+  - "GLOBAL_SPOOKY;3"
+  - "GLOBAL_BUTCHER;3"
+  - "GLOBAL_GRIM_REAPER;3"
 #
 anti crystal:
   item: "yellow_dye"

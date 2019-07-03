@@ -8,7 +8,6 @@ import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
 import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
 import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.utils.classes.Mask;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;

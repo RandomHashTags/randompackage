@@ -1,8 +1,7 @@
 package me.randomhashtags.randompackage.utils.classes.kits;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractCustomKit;
 import me.randomhashtags.randompackage.utils.abstraction.AbstractFallenHero;
-import me.randomhashtags.randompackage.utils.classes.living.LivingFallenHero;
+import me.randomhashtags.randompackage.recode.api.addons.active.LivingFallenHero;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;

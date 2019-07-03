@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
 import me.randomhashtags.randompackage.utils.AbstractRPFeature;
 import me.randomhashtags.randompackage.utils.abstraction.*;
 import me.randomhashtags.randompackage.utils.supported.SpawnerAPI;
@@ -121,11 +122,11 @@ public class UVersion {
         }
         return null;
     }
-    public AbstractEnchantRarity getEnchantRarity(String plugin, String key) {
-        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, AbstractEnchantRarity> b = AbstractEnchantRarity.rarities;
+    public EnchantRarity getEnchantRarity(String plugin, String key) {
+        final HashMap<me.randomhashtags.randompackage.utils.NamespacedKey, EnchantRarity> b = EnchantRarity.rarities;
         if(b != null) {
             final AbstractRPFeature f = getFeature(plugin, key, b.keySet(), b.values());
-            return f != null ? (AbstractEnchantRarity) f : null;
+            return f != null ? (EnchantRarity) f : null;
         }
         return null;
     }

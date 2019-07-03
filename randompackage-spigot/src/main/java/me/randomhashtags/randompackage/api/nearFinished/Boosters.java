@@ -1,8 +1,6 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractBooster;
-import me.randomhashtags.randompackage.utils.classes.Booster;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;

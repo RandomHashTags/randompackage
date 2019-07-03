@@ -1,8 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.abstraction.*;
-import me.randomhashtags.randompackage.utils.classes.customenchants.EnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -209,7 +208,7 @@ public abstract class RPFeature extends UVersion implements Listener {
                                     int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
                                     l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
                                     if(l != 0 || !levelzeroremoval)
-                                        lore.add(EnchantRarity.valueOf(e).getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                        lore.add(FileEnchantRarity.valueOf(e).getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
                                 }
                             }
                         } else {

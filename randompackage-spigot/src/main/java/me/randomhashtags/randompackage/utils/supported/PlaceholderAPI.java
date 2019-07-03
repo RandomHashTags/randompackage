@@ -3,11 +3,10 @@ package me.randomhashtags.randompackage.utils.supported;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.classes.Title;
-import me.randomhashtags.randompackage.utils.classes.CoinFlipStats;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
+import me.randomhashtags.randompackage.recode.utils.CoinFlipStats;
 import org.bukkit.entity.Player;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
@@ -54,7 +53,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return Integer.toString(pdata.jackpotTickets);
 
         } else if(identifier.startsWith("title_")) {
-            final Title t = pdata.getActiveTitle();
+            final FileTitle t = pdata.getActiveTitle();
             return t != null ? identifier.equals("title_chat") ? " " + t.getChatTitle() : t.getTabTitle() : "";
         }
         return null;

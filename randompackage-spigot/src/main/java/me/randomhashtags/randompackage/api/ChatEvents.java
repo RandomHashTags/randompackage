@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.classes.Title;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -62,7 +62,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		final Player player = event.getPlayer();
 		if(message.contains("[brag]") || message.contains("[item]")) {
 			final ArrayList<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
-			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
+			final FileTitle ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
 			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", event.getMessage().split("\\[").length > 0 ? event.getMessage().split("\\[")[0] : "")), suffix = new TextComponent(event.getMessage().split("]").length > 1 ? event.getMessage().split("]")[1] : "");
 			if(message.contains("[brag]")) {

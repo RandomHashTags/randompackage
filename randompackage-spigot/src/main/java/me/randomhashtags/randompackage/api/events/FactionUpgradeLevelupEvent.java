@@ -1,16 +1,16 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.abstraction.AbstractFactionUpgrade;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.FactionUpgrade;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
 public class FactionUpgradeLevelupEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
     public final Player player;
-    public final AbstractFactionUpgrade upgrade;
+    public final FactionUpgrade upgrade;
     public final int fromTier;
-    public FactionUpgradeLevelupEvent(Player player, AbstractFactionUpgrade upgrade, int fromTier) {
+    public FactionUpgradeLevelupEvent(Player player, FactionUpgrade upgrade, int fromTier) {
         this.player = player;
         this.upgrade = upgrade;
         this.fromTier = fromTier;

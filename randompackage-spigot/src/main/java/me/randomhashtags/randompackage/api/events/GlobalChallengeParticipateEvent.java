@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.globalchallenges.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.api.addons.active.ActiveGlobalChallenge;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 

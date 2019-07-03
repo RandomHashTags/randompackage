@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.classes.Trinket;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,14 +31,14 @@ public class Trinkets extends RPFeature {
         final File folder = new File(rpd + separator + "trinkets");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                trinkets.add(new Trinket(f).getItem());
+                trinkets.add(new FileTrinket(f).getItem());
             }
         }
-        final HashMap<String, Trinket> t = Trinket.trinkets;
+        final HashMap<String, FileTrinket> t = FileTrinket.trinkets;
         if(t != null) addGivedpCategory(trinkets, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (t != null ? t.size() : 0) + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        Trinket.deleteAll();
+        FileTrinket.deleteAll();
     }
 }

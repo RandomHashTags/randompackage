@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +18,7 @@ public class RandomizationScroll {
 	private static YamlConfiguration yml;
 	private String path;
 	private ItemStack is;
-	private List<AbstractEnchantRarity> appliesto;
+	private List<EnchantRarity> appliesto;
 	public RandomizationScroll(String path) {
 		if(scrolls == null) {
 			scrolls = new HashMap<>();
@@ -32,11 +32,11 @@ public class RandomizationScroll {
 		if(is == null) is = api.d(yml, "scrolls." + path);
 		return is.clone();
 	}
-	public List<AbstractEnchantRarity> getAppliesToRarities() {
+	public List<EnchantRarity> getAppliesToRarities() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : yml.getString("scrolls." + path + ".applies to").split(";")) {
-				appliesto.add(AbstractEnchantRarity.rarities.get(s));
+				appliesto.add(EnchantRarity.rarities.get(s));
 			}
 		}
 		return appliesto;

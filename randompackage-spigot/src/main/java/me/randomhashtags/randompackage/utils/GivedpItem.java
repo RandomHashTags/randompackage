@@ -5,13 +5,12 @@ import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.events.customenchant.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.nearFinished.Boosters;
-import me.randomhashtags.randompackage.utils.abstraction.*;
-import me.randomhashtags.randompackage.utils.classes.*;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileArmorSet;
+import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileEnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileTitle;
 import me.randomhashtags.randompackage.utils.classes.customenchants.*;
-import me.randomhashtags.randompackage.utils.classes.kits.EvolutionKit;
-import me.randomhashtags.randompackage.utils.classes.kits.GlobalKit;
-import me.randomhashtags.randompackage.utils.classes.kits.MasteryKit;
-import me.randomhashtags.randompackage.utils.classes.ServerCrate;
+import me.randomhashtags.randompackage.recode.api.addons.usingFile.FileServerCrate;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 public class GivedpItem extends RPFeature implements CommandExecutor {
     public static final GivedpItem givedpitem = new GivedpItem();
@@ -158,8 +156,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(CustomArmor.getCustomArmor().isEnabled) {
                 final String[] b = input.split(":");
                 String type = b.length == 2 ? "random" : b[2];
-                final HashMap<String, ArmorSet> L = ArmorSet.sets;
-                final ArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
+                final HashMap<String, FileArmorSet> L = FileArmorSet.sets;
+                final FileArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
                 if(a != null) {
                     final int R = random.nextInt(4);
                     type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
@@ -195,7 +193,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(l < 5) return air;
             final String plugin = l == 6 ? k[1] : null, key = l == 6 ? k[2] : k[1];
             AbstractCustomEnchant e = getCustomEnchant(plugin, key.replace("_", " "));
-            final AbstractEnchantRarity r = e == null ? getEnchantRarity(plugin, key) : null;
+            final EnchantRarity r = e == null ? getEnchantRarity(plugin, key) : null;
             if(r != null) {
                 final List<AbstractCustomEnchant> a = r.getEnchants();
                 e = a.get(random.nextInt(a.size()));
@@ -286,7 +284,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final RandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return R != null ? R.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
-            final AbstractEnchantRarity r = EnchantRarity.rarities != null ? AbstractEnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
+            final EnchantRarity r = FileEnchantRarity.rarities != null ? EnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
             return r != null ? r.getRevealItem() : air;
         } else if(input.startsWith("rarityfireball")) {
             final HashMap<String, Fireball> L = Fireball.fireballs;
@@ -300,12 +298,12 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final int amount = three != null && three.contains("-") ? min+random.nextInt(Integer.parseInt(three.split("-")[1])-min+1) : min;
             return g != null ? g.getItem(amount) : air;
         } else if(input.startsWith("servercrate") || input.startsWith("spacecrate") || input.startsWith("spacechest")) {
-            final HashMap<String, ServerCrate> L = ServerCrate.crates;
-            final ServerCrate s = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
+            final HashMap<String, FileServerCrate> L = FileServerCrate.crates;
+            final FileServerCrate s = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return s != null ? s.getPhyiscalItem() : air;
         } else if(input.startsWith("serverflare") || input.startsWith("spaceflare")) {
-            final HashMap<String, ServerCrate> L = ServerCrate.crates;
-            final ServerCrate s = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
+            final HashMap<String, FileServerCrate> L = FileServerCrate.crates;
+            final FileServerCrate s = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return s != null ? s.getFlare().getItem() : air;
         } else if(input.startsWith("soultracker")) {
             final HashMap<String, SoulTracker> L = SoulTracker.trackers;
@@ -313,9 +311,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return st != null ? st.getItem() : air;
         } else if(input.startsWith("title")) {
             final Titles t = Titles.getTitles();
-            final HashMap<Integer, Title> L = Title.numbers;
+            final HashMap<Integer, FileTitle> L = FileTitle.numbers;
             final int a = t.isEnabled() && L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? random.nextInt(L.size()) : getRemainingInt(input.split(":")[1]) : -1;
-            final Title ti = L != null? L.getOrDefault(a, null) : null;
+            final FileTitle ti = L != null? L.getOrDefault(a, null) : null;
             return ti != null ? ti.getItem() : air;
         } else if(input.startsWith("vkitfallenhero")) {
             final HashMap<String, EvolutionKit> L = EvolutionKit.kits;

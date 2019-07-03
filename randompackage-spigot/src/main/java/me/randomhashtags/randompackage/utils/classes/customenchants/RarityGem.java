@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.classes.customenchants;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEnchantRarity;
+import me.randomhashtags.randompackage.recode.api.addons.EnchantRarity;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +21,7 @@ public class RarityGem {
 	private String path;
 	private int timeBetweenSameKills;
 	private ItemStack item;
-	private List<AbstractEnchantRarity> worksFor;
+	private List<EnchantRarity> worksFor;
 	private List<String> splitMessage, toggleon, toggleoffInteract, toggleoffDropped, toggleoffMoved, toggleoffRanOut;
 	private HashMap<Integer, String> colors;
 
@@ -46,11 +46,11 @@ public class RarityGem {
 		item.setItemMeta(itemMeta);
 		return item;
 	}
-	public List<AbstractEnchantRarity> getWorksFor() {
+	public List<EnchantRarity> getWorksFor() {
 		if(worksFor == null) {
 			worksFor = new ArrayList<>();
 			for(String s : yml.getString("gems." + path + ".works for rarities").split(";")) {
-				worksFor.add(AbstractEnchantRarity.rarities.get(s));
+				worksFor.add(EnchantRarity.rarities.get(s));
 			}
 		}
 		return worksFor;

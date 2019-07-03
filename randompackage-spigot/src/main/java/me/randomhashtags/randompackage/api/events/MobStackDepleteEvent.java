@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
-import me.randomhashtags.randompackage.utils.abstraction.AbstractEvent;
-import me.randomhashtags.randompackage.utils.classes.StackedEntity;
+import me.randomhashtags.randompackage.recode.api.events.AbstractEvent;
+import me.randomhashtags.randompackage.recode.utils.StackedEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 
