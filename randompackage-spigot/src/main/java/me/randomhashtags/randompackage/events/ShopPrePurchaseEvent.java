@@ -6,7 +6,6 @@ import org.bukkit.event.Cancellable;
 
 public class ShopPrePurchaseEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
-
     public final Player player;
     public final ShopItem item;
     private int amount;

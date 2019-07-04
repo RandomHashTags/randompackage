@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+applies to:
+  - HEROIC
+  - SOUL
+  - LEGENDARY
+  - ULTIMATE
+  - ELITE
+  - UNIQUE
+  - SIMPLE
+#
+item:
+  item: "paper"
+  name: "&c&lGodly Randomization Scroll"
+  lore:
+  - " "
+  - "&7Apply to &cANY &7enchantment book"
+  - "&7to reroll the success and destroy rates."
+  -  " "
+  - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

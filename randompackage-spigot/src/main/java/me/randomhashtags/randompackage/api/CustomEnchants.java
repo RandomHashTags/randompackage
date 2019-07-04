@@ -2,8 +2,11 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.objects.customenchants.*;
 import me.randomhashtags.randompackage.addons.objects.customenchants.Fireball;
+import me.randomhashtags.randompackage.addons.usingfile.FileRandomizationScroll;
+import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.RandomizationScrollUseEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
@@ -12,7 +15,7 @@ import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.utils.enums.CustomEnchantApplyResult;
+import me.randomhashtags.randompackage.addons.enums.CustomEnchantApplyResult;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
@@ -381,8 +384,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "rarity gems.yml"));
             final ConfigurationSection cs = r.getConfigurationSection("gems");
             if(cs != null) {
-                RarityGem.defaultColors = new HashMap<>();
-                final HashMap<Integer, String> d = RarityGem.defaultColors;
+                FileRarityGem.defaultColors = new HashMap<>();
+                final HashMap<Integer, String> d = FileRarityGem.defaultColors;
                 final ConfigurationSection C = r.getConfigurationSection("default settings.colors");
                 d.put(-1, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.else")));
                 d.put(0, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.less than 100")));
@@ -392,42 +395,10 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                 }
                 for(String s : cs.getKeys(false)) {
-                    new RarityGem(r, s);
+                    new FileRarityGem(r, s);
                 }
-                final HashMap<String, RarityGem> g = RarityGem.gems;
+                final HashMap<String, FileRarityGem> g = FileRarityGem.gems;
                 sendConsoleMessage("&6[RandomPackage] &aLoaded " + (g != null ? g.size() : 0) + " Rarity Gems &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
-        if(RP.getBoolean("custom enchants.soul trackers")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "soul trackers.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "soul trackers.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("trackers");
-            if(cs != null) {
-                final List<ItemStack> z = new ArrayList<>();
-                for(String s : cs.getKeys(false)) {
-                    z.add(new SoulTracker(s).getItem());
-                }
-                addGivedpCategory(z, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
-                final HashMap<String, SoulTracker> s = SoulTracker.trackers;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (s != null ? s.size() : 0) + " Soul Trackers &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
-        if(RP.getBoolean("custom enchants.randomization scrolls")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "randomization scrolls.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "randomization scrolls.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("scrolls");
-            if(cs != null) {
-                final List<ItemStack> z = new ArrayList<>();
-                for(String s : cs.getKeys(false)) {
-                    z.add(new RandomizationScroll(s).getItem());
-                }
-                addGivedpCategory(z, UMaterial.PAPER, "Randomization Scrolls", "Givedp: Randomization Scrolls");
-                final HashMap<String, RandomizationScroll> s = RandomizationScroll.scrolls;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (s != null ? s.size() : 0) + " Randomization Scrolls &e(took " + (Q-started) + "ms)");
                 started = Q;
             }
         }
@@ -483,9 +454,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         CustomEnchantEntity.deleteAll();
         AbstractCustomEnchant.deleteAll();
         EnchantRarity.deleteAll();
-        RarityGem.deleteAll();
-        SoulTracker.deleteAll();
-        RandomizationScroll.deleteAll();
+        FileRarityGem.deleteAll();
         BlackScroll.deleteAll();
         Fireball.deleteAll();
         MagicDust.deleteAll();
@@ -563,7 +532,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     @EventHandler(priority = EventPriority.HIGH)
     private void playerDropItemEvent(PlayerDropItemEvent event) {
         if(!event.isCancelled()) {
-            final RarityGem gem = RarityGem.valueOf(event.getItemDrop().getItemStack());
+            final FileRarityGem gem = FileRarityGem.valueOf(event.getItemDrop().getItemStack());
             if(gem != null) {
                 final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
                 if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
@@ -761,7 +730,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
         EnchantRarity rarity = EnchantRarity.valueOf(I);
         final Fireball fireball = rarity == null ? Fireball.valueOf(I) : null;
-        final RarityGem gem = fireball == null ? RarityGem.valueOf(I) : null;
+        final FileRarityGem gem = fireball == null ? FileRarityGem.valueOf(I) : null;
         final EnchantmentOrb eo = gem == null ? EnchantmentOrb.valueOf(I) : null;
         if(rarity != null) {
             final ItemStack r = getRandomEnabledEnchant(rarity);
@@ -852,7 +821,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         spawnedFromSpawner.remove(u);
         if(e instanceof Player) {
             final RPPlayer pdata = RPPlayer.get(u);
-            for(RarityGem g : pdata.getRarityGems().keySet())
+            for(FileRarityGem g : pdata.getRarityGems().keySet())
                 pdata.toggleRarityGem(event, g);
         }
         if(!(e instanceof Player) && k != null) {
@@ -1279,7 +1248,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         final ItemStack curs = event.getCursor(), curr = event.getCurrentItem();
         if(!event.isCancelled() && curr != null && curs != null && curr.hasItemMeta() && curs.hasItemMeta()) {
             final int cursorAmount = curs.getAmount();
-            final RarityGem cursor = RarityGem.valueOf(curs), current = cursor != null ? RarityGem.valueOf(curr) : null;
+            final FileRarityGem cursor = FileRarityGem.valueOf(curs), current = cursor != null ? FileRarityGem.valueOf(curr) : null;
             if(cursor == null || current == null) return;
             if(cursor.equals(current)) {
                 final Player player = (Player) event.getWhoClicked();
@@ -1326,7 +1295,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
                 item = current; itemMeta = current.getItemMeta(); lore.clear();
                 final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(current);
-                final RandomizationScroll randomizationscroll = RandomizationScroll.valueOf(cursor);
+                final FileRandomizationScroll randomizationscroll = FileRandomizationScroll.valueOf(cursor);
                 if(enchant != null && randomizationscroll != null) {
                     final EnchantRarity r = EnchantRarity.valueOf(enchant);
                     if(randomizationscroll.getAppliesToRarities().contains(r)) {
@@ -1416,11 +1385,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             }
                         }
                         if(!did) return;
-                        success = true;
-                    }
-                    final SoulTracker soultracker = orb == null ? SoulTracker.valueOf(cursor) : null;
-                    if(soultracker != null) {
-                        applySoulTracker(player, current, soultracker);
                         success = true;
                     }
                 }
@@ -1529,44 +1493,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
         return item;
     }
-    public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {
-        if(is != null && SoulTracker.trackers != null) {
-            itemMeta = is.getItemMeta(); lore.clear();
-            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-            boolean did = false;
-            final String a = soultracker.getAppliedLore(), ist = is.getType().name();
-            for(String s : soultracker.getAppliesTo()) {
-                if(!did && ist.toLowerCase().endsWith(s.toLowerCase())) {
-                    if(!lore.isEmpty()) {
-                        for(int i = 0; i < lore.size(); i++) {
-                            final String targetLore = lore.get(i);
-                            for(SoulTracker st : SoulTracker.trackers.values()) {
-                                if(!did && targetLore.startsWith(st.getAppliedLore().replace("{SOULS}", ""))) {
-                                    did = true;
-                                    lore.set(i, a.replace("{SOULS}", "0"));
-                                }
-                            }
-                        }
-                        if(!did) {
-                            did = true;
-                            lore.add(a.replace("{SOULS}", "0"));
-                        }
-                    } else {
-                        lore.add(a.replace("{SOULS}", "0"));
-                        did = true;
-                    }
-                }
-            }
-            if(did) {
-                for(String string : soultracker.getApplyMessage()) {
-                    if(string.contains("{ITEM}")) string = string.replace("{ITEM}", is.getType().name());
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
-                }
-                itemMeta.setLore(lore); lore.clear();
-                is.setItemMeta(itemMeta);
-            }
-        }
-    }
     public boolean applyTransmogScroll(ItemStack is) {
         final String currentitem = is != null ? is.getType().name() : null;
         if(currentitem != null && (currentitem.endsWith("AXE") || currentitem.endsWith("SWORD") || currentitem.endsWith("SPADE") || currentitem.equals("BOW") || currentitem.endsWith("HELMET") || currentitem.endsWith("CHESTPLATE") || currentitem.endsWith("LEGGINGS") || currentitem.endsWith("BOOTS"))) {
@@ -1658,81 +1584,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             itemMeta.setLore(lore); lore.clear();
             is.setItemMeta(itemMeta);
             player.updateInventory();
-        }
-    }
-    public void splitsouls(Player player, int amount) {
-        final HashMap<String, SoulTracker> ST = SoulTracker.trackers;
-        if(ST != null) {
-            item = getItemInHand(player);
-            RarityGem g = RarityGem.valueOf(item);
-            int collectedsouls = 0, gems = 0;
-            List<String> split = null;
-            SoulTracker appliedst = null;
-            if(g != null) {
-                split = g.getSplitMessage();
-                collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
-            } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
-                sendStringListMessage(player, config.getStringList("messages.need item with soul tracker"), null);
-            } else {
-                itemMeta = item.getItemMeta();
-                lore.clear();
-                if(itemMeta.hasLore())
-                    lore.addAll(itemMeta.getLore());
-                boolean did = false;
-                int applied = -1, totalsouls = -1;
-                for(SoulTracker st : ST.values()) {
-                    int i = -1;
-                    if(!did) {
-                        for(String s : lore) {
-                            i += 1;
-                            final String a = st.getAppliedLore();
-                            if(s.startsWith(a.replace("{SOULS}", ""))) {
-                                appliedst = st;
-                                applied = i;
-                                split = st.getSplitMessage();
-                                collectedsouls = getRemainingInt(s);
-                                totalsouls = collectedsouls;
-                                if(amount == -1) {
-                                    amount = collectedsouls;
-                                } else if(collectedsouls <= 0) {
-                                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
-                                    return;
-                                } else {
-                                    collectedsouls = amount;
-                                }
-                                if(amount == 0)  {
-                                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
-                                    return;
-                                }
-                                gems = (int) (collectedsouls * st.getSoulsPerKill());
-                                did = true;
-                            }
-                        }
-                    }
-                }
-                if(did) {
-                    lore.set(applied, appliedst.getAppliedLore().replace("{SOULS}", Integer.toString(totalsouls - amount)));
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                    player.updateInventory();
-                }
-            }
-            if(split != null) {
-                if(g == null) {
-                    g = appliedst.getConvertsTo();
-                }
-                item = g.getItem().clone(); itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', g.getColors(gems)) + gems));
-                if(gems != 0) item.setAmount(1);
-                item.setItemMeta(itemMeta);
-                giveItem(player, item);
-                for(String string : split) {
-                    if(string.contains("{SOULS}")) string = string.replace("{SOULS}", Integer.toString(collectedsouls));
-                    if(string.contains("{GEMS}")) string = string.replace("{GEMS}", Integer.toString(gems));
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
-                }
-                player.updateInventory();
-            }
         }
     }
 }

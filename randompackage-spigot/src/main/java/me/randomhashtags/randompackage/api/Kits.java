@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.classes.kits.*;
 import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
-import me.randomhashtags.randompackage.utils.enums.KitType;
+import me.randomhashtags.randompackage.addons.enums.KitType;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;

@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+applies to:
+  - LEGENDARY
+#
+item:
+  item: "paper"
+  name: "&6&lLegendary Randomization Scroll"
+  lore:
+  - " "
+  - "&7Apply to a(n) &6Legendary &7enchantment book"
+  - "&7to reroll the success and destroy rates."
+  - " "
+  - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

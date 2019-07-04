@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons.objects.customenchants;
 
-import me.randomhashtags.randompackage.recode.RPStorage;
+import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;

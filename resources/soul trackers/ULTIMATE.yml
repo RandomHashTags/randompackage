@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+messages:
+  apply:
+    - "&e&l(!)&r &eYou have applied a &e&lUltimate Soul Tracker&r &eto your {ITEM}!"
+  split:
+    - "&e&l- {SOULS} Ultimate Souls"
+    - "&a&l+ {GEMS} Soul Gem(s)"
+#
+tracks: PLAYERS
+applies to: "sword;_axe"
+souls per kill: 20
+converts to gem: SOUL
+applied lore: "&e&lSouls Harvested: {SOULS}"
+#
+item:
+  item: "paper"
+  name: "&e&lUltimate Soul Tracker"
+  lore:
+  - "&7Apply to weapons to start tracking"
+  - "&e&lUltimate Souls &7collected from kills."
+  - " "
+  - "&eCollects: &720 souls/player kill"
+  - " "
+  - "&c&lWARNING: &7Previously tracked souls"
+  - "&7will be released on apply."

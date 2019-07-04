@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
+import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -7,13 +9,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class CustomEnchantProcEvent extends AbstractEvent implements Cancellable {
 	public final Event event;
-	public final AbstractCustomEnchant enchant;
+	public final CustomEnchant enchant;
 	public final int level;
 	public final ItemStack itemWithEnchant;
 	private boolean cancelled;
 	public boolean didProc;
 	public final Player player;
-	public CustomEnchantProcEvent(Event event, AbstractCustomEnchant enchant, int level, ItemStack itemWithEnchant, Player player) {
+	public CustomEnchantProcEvent(Event event, CustomEnchant enchant, int level, ItemStack itemWithEnchant, Player player) {
 		this.event = event;
 		this.enchant = enchant;
 		this.level = level;

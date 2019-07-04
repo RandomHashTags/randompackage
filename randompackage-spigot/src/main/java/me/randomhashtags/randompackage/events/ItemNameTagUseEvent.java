@@ -1,5 +1,6 @@
-package me.randomhashtags.randompackage.events.customenchant;
+package me.randomhashtags.randompackage.events;
 
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;

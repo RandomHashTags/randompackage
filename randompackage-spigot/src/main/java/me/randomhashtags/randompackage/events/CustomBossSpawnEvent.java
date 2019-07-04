@@ -1,6 +1,7 @@
-package me.randomhashtags.randompackage.events.customboss;
+package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;

@@ -1,12 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

@@ -1,0 +1,25 @@
+# Made by RandomHashTags
+messages:
+  apply:
+    - "&e&l(!)&r &eYou have applied a &6&lLegendary Soul Tracker&r &eto your {ITEM}!"
+  split:
+    - "&6&l- {SOULS} Legendary Souls"
+    - "&a&l+ {GEMS} Soul Gem(s)"
+#
+tracks: PLAYERS
+applies to: "sword;_axe"
+souls per kill: 25
+converts to gem: SOUL
+applied lore: "&6&lSouls Harvested: {SOULS}"
+#
+item:
+  item: "paper"
+  name: "&6&lLegendary Soul Tracker"
+  lore:
+  - "&7Apply to weapons to start tracking"
+  - "&6&lLegendary Souls &7collected from kills."
+  - " "
+  - "&6Collects: &725 souls/player kill"
+  - " "
+  - "&c&lWARNING: &7Previously tracked souls"
+  - "&7will be released on apply."

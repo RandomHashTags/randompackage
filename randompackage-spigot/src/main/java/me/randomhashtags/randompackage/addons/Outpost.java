@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.utils.RPAddon;
-import me.randomhashtags.randompackage.utils.enums.OutpostStatus;
+import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;

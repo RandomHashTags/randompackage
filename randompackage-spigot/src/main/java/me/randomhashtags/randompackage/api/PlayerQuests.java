@@ -1,13 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.events.PlayerQuestCompleteEvent;
-import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;

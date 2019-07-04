@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+applies to:
+  - ULTIMATE
+#
+item:
+  item: "paper"
+  name: "&e&lUltimate Randomization Scroll"
+  lore:
+  - " "
+  - "&7Apply to a(n) &eUltimate &7enchantment book"
+  - "&7to reroll the success and destroy rates."
+  - " "
+  - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addons.active;
 
-import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossDeathEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossSpawnEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.CustomBossDeathEvent;
+import me.randomhashtags.randompackage.events.CustomBossSpawnEvent;
 import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;

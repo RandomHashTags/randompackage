@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgrade;
-import me.randomhashtags.randompackage.addons.objects.customenchants.RarityGem;
+import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -57,7 +57,7 @@ public class FactionUpgrades extends RPFeature {
 
     private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
     private HashMap<String, Double> teleportDelayMultipliers, cropGrowthMultipliers, enemyDamageMultipliers, bossDamageMultipliers, vkitLevelingChances;
-    private HashMap<String, HashMap<RarityGem, Double>> decreaseRarityGemCost;
+    private HashMap<String, HashMap<FileRarityGem, Double>> decreaseRarityGemCost;
 
     public void load() {
         final long started = System.currentTimeMillis();
@@ -440,7 +440,7 @@ public class FactionUpgrades extends RPFeature {
         enemyDamageMultipliers.put(faction, multiplier);
     }
 
-    public double getDecreaseRarityGemPercent(String factionName, RarityGem gem) {
+    public double getDecreaseRarityGemPercent(String factionName, FileRarityGem gem) {
         return decreaseRarityGemCost.containsKey(factionName) ? decreaseRarityGemCost.get(factionName).getOrDefault(gem, 0.00) : 0;
     }
     public double getVkitLevelingChance(String factionName) {

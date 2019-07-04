@@ -12,7 +12,7 @@ import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Updater;
-import me.randomhashtags.randompackage.utils.enums.Feature;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
 import org.bukkit.Bukkit;

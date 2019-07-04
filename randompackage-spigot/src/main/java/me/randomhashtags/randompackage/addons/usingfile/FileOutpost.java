@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Outpost;
-import me.randomhashtags.randompackage.utils.enums.OutpostStatus;
+import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

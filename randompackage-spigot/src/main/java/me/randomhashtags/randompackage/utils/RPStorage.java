@@ -1,8 +1,8 @@
-package me.randomhashtags.randompackage.recode;
+package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import me.randomhashtags.randompackage.utils.enums.Feature;
+import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public abstract class RPStorage {
+public abstract class RPStorage extends UVersion {
     protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
 
@@ -38,8 +38,11 @@ public abstract class RPStorage {
     protected static TreeMap<String, Outpost> outposts;
     protected static TreeMap<String, Pet> pets;
     protected static TreeMap<String, PlayerQuest> playerquests;
+    protected static TreeMap<String, RandomizationScroll> randomizationscrolls;
+    protected static TreeMap<String, RarityGem> raritygems;
     protected static TreeMap<String, ServerCrate> servercrates;
     protected static TreeMap<String, ShopCategory> shopcategories;
+    protected static TreeMap<String, SoulTracker> soultrackers;
     protected static TreeMap<String, Title> titles;
     protected static TreeMap<String, Trinket> trinkets;
 
@@ -229,6 +232,22 @@ public abstract class RPStorage {
         playerquests.put(identifier, l);
     }
 
+    public RandomizationScroll getRandomizationScroll(String identifier) {
+        return randomizationscrolls != null ? randomizationscrolls.getOrDefault(identifier, null) : null;
+    }
+    public void addRandomizationScroll(String identifier, RandomizationScroll l) {
+        if(randomizationscrolls == null) randomizationscrolls = new TreeMap<>();
+        randomizationscrolls.put(identifier, l);
+    }
+
+    public RarityGem getRarityGem(String identifier) {
+        return raritygems != null ? raritygems.getOrDefault(identifier, null) : null;
+    }
+    public void addRarityGem(String identifier, RarityGem l) {
+        if(raritygems == null) raritygems = new TreeMap<>();
+        raritygems.put(identifier, l);
+    }
+
     public ServerCrate getServerCrate(String identifier) {
         return servercrates != null ? servercrates.getOrDefault(identifier, null) : null;
     }
@@ -243,6 +262,14 @@ public abstract class RPStorage {
     public void addShopCategory(String identifier, ShopCategory l) {
         if(shopcategories == null) shopcategories = new TreeMap<>();
         shopcategories.put(identifier, l);
+    }
+
+    public SoulTracker getSoulTracker(String identifier) {
+        return soultrackers != null ? soultrackers.getOrDefault(identifier, null) : null;
+    }
+    public void addSoulTracker(String identifier, SoulTracker l) {
+        if(soultrackers == null) soultrackers = new TreeMap<>();
+        soultrackers.put(identifier, l);
     }
 
     public Title getTitle(String identifier) {
@@ -281,12 +308,15 @@ public abstract class RPStorage {
         else if(f.equals(Feature.MONTHLY_CRATES)) monthlycrates = null;
         else if(f.equals(Feature.OUTPOSTS)) outposts = null;
         else if(f.equals(Feature.PLAYER_QUESTS)) playerquests = null;
+        else if(f.equals(Feature.RANDOMIZATION_SCROLLS)) randomizationscrolls = null;
+        else if(f.equals(Feature.RARITY_GEMS)) raritygems = null;
         else if(f.equals(Feature.SERVER_CRATES)) servercrates = null;
+        else if(f.equals(Feature.SOUL_TRACKERS)) soultrackers = null;
         else if(f.equals(Feature.SHOP)) shopcategories = null;
         else if(f.equals(Feature.TITLES)) titles = null;
         else if(f.equals(Feature.TRINKETS)) trinkets = null;
     }
-    public static void deleteAll() {
-
+    public void deleteAll() {
+        for(Feature f : Feature.values()) deleteAll(f);
     }
 }

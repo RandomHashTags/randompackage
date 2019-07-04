@@ -7,7 +7,6 @@ import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import me.randomhashtags.randompackage.utils.universal.UVersion;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +30,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
-public abstract class RPFeature extends UVersion implements Listener {
+public abstract class RPFeature extends RPStorage implements Listener {
     private boolean isEnabled = false;
     private static boolean mcmmoIsEnabled = false;
     public boolean isEnabled() { return isEnabled; }

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;

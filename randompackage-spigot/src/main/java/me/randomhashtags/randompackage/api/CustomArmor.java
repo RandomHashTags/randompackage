@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.CEAApplyPotionEffectEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantProcEvent;

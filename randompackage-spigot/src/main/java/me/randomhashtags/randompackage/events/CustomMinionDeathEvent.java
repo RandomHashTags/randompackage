@@ -1,6 +1,7 @@
-package me.randomhashtags.randompackage.events.customboss;
+package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.active.LivingCustomMinion;
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.event.Event;
 
 public class CustomMinionDeathEvent extends AbstractEvent {

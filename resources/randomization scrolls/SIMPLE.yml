@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+applies to:
+  - SIMPLE
+#
+item:
+  item: "paper"
+  name: "&f&lSimple Randomization Scroll"
+  lore:
+  - " "
+  - "&7Apply to a(n) &fSimple &7enchantment book"
+  - "&7to reroll the success and destroy rates."
+  - " "
+  - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

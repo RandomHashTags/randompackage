@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.usingfile.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
-import me.randomhashtags.randompackage.utils.interfaces.ILivingFallenHero;
+import me.randomhashtags.randompackage.addons.interfaces.ILivingFallenHero;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

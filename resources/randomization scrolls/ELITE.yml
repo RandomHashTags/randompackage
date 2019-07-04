@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+applies to:
+  - ELITE
+#
+item:
+  item: "paper"
+  name: "&b&lElite Randomization Scroll"
+  lore:
+  - " "
+  - "&7Apply to a(n) &bElite &7enchantment book"
+  - "&7to reroll the success and destroy rates."
+  - " "
+  - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

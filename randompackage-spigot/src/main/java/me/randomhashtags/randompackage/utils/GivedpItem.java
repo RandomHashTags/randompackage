@@ -1,16 +1,13 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.objects.customenchants.*;
+import me.randomhashtags.randompackage.addons.usingfile.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
-import me.randomhashtags.randompackage.events.customenchant.ItemNameTagUseEvent;
-import me.randomhashtags.randompackage.events.customenchant.MysteryMobSpawnerOpenEvent;
+import me.randomhashtags.randompackage.events.ItemNameTagUseEvent;
+import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.nearFinished.Boosters;
-import me.randomhashtags.randompackage.addons.usingfile.FileArmorSet;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
-import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
-import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
@@ -280,8 +277,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final MonthlyCrate mc = L != null ? L.getOrDefault(Q.split(":")[1], null) : null;
             return mc != null ? mc.getItem() : air;
         } else if(input.startsWith("randomizationscroll")) {
-            final HashMap<String, RandomizationScroll> L = RandomizationScroll.scrolls;
-            final RandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
+            final HashMap<String, FileRandomizationScroll> L = FileRandomizationScroll.scrolls;
+            final FileRandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return R != null ? R.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
             final EnchantRarity r = FileEnchantRarity.rarities != null ? EnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
@@ -291,8 +288,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final Fireball f = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return f != null ? f.getItem() : air;
         } else if(input.startsWith("raritygem")) {
-            final HashMap<String, RarityGem> L = RarityGem.gems;
-            final RarityGem g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())])  : L.getOrDefault(Q.split(":")[1], null) : null;
+            final HashMap<String, FileRarityGem> L = FileRarityGem.gems;
+            final FileRarityGem g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())])  : L.getOrDefault(Q.split(":")[1], null) : null;
             final String three = input.split(":").length == 3 ? input.split(":")[2] : null;
             final int min = three != null ? Integer.parseInt(three.contains("-") ? three.split("-")[0] : three) : 0;
             final int amount = three != null && three.contains("-") ? min+random.nextInt(Integer.parseInt(three.split("-")[1])-min+1) : min;

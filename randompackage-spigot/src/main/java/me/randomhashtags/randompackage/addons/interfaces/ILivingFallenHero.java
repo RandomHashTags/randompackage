@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.utils.interfaces;
+package me.randomhashtags.randompackage.addons.interfaces;
 
 import org.bukkit.Location;
 

@@ -1,5 +1,6 @@
-package me.randomhashtags.randompackage.events.customboss;
+package me.randomhashtags.randompackage.events;
 
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;

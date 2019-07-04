@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.enums.OutpostStatus;
+import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

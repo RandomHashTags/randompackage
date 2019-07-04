@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.utils;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.customboss.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.events.MaskEquipEvent;
 import me.randomhashtags.randompackage.events.MaskUnequipEvent;
@@ -11,7 +11,7 @@ import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.objects.customenchants.RarityGem;
+import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -669,7 +669,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
             if(fu.isEnabled()) {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final RarityGem gem = RarityGem.gems.get(a.split("\\{")[1].split(":")[0]);
+                final FileRarityGem gem = FileRarityGem.gems.get(a.split("\\{")[1].split(":")[0]);
                 if(!pdata.hasActiveRarityGem(gem)) {
                     ev.didProc = false;
                     return;
@@ -917,7 +917,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-    public ItemStack getRarityGem(RarityGem gem, Player player) {
+    public ItemStack getRarityGem(FileRarityGem gem, Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
         for(int i = 0; i < pi.getSize(); i++) {

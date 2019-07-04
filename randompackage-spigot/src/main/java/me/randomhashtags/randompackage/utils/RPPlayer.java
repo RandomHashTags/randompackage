@@ -1,19 +1,15 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.addons.PlayerQuest;
+import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.objects.customenchants.RarityGem;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.objects.Home;
-import me.randomhashtags.randompackage.recode.RPStorage;
-import me.randomhashtags.randompackage.utils.enums.KitType;
+import me.randomhashtags.randompackage.addons.enums.KitType;
 import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -56,7 +52,7 @@ public class RPPlayer extends RPStorage {
     public YamlConfiguration yml = null;
 
     private CoinFlipStats coinflipStats;
-    private FileTitle activeTitle;
+    private Title activeTitle;
     public long jackpotWonCash = 0, xpExhaustionExpiration = 0;
     public int jackpotTickets = 0, jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
     public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
@@ -64,7 +60,7 @@ public class RPPlayer extends RPStorage {
 
     private List<Home> homes;
     private List<UMaterial> filteredItems;
-    private List<FileTitle> ownedTitles;
+    private List<Title> ownedTitles;
     private List<String> ownedMonthlyCrates, claimedMonthlyCrates;
     private List<ItemStack> unclaimedPurchases;
     private List<UUID> customEnchantEntities;
@@ -75,8 +71,11 @@ public class RPPlayer extends RPStorage {
     private HashMap<GlobalChallengePrize, Integer> challengeprizes;
     private HashMap<PlayerQuest, ActivePlayerQuest> quests;
 
-    private HashMap<String, Integer> gkits, vkits, mkits, unclaimedLootboxes;
-    private HashMap<String, Long> gkitCooldowns, vkitCooldowns, mkitCooldowns, claimedLootboxesExpiration;
+
+    private HashMap<CustomKit, Integer> kitLevels;
+    private HashMap<CustomKit, Long> kitCooldowns;
+    private HashMap<String, Integer> unclaimedLootboxes;
+    private HashMap<String, Long> claimedLootboxesExpiration;
 
     public RPPlayer(UUID uuid) {
         this.uuid = uuid;
@@ -102,9 +101,13 @@ public class RPPlayer extends RPStorage {
         if(backup) backup();
     }
     public static RPPlayer get(UUID player) { return players.getOrDefault(player, new RPPlayer(player)); }
+    public void backup(boolean async) {
+        if(async) scheduler.runTaskAsynchronously(randompackage, () -> backup());
+        else backup();
+    }
     public void backup() {
         yml.set("name", Bukkit.getOfflinePlayer(uuid).getName());
-        final FileTitle T = getActiveTitle();
+        final Title T = getActiveTitle();
         final String strings = T != null ? T.getTitle() : "null";
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
         final String ints = jackpotTickets + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
@@ -119,7 +122,7 @@ public class RPPlayer extends RPStorage {
         for(Home h : getHomes()) homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
         yml.set("homes", homez);
         yml.set("filtered items", getFilteredItemz());
-        for(FileTitle t : getTitles()) titles.add(t.getTitle());
+        for(Title t : getTitles()) titles.add(t.getTitle());
         yml.set("owned titles", titles);
         yml.set("owned monthly crates", getMonthlyCrates());
         yml.set("claimed monthly crates", getClaimedMonthlyCrates());
@@ -157,37 +160,22 @@ public class RPPlayer extends RPStorage {
         final HashMap<RarityGem, Boolean> r = getRarityGems();
         yml.set("rarity gems", null);
         for(RarityGem g : r.keySet()) {
-            yml.set("rarity gems." + g.getPath(), r.get(g));
+            yml.set("rarity gems." + g.getYamlName(), r.get(g));
         }
 
-        loadGlobalChallengePrizes();
+        final HashMap<GlobalChallengePrize, Integer> prizes = getGlobalChallengePrizes();
         yml.set("global challenge prizes", null);
-        for(GlobalChallengePrize p : challengeprizes.keySet()) {
-            yml.set("global challenge prizes." + p.getPlacement(), challengeprizes.get(p));
+        for(GlobalChallengePrize p : prizes.keySet()) {
+            yml.set("global challenge prizes." + p.getPlacement(), prizes.get(p));
         }
 
-        loadKits(KitType.GLOBAL);
-        loadKitCooldowns(KitType.GLOBAL);
-        yml.set("gkits", null);
-        for(String s : gkits.keySet()) {
-            yml.set("gkits." + s + ".level", gkits.get(s));
-            yml.set("gkits." + s + ".cooldown expiration", gkitCooldowns.getOrDefault(s, 0l));
-        }
-
-        loadKits(KitType.EVOLUTION);
-        loadKitCooldowns(KitType.EVOLUTION);
-        yml.set("vkits", null);
-        for(String s : vkits.keySet()) {
-            yml.set("vkits." + s + ".level", vkits.get(s));
-            yml.set("vkits." + s + ".cooldown expiration", vkitCooldowns.getOrDefault(s, 0l));
-        }
-
-        loadKits(KitType.MASTERY);
-        loadKitCooldowns(KitType.MASTERY);
-        yml.set("mkits", null);
-        for(String s : mkits.keySet()) {
-            yml.set("mkits." + s + ".level", mkits.get(s));
-            yml.set("mkits." + s + ".cooldown expiration", mkitCooldowns.getOrDefault(s, 0l));
+        final HashMap<CustomKit, Integer> kitLevels = getKitLevels();
+        final HashMap<CustomKit, Long> kitCooldowns = getKitCooldowns();
+        yml.set("kits", null);
+        for(CustomKit k : kitCooldowns.keySet()) {
+            final String i = k.getIdentifier();
+            yml.set("kits." + i + ".level", kitLevels.getOrDefault(k, -1));
+            yml.set("kits." + i + ".cooldown expiration", kitCooldowns.get(k));
         }
 
         final HashMap<PlayerQuest, ActivePlayerQuest> apq = getQuests();
@@ -251,6 +239,10 @@ public class RPPlayer extends RPStorage {
         }
         return players.get(uuid);
     }
+    public void unload(boolean async) {
+        if(async) scheduler.runTaskAsynchronously(randompackage, () -> unload());
+        else unload();
+    }
     public void unload() {
         if(isLoaded) {
             try {
@@ -276,12 +268,8 @@ public class RPPlayer extends RPStorage {
             raritygems = null;
             challengeprizes = null;
 
-            gkits = null;
-            vkits = null;
-            mkits = null;
-            gkitCooldowns = null;
-            vkitCooldowns = null;
-            mkitCooldowns = null;
+            kitLevels = null;
+            kitCooldowns = null;
             quests = null;
 
             if(questTasks.containsKey(uuid)) {
@@ -329,7 +317,7 @@ public class RPPlayer extends RPStorage {
         return coinflipStats;
     }
 
-    private void loadHomes() {
+    public List<Home> getHomes() {
         if(homes == null) {
             homes = new ArrayList<>();
             for(String s : yml.getStringList("homes")) {
@@ -339,14 +327,10 @@ public class RPPlayer extends RPStorage {
                 homes.add(new Home(name, api.toLocation(s.substring(name.length()+A[1].length()+2)), mat));
             }
         }
-    }
-    public List<Home> getHomes() {
-        loadHomes();
         return homes;
     }
     public Home getHome(String name) {
-        loadHomes();
-        for(Home h : homes) {
+        for(Home h : getHomes()) {
             if(h.name.equals(name)) {
                 return h;
             }
@@ -354,7 +338,6 @@ public class RPPlayer extends RPStorage {
         return null;
     }
     public void addHome(Location location, String name, UMaterial icon) {
-        loadHomes();
         final Home h = getHome(name);
         if(h != null) {
             h.location = location;
@@ -364,8 +347,7 @@ public class RPPlayer extends RPStorage {
         }
     }
     public void deleteHome(Home h) {
-        loadHomes();
-        homes.remove(h);
+        getHomes().remove(h);
     }
     public int getMaxHomes() {
         final Player p = Bukkit.getPlayer(uuid);
@@ -420,48 +402,42 @@ public class RPPlayer extends RPStorage {
         customEnchantEntities.remove(uuid);
     }
 
-    private void loadShowcases() {
+    public HashMap<Integer, ItemStack[]> getShowcases() {
         if(showcases == null && showcaseSizes == null) {
             showcases = new HashMap<>();
             showcaseSizes = new HashMap<>();
             final ConfigurationSection c = yml.getConfigurationSection("showcases");
             if(c != null) {
-               for(String s : c.getKeys(false)) {
-                   final int page = Integer.parseInt(s);
-                   showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
-                   final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
-                   final ItemStack[] items = new ItemStack[54];
-                   if(i != null) {
-                       for(String sl : i.getKeys(false)) {
-                           final int slot = Integer.parseInt(sl);
-                           items[slot] = api.d(yml, "showcases." + s + "." + sl);
-                       }
-                   }
-                   showcases.put(page, items);
-               }
+                for(String s : c.getKeys(false)) {
+                    final int page = Integer.parseInt(s);
+                    showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
+                    final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
+                    final ItemStack[] items = new ItemStack[54];
+                    if(i != null) {
+                        for(String sl : i.getKeys(false)) {
+                            final int slot = Integer.parseInt(sl);
+                            items[slot] = api.d(yml, "showcases." + s + "." + sl);
+                        }
+                    }
+                    showcases.put(page, items);
+                }
             }
         }
-    }
-    public HashMap<Integer, ItemStack[]> getShowcases() {
-        loadShowcases();
         return showcases;
     }
     public HashMap<Integer, Integer> getShowcaseSizes() {
-        loadShowcases();
+        getShowcases();
         return showcaseSizes;
     }
     public ItemStack[] getShowcase(int page) {
-        loadShowcases();
-        return showcases.getOrDefault(page, null);
+        return getShowcases().getOrDefault(page, null);
     }
     public int getShowcaseSize(int page) {
-        loadShowcases();
-        return showcaseSizes.getOrDefault(page, 0);
+        return getShowcaseSizes().getOrDefault(page, 0);
     }
     public HashMap<Integer, ItemStack> getShowcaseItems(int page) {
-        loadShowcases();
         final HashMap<Integer, ItemStack> items = new HashMap<>();
-        if(showcases.containsKey(page)) {
+        if(getShowcases().containsKey(page)) {
             int p = 0;
             for(ItemStack a : showcases.get(page)) {
                 if(a != null && !a.getType().equals(Material.AIR)) {
@@ -473,8 +449,7 @@ public class RPPlayer extends RPStorage {
         return items;
     }
     public void addToShowcase(int page, ItemStack item) {
-        loadShowcases();
-        if(showcases.containsKey(page)) {
+        if(getShowcases().containsKey(page)) {
             int p = 0;
             for(ItemStack is : showcases.get(page)) {
                 if(is == null || is.getType().equals(Material.AIR)) {
@@ -486,8 +461,7 @@ public class RPPlayer extends RPStorage {
         }
     }
     public void removeFromShowcase(ItemStack item) {
-        loadShowcases();
-        for(int i : showcases.keySet()) {
+        for(int i : getShowcases().keySet()) {
             final ItemStack[] a = showcases.get(i);
             int p = 0;
             for(ItemStack l : a) {
@@ -500,8 +474,7 @@ public class RPPlayer extends RPStorage {
         }
     }
     public void removeFromShowcase(int page, ItemStack item) {
-        loadShowcases();
-        if(showcases.containsKey(page)) {
+        if(getShowcases().containsKey(page)) {
             int p = 0;
             for(ItemStack is : showcases.get(page)) {
                 if(is.equals(item)) {
@@ -522,79 +495,67 @@ public class RPPlayer extends RPStorage {
         showcaseSizes.put(page, 9);
     }
 
-    private void loadRarityGems() {
+    public HashMap<RarityGem, Boolean> getRarityGems() {
         if(raritygems == null) {
             raritygems = new HashMap<>();
             final ConfigurationSection c = yml.getConfigurationSection("rarity gems");
             if(c != null) {
                 for(String s : c.getKeys(false)) {
-                    raritygems.put(RarityGem.gems.get(s), yml.getBoolean("rarity gems." + s));
+                    raritygems.put(getRarityGem(s), yml.getBoolean("rarity gems." + s));
                 }
             }
         }
-    }
-    public HashMap<RarityGem, Boolean> getRarityGems() {
-        loadRarityGems();
         return raritygems;
     }
     public boolean hasActiveRarityGem(RarityGem gem) {
         if(gem != null) {
-            loadRarityGems();
-            return raritygems.getOrDefault(gem, false);
+            return getRarityGems().getOrDefault(gem, false);
         }
         return false;
     }
     public void toggleRarityGem(Event event, RarityGem gem) {
         if(event != null && gem != null) {
-            loadRarityGems();
-            final boolean prev = raritygems.getOrDefault(gem, false), on = !prev;
+            final boolean prev = getRarityGems().getOrDefault(gem, false), on = !prev;
             raritygems.put(gem, on);
             final List<String> msg = on ? gem.getToggleOnMsg() : event instanceof PlayerInteractEvent ? gem.getToggleOffInteractMsg() : event instanceof InventoryClickEvent ? gem.getToggleOffMovedMsg() : event instanceof PlayerDropItemEvent ? gem.getToggleOffDroppedMsg() : gem.getToggleOffRanOutMsg();
             api.sendStringListMessage(Bukkit.getPlayer(uuid), msg, null);
         }
     }
 
-    private void loadActiveTitle() {
-        if(!activeTitleIsLoaded && activeTitle == null && FileTitle.titles != null) {
+    public Title getActiveTitle() {
+        if(!activeTitleIsLoaded && activeTitle == null && titles != null) {
             activeTitleIsLoaded = true;
             final String s = yml.getString("strings");
             if(s != null && !s.isEmpty()) {
                 final String a = s.split(";")[0];
                 if(a != null && !a.equals("null")) {
-                    activeTitle = FileTitle.titles.get(a);
+                    activeTitle = getTitle(a);
                 }
             }
         }
-    }
-    public FileTitle getActiveTitle() {
-        loadActiveTitle();
         return activeTitle;
     }
-    public void setActiveTitle(FileTitle title) {
+    public void setActiveTitle(Title title) {
         activeTitle = title;
     }
 
-    private void loadTitles() {
+    public List<Title> getTitles() {
         if(ownedTitles == null) {
             ownedTitles = new ArrayList<>();
             final List<String> O = yml.getStringList("owned titles");
             for(String s : O) {
-                ownedTitles.add(FileTitle.titles.get(s));
+                ownedTitles.add(getTitle(s));
             }
         }
-    }
-    public List<FileTitle> getTitles() {
-        loadTitles();
         return ownedTitles;
     }
-    public void addTitle(FileTitle title) {
-        loadTitles();
-        if(!ownedTitles.contains(title)) {
+    public void addTitle(Title title) {
+        if(!getTitles().contains(title)) {
             ownedTitles.add(title);
         }
     }
 
-    private void loadUnclaimedPurchases() {
+    public List<ItemStack> getUnclaimedPurchases() {
         if(unclaimedPurchases == null) {
             unclaimedPurchases = new ArrayList<>();
             final ConfigurationSection cs = yml.getConfigurationSection("unclaimed purchases");
@@ -604,17 +565,13 @@ public class RPPlayer extends RPStorage {
                 }
             }
         }
-    }
-    public List<ItemStack> getUnclaimedPurchases() {
-        loadUnclaimedPurchases();
         return unclaimedPurchases;
     }
     public void removeUnclaimedPurchase(ItemStack is) {
-        loadUnclaimedPurchases();
-        unclaimedPurchases.remove(is);
+        getUnclaimedPurchases().remove(is);
     }
 
-    private void loadGlobalChallengePrizes() {
+    public HashMap<GlobalChallengePrize, Integer> getGlobalChallengePrizes() {
         if(challengeprizes == null) {
             challengeprizes = new HashMap<>();
             final ConfigurationSection a = yml.getConfigurationSection("global challenge prizes");
@@ -624,107 +581,39 @@ public class RPPlayer extends RPStorage {
                 }
             }
         }
-    }
-    public HashMap<GlobalChallengePrize, Integer> getGlobalChallengePrizes() {
-        loadGlobalChallengePrizes();
         return challengeprizes;
     }
     public void addGlobalChallengePrize(GlobalChallengePrize prize) {
-        loadGlobalChallengePrizes();
-        challengeprizes.put(prize, challengeprizes.getOrDefault(prize, 0)+1);
+        getGlobalChallengePrizes().put(prize, challengeprizes.getOrDefault(prize, 0)+1);
     }
 
-    private void loadKits(KitType type) {
-        final String p = type == KitType.GLOBAL ? "gkits" : type == KitType.EVOLUTION ? "vkits" : "mkits";
-        final HashMap<String, Integer> levels;
-        if(type == KitType.GLOBAL && gkits == null) {
-            gkits = new HashMap<>();
-            levels = gkits;
-        } else if(type == KitType.EVOLUTION && vkits == null) {
-            vkits = new HashMap<>();
-            levels = vkits;
-        } else if(type == KitType.MASTERY && mkits == null) {
-            mkits = new HashMap<>();
-            levels = mkits;
-        } else return;
-        final ConfigurationSection c = yml.getConfigurationSection(p);
-        if(c != null) {
-            for(String s : c.getKeys(false)) {
-                levels.put(s, yml.getInt(p + "." + s + ".level"));
+    public HashMap<CustomKit, Integer> getKitLevels() {
+        if(kitLevels == null) {
+            kitLevels = new HashMap<>();
+            kitCooldowns = new HashMap<>();
+            final ConfigurationSection c = yml.getConfigurationSection("kits");
+            if(c != null) {
+                for(String s : c.getKeys(false)) {
+                    final CustomKit k = getKit(s);
+                    if(k != null) {
+                        kitLevels.put(k, yml.getInt("kits." + s + ".level"));
+                        kitCooldowns.put(k, yml.getLong("kits." + s + ".cooldown expiration"));
+                    }
+                }
             }
         }
+        return kitLevels;
     }
-    private void loadKitCooldowns(KitType type) {
-        final String p = type == KitType.GLOBAL ? "gkits" : type == KitType.EVOLUTION ? "vkits" : "mkits";
-        final HashMap<String, Long> cooldowns;
-        if(type == KitType.GLOBAL && gkitCooldowns == null) {
-            gkitCooldowns = new HashMap<>();
-            cooldowns = gkitCooldowns;
-        } else if(type == KitType.EVOLUTION && vkitCooldowns == null) {
-            vkitCooldowns = new HashMap<>();
-            cooldowns = vkitCooldowns;
-        } else if(type == KitType.MASTERY && mkitCooldowns == null) {
-            mkitCooldowns = new HashMap<>();
-            cooldowns = mkitCooldowns;
-        } else return;
-        final ConfigurationSection c = yml.getConfigurationSection(p);
-        if(c != null) {
-            for(String s : c.getKeys(false)) {
-                cooldowns.put(s, yml.getLong(p + "." + s + ".cooldown expiration"));
-            }
-        }
+    public HashMap<CustomKit, Long> getKitCooldowns() {
+        getKitLevels();
+        return kitCooldowns;
     }
-    public HashMap<String, Integer> getKitLevels(KitType type) {
-        loadKits(type);
-        return type == KitType.GLOBAL ? gkits : type == KitType.EVOLUTION ? vkits : mkits;
+    public int getKitLevel(CustomKit kit) {
+        return kit != null ? getKitLevels().getOrDefault(kit, -1) : -1;
     }
-    public int getKitLevel(GlobalKit kit) {
-        loadKits(KitType.GLOBAL);
-        return gkits.getOrDefault(kit.getYamlName(), 0);
+    public void setKitCooldown(CustomKit kit, long cooldownExpiration) {
+        if(kit != null) getKitCooldowns().put(kit, cooldownExpiration);
     }
-    public int getKitLevel(EvolutionKit kit) {
-        loadKits(KitType.EVOLUTION);
-        return vkits.getOrDefault(kit.getYamlName(), 0);
-    }
-    public int getKitLevel(MasteryKit kit) {
-        loadKits(KitType.MASTERY);
-        return mkits.getOrDefault(kit.getYamlName(), 0);
-    }
-    public HashMap<String, Long> getKitCooldowns(KitType type) {
-        loadKitCooldowns(type);
-        return type == KitType.GLOBAL ? gkitCooldowns : type == KitType.EVOLUTION ? vkitCooldowns : mkitCooldowns;
-    }
-    public long getKitCooldown(GlobalKit kit) {
-        loadKitCooldowns(KitType.GLOBAL);
-        return gkitCooldowns.getOrDefault(kit.getYamlName(), 0l);
-    }
-    public void setKitCooldown(GlobalKit kit, long cooldown) {
-        loadKitCooldowns(KitType.GLOBAL);
-        gkitCooldowns.put(kit.getYamlName(), cooldown);
-    }
-    public long getKitCooldown(EvolutionKit kit) {
-        loadKitCooldowns(KitType.EVOLUTION);
-        return vkitCooldowns.getOrDefault(kit.getYamlName(), 0l);
-    }
-    public void setKitCooldown(EvolutionKit kit, long cooldown) {
-        loadKitCooldowns(KitType.EVOLUTION);
-        vkitCooldowns.put(kit.getYamlName(), cooldown);
-    }
-    public long getKitCooldown(MasteryKit kit) {
-        loadKitCooldowns(KitType.MASTERY);
-        return mkitCooldowns.getOrDefault(kit.getYamlName(), 0l);
-    }
-    public void addKitCooldown(Object kit, long expiration) {
-        final GlobalKit g = kit instanceof GlobalKit ? (GlobalKit) kit : null;
-        final EvolutionKit v = g == null && kit instanceof EvolutionKit ? (EvolutionKit) kit : null;
-        final MasteryKit m = v == null && kit instanceof MasteryKit ? (MasteryKit) kit : null;
-        if(g == null && v == null && m == null) return;
-        final boolean gkit = g != null, vkit = v != null;
-        final KitType type = gkit ? KitType.GLOBAL : vkit ? KitType.EVOLUTION : KitType.MASTERY;
-        loadKitCooldowns(type);
-        (gkit ? gkitCooldowns : vkit ? vkitCooldowns : mkitCooldowns).put(gkit ? g.getYamlName() : vkit ? v.getYamlName() : m.getYamlName(), expiration);
-    }
-
 
     private void loadOwnedMonthlyCrates() {
         if(ownedMonthlyCrates == null) {
@@ -753,7 +642,7 @@ public class RPPlayer extends RPStorage {
                 final ConfigurationSection c = fadditions.getConfigurationSection(F);
                 if(c != null) {
                     for(String s : c.getKeys(false)) {
-                        upgrades.put(FactionUpgrade.upgrades.getOrDefault(s, null), fadditions.getInt("factions." + F + "." + s));
+                        upgrades.put(getFactionUpgrade(s), fadditions.getInt("factions." + F + "." + s));
                     }
                 }
                 factionUpgrades.put(F, upgrades);
@@ -791,7 +680,7 @@ public class RPPlayer extends RPStorage {
                 final BukkitScheduler scheduler = api.scheduler;
                 final PluginManager pm = api.pluginmanager;
                 for(String s : c.getKeys(false)) {
-                    final PlayerQuest q = PlayerQuest.enabled.get(s);
+                    final PlayerQuest q = getPlayerQuest(s);
                     final String[] b = yml.getString("quests." + s).split(";");
                     final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
                     if(!a.isExpired()) {
