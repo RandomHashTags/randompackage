@@ -18,6 +18,7 @@ public abstract class RPStorage extends UVersion {
 
     private static TreeMap<UUID, RPPlayer> players;
     protected static TreeMap<String, ArmorSet> armorsets;
+    protected static TreeMap<String, BlackScroll> blackscrolls;
     protected static TreeMap<String, Booster> boosters;
     protected static TreeMap<String, CustomBoss> bosses;
     protected static TreeMap<String, CustomEnchant> enabled, disabled;
@@ -28,6 +29,7 @@ public abstract class RPStorage extends UVersion {
     protected static TreeMap<String, CustomExplosion> explosions;
     protected static TreeMap<String, FactionUpgrade> factionupgrades;
     protected static TreeMap<String, FactionUpgradeType> factionupgradetypes;
+    protected static TreeMap<String, FallenHero> fallenheroes;
     protected static TreeMap<String, FilterCategory> filtercategories;
     protected static TreeMap<String, GlobalChallenge> globalchallenges;
     protected static TreeMap<String, GlobalChallengePrize> globalchallengeprizes;
@@ -70,6 +72,15 @@ public abstract class RPStorage extends UVersion {
         if(armorsets == null) armorsets = new TreeMap<>();
         armorsets.put(identifier, a);
     }
+
+    public BlackScroll getBlackScroll(String identifier) {
+        return blackscrolls != null ? blackscrolls.getOrDefault(identifier, null) : null;
+    }
+    public void addBlackScroll(String identifier, BlackScroll a) {
+        if(blackscrolls == null) blackscrolls = new TreeMap<>();
+        blackscrolls.put(identifier, a);
+    }
+
     public Booster getBooster(String identifier) {
         return boosters != null ? boosters.getOrDefault(identifier, null) : null;
     }
@@ -102,6 +113,14 @@ public abstract class RPStorage extends UVersion {
     public void addEnchantRarity(String identifier, EnchantRarity rarity) {
         if(rarities == null) rarities = new TreeMap<>();
         rarities.put(identifier, rarity);
+    }
+
+    public FallenHero getFallenHero(String identifier) {
+        return fallenheroes != null ? fallenheroes.getOrDefault(identifier, null) : null;
+    }
+    public void addFallenHero(String identifier, FallenHero rarity) {
+        if(fallenheroes == null) fallenheroes = new TreeMap<>();
+        fallenheroes.put(identifier, rarity);
     }
 
     public DuelArena getDuelArena(String identifier) {
@@ -315,8 +334,5 @@ public abstract class RPStorage extends UVersion {
         else if(f.equals(Feature.SHOP)) shopcategories = null;
         else if(f.equals(Feature.TITLES)) titles = null;
         else if(f.equals(Feature.TRINKETS)) trinkets = null;
-    }
-    public void deleteAll() {
-        for(Feature f : Feature.values()) deleteAll(f);
     }
 }

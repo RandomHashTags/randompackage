@@ -21,9 +21,9 @@ public class FileCustomBoss extends CustomBoss {
 
     public FileCustomBoss(File f) {
         load(f);
-        initilize();
+        addBoss(getIdentifier(), this);
     }
-    public void initilize() { addBoss(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName();  }
 
     public String getType() { return yml.getString("type").toUpperCase(); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }

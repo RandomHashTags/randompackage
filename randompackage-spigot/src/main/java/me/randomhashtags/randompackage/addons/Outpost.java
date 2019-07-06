@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -8,7 +8,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-public abstract class Outpost extends RPAddon {
+public abstract class Outpost extends Identifyable {
     public abstract String getName();
     public abstract int getSlot();
     public abstract ItemStack getDisplay();
@@ -28,4 +28,15 @@ public abstract class Outpost extends RPAddon {
     public abstract double getControlPercent();
     public abstract OutpostStatus getOutpostStatus();
     public abstract void setOutpostStatus(OutpostStatus status);
+
+    public static Outpost valueOf(int slot) {
+        if(outposts != null) {
+            for(Outpost o : outposts.values()) {
+                if(o.getSlot() == slot) {
+                    return o;
+                }
+            }
+        }
+        return null;
+    }
 }

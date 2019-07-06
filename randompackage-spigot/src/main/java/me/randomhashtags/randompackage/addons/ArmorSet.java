@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.List;
 
-public abstract class ArmorSet extends RPAddon {
+public abstract class ArmorSet extends Identifyable {
     public abstract ItemStack getHelmet();
     public abstract ItemStack getChestplate();
     public abstract ItemStack getLeggings();

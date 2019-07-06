@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -8,16 +8,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Title extends RPAddon {
+public abstract class Title extends Identifyable {
     public static ItemStack i;
     public static String titleChatFormat, titleTabFormat;
 
-    public abstract String getTitle();
-    public String getChatTitle() { return titleChatFormat.replace("{TITLE}", getTitle()); }
-    public String getTabTitle() { return titleTabFormat.replace("{TITLE}", getTitle()); }
+    public String getChatTitle() { return titleChatFormat.replace("{TITLE}", getIdentifier()); }
+    public String getTabTitle() { return titleTabFormat.replace("{TITLE}", getIdentifier()); }
 
     public ItemStack getItem() {
-        final String title = getTitle();
+        final String title = getIdentifier();
         final ItemStack item = i.clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> a = new ArrayList<>();

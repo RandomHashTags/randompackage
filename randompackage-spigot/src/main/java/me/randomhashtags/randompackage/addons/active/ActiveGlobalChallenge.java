@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.events.GlobalChallengeEndEvent;
+import me.randomhashtags.randompackage.api.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;

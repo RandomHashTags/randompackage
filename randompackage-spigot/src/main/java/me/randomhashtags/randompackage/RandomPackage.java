@@ -4,14 +4,13 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.Updater;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
@@ -41,8 +40,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
@@ -294,7 +297,17 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
 
     public void checkForUpdate() {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> Updater.getUpdater().checkForUpdate());
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            try {
+                final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
+                final URLConnection con = checkURL.openConnection();
+                final String v = RandomPackage.getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                final boolean canUpdate = !v.equals(newVersion);
+                if(canUpdate) Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion));
+            } catch(Exception e) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!"));
+            }
+        });
     }
     public void reload() {
         disable();

@@ -1,7 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.addons.PlayerQuest;
+import me.randomhashtags.randompackage.addons.usingfile.FilePlayerQuest;
+import me.randomhashtags.randompackage.api.events.*;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
@@ -172,11 +174,10 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final File folder = new File(rpd + separator + "player quests");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                new PlayerQuest(f);
+                new FilePlayerQuest(f);
             }
         }
-        final TreeMap<String, PlayerQuest> enabled = PlayerQuest.enabled, disabled = PlayerQuest.disabled;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + (enabled != null ? enabled.size() : 0) + "e, &c" + (disabled != null ? disabled.size() : 0) + "d&a] Player Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (playerquests != null ? playerquests.size() : 0) + " Player Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
@@ -191,7 +192,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         questSlots = null;
         shopitems = null;
         tokencost = null;
-        PlayerQuest.deleteAll();
+        playerquests = null;
     }
 
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {

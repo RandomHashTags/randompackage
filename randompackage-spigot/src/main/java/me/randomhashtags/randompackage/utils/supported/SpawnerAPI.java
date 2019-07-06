@@ -5,7 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 public class SpawnerAPI {
-
     private static SpawnerAPI instance;
     public static SpawnerAPI getSpawnerAPI() {
         if(instance == null) {
@@ -22,14 +21,14 @@ public class SpawnerAPI {
 
     public ItemStack getItem(String entitytype) {
         if(plugin != null) {
-            if(plugin.equals("EpicSpawners5")) return getItemEpicSpawners5(entitytype);
-            else if(plugin.equals("EpicSpawners6")) return getItemEpicSpawners6(entitytype);
-            else if(plugin.equals("SilkSpawners")) return getItemSilkSpawners(entitytype);
+            if(plugin.equals("EpicSpawners5")) return es5(entitytype);
+            else if(plugin.equals("EpicSpawners6")) return es6(entitytype);
+            else if(plugin.equals("SilkSpawners")) return ss(entitytype);
         }
         return null;
     }
 
-    public ItemStack getItemEpicSpawners5(String entitytype) {
+    private ItemStack es5(String entitytype) {
         com.songoda.epicspawners.api.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.api.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawnersPlugin.getInstance().getSpawnerManager().getAllSpawnerData()) {
             final String input = entitytype.toUpperCase().replace("_", "").replace(" ", ""), compare = spawnerData.getIdentifyingName().toUpperCase().replace("_", "").replace(" ", "");
@@ -37,7 +36,7 @@ public class SpawnerAPI {
         }
         return data != null ? data.toItemStack() : null;
     }
-    public ItemStack getItemEpicSpawners6(String entitytype) {
+    private ItemStack es6(String entitytype) {
         com.songoda.epicspawners.spawners.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.spawners.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawners.getInstance().getSpawnerManager().getAllSpawnerData()) {
             final String input = entitytype.toUpperCase().replace("_", "").replace(" ", ""), compare = spawnerData.getIdentifyingName().toUpperCase().replace("_", "").replace(" ", "");
@@ -45,7 +44,7 @@ public class SpawnerAPI {
         }
         return data != null ? data.toItemStack() : null;
     }
-    public ItemStack getItemSilkSpawners(String entitytype) {
+    private ItemStack ss(String entitytype) {
         final String input = entitytype.toUpperCase().replace("_", "").replace(" ", "");
         for(EntityType t : EntityType.values()) {
             if(input.equals(t.name().replace("_", "").replace(" ", ""))) {

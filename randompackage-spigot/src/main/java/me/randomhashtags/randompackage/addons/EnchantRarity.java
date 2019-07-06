@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class EnchantRarity extends RPAddon {
+public abstract class EnchantRarity extends Identifyable {
     public abstract String[] getRevealedEnchantRarities();
     public abstract List<String> getRevealedEnchantMsg();
     public abstract ItemStack getRevealItem();

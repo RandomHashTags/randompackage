@@ -12,9 +12,9 @@ public class FileBooster extends Booster {
     private ItemStack item;
     public FileBooster(File f) {
         load(f);
-        initilize();
+        addBooster(getIdentifier(), this);
     }
-    public void initilize() { addBooster(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getType() { return yml.getString("settings.type"); }
     public ItemStack getItem() {

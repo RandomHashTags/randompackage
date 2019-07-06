@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.addons.active;
 
+import me.randomhashtags.randompackage.addons.FallenHero;
 import me.randomhashtags.randompackage.api.Kits;
-import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.usingfile.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
-import me.randomhashtags.randompackage.addons.interfaces.ILivingFallenHero;
+import me.randomhashtags.randompackage.addons.utils.ILivingFallenHero;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,7 +39,7 @@ public class LivingFallenHero implements ILivingFallenHero {
         this.summoner = summoner;
         this.spawnedLocation = spawnedLocation;
         fallenhero = kits.getEntity(getFallenHero().getType(), getSpawnedLocation(), true);
-        fallenhero.setCustomName(kit instanceof GlobalKit ? ((GlobalKit) kit).getFallenHeroName() : ((EvolutionKit) kit).getFallenHeroName());
+        fallenhero.setCustomName(kit.getFallenHeroName());
         living.put(fallenhero.getUniqueId(), this);
     }
     public CustomKit getKit() { return kit; }
@@ -69,12 +70,12 @@ public class LivingFallenHero implements ILivingFallenHero {
                     }
                     Bukkit.broadcastMessage(s);
                 }
-                w.dropItem(fallenhero.getLocation(), kit instanceof FileKitGlobal ? (((GlobalKit) kit).getFallenHeroGem()) : ((EvolutionKit) kit).getFallenHeroGem());
+                w.dropItem(fallenhero.getLocation(), kit.getFallenHeroGemItem(kit));
             } else {
                 final List<KitItem> items = kit.getItems();
-                final boolean g = kit instanceof GlobalKit;
+                final boolean g = kit instanceof FileKitGlobal;
                 final RPPlayer pdata = RPPlayer.get(killer.getUniqueId());
-                final int lvl = g ? pdata.getKitLevel((GlobalKit) kit) : pdata.getKitLevel((EvolutionKit) kit);
+                final int lvl = pdata.getKitLevel(kit);
                 final YamlConfiguration yml = g ? kits.gkits : kits.vkits;
                 final boolean enabled = yml.getBoolean("gui.settings.use tiers");
                 final ItemStack is = kits.d(kit.getYaml(), "items." + items.get(random.nextInt(items.size())).path, enabled ? yml.getDouble("gui.settings.tier custom enchant multiplier." + lvl) : 0.00);

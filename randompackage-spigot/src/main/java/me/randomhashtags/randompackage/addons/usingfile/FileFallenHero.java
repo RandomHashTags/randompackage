@@ -2,17 +2,25 @@ package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.FallenHero;
+import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FileFallenHero extends FallenHero {
+public class FileFallenHero extends FallenHero {
     private ItemStack spawnitem, gem;
     private List<String> summonMsg, receiveKitMsg;
+
+    public FileFallenHero(File f) {
+        load(f);
+        addFallenHero(getIdentifier(), this);
+    }
+    public String getIdentifier() { return getYamlName(); }
 
     public int getGemDropChance() { return yml.getInt("gem.chance"); }
     public List<String> getSummonMsg() {
@@ -35,7 +43,7 @@ public abstract class FileFallenHero extends FallenHero {
     }
     public void spawn(LivingEntity summoner, Location loc, CustomKit kit) {
         if(loc != null && kit != null) {
-            //new LivingFallenHero(kit, this, summoner != null ? summoner.getUniqueId() : null, loc);
+            new LivingFallenHero(kit, this, summoner != null ? summoner.getUniqueId() : null, loc);
         }
     }
 }

@@ -11,9 +11,9 @@ public class FileKitEvolution extends RPKit {
 
     public FileKitEvolution(File f) {
         load(f);
-        initilize();
+        addKit(getIdentifier(), this);
     }
-    public void initilize() { addKit("EVOLUTION_" + getYamlName(), this); }
+    public String getIdentifier() { return "EVOLUTION_" + getYamlName(); }
 
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "gui settings");

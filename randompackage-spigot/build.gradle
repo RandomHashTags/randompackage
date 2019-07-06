@@ -30,6 +30,7 @@ dependencies {
     compileOnly 'com.wasteofplastic:askyblock:3.0.9.5'
     compileOnly 'de.dustplanet:SilkSpawners:5.1.0'
     compileOnly 'com.bgsoftware:superiorskyblockapi:0.1.1'
+    compileOnly 'com.bgsoftware:wildstackerapi:15'
 
     // Spigot versions for NMS/OBC
     compileOnly 'org.spigotmc:spigot-1_8_R3:1.8.8-R0.1-SNAPSHOT'

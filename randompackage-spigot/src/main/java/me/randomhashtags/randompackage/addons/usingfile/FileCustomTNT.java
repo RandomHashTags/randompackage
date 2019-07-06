@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 public class FileCustomTNT extends CustomExplosion {
@@ -24,9 +23,9 @@ public class FileCustomTNT extends CustomExplosion {
             primed = new HashMap<>();
         }
         load(f);
-        initilize();
+        addExplosion(getIdentifier(), this);
     }
-    public void initilize() { addExplosion("TNT_" + getYamlName(), this); }
+    public String getIdentifier() { return "TNT_" + getYamlName(); }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return item.clone();
@@ -36,7 +35,6 @@ public class FileCustomTNT extends CustomExplosion {
         primed.remove(uuid);
         final HashMap<Location, FileCustomTNT> p = FileCustomTNT.placed;
         if(p != null) {
-            final Random random = api.random;
             for(Block b : blockList) {
                 final Location lo = b.getLocation();
                 if(p.containsKey(lo)) {
@@ -61,9 +59,5 @@ public class FileCustomTNT extends CustomExplosion {
     public TNTPrimed ignite(Location l) {
         placed.remove(l);
         return spawn(l);
-    }
-    public static void deleteAll() {
-        placed = null;
-        primed = null;
     }
 }

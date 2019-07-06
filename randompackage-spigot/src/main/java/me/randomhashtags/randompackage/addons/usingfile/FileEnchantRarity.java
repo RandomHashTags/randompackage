@@ -20,9 +20,9 @@ public class FileEnchantRarity extends EnchantRarity {
     public FileEnchantRarity(File folder, File f) {
         load(f);
         enchants = new ArrayList<>();
-        initilize();
+        addEnchantRarity(getIdentifier(), this);
     }
-    public void initilize() { addEnchantRarity(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String[] getRevealedEnchantRarities() { return yml.getString("reveals enchant rarities").split(";"); }
     public List<String> getRevealedEnchantMsg() {

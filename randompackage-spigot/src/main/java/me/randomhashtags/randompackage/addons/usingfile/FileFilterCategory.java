@@ -11,9 +11,9 @@ public class FileFilterCategory extends FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
         load(f);
-        initilize();
+        addFilterCategory(getIdentifier(), this);
     }
-    public void initilize() { addFilterCategory(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public UInventory getInventory() {
         if(gui == null) {

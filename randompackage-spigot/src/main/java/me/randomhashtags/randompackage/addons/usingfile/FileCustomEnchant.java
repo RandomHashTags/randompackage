@@ -12,9 +12,9 @@ public class FileCustomEnchant extends me.randomhashtags.randompackage.addons.Cu
 
     public FileCustomEnchant(File f) {
         load(f);
-        initilize();
+        addEnchant(getIdentifier(), this);
     }
-    public void initilize() { addEnchant(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public boolean isEnabled() { return yml.getBoolean("enabled"); }
     public String getName() { return yml.getString("name"); }

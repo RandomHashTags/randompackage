@@ -12,15 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-
 public class FileCustomCreeper extends CustomExplosion {
     public static HashMap<UUID, FileCustomCreeper> living;
     private ItemStack item;
     public FileCustomCreeper(File f) {
         load(f);
-        initilize();
+        addExplosion(getIdentifier(), this);
     }
-    public void initilize() { addExplosion("CREEPER_" + getYamlName(), this); }
+    public String getIdentifier() { return "CREEPER_" + getYamlName(); }
+
     public String getCreeperName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("creeper name")); }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
     public ItemStack getItem() {
@@ -35,9 +35,5 @@ public class FileCustomCreeper extends CustomExplosion {
     }
     public void didExplode(UUID uuid, List<Block> blockList) {
         living.remove(uuid);
-    }
-
-    public static void deleteAll() {
-        living = null;
     }
 }

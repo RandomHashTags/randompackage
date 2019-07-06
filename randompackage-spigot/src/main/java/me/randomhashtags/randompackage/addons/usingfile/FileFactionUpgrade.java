@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
-import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.addons.FactionUpgradeType;
+import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,9 +15,9 @@ public class FileFactionUpgrade extends FactionUpgrade {
 
     public FileFactionUpgrade(File f) {
         load(f);
-        initilize();
+        addFactionUpgrade(getIdentifier(), this);
     }
-    public void initilize() { addFactionUpgrade(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public ItemStack getItem() {
         if(item == null) {
@@ -35,7 +36,7 @@ public class FileFactionUpgrade extends FactionUpgrade {
         }
         return item.clone();
     }
-    public FileFactionUpgradeType getType() { return FileFactionUpgradeType.types.getOrDefault(yml.getString("settings.type"), null); }
+    public FactionUpgradeType getType() { return getFactionUpgradeType(yml.getString("settings.type")); }
     public int getSlot() { return yml.getInt("settings.slot"); }
     public int getMaxTier() { return yml.getInt("settings.max tier"); }
     public boolean itemAmountEqualsTier() { return yml.getBoolean("settings.item amount=tier"); }

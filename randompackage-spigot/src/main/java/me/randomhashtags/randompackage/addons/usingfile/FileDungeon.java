@@ -13,9 +13,9 @@ public class FileDungeon extends Dungeon {
 
     public FileDungeon(File f) {
         load(f);
-        initilize();
+        addDungeon(getIdentifier(), this);
     }
-    public void initilize() { addDungeon(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "gui");

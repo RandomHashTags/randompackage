@@ -15,9 +15,9 @@ public class FileLootbox extends Lootbox {
 
     public FileLootbox(File f) {
         load(f);
-        initilize();
+        addLootbox(getIdentifier(), this);
     }
-    public void initilize() { addLootbox(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
     public String getGuiTitle() { return ChatColor.translateAlternateColorCodes('&', yml.getString("gui.title")); }

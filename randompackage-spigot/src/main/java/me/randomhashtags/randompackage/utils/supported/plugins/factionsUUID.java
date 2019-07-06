@@ -162,14 +162,14 @@ public class factionsUUID implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void factionDisbandEvent(FactionDisbandEvent event) {
 		if(!event.isCancelled()) {
-			final me.randomhashtags.randompackage.events.FactionDisbandEvent e = new me.randomhashtags.randompackage.events.FactionDisbandEvent(event.getPlayer(), event.getFaction().getTag());
+			final me.randomhashtags.randompackage.api.events.FactionDisbandEvent e = new me.randomhashtags.randompackage.api.events.FactionDisbandEvent(event.getPlayer(), event.getFaction().getTag());
 			Bukkit.getPluginManager().callEvent(e);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void factinRenameEvent(FactionRenameEvent event) {
 		if(!event.isCancelled()) {
-			final me.randomhashtags.randompackage.events.FactionRenameEvent e = new me.randomhashtags.randompackage.events.FactionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag());
+			final me.randomhashtags.randompackage.api.events.FactionRenameEvent e = new me.randomhashtags.randompackage.api.events.FactionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag());
 			Bukkit.getPluginManager().callEvent(e);
 		}
 	}

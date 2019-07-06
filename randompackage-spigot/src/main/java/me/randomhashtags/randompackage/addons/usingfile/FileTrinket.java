@@ -6,16 +6,15 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-
 public class FileTrinket extends Trinket {
     private String radius, cooldown;
     private ItemStack item;
 
     public FileTrinket(File f) {
         load(f);
-        initilize();
+        addTrinket(getIdentifier(), this);
     }
-    public void initilize() { addTrinket(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getRadius() {
         if(radius == null) {

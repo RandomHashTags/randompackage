@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;

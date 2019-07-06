@@ -12,7 +12,7 @@ public abstract class SoulTracker extends Itemable {
     public abstract String[] getAppliesTo();
     public abstract String getSoulsPerKill();
     public abstract double getSoulsCollected();
-    public abstract FileRarityGem getConvertsTo();
+    public abstract RarityGem getConvertsTo();
     public abstract String getAppliedLore();
     public abstract List<String> getApplyMsg();
     public abstract List<String> getSplitMsg();

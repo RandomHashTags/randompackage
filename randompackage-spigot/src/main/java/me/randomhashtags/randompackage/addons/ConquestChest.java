@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import me.randomhashtags.randompackage.addons.active.LivingConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class ConquestChest extends RPAddon {
+public abstract class ConquestChest extends Identifyable {
     public abstract String getSpawnRegion();
     public abstract String getRewardSize();
     public abstract HashMap<ConquestMob, String> getSpawnedBosses();

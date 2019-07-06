@@ -12,7 +12,7 @@ public abstract class RPKit extends CustomKit {
     public int getMaxLevel() { return yml.getInt("settings.max level"); }
     public long getCooldown() { return yml.getLong("settings.cooldown"); }
     public int getSlot() { return yml.getInt("gui settings.slot"); }
-    public FallenHero getFallenHero() { return null; }
+    public FallenHero getFallenHero() { return getFallenHero(yml.getString("settings.fallen hero")); }
     public List<KitItem> getItems() {
         if(items == null) {
             items = new ArrayList<>();
@@ -26,5 +26,6 @@ public abstract class RPKit extends CustomKit {
         }
         return items;
     }
+    public void setItems(List<KitItem> items) { this.items = items; }
 
 }

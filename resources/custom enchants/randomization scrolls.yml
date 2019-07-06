@@ -1,0 +1,73 @@
+# Made by RandomHashTags
+scrolls:
+  GODLY:
+    applies to: "HEROIC;SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "paper"
+    name: "&c&lGodly Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to &cANY &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      -  " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  SOUL:
+    applies to: "SOUL"
+    item: "paper"
+    name: "&c&lSoul Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &cSoul &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  LEGENDARY:
+    applies to: "LEGENDARY"
+    item: "paper"
+    name: "&6&lLegendary Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &6Legendary &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  ULTIMATE:
+    applies to: "ULTIMATE"
+    item: "paper"
+    name: "&e&lUltimate Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &eUltimate &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  ELITE:
+    applies to: "ELITE"
+    item: "paper"
+    name: "&b&lElite Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &bElite &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  UNIQUE:
+    applies to: "UNIQUE"
+    item: "paper"
+    name: "&a&lUnique Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &aUnique &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  SIMPLE:
+    applies to: "SIMPLE"
+    item: "paper"
+    name: "&f&lSimple Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &fSimple &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+#

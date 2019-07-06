@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.addons.EnvoyCrate;
+import me.randomhashtags.randompackage.addons.usingfile.FileEnvoyCrate;
+import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -21,8 +23,8 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.*;
 
+import static me.randomhashtags.randompackage.addons.EnvoyCrate.getRandomCrate;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
-import static me.randomhashtags.randompackage.utils.classes.EnvoyCrate.getRandomCrate;
 
 public class Envoy extends RPFeature implements CommandExecutor {
 	private static Envoy instance;
@@ -96,11 +98,11 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final File folder = new File(rpd + separator + "envoy tiers");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
-				final EnvoyCrate e = new EnvoyCrate(f);
+				final FileEnvoyCrate e = new FileEnvoyCrate(f);
 				tiers.add(e.getItem());
 			}
 		}
-		AbstractEnvoyCrate.defaultTier = new NamespacedKey(randompackage, config.getString("settings.default tier"));
+		EnvoyCrate.defaultTier = config.getString("settings.default tier");
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
 
@@ -114,8 +116,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			}
 		}, 0, 20*config.getInt("settings.firework delay"));
 
-		final HashMap<NamespacedKey, AbstractEnvoyCrate> E = EnvoyCrate.crates;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (E != null ? E.size() : 0) + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (envoycrates != null ? envoycrates.size() : 0) + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		final List<String> p = new ArrayList<>();
@@ -139,7 +140,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		preset = null;
 		settingPreset = null;
 		active = null;
-		AbstractEnvoyCrate.deleteAll();
+		envoycrates = null;
 	}
 
 	public void stopAllEnvoys() {
@@ -157,7 +158,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
-		final AbstractEnvoyCrate ec = AbstractEnvoyCrate.valueOf(i);
+		final EnvoyCrate ec = EnvoyCrate.valueOf(i);
 		final Player player = event.getPlayer();
 		if(ec != null) {
 			event.setCancelled(true);
@@ -224,7 +225,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			if(!c.isEmpty()) {
 				for(int i = 1; i <= amount; i++) {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
-					final AbstractEnvoyCrate crate = getRandomCrate(true);
+					final EnvoyCrate crate = getRandomCrate(true);
 					final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 					if(lec == null && crate.canLand(loc)) {
@@ -241,7 +242,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				final Location r = preset.get(random.nextInt(preset.size()));
 				final World w = r.getWorld();
 				final Location newl = new Location(w, r.getBlockX(), r.getBlockY()-1, r.getBlockZ());
-				final AbstractEnvoyCrate crate = getRandomCrate(true);
+				final EnvoyCrate crate = getRandomCrate(true);
 				LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 				if(lec == null && crate.canLand(r)) {
 					lec = new LivingEnvoyCrate(totalEnvoys, crate, r);

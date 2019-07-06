@@ -11,9 +11,9 @@ public class FilePet extends Pet {
     private ItemStack item;
     public FilePet(File f) {
         load(f);
-        initilize();
+        addPet(getIdentifier(), this);
     }
-    public void initilize() { addPet(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public TreeMap<Integer, Long> getCooldownForLevel() {
         final TreeMap<Integer, Long> a = new TreeMap<>();

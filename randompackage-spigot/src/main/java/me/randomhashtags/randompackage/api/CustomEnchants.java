@@ -1,14 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.BlackScroll;
+import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.objects.customenchants.*;
 import me.randomhashtags.randompackage.addons.objects.customenchants.Fireball;
-import me.randomhashtags.randompackage.addons.usingfile.FileRandomizationScroll;
+import me.randomhashtags.randompackage.addons.usingpath.PathBlackScroll;
 import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.RandomizationScrollUseEvent;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
@@ -83,8 +84,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final int page = getRemainingInt(args[0]);
                 viewEnchants(sender, page > 0 ? page : 1);
             }
-        } else if(player != null && n.equals("splitsouls") && hasPermission(sender, "RandomPackage.splitsouls", true)) {
-            splitsouls(player, args.length == 0 ? -1 : getRemainingInt(args[0]));
         }
         return true;
     }
@@ -302,9 +301,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             final ConfigurationSection cs = r.getConfigurationSection("scrolls");
             if(cs != null) {
                 for(String s : cs.getKeys(false)) {
-                    new BlackScroll(s);
+                    new PathBlackScroll(s);
                 }
-                final HashMap<String, BlackScroll> L = BlackScroll.scrolls;
+                final HashMap<String, PathBlackScroll> L = PathBlackScroll.scrolls;
                 sendConsoleMessage("&6[RandomPackage] &aLoaded " + (L != null ? L.size() : 0) + " Black Scrolls &e(took " + (Q-started) + "ms)");
                 started = Q;
             }
@@ -455,7 +454,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         AbstractCustomEnchant.deleteAll();
         EnchantRarity.deleteAll();
         FileRarityGem.deleteAll();
-        BlackScroll.deleteAll();
+        PathBlackScroll.deleteAll();
         Fireball.deleteAll();
         MagicDust.deleteAll();
     }
@@ -532,7 +531,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     @EventHandler(priority = EventPriority.HIGH)
     private void playerDropItemEvent(PlayerDropItemEvent event) {
         if(!event.isCancelled()) {
-            final FileRarityGem gem = FileRarityGem.valueOf(event.getItemDrop().getItemStack());
+            final RarityGem gem = RarityGem.valueOf(event.getItemDrop().getItemStack());
             if(gem != null) {
                 final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
                 if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
@@ -1295,25 +1294,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
                 item = current; itemMeta = current.getItemMeta(); lore.clear();
                 final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(current);
-                final FileRandomizationScroll randomizationscroll = FileRandomizationScroll.valueOf(cursor);
-                if(enchant != null && randomizationscroll != null) {
-                    final EnchantRarity r = EnchantRarity.valueOf(enchant);
-                    if(randomizationscroll.getAppliesToRarities().contains(r)) {
-                        final String s = r.getSuccess(), d = r.getDestroy();
-                        int newSuccess = random.nextInt(101), newDestroy = random.nextInt(101);
-                        final RandomizationScrollUseEvent e = new RandomizationScrollUseEvent(player, enchant, getEnchantmentLevel(itemMeta.getDisplayName()), randomizationscroll, newSuccess, newDestroy);
-                        pluginmanager.callEvent(e);
-                        newSuccess = e.getNewSuccess();
-                        newDestroy = e.getNewDestroy();
-                        for(String string : itemMeta.getLore()) {
-                            if(string.equals(s.replace("{PERCENT}", "" + getRemainingInt(string))))        string = s.replace("{PERCENT}", "" + newSuccess);
-                            else if(string.equals(d.replace("{PERCENT}", "" + getRemainingInt(string))))   string = d.replace("{PERCENT}", "" + newDestroy);
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
-                        }
-                        itemMeta.setLore(lore); lore.clear();
-                        success = true;
-                    }
-                }
                 HashMap<AbstractCustomEnchant, Integer> enchantmentsonitem = null;
                 if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
                 if(cursor.getItemMeta().equals(whitescroll.getItemMeta())) {
@@ -1466,7 +1446,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
+    public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, PathBlackScroll bs) {
         item = null;
         final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(is);
         if(is != null && enchants.size() > 0) {

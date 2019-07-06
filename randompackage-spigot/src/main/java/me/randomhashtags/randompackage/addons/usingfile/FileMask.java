@@ -21,9 +21,9 @@ public class FileMask extends Mask {
 
     public FileMask(File f) {
         load(f);
-        initilize();
+        addMask(getIdentifier(), this);
     }
-    public void initilize() { addMask(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getOwner() {
         final String tex = yml.getString("texture");

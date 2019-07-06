@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class CustomEnchant extends RPAddon {
+public abstract class CustomEnchant extends Identifyable {
     public abstract boolean isEnabled();
     public abstract String getName();
     public abstract List<String> getLore();

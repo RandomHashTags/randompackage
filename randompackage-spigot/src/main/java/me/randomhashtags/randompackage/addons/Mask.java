@@ -9,6 +9,7 @@ import java.util.List;
 public abstract class Mask extends Itemable {
     public abstract String getOwner();
     public abstract List<String> getAddedLore();
+    public abstract List<String> getAttributes();
 
     public static Mask valueOf(ItemStack is) {
         if(masks != null && is != null && is.hasItemMeta()) {

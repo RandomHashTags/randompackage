@@ -6,7 +6,7 @@ public class FileTitle extends Title {
     private String title;
     public FileTitle(String title) {
         this.title = title;
+        addTitle(title, this);
     }
-    public void initilize() { addTitle(title, this); }
-    public String getTitle() { return title; }
+    public String getIdentifier() { return title; }
 }

@@ -13,9 +13,9 @@ public class FileDuelArena extends DuelArena {
     private ItemStack item;
     public FileDuelArena(File f) {
         load(f);
-        initilize();
+        addDuelArena(getIdentifier(), this);
     }
-    public void initilize() { addDuelArena(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");

@@ -23,9 +23,9 @@ public class FileEnvoyCrate extends EnvoyCrate {
 
     public FileEnvoyCrate(File f) {
         load(f);
-        initilize();
+        addEnvoyCrate(getIdentifier(), this);
     }
-    public void initilize() { addEnvoyCrate(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public Firework getFirework() {
         if(fw == null) {

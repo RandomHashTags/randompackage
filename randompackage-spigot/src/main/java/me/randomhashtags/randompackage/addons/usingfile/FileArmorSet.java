@@ -12,9 +12,9 @@ public class FileArmorSet extends ArmorSet {
 
 	public FileArmorSet(File f) {
 		load(f);
-		initilize();
+		addArmorSet(getIdentifier(), this);
 	}
-	public void initilize() { addArmorSet(getYamlName(), this); }
+	public String getIdentifier() { return getYamlName(); }
 
 	public ItemStack getHelmet() {
 		if(helmet == null) helmet = api.d(yml, "helmet");

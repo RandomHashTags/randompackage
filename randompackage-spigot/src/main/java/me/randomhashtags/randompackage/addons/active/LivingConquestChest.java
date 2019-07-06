@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.events.ConquestDamageEvent;
+import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import org.bukkit.*;

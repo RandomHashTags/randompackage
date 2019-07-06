@@ -10,9 +10,9 @@ public class FilePlayerQuest extends PlayerQuest {
 
     public FilePlayerQuest(File f) {
         load(f);
-        initilize();
+        addPlayerQuest(getIdentifier(), this);
     }
-    public void initilize() { addPlayerQuest(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }

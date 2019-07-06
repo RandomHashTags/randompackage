@@ -23,9 +23,9 @@ public class FileServerCrate extends ServerCrate {
 	public FileServerCrate(File f) {
 		load(f);
 		redeemableItems = yml.getInt("settings.redeemable items");
-		initilize();
+		addServerCrate(getIdentifier(), this);
 	}
-	public void initilize() { addServerCrate(getYamlName(), this); }
+	public String getIdentifier() { return getYamlName(); }
 
 	public String getBossReward() { return ChatColor.translateAlternateColorCodes('&', yml.getString("boss reward")); }
 	public int getRedeemableItems() { return redeemableItems; }

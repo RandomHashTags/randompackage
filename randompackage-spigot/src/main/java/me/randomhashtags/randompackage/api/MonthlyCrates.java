@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.MonthlyCrate;
+import me.randomhashtags.randompackage.addons.usingfile.FileMonthlyCrate;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -129,7 +131,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "monthly crates");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final MonthlyCrate m = new MonthlyCrate(f);
+                final FileMonthlyCrate m = new FileMonthlyCrate(f);
                 final int z = m.getCategory();
                 if(categoriez.containsKey(z)) {
                     if(!K.containsKey(z)) K.put(z, new HashMap<>());
@@ -165,8 +167,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 inv.setItem(S, O.get(S));
             }
         }
-        final HashMap<String, MonthlyCrate> MC = MonthlyCrate.crates;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (MC != null ? MC.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (monthlycrates != null ? monthlycrates.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
@@ -183,7 +184,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         categoryViewBackground = null;
         for(Player p : playertimers.keySet()) p.closeInventory();
         playertimers = null;
-        MonthlyCrate.deleteAll();
+        monthlycrates = null;
     }
 
     public void viewCrates(Player player) {

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class EnvoyCrate extends Itemable {
-    protected static String defaultTier;
+    public static String defaultTier;
 
     public abstract Firework getFirework();
     public abstract int getChance();

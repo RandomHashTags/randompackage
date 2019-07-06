@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.addons.utils.Identifyable;
 
 import java.util.List;
 
-public abstract class PlayerQuest extends RPAddon {
+public abstract class PlayerQuest extends Identifyable {
     public abstract boolean isEnabled();
     public abstract String getName();
     public abstract long getExpiration();

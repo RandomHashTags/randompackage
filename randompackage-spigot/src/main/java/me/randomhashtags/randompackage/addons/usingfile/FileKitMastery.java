@@ -19,9 +19,9 @@ public class FileKitMastery extends RPKit {
     private List<String> antiCrystalAddedLore;
     public FileKitMastery(File f) {
         load(f);
-        initilize();
+        addKit(getIdentifier(), this);
     }
-    public void initilize() { addKit("MASTERY_" + getYamlName(), this); }
+    public String getIdentifier() { return "MASTERY_" + getYamlName(); }
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public ItemStack getItem() {

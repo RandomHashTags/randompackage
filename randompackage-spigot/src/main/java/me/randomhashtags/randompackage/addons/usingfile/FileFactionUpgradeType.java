@@ -19,9 +19,9 @@ public class FileFactionUpgradeType extends FactionUpgradeType {
 			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
 		}
 		this.path = path;
-		initilize();
+		addFactionUpgradeType(path, this);
 	}
-	public void initilize() { addFactionUpgradeType(path, this); }
+	public String getIdentifier() { return path; }
 
 	public String getPerkAchievedPrefix() { return ChatColor.translateAlternateColorCodes('&', yml.getString("types." + path + ".perk achieved prefix")); }
 	public String getPerkUnachievedPrefix() { return ChatColor.translateAlternateColorCodes('&', yml.getString("types." + path + ".perk unachieved prefix")); }

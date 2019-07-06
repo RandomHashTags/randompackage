@@ -1,11 +1,13 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.objects.customenchants.*;
+import me.randomhashtags.randompackage.addons.usingpath.PathBlackScroll;
+import me.randomhashtags.randompackage.addons.usingpath.PathRandomizationScroll;
 import me.randomhashtags.randompackage.addons.usingfile.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
-import me.randomhashtags.randompackage.events.ItemNameTagUseEvent;
-import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
+import me.randomhashtags.randompackage.api.events.ItemNameTagUseEvent;
+import me.randomhashtags.randompackage.api.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.nearFinished.Boosters;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
@@ -133,7 +135,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return getBanknote(Integer.parseInt(a[1]), a.length == 3 ? a[2] : null);
         } else if(input.startsWith("blackscroll:")) {
             final String[] a = Q.split(":");
-            final BlackScroll b = BlackScroll.scrolls != null ? BlackScroll.scrolls.getOrDefault(a[1], null) : null;
+            final PathBlackScroll b = PathBlackScroll.scrolls != null ? PathBlackScroll.scrolls.getOrDefault(a[1], null) : null;
             int amount = 0;
             if(b != null) {
                 if(a.length == 3) {
@@ -277,8 +279,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final MonthlyCrate mc = L != null ? L.getOrDefault(Q.split(":")[1], null) : null;
             return mc != null ? mc.getItem() : air;
         } else if(input.startsWith("randomizationscroll")) {
-            final HashMap<String, FileRandomizationScroll> L = FileRandomizationScroll.scrolls;
-            final FileRandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
+            final HashMap<String, PathRandomizationScroll> L = PathRandomizationScroll.scrolls;
+            final PathRandomizationScroll R = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
             return R != null ? R.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
             final EnchantRarity r = FileEnchantRarity.rarities != null ? EnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;

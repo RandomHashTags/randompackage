@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.MaskEquipEvent;
-import me.randomhashtags.randompackage.events.MaskUnequipEvent;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.addons.Mask;
+import me.randomhashtags.randompackage.addons.usingfile.FileMask;
+import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
+import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -71,13 +73,12 @@ public class Masks extends CustomEnchants implements Listener {
         final File folder = new File(rpd + separator + "masks");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final Mask m = new Mask(f);
+                final FileMask m = new FileMask(f);
                 ms.add(m.getItem());
             }
         }
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
-        final HashMap<String, Mask> M = Mask.masks;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (M != null ? M.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (masks != null ? masks.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
@@ -86,7 +87,7 @@ public class Masks extends CustomEnchants implements Listener {
             p.updateInventory();
         }
         equippedMasks = null;
-        Mask.deleteAll();
+        masks = null;
     }
 
     @EventHandler

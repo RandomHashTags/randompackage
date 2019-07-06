@@ -9,9 +9,9 @@ public class FileGlobalChallenge extends GlobalChallenge {
     private ItemStack display;
     public FileGlobalChallenge(File f) {
         load(f);
-        initilize();
+        addGlobalChallenge(getIdentifier(), this);
     }
-    public void initilize() { addGlobalChallenge(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName();  }
 
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "item");

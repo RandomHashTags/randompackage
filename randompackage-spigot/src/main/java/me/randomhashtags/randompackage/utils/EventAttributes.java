@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.api.events.*;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

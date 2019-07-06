@@ -20,9 +20,9 @@ public class FileMonthlyCrate extends MonthlyCrate {
 
     public FileMonthlyCrate(File f) {
         load(f);
-        initilize();
+        addMonthlyCrate(getIdentifier(), this);
     }
-    public void initilize() {}
+    public String getIdentifier() { return getYamlName(); }
 
     public int getCategory() { return yml.getInt("category"); }
     public int getCategorySlot() { return yml.getInt("category slot"); }

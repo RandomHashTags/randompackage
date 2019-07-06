@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
+import me.randomhashtags.randompackage.addons.Outpost;
+import me.randomhashtags.randompackage.addons.usingfile.FileOutpost;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -70,7 +72,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "outposts");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final Outpost o = new Outpost(f);
+                final FileOutpost o = new FileOutpost(f);
                 o.setOutpostStatus(OutpostStatus.UNCONTESTED);
                 gi.setItem(o.getSlot(), o.getDisplay());
             }
@@ -81,15 +83,14 @@ public class Outposts extends RPFeature implements CommandExecutor {
             if(is == null) gi.setItem(i, background);
             i++;
         }
-        final TreeMap<String, Outpost> O = Outpost.outposts;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (O != null ? O.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (outposts != null ? outposts.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
         gui = null;
         background = null;
         statuses = null;
-        Outpost.deleteAll();
+        outposts = null;
     }
 
 
@@ -120,10 +121,9 @@ public class Outposts extends RPFeature implements CommandExecutor {
             player.openInventory(Bukkit.createInventory(null, size, gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
-            final HashMap<Integer, Outpost> slots = Outpost.slots;
             for(int i = 0; i < size; i++) {
                 item = top.getItem(i);
-                final Outpost o = slots.getOrDefault(i, null);
+                final Outpost o = Outpost.valueOf(i);
                 if(o != null) {
                     final String cap = Double.toString(round(o.getControlPercent(), 4)), attacking = o.getAttackingFaction(), controlling = o.getControllingFaction(), status = o.getStatus();
                     itemMeta = item.getItemMeta(); lore.clear();
@@ -156,7 +156,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             player.updateInventory();
             final int r = event.getRawSlot();
             if(r < 0 || r >= player.getOpenInventory().getTopInventory().getSize()) return;
-            final Outpost o = Outpost.slots.getOrDefault(r, null);
+            final Outpost o = Outpost.valueOf(r);
             if(o != null) {
                 tryTeleportingTo(player, o);
             }

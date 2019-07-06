@@ -19,9 +19,9 @@ public class FileConquestChest extends ConquestChest {
 
     public FileConquestChest(File f) {
         load(f);
-        initilize();
+        addConquestChest(getIdentifier(), this);
     }
-    public void initilize() { }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getSpawnRegion() {
         if(spawnRegion == null) spawnRegion = yml.getString("settings.spawn region").toUpperCase();

@@ -17,9 +17,9 @@ public class FileShopCategory extends ShopCategory {
 
     public FileShopCategory(File f) {
         load(f);
-        initilize();
+        addShopCategory(getIdentifier(), this);
     }
-    public void initilize() { addShopCategory(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
     public UInventory getInventory() {
         if(inventory == null) {
             inventory = new UInventory(null, yml.getInt("size"), ChatColor.translateAlternateColorCodes('&', yml.getString("title")));

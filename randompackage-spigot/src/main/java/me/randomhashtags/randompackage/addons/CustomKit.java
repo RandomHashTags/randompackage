@@ -14,6 +14,7 @@ public abstract class CustomKit extends Itemable {
     public abstract long getCooldown();
     public abstract List<KitItem> getItems();
     public abstract FallenHero getFallenHero();
+    public String getFallenHeroName() { return getFallenHero().getSpawnItem().getItemMeta().getDisplayName().replace("{NAME}", getItem().getItemMeta().getDisplayName()); }
     public ItemStack getFallenHeroSpawnItem(CustomKit kit) {
         final FallenHero f = getFallenHero();
         return f != null ? get(kit, f.getSpawnItem()) : null;

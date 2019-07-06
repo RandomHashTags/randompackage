@@ -20,9 +20,9 @@ public class FileRarityGem extends RarityGem {
 
 	public FileRarityGem(File f) {
 		load(f);
-		initilize();
+		addRarityGem(getIdentifier(), this);
 	}
-	public void initilize() { addRarityGem(getYamlName(), this); }
+	public String getIdentifier() { return getYamlName(); }
 
 	public ItemStack getItem() {
 		if(item == null) item = api.d(yml, "item");

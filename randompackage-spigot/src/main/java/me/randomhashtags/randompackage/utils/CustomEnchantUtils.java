@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.MaskEquipEvent;
-import me.randomhashtags.randompackage.events.MaskUnequipEvent;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
+import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
+import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
@@ -66,9 +67,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
 
     public static List<UUID> spawnedFromSpawner;
     public static List<Player> stoppedAllEnchants, frozen;
-    public static HashMap<AbstractCustomEnchant, Integer> timerenchants;
-    public static HashMap<Player, HashMap<AbstractCustomEnchant, Integer>> stoppedEnchants;
-    public static HashMap<Player, HashMap<AbstractCustomEnchant, Double>> combos;
+    public static HashMap<CustomEnchant, Integer> timerenchants;
+    public static HashMap<Player, HashMap<CustomEnchant, Integer>> stoppedEnchants;
+    public static HashMap<Player, HashMap<CustomEnchant, Double>> combos;
     public static HashMap<Location, HashMap<ItemStack, HashMap<Block, Integer>>> temporaryblocks; // <block location <original block, <temporary new block, ticks>>>>
     public static HashMap<UUID, ItemStack> shotBows;
     public static HashMap<UUID, Player> shotbows;
@@ -119,7 +120,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(ItemStack is : player.getInventory().getArmorContents()) {
                 if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
                     for(String s : is.getItemMeta().getLore()) {
-                        final AbstractCustomEnchant e = AbstractCustomEnchant.valueOf(s);
+                        final CustomEnchant e = CustomEnchant.valueOf(s);
                         if(e != null) {
                             procEnchant(event, e, getEnchantmentLevel(s), is, player);
                         }
@@ -133,7 +134,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final ItemStack h = is == null ? player.getInventory().getItemInHand() : is;
             if(h != null && h.hasItemMeta() && h.getItemMeta().hasLore()) {
                 for(String s : h.getItemMeta().getLore()) {
-                    final AbstractCustomEnchant e = AbstractCustomEnchant.valueOf(s);
+                    final CustomEnchant e = CustomEnchant.valueOf(s);
                     if(e != null) {
                         procEnchant(event, e, getEnchantmentLevel(s), h, player);
                     }
@@ -142,12 +143,12 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
 
     }
-    public void tryProcEnchant(Event event, Player player, AbstractCustomEnchant enchant) {
+    public void tryProcEnchant(Event event, Player player, CustomEnchant enchant) {
         if(player != null) {
             for(ItemStack is : player.getInventory().getArmorContents()) {
                 if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
                     for(String s : is.getItemMeta().getLore()) {
-                        final AbstractCustomEnchant e = AbstractCustomEnchant.valueOf(s);
+                        final CustomEnchant e = CustomEnchant.valueOf(s);
                         if(e != null && e.equals(enchant)) {
                             procEnchant(event, e, getEnchantmentLevel(s), is, player);
                         }
@@ -157,7 +158,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
     }
 
-    public void procEnchant(Event event, AbstractCustomEnchant enchant, int level, ItemStack itemWithEnchant, Player P) {
+    public void procEnchant(Event event, CustomEnchant enchant, int level, ItemStack itemWithEnchant, Player P) {
         final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, enchant, level, itemWithEnchant, P);
         pluginmanager.callEvent(e);
         if(!e.isCancelled() && (!(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) || event instanceof PluginEnableEvent) {
@@ -167,7 +168,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
 
     public void executeAttributes(CustomEnchantProcEvent e, Player P) {
         final Event event = e.event;
-        final AbstractCustomEnchant enchant = e.enchant;
+        final CustomEnchant enchant = e.enchant;
         for(String attr : enchant.getAttributes()) {
             final String A = attr.split(";")[0].toLowerCase();
             if(event instanceof PlayerArmorEvent && (A.equals("armorequip") && ((PlayerArmorEvent) event).reason.name().contains("_EQUIP") || A.equals("armorunequip") && (((PlayerArmorEvent) event).reason.name().contains("_UNEQUIP") || ((PlayerArmorEvent) event).reason.name().contains("DROP")) || A.equals("armorpiecebreak") && ((PlayerArmorEvent) event).reason.equals(PlayerArmorEvent.ArmorEventReason.BREAK))
@@ -268,7 +269,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         return chance;
     }
 
-    private void doAttribute(CustomEnchantProcEvent e, String attribute, AbstractCustomEnchant enchant, Player P) {
+    private void doAttribute(CustomEnchantProcEvent e, String attribute, CustomEnchant enchant, Player P) {
         final int level = e.level;
         if(attribute.contains("level")) attribute = attribute.replace("level", Integer.toString(level));
         int b = -1;
@@ -284,9 +285,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
             if(a.toLowerCase().startsWith("didproc") && !e.didProc) {
                 return;
             } else if(a.toLowerCase().startsWith("chance=")) {
-                HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> o = getEnchants(e.player);
+                HashMap<ItemStack, HashMap<CustomEnchant, Integer>> o = getEnchants(e.player);
                 for(ItemStack q : o.keySet())
-                    for(AbstractCustomEnchant E : o.get(q).keySet())
+                    for(CustomEnchant E : o.get(q).keySet())
                         if(a.split("=")[1].contains(E.getName()))
                             a = a.replace(E.getName(), Integer.toString((int) oldevaluate(E.getEnchantProcValue().replace("level", Integer.toString(o.get(q).get(E))))));
                 final int chance = (int) oldevaluate(a.split("=")[1].replaceAll("\\p{L}", "0"));
@@ -304,7 +305,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
     }
 
-    public void executeAttribute(CustomEnchantProcEvent ev, Event event, AbstractCustomEnchant enchant, String a, String attribute, int b, Player P) {
+    public void executeAttribute(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, String a, String attribute, int b, Player P) {
         if(event != null && a.toLowerCase().startsWith("cancel")) {
             if(event instanceof Cancellable) {
                 ((Cancellable) event).setCancelled(true);
@@ -313,7 +314,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             w(ev, event, enchant, getRecipients(event, a.contains("[") ? a.split("\\[")[1].split("]")[0] : a, P), a, attribute, b, P);
         }
     }
-    public void w(CustomEnchantProcEvent ev, Event event, AbstractCustomEnchant enchant, List<LivingEntity> recipients, String a, String attribute, int b, Player P) {
+    public void w(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, List<LivingEntity> recipients, String a, String attribute, int b, Player P) {
         try {
             executeAttributes(ev, event, enchant, recipients, a, attribute, b, P);
         } catch (Exception e) {
@@ -333,7 +334,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
     }
 
-    private void executeAttributes(CustomEnchantProcEvent ev, Event event, AbstractCustomEnchant enchant, List<LivingEntity> recipients, String a, String attribute, int b, Player P) {
+    private void executeAttributes(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, List<LivingEntity> recipients, String a, String attribute, int b, Player P) {
         if(ev != null && !ev.didProc) return;
         final Player player = ev != null ? ev.player : null;
         final int level = ev != null ? ev.level : 0;
@@ -577,10 +578,10 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.toLowerCase().startsWith("procenchants{")) {
             for(LivingEntity l : recipients)
                 if(l instanceof Player) {
-                    final HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> enchants = getEnchants((Player) l);
+                    final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> enchants = getEnchants((Player) l);
                     for(ItemStack is : enchants.keySet()) {
-                        final HashMap<AbstractCustomEnchant, Integer> e = enchants.get(is);
-                        for(AbstractCustomEnchant ce : e.keySet())
+                        final HashMap<CustomEnchant, Integer> e = enchants.get(is);
+                        for(CustomEnchant ce : e.keySet())
                             if(!ce.getAttributes().toString().toLowerCase().contains("procenchants{"))
                                 procEnchant(event, ce, e.get(ce), is, P);
                     }
@@ -623,7 +624,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
                         stoppedAllEnchants.add(p);
                         scheduler.scheduleSyncDelayedTask(randompackage, () -> stoppedAllEnchants.remove(p), 20*seconds);
                     } else {
-                        final AbstractCustomEnchant ce = AbstractCustomEnchant.valueOf(J.split(":")[0]);
+                        final CustomEnchant ce = CustomEnchant.valueOf(J.split(":")[0]);
                         if(ce != null) {
                             if(!stoppedEnchants.keySet().contains(p)) stoppedEnchants.put(p, new HashMap<>());
                             if(stoppedEnchants.get(p).keySet().contains(ce)) {
@@ -696,18 +697,18 @@ public abstract class CustomEnchantUtils extends RPFeature {
             ((MobStackDepleteEvent) event).amount = amount;
         } else if(a.toLowerCase().startsWith("createcombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final AbstractCustomEnchant n = AbstractCustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
             createCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("addcombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final AbstractCustomEnchant n = AbstractCustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
             addCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("depletecombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final AbstractCustomEnchant n = AbstractCustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
             depleteCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("stopcombo{")) {
-            final AbstractCustomEnchant n = AbstractCustomEnchant.valueOf(a.split("\\{")[1].split("}")[0]);
+            final CustomEnchant n = CustomEnchant.valueOf(a.split("\\{")[1].split("}")[0]);
             stopCombo(player, n);
         } else if(a.toLowerCase().startsWith("explode{")) {
             final Location l = getRecipientLoc(event, a.split("\\[")[1].split("]")[0]);
@@ -717,7 +718,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             doIf(ev, event, enchant, level, a, attribute, b, a.split("\\{")[1], P);
         }
     }
-    private void doIf(CustomEnchantProcEvent ev, Event event, AbstractCustomEnchant enchant, int level, String a, String attribute, int b, String input, Player P) {
+    private void doIf(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, int level, String a, String attribute, int b, String input, Player P) {
         final ArrayList<Boolean> ifs = new ArrayList<>();
         for(LivingEntity l : getRecipients(event, input, P)) {
             for(String s : (a.split("->")[0].contains("]") ? a.split("->")[0].split("]")[1] : a.split("->")[0].split("\\{")[1]).split("&&"))
@@ -729,7 +730,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(String q : a.split("-<")[1].split("&&")) executeAttribute(ev, event, enchant, q, attribute, b, P);
         }
     }
-    private boolean doVariable(CustomEnchantProcEvent e, Event event, AbstractCustomEnchant enchant, LivingEntity entity, String input) {
+    private boolean doVariable(CustomEnchantProcEvent e, Event event, CustomEnchant enchant, LivingEntity entity, String input) {
         if(input.startsWith("isHolding("))      return isHolding(entity, input.split("\\(")[1].split("\\)")[0]);
         else if(input.startsWith("isBlocking")) return isBlocking(entity);
         else if(input.startsWith("healthIs<=:")) return healthIsLessThanOrEqualTo(entity, oldevaluate(input.split(":")[1].split(":")[0]));
@@ -928,8 +929,8 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-    public HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> getEnchants(Player player) { // <Inventory Slot, <FileCustomEnchant, FileCustomEnchant level>>
-        final HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> L = new HashMap<>();
+    public HashMap<ItemStack, HashMap<CustomEnchant, Integer>> getEnchants(Player player) { // <Inventory Slot, <FileCustomEnchant, FileCustomEnchant level>>
+        final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> L = new HashMap<>();
         if(player != null) {
             final PlayerInventory pi = player.getInventory();
             final ItemStack p = pi.getItem(pi.getHeldItemSlot());
@@ -940,17 +941,17 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return L;
     }
-    public HashMap<AbstractCustomEnchant, Integer> getEnchants(ItemStack is) { // <FileCustomEnchant, FileCustomEnchant level>
-        final HashMap<AbstractCustomEnchant, Integer> enchants = new HashMap<>();
+    public HashMap<CustomEnchant, Integer> getEnchants(ItemStack is) { // <FileCustomEnchant, FileCustomEnchant level>
+        final HashMap<CustomEnchant, Integer> enchants = new HashMap<>();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {
-                final AbstractCustomEnchant e = AbstractCustomEnchant.valueOf(s);
+                final CustomEnchant e = CustomEnchant.valueOf(s);
                 if(e != null) enchants.put(e, getEnchantmentLevel(s));
             }
         }
         return enchants;
     }
-    public boolean isOnCorrectItem(AbstractCustomEnchant enchant, ItemStack is) {
+    public boolean isOnCorrectItem(CustomEnchant enchant, ItemStack is) {
         final String i = is != null ? is.getType().name() : null;
         if(enchant != null && i != null) for(String s : enchant.getAppliesTo()) if(i.endsWith(s.toUpperCase())) return true;
         return false;
@@ -961,7 +962,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     /*
         ATTRIBUTES
      */
-    private void wait(CustomEnchantProcEvent ev, Event event, AbstractCustomEnchant enchant, String attribute, int number, int ticks, Player P) {
+    private void wait(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, String attribute, int number, int ticks, Player P) {
         String t = "";
         for(int i = number+1; i < attribute.split(";").length; i++)
             t = t + attribute.split(";")[i] + ";";
@@ -974,27 +975,27 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }
         }, ticks);
     }
-    public void createCombo(Player player, AbstractCustomEnchant source, double base) {
+    public void createCombo(Player player, CustomEnchant source, double base) {
         if(!combos.keySet().contains(player)) combos.put(player, new HashMap<>());
         if(!combos.get(player).keySet().contains(source)) combos.get(player).put(source, base);
     }
-    public void addCombo(Player player, AbstractCustomEnchant source, double addition) {
+    public void addCombo(Player player, CustomEnchant source, double addition) {
         if(!combos.containsKey(player)) combos.put(player, new HashMap<>());
         final double prev = combos.get(player).getOrDefault(source, 0.00);
         combos.get(player).put(source, prev+addition);
     }
-    public void depleteCombo(Player player, AbstractCustomEnchant source, double depletion) {
+    public void depleteCombo(Player player, CustomEnchant source, double depletion) {
         if(combos.containsKey(player) && combos.get(player).containsKey(source)) {
             final double d = combos.get(player).get(source), de = d-depletion;
             combos.get(player).put(source, de < 0.00 ? 0.00 : round(de, 2));
         }
     }
-    public void stopCombo(Player player, AbstractCustomEnchant source) {
+    public void stopCombo(Player player, CustomEnchant source) {
         if(combos.containsKey(player) && combos.get(player).containsKey(source)) {
             combos.get(player).remove(source);
         }
     }
-    public void addPotionEffect(Event event, Player player, LivingEntity entity, PotionEffect potioneffect, List<String> message, AbstractCustomEnchant enchant, int level) {
+    public void addPotionEffect(Event event, Player player, LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
         if(entity != null) {
             final CEAApplyPotionEffectEvent e = new CEAApplyPotionEffectEvent(event, player, entity, enchant, level, potioneffect);
             pluginmanager.callEvent(e);
@@ -1007,13 +1008,13 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }
         }
     }
-    private void removePotionEffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, AbstractCustomEnchant enchant, int level) {
+    private void removePotionEffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
         if(potioneffect != null && entity != null && entity.hasPotionEffect(potioneffect.getType())) {
             entity.removePotionEffect(potioneffect.getType());
             dopotioneffect(entity, potioneffect, message, enchant, level);
         }
     }
-    private void dopotioneffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, AbstractCustomEnchant enchant, int level) {
+    private void dopotioneffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
         if(message != null) {
             for(String s : message) {
                 if(s.contains("{ENCHANT}")) s = s.replace("{ENCHANT}", enchant.getName() + " " + toRoman(level));
@@ -1136,7 +1137,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     private double distanceBetween(Entity e1, Entity e2) {
         return e1.getLocation().distance(e2.getLocation());
     }
-    private void sendMessage(AbstractCustomEnchant enchant, LivingEntity entity, String message) {
+    private void sendMessage(CustomEnchant enchant, LivingEntity entity, String message) {
         if(message.contains("\\n")) for(String s : message.split("\\\\n")) entity.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("}", "").replace("%ENCHANT%", enchant.getName())));
         else                                                               entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("}", "").replace("%ENCHANT%", enchant.getName())));
     }
@@ -1148,7 +1149,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         entity.setVelocity(vel);
     }
     private void stopEnchant(Player player, String input, int ticks) {
-        final HashMap<ItemStack, HashMap<AbstractCustomEnchant, Integer>> enchants = getEnchants(player);
+        final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         if(input.toLowerCase().equals("all")) {
         }
     }

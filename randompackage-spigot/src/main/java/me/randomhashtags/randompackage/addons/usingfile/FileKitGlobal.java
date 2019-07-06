@@ -13,9 +13,9 @@ public class FileKitGlobal extends RPKit {
 
     public FileKitGlobal(File f) {
         load(f);
-        initilize();
+        addKit(getIdentifier(), this);
     }
-    public void initilize() { addKit("GLOBAL_" + getYamlName(), this); }
+    public String getIdentifier() { return "GLOBAL_" + getYamlName(); }
 
     public boolean isHeroic() { return yml.getBoolean("settings.heroic"); }
     public ItemStack getItem() {

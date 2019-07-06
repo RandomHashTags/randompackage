@@ -1,13 +1,12 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
 
 import java.util.List;
 
 public abstract class FactionUpgrade extends Itemable {
-    public abstract FileFactionUpgradeType getType();
+    public abstract FactionUpgradeType getType();
     public abstract int getSlot();
     public abstract int getMaxTier();
     public abstract boolean itemAmountEqualsTier();

@@ -25,9 +25,9 @@ public class FileOutpost extends Outpost {
     private double controlPercent;
     public FileOutpost(File f) {
         load(f);
-        initilize();
+        addOutpost(getIdentifier(), this);
     }
-    public void initilize() { addOutpost(getYamlName(), this); }
+    public String getIdentifier() { return getYamlName(); }
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public int getSlot() { return yml.getInt("gui.slot"); }

@@ -1,10 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.FundDepositEvent;
-import me.randomhashtags.randompackage.events.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.addons.GlobalChallenge;
+import me.randomhashtags.randompackage.addons.usingfile.FileGlobalChallenge;
+import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.api.events.FundDepositEvent;
+import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
@@ -64,7 +67,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		    viewCurrent(player);
 		else if(args.length >= 2 && args[0].equals("stop")) {
 			if(hasPermission(player, "RandomPackage.globalchallenges.stop", true))
-				stopChallenge(getGlobalChallenge(null, args[1].replace("_", " ")), false);
+				stopChallenge(getGlobalChallenge(args[1].replace("_", " ")), false);
 		} else if(player != null && args.length >= 1 && args[0].equals("claim"))
 			viewPrizes(player);
 		else if(args.length >= 1 && args[0].equals("reload")) {
@@ -121,7 +124,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		final File folder = new File(rpd + separator + "global challenges");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
-				new GlobalChallenge(f, new HashSet<>());
+				new FileGlobalChallenge(f);
 			}
 		}
 
@@ -136,9 +139,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			}
 		}
 
-		final HashMap<NamespacedKey, AbstractGlobalChallenge> G = GlobalChallenge.challenges;
-		final List<GlobalChallengePrize> P = GlobalChallengePrize.prizes;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (G != null ? G.size() : 0) + " global challenges and " + (P != null ? P.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (globalchallenges != null ? globalchallenges.size() : 0) + " global challenges and " + (globalchallengeprizes != null ? globalchallengeprizes.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		reloadChallenges();
 	}
 	public void unload() {
@@ -158,21 +159,20 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		GlobalChallenge.challenges = null;
-		GlobalChallengePrize.prizes = null;
+		globalchallenges = null;
+		globalchallengeprizes = null;
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");
 		int maxAtOnce = max;
-		final HashMap<NamespacedKey, AbstractGlobalChallenge> gc = GlobalChallenge.challenges;
 		final ConfigurationSection EEE = data.getConfigurationSection("active global challenges");
-		if(gc != null && EEE != null) {
+		if(globalchallenges != null && EEE != null) {
 		    final long started = System.currentTimeMillis();
 			int loadeD = 0;
 			for(String s : EEE.getKeys(false)) {
 				if(maxAtOnce > 0) {
 					loadeD += 1;
-					final AbstractGlobalChallenge g = gc.getOrDefault(s, null);
+					final GlobalChallenge g = getGlobalChallenge(s);
 					if(g != null) {
 						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
 						final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
@@ -192,7 +192,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		if(maxAtOnce > 0) {
 			final long started = System.currentTimeMillis();
 			for(int i = 1; i <= maxAtOnce; i++) {
-				final AbstractGlobalChallenge r = getRandomChallenge();
+				final GlobalChallenge r = getRandomChallenge();
 				if(!r.isActive()) r.start();
 				else i-=1;
 			}
@@ -210,9 +210,9 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 				if(p.toUpperCase().equals("{CHALLENGE}")) {
 					ActiveGlobalChallenge z = f < ActiveGlobalChallenge.active.size() ? (ActiveGlobalChallenge) ActiveGlobalChallenge.active.values().toArray()[f] : null;
 					if(z == null) z = getRandomChallenge().start();
-					final AbstractGlobalChallenge T = z.getType();
+					final GlobalChallenge T = z.getType();
 					final String n = T.getType();
-					item = T.getDisplayItem().clone();
+					item = T.getItem().clone();
 					itemMeta = item.getItemMeta(); lore.clear();
 					for(String s : config.getStringList("challenge settings.added lore")) {
 						lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TYPE}", n)));
@@ -335,8 +335,8 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 		}
 	}
-	public void stopChallenge(AbstractGlobalChallenge chall, boolean giveRewards) {
-		final HashMap<AbstractGlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
+	public void stopChallenge(GlobalChallenge chall, boolean giveRewards) {
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
 		if(a != null && a.containsKey(chall)) {
 			a.get(chall).end(giveRewards, 3);
 		}
@@ -366,8 +366,8 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		}
 		player.updateInventory();
 	}
-	public AbstractGlobalChallenge getRandomChallenge() {
-		return getGlobalChallenge(null, "random");
+	public GlobalChallenge getRandomChallenge() {
+		return getGlobalChallenge("random");
 	}
 	
 	@EventHandler
@@ -528,7 +528,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private void customEnchantProcEvent(CustomEnchantProcEvent event) {
 		if(event.player != null && !event.isCancelled()) {
 			final UUID player = event.player.getUniqueId();
-			final AbstractCustomEnchant enchant = event.enchant;
+			final CustomEnchant enchant = event.enchant;
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantprocs", player, one);
 			increase(event, "customenchantprocs_" + FileEnchantRarity.valueOf(enchant).getName(), player, one);

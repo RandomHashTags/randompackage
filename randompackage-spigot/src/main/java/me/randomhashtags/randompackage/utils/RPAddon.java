@@ -21,5 +21,4 @@ public abstract class RPAddon extends RPStorage {
     public File getFile() { return file; }
     public YamlConfiguration getYaml() { return yml; }
     public String getYamlName() { return file.getName().split("\\.yml")[0]; }
-    public abstract void initilize();
 }

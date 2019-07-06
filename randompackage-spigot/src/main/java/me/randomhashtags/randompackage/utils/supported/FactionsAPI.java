@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FactionsAPI {
-
     private static FactionsAPI instance;
     public static FactionsAPI getFactionsAPI() {
         if(instance == null) instance = new FactionsAPI();
