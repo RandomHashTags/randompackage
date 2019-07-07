@@ -2,6 +2,9 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
+import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
+import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 
@@ -24,13 +27,16 @@ public abstract class RPStorage extends UVersion {
     protected static TreeMap<String, CustomEnchant> enabled, disabled;
     protected static TreeMap<String, DuelArena> duelArenas;
     protected static TreeMap<String, Dungeon> dungeons;
+    protected static TreeMap<String, PathMagicDust> dusts;
     protected static TreeMap<String, EnchantRarity> rarities;
+    protected static TreeMap<String, EnchantmentOrb> enchantmentorbs;
     protected static TreeMap<String, EnvoyCrate> envoycrates;
     protected static TreeMap<String, CustomExplosion> explosions;
     protected static TreeMap<String, FactionUpgrade> factionupgrades;
     protected static TreeMap<String, FactionUpgradeType> factionupgradetypes;
     protected static TreeMap<String, FallenHero> fallenheroes;
     protected static TreeMap<String, FilterCategory> filtercategories;
+    protected static TreeMap<String, PathFireball> fireballs;
     protected static TreeMap<String, GlobalChallenge> globalchallenges;
     protected static TreeMap<String, GlobalChallengePrize> globalchallengeprizes;
     protected static TreeMap<String, CustomKit> kits;
@@ -97,32 +103,6 @@ public abstract class RPStorage extends UVersion {
         bosses.put(identifier, b);
     }
 
-    public CustomEnchant getEnchant(String identifier) {
-        return enabled != null && enabled.containsKey(identifier) ? enabled.get(identifier) : disabled != null && disabled.containsKey(identifier) ? disabled.get(identifier) : null;
-    }
-    public void addEnchant(String identifier, CustomEnchant enchant) {
-        final boolean e = enchant.isEnabled();
-        if(e && enabled == null) enabled = new TreeMap<>();
-        else if(!e && disabled == null) disabled = new TreeMap<>();
-        (e ? enabled : disabled).put(identifier, enchant);
-    }
-
-    public EnchantRarity getEnchantRarity(String identifier) {
-        return rarities != null ? rarities.getOrDefault(identifier, null) : null;
-    }
-    public void addEnchantRarity(String identifier, EnchantRarity rarity) {
-        if(rarities == null) rarities = new TreeMap<>();
-        rarities.put(identifier, rarity);
-    }
-
-    public FallenHero getFallenHero(String identifier) {
-        return fallenheroes != null ? fallenheroes.getOrDefault(identifier, null) : null;
-    }
-    public void addFallenHero(String identifier, FallenHero rarity) {
-        if(fallenheroes == null) fallenheroes = new TreeMap<>();
-        fallenheroes.put(identifier, rarity);
-    }
-
     public DuelArena getDuelArena(String identifier) {
         return duelArenas != null ? duelArenas.getOrDefault(identifier, null) : null;
     }
@@ -137,6 +117,40 @@ public abstract class RPStorage extends UVersion {
     public void addDungeon(String identifier, Dungeon e) {
         if(dungeons == null) dungeons = new TreeMap<>();
         dungeons.put(identifier, e);
+    }
+
+    public PathMagicDust getDust(String identifier) {
+        return dusts != null ? dusts.getOrDefault(identifier, null) : null;
+    }
+    public void addDust(String identifier, PathMagicDust e) {
+        if(dusts == null) dusts = new TreeMap<>();
+        dusts.put(identifier, e);
+    }
+
+    public CustomEnchant getEnchant(String identifier) {
+        return enabled != null && enabled.containsKey(identifier) ? enabled.get(identifier) : disabled != null && disabled.containsKey(identifier) ? disabled.get(identifier) : null;
+    }
+    public void addEnchant(String identifier, CustomEnchant enchant) {
+        final boolean e = enchant.isEnabled();
+        if(e && enabled == null) enabled = new TreeMap<>();
+        else if(!e && disabled == null) disabled = new TreeMap<>();
+        (e ? enabled : disabled).put(identifier, enchant);
+    }
+
+    public EnchantmentOrb getEnchantmentOrb(String identifier) {
+        return enchantmentorbs != null ? enchantmentorbs.get(identifier) : null;
+    }
+    public void addEnchantmentOrb(String identifier, EnchantmentOrb enchant) {
+        if(enchantmentorbs == null) enchantmentorbs = new TreeMap<>();
+        enchantmentorbs.put(identifier, enchant);
+    }
+
+    public EnchantRarity getEnchantRarity(String identifier) {
+        return rarities != null ? rarities.getOrDefault(identifier, null) : null;
+    }
+    public void addEnchantRarity(String identifier, EnchantRarity rarity) {
+        if(rarities == null) rarities = new TreeMap<>();
+        rarities.put(identifier, rarity);
     }
 
     public EnvoyCrate getEnvoyCrate(String identifier) {
@@ -171,12 +185,28 @@ public abstract class RPStorage extends UVersion {
         factionupgradetypes.put(identifier, e);
     }
 
+    public FallenHero getFallenHero(String identifier) {
+        return fallenheroes != null ? fallenheroes.getOrDefault(identifier, null) : null;
+    }
+    public void addFallenHero(String identifier, FallenHero rarity) {
+        if(fallenheroes == null) fallenheroes = new TreeMap<>();
+        fallenheroes.put(identifier, rarity);
+    }
+
     public FilterCategory getFilterCategory(String identifier) {
         return filtercategories != null ? filtercategories.getOrDefault(identifier, null) : null;
     }
     public void addFilterCategory(String identifier, FilterCategory e) {
         if(filtercategories == null) filtercategories = new TreeMap<>();
         filtercategories.put(identifier, e);
+    }
+
+    public PathFireball getFireball(String identifier) {
+        return fireballs != null ? fireballs.getOrDefault(identifier, null) : null;
+    }
+    public void addFireball(String identifier, PathFireball e) {
+        if(fireballs == null) fireballs = new TreeMap<>();
+        fireballs.put(identifier, e);
     }
 
     public GlobalChallenge getGlobalChallenge(String identifier) {
@@ -309,6 +339,7 @@ public abstract class RPStorage extends UVersion {
 
     public void deleteAll(Feature f) {
         if(f.equals(Feature.BOOSTERS)) boosters = null;
+        else if(f.equals(Feature.BLACK_SCROLLS)) blackscrolls = null;
         else if(f.equals(Feature.CUSTOM_ARMOR)) armorsets = null;
         else if(f.equals(Feature.CUSTOM_BOSSES)) bosses = null;
         else if(f.equals(Feature.CUSTOM_ENCHANTS)) {
@@ -317,10 +348,14 @@ public abstract class RPStorage extends UVersion {
             rarities = null;
         } else if(f.equals(Feature.DUELS)) duelArenas = null;
         else if(f.equals(Feature.DUNGEONS)) dungeons = null;
+        else if(f.equals(Feature.ENCHANTMENT_ORBS)) enchantmentorbs = null;
         else if(f.equals(Feature.ENVOY)) envoycrates = null;
         else if(f.equals(Feature.FACTION_UPGRADES)) {
             factionupgrades = null;
             factionupgradetypes = null;
+        } else if(f.equals(Feature.FIREBALLS_AND_DUST)) {
+            dusts = null;
+            fireballs = null;
         } else if(f.equals(Feature.ITEM_FILTER)) filtercategories = null;
         else if(f.equals(Feature.MASKS)) masks = null;
         else if(f.equals(Feature.LOOTBOXES)) lootboxes = null;

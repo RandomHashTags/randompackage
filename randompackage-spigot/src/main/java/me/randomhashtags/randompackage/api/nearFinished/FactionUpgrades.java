@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
+import me.randomhashtags.randompackage.addons.FactionUpgradeType;
+import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgrade;
-import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -38,7 +40,6 @@ import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
 public class FactionUpgrades extends RPFeature {
-
     private static FactionUpgrades instance;
     public static FactionUpgrades getFactionUpgrades() {
         if(instance == null) instance = new FactionUpgrades();
@@ -57,7 +58,7 @@ public class FactionUpgrades extends RPFeature {
 
     private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
     private HashMap<String, Double> teleportDelayMultipliers, cropGrowthMultipliers, enemyDamageMultipliers, bossDamageMultipliers, vkitLevelingChances;
-    private HashMap<String, HashMap<FileRarityGem, Double>> decreaseRarityGemCost;
+    private HashMap<String, HashMap<RarityGem, Double>> decreaseRarityGemCost;
 
     public void load() {
         final long started = System.currentTimeMillis();
@@ -125,8 +126,7 @@ public class FactionUpgrades extends RPFeature {
         }
 
         loadBackup();
-        final HashMap<NamespacedKey, FactionUpgrade> u = FileFactionUpgrade.upgrades;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (u != null ? u.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (factionupgrades != null ? factionupgrades.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         backup();
@@ -138,8 +138,7 @@ public class FactionUpgrades extends RPFeature {
         bossDamageMultipliers = null;
         vkitLevelingChances = null;
         decreaseRarityGemCost = null;
-        FileFactionUpgradeType.deleteAll();
-        FactionUpgrade.upgrades = null;
+        deleteAll(Feature.FACTION_UPGRADES);
     }
 
 
@@ -167,7 +166,7 @@ public class FactionUpgrades extends RPFeature {
                 final ConfigurationSection f = fupgrades.getConfigurationSection("factions." + s);
                 final HashMap<FactionUpgrade, Integer> b = new HashMap<>();
                 for(String a : f.getKeys(false)) {
-                    final FactionUpgrade u = FactionUpgrade.upgrades.getOrDefault(a, null);
+                    final FactionUpgrade u = getFactionUpgrade(a);
                     if(u != null) {
                         b.put(u, fupgrades.getInt("factions." + s + "." + a));
                     }
@@ -208,7 +207,7 @@ public class FactionUpgrades extends RPFeature {
             final int tier = upgrades != null ? upgrades.getOrDefault(f, 0) : 0;
             item = f.getItem();
             itemMeta = item.getItemMeta(); lore.clear();
-            final FileFactionUpgradeType type = f.getType();
+            final FactionUpgradeType type = f.getType();
             final String perkAchived = type.getPerkAchievedPrefix(), perkUnachived = type.getPerkUnachievedPrefix(), requirementsPrefix = type.getRequirementsPrefix();
             if(item.hasItemMeta() && itemMeta.hasLore()) {
                 for(String s : itemMeta.getLore()) {
@@ -338,7 +337,7 @@ public class FactionUpgrades extends RPFeature {
                     return;
                 } else if(target.startsWith("factionupgrade{")) {
                     final String p = target.split("\\{")[1].split("}")[0];
-                    final FactionUpgrade fuu = FactionUpgrade.upgrades.get(p.split(":")[0]);
+                    final FactionUpgrade fuu = getFactionUpgrade(p.split(":")[0]);
                     final int lvl = Integer.parseInt(p.split(":")[1].split("=")[1]);
                     if(!upgrades.containsKey(fuu)) {
                         final String di = ChatColor.stripColor(fuu.getItem().getItemMeta().getDisplayName());
@@ -440,7 +439,7 @@ public class FactionUpgrades extends RPFeature {
         enemyDamageMultipliers.put(faction, multiplier);
     }
 
-    public double getDecreaseRarityGemPercent(String factionName, FileRarityGem gem) {
+    public double getDecreaseRarityGemPercent(String factionName, RarityGem gem) {
         return decreaseRarityGemCost.containsKey(factionName) ? decreaseRarityGemCost.get(factionName).getOrDefault(gem, 0.00) : 0;
     }
     public double getVkitLevelingChance(String factionName) {

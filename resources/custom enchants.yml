@@ -315,12 +315,6 @@ enchant types:
   sword;_axe;bow: "&7Weapon Enchant"
 #
 items:
-  mystery dust:
-    item: "sulphur"
-    name: "&fMystery Dust"
-    lore:
-    - "&7A failed by-product of"
-    - "&7Magic and Primal dust."
   transmog scroll:
     item: "paper"
     name: "&e&lTransmog Scroll"
@@ -347,16 +341,6 @@ items:
     - "&fdue to a failed Enchantment Book."
     - "&ePlace scroll on item to apply."
     apply: "&f&lPROTECTED"
-#
-dust:
-  sounds:
-    reveal mystery dust: "BLOCK_LAVA_POP:1:1"
-    reveal dust: "ENTITY_PLAYER_LEVELUP:1:2"
-  particles:
-    default:
-      mystery: "LAVA_POP"
-      regular: "SPELL"
-      primal: "SPELL"
 #
 entities:
   settings:

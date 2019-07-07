@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addons.objects.customenchants;
+package me.randomhashtags.randompackage.addons.objects;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;

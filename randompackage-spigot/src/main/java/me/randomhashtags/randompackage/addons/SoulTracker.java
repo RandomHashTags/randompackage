@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
+import me.randomhashtags.randompackage.addons.usingpath.PathRarityGem;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,7 +17,7 @@ public abstract class SoulTracker extends Itemable {
     public abstract List<String> getApplyMsg();
     public abstract List<String> getSplitMsg();
 
-    public static SoulTracker valueOf(FileRarityGem gem) {
+    public static SoulTracker valueOf(PathRarityGem gem) {
         if(soultrackers != null)
             for(SoulTracker st : soultrackers.values())
                 if(st.getConvertsTo().equals(gem))

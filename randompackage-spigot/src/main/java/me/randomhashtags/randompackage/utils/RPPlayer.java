@@ -107,7 +107,7 @@ public class RPPlayer extends RPStorage {
     public void backup() {
         yml.set("name", Bukkit.getOfflinePlayer(uuid).getName());
         final Title T = getActiveTitle();
-        final String strings = T != null ? T.getTitle() : "null";
+        final String strings = T != null ? T.getIdentifier() : "null";
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
         final String ints = jackpotTickets + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
         final String longs = jackpotWonCash + ";" + xpExhaustionExpiration;
@@ -121,7 +121,7 @@ public class RPPlayer extends RPStorage {
         for(Home h : getHomes()) homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
         yml.set("homes", homez);
         yml.set("filtered items", getFilteredItemz());
-        for(Title t : getTitles()) titles.add(t.getTitle());
+        for(Title t : getTitles()) titles.add(t.getIdentifier());
         yml.set("owned titles", titles);
         yml.set("owned monthly crates", getMonthlyCrates());
         yml.set("claimed monthly crates", getClaimedMonthlyCrates());

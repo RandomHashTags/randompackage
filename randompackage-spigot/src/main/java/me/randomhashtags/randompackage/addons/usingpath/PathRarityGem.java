@@ -1,28 +1,30 @@
-package me.randomhashtags.randompackage.addons.usingfile;
+package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RarityGem;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class FileRarityGem extends RarityGem {
+public class PathRarityGem extends RarityGem {
+	public static YamlConfiguration raritygemyml;
+	private String path;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
 	private List<String> splitMessage, toggleon, toggleoffInteract, toggleoffDropped, toggleoffMoved, toggleoffRanOut;
 	private TreeMap<Integer, String> colors;
 
-	public FileRarityGem(File f) {
-		load(f);
+	public PathRarityGem(String path) {
+		this.path = path;
 		addRarityGem(getIdentifier(), this);
 	}
-	public String getIdentifier() { return getYamlName(); }
+	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
 		if(item == null) item = api.d(yml, "item");

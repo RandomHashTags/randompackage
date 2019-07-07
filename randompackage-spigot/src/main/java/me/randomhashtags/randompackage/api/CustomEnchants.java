@@ -1,11 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.BlackScroll;
-import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.addons.objects.customenchants.*;
-import me.randomhashtags.randompackage.addons.objects.customenchants.Fireball;
-import me.randomhashtags.randompackage.addons.usingpath.PathBlackScroll;
-import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
+import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.addons.MagicDust;
+import me.randomhashtags.randompackage.addons.RarityFireball;
+import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
+import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
@@ -13,6 +12,7 @@ import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
@@ -23,7 +23,6 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +35,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -62,7 +60,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     private String alchemistcurrency, enchantercurrency;
     private int alchemistCostSlot;
     private UInventory alchemist, enchanter, tinkerer;
-    public ItemStack mysterydust, transmogscroll, whitescroll;
+    public ItemStack transmogscroll, whitescroll;
     private ItemStack tinkereraccept, alchemistpreview, alchemistexchange, alchemistaccept;
     private HashMap<Integer, Long> enchantercost;
     private HashMap<Integer, ItemStack> enchanterpurchase;
@@ -89,7 +87,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     }
     public void load() {
         loadUtils();
-        long started = System.currentTimeMillis();
+        final long started = System.currentTimeMillis();
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
         enchantercurrency = config.getString("enchanter.currency").toUpperCase();
@@ -119,7 +117,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         tinkerer = new UInventory(null, config.getInt("tinkerer.size"), ChatColor.translateAlternateColorCodes('&', config.getString("tinkerer.title")));
         setupInventory(alchemist);
         setupInventory(tinkerer);
-        mysterydust = d(config, "items.mystery dust");
 
         final YamlConfiguration a = otherdata;
         final FileConfiguration RP = randompackage.getConfig();
@@ -280,7 +277,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                         if(rarity != null) {
                             for(File ff : files) {
                                 if(!ff.getName().startsWith("_settings")) {
-                                    final CustomEnchant e = new CustomEnchant(ff);
+                                    final FileCustomEnchant e = new FileCustomEnchant(ff);
                                     if(e.isEnabled()) rarity.getEnchants().add(e);
                                 }
                             }
@@ -289,118 +286,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 }
             }
         }
-        long Q = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + CustomEnchant.enabled.size() + "e, &c" + CustomEnchant.disabled.size() + "d&a] Custom Enchants &e(took " + (Q-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + CustomEnchant.enabled.size() + "e, &c" + CustomEnchant.disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books'");
-        started = Q;
-
-        if(RP.getBoolean("custom enchants.black scrolls")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "black scrolls.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "black scrolls.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("scrolls");
-            if(cs != null) {
-                for(String s : cs.getKeys(false)) {
-                    new PathBlackScroll(s);
-                }
-                final HashMap<String, PathBlackScroll> L = PathBlackScroll.scrolls;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (L != null ? L.size() : 0) + " Black Scrolls &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
-        if(RP.getBoolean("custom enchants.dusts")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "dusts.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "dusts.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("dusts");
-            if(cs != null) {
-                for(String s : cs.getKeys(false)) {
-                    new MagicDust(s);
-                }
-                final HashMap<String, MagicDust> L = MagicDust.dust;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (L != null ? L.size() : 0) + " Magic Dust &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
-        if(RP.getBoolean("custom enchants.enchantment orbs")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "enchantment orbs.yml");
-            final YamlConfiguration yml = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "enchantment orbs.yml"));
-            final List<ItemStack> orbs = new ArrayList<>();
-            for(String A : yml.getConfigurationSection("orbs").getKeys(false)) {
-                final ItemStack iii = d(yml, "orbs." + A);
-                final List<String> appliesto = new ArrayList<>();
-                for(String s : yml.getString("orbs." + A + ".applies to").split(";")) appliesto.add(s.toUpperCase());
-                final int starting = yml.getInt("orbs." + A + ".starting max slots");
-                final int increment = yml.getInt("orbs." + A + ".upgrade increment");
-                int increm = increment;
-                for(int k = starting; k <= yml.getInt("orbs." + A + ".final max slots"); k += increment) {
-                    if(k != starting) increm += increment;
-                    final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', yml.getString("orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
-                    item = iii.clone(); itemMeta = item.getItemMeta(); lore.clear();
-                    itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
-                    if(itemMeta.hasLore()) {
-                        for(String s : itemMeta.getLore()) {
-                            lore.add(s.replace("{SLOTS}", slots).replace("{INCREMENT}", increments));
-                        }
-                    }
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                    new EnchantmentOrb(A, item, appliedlore, appliesto, k, increm);
-                    item = item.clone(); itemMeta = item.getItemMeta(); lore.clear();
-                    for(String s: itemMeta.getLore()) lore.add(s.replace("{PERCENT}", "100"));
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                    orbs.add(item);
-                }
-            }
-            addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");
-            final HashMap<String, EnchantmentOrb> E = EnchantmentOrb.orbs;
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (E != null ? E.size() : 0) + " Enchantment Orbs &e(took " + (Q-started) + "ms)");
-            started = Q;
-        }
-        if(RP.getBoolean("custom enchants.fireballs")) {
-            Q = System.currentTimeMillis();
-            givedpitem.items.put("mysterydust", d(config, "items.mystery dust"));
-            save("custom enchants", "fireballs.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "fireballs.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("fireballs");
-            if(cs != null) {
-                final List<ItemStack> fireballs = new ArrayList<>();
-                for(String s : cs.getKeys(false)) {
-                    final Fireball f = new Fireball(s);
-                    fireballs.add(f.getItem());
-                }
-                addGivedpCategory(fireballs, UMaterial.FIRE_CHARGE, "Rarity Fireballs", "Givedp: Rarity Fireballs");
-                final HashMap<String, Fireball> f = Fireball.fireballs;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (f != null ? f.size() : 0) + " Fireballs &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
-        if(RP.getBoolean("custom enchants.rarity gems")) {
-            Q = System.currentTimeMillis();
-            save("custom enchants", "rarity gems.yml");
-            final YamlConfiguration r = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "rarity gems.yml"));
-            final ConfigurationSection cs = r.getConfigurationSection("gems");
-            if(cs != null) {
-                FileRarityGem.defaultColors = new HashMap<>();
-                final HashMap<Integer, String> d = FileRarityGem.defaultColors;
-                final ConfigurationSection C = r.getConfigurationSection("default settings.colors");
-                d.put(-1, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.else")));
-                d.put(0, ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors.less than 100")));
-                for(String s : C.getKeys(false)) {
-                    if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                        d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', r.getString("default settings.colors." + s)));
-                    }
-                }
-                for(String s : cs.getKeys(false)) {
-                    new FileRarityGem(r, s);
-                }
-                final HashMap<String, FileRarityGem> g = FileRarityGem.gems;
-                sendConsoleMessage("&6[RandomPackage] &aLoaded " + (g != null ? g.size() : 0) + " Rarity Gems &e(took " + (Q-started) + "ms)");
-                started = Q;
-            }
-        }
 
         boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
         final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
@@ -439,7 +326,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         alchemist = null;
         enchanter = null;
         tinkerer = null;
-        mysterydust = null;
         enchantercost = null;
         enchanterpurchase = null;
         alchemistpreview = null;
@@ -451,12 +337,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
-        AbstractCustomEnchant.deleteAll();
-        EnchantRarity.deleteAll();
-        FileRarityGem.deleteAll();
-        PathBlackScroll.deleteAll();
-        Fireball.deleteAll();
-        MagicDust.deleteAll();
+        deleteAll(Feature.CUSTOM_ENCHANTS);
     }
 
 
@@ -474,7 +355,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                         final CustomEnchant ce = (CustomEnchant) CustomEnchant.enabled.values().toArray()[i];
                         final EnchantRarity rarity = EnchantRarity.valueOf(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
-                        replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getName()));
+                        replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getYamlName()));
                         replacements.put("{DESC}", ce.getLore());
                         final String msg = ChatColor.translateAlternateColorCodes('&', format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {
@@ -529,22 +410,12 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    private void playerDropItemEvent(PlayerDropItemEvent event) {
-        if(!event.isCancelled()) {
-            final RarityGem gem = RarityGem.valueOf(event.getItemDrop().getItemStack());
-            if(gem != null) {
-                final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-                if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
-            }
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGH)
     private void playerArmorEvent(PlayerArmorEvent event) {
         if(!event.isCancelled()) {
             final ItemStack itemstack = event.getItem();
             if(itemstack != null && itemstack.hasItemMeta() && itemstack.getItemMeta().hasLore()) {
                 for(String s : itemstack.getItemMeta().getLore()) {
-                    final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s);
+                    final CustomEnchant enchant = CustomEnchant.valueOf(s);
                     if(enchant != null)
                         procEnchant(event, enchant, getEnchantmentLevel(s), itemstack, null);
                 }
@@ -609,7 +480,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
             if(damager != null && combos.containsKey(damager)) {
                 final double d = event.getDamage();
-                for(AbstractCustomEnchant enchant : combos.get(damager).keySet()) {
+                for(CustomEnchant enchant : combos.get(damager).keySet()) {
                     event.setDamage(d*combos.get(damager).get(enchant));
                 }
             }
@@ -637,7 +508,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
     }
 
-    public ItemStack getRevealedItem(AbstractCustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
+    public ItemStack getRevealedItem(CustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
         final EnchantRarity rarity = EnchantRarity.valueOf(enchant);
         item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
         itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level));
@@ -664,8 +535,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         final String[] r = rarity.getRevealedEnchantRarities();
         final int l = r.length;
         final EnchantRarity rar = EnchantRarity.rarities.get(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
-        final List<AbstractCustomEnchant> enchants = rar.getEnchants();
-        final AbstractCustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
+        final List<CustomEnchant> enchants = rar.getEnchants();
+        final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
         final int level = random.nextInt(enchant.getMaxLevel()+1);
         item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
         itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
@@ -728,13 +599,10 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             procPlayerItem(event, player, item);
         }
         EnchantRarity rarity = EnchantRarity.valueOf(I);
-        final Fireball fireball = rarity == null ? Fireball.valueOf(I) : null;
-        final FileRarityGem gem = fireball == null ? FileRarityGem.valueOf(I) : null;
-        final EnchantmentOrb eo = gem == null ? EnchantmentOrb.valueOf(I) : null;
         if(rarity != null) {
             final ItemStack r = getRandomEnabledEnchant(rarity);
             final String displayname = r.getItemMeta().getDisplayName();
-            final AbstractCustomEnchant enchant = CustomEnchant.valueOf(r);
+            final CustomEnchant enchant = CustomEnchant.valueOf(r);
             final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, I, enchant, getEnchantmentLevel(displayname));
             pluginmanager.callEvent(e);
             if(!e.isCancelled()) {
@@ -745,29 +613,12 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 player.updateInventory();
                 for(String s : rarity.getRevealedEnchantMsg()) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{ENCHANT}", displayname)));
             }
-        } else if(fireball != null) {
-            event.setCancelled(true);
-            removeItem(player, I, 1);
-            ItemStack reward = fireball.getRevealedItem(true);
-            if(reward == null) {
-                reward = mysterydust.clone();
-                playParticle(config, "dust.particles.default.mystery", player.getEyeLocation(), 15);
-                playSound(config, "dust.sounds.reveal dust", player, player.getLocation(), false);
-            }
-            giveItem(player, reward);
-        } else if(gem != null) {
-            event.setCancelled(true);
-            player.updateInventory();
-            RPPlayer.get(player.getUniqueId()).toggleRarityGem(event, gem);
-        } else if(eo != null) {
-            event.setCancelled(true);
-            player.updateInventory();
         } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {
             if(I.getItemMeta().equals(whitescroll.getItemMeta()) || I.getItemMeta().equals(transmogscroll.getItemMeta())) {
                 event.setCancelled(true);
                 player.updateInventory();
             } else {
-                final AbstractCustomEnchant enchant = CustomEnchant.valueOf(I);
+                final CustomEnchant enchant = CustomEnchant.valueOf(I);
                 if(enchant != null)
                     for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
             }
@@ -818,11 +669,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         final Player k = e.getKiller();
         final UUID u = e.getUniqueId();
         spawnedFromSpawner.remove(u);
-        if(e instanceof Player) {
-            final RPPlayer pdata = RPPlayer.get(u);
-            for(FileRarityGem g : pdata.getRarityGems().keySet())
-                pdata.toggleRarityGem(event, g);
-        }
         if(!(e instanceof Player) && k != null) {
             procPlayerArmor(event, k);
             procPlayerItem(event, k, null);
@@ -871,7 +717,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final String c = event.getClick().name(), cu = cur != null ? cur.getType().name() : null;
                 if(r < 0 || !c.contains("LEFT") && !c.contains("RIGHT") || cu == null || cu.equals("AIR")) return;
 
-                final AbstractCustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? AbstractCustomEnchant.valueOf(cur.getItemMeta().getDisplayName()) : null;
+                final CustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? CustomEnchant.valueOf(cur.getItemMeta().getDisplayName()) : null;
                 if(r >= 4 && r <= 8
                         || r >= 13 && r <= 17
                         || r >= 22 && r <= 26
@@ -891,7 +737,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     return;
                 } else if(e != null) {
                     final EnchantRarity R = EnchantRarity.valueOf(e);
-                    final Fireball f = Fireball.valueOf(Arrays.asList(R));
+                    final RarityFireball f = RarityFireball.valueOf(Arrays.asList(R));
                     if(f != null) {
                         final ItemStack itemstack = f.getItem();
                         if(itemstack == null) return;
@@ -904,8 +750,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     for(Enchantment enchant : cur.getEnchantments().keySet())
                         xp += Integer.parseInt(config.getString("tinkerer.enchant values." + enchant.getName().toLowerCase()));
                     if(cur.hasItemMeta() && cur.getItemMeta().hasLore()) {
-                        final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(cur);
-                        for(AbstractCustomEnchant enchant : enchants.keySet()) xp += enchant.getTinkererValue(enchants.get(enchant));
+                        final HashMap<CustomEnchant, Integer> enchants = getEnchants(cur);
+                        for(CustomEnchant enchant : enchants.keySet()) xp += enchant.getTinkererValue(enchants.get(enchant));
                     }
                     if(xp != 0) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
                 } else {
@@ -994,13 +840,13 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                 } else if(current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore()) {
                     final ItemMeta cm = current.getItemMeta();
-                    final AbstractCustomEnchant enchant = CustomEnchant.valueOf(cm.getDisplayName());
+                    final CustomEnchant enchant = CustomEnchant.valueOf(cm.getDisplayName());
                     final MagicDust dust = enchant == null ? MagicDust.valueOf(event.getCurrentItem()) : null;
                     final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, d = cm.getDisplayName();
                     final int F = top.firstEmpty();
                     if(suCCess != null) {
                         boolean upgrade = false;
-                        int cost = -1;
+                        double cost = -1;
                         if(F == 5 && !top.getItem(3).getItemMeta().getDisplayName().equals(d)
                                 || F == 3 && top.getItem(5) != null && !top.getItem(5).getItemMeta().getDisplayName().equals(d)
                                 || F < 0
@@ -1071,7 +917,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             top.setItem(13, item);
                             item = alchemistaccept.clone(); itemMeta = item.getItemMeta(); lore.clear();
                             for(String string : itemMeta.getLore()) {
-                                if(string.contains("{COST}")) string = string.replace("{COST}", formatInt(cost));
+                                if(string.contains("{COST}")) string = string.replace("{COST}", formatDouble(cost));
                                 lore.add(string);
                             }
                             itemMeta.setLore(lore); lore.clear();
@@ -1127,7 +973,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final ItemMeta cm = cursor.getItemMeta();
                 final String d = cm.getDisplayName();
 
-                final AbstractCustomEnchant enchant = CustomEnchant.valueOf(d);
+                final CustomEnchant enchant = CustomEnchant.valueOf(d);
                 final int level = getEnchantmentLevel(d);
                 int enchantsize = 0;
                 final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(d), current);
@@ -1152,7 +998,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             if(player.hasPermission("RandomPackage.levelcap." + i))
                                 haspermfor = i;
                         for(int z = 0; z < lore.size(); z++) {
-                            final AbstractCustomEnchant e = CustomEnchant.valueOf(lore.get(z));
+                            final CustomEnchant e = CustomEnchant.valueOf(lore.get(z));
                             if(e != null) {
                                 enchantsize += 1;
                                 if(e.equals(enchant)) {
@@ -1170,9 +1016,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             return;
                         } else {
                             final String requires = enchant.getRequiredEnchant();
-                            final AbstractCustomEnchant replaces = requires != null ? AbstractCustomEnchant.valueOf(requires.split(";")[0]) : null;
+                            final CustomEnchant replaces = requires != null ? CustomEnchant.valueOf(requires.split(";")[0]) : null;
                             final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
-                            final HashMap<AbstractCustomEnchant, Integer> enchants = replaces != null ? getEnchants(current) : null;
+                            final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchants(current) : null;
                             if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) return;
                             //
                             if(random.nextInt(100) <= success) {
@@ -1185,7 +1031,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                                     final ArrayList<String> newlore = new ArrayList<>();
                                     for(String s : lore) {
                                         if(!did) R += 1;
-                                        final AbstractCustomEnchant ce = CustomEnchant.valueOf(s);
+                                        final CustomEnchant ce = CustomEnchant.valueOf(s);
                                         if(ce != null) {
                                             if(ce.equals(replaces)) did = true;
                                             newlore.add(s);
@@ -1242,31 +1088,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @EventHandler
-    private void raritygemClickEvent(InventoryClickEvent event) {
-        final ItemStack curs = event.getCursor(), curr = event.getCurrentItem();
-        if(!event.isCancelled() && curr != null && curs != null && curr.hasItemMeta() && curs.hasItemMeta()) {
-            final int cursorAmount = curs.getAmount();
-            final FileRarityGem cursor = FileRarityGem.valueOf(curs), current = cursor != null ? FileRarityGem.valueOf(curr) : null;
-            if(cursor == null || current == null) return;
-            if(cursor.equals(current)) {
-                final Player player = (Player) event.getWhoClicked();
-                final int combinedTotal = getRemainingInt(curs.getItemMeta().getDisplayName()) + getRemainingInt(curr.getItemMeta().getDisplayName());
-                event.setCancelled(true);
-                item = cursor.getItem();
-                itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', cursor.getColors(combinedTotal)) + combinedTotal));
-                item.setItemMeta(itemMeta);
-                event.setCurrentItem(item);
-                if(cursorAmount == 1) event.setCursor(new ItemStack(Material.AIR));
-                else {
-                    curs.setAmount(cursorAmount-1);
-                    event.setCursor(curs);
-                }
-                player.updateInventory();
-            }
-        }
-    }
+
     @EventHandler
     private void givedpClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
@@ -1275,11 +1097,11 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         if(event.isCancelled()) return;
         else if(top.getType().equals(InventoryType.ANVIL)) {
             if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore() || event.getClick().equals(ClickType.NUMBER_KEY)) {
-                AbstractCustomEnchant enchant = null;
+                CustomEnchant enchant = null;
                 final int hb = event.getHotbarButton();
                 item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
                 if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-                    enchant = AbstractCustomEnchant.valueOf(item.getItemMeta().getDisplayName());
+                    enchant = CustomEnchant.valueOf(item.getItemMeta().getDisplayName());
                 if(enchant != null) {
                     event.setCancelled(true);
                     player.updateInventory();
@@ -1293,9 +1115,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             int enchantcount = -1;
             if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
                 item = current; itemMeta = current.getItemMeta(); lore.clear();
-                final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(current);
-                HashMap<AbstractCustomEnchant, Integer> enchantmentsonitem = null;
-                if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
                 if(cursor.getItemMeta().equals(whitescroll.getItemMeta())) {
                     final String t = item.getType().name();
                     if(t.endsWith("AXE") || t.endsWith("SWORD") || t.endsWith("SPADE") || t.equals("BOW") || t.equals("FISHING_ROD") || t.endsWith("HELMET") || t.endsWith("CHESTPLATE") || t.endsWith("LEGGINGS") || t.endsWith("BOOTS")) {
@@ -1316,57 +1135,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     else       cursor.setAmount(a-1);
                     player.updateInventory();
                     return;
-                } else {
-                    final BlackScroll bs = BlackScroll.valueOf(cursor);
-                    if(bs != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && !enchantmentsonitem.isEmpty()) {
-                        enchantcount = enchantmentsonitem.size();
-                        giveItem(player, applyBlackScroll(current, cursor, bs));
-                        item = current; itemMeta = item.getItemMeta();
-                        if(itemMeta.hasDisplayName()) {
-                            final String d = itemMeta.getDisplayName(), l = TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantcount));
-                            if(d.contains(l)) {
-                                itemMeta.setDisplayName(d.replace(l, TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantcount-1))));
-                            }
-                        }
-                        success = true;
-                    }
-                    final MagicDust dust = bs == null ? MagicDust.valueOf(cursor) : null;
-                    if(dust != null && enchant != null) {
-                        final EnchantRarity ra = EnchantRarity.valueOf(enchant);
-                        if(dust.getAppliesTo().contains(ra)) {
-                            final String SUCCESS = ra.getSuccess();
-                            int percent = -1;
-                            final List<String> l = dust.getPlainItem().getItemMeta().getLore();
-                            for(int z = 0; z < l.size(); z++)
-                                if(l.get(z).contains("{PERCENT}"))
-                                    percent = getRemainingInt(cursor.getItemMeta().getLore().get(z));
-                            if(percent == -1) return;
-                            for(String string : itemMeta.getLore()) {
-                                int r = getRemainingInt(string);
-                                if(string.equals(SUCCESS.replace("{PERCENT}", "" + r))) {
-                                    if(r >= 100) return;
-                                    else if(r + percent > 100) { r = 50; percent = 50; }
-                                    string = SUCCESS.replace("{PERCENT}", "" + (r + percent));
-                                }
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
-                            }
-                            itemMeta.setLore(lore); lore.clear();
-                            success = true;
-                        }
-                    }
-                    final EnchantmentOrb orb = dust == null ? EnchantmentOrb.valueOf(cursor) : null;
-                    if(orb != null) {
-                        boolean did = false;
-                        final EnchantmentOrb o = EnchantmentOrb.getOrb(current);
-                        for(String s : orb.getAppliesTo()) {
-                            if((o == null || !o.equals(orb) && o.getIncrement() < orb.getIncrement()) && current.getType().name().toLowerCase().endsWith(s.toLowerCase())) {
-                                did = true;
-                                applyEnchantmentOrb(player, current, cursor, orb);
-                            }
-                        }
-                        if(!did) return;
-                        success = true;
-                    }
                 }
                 if(success) {
                     //playSuccess((Player) event.getWhoClicked());
@@ -1446,37 +1214,11 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, PathBlackScroll bs) {
-        item = null;
-        final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(is);
-        if(is != null && enchants.size() > 0) {
-            final Set<AbstractCustomEnchant> key = enchants.keySet();
-            CustomEnchant enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
-            final List<EnchantRarity> a = bs.getAppliesTo();
-            int successP = -1;
-            for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
-            for(int f = 1; f <= 5; f++) {
-                final EnchantRarity r = EnchantRarity.valueOf(enchant);
-                if(a.contains(r)) {
-                    int enchantlevel = enchants.get(enchant);
-                    itemMeta = is.getItemMeta(); lore.clear(); lore.addAll(itemMeta.getLore());
-                    int enchantslot = -1;
-                    final String ap = r.getApplyColors();
-                    for(int i = 0; i < lore.size(); i++) if(lore.get(i).equals(ap + enchant.getName() + " " + toRoman(enchantlevel))) enchantslot = i;
-                    if(enchantslot == -1) return null;
-                    lore.remove(enchantslot);
-                    itemMeta.setLore(lore); lore.clear();
-                    is.setItemMeta(itemMeta);
-                    return getRevealedItem(enchant, enchantlevel, successP, 100, true, true).clone();
-                } else enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
-            }
-        }
-        return item;
-    }
+
     public boolean applyTransmogScroll(ItemStack is) {
         final String currentitem = is != null ? is.getType().name() : null;
         if(currentitem != null && (currentitem.endsWith("AXE") || currentitem.endsWith("SWORD") || currentitem.endsWith("SPADE") || currentitem.equals("BOW") || currentitem.endsWith("HELMET") || currentitem.endsWith("CHESTPLATE") || currentitem.endsWith("LEGGINGS") || currentitem.endsWith("BOOTS"))) {
-            final HashMap<AbstractCustomEnchant, Integer> enchants = getEnchants(is);
+            final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
             final int size = enchants.keySet().size(), prevsize = enchants.keySet().size();
             itemMeta = is.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) {
@@ -1484,7 +1226,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 for(String ss : transmog_organization) {
                     final EnchantRarity r = EnchantRarity.rarities.get(ss);
                     for(String s : l) {
-                        final AbstractCustomEnchant enchant = AbstractCustomEnchant.valueOf(s);
+                        final CustomEnchant enchant = CustomEnchant.valueOf(s);
                         if(enchant != null && EnchantRarity.valueOf(enchant).equals(r)) lore.add(s);
                     }
                 }
@@ -1521,39 +1263,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             return true;
         }
         return false;
-    }
-    private void applyEnchantmentOrb(Player player, ItemStack is, ItemStack enchantmentorb, EnchantmentOrb orb) {
-        EnchantmentOrb prevOrb = null;
-        final int percent = getRemainingInt(enchantmentorb.getItemMeta().getLore().get(orb.getPercentLoreSlot()));
-        item = is; itemMeta = item.getItemMeta(); lore.clear();
-        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-        for(String s : lore) {
-            EnchantmentOrb q = EnchantmentOrb.valueOf(s);
-            if(q != null) prevOrb = q;
-        }
-        if(random.nextInt(100) <= percent) {
-            final String a = orb.getApplyLore();
-            if(prevOrb == null) {
-                lore.add(a);
-            } else {
-                final String prev = prevOrb.getApplyLore();
-                boolean did = false;
-                for(int i = 0; i < lore.size(); i++) {
-                    if(!did && lore.get(i).equals(prev)) {
-                        did = true;
-                        lore.set(i, a);
-                    }
-                }
-                if(!did) return;
-            }
-            //playSuccess(player);
-        } else {
-            //playDestroy(player);
-            return;
-        }
-        itemMeta.setLore(lore); lore.clear();
-        item.setItemMeta(itemMeta);
-        player.updateInventory();
     }
     public void applyWhiteScroll(Player player, ItemStack is) {
         if(is != null) {

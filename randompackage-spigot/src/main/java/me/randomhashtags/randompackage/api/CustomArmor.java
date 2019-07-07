@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.ArmorSet;
+import me.randomhashtags.randompackage.addons.usingfile.FileArmorSet;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
@@ -8,7 +10,7 @@ import me.randomhashtags.randompackage.api.events.customenchant.CEAApplyPotionEf
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.addons.usingfile.FileArmorSet;
+import me.randomhashtags.randompackage.utils.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -63,15 +65,14 @@ public class CustomArmor extends CustomEnchants implements Listener {
 				new FileArmorSet(f);
 			}
 		}
-		final HashMap<String, FileArmorSet> A = FileArmorSet.sets;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (A != null ? A.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (armorsets != null ? armorsets.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	@Override
 	public void unload() {
 		config = null;
 		equipmentLootbox = null;
 		inEquipmentLootbox = null;
-		FileArmorSet.deleteAll();
+		deleteAll(Feature.CUSTOM_ARMOR);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -81,7 +82,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 			final String n = event.reason.name();
 			if(n.contains("_EQUIP")) {
 				scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-					final FileArmorSet W = FileArmorSet.valueOf(player);
+					final ArmorSet W = ArmorSet.valueOf(player);
 					if(W != null) {
 						final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
 						pluginmanager.callEvent(e);
@@ -90,14 +91,14 @@ public class CustomArmor extends CustomEnchants implements Listener {
 					}
 				}, 0);
 			} else if(n.contains("_UNEQUIP")) {
-				final FileArmorSet W = FileArmorSet.valueOf(player);
+				final ArmorSet W = ArmorSet.valueOf(player);
 				if(W != null) {
 					final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
 					pluginmanager.callEvent(e);
 					procCustomArmor(e, W);
 				}
 			} else if(n.equals("BREAK")) {
-				final FileArmorSet W = FileArmorSet.valueOf(player);
+				final ArmorSet W = ArmorSet.valueOf(player);
 				if(W != null) procCustomArmor(event, W);
 			}
 		}
@@ -106,21 +107,21 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		final Entity e = event.getEntity(), d = event.getDamager();
-		if(e instanceof Player) procCustomArmor(event, FileArmorSet.valueOf((Player) e));
-		if(d instanceof Player) procCustomArmor(event, FileArmorSet.valueOf((Player) d));
+		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
+		if(d instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) d));
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageEvent(EntityDamageEvent event) {
 		final Entity e = event.getEntity();
-		if(e instanceof Player) procCustomArmor(event, FileArmorSet.valueOf((Player) e));
+		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
 		final HumanEntity e = event.getEntity();
-		if(e instanceof Player) procCustomArmor(event, FileArmorSet.valueOf((Player) e));
+		if(e instanceof Player) procCustomArmor(event, ArmorSet.valueOf((Player) e));
 	}
 
-	public void procCustomArmor(Event event, FileArmorSet set) {
+	public void procCustomArmor(Event event, ArmorSet set) {
 		if(set == null) return;
 		for(String attr : set.getAttributes()) {
             final String A = attr.split(";")[0].toLowerCase();

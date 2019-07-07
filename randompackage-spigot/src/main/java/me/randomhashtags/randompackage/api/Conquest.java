@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class Conquest extends RPFeature implements CommandExecutor {
-
     private static Conquest instance;
     public static Conquest getConquest() {
         if(instance == null) instance = new Conquest();
@@ -110,7 +109,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         if(C != null) {
             final List<String> con = new ArrayList<>();
             for(LivingConquestChest c : C) {
-                con.add(toString(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.ymlName + ":" + c.conquerer);
+                con.add(toString(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.getIdentifier() + ":" + c.conquerer);
             }
             otherdata.set("conquests", con);
         }

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.addons.usingfile.FileGlobalChallenge;
 import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
@@ -505,7 +506,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final UUID player = event.player.getUniqueId();
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantsrevealed", player, one);
-			increase(event, "customenchantsrevealed_" + FileEnchantRarity.valueOf(event.enchant).getName(), player, one);
+			increase(event, "customenchantsrevealed_" + EnchantRarity.valueOf(event.enchant).getIdentifier(), player, one);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -531,7 +532,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final CustomEnchant enchant = event.enchant;
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantprocs", player, one);
-			increase(event, "customenchantprocs_" + FileEnchantRarity.valueOf(enchant).getName(), player, one);
+			increase(event, "customenchantprocs_" + EnchantRarity.valueOf(enchant).getIdentifier(), player, one);
 			increase(event, "customenchantproc'd_" + enchant.getYamlName(), player, one);
 			final ItemStack i = event.itemWithEnchant;
 			increase(event, "customenchantmprocs_" + i.getType().name() + ":" + i.getData().getData(), player, one);
@@ -542,7 +543,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		final UUID player = event.player.getUniqueId();
 		final BigDecimal one = BigDecimal.ONE;
 		increase(event, "customenchantsapplied", player, one);
-		increase(event, "customenchantsapplied_" + FileEnchantRarity.valueOf(event.enchant).getName(), player, one);
+		increase(event, "customenchantsapplied_" + EnchantRarity.valueOf(event.enchant).getIdentifier(), player, one);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {

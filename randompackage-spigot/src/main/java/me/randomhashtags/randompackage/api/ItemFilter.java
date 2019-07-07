@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.FilterCategory;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.usingfile.FileFilterCategory;
@@ -102,9 +104,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
                 categoryTitles.put(fc.getInventoryTitle(), fc);
             }
         }
-
-        final HashMap<String, FileFilterCategory> F = FileFilterCategory.categories;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (F != null ? F.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (filtercategories != null ? filtercategories.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
@@ -115,8 +115,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         disable = null;
         addedLore = null;
         categorySlots = null;
-        FileFilterCategory.deleteAll();
         categories = null;
+        deleteAll(Feature.ITEM_FILTER);
     }
 
     public void viewHelp(Player player) {
@@ -152,7 +152,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, config.getStringList("messages." + (pdata.filter ? "en" : "dis") + "able"), null);
         }
     }
-    public void viewCategory(Player player, FileFilterCategory category) {
+    public void viewCategory(Player player, FilterCategory category) {
         if(hasPermission(player, "RandomPackage.filter.view." + category.getYamlName(), true)) {
             player.closeInventory();
             final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
@@ -197,7 +197,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
                     top.setItem(r, getStatus(filtered, c));
                     player.updateInventory();
                 } else if(categorySlots.containsKey(r)) {
-                    final FileFilterCategory fc = FileFilterCategory.categories.getOrDefault(categorySlots.get(r), null);
+                    final FilterCategory fc = getFilterCategory(categorySlots.get(r), null);
                     if(fc != null) {
                         player.closeInventory();
                         viewCategory(player, fc);

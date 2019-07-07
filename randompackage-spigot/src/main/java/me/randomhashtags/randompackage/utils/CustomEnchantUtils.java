@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
@@ -12,7 +13,6 @@ import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.usingfile.FileRarityGem;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -38,7 +38,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public abstract class CustomEnchantUtils extends RPFeature {
-
     private enum RomanNumeralValues {
         I(1), X(10), C(100), M(1000), V(5), L(50), D(500);
         private int val;
@@ -670,7 +669,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
             if(fu.isEnabled()) {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final FileRarityGem gem = FileRarityGem.gems.get(a.split("\\{")[1].split(":")[0]);
+                final RarityGem gem = getRarityGem(a.split("\\{")[1].split(":")[0]);
                 if(!pdata.hasActiveRarityGem(gem)) {
                     ev.didProc = false;
                     return;
@@ -918,7 +917,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-    public ItemStack getRarityGem(FileRarityGem gem, Player player) {
+    public ItemStack getRarityGem(RarityGem gem, Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
         for(int i = 0; i < pi.getSize(); i++) {

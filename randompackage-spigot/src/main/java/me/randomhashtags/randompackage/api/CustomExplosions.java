@@ -75,13 +75,12 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 
-		final HashMap<String, CustomExplosion> e = CustomExplosion.explosions;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (e != null ? e.size() : null) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (explosions != null ? explosions.size() : null) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
-		final ArrayList<ItemStack> explosions = new ArrayList<>();
-		if(e != null) for(CustomExplosion ae : e.values()) explosions.add(ae.getItem());
+		final ArrayList<ItemStack> E = new ArrayList<>();
+		if(explosions != null) for(CustomExplosion ae : explosions.values()) E.add(ae.getItem());
 
-		addGivedpCategory(explosions, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
+		addGivedpCategory(E, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 
 		int loadedPlaced = 0, loadedPrimed = 0, loadedLiving = 0;
 		final List<String> placedtnt = a.getStringList("tnt.placed"), primedtnt = a.getStringList("tnt.primed"), livingcreepers = a.getStringList("creepers");
@@ -89,7 +88,7 @@ public class CustomExplosions extends RPFeature {
 			for(String s : placedtnt) {
 				final Location l = toLocation(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
-					FileCustomTNT.placed.put(l, (FileCustomTNT) getCustomExplosion(null, "TNT_" + s.split(":")[1]));
+					FileCustomTNT.placed.put(l, (FileCustomTNT) getExplosion("TNT_" + s.split(":")[1]));
 					loadedPlaced += 1;
 				}
 			}
@@ -100,7 +99,7 @@ public class CustomExplosions extends RPFeature {
 				final UUID u = UUID.fromString(s.split(":")[0]);
 				final Entity en = getEntity(u);
 				if(en != null && !en.isDead()) {
-					FileCustomTNT.primed.put(u, (FileCustomTNT) getCustomExplosion(null, "TNT_" + s.split(":")[1]));
+					FileCustomTNT.primed.put(u, (FileCustomTNT) getExplosion("TNT_" + s.split(":")[1]));
 					loadedPrimed += 1;
 				}
 			}
@@ -111,7 +110,7 @@ public class CustomExplosions extends RPFeature {
 				final UUID u = UUID.fromString(s.split(":")[0]);
 				final Entity en = getEntity(u);
 				if(en != null && !en.isDead()) {
-					FileCustomCreeper.living.put(u, (FileCustomCreeper) getCustomExplosion(null, "CREEPER_" + s.split(":")[1]));
+					FileCustomCreeper.living.put(u, (FileCustomCreeper) getExplosion("CREEPER_" + s.split(":")[1]));
 					loadedLiving += 1;
 				}
 			}
