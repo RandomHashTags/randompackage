@@ -20,9 +20,13 @@ public class FileShopCategory extends ShopCategory {
         addShopCategory(getIdentifier(), this);
     }
     public String getIdentifier() { return getYamlName(); }
+
+    public String getTitle() {
+        return ChatColor.translateAlternateColorCodes('&', yml.getString("title"));
+    }
     public UInventory getInventory() {
         if(inventory == null) {
-            inventory = new UInventory(null, yml.getInt("size"), ChatColor.translateAlternateColorCodes('&', yml.getString("title")));
+            inventory = new UInventory(null, yml.getInt("size"), getTitle());
             final Inventory ii = inventory.getInventory();
             items = new ArrayList<>();
             final ItemStack back = shop.back;

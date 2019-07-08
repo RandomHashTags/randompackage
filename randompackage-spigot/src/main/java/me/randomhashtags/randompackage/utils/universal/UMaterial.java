@@ -1223,7 +1223,7 @@ public enum UMaterial {
     STRUCTURE_BLOCK(null, "STRUCTURE_BLOCK"),
     STRUCTURE_VOID(null, null, null, null, null, null, "STRUCTURE_VOID"),
     SUGAR("SUGAR"),
-    SUGAR_CANE_ITEM("SUGAR_CANE"),
+    SUGAR_CANE("SUGAR_CANE"),
     SUNFLOWER("DOUBLE_PLANT", null, null, null, null, "SUNFLOWER"),
     SUSPICIOUS_STEW(null, null, null, null, null, null, "SUSPICIOUS_STEW"),
     SWEET_BERRIES(null, null, null, null, null, null, "SWEET_BERRIES"),
@@ -1603,7 +1603,7 @@ public enum UMaterial {
                 un = u != null ? u.name() : potion != null ? potion.name() : null;
                 if(un != null) return valueOf(un);
             }
-            return un != null ? un.contains("SPAWN_EGG") ? matchSpawnEgg(item) : un.contains("ENCHANTED_BOOK") ? matchEnchantedBook(item) : un.contains("POTION") ? matchPotion(item) : valueOf(un) : null;
+            return un != null ? un.contains("SPAWN_EGG") ? matchSpawnEgg(item) : un.contains("ENCHANTED_BOOK") ? matchEnchantedBook(item) : un.contains("POTION") ? matchPotion(item) : match(un) : null;
         }
         return null;
     }

@@ -101,6 +101,7 @@ public class ActiveTrade {
         for(ItemStack is : (accepted ? sendingTrade : receivingTrade).values()) {
             uv.giveItem(receiver, is);
         }
+        trades.remove(this);
         sender.closeInventory();
         receiver.closeInventory();
 

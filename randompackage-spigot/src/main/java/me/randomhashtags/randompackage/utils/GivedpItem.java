@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
-import me.randomhashtags.randompackage.addons.usingpath.*;
 import me.randomhashtags.randompackage.addons.usingfile.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
@@ -50,15 +49,14 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             else if(args.length >= 2) {
                 final OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                 final String i = args[1];
-                if(i.startsWith("gkit:") || i.startsWith("vkit:")) {
+                if(i.startsWith("kit:")) {
                     final String kit = i.split(":")[1];
                     final int tier = Integer.parseInt(i.split(":")[2]);
                     final Player pl = p.getPlayer();
-                    final GlobalKit gkit = GlobalKit.kits.getOrDefault(kit, null);
-                    final EvolutionKit vkit = gkit == null ? EvolutionKit.kits.getOrDefault(kit, null) : null;
+                    final CustomKit k = getKit(kit);
                     final Kits kits = Kits.getKits();
-                    if(gkit != null || vkit != null) {
-                        kits.give(pl, gkit != null ? gkit : vkit, tier, false, false);
+                    if(k != null) {
+                        kits.give(pl, k, tier, false, false);
                     }
                 } else {
                     item = d(null, i);
@@ -152,19 +150,18 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return cf.isEnabled() ? cf.getCollectionChest("all") : air;
         } else if(input.startsWith("customarmor:")) {
             if(CustomArmor.getCustomArmor().isEnabled) {
-                final String[] b = input.split(":");
+                final String[] b = Q.split(":");
+                final ArmorSet s = getArmorSet(b[1]);
                 String type = b.length == 2 ? "random" : b[2];
-                final HashMap<String, FileArmorSet> L = FileArmorSet.sets;
-                final FileArmorSet a = L != null ? L.get(Q.split(":")[1]) : null;
-                if(a != null) {
+                if(s != null) {
                     final int R = random.nextInt(4);
                     type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
                 }
-                item = a != null && type != null ? type.equals("helmet") ? a.getHelmet() : type.equals("chestplate") ? a.getChestplate() : type.equals("leggings") ? a.getLeggings() : a.getBoots() : null;
+                item = s != null && type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : s.getBoots() : null;
                 if(item != null) {
                     itemMeta = item.getItemMeta(); lore.clear();
                     if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    lore.addAll(a.getArmorLore());
+                    lore.addAll(s.getArmorLore());
                     itemMeta.setLore(lore); lore.clear();
                     item.setItemMeta(itemMeta);
                 }
@@ -179,24 +176,20 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
             // ce:<enchant>:<level>:<success>:<destroy>
-            // ce:<plugin>:<enchant>:<level>:<success>:<destroy>
             final String[] k = Q.split(":");
             final int l = k.length;
-            if(l < 5) return air;
-            final String plugin = l == 6 ? k[1] : null, key = l == 6 ? k[2] : k[1];
-            AbstractCustomEnchant e = getCustomEnchant(plugin, key.replace("_", " "));
-            final EnchantRarity r = e == null ? getEnchantRarity(plugin, key) : null;
+            CustomEnchant e = getEnchant(k[1]);
+            final EnchantRarity r = e == null ? getEnchantRarity(k[1]) : null;
             if(r != null) {
-                final List<AbstractCustomEnchant> a = r.getEnchants();
+                final List<CustomEnchant> a = r.getEnchants();
                 e = a.get(random.nextInt(a.size()));
             }
-            final int level = e != null ? l == 6 ? getInt(k[3], e.getMaxLevel()) : getInt(k[2]) : 0;
-            final int success = level != 0 ? l == 6 ? getInt(k[4]) : getInt(k[3]) : 0;
-            final int destroy = level != 0 ? l == 6 ? getInt(k[5]) : getInt(k[4]) : 0;
+            final int level = e != null ? l == 5 ? getInt(k[2], e.getMaxLevel()) : getInt(k[1]) : 0;
+            final int success = level != 0 ? l == 5 ? getInt(k[3]) : getInt(k[2]) : 0;
+            final int destroy = level != 0 ? l == 5 ? getInt(k[4]) : getInt(k[3]) : 0;
             return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
         } else if(input.startsWith("dust:")) {
-            final HashMap<String, PathMagicDust> m = PathMagicDust.dust;
-            final PathMagicDust d = m != null ? m.get(Q.split(":")[1]) : null;
+            final MagicDust d = getDust(Q.split(":")[1]);
             return d != null ? d.getItem() : air;
         } else if(input.startsWith("enchantmentorb:")) {
             final HashMap<String, EnchantmentOrb> L = EnchantmentOrb.orbs;
@@ -222,14 +215,14 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 return getBooster(a[0]).getItem(Long.parseLong(a[2])*1000, Double.parseDouble(a[1]));
             }
             return air;
-        } else if(input.equals("gkitfallenhero") || input.startsWith("gkitfallenhero:")) {
-            final HashMap<String, GlobalKit> L = GlobalKit.kits;
-            final GlobalKit g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return g != null ? g.getFallenHeroSpawnItem() : air;
-        } else if(input.startsWith("gkitgem")) {
-            final HashMap<String, GlobalKit> L = GlobalKit.kits;
-            final GlobalKit g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return g != null ? g.getFallenHeroGem() : air;
+        } else if(input.startsWith("fallenhero:")) {
+            final CustomKit k = getKit(Q.split(":")[1]);
+            final FallenHero f = k != null ? k.getFallenHero() : null;
+            return f != null ? f.getSpawnItem() : air;
+        } else if(input.startsWith("fallenherogem:")) {
+            final CustomKit k = getKit(Q.split(":")[1]);
+            final FallenHero f = k != null ? k.getFallenHero() : null;
+            return f != null ? f.getGem() : air;
         } else if(input.startsWith("lootbox:")) {
             final Lootbox l = getLootbox(Q.split(":")[1]);
             return l != null ? l.getItem() : air;
@@ -259,10 +252,6 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 }
             }
             return air;
-        } else if(input.startsWith("mkitgem")) {
-            final HashMap<String, MasteryKit> L = MasteryKit.kits;
-            final MasteryKit m = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return m != null ? m.getRedeem() : air;
         } else if(input.startsWith("monthlycrate:")) {
             final MonthlyCrate m = getMonthlyCrate(Q.split(":")[1]);
             return m != null ? m.getItem() : air;
@@ -276,8 +265,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final RarityFireball f = getFireball(Q.split(":")[1]);
             return f != null ? f.getItem() : air;
         } else if(input.startsWith("raritygem")) {
-            final HashMap<String, PathRarityGem> L = PathRarityGem.gems;
-            final PathRarityGem g = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())])  : L.getOrDefault(Q.split(":")[1], null) : null;
+            final RarityGem g = getRarityGem(Q.split(":")[1]);
             final String three = input.split(":").length == 3 ? input.split(":")[2] : null;
             final int min = three != null ? Integer.parseInt(three.contains("-") ? three.split("-")[0] : three) : 0;
             final int amount = three != null && three.contains("-") ? min+random.nextInt(Integer.parseInt(three.split("-")[1])-min+1) : min;
@@ -286,26 +274,17 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final ServerCrate s = getServerCrate(Q.split(":")[1]);
             return s != null ? s.getItem() : air;
         } else if(input.startsWith("serverflare:") || input.startsWith("spaceflare:")) {
-            final HashMap<String, FileServerCrate> L = FileServerCrate.crates;
-            final FileServerCrate s = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return s != null ? s.getFlare().getItem() : air;
+            final ServerCrate c = getServerCrate(Q.split(":")[1]);
+            return c != null ? c.getFlare().getItem() : air;
         } else if(input.startsWith("soultracker:")) {
             final SoulTracker s = getSoulTracker(Q.split(":")[1]);
             return s != null ? s.getItem() : air;
         } else if(input.startsWith("title")) {
-            final Titles t = Titles.getTitles();
-            final HashMap<Integer, FileTitle> L = FileTitle.numbers;
-            final int a = t.isEnabled() && L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? random.nextInt(L.size()) : getRemainingInt(input.split(":")[1]) : -1;
-            final FileTitle ti = L != null? L.getOrDefault(a, null) : null;
-            return ti != null ? ti.getItem() : air;
-        } else if(input.startsWith("vkitfallenhero")) {
-            final HashMap<String, EvolutionKit> L = EvolutionKit.kits;
-            final EvolutionKit v = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return v != null ? v.getFallenHeroSpawnItem() : air;
-        } else if(input.startsWith("vkitgem")) {
-            final HashMap<String, EvolutionKit> L = EvolutionKit.kits;
-            final EvolutionKit v = L != null ? !input.contains(":") || Q.split(":")[1].equals("random") ? L.get(L.keySet().toArray()[random.nextInt(L.size())]) : L.getOrDefault(Q.split(":")[1], null) : null;
-            return v != null ? v.getFallenHeroGem() : air;
+            if(Titles.getTitles().isEnabled()) {
+                final Title t = getTitle(input.contains(":") ? Q.split(":")[1] : "random");
+                return t != null ? t.getItem() : air;
+            }
+            return air;
         } else if(input.startsWith("xpbottle:")) {
             final String[] a = Q.split(":");
             final boolean r = a[1].contains("-");

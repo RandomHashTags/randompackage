@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.api.events.*;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -165,7 +165,7 @@ public abstract class EventAttributes extends RPFeature {
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
             final int newSuccess = event.getNewSuccess(), newDestroy = event.getNewDestroy();
-            final String customenchant = event.customenchant.getYamlName(), rarity = event.scroll.getPath();
+            final String customenchant = event.customenchant.getIdentifier(), rarity = event.scroll.getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -222,8 +222,8 @@ public abstract class EventAttributes extends RPFeature {
     public String executeAttributes(Player player, PlayerApplyCustomEnchantEvent event, List<String> attributes) {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
-            final AbstractCustomEnchant enchant = event.enchant;
-            final String rarity = FileEnchantRarity.valueOf(enchant).getName(), name = enchant.getYamlName(), result = event.result.name();
+            final CustomEnchant enchant = event.enchant;
+            final String rarity = EnchantRarity.valueOf(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result.name();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -251,9 +251,9 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final ItemStack is = event.purchased;
-            final EnchantRarity r = FileEnchantRarity.valueOf(is);
+            final EnchantRarity r = EnchantRarity.valueOf(is);
             final boolean cancelled = event.isCancelled(), isRarityBook = r != null;
-            final String rarity = isRarityBook ? r.getName() : null;
+            final String rarity = isRarityBook ? r.getIdentifier() : null;
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -281,7 +281,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
-            final String rarity = FileEnchantRarity.valueOf(CustomEnchant.valueOf(event.result)).getName();
+            final String rarity = EnchantRarity.valueOf(CustomEnchant.valueOf(event.result)).getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;

@@ -699,7 +699,7 @@ public class RPPlayer extends RPStorage {
             if(quests.size() != max) {
                 final long time = System.currentTimeMillis();
                 final Random random = new Random();
-                final HashMap<String, PlayerQuest> pq = new HashMap<>(PlayerQuest.enabled);
+                final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
                 for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
                 for(int i = 1; i <= permfor && quests.size() <= permfor-1; i++) {
                     loadNewQuest(time, random);
@@ -708,7 +708,7 @@ public class RPPlayer extends RPStorage {
         }
     }
     private void loadNewQuest(long time, Random random) {
-        final HashMap<String, PlayerQuest> pq = new HashMap<>(PlayerQuest.enabled);
+        final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
         for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getYamlName());
         final int pqs = pq.size();
         final BukkitScheduler s = api.scheduler;

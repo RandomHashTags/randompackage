@@ -184,8 +184,9 @@ public abstract class RPFeature extends RPStorage implements Listener {
                 item.setAmount(amount);
                 itemMeta = item.getItemMeta();
                 if(i.equals(skullitem)) {
+                    final String owner = P.contains(";owner=") ? P.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
                     m = (SkullMeta) itemMeta;
-                    if(item.getData().getData() == 3) m.setOwner(P.split(":").length == 4 ? P.split(":")[3].split("}")[0] : "RandomHashTags");
+                    m.setOwner(owner);
                 }
                 (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
 

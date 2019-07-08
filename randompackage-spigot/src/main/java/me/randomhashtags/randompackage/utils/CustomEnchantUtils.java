@@ -588,6 +588,12 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.startsWith("dropItem{")) {
             String y = a.split("dropItem\\{")[1].split("]")[1];
             if(event instanceof PlayerInteractEvent) y = y.replace("player", ((PlayerInteractEvent) event).getPlayer().getName());
+            else if(event instanceof EntityDeathEvent) {
+                final EntityDeathEvent e = (EntityDeathEvent) event;
+                final LivingEntity v = e.getEntity(), d = v.getKiller();
+                if(v instanceof Player) y = y.replace("victim", v.getName());
+                if(d != null) y = y.replace("killer", d.getName());
+            }
             for(LivingEntity l : recipients)
                 dropItem(l, d(null, y));
         } else if(a.toLowerCase().startsWith("setgainedxp{") && mcmmoIsEnabled()) {

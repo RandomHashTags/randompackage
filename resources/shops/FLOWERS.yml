@@ -5,7 +5,7 @@ gui:
   rose:
     slot: 0
     item: "red_rose"
-    name: "e&lRose"
+    name: "&e&lRose"
     prices: 18.75;0
   blue orchid:
     slot: 1

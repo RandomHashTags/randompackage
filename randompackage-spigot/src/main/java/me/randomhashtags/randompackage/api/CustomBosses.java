@@ -1,5 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.CustomBoss;
+import me.randomhashtags.randompackage.addons.usingfile.FileCustomBoss;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
 import me.randomhashtags.randompackage.addons.active.LivingCustomMinion;
@@ -47,21 +50,19 @@ public class CustomBosses extends RPFeature {
 		final File folder = new File(rpd + separator + "custom bosses");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
-				final CustomBoss b = new CustomBoss(f);
+				final FileCustomBoss b = new FileCustomBoss(f);
 				j.add(b.getSpawnItem());
 			}
+			addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
 		}
 		loadBackup();
-		addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
-		final HashMap<String, AbstractCustomBoss> C = AbstractCustomBoss.bosses;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (C != null ? C.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (bosses != null ? bosses.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		backup();
 		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
-		AbstractCustomBoss.bosses = null;
-		AbstractCustomBoss.spawnType = null;
+		deleteAll(Feature.CUSTOM_BOSSES);
 		deadBosses = null;
 	}
 
@@ -109,7 +110,7 @@ public class CustomBosses extends RPFeature {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack I = event.getItem();
 		if(I != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			final AbstractCustomBoss c = AbstractCustomBoss.valueOf(I);
+			final CustomBoss c = CustomBoss.valueOf(I);
 			if(c != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);

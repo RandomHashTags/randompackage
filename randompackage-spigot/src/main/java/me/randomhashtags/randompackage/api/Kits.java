@@ -689,17 +689,12 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
         }
         player.updateInventory();
     }
-    public void give(Player player, Object kit, int tier, boolean allItems, boolean addCooldown) {
+    public void give(Player player, CustomKit kit, int tier, boolean allItems, boolean addCooldown) {
         if(player != null && kit != null) {
-            final FileKitGlobal gkit = kit instanceof FileKitGlobal ? (FileKitGlobal) kit : null;
-            final FileKitEvolution vkit = gkit == null && kit instanceof FileKitEvolution ? (FileKitEvolution) kit : null;
-            final FileKitMastery mkit = gkit == null && kit instanceof FileKitMastery ? (FileKitMastery) kit : null;
-            if(gkit == null && vkit == null && mkit == null) return;
-
-            final boolean g = gkit != null, v = vkit != null;
-            final int max = g || v ? (g ? gkit : vkit).getMaxLevel() : 0;
-            final YamlConfiguration yml = g ? gkit.getYaml() : v ? vkit.getYaml() : mkit.getYaml();
-            final List<KitItem> kitItems = g ? gkit.getItems() : v ? vkit.getItems() : null;
+            final boolean g = kit instanceof FileKitGlobal, v = !g && kit instanceof FileKitEvolution;
+            final int max = kit.getMaxLevel();
+            final YamlConfiguration yml = kit.getYaml();
+            final List<KitItem> kitItems = kit.getItems();
             if(kitItems == null) return;
             final YamlConfiguration typeYML = g ? gkits : v ? vkits : mkits;
             final String pn = player.getName(), t = Integer.toString(tier), mt = Integer.toString(max);
@@ -956,10 +951,10 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                 event.setCancelled(true);
                 removeItem(player, is, 1);
                 final List<String> s = gkits.getStringList("items.fallen hero bundle.reveals");
-                final HashMap<String, FileKitGlobal> g = FileKitGlobal.kits;
-                final int size = g.size();
-                for(int i = 1; i <= gkits.getInt("items.fallen hero bundle.reveal amount"); i++) {
-                    giveItem(player, g.get(s.get(random.nextInt(size))).getFallenHeroSpawnItem());
+                final int size = s.size(), amount = gkits.getInt("items.fallen hero bundle.reveal amount");
+                for(int i = 1; i <= amount; i++) {
+                    final CustomKit k = getKit(s.get(random.nextInt(size)));
+                    giveItem(player, k.getFallenHeroSpawnItem(k));
                 }
             }
         }

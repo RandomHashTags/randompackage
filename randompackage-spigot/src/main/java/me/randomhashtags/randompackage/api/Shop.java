@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.events.ShopPrePurchaseEvent;
 import me.randomhashtags.randompackage.api.events.ShopPreSellEvent;
 import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.api.events.ShopSellEvent;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileShopCategory;
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
@@ -58,16 +59,15 @@ public class Shop extends RPFeature implements CommandExecutor {
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 final FileShopCategory c = new FileShopCategory(f);
-                titles.put(c.getInventoryTitle(), c);
+                titles.put(c.getTitle(), c);
             }
         }
-        final HashMap<String, FileShopCategory> S = FileShopCategory.categories;
-        sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (shopcategories != null ? shopcategories.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
 	    config = null;
 	    back = null;
-	    FileShopCategory.deleteAll();
+	    deleteAll(Feature.SHOP);
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

@@ -9,6 +9,7 @@ import java.util.TreeMap;
 public abstract class RarityGem extends Itemable {
     public static TreeMap<Integer, String> defaultColors;
 
+    public abstract ItemStack getItem(int souls);
     public abstract List<EnchantRarity> getWorksFor();
     public abstract List<String> getSplitMsg();
     public abstract long getTimeBetweenSameKills();

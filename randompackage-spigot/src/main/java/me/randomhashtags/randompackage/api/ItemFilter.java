@@ -101,7 +101,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
             for(File f : folder.listFiles()) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);
-                categoryTitles.put(fc.getInventoryTitle(), fc);
+                categoryTitles.put(fc.getTitle(), fc);
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (filtercategories != null ? filtercategories.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -197,7 +197,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
                     top.setItem(r, getStatus(filtered, c));
                     player.updateInventory();
                 } else if(categorySlots.containsKey(r)) {
-                    final FilterCategory fc = getFilterCategory(categorySlots.get(r), null);
+                    final FilterCategory fc = getFilterCategory(categorySlots.get(r));
                     if(fc != null) {
                         player.closeInventory();
                         viewCategory(player, fc);
