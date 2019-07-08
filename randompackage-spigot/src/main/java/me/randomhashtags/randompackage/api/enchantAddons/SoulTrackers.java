@@ -13,8 +13,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -182,6 +185,22 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
                 if(a == 1) event.setCursor(new ItemStack(Material.AIR));
                 else       cursor.setAmount(a-1);
                 player.updateInventory();
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGH)
+    private void entityDeathEvent(EntityDeathEvent event) {
+        if(!event.isCancelled()) {
+            final LivingEntity victim = event.getEntity();
+            final Player killer = victim.getKiller();
+            if(killer != null) {
+                final ItemStack is = killer.getItemInHand();
+                if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+                    final SoulTracker s = SoulTracker.valueOf(is);
+                    if(s != null) {
+                        // TODO: Finish this
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.ConquestChest;
 import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
@@ -75,7 +77,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "conquests");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final FileConquestChest c = new FileConquestChest(YamlConfiguration.loadConfiguration(f), f.getName());
+                final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
                 tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
                     final String[] sr = c.getSpawnRegion().split(";");
@@ -89,15 +91,14 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
 
         final List<String> conquests = a.getStringList("conquests");
-        final HashMap<String, FileConquestChest> cc = FileConquestChest.types;
         if(conquests != null && !conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");
-                new LivingConquestChest(toLocation(p[0]), cc.get(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
+                new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
             }
         }
         final HashMap<String, ConquestMob> CM = ConquestMob.bosses;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (cc != null ? cc.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (conquestchests != null ? conquestchests.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
@@ -117,7 +118,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         saveOtherData();
 
         LivingConquestChest.deleteAll(false);
-        FileConquestChest.deleteAll();
+        deleteAll(Feature.CONQUEST);
         ConquestMob.deleteAll();
     }
     public void destroyConquests() {
@@ -194,7 +195,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public void spawn(Player player) {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
-            final List<FileConquestChest> chests = new ArrayList<>(FileConquestChest.types.values());
+            final List<ConquestChest> chests = new ArrayList<>(conquestchests.values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
             last = chests.get(random.nextInt(chests.size())).spawn(l);
         }

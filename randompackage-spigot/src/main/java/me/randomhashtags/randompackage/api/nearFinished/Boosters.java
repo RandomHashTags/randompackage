@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
+import me.randomhashtags.randompackage.addons.usingfile.FileBooster;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
@@ -12,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 public class Boosters extends RPFeature {
 	private static Boosters instance;
@@ -35,21 +36,20 @@ public class Boosters extends RPFeature {
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "faction additions.yml"));
 
-		final List<ItemStack> boosters = new ArrayList<>();
+		final List<ItemStack> b = new ArrayList<>();
 		final File folder = new File(rpd + separator + "boosters");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
-				final Booster b = new Booster(f);
-				boosters.add(b.getItem(600, 5.0));
+				final FileBooster bo = new FileBooster(f);
+				b.add(bo.getItem(600, 5.0));
 			}
 		}
-		addGivedpCategory(boosters, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
-		final TreeMap<NamespacedKey, AbstractBooster> b = AbstractBooster.boosters;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (b != null ? b.size() : 0) + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		if(boosters != null) addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (boosters != null ? boosters.size() : 0) + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		config = null;
-		AbstractBooster.boosters = null;
+		deleteAll(Feature.BOOSTERS);
 	}
 
 	@EventHandler

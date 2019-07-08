@@ -1,8 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.MagicDust;
-import me.randomhashtags.randompackage.addons.RarityFireball;
+import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
@@ -14,7 +12,6 @@ import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.enums.CustomEnchantApplyResult;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -1232,7 +1229,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 }
                 String soultracker = null;
                 for(String s : itemMeta.getLore()) {
-                    final HashMap<String, SoulTracker> t = SoulTracker.trackers;
+                    final TreeMap<String, SoulTracker> t = soultrackers;
                     if(t != null) {
                         for(SoulTracker st : t.values()) {
                             if(s.startsWith(st.getAppliedLore().replace("{SOULS}", ""))) {

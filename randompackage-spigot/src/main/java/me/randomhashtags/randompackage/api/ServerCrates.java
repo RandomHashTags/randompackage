@@ -1,7 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.ServerCrate;
 import me.randomhashtags.randompackage.api.events.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingServerCrate;
 import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
@@ -35,8 +37,8 @@ public class ServerCrates extends RPFeature {
 	}
 
 	private List<UUID> canRevealRarities;
-	private HashMap<UUID, FileServerCrate> revealingLoot;
-	private HashMap<UUID, HashMap<Integer, FileServerCrate>> selectedSlots;
+	private HashMap<UUID, ServerCrate> revealingLoot;
+	private HashMap<UUID, HashMap<Integer, ServerCrate>> selectedSlots;
 	private HashMap<UUID, List<ItemStack>> revealingloot;
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
@@ -61,14 +63,13 @@ public class ServerCrates extends RPFeature {
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileServerCrate sc = new FileServerCrate(f);
-				crates.add(sc.getPhyiscalItem());
+				crates.add(sc.getItem());
 				flares.add(sc.getFlare().getItem());
 			}
 		}
 		addGivedpCategory(crates, UMaterial.CHEST, "Server Crates", "Givedp: Server Crates");
 		addGivedpCategory(flares, UMaterial.TORCH, "Server Crate Flares", "Givedp: Server Crate Flares");
-		final HashMap<String, FileServerCrate> S = FileServerCrate.crates;
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (S != null ? S.size() : 0) + " server crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (servercrates != null ? servercrates.size() : 0) + " server crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		canRevealRarities = null;
@@ -82,7 +83,7 @@ public class ServerCrates extends RPFeature {
 		for(UUID u : tasks.keySet()) stopTasks(u);
 		tasks = null;
 		revealedslots = null;
-		FileServerCrate.deleteAll();
+		deleteAll(Feature.SERVER_CRATES);
 		LivingServerCrate.deleteAll(true);
 	}
 
@@ -97,13 +98,13 @@ public class ServerCrates extends RPFeature {
 		if(l != null) {
 			l.delete(true);
 		} else if(is != null && is.hasItemMeta() && event.getAction().name().contains("RIGHT")) {
-			final FileServerCrate c = FileServerCrate.valueOf(is);
+			final ServerCrate c = ServerCrate.valueOf(is);
 			if(c != null) {
 				event.setCancelled(true);
 				removeItem(player, is, 1);
 				openCrate(player, c);
 			} else if(b != null) {
-				final FileServerCrate f = FileServerCrate.valueOfFlare(is);
+				final ServerCrate f = ServerCrate.valueOfFlare(is);
 				if(f != null) {
 					event.setCancelled(true);
 					player.updateInventory();
@@ -120,7 +121,7 @@ public class ServerCrates extends RPFeature {
 			final UUID uuid = player.getUniqueId();
 			if(revealingLoot.containsKey(uuid))  {
 				final int r = event.getRawSlot();
-				final FileServerCrate c = revealingLoot.get(uuid);
+				final ServerCrate c = revealingLoot.get(uuid);
 				event.setCancelled(true);
 				player.updateInventory();
 				final Inventory top = player.getOpenInventory().getTopInventory();
@@ -151,7 +152,7 @@ public class ServerCrates extends RPFeature {
 							revealBackgroundLoot(player);
 						}
 					} else if(canRevealRarities.contains(uuid) && selectedSlots.get(uuid).containsKey(r) && selectedSlots.get(uuid).get(r) == null) {
-						final FileServerCrate sc = c.getRandomRarity(true);
+						final ServerCrate sc = c.getRandomRarity(true);
 						selectedSlots.get(uuid).put(r, sc);
 						item = sc.getDisplay().clone(); itemMeta = item.getItemMeta(); lore.clear();
 						if(item.hasItemMeta()) {
@@ -183,7 +184,7 @@ public class ServerCrates extends RPFeature {
 		}
 	}
 
-	public void openCrate(Player player, FileServerCrate crate) {
+	public void openCrate(Player player, ServerCrate crate) {
 		final ServerCrateOpenEvent e = new ServerCrateOpenEvent(player, crate);
 		pluginmanager.callEvent(e);
 		if(!e.isCancelled()) {
@@ -205,7 +206,7 @@ public class ServerCrates extends RPFeature {
 	}
 	private void revealBackgroundLoot(Player player) {
 		final UUID uuid = player.getUniqueId();
-		final FileServerCrate c = revealingLoot.get(uuid);
+		final ServerCrate c = revealingLoot.get(uuid);
 		tasks.put(player.getUniqueId(), new ArrayList<>());
 		List<Integer> background = new ArrayList<>();
 		final Inventory top = player.getOpenInventory().getTopInventory();
@@ -261,7 +262,7 @@ public class ServerCrates extends RPFeature {
 		if(revealingLoot.containsKey(uuid)) {
 			canRevealRarities.remove(uuid);
 			stopTasks(uuid);
-			final FileServerCrate c = revealingLoot.get(uuid);
+			final ServerCrate c = revealingLoot.get(uuid);
 			revealingLoot.remove(uuid);
 			if(!revealingloot.containsKey(uuid)) revealingloot.put(uuid, new ArrayList<>());
 			final HashMap<String, List<String>> cr = c.getRewards();

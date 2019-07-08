@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.Title;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
@@ -70,8 +72,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 		tabformat = ChatColor.translateAlternateColorCodes('&', config.getString("tab.format"));
 		FileTitle.titleChatFormat = chatformat;
 		FileTitle.titleTabFormat = tabformat;
-		final HashMap<String, FileTitle> T = FileTitle.titles;
- 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (T != null ? T.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
+ 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (titles != null ? titles.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		config = null;
@@ -84,14 +85,14 @@ public class Titles extends RPFeature implements CommandExecutor {
 		tabformat = null;
 		for(Player p : pages.keySet()) p.closeInventory();
 		pages = null;
-		FileTitle.deleteAll();
+		deleteAll(Feature.TITLES);
 	}
 
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getType().equals(interactableItem.getType())) {
-			final FileTitle T = FileTitle.valueOf(i);
+			final Title T = Title.valueOf(i);
 			if(T != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);
@@ -100,7 +101,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 				final boolean has = pdata.getTitles().contains(T);
 				final List<String> m = config.getStringList("messages." + (has ? "already own" : "redeem"));
 				for(String s : m) {
-					s = s.replace("{TITLE}", ChatColor.translateAlternateColorCodes('&', T.getTitle()));
+					s = s.replace("{TITLE}", ChatColor.translateAlternateColorCodes('&', T.getIdentifier()));
 					player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
 				}
 				if(!has) {
@@ -121,17 +122,17 @@ public class Titles extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 			if(r >= top.getSize()) return;
 			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final FileTitle T = pdata.getActiveTitle();
-			final String a = T != null ? T.getTitle() : null;
-			final List<FileTitle> titles = pdata.getTitles();
+			final Title T = pdata.getActiveTitle();
+			final String a = T != null ? T.getIdentifier() : null;
+			final List<Title> titles = pdata.getTitles();
 			final int page = pages.getOrDefault(player, 0), Z = (page*53)+r;
 			if(c.equals(nextpage)) {
 				player.closeInventory();
 				viewTitles(player, pdata, page+2);
 			} else if(titles.size() > Z) {
-				final String q = (a != null && a.equals(titles.get(Z).getTitle()) ? "un" : "") + "equip";
+				final String q = (a != null && a.equals(titles.get(Z).getIdentifier()) ? "un" : "") + "equip";
 				final List<String> s = config.getStringList("messages." + q);
-				for(String h : s) player.sendMessage(ChatColor.translateAlternateColorCodes('&', h.replace("{TITLE}", titles.get(Z).getTitle())));
+				for(String h : s) player.sendMessage(ChatColor.translateAlternateColorCodes('&', h.replace("{TITLE}", titles.get(Z).getIdentifier())));
 				pdata.setActiveTitle(q.equals("unequip") ? null : titles.get(Z));
 				update(player, pdata);
 			}
@@ -144,21 +145,21 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 	private void viewTitles(Player player, RPPlayer pdata, int page) {
 		if(hasPermission(player, "RandomPackage.titles", true)) {
-			final List<FileTitle> titles = pdata.getTitles();
+			final List<Title> titles = pdata.getTitles();
 			page = page-1;
 			int size = titles.size()-(53*page);
 			if(size <= 0) {
 				sendStringListMessage(player, config.getStringList("messages.no unlocked titles"), null);
 			} else {
-				final List<FileTitle> owned = pdata.getTitles();
-				final FileTitle A = pdata.getActiveTitle();
-				final String activetitle = A != null ? A.getTitle() : null;
+				final List<Title> owned = pdata.getTitles();
+				final Title A = pdata.getActiveTitle();
+				final String activetitle = A != null ? A.getIdentifier() : null;
 				pages.put(player, page);
 				size = size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9;
 				size = size > 54 ? 54 : size;
 				player.openInventory(Bukkit.createInventory(player, size, selftitle));
 				final Inventory top = player.getOpenInventory().getTopInventory();
-				for(FileTitle t : owned) {
+				for(Title t : owned) {
 					top.setItem(top.firstEmpty(), getTitle(activetitle, t));
 				}
 				for(int p = 0; p < top.getSize(); p++) {
@@ -173,9 +174,9 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 	private void update(Player player, RPPlayer pdata) {
 		final int page = pages.get(player)-1;
-		final List<FileTitle> owned = pdata.getTitles();
-		final FileTitle A = pdata.getActiveTitle();
-		final String activetitle = A != null ? A.getTitle() : null;
+		final List<Title> owned = pdata.getTitles();
+		final Title A = pdata.getActiveTitle();
+		final String activetitle = A != null ? A.getIdentifier() : null;
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		for(int i = 0; i < top.getSize() && i < owned.size(); i++) {
 			final ItemStack is = top.getItem(i);
@@ -186,8 +187,8 @@ public class Titles extends RPFeature implements CommandExecutor {
 		player.updateInventory();
 	}
 
-	private ItemStack getTitle(String activetitle, FileTitle input) {
-		final String title = input.getTitle();
+	private ItemStack getTitle(String activetitle, Title input) {
+		final String title = input.getIdentifier();
 		item = title.equals(activetitle) ? active.clone() : inactive.clone();
 		itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", title));

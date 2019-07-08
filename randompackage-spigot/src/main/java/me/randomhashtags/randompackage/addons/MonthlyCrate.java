@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class MonthlyCrate extends Itemable {
-    protected static HashMap<Player, List<String>> revealedRegular, revealedBonus;
+    public static HashMap<Player, List<String>> revealedRegular, revealedBonus;
 
     public abstract int getCategory();
     public abstract int getCategorySlot();

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addons.ShopCategory;
 import me.randomhashtags.randompackage.api.events.ShopPrePurchaseEvent;
 import me.randomhashtags.randompackage.api.events.ShopPreSellEvent;
 import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
@@ -191,14 +192,14 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public void view(Player player) {
 	    if(hasPermission(player, "RandomPackage.shop", true)) {
             player.closeInventory();
-            final UInventory inv = FileShopCategory.categories.get(defaultShop).getInventory();
+            final UInventory inv = getShopCategory(defaultShop).getInventory();
             player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
             player.getOpenInventory().getTopInventory().setContents(inv.getInventory().getContents());
             player.updateInventory();
         }
 	}
-	public void viewCategory(Player player, String yml) {
-	    final FileShopCategory s = FileShopCategory.categories.getOrDefault(yml, null);
+	public void viewCategory(Player player, String identifier) {
+	    final ShopCategory s = getShopCategory(identifier);
 	    if(player != null && s != null) {
 	        player.closeInventory();
 	        final UInventory inv = s.getInventory();

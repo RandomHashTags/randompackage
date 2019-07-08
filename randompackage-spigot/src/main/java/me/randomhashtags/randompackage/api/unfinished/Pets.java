@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.addons.usingfile.FilePet;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 
 import java.io.File;
-import java.util.HashMap;
 
 public class Pets extends RPFeature implements Listener {
     private static Pets instance;
@@ -27,15 +28,14 @@ public class Pets extends RPFeature implements Listener {
         final File folder = new File(rpd + separator + "pets");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                new Pet(f);
+                new FilePet(f);
             }
         }
-        final HashMap<String, Pet> p = Pet.pets;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (p != null ? p.size() : 0) + " Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (pets != null ? pets.size() : 0) + " Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
-        Pet.deleteAll();
+        deleteAll(Feature.PETS);
     }
 
 

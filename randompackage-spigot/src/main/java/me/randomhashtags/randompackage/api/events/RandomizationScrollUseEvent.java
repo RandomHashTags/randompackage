@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.events;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.usingpath.PathRandomizationScroll;
+import me.randomhashtags.randompackage.addons.RandomizationScroll;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 
@@ -10,9 +10,9 @@ public class RandomizationScrollUseEvent extends AbstractEvent implements Cancel
     public final Player player;
     public final CustomEnchant customenchant;
     public final int enchantlevel;
-    public final PathRandomizationScroll scroll;
+    public final RandomizationScroll scroll;
     private int newSuccess, newDestroy;
-    public RandomizationScrollUseEvent(Player player, CustomEnchant customenchant, int enchantlevel, PathRandomizationScroll scroll, int newSuccess, int newDestroy) {
+    public RandomizationScrollUseEvent(Player player, CustomEnchant customenchant, int enchantlevel, RandomizationScroll scroll, int newSuccess, int newDestroy) {
         this.player = player;
         this.customenchant = customenchant;
         this.enchantlevel = enchantlevel;

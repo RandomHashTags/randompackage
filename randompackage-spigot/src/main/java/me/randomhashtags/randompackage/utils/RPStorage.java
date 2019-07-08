@@ -24,6 +24,7 @@ public abstract class RPStorage extends UVersion {
     protected static TreeMap<String, BlackScroll> blackscrolls;
     protected static TreeMap<String, Booster> boosters;
     protected static TreeMap<String, CustomBoss> bosses;
+    protected static TreeMap<String, ConquestChest> conquestchests;
     protected static TreeMap<String, CustomEnchant> enabled, disabled;
     protected static TreeMap<String, DuelArena> duelArenas;
     protected static TreeMap<String, Dungeon> dungeons;
@@ -101,6 +102,14 @@ public abstract class RPStorage extends UVersion {
     public void addBoss(String identifier, CustomBoss b) {
         if(bosses == null) bosses = new TreeMap<>();
         bosses.put(identifier, b);
+    }
+
+    public ConquestChest getConquestChest(String identifier) {
+        return conquestchests != null ? conquestchests.getOrDefault(identifier, null) : null;
+    }
+    public void addConquestChest(String identifier, ConquestChest b) {
+        if(conquestchests == null) conquestchests = new TreeMap<>();
+        conquestchests.put(identifier, b);
     }
 
     public DuelArena getDuelArena(String identifier) {
@@ -340,6 +349,7 @@ public abstract class RPStorage extends UVersion {
     public void deleteAll(Feature f) {
         if(f.equals(Feature.BOOSTERS)) boosters = null;
         else if(f.equals(Feature.BLACK_SCROLLS)) blackscrolls = null;
+        else if(f.equals(Feature.CONQUEST)) conquestchests = null;
         else if(f.equals(Feature.CUSTOM_ARMOR)) armorsets = null;
         else if(f.equals(Feature.CUSTOM_BOSSES)) bosses = null;
         else if(f.equals(Feature.CUSTOM_ENCHANTS)) {

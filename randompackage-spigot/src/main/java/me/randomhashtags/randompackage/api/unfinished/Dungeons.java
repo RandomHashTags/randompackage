@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Dungeons extends RPFeature implements CommandExecutor {
     private static Dungeons instance;
@@ -29,7 +29,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         return instance;
     }
     public YamlConfiguration config;
-    private UInventory dungeons, master;
+    private UInventory gui, master;
     private ItemStack background;
 
     public ItemStack dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl;
@@ -54,11 +54,11 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         soulpearl = d(config, "items.soul pearl");
         addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
-        dungeons = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         master = new UInventory(null, config.getInt("master.size"), ChatColor.translateAlternateColorCodes('&', config.getString("master.title")));
         background = d(config, "gui.background");
         final ItemStack undisDungeon = d(config, "gui.undiscovered.dungeon"), undisKey = d(config, "gui.undiscovered.key");
-        final Inventory di = dungeons.getInventory();
+        final Inventory di = gui.getInventory();
         for(String s : config.getConfigurationSection("gui").getKeys(false)) {
             if(!s.equals("background") && !s.contains("discovered") && config.get("gui." + s + ".slot") != null) {
                 final int slot = config.getInt("gui." + s + ".slot");
@@ -67,18 +67,17 @@ public class Dungeons extends RPFeature implements CommandExecutor {
                 di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.clone() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.clone() : d(config, "gui." + s));
             }
         }
-        for(int i = 0; i < dungeons.getSize(); i++)
+        for(int i = 0; i < gui.getSize(); i++)
             if(di.getItem(i) == null)
                 di.setItem(i, background);
-        final HashMap<NamespacedKey, AbstractDungeon> d = Dungeon.dungeons;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (d != null ? d.size() : 0) + " dungeons");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " dungeons");
     }
     public void unload() {
         config = null;
         dungeons = null;
         master = null;
         background = null;
-        AbstractDungeon.dungeons = null;
+        deleteAll(Feature.DUNGEONS);
     }
 
     @EventHandler
@@ -86,7 +85,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(!event.isCancelled() && top.getHolder() == player) {
-            if(top.getTitle().equals(dungeons.getTitle())) {
+            if(top.getTitle().equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();
@@ -122,8 +121,8 @@ public class Dungeons extends RPFeature implements CommandExecutor {
 
     public void viewDungeons(Player player) {
         player.closeInventory();
-        player.openInventory(Bukkit.createInventory(player, dungeons.getSize(), dungeons.getTitle()));
-        player.getOpenInventory().getTopInventory().setContents(dungeons.getInventory().getContents());
+        player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
+        player.getOpenInventory().getTopInventory().setContents(gui.getInventory().getContents());
         /*for(int i : keys.keySet()) {
             final Dungeon d = keys.get(i);
             if(player.getInventory().containsAtLeast(d.getKey(), 1)) {

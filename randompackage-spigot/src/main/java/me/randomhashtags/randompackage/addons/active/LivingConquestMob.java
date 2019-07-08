@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,7 +25,7 @@ public class LivingConquestMob {
     public LivingConquestMob(LivingEntity entity, ConquestMob type) {
         if(living == null) {
             living = new HashMap<>();
-            isLegacy = api.version.contains("1.8");
+            isLegacy = Bukkit.getVersion().contains("1.8");
         }
 
         this.entity = entity;

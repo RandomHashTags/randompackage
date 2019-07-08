@@ -77,6 +77,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 		accepting = null;
 		requests = null;
 		blacklistedMaterials = null;
+		ActiveTrade.trades = null;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons.active;
 
-import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
+import me.randomhashtags.randompackage.addons.ServerCrate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 public class LivingServerCrate {
     public static HashMap<Location, LivingServerCrate> living;
-    private FileServerCrate type;
+    private ServerCrate type;
     private Location location;
-    public LivingServerCrate(FileServerCrate type, Location location) {
+    public LivingServerCrate(ServerCrate type, Location location) {
         if(living == null) {
             living = new HashMap<>();
         }
@@ -20,7 +20,7 @@ public class LivingServerCrate {
         this.location = location;
         living.put(location, this);
     }
-    public FileServerCrate getType() { return type; }
+    public ServerCrate getType() { return type; }
     public Location getLocation() { return location; }
     public void delete(boolean drop) {
         final World w = location.getWorld();

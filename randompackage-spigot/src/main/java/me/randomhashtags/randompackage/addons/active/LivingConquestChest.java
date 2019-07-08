@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.addons.ConquestChest;
 import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
-import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -25,12 +25,12 @@ public class LivingConquestChest {
     public Location location;
     private int x, y, z;
     private int announceTask, despawnTask, minutes;
-    public FileConquestChest type;
+    public ConquestChest type;
     public long spawnedTime;
     public long damageDelayExpire;
     public int health;
     public String conquerer;
-    public LivingConquestChest(Location location, FileConquestChest type, long spawnedTime, boolean sendMessage, boolean spawnBosses) {
+    public LivingConquestChest(Location location, ConquestChest type, long spawnedTime, boolean sendMessage, boolean spawnBosses) {
         this.health = type.getSpawnedHP();
         this.location = location;
         this.x = location.getBlockX();
@@ -41,7 +41,7 @@ public class LivingConquestChest {
         q(spawnBosses);
         if(sendMessage) send(type.getSpawnMsg());
     }
-    public LivingConquestChest(Location location, FileConquestChest type, int health, long spawnedTime, boolean sendMessage, boolean spawnBosses) {
+    public LivingConquestChest(Location location, ConquestChest type, int health, long spawnedTime, boolean sendMessage, boolean spawnBosses) {
         this.health = health;
         this.location = location;
         this.x = location.getBlockX();
