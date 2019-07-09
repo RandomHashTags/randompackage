@@ -190,16 +190,14 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGH)
     private void entityDeathEvent(EntityDeathEvent event) {
-        if(!event.isCancelled()) {
-            final LivingEntity victim = event.getEntity();
-            final Player killer = victim.getKiller();
-            if(killer != null) {
-                final ItemStack is = killer.getItemInHand();
-                if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-                    final SoulTracker s = SoulTracker.valueOf(is);
-                    if(s != null) {
-                        // TODO: Finish this
-                    }
+        final LivingEntity victim = event.getEntity();
+        final Player killer = victim.getKiller();
+        if(killer != null) {
+            final ItemStack is = killer.getItemInHand();
+            if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+                final SoulTracker s = SoulTracker.valueOf(is);
+                if(s != null) {
+                    // TODO: Finish this
                 }
             }
         }

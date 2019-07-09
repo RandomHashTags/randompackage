@@ -252,7 +252,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			final RPPlayer pdata = RPPlayer.get(player);
 			final HashMap<Integer, ItemStack[]> showcases = pdata.getShowcases();
 			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
-			if(!showcases.keySet().contains(page)) showcases.put(page, new ItemStack[54]);
+			if(!showcases.containsKey(page)) showcases.put(page, new ItemStack[54]);
 			if(sizes.get(page) > pdata.getShowcaseSize(page)) pdata.addToShowcase(page, item);
 		}
 	}
@@ -269,8 +269,9 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		if(!hasPermission(opener, "RandomPackage.showcase" + (self ? "" : ".other"), false)) {
 			sendStringListMessage(opener, config.getStringList("messages.no access"), null);
 		} else {
+			int size = pdata.getShowcaseSize(page);
+			size = size == 0 ? 9 : size;
 			(self ? inSelf : inOther).add(opener);
-			final int size = pdata.getShowcaseSize(page);
 			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", opener.getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", "" + actualsize));
 			opener.openInventory(inv);
 			final Inventory top = opener.getOpenInventory().getTopInventory();

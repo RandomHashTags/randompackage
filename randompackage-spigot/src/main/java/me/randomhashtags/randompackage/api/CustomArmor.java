@@ -207,6 +207,6 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		final List<String> r = config.getStringList("items.equipment lootbox.rewards");
 		String l = r.get(random.nextInt(r.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[random.nextInt(l.split("\\|\\|").length)];
-		return givedpitem.valueOf(l).clone();
+		return givedpitem.valueOf(l);
 	}
 }

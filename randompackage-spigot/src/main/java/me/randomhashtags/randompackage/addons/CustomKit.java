@@ -35,9 +35,31 @@ public abstract class CustomKit extends Itemable {
     }
 
     public static CustomKit valueOf(int slot, Class type) {
-        if(kits != null) {
+        if(kits != null && type != null) {
             for(CustomKit k : kits.values()) {
                 if(k.getClass().isInstance(type) && k.getSlot() == slot) {
+                    return k;
+                }
+            }
+        }
+        return null;
+    }
+    public static CustomKit valueOfFallenHeroSpawnItem(ItemStack is) {
+        if(kits != null && is != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack g = k.getFallenHeroSpawnItem(k);
+                if(g != null && g.isSimilar(is)) {
+                    return k;
+                }
+            }
+        }
+        return null;
+    }
+    public static CustomKit valueOfFallenHeroGemItem(ItemStack is) {
+        if(kits != null && is != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack g = k.getFallenHeroGemItem(k);
+                if(g != null && g.isSimilar(is)) {
                     return k;
                 }
             }

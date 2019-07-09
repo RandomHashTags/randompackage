@@ -127,23 +127,27 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             a.set("saved default monthly crates", true);
             saveOtherData();
         }
+        final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> K = new HashMap<>();
         final File folder = new File(rpd + separator + "monthly crates");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 final FileMonthlyCrate m = new FileMonthlyCrate(f);
                 final int z = m.getCategory();
+                if(!categorySlots.containsKey(z)) categorySlots.put(z, new HashMap<>());
                 if(categoriez.containsKey(z)) {
                     if(!K.containsKey(z)) K.put(z, new HashMap<>());
-                    K.get(z).put(m.getCategorySlot(), m.getItem());
+                    final int slot = m.getCategorySlot();
+                    K.get(z).put(slot, m.getItem());
+                    categorySlots.get(z).put(slot, m);
                 }
             }
         }
-        final HashMap<Integer, HashMap<Integer, MonthlyCrate>> M = MonthlyCrate.categorySlots;
+
         for(int i = 0; i < gui.getSize(); i++) {
             item = gi.getItem(i);
             if(categories.containsKey(i)) {
-                final HashMap<Integer, MonthlyCrate> A = M.get(categories.get(i));
+                final HashMap<Integer, MonthlyCrate> A = categorySlots.get(categories.get(i));
                 itemMeta = item.getItemMeta(); lore.clear();
                 for(String s : itemMeta.getLore()) {
                     if(s.contains("{CRATE}")) {

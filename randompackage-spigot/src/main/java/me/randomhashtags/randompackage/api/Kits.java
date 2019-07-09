@@ -68,17 +68,16 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String c = cmd.getName();
-        if(args.length == 0 && player != null) {
+        final int l = args.length;
+        if(l == 0 && player != null) {
             if(hasPermission(sender, "RandomPackage." + c, true))
                 view(player, c.equals("gkit") ? KitType.GLOBAL : c.equals("vkit") ? KitType.EVOLUTION : KitType.MASTERY);
-        } else if(args.length == 2 && args[0].equals("reset")) {
-            if(hasPermission(sender, "RandomPackage." + c + ".reset", true))
-                resetAll(player, args[1], c.equals("gkit") ? KitType.GLOBAL : c.equals("vkit") ? KitType.EVOLUTION : KitType.MASTERY);
-        } else if(args.length == 3 && args[0].equals("reset")) {
-            if(hasPermission(sender, "RandomPackage." + c + ".reset-kit", true))
-                reset(player, args[1], c.equals("gkit") ? KitType.GLOBAL : c.equals("vkit") ? KitType.EVOLUTION : KitType.MASTERY, args[2]);
+        } else if(args[0].equals("reset")) {
+            final Class<? extends CustomKit> k = c.equals("gkit") ? FileKitGlobal.class : c.equals("vkit") ? FileKitEvolution.class : FileKitMastery.class;
+            if(l == 2 && hasPermission(sender, "RandomPackage." + c + ".reset", true)) resetAll(player, args[1], k);
+            else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) reset(player, args[1], k);
         }
-        if(c.equals("gkit") && args.length == 2) {
+        if(c.equals("gkit") && l == 2) {
             final String arg = args[0], argg = args[1];
             //if(arg.equals("edit") && hasPermission(sender, "RandomPackage.gkit.edit", true))
                 //edit(player, FileKitGlobal.kits.getOrDefault(argg.toUpperCase().split("\\.yml")[0], null), true);
@@ -420,7 +419,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                         } else {
                             final FileKitGlobal gkit = (FileKitGlobal) k;
                             final int tier = tiers.containsKey(k) ? tiers.get(k) : has ? 1 : 0;
-                            final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(n) && !(tier < 1));
+                            final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(k) && !(tier < 1));
                             if(gkitUsesTiers)
                                 for(String s : gkits.getStringList("gui.settings.pre lore"))
                                     lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxLevel()))));
@@ -442,7 +441,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             top.setContents(mkit.getInventory().getContents());
             player.updateInventory();
             for(int i = 0; i < top.getSize(); i++) {
-                final FileKitMastery m = FileKitMastery.valueOf(i);
+                final CustomKit m = CustomKit.valueOf(i, FileKitMastery.class);
                 if(m != null) {
                     item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                     if(itemMeta.hasLore()) {
@@ -476,14 +475,14 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final boolean hasPerm = hasPermissionToObtain(player, kit);
             final YamlConfiguration yml = kit instanceof FileKitGlobal ? gkits : kit instanceof FileKitEvolution ? vkits : mkits;
-            final String n = kit.getIdentifier();
             final long t = System.currentTimeMillis();
-            final boolean cooldown = pdata.getKitCooldowns().getOrDefault(kit)-t <= 0;
+            final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+            final long c = cooldowns.get(kit);
+            final boolean cooldown = c-t <= 0;
             final int slot = kit.getSlot(), tier = pdata.getKitLevel(kit);
             final ItemStack displayed = kit.getItem();
-            final HashMap<String, Long> cooldowns = g ? pdata.getKitCooldowns(KitType.GLOBAL) : v ? pdata.getKitCooldowns(KitType.EVOLUTION) : null;
-            final String remainingTime = getRemainingTime(cooldowns.get(n)-t);
-            item = (g ? gkitCooldown : v ? vkitCooldown : null).clone(); itemMeta = item.getItemMeta(); lore.clear();
+            final String remainingTime = getRemainingTime(c-t);
+            item = (kit instanceof FileKitGlobal ? gkitCooldown : kit instanceof FileKitEvolution ? vkitCooldown : null).clone(); itemMeta = item.getItemMeta(); lore.clear();
             for(String s : itemMeta.getLore()) {
                 if(s.equals("{LORE}"))
                     for(String q : displayed.getItemMeta().getLore())
@@ -610,22 +609,28 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
 
 
     public boolean hasPermissionToObtain(Player player, CustomKit kit) {
-        return player != null && kit != null && RPPlayer.get(player.getUniqueId()).getKitLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier());
+        return player != null && kit != null && (RPPlayer.get(player.getUniqueId()).getKitLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
     }
-    public void resetAll(CommandSender sender, String target, KitType type) {
+    public void resetAll(CommandSender sender, String target, Class<? extends CustomKit> type) {
         final RPPlayer pdata = r(sender, target, type);
         if(pdata != null) {
-            pdata.getKitCooldowns(type).clear();
+            final Class<? extends CustomKit> t = type.isInstance(FileKitGlobal.class) ? FileKitGlobal.class : type.isInstance(FileKitEvolution.class) ? FileKitEvolution.class : FileKitMastery.class;
+            final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+            for(CustomKit k : new ArrayList<>(cooldowns.keySet())) {
+                if(k.getClass().isInstance(t)) {
+                    cooldowns.remove(k);
+                }
+            }
         }
     }
-    public void reset(CommandSender sender, String target, KitType type, String kitName) {
-        final RPPlayer pdata = r(sender, target, type);
-        if(pdata != null) pdata.getKitCooldowns(type).put(kitName, 0l);
+    public void reset(CommandSender sender, String target, Class<? extends CustomKit> kit) {
+        final RPPlayer pdata = r(sender, target, kit);
+        if(pdata != null) pdata.getKitCooldowns().remove(kit);
     }
-    private RPPlayer r(CommandSender sender, String target, KitType type) {
+    private RPPlayer r(CommandSender sender, String target, Class<? extends CustomKit> kit) {
         final OfflinePlayer p = Bukkit.getOfflinePlayer(target);
         final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
-        final YamlConfiguration yml = type.equals(KitType.EVOLUTION) ? vkits : type.equals(KitType.GLOBAL) ? gkits : mkits;
+        final YamlConfiguration yml = kit.isInstance(FileKitEvolution.class) ? vkits : kit.isInstance(FileKitGlobal.class) ? gkits : mkits;
 
         if(pdata == null) {
             sendStringListMessage(sender, yml.getStringList("messages.target doesnt exist"), null);
@@ -636,7 +641,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
         }
         return pdata;
     }
-    public void preview(Player player, FileKitGlobal kit, int tier) {
+    public void preview(Player player, CustomKit kit, int tier) {
         if(player == null || kit == null) return;
         player.closeInventory();
         final List<ItemStack> rewards = new ArrayList<>();
@@ -661,7 +666,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             rewards.add(is);
         }
         int s = rewards.size();
-        s = s == 9 || s == 18 || s == 27 || s == 36 || s == 45 || s == 54 ? s : s > 54 ? 54 : ((s+9)/9)*9;
+        s = s <= 54 && s%9 == 0 ? s : s > 54 ? 54 : ((s+9)/9)*9;
         player.openInventory(Bukkit.createInventory(player, s, gkitPreview.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(ItemStack i : rewards)
@@ -709,9 +714,8 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     public void give(Player player, FileKitEvolution vkit, boolean preview) {
         if(vkit == null) return;
         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-        final HashMap<String, Integer> lvls = pdata.getKitLevels(KitType.EVOLUTION);
-        final String n = vkit.getYamlName();
-        final int vkitlvl = lvls.containsKey(n) ? lvls.get(n) : player.hasPermission("RandomPackage.vkit." + n) ? 1 : 0;
+        final HashMap<CustomKit, Integer> lvls = pdata.getKitLevels();
+        final int vkitlvl = lvls.containsKey(vkit) ? lvls.get(vkit) : player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()) ? 1 : 0;
         final List<ItemStack> rewards = new ArrayList<>();
         final YamlConfiguration yml = vkit.getYaml();
         for(KitItem ki : vkit.getItems())
@@ -763,7 +767,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             for(int i = fe; i < player.getOpenInventory().getTopInventory().getSize(); i++)
                 player.getOpenInventory().getTopInventory().setItem(i, vkitPreviewBackground.clone());
         if(!preview)
-            pdata.getKitCooldowns(KitType.EVOLUTION).put(n, System.currentTimeMillis()+(vkit.getCooldown()*1000));
+            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis()+(vkit.getCooldown()*1000));
         player.updateInventory();
         final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
         int upgradechance = vkit.getUpgradeChance(), a = fu.isEnabled() ? (int) (fu.getVkitLevelingChance(fapi.getFaction(player))*100) : 0;
@@ -772,7 +776,7 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
             final int newlvl = vkitlvl+1;
             if(newlvl > vkit.getMaxLevel()) return;
             final String name = vkit.getItem().getItemMeta().getDisplayName();
-            pdata.getKitLevels(KitType.EVOLUTION).put(n, newlvl);
+            pdata.getKitLevels().put(vkit, newlvl);
             for(String s : vkits.getStringList("messages.upgrade"))
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
             for(String s : vkits.getStringList("messages.upgrade broadcast"))
@@ -807,23 +811,22 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     }
     private void tryIncreaseTier(Player player, ItemStack is, CustomKit kit) {
         final boolean gkit = kit instanceof FileKitGlobal;
-        final String type = gkit ? "gkit" : "vkit";
         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-        final String n = kit.getYamlName();
+        final String n = kit.getIdentifier();
         final HashMap<String, String> replacements = new HashMap<>();
-        final HashMap<String, Integer> tiers = pdata.getKitLevels(gkit ? KitType.GLOBAL : KitType.EVOLUTION);
-        if(!tiers.containsKey(n) && player.hasPermission("RandomPackage." + type + "." + n)) tiers.put(n, 0);
-        if(tiers.containsKey(n)) {
-            final int l = tiers.get(n);
+        final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
+        if(!tiers.containsKey(kit) && player.hasPermission("RandomPackage.kit." + n)) tiers.put(kit, 0);
+        if(tiers.containsKey(kit)) {
+            final int l = tiers.get(kit);
             if(l != kit.getMaxLevel()) {
-                tiers.put(n, l+1);
+                tiers.put(kit, l+1);
             } else {
                 sendStringListMessage(player, (gkit ? gkits : vkits).getStringList("messages.already have max"), null);
                 return;
             }
         } else {
-            replacements.put("{NAME}", (gkit ? ((FileKitGlobal) kit).getFallenHeroName() : ((FileKitEvolution) kit).getFallenHeroName()));
-            tiers.put(n, 1);
+            replacements.put("{NAME}", kit.getFallenHeroName());
+            tiers.put(kit, 1);
             sendStringListMessage(player, (gkit ? gkits : vkits).getStringList("messages.redeem"), replacements);
         }
         removeItem(player, is, 1);
@@ -860,12 +863,12 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack is = event.getItem();
-        final FileKitGlobal g = FileKitGlobal.valueOfFallenHeroSpawnItem(is), gem = g == null ? FileKitGlobal.valueOfFallenHeroGem(is) : null;
-        final FileKitEvolution v = gem == null ? FileKitEvolution.valueOfFallenHeroSpawnItem(is) : null, vgem = v == null ? FileKitEvolution.valueOfFallenHeroGem(is) : null;
-        if((g != null || v != null) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            trySpawning(player, is, g != null ? g : v, event.getClickedBlock().getLocation());
-        } else if(gem != null || vgem != null) {
-            tryIncreaseTier(player, is, gem != null ? gem : vgem);
+        final CustomKit spawn = CustomKit.valueOfFallenHeroSpawnItem(is), gem = spawn == null ? CustomKit.valueOfFallenHeroGemItem(is) : null;
+
+        if(spawn != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            trySpawning(player, is, spawn, event.getClickedBlock().getLocation());
+        } else if(gem != null) {
+            tryIncreaseTier(player, is, gem);
         }
     }
 
@@ -881,9 +884,10 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                 if(t.equals(gkit.getTitle()) || t.equals(gkitPreview.getTitle())) {
                     event.setCancelled(true);
                     player.updateInventory();
-                    final FileKitGlobal gkit = FileKitGlobal.valueOf(r);
-                    if(gkit == null || r < 0 || r >= top.getSize()) return;
+                    final CustomKit k = CustomKit.valueOf(r, FileKitGlobal.class);
+                    if(gkit == null || r < 0 || r >= top.getSize() || k == null) return;
 
+                    final FileKitGlobal gkit = (FileKitGlobal) k;
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                     final int tier = pdata.getKitLevel(gkit);
                     if(t.equals(gkitPreview.getTitle())) {
@@ -892,16 +896,16 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     } else if(event.getClick().name().contains("RIGHT")) {
                         preview(player, gkit, tier);
                     } else {
-                        final String n = gkit.getYamlName();
-                        final HashMap<String, Long> cooldowns = pdata.getKitCooldowns(KitType.GLOBAL);
-                        final HashMap<String, Integer> tiers = pdata.getKitLevels(KitType.GLOBAL);
+                        final String n = gkit.getIdentifier();
+                        final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+                        final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
                         final boolean hasPerm = hasPermissionToObtain(player, gkit);
                         if(!hasPerm) {
                             sendStringListMessage(player, gkits.getStringList("messages.not unlocked kit"), null);
-                        } else if(tiers.containsKey(n) && !cooldowns.containsKey(n)
-                                || !tiers.containsKey(n) && player.hasPermission("RandomPackage.gkit." + n) && !cooldowns.containsKey(n)
-                                || cooldowns.containsKey(n) && cooldowns.get(n) <= System.currentTimeMillis()) {
-                            cooldowns.put(n, System.currentTimeMillis()+(gkit.getCooldown()*1000));
+                        } else if(tiers.containsKey(gkit) && !cooldowns.containsKey(gkit)
+                                || !tiers.containsKey(gkit) && player.hasPermission("RandomPackage.kit." + n) && !cooldowns.containsKey(n)
+                                || cooldowns.containsKey(gkit) && cooldowns.get(gkit) <= System.currentTimeMillis()) {
+                            cooldowns.put(gkit, System.currentTimeMillis()+(gkit.getCooldown()*1000));
                             give(player, gkit, tier, false);
                             setCooldown(player, gkit);
                         }
@@ -963,22 +967,21 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                         sendStringListMessage(player, vkits.getStringList("messages.cannot withdraw"), null);
                     } else if(event.getClick().name().contains("RIGHT")) {
                         player.closeInventory();
-                        final FileKitEvolution vkit = FileKitEvolution.valueOf(r);
+                        final FileKitEvolution vkit = (FileKitEvolution) CustomKit.valueOf(r, FileKitEvolution.class);
                         give(player, vkit, true);
                     } else {
-                        final FileKitEvolution vkit = FileKitEvolution.valueOf(r);
+                        final FileKitEvolution vkit = (FileKitEvolution) CustomKit.valueOf(r, FileKitEvolution.class);
                         if(vkit == null) return;
-                        final String n = vkit.getYamlName();
-                        final HashMap<String, Long> cooldowns = pdata.getKitCooldowns(KitType.EVOLUTION);
-                        final HashMap<String, Integer> levels = pdata.getKitLevels(KitType.EVOLUTION);
+                        final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+                        final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
                         final boolean hasPerm = hasPermissionToObtain(player, vkit);
                         final long time = System.currentTimeMillis();
                         if(!hasPerm) {
                             sendStringListMessage(player, vkits.getStringList("messages.not unlocked kit"), null);
-                        } else if(!cooldowns.keySet().contains(n) && (levels.containsKey(n) || !levels.containsKey(n) && player.hasPermission("RandomPackage.vkit." + n))
-                                || cooldowns.keySet().contains(n) && cooldowns.get(n) <= time) {
+                        } else if(!cooldowns.containsKey(vkit) && (levels.containsKey(vkit) || !levels.containsKey(vkit) && player.hasPermission("RandomPackage.vkit." + vkit.getIdentifier()))
+                                || cooldowns.containsKey(vkit) && cooldowns.get(vkit) <= time) {
                             give(player, vkit, false);
-                            cooldowns.put(n, time+(vkit.getCooldown()*1000));
+                            cooldowns.put(vkit, time+(vkit.getCooldown()*1000));
                             setCooldown(player, vkit);
                         }
                     }
@@ -995,15 +998,14 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     event.setCancelled(true);
                     player.updateInventory();
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                    final HashMap<String, Integer> kits = pdata.getKitLevels(KitType.EVOLUTION);
-                    final String n = e.getYamlName();
-                    if(!kits.containsKey(n)) {
+                    final HashMap<CustomKit, Integer> kits = pdata.getKitLevels();
+                    if(!kits.containsKey(e)) {
                         sendStringListMessage(player, vkits.getStringList("messages.not unlocked kit"), null);
                     } else {
-                        final int lvl = kits.get(n);
+                        final int lvl = kits.get(e);
                         final String name = e.getItem().getItemMeta().getDisplayName(), newl = Integer.toString(lvl+1);
                         if(lvl < e.getMaxLevel()) {
-                            kits.put(n, lvl+1);
+                            kits.put(e, lvl+1);
                         }
                         removeItem(player, is, 1);
                         for(String s : vkits.getStringList("messages.upgrade"))
@@ -1030,13 +1032,14 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     player.updateInventory();
                     final int r = event.getRawSlot();
                     final String cl = event.getClick().name();
-                    final FileKitMastery m = FileKitMastery.valueOf(r);
+                    final CustomKit k = CustomKit.valueOf(r, FileKitMastery.class);
+                    final FileKitMastery m = k != null ? (FileKitMastery) k : null;
                     if(r < 0 || r >= top.getSize() || !cl.contains("LEFT") && !cl.contains("RIGHT") || event.getCurrentItem() == null || m == null) return;
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                     if(cl.contains("RIGHT")) {
 
                     } else {
-                        if(pdata.getKitLevels(KitType.MASTERY).containsKey(m.getYamlName())) {
+                        if(pdata.getKitLevels().containsKey(m)) {
 
                         } else {
                             sendStringListMessage(player, mkits.getStringList("messages.not unlocked"), null);
@@ -1057,10 +1060,10 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     player.updateInventory();
 
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                    final HashMap<Object, Integer> required = mkit.getRequiredKits();
+                    final HashMap<CustomKit, Integer> required = mkit.getRequiredKits();
                     final List<FileKitGlobal> gkits = new ArrayList<>();
                     final List<FileKitEvolution> vkits = new ArrayList<>();
-                    for(Object o : required.keySet()) {
+                    for(CustomKit o : required.keySet()) {
                         if(o instanceof FileKitGlobal) {
                             gkits.add((FileKitGlobal) o);
                         } else if(o instanceof FileKitEvolution) {
@@ -1069,20 +1072,18 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                     }
                     FileKitGlobal missingG = null;
                     FileKitEvolution missingV = null;
-                    final HashMap<String, Integer> l = pdata.getKitLevels(KitType.GLOBAL);
-                    final HashMap<String, Integer> m = pdata.getKitLevels(KitType.EVOLUTION);
+                    final HashMap<CustomKit, Integer> l = pdata.getKitLevels();
+                    final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
                     if(!gkits.isEmpty()) {
                         for(FileKitGlobal g : gkits) {
-                            final String n = g.getYamlName();
-                            if(missingG == null && (!l.containsKey(n) || l.get(n) < required.get(g))) {
+                            if(missingG == null && (!l.containsKey(g) || l.get(g) < required.get(g))) {
                                 missingG = g;
                             }
                         }
                     }
                     if(!vkits.isEmpty()) {
                         for(FileKitEvolution v : vkits) {
-                            final String n = v.getYamlName();
-                            if(missingV == null && (!m.containsKey(n) || m.get(n) < required.get(v))) {
+                            if(missingV == null && (!l.containsKey(v) || l.get(v) < required.get(v))) {
                                 missingV = v;
                             }
                         }
@@ -1108,8 +1109,8 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                                 }
                             }
                             for(FileKitGlobal g : gkits) {
-                                l.remove(g.getYamlName());
-                                pdata.setKitCooldown(g, 0);
+                                l.remove(g);
+                                cooldowns.remove(g);
                             }
                         }
                         if(!vkits.isEmpty()) {
@@ -1123,12 +1124,12 @@ public class Kits extends RPFeature implements CommandExecutor, TabCompleter {
                                 }
                             }
                             for(FileKitEvolution v : vkits) {
-                                m.remove(v.getYamlName());
-                                pdata.setKitCooldown(v, 0);
+                                l.remove(v);
+                                cooldowns.remove(v);
                             }
                         }
                         removeItem(player, is, 1);
-                        pdata.getKitLevels(KitType.MASTERY).put(mkit.getYamlName(), 1);
+                        l.put(mkit, 1);
                         replacements.put("{KIT}", mkit.getName());
                         sendStringListMessage(player, mkits.getStringList("messages.unlocked"), replacements);
                         player.updateInventory();

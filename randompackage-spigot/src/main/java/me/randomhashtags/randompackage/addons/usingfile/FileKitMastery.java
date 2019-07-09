@@ -97,4 +97,20 @@ public class FileKitMastery extends RPKit {
         if(antiCrystalAddedLore == null) antiCrystalAddedLore = api.colorizeListString(yml.getStringList("anti crystal.added lore"));
         return antiCrystalAddedLore;
     }
+
+    public static FileKitMastery valueOfRedeem(ItemStack is) {
+        if(kits != null && is != null) {
+            final Class a = FileKitMastery.class;
+            for(CustomKit k : kits.values()) {
+                if(k.getClass().isInstance(a)) {
+                    final FileKitMastery m = (FileKitMastery) k;
+                    final ItemStack r = m.getRedeem();
+                    if(r != null && r.isSimilar(is)) {
+                        return m;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -420,6 +420,8 @@ public class RPPlayer extends RPStorage {
                     }
                     showcases.put(page, items);
                 }
+            } else {
+
             }
         }
         return showcases;
