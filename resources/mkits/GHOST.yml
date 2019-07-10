@@ -58,9 +58,9 @@ kit bundle:
   - "&7* 5x {REQUIREMENT}"
   - "&7* 5x {REQUIREMENT}"
   rewards:
-  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
-  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
-  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "fallenhero:{REQUIREMENT_NAME};amount=5"
+  - "fallenhero:{REQUIREMENT_NAME};amount=5"
+  - "fallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
   - "GLOBAL_SPOOKY;3"

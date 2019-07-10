@@ -49,7 +49,7 @@ regular loot:
   - "enchantmentorb:armor12;amount=2"
   - "gkitfallenherobundle"
   #- "randommkitgenerator"
-  - "vkitgem:LUCKY"
+  - "fallenherogem:EVOLUTION_LUCKY"
   - "spacedrink;amount=16"
   - "raritygem:SOUL:7500"
   - "customboss:PLAGUE_BLOATER"

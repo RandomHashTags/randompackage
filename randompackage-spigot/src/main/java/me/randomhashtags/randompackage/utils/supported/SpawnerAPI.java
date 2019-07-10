@@ -9,15 +9,16 @@ public class SpawnerAPI {
     public static SpawnerAPI getSpawnerAPI() {
         if(instance == null) {
             instance = new SpawnerAPI();
-            plugin = RandomPackage.spawner;
+            final String plugin = RandomPackage.spawner;
+            instance.plugin = plugin;
             if(plugin != null && plugin.equals("SilkSpawners")) {
-                util = de.dustplanet.util.SilkUtil.hookIntoSilkSpanwers();
+                instance.util = de.dustplanet.util.SilkUtil.hookIntoSilkSpanwers();
             }
         }
         return instance;
     }
-    private static String plugin;
-    private static Object util;
+    private String plugin;
+    private Object util;
 
     public ItemStack getItem(String entitytype) {
         if(plugin != null) {

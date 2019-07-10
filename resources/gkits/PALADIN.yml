@@ -55,7 +55,7 @@ items:
     - "&6&oSmelted out of pure holy essence."
   randomization scroll:
     chances: "25:25:25:25"
-    items: "randomizationscroll:GODLY;randomizationscroll:SOUL;randomizationscroll:LEGENDARY;randomizationscroll:ULTIMATE"
+    items: "randomizationscroll:GODLY||randomizationscroll:SOUL||randomizationscroll:LEGENDARY||randomizationscroll:ULTIMATE"
     amount: 3
   enchantment orb:
     chance: 50

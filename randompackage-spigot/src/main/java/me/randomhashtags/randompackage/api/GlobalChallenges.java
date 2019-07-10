@@ -368,7 +368,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		player.updateInventory();
 	}
 	public GlobalChallenge getRandomChallenge() {
-		return getGlobalChallenge("random");
+		return (GlobalChallenge) globalchallenges.values().toArray()[random.nextInt(globalchallenges.size())];
 	}
 	
 	@EventHandler

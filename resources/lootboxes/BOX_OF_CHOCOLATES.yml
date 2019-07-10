@@ -49,11 +49,11 @@ regular loot size: 3
 regular loot:
   #- "customboss:TREASURE_GOBLIN;amount=3"
   - "blackscroll:REGULAR;amount=5"
-  - "gkitfallenhero:VALENTINES;amount=3"
+  - "fallenhero:GLOBAL_VALENTINES;amount=3"
   - "mysterymobspawner;amount=3"
   - "raritygem:SOUL:7500"
   - "servercrate:GODLY"
-  - "vkitfallenhero:LUCKY;amount=3"
+  - "fallenhero:EVOLUTION_LUCKY;amount=3"
   #- "disguise:zombie pigman"
   - "monthlycrate:VALENTINES_2017"
   - "monthlycrate:VALENTINES_2018"

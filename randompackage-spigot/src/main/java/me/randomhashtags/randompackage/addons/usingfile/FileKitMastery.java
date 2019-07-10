@@ -58,7 +58,7 @@ public class FileKitMastery extends RPKit {
             final List<String> R = yml.getStringList("required kits");
             for(String s : R) {
                 final String[] a = s.split(";");
-                requiredKits.put(getKit(a[1]), Integer.parseInt(a[2]));
+                requiredKits.put(getKit(a[0]), Integer.parseInt(a[1]));
             }
         }
         return requiredKits;

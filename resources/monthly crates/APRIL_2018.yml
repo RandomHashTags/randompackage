@@ -35,7 +35,7 @@ rewards:
   - "bone"
   - "randomizationscroll:GODLY;amount=1-3||randomizationscroll:SOUL;amount=1-3||randomizationscroll:LEGENDARY;amount=1-3"
   - "enchantmentorb:armor12:100;amount=1-2||enchantmentorb:weapon12:100;amount=1-2"
-  - "gkitfallenhero;amount=2||vkitfallenhero;amount=2"
+  - "fallenhero;amount=2"
   - "raritybook:HEROIC"
   - "mysterycrate"
   - "paper"
@@ -43,7 +43,7 @@ rewards:
 bonus:
   - "monthlycrate:APRIL_2016||monthlycrate:APRIL_2017"
   #- "dungeonlootbag"
-  - "vkitgem:JUDGEMENT"
+  - "fallenherogem:EVOLUTION_JUDGEMENT"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

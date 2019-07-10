@@ -36,13 +36,13 @@ rewards:
   - "itemnametag;amount=2-3"
   - "{egg:0:12},{&eEaster Egg &7(Right Click)},{&7A colored easter egg full of loot!}"
   - "factionxpbooster:5:600||factionmcmmobooster:5:600"
-  - "gkitfallenhero;amount=1-2||vkitfallenhero;amount=1-2"
+  - "fallenhero;amount=1-2"
   - "customboss:KING_SLIME"
   - "randomizationscroll:GODLY"
 #
 bonus:
   - "spaceflare:GODLY"
-  - "vkitgem:ALCHEMIST"
+  - "fallenherogem:EVOLUTION_ALCHEMIST"
   - "monthlycrate:APRIL_2016"
 #
 # background item is represented as "=" in the redeem-format

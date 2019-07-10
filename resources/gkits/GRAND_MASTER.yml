@@ -67,6 +67,6 @@ items:
     item: "xpbottle:10000-15000"
   dust or black scroll:
     chance: "60:40"
-    items: "dust:ULTIMATE_REGULAR;blackscroll:REGULAR"
+    items: "dust:ULTIMATE_REGULAR||blackscroll:REGULAR"
     amount: 1
 #

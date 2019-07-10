@@ -53,7 +53,7 @@ regular loot:
   #- "fuelcell"
   #- "holywhitescroll"
   #- "heroicequipmentlootbox"
-  - "vkitfallenhero:LUCKY;amount=2"
+  - "fallenhero:EVOLUTION_LUCKY;amount=2"
   - "heroicmysterycrate"
   #- "kitbundle:NECROMANCER"
 #
