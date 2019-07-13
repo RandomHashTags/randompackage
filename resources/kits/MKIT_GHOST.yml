@@ -58,14 +58,14 @@ kit bundle:
   - "&7* 5x {REQUIREMENT}"
   - "&7* 5x {REQUIREMENT}"
   rewards:
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
-  - "GLOBAL_SPOOKY;3"
-  - "GLOBAL_BUTCHER;3"
-  - "GLOBAL_GRIM_REAPER;3"
+  - "GKIT_SPOOKY;3"
+  - "GKIT_BUTCHER;3"
+  - "GKIT_GRIM_REAPER;3"
 #
 anti crystal:
   item: "yellow_dye"

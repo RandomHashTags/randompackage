@@ -10,7 +10,6 @@ import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.objects.Home;
 import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
-import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,10 +40,7 @@ import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 public class RPPlayer extends RPStorage {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
-    private static final HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
-
-    public static YamlConfiguration fadditions;
 
     public UUID uuid;
     public File file = null;
@@ -233,7 +229,6 @@ public class RPPlayer extends RPStorage {
 
             jackpotWonCash = Long.parseLong(longs[0]);
             xpExhaustionExpiration = Long.parseLong(longs[1]);
-            loadFactionUpgrades();
             return this;
         }
         return players.get(uuid);
@@ -635,22 +630,6 @@ public class RPPlayer extends RPStorage {
         return claimedMonthlyCrates;
     }
 
-    private void loadFactionUpgrades() {
-        if(fadditions != null) {
-            final String F = FactionsAPI.getFactionsAPI().getFaction(getOfflinePlayer());
-            if(F != null && !factionUpgrades.containsKey(F)) {
-                final HashMap<FactionUpgrade, Integer> upgrades = new HashMap<>();
-                final ConfigurationSection c = fadditions.getConfigurationSection(F);
-                if(c != null) {
-                    for(String s : c.getKeys(false)) {
-                        upgrades.put(getFactionUpgrade(s), fadditions.getInt("factions." + F + "." + s));
-                    }
-                }
-                factionUpgrades.put(F, upgrades);
-            }
-        }
-    }
-
 
     private void loadUnclaimedLootboxes() {
         if(unclaimedLootboxes == null) {
@@ -749,19 +728,6 @@ public class RPPlayer extends RPStorage {
             yml.set("quests", null);
             save();
         }
-    }
-
-
-    public static HashMap<FactionUpgrade, Integer> getFactionUpgrades(OfflinePlayer player) {
-        final String F = FactionsAPI.getFactionsAPI().getFaction(player);
-        if(F != null) {
-            if(!factionUpgrades.containsKey(F)) factionUpgrades.put(F, new HashMap<>());
-            return factionUpgrades.get(F);
-        }
-        return new HashMap<>();
-    }
-    public static HashMap<String, HashMap<FactionUpgrade, Integer>> getFactionUpgrades() {
-        return factionUpgrades;
     }
 
     public static void loadAllPlayerData() {

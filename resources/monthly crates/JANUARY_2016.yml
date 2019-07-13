@@ -43,7 +43,7 @@ rewards:
 bonus:
   - "soultracker"
   - "raritybook:SOUL"
-  - "gkitgem:SPOOKY"
+  - "fallenherogem:GKIT_SPOOKY"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

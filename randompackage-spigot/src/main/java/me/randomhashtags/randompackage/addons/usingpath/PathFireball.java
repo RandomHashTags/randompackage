@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addons.usingpath;
 
+import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,7 +19,6 @@ public class PathFireball extends RarityFireball {
 	public PathFireball(String path) {
 		this.path = path;
 		addFireball(getIdentifier(), this);
-		fireballs.put(path, this);
 	}
 	public String getIdentifier() { return path; }
 
@@ -32,11 +32,12 @@ public class PathFireball extends RarityFireball {
 		if(reward != null) return api.d(null, reward);
 		for(String s : reveals) {
 			final String[] a = s.split(";");
-			final boolean ELSE = a[0].toLowerCase().startsWith("else");
-			final int chance = ELSE ? 100 : api.getRemainingInt(a[0]);
+			final int chance = api.getRemainingInt(a[0]);
 			if(random.nextInt(100) <= chance) {
-				final int R = ((ELSE ? "else" : "chance=" + chance) + ";").length();
-				return api.d(null, s.substring(R));
+				final int R = ("chance=" + chance + ";").length();
+				final String r = s.substring(R);
+				final MagicDust d = getDust(r);
+				return d.getRandomPercentItem();
 			}
 		}
 		return null;

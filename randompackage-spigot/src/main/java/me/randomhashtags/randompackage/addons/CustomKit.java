@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CustomKit extends Itemable {
+    public abstract Kits getKitClass();
     public abstract int getSlot();
     public abstract int getMaxLevel();
     public abstract long getCooldown();
     public abstract List<KitItem> getItems();
     public abstract FallenHero getFallenHero();
-    public String getFallenHeroName() { return getFallenHero().getSpawnItem().getItemMeta().getDisplayName().replace("{NAME}", getItem().getItemMeta().getDisplayName()); }
+    public String getFallenHeroName() {
+        final FallenHero f = getFallenHero();
+        return f != null ? f.getSpawnItem().getItemMeta().getDisplayName().replace("{NAME}", getItem().getItemMeta().getDisplayName()) : null;
+    }
     public ItemStack getFallenHeroSpawnItem(CustomKit kit) {
         final FallenHero f = getFallenHero();
         return f != null ? get(kit, f.getSpawnItem()) : null;
@@ -37,7 +41,7 @@ public abstract class CustomKit extends Itemable {
     public static CustomKit valueOf(int slot, Class type) {
         if(kits != null && type != null) {
             for(CustomKit k : kits.values()) {
-                if(k.getClass().isInstance(type) && k.getSlot() == slot) {
+                if(k.getSlot() == slot && k.getClass().equals(type)) {
                     return k;
                 }
             }

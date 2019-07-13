@@ -1,10 +1,12 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
+import me.randomhashtags.randompackage.addons.CustomEnchant;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileCustomEnchant extends me.randomhashtags.randompackage.addons.CustomEnchant {
+public class FileCustomEnchant extends CustomEnchant {
     private List<String> lore;
     private String value;
     private List<String> appliesto;

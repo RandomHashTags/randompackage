@@ -35,14 +35,14 @@ rewards:
   - "title:145||title:191"
   - "transmogscroll;amount=2-4"
   - "enchantmentorb:armor:random:50-75;amount=2||enchantmentorb:weapon:random:50-75;amount=2"
-  - "vkitfallenhero;amount=1-2"
-  - "gkitfallenhero;amount=1-2"
+  - "fallenhero:VKIT;amount=1-2"
+  - "fallenhero:GKIT;amount=1-2"
   - "randomizationscroll;amount=2-3"
   - "factioncrystal;amount=5-15"
 #
 bonus:
   - "spaceflare:GODLY"
-  - "gkitgem"
+  - "fallenherogem:GKIT"
   - "factioncrystal;amount=50-100"
 #
 # background item is represented as "=" in the redeem-format

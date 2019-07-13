@@ -34,10 +34,10 @@ rewards:
   - "Luck of the Irish"
   - "title:63||title:64"
   - "transmogscroll;amount=3"
-  - "gkitfallenhero;amount=1-3"
-  - "vkitfallenhero"
-  - "heroicfallenhero;amount=1-2"
-  - "vkitgem"
+  - "fallenhero:GKIT;amount=1-2||fallenhero:VKIT;amount=1-2"
+  - "fallenhero:GKIT;amount=1-2"
+  - "fallenherogem:VKIT"
+  - "paper"
   - "enchantmentorb:armor:random:75-90;amount=3-4||enchantmentorb:weapon:random:75-90;amount=3-4"
 #
 bonus:

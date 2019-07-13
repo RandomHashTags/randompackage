@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
+import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.utils.RPKit;
+import me.randomhashtags.randompackage.api.KitsGlobal;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,7 +17,8 @@ public class FileKitGlobal extends RPKit {
         load(f);
         addKit(getIdentifier(), this);
     }
-    public String getIdentifier() { return "GLOBAL_" + getYamlName(); }
+    public String getIdentifier() { return getYamlName(); }
+    public Kits getKitClass() { return KitsGlobal.getKitsGlobal(); }
 
     public boolean isHeroic() { return yml.getBoolean("settings.heroic"); }
     public ItemStack getItem() {

@@ -23,15 +23,17 @@ public abstract class CustomEnchant extends Identifyable {
 
     public static CustomEnchant valueOf(String string) { return valueOf(string, false); }
     public static CustomEnchant valueOf(String string, boolean checkDisabledEnchants) {
-        if(disabled != null && enabled != null && string != null) {
+        if(string != null) {
             final String s = ChatColor.stripColor(string);
-            for(CustomEnchant ce : enabled.values()) {
-                if(s.startsWith(ChatColor.stripColor(ce.getName())))
-                    return ce;
+            if(enabled != null) {
+                for(CustomEnchant ce : enabled.values()) {
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
             }
-            if(checkDisabledEnchants) {
+            if(checkDisabledEnchants && disabled != null) {
                 for(CustomEnchant ce : disabled.values()) {
-                    if(s.startsWith(ChatColor.stripColor(ce.getName())))
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
                         return ce;
                 }
             }
@@ -46,5 +48,4 @@ public abstract class CustomEnchant extends Identifyable {
         }
         return null;
     }
-
 }

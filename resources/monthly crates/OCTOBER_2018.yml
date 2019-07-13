@@ -35,7 +35,7 @@ rewards:
   - "itemnametag;amount=2-4||itemlorecrystal;amount=2-4"
   - "bone"
   - "equipmentlootbox;amount=1-2"
-  - "vkitgem;amount=2-4"
+  - "fallenherogem:VKIT;amount=2-4"
   - "raritybook:HEROIC;amount=1-3"
   - "servercrate:GODLY"
   - "monthlycrate:OCTOBER_2016||monthlycrate:OCTOBER_2017"

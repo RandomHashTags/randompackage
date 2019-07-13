@@ -36,7 +36,7 @@ rewards:
   - "title:62||title:189"
   - "itemnametag"
   - "factionxpbooster:6.66:360||factionmcmmobooster:6.66:360"
-  - "gkitfallenhero:GUARDIAN||gkitfallenhero:HYPERDRIVE"
+  - "fallenhero:GKIT_GUARDIAN||fallenhero:GKIT_HYPERDRIVE"
   - "mysterymobspawner;amount=2"
   - "dust:SOUL_PRIMAL;amount=4||dust:SOUL_REGULAR;amount=4"
   - "blackscroll:REGULAR:66;amount=6"

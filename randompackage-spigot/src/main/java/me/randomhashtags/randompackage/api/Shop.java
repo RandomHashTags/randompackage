@@ -55,6 +55,7 @@ public class Shop extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
+        ShopCategory.shop = this;
         titles = new HashMap<>();
         final File folder = new File(rpd + separator + "shops");
         if(folder.exists()) {

@@ -7,7 +7,7 @@ settings:
 gui settings:
   slot: 4
   #
-  item: "wither_skeleton_skull"
+  item: "wither_skeleton_skull_item"
   name: "&2&lNecromancer Mastery Kit"
   lore:
   - " "
@@ -53,14 +53,14 @@ kit bundle:
   - "&7* 5x {REQUIREMENT}"
   - "&7* 5x {REQUIREMENT}"
   rewards:
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
-  - "fallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+  - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
-  - "GLOBAL_DIABLO;3"
-  - "GLOBAL_VOIDWALKER;3"
-  - "GLOBAL_WARLOCK;3"
+  - "GKIT_DIABLO;3"
+  - "GKIT_VOIDWALKER;3"
+  - "GKIT_WARLOCK;3"
 #
 anti crystal:
   item: "yellow_dye"

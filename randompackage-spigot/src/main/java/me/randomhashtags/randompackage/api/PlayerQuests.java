@@ -136,6 +136,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "ELITE_ENCHANTER",
                     "ENDER_LORD",
                     "ENVOY_LOOTER_II",
+                    "EQUIPMENT_LOOTER",
                     "GAMBLER_I", "GAMBLER_II", "GAMBLER_III",
                     "HANGING_ON",
                     "HERO_DOMINATOR",

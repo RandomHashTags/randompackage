@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 messages:
-  receive loot from Equipment Lootbox: # This is broadcasted
+  receive loot from Equipment Lootbox: # Broadcasted
   - "&6&l(!)&r &6{PLAYER} received a {ITEM}&r &6from a Equipment Lootbox!"
 #
 items:
@@ -29,12 +29,12 @@ items:
         name: " "
       slots: "4"
     rewards:
-    - "customarmor:PHANTOM:helmet||customarmor:PHANTOM:chestplate||customarmor:PHANTOM:leggings||customarmor:PHANTOM:boots"
-    - "customarmor:YETI:helmet||customarmor:YETI:chestplate||customarmor:YETI:leggings||customarmor:YETI:boots"
-    - "customarmor:YIJKI:helmet||customarmor:YIJKI:chestplate||customarmor:YIJKI:leggings||customarmor:YIJKI:boots"
-    - "customarmor:RANGER:helmet||customarmor:RANGER:chestplate||customarmor:RANGER:leggings||customarmor:RANGER:boots"
-    - "customarmor:SUPREME:helmet||customarmor:SUPREME:chestplate||customarmor:SUPREME:leggings||customarmor:SUPREME:boots"
-    - "customarmor:TRAVELER:helmet||customarmor:TRAVELER:chestplate||customarmor:TRAVELER:leggings||customarmor:TRAVELER:boots"
+      - "customarmor:PHANTOM:random"
+      - "customarmor:YETI:random"
+      - "customarmor:YIJKI:random"
+      - "customarmor:RANGER:random"
+      - "customarmor:SUPREME:random"
+      - "customarmor:TRAVELER:random"
 #
 # Armor only works when all 4 armor pieces are worn.
 

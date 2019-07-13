@@ -49,7 +49,7 @@ regular loot:
   #- "Fat Bucket;amount=2"
   #- "resettoolkit"
   - "gkitfallenherobundle"
-  - "vkitfallenhero:SLAYER;amount=3"
+  - "fallenhero:VKIT_SLAYER;amount=3"
   #- "heroicequipmentlootbox"
   - "mysterymobspawner;amount=3"
   - "customboss:PLAGUE_BLOATER"

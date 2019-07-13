@@ -36,7 +36,7 @@ rewards:
   - "spaceflare:GODLY;amount=3-4||spaceflare:GODLY;amount=3-4"
   - "enchantmentorb:armor12:80-90;amount=1-2||enchantmentorb:weapon12:80-90;amount=1-2"
   - "customboss:BROOD_MOTHER;amount=1-2"
-  - "gkitgem||vkitgem"
+  - "fallenherogem:GKIT||fallenherogem:VKIT"
   - "mysterycrate"
 #
 bonus:

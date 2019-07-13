@@ -1,7 +1,9 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.utils.RPKit;
+import me.randomhashtags.randompackage.api.KitsMastery;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +23,8 @@ public class FileKitMastery extends RPKit {
         load(f);
         addKit(getIdentifier(), this);
     }
-    public String getIdentifier() { return "MASTERY_" + getYamlName(); }
+    public String getIdentifier() { return getYamlName(); }
+    public Kits getKitClass() { return KitsMastery.getKitsMastery(); }
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public ItemStack getItem() {

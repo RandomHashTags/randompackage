@@ -36,12 +36,13 @@ rewards:
   - "player_head_item"
   - "mysterycrate||superiorcrate"
   - "equipmentlootbox;amount=1-3"
-  - "fallenherobundle"
+  - "gkitfallenherobundle"
   - "yellow_dye"
   - "obsidian"
   - "monthlycrate:NOVEMBER_2016||monthlycrate:NOVEMBER_2017"
 #
 bonus:
+  - "fallenherogem:MKIT_GHOST"
   - "monthlycrate:HALLOWEEN_2018"
 #
 # background item is represented as "=" in the redeem-format

@@ -2,11 +2,15 @@
 messages:
   dont have item:
     - "&c&l(!)&r &cYou do not have {ITEM}!"
-  dont have cash:
+  dont have enough cash:
     - "&c&lYou do no have enough /bal $ to purchase this upgrade!"
     - "&7Upgrade Cost: &n${COST}"
   dont have f upgrade:
     - "&c&l(!)&r &cYou must have &6&l{UPGRADE}&r &cto unlock this Upgrade!"
+  dont have enough spawner value:
+    - "&c&l(!)&r &cYou do not have enough &nFaction Spawner Value&r &cto purchase this upgrade!"
+    - "&7Upgrade Cost: &n{COST}"
+  #
   upgrade:
     - ""
   unlock:

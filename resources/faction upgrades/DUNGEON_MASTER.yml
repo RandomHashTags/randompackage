@@ -1,7 +1,7 @@
 # Made by RandomHashTags
 settings:
   type: HEROIC
-  slot: 30
+  slot: 40
   max tier: 4
   item amount=tier: true
 #

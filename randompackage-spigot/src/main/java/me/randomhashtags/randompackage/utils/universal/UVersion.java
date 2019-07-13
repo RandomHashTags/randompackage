@@ -400,7 +400,7 @@ public class UVersion {
                         s = s.replace(r, replacements.get(r));
                     }
                 }
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                if(s != null) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
             }
         }
     }

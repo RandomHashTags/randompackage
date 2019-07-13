@@ -37,7 +37,7 @@ rewards:
   - "equipmentlootbox"
   - "raritybook:HEROIC;amount=1-3"
   - "heroicfactioncrystal;amount=1-3"
-  - "gkitgem;amount=1-2"
+  - "fallenherogem:GKIT;amount=1-2"
   - "monthlycrate:JUNE_2017"
 #
 bonus:

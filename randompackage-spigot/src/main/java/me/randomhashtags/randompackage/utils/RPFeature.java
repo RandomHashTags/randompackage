@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -167,7 +167,6 @@ public abstract class RPFeature extends RPStorage implements Listener {
             }
             boolean enchanted = config != null && config.getBoolean(path + ".enchanted");
             lore.clear();
-            SkullMeta m = null;
             String name = config != null ? config.getString(path + ".name") : null;
             final String[] material = P.toUpperCase().split(":");
             final String mat = material[0];
@@ -185,10 +184,11 @@ public abstract class RPFeature extends RPStorage implements Listener {
                 itemMeta = item.getItemMeta();
                 if(i.equals(skullitem)) {
                     final String owner = P.contains(";owner=") ? P.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
-                    m = (SkullMeta) itemMeta;
+                    final SkullMeta m = (SkullMeta) itemMeta;
                     m.setOwner(owner);
+                    itemMeta = m;
                 }
-                (i.equals(skullitem) ? m : itemMeta).setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
+                itemMeta.setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
 
                 if(enchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 final HashMap<Enchantment, Integer> enchants = new HashMap<>();
@@ -205,11 +205,16 @@ public abstract class RPFeature extends RPStorage implements Listener {
                         } else if(sl.startsWith("rpenchants{")) {
                             for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                                 final CustomEnchant e = CustomEnchant.valueOf(s);
-                                if(e != null) {
-                                    int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
-                                    l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
-                                    if(l != 0 || !levelzeroremoval)
-                                        lore.add(FileEnchantRarity.valueOf(e).getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                if(e != null && e.isEnabled()) {
+                                    final EnchantRarity r = EnchantRarity.valueOf(e);
+                                    if(r != null) {
+                                        int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
+                                        l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
+                                        if(l != 0 || !levelzeroremoval)
+                                            lore.add(r.getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                    } else {
+                                        System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + e.getName() + "\"!");
+                                    }
                                 }
                             }
                         } else {
@@ -217,8 +222,8 @@ public abstract class RPFeature extends RPStorage implements Listener {
                         }
                     }
                 }
-                (!i.equals(skullitem) ? itemMeta : m).setLore(lore);
-                item.setItemMeta(!item.getType().equals(skullitem) ? itemMeta : m);
+                itemMeta.setLore(lore);
+                item.setItemMeta(itemMeta);
                 lore.clear();
                 if(enchanted) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
                 for(Enchantment enchantment : enchants.keySet()) {

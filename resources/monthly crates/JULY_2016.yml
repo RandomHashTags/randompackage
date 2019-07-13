@@ -35,9 +35,9 @@ rewards:
   - "transmogscroll"
   - "title:110"
   - "spacefirework;amount=8"
-  - "gkitfallenhero:SPOOKY"
-  - "gkitfallenhero:HYPERDRIVE"
-  - "gkitfallenhero"
+  - "fallenhero:GKIT_SPOOKY"
+  - "fallenhero:GKIT_HYPERDRIVE"
+  - "fallenhero:GKIT"
   - "spaceflare:LEGENDARY"
 #
 bonus:

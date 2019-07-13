@@ -16,7 +16,7 @@ public abstract class Spawnable extends Identifyable {
         if(l != null) {
             final String own = summoner != null ? FactionsAPI.getFactionsAPI().getFaction(summoner) : null, w = l.getWorld().getName(), f = FactionsAPI.getFactionsAPI().getFactionAt(l);
             for(String s : getSpawnableFactionClaims()) {
-                if(s.startsWith(w)) {
+                if(s.startsWith(w + ";")) {
                     for(String r : s.split(w + ";")[1].split(";")) {
                         if(r.equalsIgnoreCase(f) || r.equalsIgnoreCase("own") && f.equals(own)) {
                             return true;

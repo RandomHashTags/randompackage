@@ -36,7 +36,7 @@ rewards:
   - "itemnametag"
   - "itemnametag"
   - "paper"
-  - "gkitfallenhero:ARCANE||gkitfallenhero:TRICKSTER"
+  - "fallenhero:GKIT_ARCANE||fallenhero:GKIT_TRICKSTER"
   - "spaceflare:LEGENDARY"
   - "blackscroll:REGULAR:100;amount=2"
 #

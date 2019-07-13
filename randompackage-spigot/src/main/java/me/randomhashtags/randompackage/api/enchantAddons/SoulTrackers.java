@@ -28,6 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SoulTrackers extends RPFeature implements CommandExecutor {
+    private static SoulTrackers instance;
+    public static SoulTrackers getSoulTrackers() {
+        if(instance == null) instance = new SoulTrackers();
+        return instance;
+    }
     public YamlConfiguration config;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -53,6 +58,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " +  (soultrackers != null ? soultrackers.size() : 0) + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        instance = null;
         deleteAll(Feature.SOUL_TRACKERS);
         PathSoulTracker.soultrackersyml = null;
     }
@@ -175,16 +181,23 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         if(!event.isCancelled()) {
             final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
             final SoulTracker soultracker = SoulTracker.valueOf(cursor);
-            if(soultracker != null) {
-                final Player player = (Player) event.getWhoClicked();
-                applySoulTracker(player, current, soultracker);
-                //playSuccess((Player) event.getWhoClicked());
-                event.setCancelled(true);
-                event.setCurrentItem(item);
-                final int a = cursor.getAmount();
-                if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                else       cursor.setAmount(a-1);
-                player.updateInventory();
+            if(soultracker != null && current != null && !current.getType().equals(Material.AIR)) {
+                final String n = current.getType().name();
+                for(String s : soultracker.getAppliesTo()) {
+                    if(n.endsWith(s.toUpperCase())) {
+                        item = current;
+                        final Player player = (Player) event.getWhoClicked();
+                        applySoulTracker(player, current, soultracker);
+                        //playSuccess((Player) event.getWhoClicked());
+                        event.setCancelled(true);
+                        event.setCurrentItem(item);
+                        final int a = cursor.getAmount();
+                        if(a == 1) event.setCursor(new ItemStack(Material.AIR));
+                        else       cursor.setAmount(a-1);
+                        player.updateInventory();
+                        break;
+                    }
+                }
             }
         }
     }
@@ -195,11 +208,23 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         if(killer != null) {
             final ItemStack is = killer.getItemInHand();
             if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-                final SoulTracker s = SoulTracker.valueOf(is);
+                final HashMap<Integer, SoulTracker> s = SoulTracker.valueOfApplied(is);
                 if(s != null) {
-                    // TODO: Finish this
+                    final SoulTracker tracker = (SoulTracker) s.values().toArray()[0];
+                    final String t = tracker.getTracks();
+                    if(t.equals("PLAYERS") && victim instanceof Player || t.equals("MOBS") && !(victim instanceof Player)) {
+                        addSouls(killer, is, (int) s.keySet().toArray()[0], tracker);
+                    }
                 }
             }
         }
+    }
+    public void addSouls(Player player, ItemStack is, int loreSlot, SoulTracker tracker) {
+        itemMeta = is.getItemMeta(); lore.clear();
+        lore.addAll(itemMeta.getLore());
+        lore.set(loreSlot, tracker.getAppliedLore().replace("{SOULS}", Integer.toString(getRemainingInt(ChatColor.stripColor(lore.get(loreSlot)))+1)));
+        itemMeta.setLore(lore); lore.clear();
+        is.setItemMeta(itemMeta);
+        player.updateInventory();
     }
 }

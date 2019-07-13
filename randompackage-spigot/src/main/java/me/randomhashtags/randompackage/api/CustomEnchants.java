@@ -275,7 +275,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                             for(File ff : files) {
                                 if(!ff.getName().startsWith("_settings")) {
                                     final FileCustomEnchant e = new FileCustomEnchant(ff);
-                                    if(e.isEnabled()) rarity.getEnchants().add(e);
+                                    rarity.getEnchants().add(e);
                                 }
                             }
                         }

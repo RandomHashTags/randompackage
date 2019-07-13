@@ -17,7 +17,7 @@ perks:
   - "Tier3;SetBossDamageMultiplier{2.25};+125% Boss Damage"
 #
 requirements:
-  - "Tier1;FactionUpgrade{boss mastery:level=4};Boss Mastery IV /f upgrade"
+  - "Tier1;FactionUpgrade{BOSS_MASTERY:level=4};Boss Mastery IV /f upgrade"
   - "Tier1;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
   - "Tier1;Item{heroicfactioncrystal;amount=16};16x Heroic Faction Crystals"
   - "Tier2;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"

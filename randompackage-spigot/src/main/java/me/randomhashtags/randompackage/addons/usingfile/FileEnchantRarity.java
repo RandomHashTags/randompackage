@@ -12,17 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileEnchantRarity extends EnchantRarity {
+    private File folder;
     private List<String> revealedEnchantMsg, loreFormat;
     private ItemStack revealItem, revealedItem;
     private Firework firework;
     protected List<CustomEnchant> enchants;
 
     public FileEnchantRarity(File folder, File f) {
+        this.folder = folder;
         load(f);
         enchants = new ArrayList<>();
         addEnchantRarity(getIdentifier(), this);
     }
-    public String getIdentifier() { return getYamlName(); }
+    public String getIdentifier() { return folder.getName(); }
 
     public String[] getRevealedEnchantRarities() { return yml.getString("reveals enchant rarities").split(";"); }
     public List<String> getRevealedEnchantMsg() {
@@ -56,5 +58,4 @@ public class FileEnchantRarity extends EnchantRarity {
         return firework;
     }
     public List<CustomEnchant> getEnchants() { return enchants; }
-
 }

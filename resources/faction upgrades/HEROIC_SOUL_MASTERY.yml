@@ -16,7 +16,7 @@ perks:
   - "Tier2;DecreaseRarityGemCost{SOUL:45};-45% Soul Cost"
 #
 requirements:
-  - "Tier1;FactionUpgrade{soul mastery:level=3};Soul Mastery III /f upgrade"
+  - "Tier1;FactionUpgrade{SOUL_MASTERY:level=3};Soul Mastery III /f upgrade"
   - "Tier1;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
   - "Tier1;Item{heroicfactioncrystal;amount=15};15x Heroic Faction Crystals"
   - "Tier1;Cash{75000000};$75,000,000"

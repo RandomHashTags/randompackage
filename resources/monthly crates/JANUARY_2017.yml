@@ -35,14 +35,14 @@ rewards:
   - "title:104||title:171"
   - "transmogscroll;amount=2-3"
   - "spaceflare:GODLY"
-  - "gkitgem"
+  - "fallenherogem:GKIT"
   - "factionxpbooster:5.0:600||factionmcmmobooster:5.0:600"
   - "whitescroll;amount=2-3"
   - "blackscroll:REGULAR:90;amount=3-5"
 #
 bonus:
   - "customboss:BROOD_MOTHER;amount=2"
-  - "vkitgem:PHOENIX"
+  - "fallenherogem:VKIT_PHOENIX"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

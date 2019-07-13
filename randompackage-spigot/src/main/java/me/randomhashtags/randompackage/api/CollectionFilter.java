@@ -55,8 +55,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             if(args.length == 0 || args.length == 1 || args.length == 2 && !args[1].equals("all")) {
                 final String a = args.length >= 1 ? args.length == 1 ? args[0] : args[0] + "_" + args[1] : "";
                 final ItemStack q = getItemInHand(player);
-                if(q.getType().equals(collectionchest.getType()) && q.getData().getData() == collectionchest.getData().getData()
-                        && q.hasItemMeta() && q.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
+                if(q.getType().equals(collectionchest.getType()) && q.hasItemMeta() && q.getItemMeta().getDisplayName() != null && q.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
                     if(a.equals("default"))  setFilter(player, q, defaultType);
                     else if(a.equals("all")) setFilter(player, q, ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all")));
                     else {
@@ -244,13 +243,13 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             if(c == null || c.getType().equals(Material.AIR) || r >= top.getSize()) return;
             final UUID u = player.getUniqueId();
             final CollectionChest cc = editingfilter.containsKey(u) ? CollectionChest.valueOf(player.getWorld().getBlockAt(editingfilter.get(u))) : null;
-            final UMaterial filter = cc.getFilter();
+            final UMaterial filter = cc != null ? cc.getFilter() : null;
             final Material mat = filter != null ? filter.getMaterial() : null;
             final byte data = filter != null ? filter.getData() : -1;
-            if(filter != null && mat.equals(c.getType()) && data == c.getData().getData())
+            if(mat != null && mat.equals(c.getType()) && data == c.getData().getData())
                 sendStringListMessage(player, config.getStringList("messages.item already being filtered"), null);
             else {
-                if(editingfilter.containsKey(u)) {
+                if(cc != null && editingfilter.containsKey(u)) {
                     cc.setFilter(picksup.get(r));
                     editingfilter.remove(u);
                 } else
@@ -268,7 +267,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final String selected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.selected.prefix")), notselected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.not selected.prefix"));
         final boolean selectedEnchanted = config.getBoolean("gui.selected.enchanted"), notselectedEnchanted = config.getBoolean("gui.not selected.enchanted");
         final CollectionChest cc = CollectionChest.valueOf(clickedblock);
-        final UMaterial filter = cc.getFilter();
+        final UMaterial filter = cc != null ? cc.getFilter() : getFiltered(player.getItemInHand());
         final Material mat = filter != null ? filter.getMaterial() : null;
         final byte data = filter != null ? filter.getData() : -1;
         for(int i = 0; i < top.getSize(); i++) {
@@ -342,19 +341,8 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public UMaterial getFiltered(ItemStack is) {
         final String u = collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), a = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
         for(UMaterial s : picksup.values()) {
-            if(s == null) return null;
-            if(a.equals(toMaterial(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))), false))) {
+            if(s != null && a.equals(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))))) {
                 return s;
-            }
-        }
-        return null;
-    }
-    public ItemStack getFilteredItem(ItemStack is) {
-        final String u = collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType);
-        for(UMaterial s : picksup.values()) {
-            if(s == null) return null;
-            if(ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase()).equals(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))))) {
-                return s.getItemStack();
             }
         }
         return null;

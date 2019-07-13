@@ -34,7 +34,7 @@ rewards:
   - "title:94||title:112"
   - "maxhomeincrease;amount=1-2"
   - "showcaseexpansion;amount=1-3"
-  - "gkitfallenhero;amount=1-3"
+  - "fallenhero:GKIT;amount=1-3"
   - "spaceflare:LEGENDARY;amount=2-4"
   - "factioncrystal;amount=10-25"
   - "whitescroll;amount=4-5"

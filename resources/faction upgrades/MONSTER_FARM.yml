@@ -8,7 +8,7 @@ settings:
 item:
   item: "blaze_rod"
   name: "&b&lMonster Farm"
-  desc:
+  lore:
   - "&7Increased mob spawn rates in claims."
 #
 perks:

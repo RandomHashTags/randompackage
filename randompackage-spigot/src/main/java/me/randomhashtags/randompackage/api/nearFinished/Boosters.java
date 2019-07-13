@@ -54,10 +54,14 @@ public class Boosters extends RPFeature {
 
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
-		final Player player = event.getPlayer();
 		final ItemStack is = event.getItem();
 		if(is != null && !is.getType().equals(Material.AIR)) {
-
+			final Player player = event.getPlayer();
+			/*final Booster b = Booster.valueOf(is);
+			if(b != null) {
+				event.setCancelled(true);
+				player.updateInventory();
+			}*/
 		}
 	}
 }

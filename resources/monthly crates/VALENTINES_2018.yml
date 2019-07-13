@@ -34,7 +34,7 @@ rewards:
   - "title"
   - "itemlorecrystal;amount=1-3||itemnametag;amount=1-3"
   - "randomizationscroll:ULTIMATE;amount-2-3||randomizationscroll:LEGENDARY;amount=2-3||randomizationscroll:SOUL;amount=2-3||randomizationscroll:GODLY;amount=2-3"
-  - "vkitgem"
+  - "fallenherogem:VKIT"
   - "monthlycrate:VALENTINES_2017"
   - "paper"
   - "enchantmentorb:armor12:70-95;amount=2-4||enchantmentorb:weapon12:70-95;amount=2-4"

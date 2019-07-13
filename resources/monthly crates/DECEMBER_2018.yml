@@ -33,7 +33,7 @@ rewards:
   - "paper"
   - "title"
   - "randomizationscroll:GODLY;amount=1-3"
-  - "vkitgem;amount=1-2"
+  - "fallenherogem:VKIT;amount=1-2"
   - "raritybook:HEROIC;amount=1-3||raritybook:SOUL;amount=1-3"
   - "blackscroll:HEROIC;amount=1-2||holywhitescroll;amount=1-2"
   #- "heroicgkitgenerator;amount=1-5"
@@ -41,8 +41,8 @@ rewards:
   - "monthlycrate:DECEMBER_2016||monthlycrate:DECEMBER_2017"
 #
 bonus:
-  - "mkitgem:NECROMANCER||mkitgem:GHOST"
-  - "vkitgem:LUCKY"
+  - "fallenherogem:MKIT_NECROMANCER||fallenherogem:MKIT_GHOST"
+  - "fallenherogem:VKIT_LUCKY"
   - "paper"
 #
 # background item is represented as "=" in the redeem-format

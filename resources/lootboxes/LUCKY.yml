@@ -45,11 +45,11 @@ lootbox:
 #
 regular loot size: 3
 regular loot:
-  #- "vkitfallenherobundle"
+  - "vkitfallenherobundle"
   - "enchantmentorb:armor12;amount=2"
   - "gkitfallenherobundle"
   #- "randommkitgenerator"
-  - "fallenherogem:EVOLUTION_LUCKY"
+  - "fallenherogem:VKIT_LUCKY"
   - "spacedrink;amount=16"
   - "raritygem:SOUL:7500"
   - "customboss:PLAGUE_BLOATER"

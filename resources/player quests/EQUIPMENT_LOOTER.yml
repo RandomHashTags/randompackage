@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Equipment Looter"
+  completion: 1
+  expiration: 86400
+#
+lore:
+- "&7Open an Equipment Lootbox"
+#
+rewards:
+- "questtokens=2: 2x Quest Tokens"
+#
+trigger:
+- "EquipmentLootboxOpened;cancelled=false;+1"

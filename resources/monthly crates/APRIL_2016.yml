@@ -32,18 +32,18 @@ item:
 rewards:
   - "Troll Letter"
   - "Colorful Umbrella"
-  - "fallenherogem:GLOBAL_ARCANE"
+  - "fallenherogem:GKIT_ARCANE"
   - "itemnametag"
   - "title:133||title:144"
   - "explosivecake;amount=8-64"
-  - "fallenherogem:GLOBAL_ADMIRAL"
+  - "fallenherogem:GKIT_ADMIRAL"
   - "spacechest:LEGENDARY"
   - "mysterymobspawner"
   - "whitescroll"
 #
 bonus:
   - "envoysummon"
-  - "fallenherogem:GLOBAL_SPOOKY"
+  - "fallenherogem:GKIT_SPOOKY"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

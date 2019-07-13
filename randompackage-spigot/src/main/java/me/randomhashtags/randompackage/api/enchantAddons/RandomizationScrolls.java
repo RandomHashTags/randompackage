@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RandomizationScrolls extends CustomEnchants {
+    private static RandomizationScrolls instance;
+    public static RandomizationScrolls getRandomizationScrolls() {
+        if(instance == null) instance = new RandomizationScrolls();
+        return instance;
+    }
     public YamlConfiguration config;
 
     public void load() {
@@ -40,6 +45,7 @@ public class RandomizationScrolls extends CustomEnchants {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (randomizationscrolls != null ? randomizationscrolls.size() : 0) + " Randomization Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        instance = null;
         deleteAll(Feature.RANDOMIZATION_SCROLLS);
         PathRandomizationScroll.randomizationscrollsyml = null;
     }
@@ -55,6 +61,7 @@ public class RandomizationScrolls extends CustomEnchants {
                 if(enchant != null && randomizationscroll != null) {
                     final EnchantRarity r = EnchantRarity.valueOf(enchant);
                     if(randomizationscroll.getAppliesToRarities().contains(r)) {
+                        item = current; itemMeta = item.getItemMeta(); lore.clear();
                         final String s = r.getSuccess(), d = r.getDestroy();
                         int newSuccess = random.nextInt(101), newDestroy = random.nextInt(101);
                         final RandomizationScrollUseEvent e = new RandomizationScrollUseEvent(player, enchant, getEnchantmentLevel(itemMeta.getDisplayName()), randomizationscroll, newSuccess, newDestroy);

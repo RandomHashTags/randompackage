@@ -171,6 +171,8 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 inv.setItem(S, O.get(S));
             }
         }
+        MonthlyCrate.revealedRegular = new HashMap<>();
+        MonthlyCrate.revealedBonus = new HashMap<>();
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (monthlycrates != null ? monthlycrates.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

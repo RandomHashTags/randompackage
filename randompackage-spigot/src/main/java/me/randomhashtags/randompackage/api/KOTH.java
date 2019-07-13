@@ -197,7 +197,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			final boolean captured = status.equals("CAPTURED"), stopped = status.equals("STOPPED");
 			final String status = config.getString("messages.status." + (center == null || captured || stopped ? "closed" : "open")),
 					name = currentPlayerCapturing != null ? currentPlayerCapturing.getName() : "",
-					flag = config.getString("messages.flag.") + (captured || stopped ? "captured" : currentPlayerCapturing == null ? "uncontested" : config.getString("messages.flag.capturing"));
+					flag = config.getString("messages.flag." + (captured || stopped ? "captured" : currentPlayerCapturing == null ? "uncontested" : "capturing"));
 
 			String faction = currentPlayerCapturing != null ? fapi.getFaction(currentPlayerCapturing) : "";
 			if(!faction.equals("")) faction = faction + " ";

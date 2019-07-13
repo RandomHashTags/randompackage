@@ -1,7 +1,9 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.utils.RPKit;
+import me.randomhashtags.randompackage.api.KitsEvolution;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -13,7 +15,8 @@ public class FileKitEvolution extends RPKit {
         load(f);
         addKit(getIdentifier(), this);
     }
-    public String getIdentifier() { return "EVOLUTION_" + getYamlName(); }
+    public String getIdentifier() { return getYamlName(); }
+    public Kits getKitClass() { return KitsEvolution.getKitsEvolution(); }
 
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "gui settings");

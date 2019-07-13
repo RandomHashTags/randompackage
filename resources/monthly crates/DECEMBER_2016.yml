@@ -35,8 +35,8 @@ rewards:
   - "transmogscroll;amount=2-3"
   - "enchantmentorb:armor:50-75;amount=2"
   - "enchantmentorb:weapon:30-60"
-  - "gkitfallenhero:TRICKSTER;amount=2"
-  - "gkitfallenhero:CANNONER;amount=2"
+  - "fallenhero:GKIT_TRICKSTER;amount=2"
+  - "fallenhero:GKIT_CANNONER;amount=2"
   - "whitescroll;amount=1-2"
   - "spaceflare:LEGENDARY"
 #

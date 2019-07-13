@@ -50,9 +50,9 @@ kit bundle:
   - "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
 #
 required kits:
-  - "GLOBAL_GLADIATOR;3"
-  - "GLOBAL_LOKI;3"
-  - "GLOBAL_TEMPLAR;3"
+  - "GKIT_GLADIATOR;3"
+  - "GKIT_LOKI;3"
+  - "GKIT_TEMPLAR;3"
 #
 items:
   helmet:

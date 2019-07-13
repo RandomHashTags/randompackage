@@ -53,7 +53,7 @@ public class RarityGems extends RPFeature {
         }
     }
     public void unload() {
-        config = null;
+        instance = null;
         deleteAll(Feature.RARITY_GEMS);
     }
 
@@ -100,7 +100,10 @@ public class RarityGems extends RPFeature {
         if(gem != null) {
             event.setCancelled(true);
             player.updateInventory();
-            RPPlayer.get(player.getUniqueId()).toggleRarityGem(event, gem);
+            final int souls = getRemainingInt(I.getItemMeta().getDisplayName());
+            if(souls > 0) {
+                RPPlayer.get(player.getUniqueId()).toggleRarityGem(event, gem);
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGH)

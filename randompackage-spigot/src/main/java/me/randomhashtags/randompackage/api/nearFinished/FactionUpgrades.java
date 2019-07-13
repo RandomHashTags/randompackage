@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgrade;
@@ -51,7 +50,7 @@ public class FactionUpgrades extends RPFeature {
     private File fupgradesF;
     private YamlConfiguration fupgrades;
 
-    private UInventory factionUpgrades;
+    private UInventory gui;
     private ItemStack background, locked;
     public ItemStack heroicFactionCrystal, factionCrystal;
     private List<String> aliases;
@@ -59,6 +58,8 @@ public class FactionUpgrades extends RPFeature {
     private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
     private HashMap<String, Double> teleportDelayMultipliers, cropGrowthMultipliers, enemyDamageMultipliers, bossDamageMultipliers, vkitLevelingChances;
     private HashMap<String, HashMap<RarityGem, Double>> decreaseRarityGemCost;
+
+    public static HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades;
 
     public void load() {
         final long started = System.currentTimeMillis();
@@ -79,6 +80,7 @@ public class FactionUpgrades extends RPFeature {
                     "NATURAL_GROWTH",
                     "OUTPOST_CONTROL",
                     "SOUL_MASTERY",
+                    "TP_MASTERY",
                     "WARP_MASTER", "WARZONE_CONTROL", "WELL_FED",
                     "XP_HARVEST",
             };
@@ -88,8 +90,8 @@ public class FactionUpgrades extends RPFeature {
         for(String s : config.getConfigurationSection("types").getKeys(false)) {
             new FileFactionUpgradeType(s);
         }
-        factionUpgrades = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        final Inventory fi = factionUpgrades.getInventory();
+        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        final Inventory fi = gui.getInventory();
         final File folder = new File(rpd + separator + "faction upgrades");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
@@ -106,7 +108,7 @@ public class FactionUpgrades extends RPFeature {
         vkitLevelingChances = new HashMap<>();
         decreaseRarityGemCost = new HashMap<>();
 
-        fupgradesF = new File(rpd + separator + "_Data" + separator, "faction upgrades.yml");
+        fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
         fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
         aliases = getPlugin.getConfig().getStringList("faction upgrades.aliases");
         heroicFactionCrystal = d(config, "items.heroic faction crystal");
@@ -119,7 +121,7 @@ public class FactionUpgrades extends RPFeature {
         givedpitem.items.put("heroicfactioncrystal", heroicFactionCrystal);
         givedpitem.items.put("factioncrystal", factionCrystal);
 
-        for(int i = 0; i < factionUpgrades.getSize(); i++) {
+        for(int i = 0; i < gui.getSize(); i++) {
             if(fi.getItem(i) == null) {
                 fi.setItem(i, background);
             }
@@ -138,16 +140,17 @@ public class FactionUpgrades extends RPFeature {
         bossDamageMultipliers = null;
         vkitLevelingChances = null;
         decreaseRarityGemCost = null;
+        factionUpgrades = null;
         deleteAll(Feature.FACTION_UPGRADES);
     }
 
 
     private void backup() {
-        final HashMap<String, HashMap<FactionUpgrade, Integer>> upgrades = RPPlayer.getFactionUpgrades();
-        for(String F : upgrades.keySet()) {
-            for(FactionUpgrade u : upgrades.get(F).keySet()) {
-                fupgrades.set("factions." + F, null);
-                fupgrades.set("factions." + F + "." + u.getYamlName(), upgrades.get(F).get(u));
+        for(String F : factionUpgrades.keySet()) {
+            final HashMap<FactionUpgrade, Integer> f = factionUpgrades.get(F);
+            fupgrades.set("factions." + F, null);
+            for(FactionUpgrade u : f.keySet()) {
+                fupgrades.set("factions." + F + "." + u.getIdentifier(), f.get(u));
             }
         }
         try {
@@ -161,7 +164,7 @@ public class FactionUpgrades extends RPFeature {
     private void loadBackup() {
         final ConfigurationSection c = fupgrades.getConfigurationSection("factions");
         if(c != null) {
-            final HashMap<String, HashMap<FactionUpgrade, Integer>> L = RPPlayer.getFactionUpgrades();
+            factionUpgrades = new HashMap<>();
             for(String s : c.getKeys(false)) {
                 final ConfigurationSection f = fupgrades.getConfigurationSection("factions." + s);
                 final HashMap<FactionUpgrade, Integer> b = new HashMap<>();
@@ -171,7 +174,7 @@ public class FactionUpgrades extends RPFeature {
                         b.put(u, fupgrades.getInt("factions." + s + "." + a));
                     }
                 }
-                L.put(s, b);
+                factionUpgrades.put(s, b);
             }
         }
     }
@@ -187,7 +190,7 @@ public class FactionUpgrades extends RPFeature {
                     event.setCancelled(true);
                     if(a.contains("reset")) {
                         if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
-                            RPPlayer.getFactionUpgrades(player).clear();
+                            factionUpgrades.get(fapi.getFaction(player)).clear();
                         }
                     } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
                         viewFactionUpgrades(player);
@@ -262,12 +265,13 @@ public class FactionUpgrades extends RPFeature {
         }
     }
     public void viewFactionUpgrades(Player player) {
-        if(fapi != null && fapi.getFaction(player) != null) {
+        final String f = fapi != null ? fapi.getFaction(player) : null;
+        if(f != null) {
             player.closeInventory();
-            final HashMap<FactionUpgrade, Integer> u = RPPlayer.getFactionUpgrades(player);
-            player.openInventory(Bukkit.createInventory(player, factionUpgrades.getSize(), factionUpgrades.getTitle()));
+            final HashMap<FactionUpgrade, Integer> u = factionUpgrades.get(f);
+            player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
-            top.setContents(factionUpgrades.getInventory().getContents());
+            top.setContents(gui.getInventory().getContents());
             final String W = ChatColor.translateAlternateColorCodes('&', config.getString("gui.tier")), L = ChatColor.translateAlternateColorCodes('&', config.getString("gui.locked.tier"));
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
@@ -282,7 +286,7 @@ public class FactionUpgrades extends RPFeature {
         }
     }
     public HashMap<String, String> getValues(String factionName, FactionUpgrade upgrade) {
-        final HashMap<FactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades().getOrDefault(factionName, null);
+        final HashMap<FactionUpgrade, Integer> upgrades = factionUpgrades.getOrDefault(factionName, null);
         final HashMap<String, String> values = new HashMap<>();
         final List<String> attributes = new ArrayList<>(Arrays.asList(
                 "allowfactionflight", "allowsmeltable", "increasemaxfactionwarps", "increasemaxfactionsize", "increasefactionpower", "reducemcmmocooldown", "setmobspawnrate", "setmobxpmultiplier", "setteleportdelaymultiplier",
@@ -304,9 +308,8 @@ public class FactionUpgrades extends RPFeature {
     }
     public void tryToUpgrade(Player player, FactionUpgrade fu) {
         final String f = fapi.getFaction(player);
-        final HashMap<String, HashMap<FactionUpgrade, Integer>> U = RPPlayer.getFactionUpgrades();
-        if(!U.containsKey(f)) U.put(f, new HashMap<>());
-        final HashMap<FactionUpgrade, Integer> upgrades = RPPlayer.getFactionUpgrades(player);
+        if(!factionUpgrades.containsKey(f)) factionUpgrades.put(f, new HashMap<>());
+        final HashMap<FactionUpgrade, Integer> upgrades = factionUpgrades.get(f);
         final int ti = upgrades.getOrDefault(fu, 0);
         if(ti >= fu.getMaxTier()) return;
         BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
@@ -321,7 +324,7 @@ public class FactionUpgrades extends RPFeature {
                     requiredCash = BigDecimal.valueOf(amount);
                     if(eco.getBalance(player) < amount) {
                         replacements.put("{COST}", formatDouble(requiredCash.doubleValue()).split("E")[0]);
-                        sendStringListMessage(player, config.getStringList("messages.dont have cash"), replacements);
+                        sendStringListMessage(player, config.getStringList("messages.dont have enough cash"), replacements);
                         return;
                     }
                 } else if(target.startsWith("item{")) {
@@ -334,6 +337,8 @@ public class FactionUpgrades extends RPFeature {
                         return;
                     }
                 } else if(target.startsWith("spawnervalue{")) {
+                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(Double.parseDouble(target.split("\\{")[1].split("}")[0]))));
+                    sendStringListMessage(player, config.getStringList("messages.dont have enough spawner value"), replacements);
                     return;
                 } else if(target.startsWith("factionupgrade{")) {
                     final String p = target.split("\\{")[1].split("}")[0];
@@ -458,7 +463,7 @@ public class FactionUpgrades extends RPFeature {
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(!event.isCancelled() && top.getHolder() == player) {
             final String t = event.getView().getTitle();
-            if(t.equals(factionUpgrades.getTitle())) {
+            if(t.equals(gui.getTitle())) {
                 final int r = event.getRawSlot();
                 event.setCancelled(true);
                 player.updateInventory();

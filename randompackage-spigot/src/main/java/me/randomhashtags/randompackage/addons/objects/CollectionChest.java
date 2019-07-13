@@ -31,9 +31,7 @@ public class CollectionChest {
 		this(UUID.randomUUID(), placer, location, filter);
 	}
 	public CollectionChest(UUID uuid, String placer, Location location, UMaterial filter) {
-		if(chests == null) {
-			chests = new HashMap<>();
-		}
+		if(chests == null) chests = new HashMap<>();
 		this.uuid = uuid;
 		this.placer = placer;
 		this.filter = filter;
@@ -87,9 +85,12 @@ public class CollectionChest {
 	}
 	public void destroy() {
 		final World w = location.getWorld();
-		for(ItemStack is : getInventory().getContents()) {
-			if(is != null) {
-				w.dropItemNaturally(location, is);
+		final Inventory i = getInventory();
+		if(i != null) {
+			for(ItemStack is : i.getContents()) {
+				if(is != null) {
+					w.dropItemNaturally(location, is);
+				}
 			}
 		}
 		delete();

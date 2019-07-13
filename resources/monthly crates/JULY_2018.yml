@@ -42,7 +42,7 @@ rewards:
   #- "dimensionweb||fuelcell||enchantedobsidian"
 #
 bonus:
-  - "customarmor:TRAVELER:helmet||customarmor:TRAVELER:chestplate||customarmor:TRAVELER:leggings||customarmor:TRAVELER:boots"
+  - "customarmor:TRAVELER"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

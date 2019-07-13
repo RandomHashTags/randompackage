@@ -27,7 +27,7 @@ public class PathRarityGem extends RarityGem {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(item == null) item = api.d(yml, "item");
+		if(item == null) item = api.d(raritygemyml, "gems." + path);
 		return item.clone();
 	}
 	public ItemStack getItem(int souls) {
@@ -40,29 +40,29 @@ public class PathRarityGem extends RarityGem {
 	public List<EnchantRarity> getWorksFor() {
 		if(worksFor == null) {
 			worksFor = new ArrayList<>();
-			for(String s : yml.getString("works for rarities").split(";")) {
+			for(String s : raritygemyml.getString("gems." + path + ".works for rarities").split(";")) {
 				worksFor.add(getEnchantRarity(s));
 			}
 		}
 		return worksFor;
 	}
 	public List<String> getSplitMsg() {
-		if(splitMessage == null) splitMessage = api.colorizeListString(yml.getStringList("messages.split"));
+		if(splitMessage == null) splitMessage = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".split msg"));
 		return splitMessage;
 	}
-	public long getTimeBetweenSameKills() { return yml.getLong("time between same kills"); }
+	public long getTimeBetweenSameKills() { return raritygemyml.getLong("gems." + path + ".time between same kills"); }
 	public TreeMap<Integer, String> getColors() {
 		if(colors == null) {
-			final ConfigurationSection cs = yml.getConfigurationSection("colors");
+			final ConfigurationSection cs = raritygemyml.getConfigurationSection("gems." + path + ".colors");
 			if(cs == null) {
 				colors = defaultColors;
 			} else {
 				colors = new TreeMap<>();
-				colors.put(-1, ChatColor.translateAlternateColorCodes('&', yml.getString("colors.else")));
-				colors.put(0, ChatColor.translateAlternateColorCodes('&', yml.getString("colors.less than 100")));
+				colors.put(-1, ChatColor.translateAlternateColorCodes('&', raritygemyml.getString("gems." + path + ".colors.else")));
+				colors.put(0, ChatColor.translateAlternateColorCodes('&', raritygemyml.getString("gems." + path + ".colors.less than 100")));
 				for(String s : cs.getKeys(false)) {
 					if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-						colors.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', yml.getString("colors." + s)));
+						colors.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', raritygemyml.getString("gems." + path + ".colors." + s)));
 					}
 				}
 			}
@@ -70,23 +70,23 @@ public class PathRarityGem extends RarityGem {
 		return colors;
 	}
 	public List<String> getToggleOnMsg() {
-		if(toggleon == null) toggleon = api.colorizeListString(yml.getStringList("messages.toggle on"));
+		if(toggleon == null) toggleon = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".toggle on"));
 		return toggleon;
 	}
 	public List<String> getToggleOffInteractMsg() {
-		if(toggleoffInteract == null) toggleoffInteract = api.colorizeListString(yml.getStringList("messages.toggle off.interact"));
+		if(toggleoffInteract == null) toggleoffInteract = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".toggle off.interact"));
 		return toggleoffInteract;
 	}
 	public List<String> getToggleOffDroppedMsg() {
-		if(toggleoffDropped == null) toggleoffDropped = api.colorizeListString(yml.getStringList("messages.toggle off.dropped"));
+		if(toggleoffDropped == null) toggleoffDropped = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".toggle off.dropped"));
 		return toggleoffDropped;
 	}
 	public List<String> getToggleOffMovedMsg() {
-		if(toggleoffMoved == null) toggleoffMoved = api.colorizeListString(yml.getStringList("messages.toggle off.moved"));
+		if(toggleoffMoved == null) toggleoffMoved = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".toggle off.moved"));
 		return toggleoffMoved;
 	}
 	public List<String> getToggleOffRanOutMsg() {
-		if(toggleoffRanOut == null) toggleoffRanOut = api.colorizeListString(yml.getStringList("messages.toggle off.ran out"));
+		if(toggleoffRanOut == null) toggleoffRanOut = api.colorizeListString(raritygemyml.getStringList("gems." + path + ".toggle off.ran out"));
 		return toggleoffRanOut;
 	}
 }

@@ -1,0 +1,318 @@
+# Made by RandomHashTags
+gkits:
+  messages:
+    cannot withdraw:
+      - "&c&l(!)&r &cYou cannot withdraw items from the kit preview."
+      - "&7Unlock access by defeating a Fallen Hero purchased at:"
+      - "&7&nbuy.yourserver.com"
+    not unlocked kit:
+      - "&c&l(!)&r &cYou have &nnot&r &cunlocked that Gkit!"
+      - "&7Unlock access by defeating a Fallen Hero purchased at &nbuy.yourserver.com"
+      - "&7** You can preview the contents of this kit by right-clicking it in the /gkit menu."
+    cooldown:
+      - "&eYou can obtain this gkit again in &7{TIME}"
+    # Reset
+    target doesnt exist:
+      - "&c&l(!)&r &cThat player isn't online!"
+    success:
+      - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's gkits!"
+    # Fallen Heroes
+    already have max:
+      - "&c&l(!) &cYou already have this &b&l/GKIT&r &cat max level!"
+    already have:
+      - "&c&l(!) &cYou already have this &f/gkit&c!"
+    not in warzone:
+      - "&c&l(!) &r&cYou can only summon Fallen Heroes in the &4WarZone!"
+    redeem:
+      - "&b&l(!) &r&bYou've UNLOCKED the &r{NAME}&r &b&lGKIT!"
+    upgrade:
+      - "&a&l(!)&r &a\"{NAME}&r&a\" /gkit upgraded to &aKit Tier {TIER}&r&a!"
+      - "&7You will have an increased chance of receiving higher level enchantments!"
+  #
+  permissions:
+    unlocked:
+      - " "
+      - "&a&lUNLOCKED"
+      - "&7Click to receive kit."
+    #
+    locked:
+      item: "red_stained_glass_pane"
+      lore:
+        - " "
+        - "&c&lLOCKED"
+        - "&7Unlock at &nbuy.yourserver.com"
+    preview:
+      - "&7Right-click to preview kit"
+  #
+  items:
+    cooldown:
+      item: "yellow_stained_glass_pane"
+      name: "&c&lGkit Unavailable"
+      lore:
+      - "{LORE}"
+      - " "
+      - "&eYou can obtain this gkit again in"
+      - "&7{TIME}"
+    heroic: # These settings are added to heroic gkits
+      prefix: "&b&kiii&f&l&nHeroic&d&kiii&r &f&l{NAME}"
+      enchanted effect: true
+    preview:
+      title: "Global Kit Preview"
+      item: "black_stained_glass_pane"
+      name: " "
+      added gui lore: # Added to the gkit's lore in /gkit
+      - "&7Right-click to preview kit"
+    omni gem:
+      item: "diamond"
+      name: "&6&lOmni Gem (&r&6/gkit&6&l)"
+      lore:
+      - "&7Right click to select any"
+      - "&6/gkit &7to level up or"
+      - "&7redeem if not unlocked!"
+    fallen hero bundle:
+      item: "chest"
+      name: "&6&lHeroic Fallen Hero Bundle"
+      lore:
+      - "&7Right-click to reveal &n10 random"
+      - "&7heroic fallen hero items!"
+      - " "
+      - "&6Contains 10 of the following..."
+      - "&7* Heroic Butcher"
+      - "&7* Heroic Warlock"
+      - "&7* Heroic Independence"
+      - "&7* Heroic Paladin"
+      - "&7* Heroic Spooky"
+      - "&7* Heroic Hyperdrive"
+      - "&7* Heroic Destroyer"
+      - "&7* Heroic Guardian"
+      - "&7* Heroic Diablo"
+      - "&7* Heroic Valentine"
+      - "&7* Heroic Arcane"
+      - "&7* Heroic Gladiator"
+      - "&7* Heroic Trickster"
+      - "&7* Heroic Templar"
+      - "&7* Heroic Viking"
+      - "&7* Heroic Tinkermaster"
+      - "&7* Heroic Admiral"
+      - "&7* Heroic Party Animal"
+      - "&7* Heroic Enchantment"
+      - "&7* Heroic Grand Master"
+      - "&7* Heroic Void Walker"
+      - "&7* Heroic Master Builder"
+      #
+      reveal amount: 10
+      reveals:
+        - "GKIT_SPOOKY"
+        - "GKIT_HYPERDRIVE"
+        - "GKIT_DESTROYER"
+        - "GKIT_GUARDIAN"
+        - "GKIT_DIABLO"
+        - "GKIT_VALENTINES"
+        - "GKIT_ARCANE"
+        - "GKIT_GLADIATOR"
+        - "GKIT_TRICKSTER"
+        - "GKIT_TEMPLAR"
+        - "GKIT_VIKING"
+        - "GKIT_TINKERMASTER"
+        - "GKIT_ADMIRAL"
+        - "GKIT_PARTY_ANIMAL"
+        - "GKIT_ENCHANTMENT"
+        - "GKIT_GRAND_MASTER"
+        - "GKIT_VOIDWALKER"
+        - "GKIT_MASTER_BUILDER"
+        - "GKIT_INDEPENDENCE"
+        - "GKIT_BUTCHER"
+        - "GKIT_PALADIN"
+        - "GKIT_WARLOCK"
+        - "GKIT_LOKI"
+        - "GKIT_GRIM_REAPER"
+  #
+  gui:
+    title: "Gkits"
+    size: 27
+    # Size needs to be a multiple of 9 to work!
+    settings:
+      use tiers: true
+      tier zero enchant effect: false
+      tier custom enchant multiplier:
+        1: 0.30
+        2: 0.50
+        3: 0.80
+      locked: # Added before the pre-lore if the player doesn't own the gkit
+        - " "
+        - "&c&lLOCKED"
+        - "&7Unlock at &nbuy.yourserver.com"
+      unlocked: # Added before the pre-lore if the player does own the gkit
+        - " "
+        - "&a&lUNLOCKED"
+      pre lore: # This is added before all other gkit gui item's lore, ONLY if "use tiers" is true
+        - "&e&lKit Tier:&r &e{TIER} &l/&r &e{MAX_TIER}"
+#
+vkits:
+  messages:
+    cannot withdraw:
+      - "&c&l(!)&r &cYou cannot withdraw items from the kit preview."
+      - "&7Unlock access by defeating a Fallen Hero purchased at:"
+      - "&7&nbuy.yourserver.com"
+    not unlocked kit:
+      - "&c&l(!)&r &cYou have &nnot&r &cunlocked that Vkit!"
+      - "&7Unlock access by defeating a Fallen Hero purchased at &nbuy.yourserver.com"
+      - "&7** You can preview the contents of this kit by right-clicking it in the /vkit menu."
+    cooldown:
+      - "&eYou can obtain this vkit again in &7{TIME}"
+    # Reset
+    target doesnt exist:
+      - "&c&l(!)&r &cThat player isn't online!"
+    success:
+      - "&e&l(!)&r &eSuccessfully reset &n{PLAYER}&r&e's vkits!"
+    # Fallen Heros
+    already have max:
+      - "&c&l(!) &cYou already have this &9&l/VKIT&r &cat max level!"
+    not in warzone:
+      - "&c&l(!) &r&cYou can only summon Fallen Heroes in the &4WarZone!"
+    redeem:
+      - "&9&l(!) You've UNLOCKED the &r{NAME}&r &9&l/VKIT!"
+    #
+    upgrade broadcast:
+      - "&7&l**&r &f{PLAYER}'s {VKIT}&r &7/vkit has evolved to level &f&n{LEVEL}&r&7!"
+    upgrade:
+      - " "
+      - "&e&l>>&r &eCongratulations! Your &r{VKIT}&r &e/vkit is now level &n{LEVEL}&r&e!"
+      - "&7You will now receive higher enchantment levels the next time you claim this /vkit!"
+  #
+  permissions:
+    unlocked:
+      - " "
+      - "&a&lUNLOCKED"
+      - "&7Click to receive kit."
+    #
+    locked:
+      item: "red_stained_glass_pane"
+      lore:
+        - " "
+        - "&c&lLOCKED"
+        - "&7Unlock at &nbuy.yourserver.com"
+    preview:
+      - "&7Right-click to preview kit"
+  #
+  items:
+    cooldown:
+      item: "yellow_stained_glass_pane"
+      name: "&c&lVkit Unavailable"
+      lore:
+      - "{LORE}"
+      - " "
+      - "&eYou can obtain this vkit again in"
+      - "&7{TIME}"
+    preview:
+      title: "Server Kit Preview"
+      item: "black_stained_glass_pane"
+      name: " "
+    previous menu: # Opens /vkit
+      item: "arrow"
+      name: "&c&lPrevious Menu"
+      lore:
+      - "&7Click to return to the"
+      - "&7Evolution Kit main menu!"
+    #
+    omni gem:
+      item: "diamond"
+      name: "&6&lOmni Gem (&r&d/vkit&6&l)"
+      lore:
+      - "&7Right click to select any"
+      - "&d/vkit &7to level up or"
+      - "&7redeem if not unlocked!"
+    fallen hero bundle:
+      item: "chest"
+      name: "&2&lEvolution Kit Fallen Hero Bundle"
+      lore:
+        - "&7Right-click to reveal &n4 random"
+        - "&7evolution kit fallen hero items!"
+        - " "
+        - "&6Contains 10 of the following..."
+        - "&7* &d&lPhoenix"
+        - "&7* &3&lTroll"
+        - "&7* &6&lAlchemist"
+        - "&7* &2&lOgre"
+        - "&7* &4&lSlayer"
+        - "&7 &8&lJudgement"
+      #
+      reveal amount: 4
+      reveals:
+        - "VKIT_PHOENIX"
+        - "VKIT_TROLL"
+        - "VKIT_ALCHEMIST"
+        - "VKIT_OGRE"
+        - "VKIT_SLAYER"
+        - "VKIT_JUDGEMENT"
+  #
+  gui:
+    title: "Evolution Kits"
+    size: 9
+    settings:
+      use tiers: true
+      tier zero enchant effect: false
+      tier custom enchant multiplier:
+        1: 0.30
+        2: 0.35
+        3: 0.40
+        4: 0.45
+        5: 0.50
+        6: 0.55
+        7: 0.60
+        8: 0.65
+        9: 0.70
+        10: 0.75
+#
+mkits:
+  messages:
+    not unlocked:
+      - "&c&l(!)&r &cYou have not unlocked this Mastery Kit!"
+      - "&7Use a Mastery Kit Gem to unlock it!"
+    #
+    unlocked lost gkits:
+      - "&c&l(!)&r &cYou have lost access to the following Global Kits:"
+      - " &6- {KIT}"
+    unlocked lost vkits:
+      - "&c&l(!)&r &cYou have lost access to the following Evolution Kits:"
+      - " &6- {KIT}"
+    unlocked:
+      - "&6&l(!)&r &6You UNLOCKED access to the {KIT}&r &6Mastery Kit!"
+      - "&7Use /mkit to redeem your new kit!"
+    #
+    unlock missing required gkit:
+      - "&c&l(!)&r &cYou do not have the required '{KIT}&r&c' Tier {TIER} /gkit unlocked!"
+      - "&7Purchase a Fallen Hero at &nbuy.yourserver.com&r &7to unlock and level-up your /gkit!"
+    unlock missing required vkit:
+      - "&c&l(!)&r &cYou do not have the required '{KIT}&r&c' Tier {TIER} /vkit unlocked!"
+      - "&7Purchase a Fallen Hero at &nbuy.yourserver.com&r &7to unlock and level-up your /vkit!"
+  #
+  settings:
+    max anti crystals on item: 1
+  #
+  gui:
+    title: "Mastery Kits"
+    size: 9
+    #
+    background:
+      item: "black_stained_glass_pane"
+      name: " "
+    #
+    locked:
+      item: "red_stained_glass_pane"
+      name: "{NAME}"
+      lore:
+      - "{LORE}"
+      - "&c&l{LOCKED}"
+      - "&7Unlock at &nbuy.yourserver.com"
+    unlocked lore:
+      - "&a&lUNLOCKED"
+    preview lore:
+      - "&7Right-click to preview kit items."
+    redeem added lore:
+      - " "
+      - "&7Right-click to unlock this Mastery Kit!"
+#
+custom kit addon:
+  woot woot ree ree, howdedoo?: "vroom vroom im a broom;splash splash your opinion is trash;esprugnsruigbergbserygbosertuygbp"
+#

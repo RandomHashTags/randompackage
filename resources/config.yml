@@ -70,7 +70,6 @@ custom enchants:
   enabled: true
   #
   black scrolls: true
-  dusts: true
   enchantment orbs: true
   fireballs: true
   randomization scrolls: true
@@ -118,7 +117,7 @@ envoy:
   enabled: true
 #
 faction upgrades:
-  enabled: false
+  enabled: true
   aliases:
     - "f upgrade"
 #

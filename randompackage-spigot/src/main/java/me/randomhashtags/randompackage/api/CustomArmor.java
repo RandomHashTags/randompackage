@@ -11,6 +11,8 @@ import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantEnt
 import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.Feature;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -24,7 +26,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
@@ -41,8 +42,8 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	public ItemStack equipmentLootbox;
 	private List<Player> inEquipmentLootbox;
 
-	@Override
 	public void load() {
+		isEnabled = true;
 		final long started = System.currentTimeMillis();
 		save(null, "custom armor.yml");
 
@@ -67,8 +68,8 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (armorsets != null ? armorsets.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	@Override
 	public void unload() {
+		isEnabled = false;
 		config = null;
 		equipmentLootbox = null;
 		inEquipmentLootbox = null;
@@ -199,7 +200,13 @@ public class CustomArmor extends CustomEnchants implements Listener {
 			event.setCancelled(true);
 			player.updateInventory();
 			removeItem(player, i, 1);
-			giveItem(player, getRandomEquipmentLootboxLoot());
+			final ItemStack is = getRandomEquipmentLootboxLoot();
+			giveItem(player, is);
+
+			final String p = player.getName(), it = is.getItemMeta().getDisplayName();
+			for(String s : config.getStringList("messages.receive loot from Equipment Lootbox")) {
+				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+			}
 		}
 	}
 

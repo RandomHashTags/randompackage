@@ -141,7 +141,7 @@ public class factionsUUID implements Listener {
 		return fi.getByPlayer(player1).getRelationTo(fi.getByPlayer(player2)).equals(Relation.MEMBER);
 	}
 	public String getFactionAt(Location l) {
-		return b.getFactionAt(new FLocation(l)).getTag();
+		return ChatColor.stripColor(b.getFactionAt(new FLocation(l)).getTag());
 	}
 
 	public void resetPowerBoost(Player player) {

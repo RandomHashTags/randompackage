@@ -11,7 +11,6 @@ import me.randomhashtags.randompackage.api.events.FundDepositEvent;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
@@ -162,6 +161,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		}
 		globalchallenges = null;
 		globalchallengeprizes = null;
+		instance = null;
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");

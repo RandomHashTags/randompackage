@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class EnchantmentOrbs extends RPFeature {
     public YamlConfiguration config;
     public void load() {
         final long started = System.currentTimeMillis();
+        save("custom enchants", "enchantment orbs.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "enchantment orbs.yml"));
         final List<ItemStack > orbs = new ArrayList<>();
         for(String A : config.getConfigurationSection("orbs").getKeys(false)) {
             final ItemStack iii = d(config, "orbs." + A);

@@ -128,11 +128,17 @@ public class CustomExplosions extends RPFeature {
 		a.set("tnt", null);
 		a.set("creepers", null);
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
-		for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getYamlName());
+		if(tnt != null) {
+			for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getYamlName());
+		}
 		a.set("tnt.placed", placedtnt);
-		for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getYamlName());
+		if(primed != null) {
+			for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getYamlName());
+		}
 		a.set("tnt.primed", primedtnt);
-		for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getYamlName());
+		if(creepers != null) {
+			for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getYamlName());
+		}
 		a.set("creepers", cree);
 		saveOtherData();
 

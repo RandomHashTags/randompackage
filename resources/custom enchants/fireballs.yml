@@ -21,9 +21,8 @@ fireballs:
   SOUL:
     exchangeable rarities: "SOUL"
     reveals:
-      - "chance=5;dust:SOUL_PRIMAL"
-      - "chance=10;dust:SOUL_REGULAR"
-      - "else;mysterydust"
+      - "chance=5;SOUL_PRIMAL"
+      - "chance=10;SOUL_REGULAR"
     item: "fireball"
     name: "&c&lSoul Secret Dust"
     lore:
@@ -32,9 +31,8 @@ fireballs:
   LEGENDARY:
     exchangeable rarities: "LEGENDARY"
     reveals:
-      - "chance=5;dust:LEGENDARY_PRIMAL"
-      - "chance=10;dust:LEGENDARY_REGULAR"
-      - "else;mysterydust"
+      - "chance=5;LEGENDARY_PRIMAL"
+      - "chance=10;LEGENDARY_REGULAR"
     item: "fireball"
     name: "&6&lLegendary Secret Dust"
     lore:
@@ -43,8 +41,8 @@ fireballs:
   ULTIMATE:
     exchangeable rarities: "ULTIMATE"
     reveals:
-      - "chance=5;dust:ULTIMATE_PRIMAL"
-      - "chance=10;dust:ULTIMATE_REGULAR"
+      - "chance=5;ULTIMATE_PRIMAL"
+      - "chance=10;ULTIMATE_REGULAR"
     item: "fireball"
     name: "&e&lUltimate Secret Dust"
     lore:
@@ -53,9 +51,8 @@ fireballs:
   ELITE:
     exchangeable rarities: "ELITE"
     reveals:
-      - "chance=5;dust:ELITE_PRIMAL"
-      - "chance=10;dust:ELITE_REGULAR"
-      - "else;mysterydust"
+      - "chance=5;ELITE_PRIMAL"
+      - "chance=10;ELITE_REGULAR"
     item: "fireball"
     name: "&b&lElite Secret Dust"
     lore:
@@ -64,9 +61,8 @@ fireballs:
   UNIQUE:
     exchangeable rarities: "UNIQUE"
     reveals:
-      - "chance=5;dust:UNIQUE_PRIMAL"
-      - "chance=10;dust:UNIQUE_PRIMAL"
-      - "else;mysterydust"
+      - "chance=5;UNIQUE_PRIMAL"
+      - "chance=10;UNIQUE_PRIMAL"
     item: "fireball"
     name: "&a&lUnique Secret Dust"
     lore:
@@ -75,9 +71,8 @@ fireballs:
   SIMPLE:
     exchangeable rarities: "SIMPLE"
     reveals:
-      - "chance=5;dust:SIMPLE_PRIMAL"
-      - "chance=10;dust:SIMPLE_REGULAR"
-      - "else;mysterydust"
+      - "chance=5;SIMPLE_PRIMAL"
+      - "chance=10;SIMPLE_REGULAR"
     item: "fireball"
     name: "&f&lSimple Secret Dust"
     lore:

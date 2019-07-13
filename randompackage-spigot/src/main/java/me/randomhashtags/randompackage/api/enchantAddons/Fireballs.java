@@ -39,9 +39,9 @@ public class Fireballs extends RPFeature {
     public void load() {
         long started = System.currentTimeMillis();
         save("custom enchants", "fireballs.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "fireballs.yml"));
         mysterydust = d(config, "items.mystery dust");
         givedpitem.items.put("mysterydust", mysterydust);
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "fireballs.yml"));
         PathFireball.fireballyml = config;
         PathMagicDust.fireballyml = config;
 
@@ -65,6 +65,7 @@ public class Fireballs extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dusts != null ? dusts.size() : 0) + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        instance = null;
         config = null;
         mysterydust = null;
         deleteAll(Feature.FIREBALLS_AND_DUST);

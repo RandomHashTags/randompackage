@@ -36,8 +36,8 @@ rewards:
   - "title:47||title:150"
   - "enchantmentorb:armor:random:75-100;amount=2-3"
   - "enchantmentorb:weapon:random:75-100;amount=1-2"
-  - "heroicfallenhero;amount=3"
-  - "vkitgem:PHOENIX"
+  - "fallenhero:GKIT;amount=3"
+  - "fallenherogem:VKIT_PHOENIX"
   - "paper"
 #
 bonus:

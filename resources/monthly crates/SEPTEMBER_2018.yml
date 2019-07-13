@@ -35,7 +35,7 @@ rewards:
   - "randomizationscroll:GODLY;amount=2-3"
   - "bone"
   - "raritybook:HEROIC;amount=1-3"
-  - "fallenherobundle"
+  - "gkitfallenherobundle||vkitfallenherobundle"
   - "mysterycrate||superiorcrate"
   - "monthlycrate:SCHOOL_2016||monthlycrate:SCHOOL_2017"
 #

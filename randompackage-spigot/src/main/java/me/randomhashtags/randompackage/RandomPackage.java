@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
+import me.randomhashtags.randompackage.api.enchantAddons.*;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
@@ -39,6 +40,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,7 +71,15 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private Conquest conquest;
     private CustomArmor customarmor;
     private CustomBosses custombosses;
+
     private CustomEnchants customenchants;
+    private BlackScrolls blackscrolls;
+    private EnchantmentOrbs enchantmentorbs;
+    private Fireballs fireballs;
+    private RandomizationScrolls randomizationscrolls;
+    private RarityGems raritygems;
+    private SoulTrackers soultrackers;
+
     private CustomExplosions customexplosions;
     private Duels duels;
     private Envoy envoy;
@@ -79,7 +89,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private Homes homes;
     private ItemFilter itemfilter;
     private Jackpot jackpot;
-    private Kits kits;
+    private KitsEvolution vkits;
+    private KitsGlobal gkits;
+    private KitsMastery mkits;
     private KOTH koth;
     private LastManStanding lastmanstanding;
     private Lootboxes lootboxes;
@@ -180,6 +192,26 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         customenchants = CustomEnchants.getCustomEnchants();
         tryLoading(Feature.CUSTOM_ENCHANTS);
 
+
+        blackscrolls = BlackScrolls.getBlackScrolls();
+        tryLoading(Feature.BLACK_SCROLLS);
+
+        enchantmentorbs = EnchantmentOrbs.getEnchantmentOrbs();
+        tryLoading(Feature.ENCHANTMENT_ORBS);
+
+        fireballs = Fireballs.getFireballs();
+        tryLoading(Feature.FIREBALLS_AND_DUST);
+
+        randomizationscrolls = RandomizationScrolls.getRandomizationScrolls();
+        tryLoading(Feature.RANDOMIZATION_SCROLLS);
+
+        raritygems = RarityGems.getRarityGems();
+        tryLoading(Feature.RARITY_GEMS);
+
+        soultrackers =SoulTrackers.getSoulTrackers();
+        tryLoading(Feature.SOUL_TRACKERS);
+
+
         customexplosions = CustomExplosions.getCustomExplosions();
         tryLoading(Feature.CUSTOM_CREEPERS);
         tryLoading(Feature.CUSTOM_TNT);
@@ -208,9 +240,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         jackpot = Jackpot.getJackpot();
         tryLoading(Feature.JACKPOT);
 
-        kits = Kits.getKits();
+        vkits = KitsEvolution.getKitsEvolution();
         tryLoading(Feature.KITS_EVOLUTION);
+
+        gkits = KitsGlobal.getKitsGlobal();
         tryLoading(Feature.KITS_GLOBAL);
+
+        mkits = KitsMastery.getKitsMastery();
         tryLoading(Feature.KITS_MASTERY);
 
         koth = KOTH.getKOTH();
@@ -297,17 +333,28 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
 
     public void checkForUpdate() {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            try {
-                final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
-                final URLConnection con = checkURL.openConnection();
-                final String v = RandomPackage.getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-                final boolean canUpdate = !v.equals(newVersion);
-                if(canUpdate) Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion));
-            } catch(Exception e) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!"));
-            }
-        });
+        final BukkitScheduler s = Bukkit.getScheduler();
+        final int l = 20*60*15;
+        s.scheduleSyncRepeatingTask(this, () -> {
+            s.runTaskAsynchronously(this, () -> {
+                String msg = null;
+                try {
+                    final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
+                    final URLConnection con = checkURL.openConnection();
+                    final String v = RandomPackage.getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                    final boolean canUpdate = !v.equals(newVersion);
+                    if(canUpdate) {
+                        msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion);
+                    }
+                } catch(Exception e) {
+                    msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!");
+                }
+                Bukkit.getConsoleSender().sendMessage(msg);
+                for(Player p : Bukkit.getOnlinePlayers()) {
+                    if(p.isOp()) p.sendMessage(msg);
+                }
+            });
+        }, 0, l);
     }
     public void reload() {
         disable();
@@ -352,9 +399,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             case HOMES: return homes;
             case ITEM_FILTER: return itemfilter;
             case JACKPOT: return jackpot;
-            case KITS_EVOLUTION:
-            case KITS_GLOBAL:
-            case KITS_MASTERY: return kits;
+            case KITS_EVOLUTION: return vkits;
+            case KITS_GLOBAL: return gkits;
+            case KITS_MASTERY: return mkits;
             case KOTH: return koth;
             case LAST_MAN_STANDING: return lastmanstanding;
             case LOOTBOXES: return lootboxes;
@@ -437,6 +484,38 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(enabled) {
                 customenchants.enable();
             }
+        } else if(f.equals(Feature.BLACK_SCROLLS)) {
+            enabled = config.getBoolean("custom enchants.black scrolls");
+            if(enabled) {
+                blackscrolls.enable();
+            }
+        } else if(f.equals(Feature.ENCHANTMENT_ORBS)) {
+            enabled = config.getBoolean("custom enchants.enchantment orbs");
+            if(enabled) {
+                enchantmentorbs.enable();
+            }
+        } else if(f.equals(Feature.FIREBALLS_AND_DUST)) {
+            enabled = config.getBoolean("custom enchants.fireballs");
+            if(enabled) {
+                fireballs.enable();
+            }
+        } else if(f.equals(Feature.RANDOMIZATION_SCROLLS)) {
+            enabled = config.getBoolean("custom enchants.randomization scrolls");
+            if(enabled) {
+                randomizationscrolls.enable();
+            }
+        } else if(f.equals(Feature.RARITY_GEMS)) {
+            enabled = config.getBoolean("custom enchants.rarity gems");
+            if(enabled) {
+                raritygems.enable();
+            }
+        } else if(f.equals(Feature.SOUL_TRACKERS)) {
+            enabled = config.getBoolean("custom enchants.soul trackers");
+            ce = soultrackers;
+            cmds.add("splitsouls");
+            if(enabled) {
+                soultrackers.enable();
+            }
         } else if(f.equals(Feature.CUSTOM_CREEPERS)) {
             enabled = config.getBoolean("custom creepers.enabled");
             if(enabled) {
@@ -515,36 +594,27 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
         } else if(f.equals(Feature.KITS_EVOLUTION)) {
             enabled = config.getBoolean("vkits.enabled");
-            ce = kits;
+            ce = vkits;
             cmds.add("vkit");
             ali.put("vkit", "vkits");
             if(enabled) {
-                for(String pc : cmds) {
-                    getCommand(pc).setTabCompleter(kits);
-                }
-                kits.enableVkits();
+                vkits.enable();
             }
         } else if(f.equals(Feature.KITS_GLOBAL)) {
             enabled = config.getBoolean("gkits.enabled");
-            ce = kits;
+            ce = gkits;
             cmds.add("gkit");
             ali.put("gkit", "gkits");
             if(enabled) {
-                for(String pc : cmds) {
-                    getCommand(pc).setTabCompleter(kits);
-                }
-                kits.enableGkits();
+                gkits.enable();
             }
         } else if(f.equals(Feature.KITS_MASTERY)) {
             enabled = config.getBoolean("mkits.enabled");
-            ce = kits;
+            ce = mkits;
             cmds.add("mkit");
             ali.put("mkit", "mkits");
             if(enabled) {
-                for(String pc : cmds) {
-                    getCommand(pc).setTabCompleter(kits);
-                }
-                kits.enableMkits();
+                mkits.enable();
             }
         } else if(f.equals(Feature.KOTH)) {
             enabled = config.getBoolean("kingofthehill.enabled");

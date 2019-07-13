@@ -49,27 +49,16 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             else if(args.length >= 2) {
                 final OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                 final String i = args[1];
-                if(i.startsWith("kit:")) {
-                    final String kit = i.split(":")[1];
-                    final int tier = Integer.parseInt(i.split(":")[2]);
-                    final Player pl = p.getPlayer();
-                    final CustomKit k = getKit(kit);
-                    final Kits kits = Kits.getKits();
-                    if(k != null) {
-                        kits.give(pl, k, tier, false, false);
-                    }
-                } else {
-                    item = d(null, i);
-                    if(item != null) {
-                        if(args.length >= 3) item.setAmount(getRemainingInt(args[2]));
-                        if(p.isOnline()) {
-                            p.getPlayer().getInventory().addItem(item);
-                        } else {
-                            final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
-                            pdata.load();
-                            pdata.getUnclaimedPurchases().add(item);
-                            pdata.unload();
-                        }
+                item = d(null, i);
+                if(item != null) {
+                    if(args.length >= 3) item.setAmount(getRemainingInt(args[2]));
+                    if(p.isOnline()) {
+                        p.getPlayer().getInventory().addItem(item);
+                    } else {
+                        final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
+                        pdata.load();
+                        pdata.getUnclaimedPurchases().add(item);
+                        pdata.unload();
                     }
                 }
             }
@@ -157,8 +146,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final int R = random.nextInt(4);
                     type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
                 }
-                item = s != null && type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : s.getBoots() : null;
-                if(item != null) {
+                item = s != null && type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : s.getBoots() : air;
+                if(item != air) {
                     itemMeta = item.getItemMeta(); lore.clear();
                     if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
                     lore.addAll(s.getArmorLore());
@@ -192,18 +181,17 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final MagicDust d = getDust(Q.split(":")[1]);
             return d != null ? d.getItem() : air;
         } else if(input.startsWith("enchantmentorb:")) {
-            final HashMap<String, EnchantmentOrb> L = EnchantmentOrb.orbs;
             final String[] a = Q.split(":");
             String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(random.nextInt(101));
-            EnchantmentOrb o = L != null && L.containsKey(p) ? L.get(p) : null;
+            EnchantmentOrb o = getEnchantmentOrb(p);
             if(o != null) {
                 final List<String> paths = new ArrayList<>();
-                for(String s : L.keySet()) {
+                for(String s : enchantmentorbs.keySet()) {
                     if(s.startsWith(p)) {
                         paths.add(s);
                     }
                 }
-                o = L.get(paths.get(random.nextInt(paths.size())));
+                o = getEnchantmentOrb(paths.get(random.nextInt(paths.size())));
             }
             final boolean h = percent.contains("-");
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+random.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
@@ -215,14 +203,38 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 return getBooster(a[0]).getItem(Long.parseLong(a[2])*1000, Double.parseDouble(a[1]));
             }
             return air;
-        } else if(input.startsWith("fallenhero:")) {
-            final CustomKit k = getKit(Q.split(":")[1]);
+        } else if(input.startsWith("fallenherogem")) {
+            final String type = Q.contains(":") ? Q.split(":")[1] : null;
+            CustomKit k = type != null ? getKit(type) : null;
+            if(type != null && k == null) {
+                final List<CustomKit> list = new ArrayList<>();
+                for(CustomKit kk : kits.values()) {
+                    if(kk.getIdentifier().startsWith(type)) {
+                        list.add(kk);
+                    }
+                }
+                final int s = list.size();
+                if(s > 0) k = list.get(random.nextInt(s));
+            }
+            if(k == null) k = (CustomKit) kits.values().toArray()[random.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? f.getSpawnItem() : air;
-        } else if(input.startsWith("fallenherogem:")) {
-            final CustomKit k = getKit(Q.split(":")[1]);
+            return f != null ? k.getFallenHeroGemItem(k) : air;
+        } else if(input.startsWith("fallenhero")) {
+            final String type = Q.contains(":") ? Q.split(":")[1] : null;
+            CustomKit k = type != null ? getKit(type) : null;
+            if(type != null && k == null) {
+                final List<CustomKit> list = new ArrayList<>();
+                for(CustomKit kk : kits.values()) {
+                    if(kk.getIdentifier().startsWith(type)) {
+                        list.add(kk);
+                    }
+                }
+                final int s = list.size();
+                if(s > 0) k = list.get(random.nextInt(s));
+            }
+            if(k == null) k = (CustomKit) kits.values().toArray()[random.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? f.getGem() : air;
+            return f != null ? k.getFallenHeroSpawnItem(k) : air;
         } else if(input.startsWith("lootbox:")) {
             final Lootbox l = getLootbox(Q.split(":")[1]);
             return l != null ? l.getItem() : air;

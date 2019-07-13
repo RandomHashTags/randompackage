@@ -19,7 +19,7 @@ perks:
   - "Tier4;SetHungerMultiplier{0.50};-50% Hunger increase rate"
 #
 requirements:
-  - "Tier1;FactionUpgrade{well-fed:level=4};Well Fed IV /f upgrade"
+  - "Tier1;FactionUpgrade{WELL_FED:level=4};Well Fed IV /f upgrade"
   - "Tier1;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
   - "Tier1;Cash{5000000};$5,000,000"
   - "Tier2;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"

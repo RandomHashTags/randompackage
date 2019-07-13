@@ -6,6 +6,7 @@ messages:
   flag:
     captured: "&a&lCAPTURED"
     capturing: "&e&lCAPTURING"
+    unclaimed: "&a&lUNCLAIMED"
     uncontested: "&3&lUNCONTESTED"
   #
   join event: "&b&l(!)&r &7Use &d&n/warp koth&r &7to join the event!"

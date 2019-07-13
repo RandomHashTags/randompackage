@@ -38,10 +38,10 @@ rewards:
   - "equipmentlootbox;amount=2"
   - "paper"
   - "monthlycrate:AUGUST_2016||monthlycrate:AUGUST_2017"
-  - "vkitgem;amount=1-2"
+  - "fallenherogem:VKIT;amount=1-2"
 #
 bonus:
-  - "vkitgem:MIMIC"
+  - "fallenherogem:VKIT_MIMIC"
   - "customarmor:TRAVELER"
 #
 # background item is represented as "=" in the redeem-format

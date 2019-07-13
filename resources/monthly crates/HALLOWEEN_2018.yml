@@ -35,14 +35,14 @@ rewards:
   - "equipmentlootbox;amount=2-3"
   - "title"
   - "player_head_item"
-  - "fallenherobundle"
+  - "gkitfallenherobundle"
   - "blackscroll:HEROIC;amount=1-3||holywhitescroll"
   - "raritybook:HEROIC;amount-1-3"
   - "monthlycrate:HALLOWEEN_2016||monthlycrate:HALLOWEEN_2017"
 #
 bonus:
   - "enchantmentorb:armor14:66||enchantmentorb:weapon14:66"
-  - "mkitgem:GHOST"
+  - "fallenherogem:MKIT_GHOST"
 #
 # background item is represented as "=" in the redeem-format
 # bonus-1 item is represented as "-" in the redeem-bonus-format

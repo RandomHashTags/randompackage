@@ -34,10 +34,10 @@ rewards:
   - "title:115||title:192"
   - "itemnametag;amount=2-3"
   - "enchantmentorb:armor:80-95;amount=1-5||enchantmentorb:weapon:80-95;amount=1-5"
-  - "gkitfallenhero;amount=1-3"
+  - "fallenhero:GKIT;amount=1-3"
   - "whitescroll;amount=3-8"
   - "blackscroll:REGULAR:95;amount=5-10"
-  - "gkitgem"
+  - "fallenherogem:GKIT"
   - "paper"
 #
 bonus:

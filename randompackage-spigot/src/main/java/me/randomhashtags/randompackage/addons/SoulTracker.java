@@ -5,6 +5,8 @@ import me.randomhashtags.randompackage.addons.utils.Itemable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class SoulTracker extends Itemable {
@@ -31,6 +33,25 @@ public abstract class SoulTracker extends Itemable {
                 if(s.getItem().getItemMeta().equals(m)) {
                     return s;
                 }
+            }
+        }
+        return null;
+    }
+    public static HashMap<Integer, SoulTracker> valueOfApplied(ItemStack is) {
+        if(soultrackers != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            final Collection<SoulTracker> trackers = soultrackers.values();
+            int slot = 0;
+            for(String s : l) {
+                for(SoulTracker t : trackers) {
+                    final String a = t.getAppliedLore().replace("{SOULS}", "");
+                    if(s.startsWith(a)) {
+                        final HashMap<Integer, SoulTracker> h = new HashMap<>();
+                        h.put(slot, t);
+                        return h;
+                    }
+                }
+                slot++;
             }
         }
         return null;

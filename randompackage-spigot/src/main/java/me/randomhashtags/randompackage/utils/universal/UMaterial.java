@@ -1589,6 +1589,8 @@ public enum UMaterial {
                 if(type != null) {
                     final String g = base + type + (max != 1 && l <= max ? "_" + l : "") + (extended ? "_EXTENDED" : "");
                     return valueOf(g);
+                } else {
+                    return UMaterial.POTION;
                 }
             }
         }
