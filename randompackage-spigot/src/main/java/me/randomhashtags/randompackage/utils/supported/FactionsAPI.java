@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class FactionsAPI {
     private static FactionsAPI instance;
@@ -94,6 +95,13 @@ public class FactionsAPI {
         if(factions == null) return null;
         else if(factions.contains("Factions")) return factionsUUID.getInstance().getFactionAt(l);
         else return null;
+    }
+
+    public List<UUID> getMembers(String faction) {
+        final List<UUID> e = new ArrayList<>();
+        if(factions == null) return e;
+        else if(factions.contains("Factions")) return factionsUUID.getInstance().getMembersOf(faction);
+        else return e;
     }
 
 

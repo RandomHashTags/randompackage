@@ -250,10 +250,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			item.setItemMeta(itemMeta);
 
 			final RPPlayer pdata = RPPlayer.get(player);
-			final HashMap<Integer, ItemStack[]> showcases = pdata.getShowcases();
-			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
-			if(!showcases.containsKey(page)) showcases.put(page, new ItemStack[54]);
-			if(sizes.get(page) > pdata.getShowcaseSize(page)) pdata.addToShowcase(page, item);
+			pdata.addToShowcase(page, item);
 		}
 	}
 	private void delete(UUID player, int page, ItemStack is) {
@@ -264,15 +261,18 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		if(target == null || target == opener) target = opener;
 		final boolean self = target == opener;
 		final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
-		final HashMap<Integer, ItemStack> y = pdata.getShowcaseItems(page);
-		final int actualsize = y != null ? y.size() : 0;
+		final HashMap<Integer, ItemStack[]> showcases = pdata.getShowcases();
+		int maxpage = 0;
+		for(int i = 1; i <= 100; i++) {
+			if(showcases.containsKey(i)) maxpage = i;
+		}
 		if(!hasPermission(opener, "RandomPackage.showcase" + (self ? "" : ".other"), false)) {
 			sendStringListMessage(opener, config.getStringList("messages.no access"), null);
 		} else {
 			int size = pdata.getShowcaseSize(page);
 			size = size == 0 ? 9 : size;
 			(self ? inSelf : inOther).add(opener);
-			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", opener.getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", "" + actualsize));
+			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", opener.getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", Integer.toString(maxpage)));
 			opener.openInventory(inv);
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			final HashMap<Integer, ItemStack> showcase = pdata.getShowcaseItems(page);

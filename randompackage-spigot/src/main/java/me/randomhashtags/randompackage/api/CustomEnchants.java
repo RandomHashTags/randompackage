@@ -284,7 +284,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + CustomEnchant.enabled.size() + "e, &c" + CustomEnchant.disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
-        addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books'");
+        addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
 
         boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
         final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;

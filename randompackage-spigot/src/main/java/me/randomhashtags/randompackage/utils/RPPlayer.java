@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.api.Homes;
+import me.randomhashtags.randompackage.api.Showcase;
 import me.randomhashtags.randompackage.api.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
@@ -184,16 +185,16 @@ public class RPPlayer extends RPStorage {
 
         final HashMap<Integer, ItemStack[]> showcase = getShowcases();
         for(int p : showcase.keySet()) {
-            yml.set("showcase." + p, null);
-            yml.set("showcase." + p + ".size", getShowcaseSize(p));
+            yml.set("showcases." + p, null);
+            yml.set("showcases." + p + ".size", getShowcaseSize(p));
             int s = 0;
             for(ItemStack i : showcase.get(p)) {
                 if(i != null && !i.getType().equals(Material.AIR)) {
                     final UMaterial j = UMaterial.match(i);
-                    yml.set("showcase." + p + "." + s + ".item", j.name());
+                    yml.set("showcases." + p + "." + s + ".item", j.name());
                     if(i.hasItemMeta()) {
                         final ItemMeta m = i.getItemMeta();
-                        if(m.hasDisplayName()) yml.set("showcase." + p + "." + s + ".name", m.getDisplayName());
+                        if(m.hasDisplayName()) yml.set("showcases." + p + "." + s + ".name", m.getDisplayName());
                         final List<String> l = new ArrayList<>();
                         if(m.hasEnchants()) {
                             String en = "VEnchants{";
@@ -204,7 +205,7 @@ public class RPPlayer extends RPStorage {
                             l.add(en + "}");
                         }
                         if(m.hasLore()) l.addAll(m.getLore());
-                        if(!l.isEmpty()) yml.set("showcase." + p + "." + s + ".lore", l);
+                        if(!l.isEmpty()) yml.set("showcases." + p + "." + s + ".lore", l);
                     }
                 }
                 s++;
@@ -409,14 +410,25 @@ public class RPPlayer extends RPStorage {
                     final ItemStack[] items = new ItemStack[54];
                     if(i != null) {
                         for(String sl : i.getKeys(false)) {
-                            final int slot = Integer.parseInt(sl);
-                            items[slot] = api.d(yml, "showcases." + s + "." + sl);
+                            if(sl.equals("slot")) {
+                                final int slot = Integer.parseInt(sl);
+                                items[slot] = api.d(yml, "showcases." + s + "." + sl);
+                            }
                         }
                     }
                     showcases.put(page, items);
                 }
             } else {
-
+                final Showcase s = Showcase.getShowcase();
+                final YamlConfiguration config = s.config;
+                final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
+                if(defaultShowcase > 0) {
+                    final ItemStack[] a = new ItemStack[54];
+                    for(int i = 1; i <= defaultShowcase; i++) {
+                        showcases.put(i, a);
+                        showcaseSizes.put(i, defaultSize);
+                    }
+                }
             }
         }
         return showcases;
@@ -456,24 +468,11 @@ public class RPPlayer extends RPStorage {
             }
         }
     }
-    public void removeFromShowcase(ItemStack item) {
-        for(int i : getShowcases().keySet()) {
-            final ItemStack[] a = showcases.get(i);
-            int p = 0;
-            for(ItemStack l : a) {
-                if(l.equals(item)) {
-                    a[p] = null;
-                    return;
-                }
-                p++;
-            }
-        }
-    }
     public void removeFromShowcase(int page, ItemStack item) {
         if(getShowcases().containsKey(page)) {
             int p = 0;
             for(ItemStack is : showcases.get(page)) {
-                if(is.equals(item)) {
+                if(is != null && is.equals(item)) {
                     showcases.get(page)[p] = null;
                     return;
                 }
@@ -484,7 +483,6 @@ public class RPPlayer extends RPStorage {
     public void resetShowcases() {
         showcases = new HashMap<>();
         showcaseSizes = new HashMap<>();
-        showcaseSizes.put(1, 9);
     }
     public void resetShowcase(int page) {
         showcases.put(page, new ItemStack[54]);

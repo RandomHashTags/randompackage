@@ -9,7 +9,7 @@ messages:
     - "&a&l+ {MULTIPLIER}x EXP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
 #
 settings:
-  type: FACTION_XP
+  recipients: FACTION_MEMBERS
 #
 item:
   item: "emerald"
@@ -26,3 +26,5 @@ item:
   - "&d&lDURATION"
   - "&7{TIME}"
 #
+attributes:
+  - "KilledEntity;droppedxp=xp*multiplier"

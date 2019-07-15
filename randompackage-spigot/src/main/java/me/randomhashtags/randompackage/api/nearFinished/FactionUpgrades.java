@@ -268,6 +268,7 @@ public class FactionUpgrades extends RPFeature {
         final String f = fapi != null ? fapi.getFaction(player) : null;
         if(f != null) {
             player.closeInventory();
+            if(!factionUpgrades.containsKey(f)) factionUpgrades.put(f, new HashMap<>());
             final HashMap<FactionUpgrade, Integer> u = factionUpgrades.get(f);
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -308,7 +309,6 @@ public class FactionUpgrades extends RPFeature {
     }
     public void tryToUpgrade(Player player, FactionUpgrade fu) {
         final String f = fapi.getFaction(player);
-        if(!factionUpgrades.containsKey(f)) factionUpgrades.put(f, new HashMap<>());
         final HashMap<FactionUpgrade, Integer> upgrades = factionUpgrades.get(f);
         final int ti = upgrades.getOrDefault(fu, 0);
         if(ti >= fu.getMaxTier()) return;

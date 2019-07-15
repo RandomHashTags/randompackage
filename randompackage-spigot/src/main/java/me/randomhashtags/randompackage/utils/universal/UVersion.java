@@ -186,6 +186,29 @@ public class UVersion {
         final String secs = sec != 0 ? sec + "s" : "";
         return dys + hrs + mins + secs;
     }
+    public long getTime(String fromString) {
+        long time = 0;
+        if(fromString != null) {
+            fromString = ChatColor.stripColor(fromString);
+            if(fromString.contains("d")) {
+                time += getRemainingDouble(fromString.split("d")[0])*24*60*60;
+                fromString = fromString.split("d")[1];
+            }
+            if(fromString.contains("h")) {
+                time += getRemainingDouble(fromString.split("h")[0])*60*60;
+                fromString = fromString.split("h")[1];
+            }
+            if(fromString.contains("m")) {
+                time += getRemainingDouble(fromString.split("m")[0])*60;
+                fromString = fromString.split("m")[1];
+            }
+            if(fromString.contains("s")) {
+                time += getRemainingDouble(fromString.split("s")[0]);
+                //fromString = fromString.split("s")[0];
+            }
+        }
+        return time;
+    }
     public Location toLocation(String string) {
         final String[] a = string.split(";");
         return new Location(Bukkit.getWorld(a[0]), Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), Float.parseFloat(a[4]), Float.parseFloat(a[5]));

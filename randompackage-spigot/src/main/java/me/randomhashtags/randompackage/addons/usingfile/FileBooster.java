@@ -36,4 +36,9 @@ public class FileBooster extends Booster {
     public int getDurationLoreSlot() { return get("{DURATION}"); }
     public int getMultiplierLoreSlot() { return get("{MULTIPLIER}"); }
     private int get(String string) { return getItem().getItemMeta().getLore().indexOf(string); }
+
+    public List<String> getActivateMsg() { return yml.getStringList("messages.activate"); }
+    public List<String> getExpireMsg() { return yml.getStringList("messages.expire"); }
+    public List<String> getNotifyMsg() { return yml.getStringList("messages.notify"); }
+    public List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

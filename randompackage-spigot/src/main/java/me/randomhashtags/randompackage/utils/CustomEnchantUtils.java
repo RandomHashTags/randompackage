@@ -454,7 +454,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.toLowerCase().startsWith("damage{")) {
             a = a.toLowerCase();
             for(LivingEntity l : recipients)
-                damage(P, l, oldevaluate(a.split("]")[1].split("}")[0].replace("h", "")), a.contains("h"));
+                damage(l, oldevaluate(a.split("]")[1].split("}")[0].replace("h", "")), a.contains("h"));
         } else if(a.toLowerCase().startsWith("ignite{")) {
             a = a.toLowerCase();
             final int time = (int) oldevaluate(a.split("]")[1].split("}")[0]);
@@ -1028,13 +1028,13 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }
         }
     }
-    private void damage(LivingEntity damager, LivingEntity entity, double damage, boolean heartDmg) {
+    private void damage(LivingEntity entity, double damage, boolean heartDmg) {
         if(entity != null) {
             final double h = entity.getHealth();
             if(!heartDmg && h-damage <= 0.00 || h-((int) damage) <= 0.00) {
                 damage = h;
             }
-            entity.damage(heartDmg ? ((int) damage) : damage, damager);
+            entity.damage(heartDmg ? ((int) damage) : damage);
         }
     }
     private void explode(Location l, float power, boolean setFire, boolean breakBlocks) {

@@ -1,9 +1,15 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
+import me.randomhashtags.randompackage.addons.Booster;
+import me.randomhashtags.randompackage.addons.active.ActiveBoost;
 import me.randomhashtags.randompackage.addons.usingfile.FileBooster;
+import me.randomhashtags.randompackage.api.events.BoosterActivateEvent;
+import me.randomhashtags.randompackage.api.events.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.objects.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -13,7 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Boosters extends RPFeature {
 	private static Boosters instance;
@@ -57,11 +65,52 @@ public class Boosters extends RPFeature {
 		final ItemStack is = event.getItem();
 		if(is != null && !is.getType().equals(Material.AIR)) {
 			final Player player = event.getPlayer();
-			/*final Booster b = Booster.valueOf(is);
-			if(b != null) {
+			final TObject m = Booster.valueOf(is);
+			if(m != null) {
 				event.setCancelled(true);
 				player.updateInventory();
-			}*/
+				activateBooster(player, (Booster) m.first(), (double) m.second(), (long) m.third());
+			}
 		}
+	}
+
+	private void activateBooster(Player player, Booster booster, double multiplier, long duration) {
+		final BoosterPreActivateEvent e = new BoosterPreActivateEvent(player, booster, multiplier, duration);
+		pluginmanager.callEvent(e);
+		if(!e.isCancelled()) {
+			final double m = e.multiplier;
+			final long d = e.duration;
+			final BoosterActivateEvent ee = new BoosterActivateEvent(player, booster, m, d);
+			pluginmanager.callEvent(ee);
+			new ActiveBoost(booster, multiplier, System.currentTimeMillis()+duration);
+
+			final String type = booster.getType();
+			final boolean fm = type.equals("FACTION_MCMMO"), fx = type.equals("FACTION_XP");
+			if(fm || fx) {
+				final HashMap<String, String> replacements = new HashMap<>();
+				replacements.put("{PLAYER}", player.getName());
+				final List<Player> members = getFactionMembers(player);
+				if(members != null) {
+					for(Player p : members) {
+						sendStringListMessage(p, booster.getActivateMsg(), replacements);
+					}
+				}
+			}
+		}
+	}
+	private List<Player> getFactionMembers(Player player) {
+		final String f = fapi != null ? fapi.getFaction(player) : null;
+		final List<UUID> m = f != null ? fapi.getMembers(f) : null;
+		if(m != null) {
+			final List<Player> a = new ArrayList<>();
+			for(UUID u : m) {
+				final Player p = Bukkit.getPlayer(u);
+				if(p != null && p.isOnline()) {
+					a.add(p);
+				}
+			}
+			return a;
+		}
+		return null;
 	}
 }
