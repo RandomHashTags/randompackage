@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
@@ -46,12 +48,17 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             " "))
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
                 }
-            } else if(args[0].equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
-                getPlugin.reload();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aReload complete!"));
-            } else if(args[0].equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
-                RPEvents.getRPEvents().backup();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aPlayer backup complete!"));
+            } else {
+                final String a = args[0];
+                if(a.equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
+                    getPlugin.reload();
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aReload complete!"));
+                } else if(a.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
+                    RPEvents.getRPEvents().backup();
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aPlayer backup complete!"));
+                } else if(a.equals("updateyml") && hasPermission(sender, "RandomPackage.randompackage.updateyml", true)) {
+                    YamlUpdater.getYmlUpdater().update(new File(randompackage.getDataFolder(), args[1].replace("_", " ")));
+                }
             }
         }
         return true;
