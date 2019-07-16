@@ -167,37 +167,39 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		final int max = config.getInt("challenge settings.max at once");
 		int maxAtOnce = max;
 		final ConfigurationSection EEE = data.getConfigurationSection("active global challenges");
-		if(globalchallenges != null && EEE != null) {
-		    final long started = System.currentTimeMillis();
-			int loadeD = 0;
-			for(String s : EEE.getKeys(false)) {
-				if(maxAtOnce > 0) {
-					loadeD += 1;
-					final GlobalChallenge g = getGlobalChallenge(s);
-					if(g != null) {
-						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
-						final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
-						if(partic != null) {
-							for(String u : partic.getKeys(false)) {
-								final UUID uuid = UUID.fromString(u);
-								participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + s + ".participants." + u)));
+		if(globalchallenges != null) {
+			if(EEE != null) {
+				final long started = System.currentTimeMillis();
+				int loadeD = 0;
+				for(String s : EEE.getKeys(false)) {
+					if(maxAtOnce > 0) {
+						loadeD += 1;
+						final GlobalChallenge g = getGlobalChallenge(s);
+						if(g != null) {
+							final HashMap<UUID, BigDecimal> participants = new HashMap<>();
+							final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
+							if(partic != null) {
+								for(String u : partic.getKeys(false)) {
+									final UUID uuid = UUID.fromString(u);
+									participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + s + ".participants." + u)));
+								}
 							}
+							maxAtOnce -= 1;
+							g.start(Long.parseLong(data.getString("active global challenges." + s + ".started")), participants);
 						}
-						maxAtOnce -= 1;
-						g.start(Long.parseLong(data.getString("active global challenges." + s + ".started")), participants);
 					}
 				}
+				sendConsoleMessage("&6[RandomPackage] &aStarted " + loadeD + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 			}
-			sendConsoleMessage("&6[RandomPackage] &aStarted " + loadeD + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
-		}
-		if(maxAtOnce > 0) {
-			final long started = System.currentTimeMillis();
-			for(int i = 1; i <= maxAtOnce; i++) {
-				final GlobalChallenge r = getRandomChallenge();
-				if(!r.isActive()) r.start();
-				else i-=1;
+			if(maxAtOnce > 0) {
+				final long started = System.currentTimeMillis();
+				for(int i = 1; i <= maxAtOnce; i++) {
+					final GlobalChallenge r = getRandomChallenge();
+					if(!r.isActive()) r.start();
+					else i-=1;
+				}
+				sendConsoleMessage("&6[RandomPackage] &aStarted " + maxAtOnce + " new global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 			}
-			sendConsoleMessage("&6[RandomPackage] &aStarted " + maxAtOnce + " new global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		}
 		reloadInventory();
 	}
@@ -368,7 +370,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		player.updateInventory();
 	}
 	public GlobalChallenge getRandomChallenge() {
-		return (GlobalChallenge) globalchallenges.values().toArray()[random.nextInt(globalchallenges.size())];
+		return globalchallenges != null ? (GlobalChallenge) globalchallenges.values().toArray()[random.nextInt(globalchallenges.size())] : null;
 	}
 	
 	@EventHandler

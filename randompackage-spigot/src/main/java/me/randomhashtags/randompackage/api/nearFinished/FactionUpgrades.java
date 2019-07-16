@@ -155,7 +155,7 @@ public class FactionUpgrades extends RPFeature {
         }
         try {
             fupgrades.save(fupgradesF);
-            fupgradesF = new File(rpd + separator + "_Data", "faction additions.yml");
+            fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
         } catch(IOException e) {
             e.printStackTrace();
@@ -163,8 +163,8 @@ public class FactionUpgrades extends RPFeature {
     }
     private void loadBackup() {
         final ConfigurationSection c = fupgrades.getConfigurationSection("factions");
+        factionUpgrades = new HashMap<>();
         if(c != null) {
-            factionUpgrades = new HashMap<>();
             for(String s : c.getKeys(false)) {
                 final ConfigurationSection f = fupgrades.getConfigurationSection("factions." + s);
                 final HashMap<FactionUpgrade, Integer> b = new HashMap<>();

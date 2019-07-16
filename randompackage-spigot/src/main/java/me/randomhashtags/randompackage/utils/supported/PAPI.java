@@ -9,9 +9,18 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class PlaceholderAPI extends PlaceholderExpansion {
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-    public PlaceholderAPI() {}
+public class PAPI extends PlaceholderExpansion {
+    private static PAPI instance;
+    public static PAPI getPAPI() {
+        if(instance == null) instance = new PAPI();
+        return instance;
+    }
+    private PAPI() {
+        api.sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI");
+        register();
+    }
 
     @Override
     public String getIdentifier() {

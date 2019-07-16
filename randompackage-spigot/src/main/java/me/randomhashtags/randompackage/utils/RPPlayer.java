@@ -398,35 +398,37 @@ public class RPPlayer extends RPStorage {
     }
 
     public HashMap<Integer, ItemStack[]> getShowcases() {
-        if(showcases == null && showcaseSizes == null) {
-            showcases = new HashMap<>();
-            showcaseSizes = new HashMap<>();
-            final ConfigurationSection c = yml.getConfigurationSection("showcases");
-            if(c != null) {
-                for(String s : c.getKeys(false)) {
-                    final int page = Integer.parseInt(s);
-                    showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
-                    final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
-                    final ItemStack[] items = new ItemStack[54];
-                    if(i != null) {
-                        for(String sl : i.getKeys(false)) {
-                            if(sl.equals("slot")) {
-                                final int slot = Integer.parseInt(sl);
-                                items[slot] = api.d(yml, "showcases." + s + "." + sl);
+        final Showcase showcase = Showcase.getShowcase();
+        if(showcase.isEnabled()) {
+            if(showcases == null && showcaseSizes == null) {
+                showcases = new HashMap<>();
+                showcaseSizes = new HashMap<>();
+                final ConfigurationSection c = yml.getConfigurationSection("showcases");
+                if(c != null) {
+                    for(String s : c.getKeys(false)) {
+                        final int page = Integer.parseInt(s);
+                        showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
+                        final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
+                        final ItemStack[] items = new ItemStack[54];
+                        if(i != null) {
+                            for(String sl : i.getKeys(false)) {
+                                if(sl.equals("slot")) {
+                                    final int slot = Integer.parseInt(sl);
+                                    items[slot] = api.d(yml, "showcases." + s + "." + sl);
+                                }
                             }
                         }
+                        showcases.put(page, items);
                     }
-                    showcases.put(page, items);
-                }
-            } else {
-                final Showcase s = Showcase.getShowcase();
-                final YamlConfiguration config = s.config;
-                final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
-                if(defaultShowcase > 0) {
-                    final ItemStack[] a = new ItemStack[54];
-                    for(int i = 1; i <= defaultShowcase; i++) {
-                        showcases.put(i, a);
-                        showcaseSizes.put(i, defaultSize);
+                } else {
+                    final YamlConfiguration config = showcase.config;
+                    final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
+                    if(defaultShowcase > 0) {
+                        final ItemStack[] a = new ItemStack[54];
+                        for(int i = 1; i <= defaultShowcase; i++) {
+                            showcases.put(i, a);
+                            showcaseSizes.put(i, defaultSize);
+                        }
                     }
                 }
             }

@@ -51,7 +51,7 @@ public abstract class Spawnable extends Identifyable {
         return false;
     }
 
-    public boolean canSpawnAt(Location l) { return canSpawnAt(null ,l); }
+    public boolean canSpawnAt(Location l) { return canSpawnAt(null, l); }
     public boolean canSpawnAt(Player summoner, Location l) {
         switch(getSpawnType()) {
             case FACTIONS_UUID: return canSpawnAtFactionClaim(summoner, l);

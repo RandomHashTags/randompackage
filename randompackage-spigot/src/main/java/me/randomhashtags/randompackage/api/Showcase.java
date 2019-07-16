@@ -80,6 +80,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "showcase.yml"));
 		expansion = d(config, "items.expansion");
 		givedpitem.items.put("showcaseexpansion", expansion);
+		givedpitem.items.put("showcaseexpander", expansion);
 		addedRows = config.getInt("items.expansion.added rows");
 
 		itemslots = new ArrayList<>();

@@ -5,10 +5,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+
+import static me.randomhashtags.randompackage.utils.RPFeature.rpd;
 
 public class YamlUpdater extends UVersion {
     private static YamlUpdater instance;
@@ -17,7 +16,7 @@ public class YamlUpdater extends UVersion {
         return instance;
     }
 
-    public void update(File file) {
+    private boolean update(File file) {
         if(file.exists()) {
             final TreeMap<String, Object> changes = getChanges(file);
             if(changes != null && !changes.isEmpty()) {
@@ -32,15 +31,67 @@ public class YamlUpdater extends UVersion {
                     }
                 }
                 if(changed) {
-                    System.out.println("Updating file \"" + file.getName() + "\" with new contents!");
+                    System.out.println("Updated file \"" + file.getName() + "\" with new contents!");
                     try {
                         yml.save(file);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
+                return changed;
             }
         }
+        return false;
+    }
+    public void update() {
+        final String[] f = new String[] {
+                "auction house",
+                "coinflip",
+                "collection filter",
+                "config",
+                "conquests",
+                "custom armor",
+                "custom enchants",
+                "custom explosions",
+                "disguises",
+                "duels",
+                "dungeons",
+                "envoy",
+                "faction points",
+                "faction quests",
+                "faction upgrades",
+                "fund",
+                "global challenges",
+                "homes",
+                "item filter",
+                "items",
+                "jackpot",
+                "kits",
+                "koth",
+                "last man standing",
+                "lootboxes",
+                "masks",
+                "mob stacker",
+                "monthly crates",
+                "outposts",
+                "player quests",
+                "secondary",
+                "shop",
+                "showcase",
+                "titles",
+                "trade",
+                "wild pvp",
+        };
+        final File d = rpd;
+        final List<String> updatedymls = new ArrayList<>();
+        for(String s : f) {
+            final File y = new File(d, s + ".yml");
+            if(y.exists()) {
+                final boolean updated = update(y);
+                if(updated) updatedymls.add(s + ".yml");
+            }
+        }
+        sendConsoleMessage("&6[RandomPackage] &a" + (!updatedymls.isEmpty() ? "updated the following ymls: &7" + updatedymls.toString() : "All files up to date"));
     }
 
     public TreeMap<String, Object> getChanges(File file) { // since v16.3.1
@@ -53,7 +104,7 @@ public class YamlUpdater extends UVersion {
             case "conquests": return getConquests();
             case "custom armor": return getCustomArmor();
             case "custom enchants": return getCustomEnchants();
-            case "custom explosions": return getCustomExplosiosn();
+            case "custom explosions": return getCustomExplosions();
             case "disguises": return getDisguises();
             case "duels": return getDuels();
             case "dungeons": return getDungeons();
@@ -109,7 +160,7 @@ public class YamlUpdater extends UVersion {
     private TreeMap<String, Object> getCustomEnchants() {
         return null;
     }
-    private TreeMap<String, Object> getCustomExplosiosn() {
+    private TreeMap<String, Object> getCustomExplosions() {
         return null;
     }
     private TreeMap<String, Object> getDisguises() {

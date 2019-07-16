@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
@@ -38,11 +36,11 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&7- Author: &6RandomHashTags",
                             "&7- RandomPackage Version: &b" + randompackage.getDescription().getVersion(),
                             "&7- Server Version: &f" + version,
+                            "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Faction Plugin: " + (fapi.factions != null ? "&3" + fapi.factions + " &7(&2" + pluginmanager.getPlugin("Factions").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
-                            "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage/wikis/Home",
-                            "&7- Info: &f%%__USER__%%, &f%%__NONCE__%%",
+                            "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Home",
                             "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/",
                             "&6&m&l---------------------------------------------",
                             " "))
@@ -56,8 +54,6 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                 } else if(a.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
                     RPEvents.getRPEvents().backup();
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aPlayer backup complete!"));
-                } else if(a.equals("updateyml") && hasPermission(sender, "RandomPackage.randompackage.updateyml", true)) {
-                    YamlUpdater.getYmlUpdater().update(new File(randompackage.getDataFolder(), args[1].replace("_", " ")));
                 }
             }
         }

@@ -13,7 +13,6 @@ import java.io.File;
 import java.util.*;
 
 public class FileServerCrate extends ServerCrate {
-	private int redeemableItems;
 	private UInventory inv;
 	private LinkedHashMap<String, Integer> revealChances;
 	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
@@ -22,17 +21,14 @@ public class FileServerCrate extends ServerCrate {
 	private ServerCrateFlare flare;
 	public FileServerCrate(File f) {
 		load(f);
-		redeemableItems = yml.getInt("settings.redeemable items");
 		addServerCrate(getIdentifier(), this);
 	}
 	public String getIdentifier() { return getYamlName(); }
 
 	public String getBossReward() { return ChatColor.translateAlternateColorCodes('&', yml.getString("boss reward")); }
-	public int getRedeemableItems() { return redeemableItems; }
+	public int getRedeemableItems() { return yml.getInt("settings.redeemable items"); }
 	public String getDisplayRarity() { return ChatColor.translateAlternateColorCodes('&', yml.getString("display.rarity")); }
-	public List<Integer> getSelectableSlots() {
-		return selectableslots;
-	}
+	public List<Integer> getSelectableSlots() { return selectableslots; }
 	public UInventory getInventory() {
 		if(inv == null) {
 			inv = new UInventory(null, yml.getInt("settings.size"), ChatColor.translateAlternateColorCodes('&', yml.getString("settings.title")));
@@ -46,12 +42,12 @@ public class FileServerCrate extends ServerCrate {
 					final int slot = i*9+o;
 					final String t = s.substring(o, o+1);
 					final boolean plus = t.equals("+");
-					final ItemStack item = t.equals("-") ? BG : plus ? O : air;
+					final ItemStack item = plus ? O.clone() : t.equals("-") ? BG : air;
 					if(plus) {
-						final ItemMeta m = item.getItemMeta();
-						if(m.hasDisplayName()) m.setDisplayName(m.getDisplayName().replace("{SLOT}", Integer.toString(slot)));
-						item.setItemMeta(m);
 						selectableslots.add(slot);
+						final ItemMeta m = item.getItemMeta();
+						if(m.hasDisplayName()) m.setDisplayName(m.getDisplayName().replace("{SLOT}", Integer.toString(selectableslots.size())));
+						item.setItemMeta(m);
 					}
 					ii.setItem(slot, item);
 				}

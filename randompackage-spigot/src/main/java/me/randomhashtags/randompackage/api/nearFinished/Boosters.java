@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Booster;
-import me.randomhashtags.randompackage.addons.active.ActiveBoost;
+import me.randomhashtags.randompackage.addons.active.ActiveBooster;
 import me.randomhashtags.randompackage.addons.usingfile.FileBooster;
 import me.randomhashtags.randompackage.api.events.BoosterActivateEvent;
 import me.randomhashtags.randompackage.api.events.BoosterPreActivateEvent;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.objects.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Boosters extends RPFeature {
+public class Boosters extends EventAttributes {
 	private static Boosters instance;
 	public static Boosters getBoosters() {
 	    if(instance == null) instance = new Boosters();
@@ -31,6 +31,7 @@ public class Boosters extends RPFeature {
 	}
 
 	public YamlConfiguration config;
+	public static HashMap<String, List<ActiveBooster>> activeBoosters;
 
 	public void load() {
 		final long started = System.currentTimeMillis();
@@ -43,6 +44,7 @@ public class Boosters extends RPFeature {
 		}
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "faction additions.yml"));
+		activeBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
 		final File folder = new File(rpd + separator + "boosters");
@@ -56,7 +58,7 @@ public class Boosters extends RPFeature {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (boosters != null ? boosters.size() : 0) + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		config = null;
+		instance = null;
 		deleteAll(Feature.BOOSTERS);
 	}
 
@@ -69,12 +71,12 @@ public class Boosters extends RPFeature {
 			if(m != null) {
 				event.setCancelled(true);
 				player.updateInventory();
-				activateBooster(player, (Booster) m.first(), (double) m.second(), (long) m.third());
+				if(activateBooster(player, (Booster) m.first(), (double) m.second(), (long) m.third())) removeItem(player, is, 1);
 			}
 		}
 	}
 
-	private void activateBooster(Player player, Booster booster, double multiplier, long duration) {
+	private boolean activateBooster(Player player, Booster booster, double multiplier, long duration) {
 		final BoosterPreActivateEvent e = new BoosterPreActivateEvent(player, booster, multiplier, duration);
 		pluginmanager.callEvent(e);
 		if(!e.isCancelled()) {
@@ -82,10 +84,11 @@ public class Boosters extends RPFeature {
 			final long d = e.duration;
 			final BoosterActivateEvent ee = new BoosterActivateEvent(player, booster, m, d);
 			pluginmanager.callEvent(ee);
-			new ActiveBoost(booster, multiplier, System.currentTimeMillis()+duration);
+			executeAttributes(player, ee, booster.getAttributes());
+			new ActiveBooster(player, booster, multiplier, System.currentTimeMillis()+duration);
 
-			final String type = booster.getType();
-			final boolean fm = type.equals("FACTION_MCMMO"), fx = type.equals("FACTION_XP");
+			final String type = booster.getRecipients();
+			final boolean fm = type.equals("FACTION_MCMMO"), fx = !fm && type.equals("FACTION_XP");
 			if(fm || fx) {
 				final HashMap<String, String> replacements = new HashMap<>();
 				replacements.put("{PLAYER}", player.getName());
@@ -96,7 +99,8 @@ public class Boosters extends RPFeature {
 					}
 				}
 			}
-		}
+			return true;
+		} else return false;
 	}
 	private List<Player> getFactionMembers(Player player) {
 		final String f = fapi != null ? fapi.getFaction(player) : null;
@@ -112,5 +116,20 @@ public class Boosters extends RPFeature {
 			return a;
 		}
 		return null;
+	}
+	@EventHandler
+	private void boosterActivateEvent(BoosterActivateEvent event) {
+		final Booster b = event.booster;
+		if(b instanceof FileBooster) {
+			final Player player = event.player;
+			final double multiplier = event.multiplier;
+			final long duration = event.duration;
+			final String recipients = b.getRecipients();
+			for(String s : b.getAttributes()) {
+				if(s.toLowerCase().startsWith("activatebooster;")) {
+
+				}
+			}
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.api.events.*;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
@@ -345,6 +346,37 @@ public abstract class EventAttributes extends RPFeature {
                             did = cancelled && Boolean.parseBoolean(A.split("=")[1]);
                         } else if(A.startsWith("entity=")) {
                             did = entity.equals(A.split("=")[1].toUpperCase());
+                        } else if(did) {
+                            completion = completion.concat(A + "&&");
+                        }
+                    }
+                }
+            }
+        }
+        return completion.isEmpty() ? null : completion.substring(0, completion.length()-2);
+    }
+    public String executeAttributes(Player player, BoosterActivateEvent event, List<String> attributes) {
+        String completion = "";
+        if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
+            final Booster b = event.booster;
+            final String recipients = b.getRecipients();
+            final double multiplier = event.multiplier;
+            final long duration = event.duration;
+            for(String s : attributes) {
+                final String a = s.toLowerCase();
+                boolean did = true;
+                if(a.startsWith("boosteractivated;")) {
+                    for(String A : a.split("boosteractivated;")[1].split(";")) {
+                        if(A.startsWith("multiplier=")) {
+                            did = multiplier == Double.parseDouble(A.split("=")[1]);
+                        } else if(A.startsWith("multiplier>=")) {
+                            did = multiplier >= Double.parseDouble(A.split("=")[1]);
+                        } else if(A.startsWith("multiplier<=")) {
+                            did = multiplier <= Double.parseDouble(A.split("=")[1]);
+                        } else if(A.startsWith("duration=")) {
+                            did = duration == Long.parseLong(A.split("=")[1]);
+                        } else if(A.startsWith("recipients=")) {
+                            did = recipients.equalsIgnoreCase(A.split("=")[1]);
                         } else if(did) {
                             completion = completion.concat(A + "&&");
                         }

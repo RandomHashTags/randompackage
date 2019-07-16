@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 public abstract class Booster extends Itemable {
-    public abstract String getType();
+    public abstract String getRecipients();
     public abstract ItemStack getItem(long duration, double multiplier);
     public abstract int getDurationLoreSlot();
     public abstract int getMultiplierLoreSlot();

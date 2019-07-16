@@ -13,8 +13,9 @@ import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.YamlUpdater;
+import me.randomhashtags.randompackage.utils.supported.PAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
-import me.randomhashtags.randompackage.utils.supported.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -116,6 +117,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     public static String spawner;
     public static Plugin spawnerPlugin, mcmmo;
+    public boolean placeholderapi = false;
 
     private PluginManager pm;
 
@@ -156,6 +158,8 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         vapi = VaultAPI.getVaultAPI();
         vapi.setupEconomy();
+
+        YamlUpdater.getYmlUpdater().update();
 
         api.enable();
         getCommand("randompackage").setExecutor(api);
@@ -296,10 +300,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         wildpvp = WildPvP.getWildPvP();
         tryLoading(Feature.WILD_PVP);
-
-        if(pm.isPluginEnabled("PlaceholderAPI")) {
-            new PlaceholderAPI();
-        }
     }
     private void checkFiles() {
         saveDefaultConfig();
@@ -309,12 +309,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         final PluginManager pm = Bukkit.getPluginManager();
         mcmmo = pm.isPluginEnabled("mcMMO") ? pm.getPlugin("mcMMO") : null;
         tryLoadingSpawner();
+        if(pm.isPluginEnabled("PlaceholderAPI")) {
+            placeholderapi = true;
+            PAPI.getPAPI();
+        }
     }
     public void tryLoadingSpawner() {
         final String es = pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
         final String ss = pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
         spawnerPlugin = es != null || ss != null ? pm.getPlugin(es != null ? "EpicSpawners" : "SilkSpawners") : null;
-        spawner = es != null ? es : ss != null ? ss : null;
+        spawner = es != null ? es : ss;
         spawnerchance = es != null ? Integer.parseInt(spawnerPlugin.getConfig().getString("Spawner Drops.Chance On TNT Explosion").replace("%", "")): ss != null ? spawnerPlugin.getConfig().getInt("explosionDropChance") : 0;
     }
     private void disable() {

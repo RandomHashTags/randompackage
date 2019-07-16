@@ -16,7 +16,7 @@ public class FileBooster extends Booster {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public String getType() { return yml.getString("settings.type"); }
+    public String getRecipients() { return yml.getString("settings.recipients"); }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return item.clone();
