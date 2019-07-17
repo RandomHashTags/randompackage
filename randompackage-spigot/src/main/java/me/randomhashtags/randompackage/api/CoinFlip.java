@@ -394,6 +394,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             active.put(p, m);
         }
 
+        final String rollingName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name"));
         final List<Integer> t = tasks.get(m);
         for(int i = 1; i <= countdownStart; i++) {
             final int I = i;
@@ -418,15 +419,18 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                     B.updateInventory();
                 }
                 if(I == countdownStart) {
-                    final ItemStack F = m.option().selection(), G = m.challengerOption.selection();
+                    final CoinFlipOption op1 = m.option(), op2 = m.challengerOption;
+                    final String color1 = op1.selectionColor, color2 = op2.selectionColor;
+                    final ItemStack F = op1.selection(), G = op2.selection();
                     ItemStack option = F;
+                    String selectionColor = color1;
                     for(int o = 0; o <= 60; o++) {
                         final int d = o*2;
                         if(o == 60) {
                             t.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> chooseWinner(m), d));
                         } else {
                             item = option.clone(); itemMeta = item.getItemMeta();
-                            itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name")));
+                            itemMeta.setDisplayName(rollingName.replace("{SELECTION_COLOR}", selectionColor));
                             itemMeta.setLore(rollingLore);
                             item.setItemMeta(itemMeta);
                             t.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
@@ -437,7 +441,9 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                                     B.getOpenInventory().getTopInventory().setItem(q, item);
                                 }
                             }, d));
-                            option = option == F ? G : F;
+                            final boolean isF = option == F;
+                            option = isF ? G : F;
+                            selectionColor = isF ? color2 : color1;
                         }
                     }
 

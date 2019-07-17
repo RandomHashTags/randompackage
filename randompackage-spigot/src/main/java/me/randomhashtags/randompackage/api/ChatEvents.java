@@ -58,30 +58,32 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	}
 	@EventHandler
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
-		final String message = event.getMessage();
-		final Player player = event.getPlayer();
-		if(message.contains("[brag]") || message.contains("[item]")) {
-			final ArrayList<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
-			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
-			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", event.getMessage().split("\\[").length > 0 ? event.getMessage().split("\\[")[0] : "")), suffix = new TextComponent(event.getMessage().split("]").length > 1 ? event.getMessage().split("]")[1] : "");
-			if(message.contains("[brag]")) {
-				event.setCancelled(true);
-				if(hasPermission(player, "RandomPackage.chat.brag", false)) {
-					sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
-				} else {
-					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
-				}
-			}
-			if(message.contains("[item]")) {
-				event.setCancelled(true);
-				if(hasPermission(player, "RandomPackage.chat.item", false)) {
-					ItemStack i = getItemInHand(event.getPlayer());
-					if(i != null && !i.getType().equals(Material.AIR)) {
-						String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
-						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
+		if(!event.isCancelled()) {
+			final String message = event.getMessage();
+			final Player player = event.getPlayer();
+			if(message.contains("[brag]") || message.contains("[item]")) {
+				final ArrayList<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
+				final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
+				final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+				final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", event.getMessage().split("\\[").length > 0 ? event.getMessage().split("\\[")[0] : "")), suffix = new TextComponent(event.getMessage().split("]").length > 1 ? event.getMessage().split("]")[1] : "");
+				if(message.contains("[brag]")) {
+					event.setCancelled(true);
+					if(hasPermission(player, "RandomPackage.chat.brag", false)) {
+						sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
+					} else {
+						sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
 					}
-				} else sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
+				}
+				if(message.contains("[item]")) {
+					event.setCancelled(true);
+					if(hasPermission(player, "RandomPackage.chat.item", false)) {
+						ItemStack i = getItemInHand(event.getPlayer());
+						if(i != null && !i.getType().equals(Material.AIR)) {
+							String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
+							sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
+						}
+					} else sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
+				}
 			}
 		}
 	}
