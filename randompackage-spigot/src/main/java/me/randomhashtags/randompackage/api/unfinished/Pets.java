@@ -1,10 +1,14 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.addons.Pet;
 import me.randomhashtags.randompackage.addons.usingfile.FilePet;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
@@ -20,7 +24,19 @@ public class Pets extends RPFeature implements Listener {
         final long started = System.currentTimeMillis();
 
         if(!otherdata.getBoolean("saved default pets")) {
-            final String[] p = new String[] {"ANTI_TELEBLOCK", "BANNER", "LAVA_ELEMENTAL", "WATER_ELEMENTAL"};
+            final String[] p = new String[] {
+                    "ALCHEMIST", "ANTI_TELEBLOCK",
+                    "BANNER", "BLACKSCROLL",
+                    "ENCHANTER",
+                    "FEIGN_DEATH",
+                    "GAIA",
+                    "LAVA_ELEMENTAL",
+                    "RAID_CREEPER",
+                    "STRONGHOLD_SELL",
+                    "TESLA",
+                    "WATER_ELEMENTAL",
+                    "XP_BOOSTER",
+            };
             for(String s : p) save("pets", s + ".yml");
             otherdata.set("saved default pets", true);
             saveOtherData();
@@ -38,5 +54,11 @@ public class Pets extends RPFeature implements Listener {
         deleteAll(Feature.PETS);
     }
 
-
+    @EventHandler
+    private void playerInteractEvent(PlayerInteractEvent event) {
+        final ItemStack is = event.getItem();
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final Pet p = Pet.valueOf(is);
+        }
+    }
 }

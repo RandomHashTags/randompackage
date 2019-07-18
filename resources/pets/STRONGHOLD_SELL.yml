@@ -2,22 +2,20 @@
 settings:
   max level: 10
   cooldown:
-    1: 120
+    1: 1800
   exp to level:
-    2: 1000
+    2: 500
 #
 item:
   texture: ""
   item: "player_head_item"
-  name: "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]"
+  name: "&e&lStronghold Sell Pet&r &7[LVL {LEVEL}]"
   lore:
-  - "&7An elusive creature that"
-  - "&7has the power to negate"
-  - "&7curses that prevent the use"
-  - "&7of enderpearl teleportation."
+  - "&7A beast born from the chaos of"
+  - "&7the contested strongholds of this planet."
   - " "
   - "&f&lAbility"
-  - "&7Removes [&cTeleblock&7]"
+  - "&7Enable /sh sell for: &f15s"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

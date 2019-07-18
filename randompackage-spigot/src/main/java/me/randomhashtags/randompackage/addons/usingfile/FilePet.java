@@ -15,7 +15,7 @@ public class FilePet extends Pet {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public TreeMap<Integer, Long> getCooldownForLevel() {
+    public TreeMap<Integer, Long> getCooldowns() {
         final TreeMap<Integer, Long> a = new TreeMap<>();
         final ConfigurationSection c = yml.getConfigurationSection("settings.cooldowns");
         if(c != null) {
@@ -29,7 +29,7 @@ public class FilePet extends Pet {
         if(item == null) item = api.d(yml, "item");
         return item.clone();
     }
-    public TreeMap<Integer, Long> getRequiredXpForLevel() {
+    public TreeMap<Integer, Long> getRequiredXp() {
         final TreeMap<Integer, Long> a = new TreeMap<>();
         final ConfigurationSection c = yml.getConfigurationSection("settings.exp to level");
         if(c != null) {

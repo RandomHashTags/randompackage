@@ -2,22 +2,23 @@
 settings:
   max level: 10
   cooldown:
-    1: 120
+    1: 3600
   exp to level:
-    2: 1000
+    2: 2250
 #
 item:
   texture: ""
   item: "player_head_item"
-  name: "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]"
+  name: "&e&lEnchanter Pet&r &7[LVL {LEVEL}]"
   lore:
-  - "&7An elusive creature that"
-  - "&7has the power to negate"
-  - "&7curses that prevent the use"
-  - "&7of enderpearl teleportation."
+  - "&7A powerful, magical creature"
+  - "&7skilled in many forms of"
+  - "&7alchemy and enchantment."
   - " "
   - "&f&lAbility"
-  - "&7Removes [&cTeleblock&7]"
+  - "&7Increase the % success rate of"
+  - "&7the next enchantment book you"
+  - "&7attempt to apply by &f1%"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

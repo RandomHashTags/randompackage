@@ -130,6 +130,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             final String[] q = new String[] {
                     "A_LITTLE_GRIND", "A_MEDIUM_GRIND", "A_BIG_GRIND",
                     "BIGGER_SPENDER", "BIGGEST_SPENDER",
+                    "DEFINITELY_AFK",
                     "DISGUISED",
                     "DUNGEON_NOOB",
                     "DUNGEON_RUNNER",
@@ -143,6 +144,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "HEROIC_ENCHANTER",
                     "HEROIC_ENVOY_LOOTER_II",
                     "ITEM_CUSTOMIZATION",
+                    "KOTH_KILLER_II",
                     "LAST_NOOB_STANDING", "LAST_MASTER_STANDING",
                     "LEGENDARY_LOOTER",
                     "MASTER_KIT_LEVELING",

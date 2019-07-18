@@ -64,7 +64,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 } else {
                     q = "other";
                     qq = eco.getBalance(player) >= eco.getBalance(op) ? "other" : "self";
-                    bal = formatDouble(eco.getBalance(op));
+                    bal = formatBigDecimal(BigDecimal.valueOf(eco.getBalance(op)));
                 }
             } else return true;
             for(String s : config.getStringList("balance.view " + q)) {

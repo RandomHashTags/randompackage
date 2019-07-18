@@ -1,15 +1,15 @@
 # Made by RandomHashTags
 settings:
   enabled: false
-  name: "Skill Booster III"
-  completion: 5
+  name: "Definitely AFK"
+  completion: 500000
   expiration: 86400
 #
 lore:
-- "&7Successfully use 5 mcMMO Booster"
+- "&7Earn a total of 500,000 EXP from grinding."
 #
 rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "ActivateBooster;nameContains=MCMMO;+1"
+- "KilledEntity;isMob;+xp"

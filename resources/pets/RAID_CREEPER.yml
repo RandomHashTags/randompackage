@@ -2,22 +2,23 @@
 settings:
   max level: 10
   cooldown:
-    1: 120
+    1: 600
   exp to level:
-    2: 1000
+    2: 5000
 #
 item:
   texture: ""
   item: "player_head_item"
-  name: "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]"
+  name: "&e&lRaid Creeper Pet&r &7[LVL {LEVEL}]"
   lore:
-  - "&7An elusive creature that"
-  - "&7has the power to negate"
-  - "&7curses that prevent the use"
-  - "&7of enderpearl teleportation."
+  - "&7A mythical hybrid creeper,"
+  - "&7a rare cross between the"
+  - "&7Lucky and Tactical species."
   - " "
   - "&f&lAbility"
-  - "&7Removes [&cTeleblock&7]"
+  - "&7ASpawn a &4Raid Creeper"
+  - "&7(Lucky + Tactical)"
+  - "&7(100% Spawn Drop Rate)"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

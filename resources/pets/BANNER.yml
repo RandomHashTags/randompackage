@@ -29,3 +29,6 @@ item:
   - "&f&lEXP"
   - "{EXP}"
   - " &7({XP}/{COMPLETION})"
+#
+attributes:
+  - ""

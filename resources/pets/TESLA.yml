@@ -4,24 +4,20 @@ settings:
   cooldown:
     1: 300
   exp to level:
-    2: 2000
+    2: 3000
 #
 item:
   texture: ""
   item: "player_head_item"
-  name: "&e&lLava Elemental Pet&r &7[LVL {LEVEL}]"
+  name: "&e&lTesla Pet&r &7[LVL {LEVEL}]"
   lore:
-  - "&7A fiery pet that is"
-  - "&7capable of conjuring lava"
-  - "&7and giving it to its owner."
+  - "&7A legendary creature of myth"
+  - "&7that acts as a temporarily"
+  - "&7infinite source of player souls."
   - " "
   - "&f&lAbility"
-  - "&7Fills up to 32x"
-  - "&7empty buckets in your"
-  - "&7inventory into lava!"
-  - "     &f&l+"
-  - "&7Adds 25x Fat Bucket"
-  - "&7charges to all Fat Buckets!"
+  - "&7Remove all soul costs from"
+  - "&7any action for 5s."
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

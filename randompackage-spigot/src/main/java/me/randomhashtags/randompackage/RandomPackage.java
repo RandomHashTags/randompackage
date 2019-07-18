@@ -353,9 +353,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 } catch(Exception e) {
                     msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!");
                 }
-                Bukkit.getConsoleSender().sendMessage(msg);
-                for(Player p : Bukkit.getOnlinePlayers()) {
-                    if(p.isOp()) p.sendMessage(msg);
+                if(msg != null) {
+                    Bukkit.getConsoleSender().sendMessage(msg);
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        if(p.isOp()) p.sendMessage(msg);
+                    }
                 }
             });
         }, 0, l);

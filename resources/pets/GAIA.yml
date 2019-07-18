@@ -2,26 +2,21 @@
 settings:
   max level: 10
   cooldown:
-    1: 300
+    1: 600
   exp to level:
     2: 2000
 #
 item:
   texture: ""
   item: "player_head_item"
-  name: "&e&lLava Elemental Pet&r &7[LVL {LEVEL}]"
+  name: "&e&lGaia Pet&r &7[LVL {LEVEL}]"
   lore:
-  - "&7A fiery pet that is"
-  - "&7capable of conjuring lava"
-  - "&7and giving it to its owner."
+  - "&7A segment of the goddess"
+  - "&7of the earth and nature itself."
   - " "
   - "&f&lAbility"
-  - "&7Fills up to 32x"
-  - "&7empty buckets in your"
-  - "&7inventory into lava!"
-  - "     &f&l+"
-  - "&7Adds 25x Fat Bucket"
-  - "&7charges to all Fat Buckets!"
+  - "&7Call upon the wrath of Nature."
+  - "&7[&cNature Wrath I&7] (50% duration)"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

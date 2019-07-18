@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  max level: 10
   cooldown:
     1: 300
   exp to level:
@@ -29,3 +30,6 @@ item:
   - "&f&lEXP"
   - "{EXP}"
   - " &7({XP}/{COMPLETION})"
+#
+attributes:
+  - ""
