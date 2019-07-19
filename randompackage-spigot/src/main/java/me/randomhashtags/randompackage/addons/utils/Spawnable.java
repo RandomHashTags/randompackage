@@ -11,8 +11,7 @@ import java.util.List;
 public abstract class Spawnable extends Identifyable {
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
-    public boolean canSpawnAtFactionClaim(Location l) { return canSpawnAtFactionClaim(null, l); }
-    public boolean canSpawnAtFactionClaim(Player summoner, Location l) {
+     public boolean canSpawnAtFactionClaim(Player summoner, Location l) {
         if(l != null) {
             final String own = summoner != null ? FactionsAPI.getFactionsAPI().getFaction(summoner) : null, w = l.getWorld().getName(), f = FactionsAPI.getFactionsAPI().getFactionAt(l);
             for(String s : getSpawnableFactionClaims()) {

@@ -18,7 +18,7 @@ public class YamlUpdater extends UVersion {
 
     private boolean update(File file) {
         if(file.exists()) {
-            final TreeMap<String, Object> changes = getChanges(file);
+            final LinkedHashMap<String, Object> changes = getChanges(file);
             if(changes != null && !changes.isEmpty()) {
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
                 boolean changed = false;
@@ -94,7 +94,7 @@ public class YamlUpdater extends UVersion {
         sendConsoleMessage("&6[RandomPackage] &a" + (!updatedymls.isEmpty() ? "Updated the following ymls: &e" + updatedymls.toString() : "All files up to date"));
     }
 
-    public TreeMap<String, Object> getChanges(File file) { // Implemented since v16.3.1
+    public LinkedHashMap<String, Object> getChanges(File file) { // Implemented since v16.3.1
         final String n = file.getName().split("\\.yml")[0];
         switch(n) {
             case "auction house": return getAH();
@@ -137,8 +137,8 @@ public class YamlUpdater extends UVersion {
         }
     }
 
-    private TreeMap<String, Object> putAll(Object[] values) {
-        final TreeMap<String, Object> tree = new TreeMap<>();
+    private LinkedHashMap<String, Object> putAll(Object[] values) {
+        final LinkedHashMap<String, Object> tree = new LinkedHashMap<>();
         for(int i = 0; i < values.length; i++) {
             final Object o = values[i];
             if(o instanceof Object[]) {
@@ -155,7 +155,7 @@ public class YamlUpdater extends UVersion {
         return tree;
     }
 
-    private TreeMap<String, Object> getConfig() {
+    private LinkedHashMap<String, Object> getConfig() {
         final Object[] values = new Object[] {
                 // 16.3.3
                 "backup interval", 360
@@ -164,13 +164,13 @@ public class YamlUpdater extends UVersion {
     }
 
 
-    private TreeMap<String, Object> getAH() {
+    private LinkedHashMap<String, Object> getAH() {
         return null;
     }
-    private TreeMap<String, Object> getCoinFlip() {
+    private LinkedHashMap<String, Object> getCoinFlip() {
         return null;
     }
-    private TreeMap<String, Object> getCollectionFilter() {
+    private LinkedHashMap<String, Object> getCollectionFilter() {
         final Object[] values = new Object[] {
                 // 16.3.3
                 newInventory("types.iron", "Select Iron Type", 9),
@@ -185,100 +185,100 @@ public class YamlUpdater extends UVersion {
         };
         return putAll(values);
     }
-    private TreeMap<String, Object> getConquests() {
+    private LinkedHashMap<String, Object> getConquests() {
         return null;
     }
-    private TreeMap<String, Object> getCustomArmor() {
+    private LinkedHashMap<String, Object> getCustomArmor() {
         return null;
     }
-    private TreeMap<String, Object> getCustomEnchants() {
+    private LinkedHashMap<String, Object> getCustomEnchants() {
         return null;
     }
-    private TreeMap<String, Object> getCustomExplosions() {
+    private LinkedHashMap<String, Object> getCustomExplosions() {
         return null;
     }
-    private TreeMap<String, Object> getDisguises() {
+    private LinkedHashMap<String, Object> getDisguises() {
         return null;
     }
-    private TreeMap<String, Object> getDuels() {
+    private LinkedHashMap<String, Object> getDuels() {
         return null;
     }
-    private TreeMap<String, Object> getDungeons() {
+    private LinkedHashMap<String, Object> getDungeons() {
         return null;
     }
-    private TreeMap<String, Object> getEnvoy() {
+    private LinkedHashMap<String, Object> getEnvoy() {
         return null;
     }
-    private TreeMap<String, Object> getFactionPoints() {
+    private LinkedHashMap<String, Object> getFactionPoints() {
         return null;
     }
-    private TreeMap<String, Object> getFactionQuests() {
+    private LinkedHashMap<String, Object> getFactionQuests() {
         return null;
     }
-    private TreeMap<String, Object> getFactionUpgrades() {
+    private LinkedHashMap<String, Object> getFactionUpgrades() {
         return null;
     }
-    private TreeMap<String, Object> getFund() {
+    private LinkedHashMap<String, Object> getFund() {
         return null;
     }
-    private TreeMap<String, Object> getGlobalChallenges() {
+    private LinkedHashMap<String, Object> getGlobalChallenges() {
         return null;
     }
-    private TreeMap<String, Object> getHomes() {
+    private LinkedHashMap<String, Object> getHomes() {
         return null;
     }
-    private TreeMap<String, Object> getItemFilter() {
+    private LinkedHashMap<String, Object> getItemFilter() {
         return null;
     }
-    private TreeMap<String, Object> getItems() {
+    private LinkedHashMap<String, Object> getItems() {
         return null;
     }
-    private TreeMap<String, Object> getJackpot() {
+    private LinkedHashMap<String, Object> getJackpot() {
         return null;
     }
-    private TreeMap<String, Object> getKits() {
+    private LinkedHashMap<String, Object> getKits() {
         return null;
     }
-    private TreeMap<String, Object> getKOTH() {
+    private LinkedHashMap<String, Object> getKOTH() {
         return null;
     }
-    private TreeMap<String, Object> getLastManStanding() {
+    private LinkedHashMap<String, Object> getLastManStanding() {
         return null;
     }
-    private TreeMap<String, Object> getLootboxes() {
+    private LinkedHashMap<String, Object> getLootboxes() {
         return null;
     }
-    private TreeMap<String, Object> getMasks() {
+    private LinkedHashMap<String, Object> getMasks() {
         return null;
     }
-    private TreeMap<String, Object> getMobStacker() {
+    private LinkedHashMap<String, Object> getMobStacker() {
         return null;
     }
-    private TreeMap<String, Object> getMonthlyCrates() {
+    private LinkedHashMap<String, Object> getMonthlyCrates() {
         return null;
     }
-    private TreeMap<String, Object> getOutposts() {
+    private LinkedHashMap<String, Object> getOutposts() {
         return null;
     }
-    private TreeMap<String, Object> getPlayerQuests() {
+    private LinkedHashMap<String, Object> getPlayerQuests() {
         return null;
     }
-    private TreeMap<String, Object> getSecondary() {
+    private LinkedHashMap<String, Object> getSecondary() {
         return null;
     }
-    private TreeMap<String, Object> getShop() {
+    private LinkedHashMap<String, Object> getShop() {
         return null;
     }
-    private TreeMap<String, Object> getShowcase() {
+    private LinkedHashMap<String, Object> getShowcase() {
         return null;
     }
-    private TreeMap<String, Object> getTitles() {
+    private LinkedHashMap<String, Object> getTitles() {
         return null;
     }
-    private TreeMap<String, Object> getTrade() {
+    private LinkedHashMap<String, Object> getTrade() {
         return null;
     }
-    private TreeMap<String, Object> getWildPvP() {
+    private LinkedHashMap<String, Object> getWildPvP() {
         return null;
     }
 
