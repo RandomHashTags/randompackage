@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 import static java.util.Map.Entry.comparingByKey;
@@ -50,7 +51,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private HashMap<Player, AuctionedItem> purchasing;
     private List<Integer> confirmAuctionSlots, cancelAuctionSlots, confirmPurchaseSlots, cancelPurchaseSlots, slots;
 
-    private HashMap<Player, HashMap<ItemStack, Double>> auctioning;
+    private HashMap<Player, HashMap<ItemStack, BigDecimal>> auctioning;
 
     public HashMap<UUID, List<AuctionedItem>> auctions;
     public HashMap<Long, AuctionedItem> auctionHouse;
@@ -76,11 +77,11 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         } else {
             final String a = args[0], b = args[1];
             if(a.equals("sell")) {
-                final double price = getRemainingDouble(b);
+                final BigDecimal price = BigDecimal.valueOf(getRemainingDouble(b));
                 final ItemStack is = player.getItemInHand();
                 if(is == null || is.getType().equals(Material.AIR)) {
                     sendStringListMessage(player, config.getStringList("messages.need to be holding item"), null);
-                } else if(price <= 0.00) {
+                } else if(price.doubleValue() <= 0.00) {
                     sendStringListMessage(player, config.getStringList("messages.must enter valid price"), null);
                 } else {
                     confirmAuction(player, is, price);
@@ -234,7 +235,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 for(String a : data.getConfigurationSection("auctions." + uuid).getKeys(false)) {
                     final long l = Long.parseLong(a);
                     final ItemStack i = d(data, "auctions." + uuid + "." + a);
-                    final AuctionedItem ai = new AuctionedItem(l, u, i, data.getDouble("auctions." + uuid + "." + a + ".price"));
+                    final AuctionedItem ai = new AuctionedItem(l, u, i, BigDecimal.valueOf(data.getDouble("auctions." + uuid + "." + a + ".price")));
                     ai.claimable = data.getBoolean("auctions." + uuid + "." + a + ".claimable");
                     final boolean c = ai.claimable;
                     boolean deleted = false;
@@ -387,14 +388,14 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 for(UMaterial u : y.keySet()) {
                     for(String s : y.get(u).keySet()) {
                         final String listings = Integer.toString(y.get(u).get(s).size());
-                        double lowestPrice = -1;
+                        BigDecimal lowestPrice = BigDecimal.ZERO;
                         for(AuctionedItem ai : y.get(u).get(s)) {
-                            final double price = ai.price;
-                            if(lowestPrice == -1 || price < lowestPrice) {
+                            final BigDecimal price = ai.price;
+                            if(lowestPrice.equals(BigDecimal.ZERO) || price.doubleValue() < lowestPrice.doubleValue()) {
                                 lowestPrice = price;
                             }
                         }
-                        final String lowest = formatDouble(lowestPrice);
+                        final String lowest = formatBigDecimal(lowestPrice);
                         item = u.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
                         itemMeta.setDisplayName(s);
                         for(String x : categoryFormat) {
@@ -416,7 +417,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                         final long l = (long) auctionHouse.keySet().toArray()[ahitem];
                         final AuctionedItem a = auctionHouse.get(l);
                         final UUID auctioner = a.auctioner;
-                        final String pr = formatDouble(a.price), seller = Bukkit.getOfflinePlayer(auctioner).getName();
+                        final String pr = formatBigDecimal(a.price), seller = Bukkit.getOfflinePlayer(auctioner).getName();
                         item = a.item(); itemMeta = item.getItemMeta();
                         if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
                         for(String s : format) {
@@ -437,7 +438,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 int slot = (int) slots.toArray()[0];
                 for(AuctionedItem a : cb) {
                     if(slots.contains(slot)) {
-                        final String price = formatDouble(a.price);
+                        final String price = formatBigDecimal(a.price);
                         item = a.item(); itemMeta = item.getItemMeta(); lore.clear();
                         if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
                         final boolean c = a.claimable;
@@ -472,7 +473,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         int slot = (int) slots.toArray()[0];
         for(AuctionedItem a : category.get(material).get(name)) {
             final UUID auctioner = a.auctioner;
-            final String price = formatDouble(a.price), seller = Bukkit.getOfflinePlayer(a.auctioner).getName();
+            final String price = formatBigDecimal(a.price), seller = Bukkit.getOfflinePlayer(a.auctioner).getName();
             item = a.item(); itemMeta = item.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
             for(String s : format) {
@@ -584,9 +585,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         updatePage(player);
     }
 
-    public void confirmAuction(Player player, ItemStack item, double price) {
+    public void confirmAuction(Player player, ItemStack item, BigDecimal price) {
         if(hasPermission(player, "RandomPackage.ah.sell", true)) {
-            final String p = formatDouble(price);
+            final String p = formatBigDecimal(price);
             player.closeInventory();
 
             player.openInventory(Bukkit.createInventory(player, confirmAuction.getSize(), confirmAuction.getTitle()));
@@ -614,7 +615,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             auctioning.get(player).put(item, price);
         }
     }
-    public void auction(Player player, ItemStack item, double price) {
+    public void auction(Player player, ItemStack item, BigDecimal price) {
         if(hasPermission(player, "RandomPackage.ah.auction", true)) {
             final UUID u = player.getUniqueId();
             if(!auctions.containsKey(u)) auctions.put(u, new ArrayList<>());
@@ -625,7 +626,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             auctionHouse.put(l, a);
             addToCategoryView(a, um);
             organizeAH();
-            final String p = formatDouble(price), i = item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : toMaterial(um.name(), false);
+            final String p = formatBigDecimal(price), i = item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : toMaterial(um.name(), false);
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{PRICE}", p);
             replacements.put("{ITEM}", i);
@@ -650,7 +651,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             player.closeInventory();
 
             final ItemStack its = a.item();
-            final String p = formatDouble(a.price), it = its.hasItemMeta() && its.getItemMeta().hasDisplayName() ? its.getItemMeta().getDisplayName() : toMaterial(UMaterial.match(its).name(), false);
+            final String p = formatBigDecimal(a.price), it = its.hasItemMeta() && its.getItemMeta().hasDisplayName() ? its.getItemMeta().getDisplayName() : toMaterial(UMaterial.match(its).name(), false);
             final int size = purchaseItem.getSize();
             player.openInventory(Bukkit.createInventory(player, size, purchaseItem.getTitle().replace("{PRICE}", p)));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -754,8 +755,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                     final UUID OPU = ai != null ? ai.auctioner : null;
                     final OfflinePlayer OP = ai != null ? Bukkit.getOfflinePlayer(OPU) : null;
                     final HashMap<String, String> replacements = new HashMap<>();
-                    final double price = ai != null ? ai.price : 0.00;
-                    final String p = formatDouble(price);
+                    final BigDecimal price = ai != null ? ai.price : BigDecimal.ZERO;
+                    final double priceDouble = price.doubleValue();
+                    final String p = formatBigDecimal(price);
                     replacements.put("{PRICE}", p);
                     replacements.put("{ITEM}", z != null ? z.hasItemMeta() && z.getItemMeta().hasDisplayName() ? z.getItemMeta().getDisplayName() : toMaterial(UMaterial.match(z).name(), false) : "");
                     replacements.put("{PURCHASER}", player.getName());
@@ -769,7 +771,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                             sendStringListMessage(player, config.getStringList("messages.cannot purchase own item"), replacements);
                             view(player, 1);
                             return;
-                        } else if(eco.withdrawPlayer(player, price).transactionSuccess()) {
+                        } else if(eco.withdrawPlayer(player, priceDouble).transactionSuccess()) {
                             sendStringListMessage(player, config.getStringList("messages.purchased auction"), replacements);
                             giveItem(player, z);
                             auctionHouse.remove(ai.auctionTime);
@@ -777,7 +779,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                             if(OP.isOnline()) {
                                 sendStringListMessage(OP.getPlayer(), config.getStringList("messages.sold auction"), replacements);
                             }
-                            eco.depositPlayer(OP, price);
+                            eco.depositPlayer(OP, priceDouble);
                         } else {
                             sendStringListMessage(player, config.getStringList("messages.cannot afford"), replacements);
                         }
@@ -803,9 +805,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                     player.closeInventory();
                     viewCategory(player, UMaterial.match(c), c.getItemMeta().getDisplayName());
                 } else if(isCA) {
-                    final HashMap<ItemStack, Double> i = auctioning.get(player);
+                    final HashMap<ItemStack, BigDecimal> i = auctioning.get(player);
                     final ItemStack it = (ItemStack) i.keySet().toArray()[0];
-                    final double price = i.get(it);
+                    final BigDecimal price = i.get(it);
                     if(confirmAuctionSlots.contains(r)) {
                         auction(player, it, price);
                         auctioning.remove(player);

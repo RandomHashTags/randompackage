@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
+import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.usingfile.FileGlobalChallenge;
 import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
@@ -12,7 +13,7 @@ import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEven
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
-import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
+import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -135,7 +136,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 
 		for(String s : config.getConfigurationSection("rewards").getKeys(false)) {
 			if(!s.equals("title")) {
-				new GlobalChallengePrize(d(config, "rewards." + s + ".prize"), config.getInt("rewards." + s + ".amount"), Integer.parseInt(s), config.getStringList("rewards." + s + ".prizes"));
+				new GlobalChallengePrizeObject(d(config, "rewards." + s + ".prize"), config.getInt("rewards." + s + ".amount"), Integer.parseInt(s), config.getStringList("rewards." + s + ".prizes"));
 			}
 		}
 
@@ -241,7 +242,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			player.updateInventory();
 			for(GlobalChallengePrize prize : prizes.keySet()) {
-				item = prize.getDisplay(); item.setAmount(prizes.get(prize));
+				item = prize.getItem(); item.setAmount(prizes.get(prize));
 				top.addItem(item);
 			}
 		}
@@ -508,7 +509,8 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final UUID player = event.player.getUniqueId();
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantsrevealed", player, one);
-			increase(event, "customenchantsrevealed_" + EnchantRarity.valueOf(event.enchant).getIdentifier(), player, one);
+			final EnchantRarity e = EnchantRarity.valueOf(event.enchant);
+			if(e != null) increase(event, "customenchantsrevealed_" + e.getIdentifier(), player, one);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)

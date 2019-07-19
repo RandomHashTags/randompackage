@@ -2,15 +2,16 @@ package me.randomhashtags.randompackage.addons.objects;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class AuctionedItem {
     public long auctionTime;
     public final UUID auctioner;
     private final ItemStack item;
-    public final double price;
+    public final BigDecimal price;
     public boolean claimable;
-    public AuctionedItem(long auctionTime, UUID auctioner, ItemStack item, double price) {
+    public AuctionedItem(long auctionTime, UUID auctioner, ItemStack item, BigDecimal price) {
         this.auctionTime = auctionTime;
         this.auctioner = auctioner;
         this.item = item;

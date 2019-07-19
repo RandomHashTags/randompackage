@@ -31,7 +31,7 @@ public class YamlUpdater extends UVersion {
                     }
                 }
                 if(changed) {
-                    System.out.println("Updated file \"" + file.getName() + "\" with new contents!");
+                    System.out.println("[RandomPackage] Updated file \"" + file.getName() + "\" with new contents!");
                     try {
                         yml.save(file);
                     } catch(Exception e) {
@@ -91,10 +91,10 @@ public class YamlUpdater extends UVersion {
                 if(updated) updatedymls.add(s + ".yml");
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &a" + (!updatedymls.isEmpty() ? "updated the following ymls: &7" + updatedymls.toString() : "All files up to date"));
+        sendConsoleMessage("&6[RandomPackage] &a" + (!updatedymls.isEmpty() ? "Updated the following ymls: &e" + updatedymls.toString() : "All files up to date"));
     }
 
-    public TreeMap<String, Object> getChanges(File file) { // since v16.3.1
+    public TreeMap<String, Object> getChanges(File file) { // Implemented since v16.3.1
         final String n = file.getName().split("\\.yml")[0];
         switch(n) {
             case "auction house": return getAH();
@@ -137,8 +137,30 @@ public class YamlUpdater extends UVersion {
         }
     }
 
+    private TreeMap<String, Object> putAll(Object[] values) {
+        final TreeMap<String, Object> tree = new TreeMap<>();
+        for(int i = 0; i < values.length; i++) {
+            final Object o = values[i];
+            if(o instanceof Object[]) {
+                final Object[] obj = (Object[]) o;
+                for(int z = 0; z < obj.length; z++) {
+                    if(z%2 == 1) {
+                        tree.put((String) obj[z-1], obj[z]);
+                    }
+                }
+            } else if(i%2 == 1) {
+                tree.put(values[i-1].toString(), o);
+            }
+        }
+        return tree;
+    }
+
     private TreeMap<String, Object> getConfig() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.3.3
+                "backup interval", 360
+        };
+        return putAll(values);
     }
 
 
@@ -149,7 +171,19 @@ public class YamlUpdater extends UVersion {
         return null;
     }
     private TreeMap<String, Object> getCollectionFilter() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.3.3
+                newInventory("types.iron", "Select Iron Type", 9),
+                newItemStack("types.iron.all iron", 0, "heavy_weighted_pressure_plate", "All Iron", newStringList("&7Click to pickup Iron Ingots and Blocks!"), "iron_ingot;iron_block"),
+                newItemStack("types.iron.iron ingot", 1, "iron_ingot", "Iron Ingot", newStringList("&7Click to only pickup Iron Ingots!"), "ingot_ingot"),
+                newItemStack("types.iron.iron block", 2, "iron_block", "Iron Block", newStringList("&7Click to only pickup Iron Blocks!"), "iron_block"),
+                newInventory("types.gold", "Select Gold Type", 9),
+                newItemStack("types.gold.all gold", 0, "light_weighted_pressure_plate", "All Gold", newStringList("&7Click to pickup Gold Ingots, Nuggets and Blocks!"), "gold_ingot;gold_nugget;gold_block"),
+                newItemStack("types.gold.gold ingot", 1, "gold_ingot", "Gold Ingot", newStringList("&7Click to only pickup Gold Ingots!"), "gold_ingot"),
+                newItemStack("types.gold.gold nugget", 1, "gold_nugget", "Gold Nugget", newStringList("&7Click to only pickup Gold Nuggets!"), "gold_nugget"),
+                newItemStack("types.gold.gold block", 1, "gold_block", "Gold Block", newStringList("&7Click to only pickup Gold Blocks!"), "gold_block"),
+        };
+        return putAll(values);
     }
     private TreeMap<String, Object> getConquests() {
         return null;
@@ -249,16 +283,20 @@ public class YamlUpdater extends UVersion {
     }
 
 
-    private TreeMap<String, Object> newTree(Object...values) {
-        int i = 0;
-        final TreeMap<String, Object> tree = new TreeMap<>();
-        for(Object o : values) {
-            if(i%2 != 0) {
-                tree.put((String) values[i-1], o);
-            }
-            i++;
-        }
-        return tree;
+    private Object[] newInventory(String key, String title, int size) {
+        return new Object[]{
+                key + ".title", title,
+                key + ".size", size
+        };
+    }
+    private Object[] newItemStack(String key, int slot, String material, String name, List<String> lore, String picksup) {
+        return new Object[]{
+                key + ".slot", slot,
+                key + ".item", material,
+                key + ".name", name,
+                key + ".lore", lore,
+                key + ".picks up", picksup
+        };
     }
     private List<String> newStringList(String...list) {
         return Arrays.asList(list);

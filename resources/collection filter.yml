@@ -99,9 +99,6 @@ gui:
   #
   background:
     item: "AIR"
-    #name: " "
-    #lore:
-    #- " "
   #
   '4':
     item: "paper"
@@ -110,84 +107,98 @@ gui:
     - "&7Click to pickup all mob drops!"
     - " "
     picks up: "ALL"
-  '12':
-    item: "iron_ingot"
-    name: "Iron Ingot"
+  '10':
+    item: "heavy_weighted_pressure_plate"
+    name: "Iron"
     lore:
     - "&7Click to only pickup Iron Ingots!"
     - " "
     picks up: "iron_ingot"
-  '13':
+  '11':
+    item: "light_weighted_pressure_plate"
+    name: "Gold"
+    lore:
+    - "&7Click to select a gold material to pickup!"
+    - " "
+    picks up: "gold_ingot"
+  '12':
     item: "emerald"
     name: "Emerald"
     lore:
     - "&7Click to only pickup Emeralds!"
     - " "
     picks up: "emerald"
+  '13':
+    item: "diamond"
+    name: "Diamond"
+    lore:
+    - "&7Click to only pickup Diamonds!"
+    - " "
+    picks up: "diamond"
   '14':
-    item: "gold_ingot"
-    name: "Gold Ingot"
-    lore:
-    - "&7Click to only pickup Gold Ingots!"
-    - " "
-    picks up: "gold_ingot"
-  '21':
-    item: "iron_block"
-    name: "Iron Block"
-    lore:
-    - "&7Click to only pickup Iron Blocks!"
-    - " "
-    picks up: "iron_block"
-  '22':
     item: "ender_pearl"
     name: "Ender Pearl"
     lore:
     - "&7Click to only pickup Ender Pearls!"
     - " "
     picks up: "ender_pearl"
-  '23':
-    item: "gold_nugget"
-    name: "Gold Nuggets"
-    lore:
-    - "&7Click to only pickup Gold Nuggets!"
-    - " "
-    picks up: "gold_nugget"
-  '30':
+  '15':
     item: "sulphur"
     name: "Gunpowder"
     lore:
     - "&7Click to only pickup Gunpowder!"
     - " "
     picks up: "sulphur"
-  '31':
+  '16':
+    item: "blaze_rod"
+    name: "Blaze Rod"
+    lore:
+      - "&7Click to only pickup Blaze Rods!"
+      - " "
+    picks up: "blaze_rod"
+  '19':
     item: "spider_eye"
     name: "Spider Eye"
     lore:
     - "&7Click to only pickup Spider Eye!"
     - " "
     picks up: "spider_eye"
-  '32':
+  '20':
     item: "rotten_flesh"
     name: "Rotten Flesh"
     lore:
     - "&7Click to only pickup Rotten Flesh!"
     - " "
     picks up: "rotten_flesh"
-  '39':
+  '21':
+    item: "emerald_block"
+    name: "Emerald Block"
+    lore:
+    - "&7Click to only pickup Emerald Blocks!"
+    - " "
+    picks up: "rotten_flesh"
+  '22':
+    item: "leather"
+    name: "Leather"
+    lore:
+      - "&7Click to only pickup Leather!"
+      - " "
+    picks up: "rotten_flesh"
+  '23':
     item: "bone"
     name: "Bone"
     lore:
     - "&7Click to only pickup Bones!"
     - " "
     picks up: "bone"
-  '40':
+  '24':
     item: "arrow"
     name: "Arrows"
     lore:
     - "&7Click to only pickup Arrows!"
     - " "
     picks up: "arrow"
-  '41':
+  '25':
     item: "string"
     name: "String"
     lore:
@@ -195,3 +206,61 @@ gui:
     - " "
     picks up: "string"
 #
+types:
+  iron:
+    title: "Select Iron Type"
+    size: 9
+    #
+    all iron:
+      slot: 0
+      item: "heavy_weighted_pressure_plate"
+      name: "All Iron"
+      lore:
+      - "&7Click to pickup Iron Ingots and Blocks!"
+      picks up: "iron_ingot;iron_block"
+    iron ingot:
+      slot: 1
+      item: "iron_ingot"
+      name: "Iron Ingot"
+      lore:
+      - "&7Click to only pickup Iron Ingots!"
+      picks up: "iron_ingot"
+    iron block:
+      slot: 2
+      item: "iron_block"
+      name: "Iron Block"
+      lore:
+      - "&7Click to only pickup Iron Blocks!"
+      picks up: "iron_block"
+  gold:
+    title: "Select Gold Type"
+    size: 9
+    #
+    all gold:
+      slot: 0
+      item: "light_weighted_pressure_plate"
+      name: "All Gold"
+      lore:
+      - "&7Click to pickup Gold Ingots, Nuggets and Blocks!"
+      picks up: "gold_ingot;gold_nugget;gold_block"
+    gold ingot:
+      slot: 1
+      item: "gold_ingot"
+      name: "Gold Ingot"
+      lore:
+      - "&7Click to only pickup Gold Ingots!"
+      picks up: "gold_ingot"
+    gold nugget:
+      slot: 2
+      item: "gold_nugget"
+      name: "Gold Nugget"
+      lore:
+      - "&7Click to only pickup Gold Nuggets!"
+      picks up: "gold_nugget"
+    gold block:
+      slot: 3
+      item: "gold_block"
+      name: "Gold Block"
+      lore:
+      - "&7Click to only pickup Gold Blocks!"
+      picks up: "gold_block"

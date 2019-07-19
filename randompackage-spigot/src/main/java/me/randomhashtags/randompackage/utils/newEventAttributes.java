@@ -203,7 +203,7 @@ public abstract class newEventAttributes extends RPFeature {
         }
         return e;
     }
-    public ItemStack getRarityGem(RarityGem gem, Player player) {
+    private ItemStack getRarityGem(RarityGem gem, Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
         for(int i = 0; i < pi.getSize(); i++) {

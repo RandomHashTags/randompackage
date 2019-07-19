@@ -1229,7 +1229,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 }
                 String soultracker = null;
                 for(String s : itemMeta.getLore()) {
-                    final TreeMap<String, SoulTracker> t = soultrackers;
+                    final LinkedHashMap<String, SoulTracker> t = soultrackers;
                     if(t != null) {
                         for(SoulTracker st : t.values()) {
                             if(s.startsWith(st.getAppliedLore().replace("{SOULS}", ""))) {

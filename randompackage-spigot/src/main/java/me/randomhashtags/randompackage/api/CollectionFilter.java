@@ -152,6 +152,13 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         CollectionChest.deleteAll();
     }
 
+    private void viewFilter(Player player, CollectionChest cc) {
+        final HashMap<String, String> replacements = new HashMap<>();
+        final UMaterial f = cc.getFilter();
+        replacements.put("{ITEM}", f != null ? f.name() : "All");
+        sendStringListMessage(player, config.getStringList("messages.view filter"), replacements);
+    }
+
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
         final Entity e = event.getEntity();
@@ -181,12 +188,17 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         if(!event.isCancelled() && b != null && !b.getType().equals(Material.AIR) && b.getType().name().contains("CHEST")) {
             final Player player = event.getPlayer();
             final CollectionChest cc = CollectionChest.valueOf(b);
-            if(cc != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                if(player.isSneaking()) {
-                    event.setCancelled(true);
-                    editFilter(player, b);
-                } else {
-                    cc.getInventory();
+            if(cc != null) {
+                final Action a = event.getAction();
+                if(a.equals(Action.RIGHT_CLICK_BLOCK)) {
+                    if(player.isSneaking()) {
+                        event.setCancelled(true);
+                        editFilter(player, b);
+                    } else {
+                        cc.getInventory();
+                    }
+                } else if(a.equals(Action.LEFT_CLICK_BLOCK)) {
+                    viewFilter(player, cc);
                 }
             }
         }
@@ -252,9 +264,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 if(cc != null && editingfilter.containsKey(u)) {
                     cc.setFilter(picksup.get(r));
                     editingfilter.remove(u);
+                    viewFilter(player, cc);
                 } else
                     setFilter(player, getItemInHand(player), r);
-                player.closeInventory();
+                player.closeInventory();;
             }
         }
     }

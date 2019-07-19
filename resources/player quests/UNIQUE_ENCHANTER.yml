@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Unique Enchanter"
+  completion: 120
+  expiration: 86400
+#
+lore:
+- "&7Purchase 50 Ultimate Books"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "EnchanterPurchase;isRarityBook;rarity=UNIQUE;+1"

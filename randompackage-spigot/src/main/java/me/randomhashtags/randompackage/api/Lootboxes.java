@@ -114,8 +114,11 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }
         } else {
             for(String s : c.getKeys(false)) {
-                for(String k : a.getConfigurationSection("lootboxes.started." + s).getKeys(false)) {
-                    started.put(getLootbox(k), a.getLong("lootboxes.started." + s));
+                final ConfigurationSection K = a.getConfigurationSection("lootboxes.started." + s);
+                if(K != null) {
+                    for(String k : K.getKeys(false)) {
+                        started.put(getLootbox(k), a.getLong("lootboxes.started." + s));
+                    }
                 }
             }
         }

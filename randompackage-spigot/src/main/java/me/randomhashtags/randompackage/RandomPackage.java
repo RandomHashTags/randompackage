@@ -14,6 +14,7 @@ import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.YamlUpdater;
+import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.PAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import org.bukkit.Bukkit;
@@ -159,8 +160,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         vapi = VaultAPI.getVaultAPI();
         vapi.setupEconomy();
 
-        YamlUpdater.getYmlUpdater().update();
-
         api.enable();
         getCommand("randompackage").setExecutor(api);
         try {
@@ -214,7 +213,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         soultrackers =SoulTrackers.getSoulTrackers();
         tryLoading(Feature.SOUL_TRACKERS);
-
 
         customexplosions = CustomExplosions.getCustomExplosions();
         tryLoading(Feature.CUSTOM_CREEPERS);
@@ -300,9 +298,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         wildpvp = WildPvP.getWildPvP();
         tryLoading(Feature.WILD_PVP);
+
+        final int interval = config.getInt("backup interval")*20*60;
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
     }
     private void checkFiles() {
         saveDefaultConfig();
+        YamlUpdater.getYmlUpdater().update();
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {

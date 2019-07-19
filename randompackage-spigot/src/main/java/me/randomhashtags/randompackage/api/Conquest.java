@@ -61,10 +61,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
         save(null, "conquests.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "conquests.yml"));
 
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default conquests")) {
+        if(!otherdata.getBoolean("saved default conquests")) {
             save("conquests", "NORMAL.yml");
-            a.set("saved default conquests", true);
+            otherdata.set("saved default conquests", true);
             saveOtherData();
         }
 
@@ -90,7 +89,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
 
-        final List<String> conquests = a.getStringList("conquests");
+        final List<String> conquests = otherdata.getStringList("conquests");
         if(conquests != null && !conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");

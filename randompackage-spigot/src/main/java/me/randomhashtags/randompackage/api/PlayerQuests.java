@@ -129,6 +129,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         if(!otherdata.getBoolean("saved default player quests")) {
             final String[] q = new String[] {
                     "A_LITTLE_GRIND", "A_MEDIUM_GRIND", "A_BIG_GRIND",
+                    "BEGINNERS_LUCK",
                     "BIGGER_SPENDER", "BIGGEST_SPENDER",
                     "DEFINITELY_AFK",
                     "DISGUISED",
@@ -137,6 +138,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "ELITE_ENCHANTER",
                     "ENDER_LORD",
                     "ENVOY_LOOTER_II",
+                    "ENVOY_SUMMONER_III",
                     "EQUIPMENT_LOOTER",
                     "GAMBLER_I", "GAMBLER_II", "GAMBLER_III",
                     "HANGING_ON",
@@ -154,11 +156,13 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "NOVICE_EXCAVATOR",
                     "NOVICE_MERCHANT", "SKILLED_MERCHANT",
                     "NOVICE_MINER",
+                    "NOVICE_TINKERER",
                     "OUTPOST_DEFENDER",
                     "QUEST_MASTER",
                     "RANDOMIZER_II", "RANDOMIZER_III",
                     "RIGGED",
                     "SIMPLE_ENCHANTER",
+                    "SIMPLE_LOOTER",
                     "SKILL_BOOSTER_I", "SKILL_BOOSTER_III",
                     "SLAUGHTER_HOUSE_I", "SLAUGHTER_HOUSE_II", "SLAUGHTER_HOUSE_III",
                     "SOUL_COLLECTOR_I", "SOUL_ENCHANTER",
@@ -167,6 +171,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "THIRSTY",
                     "ULTIMATE_ENCHANTER",
                     "ULTIMATE_LOOTER",
+                    "UNIQNUE_ENCHANTER",
                     "VERY_UNLUCKY",
                     "XP_BOOSTED_I",
             };
@@ -261,7 +266,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
 
             final long time = System.currentTimeMillis();
             final HashMap<PlayerQuest, ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests();
-            final int size = a.size();
+            final int size = a != null ? a.size() : 0;
             final List<String> available = colorizeListString(config.getStringList("status.available")), completed = colorizeListString(config.getStringList("status.completed")), claimed = colorizeListString(config.getStringList("status.claimed"));
             final String tokens = Integer.toString(RPPlayer.get(player.getUniqueId()).questTokens);
             int q = 0;

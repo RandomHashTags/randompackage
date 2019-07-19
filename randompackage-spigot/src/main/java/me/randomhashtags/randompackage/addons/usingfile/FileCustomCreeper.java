@@ -16,6 +16,9 @@ public class FileCustomCreeper extends CustomExplosion {
     public static HashMap<UUID, FileCustomCreeper> living;
     private ItemStack item;
     public FileCustomCreeper(File f) {
+        if(living == null) {
+            living = new HashMap<>();
+        }
         load(f);
         addExplosion(getIdentifier(), this);
     }

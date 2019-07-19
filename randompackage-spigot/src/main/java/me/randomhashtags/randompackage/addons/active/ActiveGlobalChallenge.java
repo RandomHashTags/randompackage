@@ -1,10 +1,11 @@
 package me.randomhashtags.randompackage.addons.active;
 
+import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.api.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
+import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -82,7 +83,7 @@ public class ActiveGlobalChallenge {
             for(UUID p : placements.keySet()) {
                 final RPPlayer pdata = RPPlayer.get(p);
                 if(i <= recordPlacements) {
-                    final GlobalChallengePrize prize = GlobalChallengePrize.valueOf(i);
+                    final GlobalChallengePrize prize = GlobalChallengePrizeObject.valueOf(i);
                     pdata.addGlobalChallengePrize(prize);
                     i += 1;
                 }

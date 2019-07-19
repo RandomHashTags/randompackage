@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: false
+  name: "Envoy Summoner III"
+  completion: 5
+  expiration: 86400
+#
+lore:
+- "&7Summon 5 Envoys"
+#
+rewards:
+- "questtokens=3: 3x Quest Tokens"
+#
+trigger:
+- ""

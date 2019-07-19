@@ -9,8 +9,8 @@ import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.Random;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
@@ -19,48 +19,48 @@ public abstract class RPStorage extends UVersion {
     protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
 
-    private static TreeMap<UUID, RPPlayer> players;
-    protected static TreeMap<String, ArmorSet> armorsets;
-    protected static TreeMap<String, BlackScroll> blackscrolls;
-    protected static TreeMap<String, Booster> boosters;
-    protected static TreeMap<String, CustomBoss> bosses;
-    protected static TreeMap<String, ConquestChest> conquestchests;
-    protected static TreeMap<String, CustomEnchant> enabled, disabled;
-    protected static TreeMap<String, DuelArena> duelArenas;
-    protected static TreeMap<String, Dungeon> dungeons;
-    protected static TreeMap<String, PathMagicDust> dusts;
-    protected static TreeMap<String, EnchantRarity> rarities;
-    protected static TreeMap<String, EnchantmentOrb> enchantmentorbs;
-    protected static TreeMap<String, EnvoyCrate> envoycrates;
-    protected static TreeMap<String, CustomExplosion> explosions;
-    protected static TreeMap<String, FactionUpgrade> factionupgrades;
-    protected static TreeMap<String, FactionUpgradeType> factionupgradetypes;
-    protected static TreeMap<String, FallenHero> fallenheroes;
-    protected static TreeMap<String, FilterCategory> filtercategories;
-    protected static TreeMap<String, PathFireball> fireballs;
-    protected static TreeMap<String, GlobalChallenge> globalchallenges;
-    protected static TreeMap<String, GlobalChallengePrize> globalchallengeprizes;
-    protected static TreeMap<String, CustomKit> kits;
-    protected static TreeMap<String, Lootbox> lootboxes;
-    protected static TreeMap<String, Mask> masks;
-    protected static TreeMap<String, MonthlyCrate> monthlycrates;
-    protected static TreeMap<String, Outpost> outposts;
-    protected static TreeMap<String, Pet> pets;
-    protected static TreeMap<String, PlayerQuest> playerquests;
-    protected static TreeMap<String, RandomizationScroll> randomizationscrolls;
-    protected static TreeMap<String, RarityGem> raritygems;
-    protected static TreeMap<String, ServerCrate> servercrates;
-    protected static TreeMap<String, ShopCategory> shopcategories;
-    protected static TreeMap<String, SoulTracker> soultrackers;
-    protected static TreeMap<String, Title> titles;
-    protected static TreeMap<String, Trinket> trinkets;
+    private static LinkedHashMap<UUID, RPPlayer> players;
+    protected static LinkedHashMap<String, ArmorSet> armorsets;
+    protected static LinkedHashMap<String, BlackScroll> blackscrolls;
+    protected static LinkedHashMap<String, Booster> boosters;
+    protected static LinkedHashMap<String, CustomBoss> bosses;
+    protected static LinkedHashMap<String, ConquestChest> conquestchests;
+    protected static LinkedHashMap<String, CustomEnchant> enabled, disabled;
+    protected static LinkedHashMap<String, DuelArena> duelArenas;
+    protected static LinkedHashMap<String, Dungeon> dungeons;
+    protected static LinkedHashMap<String, PathMagicDust> dusts;
+    protected static LinkedHashMap<String, EnchantRarity> rarities;
+    protected static LinkedHashMap<String, EnchantmentOrb> enchantmentorbs;
+    protected static LinkedHashMap<String, EnvoyCrate> envoycrates;
+    protected static LinkedHashMap<String, CustomExplosion> explosions;
+    protected static LinkedHashMap<String, FactionUpgrade> factionupgrades;
+    protected static LinkedHashMap<String, FactionUpgradeType> factionupgradetypes;
+    protected static LinkedHashMap<String, FallenHero> fallenheroes;
+    protected static LinkedHashMap<String, FilterCategory> filtercategories;
+    protected static LinkedHashMap<String, PathFireball> fireballs;
+    protected static LinkedHashMap<String, GlobalChallenge> globalchallenges;
+    protected static LinkedHashMap<String, GlobalChallengePrize> globalchallengeprizes;
+    protected static LinkedHashMap<String, CustomKit> kits;
+    protected static LinkedHashMap<String, Lootbox> lootboxes;
+    protected static LinkedHashMap<String, Mask> masks;
+    protected static LinkedHashMap<String, MonthlyCrate> monthlycrates;
+    protected static LinkedHashMap<String, Outpost> outposts;
+    protected static LinkedHashMap<String, Pet> pets;
+    protected static LinkedHashMap<String, PlayerQuest> playerquests;
+    protected static LinkedHashMap<String, RandomizationScroll> randomizationscrolls;
+    protected static LinkedHashMap<String, RarityGem> raritygems;
+    protected static LinkedHashMap<String, ServerCrate> servercrates;
+    protected static LinkedHashMap<String, ShopCategory> shopcategories;
+    protected static LinkedHashMap<String, SoulTracker> soultrackers;
+    protected static LinkedHashMap<String, Title> titles;
+    protected static LinkedHashMap<String, Trinket> trinkets;
 
     private File exists(UUID uuid) {
         final File f = new File(getPlugin.getDataFolder() + File.separator + "_Data", uuid.toString() + ".yml");
         return f.exists() ? f : null;
     }
     public RPPlayer getPlayer(UUID uuid) {
-        if(players == null) players = new TreeMap<>();
+        if(players == null) players = new LinkedHashMap<>();
         if(players.containsKey(uuid)) return players.get(uuid);
         final File f = exists(uuid);
         return f != null ? null : null;
@@ -76,7 +76,7 @@ public abstract class RPStorage extends UVersion {
         return armorsets != null ? armorsets.getOrDefault(identifier, null) : null;
     }
     public void addArmorSet(String identifier, ArmorSet a) {
-        if(armorsets == null) armorsets = new TreeMap<>();
+        if(armorsets == null) armorsets = new LinkedHashMap<>();
         armorsets.put(identifier, a);
     }
 
@@ -84,7 +84,7 @@ public abstract class RPStorage extends UVersion {
         return blackscrolls != null ? blackscrolls.getOrDefault(identifier, null) : null;
     }
     public void addBlackScroll(String identifier, BlackScroll a) {
-        if(blackscrolls == null) blackscrolls = new TreeMap<>();
+        if(blackscrolls == null) blackscrolls = new LinkedHashMap<>();
         blackscrolls.put(identifier, a);
     }
 
@@ -92,7 +92,7 @@ public abstract class RPStorage extends UVersion {
         return boosters != null ? boosters.getOrDefault(identifier, null) : null;
     }
     public void addBooster(String identifier, Booster b) {
-        if(boosters == null) boosters = new TreeMap<>();
+        if(boosters == null) boosters = new LinkedHashMap<>();
         boosters.put(identifier, b);
     }
 
@@ -100,7 +100,7 @@ public abstract class RPStorage extends UVersion {
         return bosses != null ? bosses.getOrDefault(identifier, null) : null;
     }
     public void addBoss(String identifier, CustomBoss b) {
-        if(bosses == null) bosses = new TreeMap<>();
+        if(bosses == null) bosses = new LinkedHashMap<>();
         bosses.put(identifier, b);
     }
 
@@ -108,7 +108,7 @@ public abstract class RPStorage extends UVersion {
         return conquestchests != null ? conquestchests.getOrDefault(identifier, null) : null;
     }
     public void addConquestChest(String identifier, ConquestChest b) {
-        if(conquestchests == null) conquestchests = new TreeMap<>();
+        if(conquestchests == null) conquestchests = new LinkedHashMap<>();
         conquestchests.put(identifier, b);
     }
 
@@ -116,7 +116,7 @@ public abstract class RPStorage extends UVersion {
         return duelArenas != null ? duelArenas.getOrDefault(identifier, null) : null;
     }
     public void addDuelArena(String identifier, DuelArena e) {
-        if(duelArenas == null) duelArenas = new TreeMap<>();
+        if(duelArenas == null) duelArenas = new LinkedHashMap<>();
         duelArenas.put(identifier, e);
     }
 
@@ -124,7 +124,7 @@ public abstract class RPStorage extends UVersion {
         return dungeons != null ? dungeons.getOrDefault(identifier, null) : null;
     }
     public void addDungeon(String identifier, Dungeon e) {
-        if(dungeons == null) dungeons = new TreeMap<>();
+        if(dungeons == null) dungeons = new LinkedHashMap<>();
         dungeons.put(identifier, e);
     }
 
@@ -132,7 +132,7 @@ public abstract class RPStorage extends UVersion {
         return dusts != null ? dusts.getOrDefault(identifier, null) : null;
     }
     public void addDust(String identifier, PathMagicDust e) {
-        if(dusts == null) dusts = new TreeMap<>();
+        if(dusts == null) dusts = new LinkedHashMap<>();
         dusts.put(identifier, e);
     }
 
@@ -141,8 +141,8 @@ public abstract class RPStorage extends UVersion {
     }
     public void addEnchant(String identifier, CustomEnchant enchant) {
         final boolean e = enchant.isEnabled();
-        if(e && enabled == null) enabled = new TreeMap<>();
-        else if(!e && disabled == null) disabled = new TreeMap<>();
+        if(e && enabled == null) enabled = new LinkedHashMap<>();
+        else if(!e && disabled == null) disabled = new LinkedHashMap<>();
         (e ? enabled : disabled).put(identifier, enchant);
     }
 
@@ -150,7 +150,7 @@ public abstract class RPStorage extends UVersion {
         return enchantmentorbs != null ? enchantmentorbs.get(identifier) : null;
     }
     public void addEnchantmentOrb(String identifier, EnchantmentOrb enchant) {
-        if(enchantmentorbs == null) enchantmentorbs = new TreeMap<>();
+        if(enchantmentorbs == null) enchantmentorbs = new LinkedHashMap<>();
         enchantmentorbs.put(identifier, enchant);
     }
 
@@ -158,7 +158,7 @@ public abstract class RPStorage extends UVersion {
         return rarities != null ? rarities.getOrDefault(identifier, null) : null;
     }
     public void addEnchantRarity(String identifier, EnchantRarity rarity) {
-        if(rarities == null) rarities = new TreeMap<>();
+        if(rarities == null) rarities = new LinkedHashMap<>();
         rarities.put(identifier, rarity);
     }
 
@@ -166,7 +166,7 @@ public abstract class RPStorage extends UVersion {
         return envoycrates != null ? envoycrates.getOrDefault(identifier, null) : null;
     }
     public void addEnvoyCrate(String identifier, EnvoyCrate e) {
-        if(envoycrates == null) envoycrates = new TreeMap<>();
+        if(envoycrates == null) envoycrates = new LinkedHashMap<>();
         envoycrates.put(identifier, e);
     }
 
@@ -174,7 +174,7 @@ public abstract class RPStorage extends UVersion {
         return explosions != null ? explosions.getOrDefault(identifier, null) : null;
     }
     public void addExplosion(String identifier, CustomExplosion e) {
-        if(explosions == null) explosions = new TreeMap<>();
+        if(explosions == null) explosions = new LinkedHashMap<>();
         explosions.put(identifier, e);
     }
 
@@ -182,7 +182,7 @@ public abstract class RPStorage extends UVersion {
         return factionupgrades != null ? factionupgrades.getOrDefault(identifier, null) : null;
     }
     public void addFactionUpgrade(String identifier, FactionUpgrade e) {
-        if(factionupgrades == null) factionupgrades = new TreeMap<>();
+        if(factionupgrades == null) factionupgrades = new LinkedHashMap<>();
         factionupgrades.put(identifier, e);
     }
 
@@ -190,7 +190,7 @@ public abstract class RPStorage extends UVersion {
         return factionupgradetypes != null ? factionupgradetypes.getOrDefault(identifier, null) : null;
     }
     public void addFactionUpgradeType(String identifier, FactionUpgradeType e) {
-        if(factionupgradetypes == null) factionupgradetypes = new TreeMap<>();
+        if(factionupgradetypes == null) factionupgradetypes = new LinkedHashMap<>();
         factionupgradetypes.put(identifier, e);
     }
 
@@ -198,7 +198,7 @@ public abstract class RPStorage extends UVersion {
         return fallenheroes != null ? fallenheroes.getOrDefault(identifier, null) : null;
     }
     public void addFallenHero(String identifier, FallenHero rarity) {
-        if(fallenheroes == null) fallenheroes = new TreeMap<>();
+        if(fallenheroes == null) fallenheroes = new LinkedHashMap<>();
         fallenheroes.put(identifier, rarity);
     }
 
@@ -206,7 +206,7 @@ public abstract class RPStorage extends UVersion {
         return filtercategories != null ? filtercategories.getOrDefault(identifier, null) : null;
     }
     public void addFilterCategory(String identifier, FilterCategory e) {
-        if(filtercategories == null) filtercategories = new TreeMap<>();
+        if(filtercategories == null) filtercategories = new LinkedHashMap<>();
         filtercategories.put(identifier, e);
     }
 
@@ -214,7 +214,7 @@ public abstract class RPStorage extends UVersion {
         return fireballs != null ? fireballs.getOrDefault(identifier, null) : null;
     }
     public void addFireball(String identifier, PathFireball e) {
-        if(fireballs == null) fireballs = new TreeMap<>();
+        if(fireballs == null) fireballs = new LinkedHashMap<>();
         fireballs.put(identifier, e);
     }
 
@@ -222,7 +222,7 @@ public abstract class RPStorage extends UVersion {
         return globalchallenges != null ? globalchallenges.getOrDefault(identifier, null) : null;
     }
     public void addGlobalChallenge(String identifier, GlobalChallenge e) {
-        if(globalchallenges == null) globalchallenges = new TreeMap<>();
+        if(globalchallenges == null) globalchallenges = new LinkedHashMap<>();
         globalchallenges.put(identifier, e);
     }
 
@@ -230,7 +230,7 @@ public abstract class RPStorage extends UVersion {
         return globalchallengeprizes != null ? globalchallengeprizes.getOrDefault(identifier, null) : null;
     }
     public void addGlobalChallengePrize(String identifier, GlobalChallengePrize e) {
-        if(globalchallengeprizes == null) globalchallengeprizes = new TreeMap<>();
+        if(globalchallengeprizes == null) globalchallengeprizes = new LinkedHashMap<>();
         globalchallengeprizes.put(identifier, e);
     }
 
@@ -238,7 +238,7 @@ public abstract class RPStorage extends UVersion {
         return kits != null ? kits.getOrDefault(identifier, null) : null;
     }
     public void addKit(String identifier, CustomKit e) {
-        if(kits == null) kits = new TreeMap<>();
+        if(kits == null) kits = new LinkedHashMap<>();
         kits.put(identifier, e);
     }
 
@@ -246,7 +246,7 @@ public abstract class RPStorage extends UVersion {
         return lootboxes != null ? lootboxes.getOrDefault(identifier, null) : null;
     }
     public void addLootbox(String identifier, Lootbox l) {
-        if(lootboxes == null) lootboxes = new TreeMap<>();
+        if(lootboxes == null) lootboxes = new LinkedHashMap<>();
         lootboxes.put(identifier, l);
     }
 
@@ -254,7 +254,7 @@ public abstract class RPStorage extends UVersion {
         return masks != null ? masks.getOrDefault(identifier, null) : null;
     }
     public void addMask(String identifier, Mask l) {
-        if(masks == null) masks = new TreeMap<>();
+        if(masks == null) masks = new LinkedHashMap<>();
         masks.put(identifier, l);
     }
 
@@ -262,7 +262,7 @@ public abstract class RPStorage extends UVersion {
         return monthlycrates != null ? monthlycrates.getOrDefault(identifier, null) : null;
     }
     public void addMonthlyCrate(String identifier, MonthlyCrate l) {
-        if(monthlycrates == null) monthlycrates = new TreeMap<>();
+        if(monthlycrates == null) monthlycrates = new LinkedHashMap<>();
         monthlycrates.put(identifier, l);
     }
 
@@ -270,7 +270,7 @@ public abstract class RPStorage extends UVersion {
         return outposts != null ? outposts.getOrDefault(identifier, null) : null;
     }
     public void addOutpost(String identifier, Outpost l) {
-        if(outposts == null) outposts = new TreeMap<>();
+        if(outposts == null) outposts = new LinkedHashMap<>();
         outposts.put(identifier, l);
     }
 
@@ -278,7 +278,7 @@ public abstract class RPStorage extends UVersion {
         return pets != null ? pets.getOrDefault(identifier, null) : null;
     }
     public void addPet(String identifier, Pet l) {
-        if(pets == null) pets = new TreeMap<>();
+        if(pets == null) pets = new LinkedHashMap<>();
         pets.put(identifier, l);
     }
 
@@ -286,7 +286,7 @@ public abstract class RPStorage extends UVersion {
         return playerquests != null ? playerquests.getOrDefault(identifier, null) : null;
     }
     public void addPlayerQuest(String identifier, PlayerQuest l) {
-        if(playerquests == null) playerquests = new TreeMap<>();
+        if(playerquests == null) playerquests = new LinkedHashMap<>();
         playerquests.put(identifier, l);
     }
 
@@ -294,7 +294,7 @@ public abstract class RPStorage extends UVersion {
         return randomizationscrolls != null ? randomizationscrolls.getOrDefault(identifier, null) : null;
     }
     public void addRandomizationScroll(String identifier, RandomizationScroll l) {
-        if(randomizationscrolls == null) randomizationscrolls = new TreeMap<>();
+        if(randomizationscrolls == null) randomizationscrolls = new LinkedHashMap<>();
         randomizationscrolls.put(identifier, l);
     }
 
@@ -302,7 +302,7 @@ public abstract class RPStorage extends UVersion {
         return raritygems != null ? raritygems.getOrDefault(identifier, null) : null;
     }
     public void addRarityGem(String identifier, RarityGem l) {
-        if(raritygems == null) raritygems = new TreeMap<>();
+        if(raritygems == null) raritygems = new LinkedHashMap<>();
         raritygems.put(identifier, l);
     }
 
@@ -310,7 +310,7 @@ public abstract class RPStorage extends UVersion {
         return servercrates != null ? servercrates.getOrDefault(identifier, null) : null;
     }
     public void addServerCrate(String identifier, ServerCrate l) {
-        if(servercrates == null) servercrates = new TreeMap<>();
+        if(servercrates == null) servercrates = new LinkedHashMap<>();
         servercrates.put(identifier, l);
     }
 
@@ -318,7 +318,7 @@ public abstract class RPStorage extends UVersion {
         return shopcategories != null ? shopcategories.getOrDefault(identifier, null) : null;
     }
     public void addShopCategory(String identifier, ShopCategory l) {
-        if(shopcategories == null) shopcategories = new TreeMap<>();
+        if(shopcategories == null) shopcategories = new LinkedHashMap<>();
         shopcategories.put(identifier, l);
     }
 
@@ -326,7 +326,7 @@ public abstract class RPStorage extends UVersion {
         return soultrackers != null ? soultrackers.getOrDefault(identifier, null) : null;
     }
     public void addSoulTracker(String identifier, SoulTracker l) {
-        if(soultrackers == null) soultrackers = new TreeMap<>();
+        if(soultrackers == null) soultrackers = new LinkedHashMap<>();
         soultrackers.put(identifier, l);
     }
 
@@ -334,7 +334,7 @@ public abstract class RPStorage extends UVersion {
         return titles != null ? titles.getOrDefault(identifier, null) : null;
     }
     public void addTitle(String identifier, Title l) {
-        if(titles == null) titles = new TreeMap<>();
+        if(titles == null) titles = new LinkedHashMap<>();
         titles.put(identifier, l);
     }
 
@@ -342,7 +342,7 @@ public abstract class RPStorage extends UVersion {
         return trinkets != null ? trinkets.getOrDefault(identifier, null) : null;
     }
     public void addTrinket(String identifier, Trinket l) {
-        if(trinkets == null) trinkets = new TreeMap<>();
+        if(trinkets == null) trinkets = new LinkedHashMap<>();
         trinkets.put(identifier, l);
     }
 

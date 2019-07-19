@@ -41,7 +41,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Home",
-                            "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/",
+                            "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/&r &f%%__NONCE__%%",
                             "&6&m&l---------------------------------------------",
                             " "))
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));

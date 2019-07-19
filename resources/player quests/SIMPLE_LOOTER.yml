@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+settings:
+  enabled: true
+  name: "Simple Looter"
+  completion: 10
+  expiration: 86400
+#
+lore:
+- "&7Open 10 Simple Chests"
+#
+rewards:
+- "questtokens=1: 1x Quest Token"
+#
+trigger:
+- "ServerCrateOpen;rarity=SIMPLE;+1"

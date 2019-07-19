@@ -108,8 +108,10 @@ public class KitsGlobal extends Kits {
                 }
             }
         }
-        for(CustomKit k : new ArrayList<>(kits.values())) {
-            if(k instanceof FileKitGlobal) kits.remove(k.getIdentifier());
+        if(kits != null) {
+            for(CustomKit k : new ArrayList<>(kits.values())) {
+                if(k instanceof FileKitGlobal) kits.remove(k.getIdentifier());
+            }
         }
         FileKitGlobal.heroicprefix = null;
         unloadKitUtils();

@@ -293,7 +293,14 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return s != null ? s.getItem() : air;
         } else if(input.startsWith("title")) {
             if(Titles.getTitles().isEnabled()) {
-                final Title t = getTitle(input.contains(":") ? Q.split(":")[1] : "random");
+                Title t = getTitle(input.contains(":") ? Q.split(":")[1] : "random");
+                if(t == null) {
+                    try {
+                        t = (Title) titles.values().toArray()[Integer.parseInt(Q.split(":")[1])-1];
+                    } catch(Exception e) {
+                        System.out.println("[RandomPackage] That title doesn't exist!");
+                    }
+                }
                 return t != null ? t.getItem() : air;
             }
             return air;

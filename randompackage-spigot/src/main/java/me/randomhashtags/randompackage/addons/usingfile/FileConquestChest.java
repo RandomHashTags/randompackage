@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FileConquestChest extends ConquestChest {
-    private String spawnRegion, rewardSize;
     private HashMap<ConquestMob, String> spawnedBosses;
     private UMaterial placedBlock;
     private List<String> spawnMsg, willSpawnMsg, stillAliveMsg, healthMsg, unlockedMsg;
@@ -23,14 +22,8 @@ public class FileConquestChest extends ConquestChest {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public String getSpawnRegion() {
-        if(spawnRegion == null) spawnRegion = yml.getString("settings.spawn region").toUpperCase();
-        return spawnRegion;
-    }
-    public String getRewardSize() {
-        if(rewardSize == null) rewardSize = yml.getString("settings.reward size");
-        return rewardSize;
-    }
+    public String getSpawnRegion() { return yml.getString("settings.spawn region").toUpperCase(); }
+    public String getRewardSize() { return yml.getString("settings.reward size"); }
     public HashMap<ConquestMob, String> getSpawnedBosses() {
         if(spawnedBosses == null) {
             spawnedBosses = new HashMap<>();

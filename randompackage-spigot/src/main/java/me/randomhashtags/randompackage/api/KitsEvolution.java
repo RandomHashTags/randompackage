@@ -100,8 +100,10 @@ public class KitsEvolution extends Kits {
                 }
             }
         }
-        for(CustomKit k : new ArrayList<>(kits.values())) {
-            if(k instanceof FileKitEvolution) kits.remove(k.getIdentifier());
+        if(kits != null) {
+            for(CustomKit k : new ArrayList<>(kits.values())) {
+                if(k instanceof FileKitEvolution) kits.remove(k.getIdentifier());
+            }
         }
     }
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }

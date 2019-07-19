@@ -8,7 +8,6 @@ import me.randomhashtags.randompackage.api.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.objects.Home;
 import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addons.objects;
 
+import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -7,22 +8,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public class GlobalChallengePrize {
-    public static List<GlobalChallengePrize> prizes;
+public class GlobalChallengePrizeObject extends GlobalChallengePrize {
     private final ItemStack display;
     private final int placement, amount;
     private final List<String> rewards;
-    public GlobalChallengePrize(ItemStack display, int amount, int placement, List<String> rewards) {
-        if(prizes == null) prizes = new ArrayList<>();
+    public GlobalChallengePrizeObject(ItemStack display, int amount, int placement, List<String> rewards) {
         this.display = display;
         this.amount = amount;
         this.placement = placement;
         this.rewards = rewards;
-        prizes.add(this);
+        addGlobalChallengePrize(getIdentifier(), this);
     }
-    public ItemStack getDisplay() { return display; }
+    public String getIdentifier() { return "GLOBAL_CHALLENGE_PRIZE_" + placement; }
+
+    public ItemStack getItem() { return display; }
     public int getAmount() { return amount; }
     public int getPlacement() { return placement; }
     public List<String> getRewards() { return rewards; }
@@ -59,23 +58,5 @@ public class GlobalChallengePrize {
             }
         }
         return rewards;
-    }
-    public static GlobalChallengePrize valueOf(int placement) {
-        if(prizes != null) {
-            for(GlobalChallengePrize p : prizes)
-                if(p.getPlacement() == placement)
-                    return p;
-        }
-        return null;
-    }
-    public static GlobalChallengePrize valueOf(ItemStack display) {
-        if(prizes != null && display != null && display.hasItemMeta())
-            for(GlobalChallengePrize p : prizes) {
-                final ItemStack d = p.getDisplay();
-                if(d.getType().equals(display.getType()) && d.getData().getData() == display.getData().getData() && d.getItemMeta().equals(display.getItemMeta()))
-                    return p;
-            }
-
-        return null;
     }
 }

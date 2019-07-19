@@ -24,7 +24,7 @@ public abstract class GlobalChallengePrize extends Itemable {
         if(globalchallengeprizes != null && display != null && display.hasItemMeta())
             for(GlobalChallengePrize p : globalchallengeprizes.values()) {
                 final ItemStack d = p.getItem();
-                if(d.getType().equals(display.getType()) && d.getData().getData() == display.getData().getData() && d.getItemMeta().equals(display.getItemMeta()))
+                if(d.isSimilar(display))
                     return p;
             }
 

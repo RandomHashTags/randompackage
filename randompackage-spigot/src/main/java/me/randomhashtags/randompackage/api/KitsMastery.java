@@ -73,8 +73,10 @@ public class KitsMastery extends Kits {
     }
     public void unload() {
         instance = null;
-        for(CustomKit k : new ArrayList<>(kits.values())) {
-            if(k instanceof FileKitMastery) kits.remove(k.getIdentifier());
+        if(kits != null) {
+            for(CustomKit k : new ArrayList<>(kits.values())) {
+                if(k instanceof FileKitMastery) kits.remove(k.getIdentifier());
+            }
         }
         unloadKitUtils();
     }
