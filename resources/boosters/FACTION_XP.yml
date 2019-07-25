@@ -2,7 +2,7 @@
 messages:
   activate:
     - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} XP&r &aFaction Booster! &7[{TIME} left]"
-  expired:
+  expire:
     - "&c&l(!) {MULTIPLIER}x&r &cEXP Booster from &l{PLAYER}&r &chas expired!"
     - "&cPurchase another booster at &nbuy.yourserver.com!"
   notify:
@@ -27,4 +27,4 @@ item:
   - "&7{TIME}"
 #
 attributes:
-  - "KilledEntity;droppedxp=xp*multiplier"
+  - "EntityDeath;VictimIsMob;droppedxp=xp*multiplier"

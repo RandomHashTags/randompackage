@@ -158,7 +158,12 @@ public class YamlUpdater extends UVersion {
     private LinkedHashMap<String, Object> getConfig() {
         final Object[] values = new Object[] {
                 // 16.3.3
-                "backup interval", 360
+                "backup interval", 360,
+                // 16.4.0
+                "boosters.enabled", true,
+                "custom enchants.transmog scrolls", true,
+                "custom enchants.white scrolls", true,
+                "wild.enabled", true,
         };
         return putAll(values);
     }

@@ -2,21 +2,21 @@ package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.BlackScroll;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.addons;
+
 public class PathBlackScroll extends BlackScroll {
-	public static YamlConfiguration blackscrollsyml;
 	private String path;
 	private int min, max;
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;
 	public PathBlackScroll(String path) {
 		this.path = path;
-		final String[] p = blackscrollsyml.getString("scrolls." + path + ".percents").split(";");
+		final String[] p = addons.getString("black scrolls." + path + ".percents").split(";");
 		min = Integer.parseInt(p[0]);
 		max = Integer.parseInt(p[1]);
 		addBlackScroll(getIdentifier(), this);
@@ -24,7 +24,7 @@ public class PathBlackScroll extends BlackScroll {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(blackscrollsyml, "scrolls." + path);
+		if(is == null) is = api.d(addons, "black scrolls." + path);
 		return is.clone();
 	}
 
@@ -33,7 +33,7 @@ public class PathBlackScroll extends BlackScroll {
 	public List<EnchantRarity> getAppliesTo() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
-			for(String s : blackscrollsyml.getString("scrolls." + path + ".applies to").split(";")) {
+			for(String s : addons.getString("black scrolls." + path + ".applies to").split(";")) {
 				appliesto.add(getEnchantRarity(s));
 			}
 		}

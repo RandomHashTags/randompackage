@@ -2,13 +2,12 @@ package me.randomhashtags.randompackage.api.enchantAddons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.usingpath.PathRarityGem;
+import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,42 +18,41 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
 import java.util.TreeMap;
 import java.util.UUID;
 
-public class RarityGems extends RPFeature {
+public class RarityGems extends CustomEnchantUtils {
     private static RarityGems instance;
     public static RarityGems getRarityGems() {
         if(instance == null) instance = new RarityGems();
         return instance;
     }
-    public YamlConfiguration config;
 
     public void load() {
+        loadUtils();
         final long started = System.currentTimeMillis();
-        save("custom enchants", "rarity gems.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "rarity gems.yml"));
-        final ConfigurationSection cs = config.getConfigurationSection("gems");
+        final ConfigurationSection cs = addons.getConfigurationSection("rarity gems");
         if(cs != null) {
-            PathRarityGem.raritygemyml = config;
             PathRarityGem.defaultColors = new TreeMap<>();
             final TreeMap<Integer, String> d = PathRarityGem.defaultColors;
-            final ConfigurationSection C = config.getConfigurationSection("default settings.colors");
-            d.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.else")));
-            d.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.less than 100")));
+            final ConfigurationSection C = addons.getConfigurationSection("rarity gems.default settings.colors");
+            d.put(-1, ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors.else")));
+            d.put(0, ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors.less than 100")));
             for(String s : C.getKeys(false)) {
-                if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                    d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors." + s)));
+                if(!s.equals("default settings") && !s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
+                    d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors." + s)));
                 }
             }
-            for(String s : cs.getKeys(false)) new PathRarityGem(s);
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (started-System.currentTimeMillis()) + "ms)");
+            for(String s : cs.getKeys(false)) {
+                if(!s.equals("default settings")) new PathRarityGem(s);
+            }
+            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
     public void unload() {
         instance = null;
         deleteAll(Feature.RARITY_GEMS);
+        unloadUtils();
     }
 
     @EventHandler(priority = EventPriority.HIGH)

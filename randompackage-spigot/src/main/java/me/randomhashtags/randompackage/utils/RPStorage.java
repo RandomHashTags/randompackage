@@ -5,13 +5,13 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
+import me.randomhashtags.randompackage.api.Boosters;
+import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
@@ -25,7 +25,7 @@ public abstract class RPStorage extends UVersion {
     protected static LinkedHashMap<String, Booster> boosters;
     protected static LinkedHashMap<String, CustomBoss> bosses;
     protected static LinkedHashMap<String, ConquestChest> conquestchests;
-    protected static LinkedHashMap<String, CustomEnchant> enabled, disabled;
+    protected static TreeMap<String, CustomEnchant> enabled, disabled;
     protected static LinkedHashMap<String, DuelArena> duelArenas;
     protected static LinkedHashMap<String, Dungeon> dungeons;
     protected static LinkedHashMap<String, PathMagicDust> dusts;
@@ -53,11 +53,16 @@ public abstract class RPStorage extends UVersion {
     protected static LinkedHashMap<String, ShopCategory> shopcategories;
     protected static LinkedHashMap<String, SoulTracker> soultrackers;
     protected static LinkedHashMap<String, Title> titles;
+    protected static LinkedHashMap<String, TransmogScroll> transmogscrolls;
     protected static LinkedHashMap<String, Trinket> trinkets;
+    protected static LinkedHashMap<String, WhiteScroll> whitescrolls;
 
     private File exists(UUID uuid) {
         final File f = new File(getPlugin.getDataFolder() + File.separator + "_Data", uuid.toString() + ".yml");
         return f.exists() ? f : null;
+    }
+    private void check(Map<String, ?> map, String identifier, String subject) {
+        if(map.containsKey(identifier)) System.out.println("[RandomPackage] Already contains " + subject + " \"" + identifier + "\"");
     }
     public RPPlayer getPlayer(UUID uuid) {
         if(players == null) players = new LinkedHashMap<>();
@@ -77,6 +82,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addArmorSet(String identifier, ArmorSet a) {
         if(armorsets == null) armorsets = new LinkedHashMap<>();
+        check(armorsets, identifier, "armor set");
         armorsets.put(identifier, a);
     }
 
@@ -85,6 +91,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addBlackScroll(String identifier, BlackScroll a) {
         if(blackscrolls == null) blackscrolls = new LinkedHashMap<>();
+        check(blackscrolls, identifier, "black scroll");
         blackscrolls.put(identifier, a);
     }
 
@@ -93,6 +100,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addBooster(String identifier, Booster b) {
         if(boosters == null) boosters = new LinkedHashMap<>();
+        check(boosters, identifier, "booster");
         boosters.put(identifier, b);
     }
 
@@ -101,6 +109,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addBoss(String identifier, CustomBoss b) {
         if(bosses == null) bosses = new LinkedHashMap<>();
+        check(bosses, identifier, "custom boss");
         bosses.put(identifier, b);
     }
 
@@ -109,6 +118,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addConquestChest(String identifier, ConquestChest b) {
         if(conquestchests == null) conquestchests = new LinkedHashMap<>();
+        check(conquestchests, identifier, "conquest chest");
         conquestchests.put(identifier, b);
     }
 
@@ -117,6 +127,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addDuelArena(String identifier, DuelArena e) {
         if(duelArenas == null) duelArenas = new LinkedHashMap<>();
+        check(duelArenas, identifier, "duel arena");
         duelArenas.put(identifier, e);
     }
 
@@ -125,6 +136,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addDungeon(String identifier, Dungeon e) {
         if(dungeons == null) dungeons = new LinkedHashMap<>();
+        check(dungeons, identifier, "dungeon");
         dungeons.put(identifier, e);
     }
 
@@ -133,6 +145,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addDust(String identifier, PathMagicDust e) {
         if(dusts == null) dusts = new LinkedHashMap<>();
+        check(dusts, identifier, "rarity dust");
         dusts.put(identifier, e);
     }
 
@@ -141,8 +154,9 @@ public abstract class RPStorage extends UVersion {
     }
     public void addEnchant(String identifier, CustomEnchant enchant) {
         final boolean e = enchant.isEnabled();
-        if(e && enabled == null) enabled = new LinkedHashMap<>();
-        else if(!e && disabled == null) disabled = new LinkedHashMap<>();
+        if(e && enabled == null) enabled = new TreeMap<>();
+        else if(!e && disabled == null) disabled = new TreeMap<>();
+        check(e ? enabled : disabled, identifier, "custom enchant");
         (e ? enabled : disabled).put(identifier, enchant);
     }
 
@@ -151,6 +165,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addEnchantmentOrb(String identifier, EnchantmentOrb enchant) {
         if(enchantmentorbs == null) enchantmentorbs = new LinkedHashMap<>();
+        //check(enchantmentorbs, identifier, "enchantment orb"); Allows the same identifier
         enchantmentorbs.put(identifier, enchant);
     }
 
@@ -159,6 +174,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addEnchantRarity(String identifier, EnchantRarity rarity) {
         if(rarities == null) rarities = new LinkedHashMap<>();
+        check(rarities, identifier, "enchant rarity");
         rarities.put(identifier, rarity);
     }
 
@@ -167,6 +183,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addEnvoyCrate(String identifier, EnvoyCrate e) {
         if(envoycrates == null) envoycrates = new LinkedHashMap<>();
+        check(envoycrates, identifier, "envoy crate");
         envoycrates.put(identifier, e);
     }
 
@@ -175,6 +192,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addExplosion(String identifier, CustomExplosion e) {
         if(explosions == null) explosions = new LinkedHashMap<>();
+        check(explosions, identifier, "custom explosion");
         explosions.put(identifier, e);
     }
 
@@ -183,6 +201,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addFactionUpgrade(String identifier, FactionUpgrade e) {
         if(factionupgrades == null) factionupgrades = new LinkedHashMap<>();
+        check(factionupgrades, identifier, "faction upgrade");
         factionupgrades.put(identifier, e);
     }
 
@@ -191,6 +210,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addFactionUpgradeType(String identifier, FactionUpgradeType e) {
         if(factionupgradetypes == null) factionupgradetypes = new LinkedHashMap<>();
+        check(factionupgradetypes, identifier, "faction upgrade type");
         factionupgradetypes.put(identifier, e);
     }
 
@@ -199,6 +219,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addFallenHero(String identifier, FallenHero rarity) {
         if(fallenheroes == null) fallenheroes = new LinkedHashMap<>();
+        check(fallenheroes, identifier, "fallen hero");
         fallenheroes.put(identifier, rarity);
     }
 
@@ -207,6 +228,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addFilterCategory(String identifier, FilterCategory e) {
         if(filtercategories == null) filtercategories = new LinkedHashMap<>();
+        check(filtercategories, identifier, "filter category");
         filtercategories.put(identifier, e);
     }
 
@@ -215,6 +237,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addFireball(String identifier, PathFireball e) {
         if(fireballs == null) fireballs = new LinkedHashMap<>();
+        check(fireballs, identifier, "rarity fireball");
         fireballs.put(identifier, e);
     }
 
@@ -223,6 +246,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addGlobalChallenge(String identifier, GlobalChallenge e) {
         if(globalchallenges == null) globalchallenges = new LinkedHashMap<>();
+        check(globalchallenges, identifier, "global challenge");
         globalchallenges.put(identifier, e);
     }
 
@@ -231,6 +255,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addGlobalChallengePrize(String identifier, GlobalChallengePrize e) {
         if(globalchallengeprizes == null) globalchallengeprizes = new LinkedHashMap<>();
+        check(globalchallengeprizes, identifier, "global challenge prize");
         globalchallengeprizes.put(identifier, e);
     }
 
@@ -239,6 +264,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addKit(String identifier, CustomKit e) {
         if(kits == null) kits = new LinkedHashMap<>();
+        check(kits, identifier, "custom kit");
         kits.put(identifier, e);
     }
 
@@ -247,6 +273,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addLootbox(String identifier, Lootbox l) {
         if(lootboxes == null) lootboxes = new LinkedHashMap<>();
+        check(lootboxes, identifier, "lootbox");
         lootboxes.put(identifier, l);
     }
 
@@ -255,6 +282,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addMask(String identifier, Mask l) {
         if(masks == null) masks = new LinkedHashMap<>();
+        check(masks, identifier, "mask");
         masks.put(identifier, l);
     }
 
@@ -263,6 +291,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addMonthlyCrate(String identifier, MonthlyCrate l) {
         if(monthlycrates == null) monthlycrates = new LinkedHashMap<>();
+        check(monthlycrates, identifier, "monthly crate");
         monthlycrates.put(identifier, l);
     }
 
@@ -271,6 +300,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addOutpost(String identifier, Outpost l) {
         if(outposts == null) outposts = new LinkedHashMap<>();
+        check(outposts, identifier, "outpost");
         outposts.put(identifier, l);
     }
 
@@ -279,6 +309,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addPet(String identifier, Pet l) {
         if(pets == null) pets = new LinkedHashMap<>();
+        check(pets, identifier, "pet");
         pets.put(identifier, l);
     }
 
@@ -287,6 +318,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addPlayerQuest(String identifier, PlayerQuest l) {
         if(playerquests == null) playerquests = new LinkedHashMap<>();
+        check(playerquests, identifier, "player quest");
         playerquests.put(identifier, l);
     }
 
@@ -295,6 +327,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addRandomizationScroll(String identifier, RandomizationScroll l) {
         if(randomizationscrolls == null) randomizationscrolls = new LinkedHashMap<>();
+        check(randomizationscrolls, identifier, "randomization scroll");
         randomizationscrolls.put(identifier, l);
     }
 
@@ -303,6 +336,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addRarityGem(String identifier, RarityGem l) {
         if(raritygems == null) raritygems = new LinkedHashMap<>();
+        check(raritygems, identifier, "rarity gem");
         raritygems.put(identifier, l);
     }
 
@@ -311,6 +345,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addServerCrate(String identifier, ServerCrate l) {
         if(servercrates == null) servercrates = new LinkedHashMap<>();
+        check(servercrates, identifier, "server crate");
         servercrates.put(identifier, l);
     }
 
@@ -319,6 +354,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addShopCategory(String identifier, ShopCategory l) {
         if(shopcategories == null) shopcategories = new LinkedHashMap<>();
+        check(shopcategories, identifier, "shop category");
         shopcategories.put(identifier, l);
     }
 
@@ -327,6 +363,7 @@ public abstract class RPStorage extends UVersion {
     }
     public void addSoulTracker(String identifier, SoulTracker l) {
         if(soultrackers == null) soultrackers = new LinkedHashMap<>();
+        check(soultrackers, identifier, "soul tracker");
         soultrackers.put(identifier, l);
     }
 
@@ -335,7 +372,17 @@ public abstract class RPStorage extends UVersion {
     }
     public void addTitle(String identifier, Title l) {
         if(titles == null) titles = new LinkedHashMap<>();
+        check(titles, identifier, "title");
         titles.put(identifier, l);
+    }
+
+    public TransmogScroll getTransmogScroll(String identifier) {
+        return transmogscrolls != null ? transmogscrolls.getOrDefault(identifier, null) : null;
+    }
+    public void addTransmogScroll(String identifier, TransmogScroll t) {
+        if(transmogscrolls == null) transmogscrolls = new LinkedHashMap<>();
+        check(transmogscrolls, identifier, "transmog scroll");
+        transmogscrolls.put(identifier, t);
     }
 
     public Trinket getTrinket(String identifier) {
@@ -343,12 +390,24 @@ public abstract class RPStorage extends UVersion {
     }
     public void addTrinket(String identifier, Trinket l) {
         if(trinkets == null) trinkets = new LinkedHashMap<>();
+        check(trinkets, identifier, "trinket");
         trinkets.put(identifier, l);
     }
 
+    public WhiteScroll getWhiteScroll(String identifier) {
+        return whitescrolls != null ? whitescrolls.getOrDefault(identifier, null) : null;
+    }
+    public void addWhiteScroll(String identifier, WhiteScroll w) {
+        if(whitescrolls == null) whitescrolls = new LinkedHashMap<>();
+        check(whitescrolls, identifier, "white scroll");
+        whitescrolls.put(identifier, w);
+    }
+
     public void deleteAll(Feature f) {
-        if(f.equals(Feature.BOOSTERS)) boosters = null;
-        else if(f.equals(Feature.BLACK_SCROLLS)) blackscrolls = null;
+        if(f.equals(Feature.BOOSTERS)) {
+            boosters = null;
+            Boosters.activeFactionBoosters = null;
+        } else if(f.equals(Feature.BLACK_SCROLLS)) blackscrolls = null;
         else if(f.equals(Feature.CONQUEST)) conquestchests = null;
         else if(f.equals(Feature.CUSTOM_ARMOR)) armorsets = null;
         else if(f.equals(Feature.CUSTOM_BOSSES)) bosses = null;
@@ -370,8 +429,10 @@ public abstract class RPStorage extends UVersion {
         else if(f.equals(Feature.MASKS)) masks = null;
         else if(f.equals(Feature.LOOTBOXES)) lootboxes = null;
         else if(f.equals(Feature.MONTHLY_CRATES)) monthlycrates = null;
-        else if(f.equals(Feature.OUTPOSTS)) outposts = null;
-        else if(f.equals(Feature.PLAYER_QUESTS)) playerquests = null;
+        else if(f.equals(Feature.OUTPOSTS)) {
+            outposts = null;
+            Outposts.statuses = null;
+        } else if(f.equals(Feature.PLAYER_QUESTS)) playerquests = null;
         else if(f.equals(Feature.RANDOMIZATION_SCROLLS)) randomizationscrolls = null;
         else if(f.equals(Feature.RARITY_GEMS)) raritygems = null;
         else if(f.equals(Feature.SERVER_CRATES)) servercrates = null;

@@ -2,15 +2,14 @@ package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.MagicDust;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathMagicDust extends MagicDust {
-	public static YamlConfiguration fireballyml;
+import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.addons;
 
+public class PathMagicDust extends MagicDust {
 	private String path;
 	private PathMagicDust upgradesto;
 	private ItemStack is;
@@ -19,11 +18,11 @@ public class PathMagicDust extends MagicDust {
 	private List<EnchantRarity> appliesto;
 	public PathMagicDust(String path) {
 		this.path = path;
-		chance = fireballyml.getInt("dusts." + path + ".chance");
-		final String[] a = fireballyml.getString("dusts." + path + ".percents").split(";");
+		chance = addons.getInt("dusts." + path + ".chance");
+		final String[] a = addons.getString("dusts." + path + ".percents").split(";");
 		min = Integer.parseInt(a[0]);
 		max = Integer.parseInt(a[1]);
-		upgradecost = fireballyml.getInt("dusts." + path + ".upgrade cost");
+		upgradecost = addons.getInt("dusts." + path + ".upgrade cost");
 		addDust(getIdentifier(), this);
 	}
 	public String getIdentifier() { return path; }
@@ -32,14 +31,14 @@ public class PathMagicDust extends MagicDust {
 	public int getMinPercent() { return min; }
 	public int getMaxPercent() { return max; }
 	public ItemStack getItem() {
-		if(is == null) is = api.d(fireballyml, "dusts." + path);
+		if(is == null) is = api.d(addons, "dusts." + path);
 		return is.clone();
 	}
 
 	public List<EnchantRarity> getAppliesTo() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
-			for(String s : fireballyml.getString("dusts." + path + ".applies to").split(";")) {
+			for(String s : addons.getString("dusts." + path + ".applies to").split(";")) {
 				appliesto.add(EnchantRarity.rarities.get(s));
 			}
 		}
@@ -47,7 +46,7 @@ public class PathMagicDust extends MagicDust {
 	}
 	public MagicDust getUpgradesTo() {
 		if(upgradesto != null) return upgradesto;
-		final String U = fireballyml.getString("dusts." + path + ".upgrades to", null);
+		final String U = addons.getString("dusts." + path + ".upgrades to", null);
 		if(U != null) upgradesto = getDust(U);
 		return upgradesto;
 	}

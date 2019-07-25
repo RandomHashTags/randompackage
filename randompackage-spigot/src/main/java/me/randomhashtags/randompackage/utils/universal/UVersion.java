@@ -192,22 +192,22 @@ public class UVersion {
             fromString = ChatColor.stripColor(fromString);
             if(fromString.contains("d")) {
                 time += getRemainingDouble(fromString.split("d")[0])*24*60*60;
-                fromString = fromString.split("d")[1];
+                if(fromString.contains("h") || fromString.contains("m") || fromString.contains("s")) fromString = fromString.split("d")[1];
             }
             if(fromString.contains("h")) {
                 time += getRemainingDouble(fromString.split("h")[0])*60*60;
-                fromString = fromString.split("h")[1];
+                if(fromString.contains("m") || fromString.contains("s")) fromString = fromString.split("h")[1];
             }
             if(fromString.contains("m")) {
                 time += getRemainingDouble(fromString.split("m")[0])*60;
-                fromString = fromString.split("m")[1];
+                if(fromString.contains("s")) fromString = fromString.split("m")[1];
             }
             if(fromString.contains("s")) {
                 time += getRemainingDouble(fromString.split("s")[0]);
                 //fromString = fromString.split("s")[0];
             }
         }
-        return time;
+        return time*1000;
     }
     public Location toLocation(String string) {
         final String[] a = string.split(";");

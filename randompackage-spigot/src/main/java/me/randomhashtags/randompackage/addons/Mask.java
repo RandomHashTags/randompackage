@@ -1,14 +1,13 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.addons.utils.Applyable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public abstract class Mask extends Itemable {
+public abstract class Mask extends Applyable {
     public abstract String getOwner();
-    public abstract List<String> getAddedLore();
     public abstract List<String> getAttributes();
 
     public static Mask valueOf(ItemStack is) {
@@ -27,7 +26,7 @@ public abstract class Mask extends Itemable {
             if(im != null && im.hasLore()) {
                 final List<String> l = im.getLore();
                 for(Mask m : masks.values())
-                    if(l.containsAll(m.getAddedLore()))
+                    if(l.contains(m.getApplied()))
                         return m;
             }
         }

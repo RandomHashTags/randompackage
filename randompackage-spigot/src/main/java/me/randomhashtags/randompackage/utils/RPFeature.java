@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.utils;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -231,7 +232,10 @@ public abstract class RPFeature extends RPStorage implements Listener {
                         item.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
                     }
                 }
-                if(name != null && name.contains("{ENCHANT_SIZE}")) ce.applyTransmogScroll(item);
+                if(name != null && name.contains("{ENCHANT_SIZE}")) {
+                    final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+                    if(t.isEnabled()) t.applyTransmogScroll(item, getTransmogScroll("REGULAR"));
+                }
             }
         }
         return item;

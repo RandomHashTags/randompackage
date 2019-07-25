@@ -59,10 +59,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     }
 
     private static boolean isEnabled = false;
-    public static YamlConfiguration config;
-
-    public static String TRANSMOG, WHITE_SCROLL;
-    public static List<String> transmog_organization;
+    public static YamlConfiguration config, addons;
 
     public static List<UUID> spawnedFromSpawner;
     public static List<Player> stoppedAllEnchants, frozen;
@@ -79,9 +76,8 @@ public abstract class CustomEnchantUtils extends RPFeature {
         save(null, "custom enchants.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
 
-        TRANSMOG = ChatColor.translateAlternateColorCodes('&', config.getString("items.transmog scroll.apply"));
-        WHITE_SCROLL = ChatColor.translateAlternateColorCodes('&', config.getString("items.white scroll.apply"));
-        transmog_organization = config.getStringList("items.transmog scroll.rarity organization");
+        save("custom enchants", "addons.yml");
+        addons = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "addons.yml"));
 
         spawnedFromSpawner = new ArrayList<>();
         stoppedAllEnchants = new ArrayList<>();
@@ -97,7 +93,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         if(!isEnabled) return;
         isEnabled = false;
         config = null;
-        transmog_organization = null;
         spawnedFromSpawner = null;
         timerenchants = null;
         stoppedAllEnchants = null;

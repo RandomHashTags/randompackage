@@ -160,7 +160,12 @@ public class Titles extends RPFeature implements CommandExecutor {
 				player.openInventory(Bukkit.createInventory(player, size, selftitle));
 				final Inventory top = player.getOpenInventory().getTopInventory();
 				for(Title t : owned) {
-					top.setItem(top.firstEmpty(), getTitle(activetitle, t));
+					final int f = top.firstEmpty();
+					if(f > -1) {
+						top.setItem(f, getTitle(activetitle, t));
+					} else {
+						break;
+					}
 				}
 				for(int p = 0; p < top.getSize(); p++) {
 					final ItemStack is = top.getItem(p);

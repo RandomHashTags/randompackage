@@ -15,5 +15,4 @@ attributes:
   - "MaskEquip;addPotionEffect{health_boost:0:99999}"
   - "MaskUnequip;removePotionEffect{health_boost:false}"
 #
-added lore:
-  - "&7&lATTACHED:&r &b&lSanta Mask&r &f(&c+2 Max Hearts&f)"
+added lore: "&7&lATTACHED:&r &b&lSanta Mask&r &f(&c+2 Max Hearts&f)"

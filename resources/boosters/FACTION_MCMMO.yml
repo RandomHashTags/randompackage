@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 messages:
   activate:
-    - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} XP&r &aFaction Booster! &7[{TIME} left]"
-  expired:
+    - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} MCMMO XP&r &aFaction Booster! &7[{TIME} left]"
+  expire:
     - "&c&l(!) {MULTIPLIER}x&r &cEXP Booster from &l{PLAYER}&r &chas expired!"
     - "&cPurchase another booster at &nbuy.yourserver.com!"
   notify:
@@ -27,4 +27,4 @@ item:
   - "&7{TIME}"
 #
 attributes:
-  - ""
+  - "MCMMOXpGained;gainedxp=xp*multiplier"

@@ -1,40 +1,46 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.PlayerQuest;
 import me.randomhashtags.randompackage.addons.RarityGem;
+import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
+import me.randomhashtags.randompackage.api.PlayerQuests;
+import me.randomhashtags.randompackage.api.events.PlayerQuestCompleteEvent;
 import me.randomhashtags.randompackage.api.events.eventAttributes.ExecuteAttributesEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public abstract class newEventAttributes extends RPFeature {
+    private static int loadedInstances = 0;
     private static boolean isenabled = false;
     private final boolean isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
 
 
-    private void loadUtils() {
+    protected void loadUtils() {
         if(!isenabled) {
             isenabled = true;
         }
+        loadedInstances++;
     }
-    private void unloadUtils() {
-        if(isenabled) {
+    protected void unloadUtils() {
+        if(loadedInstances > 0) loadedInstances--;
+        if(isenabled && loadedInstances == 0) {
             isenabled = false;
         }
     }
@@ -61,7 +67,7 @@ public abstract class newEventAttributes extends RPFeature {
         return a;
     }
 
-    private boolean passedIfs(Event event, TreeMap<String, LivingEntity> entities, String attribute) {
+    public boolean passedIfs(Event event, TreeMap<String, LivingEntity> entities, String attribute) {
         if(entities.isEmpty()) return true;
         attribute = attribute.toLowerCase();
         final List<Boolean> booleans = new ArrayList<>();
@@ -70,6 +76,8 @@ public abstract class newEventAttributes extends RPFeature {
             final String l = s.toLowerCase();
             if(l.startsWith("cancelled=") && cancellable) {
                 booleans.add(((Cancellable) event).isCancelled() && Boolean.parseBoolean(l.split("=")[1]));
+            } else if(l.startsWith("chance=")) {
+                booleans.add(getRemainingInt(l.split("=")[1]) >= random.nextInt(100));
             }
             for(String entity : entities.keySet()) {
                 final String el = entity.toLowerCase();
@@ -87,13 +95,23 @@ public abstract class newEventAttributes extends RPFeature {
                     booleans.add(le instanceof Player && ((Player) le).isSneaking() == Boolean.parseBoolean(l.split("=")[1]));
                 } else if(l.startsWith(el + "isfacing=")) {
                     booleans.add(le.getFacing().name().startsWith(l.split("=")[1].toUpperCase()));
+                } else if(l.equals(el + "isplayer")) {
+                    booleans.add(le instanceof Player);
+                } else if(l.equals(el + "!isplayer")) {
+                    booleans.add(!(le instanceof Player));
+                } else if(l.equals(el + "ismob")) {
+                    booleans.add(le instanceof Mob);
+                } else if(l.equals(el + "iscreature")) {
+                    booleans.add(le instanceof Creature);
                 }
             }
         }
         return !booleans.contains(false);
     }
-    private void doGenericAttribute(Event event, TreeMap<String, LivingEntity> entities, String attribute, String attributeLowercase) {
+    private ExecutedEventAttributes doGenericAttribute(Event event, TreeMap<String, LivingEntity> entities, String attribute, String wholeAttribute) {
+        final String attributeLowercase = attribute.toLowerCase();
         if(passedIfs(event, entities, attribute)) {
+            final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
             if(attributeLowercase.startsWith("dropitem=")) {
             } else if(attributeLowercase.startsWith("playsound=")) {
                 final String[] a = attributeLowercase.split("=")[1].split(":");
@@ -120,6 +138,7 @@ public abstract class newEventAttributes extends RPFeature {
                 }
             } else {
                 for(String entity : entities.keySet()) {
+                    boolean did = true;
                     final String el = entity.toLowerCase();
                     final LivingEntity le = entities.get(entity);
                     if(attributeLowercase.startsWith("give" + el + "exp=") || attributeLowercase.startsWith("set" + el + "exp=")) {
@@ -189,12 +208,69 @@ public abstract class newEventAttributes extends RPFeature {
                         }
                     } else if(attributeLowercase.startsWith("ignite" + el + "=")) {
                         le.setFireTicks((int) eval(attributeLowercase.split("=")[1]));
+                    } else if(attributeLowercase.startsWith("increase" + el + "playerquest=")) {
+                        final PlayerQuests q = PlayerQuests.getPlayerQuests();
+                        if(q.isEnabled()) {
+                            final List<String> completed = q.config.getStringList("messages.completed");
+                            final LivingEntity target = entities.get(el);
+                            if(target instanceof Player) {
+                                final Player player = (Player) target;
+                                final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
+                                final double value = Double.parseDouble(attribute.split("=")[1]);
+                                for(ActivePlayerQuest quest : a) {
+                                    tryIncreasingPlayerQuest(event, entities, player, quest, value, completed);
+                                }
+                            }
+                        }
+                    } else {
+                        did = false;
+                    }
+                    if(did) {
+                        attributes.put(wholeAttribute, attributeLowercase);
                     }
                 }
             }
+            return attributes.isEmpty() ? null : new ExecutedEventAttributes(event, attributes);
+        }
+        return null;
+    }
+    public void tryIncreasingPlayerQuest(Event event, TreeMap<String, LivingEntity> entities, Player player, ActivePlayerQuest activeQuest, double value, List<String> completedMsg) {
+        tryIncreasingPlayerQuest(event, entities, player, activeQuest, value, completedMsg, false);
+    }
+    public void tryIncreasingPlayerQuest(Event event, TreeMap<String, LivingEntity> entities, Player player, ActivePlayerQuest activeQuest, double value, List<String> completedMsg, boolean checkIfs) {
+        if(event != null && entities != null && player != null && activeQuest != null && !activeQuest.isCompleted()) {
+            final PlayerQuest quest = activeQuest.getQuest();
+            if(checkIfs) {
+                final String trigger = event.getEventName().replace("Event", "");
+                for(String s : quest.getTrigger()) {
+                    final String[] A = s.split(";");
+                    if(trigger.equals(A[0])) {
+                        for(String attribute : s.split(A[0] + ";")[1].split(";")) {
+                            if(passedIfs(event, entities, attribute)) {
+                                increasePlayerQuest(player, activeQuest, quest, value, completedMsg);
+                            }
+                        }
+                    }
+                }
+            } else {
+                increasePlayerQuest(player, activeQuest, quest, value, completedMsg);
+            }
         }
     }
-    private TreeMap<String, LivingEntity> getEntities(Object...values) {
+    private void increasePlayerQuest(Player player, ActivePlayerQuest activeQuest, PlayerQuest quest, double value, List<String> completed) {
+        activeQuest.setProgress(activeQuest.getProgress()+value);
+        final double timer = quest.getTimedCompletion();
+        if(timer > 0.00) {
+        } else if(activeQuest.getProgress() >= Double.parseDouble(quest.getCompletion())) {
+            activeQuest.setCompleted(true);
+            final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, activeQuest);
+            pluginmanager.callEvent(e);
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{NAME}", quest.getName());
+            sendStringListMessage(player, completed, replacements);
+        }
+    }
+    public TreeMap<String, LivingEntity> getEntities(Object...values) {
         final TreeMap<String, LivingEntity> e = new TreeMap<>();
         for(int i = 0; i < values.length; i++) {
             if(i%2 == 1) {
@@ -215,56 +291,37 @@ public abstract class newEventAttributes extends RPFeature {
         return null;
     }
 
-
-    private void doAttribute(PlayerInteractEvent event, Player player, String attribute, String attributeLowercase) {
-        if(attributeLowercase.equals("cancel")) {
-            event.setCancelled(true);
-        } else {
-            if(attributeLowercase.contains("playerlocation")) attributeLowercase = attribute.replace("playerlocation", toString(player.getLocation()));
-            doGenericAttribute(event, getEntities("Player", player), attribute, attributeLowercase);
-        }
-    }
-    private void doAttribute(EntityDeathEvent event, LivingEntity victim, Player killer, String attribute, String attributeLowercase) {
+    private ExecutedEventAttributes doAttribute(EntityDeathEvent event, LivingEntity victim, Player killer, String attribute, String wholeAttribute) {
+        String attributeLowercase = attribute.toLowerCase();
         final int xp = event.getDroppedExp();
         if(attributeLowercase.startsWith("droppedxp=")) {
-            event.setDroppedExp((int) eval(attributeLowercase.split("=")[1].replace("droppedxp", Integer.toString(xp))));
+            final String s = attributeLowercase.split("=")[1].replace("xp", Integer.toString(xp));
+            event.setDroppedExp((int) eval(s));
+            final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
+            attributes.put(wholeAttribute, attributeLowercase);
+            return new ExecutedEventAttributes(event, attributes);
         } else {
-            if(attributeLowercase.contains("victimlocation")) attributeLowercase = attribute.replace("victimlocation", toString(victim.getLocation()));
-            if(attributeLowercase.contains("killerlocation")) attributeLowercase = attribute.replace("killerlocation", toString(killer.getLocation()));
-            doGenericAttribute(event, getEntities("Victim", victim, "Killer", killer), attribute, attributeLowercase);
+            if(attributeLowercase.contains("victimlocation")) attributeLowercase = attributeLowercase.replace("victimlocation", toString(victim.getLocation()));
+            if(killer != null && attributeLowercase.contains("killerlocation")) attributeLowercase = attributeLowercase.replace("killerlocation", toString(killer.getLocation()));
+            return doGenericAttribute(event, getEntities("Victim", victim, "Killer", killer), attribute, attributeLowercase);
         }
     }
-
-    public void executeAttributes(PlayerInteractEvent event, List<String> attributes, HashMap<String, String> attributeReplacements) {
-        if(success(event, attributes, attributeReplacements)) {
-            attributes = replace(attributes, attributeReplacements);
-            final Player player = event.getPlayer();
-            for(String s : attributes) {
-                if(s.startsWith("PlayerInteract;")) {
-                    for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
-                        doAttribute(event, player, a, a.toLowerCase());
-                    }
-                }
-            }
-            player.updateInventory();
-        }
-    }
-    public void executeAttributes(EntityDeathEvent event, List<String> attributes, HashMap<String, String> attributeReplacements) {
+    public List<ExecutedEventAttributes> executeAttributes(EntityDeathEvent event, List<String> attributes, HashMap<String, String> attributeReplacements) {
         if(success(event, attributes, attributeReplacements)) {
             attributes = replace(attributes, attributeReplacements);
             final LivingEntity victim = event.getEntity();
             final Player killer = victim.getKiller();
-            if(killer != null) {
-                final boolean victimIsPlayer = victim instanceof Player;
-                for(String s : attributes) {
-                    if(s.startsWith("KilledEntity;") && !victimIsPlayer || s.startsWith("KilledPlayer;") && victimIsPlayer) {
-                        for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
-                            doAttribute(event, victim, killer, a, a.toLowerCase());
-                        }
+            final List<ExecutedEventAttributes> e = new ArrayList<>();
+            for(String s : attributes) {
+                if(s.startsWith("EntityDeath;")) {
+                    for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
+                        e.add(doAttribute(event, victim, killer, a, s));
                     }
                 }
-                killer.updateInventory();
             }
+            if(killer != null) killer.updateInventory();
+            if(!e.isEmpty()) return e;
         }
+        return null;
     }
 }

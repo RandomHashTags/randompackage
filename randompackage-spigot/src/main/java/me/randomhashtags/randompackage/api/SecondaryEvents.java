@@ -192,6 +192,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         teleportationDelay = null;
         teleportMinDelay = null;
         teleportationVariable = null;
+        instance = null;
     }
 
 

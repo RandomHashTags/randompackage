@@ -15,5 +15,4 @@ attributes:
   - "PvA;setDamage{dmg*1.05}"
   - "DamagedBy(FIRE||FIRE_TICK||LAVA);cancel"
 #
-added lore:
-  - "&7&lATTACHED:&r &4&lDragon Mask&r &f(&c+5% DMG&f)"
+added lore: "&7&lATTACHED:&r &4&lDragon Mask&r &f(&c+5% DMG&f)"

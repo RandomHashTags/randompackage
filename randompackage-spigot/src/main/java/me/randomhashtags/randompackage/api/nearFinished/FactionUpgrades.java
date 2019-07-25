@@ -85,6 +85,7 @@ public class FactionUpgrades extends RPFeature {
                     "XP_HARVEST",
             };
             for(String s : a) save("faction upgrades", s + ".yml");
+            otherdata.set("saved default faction upgrades", true);
         }
         config = YamlConfiguration.loadConfiguration(new File(rpd, "faction upgrades.yml"));
         for(String s : config.getConfigurationSection("types").getKeys(false)) {

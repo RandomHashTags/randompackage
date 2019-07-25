@@ -27,7 +27,7 @@ public class FileConquestChest extends ConquestChest {
     public HashMap<ConquestMob, String> getSpawnedBosses() {
         if(spawnedBosses == null) {
             spawnedBosses = new HashMap<>();
-            for(String s : yml.getStringList("bosses")) {
+            for(String s : yml.getStringList("spawned bosses")) {
                 final String[] a = s.split(":");
                 spawnedBosses.put(ConquestMob.bosses.get(a[0]), a[1]);
             }

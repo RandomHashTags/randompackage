@@ -9,14 +9,12 @@ import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -28,21 +26,19 @@ public class BlackScrolls extends CustomEnchantUtils {
         return instance;
     }
 
-    public YamlConfiguration config;
     public void load() {
+        loadUtils();
         final long started = System.currentTimeMillis();
-        save("custom enchants", "black scrolls.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants" + separator, "black scrolls.yml"));
-        final ConfigurationSection cs = config.getConfigurationSection("scrolls");
+        final ConfigurationSection cs = addons.getConfigurationSection("black scrolls");
         if(cs != null) {
-            PathBlackScroll.blackscrollsyml = config;
-            for(String s : cs.getKeys(false)) new PathBlackScroll(s);
+            for(String s : cs.getKeys(false))
+                new PathBlackScroll(s);
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (blackscrolls != null ? blackscrolls.size() : 0) + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
         deleteAll(Feature.BLACK_SCROLLS);
+        unloadUtils();
     }
 
 
@@ -80,20 +76,19 @@ public class BlackScrolls extends CustomEnchantUtils {
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(!event.isCancelled() && current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             final Player player = (Player) event.getWhoClicked();
-            int enchantcount = -1;
             item = current; itemMeta = current.getItemMeta(); lore.clear();
             HashMap<CustomEnchant, Integer> enchantmentsonitem = null;
             if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
 
             final BlackScroll bs = BlackScroll.valueOf(cursor);
             if(bs != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && !enchantmentsonitem.isEmpty()) {
-                enchantcount = enchantmentsonitem.size();
                 giveItem(player, applyBlackScroll(current, cursor, bs));
                 item = current; itemMeta = item.getItemMeta();
                 if(itemMeta.hasDisplayName()) {
-                    final String d = itemMeta.getDisplayName(), l = TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantcount));
-                    if(d.contains(l)) {
-                        itemMeta.setDisplayName(d.replace(l, TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantcount-1))));
+                    final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+                    if(t.isEnabled()) {
+                        final int enchantcount = enchantmentsonitem.size();
+                        t.update(item, enchantcount, enchantcount-1);
                     }
                 }
                 //playSuccess((Player) event.getWhoClicked());

@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.api.enchantAddons;
 
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
+import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,33 +14,30 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentOrbs extends RPFeature {
+public class EnchantmentOrbs extends CustomEnchantUtils {
     private static EnchantmentOrbs instance;
     public static EnchantmentOrbs getEnchantmentOrbs() {
         if(instance == null) instance = new EnchantmentOrbs();
         return instance;
     }
 
-    public YamlConfiguration config;
     public void load() {
+        loadUtils();
         final long started = System.currentTimeMillis();
-        save("custom enchants", "enchantment orbs.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "enchantment orbs.yml"));
         final List<ItemStack > orbs = new ArrayList<>();
-        for(String A : config.getConfigurationSection("orbs").getKeys(false)) {
-            final ItemStack iii = d(config, "orbs." + A);
+        for(String A : addons.getConfigurationSection("enchantment orbs").getKeys(false)) {
+            final ItemStack iii = d(addons, "enchantment orbs." + A);
             final java.util.List<String> appliesto = new ArrayList<>();
-            for(String s : config.getString("orbs." + A + ".applies to").split(";")) appliesto.add(s.toUpperCase());
-            final int starting = config.getInt("orbs." + A + ".starting max slots");
-            final int increment = config.getInt("orbs." + A + ".upgrade increment");
+            for(String s : addons.getString("enchantment orbs." + A + ".applies to").split(";")) appliesto.add(s.toUpperCase());
+            final int starting = addons.getInt("enchantment orbs." + A + ".starting max slots");
+            final int increment = addons.getInt("enchantment orbs." + A + ".upgrade increment");
             int increm = increment;
-            for(int k = starting; k <= config.getInt("orbs." + A + ".final max slots"); k += increment) {
+            for(int k = starting; k <= addons.getInt("enchantment orbs." + A + ".final max slots"); k += increment) {
                 if(k != starting) increm += increment;
-                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', config.getString("orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
+                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', addons.getString("enchantment orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
                 item = iii.clone(); itemMeta = item.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
                 if(itemMeta.hasLore()) {
@@ -62,8 +59,9 @@ public class EnchantmentOrbs extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (enchantmentorbs != null ? enchantmentorbs.size() : 0) + " Enchantment Orbs &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
+        instance = null;
         deleteAll(Feature.ENCHANTMENT_ORBS);
+        unloadUtils();
     }
 
 

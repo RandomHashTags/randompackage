@@ -4,19 +4,17 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.randomhashtags.randompackage.addons.Mask;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 public class FileMask extends Mask {
     private static TreeMap<String, ItemStack> maskOwners;
-    private List<String> addedLore;
     private ItemStack item;
 
     public FileMask(File f) {
@@ -50,11 +48,18 @@ public class FileMask extends Mask {
         }
         return item != null ? item.clone() : null;
     }
-    public List<String> getAddedLore() {
-        if(addedLore == null) addedLore = api.colorizeListString(yml.getStringList("added lore"));
-        return addedLore;
+    public boolean canBeApplied(ItemStack is) {
+        return is != null && is.getType().name().endsWith("_HELMET") && getOnItem(is) == null;
+    }
+    public String getApplied() {
+        final Object o = yml.get("added lore"); // changed from List<String> to String in v16.4.0
+        String string;
+        if(o instanceof List) string = ((List<String>) o).get(0);
+        else string = (String) o;
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public List<String> getAppliesTo() { return null; }
 
     // https://www.spigotmc.org/threads/tutorial-player-skull-with-custom-skin.143323/ , edited by RandomHashTags
     private ItemStack getSkull(String skinURL, String name, List<String> lore) {

@@ -7,8 +7,10 @@ import me.randomhashtags.randompackage.api.WildPvP;
 import me.randomhashtags.randompackage.api.enchantAddons.*;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
+import me.randomhashtags.randompackage.api.Boosters;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
+import me.randomhashtags.randompackage.api.unfinished.Wild;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -67,6 +69,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private HashMap<String, PluginCommand> Y = new HashMap<>(), originalCommands = new HashMap<>();
 
     private AuctionHouse auctionhouse;
+    private Boosters boosters;
     private ChatEvents chatevents;
     private CoinFlip coinflip;
     private CollectionFilter collectionfilter;
@@ -108,8 +111,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private Showcase showcase;
     private Titles titles;
     private Trade trade;
+    private TransmogScrolls transmogscrolls;
     private Trinkets trinkets;
+    private WhiteScrolls whitescrolls;
     private WildPvP wildpvp;
+    private Wild wild;
 
     private RandomPackageAPI api;
     private RPEvents rpevents;
@@ -174,6 +180,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         auctionhouse = AuctionHouse.getAuctionHouse();
         tryLoading(Feature.AUCTION_HOUSE);
 
+        boosters = Boosters.getBoosters();
+        tryLoading(Feature.BOOSTERS);
+
         chatevents = ChatEvents.getChatEvents();
         tryLoading(Feature.CHAT_BRAG);
 
@@ -211,8 +220,14 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         raritygems = RarityGems.getRarityGems();
         tryLoading(Feature.RARITY_GEMS);
 
-        soultrackers =SoulTrackers.getSoulTrackers();
+        soultrackers = SoulTrackers.getSoulTrackers();
         tryLoading(Feature.SOUL_TRACKERS);
+
+        transmogscrolls = TransmogScrolls.getTransmogScrolls();
+        tryLoading(Feature.TRANSMOG_SCROLLS);
+
+        whitescrolls = WhiteScrolls.getWhiteScrolls();
+        tryLoading(Feature.WHITE_SCROLLS);
 
         customexplosions = CustomExplosions.getCustomExplosions();
         tryLoading(Feature.CUSTOM_CREEPERS);
@@ -298,6 +313,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         wildpvp = WildPvP.getWildPvP();
         tryLoading(Feature.WILD_PVP);
+
+        wild = Wild.getWild();
+        tryLoading(Feature.WILD);
 
         final int interval = config.getInt("backup interval")*20*60;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
@@ -390,6 +408,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private RPFeature getfeature(Feature f) {
         switch(f) {
             case AUCTION_HOUSE: return auctionhouse;
+            case BOOSTERS: return boosters;
             case CHAT_BRAG: return chatevents;
             case COINFLIP: return coinflip;
             case CONQUEST: return conquest;
@@ -424,7 +443,10 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             case SHOWCASE: return showcase;
             case TITLES: return titles;
             case TRADE: return trade;
+            case TRANSMOG_SCROLLS: return transmogscrolls;
             case TRINKETS: return trinkets;
+            case WHITE_SCROLLS: return whitescrolls;
+            case WILD: return wild;
             case WILD_PVP: return wildpvp;
         }
         return null;
@@ -441,6 +463,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             ali.put("auctionhouse", "auction house");
             if(enabled) {
                 auctionhouse.enable();
+            }
+        } else if(f.equals(Feature.BOOSTERS)) {
+            enabled = config.getBoolean("boosters.enabled");
+            if(enabled) {
+                boosters.enable();
             }
         } else if(f.equals(Feature.CHAT_BRAG)) {
             enabled = config.getBoolean("chat cmds.brag.enabled");
@@ -733,10 +760,27 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(enabled) {
                 trade.enable();
             }
+        } else if(f.equals(Feature.TRANSMOG_SCROLLS)) {
+            enabled = config.getBoolean("custom enchants.transmog scrolls");
+            if(enabled) {
+                transmogscrolls.enable();
+            }
         } else if(f.equals(Feature.TRINKETS)) {
             enabled = config.getBoolean("trinkets.enabled");
             if(enabled) {
                 trinkets.enable();
+            }
+        } else if(f.equals(Feature.WHITE_SCROLLS)) {
+            enabled = config.getBoolean("custom enchants.white scrolls");
+            if(enabled) {
+                whitescrolls.enable();
+            }
+        } else if(f.equals(Feature.WILD)) {
+            enabled = config.getBoolean("wild.enabled");
+            ce = wild;
+            cmds.add("wild");
+            if(enabled) {
+                wild.enable();
             }
         } else if(f.equals(Feature.WILD_PVP)) {
             enabled = config.getBoolean("wild pvp.enabled");

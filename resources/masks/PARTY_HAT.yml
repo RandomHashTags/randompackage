@@ -14,5 +14,4 @@ attributes:
   - "PvA;setDamage{dmg*1.04}"
   - "isDamaged;setDamage{dmg*0.95}"
 #
-added lore:
-  - "&7&lATTACHED:&r &f&lParty Hat Mask&r &f(&c-5 ENEMY DMG, +4% DMG&f)"
+added lore: "&7&lATTACHED:&r &f&lParty Hat Mask&r &f(&c-5 ENEMY DMG, +4% DMG&f)"

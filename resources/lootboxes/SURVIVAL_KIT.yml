@@ -49,7 +49,7 @@ regular loot:
   - "blackscroll:HEROIC;amount=2"
   #- "dimensionweb;amount=2"
   #- "resettoolkit"
-  #- "maskgenerator"
+  - "maskgenerator"
   - "equipmentlootbox"
   #- "heroicequipmentlootbox"
   - "raritybook:HEROIC;amount=2"
@@ -66,5 +66,5 @@ jackpot loot:
 #
 bonus loot size: 1
 bonus loot:
-  - "title:209"
+  - "title:204"
 #

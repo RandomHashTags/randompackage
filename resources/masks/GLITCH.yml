@@ -13,5 +13,4 @@ item:
 attributes:
   - "CustomEnchantProced;"
 #
-added lore:
-  - "&7&lATTACHED:&r &f&lGlitch Mask&r &f(&cImmune to Teleblock, Bidirectional Teleport&f)"
+added lore: "&7&lATTACHED:&r &f&lGlitch Mask&r &f(&cImmune to Teleblock, Bidirectional Teleport&f)"

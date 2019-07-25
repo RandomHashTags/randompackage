@@ -13,5 +13,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &3&lSpectral Mask&r &f(&cZombie Auto-disguise at y>200 (in combat)&f)"
+added lore: "&7&lATTACHED:&r &3&lSpectral Mask&r &f(&cZombie Auto-disguise at y>200 (in combat)&f)"

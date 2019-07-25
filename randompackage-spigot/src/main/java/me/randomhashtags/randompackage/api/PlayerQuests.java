@@ -171,7 +171,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                     "THIRSTY",
                     "ULTIMATE_ENCHANTER",
                     "ULTIMATE_LOOTER",
-                    "UNIQNUE_ENCHANTER",
+                    "UNIQUE_ENCHANTER",
                     "VERY_UNLUCKY",
                     "XP_BOOSTED_I",
             };

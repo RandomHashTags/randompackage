@@ -61,7 +61,7 @@ interactable item:
   - "&7the {TITLE} title on this server"
 # You can have an unlimited amount of titles!
 titles:
-  - "Wasted"                         # 1
+  - "Wasted" #1
   - "Tilted"
   - "RIP"
   - "Getmed"
@@ -70,8 +70,8 @@ titles:
   - "Gank"
   - "Vapenation"
   - "Shiva-d"
-  - "Weewoo"
-  - "#BANNED"                        # 11
+  - "Weewoo" # 10
+  - "#BANNED"
   - "Epic"
   - "Salty"
   - "Prick"
@@ -80,8 +80,8 @@ titles:
   - "SlabBusting"
   - "PvPGod"
   - "2ButtonOP"
-  - "uW0tM8"
-  - "CheckYourBuffer"                # 21
+  - "uW0tM8" # 20
+  - "CheckYourBuffer"
   - "Cactus"
   - "FudgeKing"
   - "GoodnessLover"
@@ -90,8 +90,8 @@ titles:
   - "TeamWOOF"
   - "BlameEULA"
   - "#JeBentMooi"
-  - "#RandomHashTags"
-  - "#BetterThanCosmic"              # 31
+  - "#RandomHashTags" # 30
+  - "#BetterThanCosmic"
   - "#ShotsFired"
   - "#LuckyX"
   - "(/°^°)/L"
@@ -100,8 +100,8 @@ titles:
   - "#4EverAlone"
   - "XoXo"
   - "#IHaveNoLifeAndIDoNotCare"
-  - "AnyGirls?"
-  - "#Salty"                         # 41
+  - "AnyGirls?" # 40
+  - "#Salty"
   - "Renewal"
   - "GetRekt"
   - "#CandyNCuddle"
@@ -110,8 +110,8 @@ titles:
   - "Ghost"
   - "IFindYourLackOfCheerDisturbing"
   - "Ez"
-  - "Assassin"
-  - "#Coal4Christmas"                # 51
+  - "Assassin" # 50
+  - "#Coal4Christmas"
   - "HoHoHo"
   - "Brood"
   - "2017 &8OG"
@@ -120,8 +120,8 @@ titles:
   - "GangGang"
   - "Trollolol"
   - "#AllmcMMO"
-  - "#Hot"
-  - "Edgy"                           # 61
+  - "#Hot" # 60
+  - "Edgy"
   - "#TrickOrDerp"
   - "#IsItStillWinter?"
   - "#GotLucky"
@@ -130,8 +130,7 @@ titles:
   - "#nice"
   - "Slimey"
   - "#poor"
-  - "PvPGod"
-  - "Yijki"                          # 71
+  - "Yijki" # 70
   - "#BlackFriday"
   - "#21"
   - "Ezpz"
@@ -140,10 +139,8 @@ titles:
   - "Leprechaun"
   - "Thanksgiving"
   - "OneShot"
-  - "2ButtonOP"                      # 81
-  - "SlabBusting"
   - "TrickOrTreat"
-  - "Hyper"
+  - "Hyper" # 80
   - "#KOTH"
   - "#CantHang"
   - "EzCap"
@@ -151,9 +148,9 @@ titles:
   - "Godly"
   - "Reaper"
   - "Demolitionist"
-  - "Independent"                    # 91
+  - "Independent"
   - "0C"
-  - "$CASH$"
+  - "$CASH$" # 90
   - "#ScummerVibes"
   - "FistFistFist"
   - "$9001"
@@ -161,113 +158,111 @@ titles:
   - "SchoolIsCruel"
   - "#IPlayForMyself"
   - "#NoSchoolNoProblems"
-  - "BaseSlave"                      # 101
+  - "BaseSlave"
   - "#ForeverTogether"
-  - "Rudolph"
+  - "Rudolph" # 100
   - "#NotMyPlanet"
   - "#EvilXmasElf"
   - "EverythingMustGo"
   - "#GetSplit"
-  - "#AllmcMMO"
   - "IDerp"
   - "#Freedom"
-  - "Frosty"                         # 111
+  - "Frosty"
   - "IAmSoBored"
   - "1v1me"
-  - "Donald_Trump"
+  - "Donald_Trump" # 110
   - "#NoSeasons"
   - "2k16"
   - "#WinterIsComing"
   - "CheckMyTanLine"
   - "Noob"
   - "Jolly"
-  - "Grinch"                         # 121
+  - "Grinch"
   - "Santa"
   - "WALMART"
-  - "#Pay2Play"
+  - "#Pay2Play" # 120
   - "#ClownLivesMatter"
   - "TheLongestTitleOnCosmicPvP"
   - "IDC"
   - "DoMyHomework"
   - "#RipCraygasm"
   - "Slayer"
-  - "#Numb"                          # 131
+  - "#Numb"
   - "CandyAddict"
   - "#April"
-  - "Toxic"
+  - "Toxic" # 130
   - "#BackToJail"
   - "Pyromaniac"
   - "CandyCrazy"
   - "Monster"
   - "Phoenix"
   - "#JakePauler"
-  - "Enchanter"                      # 141
+  - "Enchanter"
   - "PumpkinManiac"
   - "#Spring"
-  - "Troll"
+  - "Troll" # 140
   - "Sunny"
   - "CactusParty"
   - "Plague"
   - "#TrickOrGank"
   - "ThankFulForBeingRich"
   - "#2k17"
-  - "IsItSummerYet?"                 # 151
+  - "IsItSummerYet?"
   - "Valentine"
   - "#Thankful"
-  - "#June2017"
+  - "#June2017" # 150
   - "EasterBunny"
   - "#2k16"
   - "HotChocolate"
   - "Chilly"
   - "#Timeless"
   - "Destroyer"
-  - "#2k15"                          # 161
+  - "#2k15"
   - "MakeLoveNotMinecraft"
   - "#TrickAndTreat"
-  - "#TurkeyLivesMatter"
+  - "#TurkeyLivesMatter" # 160
   - "#Capitalism"
   - "#CatchMeOutside"
   - "#IPayToLose"
   - "SsMeBro"
   - "ILoveSugar"
   - "ILikeSpookyMemes"
-  - "BuildThatWall"                  # 171
+  - "BuildThatWall"
   - "Qt3.14"
-  - "#Numb"
   - "BabyItsColdOffline"
-  - "KeepCalmAndStayToasty"
+  - "KeepCalmAndStayToasty" # 170
   - "CyaInDetention"
   - "#Cleared"
   - "BlackFriday2017"
   - "Clowns"
   - "#FREE"
-  - "#End"                           # 181
+  - "#End"
   - "#XMAS"
   - "#naughty"
   - "#May2017"
-  - "VapeOP"
+  - "VapeOP" # 180
   - "69cps"
   - "EveryDayImShovelin"
   - "OnTheGrind"
   - "#2spooky4me"
   - "2017_OG"
-  - "#WaitingForWinter"              # 191
+  - "#WaitingForWinter"
   - "#IGotSmarts"
   - "#Expelled"
   - "#WinterIsHere"
-  - "#ChristmasIsComing"
+  - "#ChristmasIsComing" # 190
   - "iHateHolidays"
   - "Blacklisted"
   - "RIP2k17"
   - "NewYearNewMe"
   - "2k18"
-  - "#WePayWeSay"                   # 201
+  - "#WePayWeSay"
   - "LoneWolf"
   - "DupeMeDaddy"
   - "#First"
-  - "Frostbite"
+  - "Frostbite" # 200
   - "HalfBaked"
   - "IRegretNothing"
   - "EndOfTheRainbow"
-  - "#Prepper"
+  - "#Prepper" # 204
 #

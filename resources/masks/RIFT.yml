@@ -14,5 +14,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &d&lRift Mask&r &f(&c50% Mastery Enchant Negation&f)"
+added lore: "&7&lATTACHED:&r &d&lRift Mask&r &f(&c50% Mastery Enchant Negation&f)"

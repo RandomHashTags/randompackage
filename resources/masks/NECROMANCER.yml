@@ -13,5 +13,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &2&lNecromancer Mask&r &f(&cImmune to Lifesteal&f)"
+added lore: "&7&lATTACHED:&r &2&lNecromancer Mask&r &f(&cImmune to Lifesteal&f)"

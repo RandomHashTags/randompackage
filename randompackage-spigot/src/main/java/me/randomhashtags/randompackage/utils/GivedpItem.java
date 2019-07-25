@@ -7,7 +7,8 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.events.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.api.events.MysteryMobSpawnerOpenEvent;
-import me.randomhashtags.randompackage.api.nearFinished.Boosters;
+import me.randomhashtags.randompackage.api.Boosters;
+import me.randomhashtags.randompackage.api.unfinished.Trinkets;
 import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
@@ -106,11 +107,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
 
     private int getInt(String input, int max) {
         input = input.toLowerCase();
-        return input.equalsIgnoreCase("random") ? 1+random.nextInt(max) : Integer.parseInt(input);
+        return input.equals("random") ? 1+random.nextInt(max) : Integer.parseInt(input);
     }
     private int getInt(String input) {
         input = input.toLowerCase();
-        return input.equalsIgnoreCase("random") ? random.nextInt(101) : Integer.parseInt(input);
+        return input.equals("random") ? random.nextInt(101) : Integer.parseInt(input);
     }
 
     public ItemStack valueOf(String input) {
@@ -200,7 +201,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final Boosters f = Boosters.getBoosters();
             if(f.isEnabled()) {
                 final String[] a = Q.split(":");
-                return getBooster(a[0]).getItem(Long.parseLong(a[2])*1000, Double.parseDouble(a[1]));
+                return getBooster(a[1]).getItem(Long.parseLong(a[3])*1000, Double.parseDouble(a[2]));
             }
             return air;
         } else if(input.startsWith("fallenherogem")) {
@@ -296,10 +297,18 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 Title t = getTitle(input.contains(":") ? Q.split(":")[1] : "random");
                 if(t == null) {
                     try {
-                        t = (Title) titles.values().toArray()[Integer.parseInt(Q.split(":")[1])-1];
+                        t = (Title) titles.values().toArray()[getRemainingInt(Q.contains(":") ? Q.split(":")[1] : Q)-1];
                     } catch(Exception e) {
                         System.out.println("[RandomPackage] That title doesn't exist!");
                     }
+                }
+                return t != null ? t.getItem() : air;
+            }
+            return air;
+        } else if(input.startsWith("trinket")) {
+            if(Trinkets.getTrinkets().isEnabled()) {
+                Trinket t = getTrinket(input.contains(":") ? Q.split(":")[1] : "random");
+                if(t == null) {
                 }
                 return t != null ? t.getItem() : air;
             }

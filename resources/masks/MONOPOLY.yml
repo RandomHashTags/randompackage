@@ -14,5 +14,4 @@ item:
 attributes:
   - "PvA;setDamage{dmg*0.95}"
 #
-added lore:
-  - "&7&lATTACHED:&r &b&lMonopoly Mask&r &f(&c33% Holy White Scroll negation&f)"
+added lore: "&7&lATTACHED:&r &b&lMonopoly Mask&r &f(&c33% Holy White Scroll negation&f)"

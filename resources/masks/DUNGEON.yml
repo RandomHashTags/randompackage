@@ -14,5 +14,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &6&lDungeon Mask&r &f(&c10% chance to not use /dungeon key&f)"
+added lore: "&7&lATTACHED:&r &6&lDungeon Mask&r &f(&c10% chance to not use /dungeon key&f)"

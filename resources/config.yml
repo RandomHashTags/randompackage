@@ -42,6 +42,9 @@ balance:
 bless:
   enabled: true
 #
+boosters:
+  enabled: true
+#
 bump:
   enabled: true
 #
@@ -77,6 +80,8 @@ custom enchants:
   randomization scrolls: true
   rarity gems: true
   soul trackers: true
+  transmog scrolls: true
+  white scrolls: true
 #
 custom creepers:
   enabled: true
@@ -230,6 +235,9 @@ vkits:
   enabled: true
   aliases:
     - "vkits"
+#
+wild:
+  enabled: true
 #
 withdraw:
   enabled: true

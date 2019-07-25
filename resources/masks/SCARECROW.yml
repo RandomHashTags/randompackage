@@ -13,5 +13,4 @@ item:
 attributes:
   - "FoodLevelLost;cancel"
 #
-added lore:
-  - "&7&lATTACHED:&r &e&lScarecrow Mask&r &f(&cInfinite Food&f)"
+added lore: "&7&lATTACHED:&r &e&lScarecrow Mask&r &f(&cInfinite Food&f)"

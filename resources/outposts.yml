@@ -19,6 +19,10 @@ messages:
     - " "
     - "&b&l*&r &7Use &b/warp outpost &7to select an outpost to teleport to. Or use &b/outpost help &7for more information."
     - " "
+  teleport death ban indefinitely:
+    - "&c&l(!)&r &cYou cannot teleport back to that /outpost because you were killed in it!"
+  teleport death ban temporary:
+    - "&c&l(!)&r &cYou cannot teleport back to that /outpost for: &n{TIME}"
 #
 status:
   # {CONTROLLING_FACTION} = The controlling faction's name
@@ -41,3 +45,10 @@ gui:
     item: "black_stained_glass_pane"
     name: " "
 #
+death ban:
+  enabled: true
+  # Duration in seconds
+  default duration: 120
+  duration: # <permission>;<duration>
+    - "RandomPackage.outpost.deathban.120;120"
+    - "RandomPackage.outpost.deathban.60;60"

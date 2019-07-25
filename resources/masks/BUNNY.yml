@@ -14,5 +14,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.5x Mobs from Spawners in Chunk&f)"
+added lore: "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.5x Mobs from Spawners in Chunk&f)"

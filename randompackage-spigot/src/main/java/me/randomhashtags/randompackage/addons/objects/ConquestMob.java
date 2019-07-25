@@ -30,6 +30,7 @@ public class ConquestMob {
     }
 
     public LivingConquestMob spawn(Location location) {
+        location.getChunk().load();
         final LivingEntity le = uv.getEntity(type, location, true);
         final LivingConquestMob l = new LivingConquestMob(le, this);
         return l;

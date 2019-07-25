@@ -14,5 +14,4 @@ item:
 attributes:
   - "PvA;setDamage{dmg*1.025}"
 #
-added lore:
-  - "&7&lATTACHED:&r &9&lDeath Knight Mask&r &f(&c50% chance to negate enemy's Phoenix&f)"
+added lore: "&7&lATTACHED:&r &9&lDeath Knight Mask&r &f(&c50% chance to negate enemy's Phoenix&f)"

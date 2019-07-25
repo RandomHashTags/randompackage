@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
+import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
@@ -13,14 +14,12 @@ import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.enums.CustomEnchantApplyResult;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -57,7 +56,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     private String alchemistcurrency, enchantercurrency;
     private int alchemistCostSlot;
     private UInventory alchemist, enchanter, tinkerer;
-    public ItemStack transmogscroll, whitescroll;
     private ItemStack tinkereraccept, alchemistpreview, alchemistexchange, alchemistaccept;
     private HashMap<Integer, Long> enchantercost;
     private HashMap<Integer, ItemStack> enchanterpurchase;
@@ -99,11 +97,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             if(s.contains("{COST}")) alchemistCostSlot = X;
             X++;
         }
-        transmogscroll = d(config, "items.transmog scroll");
-        whitescroll = d(config, "items.white scroll");
-
-        givedpitem.items.put("transmogscroll", transmogscroll);
-        givedpitem.items.put("whitescroll", whitescroll);
 
         enchantercost = new HashMap<>();
         enchanterpurchase = new HashMap<>();
@@ -116,7 +109,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         setupInventory(tinkerer);
 
         final YamlConfiguration a = otherdata;
-        final FileConfiguration RP = randompackage.getConfig();
         if(!a.getBoolean("saved default custom enchants")) {
             final String[] mas = new String[] {
                     "_settings",
@@ -329,8 +321,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         alchemistexchange = null;
         alchemistaccept = null;
         noMoreEnchantsAllowed = null;
-        whitescroll = null;
-        transmogscroll = null;
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
@@ -352,7 +342,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                         final CustomEnchant ce = (CustomEnchant) CustomEnchant.enabled.values().toArray()[i];
                         final EnchantRarity rarity = EnchantRarity.valueOf(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
-                        replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getYamlName()));
+                        replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getIdentifier()));
                         replacements.put("{DESC}", ce.getLore());
                         final String msg = ChatColor.translateAlternateColorCodes('&', format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {
@@ -533,21 +523,27 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         final int l = r.length;
         final EnchantRarity rar = EnchantRarity.rarities.get(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
         final List<CustomEnchant> enchants = rar.getEnchants();
-        final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
-        final int level = random.nextInt(enchant.getMaxLevel()+1);
-        item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
-        itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
-        final String appliesto = enchant.getAppliesTo().toString().replace(" ", "").replace(",", ";");
-        final int sp = random.nextInt(101), dp = rarity.percentsAddUpto100() ? 100-sp : random.nextInt(101);
-        for(String s : rarity.getLoreFormat()) {
-            if(s.equals("{SUCCESS}")) s = rarity.getSuccess().replace("{PERCENT}", Integer.toString(sp));
-            if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
-            if(s.equals("{ENCHANT_LORE}")) lore.addAll(enchant.getLore());
-            if(s.equals("{ENCHANT_TYPE}")) s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
-            if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+        item = new ItemStack(Material.BOOK);
+        for(int i = 1; i <= 100; i++) {
+            final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
+            if(enchant.isEnabled()) {
+                final int level = random.nextInt(enchant.getMaxLevel()+1);
+                item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
+                itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
+                final String appliesto = enchant.getAppliesTo().toString().replace(" ", "").replace(",", ";");
+                final int sp = random.nextInt(101), dp = rarity.percentsAddUpto100() ? 100-sp : random.nextInt(101);
+                for(String s : rarity.getLoreFormat()) {
+                    if(s.equals("{SUCCESS}")) s = rarity.getSuccess().replace("{PERCENT}", Integer.toString(sp));
+                    if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
+                    if(s.equals("{ENCHANT_LORE}")) lore.addAll(enchant.getLore());
+                    if(s.equals("{ENCHANT_TYPE}")) s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
+                    if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                }
+                itemMeta.setLore(lore); lore.clear();
+                item.setItemMeta(itemMeta);
+                break;
+            }
         }
-        itemMeta.setLore(lore); lore.clear();
-        item.setItemMeta(itemMeta);
         return item;
     }
     @EventHandler(priority = EventPriority.HIGH)
@@ -611,14 +607,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 for(String s : rarity.getRevealedEnchantMsg()) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{ENCHANT}", displayname)));
             }
         } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {
-            if(I.getItemMeta().equals(whitescroll.getItemMeta()) || I.getItemMeta().equals(transmogscroll.getItemMeta())) {
-                event.setCancelled(true);
-                player.updateInventory();
-            } else {
-                final CustomEnchant enchant = CustomEnchant.valueOf(I);
-                if(enchant != null)
-                    for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-            }
+            final CustomEnchant enchant = CustomEnchant.valueOf(I);
+            if(enchant != null)
+                for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
         }
     }
     @EventHandler(priority = EventPriority.HIGH)
@@ -985,7 +976,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                         }
                         lore.addAll(itemMeta.getLore());
                     }
-                    CustomEnchantApplyResult result = null;
+                    String result = null;
                     if(enchant != null) {
                         final EnchantRarity rar = EnchantRarity.valueOf(enchant);
                         final List<String> cml = cm.getLore();
@@ -1023,52 +1014,49 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                                 if(lore.isEmpty()) {
                                     lore.add(e);
                                 } else if(prevlevel == -1 && prevslot == -1) {
-                                    int R = -1;
-                                    boolean did = false;
+                                    String replacedEnchant = null;
                                     final ArrayList<String> newlore = new ArrayList<>();
                                     for(String s : lore) {
-                                        if(!did) R += 1;
                                         final CustomEnchant ce = CustomEnchant.valueOf(s);
                                         if(ce != null) {
-                                            if(ce.equals(replaces)) did = true;
-                                            newlore.add(s);
+                                            if(ce.equals(replaces)) {
+                                                newlore.add(e);
+                                                replacedEnchant = s;
+                                            } else {
+                                                newlore.add(s);
+                                            }
                                         }
                                     }
-                                    newlore.add(e);
-                                    for(String s : lore) if(!newlore.contains(s)) newlore.add(s);
-                                    if(replaces != null) newlore.remove(R);
+                                    if(!newlore.contains(e)) newlore.add(e);
+                                    for(String s : lore) if(!newlore.contains(s) && (replacedEnchant == null || !s.equals(replacedEnchant))) newlore.add(s);
                                     lore = newlore;
                                 } else {
                                     lore.set(prevslot, a + en + " " + toRoman(level > prevlevel ? level : prevlevel + 1));
                                 }
-                                result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? CustomEnchantApplyResult.SUCCESS_APPLY : CustomEnchantApplyResult.SUCCESS_UPGRADE;
+                                result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
                             } else if(random.nextInt(100) <= destroy) {
-                                result = lore.contains(WHITE_SCROLL) ? CustomEnchantApplyResult.DESTROY_WHITE_SCROLL : CustomEnchantApplyResult.DESTROY;
-                                if(lore.contains(WHITE_SCROLL)) lore.remove(WHITE_SCROLL);
-                                else                            item = new ItemStack(Material.AIR);
+                                final WhiteScroll w = getWhiteScroll("REGULAR");
+                                final String applied = w != null ? w.getApplied() : null;
+                                result = applied != null && lore.contains(applied) ? "DESTROY_WHITE_SCROLL" : "DESTROY";
+                                if(lore.contains(applied)) lore.remove(applied);
+                                else                       item = new ItemStack(Material.AIR);
                             }
                             apply = true;
                             final PlayerApplyCustomEnchantEvent ce = new PlayerApplyCustomEnchantEvent(player, enchant, level, result);
                             pluginmanager.callEvent(ce);
                         }
-                    } else {
-                        if(whitescroll != null && cm.equals(whitescroll.getItemMeta()) && !current.getType().equals(Material.AIR)) {
-                            final ItemMeta c = current.getItemMeta();
-                            if(!current.hasItemMeta() || current.hasItemMeta() && (!c.hasLore() || c.hasLore() && !c.getLore().contains(WHITE_SCROLL))) {
-                                apply = true;
-                                lore.add(WHITE_SCROLL);
-                            }
-                        }
                     }
                     if(apply) {
                         if(!item.getType().equals(Material.AIR)) {
                             if(itemMeta.hasDisplayName()) {
-                                final String D = itemMeta.getDisplayName(), l = TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantsize));
-                                if(D.contains(l)) {
-                                    itemMeta.setDisplayName(D.replace(l, TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantsize+1))));
+                                final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+                                if(t.isEnabled()) {
+                                    final TransmogScroll ts = t.getApplied(item);
+                                    if(ts != null) {
+                                        t.update(item, enchantsize, enchantsize+1);
+                                    }
                                 }
                             }
-                            if(lore.contains(WHITE_SCROLL)) { lore.remove(WHITE_SCROLL); lore.add(WHITE_SCROLL); }
                             itemMeta.setLore(lore); lore.clear();
                             item.setItemMeta(itemMeta);
                         }
@@ -1088,62 +1076,22 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
 
     @EventHandler
     private void givedpClickEvent(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        final Inventory inventory = event.getInventory(), inv = player.getInventory(), top = player.getOpenInventory().getTopInventory();
-        final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-        if(event.isCancelled()) return;
-        else if(top.getType().equals(InventoryType.ANVIL)) {
-            if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore() || event.getClick().equals(ClickType.NUMBER_KEY)) {
-                CustomEnchant enchant = null;
-                final int hb = event.getHotbarButton();
-                item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
-                if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-                    enchant = CustomEnchant.valueOf(item.getItemMeta().getDisplayName());
-                if(enchant != null) {
-                    event.setCancelled(true);
-                    player.updateInventory();
-                    player.closeInventory();
-                }
-            }
-            return;
-        } else if(current == null || current.getType().equals(Material.AIR)) { return;
-        } else if(inventory.getType().equals(InventoryType.CRAFTING) || inventory.getType().equals(InventoryType.PLAYER)) {
-            boolean success = false;
-            int enchantcount = -1;
-            if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
-                item = current; itemMeta = current.getItemMeta(); lore.clear();
-                if(cursor.getItemMeta().equals(whitescroll.getItemMeta())) {
-                    final String t = item.getType().name();
-                    if(t.endsWith("AXE") || t.endsWith("SWORD") || t.endsWith("SPADE") || t.equals("BOW") || t.equals("FISHING_ROD") || t.endsWith("HELMET") || t.endsWith("CHESTPLATE") || t.endsWith("LEGGINGS") || t.endsWith("BOOTS")) {
-                        if(!item.hasItemMeta() || item.hasItemMeta() && (!itemMeta.hasLore() || !itemMeta.getLore().contains(WHITE_SCROLL))) {
-                            if(item.hasItemMeta() && itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                            lore.add(WHITE_SCROLL);
-                            itemMeta.setLore(lore); lore.clear();
-                            success = true;
-                        }
+        if(!event.isCancelled()) {
+            final Player player = (Player) event.getWhoClicked();
+            final Inventory inv = player.getInventory();
+            final ItemStack current = event.getCurrentItem();
+            if(player.getOpenInventory().getTopInventory().getType().equals(InventoryType.ANVIL)) {
+                if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore() || event.getClick().equals(ClickType.NUMBER_KEY)) {
+                    CustomEnchant enchant = null;
+                    final int hb = event.getHotbarButton();
+                    item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
+                    if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+                        enchant = CustomEnchant.valueOf(item.getItemMeta().getDisplayName());
+                    if(enchant != null) {
+                        event.setCancelled(true);
+                        player.updateInventory();
+                        player.closeInventory();
                     }
-                } else if(cursor.getItemMeta().equals(transmogscroll.getItemMeta())) {
-                    applyTransmogScroll(current);
-                    //playSuccess((Player) event.getWhoClicked());
-                    event.setCancelled(true);
-                    event.setCurrentItem(current);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
-                    player.updateInventory();
-                    return;
-                }
-                if(success) {
-                    //playSuccess((Player) event.getWhoClicked());
-                    item.setItemMeta(itemMeta);
-                    if(itemMeta.hasDisplayName() && itemMeta.getDisplayName().contains(TRANSMOG.replace("{LORE_COUNT}", Integer.toString(enchantcount))))
-                        applyTransmogScroll(item);
-                    event.setCancelled(true);
-                    event.setCurrentItem(item);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
-                    player.updateInventory();
                 }
             }
         }
@@ -1209,67 +1157,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                 }
             }
-        }
-    }
-
-    public boolean applyTransmogScroll(ItemStack is) {
-        final String currentitem = is != null ? is.getType().name() : null;
-        if(currentitem != null && (currentitem.endsWith("AXE") || currentitem.endsWith("SWORD") || currentitem.endsWith("SPADE") || currentitem.equals("BOW") || currentitem.endsWith("HELMET") || currentitem.endsWith("CHESTPLATE") || currentitem.endsWith("LEGGINGS") || currentitem.endsWith("BOOTS"))) {
-            final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
-            final int size = enchants.keySet().size(), prevsize = enchants.keySet().size();
-            itemMeta = is.getItemMeta(); lore.clear();
-            if(itemMeta.hasLore()) {
-                final List<String> l = itemMeta.getLore();
-                for(String ss : transmog_organization) {
-                    final EnchantRarity r = EnchantRarity.rarities.get(ss);
-                    for(String s : l) {
-                        final CustomEnchant enchant = CustomEnchant.valueOf(s);
-                        if(enchant != null && EnchantRarity.valueOf(enchant).equals(r)) lore.add(s);
-                    }
-                }
-                String soultracker = null;
-                for(String s : itemMeta.getLore()) {
-                    final LinkedHashMap<String, SoulTracker> t = soultrackers;
-                    if(t != null) {
-                        for(SoulTracker st : t.values()) {
-                            if(s.startsWith(st.getAppliedLore().replace("{SOULS}", ""))) {
-                                soultracker = s;
-                            }
-                        }
-                    }
-                }
-                if(lore.contains(WHITE_SCROLL)) { lore.remove(WHITE_SCROLL); lore.add(WHITE_SCROLL); }
-                if(soultracker != null) { lore.remove(soultracker); lore.add(soultracker); }
-                for(String s : itemMeta.getLore())
-                    if(!lore.contains(s)) lore.add(s);
-            }
-            itemMeta.setLore(lore); lore.clear();
-            //
-            String name;
-            if(itemMeta.hasDisplayName()) {
-                name = itemMeta.getDisplayName();
-                if(name.contains(TRANSMOG.replace("{LORE_COUNT}", "" + prevsize))) name = name.replace(TRANSMOG.replace("{LORE_COUNT}", "" + prevsize), TRANSMOG.replace("{LORE_COUNT}", "" + size));
-            } else name = is.getType().name();
-            if(name.equals(is.getType().name())) name = toMaterial(is.getType().name(), false);
-            name = name.replace("{ENCHANT_SIZE}", TRANSMOG.replace("{LORE_COUNT}", "" + size));
-            if(!name.contains(TRANSMOG.replace("{LORE_COUNT}", Integer.toString(size)))) name = name + " " + TRANSMOG.replace("{LORE_COUNT}", Integer.toString(size));
-            ChatColor color = ChatColor.RESET;
-            if(itemMeta.hasEnchants()) color = ChatColor.AQUA;
-            itemMeta.setDisplayName(color + name);
-            is.setItemMeta(itemMeta);
-            return true;
-        }
-        return false;
-    }
-    public void applyWhiteScroll(Player player, ItemStack is) {
-        if(is != null) {
-            if(is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().contains(WHITE_SCROLL)) return;
-            itemMeta = is.getItemMeta(); lore.clear();
-            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-            lore.add(WHITE_SCROLL);
-            itemMeta.setLore(lore); lore.clear();
-            is.setItemMeta(itemMeta);
-            player.updateInventory();
         }
     }
 }

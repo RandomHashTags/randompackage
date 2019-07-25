@@ -181,20 +181,6 @@ items:
     - "&7Next-Gen Servonaut space tech,"
     - "&7used to stabilize the output of"
     - "&7Dimension Webs for /dungeons."
-  holy white scroll:
-    # When a player dies with this on an item, this is the chance that the item isn't lost
-    chance of not losing: 100
-    item: "paper"
-    name: "&6&lHoly White Scroll"
-    lore:
-    - "&eA legendary /dungeon reward that"
-    - "&ecan be applied to armor/weapons,"
-    - "&egives a 100% chance of not losing"
-    - "&ethe blessed item on death."
-    - " "
-    - "&6&nREQ:&r &eWhite Scroll"
-    #
-    apply: "&f&lPROTECTED (&r&6&l*HOLY*&r&f&l)"
   interdimensional core:
     item: "beacon"
     name: "&d&lInterdimensional Core"

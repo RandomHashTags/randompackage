@@ -6,13 +6,13 @@ import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
+import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,32 +20,26 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
-public class Fireballs extends RPFeature {
+public class Fireballs extends CustomEnchantUtils {
     private static Fireballs instance;
     public static Fireballs getFireballs() {
         if(instance == null) instance = new Fireballs();
         return instance;
     }
 
-    public YamlConfiguration config;
     public ItemStack mysterydust;
 
     public void load() {
+        loadUtils();
         long started = System.currentTimeMillis();
-        save("custom enchants", "fireballs.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "fireballs.yml"));
-        mysterydust = d(config, "items.mystery dust");
+        mysterydust = d(addons, "items.mystery dust");
         givedpitem.items.put("mysterydust", mysterydust);
-        PathFireball.fireballyml = config;
-        PathMagicDust.fireballyml = config;
-
-        ConfigurationSection cs = config.getConfigurationSection("fireballs");
+        ConfigurationSection cs = addons.getConfigurationSection("fireballs");
         final List<ItemStack> z = new ArrayList<>();
         if(cs != null) {
             for(String s : cs.getKeys(false)) {
@@ -56,7 +50,7 @@ public class Fireballs extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fireballs != null ? fireballs.size() : 0) + " Fireballs &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
         started = System.currentTimeMillis();
-        cs = config.getConfigurationSection("dusts");
+        cs = addons.getConfigurationSection("dusts");
         if(cs != null) {
             for(String s : cs.getKeys(false)) {
                 new PathMagicDust(s);
@@ -66,11 +60,9 @@ public class Fireballs extends RPFeature {
     }
     public void unload() {
         instance = null;
-        config = null;
         mysterydust = null;
         deleteAll(Feature.FIREBALLS_AND_DUST);
-        PathFireball.fireballyml = null;
-        PathMagicDust.fireballyml = null;
+        unloadUtils();
     }
 
     @EventHandler(priority = EventPriority.HIGH)

@@ -11,13 +11,11 @@ import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +25,11 @@ public class RandomizationScrolls extends CustomEnchants {
         if(instance == null) instance = new RandomizationScrolls();
         return instance;
     }
-    public YamlConfiguration config;
 
     public void load() {
+        loadUtils();
         final long started = System.currentTimeMillis();
-        save("custom enchants", "randomization scrolls.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants" + separator, "randomization scrolls.yml"));
-        PathRandomizationScroll.randomizationscrollsyml = config;
-        final ConfigurationSection cs = config.getConfigurationSection("scrolls");
+        final ConfigurationSection cs = addons.getConfigurationSection("randomization scrolls");
         if(cs != null) {
             final List<ItemStack> z = new ArrayList<>();
             for(String s : cs.getKeys(false)) {
@@ -47,7 +42,7 @@ public class RandomizationScrolls extends CustomEnchants {
     public void unload() {
         instance = null;
         deleteAll(Feature.RANDOMIZATION_SCROLLS);
-        PathRandomizationScroll.randomizationscrollsyml = null;
+        unloadUtils();
     }
 
     @EventHandler

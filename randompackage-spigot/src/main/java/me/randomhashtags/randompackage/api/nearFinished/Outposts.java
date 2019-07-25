@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Outpost;
 import me.randomhashtags.randompackage.addons.usingfile.FileOutpost;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -21,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 public class Outposts extends RPFeature implements CommandExecutor {
     private static Outposts instance;
@@ -86,11 +86,11 @@ public class Outposts extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (outposts != null ? outposts.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        deleteAll(Feature.OUTPOSTS);
         config = null;
         gui = null;
         background = null;
-        statuses = null;
-        outposts = null;
+        instance = null;
     }
 
 
@@ -139,7 +139,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         }
     }
     public void tryTeleportingTo(Player player, Outpost outpost) {
-        if(hasPermission(player, "RandomPackage.outpost.warp.*", false) || hasPermission(player, "RandomPackage.outpost.warp." + outpost.getYamlName(), true)) {
+        if(hasPermission(player, "RandomPackage.outpost.warp.*", false) || hasPermission(player, "RandomPackage.outpost.warp." + outpost.getIdentifier(), true)) {
             try {
                 player.teleport(outpost.getWarpLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             } catch(Exception e) {

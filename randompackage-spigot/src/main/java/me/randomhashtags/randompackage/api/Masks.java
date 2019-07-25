@@ -2,14 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Mask;
 import me.randomhashtags.randompackage.addons.usingfile.FileMask;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.api.events.*;
 import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
-import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
-import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -112,6 +106,8 @@ public class Masks extends CustomEnchants implements Listener {
             final Player player = (Player) event.getWhoClicked();
             if(m != null && onitem == null) {
                 event.setCancelled(true);
+                final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
+                pluginmanager.callEvent(e);
                 apply(m, current);
                 item = m.getItem();
                 final int a = item.getAmount()-mask.getAmount();
@@ -121,7 +117,7 @@ public class Masks extends CustomEnchants implements Listener {
             } else if(click.equals("RIGHT") && onitem != null) {
                 item = current; itemMeta = item.getItemMeta(); lore.clear();
                 lore.addAll(itemMeta.getLore());
-                lore.removeAll(onitem.getAddedLore());
+                lore.remove(onitem.getApplied());
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
                 event.setCancelled(true);
@@ -315,7 +311,7 @@ public class Masks extends CustomEnchants implements Listener {
         if(m != null && is != null) {
             itemMeta = is.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-            lore.addAll(m.getAddedLore());
+            lore.add(m.getApplied());
             itemMeta.setLore(lore); lore.clear();
             is.setItemMeta(itemMeta);
         }

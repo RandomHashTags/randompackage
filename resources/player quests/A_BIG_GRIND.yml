@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "KilledEntity;type=MAGMA_CUBE;+1"
+- "EntityDeath;type=MAGMA_CUBE;increaseKillerPlayerQuest=1"

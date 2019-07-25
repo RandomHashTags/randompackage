@@ -15,5 +15,4 @@ item:
 attributes:
   - ""
 #
-added lore:
-  - "&7&lATTACHED:&r &5&lJoker Mask&r &f(&c+4s Combat Tag on enemies, -3s Combat Tag on you&f)"
+added lore: "&7&lATTACHED:&r &5&lJoker Mask&r &f(&c+4s Combat Tag on enemies, -3s Combat Tag on you&f)"

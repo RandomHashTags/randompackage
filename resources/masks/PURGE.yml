@@ -14,5 +14,4 @@ item:
 attributes:
   - "PvA;setDamage{dmg*1.025}"
 #
-added lore:
-  - "&7&lATTACHED:&r &c&lPurge Mask&r &f(&c+2.5% DMG&f)"
+added lore: "&7&lATTACHED:&r &c&lPurge Mask&r &f(&c+2.5% DMG&f)"

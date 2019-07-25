@@ -409,15 +409,19 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		if(!event.isCancelled() && center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED")) {
+		if(!event.isCancelled() && center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED") && !limitedcommands.contains("*")) {
 			final String m = event.getMessage().toLowerCase();
 			boolean did = false;
-			for(String string : limitedcommands) if(m.startsWith(string.toLowerCase())) did = true;
+			for(String string : limitedcommands) {
+				if(m.startsWith(string.toLowerCase())) {
+					did = true;
+					break;
+				}
+			}
 			if(!did) {
 				sendStringListMessage(player, null, config.getStringList("messages.blocked command"), -1, null);
 				if(!player.isOp()) event.setCancelled(true);
 				else player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eSince you're OP, the command has been executed."));
-				return;
 			}
 		}
 	}

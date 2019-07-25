@@ -224,7 +224,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final CustomEnchant enchant = event.enchant;
-            final String rarity = EnchantRarity.valueOf(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result.name();
+            final String rarity = EnchantRarity.valueOf(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result;
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;

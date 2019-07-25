@@ -52,7 +52,9 @@ public abstract class Spawnable extends Identifyable {
 
     public boolean canSpawnAt(Location l) { return canSpawnAt(null, l); }
     public boolean canSpawnAt(Player summoner, Location l) {
-        switch(getSpawnType()) {
+        final RegionPlugin a = getSpawnType();
+        if(a == null) return true;
+        switch(a) {
             case FACTIONS_UUID: return canSpawnAtFactionClaim(summoner, l);
             case ASKYBLOCK: return canSpawnSkyblock(RegionPlugin.ASKYBLOCK, l);
             case SUPERIOR_SKYBLOCK: return canSpawnSkyblock(RegionPlugin.SUPERIOR_SKYBLOCK, l);

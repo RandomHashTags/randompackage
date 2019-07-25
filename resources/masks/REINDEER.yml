@@ -16,5 +16,4 @@ attributes:
   - "MaskEquip;addPotionEffect{speed:3:99999}"
   - "MaskUnequip;removePotionEffect{speed:false}"
 #
-added lore:
-  - "&7&lATTACHED:&r &a&lReindeer Mask&r &f(&cSPEED IV, Flight regardless of rank&f)"
+added lore: "&7&lATTACHED:&r &a&lReindeer Mask&r &f(&cSPEED IV, Flight regardless of rank&f)"
