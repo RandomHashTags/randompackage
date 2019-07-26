@@ -34,6 +34,8 @@ commands:
     description: View disabled custom enchants.
   duel:
     description: Duels!
+  dungeon:
+    description: Dungeons!
   enchanter:
     description: Purchase givedp items.
   enchants:

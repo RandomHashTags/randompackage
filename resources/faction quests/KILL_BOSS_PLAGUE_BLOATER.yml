@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Kill Boss Plague Bloater"
+  completion: 1
+#
+lore:
+- "&7Kill a &2&lPlague Bloater"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

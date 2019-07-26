@@ -6,8 +6,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.config;
-
 public class PathWhiteScroll extends WhiteScroll {
     private String path, apply;
     private ItemStack item;
@@ -17,14 +15,15 @@ public class PathWhiteScroll extends WhiteScroll {
     }
     public String getIdentifier() { return path; }
 
-    public String getRequiredWhiteScroll() { return config.getString("white scrolls." + path + ".required white scroll"); }
+    public String getRequiredWhiteScroll() { return getAddonConfig("white scrolls.yml").getString("white scrolls." + path + ".required white scroll"); }
+    public boolean removesRequiredAfterApplication() { return getAddonConfig("white scrolls.yml").getBoolean("white scrolls." + path + ".removes required after application"); }
     public ItemStack getItem() {
-        if(item == null) item = api.d(config, "white scrolls." + path);
+        if(item == null) item = api.d(getAddonConfig("white scrolls.yml"), "white scrolls." + path);
         return item.clone();
     }
     public String getApplied() {
-        if(apply == null) apply = ChatColor.translateAlternateColorCodes('&', config.getString("white scrolls." + path + ".apply"));
+        if(apply == null) apply = ChatColor.translateAlternateColorCodes('&', getAddonConfig("white scrolls.yml").getString("white scrolls." + path + ".apply"));
         return apply;
     }
-    public List<String> getAppliesTo() { return config.getStringList("white scrolls." + path + ".applies to"); }
+    public List<String> getAppliesTo() { return getAddonConfig("white scrolls.yml").getStringList("white scrolls." + path + ".applies to"); }
 }

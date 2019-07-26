@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.addons;
-
 public class PathSoulTracker extends SoulTracker {
     private String path;
     private ItemStack is;
@@ -30,11 +28,11 @@ public class PathSoulTracker extends SoulTracker {
         }
         return false;
     }
-    public String getTracks() { return addons.getString("soul trackers." + path + ".tracks"); }
+    public String getTracks() { return getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".tracks"); }
     public List<String> getAppliesTo() {
-        return addons.getStringList("soul trackers." + path + ".applies to");
+        return getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".applies to");
     }
-    public String getSoulsPerKill() { return addons.getString("soul trackers." + path + ".souls per kill"); }
+    public String getSoulsPerKill() { return getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".souls per kill"); }
     public double getSoulsCollected() {
         double min = 0;
         final String p = getSoulsPerKill();
@@ -42,19 +40,19 @@ public class PathSoulTracker extends SoulTracker {
         return min > 0 ? min+random.nextInt((int) (Double.parseDouble(p.split("-")[1])-min+1)) : Double.parseDouble(p);
     }
     public RarityGem getConvertsTo() {
-        return getRarityGem(addons.getString("soul trackers." + path + ".converts to gem"));
+        return getRarityGem(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".converts to gem"));
     }
     public ItemStack getItem() {
-        if(is == null) is = api.d(addons, "soul trackers." + path);
+        if(is == null) is = api.d(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
         return is.clone();
     }
-    public String getApplied() { return ChatColor.translateAlternateColorCodes('&', addons.getString("soul trackers." + path + ".apply")); }
+    public String getApplied() { return ChatColor.translateAlternateColorCodes('&', getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }
     public List<String> getApplyMsg() {
-        if(apply == null) apply = api.colorizeListString(addons.getStringList("soul trackers." + path + ".apply msg"));
+        if(apply == null) apply = api.colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".apply msg"));
         return apply;
     }
     public List<String> getSplitMsg() {
-        if(split == null) split = api.colorizeListString(addons.getStringList("soul trackers." + path + ".split msg"));
+        if(split == null) split = api.colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".split msg"));
         return split;
     }
 }

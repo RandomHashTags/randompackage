@@ -227,6 +227,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
 					final EnvoyCrate crate = getRandomCrate(true);
 					final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
+					loc.getChunk().load();
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 					if(lec == null && crate.canLand(loc)) {
 						lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);

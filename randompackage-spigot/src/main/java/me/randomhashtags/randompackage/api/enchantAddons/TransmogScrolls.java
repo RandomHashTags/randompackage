@@ -5,14 +5,17 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.TransmogScroll;
 import me.randomhashtags.randompackage.addons.usingpath.PathTransmogScroll;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,11 +29,14 @@ public class TransmogScrolls extends CustomEnchantUtils {
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
-        final ConfigurationSection c = addons.getConfigurationSection("transmog scrolls");
+        save("addons", "transmog scrolls.yml");
+        final ConfigurationSection c = getAddonConfig("transmog scrolls.yml").getConfigurationSection("transmog scrolls");
         if(c != null) {
+            final List<ItemStack> a = new ArrayList<>();
             for(String s : c.getKeys(false)) {
-                new PathTransmogScroll(s);
+                a.add(new PathTransmogScroll(s).getItem());
             }
+            addGivedpCategory(a, UMaterial.PAPER, "Transmog Scrolls", "Givedp: Transmog Scrolls");
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (transmogscrolls != null ? transmogscrolls.size() : 0) + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -40,9 +46,8 @@ public class TransmogScrolls extends CustomEnchantUtils {
         unloadUtils();
     }
 
-
     @EventHandler
-    private void givedpClickEvent(InventoryClickEvent event) {
+    private void inventoryClickEvent(InventoryClickEvent event) {
         if(!event.isCancelled()) {
             final Player player = (Player) event.getWhoClicked();
             final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();

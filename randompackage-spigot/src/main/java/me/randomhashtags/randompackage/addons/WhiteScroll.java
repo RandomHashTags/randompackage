@@ -8,12 +8,13 @@ import java.util.List;
 
 public abstract class WhiteScroll extends Applyable {
     public abstract String getRequiredWhiteScroll();
+    public abstract boolean removesRequiredAfterApplication();
 
     public boolean canBeApplied(ItemStack is) {
-        if(is != null) {
+        if(is != null && !is.getType().name().contains("AIR")) {
             final List<WhiteScroll> a = valueOfApplied(is);
             final String reqws = getRequiredWhiteScroll();
-            if(a != null && !a.contains(this) && (reqws == null || a.contains(getWhiteScroll(reqws)))) {
+            if(a == null && reqws == null || a != null && !a.contains(this) && (reqws == null || a.contains(getWhiteScroll(reqws)))) {
                 final String m = is.getType().name();
                 for(String s : getAppliesTo()) {
                     if(m.endsWith(s.toUpperCase())) {

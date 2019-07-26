@@ -9,15 +9,20 @@ import me.randomhashtags.randompackage.api.Boosters;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.utils.RPFeature.rpd;
+import static me.randomhashtags.randompackage.utils.RPFeature.separator;
 
 public abstract class RPStorage extends UVersion {
     protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
+
+    private static HashMap<String, YamlConfiguration> cached = new HashMap<>();
 
     private static LinkedHashMap<UUID, RPPlayer> players;
     protected static LinkedHashMap<String, ArmorSet> armorsets;
@@ -76,6 +81,17 @@ public abstract class RPStorage extends UVersion {
             players.remove(player);
         }
     }
+
+
+    private YamlConfiguration get(String yml) {
+        if(cached.containsKey(yml)) return cached.get(yml);
+        final File f = new File(rpd + separator + "addons", yml);
+        final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
+        cached.put(yml ,c);
+        return c;
+    }
+    public YamlConfiguration getAddonConfig(String yml) { return get(yml); }
+
 
     public ArmorSet getArmorSet(String identifier) {
         return armorsets != null ? armorsets.getOrDefault(identifier, null) : null;

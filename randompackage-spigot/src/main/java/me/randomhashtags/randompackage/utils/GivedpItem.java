@@ -5,6 +5,8 @@ import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingfile.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
+import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
+import me.randomhashtags.randompackage.api.enchantAddons.WhiteScrolls;
 import me.randomhashtags.randompackage.api.events.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.api.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.Boosters;
@@ -294,7 +296,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return s != null ? s.getItem() : air;
         } else if(input.startsWith("title")) {
             if(Titles.getTitles().isEnabled()) {
-                Title t = getTitle(input.contains(":") ? Q.split(":")[1] : "random");
+                Title t = getTitle(Q.contains(":") ? Q.split(":")[1] : "random");
                 if(t == null) {
                     try {
                         t = (Title) titles.values().toArray()[getRemainingInt(Q.contains(":") ? Q.split(":")[1] : Q)-1];
@@ -305,12 +307,28 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 return t != null ? t.getItem() : air;
             }
             return air;
-        } else if(input.startsWith("trinket")) {
-            if(Trinkets.getTrinkets().isEnabled()) {
-                Trinket t = getTrinket(input.contains(":") ? Q.split(":")[1] : "random");
+        } else if(input.startsWith("transmogscroll")) {
+            if(TransmogScrolls.getTransmogScrolls().isEnabled()) {
+                TransmogScroll t = getTransmogScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
                 if(t == null) {
                 }
                 return t != null ? t.getItem() : air;
+            }
+            return air;
+        } else if(input.startsWith("trinket")) {
+            if(Trinkets.getTrinkets().isEnabled()) {
+                Trinket t = getTrinket(Q.contains(":") ? Q.split(":")[1] : "random");
+                if(t == null) {
+                }
+                return t != null ? t.getItem() : air;
+            }
+            return air;
+        } else if(input.startsWith("whitescroll")) {
+            if(WhiteScrolls.getWhiteScrolls().isEnabled()) {
+                WhiteScroll w = getWhiteScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
+                if(w == null) {
+                }
+                return w != null ? w.getItem() : air;
             }
             return air;
         } else if(input.startsWith("xpbottle:")) {

@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +16,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Arrays;
@@ -32,7 +30,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     private UInventory gui, master;
     private ItemStack background;
 
-    public ItemStack dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl;
+    public ItemStack dimensionweb, enchantedobsidian, fuelcell;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -49,10 +47,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         dimensionweb = d(config, "items.dimension web");
         enchantedobsidian = d(config, "items.enchanted obsidian");
         fuelcell = d(config, "items.fuel cell");
-        holywhitescroll = d(config, "items.holy white scroll");
-        soulanvil = d(config, "items.soul anvil");
-        soulpearl = d(config, "items.soul pearl");
-        addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell, holywhitescroll, soulanvil, soulpearl), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
+        addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         master = new UInventory(null, config.getInt("master.size"), ChatColor.translateAlternateColorCodes('&', config.getString("master.title")));
@@ -74,10 +69,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         config = null;
-        dungeons = null;
         master = null;
         background = null;
         deleteAll(Feature.DUNGEONS);
+        instance = null;
     }
 
     @EventHandler
@@ -100,21 +95,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack i = event.getItem();
         if(i != null && i.hasItemMeta()) {
-            final ItemMeta im = i.getItemMeta();
-            final Material t = i.getType();
-            final byte d = i.getData().getData();
-            final String o = im.equals(dimensionweb.getItemMeta()) && t.equals(dimensionweb.getType()) && d == dimensionweb.getData().getData() ? "d"
-                            : im.equals(enchantedobsidian.getItemMeta()) && t.equals(enchantedobsidian.getType()) && d == enchantedobsidian.getData().getData() ? "e"
-                            : im.equals(fuelcell.getItemMeta()) && t.equals(fuelcell.getType()) && d == fuelcell.getData().getData() ? "f"
-                            : im.equals(holywhitescroll.getItemMeta()) && t.equals(holywhitescroll.getType()) && d == holywhitescroll.getData().getData() ? "h"
-                            : im.equals(soulanvil.getItemMeta()) && t.equals(soulanvil.getType()) && d == soulanvil.getData().getData() ? "sa"
-                            : im.equals(soulpearl.getItemMeta()) && t.equals(soulpearl.getType()) && d == soulpearl.getData().getData() ? "sp"
-                            : null;
-            if(o != null) {
+            if(i.isSimilar(dimensionweb) || i.isSimilar(enchantedobsidian) || i.isSimilar(fuelcell)) {
                 final Player player = event.getPlayer();
                 event.setCancelled(true);
                 player.updateInventory();
-                if(o.equals("h")) return;
             }
         }
     }

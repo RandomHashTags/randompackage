@@ -87,6 +87,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     private CustomExplosions customexplosions;
     private Duels duels;
+    private Dungeons dungeons;
     private Envoy envoy;
     private FactionUpgrades factionupgrades;
     private Fund fund;
@@ -236,6 +237,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         duels = Duels.getDuels();
         tryLoading(Feature.DUELS);
 
+        dungeons = Dungeons.getDungeons();
+        tryLoading(Feature.DUNGEONS);
+
         envoy = Envoy.getEnvoy();
         tryLoading(Feature.ENVOY);
 
@@ -322,7 +326,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
     private void checkFiles() {
         saveDefaultConfig();
-        YamlUpdater.getYmlUpdater().update();
+        YamlUpdater.getYamlUpdater().update();
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {
@@ -419,6 +423,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             case CUSTOM_CREEPERS:
             case CUSTOM_TNT: return customexplosions;
             case DUELS: return duels;
+            case DUNGEONS: return dungeons;
             case ENVOY: return envoy;
             case FACTION_UPGRADES: return factionupgrades;
             case FUND: return fund;
@@ -569,14 +574,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(enabled) {
                 duels.enable();
             }
-            /*
         } else if(f.equals(Feature.DUNGEONS)) {
-            enabled = config.getBoolean("dungeon.enabled");
+            enabled = config.getBoolean("dungeons.enabled");
             ce = dungeons;
             cmds.add("dungeon");
             if(enabled) {
                 dungeons.enable();
-            }*/
+            }
         } else if(f.equals(Feature.ENVOY)) {
             enabled = config.getBoolean("envoy.enabled");
             ce = envoy;

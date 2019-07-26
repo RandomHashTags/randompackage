@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.addons;
-
 public class PathBlackScroll extends BlackScroll {
 	private String path;
 	private int min, max;
@@ -16,7 +14,7 @@ public class PathBlackScroll extends BlackScroll {
 	private List<EnchantRarity> appliesto;
 	public PathBlackScroll(String path) {
 		this.path = path;
-		final String[] p = addons.getString("black scrolls." + path + ".percents").split(";");
+		final String[] p = getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".percents").split(";");
 		min = Integer.parseInt(p[0]);
 		max = Integer.parseInt(p[1]);
 		addBlackScroll(getIdentifier(), this);
@@ -24,7 +22,7 @@ public class PathBlackScroll extends BlackScroll {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(addons, "black scrolls." + path);
+		if(is == null) is = api.d(getAddonConfig("black scrolls.yml"), "black scrolls." + path);
 		return is.clone();
 	}
 
@@ -33,7 +31,7 @@ public class PathBlackScroll extends BlackScroll {
 	public List<EnchantRarity> getAppliesTo() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
-			for(String s : addons.getString("black scrolls." + path + ".applies to").split(";")) {
+			for(String s : getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".applies to").split(";")) {
 				appliesto.add(getEnchantRarity(s));
 			}
 		}

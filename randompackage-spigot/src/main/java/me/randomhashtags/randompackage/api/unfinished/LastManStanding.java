@@ -38,6 +38,7 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         config = null;
+        instance = null;
     }
 
     public void viewHelp(CommandSender sender) {

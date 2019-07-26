@@ -1,0 +1,45 @@
+# Made by RandomHashTags
+sounds:
+particles:
+#
+enchantment orbs:
+  armor:
+    applies to: "helmet;chestplate;leggings;boots"
+    starting max slots: 10
+    final max slots: 14
+    upgrade increment: 1
+    item: "eye_of_ender"
+    name: "&6&lArmor Enchantment Orb [&a&n{SLOTS}&6&l]"
+    lore:
+    - "&a{PERCENT}% Success Rate"
+    - " "
+    - "&6+{INCREMENT} Enchantment Slot"
+    - "&6{SLOTS} Max Armor Slots"
+    - " "
+    - "&eIncreases the # of enchantment"
+    - "&eslots on a piece of armor by {INCREMENT},"
+    - "&eup to a maximum of {SLOTS}."
+    - "&7Drag n' Drop onto armor to apply."
+    # This string is applied to the item to show an enchantment orb was applied to it.
+    apply: "&a&l{SLOTS} Enchantment Slots &7(Orb [&a+{ADD_SLOTS}&7])"
+  #
+  weapon:
+    applies to: "sword;_axe"
+    starting max slots: 10
+    final max slots: 14
+    upgrade increment: 1
+    item: "eye_of_ender"
+    name: "&6&lWeapon Enchantment Orb [&a&n{SLOTS}&6&l]"
+    lore:
+    - "&a{PERCENT}% Success Rate"
+    - " "
+    - "&6+{INCREMENT} Enchantment Slot"
+    - "&6{SLOTS} Max Enchantment Slots"
+    - " "
+    - "&eIncreases the # of enchantment"
+    - "&eslots on a weapon by {INCREMENT},"
+    - "&eup to a maximum of {SLOTS}."
+    - "&7Drag n' Drop onto weapon to apply."
+    # This string is applied to the item to show a weapon enchantment orb was applied to it.
+    apply: "&a&l{SLOTS} Enchantment Slots &7(Orb [&a+{ADD_SLOTS}&7])"
+#

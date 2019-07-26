@@ -41,10 +41,13 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
                     "KILL_BLAZE_I",
                     "KILL_BOSS_BROOD_MOTHER",
                     "KILL_BOSS_KING_SLIME",
+                    "KILL_BOSS_PLAGUE_BLOATER",
                     "KILL_BOSS_UNDEAD_ASSASSIN",
                     "KILL_CONQUEST_BOSSES_I",
                     "KOTH_CAPTURER_I",
+                    "LEGENDARY_ENCHANTER_I",
                     "LMS_DEFENDER_I",
+                    "ULTIMATE_ENCHANTER_I",
             };
             for(String s : q) save("faction quests", s + ".yml");
             otherdata.set("saved default faction quests", true);

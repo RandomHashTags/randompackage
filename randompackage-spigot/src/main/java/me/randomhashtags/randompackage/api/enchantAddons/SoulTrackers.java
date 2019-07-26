@@ -44,10 +44,13 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
-        final ConfigurationSection cs = addons.getConfigurationSection("soul trackers");
+        save("addons", "soul trackers.yml");
+        final ConfigurationSection cs = getAddonConfig("soul trackers.yml").getConfigurationSection("soul trackers");
         if(cs != null) {
             final List<ItemStack> z = new ArrayList<>();
-            for(String s : cs.getKeys(false)) z.add(new PathSoulTracker(s).getItem());
+            for(String s : cs.getKeys(false)) {
+                z.add(new PathSoulTracker(s).getItem());
+            }
             addGivedpCategory(z, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " +  (soultrackers != null ? soultrackers.size() : 0) + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");

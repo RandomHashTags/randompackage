@@ -147,7 +147,7 @@ shop:
   gigantic creeper:
     item: "customexplosion:CREEPER_GIGANTIC;amount=2"
   white scroll:
-    item: "whitescroll"
+    item: "whitescroll:REGULAR"
     cost: 5
   ultimate fireball:
     item: "rarityfireball:ULTIMATE;amount=5"

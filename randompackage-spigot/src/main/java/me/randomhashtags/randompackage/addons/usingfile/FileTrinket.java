@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 
 public class FileTrinket extends Trinket {
-    private String radius, cooldown;
+    private String soulcost, radius, cooldown;
     private ItemStack item;
 
     public FileTrinket(File f) {
@@ -16,6 +16,13 @@ public class FileTrinket extends Trinket {
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public String getSoulCostPerUse() {
+        if(soulcost == null) {
+            final String s = yml.getString("settings.soul cost");
+            soulcost = s == null ? "0" : s;
+        }
+        return soulcost;
+    }
     public String getRadius() {
         if(radius == null) {
             final String s = yml.getString("settings.radius");

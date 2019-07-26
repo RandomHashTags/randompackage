@@ -58,6 +58,7 @@ gui:
       - " "
       - "&7Unlock access from the &cDungeon Master"
       - "&7at /spawn, or at &cbuy.yourserver.com"
+#
 portal:
   anyone can join: true
   craftable: true
@@ -83,7 +84,7 @@ lootbag:
     - "&5&l&nAbandoned Spaceship&r &7dungeon!"
     - " "
     - "&7Contains &6??? Dungeons &7items..."
-    - "&6&l*&r &6$,$$$,$$$+ Money Notes"
+    - "&6&l*&r &6$$,$$$,$$$+ Money Notes"
     - "&6&l*&r &6100+ Level mcMMO Vouchers"
     - "&6&l*&r &6Soul Enderpearl"
     - "&6&l*&r &6Soul Anvil"
@@ -95,9 +96,9 @@ lootbag:
     - "&6&l*&r &6Divine Enlighted"
     - "&6... good luck."
   rewards:
-    - "soulpearl"
-    - "soulanvil"
-    - "holywhitescroll"
+    - "trinket:SOUL_PEARL"
+    - "trinket:SOUL_ANVIL"
+    - "whitescroll:HOLY"
     - "customarmor:YIJKI:helmet"
     - "customarmor:YIJKI:chestplate"
     - "customarmor:YIJKI:leggings"

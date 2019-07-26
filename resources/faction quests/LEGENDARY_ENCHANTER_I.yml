@@ -1,0 +1,13 @@
+# Made by RandomHashTags
+settings:
+  name: "Legendary Enchanter I"
+  completion: 15
+#
+lore:
+- "&7Purchase 15 Legendary Books in a Day"
+#
+rewards:
+- ""
+#
+trigger:
+- ""

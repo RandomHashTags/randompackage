@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,20 +32,22 @@ public class RarityGems extends CustomEnchantUtils {
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
-        final ConfigurationSection cs = addons.getConfigurationSection("rarity gems");
+        save("addons", "rarity gems.yml");
+        final YamlConfiguration config = getAddonConfig("rarity gems.yml");
+        final ConfigurationSection cs = config.getConfigurationSection("rarity gems");
         if(cs != null) {
             PathRarityGem.defaultColors = new TreeMap<>();
             final TreeMap<Integer, String> d = PathRarityGem.defaultColors;
-            final ConfigurationSection C = addons.getConfigurationSection("rarity gems.default settings.colors");
-            d.put(-1, ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors.else")));
-            d.put(0, ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors.less than 100")));
+            final ConfigurationSection C = config.getConfigurationSection("default settings.colors");
+            d.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.else")));
+            d.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.less than 100")));
             for(String s : C.getKeys(false)) {
-                if(!s.equals("default settings") && !s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                    d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', addons.getString("rarity gems.default settings.colors." + s)));
+                if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
+                    d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors." + s)));
                 }
             }
             for(String s : cs.getKeys(false)) {
-                if(!s.equals("default settings")) new PathRarityGem(s);
+                new PathRarityGem(s);
             }
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }

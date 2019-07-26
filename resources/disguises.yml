@@ -4,7 +4,7 @@ messages:
     - "&cUnlock access to disguises at &nbuy.yourserver.com&r&c!"
 #
 item:
-  item: "bone"
+  item: "iron_hoe"
   name: "&a&lPlayer Disguise \"&r&a{TYPE}&l\""
   lore:
   - " "

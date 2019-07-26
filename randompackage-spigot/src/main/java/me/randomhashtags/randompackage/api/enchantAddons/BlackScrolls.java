@@ -29,7 +29,8 @@ public class BlackScrolls extends CustomEnchantUtils {
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
-        final ConfigurationSection cs = addons.getConfigurationSection("black scrolls");
+        save("addons", "black scrolls.yml");
+        final ConfigurationSection cs = getAddonConfig("black scrolls.yml").getConfigurationSection("black scrolls");
         if(cs != null) {
             for(String s : cs.getKeys(false))
                 new PathBlackScroll(s);

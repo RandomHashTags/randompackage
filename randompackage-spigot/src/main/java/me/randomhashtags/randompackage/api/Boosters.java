@@ -38,9 +38,8 @@ public class Boosters extends newEventAttributes {
 	}
 
 	public File dataF;
-	public YamlConfiguration config, data;
+	public YamlConfiguration data;
 	public static HashMap<String, List<ActiveBooster>> activeFactionBoosters;
-
 
 	public void load() {
 		loadUtils();
@@ -55,7 +54,6 @@ public class Boosters extends newEventAttributes {
 			saveOtherData();
 		}
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "faction additions.yml"));
 		activeFactionBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();

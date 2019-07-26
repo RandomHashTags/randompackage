@@ -11,7 +11,7 @@ import static me.randomhashtags.randompackage.utils.RPFeature.rpd;
 
 public class YamlUpdater extends UVersion {
     private static YamlUpdater instance;
-    public static YamlUpdater getYmlUpdater() {
+    public static YamlUpdater getYamlUpdater() {
         if(instance == null) instance = new YamlUpdater();
         return instance;
     }
@@ -163,7 +163,7 @@ public class YamlUpdater extends UVersion {
                 "boosters.enabled", true,
                 "custom enchants.transmog scrolls", true,
                 "custom enchants.white scrolls", true,
-                "wild.enabled", true,
+                "wild.enabled", false,
         };
         return putAll(values);
     }

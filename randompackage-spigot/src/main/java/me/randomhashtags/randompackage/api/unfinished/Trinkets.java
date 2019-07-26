@@ -4,6 +4,8 @@ import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -19,9 +21,14 @@ public class Trinkets extends RPFeature {
 
     public void load() {
         final long started = System.currentTimeMillis();
-
         if(!otherdata.getBoolean("saved default trinkets")) {
-            final String[] a = new String[]{"BATTLESTAFF_OF_YIJKI", "EMP_PULSE", "FACTION_BANNER", "PHOENIX_FEATHER", "SPEED"};
+            final String[] a = new String[]{
+                    "BATTLESTAFF_OF_YIJKI",
+                    "EMP_PULSE",
+                    "FACTION_BANNER",
+                    "PHOENIX_FEATHER",
+                    "SOUL_ANVIL", "SOUL_PEARL", "SPEED"
+            };
             for(String s : a) save("trinkets", s + ".yml");
             otherdata.set("saved default trinkets", true);
             saveOtherData();
@@ -39,5 +46,10 @@ public class Trinkets extends RPFeature {
     }
     public void unload() {
         deleteAll(Feature.TRINKETS);
+        instance = null;
+    }
+
+    @EventHandler
+    private void playerInteractEvent(PlayerInteractEvent event) {
     }
 }

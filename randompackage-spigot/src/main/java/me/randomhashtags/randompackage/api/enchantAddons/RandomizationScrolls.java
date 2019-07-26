@@ -29,7 +29,8 @@ public class RandomizationScrolls extends CustomEnchants {
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
-        final ConfigurationSection cs = addons.getConfigurationSection("randomization scrolls");
+        save("addons", "randomization scrolls.yml");
+        final ConfigurationSection cs = getAddonConfig("randomization scrolls.yml").getConfigurationSection("randomization scrolls");
         if(cs != null) {
             final List<ItemStack> z = new ArrayList<>();
             for(String s : cs.getKeys(false)) {

@@ -8,11 +8,11 @@ import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,9 +37,12 @@ public class Fireballs extends CustomEnchantUtils {
     public void load() {
         loadUtils();
         long started = System.currentTimeMillis();
-        mysterydust = d(addons, "items.mystery dust");
+        save("addons", "fireballs.yml");
+        final YamlConfiguration config = getAddonConfig("fireballs.yml");
+        mysterydust = d(config, "items.mystery dust");
         givedpitem.items.put("mysterydust", mysterydust);
-        ConfigurationSection cs = addons.getConfigurationSection("fireballs");
+
+        ConfigurationSection cs = config.getConfigurationSection("fireballs");
         final List<ItemStack> z = new ArrayList<>();
         if(cs != null) {
             for(String s : cs.getKeys(false)) {
@@ -50,7 +53,7 @@ public class Fireballs extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fireballs != null ? fireballs.size() : 0) + " Fireballs &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
         started = System.currentTimeMillis();
-        cs = addons.getConfigurationSection("dusts");
+        cs = config.getConfigurationSection("dusts");
         if(cs != null) {
             for(String s : cs.getKeys(false)) {
                 new PathMagicDust(s);

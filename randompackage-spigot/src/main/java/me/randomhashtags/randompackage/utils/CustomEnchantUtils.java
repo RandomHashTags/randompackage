@@ -59,7 +59,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     }
 
     private static boolean isEnabled = false;
-    public static YamlConfiguration config, addons;
+    public static YamlConfiguration config;
 
     public static List<UUID> spawnedFromSpawner;
     public static List<Player> stoppedAllEnchants, frozen;
@@ -75,9 +75,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         isEnabled = true;
         save(null, "custom enchants.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
-
-        save("custom enchants", "addons.yml");
-        addons = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "addons.yml"));
 
         spawnedFromSpawner = new ArrayList<>();
         stoppedAllEnchants = new ArrayList<>();

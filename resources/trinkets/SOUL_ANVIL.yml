@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+settings:
+  cooldown: 30
+  soul cost: 100
+#
+items:
+  item: "anvil"
+  name: "&5&lSoul Anvil"
+  lore:
+  - "&dA powerful /dungeon trinket that"
+  - "&dheals durability of all equipped"
+  - "&darmor by 10% in exchange for souls."
+  - " "
+  - "&5&nSouls Cost:&r &d100/use"
+  - "&5&nCooldown:&r &d30s"
+#
+attributes:
+  - ""

@@ -189,32 +189,6 @@ items:
     - "&7ominous aura. You sense you will need other"
     - "&7components for this object to be useful"
     - "&7to you in your /dungeon runs."
-  soul anvil:
-    # Set to -1 to not use any souls upon use.
-    souls used per use: 100
-    # Measured in seconds.
-    cooldown: 30
-    item: "anvil"
-    name: "&5&lSoul Anvil"
-    lore:
-    - "&dA powerful /dungeon trinket that"
-    - "&dheals durability of all equipped"
-    - "&darmor by 10% in exchange for souls."
-    - " "
-    - "&5&nSouls Cost:&r &d100/use"
-    - "&5&nCooldown:&r &d30s"
-  soul pearl:
-    # Set to -1 to not use any souls upon use.
-    souls used per use: 5
-    item: "ender_pearl"
-    name: "&5&lSoul Pearl"
-    lore:
-    - "&dA rare /dungeon trinket that"
-    - "&dfunctions like a normal enderpearl,"
-    - "&dbut costs souls instead of being"
-    - "&dconsumed on use."
-    - " "
-    - "&5&nSoul Cost:&r &d5/pearl"
   teleportation crystal:
     item: "firework_charge"
     name: "&f&lTeleportation Crystal"

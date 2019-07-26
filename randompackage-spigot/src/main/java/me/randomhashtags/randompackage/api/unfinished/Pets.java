@@ -32,8 +32,10 @@ public class Pets extends RPFeature implements Listener {
                     "GAIA",
                     "LAVA_ELEMENTAL",
                     "RAID_CREEPER",
+                    "SMITE",
                     "STRONGHOLD_SELL",
                     "TESLA",
+                    "VILE_CREEPER",
                     "WATER_ELEMENTAL",
                     "XP_BOOSTER",
             };

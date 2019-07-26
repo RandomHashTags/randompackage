@@ -1,0 +1,32 @@
+# Made by RandomHashTags
+transmog scrolls:
+  REGULAR:
+    item: "paper"
+    name: "&e&lTransmog Scroll"
+    lore:
+    - "&7Organizes enchants by &e&nrarity&r &7on item"
+    - "&7and adds the &blore &acount &7to name"
+    - " "
+    - "&e&oPlace scroll on item to apply"
+    apply: "&9&l[&b&n{LORE_COUNT}&9&l]"
+    rarity organization:
+      - MASTERY
+      - HEROIC
+      - SOUL
+      - LEGENDARY
+      - ULTIMATE
+      - ELITE
+      - UNIQUE
+      - SIMPLE
+    applies to:
+      - SWORD
+      - AXE
+      - SHOVEL
+      - SPADE
+      - BOW
+      - FISHING_ROD
+      - HELMET
+      - CHESTPLATE
+      - LEGGINGS
+      - BOOTS
+#

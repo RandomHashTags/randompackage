@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.CustomEnchantUtils.addons;
-
 public class PathFireball extends RarityFireball {
 	private String path;
 	private ItemStack is;
@@ -22,7 +20,7 @@ public class PathFireball extends RarityFireball {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(addons, "fireballs." + path);
+		if(is == null) is = api.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
 		return is.clone();
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
@@ -44,7 +42,7 @@ public class PathFireball extends RarityFireball {
 	public List<EnchantRarity> getExchangeableRarities() {
 		if(exchangeablerarities == null) {
 			exchangeablerarities = new ArrayList<>();
-			final String e = addons.getString("fireballs." + path + ".exchangeable rarities");
+			final String e = getAddonConfig("fireballs.yml").getString("fireballs." + path + ".exchangeable rarities");
 			for(String s : e.split(";")) {
 				exchangeablerarities.add(getEnchantRarity(s));
 			}
@@ -52,7 +50,7 @@ public class PathFireball extends RarityFireball {
 		return exchangeablerarities;
 	}
 	public List<String> getReveals() {
-		if(reveals == null) reveals = addons.getStringList("fireballs." + path + ".reveals");
+		if(reveals == null) reveals = getAddonConfig("fireballs.yml").getStringList("fireballs." + path + ".reveals");
 		return reveals;
 	}
 }

@@ -1,0 +1,35 @@
+# Made by RandomHashTags
+settings:
+  max level: 10
+  cooldown:
+    1: 600
+  exp to level:
+    2: 5000
+#
+item:
+  texture: ""
+  item: "player_head_item"
+  name: "&e&lVile Creeper Pet&r &7[LVL {LEVEL}]"
+  lore:
+  - "&7An extremely dangerous creeper,"
+  - "&7species, famous for its vicious"
+  - "&7modern warfare deployments."
+  - " "
+  - "&f&lAbility"
+  - "&7ASpawn a &5Vile Creeper"
+  - "&7Corrupts the area it explodes"
+  - "&7in, applying [&cRot and Decay V&7]"
+  - "&7for a 5 second duration."
+  - " "
+  - "&f&lCooldown"
+  - " &7{COOLDOWN}"
+  - " "
+  - "&f&lLevel"
+  - " &7{LEVEL}"
+  - " "
+  - "&f&lEXP"
+  - "{EXP}"
+  - " &7({XP}/{COMPLETION})"
+#
+attributes:
+  - ""

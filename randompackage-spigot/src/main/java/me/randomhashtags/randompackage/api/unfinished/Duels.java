@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -20,7 +21,6 @@ public class Duels extends RPFeature implements CommandExecutor {
         return instance;
     }
     public YamlConfiguration config;
-
     private UInventory type, godset;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -53,6 +53,8 @@ public class Duels extends RPFeature implements CommandExecutor {
         config = null;
         type = null;
         godset = null;
+        deleteAll(Feature.DUELS);
+        instance = null;
     }
 
     public void viewTypes(Player player) {

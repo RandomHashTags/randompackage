@@ -1,0 +1,17 @@
+# Made by RandomHashTags
+settings:
+  soul cost: 5
+#
+item:
+  item: "ender_pearl"
+  name: "&5&lSoul Pearl"
+  lore:
+  - "&dA rare /dungeon trinket that"
+  - "&dfunctions like a normal enderpearl,"
+  - "&dbut costs souls instead of being"
+  - "&dconsumed on use."
+  - " "
+  - "&5&nSoul Cost:&r &d5/pearl"
+#
+attributes:
+  - ""
