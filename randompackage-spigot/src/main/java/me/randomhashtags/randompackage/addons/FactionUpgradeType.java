@@ -4,12 +4,12 @@ import me.randomhashtags.randompackage.addons.utils.Identifyable;
 
 import java.util.List;
 
-public abstract class FactionUpgradeType extends Identifyable {
-    public abstract String getPerkAchievedPrefix();
-    public abstract String getPerkUnachievedPrefix();
-    public abstract String getRequirementsPrefix();
-    public abstract List<String> getUnlock();
-    public abstract List<String> getUpgrade();
-    public abstract List<String> getMaxed();
-    public abstract List<String> getFormat();
+public interface FactionUpgradeType extends Identifyable {
+    String getPerkAchievedPrefix();
+    String getPerkUnachievedPrefix();
+    String getRequirementsPrefix();
+    List<String> getUnlock();
+    List<String> getUpgrade();
+    List<String> getMaxed();
+    List<String> getFormat();
 }

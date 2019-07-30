@@ -293,4 +293,28 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         }
         player.updateInventory();
     }
+
+
+    public FallenHero valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
+        if(is != null && kits != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack f = k.getFallenHeroSpawnItem(k);
+                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
+                    return k.getFallenHero();
+                }
+            }
+        }
+        return null;
+    }
+    public FallenHero valueOfFallenHeroGem(ItemStack is, Class type) {
+        if(is != null && kits != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack f = k.getFallenHeroGemItem(k);
+                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
+                    return k.getFallenHero();
+                }
+            }
+        }
+        return null;
+    }
 }

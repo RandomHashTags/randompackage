@@ -9,32 +9,32 @@ gui:
     prices: 3;0.69
   oak wood:
     slot: 1
-    item: "oak_wood"
+    item: "oak_log"
     name: "&e&lOak Wood"
     prices: 8.12;2.03
   spruce wood:
     slot: 2
-    item: "spruce_wood"
+    item: "spruce_log"
     name: "&e&lSpruce Wood"
     prices: 8.12;2.03
   birch wood:
     slot: 3
-    item: "birch_wood"
+    item: "birch_log"
     name: "&e&lBirch Wood"
     prices: 8.12;2.03
   jungle wood:
     slot: 4
-    item: "jungle_wood"
+    item: "jungle_log"
     name: "&e&lJungle Wood"
     prices: 8.12;2.03
   acacia wood:
     slot: 5
-    item: "acacia_wood"
+    item: "acacia_log"
     name: "&e&lAcacia Wood"
     prices: 8.12;2.03
   dark oak wood:
     slot: 6
-    item: "dark_oak_wood"
+    item: "dark_oak_log"
     name: "&e&lDark Oak Wood"
     prices: 8.12;2.03
   dirt:

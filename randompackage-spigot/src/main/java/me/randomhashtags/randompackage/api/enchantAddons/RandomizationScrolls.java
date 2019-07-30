@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class RandomizationScrolls extends CustomEnchants {
             final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
             if(current != null && cursor != null && !current.getType().equals(Material.AIR) && !cursor.getType().equals(Material.AIR)) {
                 final CustomEnchant enchant = CustomEnchant.valueOf(current);
-                final RandomizationScroll randomizationscroll = RandomizationScroll.valueOf(cursor);
+                final RandomizationScroll randomizationscroll = valueOfRandomizationScroll(cursor);
                 if(enchant != null && randomizationscroll != null) {
                     final EnchantRarity r = EnchantRarity.valueOf(enchant);
                     if(randomizationscroll.getAppliesToRarities().contains(r)) {
@@ -82,5 +83,17 @@ public class RandomizationScrolls extends CustomEnchants {
                 }
             }
         }
+    }
+
+    public RandomizationScroll valueOfRandomizationScroll(ItemStack is) {
+        if(randomizationscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final ItemMeta m = is.getItemMeta();
+            for(RandomizationScroll r : randomizationscrolls.values()) {
+                if(r.getItem().getItemMeta().equals(m)) {
+                    return r;
+                }
+            }
+        }
+        return null;
     }
 }

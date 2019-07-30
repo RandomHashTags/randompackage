@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Outpost;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.api.nearFinished.Outposts.statuses;
 
-public class FileOutpost extends Outpost {
+public class FileOutpost extends RPAddon implements Outpost {
     private ItemStack display;
     private List<String> lostControl, claimed;
     private Scoreboard scoreboard;

@@ -9,26 +9,26 @@ import org.bukkit.Location;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class ConquestChest extends Identifyable {
-    public abstract String getSpawnRegion();
-    public abstract String getRewardSize();
-    public abstract HashMap<ConquestMob, String> getSpawnedBosses();
-    public abstract int getSpawnInterval();
-    public abstract int getHealthMsgRadius();
-    public abstract int getMaxHP();
-    public abstract int getSpawnedHP();
-    public abstract int getDamagePerHit();
-    public abstract int getFirstAnnounced();
-    public abstract int getAnnounceIntervalAfterSpawned();
-    public abstract int getDespawnDelay();
-    public abstract double getDamageDelay();
-    public abstract UMaterial getPlacedBlock();
-    public abstract List<String> getRewards();
-    public abstract List<String> getHitAttributes();
-    public abstract List<String> getSpawnMsg();
-    public abstract List<String> getWillSpawnMsg();
-    public abstract List<String> getStillAliveMsg();
-    public abstract List<String> getHealthMsg();
-    public abstract List<String> getUnlockedMsg();
-    public abstract LivingConquestChest spawn(Location l);
+public interface ConquestChest extends Identifyable {
+    String getSpawnRegion();
+    String getRewardSize();
+    HashMap<ConquestMob, String> getSpawnedBosses();
+    int getSpawnInterval();
+    int getHealthMsgRadius();
+    int getMaxHP();
+    int getSpawnedHP();
+    int getDamagePerHit();
+    int getFirstAnnounced();
+    int getAnnounceIntervalAfterSpawned();
+    int getDespawnDelay();
+    double getDamageDelay();
+    UMaterial getPlacedBlock();
+    List<String> getRewards();
+    List<String> getHitAttributes();
+    List<String> getSpawnMsg();
+    List<String> getWillSpawnMsg();
+    List<String> getStillAliveMsg();
+    List<String> getHealthMsg();
+    List<String> getUnlockedMsg();
+    LivingConquestChest spawn(Location l);
 }

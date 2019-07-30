@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 import me.randomhashtags.randompackage.addons.ConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import me.randomhashtags.randompackage.addons.active.LivingConquestChest;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -11,7 +12,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileConquestChest extends ConquestChest {
+public class FileConquestChest extends RPAddon implements ConquestChest {
     private HashMap<ConquestMob, String> spawnedBosses;
     private UMaterial placedBlock;
     private List<String> spawnMsg, willSpawnMsg, stillAliveMsg, healthMsg, unlockedMsg;

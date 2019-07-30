@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.FactionUpgradeType;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class FileFactionUpgradeType extends FactionUpgradeType {
+public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeType {
 	private static YamlConfiguration yml;
 
 	private String path;

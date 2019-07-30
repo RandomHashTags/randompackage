@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
+import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
 import me.randomhashtags.randompackage.api.events.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.utils.Feature;
@@ -98,13 +99,13 @@ public class ServerCrates extends RPFeature {
 		if(l != null) {
 			l.delete(true);
 		} else if(is != null && is.hasItemMeta() && event.getAction().name().contains("RIGHT")) {
-			final ServerCrate c = ServerCrate.valueOf(is);
+			final ServerCrate c = valueOf(is);
 			if(c != null) {
 				event.setCancelled(true);
 				removeItem(player, is, 1);
 				openCrate(player, c);
 			} else if(b != null) {
-				final ServerCrate f = ServerCrate.valueOfFlare(is);
+				final ServerCrate f = valueOfFlare(is);
 				if(f != null) {
 					event.setCancelled(true);
 					player.updateInventory();
@@ -170,7 +171,7 @@ public class ServerCrates extends RPFeature {
 						player.updateInventory();
 					} else if(selectedSlots.get(uuid).containsKey(r) && selectedSlots.get(uuid).get(r) != null) {
 						if(!revealedslots.keySet().contains(uuid) || !revealedslots.get(uuid).contains(r)) {
-							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(uuid).get(r).getYamlName());
+							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(uuid).get(r).getIdentifier());
 							top.setItem(r, reward);
 							player.updateInventory();
 							if(!revealingloot.containsKey(uuid)) revealingloot.put(uuid, new ArrayList<>());
@@ -220,7 +221,7 @@ public class ServerCrates extends RPFeature {
 			final int I = i;
 			int k = scheduler.scheduleSyncDelayedTask(randompackage, () -> {
 				final int randomSlot = (int) background.toArray()[random.nextInt(background.size())];
-				ItemStack reward = c.getRandomReward(c.getRandomRarity(true).getYamlName());
+				ItemStack reward = c.getRandomReward(c.getRandomRarity(true).getIdentifier());
 				top.setItem(randomSlot, reward);
 				player.updateInventory();
 				background.remove((Object) randomSlot);
@@ -282,5 +283,27 @@ public class ServerCrates extends RPFeature {
 			revealingloot.remove(uuid);
 			revealedslots.remove(uuid);
 		}
+	}
+
+	public ServerCrate valueOf(ItemStack item) {
+		if(servercrates != null) {
+			for(ServerCrate crate : servercrates.values()) {
+				if(crate.getItem().isSimilar(item)) {
+					return crate;
+				}
+			}
+		}
+		return null;
+	}
+	public ServerCrate valueOfFlare(ItemStack flare) {
+		if(servercrates != null) {
+			for(ServerCrate s : servercrates.values()) {
+				final ServerCrateFlare f = s.getFlare();
+				if(f != null && f.getItem().isSimilar(flare)) {
+					return s;
+				}
+			}
+		}
+		return null;
 	}
 }

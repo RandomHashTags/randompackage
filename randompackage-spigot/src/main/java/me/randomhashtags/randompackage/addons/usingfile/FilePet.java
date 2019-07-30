@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Pet;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.List;
 import java.util.TreeMap;
 
-public class FilePet extends Pet {
+public class FilePet extends RPAddon implements Pet {
     private ItemStack item;
     public FilePet(File f) {
         load(f);
@@ -15,6 +17,17 @@ public class FilePet extends Pet {
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public int getCooldownSlot() { return get("{COOLDOWN}"); }
+    public int getExpSlot() { return get("{EXP}"); }
+    private int get(String input) {
+        final List<String> l = getItem().getItemMeta().getLore();
+        for(int i = 0; i < l.size(); i++) {
+            if(l.get(i).contains(input)) {
+                return i;
+            }
+        }
+        return -1;
+    }
     public TreeMap<Integer, Long> getCooldowns() {
         final TreeMap<Integer, Long> a = new TreeMap<>();
         final ConfigurationSection c = yml.getConfigurationSection("settings.cooldowns");

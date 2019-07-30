@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.EnvoyCrate;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class FileEnvoyCrate extends EnvoyCrate {
+public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
     private UMaterial block, fallingblock;
     private List<UMaterial> cannotLandAbove;
     private ItemStack item;

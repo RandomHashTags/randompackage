@@ -13,6 +13,7 @@ import me.randomhashtags.randompackage.utils.newEventAttributes;
 import me.randomhashtags.randompackage.utils.objects.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,6 +24,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -132,7 +134,7 @@ public class Boosters extends newEventAttributes {
 		final ItemStack is = event.getItem();
 		if(is != null && !is.getType().equals(Material.AIR)) {
 			final Player player = event.getPlayer();
-			final TObject m = Booster.valueOf(is);
+			final TObject m = valueOf(is);
 			if(m != null) {
 				event.setCancelled(true);
 				player.updateInventory();
@@ -264,5 +266,23 @@ public class Boosters extends newEventAttributes {
 				}
 			}
 		}
+	}
+
+
+	public TObject valueOf(ItemStack is) {
+		if(boosters != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+			final ItemMeta m = is.getItemMeta();
+			final String d = m.getDisplayName();
+			final List<String> l = m.getLore();
+			for(Booster b : boosters.values()) {
+				final ItemStack i = b.getItem();
+				if(d.equals(i.getItemMeta().getDisplayName())) {
+					double multiplier = getRemainingDouble(ChatColor.stripColor(l.get(b.getMultiplierLoreSlot())));
+					long duration = getTime(ChatColor.stripColor(l.get(b.getTimeLoreSlot())));
+					return new TObject(b, multiplier, duration);
+				}
+			}
+		}
+		return null;
 	}
 }

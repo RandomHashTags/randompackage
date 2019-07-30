@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Lootbox;
 import me.randomhashtags.randompackage.addons.usingfile.FileLootbox;
+import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -97,7 +98,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             if(!s.equals("title") && !s.equals("type") && !s.equals("size") && !s.equals("background")) {
                 final ItemStack is = d(config, "gui." + s);
                 final int slot = config.getInt("gui." + s + ".slot");
-                final Lootbox l = Lootbox.valueOf(is);
+                final Lootbox l = valueOf(is);
                 if(l != null) guiLootboxes.put(slot, l);
                 gi.setItem(slot, is);
             }
@@ -140,7 +141,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         viewing = null;
         tasks = null;
         started = null;
-        Lootbox.lootboxes = null;
+        deleteAll(Feature.LOOTBOXES);
     }
 
     public void viewLootbox(Player player) {
@@ -176,7 +177,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         return started.containsKey(lootbox) && started.get(lootbox)+(lootbox.getAvailableFor()*1000)-System.currentTimeMillis() > 0;
     }
     public void tryClaiming(Player player, Lootbox lootbox) {
-        final String y = lootbox.getYamlName();
+        final String y = lootbox.getIdentifier();
         final HashMap<String, Integer> L = RPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
         if(L.getOrDefault(y, 0) > 0) {
             if(isAvailable(lootbox)) {
@@ -296,7 +297,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             final Player player = (Player) event.getWhoClicked();
             final Inventory top = player.getOpenInventory().getTopInventory();
             final String t = event.getView().getTitle();
-            final Lootbox l = Lootbox.valueOf(t), L = l == null ? Lootbox.valueof(t) : null;
+            final Lootbox l = valueOf(t), L = l == null ? valueof(t) : null;
             if(redeeming.containsKey(player)) {
                 event.setCancelled(true);
                 player.updateInventory();
@@ -325,7 +326,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack i = event.getItem();
-        final Lootbox l = Lootbox.valueOf(i);
+        final Lootbox l = valueOf(i);
         if(l != null && event.getAction().name().contains("RIGHT")) {
             event.setCancelled(true);
             player.updateInventory();
@@ -367,5 +368,61 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }
             tasks.remove(player);
         }
+    }
+
+    public Lootbox valueOf(String guiTitle) {
+        if(lootboxes != null) {
+            for(Lootbox l : lootboxes.values()) {
+                if(l.getGuiTitle().equals(guiTitle)) {
+                    return l;
+                }
+            }
+        }
+        return null;
+    }
+    public Lootbox valueof(String previewTitle) {
+        if(lootboxes != null) {
+            previewTitle = ChatColor.stripColor(previewTitle);
+            for(Lootbox l : lootboxes.values()) {
+                if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
+                    return l;
+                }
+            }
+        }
+        return null;
+    }
+    public Lootbox valueOf(ItemStack is) {
+        if(lootboxes != null && is != null && is.hasItemMeta()) {
+            for(Lootbox l : lootboxes.values()) {
+                if(l.getItem().isSimilar(is)) {
+                    return l;
+                }
+            }
+        }
+        return null;
+    }
+    public Lootbox valueOf(int priority) {
+        if(lootboxes != null) {
+            for(Lootbox l : lootboxes.values()) {
+                if(l.getPriority() == priority) {
+                    return l;
+                }
+            }
+        }
+        return null;
+    }
+    public Lootbox latest() {
+        int p = 0;
+        Lootbox lo = null;
+        if(lootboxes != null) {
+            for(Lootbox l : lootboxes.values()) {
+                final int P = l.getPriority();
+                if(lo == null || P > p) {
+                    p = P;
+                    lo = l;
+                }
+            }
+        }
+        return lo;
     }
 }

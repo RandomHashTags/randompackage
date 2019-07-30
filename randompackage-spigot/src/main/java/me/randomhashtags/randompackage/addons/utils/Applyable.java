@@ -4,8 +4,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class Applyable extends Itemable{
-    public abstract String getApplied();
-    public abstract List<String> getAppliesTo();
-    public abstract boolean canBeApplied(ItemStack is);
+public interface Applyable extends Itemable {
+    String getApplied();
+    List<String> getAppliesTo();
+    boolean canBeApplied(ItemStack is);
 }

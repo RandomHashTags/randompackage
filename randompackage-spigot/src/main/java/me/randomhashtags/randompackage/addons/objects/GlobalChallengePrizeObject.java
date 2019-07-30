@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.objects;
 
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
-public class GlobalChallengePrizeObject extends GlobalChallengePrize {
+public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallengePrize {
     private final ItemStack display;
     private final int placement, amount;
     private final List<String> rewards;

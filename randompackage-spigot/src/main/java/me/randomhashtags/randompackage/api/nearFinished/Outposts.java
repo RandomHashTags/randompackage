@@ -99,7 +99,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             final List<String> msg = colorizeListString(config.getStringList("messages.view current"));
             for(String s : msg) {
                 if(s.contains("{OUTPOST}")) {
-                    for(Outpost o : Outpost.outposts.values()) {
+                    for(Outpost o : outposts.values()) {
                         sender.sendMessage(s.replace("{OUTPOST}", o.getName()).replace("{STATUS}", o.getStatus()));
                     }
                 } else {
@@ -123,7 +123,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             top.setContents(gui.getInventory().getContents());
             for(int i = 0; i < size; i++) {
                 item = top.getItem(i);
-                final Outpost o = Outpost.valueOf(i);
+                final Outpost o = valueOf(i);
                 if(o != null) {
                     final String cap = Double.toString(round(o.getControlPercent(), 4)), attacking = o.getAttackingFaction(), controlling = o.getControllingFaction(), status = o.getStatus();
                     itemMeta = item.getItemMeta(); lore.clear();
@@ -156,10 +156,21 @@ public class Outposts extends RPFeature implements CommandExecutor {
             player.updateInventory();
             final int r = event.getRawSlot();
             if(r < 0 || r >= player.getOpenInventory().getTopInventory().getSize()) return;
-            final Outpost o = Outpost.valueOf(r);
+            final Outpost o = valueOf(r);
             if(o != null) {
                 tryTeleportingTo(player, o);
             }
         }
+    }
+
+    public Outpost valueOf(int slot) {
+        if(outposts != null) {
+            for(Outpost o : outposts.values()) {
+                if(o.getSlot() == slot) {
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 }

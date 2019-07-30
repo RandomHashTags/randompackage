@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addons.usingfile.FilePet;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -60,7 +61,21 @@ public class Pets extends RPFeature implements Listener {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final Pet p = Pet.valueOf(is);
+            final Pet p = valueOf(is);
+            if(p != null) {
+                final Player player = event.getPlayer();
+                event.setCancelled(true);
+                player.updateInventory();
+            }
         }
+    }
+
+    public Pet valueOf(ItemStack is) {
+        if(pets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            for(Pet p : pets.values()) {
+                final ItemStack i = p.getItem();
+            }
+        }
+        return null;
     }
 }

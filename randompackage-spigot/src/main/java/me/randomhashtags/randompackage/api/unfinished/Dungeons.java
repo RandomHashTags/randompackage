@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.addons.Dungeon;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -120,5 +121,16 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         player.closeInventory();
         player.openInventory(Bukkit.createInventory(player, master.getSize(), master.getTitle()));
         player.updateInventory();
+    }
+
+    public Dungeon valueOf(ItemStack key) {
+        if(dungeons != null && key != null) {
+            for(Dungeon d : dungeons.values()) {
+                if(d.getKey().isSimilar(key)) {
+                    return d;
+                }
+            }
+        }
+        return null;
     }
 }

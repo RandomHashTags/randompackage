@@ -72,7 +72,7 @@ public class Fireballs extends CustomEnchantUtils {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack I = event.getItem();
         final Player player = event.getPlayer();
-        final RarityFireball fireball = RarityFireball.valueOf(I);
+        final RarityFireball fireball = valueOfFireball(I);
         if(fireball != null) {
             event.setCancelled(true);
             removeItem(player, I, 1);
@@ -125,5 +125,25 @@ public class Fireballs extends CustomEnchantUtils {
                 }
             }
         }
+    }
+
+
+    public RarityFireball valueOfFireball(ItemStack is) {
+        if(fireballs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            for(RarityFireball f : fireballs.values())
+                if(is.isSimilar(f.getItem()))
+                    return f;
+        }
+        return null;
+    }
+    public RarityFireball valueOfFireball(List<EnchantRarity> exchangeablerarities) {
+        if(fireballs != null) {
+            for(RarityFireball f : fireballs.values()) {
+                if(f.getExchangeableRarities().equals(exchangeablerarities)) {
+                    return f;
+                }
+            }
+        }
+        return null;
     }
 }

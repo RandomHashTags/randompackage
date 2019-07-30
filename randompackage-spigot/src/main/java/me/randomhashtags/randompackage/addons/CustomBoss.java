@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.utils.RPAddon;
-import me.randomhashtags.randompackage.addons.utils.Spawnable;
+import me.randomhashtags.randompackage.addons.utils.RPSpawnable;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
@@ -13,7 +13,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class CustomBoss extends Spawnable {
+public abstract class CustomBoss extends RPSpawnable {
     public abstract String getType();
     public abstract String getName();
     public abstract String getScoreboardTitle();

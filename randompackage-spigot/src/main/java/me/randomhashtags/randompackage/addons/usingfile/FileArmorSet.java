@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
 
-public class FileArmorSet extends ArmorSet {
+public class FileArmorSet extends RPAddon implements ArmorSet {
 	private ItemStack helmet, chestplate, leggings, boots;
 	private List<String> armorLore, weaponLore, attributes, activateMessage;
 

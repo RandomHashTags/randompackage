@@ -2,12 +2,13 @@ package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RandomizationScroll;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathRandomizationScroll extends RandomizationScroll {
+public class PathRandomizationScroll extends RPAddon implements RandomizationScroll {
 	private String path;
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;

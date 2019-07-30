@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Dungeon;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
 
-public class FileDungeon extends Dungeon {
+public class FileDungeon extends RPAddon implements Dungeon {
     private ItemStack display, key, keyLocked, lootbag;
     private long fastestCompletion;
 

@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.TransmogScroll;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class PathTransmogScroll extends TransmogScroll {
+public class PathTransmogScroll extends RPAddon implements TransmogScroll {
     private String path;
     private ItemStack item;
     public PathTransmogScroll(String path) {
@@ -15,6 +16,17 @@ public class PathTransmogScroll extends TransmogScroll {
     }
     public String getIdentifier() { return path; }
 
+    public boolean canBeApplied(ItemStack is) {
+        if(is != null) {
+            final String m = is.getType().name();
+            for(String s : getAppliesTo()) {
+                if(m.endsWith(s.toUpperCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public ItemStack getItem() {
         if(item == null) item = api.d(getAddonConfig("transmog scrolls.yml"), "transmog scrolls." + path);
         return item;

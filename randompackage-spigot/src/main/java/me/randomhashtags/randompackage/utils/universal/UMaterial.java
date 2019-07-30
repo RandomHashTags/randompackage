@@ -34,10 +34,10 @@ import java.util.*;
  */
 public enum UMaterial {
     /*
-        <item>(1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.3)
+        <item>(1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
         1.8.9 = http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Material.html
         1.13.2 = ?
-        1.14.3 = https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+        1.14.4 = https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
         visual = https://www.digminecraft.com/lists/item_id_list_pc.php
         Special blocks = https://www.planetminecraft.com/blog/secret-blocks-vanilla/
     */
@@ -1429,7 +1429,7 @@ public enum UMaterial {
     // 3 = 1.11.2
     // 4 = 1.12.2
     // 5 = 1.13.2
-    // 6 = 1.14.3
+    // 6 = 1.14.4
     private String setupVersionName() {
         final int ver = version.contains("1.8") ? 0 : version.contains("1.9") ? 1 : version.contains("1.10") ? 2 : version.contains("1.11") ? 3 : version.contains("1.12") ? 4 : version.contains("1.13") ? 5 : version.contains("1.14") ? 6 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;

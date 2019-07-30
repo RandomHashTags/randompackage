@@ -1,12 +1,13 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Trinket;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
 
-public class FileTrinket extends Trinket {
+public class FileTrinket extends RPAddon implements Trinket {
     private String soulcost, radius, cooldown;
     private ItemStack item;
 

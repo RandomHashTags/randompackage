@@ -3,6 +3,8 @@ package me.randomhashtags.randompackage.addons.usingfile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.randomhashtags.randompackage.addons.Mask;
+import me.randomhashtags.randompackage.api.Masks;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +15,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class FileMask extends Mask {
+public class FileMask extends RPAddon implements Mask {
     private static TreeMap<String, ItemStack> maskOwners;
     private ItemStack item;
 
@@ -49,7 +51,7 @@ public class FileMask extends Mask {
         return item != null ? item.clone() : null;
     }
     public boolean canBeApplied(ItemStack is) {
-        return is != null && is.getType().name().endsWith("_HELMET") && getOnItem(is) == null;
+        return is != null && is.getType().name().endsWith("_HELMET") && Masks.getMasks().getOnItem(is) == null;
     }
     public String getApplied() {
         final Object o = yml.get("added lore"); // changed from List<String> to String in v16.4.0

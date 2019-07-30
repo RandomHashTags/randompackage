@@ -2,12 +2,13 @@ package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.SoulTracker;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class PathSoulTracker extends SoulTracker {
+public class PathSoulTracker extends RPAddon implements SoulTracker {
     private String path;
     private ItemStack is;
     private List<String> apply, split;

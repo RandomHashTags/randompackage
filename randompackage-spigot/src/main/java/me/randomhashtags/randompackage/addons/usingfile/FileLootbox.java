@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.Lootbox;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -9,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileLootbox extends Lootbox {
+public class FileLootbox extends RPAddon implements Lootbox {
     private List<String> regularLootFormat, jackpotLootFormat, bonusLootFormat;
     private ItemStack item, background;
 

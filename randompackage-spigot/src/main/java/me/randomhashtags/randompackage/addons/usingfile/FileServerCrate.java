@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
 import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public class FileServerCrate extends ServerCrate {
+public class FileServerCrate extends RPAddon implements ServerCrate {
 	private UInventory inv;
 	private LinkedHashMap<String, Integer> revealChances;
 	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
@@ -105,5 +106,22 @@ public class FileServerCrate extends ServerCrate {
 	public ServerCrateFlare getFlare() {
 		if(flare == null) flare = new ServerCrateFlare(api.d(yml, "flare"), yml.getStringList("flare.request msg"), yml.getInt("flare.settings.spawn radius"), yml.getInt("flare.settings.spawn in delay"), yml.getInt("flare.settings.nearby radius"), yml.getStringList("flare.nearby spawn msg"));
 		return flare;
+	}
+	public ServerCrate getRandomRarity(boolean useChances) {
+		String rarity = null;
+		final Collection<String> key = getRewards().keySet();
+		if(!useChances) {
+			rarity = (String) key.toArray()[random.nextInt(key.size())];
+		} else {
+			final LinkedHashMap<String, Integer> r = getRevealChances();
+			for(String s : key) if(random.nextInt(100) <= r.get(s)) rarity = s;
+			if(rarity == null) rarity = (String) r.keySet().toArray()[r.keySet().size()-1];
+		}
+		return servercrates.getOrDefault(rarity, null);
+	}
+	public ItemStack getRandomReward(String rarity) {
+		final List<String> r = getRewards().get(rarity);
+		final String reward = r.get(random.nextInt(r.size()));
+		return api.d(null, reward);
 	}
 }

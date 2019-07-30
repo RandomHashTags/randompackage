@@ -23,7 +23,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.addons.EnvoyCrate.getRandomCrate;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
 public class Envoy extends RPFeature implements CommandExecutor {
@@ -36,7 +35,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 	public ItemStack envoySummon, presetLocationPlacer;
 	private int spawnTask, task, totalEnvoys = 0;
-	private String type;
+	private String defaultTier, type;
 	public List<Location> preset;
 	private List<Player> settingPreset;
 
@@ -102,7 +101,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				tiers.add(e.getItem());
 			}
 		}
-		EnvoyCrate.defaultTier = config.getString("settings.default tier");
+		defaultTier = config.getString("settings.default tier");
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
 
@@ -158,7 +157,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
-		final EnvoyCrate ec = EnvoyCrate.valueOf(i);
+		final EnvoyCrate ec = valueOf(i);
 		final Player player = event.getPlayer();
 		if(ec != null) {
 			event.setCancelled(true);
@@ -225,7 +224,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			if(!c.isEmpty()) {
 				for(int i = 1; i <= amount; i++) {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
-					final EnvoyCrate crate = getRandomCrate(true);
+					final EnvoyCrate crate = getRandomCrate(true, defaultTier);
 					final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 					loc.getChunk().load();
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
@@ -243,7 +242,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				final Location r = preset.get(random.nextInt(preset.size()));
 				final World w = r.getWorld();
 				final Location newl = new Location(w, r.getBlockX(), r.getBlockY()-1, r.getBlockZ());
-				final EnvoyCrate crate = getRandomCrate(true);
+				final EnvoyCrate crate = getRandomCrate(true, defaultTier);
 				LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 				if(lec == null && crate.canLand(r)) {
 					lec = new LivingEnvoyCrate(totalEnvoys, crate, r);
@@ -299,5 +298,28 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		if(hasPermission(sender, "RandomPackage.envoy.help", true)) {
 			sendStringListMessage(sender, config.getStringList("messages.envoy help"), null);
 		}
+	}
+
+
+	public EnvoyCrate valueOf(ItemStack is) {
+		if(envoycrates != null && is != null && is.hasItemMeta())
+			for(EnvoyCrate c : envoycrates.values())
+				if(is.isSimilar(c.getItem()))
+					return c;
+		return null;
+	}
+	public EnvoyCrate getRandomCrate(boolean useChances, String defaultTier) {
+		if(envoycrates != null) {
+			final Random random = new Random();
+			if(useChances) {
+				for(EnvoyCrate c : envoycrates.values())
+					if(random.nextInt(100) <= c.getChance())
+						return c;
+			} else {
+				return envoycrates.get(defaultTier);
+			}
+			return envoycrates.get(defaultTier);
+		}
+		return null;
 	}
 }

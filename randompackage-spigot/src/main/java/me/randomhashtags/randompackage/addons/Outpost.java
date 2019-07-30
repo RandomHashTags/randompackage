@@ -8,35 +8,24 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-public abstract class Outpost extends Identifyable {
-    public abstract String getName();
-    public abstract int getSlot();
-    public abstract ItemStack getDisplay();
-    public abstract List<String> getLostControlMsg();
-    public abstract List<String> getClaimedMsg();
-    public abstract List<String> getLimits();
-    public abstract List<String> getUnallowedItems();
-    public abstract List<String> getRewards();
-    public abstract Scoreboard getScoreboard();
-    public abstract Location getWarpLocation();
-    public abstract String getAttackingFaction();
-    public abstract void setAttackingFaction(String faction);
-    public abstract String getControllingFaction();
-    public abstract void setControllingFaction(String faction);
-    public abstract String getStatus();
-    public abstract long getControlledStarting();
-    public abstract double getControlPercent();
-    public abstract OutpostStatus getOutpostStatus();
-    public abstract void setOutpostStatus(OutpostStatus status);
-
-    public static Outpost valueOf(int slot) {
-        if(outposts != null) {
-            for(Outpost o : outposts.values()) {
-                if(o.getSlot() == slot) {
-                    return o;
-                }
-            }
-        }
-        return null;
-    }
+public interface Outpost extends Identifyable {
+    String getName();
+    int getSlot();
+    ItemStack getDisplay();
+    List<String> getLostControlMsg();
+    List<String> getClaimedMsg();
+    List<String> getLimits();
+    List<String> getUnallowedItems();
+    List<String> getRewards();
+    Scoreboard getScoreboard();
+    Location getWarpLocation();
+    String getAttackingFaction();
+    void setAttackingFaction(String faction);
+    String getControllingFaction();
+    void setControllingFaction(String faction);
+    String getStatus();
+    long getControlledStarting();
+    double getControlPercent();
+    OutpostStatus getOutpostStatus();
+    void setOutpostStatus(OutpostStatus status);
 }

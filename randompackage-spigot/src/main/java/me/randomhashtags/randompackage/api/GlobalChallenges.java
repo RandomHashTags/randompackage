@@ -79,7 +79,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 				final OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
 				final int placing = getRemainingInt(args[2]);
 				if(op != null && placing != -1) {
-					RPPlayer.get(op.getUniqueId()).addGlobalChallengePrize(GlobalChallengePrize.valueOf(placing));
+					RPPlayer.get(op.getUniqueId()).addGlobalChallengePrize(valueOf(placing));
 				}
 			}
 		}
@@ -146,7 +146,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	public void unload() {
 		data.set("active global challenges", null);
 		for(ActiveGlobalChallenge c : ActiveGlobalChallenge.active.values()) {
-			final String p = c.getType().getYamlName();
+			final String p = c.getType().getIdentifier();
 			data.set("active global challenges." + p + ".started", c.getStartedTime());
 			final HashMap<UUID, BigDecimal> participants = c.getParticipants();
 			for(UUID u : participants.keySet())
@@ -395,7 +395,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 						viewTopPlayers(player, g);
 					}
 				} else if(t.equals(claimPrizes.getTitle())) {
-					final GlobalChallengePrize prize = GlobalChallengePrize.valueOf(c);
+					final GlobalChallengePrize prize = valueOf(c);
 					givePrize(player.getUniqueId(), prize, true);
 					item = c.clone();
 					item = item.getAmount() == 1 ? new ItemStack(Material.AIR) : item;
@@ -537,7 +537,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			final BigDecimal one = BigDecimal.ONE;
 			increase(event, "customenchantprocs", player, one);
 			increase(event, "customenchantprocs_" + EnchantRarity.valueOf(enchant).getIdentifier(), player, one);
-			increase(event, "customenchantproc'd_" + enchant.getYamlName(), player, one);
+			increase(event, "customenchantproc'd_" + enchant.getIdentifier(), player, one);
 			final ItemStack i = event.itemWithEnchant;
 			increase(event, "customenchantmprocs_" + i.getType().name() + ":" + i.getData().getData(), player, one);
 		}
@@ -563,5 +563,24 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			increase(event, "tinkerertrades", player, BigDecimal.ONE);
 			increase(event, "tinkereritemtrades", player, BigDecimal.valueOf(event.trades.size()));
 		}
+	}
+
+
+	public GlobalChallengePrize valueOf(int placement) {
+		if(globalchallengeprizes != null) {
+			for(GlobalChallengePrize p : globalchallengeprizes.values())
+				if(p.getPlacement() == placement)
+					return p;
+		}
+		return null;
+	}
+	public GlobalChallengePrize valueOf(ItemStack display) {
+		if(globalchallengeprizes != null && display != null && display.hasItemMeta())
+			for(GlobalChallengePrize p : globalchallengeprizes.values()) {
+				final ItemStack d = p.getItem();
+				if(d.isSimilar(display))
+					return p;
+			}
+		return null;
 	}
 }

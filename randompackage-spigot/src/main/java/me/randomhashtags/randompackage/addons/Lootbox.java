@@ -8,23 +8,23 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Lootbox extends Itemable {
-    public abstract String getName();
-    public abstract String getGuiTitle();
-    public abstract String getPreviewTitle();
-    public abstract String getRegularLootSize();
-    public abstract String getBonusLootSize();
-    public abstract int getPriority();
-    public abstract int getAvailableFor();
-    public abstract int getGuiSize();
-    public abstract List<String> getGuiFormat();
-    public abstract List<String> getRegularLootFormat();
-    public abstract List<String> getJackpotLootFormat();
-    public abstract List<String> getBonusLootFormat();
-    public abstract List<String> getRandomLoot();
-    public abstract List<String> getJackpotLoot();
-    public abstract List<String> getBonusLoot();
-    public abstract ItemStack getBackground();
+public interface Lootbox extends Itemable {
+    String getName();
+    String getGuiTitle();
+    String getPreviewTitle();
+    String getRegularLootSize();
+    String getBonusLootSize();
+    int getPriority();
+    int getAvailableFor();
+    int getGuiSize();
+    List<String> getGuiFormat();
+    List<String> getRegularLootFormat();
+    List<String> getJackpotLootFormat();
+    List<String> getBonusLootFormat();
+    List<String> getRandomLoot();
+    List<String> getJackpotLoot();
+    List<String> getBonusLoot();
+    ItemStack getBackground();
 
     public int randomRegularLootSize() {
         final String s = getRegularLootSize();
@@ -79,65 +79,5 @@ public abstract class Lootbox extends Itemable {
         for(String s : getJackpotLoot()) items.add(api.d(null, s));
         for(String s : getBonusLoot()) items.add(api.d(null, s));
         return items;
-    }
-    public static Lootbox valueOf(String guiTitle) {
-        if(lootboxes != null) {
-            for(RPAddon l : lootboxes.values()) {
-                final Lootbox lb = (Lootbox) l;
-                if(lb.getGuiTitle().equals(guiTitle)) {
-                    return lb;
-                }
-            }
-        }
-        return null;
-    }
-    public static Lootbox valueof(String previewTitle) {
-        if(lootboxes != null) {
-            previewTitle = ChatColor.stripColor(previewTitle);
-            for(RPAddon l : lootboxes.values()) {
-                final Lootbox lb = (Lootbox) l;
-                if(ChatColor.stripColor(lb.getPreviewTitle()).equals(previewTitle)) {
-                    return lb;
-                }
-            }
-        }
-        return null;
-    }
-    public static Lootbox valueOf(ItemStack is) {
-        if(lootboxes != null && is != null && is.hasItemMeta()) {
-            for(RPAddon l : lootboxes.values()) {
-                final Lootbox lb = (Lootbox) l;
-                if(lb.getItem().isSimilar(is)) {
-                    return lb;
-                }
-            }
-        }
-        return null;
-    }
-    public static Lootbox valueOf(int priority) {
-        if(lootboxes != null) {
-            for(RPAddon l : lootboxes.values()) {
-                final Lootbox lb = (Lootbox) l;
-                if(lb.getPriority() == priority) {
-                    return lb;
-                }
-            }
-        }
-        return null;
-    }
-    public static Lootbox latest() {
-        int p = 0;
-        Lootbox lo = null;
-        if(lootboxes != null) {
-            for(RPAddon l : lootboxes.values()) {
-                final Lootbox lb = (Lootbox) l;
-                final int P = lb.getPriority();
-                if(lo == null || P > p) {
-                    p = P;
-                    lo = lb;
-                }
-            }
-        }
-        return lo;
     }
 }

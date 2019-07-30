@@ -48,7 +48,7 @@ public class WhiteScrolls extends CustomEnchantUtils {
         if(!event.isCancelled()) {
             final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
             if(cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore() && current != null) {
-                final WhiteScroll w = WhiteScroll.valueOf(cursor);
+                final WhiteScroll w = valueOf(cursor);
                 final Player player = (Player) event.getWhoClicked();
                 if(applyWhiteScroll(player, current, w)) {
                     event.setCancelled(true);
@@ -63,7 +63,7 @@ public class WhiteScrolls extends CustomEnchantUtils {
     }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final WhiteScroll w = WhiteScroll.valueOf(event.getItem());
+        final WhiteScroll w = valueOf(event.getItem());
         if(w != null) {
             event.setCancelled(true);
             event.getPlayer().updateInventory();
@@ -85,5 +85,37 @@ public class WhiteScrolls extends CustomEnchantUtils {
             player.updateInventory();
         }
         return did;
+    }
+
+    public WhiteScroll valueOf(String apply) {
+        if(whitescrolls != null && apply != null && !apply.isEmpty()) {
+            for(WhiteScroll w : whitescrolls.values()) {
+                if(w.getApplied().equals(apply)) {
+                    return w;
+                }
+            }
+        }
+        return null;
+    }
+    public WhiteScroll valueOf(ItemStack is) {
+        if(whitescrolls != null && is != null) {
+            for(WhiteScroll w : whitescrolls.values()) {
+                if(is.isSimilar(w.getItem())) {
+                    return w;
+                }
+            }
+        }
+        return null;
+    }
+    public List<WhiteScroll> valueOfApplied(ItemStack is) {
+        if(whitescrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<WhiteScroll> l = new ArrayList<>();
+            for(String s : is.getItemMeta().getLore()) {
+                final WhiteScroll w = valueOf(s);
+                if(w != null) l.add(w);
+            }
+            return l;
+        }
+        return null;
     }
 }

@@ -3,11 +3,12 @@ package me.randomhashtags.randompackage.addons.usingpath;
 import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class PathFireball extends RarityFireball {
+public class PathFireball extends RPAddon implements RarityFireball {
 	private String path;
 	private ItemStack is;
 	private List<EnchantRarity> exchangeablerarities;

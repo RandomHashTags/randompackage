@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.FilterCategory;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 
-public class FileFilterCategory extends FilterCategory {
+public class FileFilterCategory extends RPAddon implements FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
         load(f);

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.DuelArena;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileDuelArena extends DuelArena {
+public class FileDuelArena extends RPAddon implements DuelArena {
     private ItemStack item;
     public FileDuelArena(File f) {
         load(f);
