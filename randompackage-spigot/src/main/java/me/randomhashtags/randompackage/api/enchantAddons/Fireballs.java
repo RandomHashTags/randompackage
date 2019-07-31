@@ -95,7 +95,7 @@ public class Fireballs extends CustomEnchantUtils {
             final CustomEnchant enchant = CustomEnchant.valueOf(current);
             final MagicDust dust = MagicDust.valueOf(cursor);
             if(dust != null && enchant != null) {
-                final EnchantRarity ra = EnchantRarity.valueOf(enchant);
+                final EnchantRarity ra = valueOfEnchantRarity(enchant);
                 if(dust.getAppliesTo().contains(ra)) {
                     final String SUCCESS = ra.getSuccess();
                     int percent = -1;
@@ -125,25 +125,5 @@ public class Fireballs extends CustomEnchantUtils {
                 }
             }
         }
-    }
-
-
-    public RarityFireball valueOfFireball(ItemStack is) {
-        if(fireballs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            for(RarityFireball f : fireballs.values())
-                if(is.isSimilar(f.getItem()))
-                    return f;
-        }
-        return null;
-    }
-    public RarityFireball valueOfFireball(List<EnchantRarity> exchangeablerarities) {
-        if(fireballs != null) {
-            for(RarityFireball f : fireballs.values()) {
-                if(f.getExchangeableRarities().equals(exchangeablerarities)) {
-                    return f;
-                }
-            }
-        }
-        return null;
     }
 }

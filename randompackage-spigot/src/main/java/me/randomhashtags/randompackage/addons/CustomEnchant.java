@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Identifyable;
+import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class CustomEnchant extends Identifyable {
+public abstract class CustomEnchant extends RPAddon implements Identifyable {
     public abstract boolean isEnabled();
     public abstract String getName();
     public abstract List<String> getLore();
@@ -43,7 +45,7 @@ public abstract class CustomEnchant extends Identifyable {
     public static CustomEnchant valueOf(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final CustomEnchant e = valueOf(is.getItemMeta().getDisplayName());
-            final EnchantRarity r = EnchantRarity.valueOf(e);
+            final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfEnchantRarity(e);
             return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
         }
         return null;

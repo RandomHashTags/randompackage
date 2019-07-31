@@ -104,7 +104,7 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     public void splitsouls(Player player, int amount) {
         if(soultrackers != null) {
             item = getItemInHand(player);
-            RarityGem g = RarityGem.valueOf(item);
+            RarityGem g = valueOfRarityGem(item);
             int collectedsouls = 0, gems = 0;
             List<String> split = null;
             SoulTracker appliedst = null;

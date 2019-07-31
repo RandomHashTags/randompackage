@@ -2,10 +2,11 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.utils.RPAddon;
 
 import java.util.List;
 
-public abstract class FactionUpgrade extends Itemable {
+public abstract class FactionUpgrade extends RPAddon implements Itemable {
     public abstract FactionUpgradeType getType();
     public abstract int getSlot();
     public abstract int getMaxTier();

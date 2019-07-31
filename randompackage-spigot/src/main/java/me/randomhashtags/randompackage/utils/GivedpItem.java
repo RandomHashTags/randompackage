@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
-import me.randomhashtags.randompackage.addons.usingfile.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
@@ -274,7 +273,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final RandomizationScroll r = getRandomizationScroll(Q.split(":")[1]);
             return r != null ? r.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
-            final EnchantRarity r = FileEnchantRarity.rarities != null ? EnchantRarity.rarities.getOrDefault(Q.split(":")[1], null) : null;
+            final EnchantRarity r = rarities != null ? rarities.getOrDefault(Q.split(":")[1], null) : null;
             return r != null ? r.getRevealItem() : air;
         } else if(input.startsWith("rarityfireball:")) {
             final RarityFireball f = getFireball(Q.split(":")[1]);

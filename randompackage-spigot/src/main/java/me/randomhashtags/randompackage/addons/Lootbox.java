@@ -1,30 +1,29 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import org.bukkit.ChatColor;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Lootbox extends Itemable {
-    String getName();
-    String getGuiTitle();
-    String getPreviewTitle();
-    String getRegularLootSize();
-    String getBonusLootSize();
-    int getPriority();
-    int getAvailableFor();
-    int getGuiSize();
-    List<String> getGuiFormat();
-    List<String> getRegularLootFormat();
-    List<String> getJackpotLootFormat();
-    List<String> getBonusLootFormat();
-    List<String> getRandomLoot();
-    List<String> getJackpotLoot();
-    List<String> getBonusLoot();
-    ItemStack getBackground();
+public abstract class Lootbox extends RPAddon implements Itemable {
+    public abstract String getName();
+    public abstract String getGuiTitle();
+    public abstract String getPreviewTitle();
+    public abstract String getRegularLootSize();
+    public abstract String getBonusLootSize();
+    public abstract int getPriority();
+    public abstract int getAvailableFor();
+    public abstract int getGuiSize();
+    public abstract List<String> getGuiFormat();
+    public abstract List<String> getRegularLootFormat();
+    public abstract List<String> getJackpotLootFormat();
+    public abstract List<String> getBonusLootFormat();
+    public abstract List<String> getRandomLoot();
+    public abstract List<String> getJackpotLoot();
+    public abstract List<String> getBonusLoot();
+    public abstract ItemStack getBackground();
 
     public int randomRegularLootSize() {
         final String s = getRegularLootSize();

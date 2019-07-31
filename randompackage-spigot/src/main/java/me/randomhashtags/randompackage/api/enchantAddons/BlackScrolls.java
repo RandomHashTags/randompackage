@@ -53,7 +53,7 @@ public class BlackScrolls extends CustomEnchantUtils {
             int successP = -1;
             for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
             for(int f = 1; f <= 5; f++) {
-                final EnchantRarity r = EnchantRarity.valueOf(enchant);
+                final EnchantRarity r = valueOfEnchantRarity(enchant);
                 if(a.contains(r)) {
                     int enchantlevel = enchants.get(enchant);
                     itemMeta = is.getItemMeta(); lore.clear(); lore.addAll(itemMeta.getLore());

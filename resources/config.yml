@@ -1,4 +1,13 @@
 # Made by RandomHashTags
+file system:
+  enabled: false
+  type: LOCAL/MYSQL
+  host: localhost
+  port: 3306
+  database: GlobalBase
+  username: user
+  password: password
+#
 chat cmds:
   # {F_TAG}
   ## = If the player is in a faction --> The player's relation color to recipient + The player's faction role + The player's faction tag + a space

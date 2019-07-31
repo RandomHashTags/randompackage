@@ -2,13 +2,14 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Itemable;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CustomKit extends Itemable {
+public abstract class CustomKit extends RPAddon implements Itemable {
     public abstract Kits getKitClass();
     public abstract int getSlot();
     public abstract int getMaxLevel();

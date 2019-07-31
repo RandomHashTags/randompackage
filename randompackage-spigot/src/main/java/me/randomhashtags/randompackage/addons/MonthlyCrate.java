@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class MonthlyCrate extends Itemable {
+public abstract class MonthlyCrate extends RPAddon implements Itemable {
     public static HashMap<Player, List<String>> revealedRegular, revealedBonus;
 
     public abstract int getCategory();

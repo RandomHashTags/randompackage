@@ -12,7 +12,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -81,10 +80,10 @@ public class TransmogScrolls extends CustomEnchantUtils {
                 if(itemMeta.hasLore()) {
                     final List<String> l = itemMeta.getLore();
                     for(String ss : scroll.getRarityOrganization()) {
-                        final EnchantRarity r = EnchantRarity.rarities.get(ss);
+                        final EnchantRarity r = rarities.get(ss);
                         for(String s : l) {
                             final CustomEnchant enchant = CustomEnchant.valueOf(s);
-                            if(enchant != null && EnchantRarity.valueOf(enchant) == r) {
+                            if(enchant != null && valueOfEnchantRarity(enchant) == r) {
                                 lore.add(s);
                             }
                         }

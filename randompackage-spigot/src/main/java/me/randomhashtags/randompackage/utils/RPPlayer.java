@@ -155,7 +155,7 @@ public class RPPlayer extends RPStorage {
         final HashMap<RarityGem, Boolean> r = getRarityGems();
         yml.set("rarity gems", null);
         for(RarityGem g : r.keySet()) {
-            yml.set("rarity gems." + g.getYamlName(), r.get(g));
+            yml.set("rarity gems." + g.getIdentifier(), r.get(g));
         }
 
         final HashMap<GlobalChallengePrize, Integer> prizes = getGlobalChallengePrizes();
@@ -178,7 +178,7 @@ public class RPPlayer extends RPStorage {
         if(apq != null) {
             for(PlayerQuest q : apq.keySet()) {
                 final ActivePlayerQuest A = apq.get(q);
-                yml.set("quests." + q.getFile().getName().split("\\.yml")[0], A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
+                yml.set("quests." + q.getIdentifier(), A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
             }
         }
 
@@ -572,7 +572,7 @@ public class RPPlayer extends RPStorage {
             final ConfigurationSection a = yml.getConfigurationSection("global challenge prizes");
             if(a != null) {
                 for(String s : a.getKeys(false)) {
-                    challengeprizes.put(GlobalChallengePrize.valueOf(Integer.parseInt(s)), yml.getInt("global challenge prizes." + s));
+                    challengeprizes.put(valueOfGlobalChallengePrize(Integer.parseInt(s)), yml.getInt("global challenge prizes." + s));
                 }
             }
         }
@@ -689,7 +689,7 @@ public class RPPlayer extends RPStorage {
     }
     private void loadNewQuest(long time, Random random) {
         final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
-        for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getYamlName());
+        for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getIdentifier());
         final int pqs = pq.size();
         final BukkitScheduler s = api.scheduler;
         final PluginManager pm = api.pluginmanager;

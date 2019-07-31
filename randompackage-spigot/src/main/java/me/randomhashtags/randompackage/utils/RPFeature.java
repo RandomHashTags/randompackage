@@ -207,7 +207,7 @@ public abstract class RPFeature extends RPStorage implements Listener {
                             for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                                 final CustomEnchant e = CustomEnchant.valueOf(s);
                                 if(e != null && e.isEnabled()) {
-                                    final EnchantRarity r = EnchantRarity.valueOf(e);
+                                    final EnchantRarity r = ce.valueOfEnchantRarity(e);
                                     if(r != null) {
                                         int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
                                         l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);

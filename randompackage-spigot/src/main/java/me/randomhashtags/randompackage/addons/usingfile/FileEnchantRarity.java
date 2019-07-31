@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Firework;
@@ -11,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileEnchantRarity extends EnchantRarity {
+public class FileEnchantRarity extends RPAddon implements EnchantRarity {
     private File folder;
     private List<String> revealedEnchantMsg, loreFormat;
     private ItemStack revealItem, revealedItem;

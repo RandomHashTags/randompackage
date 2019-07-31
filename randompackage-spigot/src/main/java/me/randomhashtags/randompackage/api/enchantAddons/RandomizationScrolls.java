@@ -56,7 +56,7 @@ public class RandomizationScrolls extends CustomEnchants {
                 final CustomEnchant enchant = CustomEnchant.valueOf(current);
                 final RandomizationScroll randomizationscroll = valueOfRandomizationScroll(cursor);
                 if(enchant != null && randomizationscroll != null) {
-                    final EnchantRarity r = EnchantRarity.valueOf(enchant);
+                    final EnchantRarity r = valueOfEnchantRarity(enchant);
                     if(randomizationscroll.getAppliesToRarities().contains(r)) {
                         item = current; itemMeta = item.getItemMeta(); lore.clear();
                         final String s = r.getSuccess(), d = r.getDestroy();

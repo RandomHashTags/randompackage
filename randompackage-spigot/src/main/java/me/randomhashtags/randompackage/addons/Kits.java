@@ -218,7 +218,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                     if(en != null && !c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1])) {
                         final int lvl = random.nextInt(en.getMaxLevel()+1);
                         if(lvl != 0 || !levelzeroremoval) {
-                            lore.add(EnchantRarity.valueOf(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
+                            lore.add(valueOfEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
                         }
                     }
                 } else {

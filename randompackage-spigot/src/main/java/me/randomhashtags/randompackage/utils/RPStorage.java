@@ -10,6 +10,7 @@ import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.*;
@@ -456,5 +457,71 @@ public abstract class RPStorage extends UVersion {
         else if(f.equals(Feature.SHOP)) shopcategories = null;
         else if(f.equals(Feature.TITLES)) titles = null;
         else if(f.equals(Feature.TRINKETS)) trinkets = null;
+    }
+
+    public EnchantRarity valueOfEnchantRarity(ItemStack is) {
+        if(is != null && rarities != null) {
+            for(EnchantRarity r : rarities.values()) {
+                final ItemStack re = r.getRevealItem();
+                if(re != null && re.isSimilar(is)) {
+                    return r;
+                }
+            }
+        }
+        return null;
+    }
+    public EnchantRarity valueOfEnchantRarity(CustomEnchant enchant) {
+        if(rarities != null) {
+            for(EnchantRarity e : rarities.values()) {
+                if(e.getEnchants().contains(enchant)) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+    public RarityGem valueOfRarityGem(ItemStack item) {
+        if(raritygems != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            final List<String> l = item.getItemMeta().getLore();
+            for(RarityGem g : raritygems.values())
+                if(g.getItem().getItemMeta().getLore().equals(l))
+                    return g;
+        }
+        return null;
+    }
+    public RarityFireball valueOfFireball(ItemStack is) {
+        if(fireballs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            for(RarityFireball f : fireballs.values())
+                if(is.isSimilar(f.getItem()))
+                    return f;
+        }
+        return null;
+    }
+    public RarityFireball valueOfFireball(List<EnchantRarity> exchangeablerarities) {
+        if(fireballs != null) {
+            for(RarityFireball f : fireballs.values()) {
+                if(f.getExchangeableRarities().equals(exchangeablerarities)) {
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+    public GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
+        if(globalchallengeprizes != null) {
+            for(GlobalChallengePrize p : globalchallengeprizes.values())
+                if(p.getPlacement() == placement)
+                    return p;
+        }
+        return null;
+    }
+    public GlobalChallengePrize valueOfGlobalChallengePrize(ItemStack display) {
+        if(globalchallengeprizes != null && display != null && display.hasItemMeta())
+            for(GlobalChallengePrize p : globalchallengeprizes.values()) {
+                final ItemStack d = p.getItem();
+                if(d.isSimilar(display))
+                    return p;
+            }
+        return null;
     }
 }

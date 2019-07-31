@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.api.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
+import me.randomhashtags.randompackage.utils.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -15,7 +16,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class ActiveGlobalChallenge {
+public class ActiveGlobalChallenge extends RPStorage {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
     private static PluginManager pm;
     private static GlobalChallenges globalchallenges;
@@ -83,7 +84,7 @@ public class ActiveGlobalChallenge {
             for(UUID p : placements.keySet()) {
                 final RPPlayer pdata = RPPlayer.get(p);
                 if(i <= recordPlacements) {
-                    final GlobalChallengePrize prize = GlobalChallengePrizeObject.valueOf(i);
+                    final GlobalChallengePrize prize = valueOfGlobalChallengePrize(i);
                     pdata.addGlobalChallengePrize(prize);
                     i += 1;
                 }

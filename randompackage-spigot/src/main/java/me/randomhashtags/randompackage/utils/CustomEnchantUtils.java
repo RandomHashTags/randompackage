@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
+import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;

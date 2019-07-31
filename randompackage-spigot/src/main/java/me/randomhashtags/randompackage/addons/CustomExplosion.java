@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public abstract class CustomExplosion extends Itemable {
+public abstract class CustomExplosion extends RPAddon implements Itemable {
 
     public abstract List<String> getAttributes();
     public abstract void didExplode(UUID uuid, List<Block> blockList);

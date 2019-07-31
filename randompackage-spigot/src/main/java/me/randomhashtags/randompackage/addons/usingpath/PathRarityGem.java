@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RarityGem;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,15 +10,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
-public class PathRarityGem extends RarityGem {
+public class PathRarityGem extends RPAddon implements RarityGem {
+	public static HashMap<Integer, String> defaultColors;
 	private String path;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
 	private List<String> splitMessage, toggleon, toggleoffInteract, toggleoffDropped, toggleoffMoved, toggleoffRanOut;
-	private TreeMap<Integer, String> colors;
+	private HashMap<Integer, String> colors;
 
 	public PathRarityGem(String path) {
 		this.path = path;
@@ -32,7 +34,7 @@ public class PathRarityGem extends RarityGem {
 	public ItemStack getItem(int souls) {
 		final ItemStack item = getItem();
 		final ItemMeta itemMeta = item.getItemMeta();
-		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", getColors(this, souls) + souls));
+		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", getColors(souls) + souls));
 		item.setItemMeta(itemMeta);
 		return item;
 	}
@@ -50,14 +52,14 @@ public class PathRarityGem extends RarityGem {
 		return splitMessage;
 	}
 	public long getTimeBetweenSameKills() { return getAddonConfig("rarity gems.yml").getLong("rarity gems." + path + ".time between same kills"); }
-	public TreeMap<Integer, String> getColors() {
+	public HashMap<Integer, String> getColors() {
 		if(colors == null) {
 			final YamlConfiguration config = getAddonConfig("rarity gems.yml");
 			final ConfigurationSection cs = config.getConfigurationSection("rarity gems." + path + ".colors");
 			if(cs == null) {
 				colors = defaultColors;
 			} else {
-				colors = new TreeMap<>();
+				colors = new HashMap<>();
 				colors.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("rarity gems." + path + ".colors.else")));
 				colors.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("rarity gems." + path + ".colors.less than 100")));
 				for(String s : cs.getKeys(false)) {
@@ -88,5 +90,19 @@ public class PathRarityGem extends RarityGem {
 	public List<String> getToggleOffRanOutMsg() {
 		if(toggleoffRanOut == null) toggleoffRanOut = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.ran out"));
 		return toggleoffRanOut;
+	}
+	public String getColors(int soulsCollected) {
+		final HashMap<Integer, String> colors = getColors();
+		if(soulsCollected < 100) return colors.get(0);
+		int last = -1;
+		for(int i = 100; i <= 1000000; i += 100) {
+			if(soulsCollected >= i && soulsCollected < i + 100) {
+				final String c = colors.get(i);
+				final boolean d = c != null;
+				if(d) last += 1;
+				return d ? c : colors.get(last);
+			}
+		}
+		return colors.get(-1);
 	}
 }

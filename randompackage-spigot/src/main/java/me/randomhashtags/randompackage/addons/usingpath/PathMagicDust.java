@@ -39,7 +39,7 @@ public class PathMagicDust extends MagicDust {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : getAddonConfig("fireballs.yml").getString("dusts." + path + ".applies to").split(";")) {
-				appliesto.add(EnchantRarity.rarities.get(s));
+				appliesto.add(rarities.get(s));
 			}
 		}
 		return appliesto;

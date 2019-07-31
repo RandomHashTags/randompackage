@@ -199,7 +199,7 @@ public class KitsEvolution extends Kits {
                                 final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
                                 final CustomEnchant enchant = CustomEnchant.valueOf(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(random.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
-                                    lore.add(EnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
+                                    lore.add(valueOfEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
                                 final String r = s.split(":")[random.nextInt(s.split(":").length)];
@@ -208,7 +208,7 @@ public class KitsEvolution extends Kits {
 
                                 if(enchant != null) {
                                     if(level == -1) level = random.nextInt(enchant.getMaxLevel());
-                                    lore.add(EnchantRarity.valueOf(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
+                                    lore.add(valueOfEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
                                 }
                             } else
                                 lore.add(s.replace("{LEVEL}", Integer.toString(vkitlvl)));

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BlackScroll extends Itemable {
+public abstract class BlackScroll extends RPAddon implements Itemable {
     public abstract int getMinPercent();
     public abstract int getMaxPercent();
     public abstract List<EnchantRarity> getAppliesTo();

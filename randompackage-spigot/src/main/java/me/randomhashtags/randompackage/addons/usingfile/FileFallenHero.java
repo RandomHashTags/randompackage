@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.FallenHero;
 import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
+import me.randomhashtags.randompackage.addons.utils.RPFallenHero;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileFallenHero extends FallenHero {
+public class FileFallenHero extends RPFallenHero implements FallenHero {
     private ItemStack spawnitem, gem;
     private List<String> summonMsg, receiveKitMsg;
 

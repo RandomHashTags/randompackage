@@ -65,7 +65,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
-            final String rarity = event.crate.getYamlName();
+            final String rarity = event.crate.getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -198,7 +198,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
-            final String tier = event.type.getType().getYamlName();
+            final String tier = event.type.getType().getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -224,7 +224,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final CustomEnchant enchant = event.enchant;
-            final String rarity = EnchantRarity.valueOf(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result;
+            final String rarity = valueOfEnchantRarity(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result;
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -252,7 +252,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final ItemStack is = event.purchased;
-            final EnchantRarity r = EnchantRarity.valueOf(is);
+            final EnchantRarity r = valueOfEnchantRarity(is);
             final boolean cancelled = event.isCancelled(), isRarityBook = r != null;
             final String rarity = isRarityBook ? r.getIdentifier() : null;
             for(String s : attributes) {
@@ -282,7 +282,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
-            final String rarity = EnchantRarity.valueOf(CustomEnchant.valueOf(event.result)).getIdentifier();
+            final String rarity = valueOfEnchantRarity(CustomEnchant.valueOf(event.result)).getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;

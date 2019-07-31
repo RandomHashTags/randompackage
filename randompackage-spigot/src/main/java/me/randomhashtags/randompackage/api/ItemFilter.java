@@ -153,7 +153,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         }
     }
     public void viewCategory(Player player, FilterCategory category) {
-        if(hasPermission(player, "RandomPackage.filter.view." + category.getYamlName(), true)) {
+        if(hasPermission(player, "RandomPackage.filter.view." + category.getIdentifier(), true)) {
             player.closeInventory();
             final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
             final UInventory target = category.getInventory();
