@@ -123,7 +123,7 @@ public class LivingCustomBoss extends UVersion {
                                     y2 = Integer.parseInt(sss.split(":")[4]);
                                     z2 = Integer.parseInt(sss.split(":")[5]);
                                     for(Location l : locations) {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + sss.split(":")[6] + " 0 replace " + UMaterial.match(sss.split(":")[7]).getVersionName());
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + UMaterial.match(sss.split(":")[6]).getVersionName() + " 0 replace " + UMaterial.match(sss.split(":")[7]).getVersionName());
                                     }
                                 } else if(ss.startsWith("{/")) {
                                     for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
