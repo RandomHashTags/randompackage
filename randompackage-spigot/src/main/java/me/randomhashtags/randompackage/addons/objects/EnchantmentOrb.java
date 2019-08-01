@@ -16,16 +16,18 @@ public class EnchantmentOrb extends RPStorage {
 		this.path = path;
 		this.is = is;
 		int q = 0;
-		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore())
-			for(int i = 0; i < is.getItemMeta().getLore().size(); i++)
-				if(is.getItemMeta().getLore().get(i).contains("{PERCENT}")) 
+		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+			final List<String> l = is.getItemMeta().getLore();
+			for(int i = 0; i < l.size(); i++)
+				if(l.get(i).contains("{PERCENT}"))
 					q = i;
+		}
 		percentlore = q;
 		this.appliesto = appliesto;
 		this.maxenchants = maxenchants;
 		this.appliedlore = ChatColor.translateAlternateColorCodes('&', appliedlore.replace("{SLOTS}", Integer.toString(maxenchants).replace("{ADD_SLOTS}", Integer.toString(increment))));
 		this.increment = increment;
-		addEnchantmentOrb(getIdentifier(), this);
+		addEnchantmentOrb(path + maxenchants, this);
 	}
 	public String getIdentifier() { return path; }
 

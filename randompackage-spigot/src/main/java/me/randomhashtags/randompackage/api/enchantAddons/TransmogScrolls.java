@@ -91,7 +91,7 @@ public class TransmogScrolls extends CustomEnchantUtils {
                     }
                     for(String s : l) {
                         if(!lore.contains(s))
-                            l.add(s);
+                            lore.add(s);
                     }
                 }
                 final String current = apply.replace("{LORE_COUNT}", Integer.toString(newsize)), material = is.getType().name();

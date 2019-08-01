@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
 import me.randomhashtags.randompackage.addons.usingfile.FileFallenHero;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.KitEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
@@ -206,6 +207,8 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
     private ItemStack d(YamlConfiguration config, String path, int tier) {
         item = d(config, path, getTierCustomEnchantMultiplier().getOrDefault(tier, 1.00));
+        final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+        final TransmogScroll scroll = t.isEnabled() ? t.getApplied(item) : null;
         itemMeta = item.getItemMeta();
         if(itemMeta != null && itemMeta.hasLore()) {
             final boolean levelzeroremoval = CustomEnchants.getCustomEnchants().levelZeroRemoval;
@@ -213,9 +216,9 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             for(String string : itemMeta.getLore()) {
                 final String sl = string.toLowerCase();
                 if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
-                    final CustomEnchant en = CustomEnchant.valueOf(string.split("\\{")[1].split("}")[0]);
+                    final CustomEnchant en = CustomEnchant.valueOf(string.split("\\{")[1].split("}")[0], true);
                     final boolean c = string.contains("chance=");
-                    if(en != null && !c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1])) {
+                    if(en != null && en.isEnabled() && (!c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
                         final int lvl = random.nextInt(en.getMaxLevel()+1);
                         if(lvl != 0 || !levelzeroremoval) {
                             lore.add(valueOfEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
@@ -227,6 +230,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             }
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
+            if(scroll != null) t.applyTransmogScroll(item, scroll);
         }
         return item;
     }

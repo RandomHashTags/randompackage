@@ -10,6 +10,13 @@ banknote:
   server crate: "Server Crate"
   monthly crate: "Monthly Crate"
 #
+christmas candy:
+  item: "glowstone_dust"
+  name: "&eChristmas Candy &7(Right Click)"
+  lore:
+  - "&7A yummy piece of space candy, only"
+  - "&7obtainable during &nChristmas 2016"
+#
 christmas eggnog:
   item: "potion_water"
   name: "&eChristmas Eggnog"

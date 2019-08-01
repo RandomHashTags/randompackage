@@ -31,16 +31,15 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         save("addons", "enchantment orbs.yml");
         final YamlConfiguration config = getAddonConfig("enchantment orbs.yml");
         for(String A : config.getConfigurationSection("enchantment orbs").getKeys(false)) {
-            final ItemStack iii = d(config, "enchantment orbs." + A);
-            final java.util.List<String> appliesto = new ArrayList<>();
+            item = d(config, "enchantment orbs." + A);
+            final List<String> appliesto = new ArrayList<>();
             for(String s : config.getString("enchantment orbs." + A + ".applies to").split(";")) appliesto.add(s.toUpperCase());
-            final int starting = config.getInt("enchantment orbs." + A + ".starting max slots");
-            final int increment = config.getInt("enchantment orbs." + A + ".upgrade increment");
+            final int starting = config.getInt("enchantment orbs." + A + ".starting max slots"), increment = config.getInt("enchantment orbs." + A + ".upgrade increment");
             int increm = increment;
             for(int k = starting; k <= config.getInt("enchantment orbs." + A + ".final max slots"); k += increment) {
                 if(k != starting) increm += increment;
                 final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', config.getString("enchantment orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
-                item = iii.clone(); itemMeta = item.getItemMeta(); lore.clear();
+                final ItemStack i = item.clone(); itemMeta = i.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
                 if(itemMeta.hasLore()) {
                     for(String s : itemMeta.getLore()) {
@@ -48,13 +47,9 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
                     }
                 }
                 itemMeta.setLore(lore); lore.clear();
-                item.setItemMeta(itemMeta);
-                new EnchantmentOrb(A, item, appliedlore, appliesto, k, increm);
-                item = item.clone(); itemMeta = item.getItemMeta(); lore.clear();
-                for(String s: itemMeta.getLore()) lore.add(s.replace("{PERCENT}", "100"));
-                itemMeta.setLore(lore); lore.clear();
-                item.setItemMeta(itemMeta);
-                orbs.add(item);
+                i.setItemMeta(itemMeta);
+                new EnchantmentOrb(A, i, appliedlore, appliesto, k, increm);
+                orbs.add(i);
             }
         }
         addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");

@@ -58,6 +58,7 @@ public abstract class RPStorage extends UVersion {
     protected static LinkedHashMap<String, ServerCrate> servercrates;
     protected static LinkedHashMap<String, ShopCategory> shopcategories;
     protected static LinkedHashMap<String, SoulTracker> soultrackers;
+    protected static LinkedHashMap<String, Stronghold> strongholds;
     protected static LinkedHashMap<String, Title> titles;
     protected static LinkedHashMap<String, TransmogScroll> transmogscrolls;
     protected static LinkedHashMap<String, Trinket> trinkets;

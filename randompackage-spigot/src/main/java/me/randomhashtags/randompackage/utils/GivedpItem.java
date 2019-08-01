@@ -79,6 +79,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         }
         items = new HashMap<>();
         items.put("banknote", d(itemsConfig, "banknote"));
+        items.put("christmascandy", d(itemsConfig, "christmas candy"));
         items.put("christmaseggnog", d(itemsConfig, "christmas eggnog"));
         items.put("commandreward", d(itemsConfig, "command reward"));
         items.put("explosivecake", d(itemsConfig, "explosive cake"));
@@ -180,20 +181,21 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final int destroy = level != 0 ? l == 5 ? getInt(k[4]) : getInt(k[3]) : 0;
             return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
         } else if(input.startsWith("dust:")) {
-            final MagicDust d = getDust(Q.split(":")[1]);
-            return d != null ? d.getItem() : air;
+            final String[] a = Q.split(":");
+            final MagicDust d = getDust(a[1]);
+            final int percent = a.length >= 3 ? Integer.parseInt(a[2]) : -1;
+            return d != null ? percent == -1 ? d.getRandomPercentItem() : d.getItem(percent) : air;
         } else if(input.startsWith("enchantmentorb:")) {
             final String[] a = Q.split(":");
             String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(random.nextInt(101));
             EnchantmentOrb o = getEnchantmentOrb(p);
-            if(o != null) {
-                final List<String> paths = new ArrayList<>();
+            if(o == null) {
                 for(String s : enchantmentorbs.keySet()) {
-                    if(s.startsWith(p)) {
-                        paths.add(s);
+                    if(p.equals(s)) {
+                        o = getEnchantmentOrb(s);
+                        break;
                     }
                 }
-                o = getEnchantmentOrb(paths.get(random.nextInt(paths.size())));
             }
             final boolean h = percent.contains("-");
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+random.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;

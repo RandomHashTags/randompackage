@@ -21,9 +21,10 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "strongholds.yml");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        config = null;
         instance = null;
     }
 }

@@ -246,7 +246,7 @@ vkits:
     - "vkits"
 #
 wild:
-  enabled: true
+  enabled: false
 #
 withdraw:
   enabled: true

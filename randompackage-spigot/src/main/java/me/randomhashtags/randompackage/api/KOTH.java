@@ -146,6 +146,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		cappingStartedTime = 0;
 		currentPlayerCapturing = null;
 		previouscapturer = null;
+		instance = null;
 	}
 	
 	public ArrayList<ItemStack> getRandomLootbagContents() {

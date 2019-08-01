@@ -236,7 +236,11 @@ public class YamlUpdater extends UVersion {
         return null;
     }
     private LinkedHashMap<String, Object> getItems() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.4.1
+                newItemStack("christmas candy", "glowstone_dust", "&eChristmas Candy &7(Right Click)", newStringList("&7A yummy piece of space candy, only", "&7obtainable during &nChristmas 2016"))
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getJackpot() {
         return null;
@@ -292,6 +296,13 @@ public class YamlUpdater extends UVersion {
         return new Object[]{
                 key + ".title", title,
                 key + ".size", size
+        };
+    }
+    private Object[] newItemStack(String key, String material, String name, List<String> lore) {
+        return new Object[]{
+                key + ".item", material,
+                key + ".name", name,
+                key + ".lore", lore,
         };
     }
     private Object[] newItemStack(String key, int slot, String material, String name, List<String> lore, String picksup) {

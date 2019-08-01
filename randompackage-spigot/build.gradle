@@ -4,9 +4,16 @@ apply plugin: 'maven'
 apply plugin: 'java-library'
 
 repositories {
+    //maven { url "https://hub.spigotmc.org/nexus/content/groups/public" } // SpigotMC
+    maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
+    maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
+    maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
 }
 
 dependencies {
+    compileOnly 'me.clip:placeholderapi:2.10.3'
+    compileOnly 'net.milkbowl.vault:VaultAPI:1.7'
+    compileOnly 'com.wasteofplastic:askyblock:3.0.9.4'
 }
 
 jar {
