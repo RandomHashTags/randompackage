@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
+
 public class GivedpItem extends RPFeature implements CommandExecutor {
     public static final GivedpItem givedpitem = new GivedpItem();
 
@@ -99,6 +101,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         itemnametag = new ArrayList<>();
         itemlorecrystal = new ArrayList<>();
         explosivesnowball = new ArrayList<>();
+
+        if(mcmmo != null) {
+            MCMMOAPI.getMCMMOAPI().enable();
+        }
     }
     public void unload() {
         itemsConfig = null;

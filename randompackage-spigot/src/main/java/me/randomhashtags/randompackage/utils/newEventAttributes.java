@@ -30,7 +30,6 @@ public abstract class newEventAttributes extends RPFeature {
     private static boolean isenabled = false;
     private final boolean isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
 
-
     protected void loadUtils() {
         if(!isenabled) {
             isenabled = true;
@@ -44,7 +43,7 @@ public abstract class newEventAttributes extends RPFeature {
         }
     }
 
-    private boolean success(Event event, List<String> attributes, HashMap<String, String> attributeReplacements) {
+    public boolean success(Event event, List<String> attributes, HashMap<String, String> attributeReplacements) {
         final boolean success = event != null && attributes != null && !attributes.isEmpty();
         if(success) {
             final ExecuteAttributesEvent e = new ExecuteAttributesEvent(event, attributes, attributeReplacements);
@@ -52,7 +51,7 @@ public abstract class newEventAttributes extends RPFeature {
         }
         return success;
     }
-    private List<String> replace(List<String> attributes, HashMap<String, String> attributeReplacements) {
+    public List<String> replace(List<String> attributes, HashMap<String, String> attributeReplacements) {
         final List<String> a = new ArrayList<>();
         final boolean not = attributeReplacements != null && !attributeReplacements.isEmpty();
         for(String s : attributes) {
@@ -70,11 +69,11 @@ public abstract class newEventAttributes extends RPFeature {
         if(entities.isEmpty()) return true;
         attribute = attribute.toLowerCase();
         final List<Boolean> booleans = new ArrayList<>();
-        final boolean cancellable = event instanceof Cancellable;
+        final boolean cancellable = event instanceof Cancellable, isCancelled = cancellable && ((Cancellable) event).isCancelled();
         for(String s : attribute.split(";")) {
             final String l = s.toLowerCase();
             if(l.startsWith("cancelled=") && cancellable) {
-                booleans.add(((Cancellable) event).isCancelled() && Boolean.parseBoolean(l.split("=")[1]));
+                booleans.add(isCancelled == Boolean.parseBoolean(l.split("=")[1]));
             } else if(l.startsWith("chance=")) {
                 booleans.add(getRemainingInt(l.split("=")[1]) >= random.nextInt(100));
             }
@@ -109,7 +108,7 @@ public abstract class newEventAttributes extends RPFeature {
         }
         return !booleans.contains(false);
     }
-    private ExecutedEventAttributes doGenericAttribute(Event event, TreeMap<String, Entity> entities, String attribute, String wholeAttribute) {
+    public ExecutedEventAttributes doGenericAttribute(Event event, TreeMap<String, Entity> entities, String attribute, String wholeAttribute) {
         final String attributeLowercase = attribute.toLowerCase();
         if(passedIfs(event, entities, attribute)) {
             final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
@@ -342,7 +341,7 @@ public abstract class newEventAttributes extends RPFeature {
             final Player killer = victim.getKiller();
             final List<ExecutedEventAttributes> e = new ArrayList<>();
             for(String s : attributes) {
-                if(s.startsWith("EntityDeath;")) {
+                if(s.toLowerCase().startsWith("entitydeath;")) {
                     for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
                         e.add(doAttribute(event, victim, killer, a, s));
                     }

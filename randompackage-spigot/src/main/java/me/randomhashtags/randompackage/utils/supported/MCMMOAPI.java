@@ -38,7 +38,6 @@ public class MCMMOAPI extends GlobalChallenges implements Listener {
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
 	public void load() {
-		pluginmanager.registerEvents(this, randompackage);
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
 		gcIsEnabled = GlobalChallenges.getChallenges().isEnabled();
 		creditVoucher = givedpitem.items.get("mcmmocreditvoucher");

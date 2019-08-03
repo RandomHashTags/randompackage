@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
@@ -47,6 +46,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
+import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 
 public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private static GlobalChallenges instance;
@@ -90,10 +90,9 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	    final long started = System.currentTimeMillis();
 		save(null, "global challenges.yml");
 		save("_Data", "global challenges.yml");
-		if(RandomPackage.mcmmo != null) {
+		if(mcmmo != null) {
 			final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
 			m.gcIsEnabled = true;
-			m.unload();
 		}
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "global challenges.yml"));
 		dataF = new File(rpd + separator + "_Data", "global challenges.yml");

@@ -4,10 +4,7 @@ import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.active.ActiveBooster;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.addons.usingfile.FileBooster;
-import me.randomhashtags.randompackage.api.events.BoosterActivateEvent;
-import me.randomhashtags.randompackage.api.events.BoosterExpireEvent;
-import me.randomhashtags.randompackage.api.events.BoosterPreActivateEvent;
-import me.randomhashtags.randompackage.api.events.FactionDisbandEvent;
+import me.randomhashtags.randompackage.api.events.*;
 import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.newEventAttributes;
 import me.randomhashtags.randompackage.utils.objects.TObject;
@@ -18,19 +15,19 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Boosters extends newEventAttributes {
 	private static Boosters instance;
@@ -42,6 +39,9 @@ public class Boosters extends newEventAttributes {
 	public File dataF;
 	public YamlConfiguration data;
 	public static HashMap<String, List<ActiveBooster>> activeFactionBoosters;
+	public static HashMap<UUID, List<ActiveBooster>> activePlayerBoosters;
+
+	private MCMMOBoosterEvents mcmmoboosters;
 
 	public void load() {
 		loadUtils();
@@ -56,7 +56,13 @@ public class Boosters extends newEventAttributes {
 			saveOtherData();
 		}
 
+		if(mcmmoIsEnabled()) {
+			mcmmoboosters = new MCMMOBoosterEvents();
+			pluginmanager.registerEvents(mcmmoboosters, randompackage);
+		}
+
 		activeFactionBoosters = new HashMap<>();
+		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
 		final File folder = new File(rpd + separator + "boosters");
@@ -74,6 +80,11 @@ public class Boosters extends newEventAttributes {
 		backup();
 		instance = null;
 		activeFactionBoosters = null;
+		activePlayerBoosters = null;
+		if(mcmmoIsEnabled()) {
+			HandlerList.unregisterAll(mcmmoboosters);
+			mcmmoboosters = null;
+		}
 		deleteAll(Feature.BOOSTERS);
 	}
 
@@ -150,8 +161,48 @@ public class Boosters extends newEventAttributes {
 		if(!cancelled) {
 			final BoosterActivateEvent ee = new BoosterActivateEvent(player, booster, multiplier, duration);
 			pluginmanager.callEvent(ee);
+			if(!ee.isCancelled()) finish(ee);
 		}
 		return !cancelled;
+	}
+	private void finish(BoosterActivateEvent event) {
+		final Booster b = event.booster;
+		if(b instanceof FileBooster) {
+			final OfflinePlayer player = event.activator;
+			final double multiplier = event.multiplier;
+			final long duration = event.duration;
+			final HashMap<String, String> replacements = new HashMap<>();
+			replacements.put("{PLAYER}", player.getName());
+			replacements.put("{MULTIPLIER}", Double.toString(multiplier));
+
+			switch(b.getRecipients()) {
+				case "FACTION_MEMBERS":
+					final String faction = fapi != null ? fapi.getFaction(player) : null;
+					if(faction != null) {
+						final ActiveBooster booster = new ActiveBooster(event, faction, System.currentTimeMillis()+duration);
+						replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
+						final List<Player> members = getFactionMembers(faction);
+						if(members != null) {
+							for(Player p : members) {
+								sendStringListMessage(p, b.getActivateMsg(), replacements);
+							}
+						}
+						if(!activeFactionBoosters.containsKey(faction)) activeFactionBoosters.put(faction, new ArrayList<>());
+						activeFactionBoosters.get(faction).add(booster);
+					}
+					break;
+				case "SELF":
+					final UUID u = player.getUniqueId();
+					final ActiveBooster booster = new ActiveBooster(event, System.currentTimeMillis()+duration);
+					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
+					if(player.isOnline()) {
+						sendStringListMessage(player.getPlayer(), b.getActivateMsg(), replacements);
+					}
+					if(!activePlayerBoosters.containsKey(u)) activePlayerBoosters.put(u, new ArrayList<>());
+					activePlayerBoosters.get(u).add(booster);
+					break;
+			}
+		}
 	}
 	private List<Player> getFactionMembers(String faction) {
 		final List<UUID> m = fapi != null ? fapi.getMembers(faction) : null;
@@ -167,48 +218,17 @@ public class Boosters extends newEventAttributes {
 		}
 		return null;
 	}
-	@EventHandler(priority = EventPriority.LOWEST)
-	private void boosterActivateEvent(BoosterActivateEvent event) {
-		final Booster b = event.booster;
-		if(b instanceof FileBooster) {
-			switch(b.getRecipients()) {
-				case "FACTION_MEMBERS":
-					final OfflinePlayer player = event.activator;
-					final String faction = fapi != null ? fapi.getFaction(player) : null;
-					if(faction != null) {
-						final long duration = event.duration;
-						final ActiveBooster booster = new ActiveBooster(event, faction, System.currentTimeMillis()+duration);
-						final double multiplier = event.multiplier;
-						final HashMap<String, String> replacements = new HashMap<>();
-						replacements.put("{PLAYER}", player.getName());
-						replacements.put("{MULTIPLIER}", Double.toString(multiplier));
-						replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
-						final List<Player> members = getFactionMembers(faction);
-						if(members != null) {
-							for(Player p : members) {
-								sendStringListMessage(p, b.getActivateMsg(), replacements);
-							}
-						}
-						if(!activeFactionBoosters.containsKey(faction)) activeFactionBoosters.put(faction, new ArrayList<>());
-						activeFactionBoosters.get(faction).add(booster);
-					}
-					break;
-				case "SELF":
-					break;
-			}
-		}
-	}
 	@EventHandler
 	private void boosterExpireEvent(BoosterExpireEvent event) {
 		final ActiveBooster b = event.booster;
 		final Booster booster = b.getBooster();
+		final List<String> expire = booster.getExpireMsg();
+		final OfflinePlayer a = b.getActivator();
+		final HashMap<String, String> replacements = new HashMap<>();
+		replacements.put("{PLAYER}", a.getName());
+		replacements.put("{MULTIPLIER}", Double.toString(b.getMultiplier()));
 		switch(booster.getRecipients()) {
 			case "FACTION_MEMBERS":
-				final List<String> expire = booster.getExpireMsg();
-				final OfflinePlayer a = b.getActivator();
-				final HashMap<String, String> replacements = new HashMap<>();
-				replacements.put("{PLAYER}", a.getName());
-				replacements.put("{MULTIPLIER}", Double.toString(b.getMultiplier()));
 				boolean did = false;
 				final String faction = b.getFaction();
 				if(faction != null && activeFactionBoosters.containsKey(faction)) {
@@ -226,15 +246,29 @@ public class Boosters extends newEventAttributes {
 				}
 				break;
 			case "SELF":
+				final UUID u = a.getUniqueId();
+				if(activePlayerBoosters.containsKey(u) && a.isOnline()) {
+					sendStringListMessage(a.getPlayer(), expire, replacements);
+				}
+				break;
 		}
 	}
 	@EventHandler
 	private void factionDisbandEvent(FactionDisbandEvent event) {
-		activeFactionBoosters.remove(event.factionName);
+		final String s = event.factionName;
+		if(activeFactionBoosters.containsKey(s)) {
+			for(ActiveBooster b : activeFactionBoosters.get(s)) {
+				b.expire(false);
+			}
+			activeFactionBoosters.remove(s);
+		}
 	}
 
 	private List<ActiveBooster> getFactionBoosters(String faction) {
 		return activeFactionBoosters != null ? activeFactionBoosters.getOrDefault(faction, new ArrayList<>()) : new ArrayList<>();
+	}
+	private List<ActiveBooster> getSelfBoosters(UUID player) {
+		return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
 	}
 	private List<ActiveBooster> getFactionBoosters(Player player) {
 		return fapi != null ? getFactionBoosters(fapi.getFaction(player)) : new ArrayList<>();
@@ -250,24 +284,31 @@ public class Boosters extends newEventAttributes {
 		final Player k = event.getEntity().getKiller();
 		if(k != null) {
 			final HashMap<String, String> replacements = new HashMap<>();
-			final List<ActiveBooster> boosters = getFactionBoosters(k);
+			final List<ActiveBooster> boosters = new ArrayList<>();
+			boosters.addAll(getFactionBoosters(k));
+			boosters.addAll(getSelfBoosters(k.getUniqueId()));
 			for(ActiveBooster ab : boosters) {
 				final double multiplier = ab.getMultiplier();
 				final long duration = ab.getDuration();
 				final String M = Double.toString(multiplier), D = Long.toString(duration);
 				replacements.put("multiplier", M);
 				replacements.put("duration", D);
-				final List<ExecutedEventAttributes> e = executeAttributes(event, ab.getBooster().getAttributes(), replacements);
-				if(e != null) {
-					replacements.put("{MULTIPLIER}", M);
-					replacements.put("{PLAYER}", ab.getActivator().getName());
-					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
-					sendNotify(k, ab, replacements);
+				final BoosterPreTriggerEvent pre = new BoosterPreTriggerEvent(event, k, ab);
+				pluginmanager.callEvent(pre);
+				if(!pre.isCancelled()) {
+					final List<ExecutedEventAttributes> e = executeAttributes(event, ab.getBooster().getAttributes(), replacements);
+					if(e != null) {
+						final BoosterTriggerEvent t = new BoosterTriggerEvent(event, k, ab, e);
+						pluginmanager.callEvent(t);
+						replacements.put("{MULTIPLIER}", M);
+						replacements.put("{PLAYER}", ab.getActivator().getName());
+						replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
+						sendNotify(k, ab, replacements);
+					}
 				}
 			}
 		}
 	}
-
 
 	public TObject valueOf(ItemStack is) {
 		if(boosters != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
@@ -284,5 +325,79 @@ public class Boosters extends newEventAttributes {
 			}
 		}
 		return null;
+	}
+
+
+	private class MCMMOBoosterEvents implements Listener {
+		@EventHandler(priority = EventPriority.HIGHEST)
+		private void mcmmoPlayerXpGainEvent(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
+			if(!event.isCancelled()) {
+				final Player player = event.getPlayer();
+				final List<ActiveBooster> boosters = new ArrayList<>();
+				if(fapi != null) {
+					final String f = fapi.getFaction(player);
+					boosters.addAll(getFactionBoosters(f));
+				}
+				boosters.addAll(getSelfBoosters(player.getUniqueId()));
+				for(ActiveBooster ab : boosters) {
+					final HashMap<String, String> replacements = new HashMap<>();
+					final double multiplier = ab.getMultiplier();
+					final long duration = ab.getDuration();
+					final String M = Double.toString(multiplier), D = Long.toString(duration);
+					replacements.put("multiplier", M);
+					replacements.put("duration", D);
+					final List<ExecutedEventAttributes> e = executeAttributes(event, ab.getBooster().getAttributes(), replacements);
+					if(e != null) {
+						replacements.put("{MULTIPLIER}", M);
+						replacements.put("{PLAYER}", ab.getActivator().getName());
+						replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
+						sendNotify(player, ab, replacements);
+					}
+				}
+			}
+		}
+		private ExecutedEventAttributes doAttribute(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, Player player, String attribute, String wholeAttribute) {
+			String attributeLowercase = attribute.toLowerCase();
+			final float xp = event.getRawXpGained();
+			final TreeMap<String, Entity> entities = getEntities("Player", player);
+			if(attributeLowercase.startsWith("gainedxp=")) {
+				final String s = attributeLowercase.split("=")[1].replace("xp", Float.toString(xp));
+				event.setRawXpGained((float) eval(s));
+				final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
+				attributes.put(wholeAttribute, attributeLowercase);
+				return new ExecutedEventAttributes(event, attributes);
+			} else {
+				if(player != null && attributeLowercase.contains("playerlocation")) attributeLowercase = attributeLowercase.replace("playerlocation", Boosters.this.toString(player.getLocation()));
+				return doGenericAttribute(event, entities, attribute, attributeLowercase);
+			}
+		}
+		private List<ExecutedEventAttributes> executeAttributes(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, List<String> attributes, HashMap<String, String> attributeReplacements) {
+			if(success(event, attributes, attributeReplacements)) {
+				attributes = replace(attributes, attributeReplacements);
+				final Player player = event.getPlayer();
+				final List<ExecutedEventAttributes> e = new ArrayList<>();
+				final String skill = event.getSkill().name();
+				final TreeMap<String, Entity> entities = getEntities("Player", player);
+				for(String s : attributes) {
+					if(s.toLowerCase().startsWith("mcmmoxpgained;")) {
+						boolean did = true;
+						for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
+							final String al = a.toLowerCase();
+							final boolean passed = passedIfs(event, entities, a);
+							if(!passed) return null;
+							else if(al.startsWith("skill=")) {
+								did = skill.equals(al.split("=")[1].toUpperCase());
+							} else if(did) {
+								final ExecutedEventAttributes att = doAttribute(event, player, a, s);
+								if(att != null) e.add(att);
+							}
+						}
+					}
+				}
+				if(player != null) player.updateInventory();
+				if(!e.isEmpty()) return e;
+			}
+			return null;
+		}
 	}
 }

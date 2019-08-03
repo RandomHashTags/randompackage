@@ -3,10 +3,10 @@ messages:
   activate:
     - "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} MCMMO XP&r &aFaction Booster! &7[{TIME} left]"
   expire:
-    - "&c&l(!) {MULTIPLIER}x&r &cEXP Booster from &l{PLAYER}&r &chas expired!"
+    - "&c&l(!) {MULTIPLIER}x&r &cMCMMO XP Booster from &l{PLAYER}&r &chas expired!"
     - "&cPurchase another booster at &nbuy.yourserver.com!"
   notify:
-    - "&a&l+ {MULTIPLIER}x EXP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
+    - "&a&l+ {MULTIPLIER}x MCMMO XP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
 #
 settings:
   recipients: FACTION_MEMBERS
@@ -27,4 +27,4 @@ item:
   - "&7{TIME}"
 #
 attributes:
-  - "MCMMOXpGained;gainedxp=xp*multiplier"
+  - "MCMMOXpGained;cancelled=false;gainedxp=xp*multiplier"
