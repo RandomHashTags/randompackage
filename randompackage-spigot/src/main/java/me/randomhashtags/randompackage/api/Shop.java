@@ -210,7 +210,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	        final Inventory top = player.getOpenInventory().getTopInventory();
 	        top.setContents(inv.getInventory().getContents());
 
-            final BigDecimal discount = getDiscount(player);
+            final BigDecimal discount = getDiscount(player), one = BigDecimal.ONE;
 
             final List<String> buylore = config.getStringList("lores.purchase"), selllore = config.getStringList("lores.sell");
             for(int i = 0; i < top.getSize(); i++) {
@@ -223,8 +223,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                     boolean buy = false, sell = false;
                     BigDecimal buyPrice = si.buyPrice, sellPrice = si.sellPrice;
                     if(buyPrice.doubleValue() > 0.00) {
-                        buyPrice = buyPrice.multiply(discount);
-                        final String b = formatBigDecimal(buyPrice);
+                        final String b = formatBigDecimal(buyPrice.multiply(discount.doubleValue() > 0 ? discount : one));
                         buy = true;
                         for(String string : buylore) {
                             if(string.contains("{BUY}")) string = string.replace("{BUY}", b);

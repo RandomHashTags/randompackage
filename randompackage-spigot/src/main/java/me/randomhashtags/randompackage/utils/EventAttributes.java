@@ -89,10 +89,10 @@ public abstract class EventAttributes extends RPFeature {
     }
 
     public String executeAttributes(Player player, ShopPurchaseEvent event, List<String> attributes) {
-        return player != null && event != null && attributes != null && !attributes.isEmpty() ? returnShop( "shoppurchaseitem", Double.toString(event.cost), UMaterial.match(event.item).name(), attributes) : null;
+        return player != null && event != null && attributes != null && !attributes.isEmpty() ? returnShop( "shoppurchaseitem", formatBigDecimal(event.cost), UMaterial.match(event.item).name(), attributes) : null;
     }
     public String executeAttributes(Player player, ShopSellEvent event, List<String> attributes) {
-        return player != null && event != null && attributes != null && !attributes.isEmpty() ? returnShop( "shopsellitem", Double.toString(event.profit), UMaterial.match(event.item).name(), attributes) : null;
+        return player != null && event != null && attributes != null && !attributes.isEmpty() ? returnShop( "shopsellitem", formatBigDecimal(event.profit), UMaterial.match(event.item).name(), attributes) : null;
     }
     private String returnShop(String type, String d, String material, List<String> attributes) {
         String completion = "";
