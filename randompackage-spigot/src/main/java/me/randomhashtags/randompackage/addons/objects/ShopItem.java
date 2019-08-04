@@ -3,12 +3,14 @@ package me.randomhashtags.randompackage.addons.objects;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+
 public class ShopItem {
     public final String path, opensCategory;
     public final int slot;
     private final ItemStack display, purchasedItem;
-    public final double buyPrice, sellPrice;
-    public ShopItem(String path, int slot, String opensCategory, ItemStack display, ItemStack purchasedItem, double buyPrice, double sellPrice) {
+    public final BigDecimal buyPrice, sellPrice;
+    public ShopItem(String path, int slot, String opensCategory, ItemStack display, ItemStack purchasedItem, BigDecimal buyPrice, BigDecimal sellPrice) {
         this.path = path;
         this.slot = slot;
         this.opensCategory = opensCategory;

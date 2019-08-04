@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class FileShopCategory extends ShopCategory {
             final Inventory ii = inventory.getInventory();
             items = new ArrayList<>();
             final ItemStack back = shop.back;
+            final BigDecimal zero = BigDecimal.ZERO;
             for(String s : yml.getConfigurationSection("gui").getKeys(false)) {
                 final String p = yml.getString("gui." + s + ".prices");
                 final String[] o = p != null ? p.split(";") : null;
@@ -39,7 +41,7 @@ public class FileShopCategory extends ShopCategory {
                 final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : shop.d(null, i) : null;
                 if(!isBack && custom == null) purchased.setAmount(display.getAmount());
                 final int slot = yml.getInt("gui." + s + ".slot");
-                items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? Double.parseDouble(o[0]) : 0, o != null ? Double.parseDouble(o[1]) : 0));
+                items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? BigDecimal.valueOf(Double.parseDouble(o[0])) : zero, o != null ? BigDecimal.valueOf(Double.parseDouble(o[1])): zero));
                 ii.setItem(slot, display);
             }
         }

@@ -4,13 +4,15 @@ import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+
 public class ShopPurchaseEvent extends AbstractEvent {
     public final Player player;
     public final ShopItem shopitem;
     public final ItemStack item;
     public final int amount;
-    public final double cost;
-    public ShopPurchaseEvent(Player player, ShopItem shopitem, ItemStack item, int amount, double cost) {
+    public final BigDecimal cost;
+    public ShopPurchaseEvent(Player player, ShopItem shopitem, ItemStack item, int amount, BigDecimal cost) {
         this.player = player;
         this.shopitem = shopitem;
         this.item = item;

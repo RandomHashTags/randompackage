@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,13 +78,14 @@ public class Shop extends RPFeature implements CommandExecutor {
 		if(player != null) view(player);
 		return true;
 	}
-	public double getDiscount(Player player) {
-	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) return 0.00;
-	    double d = 0;
+	public BigDecimal getDiscount(Player player) {
+	    final BigDecimal zero = BigDecimal.ZERO;
+	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) return zero;
+	    BigDecimal d = zero;
         for(int k = 1; k <= 100; k++)
             if(player.hasPermission("RandomPackage.shop.discount." + k))
-                d = k;
-            return d/100;
+                d = BigDecimal.valueOf(k);
+        return BigDecimal.valueOf(d.doubleValue()/100);
     }
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void inventoryClickEvent(InventoryClickEvent event) {
@@ -112,14 +114,14 @@ public class Shop extends RPFeature implements CommandExecutor {
                             player.closeInventory();
                             viewCategory(player, o);
                         } else {
-                            final double discount = getDiscount(player), buy = si.buyPrice, sell = si.sellPrice;
+                            final BigDecimal discount = getDiscount(player), buy = si.buyPrice, sell = si.sellPrice;
                             if(cl.endsWith("LEFT")) {
-                                if(buy > 0.00) {
-                                    double cost = buy, dis = discount*buy;
-                                    cost -= dis;
+                                if(buy.doubleValue() > 0.00) {
+                                    BigDecimal cost = buy, dis = discount.multiply(buy);
+                                    cost = cost.subtract(dis);
                                     final ItemStack is = si.getPurchased().clone();
                                     int amountPurchased = cl.equals("LEFT") ? 1 : is.getMaxStackSize();
-                                    cost *= amountPurchased;
+                                    cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
                                     final ShopPrePurchaseEvent e = new ShopPrePurchaseEvent(player, si, amountPurchased, cost);
                                     pluginmanager.callEvent(e);
                                     if(e.isCancelled()) return;
@@ -128,7 +130,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     item = is;
                                     item.setAmount(is.getAmount()*amountPurchased);
                                     boolean purchased = false;
-                                    if(eco.withdrawPlayer(player, cost).transactionSuccess()) {
+                                    if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
                                         purchased = true;
                                         giveItem(player, item);
                                         final ShopPurchaseEvent ev = new ShopPurchaseEvent(player, si, item, amountPurchased, cost);
@@ -136,8 +138,8 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     }
                                     playSound(config, "sounds." + (purchased ? "buy" : "not enough balance"), player, player.getLocation(), false);
                                     final HashMap<String, String> replacements = new HashMap<>();
-                                    replacements.put("{PRICE}", formatDouble(buy));
-                                    replacements.put("{TOTAL}", formatDouble(cost));
+                                    replacements.put("{PRICE}", formatBigDecimal(buy));
+                                    replacements.put("{TOTAL}", formatBigDecimal(cost));
                                     replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
                                     replacements.put("{ITEM}", item.getType().name());
                                     sendStringListMessage(player, config.getStringList("messages.purchase" + (purchased ? "" : " incomplete")), replacements);
@@ -145,26 +147,26 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     playSound(config, "sounds.not buyable", player, player.getLocation(), false);
                                 }
                             } else if(cl.endsWith("RIGHT")) {
-                                if(sell > 0.00) {
+                                if(sell.doubleValue() > 0.00) {
                                     final ItemStack A = si.getPurchased().clone();
                                     final Inventory inv = player.getInventory();
                                     String p = "messages.sell" + (!inv.containsAtLeast(A, 1) ? " incomplete" : "");
-                                    final double price = si.sellPrice;
+                                    final BigDecimal price = si.sellPrice;
                                     int amountSold = cl.equals("RIGHT") ? A.getAmount() : A.getMaxStackSize();
 
                                     if(!inv.containsAtLeast(A, 1)) {
                                         playSound(config, "sounds.not enough to sell", player, player.getLocation(), false);
                                     } else {
                                         final int has = getTotalAmount(inv, UMaterial.match(A));
-                                        amountSold = amountSold > has ? has : amountSold;
+                                        amountSold = Math.min(has, amountSold);
                                         if(inv.containsAtLeast(A, amountSold)) {
-                                            double profit = price * amountSold;
+                                            BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
                                             final ShopPreSellEvent e = new ShopPreSellEvent(player, si, amountSold, profit);
                                             pluginmanager.callEvent(e);
                                             if(e.isCancelled()) return;
                                             profit = e.getProfit();
                                             amountSold = e.getAmount();
-                                            eco.depositPlayer(player, profit);
+                                            eco.depositPlayer(player, profit.doubleValue());
                                             removeItem(player, A, amountSold);
                                             final ShopSellEvent ee = new ShopSellEvent(player, si, A, amountSold, profit);
                                             pluginmanager.callEvent(ee);
@@ -172,7 +174,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                             p = "messages.sell incomplete";
                                         }
                                     }
-                                    final String n = UMaterial.match(A).name(), pr = formatDouble(round(price, 2)), amts = formatInt(amountSold), ttl = formatDouble(round(amountSold*price, 2));
+                                    final String n = UMaterial.match(A).name(), pr = formatBigDecimal(price), amts = formatInt(amountSold), ttl = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
                                     for(String string : config.getStringList(p)) {
                                         if(string.contains("{TOTAL}")) string = string.replace("{TOTAL}", ttl);
                                         if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", amts);
@@ -208,7 +210,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	        final Inventory top = player.getOpenInventory().getTopInventory();
 	        top.setContents(inv.getInventory().getContents());
 
-            final double discount = getDiscount(player);
+            final BigDecimal discount = getDiscount(player);
 
             final List<String> buylore = config.getStringList("lores.purchase"), selllore = config.getStringList("lores.sell");
             for(int i = 0; i < top.getSize(); i++) {
@@ -219,20 +221,21 @@ public class Shop extends RPFeature implements CommandExecutor {
                     itemMeta = item.getItemMeta(); lore.clear();
                     if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
                     boolean buy = false, sell = false;
-                    double buyPrice = si.buyPrice, sellPrice = si.sellPrice;
-                    if(buyPrice > 0.00) {
-                        buyPrice -= buyPrice*discount;
-                        final String b = formatDouble(round(buyPrice, 2));
+                    BigDecimal buyPrice = si.buyPrice, sellPrice = si.sellPrice;
+                    if(buyPrice.doubleValue() > 0.00) {
+                        buyPrice = buyPrice.multiply(discount);
+                        final String b = formatBigDecimal(buyPrice);
                         buy = true;
                         for(String string : buylore) {
                             if(string.contains("{BUY}")) string = string.replace("{BUY}", b);
                             lore.add(ChatColor.translateAlternateColorCodes('&', string));
                         }
                     }
-                    if(sellPrice > 0.00) {
+                    if(sellPrice.doubleValue() > 0.00) {
+                        final String ss = formatBigDecimal(sellPrice);
                         sell = true;
                         for(String string : selllore) {
-                            if(string.contains("{SELL}")) string = string.replace("{SELL}", formatDouble(sellPrice));
+                            if(string.contains("{SELL}")) string = string.replace("{SELL}", ss);
                             lore.add(ChatColor.translateAlternateColorCodes('&', string));
                         }
                     }
