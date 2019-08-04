@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addons.utils;
 
-import me.randomhashtags.randompackage.utils.universal.UInventory;
+import org.spongepowered.api.item.inventory.Inventory;
 
 public interface Inventoryable extends Identifiable {
     String getTitle();
-    UInventory getInventory();
+    Inventory getInventory();
 }

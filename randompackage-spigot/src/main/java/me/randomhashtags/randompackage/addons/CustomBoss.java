@@ -34,9 +34,8 @@ public abstract class CustomBoss extends RPSpawnable {
 
     public static CustomBoss valueOf(ItemStack spawnitem) {
         if(bosses != null && spawnitem != null && spawnitem.hasItemMeta()) {
-            for(RPAddon c : bosses.values()) {
-                final CustomBoss b = (CustomBoss) c;
-                if(b.getSpawnItem().getItemMeta().equals(spawnitem.getItemMeta())) {
+            for(CustomBoss b : bosses.values()) {
+                if(b.getSpawnItem().isSimilar(spawnitem)) {
                     return b;
                 }
             }

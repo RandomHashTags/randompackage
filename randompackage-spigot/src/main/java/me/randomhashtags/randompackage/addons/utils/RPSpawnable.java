@@ -9,7 +9,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
 
-public abstract class RPSpawnable extends RPAddon implements Identifyable, Spawnable {
+public abstract class RPSpawnable extends RPAddon implements Identifiable, Spawnable {
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
     public boolean canSpawnAtFactionClaim(Player summoner, Location l) {

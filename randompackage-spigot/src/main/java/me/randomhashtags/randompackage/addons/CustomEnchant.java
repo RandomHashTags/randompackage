@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifyable;
+import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class CustomEnchant extends RPAddon implements Identifyable {
+public abstract class CustomEnchant extends RPAddon implements Identifiable {
     public abstract boolean isEnabled();
     public abstract String getName();
     public abstract List<String> getLore();

@@ -183,31 +183,33 @@ public class RPPlayer extends RPStorage {
         }
 
         final HashMap<Integer, ItemStack[]> showcase = getShowcases();
-        for(int p : showcase.keySet()) {
-            yml.set("showcases." + p, null);
-            yml.set("showcases." + p + ".size", getShowcaseSize(p));
-            int s = 0;
-            for(ItemStack i : showcase.get(p)) {
-                if(i != null && !i.getType().equals(Material.AIR)) {
-                    final UMaterial j = UMaterial.match(i);
-                    yml.set("showcases." + p + "." + s + ".item", j.name());
-                    if(i.hasItemMeta()) {
-                        final ItemMeta m = i.getItemMeta();
-                        if(m.hasDisplayName()) yml.set("showcases." + p + "." + s + ".name", m.getDisplayName());
-                        final List<String> l = new ArrayList<>();
-                        if(m.hasEnchants()) {
-                            String en = "VEnchants{";
-                            final Map<Enchantment, Integer> enchants = m.getEnchants();
-                            for(Enchantment e : enchants.keySet()) {
-                                en = en.concat(e.getName() + enchants.get(e) + ";");
+        if(showcases != null) {
+            for(int p : showcase.keySet()) {
+                yml.set("showcases." + p, null);
+                yml.set("showcases." + p + ".size", getShowcaseSize(p));
+                int s = 0;
+                for(ItemStack i : showcase.get(p)) {
+                    if(i != null && !i.getType().equals(Material.AIR)) {
+                        final UMaterial j = UMaterial.match(i);
+                        yml.set("showcases." + p + "." + s + ".item", j.name());
+                        if(i.hasItemMeta()) {
+                            final ItemMeta m = i.getItemMeta();
+                            if(m.hasDisplayName()) yml.set("showcases." + p + "." + s + ".name", m.getDisplayName());
+                            final List<String> l = new ArrayList<>();
+                            if(m.hasEnchants()) {
+                                String en = "VEnchants{";
+                                final Map<Enchantment, Integer> enchants = m.getEnchants();
+                                for(Enchantment e : enchants.keySet()) {
+                                    en = en.concat(e.getName() + enchants.get(e) + ";");
+                                }
+                                l.add(en + "}");
                             }
-                            l.add(en + "}");
+                            if(m.hasLore()) l.addAll(m.getLore());
+                            if(!l.isEmpty()) yml.set("showcases." + p + "." + s + ".lore", l);
                         }
-                        if(m.hasLore()) l.addAll(m.getLore());
-                        if(!l.isEmpty()) yml.set("showcases." + p + "." + s + ".lore", l);
                     }
+                    s++;
                 }
-                s++;
             }
         }
         save();
@@ -398,36 +400,34 @@ public class RPPlayer extends RPStorage {
 
     public HashMap<Integer, ItemStack[]> getShowcases() {
         final Showcase showcase = Showcase.getShowcase();
-        if(showcase.isEnabled()) {
-            if(showcases == null && showcaseSizes == null) {
-                showcases = new HashMap<>();
-                showcaseSizes = new HashMap<>();
-                final ConfigurationSection c = yml.getConfigurationSection("showcases");
-                if(c != null) {
-                    for(String s : c.getKeys(false)) {
-                        final int page = Integer.parseInt(s);
-                        showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
-                        final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
-                        final ItemStack[] items = new ItemStack[54];
-                        if(i != null) {
-                            for(String sl : i.getKeys(false)) {
-                                if(sl.equals("slot")) {
-                                    final int slot = Integer.parseInt(sl);
-                                    items[slot] = api.d(yml, "showcases." + s + "." + sl);
-                                }
+        if(showcase.isEnabled() && showcases == null && showcaseSizes == null) {
+            showcases = new HashMap<>();
+            showcaseSizes = new HashMap<>();
+            final ConfigurationSection c = yml.getConfigurationSection("showcases");
+            if(c != null) {
+                for(String s : c.getKeys(false)) {
+                    final int page = Integer.parseInt(s);
+                    showcaseSizes.put(page, yml.getInt("showcases." + s + ".size"));
+                    final ConfigurationSection i = yml.getConfigurationSection("showcases." + s);
+                    final ItemStack[] items = new ItemStack[54];
+                    if(i != null) {
+                        for(String sl : i.getKeys(false)) {
+                            if(sl.equals("slot")) {
+                                final int slot = Integer.parseInt(sl);
+                                items[slot] = api.d(yml, "showcases." + s + "." + sl);
                             }
                         }
-                        showcases.put(page, items);
                     }
-                } else {
-                    final YamlConfiguration config = showcase.config;
-                    final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
-                    if(defaultShowcase > 0) {
-                        final ItemStack[] a = new ItemStack[54];
-                        for(int i = 1; i <= defaultShowcase; i++) {
-                            showcases.put(i, a);
-                            showcaseSizes.put(i, defaultSize);
-                        }
+                    showcases.put(page, items);
+                }
+            } else {
+                final YamlConfiguration config = showcase.config;
+                final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
+                if(defaultShowcase > 0) {
+                    final ItemStack[] a = new ItemStack[54];
+                    for(int i = 1; i <= defaultShowcase; i++) {
+                        showcases.put(i, a);
+                        showcaseSizes.put(i, defaultSize);
                     }
                 }
             }

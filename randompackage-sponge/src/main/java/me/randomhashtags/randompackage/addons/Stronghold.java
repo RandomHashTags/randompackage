@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import org.bukkit.Location;
+import org.spongepowered.api.world.Location;
 
 import java.util.List;
 

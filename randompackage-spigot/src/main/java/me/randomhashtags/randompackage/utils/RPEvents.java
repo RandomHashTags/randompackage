@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.ArrayList;
 
 public class RPEvents extends RandomPackageAPI implements Listener {
-
     private static RPEvents instance;
     public static final RPEvents getRPEvents() {
         if(instance == null) instance = new RPEvents();

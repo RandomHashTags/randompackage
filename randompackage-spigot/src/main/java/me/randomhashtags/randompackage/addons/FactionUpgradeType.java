@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifyable;
+import me.randomhashtags.randompackage.addons.utils.Identifiable;
 
 import java.util.List;
 
-public interface FactionUpgradeType extends Identifyable {
+public interface FactionUpgradeType extends Identifiable {
     String getPerkAchievedPrefix();
     String getPerkUnachievedPrefix();
     String getRequirementsPrefix();

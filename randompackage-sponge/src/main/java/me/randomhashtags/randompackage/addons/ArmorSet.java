@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Identifiable;
-import org.bukkit.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifyable;
+import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -8,7 +8,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-public interface Outpost extends Identifyable {
+public interface Outpost extends Identifiable {
     String getName();
     int getSlot();
     ItemStack getDisplay();
