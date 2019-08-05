@@ -413,23 +413,31 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         if(player != null && quest != null && completion != null && !quest.isCompleted()) {
             final PlayerQuest q = quest.getQuest();
             for(String s : completion.split("&&")) {
-                if(s.startsWith("+")) {
-                    quest.setProgress(quest.getProgress()+Double.parseDouble(s.split("\\+")[1]));
-                    final double timer = q.getTimedCompletion();
-                    if(timer > 0.00) {
-                    } else if(quest.getProgress() >= Double.parseDouble(q.getCompletion())) {
-                        quest.setCompleted(true);
-                        final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, quest);
-                        pluginmanager.callEvent(e);
-                        final HashMap<String, String> replacements = new HashMap<>();
-                        replacements.put("{NAME}", q.getName());
-                        sendStringListMessage(player, config.getStringList("messages.completed"), replacements);
+                try {
+                    if(s.startsWith("+")) {
+                        quest.setProgress(quest.getProgress()+Double.parseDouble(s.split("\\+")[1]));
+                        final double timer = q.getTimedCompletion();
+                        if(timer > 0.00) {
+                        } else if(quest.getProgress() >= Double.parseDouble(q.getCompletion())) {
+                            quest.setCompleted(true);
+                            final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, quest);
+                            pluginmanager.callEvent(e);
+                            final HashMap<String, String> replacements = new HashMap<>();
+                            replacements.put("{NAME}", q.getName());
+                            sendStringListMessage(player, config.getStringList("messages.completed"), replacements);
+                        }
+                    } else if(s.startsWith("-")) {
+                        final double n = quest.getProgress()-Double.parseDouble(s.split("-")[1]);
+                        if(n >= 0.00) {
+                            quest.setProgress(n);
+                        }
                     }
-                } else if(s.startsWith("-")) {
-                    final double n = quest.getProgress()-Double.parseDouble(s.split("-")[1]);
-                    if(n >= 0.00) {
-                        quest.setProgress(n);
-                    }
+                } catch(Exception e) {
+                    System.out.println("[RandomPackage] PlayerQuest error details:");
+                    System.out.println("player=" + player.getName() + ";quest=" + quest.getQuest().getIdentifier());
+                    System.out.println("completion=" + completion);
+                    System.out.println("s=" + s);
+                    e.printStackTrace();
                 }
             }
         }
@@ -438,9 +446,11 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     private void entityDeathEvent(EntityDeathEvent event) {
         final Player player = event.getEntity().getKiller();
         if(player != null) {
+            final String xp = Integer.toString(event.getDroppedExp());
             final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
             for(ActivePlayerQuest quest : a) {
-                doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+                String e = executeAttributes(player, event, quest.getQuest().getTrigger());
+                doCompletion(player, quest, e != null ? e.replace("xp", xp) : null);
             }
         }
     }

@@ -353,8 +353,7 @@ public class UVersion {
         final PlayerInventory inv = player.getInventory();
         for(int i = 0; i < inv.getSize(); i++) {
             item = inv.getItem(i);
-            if(item != null && item.getData().getData() == itemstack.getData().getData() && item.getType().equals(itemstack.getType())
-                    && item.getItemMeta().equals(itemstack.getItemMeta())) {
+            if(item != null && item.isSimilar(itemstack)) {
                 return i;
             }
         }

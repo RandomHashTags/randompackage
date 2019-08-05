@@ -660,11 +660,13 @@ public class RPPlayer extends RPStorage {
                 final PluginManager pm = api.pluginmanager;
                 for(String s : c.getKeys(false)) {
                     final PlayerQuest q = getPlayerQuest(s);
-                    final String[] b = yml.getString("quests." + s).split(";");
-                    final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
-                    if(!a.isExpired()) {
-                        quests.put(q, a);
-                        if(isEnabled) startExpire(time, scheduler, pm, q, a);
+                    if(q != null) {
+                        final String[] b = yml.getString("quests." + s).split(";");
+                        final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
+                        if(!a.isExpired()) {
+                            quests.put(q, a);
+                            if(isEnabled) startExpire(time, scheduler, pm, q, a);
+                        }
                     }
                 }
             }

@@ -85,6 +85,7 @@ public class LivingCustomBoss extends UVersion {
         final CustomBossDamageByEntityEvent e = new CustomBossDamageByEntityEvent(customboss, damager, damage);
         pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
+            final boolean legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
             final double d = e.damage;
             final HashMap<Integer, List<String>> messages = type.getMessages();
             UUID i = null;
@@ -123,37 +124,47 @@ public class LivingCustomBoss extends UVersion {
                                     y2 = Integer.parseInt(sss.split(":")[4]);
                                     z2 = Integer.parseInt(sss.split(":")[5]);
                                     for(Location l : locations) {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + UMaterial.match(sss.split(":")[6]).getVersionName() + " 0 replace " + UMaterial.match(sss.split(":")[7]).getVersionName());
-                                    }
-                                } else if(ss.startsWith("{/")) {
-                                    for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
-                                        if(entity instanceof Player) {
-                                            Bukkit.dispatchCommand(entity, ss.replace("{", "").replace("}", "").replace("/", "").replace("~player", entity.getName()));
-                                        }
+                                        final UMaterial replacee = UMaterial.match(sss.split(":")[6]);
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + replacee.getVersionName().toLowerCase() + (legacy ? " " + replacee.getData() : "") + " replace " + UMaterial.match(sss.split(":")[7]).getVersionName().toLowerCase());
                                     }
                                 } else {
-                                    if(ss.startsWith("{message")) {
-                                        for(String v  : messages.get(Integer.parseInt(ss.split("message")[1].split("}")[0]))) {
-                                            for (Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
-                                                entity.sendMessage(ChatColor.translateAlternateColorCodes('&', v));
+                                    String replace = ss.replace("{", "").replace("}", "").replace("/", "");
+                                    if(ss.startsWith("{/effect")) {
+                                        for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                            if(entity instanceof Player) {
+                                                Bukkit.dispatchCommand(entity, "/effect " + (legacy ? "" : "give ") + replace.replace("~player", entity.getName()));
                                             }
                                         }
-                                    } else if (ss.startsWith("{summonminions")) {
-                                        spawnMinions(customboss, maxMinions);
-                                    } else if (ss.startsWith("{minionheal")) {
-                                        a = 0;
-                                        final int healby = Integer.parseInt(ss.split(":")[1]), ra = Integer.parseInt(ss.split(":")[2]);
-                                        message = messages.get(Integer.parseInt(ss.split(":")[3].replace("message", "").replace("}", "")));
-                                        for(LivingCustomMinion minion : minions) {
-                                            final double hp = customboss.getHealth(), maxhp = customboss.getMaxHealth();
-                                            customboss.setHealth(hp+healby > maxhp ? maxhp : hp+healby);
-                                            a += healby;
+                                    } else if(ss.startsWith("{/")) {
+                                        for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                            if(entity instanceof Player) {
+                                                Bukkit.dispatchCommand(entity, replace.replace("~player", entity.getName()));
+                                            }
                                         }
-                                        if(a != 0) {
-                                            for(Entity entity : customboss.getNearbyEntities(ra, ra, ra)) {
-                                                for(String g : message) {
-                                                    if(g.contains("{HP}")) g = g.replace("{HP}", Integer.toString(a));
-                                                    entity.sendMessage(ChatColor.translateAlternateColorCodes('&', g));
+                                    } else {
+                                        if(ss.startsWith("{message")) {
+                                            for(String v  : messages.get(Integer.parseInt(ss.split("message")[1].split("}")[0]))) {
+                                                for (Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                                    entity.sendMessage(ChatColor.translateAlternateColorCodes('&', v));
+                                                }
+                                            }
+                                        } else if (ss.startsWith("{summonminions")) {
+                                            spawnMinions(customboss, maxMinions);
+                                        } else if (ss.startsWith("{minionheal")) {
+                                            a = 0;
+                                            final int healby = Integer.parseInt(ss.split(":")[1]), ra = Integer.parseInt(ss.split(":")[2]);
+                                            message = messages.get(Integer.parseInt(ss.split(":")[3].replace("message", "").replace("}", "")));
+                                            for(LivingCustomMinion minion : minions) {
+                                                final double hp = customboss.getHealth(), maxhp = customboss.getMaxHealth();
+                                                customboss.setHealth(hp+healby > maxhp ? maxhp : hp+healby);
+                                                a += healby;
+                                            }
+                                            if(a != 0) {
+                                                for(Entity entity : customboss.getNearbyEntities(ra, ra, ra)) {
+                                                    for(String g : message) {
+                                                        if(g.contains("{HP}")) g = g.replace("{HP}", Integer.toString(a));
+                                                        entity.sendMessage(ChatColor.translateAlternateColorCodes('&', g));
+                                                    }
                                                 }
                                             }
                                         }

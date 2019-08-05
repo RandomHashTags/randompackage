@@ -69,10 +69,10 @@ public class Boosters extends newEventAttributes {
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileBooster bo = new FileBooster(f);
-				b.add(bo.getItem(600, 5.0));
+				b.add(bo.getItem(60*10000, 5.0));
 			}
+			addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
 		}
-		if(boosters != null) addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (boosters != null ? boosters.size() : 0) + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		loadBackup();
 	}
