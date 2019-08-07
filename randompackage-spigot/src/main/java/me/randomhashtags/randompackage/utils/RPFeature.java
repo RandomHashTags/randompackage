@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.utils;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
+import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import me.randomhashtags.randompackage.utils.supported.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.enchantAddons;
+package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.usingpath.PathRarityGem;
@@ -20,7 +20,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class RarityGems extends CustomEnchantUtils {

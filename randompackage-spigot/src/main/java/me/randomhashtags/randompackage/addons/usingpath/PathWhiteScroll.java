@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingpath;
 
 import me.randomhashtags.randompackage.addons.WhiteScroll;
-import me.randomhashtags.randompackage.api.enchantAddons.WhiteScrolls;
+import me.randomhashtags.randompackage.api.addons.WhiteScrolls;
 import me.randomhashtags.randompackage.utils.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;

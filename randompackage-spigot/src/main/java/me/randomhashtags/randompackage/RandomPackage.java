@@ -4,10 +4,13 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.api.WildPvP;
-import me.randomhashtags.randompackage.api.enchantAddons.*;
+import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Boosters;
+import me.randomhashtags.randompackage.api.addons.KitsEvolution;
+import me.randomhashtags.randompackage.api.addons.KitsGlobal;
+import me.randomhashtags.randompackage.api.addons.KitsMastery;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.api.unfinished.Wild;
@@ -796,8 +799,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
         }
         final boolean empty = cmds.isEmpty();
+        final List<String> disabledCmds = new ArrayList<>();
+        for(String s : cmds) {
+            if(!config.getBoolean(ali.getOrDefault(s, s) + ".enabled")) {
+                disabledCmds.add(s);
+            }
+        }
         if(enabled && !empty) {
             try {
+                cmds.removeAll(disabledCmds);
+                unregisterPluginCommands(disabledCmds);
                 int v = 0;
                 for(String cmd : cmds) {
                     PluginCommand pc = getCommand(cmd);
@@ -818,10 +829,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 e.printStackTrace();
             }
         } else if(!empty) {
-            for(String cmd : cmds) {
-                final PluginCommand pc = getCommand(cmd);
-                if(pc != null) unregisterPluginCommand(pc);
-            }
+            unregisterPluginCommands(cmds);
+        }
+    }
+    private void unregisterPluginCommands(List<String> cmds) {
+        for(String cmd : cmds) {
+            final PluginCommand pc = getCommand(cmd);
+            if(pc != null) unregisterPluginCommand(pc);
         }
     }
 

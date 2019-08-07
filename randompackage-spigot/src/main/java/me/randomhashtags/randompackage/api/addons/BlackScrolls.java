@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.enchantAddons;
+package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.BlackScroll;
 import me.randomhashtags.randompackage.addons.CustomEnchant;

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.enchantAddons;
+package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;

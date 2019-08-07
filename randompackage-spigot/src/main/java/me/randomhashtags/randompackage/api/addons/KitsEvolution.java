@@ -1,8 +1,7 @@
-package me.randomhashtags.randompackage.api;
+package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.CustomKit;
-import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;

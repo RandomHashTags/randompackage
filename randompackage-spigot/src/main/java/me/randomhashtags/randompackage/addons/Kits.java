@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
 import me.randomhashtags.randompackage.addons.usingfile.FileFallenHero;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
+import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.KitEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;

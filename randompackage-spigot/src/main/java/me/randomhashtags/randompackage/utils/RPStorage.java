@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.dev.eventattributes.EventAttribute;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
@@ -32,6 +33,7 @@ public abstract class RPStorage extends UVersion {
     protected static LinkedHashMap<String, CustomBoss> bosses;
     protected static LinkedHashMap<String, ConquestChest> conquestchests;
     protected static TreeMap<String, CustomEnchant> enabled, disabled;
+    protected static LinkedHashMap<String, EventAttribute> eventattributes;
     protected static LinkedHashMap<String, DuelArena> duelArenas;
     protected static LinkedHashMap<String, Dungeon> dungeons;
     protected static LinkedHashMap<String, PathMagicDust> dusts;
@@ -85,14 +87,15 @@ public abstract class RPStorage extends UVersion {
     }
 
 
-    private YamlConfiguration get(String yml) {
+    private YamlConfiguration get(String folder, String yml) {
         if(cached.containsKey(yml)) return cached.get(yml);
-        final File f = new File(rpd + separator + "addons", yml);
+        final File f = new File(rpd + separator + (folder != null ? folder : ""), yml);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
         cached.put(yml ,c);
         return c;
     }
-    public YamlConfiguration getAddonConfig(String yml) { return get(yml); }
+    public YamlConfiguration getAddonConfig(String yml) { return get("addons", yml); }
+    public YamlConfiguration getRPConfig(String folder, String yml) { return get(folder, yml); }
 
 
     public ArmorSet getArmorSet(String identifier) {
@@ -203,6 +206,15 @@ public abstract class RPStorage extends UVersion {
         if(envoycrates == null) envoycrates = new LinkedHashMap<>();
         check(envoycrates, identifier, "envoy crate");
         envoycrates.put(identifier, e);
+    }
+
+    public EventAttribute getEventAttribute(String identifier) {
+        return eventattributes != null ? eventattributes.getOrDefault(identifier, null) : null;
+    }
+    public void addEventAttribute(String identifier, EventAttribute e) {
+        if(eventattributes == null) eventattributes = new LinkedHashMap<>();
+        check(eventattributes, identifier, "event attribute");
+        eventattributes.put(identifier, e);
     }
 
     public CustomExplosion getExplosion(String identifier) {

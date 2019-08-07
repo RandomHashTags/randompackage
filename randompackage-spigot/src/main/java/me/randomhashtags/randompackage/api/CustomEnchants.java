@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
-import me.randomhashtags.randompackage.api.enchantAddons.TransmogScrolls;
+import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.api.events.customenchant.*;

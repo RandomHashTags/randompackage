@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addons.usingfile;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.utils.RPKit;
-import me.randomhashtags.randompackage.api.KitsEvolution;
+import me.randomhashtags.randompackage.api.addons.KitsEvolution;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
