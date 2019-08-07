@@ -78,8 +78,9 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         for(int i = 1; i <= getRandomRewardSize(); i++) {
             if(rewards.size() != 0) {
                 final String reward = rewards.get(random.nextInt(rewards.size()));
+                final boolean hasChance = reward.toLowerCase().contains(";chance=");
                 final String[] a = reward.split(";chance=");
-                if(random.nextInt(100) <= api.getRemainingInt(a[1])) {
+                if(!hasChance || random.nextInt(100) <= api.getRemainingInt(a[1])) {
                     actualrewards.add(a[0]);
                     if(!canRepeatRewards) rewards.remove(reward);
                 } else {

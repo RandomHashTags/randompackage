@@ -39,8 +39,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	public List<Location> preset;
 	private List<Player> settingPreset;
 
-	public HashMap<Integer, HashMap<Location, EnvoyCrate>> active;
-
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -67,7 +65,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 		preset = new ArrayList<>();
 		settingPreset = new ArrayList<>();
-		active = new HashMap<>();
 
 		final YamlConfiguration a = otherdata;
 		final List<String> c = a.getStringList("envoy.preset");
@@ -107,10 +104,13 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 		spawnTask = scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(defaul, true, type), getRandomTime());
 		task = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
-			for(int i : active.keySet()) {
-				final HashMap<Location, EnvoyCrate> w = active.get(i);
-				for(Location l : w.keySet()) {
-					spawnFirework(w.get(l).getFirework(), l);
+			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
+			if(living != null) {
+				for(int i : living.keySet()) {
+					final HashMap<Location, LivingEnvoyCrate> w = living.get(i);
+					for(Location l : w.keySet()) {
+						spawnFirework(w.get(l).getType().getFirework(), l);
+					}
 				}
 			}
 		}, 0, 20*config.getInt("settings.firework delay"));
@@ -138,7 +138,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		type = null;
 		preset = null;
 		settingPreset = null;
-		active = null;
 		envoycrates = null;
 	}
 
