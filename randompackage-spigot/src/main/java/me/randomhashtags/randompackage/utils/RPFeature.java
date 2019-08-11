@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
-import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
-import me.randomhashtags.randompackage.utils.supported.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
+import me.randomhashtags.randompackage.utils.supported.standalone.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import net.milkbowl.vault.economy.Economy;
@@ -31,7 +32,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
-public abstract class RPFeature extends RPStorage implements Listener {
+public abstract class RPFeature extends RPStorage implements Listener, Identifiable {
     private boolean isEnabled = false;
     private static boolean mcmmoIsEnabled = false;
     public boolean isEnabled() { return isEnabled; }
@@ -39,7 +40,7 @@ public abstract class RPFeature extends RPStorage implements Listener {
 
     public static final File rpd = getPlugin.getDataFolder();
     public static final String separator = File.separator;
-    public static final FactionsAPI fapi = FactionsAPI.getFactionsAPI();
+    public static final RegionalAPI regions = RegionalAPI.getRegionalAPI();
     protected static final Economy eco = VaultAPI.getVaultAPI().getEconomy();
     private static final TreeMap<Integer, String> treemap = new TreeMap<>();
 
@@ -64,8 +65,8 @@ public abstract class RPFeature extends RPStorage implements Listener {
         }
         if(isEnabled) return;
         try {
-            load();
             isEnabled = true;
+            load();
             pluginmanager.registerEvents(this, randompackage);
         } catch(Exception e) {
             e.printStackTrace();
@@ -74,9 +75,10 @@ public abstract class RPFeature extends RPStorage implements Listener {
     public void disable() {
         if(!isEnabled) return;
         try {
-            unload();
             isEnabled = false;
+            unload();
             HandlerList.unregisterAll(this);
+            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -166,7 +168,6 @@ public abstract class RPFeature extends RPStorage implements Listener {
                 item.setAmount(amount);
                 return item;
             }
-            boolean enchanted = config != null && config.getBoolean(path + ".enchanted");
             lore.clear();
             String name = config != null ? config.getString(path + ".name") : null;
             final String[] material = P.toUpperCase().split(":");
@@ -191,8 +192,8 @@ public abstract class RPFeature extends RPStorage implements Listener {
                 }
                 itemMeta.setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
 
-                if(enchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 final HashMap<Enchantment, Integer> enchants = new HashMap<>();
+                final List<ItemFlag> flags = new ArrayList<>();
                 final CustomEnchants ce = CustomEnchants.getCustomEnchants();
                 final boolean levelzeroremoval = ce.levelZeroRemoval;
                 if(config != null && config.get(path + ".lore") != null) {
@@ -202,6 +203,14 @@ public abstract class RPFeature extends RPStorage implements Listener {
                         if(sl.startsWith("venchants{")) {
                             for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                                 enchants.put(getEnchantment(s), getRemainingInt(s));
+                            }
+                        } else if(sl.startsWith("vmeta{")) {
+                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                                try {
+                                    flags.add(ItemFlag.valueOf(s.toUpperCase()));
+                                } catch(Exception e) {
+                                    System.out.println("[RandomPackage] WARNING: No ItemFlag found for string \"" + s + "\"");
+                                }
                             }
                         } else if(sl.startsWith("rpenchants{")) {
                             for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
@@ -219,14 +228,13 @@ public abstract class RPFeature extends RPStorage implements Listener {
                                 }
                             }
                         } else {
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(string.isEmpty() ? string : ChatColor.translateAlternateColorCodes('&', string));
                         }
                     }
                 }
                 itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
                 lore.clear();
-                if(enchanted) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
                 for(Enchantment enchantment : enchants.keySet()) {
                     if(enchantment != null) {
                         item.addUnsafeEnchantment(enchantment, enchants.get(enchantment));

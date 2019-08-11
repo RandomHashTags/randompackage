@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.api.events.*;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.events.*;
+import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.LivingEntity;
@@ -17,6 +17,7 @@ import java.util.UUID;
 
 public abstract class EventAttributes extends RPFeature {
 
+    public String getIdentifier() { return "EVENT_ATTRIBUTES"; }
     public String executeAttributes(Player player, EntityDeathEvent event, List<String> attributes) {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
@@ -33,7 +34,7 @@ public abstract class EventAttributes extends RPFeature {
                         if(A.startsWith("type=")) {
                             did = type.equals(A.split("=")[1]);
                         } else if(A.startsWith("isenemy")) {
-                            did = !killedPlayer && !isCustomMob || killedPlayer && fapi != null && fapi.relationIsEnemyOrNull(player, (Player) killed);
+                            did = !killedPlayer && !isCustomMob || killedPlayer && hookedFactionsUUID() && factions.isEnemy(player, (Player) killed);
                         } else if(did) {
                             completion = completion.concat(A + "&&");
                         }

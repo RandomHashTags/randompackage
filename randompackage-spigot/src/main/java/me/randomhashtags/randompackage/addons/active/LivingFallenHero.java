@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.addons.FallenHero;
 import me.randomhashtags.randompackage.addons.Kits;
-import me.randomhashtags.randompackage.api.events.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.events.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.KitItem;

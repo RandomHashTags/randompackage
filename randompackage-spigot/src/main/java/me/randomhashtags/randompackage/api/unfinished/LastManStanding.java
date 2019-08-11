@@ -18,6 +18,8 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
 
     public YamlConfiguration config;
 
+    public String getIdentifier() { return "LAST_MAN_STANDING"; }
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final int l = args.length;
         if(l == 0 || l == 1 && args[0].equals("help")) viewHelp(sender);

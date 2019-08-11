@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.SoulTracker;
 import me.randomhashtags.randompackage.addons.usingpath.PathSoulTracker;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,6 +32,8 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
         if(instance == null) instance = new SoulTrackers();
         return instance;
     }
+
+    public String getIdentifier() { return "SOUL_TRACKERS"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;

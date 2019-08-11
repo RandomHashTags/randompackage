@@ -53,7 +53,8 @@ settings:
   spawn region: "world;-10000:10000;-10000:10000"
 #
 rewards:
-  - "whitescroll;amount=1-3"
+  - "whitescroll:REGULAR;amount=1-3"
+  - "whitescroll:HOLY"
   - "blackscroll:REGULAR;amount=1-3"
   - "blackscroll:HEROIC"
   - "transmogscroll:REGULAR;amount=1-3"

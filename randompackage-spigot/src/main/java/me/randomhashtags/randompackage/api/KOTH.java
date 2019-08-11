@@ -55,6 +55,8 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	private long cappingStartedTime = -1, capturedTime = -1;
 	public Player currentPlayerCapturing, previouscapturer;
 
+	public String getIdentifier() { return "KOTH"; }
+
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0)
@@ -200,7 +202,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 					name = currentPlayerCapturing != null ? currentPlayerCapturing.getName() : "",
 					flag = config.getString("messages.flag." + (captured || stopped ? "captured" : currentPlayerCapturing == null ? "uncontested" : "capturing"));
 
-			String faction = currentPlayerCapturing != null ? fapi.getFaction(currentPlayerCapturing) : "";
+			String faction = currentPlayerCapturing != null ? regions.getFactionTag(currentPlayerCapturing.getUniqueId()) : "";
 			if(!faction.equals("")) faction = faction + " ";
 
 			final long t = System.currentTimeMillis();

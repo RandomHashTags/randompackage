@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.EnvoyCrate;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnvoyCrate;
-import me.randomhashtags.randompackage.api.events.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -39,6 +39,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	public List<Location> preset;
 	private List<Player> settingPreset;
 
+	public String getIdentifier() { return "ENVOY"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -219,7 +220,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final Random random = new Random();
 		final int despawn = config.getInt("settings.availability");
 		if(type.equals("WARZONE")) {
-			final List<Chunk> c = fapi.getWarZoneChunks();
+			final List<Chunk> c = factions.getChunks("WarZone");
 			if(!c.isEmpty()) {
 				for(int i = 1; i <= amount; i++) {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));

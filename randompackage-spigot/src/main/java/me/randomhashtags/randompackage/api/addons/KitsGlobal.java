@@ -40,6 +40,8 @@ public class KitsGlobal extends Kits {
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
     private TreeMap<Integer, Double> tiermultipliers;
 
+    public String getIdentifier() { return "KITS_GLOBAL"; }
+
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return FileKitGlobal.class; }
     public String getPath() { return "gkits"; }

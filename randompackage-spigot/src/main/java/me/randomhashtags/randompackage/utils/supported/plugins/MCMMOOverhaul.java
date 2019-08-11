@@ -2,17 +2,16 @@ package me.randomhashtags.randompackage.utils.supported.plugins;
 
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import me.randomhashtags.randompackage.api.events.MCMMOXpGainEvent;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
+import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class MCMMOOverhaul extends MCMMOAPI {
-
     private static MCMMOOverhaul instance;
-    public static final MCMMOOverhaul getMCMMOOverhaul() {
+    public static MCMMOOverhaul getMCMMOOverhaul() {
         if(instance == null) instance = new MCMMOOverhaul();
         return instance;
     }
@@ -27,6 +26,7 @@ public class MCMMOOverhaul extends MCMMOAPI {
     public void disable() {
         if(!isEnabled) return;
         isEnabled = false;
+        instance = null;
         HandlerList.unregisterAll(this);
     }
 

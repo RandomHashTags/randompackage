@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class MobStacker extends RPFeature {
-
     private static MobStacker instance;
     public static MobStacker getMobStacker() {
         if(instance == null) instance = new MobStacker();
         return instance;
     }
+
     public YamlConfiguration config;
 
     private String defaultName;
@@ -41,6 +41,8 @@ public class MobStacker extends RPFeature {
     private HashMap<String, Integer> maxStackSize;
     private HashMap<String, Double> stackRadius;
     private HashMap<String, Boolean> slaysStack;
+
+    public String getIdentifier() { return "MOB_STACKER"; }
 
     public void load() {
         save(null, "mob stacker.yml");

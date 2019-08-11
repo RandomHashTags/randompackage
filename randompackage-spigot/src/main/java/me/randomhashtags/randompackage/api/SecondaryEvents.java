@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.PlayerTeleportDelayEvent;
+import me.randomhashtags.randompackage.events.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
@@ -49,6 +49,8 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private int xpbottleValueSlot, banknoteValueSlot;
     private HashMap<String, Integer> minbottles, expexhaustion;
     private HashMap<String, Double> teleportationDelay, teleportMinDelay, teleportationVariable;
+
+    public String getIdentifier() { return "SECONDARY_EVENTS"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -279,7 +281,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 delay = round(delay, 3);
                 if(delay < mindelay) delay = mindelay;
                 final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-                final double m = fu.isEnabled() ? fu.getTeleportDelayMultiplier(fapi.getFaction(player)) : 1.00, uu = delay*m;
+                final double m = fu.isEnabled() ? fu.getTeleportDelayMultiplier(regions.getFactionTag(u)) : 1.00, uu = delay*m;
                 if(events.containsKey(player)) {
                     events.get(player).setCancelled(true);
                     scheduler.cancelTask(events.get(player).task);

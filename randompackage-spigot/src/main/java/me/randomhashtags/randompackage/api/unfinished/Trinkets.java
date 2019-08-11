@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -18,6 +18,8 @@ public class Trinkets extends RPFeature {
         if(instance == null) instance = new Trinkets();
         return instance;
     }
+
+    public String getIdentifier() { return "TRINKETS"; }
 
     public void load() {
         final long started = System.currentTimeMillis();

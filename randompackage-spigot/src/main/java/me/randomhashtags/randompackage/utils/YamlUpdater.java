@@ -164,6 +164,21 @@ public class YamlUpdater extends UVersion {
                 "custom enchants.transmog scrolls", true,
                 "custom enchants.white scrolls", true,
                 "wild.enabled", false,
+                // 16.4.3
+                "file system.enabled", false,
+                "file system.type", "LOCAL/MYSQL/MANGODB",
+                "file system.host", "localhost",
+                "file system.port", 3306,
+                "file system.database", "GlobalBase",
+                "file system.username", "username",
+                "file system.password", "password",
+                "supported plugins.standalone.PlaceholderAPI", true,
+                "supported plugins.standalone.MCMMO", true,
+                "supported plugins.standalone.Silk/Epic Spawners", true,
+                "supported plugins.regional.FactionsUUID", true,
+                "supported plugins.regional.ASkyblock", false,
+                "supported plugins.regional.SuperiorSkyblock", false,
+                "spawner stacking", false
         };
         return putAll(values);
     }

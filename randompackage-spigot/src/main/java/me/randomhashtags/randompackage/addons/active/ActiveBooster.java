@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addons.active;
 
 import me.randomhashtags.randompackage.addons.Booster;
-import me.randomhashtags.randompackage.api.events.BoosterActivateEvent;
-import me.randomhashtags.randompackage.api.events.BoosterExpireEvent;
+import me.randomhashtags.randompackage.events.BoosterActivateEvent;
+import me.randomhashtags.randompackage.events.BoosterExpireEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitScheduler;

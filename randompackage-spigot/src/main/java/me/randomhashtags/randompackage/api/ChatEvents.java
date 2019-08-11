@@ -40,6 +40,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	private HashMap<UUID, PlayerInventory> bragInventories;
 	private ArrayList<UUID> viewingBrag;
 
+	public String getIdentifier() { return "CHAT_EVENTS"; }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		bragDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.display"));
@@ -111,14 +112,14 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	    for(int i = 0; i < hoverMessage.size(); i++) {
 	        hover = hover + (i != 0 ? "\n" : "") + hoverMessage.get(i);
         }
-        for(int i = 0; i < replacements.keySet().size(); i++) {
+        for(int i = 0; i < replacements.size(); i++) {
             final String s = (String) replacements.keySet().toArray()[i];
-            String replacement = "";
+            final StringBuilder b = new StringBuilder();
             for(int j = 0; j < replacements.get(s).size(); j++) {
                 final String r = replacements.get(s).get(j);
-                replacement = replacement + (j != 0 ? "\n" : "") + r;
+                b.append(j != 0 ? "\n" : "").append(r);
             }
-            hover = hover.replace(s, replacement);
+            hover = hover.replace(s, b.toString());
         }
         TextComponent m = new TextComponent(message);
 	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', hover)).create()));
@@ -126,9 +127,10 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
     }
 	
 	private void send(Player sender, Player recipient, TextComponent prefix, TextComponent m, TextComponent suffix) {
-		final String f = fapi.getFaction(sender);
+		final UUID u = sender.getUniqueId();
+		final String f = regions.getFactionTag(u);
 		TextComponent ftag = new TextComponent(prefix.toPlainText().contains("{F_TAG}") ?
-				prefix.toLegacyText().replace("{F_TAG}", f != null && !ChatColor.stripColor(f).toLowerCase().contains("wilderness") ? fapi.getRelationColor(sender, recipient) + fapi.getRole(sender) + f + " " : "")
+				prefix.toLegacyText().replace("{F_TAG}", f != null && !ChatColor.stripColor(f).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + f + " " : "")
 			: "");
 		TextComponent p = ftag.toPlainText().equals("") ? prefix : ftag;
 		if(version.contains("1.8")) {
@@ -148,7 +150,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 			sendStringListMessage(sender, randompackage.getConfig().getStringList("chat cmds.brag.invalid"), null);
 			return true;
 		}
-		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.keySet().contains(v)) {
+		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.containsKey(v)) {
 			player.openInventory(Bukkit.createInventory(player, 45, ChatColor.stripColor(bragDisplay.replace("{PLAYER}", Bukkit.getOfflinePlayer(v).getName()))));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final PlayerInventory bi = bragInventories.get(v);

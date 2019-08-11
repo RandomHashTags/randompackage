@@ -45,6 +45,8 @@ public class WildPvP extends RPFeature implements CommandExecutor {
 
     private int invincibilityDuration, nearbyRadius;
 
+    public String getIdentifier() { return "WILD_PVP"; }
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -140,7 +142,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             if(m == null) {
                 final Location l = player.getLocation();
                 final Chunk chunk = l.getChunk();
-                final String f = ChatColor.stripColor(fapi.getFactionAt(l));
+                final String f = ChatColor.stripColor(regions.getFactionTagAt(l));
                 if(f == null || f.equals("Wilderness")) {
                     final PvPMatch ma = new PvPMatch(player, player.getInventory(), chunk);
                     final Inventory i = gui.getInventory();
@@ -154,7 +156,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     final double hp = player.getHealth();
                     ma.slot = slot;
 
-                    final String n = player.getName(), fac = fapi.getFaction(player), HP = roundDoubleString(hp, 0), N = Integer.toString(nearby);
+                    final String n = player.getName(), fac = regions.getFactionTag(player.getUniqueId()), HP = roundDoubleString(hp, 0), N = Integer.toString(nearby);
                     final ItemStack skull = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
                     final SkullMeta sm = (SkullMeta) skull.getItemMeta();
                     if(legacy) sm.setOwner(player.getName());
@@ -166,7 +168,6 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     sm.setLore(lore);
                     skull.setItemMeta(sm);
                     i.setItem(slot, skull);
-
 
                     for(String s : colorizeListString(config.getStringList("messages.created broadcast"))) {
                         Bukkit.broadcastMessage(s.replace("{PLAYER}", n));

@@ -8,6 +8,18 @@ file system:
   username: user
   password: password
 #
+supported plugins:
+  standalone:
+    PlaceholderAPI: true
+  mechanics:
+    SilkSpawners: true
+    EpicSpawners: true
+    MCMMO Classic/Overhaul: true
+  regional:
+    FactionsUUID: true
+    ASkyblock: false
+    SuperiorSkyblock: false
+#
 chat cmds:
   # {F_TAG}
   ## = If the player is in a faction --> The player's relation color to recipient + The player's faction role + The player's faction tag + a space
@@ -36,43 +48,60 @@ backup interval: 360 # Measured in minutes
 #
 alchemist:
   enabled: true
+  cmds:
+    - alchemist
 #
 auction house:
   enabled: true
-  aliases:
-    - "ah"
-    - "auction"
+  cmds:
+    - auctionhouse
+    - ah
+    - auction
 #
 balance:
   enabled: true
-  aliases:
-    - "bal"
+  cmds:
+    - balance
+    - bal
 #
 bless:
   enabled: true
+  cmds:
+    - bless
 #
 boosters:
   enabled: true
 #
 bump:
   enabled: true
+  cmds:
+    - bump
 #
 coinflip:
   enabled: true
-  aliases:
-    - "cf"
+  cmds:
+    - coinflip
+    - cf
 #
 combine:
   enabled: true
+  cmds:
+    - combine
 #
 confirm:
   enabled: true
+  cmds:
+    - confirm
 #
 collection filter:
   enabled: true
+  cmds:
+    - collectionfilter
 #
 conquest:
   enabled: true
+  cmds:
+    - conquest
 #
 custom armor:
   enabled: true
@@ -98,16 +127,28 @@ custom creepers:
 custom tnt:
   enabled: true
 #
+disabled enchants:
+  enabled: true
+  cmds:
+    - disabledenchants
+#
 duels:
   enabled: false
-  aliases:
-    - "duels"
+  cmds:
+    - duel
+    - duels
 #
 dungeons:
   enabled: false
+  cmds:
+    - dungeon
+    - dungeons
 #
 enchants:
   enabled: true
+  cmds:
+    - enchants
+  #
   format: "{ENCHANT}&r &7[Level 1-{MAX}]"
   description color: "&7"
   hover:
@@ -128,131 +169,188 @@ enchants:
 #
 enchanter:
   enabled: true
+  cmds:
+    - enchanter
 #
 envoy:
   enabled: true
+  cmds:
+    - envoy
 #
 faction upgrades:
   enabled: true
-  aliases:
-    - "f upgrade"
+  cmds:
+    - f upgrade
 #
 fund:
   enabled: true
+  cmds:
+    - fund
 #
 gkits:
   enabled: true
-  aliases:
-    - "gkits"
+  cmds:
+    - gkit
+    - gkits
 #
 global challenges:
   enabled: true
-  aliases:
-    - "challenges"
+  cmds:
+    - globalchallenge
+    - globalchallenges
+    - challenges
 #
 home:
   enabled: true
+  cmds:
+    - home
+    - homes
 #
 item filter:
   enabled: true
+  cmds:
+    - filter
 #
 jackpot:
   enabled: true
+  cmds:
+    - jackpot
 #
 kingofthehill:
   enabled: true
-  aliases:
-    - "koth"
+  cmds:
+    - kingofthehill
+    - koth
 #
 last man standing:
   enabled: false
-  aliases:
-    - "lms"
-    - "warzone"
+  cmds:
+    - lastmanstanding
+    - lms
+    - warzone
 #
 lootboxes:
   enabled: true
-  aliases:
-    - "lootboxes"
+  cmds:
+    - lootbox
+    - lootboxes
 #
 masks:
   enabled: true
 #
 mkits:
   enabled: true
-  aliases:
-    - "mkits"
+  cmds:
+    - mkit
+    - mkits
 #
 mob stacker:
   enabled: true
 #
 monthly crates:
   enabled: true
-  aliases:
-    - "cc"
-    - "mc"
+  cmds:
+    - monthlycrate
+    - monthlycrates
+    - cc
+    - mc
 #
 outposts:
   enabled: false
-  aliases:
-    - "outposts"
+  cmds:
+    - outpost
+    - outposts
 #
 pets:
   enabled: false
 #
 player quests:
   enabled: true
-  aliases:
-    - "quests"
+  cmds:
+    - quest
+    - quests
 #
 wild pvp:
   enabled: true
-  aliases:
-    - "pvp"
+  cmds:
+    - wildpvp
+    - pvp
+#
+raid events:
+  enabled: true
+  cmds:
+    - raid
 #
 roll:
   enabled: true
+  cmds:
+    - roll
 #
 server crates:
   enabled: true
 #
 shop:
   enabled: true
+  cmds:
+    - shop
 #
 showcase:
   enabled: true
+  cmds:
+    - showcase
 #
-randompackage:
-  aliases:
-    - "rp"
+spawner stacking:
+  enabled: true
+#
+splitsouls:
+  enabled: true
+  cmds:
+    - splitsouls
+#
+randompackage: # Not disableable
+  cmds:
+    - rp
 #
 tinkerer:
   enabled: true
+  cmds:
+    - tinkerer
 #
 title:
   enabled: true
-  aliases:
-    - "titles"
+  cmds:
+    - title
+    - titles
 #
 trade:
   enabled: true
+  cmds:
+    - trade
 #
 trinkets:
   enabled: false
 #
 vkits:
   enabled: true
-  aliases:
-    - "vkits"
+  cmds:
+    - vkit
+    - vkits
 #
 wild:
   enabled: false
+  cmds:
+    - wild
 #
 withdraw:
   enabled: true
+  cmds:
+    - withdraw
 #
 xpbottle:
   enabled: true
+  cmds:
+    - xpbottle
 #
 no permission:
   - "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
+#

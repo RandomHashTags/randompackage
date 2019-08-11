@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.FactionUpgradeType;
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
@@ -61,75 +61,82 @@ public class FactionUpgrades extends RPFeature {
 
     public static HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades;
 
+    public String getIdentifier() { return "FACTION_UPGRADES"; }
+
     public void load() {
-        final long started = System.currentTimeMillis();
-        save(null, "faction upgrades.yml");
-        save("_Data", "faction upgrades.yml");
+        if(hookedFactionsUUID()) {
+            final long started = System.currentTimeMillis();
+            save(null, "faction upgrades.yml");
+            save("_Data", "faction upgrades.yml");
 
-        if(!otherdata.getBoolean("saved default faction upgrades")) {
-            final String[] a = new String[] {
-                    "BOSS_MASTERY",
-                    "CONQUEST_MASTERY",
-                    "DUNGEON_LOOTER", "DUNGEON_MASTER", "DUNGEON_RUNNER",
-                    "ENDER_FARMING", "ENHANCED_FLIGHT", "ESCAPE_ARTIST", "EXPLOSIVES_EXPERT",
-                    "FACTION_POWER_BOOST", "FAST_ENDERPEARL",
-                    "HEROIC_BOSS_MASTERY", "HEROIC_SOUL_MASTERY", "HEROIC_WELL_FED",
-                    "HOME_ADVANTAGE",
-                    "KIT_EVOLUTION",
-                    "MAVERICK", "MAX_FACTION_SIZE", "MCMMO_MASTERY", "MONSTER_FARM",
-                    "NATURAL_GROWTH",
-                    "OUTPOST_CONTROL",
-                    "SOUL_MASTERY",
-                    "TP_MASTERY",
-                    "WARP_MASTER", "WARZONE_CONTROL", "WELL_FED",
-                    "XP_HARVEST",
-            };
-            for(String s : a) save("faction upgrades", s + ".yml");
-            otherdata.set("saved default faction upgrades", true);
-        }
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "faction upgrades.yml"));
-        for(String s : config.getConfigurationSection("types").getKeys(false)) {
-            new FileFactionUpgradeType(s);
-        }
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        final Inventory fi = gui.getInventory();
-        final File folder = new File(rpd + separator + "faction upgrades");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
-                final FileFactionUpgrade fu = new FileFactionUpgrade(f);
-                fi.setItem(fu.getSlot(), fu.getItem());
+            if(!otherdata.getBoolean("saved default faction upgrades")) {
+                final String[] a = new String[] {
+                        "BOSS_MASTERY",
+                        "CONQUEST_MASTERY",
+                        "DUNGEON_LOOTER", "DUNGEON_MASTER", "DUNGEON_RUNNER",
+                        "ENDER_FARMING", "ENHANCED_FLIGHT", "ESCAPE_ARTIST", "EXPLOSIVES_EXPERT",
+                        "FACTION_POWER_BOOST", "FAST_ENDERPEARL",
+                        "HEROIC_BOSS_MASTERY", "HEROIC_SOUL_MASTERY", "HEROIC_WELL_FED",
+                        "HOME_ADVANTAGE",
+                        "KIT_EVOLUTION",
+                        "MAVERICK", "MAX_FACTION_SIZE", "MCMMO_MASTERY", "MONSTER_FARM",
+                        "NATURAL_GROWTH",
+                        "OUTPOST_CONTROL",
+                        "SOUL_MASTERY",
+                        "TP_MASTERY",
+                        "WARP_MASTER", "WARZONE_CONTROL", "WELL_FED",
+                        "XP_HARVEST",
+                };
+                for(String s : a) save("faction upgrades", s + ".yml");
+                otherdata.set("saved default faction upgrades", true);
             }
-        }
-
-        cropGrowthRate = new HashMap<>();
-        teleportDelayMultipliers = new HashMap<>();
-        cropGrowthMultipliers = new HashMap<>();
-        enemyDamageMultipliers = new HashMap<>();
-        bossDamageMultipliers = new HashMap<>();
-        vkitLevelingChances = new HashMap<>();
-        decreaseRarityGemCost = new HashMap<>();
-
-        fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
-        fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-        aliases = getPlugin.getConfig().getStringList("faction upgrades.aliases");
-        heroicFactionCrystal = d(config, "items.heroic faction crystal");
-        factionCrystal = d(config, "items.faction crystal");
-        background = d(config, "gui.background");
-        locked = d(config, "gui.locked");
-        addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
-        cropGrowthRate = new HashMap<>();
-
-        givedpitem.items.put("heroicfactioncrystal", heroicFactionCrystal);
-        givedpitem.items.put("factioncrystal", factionCrystal);
-
-        for(int i = 0; i < gui.getSize(); i++) {
-            if(fi.getItem(i) == null) {
-                fi.setItem(i, background);
+            config = YamlConfiguration.loadConfiguration(new File(rpd, "faction upgrades.yml"));
+            for(String s : config.getConfigurationSection("types").getKeys(false)) {
+                new FileFactionUpgradeType(s);
             }
-        }
+            gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+            final Inventory fi = gui.getInventory();
+            final File folder = new File(rpd + separator + "faction upgrades");
+            if(folder.exists()) {
+                for(File f : folder.listFiles()) {
+                    final FileFactionUpgrade fu = new FileFactionUpgrade(f);
+                    fi.setItem(fu.getSlot(), fu.getItem());
+                }
+            }
 
-        loadBackup();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (factionupgrades != null ? factionupgrades.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
+            cropGrowthRate = new HashMap<>();
+            teleportDelayMultipliers = new HashMap<>();
+            cropGrowthMultipliers = new HashMap<>();
+            enemyDamageMultipliers = new HashMap<>();
+            bossDamageMultipliers = new HashMap<>();
+            vkitLevelingChances = new HashMap<>();
+            decreaseRarityGemCost = new HashMap<>();
+
+            fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
+            fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
+            aliases = getPlugin.getConfig().getStringList("faction upgrades.aliases");
+            heroicFactionCrystal = d(config, "items.heroic faction crystal");
+            factionCrystal = d(config, "items.faction crystal");
+            background = d(config, "gui.background");
+            locked = d(config, "gui.locked");
+            addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
+            cropGrowthRate = new HashMap<>();
+
+            givedpitem.items.put("heroicfactioncrystal", heroicFactionCrystal);
+            givedpitem.items.put("factioncrystal", factionCrystal);
+
+            for(int i = 0; i < gui.getSize(); i++) {
+                if(fi.getItem(i) == null) {
+                    fi.setItem(i, background);
+                }
+            }
+
+            loadBackup();
+            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (factionupgrades != null ? factionupgrades.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        } else {
+            sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
+            disable();
+        }
     }
     public void unload() {
         backup();
@@ -147,19 +154,21 @@ public class FactionUpgrades extends RPFeature {
 
 
     private void backup() {
-        for(String F : factionUpgrades.keySet()) {
-            final HashMap<FactionUpgrade, Integer> f = factionUpgrades.get(F);
-            fupgrades.set("factions." + F, null);
-            for(FactionUpgrade u : f.keySet()) {
-                fupgrades.set("factions." + F + "." + u.getIdentifier(), f.get(u));
+        if(isEnabled()) {
+            for(String F : factionUpgrades.keySet()) {
+                final HashMap<FactionUpgrade, Integer> f = factionUpgrades.get(F);
+                fupgrades.set("factions." + F, null);
+                for(FactionUpgrade u : f.keySet()) {
+                    fupgrades.set("factions." + F + "." + u.getIdentifier(), f.get(u));
+                }
             }
-        }
-        try {
-            fupgrades.save(fupgradesF);
-            fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
-            fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-        } catch(IOException e) {
-            e.printStackTrace();
+            try {
+                fupgrades.save(fupgradesF);
+                fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
+                fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     private void loadBackup() {
@@ -191,7 +200,7 @@ public class FactionUpgrades extends RPFeature {
                     event.setCancelled(true);
                     if(a.contains("reset")) {
                         if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
-                            factionUpgrades.get(fapi.getFaction(player)).clear();
+                            factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
                         }
                     } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
                         viewFactionUpgrades(player);
@@ -266,7 +275,7 @@ public class FactionUpgrades extends RPFeature {
         }
     }
     public void viewFactionUpgrades(Player player) {
-        final String f = fapi != null ? fapi.getFaction(player) : null;
+        final String f = regions.getFactionTag(player.getUniqueId());
         if(f != null) {
             player.closeInventory();
             if(!factionUpgrades.containsKey(f)) factionUpgrades.put(f, new HashMap<>());
@@ -309,7 +318,7 @@ public class FactionUpgrades extends RPFeature {
         return values;
     }
     public void tryToUpgrade(Player player, FactionUpgrade fu) {
-        final String f = fapi.getFaction(player);
+        final String f = regions.getFactionTag(player.getUniqueId());
         final HashMap<FactionUpgrade, Integer> upgrades = factionUpgrades.get(f);
         final int ti = upgrades.getOrDefault(fu, 0);
         if(ti >= fu.getMaxTier()) return;
@@ -366,9 +375,9 @@ public class FactionUpgrades extends RPFeature {
             final String v = values.get(key);
             try {
                 final double value = Double.parseDouble(v);
-                if(key.equals("increasefactionpower"))
-                    fapi.increasePowerBoost(f, value);
-                else if(key.equals("setteleportdelaymultiplier"))
+                if(key.equals("increasefactionpower")) {
+                    //fapi.increasePowerBoost(f, value);
+                } else if(key.equals("setteleportdelaymultiplier"))
                     setTeleportDelayMultiplier(f, fu.getTeleportDelayMultiplier(tier));
                 else if(key.equals("setcropgrowthmultiplier"))
                     setCropGrowthMultiplier(f, fu.getCropGrowMultiplier(tier));
@@ -482,16 +491,16 @@ public class FactionUpgrades extends RPFeature {
         final Entity D = event.damager;
         if(!event.isCancelled() && D instanceof Player) {
             final Player damager = (Player) D;
-            final String fn = fapi.getFaction(damager);
-            event.damage = event.damage*getBossDamageMultiplier(fn);
+            final String fn = regions.getFactionTag(damager.getUniqueId());
+            event.damage *= getBossDamageMultiplier(fn);
         }
     }
     @EventHandler(priority = EventPriority.LOWEST)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if(!event.isCancelled() && event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-            final Player damager = (Player) event.getDamager(), victim = (Player) event.getEntity();
-            if(fapi.relationIsEnemyOrNull(damager, victim)) {
-                final String f = fapi.getFaction(damager);
+            final UUID d = event.getDamager().getUniqueId(), v = event.getEntity().getUniqueId();
+            if(factions.isEnemy(d, v)) {
+                final String f = regions.getFactionTag(d);
                 event.setDamage(event.getDamage()*getEnemyDamageMultiplier(f));
             }
         }
@@ -500,7 +509,7 @@ public class FactionUpgrades extends RPFeature {
     private void blockGrowEvent(BlockGrowEvent event) {
         if(!event.isCancelled()) {
             final Location l = event.getBlock().getLocation();
-            final String f = fapi.getFactionAt(l);
+            final String f = regions.getFactionTagAt(l);
             final double cgm = f != null ? getCropGrowthMultiplier(f) : 1.00;
             if(cgm != 1.00) {
                 final Material m = l.getBlock().getType();
@@ -523,7 +532,7 @@ public class FactionUpgrades extends RPFeature {
     private void blockBreakEvent(BlockBreakEvent event) {
         if(!event.isCancelled()) {
             final Location l = event.getBlock().getLocation();
-            final String f = fapi.getFactionAt(l);
+            final String f = regions.getFactionTagAt(l);
             if(f != null && cropGrowthRate.containsKey(f)) {
                 cropGrowthRate.get(f).remove(l);
             }

@@ -44,6 +44,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private HashMap<Player, Home> editingIcons;
 	private UInventory editicon;
 
+	public String getIdentifier() { return "HOMES"; }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
@@ -112,9 +113,10 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	
 	private String getArguments(String[] args) {
-		String arguments = "";
-		for(int i = 0; i < args.length; i++) arguments = arguments + args[i] + (i == args.length - 1 ? "" : " ");
-		return arguments;
+		final StringBuilder s = new StringBuilder();
+		final int l = args.length;
+		for(int i = 0; i < l; i++) s.append(args[i]).append(i == l-1 ? "" : " ");
+		return s.toString();
 	}
 	public void viewHomes(Player opener, RPPlayer target) {
 		if(hasPermission(opener, "RandomPackage.home", true)) {

@@ -40,6 +40,8 @@ public class Trade extends RPFeature implements CommandExecutor {
 	private HashMap<UUID, UUID> requests;
 	private List<String> blacklistedMaterials;
 
+	public String getIdentifier() { return "TRADE"; }
+
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");

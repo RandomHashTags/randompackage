@@ -68,6 +68,8 @@ commands:
     description: Outposts!
   quest:
     description: Player Quests!
+  raid:
+    description: Raid Events!
   randompackage:
     description: Admin command.
   roll:

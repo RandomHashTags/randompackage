@@ -1,0 +1,54 @@
+# Made by RandomHashTags
+messages:
+  beacon destroyed - winner:
+    - "&6&l*** RAID EVENT WINNER:&r &a&n{FACTION}&r &6&l***"
+    - "&7Congratulations to the winning faction, they now ave &n1 HOUR&r &7to collect their loot from the protected chest"
+    - " &7that has spawned in the raid event's beacon room. All explosions are now disabled in the /rad event."
+  beacon destroyed - looted reward chest:
+    - "&6&l*** RAID EVENT ***"
+    - "&7The player &6{PLAYER} &7from the winning faction, &6{FACTION}&7, has looted the reward chest! They now have &n10 MINUTES&r &7to"
+    - " &7escape the raid event world before it ends. The /warp, and all teleports into this /raid event have been"
+    - " &7disabled."
+  beacon destroyed - self destruct:
+    - "&6&l(!)&r &6This /raid event world will be destroyed in &e{TIME}"
+  #
+  info active:
+    - "&e&l***&r &6&lRAID EVENT&r &e&l***"
+    - "&e&lRaid Event:&r {STATUS}"
+    - "&e&lNext Scheduled Raid Event:&r &c&l{NEXT_EVENT}"
+    - "&e&lMap:&r &e{MAP}"
+    - "&e&lPhase:&r {PHASE}"
+    - "&e&lPlayers:&r &6{PLAYERS}"
+    - "&e&lRuntime:&r &6{RUNTIME}"
+#
+settings:
+  starting phase: OPEN
+  default phase settings:
+    warpable: true
+  #
+  homes removed if logged out/server reboot: true
+  #
+  capture type: FACTION
+  teleportation disabled when beacon destroyed: true
+  beacon:
+    block: "BEACON"
+    can only be destroyed by:
+      - TNT
+#
+faction settings:
+  max claims: 200
+  max claims touching raid claims: 7
+#
+raid phases:
+  OPEN:
+    phase: "&6OPEN"
+    advance to next phase when: BEACON_DESTROYED
+  LOOTING:
+    phase: "&6LOOTING"
+    advance to next phase when: LOOTBAG_CLAIMED
+  ENDING:
+    self destruct countdown: 600
+    warpable: false
+#
+rewards:
+  - ""

@@ -49,6 +49,8 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     private HashMap<Integer, UMaterial> picksup;
     private HashMap<UUID, Location> editingfilter;
 
+    public String getIdentifier() { return "COLLECTION_FILTER"; }
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.collectionfilter", true)) {
@@ -56,20 +58,26 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 final String a = args.length >= 1 ? args.length == 1 ? args[0] : args[0] + "_" + args[1] : "";
                 final ItemStack q = getItemInHand(player);
                 if(q.getType().equals(collectionchest.getType()) && q.hasItemMeta() && q.getItemMeta().getDisplayName() != null && q.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
-                    if(a.equals("default"))  setFilter(player, q, defaultType);
-                    else if(a.equals("all")) setFilter(player, q, ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all")));
-                    else {
-                        if(args.length == 0)
-                            editFilter(player, null);
-                        else {
-                            Material f = Material.getMaterial(a.toUpperCase());
-                            if(f != null) {
-                                setFilter(player, q, itemType.replace("{ITEM}", toMaterial(a, false)));
-                            } else {
-                                sendStringListMessage(player, config.getStringList("messages.invalid filter type"), null);
+                    switch(a) {
+                        case "default":
+                            setFilter(player, q, defaultType);
+                            break;
+                        case "all":
+                            setFilter(player, q, ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all")));
+                            break;
+                        default:
+                            if(args.length == 0) {
                                 editFilter(player, null);
+                            } else {
+                                Material f = Material.getMaterial(a.toUpperCase());
+                                if(f != null) {
+                                    setFilter(player, q, itemType.replace("{ITEM}", toMaterial(a, false)));
+                                } else {
+                                    sendStringListMessage(player, config.getStringList("messages.invalid filter type"), null);
+                                    editFilter(player, null);
+                                }
                             }
-                        }
+                            break;
                     }
                 } else {
                     if(args.length == 1) sendStringListMessage(player, config.getStringList("messages.invalid filter type"), null);

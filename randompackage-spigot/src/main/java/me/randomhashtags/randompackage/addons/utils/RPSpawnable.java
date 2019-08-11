@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.addons.utils;
 
 import me.randomhashtags.randompackage.utils.RPAddon;
-import me.randomhashtags.randompackage.utils.supported.FactionsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,8 +12,8 @@ public abstract class RPSpawnable extends RPAddon implements Identifiable, Spawn
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
     public boolean canSpawnAtFactionClaim(Player summoner, Location l) {
-        if(l != null) {
-            final String own = summoner != null ? FactionsAPI.getFactionsAPI().getFaction(summoner) : null, w = l.getWorld().getName(), f = FactionsAPI.getFactionsAPI().getFactionAt(l);
+        if(l != null && hookedFactionsUUID()) {
+            final String own = summoner != null ? factions.getFactionTag(summoner.getUniqueId()) : null, w = l.getWorld().getName(), f = factions.getRegionalIdentifierAt(l);
             for(String s : getSpawnableFactionClaims()) {
                 if(s.startsWith(w + ";")) {
                     for(String r : s.split(w + ";")[1].split(";")) {

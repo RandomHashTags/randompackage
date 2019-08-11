@@ -9,6 +9,7 @@ public class FactionPoints extends RPFeature {
         return instance;
     }
 
+    public String getIdentifier() { return "FACTION_POINTS"; }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Points &e(took " + (System.currentTimeMillis()-started) + "ms)");

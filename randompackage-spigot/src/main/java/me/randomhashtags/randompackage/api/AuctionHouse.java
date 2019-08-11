@@ -62,6 +62,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
     private HashMap<AuctionedItem, Integer> task;
 
+    public String getIdentifier() { return "AUCTION_HOUSE"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final boolean i = player != null;
@@ -298,12 +299,12 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                     if(im.hasDisplayName()) data.set(p + l + ".name", im.getDisplayName());
                     final List<String> lo = new ArrayList<>();
                     if(im.hasEnchants()) {
-                        String en = "";
+                        StringBuilder en = new StringBuilder();
                         final Map<Enchantment, Integer> enchants = im.getEnchants();
                         for(Enchantment e : enchants.keySet()) {
-                            en = e.getName() + enchants.get(e) + ";";
+                            en.append(e.getName()).append(enchants.get(e)).append(";");
                         }
-                        lo.add("VEnchants{" + en.substring(0, en.length()-1) + "}");
+                        lo.add("VEnchants{" + en.toString().substring(0, en.length()-1) + "}");
                     }
                     if(im.hasLore()) lo.addAll(im.getLore());
                     if(!lo.isEmpty()) data.set(p + l + ".lore", lo);

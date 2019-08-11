@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
 import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
-import me.randomhashtags.randompackage.api.events.ServerCrateCloseEvent;
-import me.randomhashtags.randompackage.api.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.events.ServerCrateCloseEvent;
+import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingServerCrate;
 import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
@@ -43,6 +43,7 @@ public class ServerCrates extends RPFeature {
 	private HashMap<UUID, List<ItemStack>> revealingloot;
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
+	public String getIdentifier() { return "SERVER_CRATES"; }
 	public void load() {
 	    final long started = System.currentTimeMillis();
 		canRevealRarities = new ArrayList<>();

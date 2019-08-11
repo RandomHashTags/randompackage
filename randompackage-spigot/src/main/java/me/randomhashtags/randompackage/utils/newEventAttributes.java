@@ -6,8 +6,8 @@ import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.api.events.PlayerQuestCompleteEvent;
-import me.randomhashtags.randompackage.api.events.eventAttributes.ExecuteAttributesEvent;
+import me.randomhashtags.randompackage.events.PlayerQuestCompleteEvent;
+import me.randomhashtags.randompackage.events.eventAttributes.ExecuteAttributesEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -197,7 +197,8 @@ public abstract class newEventAttributes extends RPFeature {
                         } else if(attributeLowercase.startsWith("deplete" + el + "raritygem=")) {
                             if(e instanceof Player) {
                                 final Player player = (Player) e;
-                                final RPPlayer pdata = RPPlayer.get(e.getUniqueId());
+                                final UUID u = player.getUniqueId();
+                                final RPPlayer pdata = RPPlayer.get(u);
                                 final String[] a = attribute.split("=")[1].split(":");
                                 final RarityGem gem = getRarityGem(a[0]);
                                 if(gem != null && pdata.hasActiveRarityGem(gem)) {
@@ -208,8 +209,8 @@ public abstract class newEventAttributes extends RPFeature {
                                         int depleteAmount = Integer.parseInt(a[1]);
 
                                         final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-                                        if(fu.isEnabled()) {
-                                            depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(fapi.getFaction(player), gem);
+                                        if(fu.isEnabled() && hookedFactionsUUID()) {
+                                            depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(factions.getRegionalIdentifier(u), gem);
                                         }
 
                                         if(amount - depleteAmount <= 0) {

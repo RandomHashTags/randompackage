@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.usingpath.PathBlackScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -26,6 +26,7 @@ public class BlackScrolls extends CustomEnchantUtils {
         return instance;
     }
 
+    public String getIdentifier() { return "BLACK_SCROLLS"; }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.FundDepositEvent;
+import me.randomhashtags.randompackage.events.FundDepositEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,7 +34,8 @@ public class Fund extends RPFeature implements CommandExecutor {
 	private HashMap<UUID, BigDecimal> deposits;
 	
 	public BigDecimal maxfund, total;
-	
+
+	public String getIdentifier() { return "FUND"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(args.length == 0) {
 			view(sender);
@@ -153,7 +154,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 			replacements.put("{REQ}", req);
 			replacements.put("{REQ$}", req$);
 		}
-		replacements.put("{FACTION}", sender instanceof Player ? fapi.getFaction((Player) sender) : "");
+		replacements.put("{FACTION}", sender instanceof Player ? getFactionTag(((Player) sender).getUniqueId()) : "");
 		replacements.put("{PLAYER}", sender.getName());
 		replacements.put("{AMOUNT}", formatDouble(q).split("\\.")[0]);
 
@@ -194,9 +195,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
 							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
 							if(k.contains("{PROGRESS_BAR}")) {
-								String u = "";
-								for(int a = 1; a <= length; a++) u = u + (Double.parseDouble(percent) >= a ? achieved : notachieved) + symbol;
-								k = k.replace("{PROGRESS_BAR}", u);
+								StringBuilder u = new StringBuilder();
+								for(int a = 1; a <= length; a++) u.append(Double.parseDouble(percent) >= a ? achieved : notachieved).append(symbol);
+								k = k.replace("{PROGRESS_BAR}", u.toString());
 							}
 							if(k.contains("{REQ}")) k = k.replace("{REQ}", abb);
 							if(k.contains("{REQ$}")) k = k.replace("{REQ$}", qq);

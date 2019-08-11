@@ -5,15 +5,15 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.usingfile.FileGlobalChallenge;
-import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.FundDepositEvent;
-import me.randomhashtags.randompackage.api.events.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.FundDepositEvent;
+import me.randomhashtags.randompackage.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -62,6 +62,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private File dataF;
 	private YamlConfiguration data;
 
+	public String getIdentifier() { return "GLOBAL_CHALLENGES"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && player != null)

@@ -1,3 +1,20 @@
 # Made by RandomHashTags
 messages:
+  added spawner:
+    - "&a&l+&r &a1x ({TYPE}) spawner(s) &7(total &n{TOTAL}&r&7)"
+  view amount:
+    - "&e&l(!)&r &eThis block has &n{AMOUNT}x&r &e({TYPE}) spawners in it."
+  only stack up to max:
+    - "&c&l(!)&r &cYou may only stack up to {MAX}x spawners per block!"
+#
+settings:
+  drops total spawners when broke: true
+  base fee: 0.00
+  fee multiplier: 1.00
+#
+only stackable in:
+  claimed faction land: true
+#
+max stacking:
+  default: 10
 #

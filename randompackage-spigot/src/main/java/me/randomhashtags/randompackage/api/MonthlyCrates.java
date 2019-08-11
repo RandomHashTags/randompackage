@@ -46,6 +46,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     private HashMap<Integer, Integer> categories;
     private HashMap<Integer, UInventory> categoriez;
 
+    public String getIdentifier() { return "MONTHLY_CRATES"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(args.length == 0 && player != null) {

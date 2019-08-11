@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
 import me.randomhashtags.randompackage.utils.RPAddon;
 

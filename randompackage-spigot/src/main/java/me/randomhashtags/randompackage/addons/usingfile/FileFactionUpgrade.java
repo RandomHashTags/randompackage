@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.usingfile;
 
 import me.randomhashtags.randompackage.addons.FactionUpgradeType;
-import me.randomhashtags.randompackage.api.events.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

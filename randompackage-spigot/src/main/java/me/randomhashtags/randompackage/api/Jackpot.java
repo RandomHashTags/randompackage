@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -39,6 +39,8 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     public double tax, ticketCost, maxTickets, minTickets, playersPerPage, winnerPickedEvery;
     public long value, pickNextWinner;
     public HashMap<UUID, Integer> ticketsSold, top, purchasing;
+
+    public String getIdentifier() { return "JACKPOT"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;

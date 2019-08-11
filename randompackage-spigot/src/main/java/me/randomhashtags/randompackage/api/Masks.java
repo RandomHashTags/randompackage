@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Mask;
 import me.randomhashtags.randompackage.addons.usingfile.FileMask;
-import me.randomhashtags.randompackage.api.events.*;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
+import me.randomhashtags.randompackage.events.*;
+import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,6 +42,7 @@ public class Masks extends CustomEnchants implements Listener {
     public ItemStack maskgenerator;
     private List<String> maskCanObtain;
 
+    public String getIdentifier() { return "MASKS"; }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

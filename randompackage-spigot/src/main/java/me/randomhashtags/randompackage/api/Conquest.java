@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ConquestChest;
-import me.randomhashtags.randompackage.api.events.ConquestDamageEvent;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.events.ConquestDamageEvent;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
@@ -40,6 +40,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private List<Integer> tasks;
     private LivingConquestChest last;
 
+    public String getIdentifier() { return "CONQUEST"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);

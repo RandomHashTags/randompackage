@@ -4,14 +4,14 @@ import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -62,6 +62,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     private List<Player> invAccepting;
     private List<String> noMoreEnchantsAllowed;
 
+    public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
@@ -666,7 +667,8 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             final LivingCustomEnchantEntity entity = L.getOrDefault(u, null);
             if(entity != null) {
                 if(entity.getType().dropsItemsUponDeath()) {
-                    event.getDrops().clear(); event.setDroppedExp(0);
+                    event.getDrops().clear();
+                    event.setDroppedExp(0);
                 }
                 final LivingEntity s = entity.getSummoner();
                 if(s instanceof Player) {
@@ -1152,7 +1154,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     final Player player = (Player) EE, S = (Player) entity.getSummoner();
                     final RPPlayer pdata = RPPlayer.get(EE.getUniqueId());
 
-                    if(!entity.getType().canTargetSummoner() && pdata.getCustomEnchantEntities().contains(u) || fapi != null && (!fapi.relationIsEnemyOrNull(player, S) || fapi.relationIsNeutral(player, S))) {
+                    if(!entity.getType().canTargetSummoner() && pdata.getCustomEnchantEntities().contains(u) || hookedFactionsUUID() && (!factions.isEnemy(player, S) || factions.isNeutral(player, S))) {
                         event.setCancelled(true);
                     }
                 }

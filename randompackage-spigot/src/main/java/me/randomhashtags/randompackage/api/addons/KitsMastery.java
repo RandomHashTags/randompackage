@@ -35,6 +35,8 @@ public class KitsMastery extends Kits {
     private UInventory gui, preview;
     private ItemStack background, cooldown;
 
+    public String getIdentifier() { return "KITS_MASTERY"; }
+
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return FileKitMastery.class; }
     public String getPath() { return "mkits"; }

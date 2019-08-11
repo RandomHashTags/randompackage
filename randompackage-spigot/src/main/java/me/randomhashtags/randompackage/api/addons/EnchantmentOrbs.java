@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,6 +23,8 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         if(instance == null) instance = new EnchantmentOrbs();
         return instance;
     }
+
+    public String getIdentifier() { return "ENCHANTMENT_OBS"; }
 
     public void load() {
         loadUtils();

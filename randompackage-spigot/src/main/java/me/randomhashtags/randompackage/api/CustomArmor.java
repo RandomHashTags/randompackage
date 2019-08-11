@@ -2,15 +2,15 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
 import me.randomhashtags.randompackage.addons.usingfile.FileArmorSet;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.CEAApplyPotionEffectEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.customenchant.CEAApplyPotionEffectEvent;
+import me.randomhashtags.randompackage.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.customenchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,6 +43,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	public ItemStack equipmentLootbox;
 	private List<Player> inEquipmentLootbox;
 
+	public String getIdentifier() { return "CUSTOM_ARMOR"; }
 	public void load() {
 		isEnabled = true;
 		final long started = System.currentTimeMillis();

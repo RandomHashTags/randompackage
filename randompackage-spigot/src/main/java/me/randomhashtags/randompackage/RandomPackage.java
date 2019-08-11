@@ -1,35 +1,22 @@
 package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.*;
-import me.randomhashtags.randompackage.api.CollectionFilter;
-import me.randomhashtags.randompackage.api.Trade;
-import me.randomhashtags.randompackage.api.WildPvP;
 import me.randomhashtags.randompackage.api.addons.*;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.api.Boosters;
-import me.randomhashtags.randompackage.api.addons.KitsEvolution;
-import me.randomhashtags.randompackage.api.addons.KitsGlobal;
-import me.randomhashtags.randompackage.api.addons.KitsMastery;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
-import me.randomhashtags.randompackage.api.unfinished.Wild;
 import me.randomhashtags.randompackage.api.unfinished.*;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPEvents;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.objects.Backup;
-import me.randomhashtags.randompackage.utils.supported.PAPI;
-import me.randomhashtags.randompackage.utils.supported.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
+import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
+import me.randomhashtags.randompackage.utils.supported.standalone.VaultAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -52,10 +39,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 import static me.randomhashtags.randompackage.utils.RPFeature.givedp;
@@ -64,66 +51,10 @@ import static me.randomhashtags.randompackage.utils.RPFeature.givedpCategories;
 public final class RandomPackage extends JavaPlugin implements Listener {
     public static RandomPackage getPlugin;
 
-    private FileConfiguration config;
-    private String v;
-
-    private SimpleCommandMap commandMap;
-    private HashMap<String, Command> knownCommands;
-    private HashMap<String, PluginCommand> Y = new HashMap<>(), originalCommands = new HashMap<>();
-
-    private AuctionHouse auctionhouse;
-    private Boosters boosters;
-    private ChatEvents chatevents;
-    private CoinFlip coinflip;
-    private CollectionFilter collectionfilter;
-    private Conquest conquest;
-    private CustomArmor customarmor;
-    private CustomBosses custombosses;
-
-    private CustomEnchants customenchants;
-    private BlackScrolls blackscrolls;
-    private EnchantmentOrbs enchantmentorbs;
-    private Fireballs fireballs;
-    private RandomizationScrolls randomizationscrolls;
-    private RarityGems raritygems;
-    private SoulTrackers soultrackers;
-
-    private CustomExplosions customexplosions;
-    private Duels duels;
-    private Dungeons dungeons;
-    private Envoy envoy;
-    private FactionUpgrades factionupgrades;
-    private Fund fund;
-    private GlobalChallenges globalchallenges;
-    private Homes homes;
-    private ItemFilter itemfilter;
-    private Jackpot jackpot;
-    private KitsEvolution vkits;
-    private KitsGlobal gkits;
-    private KitsMastery mkits;
-    private KOTH koth;
-    private LastManStanding lastmanstanding;
-    private Lootboxes lootboxes;
-    private Masks masks;
-    private MobStacker mobstacker;
-    private MonthlyCrates monthlycrates;
-    private Outposts outposts;
-    private Pets pets;
-    private PlayerQuests playerquests;
-    private ServerCrates servercrates;
-    private Shop shop;
-    private Showcase showcase;
-    private Titles titles;
-    private Trade trade;
-    private TransmogScrolls transmogscrolls;
-    private Trinkets trinkets;
-    private WhiteScrolls whitescrolls;
-    private WildPvP wildpvp;
-    private Wild wild;
+    public FileConfiguration config;
 
     private RandomPackageAPI api;
     private RPEvents rpevents;
-    private SecondaryEvents secondaryevents;
     private VaultAPI vapi;
 
     public static String spawner;
@@ -141,28 +72,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
 
     private void enable() {
-        v = Bukkit.getVersion();
         pm = Bukkit.getPluginManager();
         pm.registerEvents(this, this);
         checkForUpdate();
         checkFiles();
         loadSoftDepends();
-
-        try {
-            commandMap = (SimpleCommandMap) getPrivateField(getServer().getPluginManager(), "commandMap");
-            knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands");
-            Y = new HashMap<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        for(String s : getDescription().getCommands().keySet()) originalCommands.put(s, getCommand(s));
-        final Collection<String> keys = knownCommands.keySet();
-        for(String s : keys) {
-            final Command cmd = knownCommands.get(s);
-            final PluginCommand pc = cmd instanceof PluginCommand ? (PluginCommand) cmd : null;
-            if(pc != null) Y.put(pc.getPlugin().getName() + ":" + s, pc);
-        }
 
         api = RandomPackageAPI.api;
         rpevents = RPEvents.getRPEvents();
@@ -172,161 +86,89 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         api.enable();
         getCommand("randompackage").setExecutor(api);
-        try {
-            addAliases("randompackage");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         rpevents.enable();
-        secondaryevents = SecondaryEvents.getSecondaryEvents();
-        tryLoading(Feature.SECONDARY_EVENTS);
 
-        auctionhouse = AuctionHouse.getAuctionHouse();
-        tryLoading(Feature.AUCTION_HOUSE);
+        final CommandManager cmd = CommandManager.getCommandManager(this);
 
-        boosters = Boosters.getBoosters();
-        tryLoading(Feature.BOOSTERS);
+        cmd.tryLoadingg(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
+        cmd.tryLoading(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
+        cmd.tryLoading(Boosters.getBoosters(), null, isTrue("boosters"));
+        cmd.tryLoading(ChatEvents.getChatEvents(), getHash("brag", "chat events.brag"), isTrue("chat events.brag"));
+        cmd.tryLoadingg(CoinFlip.getCoinFlip(), Arrays.asList("coinflip"), isTrue("coinflip"));
+        cmd.tryLoading(CollectionFilter.getCollectionFilter(), getHash("collectionfilter", "collection filter"), isTrue("collection filter.enabled"));
+        cmd.tryLoadingg(Conquest.getConquest(), Arrays.asList("conquest"), isTrue("conquest"));
+        cmd.tryLoadingg(CustomArmor.getCustomArmor(), null, isTrue("custom armor"));
+        cmd.tryLoading(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
 
-        chatevents = ChatEvents.getChatEvents();
-        tryLoading(Feature.CHAT_BRAG);
+        cmd.tryLoading(CustomEnchants.getCustomEnchants(), getHash("alchemist", "alchemist", "disabledenchants", "disabled enchants", "enchanter", "enchanter", "enchants", "enchants", "tinkerer", "tinkerer"), isTrue("alchemist", "disabled enchants", "enchanter", "enchants", "tinkerer"));
+        cmd.tryLoadingg(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.blacks scroll", true));
+        cmd.tryLoadingg(EnchantmentOrbs.getEnchantmentOrbs(), null, isTrue("custom enchants.enchantment orbs", true));
+        cmd.tryLoadingg(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
+        cmd.tryLoadingg(RandomizationScrolls.getRandomizationScrolls(), null, isTrue("custom enchants.randomization scrolls", true));
+        cmd.tryLoadingg(RarityGems.getRarityGems(), null, isTrue("custom enchants.rarity gems", true));
+        cmd.tryLoadingg(SoulTrackers.getSoulTrackers(), Arrays.asList("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
+        cmd.tryLoadingg(TransmogScrolls.getTransmogScrolls(), null, isTrue("custom enchants.transmog scrolls", true));
+        cmd.tryLoadingg(WhiteScrolls.getWhiteScrolls(), null, isTrue("custom enchants.white scrolls", true));
 
-        coinflip = CoinFlip.getCoinFlip();
-        tryLoading(Feature.COINFLIP);
+        cmd.tryLoading(CustomExplosions.getCustomExplosions(), null, isTrue("custom creepers", "custom tnt"));
+        cmd.tryLoading(Duels.getDuels(), getHash("duel", "duels"), isTrue("duels"));
+        cmd.tryLoading(Dungeons.getDungeons(), getHash("dungeon", "dungeons"), isTrue("dungeons"));
+        cmd.tryLoadingg(Envoy.getEnvoy(), Arrays.asList("envoy"), isTrue("envoy"));
+        cmd.tryLoading(FactionUpgrades.getFactionUpgrades(), null, isTrue("faction upgrades"));
+        cmd.tryLoadingg(Fund.getFund(), Arrays.asList("fund"), isTrue("fund"));
+        cmd.tryLoading(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
+        cmd.tryLoadingg(Homes.getHomes(), Arrays.asList("home"), isTrue("home"));
+        cmd.tryLoadingg(ItemFilter.getItemFilter(), Arrays.asList("filter"), isTrue("filter"));
+        cmd.tryLoadingg(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
 
-        collectionfilter = CollectionFilter.getCollectionFilter();
-        tryLoading(Feature.COLLECTION_FILTER);
+        cmd.tryLoading(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));
+        cmd.tryLoading(KitsGlobal.getKitsGlobal(), getHash("gkit", "gkits"), isTrue("gkits"));
+        cmd.tryLoading(KitsMastery.getKitsMastery(), getHash("mkit", "mkits"), isTrue("mkits"));
 
-        conquest = Conquest.getConquest();
-        tryLoading(Feature.CONQUEST);
-
-        customarmor = CustomArmor.getCustomArmor();
-        tryLoading(Feature.CUSTOM_ARMOR);
-
-        custombosses = CustomBosses.getCustomBosses();
-        tryLoading(Feature.CUSTOM_BOSSES);
-
-        customenchants = CustomEnchants.getCustomEnchants();
-        tryLoading(Feature.CUSTOM_ENCHANTS);
-
-
-        blackscrolls = BlackScrolls.getBlackScrolls();
-        tryLoading(Feature.BLACK_SCROLLS);
-
-        enchantmentorbs = EnchantmentOrbs.getEnchantmentOrbs();
-        tryLoading(Feature.ENCHANTMENT_ORBS);
-
-        fireballs = Fireballs.getFireballs();
-        tryLoading(Feature.FIREBALLS_AND_DUST);
-
-        randomizationscrolls = RandomizationScrolls.getRandomizationScrolls();
-        tryLoading(Feature.RANDOMIZATION_SCROLLS);
-
-        raritygems = RarityGems.getRarityGems();
-        tryLoading(Feature.RARITY_GEMS);
-
-        soultrackers = SoulTrackers.getSoulTrackers();
-        tryLoading(Feature.SOUL_TRACKERS);
-
-        transmogscrolls = TransmogScrolls.getTransmogScrolls();
-        tryLoading(Feature.TRANSMOG_SCROLLS);
-
-        whitescrolls = WhiteScrolls.getWhiteScrolls();
-        tryLoading(Feature.WHITE_SCROLLS);
-
-        customexplosions = CustomExplosions.getCustomExplosions();
-        tryLoading(Feature.CUSTOM_CREEPERS);
-        tryLoading(Feature.CUSTOM_TNT);
-
-        duels = Duels.getDuels();
-        tryLoading(Feature.DUELS);
-
-        dungeons = Dungeons.getDungeons();
-        tryLoading(Feature.DUNGEONS);
-
-        envoy = Envoy.getEnvoy();
-        tryLoading(Feature.ENVOY);
-
-        factionupgrades = FactionUpgrades.getFactionUpgrades();
-        tryLoading(Feature.FACTION_UPGRADES);
-
-        fund = Fund.getFund();
-        tryLoading(Feature.FUND);
-
-        globalchallenges = GlobalChallenges.getChallenges();
-        tryLoading(Feature.GLOBAL_CHALLENGES);
-
-        homes = Homes.getHomes();
-        tryLoading(Feature.HOMES);
-
-        itemfilter = ItemFilter.getItemFilter();
-        tryLoading(Feature.ITEM_FILTER);
-
-        jackpot = Jackpot.getJackpot();
-        tryLoading(Feature.JACKPOT);
-
-        vkits = KitsEvolution.getKitsEvolution();
-        tryLoading(Feature.KITS_EVOLUTION);
-
-        gkits = KitsGlobal.getKitsGlobal();
-        tryLoading(Feature.KITS_GLOBAL);
-
-        mkits = KitsMastery.getKitsMastery();
-        tryLoading(Feature.KITS_MASTERY);
-
-        koth = KOTH.getKOTH();
-        tryLoading(Feature.KOTH);
-
-        lastmanstanding = LastManStanding.getLastManStanding();
-        tryLoading(Feature.LAST_MAN_STANDING);
-
-        masks = Masks.getMasks();
-        tryLoading(Feature.MASKS);
-
-        mobstacker = MobStacker.getMobStacker();
-        tryLoading(Feature.MOB_STACKER);
-
-        outposts = Outposts.getOutposts();
-        tryLoading(Feature.OUTPOSTS);
-
-        pets = Pets.getPets();
-        tryLoading(Feature.PETS);
-
-        trinkets = Trinkets.getTrinkets();
-        tryLoading(Feature.TRINKETS);
-
-        monthlycrates = MonthlyCrates.getMonthlyCrates();
-        tryLoading(Feature.MONTHLY_CRATES);
-
-        servercrates = ServerCrates.getServerCrates();
-        tryLoading(Feature.SERVER_CRATES);
-
-        titles = Titles.getTitles();
-        tryLoading(Feature.TITLES);
-
-        lootboxes = Lootboxes.getLootboxes();
-        tryLoading(Feature.LOOTBOXES);
-
-        shop = Shop.getShop();
-        tryLoading(Feature.SHOP);
-
-        showcase = Showcase.getShowcase();
-        tryLoading(Feature.SHOWCASE);
-
-        playerquests = PlayerQuests.getPlayerQuests();
-        tryLoading(Feature.PLAYER_QUESTS);
-
-        trade = Trade.getTrade();
-        tryLoading(Feature.TRADE);
-
-        wildpvp = WildPvP.getWildPvP();
-        tryLoading(Feature.WILD_PVP);
-
-        wild = Wild.getWild();
-        tryLoading(Feature.WILD);
+        cmd.tryLoadingg(KOTH.getKOTH(), Arrays.asList("kingofthehill"), isTrue("kingofthehill"));
+        cmd.tryLoading(LastManStanding.getLastManStanding(), getHash("lastmanstanding", "last man standing"), isTrue("last man standing"));
+        cmd.tryLoadingg(Masks.getMasks(), null, isTrue("masks"));
+        cmd.tryLoadingg(MobStacker.getMobStacker(), null, isTrue("mob stacker"));
+        cmd.tryLoading(Outposts.getOutposts(), getHash("outpost", "outposts"), isTrue("outposts"));
+        cmd.tryLoadingg(Pets.getPets(), null, isTrue("pets"));
+        cmd.tryLoadingg(Trinkets.getTrinkets(), null, isTrue("trinkets"));
+        cmd.tryLoading(MonthlyCrates.getMonthlyCrates(), getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
+        cmd.tryLoadingg(ServerCrates.getServerCrates(), null, isTrue("server crates"));
+        cmd.tryLoading(Titles.getTitles(), getHash("title", "titles"), isTrue("titles"));
+        cmd.tryLoading(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
+        cmd.tryLoading(Shop.getShop(), null, isTrue("shop"));
+        cmd.tryLoadingg(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
+        cmd.tryLoading(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
+        cmd.tryLoadingg(Trade.getTrade(), Arrays.asList("trade"), isTrue("trade"));
+        cmd.tryLoading(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
+        cmd.tryLoadingg(Wild.getWild(), Arrays.asList("wild"), isTrue("wild"));
 
         final int interval = config.getInt("backup interval")*20*60;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
     }
+    private boolean isTrue(String path, boolean exact) {
+        return config.getBoolean(path + (exact ? "" : ".enabled"));
+    }
+    private boolean isTrue(String...paths) {
+        boolean enabled = false;
+        for(String s : paths) {
+            if(config.getBoolean(s + ".enabled")) {
+                enabled = true;
+                break;
+            }
+        }
+        return enabled;
+    }
+    private HashMap<String, String> getHash(String...values) {
+        final HashMap<String, String> a = new HashMap<>();
+        for(int i = 0; i < values.length; i++) {
+            if(i%2 == 1) {
+                a.put(values[i-1], values[i]);
+            }
+        }
+        return a;
+    }
+
     private void checkFiles() {
         saveDefaultConfig();
         YamlUpdater.getYamlUpdater().update();
@@ -336,27 +178,28 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         final PluginManager pm = Bukkit.getPluginManager();
         mcmmo = pm.isPluginEnabled("mcMMO") ? pm.getPlugin("mcMMO") : null;
         tryLoadingSpawner();
-        if(pm.isPluginEnabled("PlaceholderAPI")) {
+        if(isTrue("supported plugins.standalone.PlaceholderAPI") && pm.isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
             PAPI.getPAPI();
         }
+        RegionalAPI.getRegionalAPI().setup(this);
     }
     public void tryLoadingSpawner() {
-        final String es = pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
-        final String ss = pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
-        spawnerPlugin = es != null || ss != null ? pm.getPlugin(es != null ? "EpicSpawners" : "SilkSpawners") : null;
-        spawner = es != null ? es : ss;
-        spawnerchance = es != null ? Integer.parseInt(spawnerPlugin.getConfig().getString("Spawner Drops.Chance On TNT Explosion").replace("%", "")): ss != null ? spawnerPlugin.getConfig().getInt("explosionDropChance") : 0;
+        final String ss = isTrue("supported plugins.mechanics.SilkSpawners") && pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
+        final String es = isTrue("supported plugins.mechanics.EpicSpawners") && pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
+        final boolean epic = es != null;
+        if(epic || ss != null) {
+            spawnerPlugin = pm.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
+            spawner = epic ? es : ss;
+            final FileConfiguration c = spawnerPlugin.getConfig();
+            spawnerchance = epic ? Integer.parseInt(c.getString("Spawner Drops.Chance On TNT Explosion").replace("%", "")): c.getInt("explosionDropChance");
+        }
     }
     private void disable() {
         rpevents.disable();
-
-        for(Feature f : Feature.values()) {
-            tryDisabling(f);
-        }
-
-        secondaryevents.disable();
         api.disable();
+
+        CommandManager.getCommandManager(null).disable();
         givedp = null;
         givedpCategories = null;
         HandlerList.unregisterAll((Listener) this);
@@ -392,497 +235,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     public void reload() {
         disable();
         enable();
-    }
-    public void tryLoading(Feature f) {
-        try {
-            tryloading(f);
-        } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage &cERROR&6] &c&lError trying to load feature:&r &f" + f.name()));
-            e.printStackTrace();
-        }
-    }
-    public void tryDisabling(Feature f) {
-        final RPFeature a = getfeature(f);
-        if(a != null) {
-            try {
-                a.disable();
-            } catch (Exception e) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage &cERROR&6] &c&lError trying to disable feature:&r &f" + f.name()));
-                e.printStackTrace();
-            }
-        }
-    }
-    private RPFeature getfeature(Feature f) {
-        switch(f) {
-            case AUCTION_HOUSE: return auctionhouse;
-            case BOOSTERS: return boosters;
-            case CHAT_BRAG: return chatevents;
-            case COINFLIP: return coinflip;
-            case CONQUEST: return conquest;
-            case COLLECTION_FILTER: return collectionfilter;
-            case CUSTOM_ARMOR: return customarmor;
-            case CUSTOM_BOSSES: return custombosses;
-            case CUSTOM_ENCHANTS: return customenchants;
-            case CUSTOM_CREEPERS:
-            case CUSTOM_TNT: return customexplosions;
-            case DUELS: return duels;
-            case DUNGEONS: return dungeons;
-            case ENVOY: return envoy;
-            case FACTION_UPGRADES: return factionupgrades;
-            case FUND: return fund;
-            case GLOBAL_CHALLENGES: return globalchallenges;
-            case HOMES: return homes;
-            case ITEM_FILTER: return itemfilter;
-            case JACKPOT: return jackpot;
-            case KITS_EVOLUTION: return vkits;
-            case KITS_GLOBAL: return gkits;
-            case KITS_MASTERY: return mkits;
-            case KOTH: return koth;
-            case LAST_MAN_STANDING: return lastmanstanding;
-            case LOOTBOXES: return lootboxes;
-            case MASKS: return masks;
-            case MOB_STACKER: return mobstacker;
-            case MONTHLY_CRATES: return monthlycrates;
-            case OUTPOSTS: return outposts;
-            case PETS: return pets;
-            case PLAYER_QUESTS: return playerquests;
-            case SERVER_CRATES: return servercrates;
-            case SHOP: return shop;
-            case SHOWCASE: return showcase;
-            case TITLES: return titles;
-            case TRADE: return trade;
-            case TRANSMOG_SCROLLS: return transmogscrolls;
-            case TRINKETS: return trinkets;
-            case WHITE_SCROLLS: return whitescrolls;
-            case WILD: return wild;
-            case WILD_PVP: return wildpvp;
-        }
-        return null;
-    }
-    private void tryloading(Feature f) throws Exception {
-        boolean enabled = false;
-        final HashMap<String, String> ali = new HashMap<>();
-        final List<String> cmds = new ArrayList<>();
-        CommandExecutor ce = null;
-        if(f.equals(Feature.AUCTION_HOUSE)) {
-            enabled = config.getBoolean("auction house.enabled");
-            ce = auctionhouse;
-            cmds.add("auctionhouse");
-            ali.put("auctionhouse", "auction house");
-            if(enabled) {
-                auctionhouse.enable();
-            }
-        } else if(f.equals(Feature.BOOSTERS)) {
-            enabled = config.getBoolean("boosters.enabled");
-            if(enabled) {
-                boosters.enable();
-            }
-        } else if(f.equals(Feature.CHAT_BRAG)) {
-            enabled = config.getBoolean("chat cmds.brag.enabled");
-            ce = chatevents;
-            cmds.add("brag");
-            if(enabled) {
-                chatevents.enable();
-            }
-        } else if(f.equals(Feature.COINFLIP)) {
-            enabled = config.getBoolean("coinflip.enabled");
-            ce = coinflip;
-            cmds.add("coinflip");
-            if(enabled) {
-                coinflip.enable();
-            }
-        } else if(f.equals(Feature.COLLECTION_FILTER)) {
-            enabled = config.getBoolean("collection filter.enabled");
-            ce = collectionfilter;
-            cmds.add("collectionfilter");
-            if(enabled) {
-                collectionfilter.enable();
-            }
-        } else if(f.equals(Feature.CONQUEST)) {
-            enabled = config.getBoolean("conquest.enabled");
-            ce = conquest;
-            cmds.add("conquest");
-            if(enabled) {
-                conquest.enable();
-            }
-        } else if(f.equals(Feature.CUSTOM_ARMOR)) {
-            enabled = config.getBoolean("custom armor.enabled");
-            if(enabled) {
-                customarmor.enable();
-            }
-        } else if(f.equals(Feature.CUSTOM_BOSSES)) {
-            enabled = config.getBoolean("custom bosses.enabled");
-            if(enabled) {
-                custombosses.enable();
-            }
-        } else if(f.equals(Feature.CUSTOM_ENCHANTS)) {
-            enabled = config.getBoolean("custom enchants.enabled");
-            ce = customenchants;
-            cmds.add("alchemist");
-            cmds.add("disabledenchants");
-            cmds.add("enchanter");
-            cmds.add("enchants");
-            cmds.add("splitsouls");
-            cmds.add("tinkerer");
-            if(enabled) {
-                customenchants.enable();
-            }
-        } else if(f.equals(Feature.BLACK_SCROLLS)) {
-            enabled = config.getBoolean("custom enchants.black scrolls");
-            if(enabled) {
-                blackscrolls.enable();
-            }
-        } else if(f.equals(Feature.ENCHANTMENT_ORBS)) {
-            enabled = config.getBoolean("custom enchants.enchantment orbs");
-            if(enabled) {
-                enchantmentorbs.enable();
-            }
-        } else if(f.equals(Feature.FIREBALLS_AND_DUST)) {
-            enabled = config.getBoolean("custom enchants.fireballs");
-            if(enabled) {
-                fireballs.enable();
-            }
-        } else if(f.equals(Feature.RANDOMIZATION_SCROLLS)) {
-            enabled = config.getBoolean("custom enchants.randomization scrolls");
-            if(enabled) {
-                randomizationscrolls.enable();
-            }
-        } else if(f.equals(Feature.RARITY_GEMS)) {
-            enabled = config.getBoolean("custom enchants.rarity gems");
-            if(enabled) {
-                raritygems.enable();
-            }
-        } else if(f.equals(Feature.SOUL_TRACKERS)) {
-            enabled = config.getBoolean("custom enchants.soul trackers");
-            ce = soultrackers;
-            cmds.add("splitsouls");
-            if(enabled) {
-                soultrackers.enable();
-            }
-        } else if(f.equals(Feature.CUSTOM_CREEPERS)) {
-            enabled = config.getBoolean("custom creepers.enabled");
-            if(enabled) {
-                customexplosions.enable();
-            }
-        } else if(f.equals(Feature.CUSTOM_TNT)) {
-            enabled = config.getBoolean("custom tnt.enabled");
-            if(enabled) {
-                customexplosions.enable();
-            }
-        } else if(f.equals(Feature.DUELS)) {
-            enabled = config.getBoolean("duels.enabled");
-            ce = duels;
-            cmds.add("duel");
-            ali.put("duel", "duels");
-            if(enabled) {
-                duels.enable();
-            }
-        } else if(f.equals(Feature.DUNGEONS)) {
-            enabled = config.getBoolean("dungeons.enabled");
-            ce = dungeons;
-            cmds.add("dungeon");
-            if(enabled) {
-                dungeons.enable();
-            }
-        } else if(f.equals(Feature.ENVOY)) {
-            enabled = config.getBoolean("envoy.enabled");
-            ce = envoy;
-            cmds.add("envoy");
-            if(enabled) {
-                envoy.enable();
-            }
-        } else if(f.equals(Feature.FACTION_UPGRADES)) {
-            enabled = config.getBoolean("faction upgrades.enabled");
-            if(enabled) {
-                factionupgrades.enable();
-            }
-        } else if(f.equals(Feature.FUND)) {
-            enabled = config.getBoolean("fund.enabled");
-            ce = fund;
-            cmds.add("fund");
-            if(enabled) {
-                fund.enable();
-            }
-        } else if(f.equals(Feature.GLOBAL_CHALLENGES)) {
-            enabled = config.getBoolean("global challenges.enabled");
-            ce = globalchallenges;
-            cmds.add("challenge");
-            ali.put("challenge", "global challenges");
-            if(enabled) {
-                globalchallenges.enable();
-            }
-        } else if(f.equals(Feature.HOMES)) {
-            enabled = config.getBoolean("home.enabled");
-            ce = homes;
-            cmds.add("home");
-            cmds.add("sethome");
-            if(enabled) {
-                homes.enable();
-            }
-        } else if(f.equals(Feature.ITEM_FILTER)) {
-            enabled = config.getBoolean("item filter.enabled");
-            ce = itemfilter;
-            cmds.add("filter");
-            ali.put("filter", "item filter");
-            if(enabled) {
-                itemfilter.enable();
-            }
-        } else if(f.equals(Feature.JACKPOT)) {
-            enabled = config.getBoolean("jackpot.enabled");
-            ce = jackpot;
-            cmds.add("jackpot");
-            if(enabled) {
-                jackpot.enable();
-            }
-        } else if(f.equals(Feature.KITS_EVOLUTION)) {
-            enabled = config.getBoolean("vkits.enabled");
-            ce = vkits;
-            cmds.add("vkit");
-            ali.put("vkit", "vkits");
-            if(enabled) {
-                vkits.enable();
-            }
-        } else if(f.equals(Feature.KITS_GLOBAL)) {
-            enabled = config.getBoolean("gkits.enabled");
-            ce = gkits;
-            cmds.add("gkit");
-            ali.put("gkit", "gkits");
-            if(enabled) {
-                gkits.enable();
-            }
-        } else if(f.equals(Feature.KITS_MASTERY)) {
-            enabled = config.getBoolean("mkits.enabled");
-            ce = mkits;
-            cmds.add("mkit");
-            ali.put("mkit", "mkits");
-            if(enabled) {
-                mkits.enable();
-            }
-        } else if(f.equals(Feature.KOTH)) {
-            enabled = config.getBoolean("kingofthehill.enabled");
-            ce = koth;
-            cmds.add("kingofthehill");
-            if(enabled) {
-                koth.enable();
-            }
-        } else if(f.equals(Feature.LAST_MAN_STANDING)) {
-            enabled = config.getBoolean("last man standing.enabled");
-            ce = lastmanstanding;
-            cmds.add("lastmanstanding");
-            ali.put("lastmanstanding", "last man standing");
-            if(enabled) {
-                lastmanstanding.enable();
-            }
-        } else if(f.equals(Feature.LOOTBOXES)) {
-            enabled = config.getBoolean("lootboxes.enabled");
-            ce = lootboxes;
-            cmds.add("lootbox");
-            ali.put("lootbox", "lootboxes");
-            if(enabled) {
-                lootboxes.enable();
-            }
-        } else if(f.equals(Feature.MASKS)) {
-            enabled = config.getBoolean("masks.enabled");
-            if(enabled) {
-                masks.enable();
-            }
-        } else if(f.equals(Feature.MOB_STACKER)) {
-            enabled = config.getBoolean("mob stacker.enabled");
-            if(enabled) {
-                mobstacker.enable();
-            }
-        } else if(f.equals(Feature.MONTHLY_CRATES)) {
-            enabled = config.getBoolean("monthly crates.enabled");
-            ce = monthlycrates;
-            cmds.add("monthlycrate");
-            ali.put("monthlycrate", "monthly crates");
-            if(enabled) {
-                monthlycrates.enable();
-            }
-        } else if(f.equals(Feature.OUTPOSTS)) {
-            enabled = config.getBoolean("outposts.enabled");
-            ce = outposts;
-            cmds.add("outpost");
-            ali.put("outpost", "outposts");
-            if(enabled) {
-                outposts.enable();
-            }
-        } else if(f.equals(Feature.PETS)) {
-            enabled = config.getBoolean("pets.enabled");
-            if(enabled) {
-                pets.enable();
-            }
-        } else if(f.equals(Feature.PLAYER_QUESTS)) {
-            enabled = config.getBoolean("player quests.enabled");
-            ce = playerquests;
-            cmds.add("quest");
-            ali.put("quest", "player quests");
-            if(enabled) {
-                playerquests.enable();
-            }
-        } else if(f.equals(Feature.SECONDARY_EVENTS)) {
-            enabled = config.getBoolean("balance.enabled") || config.getBoolean("bless.enabled") || config.getBoolean("bump.enabled") || config.getBoolean("combine.enabled") || config.getBoolean("confirm.enabled") || config.getBoolean("roll.enabled") || config.getBoolean("withdraw.enabled") || config.getBoolean("xpbottle.enabled");
-            ce = secondaryevents;
-            cmds.add("balance");
-            cmds.add("bless");
-            cmds.add("bump");
-            cmds.add("combine");
-            cmds.add("confirm");
-            cmds.add("roll");
-            cmds.add("withdraw");
-            cmds.add("xpbottle");
-            if(enabled) {
-                secondaryevents.enable();
-            }
-        } else if(f.equals(Feature.SERVER_CRATES)) {
-            enabled = config.getBoolean("server crates.enabled");
-            if(enabled) {
-                servercrates.enable();
-            }
-        } else if(f.equals(Feature.SHOP)) {
-            enabled = config.getBoolean("shop.enabled");
-            ce = shop;
-            cmds.add("shop");
-            if(enabled) {
-                shop.enable();
-            }
-        } else if(f.equals(Feature.SHOWCASE)) {
-            enabled = config.getBoolean("showcase.enabled");
-            ce = showcase;
-            cmds.add("showcase");
-            if(enabled) {
-                showcase.enable();
-            }
-        } else if(f.equals(Feature.TITLES)) {
-            enabled = config.getBoolean("title.enabled");
-            ce = titles;
-            cmds.add("title");
-            if(enabled) {
-                titles.enable();
-            }
-        } else if(f.equals(Feature.TRADE)) {
-            enabled = config.getBoolean("trade.enabled");
-            ce = trade;
-            cmds.add("trade");
-            if(enabled) {
-                trade.enable();
-            }
-        } else if(f.equals(Feature.TRANSMOG_SCROLLS)) {
-            enabled = config.getBoolean("custom enchants.transmog scrolls");
-            if(enabled) {
-                transmogscrolls.enable();
-            }
-        } else if(f.equals(Feature.TRINKETS)) {
-            enabled = config.getBoolean("trinkets.enabled");
-            if(enabled) {
-                trinkets.enable();
-            }
-        } else if(f.equals(Feature.WHITE_SCROLLS)) {
-            enabled = config.getBoolean("custom enchants.white scrolls");
-            if(enabled) {
-                whitescrolls.enable();
-            }
-        } else if(f.equals(Feature.WILD)) {
-            enabled = config.getBoolean("wild.enabled");
-            ce = wild;
-            cmds.add("wild");
-            if(enabled) {
-                wild.enable();
-            }
-        } else if(f.equals(Feature.WILD_PVP)) {
-            enabled = config.getBoolean("wild pvp.enabled");
-            ce = wildpvp;
-            cmds.add("wildpvp");
-            ali.put("wildpvp", "wild pvp");
-            if(enabled) {
-                wildpvp.enable();
-            }
-        }
-        final boolean empty = cmds.isEmpty();
-        final List<String> disabledCmds = new ArrayList<>();
-        for(String s : cmds) {
-            if(!config.getBoolean(ali.getOrDefault(s, s) + ".enabled")) {
-                disabledCmds.add(s);
-            }
-        }
-        if(enabled && !empty) {
-            try {
-                cmds.removeAll(disabledCmds);
-                unregisterPluginCommands(disabledCmds);
-                int v = 0;
-                for(String cmd : cmds) {
-                    PluginCommand pc = getCommand(cmd);
-                    if(ce != null) {
-                        if(pc == null) {
-                            final String s = cmds.get(v);
-                            knownCommands.put(s, originalCommands.get(s));
-                            pc = (PluginCommand) knownCommands.get(s);
-                        }
-                        pc.setExecutor(ce);
-                    }
-                    final String k = pc.getName();
-                    if(ali.isEmpty()) addAliases(k);
-                    else addAliases(k, ali.get(k));
-                    v += 1;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if(!empty) {
-            unregisterPluginCommands(cmds);
-        }
-    }
-    private void unregisterPluginCommands(List<String> cmds) {
-        for(String cmd : cmds) {
-            final PluginCommand pc = getCommand(cmd);
-            if(pc != null) unregisterPluginCommand(pc);
-        }
-    }
-
-    private void addAliases(String cmd) throws Exception { addAliases(cmd, cmd); }
-    private void addAliases(String cmd, String path) throws Exception {
-        Object result = getPrivateField(getServer().getPluginManager(), "commandMap");
-        SimpleCommandMap commandMap = (SimpleCommandMap) result;
-        Object map = getPrivateField(commandMap, "knownCommands");
-        @SuppressWarnings("unchecked")
-        HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-        for(String alias : config.getStringList(path + ".aliases")) {
-            if(!alias.equals(cmd)) {
-                final String c = cmd;
-                knownCommands.put(alias, getCommand(c));
-                final PluginCommand pc = Bukkit.getPluginCommand(c);
-                if(pc != null) pc.getAliases().add(alias);
-            }
-        }
-    }
-    private Object getPrivateField(Object object, String field) throws Exception {
-        /* Code from "zeeveener" at https://bukkit.org/threads/how-to-unregister-commands-from-your-plugin.131808/ , edited by RandomHashTags */
-        Class<?> clazz = object.getClass();
-        Field objectField = field.equals("commandMap") ? clazz.getDeclaredField(field) : field.equals("knownCommands") ? v.contains("1.8") || v.contains("1.9") || v.contains("1.10") || v.contains("1.11") || v.contains("1.12") || v.equals("1.13") ? clazz.getDeclaredField(field) : clazz.getSuperclass().getDeclaredField(field) : null;
-        if(objectField == null) {
-            Bukkit.broadcastMessage("objectField == null!");
-            return null;
-        }
-        objectField.setAccessible(true);
-        Object result = objectField.get(object);
-        objectField.setAccessible(false);
-        return result;
-    }
-    private void unregisterPluginCommand(PluginCommand cmd) {
-        final String c = cmd.getName();
-        knownCommands.remove("randompackage:" + c);
-        cmd.unregister(commandMap);
-        Y.remove("RandomPackage:" + c);
-        boolean hasOtherCmd = false;
-        for(int i = 0; i < Y.keySet().size(); i++) {
-            final String otherCmd = (String) Y.keySet().toArray()[i];
-            if(!otherCmd.startsWith("RandomPackage:") && otherCmd.split(":")[otherCmd.split(":").length-1].equals(c)) { // gives the last plugin that has the cmd.getName() the command priority
-                hasOtherCmd = true;
-                knownCommands.replace(c, cmd, (PluginCommand) Y.values().toArray()[i]);
-            }
-        }
-        if(!hasOtherCmd) // removes the command completely
-            knownCommands.remove(c);
     }
 
     /*

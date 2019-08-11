@@ -41,6 +41,8 @@ public class KitsEvolution extends Kits {
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
     private TreeMap<Integer, Double> tiermultipliers;
 
+    public String getIdentifier() { return "KITS_EVOLUTION"; }
+
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return FileKitEvolution.class; }
     public String getPath() { return "vkits"; }
@@ -170,7 +172,8 @@ public class KitsEvolution extends Kits {
     }
     public void give(Player player, FileKitEvolution vkit, boolean preview) {
         if(vkit == null) return;
-        final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+        final UUID u = player.getUniqueId();
+        final RPPlayer pdata = RPPlayer.get(u);
         final HashMap<CustomKit, Integer> lvls = pdata.getKitLevels();
         final int vkitlvl = lvls.containsKey(vkit) ? lvls.get(vkit) : player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()) ? 1 : 0;
         final List<ItemStack> rewards = new ArrayList<>();
@@ -228,7 +231,7 @@ public class KitsEvolution extends Kits {
             pdata.getKitCooldowns().put(vkit, System.currentTimeMillis()+(vkit.getCooldown()*1000));
         player.updateInventory();
         final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-        int upgradechance = vkit.getUpgradeChance(), a = fu.isEnabled() ? (int) (fu.getVkitLevelingChance(fapi.getFaction(player))*100) : 0;
+        int upgradechance = vkit.getUpgradeChance(), a = fu.isEnabled() && hookedFactionsUUID() ? (int) (fu.getVkitLevelingChance(factions.getFactionTag(u))*100) : 0;
         upgradechance += a;
         if(!preview && random.nextInt(100) <= upgradechance) {
             final int newlvl = vkitlvl+1;

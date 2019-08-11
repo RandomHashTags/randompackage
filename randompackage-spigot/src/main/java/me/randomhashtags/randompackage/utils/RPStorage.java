@@ -8,7 +8,8 @@ import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
 import me.randomhashtags.randompackage.api.Boosters;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
-import me.randomhashtags.randompackage.utils.universal.UVersion;
+import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +21,7 @@ import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.RPFeature.rpd;
 import static me.randomhashtags.randompackage.utils.RPFeature.separator;
 
-public abstract class RPStorage extends UVersion {
+public abstract class RPStorage extends RegionalAPI {
     protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
 

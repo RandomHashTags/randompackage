@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ShopCategory;
-import me.randomhashtags.randompackage.api.events.ShopPrePurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopPreSellEvent;
-import me.randomhashtags.randompackage.api.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.api.events.ShopSellEvent;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.events.ShopPrePurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopPreSellEvent;
+import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.events.ShopSellEvent;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.usingfile.FileShopCategory;
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
@@ -40,6 +40,8 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public ItemStack back;
 	private String defaultShop;
 	private HashMap<String, FileShopCategory> titles;
+
+	public String getIdentifier() { return "SHOP"; }
 
 	public void load() {
 	    final long started = System.currentTimeMillis();

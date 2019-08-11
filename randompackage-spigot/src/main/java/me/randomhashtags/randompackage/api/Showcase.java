@@ -29,7 +29,7 @@ import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
 
 public class Showcase extends RPFeature implements CommandExecutor {
 	private static Showcase instance;
-	public static final Showcase getShowcase() {
+	public static Showcase getShowcase() {
 		if(instance == null) instance = new Showcase();
 		return instance;
 	}
@@ -45,6 +45,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	
 	private ArrayList<Player> inSelf, inOther;
 	private HashMap<Player, Integer> deleteSlot;
+
+	public String getIdentifier() { return "SHOWCASE"; }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;

@@ -16,6 +16,8 @@ public class newnewEventAttributes extends RPFeature {
         if(instance == null) instance = new newnewEventAttributes();
         return instance;
     }
+
+    public String getIdentifier() { return "EVENT_ATTRIBUTES"; }
     public void load() {
     }
     public void unload() {

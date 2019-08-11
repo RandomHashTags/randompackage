@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.addons.Dungeon;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -29,9 +29,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
     public YamlConfiguration config;
     private UInventory gui, master;
-    private ItemStack background;
 
     public ItemStack dimensionweb, enchantedobsidian, fuelcell;
+
+    public String getIdentifier() { return "DUNGEONS"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -42,6 +43,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
 
     public void load() {
+        final long started = System.currentTimeMillis();
         save(null, "dungeons.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "dungeons.yml"));
 
@@ -52,7 +54,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         master = new UInventory(null, config.getInt("master.size"), ChatColor.translateAlternateColorCodes('&', config.getString("master.title")));
-        background = d(config, "gui.background");
+        final ItemStack background = d(config, "gui.background");
         final ItemStack undisDungeon = d(config, "gui.undiscovered.dungeon"), undisKey = d(config, "gui.undiscovered.key");
         final Inventory di = gui.getInventory();
         for(String s : config.getConfigurationSection("gui").getKeys(false)) {
@@ -66,12 +68,11 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         for(int i = 0; i < gui.getSize(); i++)
             if(di.getItem(i) == null)
                 di.setItem(i, background);
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " dungeons");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         config = null;
         master = null;
-        background = null;
         deleteAll(Feature.DUNGEONS);
         instance = null;
     }

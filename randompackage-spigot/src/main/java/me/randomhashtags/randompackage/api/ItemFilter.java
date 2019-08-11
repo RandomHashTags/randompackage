@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.FilterCategory;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.usingfile.FileFilterCategory;
@@ -43,6 +43,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     private HashMap<Integer, String> categorySlots;
     private HashMap<String, FileFilterCategory> categories, categoryTitles;
 
+    public String getIdentifier() { return "ITEM_FILTER"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

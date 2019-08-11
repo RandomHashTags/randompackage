@@ -25,6 +25,7 @@ public class TransmogScrolls extends CustomEnchantUtils {
         return instance;
     }
 
+    public String getIdentifier() { return "TRANSMOG_SCROLLS"; }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

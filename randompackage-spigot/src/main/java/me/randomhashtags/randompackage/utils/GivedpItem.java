@@ -6,11 +6,11 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addons.WhiteScrolls;
-import me.randomhashtags.randompackage.api.events.ItemNameTagUseEvent;
-import me.randomhashtags.randompackage.api.events.MysteryMobSpawnerOpenEvent;
+import me.randomhashtags.randompackage.events.ItemNameTagUseEvent;
+import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.api.Boosters;
 import me.randomhashtags.randompackage.api.unfinished.Trinkets;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
 import org.bukkit.*;
@@ -44,6 +44,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public HashMap<String, ItemStack> items;
     private ItemStack air;
     private List<Player> itemnametag, itemlorecrystal, explosivesnowball;
+
+    public String getIdentifier() { return "GIVEDP_ITEM"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;

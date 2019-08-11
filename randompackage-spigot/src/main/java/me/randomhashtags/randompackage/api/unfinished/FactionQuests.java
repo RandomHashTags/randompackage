@@ -17,6 +17,8 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
 
     public YamlConfiguration config;
 
+    public String getIdentifier() { return "FACTION_QUESTS"; }
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }
@@ -62,5 +64,6 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
     }
     public void unload() {
         config = null;
+        instance = null;
     }
 }

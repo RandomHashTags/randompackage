@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.*;
@@ -24,6 +24,8 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
 
     public static int spawnerchance = 0;
 
+    public String getIdentifier() { return "RANDOMPACKAGE_API"; }
+
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
@@ -37,7 +39,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&7- RandomPackage Version: &b" + randompackage.getDescription().getVersion(),
                             "&7- Server Version: &f" + version,
                             "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
-                            "&7- Faction Plugin: " + (fapi.factions != null ? "&3" + fapi.factions + " &7(&2" + pluginmanager.getPlugin("Factions").getDescription().getVersion() + "&7)" : "&cfalse"),
+                            //"&7- Faction Plugin: " + (fapi.factions != null ? "&3" + fapi.factions + " &7(&2" + pluginmanager.getPlugin("Factions").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Home",
@@ -64,7 +66,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save("_Data", "other.yml");
         final Plugin f = pluginmanager.getPlugin("Factions");
-        fapi.factions = f != null ? f.getDescription().getAuthors().contains("ProSavage") ? "SavageFactions" : "Factions" : null;
+        //fapi.factions = f != null ? f.getDescription().getAuthors().contains("ProSavage") ? "SavageFactions" : "Factions" : null;
 
         givedpitem.enable();
         getPlugin.getCommand("givedp").setExecutor(givedpitem);

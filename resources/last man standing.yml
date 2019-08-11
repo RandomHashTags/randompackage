@@ -27,5 +27,8 @@ messages:
   have gained:
     - "&6&lLMS >&r &eThey have gained {REWARDS}"
 #
+settings:
+  gives loot every: 60
+#
 rewards:
   - ""

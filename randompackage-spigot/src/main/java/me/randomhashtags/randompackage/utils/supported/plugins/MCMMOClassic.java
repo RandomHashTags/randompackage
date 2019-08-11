@@ -2,17 +2,16 @@ package me.randomhashtags.randompackage.utils.supported.plugins;
 
 import com.gmail.nossr50.datatypes.skills.SkillType;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import me.randomhashtags.randompackage.api.events.MCMMOXpGainEvent;
-import me.randomhashtags.randompackage.utils.supported.MCMMOAPI;
+import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 
 public class MCMMOClassic extends MCMMOAPI {
-
     private static MCMMOClassic instance;
-    public static final MCMMOClassic getMCMMOClassic() {
+    public static MCMMOClassic getMCMMOClassic() {
         if(instance == null) instance = new MCMMOClassic();
         return instance;
     }

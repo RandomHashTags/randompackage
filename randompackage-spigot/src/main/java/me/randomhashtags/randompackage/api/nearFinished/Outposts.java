@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Outpost;
 import me.randomhashtags.randompackage.addons.usingfile.FileOutpost;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -49,6 +49,8 @@ public class Outposts extends RPFeature implements CommandExecutor {
         }
         return true;
     }
+
+    public String getIdentifier() { return "OUTPOSTS"; }
 
     public void load() {
         final long started = System.currentTimeMillis();

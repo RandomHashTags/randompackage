@@ -1,19 +1,21 @@
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'java-library'
 
 repositories {
-    //maven { url "https://hub.spigotmc.org/nexus/content/groups/public" } // SpigotMC
     maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
     maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
     maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
+    maven { url "https://jitpack.io" } // SuperiorSkyblock API
+    maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
 }
 
 dependencies {
-    compileOnly 'me.clip:placeholderapi:2.10.3'
-    compileOnly 'net.milkbowl.vault:VaultAPI:1.7'
-    compileOnly 'com.wasteofplastic:askyblock:3.0.9.4'
+    implementation 'me.clip:placeholderapi:2.10.3'
+    implementation 'net.milkbowl.vault:VaultAPI:1.7'
+    implementation 'com.wasteofplastic:askyblock:3.0.9.4'
+    implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
+    implementation 'com.massivecraft:Factions:1.6.9.5-U0.4.3'
 }
 
 jar {

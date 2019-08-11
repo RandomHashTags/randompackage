@@ -1,16 +1,15 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.api.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.api.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.api.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.api.events.customenchant.*;
-import me.randomhashtags.randompackage.api.events.MaskEquipEvent;
-import me.randomhashtags.randompackage.api.events.MaskUnequipEvent;
-import me.randomhashtags.randompackage.api.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.events.MaskEquipEvent;
+import me.randomhashtags.randompackage.events.MaskUnequipEvent;
+import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
@@ -45,6 +44,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
         RomanNumeralValues(int val) { this.val = val; }
         public int asInt() { return val; }
     }
+
+    public String getIdentifier() { return "CUSTOM_ENCHANT_UTILS"; }
+
     private int fromRoman(String num) {
         /* This code is from "batman" at https://stackoverflow.com/questions/9073150/converting-roman-numerals-to-decimal */
         num = ChatColor.stripColor(num.toUpperCase());
@@ -408,7 +410,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
                 for(Entity en : who.getNearbyEntities(oldevaluate(e.split(":")[2]), oldevaluate(e.split(":")[3]), oldevaluate(e.split(":")[4]))) {
                     if(en instanceof LivingEntity && en instanceof Damageable && (k == null || k != null && !en.equals(k)))
                         if(!(en instanceof Player)
-                                || who instanceof Player && en instanceof Player && (enemies && fapi.relationIsEnemyOrNull((Player) who, (Player) en) || allies && fapi.relationIsAlly((Player) who, (Player) en)))
+                                || who instanceof Player && en instanceof Player && (enemies && factions.isEnemy((Player) who, (Player) en) || allies && factions.isAlly((Player) who, (Player) en)))
                             r.add((LivingEntity) en);
                 }
             }
@@ -423,7 +425,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(Entity en : who.getNearbyEntities(oldevaluate(e.split(":")[2]), oldevaluate(e.split(":")[3]), oldevaluate(e.split(":")[4]))) {
                 if(en instanceof LivingEntity && en instanceof Damageable && (k == null || k != null && !en.equals(k)))
                     if(!allies && !(en instanceof Player)
-                            || who instanceof Player && en instanceof Player && (enemies && fapi.relationIsEnemyOrNull((Player) who, (Player) en) || allies && fapi.relationIsAlly((Player) who, (Player) en)))
+                            || who instanceof Player && en instanceof Player && (enemies && factions.isEnemy((Player) who, (Player) en) || allies && factions.isAlly((Player) who, (Player) en)))
                         size += 1;
             }
             a = a.replace("nearby" + (allies ? "Allies" : enemies ? "Enemies" : "") + "Size{" + e + "}", Integer.toString(size));
@@ -677,7 +679,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
                 if(g != null) {
                     itemMeta = g.getItemMeta();
                     final int amount = getRemainingInt(itemMeta.getDisplayName());
-                    final String fn = fapi.getFaction(player);
+                    final String fn = regions.getFactionTag(player);
                     int depleteAmount = Integer.parseInt(a.split(":")[1].split("}")[0]);
                     depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(fn, gem);
                     if(amount - depleteAmount <= 0) {
@@ -735,7 +737,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         else if(input.startsWith("healthIs>=:")) return healthIsGreaterThanOrEqualTo(entity, oldevaluate(input.split(":")[1].split(":")[0]));
         else if(input.startsWith("isUnderwater")) return entity.getRemainingAir() < entity.getMaximumAir();
         else if(input.startsWith("hitBlock(")) return event instanceof PlayerInteractEvent && hitBlock((PlayerInteractEvent) event, input.split("hitBlock\\(")[1].split("\\)")[0].toUpperCase());
-        else if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && fapi.canModify(((PlayerInteractEvent) event).getPlayer(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
+        else if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && factions.canModify(((PlayerInteractEvent) event).getPlayer().getUniqueId(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
         else if(input.startsWith("isHeadshot")) {
             final PvAnyEvent eve = event instanceof PvAnyEvent ? (PvAnyEvent) event : null;
             final Projectile p = eve != null ? eve.proj : null;

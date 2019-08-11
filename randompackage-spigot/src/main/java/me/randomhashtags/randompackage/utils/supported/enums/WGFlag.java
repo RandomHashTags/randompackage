@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.utils.supported.enums;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import me.randomhashtags.randompackage.utils.supported.WorldGuardAPI;
+import me.randomhashtags.randompackage.utils.supported.regional.WorldGuardAPI;
 
 public enum WGFlag {
     PASSTHROUGH,

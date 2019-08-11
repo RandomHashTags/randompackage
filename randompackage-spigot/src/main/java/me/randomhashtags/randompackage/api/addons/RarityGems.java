@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.usingpath.PathRarityGem;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,6 +29,7 @@ public class RarityGems extends CustomEnchantUtils {
         return instance;
     }
 
+    public String getIdentifier() { return "RARITY_GEMS"; }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

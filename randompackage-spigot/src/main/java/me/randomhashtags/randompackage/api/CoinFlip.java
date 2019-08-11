@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipMatch;
@@ -52,6 +52,8 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     private HashMap<OfflinePlayer, BigDecimal> picking;
     private HashMap<CoinFlipMatch, List<Integer>> tasks;
     private HashMap<Player, CoinFlipMatch> goingToChallenge, active;
+
+    public String getIdentifier() { return "COIN_FLIP"; }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;

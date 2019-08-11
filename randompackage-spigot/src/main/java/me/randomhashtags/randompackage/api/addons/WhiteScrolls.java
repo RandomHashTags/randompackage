@@ -22,6 +22,7 @@ public class WhiteScrolls extends CustomEnchantUtils {
         return instance;
     }
 
+    public String getIdentifier() { return "WHITE_SCROLLS"; }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.addons.Pet;
 import me.randomhashtags.randompackage.addons.usingfile.FilePet;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -21,9 +21,10 @@ public class Pets extends RPFeature implements Listener {
     }
     public YamlConfiguration config;
 
+    public String getIdentifier() { return "PETS"; }
+
     public void load() {
         final long started = System.currentTimeMillis();
-
         if(!otherdata.getBoolean("saved default pets")) {
             final String[] p = new String[] {
                     "ALCHEMIST", "ANTI_TELEBLOCK",
@@ -54,6 +55,7 @@ public class Pets extends RPFeature implements Listener {
     }
     public void unload() {
         config = null;
+        instance = null;
         deleteAll(Feature.PETS);
     }
 

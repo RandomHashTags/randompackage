@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
 import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.Feature;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,6 +34,7 @@ public class Fireballs extends CustomEnchantUtils {
 
     public ItemStack mysterydust;
 
+    public String getIdentifier() { return "FIREBALLS"; }
     public void load() {
         loadUtils();
         long started = System.currentTimeMillis();
