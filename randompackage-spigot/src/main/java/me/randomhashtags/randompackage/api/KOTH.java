@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class KOTH extends RPFeature implements CommandExecutor {
 	private static KOTH instance;

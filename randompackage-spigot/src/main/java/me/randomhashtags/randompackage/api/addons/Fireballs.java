@@ -4,8 +4,8 @@ import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.addons.MagicDust;
-import me.randomhashtags.randompackage.addons.usingpath.PathFireball;
-import me.randomhashtags.randompackage.addons.usingpath.PathMagicDust;
+import me.randomhashtags.randompackage.utils.addons.PathFireball;
+import me.randomhashtags.randompackage.utils.addons.PathMagicDust;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class Fireballs extends CustomEnchantUtils {
     private static Fireballs instance;

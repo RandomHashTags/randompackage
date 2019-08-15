@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.supported;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.supported.regional.ASkyblock;
 import me.randomhashtags.randompackage.utils.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.utils.supported.regional.SuperiorSkyblock;
@@ -32,21 +33,29 @@ public class RegionalAPI extends UVersion {
     private boolean isTrue(String path) { return config.getBoolean(path); }
     public void setup(RandomPackage randompackage) {
         this.config = randompackage.config;
-        final String a = "supported plugins.regional.";
-        factionsUUID = isTrue(a + "FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
-        askyblock = isTrue(a + "ASkyblock") && pluginmanager.isPluginEnabled("ASkyblock");
-        superiorskyblock = isTrue(a + "SuperiorSkyblock") && pluginmanager.isPluginEnabled("SuperiorSkyblock");
-
+        trySupportingFactions();
+        trySupportingASkyblock();
+        trySupportingSuperiorSkyblock();
+    }
+    public void trySupportingFactions() {
+        factionsUUID = isTrue( "supported plugins.regional.FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
         if(factionsUUID) {
             factions = FactionsUUID.getFactionsUUID();
             factions.enable();
             hooked("FactionsUUID");
+            FactionUpgrades.getFactionUpgrades().enable();
         }
+    }
+    public void trySupportingASkyblock() {
+        askyblock = isTrue("supported plugins.regional.ASkyblock") && pluginmanager.isPluginEnabled("ASkyblock");
         if(askyblock) {
             asky = ASkyblock.getASkyblock();
             asky.enable();
             hooked("ASkyblock");
         }
+    }
+    public void trySupportingSuperiorSkyblock() {
+        superiorskyblock = isTrue("supported plugins.regional.SuperiorSkyblock") && pluginmanager.isPluginEnabled("SuperiorSkyblock");
         if(superiorskyblock) {
             ssky = SuperiorSkyblock.getSuperiorSkyblock();
             ssky.enable();

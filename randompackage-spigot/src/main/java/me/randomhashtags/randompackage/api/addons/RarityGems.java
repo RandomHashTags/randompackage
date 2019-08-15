@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.addons.usingpath.PathRarityGem;
+import me.randomhashtags.randompackage.utils.addons.PathRarityGem;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.objects.Feature;

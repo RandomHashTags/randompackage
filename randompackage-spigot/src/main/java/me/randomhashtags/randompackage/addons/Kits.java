@@ -2,10 +2,10 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
-import me.randomhashtags.randompackage.addons.usingfile.FileFallenHero;
+import me.randomhashtags.randompackage.utils.addons.FileFallenHero;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
-import me.randomhashtags.randompackage.utils.KitEvents;
+import me.randomhashtags.randompackage.utils.listeners.KitEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;

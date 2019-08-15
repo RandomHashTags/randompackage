@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.Title;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.usingfile.FileTitle;
+import me.randomhashtags.randompackage.utils.addons.FileTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

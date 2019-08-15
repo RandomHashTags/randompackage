@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.database;
 
-import me.randomhashtags.randompackage.utils.database.files.YamlFile;
+import me.randomhashtags.randompackage.utils.database.file.YamlFile;
 
 import java.io.File;
 

@@ -2,13 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
-import me.randomhashtags.randompackage.addons.usingfile.FileCustomEnchant;
+import me.randomhashtags.randompackage.utils.addons.FileCustomEnchant;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.addons.usingfile.FileEnchantRarity;
+import me.randomhashtags.randompackage.utils.addons.FileEnchantRarity;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.objects.Feature;
@@ -43,7 +43,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class CustomEnchants extends CustomEnchantUtils implements CommandExecutor {
     private static CustomEnchants instance;

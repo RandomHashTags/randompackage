@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.utils;
 
+import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
 import me.randomhashtags.randompackage.utils.supported.standalone.VaultAPI;
@@ -27,10 +27,13 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public abstract class RPFeature extends RPStorage implements Listener, Identifiable {
     private boolean isEnabled = false;
@@ -82,6 +85,14 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+    public static void d() {
+        otherdata = null;
+        otherdataF = null;
+        treemap.clear();
+        givedp = null;
+        givedpCategories = null;
+        mcmmoIsEnabled = false;
     }
 
     public abstract void load();

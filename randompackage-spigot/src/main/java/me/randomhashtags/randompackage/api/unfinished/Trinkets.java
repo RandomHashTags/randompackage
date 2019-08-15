@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.usingfile.FileTrinket;
+import me.randomhashtags.randompackage.utils.addons.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.utils.addons.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;

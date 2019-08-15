@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.CustomBoss;
-import me.randomhashtags.randompackage.addons.usingfile.FileCustomBoss;
+import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
-import me.randomhashtags.randompackage.addons.usingfile.FileGlobalChallenge;
+import me.randomhashtags.randompackage.utils.addons.FileGlobalChallenge;
 import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.events.FundDepositEvent;

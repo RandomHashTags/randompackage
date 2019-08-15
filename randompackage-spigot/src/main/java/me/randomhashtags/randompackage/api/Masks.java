@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Mask;
-import me.randomhashtags.randompackage.addons.usingfile.FileMask;
+import me.randomhashtags.randompackage.utils.addons.FileMask;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class Masks extends CustomEnchants implements Listener {
     private static Masks instance;

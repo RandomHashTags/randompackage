@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Outpost;
-import me.randomhashtags.randompackage.addons.usingfile.FileOutpost;
+import me.randomhashtags.randompackage.utils.addons.FileOutpost;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;

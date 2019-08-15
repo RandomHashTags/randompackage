@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Lootbox;
-import me.randomhashtags.randompackage.addons.usingfile.FileLootbox;
+import me.randomhashtags.randompackage.utils.addons.FileLootbox;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;

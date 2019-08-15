@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.randomhashtags.randompackage.RandomPackage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ public class CommandManager {
     public static CommandManager getCommandManager(RandomPackage randompackage) {
         if(instance == null) {
             instance = new CommandManager();
+            instance.randompackage = randompackage;
             instance.config = randompackage.config;
         }
         return instance;
@@ -26,8 +28,9 @@ public class CommandManager {
     private HashMap<String, Command> knownCommands;
 
     private HashMap<String, RPFeature> features;
-    private Object nodes;
+    private Object dispatcher, nodes;
 
+    private RandomPackage randompackage;
     private String v;
     private boolean isLegacy;
     private FileConfiguration config;
@@ -42,14 +45,13 @@ public class CommandManager {
                 final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
                 o.setAccessible(true);
                 if(v.contains("1.13")) {
-                    nodes = o.get(net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a().getRoot());
+                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
+                    dispatcher = d;
+                    nodes = o.get(d.getRoot());
                 } else {
-                    nodes = o.get(net.minecraft.server.v1_14_R1.MinecraftServer.getServer().commandDispatcher.a().getRoot());
-                }
-                for(String s : ((Map<String, com.mojang.brigadier.tree.CommandNode<?>>) nodes).keySet()) {
-                    if(s.startsWith("randompackage:")) {
-                        System.out.println("found " + s);
-                    }
+                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_14_R1.MinecraftServer.getServer().commandDispatcher.a();
+                    dispatcher = d;
+                    nodes = o.get(d.getRoot());
                 }
                 o.setAccessible(false);
             }
@@ -99,7 +101,7 @@ public class CommandManager {
                                 knownCommands.put("randompackage:" + s, baseCmd);
                             }
                             baseCmd.register(commandMap);
-                            //updateCommand(baseCmd, false);
+                            updateBrigadierCmd(baseCmd, false);
                         }
                     } else {
                         unregisterPluginCommand(baseCmd);
@@ -126,18 +128,17 @@ public class CommandManager {
         }
     }
 
-    private void updateCommand(PluginCommand cmd, boolean unregister) {
+    private void updateBrigadierCmd(PluginCommand cmd, boolean unregister) {
         final String s = cmd.getName();
-        System.out.println("updating command \"" + s + "\"");
         final Map<String, com.mojang.brigadier.tree.CommandNode<?>> o = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) nodes;
         if(unregister) {
             o.remove("randompackage:" + s);
             o.remove(s);
         } else {
             final com.mojang.brigadier.tree.CommandNode<?> c = o.get(s);
+            final com.mojang.brigadier.CommandDispatcher w = (com.mojang.brigadier.CommandDispatcher) dispatcher;
             for(String a : cmd.getAliases()) {
-                System.out.println("put alias \"" + a + "\"");
-                o.put(a, c);
+                w.register(LiteralArgumentBuilder.literal(a));
             }
         }
     }
@@ -151,14 +152,17 @@ public class CommandManager {
         for(int i = 0; i < keys.size(); i++) {
             final String otherCmd = (String) keys.toArray()[i];
             if(!otherCmd.startsWith("RandomPackage:") && otherCmd.split(":")[otherCmd.split(":").length-1].equals(c)) { // gives the last plugin that has the cmd.getName() the command priority
-                hasOtherCmd = true;
-                knownCommands.replace(c, cmd, (PluginCommand) knownCommands.values().toArray()[i]);
+                final PluginCommand pc = (PluginCommand) knownCommands.values().toArray()[i];
+                if(!pc.getPlugin().equals(randompackage)) {
+                    hasOtherCmd = true;
+                    knownCommands.replace(c, cmd, pc);
+                }
                 break;
             }
         }
         if(!hasOtherCmd) { // removes the command completely
             knownCommands.remove(c);
-            //updateCommand(cmd, true);
+            updateBrigadierCmd(cmd, true);
         }
     }
 

@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.active.LivingServerCrate;
-import me.randomhashtags.randompackage.addons.usingfile.FileServerCrate;
+import me.randomhashtags.randompackage.utils.addons.FileServerCrate;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;

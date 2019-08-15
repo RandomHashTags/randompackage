@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RandomizationScroll;
-import me.randomhashtags.randompackage.addons.usingpath.PathRandomizationScroll;
+import me.randomhashtags.randompackage.utils.addons.PathRandomizationScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.events.RandomizationScrollUseEvent;
 import me.randomhashtags.randompackage.utils.objects.Feature;

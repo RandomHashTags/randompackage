@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.utils.RPEvents;
+import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     public static final RandomPackageAPI api = new RandomPackageAPI();
@@ -65,26 +65,23 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "other.yml");
-        final Plugin f = pluginmanager.getPlugin("Factions");
-        //fapi.factions = f != null ? f.getDescription().getAuthors().contains("ProSavage") ? "SavageFactions" : "Factions" : null;
 
         givedpitem.enable();
-        getPlugin.getCommand("givedp").setExecutor(givedpitem);
+        randompackage.getCommand("givedp").setExecutor(givedpitem);
 
         sendConsoleMessage("&6[RandomPackage] &aInfo: &e%%__USER__%%, %%__NONCE__%%");
         sendConsoleMessage("&6[RandomPackage] &aLoaded API &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         spawnerchance = 0;
-        otherdataF = null;
     }
     @EventHandler
     private void pluginEnableEvent(PluginEnableEvent event) {
-        if(RandomPackage.spawner == null) {
-            final String n = event.getPlugin().getName();
-            if(n.equals("SilkSpawners") || n.equals("EpicSpawners")) {
-                getPlugin.tryLoadingSpawner();
-            }
+        final String n = event.getPlugin().getName();
+        if(RandomPackage.spawner == null && (n.equals("SilkSpawners") || n.equals("EpicSpawners"))) {
+            randompackage.tryLoadingSpawner();
+        } else if(!regions.hookedFactionsUUID() && n.equals("Factions")) {
+            regions.trySupportingFactions();
         }
     }
 

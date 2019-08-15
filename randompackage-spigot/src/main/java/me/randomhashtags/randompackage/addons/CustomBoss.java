@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.utils.RPAddon;
-import me.randomhashtags.randompackage.addons.utils.RPSpawnable;
+import me.randomhashtags.randompackage.utils.addons.RPSpawnable;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;

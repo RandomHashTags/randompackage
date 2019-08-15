@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.addons.Pet;
-import me.randomhashtags.randompackage.addons.usingfile.FilePet;
+import me.randomhashtags.randompackage.utils.addons.FilePet;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;

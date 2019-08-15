@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.ConquestChest;
 import me.randomhashtags.randompackage.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.usingfile.FileConquestChest;
+import me.randomhashtags.randompackage.utils.addons.FileConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import me.randomhashtags.randompackage.addons.active.LivingConquestChest;
 import me.randomhashtags.randompackage.addons.active.LivingConquestMob;

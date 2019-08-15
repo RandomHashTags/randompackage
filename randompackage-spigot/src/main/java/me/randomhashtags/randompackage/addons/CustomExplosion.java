@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.utils.addons.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;

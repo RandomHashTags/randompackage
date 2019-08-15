@@ -7,8 +7,8 @@ import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgradeType;
-import me.randomhashtags.randompackage.addons.usingfile.FileFactionUpgrade;
+import me.randomhashtags.randompackage.utils.addons.FileFactionUpgradeType;
+import me.randomhashtags.randompackage.utils.addons.FileFactionUpgrade;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -36,7 +36,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class FactionUpgrades extends RPFeature {
     private static FactionUpgrades instance;

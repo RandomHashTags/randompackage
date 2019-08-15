@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addons;
 import me.randomhashtags.randompackage.api.Shop;
 import me.randomhashtags.randompackage.addons.utils.Inventoryable;
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.utils.addons.RPAddon;
 
 import java.util.List;
 

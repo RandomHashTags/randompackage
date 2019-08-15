@@ -29,7 +29,7 @@ public class PAPI extends PlaceholderExpansion {
 
     @Override
     public String getAuthor() {
-        return "RandomHashTags & GMatrixGames";
+        return "RandomHashTags";
     }
 
     @Override

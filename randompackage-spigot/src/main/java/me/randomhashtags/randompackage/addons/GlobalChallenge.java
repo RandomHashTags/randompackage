@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.utils.addons.RPAddon;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

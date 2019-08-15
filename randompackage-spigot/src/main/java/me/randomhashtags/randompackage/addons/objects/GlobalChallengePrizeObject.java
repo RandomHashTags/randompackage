@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.objects;
 
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
-import me.randomhashtags.randompackage.utils.RPAddon;
+import me.randomhashtags.randompackage.utils.addons.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

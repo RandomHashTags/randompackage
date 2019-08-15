@@ -7,7 +7,8 @@ import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
-import me.randomhashtags.randompackage.utils.RPEvents;
+import me.randomhashtags.randompackage.utils.listeners.RPEvents;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
@@ -45,8 +46,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
-import static me.randomhashtags.randompackage.utils.RPFeature.givedp;
-import static me.randomhashtags.randompackage.utils.RPFeature.givedpCategories;
 
 public final class RandomPackage extends JavaPlugin implements Listener {
     public static RandomPackage getPlugin;
@@ -55,7 +54,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     private RandomPackageAPI api;
     private RPEvents rpevents;
-    private VaultAPI vapi;
 
     public static String spawner;
     public static Plugin spawnerPlugin, mcmmo;
@@ -81,12 +79,12 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         api = RandomPackageAPI.api;
         rpevents = RPEvents.getRPEvents();
 
-        vapi = VaultAPI.getVaultAPI();
-        vapi.setupEconomy();
+        VaultAPI.getVaultAPI().setupEconomy();
 
         api.enable();
         getCommand("randompackage").setExecutor(api);
         rpevents.enable();
+        RegionalAPI.getRegionalAPI().setup(this);
 
         final CommandManager cmd = CommandManager.getCommandManager(this);
 
@@ -134,7 +132,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoadingg(Trinkets.getTrinkets(), null, isTrue("trinkets"));
         cmd.tryLoading(MonthlyCrates.getMonthlyCrates(), getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
         cmd.tryLoadingg(ServerCrates.getServerCrates(), null, isTrue("server crates"));
-        cmd.tryLoading(Titles.getTitles(), getHash("title", "titles"), isTrue("titles"));
+        cmd.tryLoadingg(Titles.getTitles(), Arrays.asList("title"), isTrue("title"));
         cmd.tryLoading(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
         cmd.tryLoading(Shop.getShop(), null, isTrue("shop"));
         cmd.tryLoadingg(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
@@ -176,17 +174,18 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
     private void loadSoftDepends() {
         final PluginManager pm = Bukkit.getPluginManager();
-        mcmmo = pm.isPluginEnabled("mcMMO") ? pm.getPlugin("mcMMO") : null;
+        if(isTrue("supported plugins.mechanics.MCMMO Classic", true) && pm.isPluginEnabled("mcMMO")) {
+            mcmmo = pm.getPlugin("mcMMO");
+        }
         tryLoadingSpawner();
-        if(isTrue("supported plugins.standalone.PlaceholderAPI") && pm.isPluginEnabled("PlaceholderAPI")) {
+        if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pm.isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
             PAPI.getPAPI();
         }
-        RegionalAPI.getRegionalAPI().setup(this);
     }
     public void tryLoadingSpawner() {
-        final String ss = isTrue("supported plugins.mechanics.SilkSpawners") && pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
-        final String es = isTrue("supported plugins.mechanics.EpicSpawners") && pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
+        final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
+        final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
         final boolean epic = es != null;
         if(epic || ss != null) {
             spawnerPlugin = pm.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
@@ -200,8 +199,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         api.disable();
 
         CommandManager.getCommandManager(null).disable();
-        givedp = null;
-        givedpCategories = null;
+        RPFeature.d();
         HandlerList.unregisterAll((Listener) this);
         Bukkit.getScheduler().cancelTasks(this);
     }

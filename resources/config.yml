@@ -14,7 +14,8 @@ supported plugins:
   mechanics:
     SilkSpawners: true
     EpicSpawners: true
-    MCMMO Classic/Overhaul: true
+    MCMMO Classic: true
+    MCMMO Overhaul: false
   regional:
     FactionsUUID: true
     ASkyblock: false
@@ -277,7 +278,7 @@ wild pvp:
     - pvp
 #
 raid events:
-  enabled: true
+  enabled: false
   cmds:
     - raid
 #
@@ -300,16 +301,12 @@ showcase:
     - showcase
 #
 spawner stacking:
-  enabled: true
+  enabled: false
 #
 splitsouls:
   enabled: true
   cmds:
     - splitsouls
-#
-randompackage: # Not disableable
-  cmds:
-    - rp
 #
 tinkerer:
   enabled: true

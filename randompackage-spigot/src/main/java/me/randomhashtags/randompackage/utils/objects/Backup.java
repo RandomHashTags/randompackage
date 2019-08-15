@@ -14,7 +14,7 @@ public class Backup extends UVersion {
                 final String a = toReadableDate(new Date(), "MMMM-dd-yyyy HH_mm_ss z");
                 FileUtils.copyDirectory(randompackage.getDataFolder(), new File(randompackage.getDataFolder().getAbsolutePath() + "_backups", a));
                 System.out.println("[RandomPackage] Successfully backed up data to folder \"" + a + "\"!");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

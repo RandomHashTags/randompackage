@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.utils.database;
 
-import me.randomhashtags.randompackage.utils.database.files.YamlFile;
+import me.randomhashtags.randompackage.utils.database.file.DatabaseFile;
 
 public abstract class Database {
     private static Database database;
-    protected void setDatabase(Database base) { database = base; }
-    public Database getDatabase() { return database; }
+    public static void setDatabase(Database base) { database = base; }
+    public static Database getDatabase() { return database; }
 
-    public abstract YamlFile getFile(String folder, String file);
+    public abstract DatabaseFile getFile(String folder, String file);
 }

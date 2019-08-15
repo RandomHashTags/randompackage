@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
-import me.randomhashtags.randompackage.addons.usingfile.FileKitEvolution;
-import me.randomhashtags.randompackage.addons.usingfile.FileKitGlobal;
-import me.randomhashtags.randompackage.addons.usingfile.FileKitMastery;
+import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
+import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
+import me.randomhashtags.randompackage.utils.addons.FileKitMastery;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;

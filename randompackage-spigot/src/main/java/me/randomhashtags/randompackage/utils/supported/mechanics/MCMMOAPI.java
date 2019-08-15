@@ -5,8 +5,6 @@ import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
-import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOOverhaul;
-import me.randomhashtags.randompackage.utils.supported.plugins.MCMMOClassic;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class MCMMOAPI extends GlobalChallenges implements Listener {
 	private static MCMMOAPI instance;

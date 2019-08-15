@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
-import me.randomhashtags.randompackage.addons.usingfile.FileKitGlobal;
+import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class KitsGlobal extends Kits {
     private static KitsGlobal instance;

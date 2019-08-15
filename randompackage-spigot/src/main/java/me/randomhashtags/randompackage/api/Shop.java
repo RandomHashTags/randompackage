@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.usingfile.FileShopCategory;
+import me.randomhashtags.randompackage.utils.addons.FileShopCategory;
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

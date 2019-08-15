@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.TransmogScroll;
-import me.randomhashtags.randompackage.addons.usingpath.PathTransmogScroll;
+import me.randomhashtags.randompackage.utils.addons.PathTransmogScroll;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
-import me.randomhashtags.randompackage.addons.usingfile.FilePlayerQuest;
+import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.EventAttributes;

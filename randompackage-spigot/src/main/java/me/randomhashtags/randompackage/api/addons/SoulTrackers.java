@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.SoulTracker;
-import me.randomhashtags.randompackage.addons.usingpath.PathSoulTracker;
+import me.randomhashtags.randompackage.utils.addons.PathSoulTracker;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

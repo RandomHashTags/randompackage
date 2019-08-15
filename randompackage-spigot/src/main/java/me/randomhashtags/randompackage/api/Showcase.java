@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.utils.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class Showcase extends RPFeature implements CommandExecutor {
 	private static Showcase instance;
