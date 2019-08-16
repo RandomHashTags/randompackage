@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.ActiveBooster;
+import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 
 public class BoosterExpireEvent extends AbstractEvent {
     public final ActiveBooster booster;

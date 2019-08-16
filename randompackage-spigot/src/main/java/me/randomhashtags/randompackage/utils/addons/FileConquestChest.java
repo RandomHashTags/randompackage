@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.ConquestChest;
 import me.randomhashtags.randompackage.addons.objects.ConquestMob;
-import me.randomhashtags.randompackage.addons.active.LivingConquestChest;
+import me.randomhashtags.randompackage.addons.living.LivingConquestChest;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

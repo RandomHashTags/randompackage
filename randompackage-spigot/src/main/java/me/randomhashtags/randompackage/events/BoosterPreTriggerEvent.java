@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.ActiveBooster;
+import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

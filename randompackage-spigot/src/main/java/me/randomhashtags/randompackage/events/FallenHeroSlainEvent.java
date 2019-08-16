@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
+import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import org.bukkit.entity.LivingEntity;
 
 public class FallenHeroSlainEvent extends AbstractEvent {

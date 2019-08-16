@@ -11,7 +11,7 @@ import me.randomhashtags.randompackage.events.FundDepositEvent;
 import me.randomhashtags.randompackage.events.GlobalChallengeParticipateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;

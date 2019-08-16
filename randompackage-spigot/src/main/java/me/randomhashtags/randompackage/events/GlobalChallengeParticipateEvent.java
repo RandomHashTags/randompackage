@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 

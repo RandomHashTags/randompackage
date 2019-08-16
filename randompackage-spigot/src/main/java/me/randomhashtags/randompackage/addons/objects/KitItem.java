@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.addons.objects;
 import java.util.List;
 
 public class KitItem {
-
     public final Object kit;
     public final String path;
     public int chance, reqLevel;

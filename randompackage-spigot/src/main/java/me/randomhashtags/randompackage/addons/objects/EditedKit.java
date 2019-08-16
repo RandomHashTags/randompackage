@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EditedKit {
-
     public static HashMap<Player, EditedKit> editing;
 
     public Player player;

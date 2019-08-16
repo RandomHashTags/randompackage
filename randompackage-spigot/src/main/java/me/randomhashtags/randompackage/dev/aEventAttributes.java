@@ -36,9 +36,11 @@ public class aEventAttributes extends RPFeature {
 
     private void tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes) {
         if(event != null && attributes != null) {
-            final String first = attributes.get(0).split(";")[0].toLowerCase();
-            if(first.equals(event.getEventName().split("Event")[0])) {
-
+            final String e = event.getEventName().split(";")[0].toLowerCase();
+            for(String s : attributes) {
+                final String first = s.split(";")[0].toLowerCase();
+                if(first.equals(e)) {
+                }
             }
         }
     }

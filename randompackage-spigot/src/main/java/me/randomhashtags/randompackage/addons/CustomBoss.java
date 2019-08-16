@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addons;
 import me.randomhashtags.randompackage.utils.addons.RPSpawnable;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
-import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
+import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.EnvoyCrate;
 import me.randomhashtags.randompackage.utils.addons.FileEnvoyCrate;
 import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.active.LivingEnvoyCrate;
+import me.randomhashtags.randompackage.addons.living.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;

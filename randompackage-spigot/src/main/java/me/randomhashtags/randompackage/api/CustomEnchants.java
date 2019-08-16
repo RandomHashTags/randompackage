@@ -13,7 +13,7 @@ import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;

@@ -12,7 +12,7 @@ import me.randomhashtags.randompackage.events.MaskUnequipEvent;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.active.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;

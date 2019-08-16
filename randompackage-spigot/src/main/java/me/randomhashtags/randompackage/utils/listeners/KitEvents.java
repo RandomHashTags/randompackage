@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.listeners;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
-import me.randomhashtags.randompackage.addons.active.LivingFallenHero;
+import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

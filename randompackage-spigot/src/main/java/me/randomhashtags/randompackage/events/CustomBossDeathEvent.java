@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.LivingCustomBoss;
+import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import org.bukkit.event.Cancellable;
 
 public class CustomBossDeathEvent extends AbstractEvent implements Cancellable {

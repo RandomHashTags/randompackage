@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.addons.active.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
@@ -28,7 +28,6 @@ import java.util.*;
 public abstract class newEventAttributes extends RPFeature {
     private static int loadedInstances = 0;
     private static boolean isenabled = false;
-    private final boolean isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
 
     protected void loadUtils() {
         if(!isenabled) {

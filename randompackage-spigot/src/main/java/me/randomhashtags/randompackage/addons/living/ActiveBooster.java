@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addons.active;
+package me.randomhashtags.randompackage.addons.living;
 
 import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.events.BoosterActivateEvent;

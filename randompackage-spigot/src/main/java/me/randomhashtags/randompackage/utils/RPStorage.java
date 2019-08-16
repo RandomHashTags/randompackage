@@ -24,6 +24,7 @@ import static me.randomhashtags.randompackage.utils.RPFeature.separator;
 public abstract class RPStorage extends RegionalAPI {
     protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
+    protected static final boolean isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
 
     private static HashMap<String, YamlConfiguration> cached = new HashMap<>();
 

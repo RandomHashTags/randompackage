@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons.objects;
 
-import me.randomhashtags.randompackage.addons.active.LivingConquestMob;
+import me.randomhashtags.randompackage.addons.living.LivingConquestMob;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;

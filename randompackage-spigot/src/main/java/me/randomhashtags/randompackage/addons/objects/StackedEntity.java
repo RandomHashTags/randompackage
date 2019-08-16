@@ -90,7 +90,6 @@ public class StackedEntity {
                 target.remove();
                 if(se != null) se.remove(false, null);
             }
-
         }
     }
     public void remove(boolean dropLoot, LivingEntity killer) {

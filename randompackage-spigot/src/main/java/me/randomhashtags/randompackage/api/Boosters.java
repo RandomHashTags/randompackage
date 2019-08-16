@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Booster;
-import me.randomhashtags.randompackage.addons.active.ActiveBooster;
+import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.utils.addons.FileBooster;
 import me.randomhashtags.randompackage.events.*;

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
 import me.randomhashtags.randompackage.utils.addons.RPAddon;
 

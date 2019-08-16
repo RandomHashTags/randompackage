@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.events;
 
-import me.randomhashtags.randompackage.addons.active.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
 
 public class GlobalChallengeEndEvent extends AbstractEvent {
 	public final ActiveGlobalChallenge challenge;
