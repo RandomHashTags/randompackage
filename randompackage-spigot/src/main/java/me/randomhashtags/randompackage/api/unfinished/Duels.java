@@ -52,10 +52,7 @@ public class Duels extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Duels &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
-        type = null;
-        godset = null;
-        deleteAll(Feature.DUELS);
+        duelArenas = null;
         instance = null;
     }
 

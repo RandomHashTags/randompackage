@@ -121,6 +121,7 @@ public class CommandManager {
         for(RPFeature f : features.values()) {
             disable(f);
         }
+        instance = null;
     }
     public void disable(RPFeature f) {
         if(f.isEnabled()) {
@@ -165,7 +166,6 @@ public class CommandManager {
             updateBrigadierCmd(cmd, true);
         }
     }
-
 
     private Object getPrivateField(Object object, String field) throws Exception {
         /* Code from "zeeveener" at https://bukkit.org/threads/131808/ , edited by RandomHashTags */

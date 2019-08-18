@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public class FileGlobalChallenge extends GlobalChallenge {
+public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
     private ItemStack display;
     public FileGlobalChallenge(File f) {
         load(f);

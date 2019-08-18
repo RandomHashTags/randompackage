@@ -1,53 +1,29 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifiable;
-import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.addons.RPAddon;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
+import me.randomhashtags.randompackage.addons.utils.Attributable;
+import me.randomhashtags.randompackage.addons.utils.Toggleable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-public abstract class CustomEnchant extends RPAddon implements Identifiable {
-    public abstract boolean isEnabled();
-    public abstract String getName();
-    public abstract List<String> getLore();
-    public abstract int getMaxLevel();
-    public abstract List<String> getAppliesTo();
-    public abstract String getRequiredEnchant();
-    public abstract int[] getAlchemist();
-    public abstract int getAlchemistUpgradeCost(int level);
-    public abstract int[] getTinkerer();
-    public abstract int getTinkererValue(int level);
-    public abstract String getEnchantProcValue();
-    public abstract List<String> getAttributes();
+public interface CustomEnchant extends Attributable, Toggleable {
+    String getName();
+    List<String> getLore();
+    int getMaxLevel();
+    List<String> getAppliesTo();
+    String getRequiredEnchant();
+    BigDecimal[] getAlchemist();
+    BigDecimal[] getTinkerer();
+    String getEnchantProcValue();
 
-    public static CustomEnchant valueOf(String string) { return valueOf(string, false); }
-    public static CustomEnchant valueOf(String string, boolean checkDisabledEnchants) {
-        if(string != null) {
-            final String s = ChatColor.stripColor(string);
-            if(enabled != null) {
-                for(CustomEnchant ce : enabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
-                        return ce;
-                }
-            }
-            if(checkDisabledEnchants && disabled != null) {
-                for(CustomEnchant ce : disabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
-                        return ce;
-                }
-            }
-        }
-        return null;
+    default BigDecimal getAlchemistUpgradeCost(int level) {
+        final BigDecimal[] i = getAlchemist();
+        final int l = level-1;
+        return i.length < l ? i[l] : BigDecimal.ZERO;
     }
-    public static CustomEnchant valueOf(ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomEnchant e = valueOf(is.getItemMeta().getDisplayName());
-            final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfEnchantRarity(e);
-            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
-        }
-        return null;
+    default BigDecimal getTinkererValue(int level) {
+        final BigDecimal[] i = getTinkerer();
+        final int l = level-1;
+        return i.length < l ? i[l] : BigDecimal.ZERO;
     }
 }

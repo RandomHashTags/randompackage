@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.ShopCategory;
+import me.randomhashtags.randompackage.addons.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;

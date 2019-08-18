@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.MonthlyCrate;
+import me.randomhashtags.randompackage.addons.legacy.MonthlyCrate;
 import me.randomhashtags.randompackage.utils.addons.FileMonthlyCrate;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
@@ -16,11 +16,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -177,21 +179,9 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (monthlycrates != null ? monthlycrates.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
-        mysterycrate = null;
-        heroicmysterycrate = null;
-        alreadyClaimed = null;
-        locked = null;
-        background = null;
-        regularRewardsLeft = null;
-        bonusRewardsLeft = null;
-        categoryView = null;
-        categories = null;
-        categoriez = null;
-        categoryViewBackground = null;
         for(Player p : playertimers.keySet()) p.closeInventory();
-        playertimers = null;
         monthlycrates = null;
+        instance = null;
     }
 
     public void viewCrates(Player player) {
@@ -391,12 +381,12 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         return -1;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         final ItemStack c = event.getCurrentItem();
-        if(!event.isCancelled() && c != null && !c.getType().equals(Material.AIR) && top.getHolder() == player) {
+        if(c != null && !c.getType().equals(Material.AIR) && top.getHolder() == player) {
             final int r = event.getRawSlot();
             final String title = event.getView().getTitle();
             if(title.equals(gui.getTitle())) {
@@ -507,9 +497,9 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
-        final Inventory top = player.getOpenInventory().getTopInventory();
-        final MonthlyCrate m = MonthlyCrate.valueOf(player.getOpenInventory().getTitle());
+        final InventoryView open = player.getOpenInventory();
+        final MonthlyCrate m = MonthlyCrate.valueOf(open.getTitle());
         if(m != null)
-            exit(player, top, m);
+            exit(player, open.getTopInventory(), m);
     }
 }

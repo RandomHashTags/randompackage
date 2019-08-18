@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.utils.addons.PathRarityGem;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.utils.addons.PathRarityGem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,25 +53,23 @@ public class RarityGems extends CustomEnchantUtils {
         }
     }
     public void unload() {
-        instance = null;
-        deleteAll(Feature.RARITY_GEMS);
+        raritygems = null;
         unloadUtils();
+        instance = null;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerDropItemEvent(PlayerDropItemEvent event) {
-        if(!event.isCancelled()) {
-            final RarityGem gem = valueOfRarityGem(event.getItemDrop().getItemStack());
-            if(gem != null) {
-                final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-                if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
-            }
+        final RarityGem gem = valueOfRarityGem(event.getItemDrop().getItemStack());
+        if(gem != null) {
+            final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
+            if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack curs = event.getCursor(), curr = event.getCurrentItem();
-        if(!event.isCancelled() && curr != null && curs != null && curr.hasItemMeta() && curs.hasItemMeta()) {
+        if(curr != null && curs != null && curr.hasItemMeta() && curs.hasItemMeta()) {
             final int cursorAmount = curs.getAmount();
             final RarityGem cursor = valueOfRarityGem(curs), current = cursor != null ? valueOfRarityGem(curr) : null;
             if(cursor == null || current == null) return;
@@ -94,7 +91,7 @@ public class RarityGems extends CustomEnchantUtils {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack I = event.getItem();
         final Player player = event.getPlayer();
@@ -108,7 +105,7 @@ public class RarityGems extends CustomEnchantUtils {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
         final LivingEntity e = event.getEntity();
         final UUID u = e.getUniqueId();

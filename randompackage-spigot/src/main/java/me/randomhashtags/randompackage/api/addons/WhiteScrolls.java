@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.WhiteScroll;
-import me.randomhashtags.randompackage.utils.addons.PathWhiteScroll;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.addons.PathWhiteScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,27 +39,25 @@ public class WhiteScrolls extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (whitescrolls != null ? whitescrolls.size() : 0) + " White Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
-        whitescrolls = null;
         unloadUtils();
+        whitescrolls = null;
+        instance = null;
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-            if(cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore() && current != null) {
-                final WhiteScroll w = valueOf(cursor);
-                final Player player = (Player) event.getWhoClicked();
-                if(applyWhiteScroll(player, current, w)) {
-                    event.setCancelled(true);
-                    event.setCurrentItem(current);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
-                    player.updateInventory();
-                }
+        final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
+        if(cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore() && current != null) {
+            final WhiteScroll w = valueOf(cursor);
+            final Player player = (Player) event.getWhoClicked();
+            if(applyWhiteScroll(player, current, w)) {
+                event.setCancelled(true);
+                event.setCurrentItem(current);
+                final int a = cursor.getAmount();
+                if(a == 1) event.setCursor(new ItemStack(Material.AIR));
+                else       cursor.setAmount(a-1);
+                player.updateInventory();
             }
         }
     }

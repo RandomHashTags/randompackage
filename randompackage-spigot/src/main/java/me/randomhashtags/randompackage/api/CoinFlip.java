@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipMatch;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipOption;
 import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
+import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -19,6 +19,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -146,21 +147,6 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Coin Flip &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        tax = 0;
-        countdownStart = 0;
-        config = null;
-        gui = null;
-        options = null;
-        addedlore = null;
-        optionz = null;
-        wagerAvailable = null;
-        wagerUnavailable = null;
-        wagerName = null;
-        wagerLore = null;
-        winnerLore = null;
-        rollingLore = null;
-        yourSelection = null;
-        opponentSelection = null;
         for(OfflinePlayer p : picking.keySet()) {
             if(p.isOnline()) {
                 p.getPlayer().closeInventory();
@@ -182,14 +168,9 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         }
         saveOtherData();
         for(Player p : active.keySet()) p.closeInventory();
-        challengeSlots = null;
-        tasks = null;
-        picking = null;
-        goingToChallenge = null;
-        active = null;
-        available = null;
         CoinFlipOption.paths = null;
         CoinFlipMatch.matches = null;
+        instance = null;
     }
 
     public void viewCoinFlips(Player player) {
@@ -560,7 +541,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();

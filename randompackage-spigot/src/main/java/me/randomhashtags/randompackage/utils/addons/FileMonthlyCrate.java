@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileMonthlyCrate extends MonthlyCrate {
+public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
     private ItemStack item, background, redeem, bonus1, bonus2;
     private UInventory regular, bonus;
     private List<Integer> rewardSlots, bonusRewardSlots;

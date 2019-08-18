@@ -5,9 +5,9 @@ import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
-import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -92,7 +93,6 @@ public class KitsEvolution extends Kits {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Evolution Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;
         if(f != null) {
             for(LivingFallenHero l : new ArrayList<>(f.values())) {
@@ -106,6 +106,8 @@ public class KitsEvolution extends Kits {
                 if(k instanceof FileKitEvolution) kits.remove(k.getIdentifier());
             }
         }
+        unloadKitUtils();
+        instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return tiermultipliers; }
@@ -199,14 +201,14 @@ public class KitsEvolution extends Kits {
                             if(s.startsWith("{") && s.contains("reqlevel=")) {
                                 final String[] a = s.split(":");
                                 final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
-                                final CustomEnchant enchant = CustomEnchant.valueOf(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final CustomEnchant enchant = valueOfCustomEnchant(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(random.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
                                     lore.add(valueOfEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
                                 final String r = s.split(":")[random.nextInt(s.split(":").length)];
                                 int level = getRemainingInt(s.split("\\{")[1].split("}")[0]);
-                                final CustomEnchant enchant = CustomEnchant.valueOf(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final CustomEnchant enchant = valueOfCustomEnchant(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
 
                                 if(enchant != null) {
                                     if(level == -1) level = random.nextInt(enchant.getMaxLevel());
@@ -245,12 +247,12 @@ public class KitsEvolution extends Kits {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled() && event.getWhoClicked().getOpenInventory().getTopInventory().getHolder() == event.getWhoClicked()) {
+        final Player player = (Player) event.getWhoClicked();
+        if(player.getOpenInventory().getTopInventory().getHolder() == player) {
             final String t = event.getView().getTitle(), preview = this.preview.getTitle();
             if(t.equals(vkit.getTitle()) || t.equals(preview)) {
-                final Player player = (Player) event.getWhoClicked();
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();
@@ -316,7 +318,7 @@ public class KitsEvolution extends Kits {
                 final int size = s.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
                 for(int i = 1; i <= amount; i++) {
                     final CustomKit k = getKit(s.get(random.nextInt(size)));
-                    giveItem(player, k.getFallenHeroSpawnItem(k));
+                    giveItem(player, k.getFallenHeroItem(k, true));
                 }
             }
         }

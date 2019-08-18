@@ -21,6 +21,7 @@ public class aEventAttributes extends RPFeature {
     public void load() {
     }
     public void unload() {
+        instance = null;
     }
 
 

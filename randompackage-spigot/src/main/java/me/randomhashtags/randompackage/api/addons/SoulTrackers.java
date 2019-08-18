@@ -2,9 +2,8 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.SoulTracker;
-import me.randomhashtags.randompackage.utils.addons.PathSoulTracker;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.utils.addons.PathSoulTracker;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -58,9 +57,9 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
         sendConsoleMessage("&6[RandomPackage] &aLoaded " +  (soultrackers != null ? soultrackers.size() : 0) + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
-        deleteAll(Feature.SOUL_TRACKERS);
+        soultrackers = null;
         unloadUtils();
+        instance = null;
     }
 
     public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {
@@ -176,32 +175,30 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
-            final SoulTracker soultracker = valueOf(cursor);
-            if(soultracker != null && current != null && !current.getType().equals(Material.AIR)) {
-                final String n = current.getType().name();
-                for(String s : soultracker.getAppliesTo()) {
-                    if(n.endsWith(s.toUpperCase())) {
-                        item = current;
-                        final Player player = (Player) event.getWhoClicked();
-                        applySoulTracker(player, current, soultracker);
-                        //playSuccess((Player) event.getWhoClicked());
-                        event.setCancelled(true);
-                        event.setCurrentItem(item);
-                        final int a = cursor.getAmount();
-                        if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                        else       cursor.setAmount(a-1);
-                        player.updateInventory();
-                        break;
-                    }
+        final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
+        final SoulTracker soultracker = valueOf(cursor);
+        if(soultracker != null && current != null && !current.getType().equals(Material.AIR)) {
+            final String n = current.getType().name();
+            for(String s : soultracker.getAppliesTo()) {
+                if(n.endsWith(s.toUpperCase())) {
+                    item = current;
+                    final Player player = (Player) event.getWhoClicked();
+                    applySoulTracker(player, current, soultracker);
+                    //playSuccess((Player) event.getWhoClicked());
+                    event.setCancelled(true);
+                    event.setCurrentItem(item);
+                    final int a = cursor.getAmount();
+                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
+                    else       cursor.setAmount(a-1);
+                    player.updateInventory();
+                    break;
                 }
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
         final LivingEntity victim = event.getEntity();
         final Player killer = victim.getKiller();

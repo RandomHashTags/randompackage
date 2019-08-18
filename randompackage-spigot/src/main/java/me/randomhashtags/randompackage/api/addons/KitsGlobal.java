@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
-import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -101,7 +102,6 @@ public class KitsGlobal extends Kits {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Global Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;
         if(f != null) {
             for(LivingFallenHero l : new ArrayList<>(f.values())) {
@@ -117,6 +117,7 @@ public class KitsGlobal extends Kits {
         }
         FileKitGlobal.heroicprefix = null;
         unloadKitUtils();
+        instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return tiermultipliers; }
@@ -132,11 +133,11 @@ public class KitsGlobal extends Kits {
     public List<String> getPermissionsLocked() { return permissionsLocked; }
     public List<String> getPermissionsPreview() { return permissionsPreview; }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR) && top.getHolder() == player) {
+        if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR) && top.getHolder() == player) {
             final String t = event.getView().getTitle(), preview = this.preview.getTitle();
             final int r = event.getRawSlot();
             if(t.equals(gkit.getTitle()) || t.equals(preview)) {
@@ -181,7 +182,7 @@ public class KitsGlobal extends Kits {
             final int size = s.size(), amount = config.getInt("gkits.items.fallen hero bundle.reveal amount");
             for(int i = 1; i <= amount; i++) {
                 final CustomKit k = getKit(s.get(random.nextInt(size)));
-                giveItem(player, k.getFallenHeroSpawnItem(k));
+                giveItem(player, k.getFallenHeroItem(k, true));
             }
         }
     }

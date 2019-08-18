@@ -51,4 +51,5 @@ public class FilePet extends RPAddon implements Pet {
         }
         return a;
     }
+    public List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

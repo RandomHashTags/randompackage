@@ -5,13 +5,20 @@ import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute {
+public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute, Listener {
     private boolean cancelled;
     private HashMap<String, Entity> recipients;
+    private static List<UUID> spawnedFromSpawner = new ArrayList<>();
 
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
@@ -419,4 +426,15 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
         }
     }
     public abstract void call(Entity recipient, Object value);
+
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void creatureSpawnEvent(CreatureSpawnEvent event) {
+        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
+            final UUID u = event.getEntity().getUniqueId();
+            if(!spawnedFromSpawner.contains(u)) {
+                spawnedFromSpawner.add(u);
+            }
+        }
+    }
 }

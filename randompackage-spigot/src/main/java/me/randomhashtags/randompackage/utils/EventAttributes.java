@@ -225,7 +225,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final CustomEnchant enchant = event.enchant;
-            final String rarity = valueOfEnchantRarity(enchant).getIdentifier(), name = enchant.getYamlName(), result = event.result;
+            final String rarity = valueOfEnchantRarity(enchant).getIdentifier(), name = enchant.getIdentifier(), result = event.result;
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;
@@ -283,7 +283,7 @@ public abstract class EventAttributes extends RPFeature {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
             final boolean cancelled = event.isCancelled();
-            final String rarity = valueOfEnchantRarity(CustomEnchant.valueOf(event.result)).getIdentifier();
+            final String rarity = valueOfEnchantRarity(valueOfCustomEnchant(event.result)).getIdentifier();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;

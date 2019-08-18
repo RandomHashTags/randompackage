@@ -79,14 +79,14 @@ public class Boosters extends newEventAttributes {
 	}
 	public void unload() {
 		backup();
-		instance = null;
-		activeFactionBoosters = null;
-		activePlayerBoosters = null;
 		if(mcmmoIsEnabled()) {
 			HandlerList.unregisterAll(mcmmoboosters);
 			mcmmoboosters = null;
 		}
-		deleteAll(Feature.BOOSTERS);
+		boosters = null;
+		instance = null;
+		activeFactionBoosters = null;
+		activePlayerBoosters = null;
 	}
 
 	public void backup() {
@@ -235,7 +235,7 @@ public class Boosters extends newEventAttributes {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}
 				break;
-			case "SELF":
+			default: // SELF
 				if(activePlayerBoosters.containsKey(u) && a.isOnline()) {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}

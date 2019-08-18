@@ -1,80 +1,56 @@
 package me.randomhashtags.randompackage.addons;
 
+import me.randomhashtags.randompackage.addons.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.utils.addons.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public abstract class Lootbox extends RPAddon implements Itemable {
-    public abstract String getName();
-    public abstract String getGuiTitle();
-    public abstract String getPreviewTitle();
-    public abstract String getRegularLootSize();
-    public abstract String getBonusLootSize();
-    public abstract int getPriority();
-    public abstract int getAvailableFor();
-    public abstract int getGuiSize();
-    public abstract List<String> getGuiFormat();
-    public abstract List<String> getRegularLootFormat();
-    public abstract List<String> getJackpotLootFormat();
-    public abstract List<String> getBonusLootFormat();
-    public abstract List<String> getRandomLoot();
-    public abstract List<String> getJackpotLoot();
-    public abstract List<String> getBonusLoot();
-    public abstract ItemStack getBackground();
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-    public int randomRegularLootSize() {
-        final String s = getRegularLootSize();
-        final boolean b = s.contains("-");
-        final int min = Integer.parseInt(b ? s.split("-")[0] : s), max = maxRegularLoot();
-        return b ? min+random.nextInt(max-min+1) : min;
+public interface Lootbox extends Itemable {
+    int getPriority();
+    long getAvailableFor();
+    int getGuiSize();
+    String getName();
+    String getGuiTitle();
+    String getPreviewTitle();
+    String getRegularLootSize();
+    String getBonusLootSize();
+
+    List<String> getGuiFormat();
+    List<String> getRegularLootFormat();
+    List<String> getJackpotLootFormat();
+    List<String> getBonusLootFormat();
+    List<String> getRegularLoot();
+    List<String> getJackpotLoot();
+    List<String> getBonusLoot();
+    ItemStack getBackground();
+
+    default List<String> getRewards(final LootboxRewardType type) {
+        return type.equals(LootboxRewardType.REGULAR) ? getRegularLoot() : type.equals(LootboxRewardType.JACKPOT) ? getJackpotLoot() : getBonusLoot();
     }
-    public int maxRegularLoot() {
-        final String s = getRegularLootSize();
-        return s.contains("-") ? Integer.parseInt(s.split("-")[1]) : Integer.parseInt(s);
-    }
-    public List<ItemStack> regularLoot() {
+    default List<ItemStack> getAllRewards(final LootboxRewardType type) {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRandomLoot()) {
+        final List<String> l = getRewards(type);
+        for(String s : l) {
             items.add(api.d(null, s));
         }
         return items;
     }
-    public String randomRegularLoot(List<String> excluding) {
-        final List<String> loot = new ArrayList<>(getRandomLoot());
-        loot.addAll(getJackpotLoot());
+    default String getRandomLoot(final LootboxRewardType type, final Random random, final List<String> excluding) {
+        final List<String> loot = new ArrayList<>(getRewards(type));
         for(String s : excluding) {
             loot.remove(s);
         }
         return loot.get(random.nextInt(loot.size()));
     }
-    public List<ItemStack> jackpotLoot() {
+
+    default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getJackpotLoot()) {
-            items.add(api.d(null, s));
-        }
-        return items;
-    }
-    public String randomBonusLoot(List<String> excluding) {
-        final List<String> loot = new ArrayList<>(getBonusLoot());
-        for(String s : excluding) {
-            loot.remove(s);
-        }
-        final int s = loot.size();
-        return s > 0 ? loot.get(random.nextInt(s)) : "air";
-    }
-    public List<ItemStack> bonusLoot() {
-        final List<ItemStack> items = new ArrayList<>();
-        for(String s : getBonusLoot()) {
-            items.add(api.d(null, s));
-        }
-        return items;
-    }
-    public List<ItemStack> items() {
-        final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRandomLoot()) items.add(api.d(null, s));
+        for(String s : getRegularLoot()) items.add(api.d(null, s));
         for(String s : getJackpotLoot()) items.add(api.d(null, s));
         for(String s : getBonusLoot()) items.add(api.d(null, s));
         return items;

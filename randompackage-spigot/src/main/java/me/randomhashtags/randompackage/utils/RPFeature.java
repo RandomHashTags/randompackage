@@ -225,7 +225,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                             }
                         } else if(sl.startsWith("rpenchants{")) {
                             for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                final CustomEnchant e = CustomEnchant.valueOf(s);
+                                final CustomEnchant e = valueOfCustomEnchant(s);
                                 if(e != null && e.isEnabled()) {
                                     final EnchantRarity r = ce.valueOfEnchantRarity(e);
                                     if(r != null) {
@@ -260,8 +260,6 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         return item;
     }
 
-
-
     // Code by 'Boann' (https://stackoverflow.com/users/964243/boann) from https://stackoverflow.com/questions/3422673/how-to-evaluate-a-math-expression-given-in-string-form
     protected double eval(final String str) {
         return new Object() {
@@ -292,7 +290,6 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             // term = factor | term `*` factor | term `/` factor
             // factor = `+` factor | `-` factor | `(` expression `)`
             //        | number | functionName factor | factor `^` factor
-
             double parseExpression() {
                 double x = parseTerm();
                 for (;;) {

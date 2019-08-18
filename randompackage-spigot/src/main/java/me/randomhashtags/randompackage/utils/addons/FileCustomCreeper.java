@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FileCustomCreeper extends CustomExplosion {
+public class FileCustomCreeper extends RPAddon implements CustomExplosion {
     public static HashMap<UUID, FileCustomCreeper> living;
     private ItemStack item;
     public FileCustomCreeper(File f) {

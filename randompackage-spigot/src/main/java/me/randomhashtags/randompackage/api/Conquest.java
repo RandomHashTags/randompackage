@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ConquestChest;
-import me.randomhashtags.randompackage.events.ConquestDamageEvent;
-import me.randomhashtags.randompackage.utils.objects.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileConquestChest;
-import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import me.randomhashtags.randompackage.addons.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addons.living.LivingConquestMob;
+import me.randomhashtags.randompackage.addons.objects.ConquestMob;
+import me.randomhashtags.randompackage.events.ConquestDamageEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.addons.FileConquestChest;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -91,7 +92,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
 
         final List<String> conquests = otherdata.getStringList("conquests");
-        if(conquests != null && !conquests.isEmpty()) {
+        if(!conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");
                 new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
@@ -101,9 +102,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (conquestchests != null ? conquestchests.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
         for(int i : tasks) scheduler.cancelTask(i);
-        tasks = null;
 
         LivingConquestMob.deleteAll();
         final List<LivingConquestChest> C = LivingConquestChest.living;
@@ -118,8 +117,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
         saveOtherData();
 
         LivingConquestChest.deleteAll(false);
-        deleteAll(Feature.CONQUEST);
+        conquestchests = null;
         ConquestMob.deleteAll();
+        instance = null;
     }
     public void destroyConquests() {
         final List<LivingConquestChest> C = LivingConquestChest.living;
@@ -149,7 +149,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
         final LivingConquestChest c = LivingConquestChest.valueOf(event.getBlock().getLocation());
         if(c != null) {
@@ -173,8 +173,11 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private void chunkUnloadEvent(ChunkUnloadEvent event) {
         final Chunk c = event.getChunk();
         final LivingConquestChest l = LivingConquestChest.valueOf(c);
-        if(l != null && event instanceof Cancellable && !event.isCancelled()) {
-            event.setCancelled(true);
+        if(l != null && event instanceof Cancellable) {
+            final Cancellable ca = ((Cancellable) event);
+            if(!ca.isCancelled()) {
+                ca.setCancelled(true);
+            }
         }
     }
 

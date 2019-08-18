@@ -1,20 +1,23 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.Arrays;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
@@ -86,10 +89,10 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack c = event.getCurrentItem();
-        if(!event.isCancelled() && c != null && !c.getType().equals(Material.AIR)) {
+        if(c != null && !c.getType().equals(Material.AIR)) {
             final Player player = (Player) event.getWhoClicked();
             final Inventory top = player.getOpenInventory().getTopInventory();
             final int r = event.getRawSlot();

@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Lootbox;
-import me.randomhashtags.randompackage.utils.addons.FileLootbox;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.addons.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.addons.FileLootbox;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -132,18 +133,9 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             otherdata.set("lootboxes.started." + l.getIdentifier(), started.get(l));
         }
         saveOtherData();
-        config = null;
-        gui = null;
-        background = null;
-        opened = null;
-        rewardFormat = null;
-        guiLootboxes = null;
-        redeeming = null;
         for(Player p : new ArrayList<>(viewing)) p.closeInventory();
-        viewing = null;
-        tasks = null;
-        started = null;
-        deleteAll(Feature.LOOTBOXES);
+        lootboxes = null;
+        instance = null;
     }
 
     public void viewLootbox(Player player) {
@@ -204,9 +196,9 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         final Inventory top = player.getOpenInventory().getTopInventory();
         final List<Integer> countdownSlots = new ArrayList<>(), lootSlots = new ArrayList<>(), bonusSlots = new ArrayList<>();
 
-        final List<ItemStack> bonus = lootbox.bonusLoot();
-        List<ItemStack> regular = new ArrayList<>(lootbox.regularLoot());
-        regular.addAll(lootbox.jackpotLoot());
+        final List<ItemStack> bonus = lootbox.getAllRewards(LootboxRewardType.BONUS);
+        List<ItemStack> regular = new ArrayList<>(lootbox.getAllRewards(LootboxRewardType.REGULAR));
+        regular.addAll(lootbox.getAllRewards(LootboxRewardType.JACKPOT));
 
         redeeming.put(player, lootbox);
         for(int i = 0; i < format.size(); i++) {
@@ -248,8 +240,8 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         final Lootbox l = redeeming.get(player);
         final ItemStack air = new ItemStack(Material.AIR);
         final List<Integer> T = tasks.get(player);
-        List<ItemStack> L = new ArrayList<>(l.regularLoot());
-        L.addAll(l.jackpotLoot());
+        List<ItemStack> L = new ArrayList<>(l.getAllRewards(LootboxRewardType.REGULAR));
+        L.addAll(l.getAllRewards(LootboxRewardType.JACKPOT));
 
         for(int i = 1; i <= countdownStart; i++) {
             final int k = i;
@@ -284,7 +276,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     public void previewLootbox(Player player, Lootbox lootbox) {
         if(hasPermission(player, "RandomPackage.lootbox.preview", true)) {
             player.closeInventory();
-            final List<ItemStack> items = lootbox.items();
+            final List<ItemStack> items = lootbox.getAllRewards();
             final int s = ((items.size()+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, s, lootbox.getPreviewTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -293,34 +285,32 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            final String t = event.getView().getTitle();
-            final Lootbox l = valueOf(t), L = l == null ? valueof(t) : null;
-            if(redeeming.containsKey(player)) {
-                event.setCancelled(true);
-                player.updateInventory();
-            } else if(viewing.contains(player) || l != null || L != null) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final ItemStack c = event.getCurrentItem();
-                final int r = event.getRawSlot();
-                if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
-                if(t.equals(gui.getTitle())) {
-                    final Lootbox lootbox = guiLootboxes.getOrDefault(r, null);
-                    final String click = event.getClick().name();
-                    if(lootbox != null) {
-                        if(click.contains("LEFT")) tryClaiming(player, lootbox);
-                        else if(click.contains("RIGHT")) previewLootbox(player, lootbox);
-                    }
-                } else if(L != null) {
-                    player.closeInventory();
-                    sendStringListMessage(player, config.getStringList("messages.unlock"), null);
-                } else {
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        final String t = event.getView().getTitle();
+        final Lootbox l = valueOf(t), L = l == null ? valueof(t) : null;
+        if(redeeming.containsKey(player)) {
+            event.setCancelled(true);
+            player.updateInventory();
+        } else if(viewing.contains(player) || l != null || L != null) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final ItemStack c = event.getCurrentItem();
+            final int r = event.getRawSlot();
+            if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
+            if(t.equals(gui.getTitle())) {
+                final Lootbox lootbox = guiLootboxes.getOrDefault(r, null);
+                final String click = event.getClick().name();
+                if(lootbox != null) {
+                    if(click.contains("LEFT")) tryClaiming(player, lootbox);
+                    else if(click.contains("RIGHT")) previewLootbox(player, lootbox);
                 }
+            } else if(L != null) {
+                player.closeInventory();
+                sendStringListMessage(player, config.getStringList("messages.unlock"), null);
+            } else {
             }
         }
     }

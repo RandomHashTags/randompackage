@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -69,17 +70,8 @@ public class Trade extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Trade &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		config = null;
-		radius = 0;
-		countdown = 0;
-		title = null;
-		q = null;
-		divider = null;
-		accept = null;
-		accepting = null;
-		requests = null;
-		blacklistedMaterials = null;
 		ActiveTrade.trades = null;
+		instance = null;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -149,10 +141,10 @@ public class Trade extends RPFeature implements CommandExecutor {
 			a.cancel();
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final ItemStack c = event.getCurrentItem();
-		if(!event.isCancelled() && c != null && !c.getType().equals(Material.AIR)) {
+		if(c != null && !c.getType().equals(Material.AIR)) {
 			final Player player = (Player) event.getWhoClicked();
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final ActiveTrade a = ActiveTrade.valueOf(player);

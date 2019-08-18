@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
-import me.randomhashtags.randompackage.utils.addons.FileFallenHero;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
-import me.randomhashtags.randompackage.utils.listeners.KitEvents;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.addons.FileFallenHero;
+import me.randomhashtags.randompackage.utils.listeners.KitEvents;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -216,7 +216,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             for(String string : itemMeta.getLore()) {
                 final String sl = string.toLowerCase();
                 if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
-                    final CustomEnchant en = CustomEnchant.valueOf(string.split("\\{")[1].split("}")[0], true);
+                    final CustomEnchant en = valueOfCustomEnchant(string.split("\\{")[1].split("}")[0], true);
                     final boolean c = string.contains("chance=");
                     if(en != null && en.isEnabled() && (!c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
                         final int lvl = random.nextInt(en.getMaxLevel()+1);
@@ -296,29 +296,5 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 top.setItem(i, bg);
         }
         player.updateInventory();
-    }
-
-
-    public FallenHero valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
-        if(is != null && kits != null) {
-            for(CustomKit k : kits.values()) {
-                final ItemStack f = k.getFallenHeroSpawnItem(k);
-                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
-                    return k.getFallenHero();
-                }
-            }
-        }
-        return null;
-    }
-    public FallenHero valueOfFallenHeroGem(ItemStack is, Class type) {
-        if(is != null && kits != null) {
-            for(CustomKit k : kits.values()) {
-                final ItemStack f = k.getFallenHeroGemItem(k);
-                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
-                    return k.getFallenHero();
-                }
-            }
-        }
-        return null;
     }
 }

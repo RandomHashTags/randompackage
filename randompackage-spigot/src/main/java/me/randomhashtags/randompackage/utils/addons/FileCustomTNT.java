@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FileCustomTNT extends CustomExplosion {
+public class FileCustomTNT extends RPAddon implements CustomExplosion {
     public static HashMap<Location, FileCustomTNT> placed;
     public static HashMap<UUID, FileCustomTNT> primed;
 
@@ -26,6 +26,7 @@ public class FileCustomTNT extends CustomExplosion {
         addExplosion(getIdentifier(), this);
     }
     public String getIdentifier() { return "TNT_" + getYamlName(); }
+
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return item.clone();

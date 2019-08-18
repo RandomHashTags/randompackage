@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.addons;
 
-import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.legacy.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
 import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -74,13 +75,13 @@ public class KitsMastery extends Kits {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Mastery Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
         if(kits != null) {
             for(CustomKit k : new ArrayList<>(kits.values())) {
                 if(k instanceof FileKitMastery) kits.remove(k.getIdentifier());
             }
         }
         unloadKitUtils();
+        instance = null;
     }
     public boolean usesTiers() { return false; }
     public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return null; }
@@ -126,11 +127,11 @@ public class KitsMastery extends Kits {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && top.getHolder() == player) {
+        if(top.getHolder() == player) {
             final String t = event.getView().getTitle();
             if(t.equals(gui.getTitle())) {
                 event.setCancelled(true);

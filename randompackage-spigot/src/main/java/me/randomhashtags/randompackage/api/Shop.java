@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.ShopCategory;
+import me.randomhashtags.randompackage.addons.legacy.ShopCategory;
+import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import me.randomhashtags.randompackage.events.ShopPrePurchaseEvent;
 import me.randomhashtags.randompackage.events.ShopPreSellEvent;
 import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.events.ShopSellEvent;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileShopCategory;
-import me.randomhashtags.randompackage.addons.objects.ShopItem;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -70,9 +70,8 @@ public class Shop extends RPFeature implements CommandExecutor {
         sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (shopcategories != null ? shopcategories.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
-	    config = null;
-	    back = null;
-	    deleteAll(Feature.SHOP);
+	    shopcategories = null;
+	    instance = null;
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -89,11 +88,11 @@ public class Shop extends RPFeature implements CommandExecutor {
                 d = BigDecimal.valueOf(k);
         return BigDecimal.valueOf(d.doubleValue()/100);
     }
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-		if(!event.isCancelled() && top.getHolder() == player) {
+		if(top.getHolder() == player) {
 			final FileShopCategory s = titles.getOrDefault(event.getView().getTitle(), null);
 			if(s != null) {
                 event.setCancelled(true);

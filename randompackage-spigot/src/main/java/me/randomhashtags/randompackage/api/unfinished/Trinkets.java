@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -47,7 +46,7 @@ public class Trinkets extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (trinkets != null ? trinkets.size() : 0) + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        deleteAll(Feature.TRINKETS);
+        trinkets = null;
         instance = null;
     }
 

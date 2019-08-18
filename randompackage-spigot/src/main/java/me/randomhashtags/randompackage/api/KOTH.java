@@ -123,31 +123,6 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				player.setScoreboard(s.getNewScoreboard());
 		}
 		stopKOTH();
-
-		config = null;
-		lootbagInv = null;
-		lootbagrewards = null;
-		scorestart = 0;
-		startCapCountdown = 0;
-		scoreboard = 0;
-		lootbag = null;
-		displaySlot = null;
-		kothtitle = null;
-		kothname = null;
-		teleportLocation = null;
-		center = null;
-		cappingscoreboard = null;
-		capturedscoreboard = null;
-		captured = null;
-		limitedcommands = null;
-		status = null;
-		captureTime = 0;
-		captureRadius = 0;
-		started = 0;
-		rewardformat = null;
-		cappingStartedTime = 0;
-		currentPlayerCapturing = null;
-		previouscapturer = null;
 		instance = null;
 	}
 	
@@ -258,7 +233,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			sendStringListMessage(event.getPlayer(), config.getStringList("messages.event running"), null);
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerTeleportEvent(PlayerTeleportEvent event) {
 		final World w = center != null ? center.getWorld() : null;
 		final Player player = event.getPlayer();
@@ -409,10 +384,10 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		final Player player = event.getPlayer();
 		if(center != null && player.getWorld().equals(center.getWorld())) player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		if(!event.isCancelled() && center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED") && !limitedcommands.contains("*")) {
+		if(center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED") && !limitedcommands.contains("*")) {
 			final String m = event.getMessage().toLowerCase();
 			boolean did = false;
 			for(String string : limitedcommands) {
@@ -428,11 +403,11 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
-		if(!event.isCancelled() && top.getHolder() == player && event.getView().getTitle().equals(lootbagInv.getTitle())) {
+		if(top.getHolder() == player && event.getView().getTitle().equals(lootbagInv.getTitle())) {
 			event.setCancelled(true);
 			player.updateInventory();
 			player.closeInventory();

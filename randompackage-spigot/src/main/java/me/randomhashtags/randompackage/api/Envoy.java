@@ -44,7 +44,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
 		if(l == 0) {
-			
 		} else {
 		    final String a = args[0];
 			if(a.equals("help")) viewHelp(sender);
@@ -67,9 +66,8 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		preset = new ArrayList<>();
 		settingPreset = new ArrayList<>();
 
-		final YamlConfiguration a = otherdata;
-		final List<String> c = a.getStringList("envoy.preset");
-		if(c != null && !c.isEmpty())
+		final List<String> c = otherdata.getStringList("envoy.preset");
+		if(!c.isEmpty())
 			for(String s : c)
 				preset.add(toLocation(s));
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "envoy.yml"));
@@ -84,10 +82,10 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		itemMeta.setLore(Arrays.asList(ChatColor.GRAY + "Place me to add a preset envoy location for", ChatColor.GRAY + "a chance for an EnvoyCrate to spawn at this location."));
 		presetLocationPlacer.setItemMeta(itemMeta);
 
-		if(!a.getBoolean("saved default envoy tiers")) {
+		if(!otherdata.getBoolean("saved default envoy tiers")) {
 			final String[] e = new String[]{"ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"};
 			for(String s : e) save("envoy tiers", s + ".yml");
-			a.set("saved default envoy tiers", true);
+			otherdata.set("saved default envoy tiers", true);
 			saveOtherData();
 		}
 
@@ -130,16 +128,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		scheduler.cancelTask(spawnTask);
 		scheduler.cancelTask(task);
 		stopAllEnvoys();
-		config = null;
-		envoySummon = null;
 		givedpitem.items.remove("envoysummon");
-		presetLocationPlacer = null;
-		spawnTask = 0;
-		task = 0;
-		type = null;
-		preset = null;
-		settingPreset = null;
 		envoycrates = null;
+		instance = null;
 	}
 
 	public void stopAllEnvoys() {
@@ -184,18 +175,16 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-	    if(!event.isCancelled()) {
-	        final Player player = event.getPlayer();
-	        if(settingPreset.contains(player) && player.getItemInHand().equals(presetLocationPlacer)) {
-	            preset.add(event.getBlockPlaced().getLocation());
-            }
-        }
+		final Player player = event.getPlayer();
+		if(settingPreset.contains(player) && player.getItemInHand().equals(presetLocationPlacer)) {
+			preset.add(event.getBlockPlaced().getLocation());
+		}
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void blockBreakEvent(BlockBreakEvent event) {
-		if(!event.isCancelled() && settingPreset.contains(event.getPlayer())) {
+		if(settingPreset.contains(event.getPlayer())) {
 			preset.remove(event.getBlock().getLocation());
 		}
 	}
@@ -240,6 +229,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			final List<Location> preset = new ArrayList<>(this.preset);
 			for(int i = 1; i <= amount; i++) {
 				final Location r = preset.get(random.nextInt(preset.size()));
+				r.getChunk().load();
 				final World w = r.getWorld();
 				final Location newl = new Location(w, r.getBlockX(), r.getBlockY()-1, r.getBlockZ());
 				final EnvoyCrate crate = getRandomCrate(true, defaultTier);

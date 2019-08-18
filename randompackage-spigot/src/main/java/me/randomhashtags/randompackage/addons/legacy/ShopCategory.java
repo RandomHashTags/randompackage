@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addons;
+package me.randomhashtags.randompackage.addons.legacy;
 
 import me.randomhashtags.randompackage.api.Shop;
 import me.randomhashtags.randompackage.addons.utils.Inventoryable;

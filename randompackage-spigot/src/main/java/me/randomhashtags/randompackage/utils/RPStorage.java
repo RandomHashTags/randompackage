@@ -1,18 +1,17 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
-import me.randomhashtags.randompackage.addons.EnchantRarity;
+import me.randomhashtags.randompackage.addons.legacy.ShopCategory;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.dev.eventattributes.EventAttribute;
-import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
-import me.randomhashtags.randompackage.utils.addons.PathFireball;
-import me.randomhashtags.randompackage.utils.addons.PathMagicDust;
-import me.randomhashtags.randompackage.api.Boosters;
-import me.randomhashtags.randompackage.api.nearFinished.Outposts;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
+import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.*;
@@ -38,7 +37,7 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, EventAttribute> eventattributes;
     protected static LinkedHashMap<String, DuelArena> duelArenas;
     protected static LinkedHashMap<String, Dungeon> dungeons;
-    protected static LinkedHashMap<String, PathMagicDust> dusts;
+    protected static LinkedHashMap<String, MagicDust> dusts;
     protected static LinkedHashMap<String, EnchantRarity> rarities;
     protected static LinkedHashMap<String, EnchantmentOrb> enchantmentorbs;
     protected static LinkedHashMap<String, EnvoyCrate> envoycrates;
@@ -47,7 +46,7 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, FactionUpgradeType> factionupgradetypes;
     protected static LinkedHashMap<String, FallenHero> fallenheroes;
     protected static LinkedHashMap<String, FilterCategory> filtercategories;
-    protected static LinkedHashMap<String, PathFireball> fireballs;
+    protected static LinkedHashMap<String, RarityFireball> fireballs;
     protected static LinkedHashMap<String, GlobalChallenge> globalchallenges;
     protected static LinkedHashMap<String, GlobalChallengePrize> globalchallengeprizes;
     protected static LinkedHashMap<String, CustomKit> kits;
@@ -163,10 +162,10 @@ public abstract class RPStorage extends RegionalAPI {
         dungeons.put(identifier, e);
     }
 
-    public PathMagicDust getDust(String identifier) {
+    public MagicDust getDust(String identifier) {
         return dusts != null ? dusts.getOrDefault(identifier, null) : null;
     }
-    public void addDust(String identifier, PathMagicDust e) {
+    public void addDust(String identifier, MagicDust e) {
         if(dusts == null) dusts = new LinkedHashMap<>();
         check(dusts, identifier, "rarity dust");
         dusts.put(identifier, e);
@@ -186,10 +185,10 @@ public abstract class RPStorage extends RegionalAPI {
     public EnchantmentOrb getEnchantmentOrb(String identifier) {
         return enchantmentorbs != null ? enchantmentorbs.get(identifier) : null;
     }
-    public void addEnchantmentOrb(String identifier, EnchantmentOrb enchant) {
+    public void addEnchantmentOrb(String identifier, EnchantmentOrb enchantmentorb) {
         if(enchantmentorbs == null) enchantmentorbs = new LinkedHashMap<>();
         //check(enchantmentorbs, identifier, "enchantment orb"); Allows the same identifier
-        enchantmentorbs.put(identifier, enchant);
+        enchantmentorbs.put(identifier, enchantmentorb);
     }
 
     public EnchantRarity getEnchantRarity(String identifier) {
@@ -264,10 +263,10 @@ public abstract class RPStorage extends RegionalAPI {
         filtercategories.put(identifier, e);
     }
 
-    public PathFireball getFireball(String identifier) {
+    public RarityFireball getFireball(String identifier) {
         return fireballs != null ? fireballs.getOrDefault(identifier, null) : null;
     }
-    public void addFireball(String identifier, PathFireball e) {
+    public void addFireball(String identifier, RarityFireball e) {
         if(fireballs == null) fireballs = new LinkedHashMap<>();
         check(fireballs, identifier, "rarity fireball");
         fireballs.put(identifier, e);
@@ -435,45 +434,90 @@ public abstract class RPStorage extends RegionalAPI {
         whitescrolls.put(identifier, w);
     }
 
-    public void deleteAll(Feature f) {
-        if(f.equals(Feature.BOOSTERS)) {
-            boosters = null;
-            Boosters.activeFactionBoosters = null;
-        } else if(f.equals(Feature.BLACK_SCROLLS)) blackscrolls = null;
-        else if(f.equals(Feature.CONQUEST)) conquestchests = null;
-        else if(f.equals(Feature.CUSTOM_ARMOR)) armorsets = null;
-        else if(f.equals(Feature.CUSTOM_BOSSES)) bosses = null;
-        else if(f.equals(Feature.CUSTOM_ENCHANTS)) {
-            enabled = null;
-            disabled = null;
-            rarities = null;
-        } else if(f.equals(Feature.DUELS)) duelArenas = null;
-        else if(f.equals(Feature.DUNGEONS)) dungeons = null;
-        else if(f.equals(Feature.ENCHANTMENT_ORBS)) enchantmentorbs = null;
-        else if(f.equals(Feature.ENVOY)) envoycrates = null;
-        else if(f.equals(Feature.FACTION_UPGRADES)) {
-            factionupgrades = null;
-            factionupgradetypes = null;
-        } else if(f.equals(Feature.FIREBALLS_AND_DUST)) {
-            dusts = null;
-            fireballs = null;
-        } else if(f.equals(Feature.ITEM_FILTER)) filtercategories = null;
-        else if(f.equals(Feature.MASKS)) masks = null;
-        else if(f.equals(Feature.LOOTBOXES)) lootboxes = null;
-        else if(f.equals(Feature.MONTHLY_CRATES)) monthlycrates = null;
-        else if(f.equals(Feature.OUTPOSTS)) {
-            outposts = null;
-            Outposts.statuses = null;
-        } else if(f.equals(Feature.PLAYER_QUESTS)) playerquests = null;
-        else if(f.equals(Feature.RANDOMIZATION_SCROLLS)) randomizationscrolls = null;
-        else if(f.equals(Feature.RARITY_GEMS)) raritygems = null;
-        else if(f.equals(Feature.SERVER_CRATES)) servercrates = null;
-        else if(f.equals(Feature.SOUL_TRACKERS)) soultrackers = null;
-        else if(f.equals(Feature.SHOP)) shopcategories = null;
-        else if(f.equals(Feature.TITLES)) titles = null;
-        else if(f.equals(Feature.TRINKETS)) trinkets = null;
+    /*
+        Value Of
+     */
+    public BlackScroll valueOfBlackScroll(ItemStack is) {
+        if(blackscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final Material m = is.getType();
+            final String d = is.getItemMeta().getDisplayName();
+            for(BlackScroll b : blackscrolls.values()) {
+                final ItemStack i = b.getItem();
+                if(m.equals(i.getType()) && is.getData().getData() == i.getData().getData() && d.equals(i.getItemMeta().getDisplayName())) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
-
+    public CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
+        if(bosses != null && spawnitem != null && spawnitem.hasItemMeta()) {
+            for(CustomBoss b : bosses.values()) {
+                if(b.getSpawnItem().isSimilar(spawnitem)) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+    public CustomExplosion valueOfCustomExplosion(ItemStack is) {
+        if(explosions != null) {
+            for(CustomExplosion c : explosions.values()) {
+                if(c.getItem().isSimilar(is)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+    public EnchantmentOrb valueOfEnchantmentOrb(ItemStack is) {
+        if(enchantmentorbs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final ItemStack item = is.clone();
+            final ItemMeta M = item.getItemMeta();
+            final List<String> l = M.getLore();
+            final int S = l.size();
+            for(EnchantmentOrb orb : enchantmentorbs.values()) {
+                final ItemStack its = orb.getItem();
+                final ItemMeta m = its.getItemMeta();
+                final List<String> L = m.getLore();
+                if(L.size() == S) {
+                    final int slot = orb.getPercentLoreSlot();
+                    L.set(slot, l.get(slot));
+                    M.setLore(L);
+                    its.setItemMeta(M);
+                    if(is.isSimilar(its))
+                        return orb;
+                }
+            }
+        }
+        return null;
+    }
+    public EnchantmentOrb valueOfEnchantmentOrb(String appliedlore) {
+        if(enchantmentorbs != null && appliedlore != null) {
+            for(EnchantmentOrb orb : enchantmentorbs.values())
+                if(orb.getApplied().equals(appliedlore))
+                    return orb;
+        }
+        return null;
+    }
+    public boolean hasEnchantmentOrb(ItemStack is) {
+        if(enchantmentorbs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            for(EnchantmentOrb orb : enchantmentorbs.values())
+                if(l.contains(orb.getApplied()))
+                    return true;
+        }
+        return false;
+    }
+    public EnchantmentOrb getEnchantmentOrb(ItemStack is) {
+        if(enchantmentorbs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            for(EnchantmentOrb e : enchantmentorbs.values())
+                if(l.contains(e.getApplied()))
+                    return e;
+        }
+        return null;
+    }
     public EnchantRarity valueOfEnchantRarity(ItemStack is) {
         if(is != null && rarities != null) {
             for(EnchantRarity r : rarities.values()) {
@@ -492,6 +536,65 @@ public abstract class RPStorage extends RegionalAPI {
                     return e;
                 }
             }
+        }
+        return null;
+    }
+    public FactionUpgrade valueOfFactionUpgrade(int slot) {
+        if(factionupgrades != null) {
+            for(FactionUpgrade f : factionupgrades.values()) {
+                if(f.getSlot() == slot) {
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+    public FallenHero valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
+        if(is != null && kits != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack f = k.getFallenHeroItem(k, true);
+                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
+                    return k.getFallenHero();
+                }
+            }
+        }
+        return null;
+    }
+    public FallenHero valueOfFallenHeroGem(ItemStack is, Class type) {
+        if(is != null && kits != null) {
+            for(CustomKit k : kits.values()) {
+                final ItemStack f = k.getFallenHeroItem(k, false);
+                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
+                    return k.getFallenHero();
+                }
+            }
+        }
+        return null;
+    }
+    public CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
+    public CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
+        if(string != null) {
+            final String s = ChatColor.stripColor(string);
+            if(enabled != null) {
+                for(CustomEnchant ce : enabled.values()) {
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
+            }
+            if(checkDisabledEnchants && disabled != null) {
+                for(CustomEnchant ce : disabled.values()) {
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
+            }
+        }
+        return null;
+    }
+    public CustomEnchant valueOfCustomEnchant(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final CustomEnchant e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
+            final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfEnchantRarity(e);
+            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
         }
         return null;
     }
@@ -537,6 +640,27 @@ public abstract class RPStorage extends RegionalAPI {
                 if(d.isSimilar(display))
                     return p;
             }
+        return null;
+    }
+    public MagicDust valueOfMagicDust(ItemStack is) {
+        if(dusts != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final Material m = is.getType();
+            final String d = is.getItemMeta().getDisplayName();
+            for(MagicDust dust : dusts.values()) {
+                final ItemStack i = dust.getItem();
+                if(i.getType().equals(m) && i.getItemMeta().getDisplayName().equals(d)) return dust;
+            }
+        }
+        return null;
+    }
+    public TransmogScroll valueOfTransmogScroll(ItemStack is) {
+        if(transmogscrolls != null && is != null) {
+            for(TransmogScroll t : transmogscrolls.values()) {
+                if(t.getItem().isSimilar(is)) {
+                    return t;
+                }
+            }
+        }
         return null;
     }
 }

@@ -127,22 +127,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
-		config = null;
-		addItemConfirm = null;
-		addItemCancel = null;
-		removeItemConfirm = null;
-		removeItemCancel = null;
-		expansion = null;
-		addedRows = 0;
-		additems = null;
-		removeitems = null;
-		othertitle = null;
-		selftitle = null;
-		TCOLOR = null;
-		itemslots = null;
-		inSelf = null;
-		inOther = null;
-		deleteSlot = null;
+		instance = null;
 	}
 
 	public void resetShowcases(OfflinePlayer player) {
@@ -204,6 +189,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
 			event.setCancelled(true);
+			player.updateInventory();
 			for(int o = 1; o <= 10; o++) {
 				if(sizes.containsKey(o)) {
 					final int size = sizes.get(o);

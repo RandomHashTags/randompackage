@@ -71,9 +71,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
-        master = null;
-        deleteAll(Feature.DUNGEONS);
+        dungeons = null;
         instance = null;
     }
 
@@ -82,7 +80,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(!event.isCancelled() && top.getHolder() == player) {
-            if(top.getTitle().equals(gui.getTitle())) {
+            if(event.getView().getTitle().equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();

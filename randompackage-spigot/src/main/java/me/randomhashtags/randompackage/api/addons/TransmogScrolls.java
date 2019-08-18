@@ -1,16 +1,17 @@
 package me.randomhashtags.randompackage.api.addons;
 
-import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.TransmogScroll;
-import me.randomhashtags.randompackage.utils.addons.PathTransmogScroll;
+import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.addons.PathTransmogScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -41,27 +42,25 @@ public class TransmogScrolls extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (transmogscrolls != null ? transmogscrolls.size() : 0) + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        unloadUtils();
         transmogscrolls = null;
         instance = null;
-        unloadUtils();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-            if(cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
-                final TransmogScroll t = valueOf(cursor);
-                if(t != null && applyTransmogScroll(current, t)) {
-                    //playSuccess((Player) event.getWhoClicked());
-                    event.setCancelled(true);
-                    event.setCurrentItem(current);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
-                    player.updateInventory();
-                }
+        final Player player = (Player) event.getWhoClicked();
+        final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
+        if(cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
+            final TransmogScroll t = valueOfTransmogScroll(cursor);
+            if(t != null && applyTransmogScroll(current, t)) {
+                //playSuccess((Player) event.getWhoClicked());
+                event.setCancelled(true);
+                event.setCurrentItem(current);
+                final int a = cursor.getAmount();
+                if(a == 1) event.setCursor(new ItemStack(Material.AIR));
+                else       cursor.setAmount(a-1);
+                player.updateInventory();
             }
         }
     }
@@ -83,7 +82,7 @@ public class TransmogScrolls extends CustomEnchantUtils {
                     for(String ss : scroll.getRarityOrganization()) {
                         final EnchantRarity r = rarities.get(ss);
                         for(String s : l) {
-                            final CustomEnchant enchant = CustomEnchant.valueOf(s);
+                            final CustomEnchant enchant = valueOfCustomEnchant(s);
                             if(enchant != null && valueOfEnchantRarity(enchant) == r) {
                                 lore.add(s);
                             }
@@ -115,16 +114,6 @@ public class TransmogScrolls extends CustomEnchantUtils {
         return did;
     }
 
-    public TransmogScroll valueOf(ItemStack is) {
-        if(transmogscrolls != null && is != null) {
-            for(TransmogScroll t : transmogscrolls.values()) {
-                if(t.getItem().isSimilar(is)) {
-                    return t;
-                }
-            }
-        }
-        return null;
-    }
     public TransmogScroll getApplied(ItemStack is) {
         if(transmogscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final String size = Integer.toString(getEnchants(is).size()), d = is.getItemMeta().getDisplayName();

@@ -66,7 +66,6 @@ public class RPPlayer extends RPStorage {
     private HashMap<GlobalChallengePrize, Integer> challengeprizes;
     private HashMap<PlayerQuest, ActivePlayerQuest> quests;
 
-
     private HashMap<CustomKit, Integer> kitLevels;
     private HashMap<CustomKit, Long> kitCooldowns;
     private HashMap<String, Integer> unclaimedLootboxes;
@@ -648,43 +647,46 @@ public class RPPlayer extends RPStorage {
 
 
     private void loadQuests() {
-        final PlayerQuests QQ = PlayerQuests.getPlayerQuests();
-        if(QQ.isEnabled() && quests == null) {
+        if(quests == null) {
             quests = new HashMap<>();
-            questTasks.put(uuid, new ArrayList<>());
-            final ConfigurationSection c = yml.getConfigurationSection("quests");
-            final boolean isEnabled = getPlugin.isEnabled();
-            if(c != null) {
-                final long time = System.currentTimeMillis();
-                final BukkitScheduler scheduler = api.scheduler;
-                final PluginManager pm = api.pluginmanager;
-                for(String s : c.getKeys(false)) {
-                    final PlayerQuest q = getPlayerQuest(s);
-                    if(q != null) {
-                        final String[] b = yml.getString("quests." + s).split(";");
-                        final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
-                        if(!a.isExpired()) {
-                            quests.put(q, a);
-                            if(isEnabled) startExpire(time, scheduler, pm, q, a);
+            final PlayerQuests QQ = PlayerQuests.getPlayerQuests();
+            if(QQ.isEnabled()) {
+                quests = new HashMap<>();
+                questTasks.put(uuid, new ArrayList<>());
+                final ConfigurationSection c = yml.getConfigurationSection("quests");
+                final boolean isEnabled = getPlugin.isEnabled();
+                if(c != null) {
+                    final long time = System.currentTimeMillis();
+                    final BukkitScheduler scheduler = api.scheduler;
+                    final PluginManager pm = api.pluginmanager;
+                    for(String s : c.getKeys(false)) {
+                        final PlayerQuest q = getPlayerQuest(s);
+                        if(q != null) {
+                            final String[] b = yml.getString("quests." + s).split(";");
+                            final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
+                            if(!a.isExpired()) {
+                                quests.put(q, a);
+                                if(isEnabled) startExpire(time, scheduler, pm, q, a);
+                            }
                         }
                     }
                 }
-            }
-            int permfor = 0;
-            final int max = QQ.questSlots.size();
-            final Player p = Bukkit.getPlayer(uuid);
-            for(int i = 1; i <= max; i++) {
-                if(p.hasPermission("RandomPackage.playerquests." + i)) {
-                    permfor = i;
+                int permfor = 0;
+                final int max = QQ.questSlots.size();
+                final Player p = Bukkit.getPlayer(uuid);
+                for(int i = 1; i <= max; i++) {
+                    if(p.hasPermission("RandomPackage.playerquests." + i)) {
+                        permfor = i;
+                    }
                 }
-            }
-            if(quests.size() != max) {
-                final long time = System.currentTimeMillis();
-                final Random random = new Random();
-                final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
-                for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
-                for(int i = 1; i <= permfor && quests.size() <= permfor-1; i++) {
-                    loadNewQuest(time, random);
+                if(quests.size() != max) {
+                    final long time = System.currentTimeMillis();
+                    final Random random = new Random();
+                    final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
+                    for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
+                    for(int i = 1; i <= permfor && quests.size() <= permfor-1; i++) {
+                        loadNewQuest(time, random);
+                    }
                 }
             }
         }

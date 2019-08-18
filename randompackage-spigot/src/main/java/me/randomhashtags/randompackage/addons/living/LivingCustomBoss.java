@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addons.living;
 import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.CustomBossDeathEvent;
 import me.randomhashtags.randompackage.events.CustomBossSpawnEvent;
-import me.randomhashtags.randompackage.addons.CustomBoss;
+import me.randomhashtags.randompackage.addons.legacy.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

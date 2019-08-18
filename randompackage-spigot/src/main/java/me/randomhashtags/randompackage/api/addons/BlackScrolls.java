@@ -3,10 +3,9 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.BlackScroll;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import me.randomhashtags.randompackage.utils.addons.PathBlackScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.utils.addons.PathBlackScroll;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -39,10 +38,10 @@ public class BlackScrolls extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (blackscrolls != null ? blackscrolls.size() : 0) + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        deleteAll(Feature.BLACK_SCROLLS);
         unloadUtils();
+        blackscrolls = null;
+        instance = null;
     }
-
 
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
         item = null;
@@ -50,7 +49,7 @@ public class BlackScrolls extends CustomEnchantUtils {
         if(is != null && enchants.size() > 0) {
             final Set<CustomEnchant> key = enchants.keySet();
             CustomEnchant enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
-            final List<EnchantRarity> a = bs.getAppliesTo();
+            final List<EnchantRarity> a = bs.getAppliesToRarities();
             int successP = -1;
             for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
             for(int f = 1; f <= 5; f++) {
@@ -72,17 +71,16 @@ public class BlackScrolls extends CustomEnchantUtils {
         return item;
     }
 
-
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-        if(!event.isCancelled() && current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
+        if(current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             final Player player = (Player) event.getWhoClicked();
             item = current; itemMeta = current.getItemMeta(); lore.clear();
             HashMap<CustomEnchant, Integer> enchantmentsonitem = null;
             if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
 
-            final BlackScroll bs = BlackScroll.valueOf(cursor);
+            final BlackScroll bs = valueOfBlackScroll(cursor);
             if(bs != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && !enchantmentsonitem.isEmpty()) {
                 giveItem(player, applyBlackScroll(current, cursor, bs));
                 item = current; itemMeta = item.getItemMeta();

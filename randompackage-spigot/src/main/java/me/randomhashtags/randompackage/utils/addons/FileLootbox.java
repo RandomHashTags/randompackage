@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.Lootbox;
+import me.randomhashtags.randompackage.addons.enums.LootboxRewardType;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -9,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileLootbox extends Lootbox {
+public class FileLootbox extends RPAddon implements Lootbox {
     private List<String> regularLootFormat, jackpotLootFormat, bonusLootFormat;
     private ItemStack item, background;
 
@@ -19,14 +20,14 @@ public class FileLootbox extends Lootbox {
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public int getPriority() { return yml.getInt("priority"); }
+    public long getAvailableFor() { return yml.getLong("available for"); }
+    public int getGuiSize() { return yml.getInt("gui.size"); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
     public String getGuiTitle() { return ChatColor.translateAlternateColorCodes('&', yml.getString("gui.title")); }
     public String getPreviewTitle() { return ChatColor.translateAlternateColorCodes('&', yml.getString("preview title")); }
     public String getRegularLootSize() { return yml.getString("regular loot size"); }
     public String getBonusLootSize() { return yml.getString("bonus loot size"); }
-    public int getPriority() { return yml.getInt("priority"); }
-    public int getAvailableFor() { return yml.getInt("available for"); }
-    public int getGuiSize() { return yml.getInt("gui.size"); }
     public List<String> getGuiFormat() { return yml.getStringList("gui.format"); }
     public List<String> getRegularLootFormat() {
         if(regularLootFormat == null) regularLootFormat = api.colorizeListString(yml.getStringList("lore formats.regular loot"));
@@ -40,7 +41,7 @@ public class FileLootbox extends Lootbox {
         if(bonusLootFormat == null) bonusLootFormat = api.colorizeListString(yml.getStringList("lore formats.bonus loot"));
         return bonusLootFormat;
     }
-    public List<String> getRandomLoot() { return yml.getStringList("regular loot"); }
+    public List<String> getRegularLoot() { return yml.getStringList("regular loot"); }
     public List<String> getJackpotLoot() { return yml.getStringList("jackpot loot"); }
     public List<String> getBonusLoot() { return yml.getStringList("bonus loot"); }
 
@@ -49,9 +50,12 @@ public class FileLootbox extends Lootbox {
             final ItemStack i = api.d(yml, "lootbox");
             final ItemMeta itemMeta = i.getItemMeta();
             final List<String> lore = new ArrayList<>(), regularLootFormat = getRegularLootFormat(), jackpotLootFormat = getJackpotLootFormat(), bonusLootFormat = getBonusLootFormat();
+            final List<ItemStack> regular = getAllRewards(LootboxRewardType.REGULAR);
+            final List<ItemStack> jackpot = getAllRewards(LootboxRewardType.JACKPOT);
+            final List<ItemStack> bonus = getAllRewards(LootboxRewardType.BONUS);
             for(String s : itemMeta.getLore()) {
                 if(s.equals("{REGULAR_LOOT}")) {
-                    for(ItemStack is : regularLoot()) {
+                    for(ItemStack is : regular) {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : regularLootFormat) {
@@ -60,7 +64,7 @@ public class FileLootbox extends Lootbox {
                         }
                     }
                 } else if(s.equals("{JACKPOT_LOOT}")) {
-                    for(ItemStack is : jackpotLoot()) {
+                    for(ItemStack is : jackpot) {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : jackpotLootFormat) {
@@ -69,7 +73,7 @@ public class FileLootbox extends Lootbox {
                         }
                     }
                 } else if(s.equals("{BONUS_LOOT}")) {
-                    for(ItemStack is : bonusLoot()) {
+                    for(ItemStack is : bonus) {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : bonusLootFormat) {

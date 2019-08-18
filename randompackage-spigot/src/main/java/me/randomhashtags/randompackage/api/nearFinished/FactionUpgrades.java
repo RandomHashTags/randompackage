@@ -1,14 +1,13 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
+import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.FactionUpgradeType;
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.utils.addons.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.utils.addons.FileFactionUpgrade;
+import me.randomhashtags.randompackage.utils.addons.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -140,16 +139,10 @@ public class FactionUpgrades extends RPFeature {
     }
     public void unload() {
         backup();
-        config = null;
-        cropGrowthRate = null;
-        teleportDelayMultipliers = null;
-        cropGrowthMultipliers = null;
-        enemyDamageMultipliers = null;
-        bossDamageMultipliers = null;
-        vkitLevelingChances = null;
-        decreaseRarityGemCost = null;
         factionUpgrades = null;
-        deleteAll(Feature.FACTION_UPGRADES);
+        factionupgrades = null;
+        factionupgradetypes = null;
+        instance = null;
     }
 
 
@@ -190,23 +183,21 @@ public class FactionUpgrades extends RPFeature {
     }
 
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = event.getPlayer();
-            final String a = event.getMessage().toLowerCase().substring(1);
-            for(String s : aliases) {
-                if(a.startsWith(s)) {
-                    event.setCancelled(true);
-                    if(a.contains("reset")) {
-                        if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
-                            factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
-                        }
-                    } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
-                        viewFactionUpgrades(player);
+        final Player player = event.getPlayer();
+        final String a = event.getMessage().toLowerCase().substring(1);
+        for(String s : aliases) {
+            if(a.startsWith(s)) {
+                event.setCancelled(true);
+                if(a.contains("reset")) {
+                    if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
+                        factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
                     }
-                    return;
+                } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
+                    viewFactionUpgrades(player);
                 }
+                return;
             }
         }
     }
@@ -215,7 +206,7 @@ public class FactionUpgrades extends RPFeature {
 
 
     private ItemStack getUpgrade(HashMap<FactionUpgrade, Integer> upgrades, int slot, String W, String L) {
-        final FactionUpgrade f = FactionUpgrade.valueOf(slot);
+        final FactionUpgrade f = valueOfFactionUpgrade(slot);
         if(f != null) {
             final int tier = upgrades != null ? upgrades.getOrDefault(f, 0) : 0;
             item = f.getItem();
@@ -467,11 +458,11 @@ public class FactionUpgrades extends RPFeature {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && top.getHolder() == player) {
+        if(top.getHolder() == player) {
             final String t = event.getView().getTitle();
             if(t.equals(gui.getTitle())) {
                 final int r = event.getRawSlot();
@@ -479,25 +470,25 @@ public class FactionUpgrades extends RPFeature {
                 player.updateInventory();
                 final String c = event.getClick().name();
                 if(r < 0 || r >= top.getSize() || !c.contains("LEFT") && !c.contains("RIGHT") || event.getCurrentItem() == null) return;
-                final FactionUpgrade f = FactionUpgrade.valueOf(r);
+                final FactionUpgrade f = valueOfFactionUpgrade(r);
                 if(f != null) tryToUpgrade(player, f);
             }
         }
     }
 
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
         final Entity D = event.damager;
-        if(!event.isCancelled() && D instanceof Player) {
+        if(D instanceof Player) {
             final Player damager = (Player) D;
             final String fn = regions.getFactionTag(damager.getUniqueId());
             event.damage *= getBossDamageMultiplier(fn);
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-        if(!event.isCancelled() && event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
+        if(event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             final UUID d = event.getDamager().getUniqueId(), v = event.getEntity().getUniqueId();
             if(factions.isEnemy(d, v)) {
                 final String f = regions.getFactionTag(d);
@@ -505,37 +496,33 @@ public class FactionUpgrades extends RPFeature {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockGrowEvent(BlockGrowEvent event) {
-        if(!event.isCancelled()) {
-            final Location l = event.getBlock().getLocation();
-            final String f = regions.getFactionTagAt(l);
-            final double cgm = f != null ? getCropGrowthMultiplier(f) : 1.00;
-            if(cgm != 1.00) {
-                final Material m = l.getBlock().getType();
-                if(!cropGrowthRate.containsKey(f)) {
-                    cropGrowthRate.put(f, new HashMap<>());
-                    cropGrowthRate.get(f).put(l, 0.00);
-                } else if(!cropGrowthRate.get(f).containsKey(l)) {
-                    cropGrowthRate.get(f).put(l, 0.00);
-                }
-                cropGrowthRate.get(f).put(l, cropGrowthRate.get(f).get(l) + getCropGrowthMultiplier(f));
-                byte d = (byte) (Math.floor(cropGrowthRate.get(f).get(l))), max = (byte) (m.name().equals("CROPS") || m.name().equals("CARROT") || m.name().equals("POTATO") ? 7 : 7);
-                if(d > max) {
-                    d = max;
-                }
-                event.getNewState().setRawData(d);
+        final Location l = event.getBlock().getLocation();
+        final String f = regions.getFactionTagAt(l);
+        final double cgm = f != null ? getCropGrowthMultiplier(f) : 1.00;
+        if(cgm != 1.00) {
+            final Material m = l.getBlock().getType();
+            if(!cropGrowthRate.containsKey(f)) {
+                cropGrowthRate.put(f, new HashMap<>());
+                cropGrowthRate.get(f).put(l, 0.00);
+            } else if(!cropGrowthRate.get(f).containsKey(l)) {
+                cropGrowthRate.get(f).put(l, 0.00);
             }
+            cropGrowthRate.get(f).put(l, cropGrowthRate.get(f).get(l) + getCropGrowthMultiplier(f));
+            byte d = (byte) (Math.floor(cropGrowthRate.get(f).get(l))), max = (byte) (m.name().equals("CROPS") || m.name().equals("CARROT") || m.name().equals("POTATO") ? 7 : 7);
+            if(d > max) {
+                d = max;
+            }
+            event.getNewState().setRawData(d);
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
-        if(!event.isCancelled()) {
-            final Location l = event.getBlock().getLocation();
-            final String f = regions.getFactionTagAt(l);
-            if(f != null && cropGrowthRate.containsKey(f)) {
-                cropGrowthRate.get(f).remove(l);
-            }
+        final Location l = event.getBlock().getLocation();
+        final String f = regions.getFactionTagAt(l);
+        if(f != null && cropGrowthRate.containsKey(f)) {
+            cropGrowthRate.get(f).remove(l);
         }
     }
 }

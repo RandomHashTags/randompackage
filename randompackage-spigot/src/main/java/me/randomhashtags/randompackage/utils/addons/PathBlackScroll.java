@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathBlackScroll extends BlackScroll {
+public class PathBlackScroll extends RPAddon implements BlackScroll {
 	private String path;
 	private int min, max;
 	private ItemStack is;
@@ -28,7 +28,7 @@ public class PathBlackScroll extends BlackScroll {
 
 	public int getMinPercent() { return min; }
 	public int getMaxPercent() { return max; }
-	public List<EnchantRarity> getAppliesTo() {
+	public List<EnchantRarity> getAppliesToRarities() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".applies to").split(";")) {

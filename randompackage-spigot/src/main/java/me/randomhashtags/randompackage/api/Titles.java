@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Title;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileTitle;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -77,17 +78,9 @@ public class Titles extends RPFeature implements CommandExecutor {
  		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (titles != null ? titles.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		config = null;
-		interactableItem = null;
-		nextpage = null;
-		background = null;
-		active = null;
-		inactive = null;
-		selftitle = null;
-		tabformat = null;
 		for(Player p : pages.keySet()) p.closeInventory();
-		pages = null;
-		deleteAll(Feature.TITLES);
+		titles = null;
+		instance = null;
 	}
 
 	@EventHandler
@@ -113,12 +106,12 @@ public class Titles extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		final ItemStack c = event.getCurrentItem();
-		if(top.getHolder() == player && !event.isCancelled() && c != null && event.getView().getTitle().equals(selftitle)) {
+		if(top.getHolder() == player && c != null && event.getView().getTitle().equals(selftitle)) {
 			final int r = event.getRawSlot();
 			event.setCancelled(true);
 			player.updateInventory();

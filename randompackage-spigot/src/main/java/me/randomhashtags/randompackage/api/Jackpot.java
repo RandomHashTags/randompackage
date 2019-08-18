@@ -15,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -133,24 +134,9 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             a.set("jackpot." + u.toString(), ticketsSold.get(u));
         }
         saveOtherData();
-        config = null;
         scheduler.cancelTask(task);
         for(int i : countdownTasks) scheduler.cancelTask(i);
-        gui = null;
-        confirmSlots = null;
-        cancelSlots = null;
-        task = 0;
-        countdownTasks = null;
-        value = 0;
-        ticketCost = 0;
-        maxTickets = 0;
-        minTickets = 0;
-        playersPerPage = 0;
-        winnerPickedEvery = 0;
-        pickNextWinner = 0;
-        ticketsSold = null;
-        top = null;
-        purchasing = null;
+        instance = null;
     }
 
     public void pickWinner() {
@@ -304,23 +290,21 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         purchasing.remove(event.getPlayer().getUniqueId());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final UUID u = player.getUniqueId();
-            if(purchasing.containsKey(u)) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final int r = event.getRawSlot();
-                final ItemStack c = event.getCurrentItem();
-                if(r < 0 || r >= player.getOpenInventory().getTopInventory().getSize() || c == null || c.getType().equals(Material.AIR)) return;
-                if(confirmSlots.contains(r)) {
-                    purchaseTickets(player, purchasing.get(u));
-                } else if(cancelSlots.contains(r)) {
-                } else return;
-                player.closeInventory();
-            }
+        final Player player = (Player) event.getWhoClicked();
+        final UUID u = player.getUniqueId();
+        if(purchasing.containsKey(u)) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final int r = event.getRawSlot();
+            final ItemStack c = event.getCurrentItem();
+            if(r < 0 || r >= player.getOpenInventory().getTopInventory().getSize() || c == null || c.getType().equals(Material.AIR)) return;
+            if(confirmSlots.contains(r)) {
+                purchaseTickets(player, purchasing.get(u));
+            } else if(cancelSlots.contains(r)) {
+            } else return;
+            player.closeInventory();
         }
     }
 }

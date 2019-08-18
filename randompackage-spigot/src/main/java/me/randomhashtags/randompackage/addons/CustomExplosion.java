@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.addons.utils.Attributable;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.utils.addons.RPAddon;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
@@ -12,7 +12,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -20,33 +19,32 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public abstract class CustomExplosion extends RPAddon implements Itemable {
+public interface CustomExplosion extends Attributable, Itemable {
 
-    public abstract List<String> getAttributes();
-    public abstract void didExplode(UUID uuid, List<Block> blockList);
+    void didExplode(UUID uuid, List<Block> blockList);
 
-    // https://minecraft.gamepedia.com/TNT
-    public void explode(EntityExplodeEvent event, Location l) {
+    default void explode(EntityExplodeEvent event, Location l, Random random) {
         final UUID u = event.getEntity().getUniqueId();
-        final List<Block> bl = getBlockList(event);
+        final List<Block> bl = getBlockList(event, random);
         didExplode(u, bl);
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||")) {
-                doExplosion(string, l, event);
+                doExplosion(string, l, event, random);
             } else if(string.contains("&&") && !string.contains("||")) {
                 for(String s : string.split("&&")) {
-                    doExplosion(s, l, event);
+                    doExplosion(s, l, event, random);
                 }
             } else if(string.contains("&&") && string.contains("||")) {
                 for(String s : random.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&")) {
-                    doExplosion(s, l, event);
+                    doExplosion(s, l, event, random);
                 }
             }
         }
     }
-    private List<Block> getBlockList(EntityExplodeEvent event) {
+    default List<Block> getBlockList(EntityExplodeEvent event, Random random) {
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||") && string.toLowerCase().startsWith("affects_only;")) {
                 return getAffectedBlocks(event, string);
@@ -63,7 +61,7 @@ public abstract class CustomExplosion extends RPAddon implements Itemable {
         }
         return event.blockList();
     }
-    private List<Block> getAffectedBlocks(EntityExplodeEvent event, String input) {
+    default List<Block> getAffectedBlocks(EntityExplodeEvent event, String input) {
         final Material material = UMaterial.match(input.split(";")[1].toUpperCase()).getMaterial();
         final List<Block> bl = event.blockList();
         for(int i = 0; i < bl.size(); i++) {
@@ -74,7 +72,7 @@ public abstract class CustomExplosion extends RPAddon implements Itemable {
         }
         return bl;
     }
-    private void doExplosion(String input, Location loc, EntityExplodeEvent event) {
+    default void doExplosion(String input, Location loc, EntityExplodeEvent event, Random random) {
         final World w = loc.getWorld();
         input = input.replace(" ", "").toLowerCase();
         if(input.startsWith("affects_only;")) {
@@ -109,14 +107,12 @@ public abstract class CustomExplosion extends RPAddon implements Itemable {
             }
         } else if(input.startsWith("increase_spawner_drop;")) {
             final UVersion uv = UVersion.getUVersion();
-            final Random r = random;
-            final int sc = spawnerchance;
             final Plugin spawner = RandomPackage.spawnerPlugin;
             final Material m = UMaterial.SPAWNER.getMaterial();
-            final double d = sc * Double.parseDouble(input.split(";")[1]);
+            final double d = spawnerchance * Double.parseDouble(input.split(";")[1]);
             for(Block block : event.blockList()) {
                 boolean mobspawner = false;
-                if(block.getType().equals(m) && d <= r.nextInt(100)) {
+                if(block.getType().equals(m) && d <= random.nextInt(100)) {
                     mobspawner = true;
                     if(spawner != null) {
                         w.dropItemNaturally(block.getLocation(), uv.getSpawner(((CreatureSpawner) block).getSpawnedType().name()));
@@ -126,15 +122,5 @@ public abstract class CustomExplosion extends RPAddon implements Itemable {
                 if(!mobspawner) block.breakNaturally();
             }
         }
-    }
-    public static CustomExplosion valueOf(ItemStack is) {
-        if(explosions != null) {
-            for(CustomExplosion c : explosions.values()) {
-                if(c.getItem().isSimilar(is)) {
-                    return c;
-                }
-            }
-        }
-        return null;
     }
 }

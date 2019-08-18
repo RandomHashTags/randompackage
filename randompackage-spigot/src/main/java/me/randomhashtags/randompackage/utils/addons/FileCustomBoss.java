@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.CustomBoss;
+import me.randomhashtags.randompackage.addons.legacy.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import org.bukkit.ChatColor;

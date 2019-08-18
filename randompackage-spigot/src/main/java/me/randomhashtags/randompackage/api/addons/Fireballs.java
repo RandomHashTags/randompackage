@@ -2,12 +2,11 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
-import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.addons.MagicDust;
+import me.randomhashtags.randompackage.addons.RarityFireball;
+import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.addons.PathFireball;
 import me.randomhashtags.randompackage.utils.addons.PathMagicDust;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -63,10 +62,10 @@ public class Fireballs extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dusts != null ? dusts.size() : 0) + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
-        mysterydust = null;
-        deleteAll(Feature.FIREBALLS_AND_DUST);
         unloadUtils();
+        fireballs = null;
+        dusts = null;
+        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -87,17 +86,17 @@ public class Fireballs extends CustomEnchantUtils {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-        if(!event.isCancelled() && current != null && !current.getType().equals(Material.AIR) && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
+        if(current != null && !current.getType().equals(Material.AIR) && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             item = current; itemMeta = current.getItemMeta(); lore.clear();
-            final CustomEnchant enchant = CustomEnchant.valueOf(current);
-            final MagicDust dust = MagicDust.valueOf(cursor);
+            final CustomEnchant enchant = valueOfCustomEnchant(current);
+            final MagicDust dust = valueOfMagicDust(cursor);
             if(dust != null && enchant != null) {
                 final EnchantRarity ra = valueOfEnchantRarity(enchant);
-                if(dust.getAppliesTo().contains(ra)) {
+                if(dust.getAppliesToRarities().contains(ra)) {
                     final String SUCCESS = ra.getSuccess();
                     int percent = -1;
                     final List<String> l = dust.getItem().getItemMeta().getLore();

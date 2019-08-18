@@ -14,5 +14,6 @@ public class RaidEvent extends RPFeature {
     public void load() {
     }
     public void unload() {
+        instance = null;
     }
 }

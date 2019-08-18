@@ -63,7 +63,6 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
         instance = null;
     }
 }

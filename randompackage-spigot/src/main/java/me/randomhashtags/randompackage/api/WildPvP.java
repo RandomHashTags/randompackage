@@ -97,22 +97,14 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Wild PvP &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
-        gui = null;
-        enterQueue = null;
-        request = null;
-        blockedCommands = null;
         for(Player p : tasks.keySet()) {
             for(int i : tasks.get(p)) {
                 scheduler.cancelTask(i);
             }
         }
-        tasks = null;
-        countdown = null;
         for(Player p : new ArrayList<>(viewing)) {
             p.closeInventory();
         }
-        viewing = null;
         final HashMap<Player, PvPMatch> m = PvPMatch.matches;
         if(m != null) {
             for(PvPMatch p : new ArrayList<>(m.values())) {
@@ -127,6 +119,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
         PvPMatch.matches = null;
         PvPCountdownMatch.countdowns = null;
+        instance = null;
     }
 
     public void viewQueue(Player player) {
@@ -293,7 +286,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final PvPMatch match = PvPMatch.valueOf(player);
@@ -308,73 +301,69 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            PvPMatch m = PvPMatch.valueOf(player);
-            if(m != null) {
+        final Player player = (Player) event.getWhoClicked();
+        PvPMatch m = PvPMatch.valueOf(player);
+        if(m != null) {
+            event.setCancelled(true);
+            player.updateInventory();
+            player.closeInventory();
+            sendStringListMessage(player, config.getStringList("messages.cannot modify inventory"), null);
+        } else {
+            final Inventory top = player.getOpenInventory().getTopInventory();
+            final boolean v = viewing.contains(player);
+            if(v || event.getView().getTitle().equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
-                player.closeInventory();
-                sendStringListMessage(player, config.getStringList("messages.cannot modify inventory"), null);
-            } else {
-                final Inventory top = player.getOpenInventory().getTopInventory();
-                final boolean v = viewing.contains(player);
-                if(v || event.getView().getTitle().equals(gui.getTitle())) {
-                    event.setCancelled(true);
-                    player.updateInventory();
 
-                    final int r = event.getRawSlot();
-                    final ItemStack c = event.getCurrentItem();
-                    if(v || r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
-                    if(c.equals(enterQueue)) {
-                        joinQueue(player);
-                    } else if(c.getItemMeta() instanceof SkullMeta) {
-                        final SkullMeta me = (SkullMeta) c.getItemMeta();
-                        final Player o = legacy ? Bukkit.getPlayer(me.getOwner()) : me.getOwningPlayer().getPlayer();
-                        m = PvPMatch.valueOf(o);
-                        if(m != null) {
-                            final String cl = event.getClick().name();
-                            player.closeInventory();
-                            if(cl.contains("RIGHT")) {
-                                viewInventoryOfQueue(player, m);
-                            } else if(cl.contains("LEFT")) {
-                                challenge(player, m);
-                            }
+                final int r = event.getRawSlot();
+                final ItemStack c = event.getCurrentItem();
+                if(v || r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
+                if(c.equals(enterQueue)) {
+                    joinQueue(player);
+                } else if(c.getItemMeta() instanceof SkullMeta) {
+                    final SkullMeta me = (SkullMeta) c.getItemMeta();
+                    final Player o = legacy ? Bukkit.getPlayer(me.getOwner()) : me.getOwningPlayer().getPlayer();
+                    m = PvPMatch.valueOf(o);
+                    if(m != null) {
+                        final String cl = event.getClick().name();
+                        player.closeInventory();
+                        if(cl.contains("RIGHT")) {
+                            viewInventoryOfQueue(player, m);
+                        } else if(cl.contains("LEFT")) {
+                            challenge(player, m);
                         }
                     }
                 }
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final PvPMatch m = PvPMatch.valueOf(event.getPlayer());
         if(m != null) {
             event.setCancelled(true);
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageEvent(EntityDamageEvent event) {
-        if(!event.isCancelled()) {
-            final Entity e = event.getEntity();
-            if(e instanceof Player) {
-                final Player player = (Player) e;
-                final PvPCountdownMatch p = PvPCountdownMatch.valueOf(player);
-                if(p != null) {
-                    event.setCancelled(true);
-                } else {
-                    final PvPMatch m = PvPMatch.valueOf(player);
-                    if(m != null) {
-                        sendStringListMessage(player, config.getStringList("messages.left due to taken damage"), null);
-                        delete(m);
-                    }
+        final Entity e = event.getEntity();
+        if(e instanceof Player) {
+            final Player player = (Player) e;
+            final PvPCountdownMatch p = PvPCountdownMatch.valueOf(player);
+            if(p != null) {
+                event.setCancelled(true);
+            } else {
+                final PvPMatch m = PvPMatch.valueOf(player);
+                if(m != null) {
+                    sendStringListMessage(player, config.getStringList("messages.left due to taken damage"), null);
+                    delete(m);
                 }
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerMoveEvent(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
         final PvPMatch m = PvPMatch.valueOf(player);

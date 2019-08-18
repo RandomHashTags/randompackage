@@ -1,23 +1,20 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
+import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.addons.utils.Rewardable;
+import me.randomhashtags.randompackage.addons.utils.Scoreboardable;
 import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
 
-public interface Outpost extends Identifiable {
+public interface Outpost extends Itemable, Rewardable, Scoreboardable {
     String getName();
     int getSlot();
-    ItemStack getDisplay();
     List<String> getLostControlMsg();
     List<String> getClaimedMsg();
     List<String> getLimits();
     List<String> getUnallowedItems();
-    List<String> getRewards();
-    Scoreboard getScoreboard();
     Location getWarpLocation();
     String getAttackingFaction();
     void setAttackingFaction(String faction);

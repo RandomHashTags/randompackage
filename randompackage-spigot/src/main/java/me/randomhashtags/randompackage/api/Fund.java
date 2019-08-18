@@ -82,11 +82,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 			a.set("fund.depositors." + u.toString(), deposits.get(u));
 		}
 		saveOtherData();
-		config = null;
-		unlockstring = null;
-		needed_unlocks = null;
-		maxfund = BigDecimal.ZERO;
-		total = BigDecimal.ZERO;
+		instance = null;
 	}
 	
 	public void deposit(Player player, String arg) {
@@ -119,26 +115,24 @@ public class Fund extends RPFeature implements CommandExecutor {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-		if(!event.isCancelled()) {
-			final Player player = event.getPlayer();
-			final String me = event.getMessage(), cmd = (me.contains(":") ? me.split(":")[1].split(" ")[0] : me.substring(1).split(" ")[0]).toLowerCase();
-			final PluginCommand p = Bukkit.getPluginCommand(cmd);
-			if(p != null) {
-				final String pl = p.getName(), m = me.toLowerCase();
-				final List<String> a = p.getAliases();
-				for(String s : unlockstring.keySet()) {
-					final String us = unlockstring.get(s);
-					if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
-						if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
-								|| m.equals(s.toLowerCase())
-								|| m.equals(s.replace(pl, cmd).toLowerCase())) {
-							if(hasPermission(player, "RandomPackage.fund.bypass", false)) return;
-							event.setCancelled(true);
-							sendMessage(player, "needs to reach", us, 0, false);
-							return;
-						}
+		final Player player = event.getPlayer();
+		final String me = event.getMessage(), cmd = (me.contains(":") ? me.split(":")[1].split(" ")[0] : me.substring(1).split(" ")[0]).toLowerCase();
+		final PluginCommand p = Bukkit.getPluginCommand(cmd);
+		if(p != null) {
+			final String pl = p.getName(), m = me.toLowerCase();
+			final List<String> a = p.getAliases();
+			for(String s : unlockstring.keySet()) {
+				final String us = unlockstring.get(s);
+				if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
+					if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
+							|| m.equals(s.toLowerCase())
+							|| m.equals(s.replace(pl, cmd).toLowerCase())) {
+						if(hasPermission(player, "RandomPackage.fund.bypass", false)) return;
+						event.setCancelled(true);
+						sendMessage(player, "needs to reach", us, 0, false);
+						return;
 					}
 				}
 			}

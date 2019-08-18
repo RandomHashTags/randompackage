@@ -34,7 +34,7 @@ public class PathFireball extends RPAddon implements RarityFireball {
 				final int R = ("chance=" + chance + ";").length();
 				final String r = s.substring(R);
 				final MagicDust d = getDust(r);
-				return d.getRandomPercentItem();
+				return d.getRandomPercentItem(random);
 			}
 		}
 		return null;

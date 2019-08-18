@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -82,8 +83,8 @@ public class Masks extends CustomEnchants implements Listener {
             p.getInventory().setHelmet(equippedMasks.get(p));
             p.updateInventory();
         }
-        equippedMasks = null;
         masks = null;
+        instance = null;
     }
 
     @EventHandler
@@ -95,67 +96,60 @@ public class Masks extends CustomEnchants implements Listener {
             equippedMasks.remove(player);
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final int r = event.getRawSlot();
-            final String click = event.getClick().name();
-            if(r < 0 || !click.equals("RIGHT") && !event.getAction().equals(InventoryAction.SWAP_WITH_CURSOR)) return;
-            final ItemStack current = event.getCurrentItem();
-            if(current == null || !current.getType().name().endsWith("HELMET")) return;
-            final ItemStack mask = event.getCursor();
-            final Mask m = valueOf(mask), onitem = getOnItem(current);
-            final Player player = (Player) event.getWhoClicked();
-            if(m != null && onitem == null) {
-                event.setCancelled(true);
-                final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
-                pluginmanager.callEvent(e);
-                apply(m, current);
-                item = m.getItem();
-                final int a = item.getAmount()-mask.getAmount();
-                if(a <= 0) item = new ItemStack(Material.AIR);
-                else       item.setAmount(a);
-                event.setCursor(item);
-            } else if(click.equals("RIGHT") && onitem != null) {
-                item = current; itemMeta = item.getItemMeta(); lore.clear();
-                lore.addAll(itemMeta.getLore());
-                lore.remove(onitem.getApplied());
-                itemMeta.setLore(lore); lore.clear();
-                item.setItemMeta(itemMeta);
-                event.setCancelled(true);
-                event.setCurrentItem(item);
-                event.setCursor(onitem.getItem());
-            } else return;
-            player.updateInventory();
-        }
+        final int r = event.getRawSlot();
+        final String click = event.getClick().name();
+        if(r < 0 || !click.equals("RIGHT") && !event.getAction().equals(InventoryAction.SWAP_WITH_CURSOR)) return;
+        final ItemStack current = event.getCurrentItem();
+        if(current == null || !current.getType().name().endsWith("HELMET")) return;
+        final ItemStack mask = event.getCursor();
+        final Mask m = valueOf(mask), onitem = getOnItem(current);
+        final Player player = (Player) event.getWhoClicked();
+        if(m != null && onitem == null) {
+            event.setCancelled(true);
+            final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
+            pluginmanager.callEvent(e);
+            apply(m, current);
+            item = m.getItem();
+            final int a = item.getAmount()-mask.getAmount();
+            if(a <= 0) item = new ItemStack(Material.AIR);
+            else       item.setAmount(a);
+            event.setCursor(item);
+        } else if(click.equals("RIGHT") && onitem != null) {
+            item = current; itemMeta = item.getItemMeta(); lore.clear();
+            lore.addAll(itemMeta.getLore());
+            lore.remove(onitem.getApplied());
+            itemMeta.setLore(lore); lore.clear();
+            item.setItemMeta(itemMeta);
+            event.setCancelled(true);
+            event.setCurrentItem(item);
+            event.setCursor(onitem.getItem());
+        } else return;
+        player.updateInventory();
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void entityDamageEvent(EntityDamageEvent event) {
-        if(!event.isCancelled()) {
-            final Player victim = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
-            final ItemStack i = equippedMasks.getOrDefault(victim, null);
-            if(victim != null && i != null) {
-                final PlayerInventory vi = victim.getInventory();
-                final Mask m = valueOf(vi.getHelmet());
-                if(m != null) {
-                    vi.setHelmet(i);
-                    victim.updateInventory();
-                    equippedMasks.remove(victim);
-                }
+        final Player victim = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
+        final ItemStack i = equippedMasks.getOrDefault(victim, null);
+        if(victim != null && i != null) {
+            final PlayerInventory vi = victim.getInventory();
+            final Mask m = valueOf(vi.getHelmet());
+            if(m != null) {
+                vi.setHelmet(i);
+                victim.updateInventory();
+                equippedMasks.remove(victim);
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void pvAnyEvent(PvAnyEvent event) {
-        if(!event.isCancelled()) {
-            tryToProcMask(event.damager, event);
-        }
+        tryToProcMask(event.damager, event);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void isDamagedEvent(isDamagedEvent event) {
-        if(!event.isCancelled())
-            tryToProcMask(event.victim, event);
+        tryToProcMask(event.victim, event);
     }
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
@@ -166,27 +160,24 @@ public class Masks extends CustomEnchants implements Listener {
     private void playerDeathEvent(PlayerDeathEvent event) {
         tryToProcMask(event.getEntity().getKiller(), event);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
-        if(!event.isCancelled()) tryToProcMask(event.getPlayer(), event);
+        tryToProcMask(event.getPlayer(), event);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = event.getPlayer();
-            final Mask m = valueOf(event.getItemInHand());
-            if(m != null) {
-                event.setCancelled(true);
-                player.updateInventory();
-            } else {
-                tryToProcMask(player, event);
-            }
+        final Player player = event.getPlayer();
+        final Mask m = valueOf(event.getItemInHand());
+        if(m != null) {
+            event.setCancelled(true);
+            player.updateInventory();
+        } else {
+            tryToProcMask(player, event);
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
-        if(!event.isCancelled())
-            tryToProcMask((Player) event.getEntity(), event);
+        tryToProcMask((Player) event.getEntity(), event);
     }
     @EventHandler(priority = EventPriority.HIGH)
     private void playerInteractEvent(PlayerInteractEvent event) {
@@ -199,10 +190,11 @@ public class Masks extends CustomEnchants implements Listener {
             giveItem(player, getMask(maskCanObtain.get(random.nextInt(maskCanObtain.size()))).getItem());
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void entityShootBowEvent(EntityShootBowEvent event) {
-        if(!event.isCancelled() && event.getEntity() instanceof Player)
-            tryToProcMask((Player) event.getEntity(), event);
+        final Entity e = event.getEntity();
+        if(e instanceof Player)
+            tryToProcMask((Player) e, event);
     }
 
     public void tryToProcMask(Player player, Event event) {
@@ -269,44 +261,42 @@ public class Masks extends CustomEnchants implements Listener {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void playerArmorEvent(PlayerArmorEvent event) {
-        if(!event.isCancelled()) {
-            final PlayerArmorEvent.ArmorEventReason reason = event.reason;
-            final String r = reason.name();
-            final Player player = event.player;
-            final boolean contains = equippedMasks.keySet().contains(player);
-            final ItemStack i = event.getItem().clone(), o = contains ? equippedMasks.get(player) : new ItemStack(Material.AIR);
-            if(!contains && r.contains("_EQUIP")) {
-                final Mask m = getOnItem(i);
-                if(m != null) {
-                    final MaskEquipEvent e = new MaskEquipEvent(player, m, o, reason);
-                    pluginmanager.callEvent(e);
-                    if(!e.isCancelled()) {
-                        equippedMasks.put(player, i);
-                        procMaskAttributes(player, e, m);
-                        scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-                            player.getInventory().setHelmet(m.getItem().clone());
-                            player.updateInventory();
-                        }, 0);
-                    }
-                } else return;
-            } else if(contains && r.contains("_UNEQUIP")) {
-                final Mask m = valueOf(i);
-                if(m != null) {
-                    final MaskUnequipEvent e = new MaskUnequipEvent(player, m, o, reason);
-                    pluginmanager.callEvent(e);
-                    if(!e.isCancelled()) {
-                        final ItemStack h = e.helmet;
-                        event.setCurrentItem(h);
-                        equippedMasks.remove(player);
-                        procMaskAttributes(player, e, e.mask);
-                        procPlayerItem(event, player, h);
-                    }
-                } else return;
+        final PlayerArmorEvent.ArmorEventReason reason = event.reason;
+        final String r = reason.name();
+        final Player player = event.player;
+        final boolean contains = equippedMasks.keySet().contains(player);
+        final ItemStack i = event.getItem().clone(), o = contains ? equippedMasks.get(player) : new ItemStack(Material.AIR);
+        if(!contains && r.contains("_EQUIP")) {
+            final Mask m = getOnItem(i);
+            if(m != null) {
+                final MaskEquipEvent e = new MaskEquipEvent(player, m, o, reason);
+                pluginmanager.callEvent(e);
+                if(!e.isCancelled()) {
+                    equippedMasks.put(player, i);
+                    procMaskAttributes(player, e, m);
+                    scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                        player.getInventory().setHelmet(m.getItem().clone());
+                        player.updateInventory();
+                    }, 0);
+                }
             } else return;
-            player.updateInventory();
-        }
+        } else if(contains && r.contains("_UNEQUIP")) {
+            final Mask m = valueOf(i);
+            if(m != null) {
+                final MaskUnequipEvent e = new MaskUnequipEvent(player, m, o, reason);
+                pluginmanager.callEvent(e);
+                if(!e.isCancelled()) {
+                    final ItemStack h = e.helmet;
+                    event.setCurrentItem(h);
+                    equippedMasks.remove(player);
+                    procMaskAttributes(player, e, e.mask);
+                    procPlayerItem(event, player, h);
+                }
+            } else return;
+        } else return;
+        player.updateInventory();
     }
 
     public void apply(Mask m, ItemStack is) {

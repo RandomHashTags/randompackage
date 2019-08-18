@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -51,11 +52,8 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded ChatEvents &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		bragDisplay = null;
-		itemDisplay = null;
 		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
-		bragInventories = null;
-		viewingBrag = null;
+		instance = null;
 	}
 	@EventHandler
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
@@ -182,7 +180,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		return true;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		if(viewingBrag.contains(player.getUniqueId())) {

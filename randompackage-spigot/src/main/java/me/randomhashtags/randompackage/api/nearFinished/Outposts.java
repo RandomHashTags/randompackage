@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Outpost;
-import me.randomhashtags.randompackage.utils.addons.FileOutpost;
-import me.randomhashtags.randompackage.utils.objects.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.addons.FileOutpost;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -76,7 +75,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             for(File f : folder.listFiles()) {
                 final FileOutpost o = new FileOutpost(f);
                 o.setOutpostStatus(OutpostStatus.UNCONTESTED);
-                gi.setItem(o.getSlot(), o.getDisplay());
+                gi.setItem(o.getSlot(), o.getItem());
             }
         }
         background = d(config, "gui.background");
@@ -88,10 +87,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (outposts != null ? outposts.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        deleteAll(Feature.OUTPOSTS);
-        config = null;
-        gui = null;
-        background = null;
+        outposts = null;
         instance = null;
     }
 

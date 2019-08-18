@@ -87,18 +87,8 @@ public class MobStacker extends RPFeature {
     }
     public void unload() {
         for(int i : tasks) scheduler.cancelTask(i);
-
-        config = null;
-        stackable = null;
-        tasks = null;
-        maxStackSize = null;
-        stackRadius = null;
-        slaysStack = null;
-        defaultName = null;
-        customNames = null;
-        lastDamager = null;
-
         backup();
+        instance = null;
     }
 
     public void backup() {
@@ -108,9 +98,9 @@ public class MobStacker extends RPFeature {
         for(StackedEntity e : se) {
             final long c = e.creationTime;
             if(c != 0) {
-                final UUID u = e.uuid;
-                a.set("stacked mobs." + u + ".creation", c);
-                a.set("stacked mobs." + u + ".size", e.size);
+                final String u = "stacked mobs." + e.uuid.toString() + ".";
+                a.set(u + "creation", c);
+                a.set(u + "size", e.size);
             }
         }
         saveOtherData();
@@ -133,14 +123,12 @@ public class MobStacker extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " stacked mobs &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if(!event.isCancelled()) {
-            final String sr = event.getSpawnReason().name();
-            if(sr.contains("NATURAL") || sr.contains("CHUNK_GEN")) {
-            } else if(sr.contains("EGG")) {
-            } else if(sr.contains("SPAWNER")) {
-            }
+        final String sr = event.getSpawnReason().name();
+        if(sr.contains("NATURAL") || sr.contains("CHUNK_GEN")) {
+        } else if(sr.contains("EGG")) {
+        } else if(sr.contains("SPAWNER")) {
         }
     }
     public void stackEntities() {
@@ -225,20 +213,18 @@ public class MobStacker extends RPFeature {
             if(s.size == 1) StackedEntity.stackedEntities.remove(s);
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-        if(!event.isCancelled()) {
-            final Entity entity = event.getEntity(), dam = event.getDamager();
-            final LivingEntity e = entity instanceof LivingEntity ? (LivingEntity) entity : null, damager = e != null && dam instanceof LivingEntity ? (LivingEntity) dam : null;
-            if(e != null && !event.getEntityType().equals(EntityType.PLAYER)) {
-                final StackedEntity s = StackedEntity.valueOf(e.getUniqueId());
-                if(s != null && e.getHealth()-event.getFinalDamage() <= 0.000) {
-                    event.setDamage(0);
-                    e.setHealth(e.getMaxHealth());
-                    s.kill(damager, 1);
-                }
-                if(s != null && s.size == 1) StackedEntity.stackedEntities.remove(s);
+        final Entity entity = event.getEntity(), dam = event.getDamager();
+        final LivingEntity e = entity instanceof LivingEntity ? (LivingEntity) entity : null, damager = e != null && dam instanceof LivingEntity ? (LivingEntity) dam : null;
+        if(e != null && !event.getEntityType().equals(EntityType.PLAYER)) {
+            final StackedEntity s = StackedEntity.valueOf(e.getUniqueId());
+            if(s != null && e.getHealth()-event.getFinalDamage() <= 0.000) {
+                event.setDamage(0);
+                e.setHealth(e.getMaxHealth());
+                s.kill(damager, 1);
             }
+            if(s != null && s.size == 1) StackedEntity.stackedEntities.remove(s);
         }
     }
 }

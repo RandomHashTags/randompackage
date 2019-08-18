@@ -114,7 +114,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(ItemStack is : player.getInventory().getArmorContents()) {
                 if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
                     for(String s : is.getItemMeta().getLore()) {
-                        final CustomEnchant e = CustomEnchant.valueOf(s);
+                        final CustomEnchant e = valueOfCustomEnchant(s);
                         if(e != null) {
                             procEnchant(event, e, getEnchantmentLevel(s), is, player);
                         }
@@ -128,7 +128,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final ItemStack h = is == null ? player.getInventory().getItemInHand() : is;
             if(h != null && h.hasItemMeta() && h.getItemMeta().hasLore()) {
                 for(String s : h.getItemMeta().getLore()) {
-                    final CustomEnchant e = CustomEnchant.valueOf(s);
+                    final CustomEnchant e = valueOfCustomEnchant(s);
                     if(e != null) {
                         procEnchant(event, e, getEnchantmentLevel(s), h, player);
                     }
@@ -142,7 +142,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(ItemStack is : player.getInventory().getArmorContents()) {
                 if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
                     for(String s : is.getItemMeta().getLore()) {
-                        final CustomEnchant e = CustomEnchant.valueOf(s);
+                        final CustomEnchant e = valueOfCustomEnchant(s);
                         if(e != null && e.equals(enchant)) {
                             procEnchant(event, e, getEnchantmentLevel(s), is, player);
                         }
@@ -624,7 +624,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
                         stoppedAllEnchants.add(p);
                         scheduler.scheduleSyncDelayedTask(randompackage, () -> stoppedAllEnchants.remove(p), 20*seconds);
                     } else {
-                        final CustomEnchant ce = CustomEnchant.valueOf(J.split(":")[0]);
+                        final CustomEnchant ce = valueOfCustomEnchant(J.split(":")[0]);
                         if(ce != null) {
                             if(!stoppedEnchants.keySet().contains(p)) stoppedEnchants.put(p, new HashMap<>());
                             if(stoppedEnchants.get(p).keySet().contains(ce)) {
@@ -697,18 +697,18 @@ public abstract class CustomEnchantUtils extends RPFeature {
             ((MobStackDepleteEvent) event).amount = amount;
         } else if(a.toLowerCase().startsWith("createcombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
             createCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("addcombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
             addCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("depletecombo{")) {
             final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = CustomEnchant.valueOf(path.split(":")[0]);
+            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
             depleteCombo(player, n, Double.parseDouble(path.split(":")[1]));
         } else if(a.toLowerCase().startsWith("stopcombo{")) {
-            final CustomEnchant n = CustomEnchant.valueOf(a.split("\\{")[1].split("}")[0]);
+            final CustomEnchant n = valueOfCustomEnchant(a.split("\\{")[1].split("}")[0]);
             stopCombo(player, n);
         } else if(a.toLowerCase().startsWith("explode{")) {
             final Location l = getRecipientLoc(event, a.split("\\[")[1].split("]")[0]);
@@ -945,7 +945,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         final HashMap<CustomEnchant, Integer> enchants = new HashMap<>();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {
-                final CustomEnchant e = CustomEnchant.valueOf(s);
+                final CustomEnchant e = valueOfCustomEnchant(s);
                 if(e != null) enchants.put(e, getEnchantmentLevel(s));
             }
         }

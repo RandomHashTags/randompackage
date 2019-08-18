@@ -15,7 +15,7 @@ import java.util.List;
 import static me.randomhashtags.randompackage.api.nearFinished.Outposts.statuses;
 
 public class FileOutpost extends RPAddon implements Outpost {
-    private ItemStack display;
+    private ItemStack item;
     private List<String> lostControl, claimed;
     private Scoreboard scoreboard;
 
@@ -31,9 +31,9 @@ public class FileOutpost extends RPAddon implements Outpost {
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public int getSlot() { return yml.getInt("gui.slot"); }
-    public ItemStack getDisplay() {
-        if(display == null) display = api.d(yml, "gui");
-        return display;
+    public ItemStack getItem() {
+        if(item == null) item = api.d(yml, "gui");
+        return item;
     }
     public List<String> getLostControlMsg() {
         if(lostControl == null) lostControl = api.colorizeListString(yml.getStringList("messages.lost control"));

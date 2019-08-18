@@ -108,16 +108,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (filtercategories != null ? filtercategories.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
-        gui = null;
-        enablePrefix = null;
-        disabledPrefix = null;
-        enable = null;
-        disable = null;
-        addedLore = null;
-        categorySlots = null;
-        categories = null;
-        deleteAll(Feature.ITEM_FILTER);
+        filtercategories = null;
+        instance = null;
     }
 
     public void viewHelp(Player player) {
@@ -173,50 +165,45 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            final String t = event.getView().getTitle();
-            final FileFilterCategory category = categoryTitles.getOrDefault(t, null);
-            if(t.equals(gui.getTitle()) || category != null) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final ItemStack c = event.getCurrentItem();
-                final int r = event.getRawSlot();
-                if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        final String t = event.getView().getTitle();
+        final FileFilterCategory category = categoryTitles.getOrDefault(t, null);
+        if(t.equals(gui.getTitle()) || category != null) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final ItemStack c = event.getCurrentItem();
+            final int r = event.getRawSlot();
+            if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
 
-                if(category != null) {
-                    final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
-                    final UMaterial target = UMaterial.match(c);
-                    if(filtered.contains(target)) {
-                        filtered.remove(target);
-                    } else {
-                        filtered.add(target);
-                    }
-                    top.setItem(r, getStatus(filtered, c));
-                    player.updateInventory();
-                } else if(categorySlots.containsKey(r)) {
-                    final FilterCategory fc = getFilterCategory(categorySlots.get(r));
-                    if(fc != null) {
-                        player.closeInventory();
-                        viewCategory(player, fc);
-                    }
+            if(category != null) {
+                final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
+                final UMaterial target = UMaterial.match(c);
+                if(filtered.contains(target)) {
+                    filtered.remove(target);
+                } else {
+                    filtered.add(target);
+                }
+                top.setItem(r, getStatus(filtered, c));
+                player.updateInventory();
+            } else if(categorySlots.containsKey(r)) {
+                final FilterCategory fc = getFilterCategory(categorySlots.get(r));
+                if(fc != null) {
+                    player.closeInventory();
+                    viewCategory(player, fc);
                 }
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = event.getPlayer();
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            if(pdata.filter) {
-                if(!pdata.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
-                    event.setCancelled(true);
-                }
+        final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
+        if(pdata.filter) {
+            if(!pdata.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
+                event.setCancelled(true);
             }
         }
     }

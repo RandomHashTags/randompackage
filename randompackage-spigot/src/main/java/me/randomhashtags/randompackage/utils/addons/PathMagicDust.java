@@ -5,15 +5,16 @@ import me.randomhashtags.randompackage.addons.MagicDust;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathMagicDust extends MagicDust {
+public class PathMagicDust extends RPAddon implements MagicDust {
 	private String path;
-	private PathMagicDust upgradesto;
+	private MagicDust upgradesto;
 	private ItemStack is;
 	private int chance, min, max;
-	private double upgradecost;
+	private BigDecimal upgradecost;
 	private List<EnchantRarity> appliesto;
 	public PathMagicDust(String path) {
 		this.path = path;
@@ -22,7 +23,7 @@ public class PathMagicDust extends MagicDust {
 		final String[] a = config.getString("dusts." + path + ".percents").split(";");
 		min = Integer.parseInt(a[0]);
 		max = Integer.parseInt(a[1]);
-		upgradecost = config.getInt("dusts." + path + ".upgrade cost");
+		upgradecost = BigDecimal.valueOf(config.getInt("dusts." + path + ".upgrade cost"));
 		addDust(getIdentifier(), this);
 	}
 	public String getIdentifier() { return path; }
@@ -35,7 +36,7 @@ public class PathMagicDust extends MagicDust {
 		return is.clone();
 	}
 
-	public List<EnchantRarity> getAppliesTo() {
+	public List<EnchantRarity> getAppliesToRarities() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
 			for(String s : getAddonConfig("fireballs.yml").getString("dusts." + path + ".applies to").split(";")) {
@@ -50,5 +51,5 @@ public class PathMagicDust extends MagicDust {
 		if(U != null) upgradesto = getDust(U);
 		return upgradesto;
 	}
-	public double getUpgradeCost() { return upgradecost; }
+	public BigDecimal getUpgradeCost() { return upgradecost; }
 }

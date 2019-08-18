@@ -1,20 +1,17 @@
 package me.randomhashtags.randompackage.utils.listeners;
 
 import me.randomhashtags.randompackage.addons.*;
-import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
 import me.randomhashtags.randompackage.api.*;
-import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addons.WhiteScrolls;
+import me.randomhashtags.randompackage.api.unfinished.Trinkets;
 import me.randomhashtags.randompackage.events.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
-import me.randomhashtags.randompackage.api.Boosters;
-import me.randomhashtags.randompackage.api.unfinished.Trinkets;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOOverhaul;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOClassic;
+import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOOverhaul;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,10 +109,6 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         }
     }
     public void unload() {
-        itemsConfig = null;
-        items = null;
-        customitems = null;
-        air = null;
     }
 
     private int getInt(String input, int max) {
@@ -131,7 +125,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         input = input.toLowerCase();
         if(input.startsWith("banknote:")) {
             final String[] a = Q.split(":");
-            return getBanknote(Integer.parseInt(a[1]), a.length == 3 ? a[2] : null);
+            return getBanknote(BigDecimal.valueOf(Integer.parseInt(a[1])), a.length == 3 ? a[2] : null);
         } else if(input.startsWith("blackscroll:")) {
             final String[] a = Q.split(":");
             final BlackScroll b = getBlackScroll(a[1]);
@@ -143,7 +137,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final int min = m ? Integer.parseInt(A.split("-")[0]) : b.getMinPercent();
                     amount = m ? min+random.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
                 } else {
-                    amount = b.getRandomPercent();
+                    amount = b.getRandomPercent(random);
                 }
             }
             return b != null ? b.getItem(amount) : air;
@@ -151,7 +145,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final CollectionFilter cf = CollectionFilter.getCollectionFilter();
             return cf.isEnabled() ? cf.getCollectionChest("all") : air;
         } else if(input.startsWith("customarmor:")) {
-            if(CustomArmor.getCustomArmor().isEnabled) {
+            if(CustomArmor.getCustomArmor().isEnabled()) {
                 final String[] b = Q.split(":");
                 final ArmorSet s = getArmorSet(b[1]);
                 String type = b.length == 2 ? "random" : b[2];
@@ -194,7 +188,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final String[] a = Q.split(":");
             final MagicDust d = getDust(a[1]);
             final int percent = a.length >= 3 ? Integer.parseInt(a[2]) : -1;
-            return d != null ? percent == -1 ? d.getRandomPercentItem() : d.getItem(percent) : air;
+            return d != null ? percent == -1 ? d.getRandomPercentItem(random) : d.getItem(percent) : air;
         } else if(input.startsWith("enchantmentorb:")) {
             final String[] a = Q.split(":");
             String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(random.nextInt(101));
@@ -232,7 +226,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             if(k == null) k = (CustomKit) kits.values().toArray()[random.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? k.getFallenHeroGemItem(k) : air;
+            return f != null ? k.getFallenHeroItem(k, false) : air;
         } else if(input.startsWith("fallenhero")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
             CustomKit k = type != null ? getKit(type) : null;
@@ -248,7 +242,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             if(k == null) k = (CustomKit) kits.values().toArray()[random.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? k.getFallenHeroSpawnItem(k) : air;
+            return f != null ? k.getFallenHeroItem(k, true) : air;
         } else if(input.startsWith("lootbox:")) {
             final Lootbox l = getLootbox(Q.split(":")[1]);
             return l != null ? l.getItem() : air;
@@ -346,7 +340,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final String[] a = Q.split(":");
             final boolean r = a[1].contains("-");
             final int min = r ? Integer.parseInt(a[1].split("-")[0]) : Integer.parseInt(a[1]), amt = r ? min+random.nextInt(Integer.parseInt(a[1].split("-")[1])-min+1) : min;
-            return getXPBottle(amt, a.length == 3 ? a[2] : null);
+            return getXPBottle(BigDecimal.valueOf(amt), a.length == 3 ? a[2] : null);
         } else if(customitems != null && customitems.containsKey(Q)) {
             return customitems.get(Q).clone();
         } else if(items != null && items.containsKey(input)) {
@@ -355,21 +349,21 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         return null;
     }
 
-    public ItemStack getBanknote(double value, String signer) {
+    public ItemStack getBanknote(BigDecimal value, String signer) {
         item = items.get("banknote").clone(); itemMeta = item.getItemMeta(); lore.clear();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{SIGNER}")) s = signer != null ? s.replace("{SIGNER}", signer) : null;
-            if(s != null) lore.add(s.replace("{VALUE}", formatDouble(value)));
+            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);
         return item;
     }
-    public ItemStack getXPBottle(int value, String enchanter) {
+    public ItemStack getXPBottle(BigDecimal value, String enchanter) {
         item = items.get("xpbottle").clone(); itemMeta = item.getItemMeta(); lore.clear();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{ENCHANTER}")) s = enchanter != null ? s.replace("{ENCHANTER}", enchanter) : null;
-            if(s != null) lore.add(s.replace("{VALUE}", formatInt(value)));
+            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);

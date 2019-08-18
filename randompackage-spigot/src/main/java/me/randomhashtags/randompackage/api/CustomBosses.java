@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.CustomBoss;
-import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
-import me.randomhashtags.randompackage.utils.objects.Feature;
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addons.living.LivingCustomMinion;
+import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
+import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,7 +24,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class CustomBosses extends RPFeature {
 	private static CustomBosses instance;
@@ -36,6 +39,7 @@ public class CustomBosses extends RPFeature {
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 
 	public String getIdentifier() { return "CUSTOM_BOSSES"; }
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();
@@ -59,12 +63,13 @@ public class CustomBosses extends RPFeature {
 		loadBackup();
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (bosses != null ? bosses.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
+	@Override
 	public void unload() {
 		backup();
 		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
 		deleteAll(Feature.CUSTOM_BOSSES);
-		deadBosses = null;
+		instance = null;
 	}
 
 	public void backup() {
@@ -111,7 +116,7 @@ public class CustomBosses extends RPFeature {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack I = event.getItem();
 		if(I != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			final CustomBoss c = CustomBoss.valueOf(I);
+			final CustomBoss c = valueOfCustomBoss(I);
 			if(c != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);

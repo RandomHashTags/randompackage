@@ -35,13 +35,14 @@ public class ActiveGlobalChallenge extends RPStorage {
         this.participants = participants;
         long remainingTime = getRemainingTime();
         if(remainingTime < 0) remainingTime = 0;
-        task = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin, () -> end(true, 3), remainingTime);
+        task = scheduler.scheduleSyncDelayedTask(getPlugin, () -> end(true, 3), remainingTime);
         active.put(type, this);
     }
 
     public long getStartedTime() { return started; }
     public GlobalChallenge getType() { return type; }
     public HashMap<UUID, BigDecimal> getParticipants() { return participants; }
+    public void setParticipants(HashMap<UUID, BigDecimal> participants) { this.participants = participants; }
 
     public long getRemainingTime() {
         return started+(type.getDuration()*1000)-System.currentTimeMillis();
@@ -76,7 +77,7 @@ public class ActiveGlobalChallenge extends RPStorage {
         pm.callEvent(e);
         globalchallenges.reloadInventory();
         final Map<UUID, BigDecimal> placements = globalchallenges.getPlacing(participants);
-        if(task != -1) Bukkit.getScheduler().cancelTask(task);
+        if(task != -1) scheduler.cancelTask(task);
         active.remove(type);
         if(giveRewards) {
             int i = 1;

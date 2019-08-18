@@ -101,8 +101,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
     public boolean canLand(Location spawnLocation) {
         final World w = spawnLocation.getWorld();
         final Block b = w.getBlockAt(new Location(w, spawnLocation.getBlockX(), spawnLocation.getBlockY()-1, spawnLocation.getBlockZ()));
-        if(cannotLandAbove().contains(UMaterial.match(b.getType().name()))) return false;
-        return true;
+        return !cannotLandAbove().contains(UMaterial.match(b.getType().name()));
     }
 
 }

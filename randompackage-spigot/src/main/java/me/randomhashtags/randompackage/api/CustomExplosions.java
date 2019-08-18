@@ -119,9 +119,6 @@ public class CustomExplosions extends RPFeature {
 		}
 	}
 	public void unload() {
-		config = null;
-		cannotBreakTNT = null;
-		cannotBreakCreepers = null;
 		final HashMap<Location, FileCustomTNT> tnt = FileCustomTNT.placed;
 		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
 		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.primed;
@@ -130,15 +127,15 @@ public class CustomExplosions extends RPFeature {
 		a.set("creepers", null);
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
 		if(tnt != null) {
-			for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getYamlName());
+			for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getIdentifier());
 		}
 		a.set("tnt.placed", placedtnt);
 		if(primed != null) {
-			for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getYamlName());
+			for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getIdentifier());
 		}
 		a.set("tnt.primed", primedtnt);
 		if(creepers != null) {
-			for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getYamlName());
+			for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getIdentifier());
 		}
 		a.set("creepers", cree);
 		saveOtherData();
@@ -147,6 +144,7 @@ public class CustomExplosions extends RPFeature {
 		FileCustomCreeper.living = null;
 		FileCustomTNT.placed = null;
 		FileCustomTNT.primed = null;
+		instance = null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -167,8 +165,8 @@ public class CustomExplosions extends RPFeature {
 	private void blockPlaceEvent(BlockPlaceEvent event) {
 		if(!event.isCancelled()) {
 			final ItemStack i = event.getItemInHand();
-			if(i != null && i.getType().equals(Material.TNT) && i.hasItemMeta()) {
-				final CustomExplosion ce = CustomExplosion.valueOf(i);
+			if(i.getType().equals(Material.TNT) && i.hasItemMeta()) {
+				final CustomExplosion ce = valueOfCustomExplosion(i);
 				if(ce instanceof FileCustomTNT) {
 					((FileCustomTNT) ce).place(event.getBlockPlaced().getLocation());
 				}
@@ -191,7 +189,7 @@ public class CustomExplosions extends RPFeature {
 					ce.ignite(l);
 				}
 			} else {
-				final CustomExplosion c = CustomExplosion.valueOf(i);
+				final CustomExplosion c = valueOfCustomExplosion(i);
 				if(c instanceof FileCustomCreeper) {
 					final Location lo = l.clone().add(0, 1, 0);
 					event.setCancelled(true);
@@ -201,65 +199,63 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void blockDispenseEvent(BlockDispenseEvent event) {
-		if(!event.isCancelled()) {
-			final ItemStack it = event.getItem();
-			if(it != null && it.hasItemMeta()) {
-				final CustomExplosion ce = CustomExplosion.valueOf(it);
-				if(ce instanceof FileCustomTNT) {
-					event.setCancelled(true);
-					final Block b = event.getBlock();
-					final Location bl = b.getLocation();
-					double x = bl.getBlockX(), y = bl.getBlockY(), z = bl.getBlockZ();
-					final Dispenser disp = (Dispenser) b.getState().getData();
-					final BlockFace bf = disp.getFacing();
-					if(bf.equals(BlockFace.DOWN)) y -= 1.0;
-					else if(bf.equals(BlockFace.UP)) y += 1.0;
-					else if(bf.equals(BlockFace.NORTH)) z -= 0.5;
-					else if(bf.equals(BlockFace.SOUTH)) z += 1.5;
-					else if(bf.equals(BlockFace.WEST)) x -= 0.5;
-					else if(bf.equals(BlockFace.EAST)) x += 1.5;
-					else {
-						Bukkit.broadcastMessage("[RandomPackage.CustomExplosions] Different direction! \"" + disp.getFacing().name() + "\"");
-						return;
-					}
-					if(!bf.equals(BlockFace.EAST) && !bf.equals(BlockFace.WEST)) x += 0.5;
-					if(!bf.name().endsWith("TH")) z += 0.5;
-					final Location l = new Location(b.getWorld(), x, y, z);
-					((FileCustomTNT) ce).spawn(l);
+		final ItemStack it = event.getItem();
+		if(it.hasItemMeta()) {
+			final CustomExplosion ce = valueOfCustomExplosion(it);
+			if(ce instanceof FileCustomTNT) {
+				event.setCancelled(true);
+				final Block b = event.getBlock();
+				final Location bl = b.getLocation();
+				double x = bl.getBlockX(), y = bl.getBlockY(), z = bl.getBlockZ();
+				final Dispenser disp = (Dispenser) b.getState().getData();
+				final BlockFace bf = disp.getFacing();
+				final boolean down = bf.equals(BlockFace.DOWN), up = bf.equals(BlockFace.UP), north = bf.equals(BlockFace.NORTH), east = bf.equals(BlockFace.EAST), west = bf.equals(BlockFace.WEST), south = bf.equals(BlockFace.SOUTH);
+				if(down) y -= 1.0;
+				else if(up) y += 1.0;
+				else if(north) z -= 0.5;
+				else if(south) z += 1.5;
+				else if(west) x -= 0.5;
+				else if(east) x += 1.5;
+				else {
+					Bukkit.broadcastMessage("[RandomPackage.CustomExplosions] Different direction! \"" + disp.getFacing().name() + "\"");
+					return;
+				}
+				if(!east && !west) x += 0.5;
+				if(!bf.name().endsWith("TH")) z += 0.5;
+				final Location l = new Location(b.getWorld(), x, y, z);
+				((FileCustomTNT) ce).spawn(l);
 
-					org.bukkit.block.Dispenser dis = (org.bukkit.block.Dispenser) b.getState();
-					final Inventory i = dis.getInventory();
-					for(int d = 0; d < i.getSize(); d++) {
-						if(i.getItem(d) != null && i.getItem(d).hasItemMeta() && i.getItem(d).getItemMeta().equals(event.getItem().getItemMeta())) {
-							final int e = d;
-							scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-								final ItemStack a = i.getItem(e);
-								if(a.getAmount() == 1) i.setItem(e, new ItemStack(Material.AIR));
-								else                   a.setAmount(a.getAmount() - 1);
-								dis.update();
-							}, 0);
-							return;
-						}
+				org.bukkit.block.Dispenser dis = (org.bukkit.block.Dispenser) b.getState();
+				final Inventory i = dis.getInventory();
+				for(int d = 0; d < i.getSize(); d++) {
+					final ItemStack target = i.getItem(d);
+					if(target != null && target.isSimilar(it)) {
+						final int e = d;
+						scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+							final ItemStack a = i.getItem(e);
+							if(a.getAmount() == 1) i.setItem(e, new ItemStack(Material.AIR));
+							else                   target.setAmount(a.getAmount() - 1);
+							dis.update();
+						}, 0);
+						return;
 					}
 				}
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void entityExplodeEvent(EntityExplodeEvent event) {
-		if(!event.isCancelled()) {
-			final Entity e = event.getEntity();
-			final UUID uuid = e.getUniqueId();
-			final HashMap<UUID, FileCustomCreeper> CC = FileCustomCreeper.living;
-			final HashMap<UUID, FileCustomTNT> CT = FileCustomTNT.primed;
-			final FileCustomCreeper creeper = CC != null ? CC.getOrDefault(uuid, null) : null;
-			final FileCustomTNT tnt = creeper == null && CT != null ? CT.getOrDefault(uuid, null) : null;
-			if(creeper == null && tnt == null) return;
-			final Location l = e.getLocation();
-			if(creeper != null) creeper.explode(event, l);
-			else tnt.explode(event, l);
-		}
+		final Entity e = event.getEntity();
+		final UUID uuid = e.getUniqueId();
+		final HashMap<UUID, FileCustomCreeper> CC = FileCustomCreeper.living;
+		final HashMap<UUID, FileCustomTNT> CT = FileCustomTNT.primed;
+		final FileCustomCreeper creeper = CC != null ? CC.getOrDefault(uuid, null) : null;
+		final FileCustomTNT tnt = creeper == null && CT != null ? CT.getOrDefault(uuid, null) : null;
+		if(creeper == null && tnt == null) return;
+		final Location l = e.getLocation();
+		if(creeper != null) creeper.explode(event, l, random);
+		else tnt.explode(event, l, random);
 	}
 }

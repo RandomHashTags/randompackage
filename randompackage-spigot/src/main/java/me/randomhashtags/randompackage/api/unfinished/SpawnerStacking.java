@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api.unfinished;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class SpawnerStacking extends RPFeature {
@@ -25,7 +26,7 @@ public class SpawnerStacking extends RPFeature {
         instance = null;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
     }
 }

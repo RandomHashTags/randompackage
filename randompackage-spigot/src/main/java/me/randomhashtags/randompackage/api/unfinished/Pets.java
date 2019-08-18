@@ -54,9 +54,8 @@ public class Pets extends RPFeature implements Listener {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (pets != null ? pets.size() : 0) + " Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        config = null;
+        pets = null;
         instance = null;
-        deleteAll(Feature.PETS);
     }
 
     @EventHandler

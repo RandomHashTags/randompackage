@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.objects.CollectionChest;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -138,17 +139,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
             if(o.isOnline()) o.getPlayer().closeInventory();
         }
-        config = null;
-        collectionchest = null;
-        defaultType = null;
-        allType = null;
-        itemType = null;
-        filtertypeString = null;
-        filtertypeSlot = 0;
-        collectionchestgui = null;
-        allMaterial = null;
-        picksup = null;
-        editingfilter = null;
         final YamlConfiguration a = otherdata;
         a.set("collection chests", null);
         final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
@@ -158,6 +148,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
         CollectionChest.deleteAll();
+        instance = null;
     }
 
     private void viewFilter(Player player, CollectionChest cc) {
@@ -190,10 +181,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Block b = event.getClickedBlock();
-        if(!event.isCancelled() && b != null && !b.getType().equals(Material.AIR) && b.getType().name().contains("CHEST")) {
+        if(b != null && !b.getType().equals(Material.AIR) && b.getType().name().contains("CHEST")) {
             final Player player = event.getPlayer();
             final CollectionChest cc = CollectionChest.valueOf(b);
             if(cc != null) {
@@ -211,10 +202,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final ItemStack is = event.getItemInHand();
-        if(!event.isCancelled() && UMaterial.match(is).equals(UMaterial.match(collectionchest)) && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
+        if(UMaterial.match(is).equals(UMaterial.match(collectionchest)) && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
             final Player player = event.getPlayer();
             item = is.clone(); item.setAmount(1);
             final UMaterial u = getFiltered(item);
@@ -227,10 +218,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
         final Block b = event.getBlock();
-        if(!event.isCancelled() && b.getType().equals(collectionchest.getType())) {
+        if(b.getType().equals(collectionchest.getType())) {
             final CollectionChest cc = CollectionChest.valueOf(b);
             if(cc != null) {
                 event.setCancelled(true);
@@ -250,11 +241,11 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && top.getHolder() != null && top.getHolder().equals(player) && event.getView().getTitle().equals(collectionchestgui.getTitle())) {
+        if(top.getHolder() != null && top.getHolder().equals(player) && event.getView().getTitle().equals(collectionchestgui.getTitle())) {
             event.setCancelled(true);
             player.updateInventory();
 

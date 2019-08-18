@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -320,47 +321,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         for(Player p : page.keySet()) p.closeInventory();
         for(Player p : viewingCategory.keySet()) p.closeInventory();
         for(AuctionedItem i : task.keySet()) scheduler.cancelTask(task.get(i));
-        config = null;
-        dataF = null;
-        data = null;
-        collectionbinExpiration = 0;
-        auctionExpiration = 0;
-        ah = null;
-        categories = null;
-        collectionbin = null;
-        confirmAuction = null;
-        purchaseItem = null;
-        categoryItems = null;
-        previousPage = null;
-        nextPage = null;
-        refresh = null;
-        categoryView = null;
-        collectionBin = null;
-        returnToAH = null;
-        mainCategoryView = null;
-        previousPageSlot = 0;
-        nextPageSlot = 0;
-        clickToBuyStatus = null;
-        cancelStatus = null;
-        format = null;
-        categoryFormat = null;
-        collectionBinInAuction = null;
-        collectionBinClaim = null;
-        organization = null;
-        purchasing = null;
-        confirmAuctionSlots = null;
-        cancelAuctionSlots = null;
-        confirmPurchaseSlots = null;
-        cancelPurchaseSlots = null;
-        slots = null;
-        auctioning = null;
-        auctions = null;
-        auctionHouse = null;
-        category = null;
-        page = null;
-        viewing = null;
-        viewingCategory = null;
-        task = null;
+        instance = null;
     }
 
 
@@ -709,126 +670,124 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         return null;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            final String t = event.getView().getTitle();
-            final boolean isAH = t.equals(ah.getTitle()), isC = t.equals(categories.getTitle()), isCB = t.equals(collectionbin.getTitle()), isCA = t.equals(confirmAuction.getTitle()), isP = purchasing.containsKey(player), isCV = t.equals(categoryItems.getTitle());
-            if(isAH || isC || isCB || isCA || isP || isCV) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final ItemStack c = event.getCurrentItem();
-                final int r = event.getRawSlot();
-                if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        final String t = event.getView().getTitle();
+        final boolean isAH = t.equals(ah.getTitle()), isC = t.equals(categories.getTitle()), isCB = t.equals(collectionbin.getTitle()), isCA = t.equals(confirmAuction.getTitle()), isP = purchasing.containsKey(player), isCV = t.equals(categoryItems.getTitle());
+        if(isAH || isC || isCB || isCA || isP || isCV) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final ItemStack c = event.getCurrentItem();
+            final int r = event.getRawSlot();
+            if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
 
-                final UUID u = player.getUniqueId();
-                final String click = event.getClick().name();
+            final UUID u = player.getUniqueId();
+            final String click = event.getClick().name();
 
-                if(isAH || isC || isCB || isCV) {
-                    final boolean n = r == nextPageSlot, p = r == previousPageSlot;
-                    if(n || p) {
-                        if(n) nextPage(player);
-                        else previousPage(player);
-                        return;
-                    } else if(c.equals(getPlayerCollectionBin(player))) {
+            if(isAH || isC || isCB || isCV) {
+                final boolean n = r == nextPageSlot, p = r == previousPageSlot;
+                if(n || p) {
+                    if(n) nextPage(player);
+                    else previousPage(player);
+                    return;
+                } else if(c.equals(getPlayerCollectionBin(player))) {
+                    player.closeInventory();
+                    viewCollectionBin(player);
+                    return;
+                } else if(c.equals(refresh)) {
+                    updatePage(player);
+                    return;
+                } else if(c.equals(returnToAH)) {
+                    player.closeInventory();
+                    view(player, 1);
+                    return;
+                } else if(c.equals(mainCategoryView)) {
+                    player.closeInventory();
+                    viewCategories(player);
+                    return;
+                }
+            }
+
+            if(isP) {
+                final AuctionedItem ai = purchasing.get(player);
+                final ItemStack z = ai != null ? ai.item() : null;
+                final UUID OPU = ai != null ? ai.auctioner : null;
+                final OfflinePlayer OP = ai != null ? Bukkit.getOfflinePlayer(OPU) : null;
+                final HashMap<String, String> replacements = new HashMap<>();
+                final BigDecimal price = ai != null ? ai.price : BigDecimal.ZERO;
+                final double priceDouble = price.doubleValue();
+                final String p = formatBigDecimal(price);
+                replacements.put("{PRICE}", p);
+                replacements.put("{ITEM}", z != null ? z.hasItemMeta() && z.getItemMeta().hasDisplayName() ? z.getItemMeta().getDisplayName() : toMaterial(UMaterial.match(z).name(), false) : "");
+                replacements.put("{PURCHASER}", player.getName());
+                replacements.put("{SELLER}", ai != null ? OP.getName() : "");
+                if(confirmPurchaseSlots.contains(r)) {
+                    purchasing.remove(player);
+                    if(ai == null) {
+                        sendStringListMessage(player, config.getStringList("messages.item no longer exists"), replacements);
+                    } else if(OPU.equals(u)) {
                         player.closeInventory();
-                        viewCollectionBin(player);
-                        return;
-                    } else if(c.equals(refresh)) {
-                        updatePage(player);
-                        return;
-                    } else if(c.equals(returnToAH)) {
-                        player.closeInventory();
+                        sendStringListMessage(player, config.getStringList("messages.cannot purchase own item"), replacements);
                         view(player, 1);
                         return;
-                    } else if(c.equals(mainCategoryView)) {
-                        player.closeInventory();
-                        viewCategories(player);
-                        return;
+                    } else if(eco.withdrawPlayer(player, priceDouble).transactionSuccess()) {
+                        sendStringListMessage(player, config.getStringList("messages.purchased auction"), replacements);
+                        giveItem(player, z);
+                        auctionHouse.remove(ai.auctionTime);
+                        auctions.get(OPU).remove(ai);
+                        if(OP.isOnline()) {
+                            sendStringListMessage(OP.getPlayer(), config.getStringList("messages.sold auction"), replacements);
+                        }
+                        eco.depositPlayer(OP, priceDouble);
+                    } else {
+                        sendStringListMessage(player, config.getStringList("messages.cannot afford"), replacements);
+                    }
+                } else if(cancelPurchaseSlots.contains(r)) {
+                } else return;
+                player.closeInventory();
+            } else if(isAH) {
+                if(slots.contains(r)) {
+                    final AuctionedItem target = valueOf(player, r, "AUCTION_HOUSE");
+                    if(target != null) {
+                        if(target.auctioner.equals(u) && click.equals("SHIFT_RIGHT")) {
+                            cancelAuction(player, target);
+                            updatePage(player);
+                        } else {
+                            tryPurchasing(player, target);
+                        }
+                    }
+                } else if(c.equals(categoryView)) {
+                    player.closeInventory();
+                    viewCategories(player);
+                }
+            } else if(isC) {
+                player.closeInventory();
+                viewCategory(player, UMaterial.match(c), c.getItemMeta().getDisplayName());
+            } else if(isCA) {
+                final HashMap<ItemStack, BigDecimal> i = auctioning.get(player);
+                final ItemStack it = (ItemStack) i.keySet().toArray()[0];
+                final BigDecimal price = i.get(it);
+                if(confirmAuctionSlots.contains(r)) {
+                    auction(player, it, price);
+                    auctioning.remove(player);
+                } else if(!cancelAuctionSlots.contains(r)) {
+                    return;
+                }
+                player.closeInventory();
+                player.updateInventory();
+            } else if(isCV) {
+                if(slots.contains(r)) {
+                    final UMaterial um = UMaterial.match(c);
+                    final AuctionedItem a = valueOf(player, slots.indexOf(r), "CATEGORY_" + um.name() + "_" + c.getItemMeta().getDisplayName());
+                    if(a != null) {
+                        tryPurchasing(player, a);
                     }
                 }
-
-                if(isP) {
-                    final AuctionedItem ai = purchasing.get(player);
-                    final ItemStack z = ai != null ? ai.item() : null;
-                    final UUID OPU = ai != null ? ai.auctioner : null;
-                    final OfflinePlayer OP = ai != null ? Bukkit.getOfflinePlayer(OPU) : null;
-                    final HashMap<String, String> replacements = new HashMap<>();
-                    final BigDecimal price = ai != null ? ai.price : BigDecimal.ZERO;
-                    final double priceDouble = price.doubleValue();
-                    final String p = formatBigDecimal(price);
-                    replacements.put("{PRICE}", p);
-                    replacements.put("{ITEM}", z != null ? z.hasItemMeta() && z.getItemMeta().hasDisplayName() ? z.getItemMeta().getDisplayName() : toMaterial(UMaterial.match(z).name(), false) : "");
-                    replacements.put("{PURCHASER}", player.getName());
-                    replacements.put("{SELLER}", ai != null ? OP.getName() : "");
-                    if(confirmPurchaseSlots.contains(r)) {
-                        purchasing.remove(player);
-                        if(ai == null) {
-                            sendStringListMessage(player, config.getStringList("messages.item no longer exists"), replacements);
-                        } else if(OPU.equals(u)) {
-                            player.closeInventory();
-                            sendStringListMessage(player, config.getStringList("messages.cannot purchase own item"), replacements);
-                            view(player, 1);
-                            return;
-                        } else if(eco.withdrawPlayer(player, priceDouble).transactionSuccess()) {
-                            sendStringListMessage(player, config.getStringList("messages.purchased auction"), replacements);
-                            giveItem(player, z);
-                            auctionHouse.remove(ai.auctionTime);
-                            auctions.get(OPU).remove(ai);
-                            if(OP.isOnline()) {
-                                sendStringListMessage(OP.getPlayer(), config.getStringList("messages.sold auction"), replacements);
-                            }
-                            eco.depositPlayer(OP, priceDouble);
-                        } else {
-                            sendStringListMessage(player, config.getStringList("messages.cannot afford"), replacements);
-                        }
-                    } else if(cancelPurchaseSlots.contains(r)) {
-                    } else return;
-                    player.closeInventory();
-                } else if(isAH) {
-                    if(slots.contains(r)) {
-                        final AuctionedItem target = valueOf(player, r, "AUCTION_HOUSE");
-                        if(target != null) {
-                            if(target.auctioner.equals(u) && click.equals("SHIFT_RIGHT")) {
-                                cancelAuction(player, target);
-                                updatePage(player);
-                            } else {
-                                tryPurchasing(player, target);
-                            }
-                        }
-                    } else if(c.equals(categoryView)) {
-                        player.closeInventory();
-                        viewCategories(player);
-                    }
-                } else if(isC) {
-                    player.closeInventory();
-                    viewCategory(player, UMaterial.match(c), c.getItemMeta().getDisplayName());
-                } else if(isCA) {
-                    final HashMap<ItemStack, BigDecimal> i = auctioning.get(player);
-                    final ItemStack it = (ItemStack) i.keySet().toArray()[0];
-                    final BigDecimal price = i.get(it);
-                    if(confirmAuctionSlots.contains(r)) {
-                        auction(player, it, price);
-                        auctioning.remove(player);
-                    } else if(!cancelAuctionSlots.contains(r)) {
-                        return;
-                    }
-                    player.closeInventory();
-                    player.updateInventory();
-                } else if(isCV) {
-                    if(slots.contains(r)) {
-                        final UMaterial um = UMaterial.match(c);
-                        final AuctionedItem a = valueOf(player, slots.indexOf(r), "CATEGORY_" + um.name() + "_" + c.getItemMeta().getDisplayName());
-                        if(a != null) {
-                            tryPurchasing(player, a);
-                        }
-                    }
-                } else { // Collection Bin
-                    if(slots.contains(r)) {
-                        expire(player, valueOf(player, r, "COLLECTION_BIN"));
-                    }
+            } else { // Collection Bin
+                if(slots.contains(r)) {
+                    expire(player, valueOf(player, r, "COLLECTION_BIN"));
                 }
             }
         }

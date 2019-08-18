@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -73,15 +74,10 @@ public class Homes extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Homes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		config = null;
-		editicon = null;
-		defaultMax = 0;
-		maxHomeIncreaser = null;
 		givedpitem.items.remove("maxhomeincreaser");
 		for(Player p : viewingHomes) p.closeInventory();
 		for(Player player : editingIcons.keySet()) player.closeInventory();
-		viewingHomes = null;
-		editingIcons = null;
+		instance = null;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -155,49 +151,47 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
 		final Player p = (Player) event.getPlayer();
 		viewingHomes.remove(p);
-		if(editingIcons.keySet().contains(p)) editingIcons.remove(p);
+		editingIcons.remove(p);
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
-		if(!event.isCancelled()) {
-			final Player player = (Player) event.getWhoClicked();
-			final boolean v = viewingHomes.contains(player);
-			if(v || editingIcons.containsKey(player)) {
-				event.setCancelled(true);
-				player.updateInventory();
-				final int r = event.getRawSlot();
-				final ItemStack c = event.getCurrentItem();
-				final String click = event.getClick().name();
-				final Inventory top = player.getOpenInventory().getTopInventory();
-				if(r < 0 || r >= top.getSize() || !click.contains("RIGHT") && !click.contains("LEFT") && !click.contains("MIDDLE") || c == null || c.getType().equals(Material.AIR)) return;
-				if(v) {
-					final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-					final List<Home> homes = pdata.getHomes();
-					player.closeInventory();
-					final Home h = homes.get(r);
-					if(click.contains("LEFT")) {
-						teleportToHome(player, h);
-					} else if(click.equals("MIDDLE")) {
-						final HashMap<String, String> replacements = new HashMap<>();
-						replacements.put("{HOME}", h.name);
-						sendStringListMessage(player, config.getStringList("messages.delete"), replacements);
-						pdata.deleteHome(h);
-					} else if(click.contains("RIGHT")) {
-						editIcon(player, h);
-					}
-				} else {
-					final Home h = editingIcons.get(player);
-					final UMaterial um = UMaterial.match(c);
-					final String n = h.name, umn = um.name();
-					h.icon = um;
-					player.closeInventory();
+		final Player player = (Player) event.getWhoClicked();
+		final boolean v = viewingHomes.contains(player);
+		if(v || editingIcons.containsKey(player)) {
+			event.setCancelled(true);
+			player.updateInventory();
+			final int r = event.getRawSlot();
+			final ItemStack c = event.getCurrentItem();
+			final String click = event.getClick().name();
+			final Inventory top = player.getOpenInventory().getTopInventory();
+			if(r < 0 || r >= top.getSize() || !click.contains("RIGHT") && !click.contains("LEFT") && !click.contains("MIDDLE") || c == null || c.getType().equals(Material.AIR)) return;
+			if(v) {
+				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+				final List<Home> homes = pdata.getHomes();
+				player.closeInventory();
+				final Home h = homes.get(r);
+				if(click.contains("LEFT")) {
+					teleportToHome(player, h);
+				} else if(click.equals("MIDDLE")) {
 					final HashMap<String, String> replacements = new HashMap<>();
-					replacements.put("{HOME}", n);
-					replacements.put("{ICON}", umn);
-					sendStringListMessage(player, config.getStringList("messages.save icon"), replacements);
+					replacements.put("{HOME}", h.name);
+					sendStringListMessage(player, config.getStringList("messages.delete"), replacements);
+					pdata.deleteHome(h);
+				} else if(click.contains("RIGHT")) {
+					editIcon(player, h);
 				}
-				player.updateInventory();
+			} else {
+				final Home h = editingIcons.get(player);
+				final UMaterial um = UMaterial.match(c);
+				final String n = h.name, umn = um.name();
+				h.icon = um;
+				player.closeInventory();
+				final HashMap<String, String> replacements = new HashMap<>();
+				replacements.put("{HOME}", n);
+				replacements.put("{ICON}", umn);
+				sendStringListMessage(player, config.getStringList("messages.save icon"), replacements);
 			}
+			player.updateInventory();
 		}
 	}
 	@EventHandler

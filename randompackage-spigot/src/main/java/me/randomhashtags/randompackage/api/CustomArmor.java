@@ -1,15 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
-import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.CEAApplyPotionEffectEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +28,6 @@ import java.util.List;
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class CustomArmor extends CustomEnchants implements Listener {
-	public boolean isEnabled = false;
 	private static CustomArmor instance;
 	public static CustomArmor getCustomArmor() {
 		if(instance == null) instance = new CustomArmor();
@@ -44,8 +39,8 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	private List<Player> inEquipmentLootbox;
 
 	public String getIdentifier() { return "CUSTOM_ARMOR"; }
+	@Override
 	public void load() {
-		isEnabled = true;
 		final long started = System.currentTimeMillis();
 		save(null, "custom armor.yml");
 
@@ -70,40 +65,36 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (armorsets != null ? armorsets.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
+	@Override
 	public void unload() {
-		isEnabled = false;
-		config = null;
-		equipmentLootbox = null;
-		inEquipmentLootbox = null;
-		deleteAll(Feature.CUSTOM_ARMOR);
+		armorsets = null;
+		instance = null;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerArmorEvent(PlayerArmorEvent event) {
-		if(!event.isCancelled()) {
-			final Player player = event.player;
-			final String n = event.reason.name();
-			if(n.contains("_EQUIP")) {
-				scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-					final ArmorSet W = valueOf(player);
-					if(W != null) {
-						final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
-						pluginmanager.callEvent(e);
-						sendStringListMessage(player, W.getActivateMessage(), null);
-						procCustomArmor(e, W);
-					}
-				}, 0);
-			} else if(n.contains("_UNEQUIP")) {
+		final Player player = event.player;
+		final String n = event.reason.name();
+		if(n.contains("_EQUIP")) {
+			scheduler.scheduleSyncDelayedTask(randompackage, () -> {
 				final ArmorSet W = valueOf(player);
 				if(W != null) {
-					final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
+					final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
 					pluginmanager.callEvent(e);
+					sendStringListMessage(player, W.getActivateMessage(), null);
 					procCustomArmor(e, W);
 				}
-			} else if(n.equals("BREAK")) {
-				final ArmorSet W = valueOf(player);
-				if(W != null) procCustomArmor(event, W);
+			}, 0);
+		} else if(n.contains("_UNEQUIP")) {
+			final ArmorSet W = valueOf(player);
+			if(W != null) {
+				final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
+				pluginmanager.callEvent(e);
+				procCustomArmor(e, W);
 			}
+		} else if(n.equals("BREAK")) {
+			final ArmorSet W = valueOf(player);
+			if(W != null) procCustomArmor(event, W);
 		}
 	}
 	

@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api.addons;
 
-import me.randomhashtags.randompackage.addons.objects.EnchantmentOrb;
+import me.randomhashtags.randompackage.addons.EnchantmentOrb;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.utils.addons.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
                 }
                 itemMeta.setLore(lore); lore.clear();
                 i.setItemMeta(itemMeta);
-                new EnchantmentOrb(A, i, appliedlore, appliesto, k, increm);
+                new PathEnchantmentOrb(A, i, appliedlore, appliesto, k, increm);
                 orbs.add(i);
             }
         }
@@ -58,9 +58,9 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (enchantmentorbs != null ? enchantmentorbs.size() : 0) + " Enchantment Orbs &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
-        deleteAll(Feature.ENCHANTMENT_ORBS);
+        enchantmentorbs = null;
         unloadUtils();
+        instance = null;
     }
 
 
@@ -70,15 +70,15 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         item = is; itemMeta = item.getItemMeta(); lore.clear();
         if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
         for(String s : lore) {
-            EnchantmentOrb q = EnchantmentOrb.valueOf(s);
+            EnchantmentOrb q = valueOfEnchantmentOrb(s);
             if(q != null) prevOrb = q;
         }
         if(random.nextInt(100) <= percent) {
-            final String a = orb.getApplyLore();
+            final String a = orb.getApplied();
             if(prevOrb == null) {
                 lore.add(a);
             } else {
-                final String prev = prevOrb.getApplyLore();
+                final String prev = prevOrb.getApplied();
                 boolean did = false;
                 for(int i = 0; i < lore.size(); i++) {
                     if(!did && lore.get(i).equals(prev)) {
@@ -102,24 +102,24 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack i = event.getItem();
         if(i != null && !i.getType().equals(Material.AIR)) {
-            final EnchantmentOrb eo = EnchantmentOrb.valueOf(i);
+            final EnchantmentOrb eo = valueOfEnchantmentOrb(i);
             if(eo != null) {
                 event.setCancelled(true);
                 event.getPlayer().updateInventory();
             }
         }
     }
-    @EventHandler
-    private void givedpClickEvent(InventoryClickEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
-        if(!event.isCancelled() && current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
-            final EnchantmentOrb orb = EnchantmentOrb.valueOf(cursor);
+        if(current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
+            final EnchantmentOrb orb = valueOfEnchantmentOrb(cursor);
             if(orb != null) {
                 final String c = current.getType().name().toLowerCase();
                 item = current; itemMeta = current.getItemMeta(); lore.clear();
                 boolean did = false;
-                final EnchantmentOrb o = EnchantmentOrb.getOrb(current);
+                final EnchantmentOrb o = getEnchantmentOrb(current);
                 for(String s : orb.getAppliesTo()) {
                     if((o == null || !o.equals(orb) && o.getIncrement() < orb.getIncrement()) && c.endsWith(s.toLowerCase())) {
                         did = true;

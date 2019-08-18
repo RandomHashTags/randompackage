@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
+import me.randomhashtags.randompackage.addons.living.LivingServerCrate;
 import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
 import me.randomhashtags.randompackage.events.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.living.LivingServerCrate;
 import me.randomhashtags.randompackage.utils.addons.FileServerCrate;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -18,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -74,19 +74,14 @@ public class ServerCrates extends RPFeature {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (servercrates != null ? servercrates.size() : 0) + " server crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		canRevealRarities = null;
 		for(UUID uuid : revealingLoot.keySet()) {
 			final OfflinePlayer o = Bukkit.getOfflinePlayer(uuid);
-			if(o != null && o.isOnline()) o.getPlayer().closeInventory();
+			if(o.isOnline()) o.getPlayer().closeInventory();
 		}
-		revealingLoot = null;
-		selectedSlots = null;
-		revealingloot = null;
 		for(UUID u : tasks.keySet()) stopTasks(u);
-		tasks = null;
-		revealedslots = null;
-		deleteAll(Feature.SERVER_CRATES);
+		servercrates = null;
 		LivingServerCrate.deleteAll(true);
+		instance = null;
 	}
 
 	@EventHandler
@@ -116,10 +111,10 @@ public class ServerCrates extends RPFeature {
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
-		if(event.getCurrentItem() != null && event.getWhoClicked().getOpenInventory().getTopInventory().getHolder() == event.getWhoClicked()) {
-			final Player player = (Player) event.getWhoClicked();
+		final Player player = (Player) event.getWhoClicked();
+		if(event.getCurrentItem() != null && player.getOpenInventory().getTopInventory().getHolder() == player) {
 			final UUID uuid = player.getUniqueId();
 			if(revealingLoot.containsKey(uuid))  {
 				final int r = event.getRawSlot();
@@ -171,7 +166,7 @@ public class ServerCrates extends RPFeature {
 						top.setItem(event.getRawSlot(), item);
 						player.updateInventory();
 					} else if(selectedSlots.get(uuid).containsKey(r) && selectedSlots.get(uuid).get(r) != null) {
-						if(!revealedslots.keySet().contains(uuid) || !revealedslots.get(uuid).contains(r)) {
+						if(!revealedslots.containsKey(uuid) || !revealedslots.get(uuid).contains(r)) {
 							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(uuid).get(r).getIdentifier());
 							top.setItem(r, reward);
 							player.updateInventory();

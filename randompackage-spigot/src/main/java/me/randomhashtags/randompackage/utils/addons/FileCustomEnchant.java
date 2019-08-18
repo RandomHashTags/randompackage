@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileCustomEnchant extends CustomEnchant {
+public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     private List<String> lore;
     private String value;
     private List<String> appliesto;
@@ -43,10 +43,6 @@ public class FileCustomEnchant extends CustomEnchant {
         }
         return alchemist;
     }
-    public int getAlchemistUpgradeCost(int level) {
-        final int i = level-1;
-        return i < getAlchemist().length ? alchemist[i] : 0;
-    }
     public int[] getTinkerer() {
         if(tinkerer == null) {
             final String[] t = yml.getString("tinkerer").split(":");
@@ -59,10 +55,6 @@ public class FileCustomEnchant extends CustomEnchant {
             this.tinkerer = tinkerer;
         }
         return tinkerer;
-    }
-    public int getTinkererValue(int level) {
-        final int i = level-1;
-        return i < getTinkerer().length ? tinkerer[i] : 0;
     }
     public String getEnchantProcValue() {
         if(value == null) {

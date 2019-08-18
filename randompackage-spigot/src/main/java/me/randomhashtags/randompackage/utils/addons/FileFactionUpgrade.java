@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.utils.addons;
 
+import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import me.randomhashtags.randompackage.addons.FactionUpgradeType;
 import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileFactionUpgrade extends FactionUpgrade {
+public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
     private ItemStack item;
 
     public FileFactionUpgrade(File f) {
