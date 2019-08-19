@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.Kits;
+import me.randomhashtags.randompackage.addons.utils.CustomKitGlobal;
 import me.randomhashtags.randompackage.api.addons.KitsGlobal;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 
-public class FileKitGlobal extends RPKit {
+public class FileKitGlobal extends RPKit implements CustomKitGlobal {
     public static String heroicprefix;
     private ItemStack item;
 
@@ -31,5 +32,4 @@ public class FileKitGlobal extends RPKit {
         }
         return item.clone();
     }
-
 }

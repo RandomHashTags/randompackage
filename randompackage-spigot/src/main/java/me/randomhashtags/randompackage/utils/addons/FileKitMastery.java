@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKitMastery;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.api.addons.KitsMastery;
 import org.bukkit.ChatColor;
@@ -13,11 +14,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FileKitMastery extends RPKit {
-    private int antiCrystalPercentSlot;
+public class FileKitMastery extends RPKit implements CustomKitMastery {
     private ItemStack item, redeem, shard, antiCrystal;
     private LinkedHashMap<CustomKit, Integer> requiredKits;
-    private List<String> antiCrystalAddedLore;
     public FileKitMastery(File f) {
         load(f);
         addKit(getIdentifier(), this);
@@ -68,51 +67,16 @@ public class FileKitMastery extends RPKit {
     public boolean losesRequiredKits() { return yml.getBoolean("settings.loses required kits"); }
     public ItemStack getShard() {
         if(shard == null) shard = api.d(yml, "shard");
-        return shard.clone();
+        return shard != null ? shard.clone() : null;
     }
     public ItemStack getAntiCrystal() {
-        if(antiCrystal == null) {
-            antiCrystal = api.d(yml, "anti crystal");
-            int i = 0;
-            for(String s : antiCrystal.getItemMeta().getLore()) {
-                if(s.contains("{PERCENT}")) antiCrystalPercentSlot = i;
-                i++;
-            }
-        }
-        return antiCrystal.clone();
+        if(antiCrystal == null) antiCrystal = api.d(yml, "anti crystal");
+        return antiCrystal != null ? antiCrystal.clone() : null;
     }
-    public int getAntiCrystalPercentSlot() {
-        if(antiCrystal == null) getAntiCrystal();
-        return antiCrystalPercentSlot;
+    public List<String> getAntiCrystalNegatedEnchants() {
+        return yml.getStringList("anti crystal.negate enchants");
     }
-    public ItemStack getAntiCrystal(int percent) {
-        final ItemStack i = getAntiCrystal();
-        final ItemMeta m = i.getItemMeta();
-        final List<String> l = m.getLore();
-        for(String s : m.getLore()) l.add(s.replace("{PERCENT}", Integer.toString(percent)));
-        m.setLore(l);
-        i.setItemMeta(m);
-        return i;
-    }
-    public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }
-    public List<String> getAntiCrystalAddedLore() {
-        if(antiCrystalAddedLore == null) antiCrystalAddedLore = api.colorizeListString(yml.getStringList("anti crystal.added lore"));
-        return antiCrystalAddedLore;
-    }
-
-    public static FileKitMastery valueOfRedeem(ItemStack is) {
-        if(kits != null && is != null) {
-            final Class a = FileKitMastery.class;
-            for(CustomKit k : kits.values()) {
-                if(k.getClass().isInstance(a)) {
-                    final FileKitMastery m = (FileKitMastery) k;
-                    final ItemStack r = m.getRedeem();
-                    if(r != null && r.isSimilar(is)) {
-                        return m;
-                    }
-                }
-            }
-        }
-        return null;
+    public String getAntiCrystalApplied() {
+        return yml.getString("anti crystal.applied");
     }
 }

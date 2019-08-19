@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class ASkyblock extends RPFeature implements Regional {
-    private static ASkyblock instance;
-    public static ASkyblock getASkyblock() {
-        if(instance == null) instance = new ASkyblock();
+public final class ASky extends RPFeature implements Regional {
+    private static ASky instance;
+    public static ASky getASkyblock() {
+        if(instance == null) instance = new ASky();
         return instance;
     }
 
@@ -57,7 +57,7 @@ public final class ASkyblock extends RPFeature implements Regional {
         return p;
     }
 
-    public List<Chunk> getChunks(String regionalIdentifier) {
+    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
         final HashMap<UUID, Island> islands = api.getOwnedIslands();
         final World w = api.getIslandWorld();
         final List<Chunk> ch = new ArrayList<>();

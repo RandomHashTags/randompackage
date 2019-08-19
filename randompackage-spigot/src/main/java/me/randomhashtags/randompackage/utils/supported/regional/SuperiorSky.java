@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SuperiorSkyblock extends RPFeature implements Regional {
-    private static SuperiorSkyblock instance;
-    public static SuperiorSkyblock getSuperiorSkyblock() {
-        if(instance == null) instance = new SuperiorSkyblock();
+public class SuperiorSky extends RPFeature implements Regional {
+    private static SuperiorSky instance;
+    public static SuperiorSky getSuperiorSkyblock() {
+        if(instance == null) instance = new SuperiorSky();
         return instance;
     }
 
@@ -71,7 +71,7 @@ public class SuperiorSkyblock extends RPFeature implements Regional {
         return a;
     }
 
-    public List<Chunk> getChunks(String regionalIdentifier) {
+    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
         try {
             final UUID u = UUID.fromString(regionalIdentifier);
             final Island i = ss.getGrid().getIsland(u);

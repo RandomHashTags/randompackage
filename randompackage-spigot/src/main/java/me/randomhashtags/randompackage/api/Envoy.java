@@ -38,6 +38,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	private String defaultTier, type;
 	public List<Location> preset;
 	private List<Player> settingPreset;
+	private long nextNaturalEnvoy;
 
 	public String getIdentifier() { return "ENVOY"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -101,7 +102,11 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
 
-		spawnTask = scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(defaul, true, type), getRandomTime());
+		final long next = getRandomTime();
+		nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
+		spawnTask = scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(defaul, true, type), next);
+
+
 		task = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
 			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
 			if(living != null) {
@@ -132,6 +137,8 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		envoycrates = null;
 		instance = null;
 	}
+
+	public long getNextNaturalEnvoy() { return nextNaturalEnvoy; }
 
 	public void stopAllEnvoys() {
 		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
@@ -209,7 +216,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final Random random = new Random();
 		final int despawn = config.getInt("settings.availability");
 		if(type.equals("WARZONE")) {
-			final List<Chunk> c = factions.getChunks("WarZone");
+			final List<Chunk> c = factions.getRegionalChunks("WarZone");
 			if(!c.isEmpty()) {
 				for(int i = 1; i <= amount; i++) {
 					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
@@ -252,7 +259,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
 		if(natural) {
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), true, where), getRandomTime());
+			final long next = getRandomTime();
+			nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
+			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), true, where), next);
 		}
 	}
 	public void stopEnvoy(int envoyID, boolean dropItems) {

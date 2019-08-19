@@ -41,16 +41,6 @@ public abstract class CustomKit extends RPAddon implements Itemable {
         return is;
     }
 
-    public static CustomKit valueOf(int slot, Class type) {
-        if(kits != null && type != null) {
-            for(CustomKit k : kits.values()) {
-                if(k.getSlot() == slot && k.getClass().equals(type)) {
-                    return k;
-                }
-            }
-        }
-        return null;
-    }
     public static CustomKit valueOfFallenHeroSpawnItem(ItemStack is) {
         if(kits != null && is != null) {
             for(CustomKit k : kits.values()) {

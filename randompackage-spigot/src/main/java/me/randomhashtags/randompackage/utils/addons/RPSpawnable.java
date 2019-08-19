@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.addons.utils.Spawnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,7 +8,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
 
-public abstract class RPSpawnable extends RPAddon implements Identifiable, Spawnable {
+public abstract class RPSpawnable extends RPAddon implements Spawnable {
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
     public boolean canSpawnAtFactionClaim(Player summoner, Location l) {

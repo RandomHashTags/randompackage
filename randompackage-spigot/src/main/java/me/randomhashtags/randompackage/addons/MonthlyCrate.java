@@ -23,4 +23,6 @@ public interface MonthlyCrate extends Itemable {
     UInventory getBonus();
     List<Integer> getRewardSlots();
     List<Integer> getBonusRewardSlots();
+    ItemStack getRandomReward(Player player, List<String> excluding, boolean canRepeatRewards);
+    ItemStack getRandomBonusReward(Player player, List<String> excluding, boolean canRepeatRewards);
 }

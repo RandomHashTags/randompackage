@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addons.living;
 import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.CustomBossDeathEvent;
 import me.randomhashtags.randompackage.events.CustomBossSpawnEvent;
-import me.randomhashtags.randompackage.addons.legacy.CustomBoss;
+import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -261,33 +261,29 @@ public class LivingCustomBoss extends UVersion {
         }
     }
     private void updateScoreboards(LivingEntity boss, double dmg) {
-        final String scoreboardTitle = type.getScoreboardTitle(), g = formatDouble(round(boss.getHealth()-dmg, 2)), m = formatInt(minions.size());
-        final DisplaySlot scoreboardSlot = type.getScoreboardSlot();
+        final String g = formatDouble(round(boss.getHealth()-dmg, 2)), m = formatInt(minions.size());
         final int messageRadius = type.getMessageRadius();
-        final List<String> scores = type.getScoreboardScores();
         for(Entity e : boss.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
             if(e instanceof Player) {
+                final Scoreboard src = type.getScoreboard();
+                final Objective o = src.getObjective("dummy");
                 final UUID u = e.getUniqueId();
-                final Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
-                final Objective obj = sb.registerNewObjective("dummy", "dummy");
-                obj.setDisplayName(scoreboardTitle);
-                obj.setDisplaySlot(scoreboardSlot);
                 int h = 15;
-                for(String s : scores) {
+                for(String s : src.getEntries()) {
                     if(s.contains("{HEALTH}")) s = s.replace("{HEALTH}", g);
                     if(s.contains("{MINIONS}")) s = s.replace("{MINIONS}", m);
                     if(s.contains("{DAMAGE_DEALT}")) s = s.replace("{DAMAGE_DEALT}", formatDouble(round(damagers.getOrDefault(u, 0.00), 0)));
                     if(s.contains("{DAMAGE_DEALT%}")) s = s.replace("{DAMAGE_DEALT%}", roundDoubleString(getDamagePercentDone(u), 1));
-                    obj.getScore(ChatColor.translateAlternateColorCodes('&', s)).setScore(h);
+                    o.getScore(ChatColor.translateAlternateColorCodes('&', s)).setScore(h);
                     h -= 1;
                 }
-                ((Player) e).setScoreboard(sb);
+                ((Player) e).setScoreboard(src);
             }
         }
     }
     public double getDamagePercentDone(UUID damager) {
         double total = 0.00, dmg = 0.00;
-        if(damagers.keySet().contains(damager)) {
+        if(damagers.containsKey(damager)) {
             for(UUID u : damagers.keySet()) {
                 final double d = damagers.get(u);
                 total += d;

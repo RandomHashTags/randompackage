@@ -1,19 +1,25 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.legacy.CustomBoss;
+import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileCustomBoss extends CustomBoss {
+public class FileCustomBoss extends RPAddon implements CustomBoss {
+    private String scoreboardTitle;
+    private DisplaySlot scoreboardSlot;
+
     private ItemStack spawnitem;
     private HashMap<Integer, List<String>> messages;
     private List<CustomBossAttack> attacks;
@@ -27,9 +33,22 @@ public class FileCustomBoss extends CustomBoss {
 
     public String getType() { return yml.getString("type").toUpperCase(); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
-    public String getScoreboardTitle() { return ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title")); }
-    public DisplaySlot getScoreboardSlot() { return DisplaySlot.valueOf(yml.getString("scoreboard.display slot").toUpperCase()); }
-    public List<String> getScoreboardScores() { return yml.getStringList("scoreboard.scores"); }
+    public Scoreboard getScoreboard() {
+        if(scoreboardTitle == null) {
+            scoreboardTitle = ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title"));
+            scoreboardSlot = DisplaySlot.valueOf(yml.getString("scoreboard.display slot").toUpperCase());
+        }
+        final Scoreboard s = scoreboardManager.getNewScoreboard();
+        s.registerNewObjective("dummy", "dummy");
+        final Objective o = s.getObjective("dummy");
+        o.setDisplayName(scoreboardTitle);
+        o.setDisplaySlot(scoreboardSlot);
+        for(String score : yml.getStringList("scoreboard.scores")) {
+            o.getScore(score).setScore(i);
+        }
+        return s;
+    }
+    public List<String> getScoreboardScores() { return ; }
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
         return spawnitem.clone();

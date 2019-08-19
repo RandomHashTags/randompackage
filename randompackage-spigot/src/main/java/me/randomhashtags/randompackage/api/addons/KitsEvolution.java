@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKitEvolution;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
@@ -45,7 +46,7 @@ public class KitsEvolution extends Kits {
     public String getIdentifier() { return "KITS_EVOLUTION"; }
 
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
-    public Class<? extends CustomKit> getCustomKit() { return FileKitEvolution.class; }
+    public Class<? extends CustomKit> getCustomKit() { return CustomKitEvolution.class; }
     public String getPath() { return "vkits"; }
 
     public void load() {
@@ -96,14 +97,14 @@ public class KitsEvolution extends Kits {
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;
         if(f != null) {
             for(LivingFallenHero l : new ArrayList<>(f.values())) {
-                if(l.getKit() instanceof FileKitEvolution) {
+                if(l.getKit() instanceof CustomKitEvolution) {
                     l.delete();
                 }
             }
         }
         if(kits != null) {
             for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof FileKitEvolution) kits.remove(k.getIdentifier());
+                if(k instanceof CustomKitEvolution) kits.remove(k.getIdentifier());
             }
         }
         unloadKitUtils();
@@ -137,7 +138,7 @@ public class KitsEvolution extends Kits {
             item = top.getItem(i);
             if(item != null) {
                 item = item.clone();
-                final CustomKit v = CustomKit.valueOf(i, FileKitEvolution.class);
+                final CustomKit v = valueOfCustomKit(i, CustomKitEvolution.class);
                 if(v != null) {
                     final String identifier = v.getIdentifier();
                     final int lvl = tiers.getOrDefault(tiers.get(v), player.hasPermission("RandomPackage.kit." + identifier) ? 1 : 0);
@@ -172,7 +173,7 @@ public class KitsEvolution extends Kits {
             }
         }
     }
-    public void give(Player player, FileKitEvolution vkit, boolean preview) {
+    public void give(Player player, CustomKitEvolution vkit, boolean preview) {
         if(vkit == null) return;
         final UUID u = player.getUniqueId();
         final RPPlayer pdata = RPPlayer.get(u);
@@ -264,10 +265,10 @@ public class KitsEvolution extends Kits {
                     sendStringListMessage(player, config.getStringList("vkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {
                     player.closeInventory();
-                    final FileKitEvolution vkit = (FileKitEvolution) CustomKit.valueOf(r, FileKitEvolution.class);
+                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(r, CustomKitEvolution.class);
                     give(player, vkit, true);
                 } else {
-                    final FileKitEvolution vkit = (FileKitEvolution) CustomKit.valueOf(r, FileKitEvolution.class);
+                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(r, CustomKitEvolution.class);
                     if(vkit == null) return;
                     final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
                     final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
@@ -290,7 +291,7 @@ public class KitsEvolution extends Kits {
         final Player player = event.getPlayer();
         final ItemStack is = event.getItem();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final FileKitEvolution e = FileKitEvolution.valueOfUpgradeGem(is);
+            final CustomKitEvolution e = valueOfCustomKitUpgradeGem(is);
             if(e != null) {
                 event.setCancelled(true);
                 player.updateInventory();

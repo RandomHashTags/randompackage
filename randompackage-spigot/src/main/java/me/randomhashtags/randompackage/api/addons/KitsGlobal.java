@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
+import me.randomhashtags.randompackage.addons.utils.CustomKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -44,7 +45,7 @@ public class KitsGlobal extends Kits {
     public String getIdentifier() { return "KITS_GLOBAL"; }
 
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
-    public Class<? extends CustomKit> getCustomKit() { return FileKitGlobal.class; }
+    public Class<? extends CustomKit> getCustomKit() { return CustomKitGlobal.class; }
     public String getPath() { return "gkits"; }
 
     public void load() {
@@ -105,14 +106,14 @@ public class KitsGlobal extends Kits {
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;
         if(f != null) {
             for(LivingFallenHero l : new ArrayList<>(f.values())) {
-                if(l.getKit() instanceof FileKitGlobal) {
+                if(l.getKit() instanceof CustomKitGlobal) {
                     l.delete();
                 }
             }
         }
         if(kits != null) {
             for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof FileKitGlobal) kits.remove(k.getIdentifier());
+                if(k instanceof CustomKitGlobal) kits.remove(k.getIdentifier());
             }
         }
         FileKitGlobal.heroicprefix = null;
@@ -143,10 +144,10 @@ public class KitsGlobal extends Kits {
             if(t.equals(gkit.getTitle()) || t.equals(preview)) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final CustomKit k = CustomKit.valueOf(r, FileKitGlobal.class);
+                final CustomKit k = CustomKit.valueOf(r, CustomKitGlobal.class);
                 if(gkit == null || r < 0 || r >= top.getSize() || k == null) return;
 
-                final FileKitGlobal gkit = (FileKitGlobal) k;
+                final CustomKitGlobal gkit = (CustomKitGlobal) k;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final int tier = pdata.getKitLevel(gkit);
                 if(t.equals(preview)) {
@@ -198,7 +199,7 @@ public class KitsGlobal extends Kits {
         final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
         final boolean usesTiers = usesTiers();
         for(int i = 0; i < top.getSize(); i++) {
-            final CustomKit k = CustomKit.valueOf(i, FileKitGlobal.class);
+            final CustomKit k = CustomKit.valueOf(i, CustomKitGlobal.class);
             if(k != null) {
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 final String identifier = k.getIdentifier();
@@ -206,7 +207,7 @@ public class KitsGlobal extends Kits {
                 if(cooldowns.containsKey(k) && cooldowns.get(k) > System.currentTimeMillis()) {
                     setCooldown(player, k);
                 } else {
-                    final FileKitGlobal gkit = (FileKitGlobal) k;
+                    final CustomKitGlobal gkit = (CustomKitGlobal) k;
                     final int tier = tiers.containsKey(k) ? tiers.get(k) : has ? 1 : 0;
                     final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(k) && !(tier < 1));
                     if(usesTiers) {

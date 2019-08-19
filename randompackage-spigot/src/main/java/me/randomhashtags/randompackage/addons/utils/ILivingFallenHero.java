@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons.utils;
 
-import me.randomhashtags.randompackage.addons.legacy.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.FallenHero;
 import org.bukkit.Location;
 

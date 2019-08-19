@@ -93,7 +93,7 @@ public class FactionsUUID extends RPFeature implements Regional {
         return f != null ? f.getOnlinePlayers() : new ArrayList<>();
     }
 
-    public List<Chunk> getChunks(String regionalIdentifier) {
+    public List<Chunk> getRegionalChunks(String regionalIdentifier) {
         final Faction faction = f.getFactionById(regionalIdentifier);
         final List<Chunk> a = new ArrayList<>();
         if(faction != null) {

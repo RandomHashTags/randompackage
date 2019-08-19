@@ -2,15 +2,14 @@ package me.randomhashtags.randompackage.utils.supported;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.utils.supported.regional.ASkyblock;
+import me.randomhashtags.randompackage.utils.supported.regional.ASky;
+import me.randomhashtags.randompackage.utils.supported.regional.EpicSky;
 import me.randomhashtags.randompackage.utils.supported.regional.FactionsUUID;
-import me.randomhashtags.randompackage.utils.supported.regional.SuperiorSkyblock;
+import me.randomhashtags.randompackage.utils.supported.regional.SuperiorSky;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +23,12 @@ public class RegionalAPI extends UVersion {
     }
 
     private FileConfiguration config;
-    private static boolean factionsUUID, askyblock, superiorskyblock;
+    private static boolean factionsUUID, askyblock, superiorskyblock, epicskyblock;
 
     protected static FactionsUUID factions;
-    protected static ASkyblock asky;
-    protected static SuperiorSkyblock ssky;
+    protected static ASky asky;
+    protected static SuperiorSky ssky;
+    protected static EpicSky esky;
 
     private boolean isTrue(String path) { return config.getBoolean(path); }
     public void setup(RandomPackage randompackage) {
@@ -36,6 +36,7 @@ public class RegionalAPI extends UVersion {
         trySupportingFactions();
         trySupportingASkyblock();
         trySupportingSuperiorSkyblock();
+        trySupportingEpicSkyblock();
     }
     public void trySupportingFactions() {
         factionsUUID = isTrue( "supported plugins.regional.FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
@@ -49,7 +50,7 @@ public class RegionalAPI extends UVersion {
     public void trySupportingASkyblock() {
         askyblock = isTrue("supported plugins.regional.ASkyblock") && pluginmanager.isPluginEnabled("ASkyblock");
         if(askyblock) {
-            asky = ASkyblock.getASkyblock();
+            asky = ASky.getASkyblock();
             asky.enable();
             hooked("ASkyblock");
         }
@@ -57,9 +58,17 @@ public class RegionalAPI extends UVersion {
     public void trySupportingSuperiorSkyblock() {
         superiorskyblock = isTrue("supported plugins.regional.SuperiorSkyblock") && pluginmanager.isPluginEnabled("SuperiorSkyblock");
         if(superiorskyblock) {
-            ssky = SuperiorSkyblock.getSuperiorSkyblock();
+            ssky = SuperiorSky.getSuperiorSkyblock();
             ssky.enable();
             hooked("SuperiorSkyblock");
+        }
+    }
+    public void trySupportingEpicSkyblock() {
+        epicskyblock = isTrue("supported plugins.regional.EpicSkyblock") && pluginmanager.isPluginEnabled("EpicSkyblock");
+        if(epicskyblock) {
+            esky = EpicSky.getEpicSkyblock();
+            esky.enable();
+            hooked("EpicSkyblock");
         }
     }
     private void hooked(String plugin) { sendConsoleMessage("&6[RandomPackage] &aHooked Regional Plugin: " + plugin); }
@@ -112,11 +121,4 @@ public class RegionalAPI extends UVersion {
     public String getFactionTag(UUID player) { return factionsUUID ? factions.getRegionalIdentifier(player) : null; }
     public String getFactionTag(OfflinePlayer player) { return getFactionTag(player.getUniqueId()); }
     public List<UUID> getFactionMembers(UUID player) { return factionsUUID ? factions.getAssociates(player) : null; }
-
-    public List<Player> getOnlineAssociates(UUID player, Regional plugin) { return plugin.getOnlineAssociates(player); }
-    public List<Chunk> getChunks(String regionalIdentifier, Regional plugin) { return plugin.getChunks(regionalIdentifier); }
-    public String getRole(UUID player, Regional plugin) { return plugin.getRole(player); }
-    public String getRegionalIdentifier(UUID player, Regional plugin) { return plugin.getRegionalIdentifier(player); }
-    public String getRegionalIdentifier(Location l, Regional plugin) { return plugin.getRegionalIdentifierAt(l); }
-    public String getChatMode(UUID player, Regional plugin) { return plugin.getChatMode(player); }
 }

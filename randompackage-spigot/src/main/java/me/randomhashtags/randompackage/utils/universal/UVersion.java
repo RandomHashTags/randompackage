@@ -20,6 +20,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -44,6 +45,7 @@ public class UVersion {
 
     public final String version = Bukkit.getVersion();
     public final BukkitScheduler scheduler = Bukkit.getScheduler();
+    public final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     public final ConsoleCommandSender console = Bukkit.getConsoleSender();
     public ItemStack item = new ItemStack(Material.APPLE);
     public ItemMeta itemMeta = item.getItemMeta();

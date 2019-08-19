@@ -180,6 +180,7 @@ public class YamlUpdater extends UVersion {
                 "supported plugins.regional.FactionsUUID", true,
                 "supported plugins.regional.ASkyblock", true,
                 "supported plugins.regional.SuperiorSkyblock", true,
+                "supported plugins.regional.EpicSkyblock", true,
 
                 "alchemist.cmds", Arrays.asList("alchemist"),
                 "auction house.cmds", Arrays.asList("auctionhouse", "ah", "auction"),

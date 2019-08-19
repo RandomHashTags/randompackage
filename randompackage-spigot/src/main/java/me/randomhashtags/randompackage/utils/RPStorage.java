@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -598,6 +599,45 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
+    public CustomKit valueOfCustomKit(int slot, Class type) {
+        if(kits != null && type != null) {
+            for(CustomKit k : kits.values()) {
+                if(k.getSlot() == slot && k.getClass().equals(type)) {
+                    return k;
+                }
+            }
+        }
+        return null;
+    }
+    public CustomKitEvolution valueOfCustomKitUpgradeGem(ItemStack is) {
+        if(is != null && kits != null) {
+            for(CustomKit k : kits.values()) {
+                if(k instanceof CustomKitEvolution) {
+                    final CustomKitEvolution e = (CustomKitEvolution) k;
+                    final ItemStack i = e.getUpgradeGem();
+                    if(i != null && i.isSimilar(is)) {
+                        return e;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    public CustomKitMastery valueOfCustomKitRedeem(ItemStack is) {
+        if(kits != null && is != null) {
+            final Class a = CustomKitMastery.class;
+            for(CustomKit k : kits.values()) {
+                if(k.getClass().isInstance(a)) {
+                    final CustomKitMastery m = (CustomKitMastery) k;
+                    final ItemStack r = m.getRedeem();
+                    if(r != null && r.isSimilar(is)) {
+                        return m;
+                    }
+                }
+            }
+        }
+        return null;
+    }
     public RarityGem valueOfRarityGem(ItemStack item) {
         if(raritygems != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
             final List<String> l = item.getItemMeta().getLore();
@@ -649,6 +689,57 @@ public abstract class RPStorage extends RegionalAPI {
             for(MagicDust dust : dusts.values()) {
                 final ItemStack i = dust.getItem();
                 if(i.getType().equals(m) && i.getItemMeta().getDisplayName().equals(d)) return dust;
+            }
+        }
+        return null;
+    }
+    public MonthlyCrate valueOfMonthlyCrate(String title) {
+        if(monthlycrates != null) {
+            for(MonthlyCrate m : monthlycrates.values()) {
+                if(m.getGuiTitle().equals(title)) {
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+    public MonthlyCrate valueOfMonthlyCrate(ItemStack item) {
+        if(monthlycrates != null) {
+            for(MonthlyCrate c : monthlycrates.values()) {
+                if(c.getItem().isSimilar(item)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+    public MonthlyCrate valueOfMonthlyCrate(Player player, ItemStack item) {
+        if(monthlycrates != null && player != null && item != null) {
+            final String p = player.getName();
+            for(MonthlyCrate c : monthlycrates.values()) {
+                final ItemStack is = c.getItem(), IS = is.clone();
+                final ItemMeta m = is.getItemMeta();
+                final List<String> s = new ArrayList<>();
+                if(m.hasLore()) {
+                    for(String l : m.getLore()) {
+                        s.add(l.replace("{UNLOCKED_BY}", p));
+                    }
+                    m.setLore(s);
+                }
+                is.setItemMeta(m);
+                if(item.isSimilar(is) || item.isSimilar(IS)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+    public MonthlyCrate valueOfMonthlyCrate(int category, int slot) {
+        if(monthlycrates != null) {
+            for(MonthlyCrate c : monthlycrates.values()) {
+                if(category == c.getCategory() && slot == c.getCategorySlot()) {
+                    return c;
+                }
             }
         }
         return null;

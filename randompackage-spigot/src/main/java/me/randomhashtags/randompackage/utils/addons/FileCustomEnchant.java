@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.utils.addons;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     private List<String> lore;
     private String value;
     private List<String> appliesto;
-    private int[] alchemist, tinkerer;
+    private BigDecimal[] alchemist, tinkerer;
 
     public FileCustomEnchant(File f) {
         load(f);
@@ -30,26 +31,26 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
         return appliesto;
     }
     public String getRequiredEnchant() { return yml.getString("requires"); }
-    public int[] getAlchemist() {
+    public BigDecimal[] getAlchemist() {
         if(alchemist == null) {
             final String[] a = yml.getString("alchemist").split(":");
-            final int[] alchemist = new int[a.length];
+            final BigDecimal[] alchemist = new BigDecimal[a.length];
             int i = 0;
             for(String s : a) {
-                alchemist[i] = Integer.parseInt(s);
+                alchemist[i] = BigDecimal.valueOf(Integer.parseInt(s));
                 i++;
             }
             this.alchemist = alchemist;
         }
         return alchemist;
     }
-    public int[] getTinkerer() {
+    public BigDecimal[] getTinkerer() {
         if(tinkerer == null) {
             final String[] t = yml.getString("tinkerer").split(":");
-            final int[] tinkerer = new int[t.length];
+            final BigDecimal[] tinkerer = new BigDecimal[t.length];
             int i = 0;
             for(String s : t) {
-                tinkerer[i] = Integer.parseInt(s);
+                tinkerer[i] = BigDecimal.valueOf(Integer.parseInt(s));
                 i++;
             }
             this.tinkerer = tinkerer;

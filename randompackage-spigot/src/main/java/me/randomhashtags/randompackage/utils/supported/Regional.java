@@ -54,7 +54,7 @@ public interface Regional {
     List<UUID> getEnemies(UUID player);
 
     List<Player> getOnlineAssociates(UUID player);
-    List<Chunk> getChunks(String regionalIdentifier);
+    List<Chunk> getRegionalChunks(String regionalIdentfier);
     String getRole(UUID uuid);
     String getRegionalIdentifier(UUID player);
     String getRegionalIdentifierAt(Location l);

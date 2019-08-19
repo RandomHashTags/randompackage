@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addons.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
 import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -68,7 +69,7 @@ public class CustomBosses extends RPFeature {
 		backup();
 		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
-		deleteAll(Feature.CUSTOM_BOSSES);
+		bosses = null;
 		instance = null;
 	}
 
@@ -102,7 +103,7 @@ public class CustomBosses extends RPFeature {
 				if(e != null && !e.isDead()) {
 					final String p = "custom bosses." + s + ".", S = a.getString(p + "summoner");
 					final LivingEntity summoner = S != null && !S.equals("null") ? (LivingEntity) getEntity(UUID.fromString(S)) : null;
-					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, CustomBoss.bosses.get(a.getString(p + "type")));
+					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, getBoss((a.getString(p + "type"))));
 					final ConfigurationSection d = a.getConfigurationSection(p + "damager");
 					if(d != null)
 						for(String aa : d.getKeys(false))
@@ -129,16 +130,14 @@ public class CustomBosses extends RPFeature {
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		if(!event.isCancelled()) {
-			final HashMap<UUID, LivingCustomBoss> L = LivingCustomBoss.living;
-			if(L != null) {
-				final LivingCustomBoss c = L.getOrDefault(event.getEntity().getUniqueId(), null);
-				if(c != null) {
-					final LivingEntity entity = (LivingEntity) event.getEntity();
-					c.damage(entity, event.getDamager(), event.getFinalDamage());
-				}
+		final HashMap<UUID, LivingCustomBoss> L = LivingCustomBoss.living;
+		if(L != null) {
+			final LivingCustomBoss c = L.getOrDefault(event.getEntity().getUniqueId(), null);
+			if(c != null) {
+				final LivingEntity entity = (LivingEntity) event.getEntity();
+				c.damage(entity, event.getDamager(), event.getFinalDamage());
 			}
 		}
 	}
@@ -159,9 +158,9 @@ public class CustomBosses extends RPFeature {
 		final UUID u = e.getUniqueId();
 		final HashMap<UUID, LivingCustomBoss> L = LivingCustomBoss.living;
 		if(L != null) {
-			final LivingCustomBoss c = L.getOrDefault(u, null);
+			final LivingCustomBoss c = L.get(u);
 			final HashMap<UUID, LivingCustomMinion> M = LivingCustomMinion.living;
-			final LivingCustomMinion m = c == null && M != null ? M.getOrDefault(u, null) : null;
+			final LivingCustomMinion m = c == null && M != null ? M.get(u) : null;
 			if(c != null || m != null) {
 				final EntityDamageEvent ede = e.getLastDamageCause();
 				event.setDroppedExp(0);

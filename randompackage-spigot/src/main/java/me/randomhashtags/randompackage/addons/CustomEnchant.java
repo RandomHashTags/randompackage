@@ -19,11 +19,12 @@ public interface CustomEnchant extends Attributable, Toggleable {
     default BigDecimal getAlchemistUpgradeCost(int level) {
         final BigDecimal[] i = getAlchemist();
         final int l = level-1;
-        return i.length < l ? i[l] : BigDecimal.ZERO;
+        final BigDecimal d = i[0];
+        return l < i.length ? i[l] : BigDecimal.ZERO;
     }
     default BigDecimal getTinkererValue(int level) {
         final BigDecimal[] i = getTinkerer();
         final int l = level-1;
-        return i.length < l ? i[l] : BigDecimal.ZERO;
+        return l < i.length ? i[l] : BigDecimal.ZERO;
     }
 }

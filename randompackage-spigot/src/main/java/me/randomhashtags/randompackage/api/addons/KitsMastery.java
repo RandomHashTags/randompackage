@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.api.addons;
 
-import me.randomhashtags.randompackage.addons.legacy.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKitEvolution;
+import me.randomhashtags.randompackage.addons.CustomKitMastery;
 import me.randomhashtags.randompackage.addons.Kits;
-import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
-import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
-import me.randomhashtags.randompackage.utils.addons.FileKitMastery;
+import me.randomhashtags.randompackage.addons.utils.CustomKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.addons.FileKitMastery;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -39,7 +40,7 @@ public class KitsMastery extends Kits {
     public String getIdentifier() { return "KITS_MASTERY"; }
 
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
-    public Class<? extends CustomKit> getCustomKit() { return FileKitMastery.class; }
+    public Class<? extends CustomKit> getCustomKit() { return CustomKitMastery.class; }
     public String getPath() { return "mkits"; }
 
     public void load() {
@@ -68,16 +69,16 @@ public class KitsMastery extends Kits {
                 }
             }
         }
-        for(int i = 0; i < gui.getSize(); i++)
+        for(int i = 0; i < gui.getSize(); i++) {
             if(mi.getItem(i) == null)
                 mi.setItem(i, background);
-
+        }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Mastery Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         if(kits != null) {
             for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof FileKitMastery) kits.remove(k.getIdentifier());
+                if(k instanceof CustomKitMastery) kits.remove(k.getIdentifier());
             }
         }
         unloadKitUtils();
@@ -104,7 +105,7 @@ public class KitsMastery extends Kits {
         top.setContents(gui.getInventory().getContents());
         player.updateInventory();
         for(int i = 0; i < top.getSize(); i++) {
-            final CustomKit m = CustomKit.valueOf(i, FileKitMastery.class);
+            final CustomKit m = CustomKit.valueOf(i, CustomKitMastery.class);
             if(m != null) {
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 if(itemMeta.hasLore()) {
@@ -138,8 +139,8 @@ public class KitsMastery extends Kits {
                 player.updateInventory();
                 final int r = event.getRawSlot();
                 final String cl = event.getClick().name();
-                final CustomKit k = CustomKit.valueOf(r, FileKitMastery.class);
-                final FileKitMastery m = k != null ? (FileKitMastery) k : null;
+                final CustomKit k = CustomKit.valueOf(r, CustomKitMastery.class);
+                final CustomKitMastery m = k != null ? (CustomKitMastery) k : null;
                 if(r < 0 || r >= top.getSize() || !cl.contains("LEFT") && !cl.contains("RIGHT") || event.getCurrentItem() == null || m == null) return;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 if(cl.contains("RIGHT")) {
@@ -160,35 +161,35 @@ public class KitsMastery extends Kits {
         final ItemStack is = event.getItem();
         if(is != null) {
             final Player player = event.getPlayer();
-            final FileKitMastery mkit = FileKitMastery.valueOfRedeem(is);
+            final CustomKitMastery mkit = valueOfCustomKitRedeem(is);
             if(mkit != null) {
                 event.setCancelled(true);
                 player.updateInventory();
 
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final HashMap<CustomKit, Integer> required = mkit.getRequiredKits();
-                final List<FileKitGlobal> gkits = new ArrayList<>();
-                final List<FileKitEvolution> vkits = new ArrayList<>();
+                final List<CustomKitGlobal> gkits = new ArrayList<>();
+                final List<CustomKitEvolution> vkits = new ArrayList<>();
                 for(CustomKit o : required.keySet()) {
-                    if(o instanceof FileKitGlobal) {
-                        gkits.add((FileKitGlobal) o);
-                    } else if(o instanceof FileKitEvolution) {
-                        vkits.add((FileKitEvolution) o);
+                    if(o instanceof CustomKitGlobal) {
+                        gkits.add((CustomKitGlobal) o);
+                    } else if(o instanceof CustomKitEvolution) {
+                        vkits.add((CustomKitEvolution) o);
                     }
                 }
-                FileKitGlobal missingG = null;
-                FileKitEvolution missingV = null;
+                CustomKitGlobal missingG = null;
+                CustomKitEvolution missingV = null;
                 final HashMap<CustomKit, Integer> l = pdata.getKitLevels();
                 final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
                 if(!gkits.isEmpty()) {
-                    for(FileKitGlobal g : gkits) {
+                    for(CustomKitGlobal g : gkits) {
                         if(missingG == null && (!l.containsKey(g) || l.get(g) < required.get(g))) {
                             missingG = g;
                         }
                     }
                 }
                 if(!vkits.isEmpty()) {
-                    for(FileKitEvolution v : vkits) {
+                    for(CustomKitEvolution v : vkits) {
                         if(missingV == null && (!l.containsKey(v) || l.get(v) < required.get(v))) {
                             missingV = v;
                         }
@@ -207,14 +208,14 @@ public class KitsMastery extends Kits {
                     if(!gkits.isEmpty()) {
                         for(String s : colorizeListString(config.getStringList("mkits.messages.unlocked lost gkits"))) {
                             if(s.contains("{KIT}")) {
-                                for(FileKitGlobal k : gkits) {
+                                for(CustomKitGlobal k : gkits) {
                                     player.sendMessage(s.replace("{KIT}", k.getItem().getItemMeta().getDisplayName()));
                                 }
                             } else {
                                 player.sendMessage(s);
                             }
                         }
-                        for(FileKitGlobal g : gkits) {
+                        for(CustomKitGlobal g : gkits) {
                             l.remove(g);
                             cooldowns.remove(g);
                         }
@@ -222,14 +223,14 @@ public class KitsMastery extends Kits {
                     if(!vkits.isEmpty()) {
                         for(String s : colorizeListString(config.getStringList("mkits.messages.unlocked lost vkits"))) {
                             if(s.contains("{KIT}")) {
-                                for(FileKitEvolution k : vkits) {
+                                for(CustomKitEvolution k : vkits) {
                                     player.sendMessage(s.replace("{KIT}", k.getItem().getItemMeta().getDisplayName()));
                                 }
                             } else {
                                 player.sendMessage(s);
                             }
                         }
-                        for(FileKitEvolution v : vkits) {
+                        for(CustomKitEvolution v : vkits) {
                             l.remove(v);
                             cooldowns.remove(v);
                         }

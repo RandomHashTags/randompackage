@@ -72,6 +72,7 @@ public interface CustomExplosion extends Attributable, Itemable {
         }
         return bl;
     }
+    // Only meant for this class usage
     default void doExplosion(String input, Location loc, EntityExplodeEvent event, Random random) {
         final World w = loc.getWorld();
         input = input.replace(" ", "").toLowerCase();
