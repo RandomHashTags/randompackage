@@ -112,15 +112,13 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded King of the Hill &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		final YamlConfiguration a = otherdata;
-		a.set("koth.center", center != null ? toString(center) : "");
-		a.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
+		otherdata.set("koth.center", center != null ? toString(center) : "");
+		otherdata.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
 		saveOtherData();
 
 		if(center != null && !status.equals("STOPPED")) {
-			final ScoreboardManager s = Bukkit.getScoreboardManager();
 			for(Player player : center.getWorld().getPlayers())
-				player.setScoreboard(s.getNewScoreboard());
+				player.setScoreboard(scoreboardManager.getNewScoreboard());
 		}
 		stopKOTH();
 		instance = null;
@@ -170,6 +168,13 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 		}
 	}
+	public long getTimeLeft() {
+		final int i = captureTime*1000;
+		return cappingStartedTime > 0 ? cappingStartedTime+i-System.currentTimeMillis() : i;
+	}
+	public long getRuntime() {
+		return System.currentTimeMillis()-started;
+	}
 	public void viewStatus(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.koth", true)) {
 			final boolean captured = status.equals("CAPTURED"), stopped = status.equals("STOPPED");
@@ -180,8 +185,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			String faction = currentPlayerCapturing != null ? regions.getFactionTag(currentPlayerCapturing.getUniqueId()) : "";
 			if(!faction.equals("")) faction = faction + " ";
 
-			final long t = System.currentTimeMillis();
-			final String join = config.getString("messages.join event"), timeleft = getRemainingTime(t-started), runtime = getRemainingTime(cappingStartedTime-capturedTime);
+			final String join = config.getString("messages.join event"), timeleft = getRemainingTime(getTimeLeft()), runtime = getRemainingTime(getRuntime());
 			final String players = center != null ? formatInt(center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius).size()) : "0";
 
 			for(String string : config.getStringList("messages.command")) {
@@ -223,6 +227,8 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	public void setCenter(CommandSender sender, Location l) {
 		if(hasPermission(sender, "RandomPackage.koth.setcenter", true)) {
 			center = l;
+			final HashMap<String, String> replacements = new HashMap<>();
+			replacements.put("{LOCATION}", l.getBlockX() + "x, " + l.getBlockY() + "y, " + l.getBlockZ());
 			sendStringListMessage(sender, config.getStringList("messages.set center"), null);
 		}
 	}
@@ -242,7 +248,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				event.setCancelled(true);
 				sendStringListMessage(player, null, config.getStringList("messages." + (status.equals("STOPPED") ? "no event running" : "already capped")), -1, null);
 			} else if(event.getFrom().getWorld().equals(w)) {
-				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+				player.setScoreboard(scoreboardManager.getNewScoreboard());
 			}
 		}
 	}
@@ -261,13 +267,16 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	public void stopKOTH() {
 		status = "STOPPED";
 		scheduler.cancelTask(scoreboard);
+		currentPlayerCapturing = null;
+		cappingStartedTime = -1;
+		capturedTime = -1;
 		if(center != null)
 			for(Player player : center.getWorld().getPlayers())
-				player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+				player.setScoreboard(scoreboardManager.getNewScoreboard());
 	}
 
 	public void broadcastStartCapping() {
-		final String time = getRemainingTime(cappingStartedTime+(captureTime*1000)-System.currentTimeMillis()), c = currentPlayerCapturing.getName();
+		final String time = getRemainingTime(getTimeLeft()), c = currentPlayerCapturing.getName();
 		final List<String> m = colorizeListString(config.getStringList("messages.start capping"));
 		final HashMap<String, String> replacements = new HashMap<>();
 		replacements.put("{PLAYER}", c);
@@ -277,7 +286,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void broadcastCapping() {
-		final String t = getRemainingTime(System.currentTimeMillis()-cappingStartedTime);
+		final String t = getRemainingTime(getTimeLeft());
 		final List<String> m = config.getStringList("messages.capping");
 		for(Player player : center.getWorld().getPlayers()) {
 			for(String string : m) {
@@ -299,10 +308,11 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	}
 
 	private void setScoreboard(boolean captured) {
-		final long T = cappingStartedTime+captureTime*1000-System.currentTimeMillis();
+		final long current = System.currentTimeMillis();
+		final long T = cappingStartedTime > 0 && currentPlayerCapturing != null ? cappingStartedTime+captureTime*1000-current : captureTime*1000;
 		final String time = getRemainingTime(T);
 		if(status.equals("STOPPED")) {
-			cappingStartedTime = System.currentTimeMillis();
+			cappingStartedTime = current;
 			currentPlayerCapturing = null;
 			previouscapturer = null;
 		} else {
@@ -333,7 +343,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				giveItem(currentPlayerCapturing, item.clone());
 				return;
 			} else {
-				if(!status.equals("CAPTURED") && T <= startCapCountdown && currentPlayerCapturing != null) broadcastCapping();
+				if(!status.equals("CAPTURED") && T/1000 <= startCapCountdown && currentPlayerCapturing != null) broadcastCapping();
 			}
 			if(currentPlayerCapturing != null && center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius).contains(currentPlayerCapturing) && (int) currentPlayerCapturing.getLocation().distance(center) <= captureRadius) {
 				closestPlayerToKOTH = currentPlayerCapturing.getName();
@@ -362,7 +372,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			closestPlayerToKOTH = "N/A";
 		//
 		for(Player player : center.getWorld().getPlayers()) {
-			final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+			final Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
 			final Objective obj = scoreboard.registerNewObjective("config", "dummy");
 			obj.setDisplayName(kothtitle);
 			obj.setDisplaySlot(displaySlot);
@@ -372,7 +382,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				if(score.contains("{DISTANCE}")) score = score.replace("{DISTANCE}", dis);
 				if(score.contains("{TIME}")) score = score.replace("{TIME}", time);
 				if(score.contains("{PLAYER}")) score = score.replace("{PLAYER}", closestPlayerToKOTH);
-				obj.getScore(score).setScore(scorestart - i);
+				obj.getScore(score).setScore(scorestart-i);
 			}
 			player.setScoreboard(scoreboard);
 		}
@@ -382,7 +392,9 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	@EventHandler
 	private void playerQuitEvent(PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		if(center != null && player.getWorld().equals(center.getWorld())) player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		if(center != null && player.getWorld().equals(center.getWorld())) {
+			player.setScoreboard(scoreboardManager.getNewScoreboard());
+		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {

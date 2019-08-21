@@ -1,24 +1,22 @@
 package me.randomhashtags.randompackage.addons.living;
 
+import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.events.GlobalChallengeEndEvent;
-import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class ActiveGlobalChallenge extends RPStorage {
+public class ActiveGlobalChallenge extends GlobalChallenges {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
-    private static PluginManager pm;
-    private static GlobalChallenges globalchallenges;
     private GlobalChallenge type;
     private HashMap<UUID, BigDecimal> participants;
     private int task;
@@ -27,8 +25,6 @@ public class ActiveGlobalChallenge extends RPStorage {
     public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
         if(active == null) {
             active = new HashMap<>();
-            globalchallenges = GlobalChallenges.getChallenges();
-            pm = globalchallenges.pluginmanager;
         }
         this.started = started;
         this.type = type;
@@ -44,11 +40,9 @@ public class ActiveGlobalChallenge extends RPStorage {
     public HashMap<UUID, BigDecimal> getParticipants() { return participants; }
     public void setParticipants(HashMap<UUID, BigDecimal> participants) { this.participants = participants; }
 
-    public long getRemainingTime() {
-        return started+(type.getDuration()*1000)-System.currentTimeMillis();
-    }
+    public long getRemainingTime() { return started+type.getDuration()*1000-System.currentTimeMillis(); }
     public void increaseValue(UUID player, BigDecimal value) {
-        final Map<UUID, BigDecimal> a = globalchallenges.getPlacing(participants, 1);
+        final Map<UUID, BigDecimal> a = getPlacing(participants, 1);
         final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
         if(!a.isEmpty()) {
             final UUID first = (UUID) a.keySet().toArray()[0];
@@ -56,7 +50,7 @@ public class ActiveGlobalChallenge extends RPStorage {
                 final double v = ((BigDecimal) a.values().toArray()[0]).doubleValue();
                 if(before.doubleValue() <= v && after.doubleValue() > v) {
                     final HashMap<String, String> replacements = new HashMap<>();
-                    final String time = globalchallenges.getRemainingTime(getRemainingTime());
+                    final String time = getRemainingTime(getRemainingTime());
                     replacements.put("{TIME}", time);
                     replacements.put("{PLAYER}", Bukkit.getOfflinePlayer(player).getName());
                     replacements.put("{CHALLENGE}", type.getItem().getItemMeta().getDisplayName());
@@ -74,9 +68,9 @@ public class ActiveGlobalChallenge extends RPStorage {
 
     public void end(boolean giveRewards, int recordPlacements) {
         final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
-        pm.callEvent(e);
-        globalchallenges.reloadInventory();
-        final Map<UUID, BigDecimal> placements = globalchallenges.getPlacing(participants);
+        pluginmanager.callEvent(e);
+        reloadInventory();
+        final Map<UUID, BigDecimal> placements = getPlacing(participants);
         if(task != -1) scheduler.cancelTask(task);
         active.remove(type);
         if(giveRewards) {
@@ -106,7 +100,6 @@ public class ActiveGlobalChallenge extends RPStorage {
 
     public static void deleteAll() {
         active = null;
-        pm = null;
         globalchallenges = null;
     }
 }

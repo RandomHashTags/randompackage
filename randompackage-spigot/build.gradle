@@ -8,6 +8,7 @@ repositories {
     maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
     maven { url "https://jitpack.io" } // SuperiorSkyblock API
     maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
+    //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
 }
 
 dependencies {
@@ -16,6 +17,7 @@ dependencies {
     implementation 'com.wasteofplastic:askyblock:3.0.9.4'
     implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
     implementation 'com.massivecraft:Factions:1.6.9.5-U0.4.3'
+    //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT'
 }
 
 jar {

@@ -309,7 +309,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
                         } else if(condition.startsWith(s + "issprinting=")) {
                             passed = e instanceof Player && ((Player) e).isSprinting() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "isriptiding=")) {
-                            passed = e instanceof Player && !legacy && ((Player) e).isRiptiding() == Boolean.parseBoolean(value);
+                            passed = !legacy && e instanceof Player && ((Player) e).isRiptiding() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "issleepignored=")) {
                             passed = e instanceof Player && ((Player) e).isSleepingIgnored() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "allowsflight=")) {

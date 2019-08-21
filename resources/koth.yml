@@ -95,12 +95,6 @@ messages:
     - "&7Prevent them from escaping the /warp koth arena alive to steal the rewards!"
     - " "
   #
-  enter edit mode:
-    - "&e&l(!)&r &eYou have entered edit mode for {KOTH}&r"
-  edit was finished:
-    - " "
-    - "&e&l(!)&r &eEdits for {KOTH}&r &ewere concluded."
-    - "&a&l(!)&r &aYour inventory has been restored."
   set center:
     - "&a&l(!)&r &aK.O.T.H. center set to &f({LOCATION})"
   #

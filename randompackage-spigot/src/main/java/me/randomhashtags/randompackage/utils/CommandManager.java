@@ -27,6 +27,7 @@ public class CommandManager extends Reflect {
     private HashMap<String, Command> knownCommands;
 
     private HashMap<String, RPFeature> features;
+    private static HashMap<String, PluginCommand> actualCmds;
     private Object dispatcher, nodes;
 
     private RandomPackage randompackage;
@@ -36,6 +37,7 @@ public class CommandManager extends Reflect {
     public String getIdentifier() { return "RP_COMMAND_MANAGER"; }
 
     private CommandManager() {
+        actualCmds = new HashMap<>();
         try {
             if(!isLegacy) {
                 final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
@@ -83,11 +85,18 @@ public class CommandManager extends Reflect {
                 for(String base : baseCmds.keySet()) {
                     final String path = baseCmds.get(base);
                     enabled = config.getBoolean(path + ".enabled");
+                    if(!knownCommands.containsKey(base)) {
+                        final PluginCommand cmd = actualCmds.get(base);
+                        commandMap.register(base, cmd);
+                        knownCommands.put(base, cmd);
+                        knownCommands.put("randompackage:" + base, cmd);
+                    }
                     final PluginCommand baseCmd = (PluginCommand) knownCommands.get(base);
                     baseCmd.setExecutor((CommandExecutor) f);
+                    if(!actualCmds.containsKey(base)) actualCmds.put(base, baseCmd);
                     if(enabled) {
                         final List<String> cmds = config.getStringList(path + ".cmds");
-                        if(cmds != null && !cmds.isEmpty()) {
+                        if(!cmds.isEmpty()) {
                             final String first = cmds.get(0);
                             baseCmd.unregister(commandMap);
                             if(!first.equalsIgnoreCase(base)) {
@@ -120,10 +129,9 @@ public class CommandManager extends Reflect {
         for(RPFeature f : features.values()) {
             disable(f);
         }
-        instance = null;
     }
     public void disable(RPFeature f) {
-        if(f.isEnabled()) {
+        if(f != null) {
             f.disable();
         }
     }
