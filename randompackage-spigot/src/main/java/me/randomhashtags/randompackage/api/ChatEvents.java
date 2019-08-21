@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,13 +40,14 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 
 	private String bragDisplay, itemDisplay, chatformat;
 	private HashMap<UUID, PlayerInventory> bragInventories;
-	private ArrayList<UUID> viewingBrag;
+	private List<UUID> viewingBrag;
 
 	public String getIdentifier() { return "CHAT_EVENTS"; }
 	public void load() {
 		final long started = System.currentTimeMillis();
-		bragDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.display"));
-		itemDisplay = ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.item.display"));
+		final FileConfiguration f = randompackage.getConfig();
+		bragDisplay = ChatColor.translateAlternateColorCodes('&', f.getString("chat cmds.brag.display"));
+		itemDisplay = ChatColor.translateAlternateColorCodes('&', f.getString("chat cmds.item.display"));
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
 		chatformat = randompackage.getConfig().getString("chat cmds.format");
@@ -55,38 +57,38 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
 		instance = null;
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
-		if(!event.isCancelled()) {
-			final String message = event.getMessage();
+		final String message = event.getMessage();
+		final boolean brag = message.contains("[brag]"), item = message.contains("[item]");
+		if(brag || item) {
 			final Player player = event.getPlayer();
-			if(message.contains("[brag]") || message.contains("[item]")) {
-				final ArrayList<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
-				final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-				final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
-				final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", event.getMessage().split("\\[").length > 0 ? event.getMessage().split("\\[")[0] : "")), suffix = new TextComponent(event.getMessage().split("]").length > 1 ? event.getMessage().split("]")[1] : "");
-				if(message.contains("[brag]")) {
-					event.setCancelled(true);
-					if(hasPermission(player, "RandomPackage.chat.brag", false)) {
-						sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
-					} else {
-						sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
+			final List<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
+
+			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
+			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", message.split("\\[").length > 0 ? message.split("\\[")[0] : "")), suffix = new TextComponent(message.split("]").length > 1 ? message.split("]")[1] : "");
+			if(brag) {
+				event.setCancelled(true);
+				if(hasPermission(player, "RandomPackage.chat.brag", false)) {
+					sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
+				} else {
+					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
+				}
+			}
+			if(item) {
+				event.setCancelled(true);
+				if(hasPermission(player, "RandomPackage.chat.item", false)) {
+					ItemStack i = getItemInHand(event.getPlayer());
+					if(i != null && !i.getType().equals(Material.AIR)) {
+						String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
+						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
 					}
-				}
-				if(message.contains("[item]")) {
-					event.setCancelled(true);
-					if(hasPermission(player, "RandomPackage.chat.item", false)) {
-						ItemStack i = getItemInHand(event.getPlayer());
-						if(i != null && !i.getType().equals(Material.AIR)) {
-							String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
-							sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
-						}
-					} else sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
-				}
+				} else sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
 			}
 		}
 	}
-	public void sendBragMessage(Player player, String message, TextComponent prefix, TextComponent suffix, ArrayList<Player> recipients) {
+	public void sendBragMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
 		bragInventories.put(player.getUniqueId(), player.getInventory());
 		final TextComponent m = new TextComponent(message);
 		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
@@ -95,7 +97,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 			send(player, p, prefix, m, suffix);
 		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
 	}
-	public void sendItemMessage(Player player, String message, TextComponent prefix, TextComponent suffix, ArrayList<Player> recipients) {
+	public void sendItemMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
 		final TextComponent m = new TextComponent(message);
 		final ItemStack i = getItemInHand(player);
 		final String u = asNMSCopy(i);
@@ -131,11 +133,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 				prefix.toLegacyText().replace("{F_TAG}", f != null && !ChatColor.stripColor(f).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + f + " " : "")
 			: "");
 		TextComponent p = ftag.toPlainText().equals("") ? prefix : ftag;
-		if(version.contains("1.8")) {
-			recipient.spigot().sendMessage(p, m, suffix);
-		} else {
-			recipient.spigot().sendMessage(p, m, suffix);
-		}
+		recipient.spigot().sendMessage(p, m, suffix);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

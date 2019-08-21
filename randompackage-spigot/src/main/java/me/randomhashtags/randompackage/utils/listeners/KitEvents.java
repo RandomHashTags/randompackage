@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils.listeners;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
+import me.randomhashtags.randompackage.utils.RPStorage;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class KitEvents implements Listener {
+public class KitEvents extends RPStorage implements Listener {
     private static KitEvents instance;
     public static KitEvents getKitEvents() {
         if(instance == null) instance = new KitEvents();
@@ -44,7 +45,7 @@ public class KitEvents implements Listener {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomKit spawn = CustomKit.valueOfFallenHeroSpawnItem(is), gem = spawn == null ? CustomKit.valueOfFallenHeroGemItem(is) : null;
+            final CustomKit spawn = valueOfFallenHeroSpawnItem(is, null), gem = spawn == null ? valueOfFallenHeroGem(is, null) : null;
             final Player player = event.getPlayer();
             if(spawn != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 spawn.getKitClass().trySpawningFallenHero(player, is, spawn, event.getClickedBlock().getLocation());

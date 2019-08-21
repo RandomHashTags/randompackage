@@ -58,10 +58,11 @@ public abstract class RPSpawnable extends RPAddon implements Spawnable {
             case FACTIONS_UUID: return canSpawnAtFactionClaim(summoner, l);
             case ASKYBLOCK: return canSpawnSkyblock(RegionPlugin.ASKYBLOCK, l);
             case SUPERIOR_SKYBLOCK: return canSpawnSkyblock(RegionPlugin.SUPERIOR_SKYBLOCK, l);
+            case EPIC_SKYBLOCK: return canSpawnSkyblock(RegionPlugin.EPIC_SKYBLOCK, l);
             default: return true;
         }
     }
     private enum RegionPlugin {
-        FACTIONS_UUID, ASKYBLOCK, SUPERIOR_SKYBLOCK
+        FACTIONS_UUID, ASKYBLOCK, SUPERIOR_SKYBLOCK, EPIC_SKYBLOCK;
     }
 }

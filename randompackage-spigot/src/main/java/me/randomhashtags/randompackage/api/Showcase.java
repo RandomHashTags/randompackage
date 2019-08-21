@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -140,10 +141,10 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final ItemStack c = event.getCurrentItem();
-		if(!event.isCancelled() && c != null && !c.getType().equals(Material.AIR)) {
+		if(c != null && !c.getType().equals(Material.AIR)) {
 			final Player player = (Player) event.getWhoClicked();
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final String t = event.getView().getTitle();
@@ -261,7 +262,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			int size = pdata.getShowcaseSize(page);
 			size = size == 0 ? 9 : size;
 			(self ? inSelf : inOther).add(opener);
-			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", opener.getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", Integer.toString(maxpage)));
+			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", (self ? opener : target).getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", Integer.toString(maxpage)));
 			opener.openInventory(inv);
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			final HashMap<Integer, ItemStack> showcase = pdata.getShowcaseItems(page);

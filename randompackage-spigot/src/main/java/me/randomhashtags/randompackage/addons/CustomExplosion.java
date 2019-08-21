@@ -27,6 +27,7 @@ public interface CustomExplosion extends Attributable, Itemable {
     void didExplode(UUID uuid, List<Block> blockList);
 
     default void explode(EntityExplodeEvent event, Location l, Random random) {
+        event.setCancelled(true);
         final UUID u = event.getEntity().getUniqueId();
         final List<Block> bl = getBlockList(event, random);
         didExplode(u, bl);

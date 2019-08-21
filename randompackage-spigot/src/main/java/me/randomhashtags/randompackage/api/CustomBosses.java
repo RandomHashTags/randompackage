@@ -82,7 +82,7 @@ public class CustomBosses extends RPFeature {
 				final String p = "custom bosses." + b.entity.getUniqueId().toString() + ".";
 				final LivingEntity s = b.summoner;
 				a.set(p + "summoner", s != null ? s.getUniqueId().toString() : "null");
-				a.set(p + "type", b.type.getYamlName());
+				a.set(p + "type", b.type.getIdentifier());
 				final List<String> m = new ArrayList<>();
 				for(LivingCustomMinion lcm : b.minions) m.add(lcm.entity.getUniqueId().toString());
 				a.set(p + "minions", m);

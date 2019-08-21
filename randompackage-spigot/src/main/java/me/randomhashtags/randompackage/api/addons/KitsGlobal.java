@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
-import me.randomhashtags.randompackage.addons.utils.CustomKitGlobal;
+import me.randomhashtags.randompackage.addons.CustomKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -40,7 +40,7 @@ public class KitsGlobal extends Kits {
     public ItemStack gkitFallenHeroBundle;
     public boolean heroicEnchantedEffect, tierZeroEnchantEffect;
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
-    private TreeMap<Integer, Double> tiermultipliers;
+    private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_GLOBAL"; }
 
@@ -77,7 +77,7 @@ public class KitsGlobal extends Kits {
         permissionsPreview = colorizeListString(config.getStringList("gkits.permissions.preview"));
         tiermultipliers = new TreeMap<>();
         for(String s : config.getConfigurationSection("gkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
-            tiermultipliers.put(Integer.parseInt(s), config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));
+            tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));
         }
 
         FileKitGlobal.heroicprefix = ChatColor.translateAlternateColorCodes('&', config.getString("gkits.items.heroic.prefix"));
@@ -91,8 +91,8 @@ public class KitsGlobal extends Kits {
                 if(f.getName().startsWith("GKIT_")) {
                     final FileKitGlobal g = new FileKitGlobal(f);
                     gi.setItem(g.getSlot(), g.getItem());
-                    gems.add(g.getFallenHeroGemItem(g));
-                    fallenheroes.add(g.getFallenHeroSpawnItem(g));
+                    gems.add(g.getFallenHeroItem(g, false));
+                    fallenheroes.add(g.getFallenHeroItem(g, true));
                     loaded++;
                 }
             }
@@ -121,7 +121,7 @@ public class KitsGlobal extends Kits {
         instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
-    public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return tiermultipliers; }
+    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
     public List<String> getNotInWarzoneMsg() { return config.getStringList("gkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("gkits.messages.already have max"); }
@@ -144,7 +144,7 @@ public class KitsGlobal extends Kits {
             if(t.equals(gkit.getTitle()) || t.equals(preview)) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final CustomKit k = CustomKit.valueOf(r, CustomKitGlobal.class);
+                final CustomKit k = valueOfCustomKit(r, CustomKitGlobal.class);
                 if(gkit == null || r < 0 || r >= top.getSize() || k == null) return;
 
                 final CustomKitGlobal gkit = (CustomKitGlobal) k;
@@ -154,7 +154,7 @@ public class KitsGlobal extends Kits {
                     player.closeInventory();
                     sendStringListMessage(player, config.getStringList("gkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {
-                    preview(player, gkit, tier);
+                    preview(player, gkit, gkit.getMaxLevel());
                 } else {
                     final String n = gkit.getIdentifier();
                     final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
@@ -199,7 +199,7 @@ public class KitsGlobal extends Kits {
         final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
         final boolean usesTiers = usesTiers();
         for(int i = 0; i < top.getSize(); i++) {
-            final CustomKit k = CustomKit.valueOf(i, CustomKitGlobal.class);
+            final CustomKit k = valueOfCustomKit(i, CustomKitGlobal.class);
             if(k != null) {
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 final String identifier = k.getIdentifier();

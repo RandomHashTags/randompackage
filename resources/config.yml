@@ -14,12 +14,12 @@ supported plugins:
   mechanics:
     SilkSpawners: true
     EpicSpawners: true
-    MCMMO Classic: true
-    MCMMO Overhaul: false
+    MCMMO: true
   regional:
     FactionsUUID: true
-    ASkyblock: false
-    SuperiorSkyblock: false
+    ASkyblock: true
+    SuperiorSkyblock: true
+    EpicSkyblock: true
 #
 chat cmds:
   # {F_TAG}

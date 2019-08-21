@@ -13,7 +13,7 @@ import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
 import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
-import me.randomhashtags.randompackage.utils.supported.standalone.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -91,7 +91,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoadingg(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
         cmd.tryLoading(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
         cmd.tryLoading(Boosters.getBoosters(), null, isTrue("boosters"));
-        cmd.tryLoading(ChatEvents.getChatEvents(), getHash("brag", "chat events.brag"), isTrue("chat events.brag"));
+        cmd.tryLoading(ChatEvents.getChatEvents(), getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
         cmd.tryLoadingg(CoinFlip.getCoinFlip(), Arrays.asList("coinflip"), isTrue("coinflip"));
         cmd.tryLoading(CollectionFilter.getCollectionFilter(), getHash("collectionfilter", "collection filter"), isTrue("collection filter.enabled"));
         cmd.tryLoadingg(Conquest.getConquest(), Arrays.asList("conquest"), isTrue("conquest"));
@@ -173,14 +173,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {
-        final PluginManager pm = Bukkit.getPluginManager();
-        if(isTrue("supported plugins.mechanics.MCMMO Classic", true) && pm.isPluginEnabled("mcMMO")) {
-            mcmmo = pm.getPlugin("mcMMO");
-        }
+        tryLoadingMCMMO();
         tryLoadingSpawner();
         if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pm.isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
             PAPI.getPAPI();
+        }
+    }
+    public void tryLoadingMCMMO() {
+        if(isTrue("supported plugins.mechanics.MCMMO", true) && pm.isPluginEnabled("mcMMO")) {
+            mcmmo = pm.getPlugin("mcMMO");
         }
     }
     public void tryLoadingSpawner() {

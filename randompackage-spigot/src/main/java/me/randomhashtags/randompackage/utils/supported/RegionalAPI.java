@@ -10,8 +10,10 @@ import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -75,6 +77,32 @@ public class RegionalAPI extends UVersion {
     public boolean hookedFactionsUUID() { return factionsUUID; }
     public boolean hookedASkyblock() { return askyblock; }
     public boolean hookedSuperiorSkyblock() { return superiorskyblock; }
+    public boolean hookedEpicSkyblock() { return epicskyblock; }
+
+    public HashMap<Regional, String> getChatModes(UUID player) {
+        final HashMap<Regional, String> m = new HashMap<>();
+        if(hookedFactionsUUID()) {
+            m.put(factions, factions.getChatMode(player));
+        }
+        if(hookedASkyblock()) {
+            m.put(asky, asky.getChatMode(player));
+        }
+        if(hookedSuperiorSkyblock()) {
+            m.put(ssky, ssky.getChatMode(player));
+        }
+        if(hookedEpicSkyblock()) {
+            m.put(esky, ssky.getChatMode(player));
+        }
+        return m;
+    }
+    public List<Player> getReceivingPlayers(UUID player, HashMap<Regional, String> chatModes) {
+        final List<Player> a = new ArrayList<>();
+        for(Regional r : chatModes.keySet()) {
+            final List<Player> o = r.getOnlineAssociates(player);
+            if(o != null) a.addAll(o);
+        }
+        return a;
+    }
 
     private List<UUID> getRelation(UUID player, int type) {
         final List<UUID> a = new ArrayList<>();

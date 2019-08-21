@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.utils.addons;
 import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileCustomBoss extends RPAddon implements CustomBoss {
+public class FileCustomBoss extends RPSpawnable implements CustomBoss {
     private String scoreboardTitle;
     private DisplaySlot scoreboardSlot;
 
@@ -43,12 +42,13 @@ public class FileCustomBoss extends RPAddon implements CustomBoss {
         final Objective o = s.getObjective("dummy");
         o.setDisplayName(scoreboardTitle);
         o.setDisplaySlot(scoreboardSlot);
+        int i = 15;
         for(String score : yml.getStringList("scoreboard.scores")) {
             o.getScore(score).setScore(i);
+            i--;
         }
         return s;
     }
-    public List<String> getScoreboardScores() { return ; }
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
         return spawnitem.clone();

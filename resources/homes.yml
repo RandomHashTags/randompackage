@@ -5,6 +5,9 @@ messages:
   save icon:
   - "&a&l(!)&r &aSaved home {HOME} icon to &n{ICON}"
   #
+  deleted due to inside a faction claim:
+  - "&c&l(!)&r &cHome &l{HOME}&r &7({X}x, {Y}y, {Z}z) &chas been removed due to it being inside a ally/truce/neutral/enemy faction claim."
+  #
   cannot set more than:
   - "&cError: &4You cannot set more than {MAX} &chomes."
   set home:
@@ -27,6 +30,10 @@ settings:
   default max: 1
   default name: "Home"
   default icon: "grass_block"
+  #
+  regional:
+    factions:
+      remove inside claims upon leaving: true
 #
 items:
   max home increaser:

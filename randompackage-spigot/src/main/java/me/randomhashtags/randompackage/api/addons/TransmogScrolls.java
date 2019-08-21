@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +77,8 @@ public class TransmogScrolls extends CustomEnchantUtils {
                 final int size = enchants.size();
                 int newsize = 0;
                 final String previous = apply.replace("{LORE_COUNT}", Integer.toString(size));
-                itemMeta = is.getItemMeta(); lore.clear();
+                final ItemMeta itemMeta = is.getItemMeta();
+                lore.clear();
                 if(itemMeta.hasLore()) {
                     final List<String> l = itemMeta.getLore();
                     for(String ss : scroll.getRarityOrganization()) {

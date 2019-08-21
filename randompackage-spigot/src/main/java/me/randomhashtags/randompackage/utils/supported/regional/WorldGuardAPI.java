@@ -1,12 +1,15 @@
 package me.randomhashtags.randompackage.utils.supported.regional;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldGuardAPI {
     private static WorldGuardAPI instance;
@@ -45,9 +48,42 @@ public class WorldGuardAPI {
         return player != null ? com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().wrapPlayer(player) : null;
     }
 
+    // unfinished
+    public List<Chunk> getChunks(String regionName) {
+        final List<Chunk> c = new ArrayList<>();
+        final List<World> worlds = Bukkit.getWorlds();
+        if(version == 6) {
+            final com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin();
+            for(World w : worlds) {
+                final com.sk89q.worldguard.protection.regions.ProtectedRegion region = wg.getRegionManager(w).getRegion(regionName);
+                c.addAll(getchunks(region, w));
+            }
+        } else  {
+            final com.sk89q.worldguard.protection.regions.RegionContainer container = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
+            for(World w : worlds) {
+                final com.sk89q.worldguard.protection.regions.ProtectedRegion region = container.get(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(w)).getRegion(regionName);
+                c.addAll(getchunks(region, w));
+            }
+        }
+        return c;
+    }
+    private List<Chunk> getchunks(com.sk89q.worldguard.protection.regions.ProtectedRegion region, World w) {
+        final List<Chunk> c = new ArrayList<>();
+        if(region != null && w != null) {
+            final List<com.sk89q.worldedit.BlockVector2D> points = region.getPoints();
+            if(points != null) {
+                for(com.sk89q.worldedit.BlockVector2D p : points) {
+                    final Chunk ch = w.getChunkAt(new Location(w, p.getBlockX(), 0, p.getBlockZ()));
+                    if(!c.contains(ch)) c.add(ch);
+                }
+            }
+        }
+        return c;
+    }
+
     private boolean allows_wg6(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
         if(hasBypass(player, l)) return true;
-        final com.sk89q.worldguard.LocalPlayer p = player != null ? com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().wrapPlayer(player) : null;
+        final com.sk89q.worldguard.LocalPlayer p = getLocalPlayer(player);
         final com.sk89q.worldguard.protection.ApplicableRegionSet s = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin().getRegionManager(l.getWorld()).getApplicableRegions(l);
         final com.sk89q.worldguard.protection.flags.StateFlag.State deny = com.sk89q.worldguard.protection.flags.StateFlag.State.DENY;
         for(com.sk89q.worldguard.protection.flags.StateFlag flag : flags) {

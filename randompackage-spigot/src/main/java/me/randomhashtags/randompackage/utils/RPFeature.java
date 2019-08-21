@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
-import me.randomhashtags.randompackage.utils.supported.standalone.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import net.milkbowl.vault.economy.Economy;
@@ -24,13 +24,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
@@ -71,7 +69,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             isEnabled = true;
             load();
             pluginmanager.registerEvents(this, randompackage);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -139,9 +137,9 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
 
 
     public ItemStack d(FileConfiguration config, String path) {
-        return d(config, path, 0.00);
+        return d(config, path, 0, 0.00f);
     }
-    public ItemStack d(FileConfiguration config, String path, double enchantMultiplier) {
+    public ItemStack d(FileConfiguration config, String path, int tier, float enchantMultiplier) {
         item = null;
         if(config == null && path != null || config != null && config.get(path + ".item") != null) {
             final String PP = config == null ? path : config.getString(path + ".item");
@@ -187,7 +185,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             final UMaterial U = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
             try {
                 item = U.getItemStack();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (U != null ? U.getVersionName() : null) + ";getMaterial()=" + (U != null ? U.getMaterial() : null));
                 return null;
             }
@@ -202,55 +200,13 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                     itemMeta = m;
                 }
                 itemMeta.setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
-
-                final HashMap<Enchantment, Integer> enchants = new HashMap<>();
-                final List<ItemFlag> flags = new ArrayList<>();
-                final CustomEnchants ce = CustomEnchants.getCustomEnchants();
-                final boolean levelzeroremoval = ce.levelZeroRemoval;
-                if(config != null && config.get(path + ".lore") != null) {
-                    lore.clear();
-                    for(String string : config.getStringList(path + ".lore")) {
-                        final String sl = string.toLowerCase();
-                        if(sl.startsWith("venchants{")) {
-                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                enchants.put(getEnchantment(s), getRemainingInt(s));
-                            }
-                        } else if(sl.startsWith("vmeta{")) {
-                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                try {
-                                    flags.add(ItemFlag.valueOf(s.toUpperCase()));
-                                } catch(Exception e) {
-                                    System.out.println("[RandomPackage] WARNING: No ItemFlag found for string \"" + s + "\"");
-                                }
-                            }
-                        } else if(sl.startsWith("rpenchants{")) {
-                            for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                                final CustomEnchant e = valueOfCustomEnchant(s);
-                                if(e != null && e.isEnabled()) {
-                                    final EnchantRarity r = ce.valueOfEnchantRarity(e);
-                                    if(r != null) {
-                                        int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
-                                        l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
-                                        if(l != 0 || !levelzeroremoval)
-                                            lore.add(r.getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
-                                    } else {
-                                        System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + e.getName() + "\"!");
-                                    }
-                                }
-                            }
-                        } else {
-                            lore.add(string.isEmpty() ? string : ChatColor.translateAlternateColorCodes('&', string));
-                        }
-                    }
-                }
-                itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
-                lore.clear();
-                for(Enchantment enchantment : enchants.keySet()) {
-                    if(enchantment != null) {
-                        item.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
-                    }
+
+                if(config != null && config.get(path + ".lore") != null) {
+                    item = updateLore(item, config.getStringList(path + ".lore"), tier, enchantMultiplier, CustomEnchants.getCustomEnchants().levelZeroRemoval, "null");
+                    itemMeta = item.getItemMeta();
                 }
+                item.setItemMeta(itemMeta);
                 if(name != null && name.contains("{ENCHANT_SIZE}")) {
                     final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
                     if(t.isEnabled()) t.applyTransmogScroll(item, getTransmogScroll("REGULAR"));
@@ -258,6 +214,75 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             }
         }
         return item;
+    }
+    public ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
+        lore.clear();
+        if(is != null && toLore != null && !toLore.isEmpty()) {
+            final ItemMeta m = is.getItemMeta();
+            if(m != null) {
+                final String name = m.getDisplayName();
+                final LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
+                final List<ItemFlag> flags = new ArrayList<>();
+                for(String string : toLore) {
+                    final String sl = string.toLowerCase();
+                    if(sl.startsWith("venchants{")) {
+                        for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                            enchants.put(getEnchantment(s), getRemainingInt(s));
+                        }
+                    } else if(sl.startsWith("vmeta{")) {
+                        for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                            try {
+                                flags.add(ItemFlag.valueOf(s.toUpperCase()));
+                            } catch(Exception e) {
+                                System.out.println("[RandomPackage] WARNING: No ItemFlag found for string \"" + s + "\"");
+                            }
+                        }
+                    } else if(sl.startsWith("rpenchants{")) {
+                        for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
+                            final CustomEnchant e = valueOfCustomEnchant(s);
+                            if(e != null && e.isEnabled()) {
+                                final EnchantRarity r = valueOfEnchantRarity(e);
+                                if(r != null) {
+                                    int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
+                                    l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
+                                    if(l != 0 || !levelzeroremoval)
+                                        lore.add(r.getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                } else {
+                                    System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + e.getName() + "\"!");
+                                }
+                            }
+                        }
+                    } else if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
+                        final CustomEnchant en = valueOfCustomEnchant(string.split("\\{")[1].split("}")[0], true);
+                        final boolean c = string.contains("chance=");
+                        if(en != null && en.isEnabled() && (!c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
+                            final int lvl = random.nextInt(en.getMaxLevel()+1);
+                            if(lvl != 0 || !levelzeroremoval) {
+                                lore.add(valueOfEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
+                            }
+                        }
+                    } else {
+                        lore.add(string.isEmpty() ? string : ChatColor.translateAlternateColorCodes('&', string.replace("{MAX_TIER}", max)));
+                    }
+                }
+                m.setLore(lore);
+                for(ItemFlag f : flags) {
+                    m.addItemFlags(f);
+                }
+                is.setItemMeta(m);
+                for(Enchantment enchantment : enchants.keySet()) {
+                    if(enchantment != null) {
+                        is.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
+                    }
+                }
+                if(name.contains("{ENCHANT_SIZE}")) {
+                    final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+                    if(t.isEnabled()) t.applyTransmogScroll(is, getTransmogScroll("REGULAR"));
+                }
+            }
+        }
+        lore.clear();
+        return is;
     }
 
     // Code by 'Boann' (https://stackoverflow.com/users/964243/boann) from https://stackoverflow.com/questions/3422673/how-to-evaluate-a-math-expression-given-in-string-form

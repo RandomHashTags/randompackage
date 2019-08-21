@@ -73,10 +73,6 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
         if(antiCrystal == null) antiCrystal = api.d(yml, "anti crystal");
         return antiCrystal != null ? antiCrystal.clone() : null;
     }
-    public List<String> getAntiCrystalNegatedEnchants() {
-        return yml.getStringList("anti crystal.negate enchants");
-    }
-    public String getAntiCrystalApplied() {
-        return yml.getString("anti crystal.applied");
-    }
+    public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }
+    public String getAntiCrystalApplied() { return yml.getString("anti crystal.applied"); }
 }

@@ -73,7 +73,7 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
             EnchantmentOrb q = valueOfEnchantmentOrb(s);
             if(q != null) prevOrb = q;
         }
-        if(random.nextInt(100) <= percent) {
+        if(random.nextInt(100) < percent) {
             final String a = orb.getApplied();
             if(prevOrb == null) {
                 lore.add(a);
@@ -115,18 +115,8 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             final EnchantmentOrb orb = valueOfEnchantmentOrb(cursor);
-            if(orb != null) {
-                final String c = current.getType().name().toLowerCase();
-                item = current; itemMeta = current.getItemMeta(); lore.clear();
-                boolean did = false;
-                final EnchantmentOrb o = getEnchantmentOrb(current);
-                for(String s : orb.getAppliesTo()) {
-                    if((o == null || !o.equals(orb) && o.getIncrement() < orb.getIncrement()) && c.endsWith(s.toLowerCase())) {
-                        did = true;
-                        applyEnchantmentOrb(player, current, cursor, orb);
-                    }
-                }
-                if(!did) return;
+            if(orb != null && orb.canBeApplied(current)) {
+                applyEnchantmentOrb(player, current, cursor, orb);
                 //playSuccess((Player) event.getWhoClicked());
                 item.setItemMeta(itemMeta);
                 event.setCancelled(true);

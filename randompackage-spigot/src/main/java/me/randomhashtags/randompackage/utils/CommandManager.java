@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.utils;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.randomhashtags.randompackage.RandomPackage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CommandManager {
+public class CommandManager extends Reflect {
     private static CommandManager instance;
     public static CommandManager getCommandManager(RandomPackage randompackage) {
         if(instance == null) {
@@ -31,15 +30,12 @@ public class CommandManager {
     private Object dispatcher, nodes;
 
     private RandomPackage randompackage;
-    private String v;
-    private boolean isLegacy;
     private FileConfiguration config;
     private ConsoleCommandSender console;
 
-    private CommandManager() {
-        v = Bukkit.getVersion();
-        isLegacy = v.contains("1.8") || v.contains("1.9") || v.contains("1.10") || v.contains("1.11") || v.contains("1.12");
+    public String getIdentifier() { return "RP_COMMAND_MANAGER"; }
 
+    private CommandManager() {
         try {
             if(!isLegacy) {
                 final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
@@ -68,6 +64,9 @@ public class CommandManager {
             e.printStackTrace();
         }
     }
+
+    public void load() {}
+    public void unload() {}
 
     public void tryLoadingg(RPFeature f, List<String> baseCmds, boolean enabled) {
         final HashMap<String, String> cmds = new HashMap<>();
@@ -139,7 +138,7 @@ public class CommandManager {
             final com.mojang.brigadier.tree.CommandNode<?> c = o.get(s);
             final com.mojang.brigadier.CommandDispatcher w = (com.mojang.brigadier.CommandDispatcher) dispatcher;
             for(String a : cmd.getAliases()) {
-                w.register(LiteralArgumentBuilder.literal(a));
+                w.register(com.mojang.brigadier.builder.LiteralArgumentBuilder.literal(a));
             }
         }
     }
@@ -165,28 +164,5 @@ public class CommandManager {
             knownCommands.remove(c);
             updateBrigadierCmd(cmd, true);
         }
-    }
-
-    private Object getPrivateField(Object object, String field) throws Exception {
-        /* Code from "zeeveener" at https://bukkit.org/threads/131808/ , edited by RandomHashTags */
-        Class<?> clazz = object.getClass();
-        Field objectField = field.equals("commandMap") ? clazz.getDeclaredField(field) : field.equals("knownCommands") ? isLegacy || v.equals("1.13") ? clazz.getDeclaredField(field) : clazz.getSuperclass().getDeclaredField(field) : clazz.getDeclaredField(field);
-        if(objectField == null) {
-            Bukkit.broadcastMessage("objectField == null!");
-            return null;
-        }
-        objectField.setAccessible(true);
-        Object result = objectField.get(object);
-        objectField.setAccessible(false);
-        return result;
-    }
-
-    private Field getPrivateField(Class clazz, String field) throws Exception {
-        Field objectField = clazz.getDeclaredField(field);
-        if(objectField == null) {
-            Bukkit.broadcastMessage("objectField == null!");
-            return null;
-        }
-        return objectField;
     }
 }

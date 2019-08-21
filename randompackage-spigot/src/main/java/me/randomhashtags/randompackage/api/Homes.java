@@ -1,14 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.events.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.Home;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -204,6 +202,28 @@ public class Homes extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 			RPPlayer.get(player.getUniqueId()).addedMaxHomes += 1;
 			sendStringListMessage(player, config.getStringList("messages.unlocked new home slot"), null);
+		}
+	}
+	@EventHandler
+	private void factionLeaveEvent(FactionLeaveEvent event) {
+		final Player player = event.player;
+		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+		final List<Home> homes = pdata.getHomes();
+		if(homes != null && !homes.isEmpty()) {
+			final List<String> msg = config.getStringList("messages.deleted due to inside a faction claim");
+			final HashMap<String, String> replacements = new HashMap<>();
+			final List<Chunk> c = factions.getRegionalChunks(event.faction);
+			for(Home h : new ArrayList<>(homes)) {
+				final Location l = h.location;
+				if(c.contains(l.getChunk())) {
+					replacements.put("{HOME}", h.name);
+					replacements.put("{X}", formatInt(l.getBlockX()));
+					replacements.put("{Y}", formatInt(l.getBlockY()));
+					replacements.put("{Z}", formatInt(l.getBlockZ()));
+					sendStringListMessage(player, msg, replacements);
+					homes.remove(h);
+				}
+			}
 		}
 	}
 }

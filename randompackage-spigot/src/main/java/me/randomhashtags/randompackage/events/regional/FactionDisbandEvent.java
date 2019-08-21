@@ -1,5 +1,6 @@
-package me.randomhashtags.randompackage.events;
+package me.randomhashtags.randompackage.events.regional;
 
+import me.randomhashtags.randompackage.events.AbstractEvent;
 import org.bukkit.entity.Player;
 
 public class FactionDisbandEvent extends AbstractEvent {

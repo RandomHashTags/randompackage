@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.legacy.CustomKit;
+import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.FallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RPKit extends CustomKit {
+public abstract class RPKit extends RPAddon implements CustomKit {
     private List<KitItem> items;
     public int getMaxLevel() { return yml.getInt("settings.max level"); }
     public long getCooldown() { return yml.getLong("settings.cooldown"); }
@@ -22,13 +22,13 @@ public abstract class RPKit extends CustomKit {
             for(String i : yml.getConfigurationSection("items").getKeys(false)) {
                 final String t = yml.getString("items." + i + ".item");
                 if(t != null) {
-                    final int chance = yml.get("items." + i + ".chance") != null ? yml.getInt("items." + i + ".chance") : 100;
-                    items.add(new KitItem(this, i, yml.getString("items." + i + ".item"), yml.getString("items." + i + ".name"), yml.getStringList("items." + i + ".lore"), chance, "1", false, yml.getInt("items." + i + ".reqlevel")));
+                    final int chance = yml.getInt("items." + i + ".chance", 100);
+                    final KitItem k = new KitItem(this, i, yml.getString("items." + i + ".item"), yml.getString("items." + i + ".amount"), yml.getString("items." + i + ".name"), yml.getStringList("items." + i + ".lore"), chance, yml.getInt("items." + i + ".required level", 0));
+                    items.add(k);
                 }
             }
         }
         return items;
     }
     public void setItems(List<KitItem> items) { this.items = items; }
-
 }

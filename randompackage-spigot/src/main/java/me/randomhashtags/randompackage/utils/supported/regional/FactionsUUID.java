@@ -1,9 +1,11 @@
 package me.randomhashtags.randompackage.utils.supported.regional;
 
 import com.massivecraft.factions.*;
+import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
 import com.massivecraft.factions.struct.Relation;
+import me.randomhashtags.randompackage.events.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.supported.Regional;
 import org.bukkit.*;
@@ -115,10 +117,14 @@ public class FactionsUUID extends RPFeature implements Regional {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionDisbandEvent(FactionDisbandEvent event) {
-        pluginmanager.callEvent(new me.randomhashtags.randompackage.events.FactionDisbandEvent(event.getPlayer(), event.getFaction().getTag()));
+        pluginmanager.callEvent(new me.randomhashtags.randompackage.events.regional.FactionDisbandEvent(event.getPlayer(), event.getFaction().getTag()));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionRenameEvent(FactionRenameEvent event) {
-        pluginmanager.callEvent(new me.randomhashtags.randompackage.events.FactionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag()));
+        pluginmanager.callEvent(new me.randomhashtags.randompackage.events.regional.FactionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag()));
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void factionLeaveEvent(FPlayerLeaveEvent event) {
+        pluginmanager.callEvent(new FactionLeaveEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag()));
     }
 }

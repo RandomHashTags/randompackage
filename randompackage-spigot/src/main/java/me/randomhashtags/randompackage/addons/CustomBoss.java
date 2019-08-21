@@ -1,15 +1,20 @@
 package me.randomhashtags.randompackage.addons;
 
+import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addons.objects.CustomBossAttack;
 import me.randomhashtags.randompackage.addons.objects.CustomMinion;
 import me.randomhashtags.randompackage.addons.utils.Attributable;
 import me.randomhashtags.randompackage.addons.utils.Rewardable;
 import me.randomhashtags.randompackage.addons.utils.Scoreboardable;
 import me.randomhashtags.randompackage.addons.utils.Spawnable;
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public interface CustomBoss extends Attributable, Rewardable, Scoreboardable, Spawnable {
     String getType();
@@ -20,4 +25,7 @@ public interface CustomBoss extends Attributable, Rewardable, Scoreboardable, Sp
     int getMessageRadius();
     int getMaxMinions();
     CustomMinion getMinion();
+    default LivingCustomBoss spawn(LivingEntity summoner, Location location) {
+        return new LivingCustomBoss(summoner, api.getEntity(getType(), location, true), this);
+    }
 }

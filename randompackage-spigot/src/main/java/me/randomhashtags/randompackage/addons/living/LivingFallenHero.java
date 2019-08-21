@@ -74,7 +74,8 @@ public class LivingFallenHero implements ILivingFallenHero {
                 final List<KitItem> items = kit.getItems();
                 final RPPlayer pdata = RPPlayer.get(killer.getUniqueId());
                 final int lvl = pdata.getKitLevel(kit);
-                final ItemStack is = kitclass.d(kit.getYaml(), "items." + items.get(random.nextInt(items.size())).path, kitclass.usesTiers() ? kitclass.getTierCustomEnchantMultiplier().getOrDefault(lvl, 0.00) : 0.00);
+                final KitItem ki = items.get(random.nextInt(items.size()));
+                final ItemStack is = ki.getItemStack(killer.getName(), lvl, kit.getKitClass().getCustomEnchantLevelMultipliers().get(lvl));
                 if(is != null && !is.getType().equals(Material.AIR)) {
                     w.dropItem(fallenhero.getLocation(), is);
                 }

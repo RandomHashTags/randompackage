@@ -20,6 +20,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.Arrays;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
+import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
 public class RandomPackageAPI extends RPFeature implements CommandExecutor {
@@ -71,6 +72,10 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
 
         givedpitem.enable();
         randompackage.getCommand("givedp").setExecutor(givedpitem);
+
+        if(mcmmo != null) {
+            MCMMOAPI.getMCMMOAPI().enable();
+        }
 
         sendConsoleMessage("&6[RandomPackage] &aInfo: &e%%__USER__%%, %%__NONCE__%%");
         sendConsoleMessage("&6[RandomPackage] &aLoaded API &e(took " + (System.currentTimeMillis()-started) + "ms)");

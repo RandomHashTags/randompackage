@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.utils.supported.standalone;
+package me.randomhashtags.randompackage.utils.supported.economy;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -8,7 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultAPI {
     private static VaultAPI instance;
-    public static final VaultAPI getVaultAPI() {
+    public static VaultAPI getVaultAPI() {
         if(instance == null) instance = new VaultAPI();
         return instance;
     }

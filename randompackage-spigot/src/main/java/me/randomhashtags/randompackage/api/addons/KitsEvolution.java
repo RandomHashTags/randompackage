@@ -15,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,7 +40,7 @@ public class KitsEvolution extends Kits {
     private ItemStack cooldown, previewBackground, locked;
     public ItemStack vkitFallenHeroBundle;
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
-    private TreeMap<Integer, Double> tiermultipliers;
+    private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_EVOLUTION"; }
 
@@ -71,7 +70,7 @@ public class KitsEvolution extends Kits {
         permissionsPreview = colorizeListString(config.getStringList("vkits.permissions.preview"));
         tiermultipliers = new TreeMap<>();
         for(String s : config.getConfigurationSection("vkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
-            tiermultipliers.put(Integer.parseInt(s), config.getDouble("vkits.gui.settings.tier custom enchant multiplier." + s));
+            tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("vkits.gui.settings.tier custom enchant multiplier." + s));
         }
 
         final Inventory vi = vkit.getInventory();
@@ -83,8 +82,8 @@ public class KitsEvolution extends Kits {
                 if(f.getName().startsWith("VKIT_")) {
                     final FileKitEvolution e = new FileKitEvolution(f);
                     vi.setItem(e.getSlot(), e.getItem());
-                    gems.add(e.getFallenHeroGemItem(e));
-                    fallenheroes.add(e.getFallenHeroSpawnItem(e));
+                    gems.add(e.getFallenHeroItem(e, false));
+                    fallenheroes.add(e.getFallenHeroItem(e, true));
                     loaded++;
                 }
             }
@@ -111,7 +110,7 @@ public class KitsEvolution extends Kits {
         instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
-    public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return tiermultipliers; }
+    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
     public List<String> getNotInWarzoneMsg() { return config.getStringList("vkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("vkits.messages.already have max"); }
@@ -178,15 +177,19 @@ public class KitsEvolution extends Kits {
         final UUID u = player.getUniqueId();
         final RPPlayer pdata = RPPlayer.get(u);
         final HashMap<CustomKit, Integer> lvls = pdata.getKitLevels();
-        final int vkitlvl = lvls.containsKey(vkit) ? lvls.get(vkit) : player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()) ? 1 : 0;
+        final int vkitlvl = preview ? vkit.getMaxLevel() : lvls.containsKey(vkit) ? lvls.get(vkit) : player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()) ? 1 : 0;
         final List<ItemStack> rewards = new ArrayList<>();
-        final YamlConfiguration yml = vkit.getYaml();
-        for(KitItem ki : vkit.getItems())
-            if(preview || ki.reqLevel <= 0 || vkitlvl >= ki.reqLevel)
-                rewards.add(d(yml, "items." + ki.path, vkitlvl));
+        final String p = player.getName();
+        final float multiplier = vkit.getKitClass().getCustomEnchantLevelMultipliers().get(vkitlvl);
+        for(KitItem ki : vkit.getItems()) {
+            final ItemStack is = ki.getItemStack(p, vkitlvl, multiplier);
+            if(is != null) {
+                rewards.add(is);
+            }
+        }
         if(preview) {
             int s = rewards.size();
-            s = s == 9 || s == 18 || s == 27 || s == 36 || s == 45 || s == 54 ? s : s > 54 ? 54 : ((s+9)/9)*9;
+            s = s > 54 ? 54 : s%9 == 0 ? s : ((s+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, s, this.preview.getTitle()));
         }
         final Inventory top = player.getOpenInventory().getTopInventory();

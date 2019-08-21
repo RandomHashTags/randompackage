@@ -10,8 +10,6 @@ import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOClassic;
-import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOOverhaul;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -120,25 +118,25 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         return input.equals("random") ? random.nextInt(101) : Integer.parseInt(input);
     }
 
+    private int getInteger(String input, int minimum) {
+        final boolean m = input.contains("-");
+        final String[] a = input.split("-");
+        final int min = m ? Integer.parseInt(a[0]) : minimum;
+        return m ? min+random.nextInt(Integer.parseInt(a[1])-min+1) : Integer.parseInt(input);
+    }
+
     public ItemStack valueOf(String input) {
         final String Q = input.split(";")[0];
         input = input.toLowerCase();
         if(input.startsWith("banknote:")) {
             final String[] a = Q.split(":");
-            return getBanknote(BigDecimal.valueOf(Integer.parseInt(a[1])), a.length == 3 ? a[2] : null);
+            return getBanknote(BigDecimal.valueOf(getInteger(a[1], 0)), a.length == 3 ? a[2] : null);
         } else if(input.startsWith("blackscroll:")) {
             final String[] a = Q.split(":");
             final BlackScroll b = getBlackScroll(a[1]);
             int amount = 0;
             if(b != null) {
-                if(a.length == 3) {
-                    final String A = a[2];
-                    final boolean m = A.contains("-");
-                    final int min = m ? Integer.parseInt(A.split("-")[0]) : b.getMinPercent();
-                    amount = m ? min+random.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
-                } else {
-                    amount = b.getRandomPercent(random);
-                }
+                amount = a.length == 3 ? getInteger(a[2], b.getMinPercent()) : b.getRandomPercent(random);
             }
             return b != null ? b.getItem(amount) : air;
         } else if(input.equals("collectionchest")) {
@@ -257,7 +255,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final ItemStack i = lvl ? items.get("mcmmolevelvoucher").clone() : xp ? items.get("mcmmoxpvoucher").clone() : items.get("mcmmocreditvoucher").clone();
                     final String[] a = input.split(":");
                     final String sk = a[1];
-                    final String skill = m.isClassic ? MCMMOClassic.getMCMMOClassic().getSkill(sk.equals("random") ? MCMMOClassic.getMCMMOClassic().getRandomSkill().name() : sk).name() : MCMMOOverhaul.getMCMMOOverhaul().getSkill(sk.equals("random") ? MCMMOOverhaul.getMCMMOOverhaul().getRandomSkill().name() : sk).name();
+                    final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(sk);
                     final boolean r = a[2].contains("-");
                     final int min = r ? Integer.parseInt(a[2].split("-")[0]) : Integer.parseInt(a[2]), amt = r ? min+random.nextInt(Integer.parseInt(a[2].split("-")[1])-min+1) : min;
                     final String n = ChatColor.translateAlternateColorCodes('&', itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase()));

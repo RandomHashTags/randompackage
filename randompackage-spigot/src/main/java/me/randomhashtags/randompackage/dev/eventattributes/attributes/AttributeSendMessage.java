@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 
 public class AttributeSendMessage extends AbstractEventAttribute {
-    public String getIdentifier() { return "sendmessage"; }
+    public String getIdentifier() { return "SENDMESSAGE"; }
     public void call(Entity recipient, Object value) {
         if(recipient != null && value != null) {
             final String v = (String) value;

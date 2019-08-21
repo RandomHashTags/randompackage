@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.CustomKitEvolution;
 import me.randomhashtags.randompackage.addons.CustomKitMastery;
 import me.randomhashtags.randompackage.addons.Kits;
-import me.randomhashtags.randompackage.addons.utils.CustomKitGlobal;
+import me.randomhashtags.randompackage.addons.CustomKitGlobal;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitMastery;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -85,7 +85,7 @@ public class KitsMastery extends Kits {
         instance = null;
     }
     public boolean usesTiers() { return false; }
-    public TreeMap<Integer, Double> getTierCustomEnchantMultiplier() { return null; }
+    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return null; }
     public UInventory getPreview() { return preview; }
     public List<String> getNotInWarzoneMsg() { return null; }
     public List<String> getAlreadyHaveMaxTierMsg() { return null; }
@@ -105,7 +105,7 @@ public class KitsMastery extends Kits {
         top.setContents(gui.getInventory().getContents());
         player.updateInventory();
         for(int i = 0; i < top.getSize(); i++) {
-            final CustomKit m = CustomKit.valueOf(i, CustomKitMastery.class);
+            final CustomKit m = valueOfCustomKit(i, CustomKitMastery.class);
             if(m != null) {
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 if(itemMeta.hasLore()) {
@@ -139,12 +139,12 @@ public class KitsMastery extends Kits {
                 player.updateInventory();
                 final int r = event.getRawSlot();
                 final String cl = event.getClick().name();
-                final CustomKit k = CustomKit.valueOf(r, CustomKitMastery.class);
+                final CustomKit k = valueOfCustomKit(r, CustomKitMastery.class);
                 final CustomKitMastery m = k != null ? (CustomKitMastery) k : null;
                 if(r < 0 || r >= top.getSize() || !cl.contains("LEFT") && !cl.contains("RIGHT") || event.getCurrentItem() == null || m == null) return;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 if(cl.contains("RIGHT")) {
-
+                    preview(player, k, k.getMaxLevel());
                 } else {
                     if(pdata.getKitLevels().containsKey(m)) {
 

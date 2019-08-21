@@ -40,27 +40,4 @@ public abstract class CustomKit extends RPAddon implements Itemable {
         is.setItemMeta(m);
         return is;
     }
-
-    public static CustomKit valueOfFallenHeroSpawnItem(ItemStack is) {
-        if(kits != null && is != null) {
-            for(CustomKit k : kits.values()) {
-                final ItemStack g = k.getFallenHeroSpawnItem(k);
-                if(g != null && g.isSimilar(is)) {
-                    return k;
-                }
-            }
-        }
-        return null;
-    }
-    public static CustomKit valueOfFallenHeroGemItem(ItemStack is) {
-        if(kits != null && is != null) {
-            for(CustomKit k : kits.values()) {
-                final ItemStack g = k.getFallenHeroGemItem(k);
-                if(g != null && g.isSimilar(is)) {
-                    return k;
-                }
-            }
-        }
-        return null;
-    }
 }

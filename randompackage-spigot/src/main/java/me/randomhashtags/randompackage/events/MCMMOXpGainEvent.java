@@ -6,9 +6,9 @@ import org.bukkit.event.Cancellable;
 public class MCMMOXpGainEvent extends AbstractEvent implements Cancellable {
     private boolean cancelled;
     public final Player player;
-    public final Object skill;
+    public final String skill;
     public float xp;
-    public MCMMOXpGainEvent(Player player, Object skill, float xp) {
+    public MCMMOXpGainEvent(Player player, String skill, float xp) {
         this.player = player;
         this.skill = skill;
         this.xp = xp;

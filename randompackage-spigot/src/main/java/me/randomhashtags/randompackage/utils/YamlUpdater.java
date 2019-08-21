@@ -173,10 +173,9 @@ public class YamlUpdater extends UVersion {
                 "file system.username", "username",
                 "file system.password", "password",
                 "supported plugins.standalone.PlaceholderAPI", true,
-                "supported plugins.SilkSpawners", true,
-                "supported plugins.EpicSpawners", true,
-                "supported plugins.mechanics.MCMMO Classic", true,
-                "supported plugins.mechanics.MCMMO Overhaul", false,
+                "supported plugins.mechanics.SilkSpawners", true,
+                "supported plugins.mechanics.EpicSpawners", true,
+                "supported plugins.mechanics.MCMMO", true,
                 "supported plugins.regional.FactionsUUID", true,
                 "supported plugins.regional.ASkyblock", true,
                 "supported plugins.regional.SuperiorSkyblock", true,
@@ -295,7 +294,12 @@ public class YamlUpdater extends UVersion {
         return null;
     }
     private LinkedHashMap<String, Object> getHomes() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.4.3
+                "messages.deleted due to inside a faction claim", newStringList("&c&l(!)&r &cHome &l{HOME}&r &7({X}x, {Y}y, {Z}z) &chas been removed due to it being inside a ally/truce/neutral/enemy faction claim."),
+                "settings.regional.factions.remove inside claims upon leaving", true
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getItemFilter() {
         return null;

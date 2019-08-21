@@ -550,23 +550,23 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public FallenHero valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
+    public CustomKit valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
         if(is != null && kits != null) {
             for(CustomKit k : kits.values()) {
                 final ItemStack f = k.getFallenHeroItem(k, true);
-                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
-                    return k.getFallenHero();
+                if(f != null && (type == null || k.getClass().isInstance(type)) && f.isSimilar(is)) {
+                    return k;
                 }
             }
         }
         return null;
     }
-    public FallenHero valueOfFallenHeroGem(ItemStack is, Class type) {
+    public CustomKit valueOfFallenHeroGem(ItemStack is, Class type) {
         if(is != null && kits != null) {
             for(CustomKit k : kits.values()) {
                 final ItemStack f = k.getFallenHeroItem(k, false);
-                if(f != null && k.getClass().isInstance(type) && f.isSimilar(is)) {
-                    return k.getFallenHero();
+                if(f != null && (type == null || k.getClass().isInstance(type)) && f.isSimilar(is)) {
+                    return k;
                 }
             }
         }
@@ -599,11 +599,14 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public CustomKit valueOfCustomKit(int slot, Class type) {
+    public CustomKit valueOfCustomKit(int slot, Class<?> type) {
         if(kits != null && type != null) {
             for(CustomKit k : kits.values()) {
-                if(k.getSlot() == slot && k.getClass().equals(type)) {
-                    return k;
+                if(k.getSlot() == slot) {
+                    final boolean isKit = type.isAssignableFrom(k.getClass());
+                    if(isKit) {
+                        return k;
+                    }
                 }
             }
         }

@@ -113,13 +113,12 @@ public class FactionUpgrades extends RPFeature {
 
             fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-            aliases = getPlugin.getConfig().getStringList("faction upgrades.aliases");
+            aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");
             heroicFactionCrystal = d(config, "items.heroic faction crystal");
             factionCrystal = d(config, "items.faction crystal");
             background = d(config, "gui.background");
             locked = d(config, "gui.locked");
             addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
-            cropGrowthRate = new HashMap<>();
 
             givedpitem.items.put("heroicfactioncrystal", heroicFactionCrystal);
             givedpitem.items.put("factioncrystal", factionCrystal);
@@ -182,7 +181,6 @@ public class FactionUpgrades extends RPFeature {
         }
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
@@ -201,9 +199,6 @@ public class FactionUpgrades extends RPFeature {
             }
         }
     }
-
-
-
 
     private ItemStack getUpgrade(HashMap<FactionUpgrade, Integer> upgrades, int slot, String W, String L) {
         final FactionUpgrade f = valueOfFactionUpgrade(slot);
