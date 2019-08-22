@@ -567,4 +567,10 @@ custom items:
     - "&7A clover passed down for"
     - "&7generations, its said to bestow"
     - "&7great fortune to the beholder."
+  Cupids Broken Heart:
+    item: "fermented_spider_eye"
+    name: "&4Cupid's &c&lBroken Heart"
+    lore:
+    - "&7The God of Loves aching heart!"
+    - "&7Will he ever find love?"
 #

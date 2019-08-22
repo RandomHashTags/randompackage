@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.events.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,8 +16,9 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
-public class ActiveGlobalChallenge extends GlobalChallenges {
+public class ActiveGlobalChallenge extends RPStorage {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
+    private static GlobalChallenges gc;
     private GlobalChallenge type;
     private HashMap<UUID, BigDecimal> participants;
     private int task;
@@ -25,6 +27,7 @@ public class ActiveGlobalChallenge extends GlobalChallenges {
     public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
         if(active == null) {
             active = new HashMap<>();
+            gc = GlobalChallenges.getChallenges();
         }
         this.started = started;
         this.type = type;
@@ -42,7 +45,7 @@ public class ActiveGlobalChallenge extends GlobalChallenges {
 
     public long getRemainingTime() { return started+type.getDuration()*1000-System.currentTimeMillis(); }
     public void increaseValue(UUID player, BigDecimal value) {
-        final Map<UUID, BigDecimal> a = getPlacing(participants, 1);
+        final Map<UUID, BigDecimal> a = gc.getPlacing(participants, 1);
         final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
         if(!a.isEmpty()) {
             final UUID first = (UUID) a.keySet().toArray()[0];
@@ -69,8 +72,8 @@ public class ActiveGlobalChallenge extends GlobalChallenges {
     public void end(boolean giveRewards, int recordPlacements) {
         final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
         pluginmanager.callEvent(e);
-        reloadInventory();
-        final Map<UUID, BigDecimal> placements = getPlacing(participants);
+        gc.reloadInventory();
+        final Map<UUID, BigDecimal> placements = gc.getPlacing(participants);
         if(task != -1) scheduler.cancelTask(task);
         active.remove(type);
         if(giveRewards) {

@@ -307,7 +307,9 @@ public class YamlUpdater extends UVersion {
     private LinkedHashMap<String, Object> getItems() {
         final Object[] values = new Object[] {
                 // 16.4.1
-                newItemStack("christmas candy", "glowstone_dust", "&eChristmas Candy &7(Right Click)", newStringList("&7A yummy piece of space candy, only", "&7obtainable during &nChristmas 2016"))
+                newItemStack("christmas candy", "glowstone_dust", "&eChristmas Candy &7(Right Click)", newStringList("&7A yummy piece of space candy, only", "&7obtainable during &nChristmas 2016")),
+                // 16.4.3
+                newItemStack("custom items.Cupids Broken Heart", "fermented_spider_eye", "&4Cupid's &c&lBroken Heart", newStringList("&7The God of Loves aching heart!", "&7Will he ever find love?"))
         };
         return putAll(values);
     }
