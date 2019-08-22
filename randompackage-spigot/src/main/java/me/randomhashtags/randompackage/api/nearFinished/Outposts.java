@@ -88,7 +88,6 @@ public class Outposts extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         outposts = null;
-        instance = null;
     }
 
 

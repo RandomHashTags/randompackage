@@ -48,8 +48,9 @@ public class RPPlayer extends RPStorage {
 
     private CoinFlipStats coinflipStats;
     private Title activeTitle;
-    public long jackpotWonCash = 0, xpExhaustionExpiration = 0;
-    public int jackpotTickets = 0, jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
+    public BigDecimal jackpotWonCash, jackpotTickets;
+    public long xpExhaustionExpiration = 0;
+    public int jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
     public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
     public boolean isLoaded = false, activeTitleIsLoaded = false;
 
@@ -223,12 +224,12 @@ public class RPPlayer extends RPStorage {
             filter = Boolean.parseBoolean(booleans[1]);
             jackpotCountdown = Boolean.parseBoolean(booleans[2]);
 
-            jackpotTickets = Integer.parseInt(ints[0]);
+            jackpotTickets = BigDecimal.valueOf(Integer.parseInt(ints[0]));
             jackpotWins = Integer.parseInt(ints[1]);
             if(ints.length >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
             if(ints.length >= 4) questTokens = Integer.parseInt(ints[3]);
 
-            jackpotWonCash = Long.parseLong(longs[0]);
+            jackpotWonCash = BigDecimal.valueOf(Double.parseDouble(longs[0]));
             xpExhaustionExpiration = Long.parseLong(longs[1]);
             return this;
         }
@@ -268,13 +269,13 @@ public class RPPlayer extends RPStorage {
             quests = null;
 
             if(questTasks.containsKey(uuid)) {
-                final BukkitScheduler s = api.scheduler;
-                for(int i : questTasks.get(uuid)) s.cancelTask(i);
+                for(int i : questTasks.get(uuid)) scheduler.cancelTask(i);
                 questTasks.remove(uuid);
             }
 
-            jackpotWonCash = 0;
-            jackpotTickets = 0;
+            final BigDecimal zero = BigDecimal.ZERO;
+            jackpotWonCash = zero;
+            jackpotTickets = zero;
             addedMaxHomes = 0;
             jackpotWins = 0;
             questTokens = 0;

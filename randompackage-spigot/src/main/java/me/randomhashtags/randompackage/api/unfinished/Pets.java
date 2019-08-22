@@ -55,7 +55,6 @@ public class Pets extends RPFeature implements Listener {
     }
     public void unload() {
         pets = null;
-        instance = null;
     }
 
     @EventHandler

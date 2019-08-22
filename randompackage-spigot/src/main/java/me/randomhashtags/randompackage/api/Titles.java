@@ -80,7 +80,6 @@ public class Titles extends RPFeature implements CommandExecutor {
 	public void unload() {
 		for(Player p : pages.keySet()) p.closeInventory();
 		titles = null;
-		instance = null;
 	}
 
 	@EventHandler

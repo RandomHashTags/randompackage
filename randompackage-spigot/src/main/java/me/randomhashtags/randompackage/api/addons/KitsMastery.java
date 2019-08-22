@@ -82,7 +82,6 @@ public class KitsMastery extends Kits {
             }
         }
         unloadKitUtils();
-        instance = null;
     }
     public boolean usesTiers() { return false; }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return null; }

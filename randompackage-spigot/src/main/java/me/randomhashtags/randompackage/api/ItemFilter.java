@@ -109,7 +109,6 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         filtercategories = null;
-        instance = null;
     }
 
     public void viewHelp(Player player) {

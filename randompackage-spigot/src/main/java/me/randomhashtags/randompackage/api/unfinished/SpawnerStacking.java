@@ -23,7 +23,6 @@ public class SpawnerStacking extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Spawner Stacking &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

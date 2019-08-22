@@ -121,7 +121,6 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				player.setScoreboard(scoreboardManager.getNewScoreboard());
 		}
 		stopKOTH();
-		instance = null;
 	}
 	
 	public ArrayList<ItemStack> getRandomLootbagContents() {

@@ -68,7 +68,6 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	@Override
 	public void unload() {
 		armorsets = null;
-		instance = null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

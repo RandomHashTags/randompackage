@@ -118,7 +118,6 @@ public class KitsGlobal extends Kits {
         }
         FileKitGlobal.heroicprefix = null;
         unloadKitUtils();
-        instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }

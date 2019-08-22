@@ -9,7 +9,11 @@ settings:
   can repeat rewards: false
   reward size: "4-7"
   cannot land above:
-  - "lava"
+    - "lava"
+  cannot land in:
+    - "lava"
+    - "water"
+    - "snow"
 #
 item:
   item: "chest"

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
-import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
+import me.randomhashtags.randompackage.utils.addons.objects.SCrateFlare;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
 	private HashMap<String, List<String>> rewards;
 	private List<Integer> selectableslots;
-	private ServerCrateFlare flare;
+	private SCrateFlare flare;
 	public FileServerCrate(File f) {
 		load(f);
 		addServerCrate(getIdentifier(), this);
@@ -102,8 +102,8 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		if(background2 == null) background2 = api.d(yml, "settings.background 2");
 		return background2.clone();
 	}
-	public ServerCrateFlare getFlare() {
-		if(flare == null) flare = new ServerCrateFlare(api.d(yml, "flare"), yml.getStringList("flare.request msg"), yml.getInt("flare.settings.spawn radius"), yml.getInt("flare.settings.spawn in delay"), yml.getInt("flare.settings.nearby radius"), yml.getStringList("flare.nearby spawn msg"));
+	public SCrateFlare getFlare() {
+		if(flare == null) flare = new SCrateFlare(this);
 		return flare;
 	}
 	public ServerCrate getRandomRarity(boolean useChances) {

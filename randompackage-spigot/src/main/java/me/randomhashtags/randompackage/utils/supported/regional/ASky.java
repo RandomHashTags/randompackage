@@ -27,7 +27,6 @@ public final class ASky extends RPFeature implements Regional {
     }
     public void unload() {
         api = null;
-        instance = null;
     }
 
     private boolean areTeammates(UUID player1, UUID player2) { return api.inTeam(player1) && api.getTeamMembers(player1).contains(player2); }

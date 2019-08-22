@@ -45,7 +45,6 @@ public class TransmogScrolls extends CustomEnchantUtils {
     public void unload() {
         unloadUtils();
         transmogscrolls = null;
-        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

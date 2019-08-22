@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
+import me.randomhashtags.randompackage.addons.ArmorSetAbility;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -48,4 +49,5 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 		if(activateMessage == null) activateMessage = api.colorizeListString(yml.getStringList("activate message"));
 		return activateMessage;
 	}
+	public ArmorSetAbility getAbility() { return null; }
 }

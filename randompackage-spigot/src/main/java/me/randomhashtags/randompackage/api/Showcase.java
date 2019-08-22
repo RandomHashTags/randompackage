@@ -128,7 +128,6 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
-		instance = null;
 	}
 
 	public void resetShowcases(OfflinePlayer player) {

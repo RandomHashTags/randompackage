@@ -2,11 +2,12 @@ package me.randomhashtags.randompackage.events;
 
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
+
 public class JackpotPurchaseTicketsEvent extends AbstractEvent {
     public final Player player;
-    public final int amount;
-    public final double price;
-    public JackpotPurchaseTicketsEvent(Player player, int amount, double price) {
+    public final BigDecimal amount, price;
+    public JackpotPurchaseTicketsEvent(Player player, BigDecimal amount, BigDecimal price) {
         this.player = player;
         this.amount = amount;
         this.price = price;

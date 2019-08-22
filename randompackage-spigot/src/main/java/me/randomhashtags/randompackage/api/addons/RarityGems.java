@@ -55,7 +55,6 @@ public class RarityGems extends CustomEnchantUtils {
     public void unload() {
         raritygems = null;
         unloadUtils();
-        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

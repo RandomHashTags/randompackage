@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
+import org.bukkit.Chunk;
+import org.bukkit.entity.Player;
 
 public class RaidEvent extends RPFeature {
     private static RaidEvent instance;
@@ -14,6 +16,9 @@ public class RaidEvent extends RPFeature {
     public void load() {
     }
     public void unload() {
-        instance = null;
+    }
+
+
+    public void didClaimLand(Player player, String faction, Chunk c) {
     }
 }

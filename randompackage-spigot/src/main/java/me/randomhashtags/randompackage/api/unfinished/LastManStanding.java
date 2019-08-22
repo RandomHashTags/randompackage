@@ -39,7 +39,6 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
     }
 
     public void viewHelp(CommandSender sender) {

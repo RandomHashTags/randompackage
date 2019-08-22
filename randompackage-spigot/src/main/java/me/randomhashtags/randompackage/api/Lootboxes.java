@@ -135,7 +135,6 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         saveOtherData();
         for(Player p : new ArrayList<>(viewing)) p.closeInventory();
         lootboxes = null;
-        instance = null;
     }
 
     public void viewLootbox(Player player) {

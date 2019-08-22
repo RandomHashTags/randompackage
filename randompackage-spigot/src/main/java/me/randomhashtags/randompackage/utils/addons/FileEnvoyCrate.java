@@ -3,10 +3,7 @@ package me.randomhashtags.randompackage.utils.addons;
 import me.randomhashtags.randompackage.addons.EnvoyCrate;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,7 +14,7 @@ import java.util.Random;
 
 public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
     private UMaterial block, fallingblock;
-    private List<UMaterial> cannotLandAbove;
+    private List<UMaterial> cannotLandAbove, cannotLandIn;
     private ItemStack item;
     private Firework fw;
 
@@ -55,6 +52,15 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         }
         return cannotLandAbove;
     }
+    public List<UMaterial> cannotLandIn() {
+        if(cannotLandIn == null) {
+            cannotLandIn = new ArrayList<>();
+            for(String s : yml.getStringList("settings.cannot land in")) {
+                cannotLandIn.add(UMaterial.match(s));
+            }
+        }
+        return cannotLandIn;
+    }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return item.clone();
@@ -81,7 +87,9 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
                 final String[] a = reward.split(";chance=");
                 if(!hasChance || random.nextInt(100) <= api.getRemainingInt(a[1])) {
                     actualrewards.add(a[0]);
-                    if(!canRepeatRewards) rewards.remove(reward);
+                    if(!canRepeatRewards) {
+                        rewards.remove(reward);
+                    }
                 } else {
                     i -= 1;
                 }
@@ -94,14 +102,10 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         final List<ItemStack> a = new ArrayList<>();
         for(String s : r) {
             final ItemStack i = api.d(null, s);
-            if(i != null && !i.getType().equals(Material.AIR)) a.add(i);
+            if(i != null && !i.getType().equals(Material.AIR)) {
+                a.add(i);
+            }
         }
         return a;
     }
-    public boolean canLand(Location spawnLocation) {
-        final World w = spawnLocation.getWorld();
-        final Block b = w.getBlockAt(new Location(w, spawnLocation.getBlockX(), spawnLocation.getBlockY()-1, spawnLocation.getBlockZ()));
-        return !cannotLandAbove().contains(UMaterial.match(b.getType().name()));
-    }
-
 }

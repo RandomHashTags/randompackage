@@ -84,7 +84,6 @@ public class Boosters extends newEventAttributes {
 			mcmmoboosters = null;
 		}
 		boosters = null;
-		instance = null;
 		activeFactionBoosters = null;
 		activePlayerBoosters = null;
 	}

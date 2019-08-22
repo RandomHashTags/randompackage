@@ -41,7 +41,6 @@ public class WhiteScrolls extends CustomEnchantUtils {
     public void unload() {
         unloadUtils();
         whitescrolls = null;
-        instance = null;
     }
 
 

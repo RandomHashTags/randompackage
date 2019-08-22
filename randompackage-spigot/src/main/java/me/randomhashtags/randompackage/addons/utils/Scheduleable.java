@@ -6,13 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 public interface Scheduleable extends Identifiable {
-    Date getEventDay();
+    List<Date> getEventDays();
     ScheduleableType getScheduleType();
     default long getTimeUntilEventStarts() {
-        final long t = getEventDay().getTime();
+        final long t = getEventDays().get(0).getTime();
         return t-System.currentTimeMillis();
     }
     long getEventDuration();
+    long getEventRuntime();
     long getEventTimeLeft();
 
     void start();

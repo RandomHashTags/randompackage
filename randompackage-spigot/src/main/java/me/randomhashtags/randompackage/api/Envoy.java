@@ -135,7 +135,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		stopAllEnvoys();
 		givedpitem.items.remove("envoysummon");
 		envoycrates = null;
-		instance = null;
 	}
 
 	public long getNextNaturalEnvoy() { return nextNaturalEnvoy; }
@@ -216,21 +215,25 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final Random random = new Random();
 		final int despawn = config.getInt("settings.availability");
 		if(type.equals("WARZONE")) {
-			final List<Chunk> c = factions.getRegionalChunks("WarZone");
-			if(!c.isEmpty()) {
-				for(int i = 1; i <= amount; i++) {
-					final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
-					final EnvoyCrate crate = getRandomCrate(true, defaultTier);
-					final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
-					loc.getChunk().load();
-					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
-					if(lec == null && crate.canLand(loc)) {
-						lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);
-						lec.shootFirework();
-					} else {
-						i -= 1;
+			if(hookedFactionsUUID()) {
+				final List<Chunk> c = factions.getRegionalChunks("WarZone");
+				if(!c.isEmpty()) {
+					for(int i = 1; i <= amount; i++) {
+						final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
+						final EnvoyCrate crate = getRandomCrate(true, defaultTier);
+						final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
+						loc.getChunk().load();
+						LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
+						if(lec == null && crate.canLand(loc)) {
+							lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);
+							lec.shootFirework();
+						} else {
+							i -= 1;
+						}
 					}
 				}
+			} else {
+				// TODO
 			}
 		} else if(type.equals("PRESET")) {
 			final List<Location> preset = new ArrayList<>(this.preset);

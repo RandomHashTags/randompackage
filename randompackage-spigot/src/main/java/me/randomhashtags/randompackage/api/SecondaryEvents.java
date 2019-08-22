@@ -185,7 +185,6 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Secondary Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
     }
 
 

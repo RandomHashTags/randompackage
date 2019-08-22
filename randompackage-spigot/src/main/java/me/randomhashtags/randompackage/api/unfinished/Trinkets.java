@@ -47,7 +47,6 @@ public class Trinkets extends RPFeature {
     }
     public void unload() {
         trinkets = null;
-        instance = null;
     }
 
     @EventHandler

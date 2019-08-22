@@ -144,7 +144,6 @@ public class CustomExplosions extends RPFeature {
 		FileCustomCreeper.living = null;
 		FileCustomTNT.placed = null;
 		FileCustomTNT.primed = null;
-		instance = null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

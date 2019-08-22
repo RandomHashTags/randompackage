@@ -45,7 +45,6 @@ public class RandomizationScrolls extends CustomEnchants {
     public void unload() {
         unloadUtils();
         randomizationscrolls = null;
-        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

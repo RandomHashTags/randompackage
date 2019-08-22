@@ -30,7 +30,6 @@ public class SuperiorSky extends RPFeature implements Regional {
     }
     public void unload() {
         ss = null;
-        instance = null;
     }
 
     private Island getIsland(UUID player) { return getSPlayer(player).getIsland(); }

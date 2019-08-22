@@ -55,7 +55,6 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	}
 	public void unload() {
 		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
-		instance = null;
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
@@ -79,7 +78,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 			if(item) {
 				event.setCancelled(true);
 				if(hasPermission(player, "RandomPackage.chat.item", false)) {
-					ItemStack i = getItemInHand(event.getPlayer());
+					ItemStack i = getItemInHand(player);
 					if(i != null && !i.getType().equals(Material.AIR)) {
 						String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
 						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);

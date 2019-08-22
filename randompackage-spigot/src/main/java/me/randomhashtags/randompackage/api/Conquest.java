@@ -119,7 +119,6 @@ public class Conquest extends RPFeature implements CommandExecutor {
         LivingConquestChest.deleteAll(false);
         conquestchests = null;
         ConquestMob.deleteAll();
-        instance = null;
     }
     public void destroyConquests() {
         final List<LivingConquestChest> C = LivingConquestChest.living;

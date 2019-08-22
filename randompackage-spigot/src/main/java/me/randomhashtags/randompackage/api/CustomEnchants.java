@@ -321,7 +321,6 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         enabled = null;
         disabled = null;
         rarities = null;
-        instance = null;
     }
 
 
@@ -742,7 +741,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                     if(!xp.equals(zero)) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
                 } else {
-                    sendStringListMessage(player, config.getStringList("tinkerer.messages.doesnt want that item"), null);
+                    sendStringListMessage(player, config.getStringList("tinkerer.messages.doesnt want item"), null);
                     return;
                 }
                 final int first = top.firstEmpty();
@@ -1074,24 +1073,22 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
     }
 
-    @EventHandler
-    private void givedpClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = (Player) event.getWhoClicked();
-            final Inventory inv = player.getInventory();
-            final ItemStack current = event.getCurrentItem();
-            if(player.getOpenInventory().getTopInventory().getType().equals(InventoryType.ANVIL)) {
-                if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore() || event.getClick().equals(ClickType.NUMBER_KEY)) {
-                    CustomEnchant enchant = null;
-                    final int hb = event.getHotbarButton();
-                    item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
-                    if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-                        enchant = valueOfCustomEnchant(item.getItemMeta().getDisplayName());
-                    if(enchant != null) {
-                        event.setCancelled(true);
-                        player.updateInventory();
-                        player.closeInventory();
-                    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void anvilClickEvent(InventoryClickEvent event) {
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory inv = player.getInventory();
+        final ItemStack current = event.getCurrentItem();
+        if(player.getOpenInventory().getTopInventory().getType().equals(InventoryType.ANVIL)) {
+            if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() || event.getClick().equals(ClickType.NUMBER_KEY)) {
+                CustomEnchant enchant = null;
+                final int hb = event.getHotbarButton();
+                item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
+                if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+                    enchant = valueOfCustomEnchant(item.getItemMeta().getDisplayName());
+                if(enchant != null) {
+                    event.setCancelled(true);
+                    player.updateInventory();
+                    player.closeInventory();
                 }
             }
         }
@@ -1114,8 +1111,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             } else if(title.equals(tinkerer.getTitle())) {
                 sendStringListMessage(player, config.getStringList("tinkerer.messages." + (contains ? "accept" : "cancel") + " trade"), null);
                 for(int i = 0; i < inv.getSize(); i++) {
-                    if(inv.getItem(i) != null && (contains && (i >= 5 && i <= 7 || i >= 14 && i <= 17 || i >= 23 && i <= 26 || i >= 32 && i <= 35 || i >= 41 && i <= 44 || i >= 50 && i <= 53) || !contains && (i >= 1 && i <= 3 || i >= 9 && i <= 12 || i >= 18 && i <= 21 || i >= 27 && i <= 30 || i >= 36 && i <= 39 || i >= 45 && i <= 48))) {
-                        giveItem(player, inv.getItem(i));
+                    item = inv.getItem(i);
+                    if(item != null && (contains && (i >= 5 && i <= 7 || i >= 14 && i <= 17 || i >= 23 && i <= 26 || i >= 32 && i <= 35 || i >= 41 && i <= 44 || i >= 50 && i <= 53) || !contains && (i >= 1 && i <= 3 || i >= 9 && i <= 12 || i >= 18 && i <= 21 || i >= 27 && i <= 30 || i >= 36 && i <= 39 || i >= 45 && i <= 48))) {
+                        giveItem(player, item);
                     }
                 }
             } else { return; }

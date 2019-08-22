@@ -4,7 +4,9 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
+import com.massivecraft.factions.event.LandClaimEvent;
 import com.massivecraft.factions.struct.Relation;
+import me.randomhashtags.randompackage.events.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.events.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.supported.Regional;
@@ -42,7 +44,6 @@ public class FactionsUUID extends RPFeature implements Regional {
         f = null;
         b = null;
         relations = null;
-        instance = null;
     }
 
     private Faction getFaction(UUID player) {
@@ -96,7 +97,7 @@ public class FactionsUUID extends RPFeature implements Regional {
     }
 
     public List<Chunk> getRegionalChunks(String regionalIdentifier) {
-        final Faction faction = f.getFactionById(regionalIdentifier);
+        final Faction faction = f.getByTag(regionalIdentifier);
         final List<Chunk> a = new ArrayList<>();
         if(faction != null) {
             for(FLocation l : faction.getAllClaims()) {
@@ -112,7 +113,9 @@ public class FactionsUUID extends RPFeature implements Regional {
         final Faction f = getFaction(player);
         return f != null ? f.getTag() : null;
     }
-    public String getRegionalIdentifierAt(Location l) { return b.getFactionAt(new FLocation(l)).getTag(); }
+    public String getRegionalIdentifierAt(Location l) {
+        return ChatColor.stripColor(b.getFactionAt(new FLocation(l)).getTag());
+    }
     public String getChatMode(UUID player) { return getFPlayer(player).getChatMode().name(); }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -126,5 +129,9 @@ public class FactionsUUID extends RPFeature implements Regional {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionLeaveEvent(FPlayerLeaveEvent event) {
         pluginmanager.callEvent(new FactionLeaveEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag()));
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void factionClaimEvent(LandClaimEvent event) {
+        pluginmanager.callEvent(new FactionClaimLandEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag(), event.getLocation().getChunk()));
     }
 }

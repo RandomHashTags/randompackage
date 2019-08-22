@@ -57,6 +57,12 @@ flare:
     spawn radius: 12
     spawn in delay: 6
     nearby radius: 50
+    cannot land above:
+      - "lava"
+    cannot land in:
+      - "lava"
+      - "water"
+      - "snow"
   item: "torch"
   name: "&a&lUnique Space Flare&r &7(Right Click)"
   lore:

@@ -75,7 +75,6 @@ public class Homes extends RPFeature implements CommandExecutor {
 		givedpitem.items.remove("maxhomeincreaser");
 		for(Player p : viewingHomes) p.closeInventory();
 		for(Player player : editingIcons.keySet()) player.closeInventory();
-		instance = null;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

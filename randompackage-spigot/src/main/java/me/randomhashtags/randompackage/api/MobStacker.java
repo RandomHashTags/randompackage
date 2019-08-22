@@ -88,7 +88,6 @@ public class MobStacker extends RPFeature {
     public void unload() {
         for(int i : tasks) scheduler.cancelTask(i);
         backup();
-        instance = null;
     }
 
     public void backup() {

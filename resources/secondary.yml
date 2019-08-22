@@ -19,6 +19,7 @@ bless:
     - POISON
     - WEAKNESS
     - SLOW_FALLING
+    - MINING_FATIGUE
   msg:
     - "&e&l*** BLESSED ***"
 #

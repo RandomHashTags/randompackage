@@ -58,8 +58,8 @@ public class PAPI extends PlaceholderExpansion {
             switch (identifier) {
                 case "jackpot_countdown": return Boolean.toString(pdata.jackpotCountdown);
                 case "jackpot_wins": return Integer.toString(pdata.jackpotWins);
-                case "jackpot_won$": return Long.toString(pdata.jackpotWonCash);
-                case "jackpot_tickets": return Integer.toString(pdata.jackpotTickets);
+                case "jackpot_won$": return api.formatBigDecimal(pdata.jackpotWonCash);
+                case "jackpot_tickets": return api.formatBigDecimal(pdata.jackpotTickets);
                 case "until_next_envoy":
                     final Envoy e = Envoy.getEnvoy();
                     return e.isEnabled() ? api.getRemainingTime(e.getNextNaturalEnvoy()) : null;

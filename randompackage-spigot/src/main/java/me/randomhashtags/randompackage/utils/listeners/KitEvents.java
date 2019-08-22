@@ -25,7 +25,6 @@ public class KitEvents extends RPStorage implements Listener {
 
     public void unload() {
         HandlerList.unregisterAll(this);
-        instance = null;
     }
 
     @EventHandler

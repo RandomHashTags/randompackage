@@ -321,7 +321,6 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         for(Player p : page.keySet()) p.closeInventory();
         for(Player p : viewingCategory.keySet()) p.closeInventory();
         for(AuctionedItem i : task.keySet()) scheduler.cancelTask(task.get(i));
-        instance = null;
     }
 
 

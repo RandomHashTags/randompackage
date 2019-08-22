@@ -191,7 +191,6 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     public void unload() {
         playerquests = null;
-        instance = null;
     }
 
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {

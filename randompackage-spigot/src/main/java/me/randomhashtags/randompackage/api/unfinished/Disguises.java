@@ -27,6 +27,5 @@ public class Disguises extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
     }
 }

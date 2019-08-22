@@ -164,7 +164,6 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		}
 		globalchallenges = null;
 		globalchallengeprizes = null;
-		instance = null;
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");

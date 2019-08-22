@@ -148,7 +148,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
         CollectionChest.deleteAll();
-        instance = null;
     }
 
     private void viewFilter(Player player, CollectionChest cc) {

@@ -179,7 +179,6 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     public void unload() {
         for(Player p : playertimers.keySet()) p.closeInventory();
         monthlycrates = null;
-        instance = null;
     }
 
     public void viewCrates(Player player) {

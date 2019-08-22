@@ -60,7 +60,6 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
     public void unload() {
         enchantmentorbs = null;
         unloadUtils();
-        instance = null;
     }
 
 

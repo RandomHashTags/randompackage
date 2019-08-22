@@ -119,7 +119,6 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
         PvPMatch.matches = null;
         PvPCountdownMatch.countdowns = null;
-        instance = null;
     }
 
     public void viewQueue(Player player) {

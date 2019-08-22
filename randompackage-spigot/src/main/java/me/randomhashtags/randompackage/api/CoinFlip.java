@@ -170,7 +170,6 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         for(Player p : active.keySet()) p.closeInventory();
         CoinFlipOption.paths = null;
         CoinFlipMatch.matches = null;
-        instance = null;
     }
 
     public void viewCoinFlips(Player player) {

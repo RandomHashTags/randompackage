@@ -40,7 +40,6 @@ public class BlackScrolls extends CustomEnchantUtils {
     public void unload() {
         unloadUtils();
         blackscrolls = null;
-        instance = null;
     }
 
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {

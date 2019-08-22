@@ -107,7 +107,6 @@ public class KitsEvolution extends Kits {
             }
         }
         unloadKitUtils();
-        instance = null;
     }
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }

@@ -22,7 +22,6 @@ public class RPEvents extends RPFeature implements Listener {
         }
     }
     public void unload() {
-        instance = null;
     }
 
     public void backup() {

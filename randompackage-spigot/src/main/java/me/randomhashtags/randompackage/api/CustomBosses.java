@@ -70,7 +70,6 @@ public class CustomBosses extends RPFeature {
 		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
 		bosses = null;
-		instance = null;
 	}
 
 	public void backup() {

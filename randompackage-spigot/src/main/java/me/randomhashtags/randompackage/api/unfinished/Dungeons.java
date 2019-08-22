@@ -72,7 +72,6 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         dungeons = null;
-        instance = null;
     }
 
     @EventHandler

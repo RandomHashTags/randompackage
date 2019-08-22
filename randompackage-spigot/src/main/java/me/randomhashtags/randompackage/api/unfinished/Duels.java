@@ -53,7 +53,6 @@ public class Duels extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         duelArenas = null;
-        instance = null;
     }
 
     public void viewTypes(Player player) {

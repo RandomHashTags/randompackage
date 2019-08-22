@@ -15,6 +15,5 @@ public class FactionPoints extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Points &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        instance = null;
     }
 }

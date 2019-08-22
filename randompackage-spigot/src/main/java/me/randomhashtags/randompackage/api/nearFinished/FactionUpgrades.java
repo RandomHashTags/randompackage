@@ -141,7 +141,6 @@ public class FactionUpgrades extends RPFeature {
         factionUpgrades = null;
         factionupgrades = null;
         factionupgradetypes = null;
-        instance = null;
     }
 
 

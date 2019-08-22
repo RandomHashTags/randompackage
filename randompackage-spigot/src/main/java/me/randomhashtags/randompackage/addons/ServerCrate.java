@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.inventory.ItemStack;
 

@@ -82,7 +82,6 @@ public class Fund extends RPFeature implements CommandExecutor {
 			a.set("fund.depositors." + u.toString(), deposits.get(u));
 		}
 		saveOtherData();
-		instance = null;
 	}
 	
 	public void deposit(Player player, String arg) {

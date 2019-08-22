@@ -59,7 +59,6 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     public void unload() {
         soultrackers = null;
         unloadUtils();
-        instance = null;
     }
 
     public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {

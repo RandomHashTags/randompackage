@@ -84,7 +84,6 @@ public class Masks extends CustomEnchants implements Listener {
             p.updateInventory();
         }
         masks = null;
-        instance = null;
     }
 
     @EventHandler

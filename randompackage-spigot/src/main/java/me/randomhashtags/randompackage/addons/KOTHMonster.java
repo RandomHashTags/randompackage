@@ -1,4 +1,6 @@
 package me.randomhashtags.randompackage.addons;
 
-public interface KOTHMonster {
+import me.randomhashtags.randompackage.addons.utils.RPEntity;
+
+public interface KOTHMonster extends RPEntity {
 }

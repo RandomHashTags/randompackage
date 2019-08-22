@@ -47,7 +47,7 @@ public abstract class EventAttributes extends RPFeature {
     public String executeAttributes(Player player, JackpotPurchaseTicketsEvent event, List<String> attributes) {
         String completion = "";
         if(player != null && event != null && attributes != null && !attributes.isEmpty()) {
-            final String price = Double.toString(event.price), amount = Integer.toString(event.amount);
+            final String price = event.price.toString(), amount = event.amount.toString();
             for(String s : attributes) {
                 final String a = s.toLowerCase();
                 boolean did = true;

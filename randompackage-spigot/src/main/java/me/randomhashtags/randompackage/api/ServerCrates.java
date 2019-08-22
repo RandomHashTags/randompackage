@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
+import me.randomhashtags.randompackage.addons.ServerCrateFlare;
 import me.randomhashtags.randompackage.addons.living.LivingServerCrate;
-import me.randomhashtags.randompackage.addons.objects.ServerCrateFlare;
 import me.randomhashtags.randompackage.events.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -81,7 +81,6 @@ public class ServerCrates extends RPFeature {
 		for(UUID u : tasks.keySet()) stopTasks(u);
 		servercrates = null;
 		LivingServerCrate.deleteAll(true);
-		instance = null;
 	}
 
 	@EventHandler

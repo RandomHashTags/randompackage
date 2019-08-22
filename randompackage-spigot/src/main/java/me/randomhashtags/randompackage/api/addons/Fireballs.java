@@ -65,7 +65,6 @@ public class Fireballs extends CustomEnchantUtils {
         unloadUtils();
         fireballs = null;
         dusts = null;
-        instance = null;
     }
 
     @EventHandler(priority = EventPriority.HIGH)

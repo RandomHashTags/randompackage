@@ -71,7 +71,6 @@ public class Shop extends RPFeature implements CommandExecutor {
     }
     public void unload() {
 	    shopcategories = null;
-	    instance = null;
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
