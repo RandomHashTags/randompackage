@@ -138,19 +138,25 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 
 	public long getNextNaturalEnvoy() { return nextNaturalEnvoy; }
+	public String getUntilNextNaturalEnvoy() { return getRemainingTime(nextNaturalEnvoy-System.currentTimeMillis()); }
 
 	public void stopAllEnvoys() {
 		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
 		if(L != null) {
-			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> l = new HashMap<>(L);
-			for(int i : l.keySet()) {
-				final HashMap<Location, LivingEnvoyCrate> a = new HashMap<>(L.get(i));
-				for(LivingEnvoyCrate e : a.values())
-					e.delete(false);
+			for(int i : L.keySet()) {
+				stopEnvoy(i, false);
 			}
 		}
 	}
-	
+	public void stopEnvoy(int envoyID, boolean dropItems) {
+		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
+		if(L != null) {
+			final HashMap<Location, LivingEnvoyCrate> a = new HashMap<>(L.get(envoyID));
+			for(Location loc : a.keySet()) {
+				a.get(loc).delete(dropItems);
+			}
+		}
+	}
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
@@ -199,13 +205,21 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		if(hasPermission(player, "RandomPackage.envoy.preset", true)) {
 			final PlayerInventory i = player.getInventory();
 			if(!settingPreset.contains(player)) {
-				if(settingPreset.isEmpty()) for(Location l : preset) l.getWorld().getBlockAt(l).setType(Material.BEDROCK);
+				if(settingPreset.isEmpty()) {
+					for(Location l : preset) {
+						l.getWorld().getBlockAt(l).setType(Material.BEDROCK);
+					}
+				}
 				settingPreset.add(player);
 				i.addItem(presetLocationPlacer);
 			} else {
 				settingPreset.remove(player);
 				i.remove(presetLocationPlacer);
-				if(settingPreset.isEmpty()) for(Location l : preset) l.getWorld().getBlockAt(l).setType(Material.AIR);
+				if(settingPreset.isEmpty()) {
+					for(Location l : preset) {
+						l.getWorld().getBlockAt(l).setType(Material.AIR);
+					}
+				}
 			}
 		}
     }
@@ -267,24 +281,13 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), true, where), next);
 		}
 	}
-	public void stopEnvoy(int envoyID, boolean dropItems) {
-		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
-		if(L != null) {
-			final HashMap<Location, LivingEnvoyCrate> l = L.getOrDefault(envoyID, null);
-			if(l != null) {
-				for(LivingEnvoyCrate c : new ArrayList<>(l.values())) {
-					c.delete(dropItems);
-				}
-			}
-		}
-	}
 	private int getRandomTime() {
 		final String r = config.getString("settings.repeats");
 		final int min = r.contains("-") ? Integer.parseInt(r.split("-")[0]) : 0, t = r.contains("-") ? min+random.nextInt(Integer.parseInt(r.split("-")[1])-min+1) : Integer.parseInt(r);
 		return t*20;
 	}
-	private Location getRandomLocation(Random random, List<Location> chunklocs) {
-		final Location rl = chunklocs.get(random.nextInt(chunklocs.size()));
+	private Location getRandomLocation(Random random, List<Location> locs) {
+		final Location rl = locs.get(random.nextInt(locs.size()));
 		final World w = rl.getWorld();
 		final int x = rl.getBlockX(), z = rl.getBlockZ();
 		return new Location(w, x, w.getHighestBlockYAt(x, z), z);

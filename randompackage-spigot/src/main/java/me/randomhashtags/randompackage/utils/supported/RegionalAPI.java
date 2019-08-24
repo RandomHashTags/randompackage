@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.utils.supported.regional.EpicSky;
 import me.randomhashtags.randompackage.utils.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.utils.supported.regional.SuperiorSky;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -78,6 +79,48 @@ public class RegionalAPI extends UVersion {
     public boolean hookedASkyblock() { return askyblock; }
     public boolean hookedSuperiorSkyblock() { return superiorskyblock; }
     public boolean hookedEpicSkyblock() { return epicskyblock; }
+
+    public HashMap<Regional, String> getRegionalIdentifiersAt(Location l) {
+        final HashMap<Regional, String> a = new HashMap<>();
+        if(hookedFactionsUUID()) {
+            a.put(factions, factions.getRegionalIdentifierAt(l));
+        }
+        if(hookedASkyblock()) {
+            a.put(asky, asky.getRegionalIdentifierAt(l));
+        }
+        if(hookedSuperiorSkyblock()) {
+            a.put(ssky, ssky.getRegionalIdentifierAt(l));
+        }
+        if(hookedEpicSkyblock()) {
+            a.put(esky, esky.getRegionalIdentifierAt(l));
+        }
+        return a;
+    }
+    public boolean isPvPZone(Location l) {
+        return isPvPZone(l, null);
+    }
+    public boolean isPvPZone(Location l, List<String> exceptions) {
+        final HashMap<Regional, String> ids = getRegionalIdentifiersAt(l);
+        final boolean e = exceptions != null;
+        for(Regional r : ids.keySet()) {
+            String id = ids.get(r);
+            if(id != null) {
+                id = ChatColor.stripColor(id);
+                if(e && exceptions.contains(id)) return false;
+                switch (id) {
+                    case "Safezone":
+                        return !(r instanceof FactionsUUID);
+                    case "spawn":
+                        return !(r instanceof ASky);
+                    case "":
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public HashMap<Regional, String> getChatModes(UUID player) {
         final HashMap<Regional, String> m = new HashMap<>();

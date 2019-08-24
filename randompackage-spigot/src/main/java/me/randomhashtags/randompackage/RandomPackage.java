@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
+import me.randomhashtags.randompackage.api.Wild;
 import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
@@ -134,12 +135,12 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoadingg(ServerCrates.getServerCrates(), null, isTrue("server crates"));
         cmd.tryLoadingg(Titles.getTitles(), Arrays.asList("title"), isTrue("title"));
         cmd.tryLoading(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
-        cmd.tryLoading(Shop.getShop(), null, isTrue("shop"));
+        cmd.tryLoadingg(Shop.getShop(), Arrays.asList("shop"), isTrue("shop"));
         cmd.tryLoadingg(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
         cmd.tryLoading(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
         cmd.tryLoadingg(Trade.getTrade(), Arrays.asList("trade"), isTrue("trade"));
-        cmd.tryLoading(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
         cmd.tryLoadingg(Wild.getWild(), Arrays.asList("wild"), isTrue("wild"));
+        cmd.tryLoading(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
 
         final int interval = config.getInt("backup interval")*20*60;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);

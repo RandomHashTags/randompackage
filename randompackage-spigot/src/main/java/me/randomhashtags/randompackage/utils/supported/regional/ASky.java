@@ -36,7 +36,6 @@ public final class ASky extends RPFeature implements Regional {
         return i != null && (i.getMembers().contains(player) || areTeammates(i.getOwner(), player));
     }
 
-    public boolean areEnemies(UUID player1, UUID player2) { return false; }
     public List<UUID> getAssociates(UUID player) {
         final Island is = api.getIslandOwnedBy(player);
         return is != null ? is.getMembers() : new ArrayList<>();
@@ -51,7 +50,9 @@ public final class ASky extends RPFeature implements Regional {
         final List<Player> p = new ArrayList<>();
         for(UUID u : a) {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
-            if(o != null && o.isOnline()) p.add(o.getPlayer());
+            if(o != null && o.isOnline()) {
+                p.add(o.getPlayer());
+            }
         }
         return p;
     }

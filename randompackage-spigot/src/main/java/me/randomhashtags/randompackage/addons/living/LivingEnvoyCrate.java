@@ -39,6 +39,7 @@ public class LivingEnvoyCrate {
     public EnvoyCrate getType() { return type; }
     public Location getLocation() { return location; }
     public void delete(boolean dropItems) {
+        location.getChunk().load();
         final HashMap<Location, LivingEnvoyCrate> l = living.get(envoyID);
         l.remove(location);
         location.getBlock().setType(Material.AIR);
@@ -46,7 +47,9 @@ public class LivingEnvoyCrate {
             final World w = location.getWorld();
             final List<ItemStack> items = type.getRandomizedRewards();
             for(ItemStack is : items) {
-                w.dropItemNaturally(location, is);
+                if(is != null && !is.getType().equals(Material.AIR)) {
+                    w.dropItemNaturally(location, is);
+                }
             }
         }
         type = null;

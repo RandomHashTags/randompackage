@@ -271,12 +271,6 @@ player quests:
     - quest
     - quests
 #
-wild pvp:
-  enabled: true
-  cmds:
-    - wildpvp
-    - pvp
-#
 raid events:
   enabled: false
   cmds:
@@ -334,9 +328,16 @@ vkits:
     - vkits
 #
 wild:
-  enabled: false
+  enabled: true
   cmds:
     - wild
+    - wilderness
+#
+wild pvp:
+  enabled: true
+  cmds:
+    - wildpvp
+    - pvp
 #
 withdraw:
   enabled: true

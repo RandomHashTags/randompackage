@@ -62,7 +62,7 @@ public class PAPI extends PlaceholderExpansion {
                 case "jackpot_tickets": return api.formatBigDecimal(pdata.jackpotTickets);
                 case "until_next_envoy":
                     final Envoy e = Envoy.getEnvoy();
-                    return e.isEnabled() ? api.getRemainingTime(e.getNextNaturalEnvoy()) : null;
+                    return e.isEnabled() ? e.getUntilNextNaturalEnvoy() : null;
                 default:
                     return null;
             }

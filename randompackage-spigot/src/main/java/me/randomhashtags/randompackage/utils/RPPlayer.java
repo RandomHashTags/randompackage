@@ -48,7 +48,7 @@ public class RPPlayer extends RPStorage {
 
     private CoinFlipStats coinflipStats;
     private Title activeTitle;
-    public BigDecimal jackpotWonCash, jackpotTickets;
+    public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
     public long xpExhaustionExpiration = 0;
     public int jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
     public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
@@ -105,8 +105,8 @@ public class RPPlayer extends RPStorage {
         final Title T = getActiveTitle();
         final String strings = T != null ? T.getIdentifier() : "null";
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
-        final String ints = jackpotTickets + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
-        final String longs = jackpotWonCash + ";" + xpExhaustionExpiration;
+        final String ints = jackpotTickets.intValue() + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
+        final String longs = jackpotWonCash.doubleValue() + ";" + xpExhaustionExpiration;
         yml.set("strings", strings);
         yml.set("booleans", booleans);
         yml.set("ints", ints);

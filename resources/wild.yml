@@ -1,0 +1,19 @@
+# Made by RandomHashTags
+messages:
+  teleported:
+    - "&e&l(!)&r &eYou have teleported to a random spot in the wilderness."
+  on cooldown:
+    - "&cYou &ncannot&r &cuse /wilderness for another {TIME}!"
+  cannot be used in area:
+    - "&cThis command cannot be used in PvP-enabled areas."
+    - "&7Teleport to /spawn and try again!"
+#
+settings:
+  # Measured in seconds
+  cooldown: 300
+  # <world>;<max>;<min>
+  x coords:
+    - "world;20000000;-20000000"
+  z coords:
+    - "world;20000000;-20000000"
+#

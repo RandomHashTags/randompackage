@@ -80,6 +80,7 @@ public class YamlUpdater extends UVersion {
                 "showcase",
                 "titles",
                 "trade",
+                "wild",
                 "wild pvp",
         };
         final File d = rpd;
@@ -132,6 +133,7 @@ public class YamlUpdater extends UVersion {
             case "showcase": return getShowcase();
             case "titles": return getTitles();
             case "trade": return getTrade();
+            case "wild": return getWild();
             case "wild pvp": return getWildPvP();
             default: return null;
         }
@@ -220,12 +222,12 @@ public class YamlUpdater extends UVersion {
                 "showcase.cmds", Arrays.asList("showcase"),
                 "spawner stacking.enabled", true,
                 "splitsouls.enabled", true,
-                "splitsouls.cmds", Arrays.asList("splutsouls"),
+                "splitsouls.cmds", Arrays.asList("splitsouls"),
                 "tinkerer.cmds", Arrays.asList("tinkerer"),
                 "title.cmds", Arrays.asList("title", "titles"),
                 "trade.cmds", Arrays.asList("trade"),
                 "vkits.cmds", Arrays.asList("vkit", "vkits"),
-                "wild.cmds", Arrays.asList("wild"),
+                "wild.cmds", Arrays.asList("wild", "wilderness"),
                 "withdraw.cmds", Arrays.asList("withdraw"),
                 "xpbottle.cmds", Arrays.asList("cmds"),
         };
@@ -356,6 +358,9 @@ public class YamlUpdater extends UVersion {
         return null;
     }
     private LinkedHashMap<String, Object> getTrade() {
+        return null;
+    }
+    private LinkedHashMap<String, Object> getWild() {
         return null;
     }
     private LinkedHashMap<String, Object> getWildPvP() {

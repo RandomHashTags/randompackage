@@ -72,6 +72,10 @@ public class UVersion {
     public BigDecimal getBigDecimal(String value) {
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
+    public BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {
+        final BigDecimal range = max.subtract(min);
+        return min.add(range.multiply(new BigDecimal(Math.random())));
+    }
     public String formatDouble(double d) {
         String decimals = Double.toString(d).split("\\.")[1];
         if(decimals.equals("0")) { decimals = ""; } else { decimals = "." + decimals; }

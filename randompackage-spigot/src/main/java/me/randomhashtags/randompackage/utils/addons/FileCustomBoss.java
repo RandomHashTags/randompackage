@@ -49,6 +49,9 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
         }
         return s;
     }
+    public int getScoreboardRadius() { return getMessageRadius(); }
+    public int getScoreboardUpdateInterval() { return 20; }
+
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
         return spawnitem.clone();

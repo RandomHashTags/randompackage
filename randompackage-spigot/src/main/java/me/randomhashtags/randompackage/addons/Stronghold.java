@@ -1,14 +1,7 @@
 package me.randomhashtags.randompackage.addons;
 
-import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.addons.utils.Rewardable;
-import org.bukkit.Location;
+import me.randomhashtags.randompackage.addons.utils.Captureable;
 
-import java.util.List;
-
-public interface Stronghold extends Itemable, Rewardable {
+public interface Stronghold extends Captureable {
     int getSlot();
-    Location getLocation();
-    List<String> getNoLongerControllingMsg();
-    List<String> getTakenControlMsg();
 }

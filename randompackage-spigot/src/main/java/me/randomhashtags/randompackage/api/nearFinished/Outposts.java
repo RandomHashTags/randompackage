@@ -1,9 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.Outpost;
-import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileOutpost;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
@@ -73,9 +72,9 @@ public class Outposts extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "outposts");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                final FileOutpost o = new FileOutpost(f);
-                o.setOutpostStatus(OutpostStatus.UNCONTESTED);
-                gi.setItem(o.getSlot(), o.getItem());
+                //final FileOutpost o = new FileOutpost(f);
+                //o.setOutpostStatus(OutpostStatus.UNCONTESTED);
+                //gi.setItem(o.getSlot(), o.getItem());
             }
         }
         background = d(config, "gui.background");
@@ -122,7 +121,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
                 item = top.getItem(i);
                 final Outpost o = valueOf(i);
                 if(o != null) {
-                    final String cap = Double.toString(round(o.getControlPercent(), 4)), attacking = o.getAttackingFaction(), controlling = o.getControllingFaction(), status = o.getStatus();
+                    final String cap = Double.toString(round(/*o.getControlPercent()*/0, 4)), attacking = o.getAttackingFaction(), controlling = o.getControllingFaction(), status = o.getStatus();
                     itemMeta = item.getItemMeta(); lore.clear();
                     for(String s : itemMeta.getLore()) {
                         if(s.contains("{CAP%}") && controlling == null || s.contains("{ATTACKING}") && attacking == null || s.contains("{CONTROLLING}") && controlling == null) s = null;
@@ -145,9 +144,9 @@ public class Outposts extends RPFeature implements CommandExecutor {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled() && event.getView().getTitle().equals(gui.getTitle())) {
+        if(event.getView().getTitle().equals(gui.getTitle())) {
             final Player player = (Player) event.getWhoClicked();
             event.setCancelled(true);
             player.updateInventory();

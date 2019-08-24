@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.Outpost;
 import me.randomhashtags.randompackage.addons.enums.OutpostStatus;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -12,9 +11,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.io.File;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.api.nearFinished.Outposts.statuses;
-
-public class FileOutpost extends RPAddon implements Outpost {
+// TODO: fix class
+public abstract class FileOutpost extends RPAddon implements Outpost {
     private ItemStack item;
     private List<String> lostControl, claimed;
     private Scoreboard scoreboard;
@@ -36,11 +34,11 @@ public class FileOutpost extends RPAddon implements Outpost {
         return item;
     }
     public List<String> getLostControlMsg() {
-        if(lostControl == null) lostControl = api.colorizeListString(yml.getStringList("messages.lost control"));
+        if(lostControl == null) lostControl = colorizeListString(yml.getStringList("messages.lost control"));
         return lostControl;
     }
     public List<String> getClaimedMsg() {
-        if(claimed == null) claimed = api.colorizeListString(yml.getStringList("messages.claimed"));
+        if(claimed == null) claimed = colorizeListString(yml.getStringList("messages.claimed"));
         return claimed;
     }
     public List<String> getLimits() { return yml.getStringList("limits"); }
@@ -48,7 +46,7 @@ public class FileOutpost extends RPAddon implements Outpost {
     public List<String> getRewards() { return yml.getStringList("rewards"); }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
-            scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+            scoreboard = scoreboardManager.getNewScoreboard();
             final Objective o = scoreboard.registerNewObjective("dummy", "dummy");
             o.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title")));
             final int s = yml.getInt("scoreboard.score start");
@@ -60,7 +58,7 @@ public class FileOutpost extends RPAddon implements Outpost {
         }
         return scoreboard;
     }
-    public Location getWarpLocation() { return api.toLocation(yml.getString("settings.warp location")); }
+    public Location getWarpLocation() { return toLocation(yml.getString("settings.warp location")); }
 
     public String getAttackingFaction() { return attacking; }
     public void setAttackingFaction(String faction) { attacking = faction; }
@@ -68,13 +66,13 @@ public class FileOutpost extends RPAddon implements Outpost {
     public void setControllingFaction(String faction) { controlling = faction; }
     public String getStatus() {
         final String a = attacking, c = controlling;
-        return status.replace("{CAP%}", Double.toString(api.round(controlPercent, 4))).replace("{ATTACKING_FACTION}", a != null ? a : "N/A").replace("{CONTROLLING_FACTION}", c != null ? c : "N/A");
+        return status.replace("{CAP%}", Double.toString(round(controlPercent, 4))).replace("{ATTACKING_FACTION}", a != null ? a : "N/A").replace("{CONTROLLING_FACTION}", c != null ? c : "N/A");
     }
     public long getControlledStarting() { return controlledStarting; }
     public double getControlPercent() { return controlPercent; }
     public OutpostStatus getOutpostStatus() { return statusType; }
     public void setOutpostStatus(OutpostStatus type) {
         statusType = type;
-        status = statuses.get(type.name());
+        status = getStatuses().get(type.name());
     }
 }
