@@ -22,6 +22,7 @@ public class PolyBoundary {
         final int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
         return x <= maxX && x >= minX && y <= maxY && y >= minY && z <= maxZ && z >= minZ;
     }
+    public World getWorld() { return center.getWorld(); }
     public Location getCenter() { return center; }
     public int getMaxM() { return maxX; }
     public int getMinX() { return minX; }

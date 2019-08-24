@@ -74,11 +74,11 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         dungeons = null;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && top.getHolder() == player) {
+        if(top.getHolder() == player) {
             if(event.getView().getTitle().equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();

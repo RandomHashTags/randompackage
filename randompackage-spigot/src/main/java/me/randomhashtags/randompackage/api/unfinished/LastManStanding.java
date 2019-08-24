@@ -1,12 +1,14 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.objects.PolyBoundary;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 public class LastManStanding extends RPFeature implements CommandExecutor {
@@ -17,10 +19,14 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     }
 
     public YamlConfiguration config;
+    private PolyBoundary boundary;
+    private HashMap<Player, Long> players;
+    private HashMap<Long, List<String>> rewards;
+    private int task;
 
     public String getIdentifier() { return "LAST_MAN_STANDING"; }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final int l = args.length;
         if(l == 0 || l == 1 && args[0].equals("help")) viewHelp(sender);
         else {
@@ -36,9 +42,19 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "last man standing.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "last man standing.yml"));
+        rewards = new HashMap<>();
+        final ConfigurationSection c = config.getConfigurationSection("rewards");
+        if(c != null) {
+            for(String s : c.getKeys(false)) {
+                rewards.put(Long.parseLong(s), config.getStringList("rewards." + s));
+            }
+        }
+        final long interval = 40;
+        task = Bukkit.scheduleRepeatingTask(randompackage, () -> check(), interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        scheduler.cancelTask(task);
     }
 
     public void viewHelp(CommandSender sender) {
@@ -57,6 +73,31 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
                     sender.sendMessage(s);
                 }
             }
+        }
+    }
+
+    private void check() {
+        if(boundary != null) {
+            final long time = System.currentTimeMillis();
+            final Collection<Player> players = Bukkit.getOnlinePlayers(boundary.getWorld());
+            if(players != null && !players.isEmpty()) {
+                if(boundary.contains(player.getLocation())) {
+                    if(!players.containsKey(player)) {
+                        players.put(player, time);
+                    } else {
+                        final long prev = players.get(player), total = time-prev;
+                        players.put(player, total);
+                        tryGivingReward(player, prev, total);
+                    }
+                } else if(players.containsKey(player)) {
+                    players.remove(player);
+                }
+            }
+        }
+    }
+
+    private void tryGivingReward(Player player, long started, long total) {
+        if(players.containsKey(player)) {
         }
     }
 }

@@ -64,4 +64,16 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
     }
     public void unload() {
     }
+
+    public void view(Player player) {
+        if(hasPermission(player, "RandomPackage.factionquests.view", true)) {
+        }
+    }
+
+    public void tryClaiming(Player player/*, ActiveFactionQuest quest*/) {
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+    }
 }

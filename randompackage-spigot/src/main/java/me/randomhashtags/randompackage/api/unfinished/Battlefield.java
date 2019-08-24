@@ -16,4 +16,8 @@ public class Battlefield extends RPFeature {
     }
     public void unload() {
     }
+
+    @EventHandler
+    private void playerTeleportEvent(PlayerTeleportEvent event) {
+    }
 }

@@ -124,8 +124,8 @@ items:
     rewards:
       - "spaceflare:GODLY"
       - "spaceflare:LEGENDARY;amount=2;chance=30"
-      - "factionxpbooster:5.0:15;chance=35"
-      - "factionmcmmobooster:5.0:15;amount=1-2;chance=35"
+      - "booster:FACTION_XP:5.0:15;chance=35"
+      - "booster:FACTION_MCMMO:5.0:15;amount=1-2;chance=35"
       - "chance=25->mcmmolevelvoucher:swords:200||mcmmocreditvoucher:200"
       - "mysterymobspawner;amount=4;chance=25"
       - "chance=60->title:106||title:125||title:167||title:176||title:184||title:185"

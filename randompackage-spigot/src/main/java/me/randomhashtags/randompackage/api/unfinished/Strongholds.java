@@ -22,8 +22,15 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "strongholds.yml");
+        if(!otherdata.getBoolean("saved default strongholds")) {
+            final String[] a = new String[] {};
+            for(String s : a) save("strongholds", s + ".yml");
+            otherdata.set("saved default strongholds", true);
+            saveOtherData();
+        }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        strongholds = null;
     }
 }

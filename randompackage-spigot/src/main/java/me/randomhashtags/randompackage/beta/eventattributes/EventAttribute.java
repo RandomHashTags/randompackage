@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.eventattributes;
+package me.randomhashtags.randompackage.beta.eventattributes;
 
 import me.randomhashtags.randompackage.addons.utils.Identifiable;
 import org.bukkit.entity.Entity;

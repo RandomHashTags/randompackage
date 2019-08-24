@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.utils.objects.Feature;
+import me.randomhashtags.randompackage.addons.DuelArena;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -74,5 +74,37 @@ public class Duels extends RPFeature implements CommandExecutor {
 
             player.updateInventory();
         }
+    }
+    public void editGodset(Player player) {
+    }
+
+    public void tryJoiningnUnranked(Player player) {
+    }
+    public void tryJoiningRanked(Player player) {
+    }
+    public void trySpectating(Player player, DuelArena arena) {
+    }
+
+    public void sendRequest(Player player, String target) {
+    }
+    public void acceptRequest(Player player) {
+    }
+
+    public void viewTop(CommandSender sender, int page) {
+        if(hasPermission(sender, "RandomPackage.duel.top", true)) {
+        }
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+    }
+
+    @EventHandler
+    private void playerQuitEvent(PlayerQuitEvent event) {
     }
 }

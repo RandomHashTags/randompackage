@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.dev.eventattributes;
+package me.randomhashtags.randompackage.beta.eventattributes;
 
-import me.randomhashtags.randompackage.dev.EventAttributeCallEvent;
+import me.randomhashtags.randompackage.beta.EventAttributeCallEvent;
 import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.*;
@@ -44,7 +44,9 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
                     } catch (Exception ignored) {}
 
                     if(condition.startsWith(s)) {
-                        if(condition.equals(s + "isplayer")) {
+                        if(condition.equals(s + "isfromspawner=")) {
+                            passed = spawnedFromSpawner.contains(e.getUniqueID()) == Boolean.parseBoolean(value);
+                        } else if(condition.equals(s + "isplayer")) {
                             passed = e instanceof Player;
                         } else if(condition.equals(s + "!isplayer")) {
                             passed = !(e instanceof Player);
@@ -425,7 +427,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
             }
         }
     }
-    public abstract void call(Entity recipient, Object value);
+    public abstract void call(HashMap<Entity, Object> recipientValues);
 
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

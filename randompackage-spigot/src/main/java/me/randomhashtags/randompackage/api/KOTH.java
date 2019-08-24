@@ -129,7 +129,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			final String S = s.toLowerCase();
 			final boolean c = S.contains(";chance"), C = s.startsWith("chance=");
 			final int i = C ? Integer.parseInt(S.split("chance=")[1].split("-")[0]) : c ? Integer.parseInt(S.split(";chance=")[1]) : 100;
-			if(random.nextInt(101) <= i) {
+			if(random.nextInt(100) < i) {
 				final String original = C ? s.split("chance=" + i + "->")[1] : c ? s.split(";chance=")[0] : s;
 				String r = C ? S.split("chance=" + i + "->")[1] : c ? S.split(";chance=")[0] : s;
 				if(r.contains("||")) {

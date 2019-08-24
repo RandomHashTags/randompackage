@@ -28,4 +28,21 @@ public class Disguises extends RPFeature {
     }
     public void unload() {
     }
+
+    @EventHandler
+    private void playerInteractEvent(PlayerInteractEvent event) {
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+    }
+
+    public void viewOwned(Player player) {
+        if(hasPermission(player, "RandomPackage.disguise", true)) {
+        }
+    }
+    public void disguise(Player player) {
+    }
+    public void undisguise(Player player) {
+    }
 }
