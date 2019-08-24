@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class FactionPoints extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "faction points.yml");
-        config = YamlConfiguration.loadYamlConfiguration(new File(rpd, "faction points.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd, "faction points.yml"));
         points = new HashMap<>();
         loadBackup();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Points &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -32,9 +34,9 @@ public class FactionPoints extends RPFeature {
     public void loadBackup() {
         points.clear();
         dataF = new File(rpd + separator + "_Data", "faction points.yml");
-        data = YamlConfiguration.loadYamlConfiguration(dataF);
+        data = YamlConfiguration.loadConfiguration(dataF);
         final ConfigurationSection c = data.getConfigurationSection("points");
-        if(c != null && !c.isEmpty()) {
+        if(c != null) {
             for(String s : c.getKeys(false)) {
                 points.put(s, data.getInt("points" + s));
             }
@@ -50,7 +52,7 @@ public class FactionPoints extends RPFeature {
         try {
             data.save(dataF);
             dataF = new File(rpd + separator + "_Data", "faction points.yml");
-            data = YamlConfiguration.loadYamlConfiguration(dataF);
+            data = YamlConfiguration.loadConfiguration(dataF);
         } catch (Exception e) {
             e.printStackTrace();
         }

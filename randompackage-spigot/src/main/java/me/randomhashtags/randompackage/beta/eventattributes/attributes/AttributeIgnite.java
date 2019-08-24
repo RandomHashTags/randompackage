@@ -3,6 +3,8 @@ package me.randomhashtags.randompackage.beta.eventattributes.attributes;
 import me.randomhashtags.randompackage.beta.eventattributes.AbstractEventAttribute;
 import org.bukkit.entity.Entity;
 
+import java.util.HashMap;
+
 public class AttributeIgnite extends AbstractEventAttribute {
     public String getIdentifier() { return "IGNITE"; }
     public void call(HashMap<Entity, Object> recipientValues) {

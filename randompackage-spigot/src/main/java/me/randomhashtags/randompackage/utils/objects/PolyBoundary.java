@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.objects;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
 public class PolyBoundary {
     private final Location center;

@@ -1,6 +1,9 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class Battlefield extends RPFeature {
     private static Battlefield instance;
@@ -17,7 +20,7 @@ public class Battlefield extends RPFeature {
     public void unload() {
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerTeleportEvent(PlayerTeleportEvent event) {
     }
 }

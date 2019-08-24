@@ -5,7 +5,11 @@ import me.randomhashtags.randompackage.utils.objects.PolyBoundary;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,7 +24,7 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
 
     public YamlConfiguration config;
     private PolyBoundary boundary;
-    private HashMap<Player, Long> players;
+    private HashMap<Player, Long> playerStartTimes;
     private HashMap<Long, List<String>> rewards;
     private int task;
 
@@ -50,7 +54,7 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
             }
         }
         final long interval = 40;
-        task = Bukkit.scheduleRepeatingTask(randompackage, () -> check(), interval, interval);
+        task = scheduler.scheduleSyncRepeatingTask(randompackage, this::check, interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -79,25 +83,32 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     private void check() {
         if(boundary != null) {
             final long time = System.currentTimeMillis();
-            final Collection<Player> players = Bukkit.getOnlinePlayers(boundary.getWorld());
-            if(players != null && !players.isEmpty()) {
-                if(boundary.contains(player.getLocation())) {
-                    if(!players.containsKey(player)) {
-                        players.put(player, time);
+            final List<Player> players = boundary.getWorld().getPlayers();
+            if(!players.isEmpty()) {
+                for(Player player : players) {
+                    if(boundary.contains(player.getLocation())) {
+                        if(!playerStartTimes.containsKey(player)) {
+                            playerStartTimes.put(player, time);
+                        } else {
+                            final long prev = playerStartTimes.get(player), total = time-prev;
+                            playerStartTimes.put(player, total);
+                            tryGivingReward(player, prev, total);
+                        }
                     } else {
-                        final long prev = players.get(player), total = time-prev;
-                        players.put(player, total);
-                        tryGivingReward(player, prev, total);
+                        playerStartTimes.remove(player);
                     }
-                } else if(players.containsKey(player)) {
-                    players.remove(player);
                 }
             }
         }
     }
 
     private void tryGivingReward(Player player, long started, long total) {
-        if(players.containsKey(player)) {
+        if(playerStartTimes.containsKey(player)) {
         }
+    }
+
+    @EventHandler
+    private void playerQuitEvent(PlayerQuitEvent event) {
+        playerStartTimes.remove(event.getPlayer());
     }
 }

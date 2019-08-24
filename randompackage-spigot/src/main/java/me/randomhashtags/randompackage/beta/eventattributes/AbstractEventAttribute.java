@@ -45,7 +45,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
 
                     if(condition.startsWith(s)) {
                         if(condition.equals(s + "isfromspawner=")) {
-                            passed = spawnedFromSpawner.contains(e.getUniqueID()) == Boolean.parseBoolean(value);
+                            passed = spawnedFromSpawner.contains(e.getUniqueId()) == Boolean.parseBoolean(value);
                         } else if(condition.equals(s + "isplayer")) {
                             passed = e instanceof Player;
                         } else if(condition.equals(s + "!isplayer")) {
@@ -421,7 +421,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
                     final EventAttributeCallEvent e = new EventAttributeCallEvent(entity, a);
                     pluginmanager.callEvent(e);
                     if(!e.isCancelled()) {
-                        call(entity, value);
+                        //call(entity, value);
                     }
                 }
             }
