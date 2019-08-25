@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.objects.AuctionedItem;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -597,7 +597,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private void addToCategoryView(AuctionedItem ai, UMaterial um) {
         final ItemStack i = ai.item();
         if(!category.containsKey(um)) category.put(um, new HashMap<>());
-        final String dn = i.getItemMeta().getDisplayName();
+        final String dn = i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : null;
         final HashMap<String, List<AuctionedItem>> m = category.get(um);
         if(!m.containsKey(dn)) m.put(dn, new ArrayList<>());
         m.get(dn).add(ai);
@@ -661,8 +661,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             return ah.size() > p+slot ? (AuctionedItem) ah.toArray()[p+slot] : null;
         } else if(type.startsWith("CATEGORY")) {
             final UMaterial u = viewingCategory.get(player);
-            String s = T.split("CATEGORY_" + u.name() + "_")[1];
-            if(s.equals("null")) s = null;
+            final String a = "CATEGORY_" + u.name() + "_";
+            final String[] b = T.split(a);
+            String s = b.length == 1 ? null : b[1];
             final List<AuctionedItem> i = category.get(u).get(s);
             return slot < i.size() ? i.get(slot) : null;
         }
@@ -763,7 +764,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 }
             } else if(isC) {
                 player.closeInventory();
-                viewCategory(player, UMaterial.match(c), c.getItemMeta().getDisplayName());
+                viewCategory(player, UMaterial.match(c), c.getItemMeta().hasDisplayName() ? c.getItemMeta().getDisplayName() : null);
             } else if(isCA) {
                 final HashMap<ItemStack, BigDecimal> i = auctioning.get(player);
                 final ItemStack it = (ItemStack) i.keySet().toArray()[0];
@@ -779,7 +780,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             } else if(isCV) {
                 if(slots.contains(r)) {
                     final UMaterial um = UMaterial.match(c);
-                    final AuctionedItem a = valueOf(player, slots.indexOf(r), "CATEGORY_" + um.name() + "_" + c.getItemMeta().getDisplayName());
+                    final AuctionedItem a = valueOf(player, slots.indexOf(r), "CATEGORY_" + um.name() + (c.getItemMeta().hasDisplayName() ? "_" + c.getItemMeta().getDisplayName() : ""));
                     if(a != null) {
                         tryPurchasing(player, a);
                     }

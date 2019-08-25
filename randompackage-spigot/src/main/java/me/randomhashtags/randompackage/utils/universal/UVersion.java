@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.supported.mechanics.SpawnerAPI;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
-public class UVersion {
+public class UVersion extends YamlUpdater {
     private static UVersion instance;
     public static UVersion getUVersion() {
         if(instance == null) instance = new UVersion();
@@ -52,7 +53,7 @@ public class UVersion {
     public List<String> lore = new ArrayList<>();
 
     public void save(String folder, String file) {
-        File f = null;
+        File f;
         final File d = randompackage.getDataFolder();
         if(folder != null && !folder.equals(""))
             f = new File(d + File.separator + folder + File.separator, file);
@@ -61,6 +62,9 @@ public class UVersion {
         if(!f.exists()) {
             f.getParentFile().mkdirs();
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
+        }
+        if(folder != null && !folder.equals("_Data")) {
+            updateYaml(f);
         }
     }
     public String formatBigDecimal(BigDecimal b) {

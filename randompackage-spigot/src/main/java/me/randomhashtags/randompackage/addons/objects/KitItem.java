@@ -20,10 +20,10 @@ public class KitItem extends RPFeature implements CustomKitItem {
     public void unload() {}
 
     public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore) {
-        this(kit, path, item, amount == null || amount.isEmpty() ? "1" : amount, name, lore, 100);
+        this(kit, path, item, amount, name, lore, 100, 0);
     }
     public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore, int chance) {
-        this(kit, path, item, amount == null || amount.isEmpty() ? "1" : amount, name, lore, chance, 0);
+        this(kit, path, item, amount, name, lore, chance, 0);
     }
     public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore, int chance, int requiredLevel) {
         this.kit = kit;

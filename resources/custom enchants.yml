@@ -11,11 +11,6 @@ messages:
   - "&b&l[+]&r &b{ENCHANT}: &7applying {POTION_EFFECT}"
   remove potion effect:
   - "&c&l[-]&r &c{ENCHANT}: &7removing {POTION_EFFECT}"
-  #
-  need item with soul tracker:
-  - "&c&l(!)&r &cYou need an item with a soul tracker to use this!"
-  need to collect souls:
-  - "&c&l(!)&r &cYou need to collect some souls to use this!"
 #
 settings:
   # If an item contains this lore, then enchants will not be able to be applied to it

@@ -1,22 +1,13 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.RPFeature.rpd;
-
-public class YamlUpdater extends UVersion {
-    private static YamlUpdater instance;
-    public static YamlUpdater getYamlUpdater() {
-        if(instance == null) instance = new YamlUpdater();
-        return instance;
-    }
-
-    private boolean update(File file) {
+public class YamlUpdater {
+    protected boolean updateYaml(File file) {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(file);
             if(changes != null && !changes.isEmpty()) {
@@ -42,57 +33,6 @@ public class YamlUpdater extends UVersion {
             }
         }
         return false;
-    }
-    public void update() {
-        final String[] f = new String[] {
-                "auction house",
-                "coinflip",
-                "collection filter",
-                "config",
-                "conquests",
-                "custom armor",
-                "custom enchants",
-                "custom explosions",
-                "disguises",
-                "duels",
-                "dungeons",
-                "envoy",
-                "faction points",
-                "faction quests",
-                "faction upgrades",
-                "fund",
-                "global challenges",
-                "homes",
-                "item filter",
-                "items",
-                "jackpot",
-                "kits",
-                "koth",
-                "last man standing",
-                "lootboxes",
-                "masks",
-                "mob stacker",
-                "monthly crates",
-                "outposts",
-                "player quests",
-                "secondary",
-                "shop",
-                "showcase",
-                "titles",
-                "trade",
-                "wild",
-                "wild pvp",
-        };
-        final File d = rpd;
-        final List<String> updatedymls = new ArrayList<>();
-        for(String s : f) {
-            final File y = new File(d, s + ".yml");
-            if(y.exists()) {
-                final boolean updated = update(y);
-                if(updated) updatedymls.add(s + ".yml");
-            }
-        }
-        sendConsoleMessage("&6[RandomPackage] &a" + (!updatedymls.isEmpty() ? "Updated the following ymls: &e" + updatedymls.toString() : "All files up to date"));
     }
 
     public LinkedHashMap<String, Object> getChanges(File file) { // Implemented since v16.3.1
@@ -135,6 +75,8 @@ public class YamlUpdater extends UVersion {
             case "trade": return getTrade();
             case "wild": return getWild();
             case "wild pvp": return getWildPvP();
+            // Addons
+            case "soul trackers": return getSoulTrackers();
             default: return null;
         }
     }
@@ -233,7 +175,6 @@ public class YamlUpdater extends UVersion {
         };
         return putAll(values);
     }
-
 
     private LinkedHashMap<String, Object> getAH() {
         return null;
@@ -366,7 +307,16 @@ public class YamlUpdater extends UVersion {
     private LinkedHashMap<String, Object> getWildPvP() {
         return null;
     }
-
+    // Addons
+    private LinkedHashMap<String, Object> getSoulTrackers() {
+        final Object[] values = new Object[] {
+                // 16.4.3
+                "messages.need item with soul tracker", newStringList("&c&l(!)&r &cYou need an item with a soul tracker to use this!"),
+                "messages.need to collect souls", newStringList("&c&l(!)&r &cYou need to collect some souls to use this!"),
+                "messages.need to collect more souls", newStringList("&c&l(!)&r &cYou need more souls collected to use this!")
+        };
+        return putAll(values);
+    }
 
     private Object[] newInventory(String key, String title, int size) {
         return new Object[]{

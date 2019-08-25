@@ -9,7 +9,6 @@ import me.randomhashtags.randompackage.api.unfinished.*;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.YamlUpdater;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
@@ -170,7 +169,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     private void checkFiles() {
         saveDefaultConfig();
-        YamlUpdater.getYamlUpdater().update();
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {

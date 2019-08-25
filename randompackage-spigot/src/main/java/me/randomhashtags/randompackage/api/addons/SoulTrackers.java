@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.addons.SoulTracker;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathSoulTracker;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,12 +26,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor {
+public class SoulTrackers extends RPFeature implements CommandExecutor {
     private static SoulTrackers instance;
     public static SoulTrackers getSoulTrackers() {
         if(instance == null) instance = new SoulTrackers();
         return instance;
     }
+
+    public YamlConfiguration config;
 
     public String getIdentifier() { return "SOUL_TRACKERS"; }
 
@@ -43,10 +46,10 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     }
 
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "soul trackers.yml");
-        final ConfigurationSection cs = getAddonConfig("soul trackers.yml").getConfigurationSection("soul trackers");
+        config = getAddonConfig("soul trackers.yml");
+        final ConfigurationSection cs = config.getConfigurationSection("soul trackers");
         if(cs != null) {
             final List<ItemStack> z = new ArrayList<>();
             for(String s : cs.getKeys(false)) {
@@ -58,7 +61,6 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
     }
     public void unload() {
         soultrackers = null;
-        unloadUtils();
     }
 
     public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {
@@ -111,6 +113,10 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
             if(g != null) {
                 split = g.getSplitMsg();
                 collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
+                if(collectedsouls <= 0) {
+                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
+                    return;
+                }
             } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
                 sendStringListMessage(player, config.getStringList("messages.need item with soul tracker"), null);
             } else {
@@ -151,10 +157,15 @@ public class SoulTrackers extends CustomEnchantUtils implements CommandExecutor 
                     }
                 }
                 if(did) {
-                    lore.set(applied, appliedst.getApplied().replace("{SOULS}", Integer.toString(totalsouls - amount)));
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                    player.updateInventory();
+                    if(totalsouls-amount < 0) {
+                        sendStringListMessage(player, config.getStringList("messages.need to collect more souls"), null);
+                        return;
+                    } else {
+                        lore.set(applied, appliedst.getApplied().replace("{SOULS}", Integer.toString(totalsouls - amount)));
+                        itemMeta.setLore(lore); lore.clear();
+                        item.setItemMeta(itemMeta);
+                        player.updateInventory();
+                    }
                 }
             }
             if(split != null) {

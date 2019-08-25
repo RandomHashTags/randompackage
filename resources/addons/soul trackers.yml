@@ -1,5 +1,12 @@
 # Made by RandomHashTags
-
+messages:
+  need item with soul tracker:
+    - "&c&l(!)&r &cYou need an item with a soul tracker to use this!"
+  need to collect souls:
+    - "&c&l(!)&r &cYou need to collect some souls to use this!"
+  need to collect more souls:
+    - "&c&l(!)&r &cYou need more souls collected to use this!"
+#
 soul trackers:
   MONSTER:
     tracks: MOBS

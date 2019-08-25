@@ -148,7 +148,7 @@ public class KitsGlobal extends Kits {
 
                 final CustomKitGlobal gkit = (CustomKitGlobal) k;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final int tier = pdata.getKitLevel(gkit);
+                final int level = pdata.getKitLevel(gkit), tier = level <= 0 ? 1 : level;
                 if(t.equals(preview)) {
                     player.closeInventory();
                     sendStringListMessage(player, config.getStringList("gkits.messages.cannot withdraw"), null);

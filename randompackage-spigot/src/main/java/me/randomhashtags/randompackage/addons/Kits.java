@@ -19,10 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public abstract class Kits extends RPFeature implements CommandExecutor {
     private static boolean isEnabled = false;
@@ -175,11 +172,10 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
     public void give(Player player, CustomKit kit, int tier, boolean allItems, boolean addCooldown) {
         if(player != null && kit != null) {
-            final int max = kit.getMaxLevel();
             final List<KitItem> kitItems = kit.getItems();
             if(kitItems == null) return;
-            final String pn = player.getName(), mt = Integer.toString(max);
-            final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().get(tier);
+            final String pn = player.getName();
+            final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(tier, 0f);
             for(KitItem ki : kitItems) {
                 final ItemStack is = allItems ? ki.getItemStack() : ki.getItemStack(pn, tier, multiplier);
                 if(is != null) {
@@ -194,7 +190,8 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         if(pdata != null) {
             final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
             for(CustomKit k : new ArrayList<>(cooldowns.keySet())) {
-                if(k.getClass().equals(type)) {
+                final boolean isInstance = Arrays.asList(k.getClass().getInterfaces()).contains(type);
+                if(isInstance) {
                     cooldowns.remove(k);
                 }
             }

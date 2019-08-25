@@ -683,12 +683,12 @@ public abstract class CustomEnchantUtils extends RPFeature {
                     int depleteAmount = Integer.parseInt(a.split(":")[1].split("}")[0]);
                     depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(fn, gem);
                     if(amount - depleteAmount <= 0) {
-                        depleteAmount = amount;
                         pdata.toggleRarityGem(ev, gem);
+                        removeItem(player, g, 1);
+                    } else {
+                        itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
+                        g.setItemMeta(itemMeta);
                     }
-                    itemMeta = g.getItemMeta();
-                    itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
-                    g.setItemMeta(itemMeta);
                     player.updateInventory();
                 }
             }
