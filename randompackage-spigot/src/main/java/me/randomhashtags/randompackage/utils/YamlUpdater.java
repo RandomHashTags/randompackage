@@ -107,7 +107,7 @@ public class YamlUpdater {
                 "boosters.enabled", true,
                 "custom enchants.transmog scrolls", true,
                 "custom enchants.white scrolls", true,
-                "wild.enabled", false,
+                "wild.enabled", true, // enabled in 16.4.3
                 // 16.4.3
                 "file system.enabled", false,
                 "file system.type", "LOCAL/MYSQL/MANGODB",
