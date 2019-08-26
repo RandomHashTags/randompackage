@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.beta.eventattributes.attributes;
+package me.randomhashtags.randompackage.dev.eventattributes.attributes;
 
-import me.randomhashtags.randompackage.beta.eventattributes.AbstractEventAttribute;
+import me.randomhashtags.randompackage.dev.eventattributes.AbstractEventAttribute;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 

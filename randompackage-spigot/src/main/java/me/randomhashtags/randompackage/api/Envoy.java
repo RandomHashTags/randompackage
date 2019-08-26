@@ -267,8 +267,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				preset.remove(r);
 			}
 		} else return;
+		final int t = totalEnvoys;
+		scheduler.scheduleSyncDelayedTask(randompackage, () -> stopEnvoy(t, false), 20*despawn);
 		totalEnvoys += 1;
-		scheduler.scheduleSyncDelayedTask(randompackage, () -> stopEnvoy(totalEnvoys, false), 20*despawn);
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
 		for(String s : config.getStringList("messages.broadcast")) {

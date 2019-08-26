@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
+import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
+import me.randomhashtags.randompackage.addons.objects.Home;
 import me.randomhashtags.randompackage.api.Homes;
+import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
 import me.randomhashtags.randompackage.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.events.PlayerQuestStartEvent;
-import me.randomhashtags.randompackage.api.PlayerQuests;
-import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
-import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.objects.Home;
-import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -95,7 +95,7 @@ public class RPPlayer extends RPStorage {
         }
         if(backup) backup();
     }
-    public static RPPlayer get(UUID player) { return players.getOrDefault(player, new RPPlayer(player)); }
+    public static RPPlayer get(UUID player) { return players.getOrDefault(player, new RPPlayer(player)).load(); }
     public void backup(boolean async) {
         if(async) scheduler.runTaskAsynchronously(randompackage, () -> backup());
         else backup();

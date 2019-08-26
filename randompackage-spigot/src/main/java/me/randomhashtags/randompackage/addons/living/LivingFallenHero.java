@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -38,6 +39,24 @@ public class LivingFallenHero implements ILivingFallenHero {
         this.spawnedLocation = spawnedLocation;
         fallenhero = kitclass.getEntity(getFallenHero().getType(), getSpawnedLocation(), true);
         fallenhero.setCustomName(kit.getFallenHeroName());
+        int pl = RPPlayer.get(summoner).getKitLevel(kit);
+        pl = pl <= 0 ? 1 : pl;
+        final EntityEquipment eq = fallenhero.getEquipment();
+        for(KitItem i : kit.getItems()) {
+            final ItemStack is = i.getItemStack(pl);
+            final String n = is.getType().name();
+            if(n.contains("HELMET")) {
+                eq.setHelmet(is);
+            } else if(n.contains("CHESTPLATE")) {
+                eq.setChestplate(is);
+            } else if(n.contains("LEGGINGS")) {
+                eq.setLeggings(is);
+            } else if(n.contains("BOOTS")) {
+                eq.setBoots(is);
+            } else if(n.contains("SWORD") || n.contains("_AXE")) {
+                eq.setItemInHand(is);
+            }
+        }
         living.put(fallenhero.getUniqueId(), this);
     }
     public CustomKit getKit() { return kit; }
@@ -73,9 +92,10 @@ public class LivingFallenHero implements ILivingFallenHero {
             } else {
                 final List<KitItem> items = kit.getItems();
                 final RPPlayer pdata = RPPlayer.get(killer.getUniqueId());
-                final int lvl = pdata.getKitLevel(kit);
+                int lvl = pdata.getKitLevel(kit);
+                lvl = lvl <= 0 ? 1 : lvl;
                 final KitItem ki = items.get(random.nextInt(items.size()));
-                final ItemStack is = ki.getItemStack(killer.getName(), lvl, kit.getKitClass().getCustomEnchantLevelMultipliers().get(lvl));
+                final ItemStack is = ki.getItemStack(killer.getName(), lvl, kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(lvl, 0f));
                 if(is != null && !is.getType().equals(Material.AIR)) {
                     w.dropItem(fallenhero.getLocation(), is);
                 }

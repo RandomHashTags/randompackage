@@ -61,8 +61,8 @@ public class CommandManager extends Reflect {
         features = new HashMap<>();
         try {
             commandMap = (SimpleCommandMap) getPrivateField(Bukkit.getServer().getPluginManager(), "commandMap");
-            knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands");
-        } catch(Exception e) {
+            knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands", !isLegacy);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,7 +91,7 @@ public class CommandManager extends Reflect {
                         knownCommands.put(base, cmd);
                         knownCommands.put("randompackage:" + base, cmd);
                     }
-                    final PluginCommand baseCmd = (PluginCommand) knownCommands.get(base);
+                    final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
                     baseCmd.setExecutor((CommandExecutor) f);
                     if(!actualCmds.containsKey(base)) actualCmds.put(base, baseCmd);
                     if(enabled) {

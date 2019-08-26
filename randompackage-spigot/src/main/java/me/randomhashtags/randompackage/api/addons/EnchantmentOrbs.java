@@ -24,7 +24,7 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
         return instance;
     }
 
-    public String getIdentifier() { return "ENCHANTMENT_OBS"; }
+    public String getIdentifier() { return "ENCHANTMENT_ORBS"; }
 
     public void load() {
         loadUtils();

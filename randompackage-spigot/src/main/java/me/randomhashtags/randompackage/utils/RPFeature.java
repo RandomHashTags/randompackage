@@ -79,7 +79,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             isEnabled = false;
             unload();
             HandlerList.unregisterAll(this);
-            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
+            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier() + " (" + randompackage.getDescription().getVersion() + ")");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,7 +220,6 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         if(is != null && toLore != null && !toLore.isEmpty()) {
             final ItemMeta m = is.getItemMeta();
             if(m != null) {
-                final String name = m.getDisplayName();
                 final LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
                 final List<ItemFlag> flags = new ArrayList<>();
                 for(String string : toLore) {
@@ -275,9 +274,12 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                         is.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
                     }
                 }
-                if(name.contains("{ENCHANT_SIZE}")) {
+                final String name = m.hasDisplayName() ? m.getDisplayName() : null;
+                if(name != null && name.contains("{ENCHANT_SIZE}")) {
                     final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                    if(t.isEnabled()) t.applyTransmogScroll(is, getTransmogScroll("REGULAR"));
+                    if(t.isEnabled()) {
+                        t.applyTransmogScroll(is, getTransmogScroll("REGULAR"));
+                    }
                 }
             }
         }
@@ -285,7 +287,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         return is;
     }
 
-    // Code by 'Boann' (https://stackoverflow.com/users/964243/boann) from https://stackoverflow.com/questions/3422673/how-to-evaluate-a-math-expression-given-in-string-form
+    // Code by 'Boann' (https://stackoverflow.com/users/964243/boann) from https://stackoverflow.com/questions/3422673
     protected double eval(final String str) {
         return new Object() {
             int pos = -1, ch;

@@ -76,10 +76,14 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (explosions != null ? explosions.size() : null) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (explosions != null ? explosions.size() : "0") + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
 		final ArrayList<ItemStack> E = new ArrayList<>();
-		if(explosions != null) for(CustomExplosion ae : explosions.values()) E.add(ae.getItem());
+		if(explosions != null) {
+			for(CustomExplosion ae : explosions.values()) {
+				E.add(ae.getItem());
+			}
+		}
 
 		addGivedpCategory(E, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 

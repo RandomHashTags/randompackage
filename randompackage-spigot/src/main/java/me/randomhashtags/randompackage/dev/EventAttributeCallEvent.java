@@ -1,7 +1,7 @@
-package me.randomhashtags.randompackage.beta;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.events.AbstractEvent;
-import me.randomhashtags.randompackage.beta.eventattributes.EventAttribute;
+import me.randomhashtags.randompackage.dev.eventattributes.EventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 

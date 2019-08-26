@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.beta;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.entity.Entity;

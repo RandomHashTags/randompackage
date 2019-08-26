@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.beta.eventattributes;
+package me.randomhashtags.randompackage.dev.eventattributes;
 
-import me.randomhashtags.randompackage.beta.EventAttributeCallEvent;
+import me.randomhashtags.randompackage.dev.EventAttributeCallEvent;
 import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.entity.*;

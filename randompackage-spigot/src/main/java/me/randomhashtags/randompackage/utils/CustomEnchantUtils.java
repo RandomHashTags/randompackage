@@ -1036,8 +1036,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
         l.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), power, setFire, breakBlocks);
     }
     private void heal(LivingEntity entity, double by) {
-        if(entity.getHealth() != entity.getMaxHealth()) {
-            entity.setHealth(entity.getHealth() + by > entity.getMaxHealth() ? entity.getMaxHealth() : entity.getHealth() + by);
+        final double hp = entity.getHealth(), max = entity.getMaxHealth();
+        if(hp < max) {
+            entity.setHealth(Math.min(hp+by, max));
         }
     }
     private void healHunger(LivingEntity entity, int by) {

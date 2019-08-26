@@ -13,7 +13,7 @@ public interface CustomKitItem extends Identifiable {
     List<String> getLore();
     int getChance();
     int getRequiredLevel();
-    default ItemStack getItemStack() { return getItemStack(100); }
+    default ItemStack getItemStack() { return getItemStack(getKit().getMaxLevel()); }
     default ItemStack getItemStack(int level) { return getItemStack(level, 1.00f); }
     default ItemStack getItemStack(int level, float enchantMultiplier) { return getItemStack("null", level, enchantMultiplier); }
     ItemStack getItemStack(String player, int level, float enchantMultiplier);
