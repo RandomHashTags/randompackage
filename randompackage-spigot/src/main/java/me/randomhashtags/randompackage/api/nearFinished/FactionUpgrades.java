@@ -184,17 +184,19 @@ public class FactionUpgrades extends RPFeature {
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final String a = event.getMessage().toLowerCase().substring(1);
-        for(String s : aliases) {
-            if(a.startsWith(s)) {
-                event.setCancelled(true);
-                if(a.contains("reset")) {
-                    if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
-                        factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
+        if(aliases != null) {
+            for(String s : aliases) {
+                if(a.startsWith(s)) {
+                    event.setCancelled(true);
+                    if(a.contains("reset")) {
+                        if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
+                            factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
+                        }
+                    } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
+                        viewFactionUpgrades(player);
                     }
-                } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
-                    viewFactionUpgrades(player);
+                    return;
                 }
-                return;
             }
         }
     }

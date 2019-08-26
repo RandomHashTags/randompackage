@@ -14,6 +14,7 @@ import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
 import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
 import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
+import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -168,7 +169,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
 
     private void checkFiles() {
-        saveDefaultConfig();
+        UVersion.getUVersion().save(null, "config.yml");
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {

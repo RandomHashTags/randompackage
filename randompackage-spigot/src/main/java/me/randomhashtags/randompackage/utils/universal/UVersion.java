@@ -63,7 +63,7 @@ public class UVersion extends YamlUpdater {
             f.getParentFile().mkdirs();
             randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
         }
-        if(folder != null && !folder.equals("_Data")) {
+        if(folder == null || !folder.equals("_Data")) {
             updateYaml(f);
         }
     }
