@@ -534,14 +534,6 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void itemNameTagUseEvent(ItemNameTagUseEvent event) {
-        final Player player = event.player;
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void mysteryMobSpawnerOpenEvent(MysteryMobSpawnerOpenEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();

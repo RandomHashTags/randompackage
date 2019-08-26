@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addons.WhiteScrolls;
 import me.randomhashtags.randompackage.api.unfinished.Trinkets;
-import me.randomhashtags.randompackage.events.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.events.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
@@ -442,18 +441,14 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
             } else if(item.getType().name().endsWith("BOW") || item.getType().name().endsWith("_AXE") || item.getType().name().endsWith("SWORD") || item.getType().name().endsWith("HELMET") || item.getType().name().endsWith("CHESTPLATE") || item.getType().name().endsWith("LEGGINGS") || item.getType().name().endsWith("BOOTS")) {
-                final ItemNameTagUseEvent e = new ItemNameTagUseEvent(player, item, message);
-                pluginmanager.callEvent(e);
-                if(!e.isCancelled()) {
-                    itemMeta = item.getItemMeta(); lore.clear();
-                    itemMeta.setDisplayName(message);
-                    item.setItemMeta(itemMeta);
-                    player.updateInventory();
-                    playSound(itemsConfig, "item name tag.sounds.rename item", player, player.getLocation(), false);
-                    for(String string : itemsConfig.getStringList("item name tag.rename item")) {
-                        if(string.contains("{NAME}")) string = string.replace("{NAME}", itemMeta.getDisplayName());
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
-                    }
+                itemMeta = item.getItemMeta(); lore.clear();
+                itemMeta.setDisplayName(message);
+                item.setItemMeta(itemMeta);
+                player.updateInventory();
+                playSound(itemsConfig, "item name tag.sounds.rename item", player, player.getLocation(), false);
+                for(String string : itemsConfig.getStringList("item name tag.rename item")) {
+                    if(string.contains("{NAME}")) string = string.replace("{NAME}", itemMeta.getDisplayName());
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
                 }
             } else {
                 sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename item"), null);
