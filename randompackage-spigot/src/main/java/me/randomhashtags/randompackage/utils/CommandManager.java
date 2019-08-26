@@ -137,6 +137,7 @@ public class CommandManager extends Reflect {
     }
 
     private void updateBrigadierCmd(PluginCommand cmd, boolean unregister) {
+        if(isLegacy) return;
         final String s = cmd.getName();
         final Map<String, com.mojang.brigadier.tree.CommandNode<?>> o = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) nodes;
         if(unregister) {
