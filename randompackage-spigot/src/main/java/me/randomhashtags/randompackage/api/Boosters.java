@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
-import me.randomhashtags.randompackage.events.regional.FactionDisbandEvent;
+import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.utils.addons.FileBooster;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.utils.newEventAttributes;
@@ -38,7 +38,7 @@ public class Boosters extends newEventAttributes {
 
 	public File dataF;
 	public YamlConfiguration data;
-	public static HashMap<String, List<ActiveBooster>> activeFactionBoosters;
+	public static HashMap<String, List<ActiveBooster>> activeRegionalBoosters;
 	public static HashMap<UUID, List<ActiveBooster>> activePlayerBoosters;
 
 	private MCMMOBoosterEvents mcmmoboosters;
@@ -62,7 +62,7 @@ public class Boosters extends newEventAttributes {
 			pluginmanager.registerEvents(mcmmoboosters, randompackage);
 		}
 
-		activeFactionBoosters = new HashMap<>();
+		activeRegionalBoosters = new HashMap<>();
 		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
@@ -84,15 +84,15 @@ public class Boosters extends newEventAttributes {
 			mcmmoboosters = null;
 		}
 		boosters = null;
-		activeFactionBoosters = null;
+		activeRegionalBoosters = null;
 		activePlayerBoosters = null;
 	}
 
 	public void backup() {
 		data.set("factions", null);
-		if(activeFactionBoosters != null) {
-			for(String s : activeFactionBoosters.keySet()) {
-				final List<ActiveBooster> boosters = activeFactionBoosters.get(s);
+		if(activeRegionalBoosters != null) {
+			for(String s : activeRegionalBoosters.keySet()) {
+				final List<ActiveBooster> boosters = activeRegionalBoosters.get(s);
 				for(ActiveBooster ab : boosters) {
 					final String p = "factions." + s + "." + ab.getBooster().getIdentifier() + ".";
 					data.set(p + "activator", ab.getActivator().getUniqueId().toString());
@@ -109,16 +109,16 @@ public class Boosters extends newEventAttributes {
 			int loaded = 0, expired = 0;
 			final ConfigurationSection c = data.getConfigurationSection("factions");
 			if(c != null) {
-				if(activeFactionBoosters == null) activeFactionBoosters = new HashMap<>();
+				if(activeRegionalBoosters == null) activeRegionalBoosters = new HashMap<>();
 				for(String s : c.getKeys(false)) {
-					if(!activeFactionBoosters.containsKey(s)) activeFactionBoosters.put(s, new ArrayList<>());
+					if(!activeRegionalBoosters.containsKey(s)) activeRegionalBoosters.put(s, new ArrayList<>());
 					final ConfigurationSection boosters = data.getConfigurationSection("factions." + s);
 					if(boosters != null) {
 						for(String b : boosters.getKeys(false)) {
 							final String p = "factions." + s + "." + b + ".";
 							final ActiveBooster a = new ActiveBooster(Bukkit.getOfflinePlayer(UUID.fromString(data.getString(p + "activator"))), getBooster(b), data.getDouble(p + "multiplier"), data.getLong(p + "duration"), data.getLong(p + "expiration"));
 							if(a.getRemainingTime() > 0) {
-								activeFactionBoosters.get(s).add(a);
+								activeRegionalBoosters.get(s).add(a);
 								loaded++;
 							} else {
 								expired++;
@@ -189,8 +189,8 @@ public class Boosters extends newEventAttributes {
 									sendStringListMessage(p, b.getActivateMsg(), replacements);
 								}
 							}
-							if(!activeFactionBoosters.containsKey(faction)) activeFactionBoosters.put(faction, new ArrayList<>());
-							activeFactionBoosters.get(faction).add(booster);
+							if(!activeRegionalBoosters.containsKey(faction)) activeRegionalBoosters.put(faction, new ArrayList<>());
+							activeRegionalBoosters.get(faction).add(booster);
 						}
 					}
 					break;
@@ -220,8 +220,8 @@ public class Boosters extends newEventAttributes {
 			case "FACTION_MEMBERS":
 				boolean did = false;
 				final String faction = b.getFaction();
-				if(faction != null && activeFactionBoosters.containsKey(faction)) {
-					final List<ActiveBooster> boosters = activeFactionBoosters.get(faction);
+				if(faction != null && activeRegionalBoosters.containsKey(faction)) {
+					final List<ActiveBooster> boosters = activeRegionalBoosters.get(faction);
 					if(boosters.contains(b)) {
 						did = true;
 						boosters.remove(b);
@@ -242,19 +242,19 @@ public class Boosters extends newEventAttributes {
 		}
 	}
 	@EventHandler
-	private void factionDisbandEvent(FactionDisbandEvent event) {
-		final String s = event.factionName;
-		if(activeFactionBoosters.containsKey(s)) {
-			for(ActiveBooster b : activeFactionBoosters.get(s)) {
+	private void regionDisbandEvent(RegionDisbandEvent event) {
+		final String s = event.identifier;
+		if(activeRegionalBoosters.containsKey(s)) {
+			for(ActiveBooster b : activeRegionalBoosters.get(s)) {
 				b.expire(false);
 			}
-			activeFactionBoosters.remove(s);
+			activeRegionalBoosters.remove(s);
 		}
 	}
 
-	private List<ActiveBooster> getFactionBoosters(String faction) { return activeFactionBoosters != null ? activeFactionBoosters.getOrDefault(faction, new ArrayList<>()) : new ArrayList<>(); }
+	private List<ActiveBooster> getRegionalBoosters(String identifier) { return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>(); }
 	private List<ActiveBooster> getSelfBoosters(UUID player) { return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>(); }
-	private List<ActiveBooster> getFactionBoosters(UUID player) { return hookedFactionsUUID() ? getFactionBoosters(getFactionTag(player)) : new ArrayList<>(); }
+	private List<ActiveBooster> getFactionBoosters(UUID player) { return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>(); }
 
 	private void sendNotify(Player player, ActiveBooster b, HashMap<String, String> replacements) {
 		if(player != null && b != null) {
@@ -319,7 +319,7 @@ public class Boosters extends newEventAttributes {
 			final List<ActiveBooster> boosters = new ArrayList<>();
 			if(hookedFactionsUUID()) {
 				final String f = factions.getFactionTag(player.getUniqueId());
-				boosters.addAll(getFactionBoosters(f));
+				boosters.addAll(getRegionalBoosters(f));
 			}
 			boosters.addAll(getSelfBoosters(player.getUniqueId()));
 			for(ActiveBooster ab : boosters) {

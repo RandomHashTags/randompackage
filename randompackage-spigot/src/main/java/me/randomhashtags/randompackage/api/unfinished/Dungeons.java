@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -94,11 +95,16 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack i = event.getItem();
         if(i != null && i.hasItemMeta()) {
-            if(i.isSimilar(dimensionweb) || i.isSimilar(enchantedobsidian) || i.isSimilar(fuelcell)) {
-                final Player player = event.getPlayer();
-                event.setCancelled(true);
-                player.updateInventory();
+            final Player player = event.getPlayer();
+            final Dungeon key = valueOfDungeonFromKey(i), portal = key == null ? valueOfDungeonFromPortal(i) : null;
+            if(key != null) {
+            } else if(portal != null) {
+            } else if(i.isSimilar(dimensionweb) || i.isSimilar(enchantedobsidian) || i.isSimilar(fuelcell)) {
+            } else {
+                return;
             }
+            event.setCancelled(true);
+            player.updateInventory();
         }
     }
 
@@ -121,14 +127,9 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         player.updateInventory();
     }
 
-    public Dungeon valueOf(ItemStack key) {
-        if(dungeons != null && key != null) {
-            for(Dungeon d : dungeons.values()) {
-                if(d.getKey().isSimilar(key)) {
-                    return d;
-                }
-            }
-        }
-        return null;
+
+    @EventHandler
+    private void entityDamageEvent(EntityDamageEvent event) {
+
     }
 }

@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.events.customenchant.CEAApplyPotionEffect
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,7 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -76,23 +74,23 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		final String n = event.reason.name();
 		if(n.contains("_EQUIP")) {
 			scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-				final ArmorSet W = valueOf(player);
+				final ArmorSet W = valueOfArmorSet(player);
 				if(W != null) {
+					sendStringListMessage(player, W.getActivateMessage(), null);
 					final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
 					pluginmanager.callEvent(e);
-					sendStringListMessage(player, W.getActivateMessage(), null);
 					procCustomArmor(e, W);
 				}
 			}, 0);
 		} else if(n.contains("_UNEQUIP")) {
-			final ArmorSet W = valueOf(player);
+			final ArmorSet W = valueOfArmorSet(player);
 			if(W != null) {
 				final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
 				pluginmanager.callEvent(e);
 				procCustomArmor(e, W);
 			}
 		} else if(n.equals("BREAK")) {
-			final ArmorSet W = valueOf(player);
+			final ArmorSet W = valueOfArmorSet(player);
 			if(W != null) procCustomArmor(event, W);
 		}
 	}
@@ -100,18 +98,18 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		final Entity e = event.getEntity(), d = event.getDamager();
-		if(e instanceof Player) procCustomArmor(event, valueOf((Player) e));
-		if(d instanceof Player) procCustomArmor(event, valueOf((Player) d));
+		if(e instanceof Player) procCustomArmor(event, valueOfArmorSet((Player) e));
+		if(d instanceof Player) procCustomArmor(event, valueOfArmorSet((Player) d));
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageEvent(EntityDamageEvent event) {
 		final Entity e = event.getEntity();
-		if(e instanceof Player) procCustomArmor(event, valueOf((Player) e));
+		if(e instanceof Player) procCustomArmor(event, valueOfArmorSet((Player) e));
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
 		final HumanEntity e = event.getEntity();
-		if(e instanceof Player) procCustomArmor(event, valueOf((Player) e));
+		if(e instanceof Player) procCustomArmor(event, valueOfArmorSet((Player) e));
 	}
 
 	public void procCustomArmor(Event event, ArmorSet set) {
@@ -207,24 +205,5 @@ public class CustomArmor extends CustomEnchants implements Listener {
 		String l = r.get(random.nextInt(r.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[random.nextInt(l.split("\\|\\|").length)];
 		return givedpitem.valueOf(l);
-	}
-
-
-	public ArmorSet valueOf(Player player) {
-		if(armorsets != null && player != null) {
-			final PlayerInventory pi = player.getInventory();
-			final ItemStack h = pi.getHelmet(), c = pi.getChestplate(), l = pi.getLeggings(), b = pi.getBoots();
-			for(ArmorSet set : armorsets.values()) {
-				final List<String> a = set.getArmorLore();
-				if(a != null &&
-						(h != null && h.hasItemMeta() && h.getItemMeta().hasLore() && h.getItemMeta().getLore().containsAll(a)
-								&& c != null && c.hasItemMeta() && c.getItemMeta().hasLore() && c.getItemMeta().getLore().containsAll(a)
-								&& l != null && l.hasItemMeta() && l.getItemMeta().hasLore() && l.getItemMeta().getLore().containsAll(a)
-								&& b != null && b.hasItemMeta() && b.getItemMeta().hasLore() && b.getItemMeta().getLore().containsAll(a))) {
-					return set;
-				}
-			}
-		}
-		return null;
 	}
 }

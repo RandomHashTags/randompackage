@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
@@ -55,7 +56,7 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, Mask> masks;
     protected static LinkedHashMap<String, MonthlyCrate> monthlycrates;
     protected static LinkedHashMap<String, Outpost> outposts;
-    protected static LinkedHashMap<String, Pet> pets;
+    protected static LinkedHashMap<String, InventoryPet> inventorypets;
     protected static LinkedHashMap<String, PlayerQuest> playerquests;
     protected static LinkedHashMap<String, RandomizationScroll> randomizationscrolls;
     protected static LinkedHashMap<String, RarityGem> raritygems;
@@ -336,13 +337,13 @@ public abstract class RPStorage extends RegionalAPI {
         outposts.put(identifier, l);
     }
 
-    public Pet getPet(String identifier) {
-        return pets != null ? pets.getOrDefault(identifier, null) : null;
+    public InventoryPet getPet(String identifier) {
+        return inventorypets != null ? inventorypets.getOrDefault(identifier, null) : null;
     }
-    public void addPet(String identifier, Pet l) {
-        if(pets == null) pets = new LinkedHashMap<>();
-        check(pets, identifier, "pet");
-        pets.put(identifier, l);
+    public void addPet(String identifier, InventoryPet l) {
+        if(inventorypets == null) inventorypets = new LinkedHashMap<>();
+        check(inventorypets, identifier, "pet");
+        inventorypets.put(identifier, l);
     }
 
     public PlayerQuest getPlayerQuest(String identifier) {
@@ -438,6 +439,23 @@ public abstract class RPStorage extends RegionalAPI {
     /*
         Value Of
      */
+    public ArmorSet valueOfArmorSet(Player player) {
+        if(armorsets != null && player != null) {
+            final PlayerInventory pi = player.getInventory();
+            final ItemStack h = pi.getHelmet(), c = pi.getChestplate(), l = pi.getLeggings(), b = pi.getBoots();
+            for(ArmorSet set : armorsets.values()) {
+                final List<String> a = set.getArmorLore();
+                if(a != null &&
+                        (h != null && h.hasItemMeta() && h.getItemMeta().hasLore() && h.getItemMeta().getLore().containsAll(a)
+                                && c != null && c.hasItemMeta() && c.getItemMeta().hasLore() && c.getItemMeta().getLore().containsAll(a)
+                                && l != null && l.hasItemMeta() && l.getItemMeta().hasLore() && l.getItemMeta().getLore().containsAll(a)
+                                && b != null && b.hasItemMeta() && b.getItemMeta().hasLore() && b.getItemMeta().getLore().containsAll(a))) {
+                    return set;
+                }
+            }
+        }
+        return null;
+    }
     public BlackScroll valueOfBlackScroll(ItemStack is) {
         if(blackscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();
@@ -641,6 +659,26 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
+    public Dungeon valueOfDungeonFromKey(ItemStack is) {
+        if(dungeons != null && is != null) {
+            for(Dungeon d : dungeons.values()) {
+                if(d.getKey().isSimilar(is)) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
+    public Dungeon valueOfDungeonFromPortal(ItemStack is) {
+        if(dungeons != null && is != null) {
+            for(Dungeon d : dungeons.values()) {
+                if(d.getPortal().isSimilar(is)) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
     public RarityGem valueOfRarityGem(ItemStack item) {
         if(raritygems != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
             final List<String> l = item.getItemMeta().getLore();
@@ -743,6 +781,24 @@ public abstract class RPStorage extends RegionalAPI {
                 if(category == c.getCategory() && slot == c.getCategorySlot()) {
                     return c;
                 }
+            }
+        }
+        return null;
+    }
+    public Outpost valueOfOutpost(int slot) {
+        if(outposts != null) {
+            for(Outpost o : outposts.values()) {
+                if(o.getSlot() == slot) {
+                    return o;
+                }
+            }
+        }
+        return null;
+    }
+    public InventoryPet valueOfInventoryPet(ItemStack is) {
+        if(inventorypets != null && is != null) {
+            for(InventoryPet p : inventorypets.values()) {
+                final ItemStack i = p.getItem();
             }
         }
         return null;

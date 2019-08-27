@@ -7,14 +7,38 @@ messages:
   only stack up to max:
     - "&c&l(!)&r &cYou may only stack up to {MAX}x spawners per block!"
 #
-settings:
-  drops total spawners when broke: true
-  base fee: 0.00
-  fee multiplier: 1.00
+drops total spawners when broke:
+  default:
+    - "world=true"
+    - "world_nether=true"
+    - "world_the_end=true"
+  SILVERFISH:
+    - "world=false"
+    - "world_the_end=false"
+#
+base fee:
+  default:
+    - "world=0.00"
+    - "world_nether=0.00"
+    - "world_the_end=0.00"
+#
+fee multiplier:
+  default:
+    - "world=1.00"
+    - "world_nether=1.00"
+    - "world_the_end=1.00"
 #
 only stackable in:
   claimed faction land: true
 #
 max stacking:
   default: 10
+  #
+  SKELETON:
+    - "world=20"
+  ZOMBIE:
+    - "world=20"
+  BLAZE:
+    - "world=20"
+    - "world_nether=20"
 #

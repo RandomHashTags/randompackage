@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.Pet;
+import me.randomhashtags.randompackage.addons.InventoryPet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,9 +8,9 @@ import java.io.File;
 import java.util.List;
 import java.util.TreeMap;
 
-public class FilePet extends RPAddon implements Pet {
+public class FileInventoryPet extends RPAddon implements InventoryPet {
     private ItemStack item;
-    public FilePet(File f) {
+    public FileInventoryPet(File f) {
         load(f);
         addPet(getIdentifier(), this);
     }

@@ -58,7 +58,7 @@ public class FactionPoints extends RPFeature {
         }
     }
 
-    public int getPoints(String identifier) {
-        return points.getOrDefault(identifier, -1);
-    }
+    public int getPoints(String identifier) { return points.getOrDefault(identifier, 0); }
+    public void addPoints(String identifier, int points) { setPoints(identifier, getPoints(identifier)+points); }
+    public void setPoints(String identifier, int points) { this.points.put(identifier, points); }
 }

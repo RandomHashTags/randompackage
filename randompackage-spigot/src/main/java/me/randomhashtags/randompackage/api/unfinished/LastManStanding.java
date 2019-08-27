@@ -53,6 +53,9 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
                 rewards.put(Long.parseLong(s), config.getStringList("rewards." + s));
             }
         }
+
+        playerStartTimes = new HashMap<>();
+
         final long interval = 40;
         task = scheduler.scheduleSyncRepeatingTask(randompackage, this::check, interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");

@@ -46,6 +46,7 @@ public class RPPlayer extends RPStorage {
     public File file = null;
     public YamlConfiguration yml = null;
 
+    private PlayerRank rank;
     private CoinFlipStats coinflipStats;
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
@@ -103,7 +104,8 @@ public class RPPlayer extends RPStorage {
     public void backup() {
         yml.set("name", Bukkit.getOfflinePlayer(uuid).getName());
         final Title T = getActiveTitle();
-        final String strings = T != null ? T.getIdentifier() : "null";
+        final PlayerRank rank = getRank();
+        final String strings = (T != null ? T.getIdentifier() : "null") + ";" + (rank != null ? rank.getIdentifier() : "null");
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
         final String ints = jackpotTickets.intValue() + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
         final String longs = jackpotWonCash.doubleValue() + ";" + xpExhaustionExpiration;
@@ -243,54 +245,27 @@ public class RPPlayer extends RPStorage {
         if(isLoaded) {
             try {
                 backup();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             isLoaded = false;
-            file = null;
-            yml = null;
-            coinflipStats = null;
-            activeTitle = null;
-
-            homes = null;
-            filteredItems = null;
-            ownedTitles = null;
-            ownedMonthlyCrates = null;
-            claimedMonthlyCrates = null;
-            unclaimedPurchases = null;
-            customEnchantEntities = null;
-            showcaseSizes = null;
-            showcases = null;
-            raritygems = null;
-            challengeprizes = null;
-
-            kitLevels = null;
-            kitCooldowns = null;
-            quests = null;
 
             if(questTasks.containsKey(uuid)) {
                 for(int i : questTasks.get(uuid)) scheduler.cancelTask(i);
                 questTasks.remove(uuid);
             }
-
-            final BigDecimal zero = BigDecimal.ZERO;
-            jackpotWonCash = zero;
-            jackpotTickets = zero;
-            addedMaxHomes = 0;
-            jackpotWins = 0;
-            questTokens = 0;
             players.remove(uuid);
-            uuid = null;
         }
     }
     private void save() {
         try {
             yml.save(file);
             yml = YamlConfiguration.loadConfiguration(file);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    public UUID getUUID() { return uuid; }
     public OfflinePlayer getOfflinePlayer() {
         return uuid != null ? Bukkit.getOfflinePlayer(uuid) : null;
     }
@@ -299,6 +274,14 @@ public class RPPlayer extends RPStorage {
         return System.currentTimeMillis() < xpExhaustionExpiration;
     }
 
+    public PlayerRank getRank() {
+        if(rank == null) {
+            final String r = yml.getString("strings").split(";")[1];
+            if(!r.equals("null")) {
+            }
+        }
+        return rank;
+    }
     public CoinFlipStats getCoinFlipStats() {
         if(coinflipStats == null) {
             final String c = yml.getString("coinflip stats");
@@ -518,13 +501,12 @@ public class RPPlayer extends RPStorage {
     }
 
     public Title getActiveTitle() {
-        if(!activeTitleIsLoaded && activeTitle == null && titles != null) {
+        if(!activeTitleIsLoaded && activeTitle == null) {
             activeTitleIsLoaded = true;
-            final String s = yml.getString("strings");
-            if(s != null && !s.isEmpty()) {
-                final String a = s.split(";")[0];
-                if(a != null && !a.equals("null")) {
-                    activeTitle = getTitle(a);
+            if(titles != null) {
+                final String s = yml.getString("strings").split(";")[0];
+                if(!s.equals("null")) {
+                    activeTitle = getTitle(s);
                 }
             }
         }

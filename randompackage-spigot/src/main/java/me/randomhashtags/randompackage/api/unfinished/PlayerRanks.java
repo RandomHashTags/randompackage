@@ -33,10 +33,10 @@ public class PlayerRanks extends RPFeature {
     public void unload() {
     }
 
-    @EventHandler
-    private void playerInteractEvent(PlayerInteractEvent event) {
+    public void tryRedeeming(Player player, PlayerRank rank) {
     }
 
-    public void tryRedeeming(Player player, PlayerRank rank) {
+    @EventHandler
+    private void playerInteractEvent(PlayerInteractEvent event) {
     }
 }

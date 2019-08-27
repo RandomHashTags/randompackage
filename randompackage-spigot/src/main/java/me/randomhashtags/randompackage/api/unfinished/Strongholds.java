@@ -5,6 +5,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Strongholds extends RPFeature implements CommandExecutor {
     private static Strongholds instance;
@@ -32,5 +39,20 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         strongholds = null;
+    }
+
+    @EventHandler
+    private void playerInteractEvent(PlayerInteractEvent event) {
+    }
+    @EventHandler
+    private void blockPlaceEvent(BlockPlaceEvent event) {
+    }
+    @EventHandler
+    private void blockBreakEvent(BlockBreakEvent event) {
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void projectileLaunchEvent(ProjectileLaunchEvent event) {
+        if(event.getEntity() instanceof EnderPearl) {
+        }
     }
 }

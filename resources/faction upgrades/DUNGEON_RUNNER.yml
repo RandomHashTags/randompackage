@@ -13,9 +13,9 @@ item:
   - "&7a Dungeons Portal to close."
 #
 perks:
-  - "Tier1;SetDungeonPortalAppearanceTime{90.00};90s Dungeons Portal Close Time"
-  - "Tier2;SetDungeonPortalAppearanceTime{80.00};80s Dungeons Portal Close Time"
-  - "Tier3;SetDungeonPortalAppearanceTime{45.00};45s Dungeons Portal Close Time"
+  - "Tier1;SetDungeonPortalAppearanceTime{90};90s Dungeons Portal Close Time"
+  - "Tier2;SetDungeonPortalAppearanceTime{80};80s Dungeons Portal Close Time"
+  - "Tier3;SetDungeonPortalAppearanceTime{45};45s Dungeons Portal Close Time"
 #
 requirements:
   - "Tier1;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"

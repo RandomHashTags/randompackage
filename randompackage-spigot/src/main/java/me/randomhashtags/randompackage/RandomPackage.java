@@ -129,7 +129,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoadingg(Masks.getMasks(), null, isTrue("masks"));
         cmd.tryLoadingg(MobStacker.getMobStacker(), null, isTrue("mob stacker"));
         cmd.tryLoading(Outposts.getOutposts(), getHash("outpost", "outposts"), isTrue("outposts"));
-        cmd.tryLoadingg(Pets.getPets(), null, isTrue("pets"));
+        cmd.tryLoadingg(InventoryPets.getInventoryPets(), null, isTrue("pets"));
         cmd.tryLoadingg(Trinkets.getTrinkets(), null, isTrue("trinkets"));
         cmd.tryLoading(MonthlyCrates.getMonthlyCrates(), getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
         cmd.tryLoadingg(ServerCrates.getServerCrates(), null, isTrue("server crates"));

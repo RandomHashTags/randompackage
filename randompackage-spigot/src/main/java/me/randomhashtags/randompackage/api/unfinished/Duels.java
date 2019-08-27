@@ -61,7 +61,7 @@ public class Duels extends RPFeature implements CommandExecutor {
     }
 
     public void viewTypes(Player player) {
-        if(hasPermission(player, "RandomPackage.duels.view", true)) {
+        if(hasPermission(player, "RandomPackage.duel", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, type.getSize(), type.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -71,7 +71,7 @@ public class Duels extends RPFeature implements CommandExecutor {
         }
     }
     public void viewGodset(Player player) {
-        if(hasPermission(player, "RandomPackage.duels.view.godset", true)) {
+        if(hasPermission(player, "RandomPackage.duel.godset", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, godset.getSize(), godset.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
