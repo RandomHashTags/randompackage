@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.dev.eventattributes.attributes;
+package me.randomhashtags.randompackage.dev.attributes;
 
-import me.randomhashtags.randompackage.dev.eventattributes.AbstractEventAttribute;
+import me.randomhashtags.randompackage.dev.AbstractEventAttribute;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 public class AttributeSmite extends AbstractEventAttribute {
     public String getIdentifier() { return "SMITE"; }
-    public void call(HashMap<Entity, Object> recipientValues) {
+    public void execute(Object value) {}
+    public void execute(HashMap<Entity, Object> recipientValues) {
         if(recipientValues != null && !recipientValues.isEmpty()) {
             for(Entity e : recipientValues.keySet()) {
                 final World w = e.getWorld();

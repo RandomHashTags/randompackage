@@ -4,16 +4,16 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
-import me.randomhashtags.randompackage.api.Wild;
 import me.randomhashtags.randompackage.api.unfinished.*;
+import me.randomhashtags.randompackage.dev.newCustomArmor;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.objects.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
-import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
 import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -89,6 +89,8 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         final CommandManager cmd = CommandManager.getCommandManager(this);
 
+        newCustomArmor.getCustomArmor().enable();
+
         cmd.tryLoadingg(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
         cmd.tryLoading(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
         cmd.tryLoading(Boosters.getBoosters(), null, isTrue("boosters"));
@@ -116,7 +118,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(FactionUpgrades.getFactionUpgrades(), null, isTrue("faction upgrades"));
         cmd.tryLoadingg(Fund.getFund(), Arrays.asList("fund"), isTrue("fund"));
         cmd.tryLoading(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
-        cmd.tryLoadingg(Homes.getHomes(), Arrays.asList("home"), isTrue("home"));
+        cmd.tryLoadingg(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
         cmd.tryLoadingg(ItemFilter.getItemFilter(), Arrays.asList("filter"), isTrue("filter"));
         cmd.tryLoadingg(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
 

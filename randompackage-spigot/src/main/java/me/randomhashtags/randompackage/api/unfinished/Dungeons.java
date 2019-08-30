@@ -66,9 +66,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
                 di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.clone() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.clone() : d(config, "gui." + s));
             }
         }
-        for(int i = 0; i < gui.getSize(); i++)
+        for(int i = 0; i < gui.getSize(); i++) {
             if(di.getItem(i) == null)
                 di.setItem(i, background);
+        }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -130,6 +131,5 @@ public class Dungeons extends RPFeature implements CommandExecutor {
 
     @EventHandler
     private void entityDamageEvent(EntityDamageEvent event) {
-
     }
 }

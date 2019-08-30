@@ -3,21 +3,46 @@ apply plugin: 'maven'
 apply plugin: 'java-library'
 
 repositories {
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    mavenLocal()
+
     maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
     maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
     maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
     maven { url "https://jitpack.io" } // SuperiorSkyblock API
     maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
     //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
+    maven { url "https://maven.enginehub.org/repo/" } // WorldEdit & WorldGuard
 }
 
 dependencies {
+    compileOnly 'org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT'
+    compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
+    //
     implementation 'me.clip:placeholderapi:2.10.3'
     implementation 'net.milkbowl.vault:VaultAPI:1.7'
     implementation 'com.wasteofplastic:askyblock:3.0.9.4'
     implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
     implementation 'com.massivecraft:Factions:1.6.9.5-U0.4.3'
-    //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT'
+    //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'
+    //implementation 'com.sk89q.worldguard:worldedit-bukkit:7.0.1'
+    //implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.1-SNAPSHOT'
+}
+
+configurations {
+    compile.exclude group: 'com.darkblade12'
+    compile.exclude group: 'org.hamcrest'
+    compile.exclude group: 'me.lucko'
+    compile.exclude group: 'mkremins'
+
+    compile.exclude group: 'com.google.guava'
+    compile.exclude group: 'com.google.code.gson'
+    compile.exclude group: 'com.googlecode.json-simple'
+
+    compile.exclude group: 'org.yaml'
+
+    compile.exclude group: 'junit'
+    compile.exclude group: 'commons-lang'
 }
 
 jar {

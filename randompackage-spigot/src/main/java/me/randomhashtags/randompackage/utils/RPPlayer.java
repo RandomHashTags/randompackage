@@ -219,20 +219,25 @@ public class RPPlayer extends RPStorage {
     public RPPlayer load() {
         if(!isLoaded) {
             isLoaded = true;
-
-            final String[] booleans = yml.getString("booleans").split(";"), ints = yml.getString("ints").split(";"), longs = yml.getString("longs").split(";");
-
-            coinflipNotifications = Boolean.parseBoolean(booleans[0]);
-            filter = Boolean.parseBoolean(booleans[1]);
-            jackpotCountdown = Boolean.parseBoolean(booleans[2]);
-
-            jackpotTickets = BigDecimal.valueOf(Integer.parseInt(ints[0]));
-            jackpotWins = Integer.parseInt(ints[1]);
-            if(ints.length >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
-            if(ints.length >= 4) questTokens = Integer.parseInt(ints[3]);
-
-            jackpotWonCash = BigDecimal.valueOf(Double.parseDouble(longs[0]));
-            xpExhaustionExpiration = Long.parseLong(longs[1]);
+            final String bools = yml.getString("booleans"), intz = yml.getString("ints"), longz = yml.getString("longs");
+            if(bools != null) {
+                final String[] booleans = bools.split(";");
+                coinflipNotifications = Boolean.parseBoolean(booleans[0]);
+                filter = Boolean.parseBoolean(booleans[1]);
+                jackpotCountdown = Boolean.parseBoolean(booleans[2]);
+            }
+            if(intz != null) {
+                final String[] ints = intz.split(";");
+                jackpotTickets = BigDecimal.valueOf(Integer.parseInt(ints[0]));
+                jackpotWins = Integer.parseInt(ints[1]);
+                if(ints.length >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
+                if(ints.length >= 4) questTokens = Integer.parseInt(ints[3]);
+            }
+            if(longz != null) {
+                final String[] longs = longz.split(";");
+                jackpotWonCash = BigDecimal.valueOf(Double.parseDouble(longs[0]));
+                xpExhaustionExpiration = Long.parseLong(longs[1]);
+            }
             return this;
         }
         return players.get(uuid);
@@ -276,8 +281,11 @@ public class RPPlayer extends RPStorage {
 
     public PlayerRank getRank() {
         if(rank == null) {
-            final String r = yml.getString("strings").split(";")[1];
-            if(!r.equals("null")) {
+            final String strings = yml.getString("strings");
+            if(strings != null && !strings.isEmpty()) {
+                final String r = strings.split(";")[1];
+                if(!r.equals("null")) {
+                }
             }
         }
         return rank;
@@ -504,9 +512,12 @@ public class RPPlayer extends RPStorage {
         if(!activeTitleIsLoaded && activeTitle == null) {
             activeTitleIsLoaded = true;
             if(titles != null) {
-                final String s = yml.getString("strings").split(";")[0];
-                if(!s.equals("null")) {
-                    activeTitle = getTitle(s);
+                final String strings = yml.getString("strings");
+                if(strings != null && !strings.isEmpty()) {
+                    final String s = strings.split(";")[0];
+                    if(!s.equals("null")) {
+                        activeTitle = getTitle(s);
+                    }
                 }
             }
         }

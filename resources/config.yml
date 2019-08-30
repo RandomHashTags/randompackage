@@ -284,6 +284,11 @@ roll:
 server crates:
   enabled: true
 #
+sethome:
+  enabled: true
+  cmds:
+    - sethome
+#
 shop:
   enabled: true
   cmds:

@@ -165,8 +165,8 @@ public class CommandManager extends Reflect {
                 if(!pc.getPlugin().equals(randompackage)) {
                     hasOtherCmd = true;
                     knownCommands.replace(c, cmd, pc);
+                    break;
                 }
-                break;
             }
         }
         if(!hasOtherCmd) { // removes the command completely

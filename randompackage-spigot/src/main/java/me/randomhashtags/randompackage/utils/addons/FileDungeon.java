@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-public class FileDungeon extends RPAddon implements Dungeon {
-    private ItemStack display, key, keyLocked, lootbag;
+public abstract class FileDungeon extends RPAddon implements Dungeon {
+    private ItemStack display, key, keyLocked, portal, lootbag;
     private long fastestCompletion;
 
     public FileDungeon(File f) {
@@ -17,6 +17,7 @@ public class FileDungeon extends RPAddon implements Dungeon {
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "gui");
         return display.clone();
@@ -29,6 +30,10 @@ public class FileDungeon extends RPAddon implements Dungeon {
         if(keyLocked == null) keyLocked = api.d(yml, "gui.key locked");
         return keyLocked.clone();
     }
+    public ItemStack getPortal() {
+        if(portal == null) portal = api.d(yml, "portal");
+        return portal.clone();
+    }
     public ItemStack getLootbag() {
         if(lootbag == null) lootbag = api.d(yml, "lootbag");
         return lootbag.clone();
@@ -37,7 +42,6 @@ public class FileDungeon extends RPAddon implements Dungeon {
         return yml.getStringList("lootbag.rewards");
     }
 
-    public int getSlot() { return yml.getInt("gui.slot"); }
     public Location getTeleportLocation() { return api.toLocation(yml.getString("settings.warp location")); }
     public long getFastestCompletion() { return fastestCompletion; }
     public void setFastestCompletion(long fastestCompletion) { this.fastestCompletion = fastestCompletion; }

@@ -79,7 +79,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             isEnabled = false;
             unload();
             HandlerList.unregisterAll(this);
-            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier() + " (" + randompackage.getDescription().getVersion() + ")");
+            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
         } catch (Exception e) {
             e.printStackTrace();
         }

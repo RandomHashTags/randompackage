@@ -171,7 +171,10 @@ public class YamlUpdater {
                 "vkits.cmds", Arrays.asList("vkit", "vkits"),
                 "wild.cmds", Arrays.asList("wild", "wilderness"),
                 "withdraw.cmds", Arrays.asList("withdraw"),
-                "xpbottle.cmds", Arrays.asList("cmds"),
+                "xpbottle.cmds", Arrays.asList("xpbottle"),
+                // 16.5.0
+                "sethome.enabled", true,
+                "sethome.cmds", Arrays.asList("sethome"),
         };
         return putAll(values);
     }

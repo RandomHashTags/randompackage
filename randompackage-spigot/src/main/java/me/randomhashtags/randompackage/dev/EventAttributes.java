@@ -1,33 +1,38 @@
-package me.randomhashtags.randompackage.dev.eventattributes;
+package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.EventAttributeCallEvent;
-import me.randomhashtags.randompackage.utils.RPStorage;
+import me.randomhashtags.randompackage.dev.attributes.AttributeDamage;
+import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.player.PlayerEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute, Listener {
-    private boolean cancelled;
-    private HashMap<String, Entity> recipients;
+public abstract class EventAttributes extends RPFeature implements Listener {
     private static List<UUID> spawnedFromSpawner = new ArrayList<>();
 
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+    private void loadAttributes() {
+        if(eventattributes == null) {
+            eventattributes = new LinkedHashMap<>();
+            final List<EventAttribute> a = Arrays.asList(new AttributeDamage());
+            for(EventAttribute e : a) {
+                e.load();
+            }
+        }
+    }
 
-    public void load() { addEventAttribute(getIdentifier(), this); }
-    public boolean didPassConditions(List<String> conditions) {
+    public boolean didPassConditions(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
         boolean passed = true;
-        final HashMap<String, Entity> entities = new HashMap<>();
-        for(String r : recipients.keySet()) entities.put(r.toLowerCase(), recipients.get(r));
 
         final boolean eight = version.contains("1.8"), nine = version.contains("1.9"), ten = version.contains("1.10"), eleven = version.contains("1.11"), thirteen = version.contains("1.13"), legacy = isLegacy;
         for(String c : conditions) {
@@ -38,6 +43,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
             if(passed) {
                 for(String s : entities.keySet()) {
                     final Entity e = entities.get(s);
+                    s = s.toLowerCase();
                     String value = null;
                     try {
                         value = condition.split("=")[1];
@@ -405,7 +411,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
                             passed = e instanceof Zombie && ((Zombie) e).isVillager() == Boolean.parseBoolean(value);
                         }
                     } else if(condition.startsWith("cancelled=")) {
-                        passed = isCancelled() == Boolean.parseBoolean(value);
+                        passed = cancelled == Boolean.parseBoolean(value);
                     }
                     if(!passed) break;
                 }
@@ -413,22 +419,136 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
         }
         return passed;
     }
-    public void execute(Event event, HashMap<String, Entity> recipients, List<String> conditions, HashMap<Entity, List<EventAttribute>> attributes, Object value, HashMap<String, String> valueReplacements) {
-        this.recipients = recipients;
-        if(didPassConditions(conditions)) {
-            for(Entity entity : attributes.keySet()) {
-                for(EventAttribute a : attributes.get(entity)) {
-                    final EventAttributeCallEvent e = new EventAttributeCallEvent(entity, a);
-                    pluginmanager.callEvent(e);
-                    if(!e.isCancelled()) {
-                        //call(entity, value);
+
+
+    public HashMap<String, Entity> getEntities(Object...values) {
+        final HashMap<String, Entity> e = new HashMap<>();
+        for(int i = 0; i < values.length; i++) {
+            if(i%2 == 1) {
+                e.put((String) values[i-1], (Entity) values[i]);
+            }
+        }
+        return e;
+    }
+
+    public boolean tryExecuting(String key, Object value) {
+        if(key != null && value != null) {
+            final EventAttribute a = getEventAttribute(key.toUpperCase());
+            if(a != null) {
+                return execute(a, value);
+            }
+        }
+        return false;
+    }
+    public boolean tryExecuting(String key, HashMap<Entity, Object> recipientValues) {
+        if(key != null && recipientValues != null && !recipientValues.isEmpty()) {
+            final EventAttribute a = getEventAttribute(key.toUpperCase());
+            if(a != null) {
+                return execute(a, recipientValues);
+            }
+        }
+        return false;
+    }
+    public boolean execute(EventAttribute attribute, Object value) {
+        final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
+        pluginmanager.callEvent(e);
+        final boolean c = !e.isCancelled();
+        if(c) {
+            attribute.execute(value);
+        }
+        return c;
+    }
+    public boolean execute(EventAttribute attribute, HashMap<Entity, Object> recipientValues) {
+        final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
+        pluginmanager.callEvent(e);
+        final boolean c = !e.isCancelled();
+        if(c) {
+            attribute.execute(recipientValues);
+        }
+        return c;
+    }
+
+    private void tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes) {
+        if(event != null && attributes != null && !attributes.isEmpty()) {
+            final String e = event.getEventName().split("Event")[0].toLowerCase();
+            final boolean cancellable = event instanceof Cancellable;
+            for(String s : attributes) {
+                final boolean cancelled = cancellable && ((Cancellable) event).isCancelled();
+                final String[] semi = s.split(";");
+                final String first = semi[0].toLowerCase();
+                if(first.equals(e)) {
+                    final List<String> conditions = new ArrayList<>();
+                    for(String c : s.split(semi[0] + ";")[1].split("&&")[0].split(";")) {
+                        if(c.contains("=")) {
+                            final EventAttribute a = getEventAttribute(c.split("=")[0].toUpperCase());
+                            if(a == null) {
+                                conditions.add(c);
+                            }
+                        } else {
+                            conditions.add(c);
+                        }
+                    }
+                    if(didPassConditions(entities, conditions, cancelled)) {
+                        Bukkit.broadcastMessage("did pass all " + e + " conditions: " + conditions.toString());
                     }
                 }
             }
         }
     }
-    public abstract void call(HashMap<Entity, Object> recipientValues);
 
+    private boolean didPass(Event event, List<String> attributes) {
+        loadAttributes();
+        return event != null && attributes != null && !attributes.isEmpty();
+    }
+
+    public void trigger(EntityDeathEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            final LivingEntity e = event.getEntity();
+            final Player k = e.getKiller();
+            if(k != null) {
+                tryGeneric(event, getEntities("Victim", e, "Killer", k), attributes);
+            }
+        }
+    }
+    public void trigger(EntityDamageEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Victim", event.getEntity()), attributes);
+        }
+    }
+    public void trigger(PlayerEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
+        }
+    }
+    public void trigger(BlockPlaceEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
+        }
+    }
+    public void trigger(BlockBreakEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
+        }
+    }
+    public void trigger(EntityTameEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes);
+        }
+    }
+
+    /*
+        RandomPackage Events
+     */
+    public void trigger(PvAnyEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Damager", event.damager, "Victim", event.victim), attributes);
+        }
+    }
+    public void trigger(PlayerArmorEvent event, List<String> attributes) {
+        if(didPass(event, attributes)) {
+            tryGeneric(event, getEntities("Player", event.player), attributes);
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void creatureSpawnEvent(CreatureSpawnEvent event) {
