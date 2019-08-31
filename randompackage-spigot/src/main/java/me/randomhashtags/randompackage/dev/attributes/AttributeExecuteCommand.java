@@ -8,19 +8,17 @@ import java.util.HashMap;
 
 public class AttributeExecuteCommand extends AbstractEventAttribute {
     public String getIdentifier() { return "EXECUTECOMMAND"; }
-    public void execute(Object value) {
-        if(value != null) {
-            console.getServer().dispatchCommand(console, (String) value);
-        }
+    @Override
+    public void execute(String value) {
+        console.getServer().dispatchCommand(console, value);
     }
-    public void execute(HashMap<Entity, Object> recipientValues) {
-        if(recipientValues != null) {
-            final Server s = console.getServer();
-            for(Entity e : recipientValues.keySet()) {
-                final Object cmd = recipientValues.get(e);
-                if(cmd != null) {
-                    s.dispatchCommand(e, (String) cmd);
-                }
+    @Override
+    public void execute(HashMap<Entity, String> recipientValues) {
+        final Server s = console.getServer();
+        for(Entity e : recipientValues.keySet()) {
+            final String cmd = recipientValues.get(e);
+            if(cmd != null) {
+                s.dispatchCommand(e, cmd);
             }
         }
     }

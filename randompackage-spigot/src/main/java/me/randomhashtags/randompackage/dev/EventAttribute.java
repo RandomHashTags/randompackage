@@ -1,13 +1,16 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addons.utils.Identifiable;
+import me.randomhashtags.randompackage.addons.utils.Mathable;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 
 import java.util.HashMap;
 
-public interface EventAttribute extends Cancellable, Identifiable {
+public interface EventAttribute extends Cancellable, Identifiable, Mathable {
     void load();
-    void execute(Object value);
-    void execute(HashMap<Entity, Object> recipientValues);
+    void execute(String value);
+    void executeAt(HashMap<Location, String> locations);
+    void execute(HashMap<Entity, String> recipientValues);
 }

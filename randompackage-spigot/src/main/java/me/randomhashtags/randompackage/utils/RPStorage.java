@@ -367,6 +367,17 @@ public abstract class RPStorage extends RegionalAPI {
     public RarityGem getRarityGem(String identifier) {
         return raritygems != null ? raritygems.getOrDefault(identifier, null) : null;
     }
+    public ItemStack getRarityGem(RarityGem gem, Player player) {
+        final PlayerInventory pi = player.getInventory();
+        final List<String> l = gem.getItem().getItemMeta().getLore();
+        for(int i = 0; i < pi.getSize(); i++) {
+            final ItemStack a = pi.getItem(i);
+            if(a != null && a.hasItemMeta() && a.getItemMeta().hasLore() && a.getItemMeta().getLore().equals(l)) {
+                return a;
+            }
+        }
+        return null;
+    }
     public void addRarityGem(String identifier, RarityGem l) {
         if(raritygems == null) raritygems = new LinkedHashMap<>();
         check(raritygems, identifier, "rarity gem");

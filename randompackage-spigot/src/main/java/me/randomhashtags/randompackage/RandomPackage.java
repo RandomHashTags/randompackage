@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.api.nearFinished.Outposts;
 import me.randomhashtags.randompackage.api.unfinished.*;
-import me.randomhashtags.randompackage.dev.newCustomArmor;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -88,8 +87,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         RegionalAPI.getRegionalAPI().setup(this);
 
         final CommandManager cmd = CommandManager.getCommandManager(this);
-
-        newCustomArmor.getCustomArmor().enable();
 
         cmd.tryLoadingg(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
         cmd.tryLoading(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));

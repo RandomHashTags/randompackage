@@ -344,7 +344,7 @@ public class Boosters extends newEventAttributes {
 			final TreeMap<String, Entity> entities = getEntities("Player", player);
 			if(attributeLowercase.startsWith("gainedxp=")) {
 				final String s = attributeLowercase.split("=")[1].replace("xp", Float.toString(xp));
-				event.setRawXpGained((float) eval(s));
+				event.setRawXpGained((float) evaluate(s));
 				final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
 				attributes.put(wholeAttribute, attributeLowercase);
 				return new ExecutedEventAttributes(event, attributes);

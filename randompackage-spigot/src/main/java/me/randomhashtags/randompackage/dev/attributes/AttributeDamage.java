@@ -8,16 +8,14 @@ import java.util.HashMap;
 
 public class AttributeDamage extends AbstractEventAttribute {
     public String getIdentifier() { return "DAMAGE"; }
-    public void execute(Object value) {}
-    public void execute(HashMap<Entity, Object> recipientValues) {
-        if(recipientValues != null) {
-            for(Entity e : recipientValues.keySet()) {
-                final LivingEntity l = e instanceof LivingEntity ? (LivingEntity) e : null;
-                if(l != null) {
-                    final Object v = recipientValues.get(e);
-                    if(v != null) {
-                        l.damage((double) v);
-                    }
+    @Override
+    public void execute(HashMap<Entity, String> recipientValues) {
+        for(Entity e : recipientValues.keySet()) {
+            final LivingEntity l = e instanceof LivingEntity ? (LivingEntity) e : null;
+            if(l != null) {
+                final String v = recipientValues.get(e);
+                if(v != null) {
+                    l.damage(Double.parseDouble(v));
                 }
             }
         }

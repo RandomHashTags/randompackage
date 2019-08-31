@@ -132,7 +132,7 @@ public abstract class newEventAttributes extends RPFeature {
                 final Location l = toLocation(a[0]);
                 if(l != null) {
                     final World w = l.getWorld();
-                    final int amount = (int) eval(a[1]);
+                    final int amount = (int) evaluate(a[1]);
                     for(int i = 1; i <= amount; i++) {
                         w.strikeLightning(l);
                     }
@@ -147,32 +147,32 @@ public abstract class newEventAttributes extends RPFeature {
                     final LivingEntity le = e instanceof LivingEntity ? (LivingEntity) e : null;
                     final boolean isLiving = le != null;
                     if(attributeLowercase.startsWith("ignite" + el + "=")) {
-                        e.setFireTicks((int) eval(attributeLowercase.split("=")[1]));
+                        e.setFireTicks((int) evaluate(attributeLowercase.split("=")[1]));
                     } else if(isLiving) {
                         if(attributeLowercase.startsWith("damage" + el + "=")) {
                             final double hp = le.getHealth();
-                            double dmg = eval(attributeLowercase.split("=")[1]);
+                            double dmg = evaluate(attributeLowercase.split("=")[1]);
                             dmg = hp < dmg ? hp : dmg;
                             le.damage(dmg);
                         } else if(attributeLowercase.startsWith("set" + el + "hunger=")) {
                             if(le instanceof Player) {
                                 final Player p = (Player) le;
-                                final int lvl = p.getFoodLevel(), n = (int) eval(attributeLowercase.split("=")[1].replace("lvl", Integer.toString(lvl)));
+                                final int lvl = p.getFoodLevel(), n = (int) evaluate(attributeLowercase.split("=")[1].replace("lvl", Integer.toString(lvl)));
                                 p.setFoodLevel(n > 20 ? 20 : n);
                             }
                         } else if(attributeLowercase.startsWith("set" + el + "air=")) {
-                            final int r = le.getRemainingAir(), m = le.getMaximumAir(), value = (int) eval(attributeLowercase.split("=")[1].replace("air", Integer.toString(r)));
+                            final int r = le.getRemainingAir(), m = le.getMaximumAir(), value = (int) evaluate(attributeLowercase.split("=")[1].replace("air", Integer.toString(r)));
                             le.setRemainingAir(value > m ? m : value);
                         } else if(attributeLowercase.startsWith("set" + el + "health=")) {
-                            final double newHealth = eval(attributeLowercase.split("=")[1].replace("hp", Double.toString(le.getHealth())));
+                            final double newHealth = evaluate(attributeLowercase.split("=")[1].replace("hp", Double.toString(le.getHealth())));
                             le.setHealth(newHealth < 0 ? 0.00 : newHealth);
                         } else if(attributeLowercase.startsWith("addpotioneffectto" + el + "=")) {
                             final String[] potion = attributeLowercase.split("=")[1].split(":");
-                            addPotionEffect(le, getPotionEffectType(potion[0]), (int) eval(potion[1]), (int) eval(potion[2]), true, true, true);
+                            addPotionEffect(le, getPotionEffectType(potion[0]), (int) evaluate(potion[1]), (int) evaluate(potion[2]), true, true, true);
                         } else if(attributeLowercase.startsWith("addpotioneffectsto" + el + "=")) {
                             for(String s : attributeLowercase.split("=")[1].split("\\|")) {
                                 final String[] potion = s.split(":");
-                                addPotionEffect(le, getPotionEffectType(potion[0]), (int) eval(potion[1]), (int) eval(potion[2]), true, true, true);
+                                addPotionEffect(le, getPotionEffectType(potion[0]), (int) evaluate(potion[1]), (int) evaluate(potion[2]), true, true, true);
                             }
                         } else if(attributeLowercase.startsWith("removepotioneffectfrom" + el + "=")) {
                             removePotionEffect(le, getPotionEffectType(attributeLowercase.split("=")[1]));
@@ -226,7 +226,7 @@ public abstract class newEventAttributes extends RPFeature {
                             if(e instanceof Player) {
                                 final boolean set = attributeLowercase.startsWith("set");
                                 final Player p = (Player) e;
-                                final int exp = getTotalExperience(p), xp = (int) eval(attributeLowercase.split("=")[1].replace("xp", Integer.toString(exp)));
+                                final int exp = getTotalExperience(p), xp = (int) evaluate(attributeLowercase.split("=")[1].replace("xp", Integer.toString(exp)));
                                 if(set) setTotalExperience(p, xp);
                                 else p.giveExp(xp);
                             }
@@ -307,24 +307,13 @@ public abstract class newEventAttributes extends RPFeature {
         }
         return e;
     }
-    private ItemStack getRarityGem(RarityGem gem, Player player) {
-        final PlayerInventory pi = player.getInventory();
-        final List<String> l = gem.getItem().getItemMeta().getLore();
-        for(int i = 0; i < pi.getSize(); i++) {
-            final ItemStack a = pi.getItem(i);
-            if(a != null && a.hasItemMeta() && a.getItemMeta().hasLore() && a.getItemMeta().getLore().equals(l)) {
-                return a;
-            }
-        }
-        return null;
-    }
 
     private ExecutedEventAttributes doAttribute(EntityDeathEvent event, LivingEntity victim, Player killer, String attribute, String wholeAttribute) {
         String attributeLowercase = attribute.toLowerCase();
         final int xp = event.getDroppedExp();
         if(attributeLowercase.startsWith("droppedxp=")) {
             final String s = attributeLowercase.split("=")[1].replace("xp", Integer.toString(xp));
-            event.setDroppedExp((int) eval(s));
+            event.setDroppedExp((int) evaluate(s));
             final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
             attributes.put(wholeAttribute, attributeLowercase);
             return new ExecutedEventAttributes(event, attributes);

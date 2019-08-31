@@ -7,11 +7,12 @@ import java.util.HashMap;
 
 public class AttributeIgnite extends AbstractEventAttribute {
     public String getIdentifier() { return "IGNITE"; }
-    public void execute(Object value) {}
-    public void execute(HashMap<Entity, Object> recipientValues) {
-        if(recipientValues != null && !recipientValues.isEmpty()) {
-            for(Entity e : recipientValues.keySet()) {
-                final int ticks = (int) recipientValues.get(e);
+    @Override
+    public void execute(HashMap<Entity, String> recipientValues) {
+        for(Entity e : recipientValues.keySet()) {
+            final String value = recipientValues.get(e);
+            if(value != null) {
+                final int ticks = Integer.parseInt(value);
                 e.setFireTicks(ticks);
             }
         }

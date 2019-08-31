@@ -8,16 +8,15 @@ import java.util.HashMap;
 
 public class AttributeSetHunger extends AbstractEventAttribute {
     public String getIdentifier() { return "SETHUNGER"; }
-    public void execute(Object value) {}
-    public void execute(HashMap<Entity, Object> recipientValues) {
-        if(recipientValues != null) {
-            for(Entity e : recipientValues.keySet()) {
-                final Player player = e instanceof Player ? (Player) e : null;
-                if(player != null) {
-                    final Object v = recipientValues.get(e);
-                    if(v != null) {
-                        player.setFoodLevel((int) v);
-                    }
+    @Override
+    public void execute(HashMap<Entity, String> recipientValues) {
+        for(Entity e : recipientValues.keySet()) {
+            final Player player = e instanceof Player ? (Player) e : null;
+            if(player != null) {
+                final String v = recipientValues.get(e);
+                if(v != null) {
+                    final int lvl = player.getFoodLevel();
+                    player.setFoodLevel((int) evaluate(v.replace("lvl", Integer.toString(lvl))));
                 }
             }
         }

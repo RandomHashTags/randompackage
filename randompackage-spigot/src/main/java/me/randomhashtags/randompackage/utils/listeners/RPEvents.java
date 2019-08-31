@@ -32,7 +32,7 @@ public class RPEvents extends RPFeature implements Listener {
 
     @EventHandler
     private void playerJoinEvent(PlayerJoinEvent event) {
-        RPPlayer.get(event.getPlayer().getUniqueId()).load();
+        RPPlayer.get(event.getPlayer().getUniqueId());
     }
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {

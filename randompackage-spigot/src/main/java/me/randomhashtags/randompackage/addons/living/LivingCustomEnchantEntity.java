@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addons.living;
 
+import me.randomhashtags.randompackage.addons.utils.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class LivingCustomEnchantEntity {
+public class LivingCustomEnchantEntity implements Mathable {
     public static HashMap<UUID, LivingCustomEnchantEntity> living;
     private static CustomEnchants ce;
     private CustomEnchantEntity type;
@@ -49,7 +50,7 @@ public class LivingCustomEnchantEntity {
                 b += 1;
                 ce.w(null, event, null, Arrays.asList(entity), attr, s, b, summoner instanceof Player ? (Player) summoner : null);
                 if(attr.toLowerCase().startsWith("despawn{"))
-                    sch.scheduleSyncDelayedTask(randompackage, () -> entity.remove(), (int) ce.oldevaluate(attr.split("\\{")[1].split("}")[0]));
+                    sch.scheduleSyncDelayedTask(randompackage, () -> entity.remove(), (int) evaluate(attr.split("\\{")[1].split("}")[0]));
             }
         }
         living.put(uuid, this);

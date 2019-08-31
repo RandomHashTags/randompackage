@@ -431,7 +431,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         return e;
     }
 
-    public boolean tryExecuting(String key, Object value) {
+    public boolean tryExecuting(String key, String value) {
         if(key != null && value != null) {
             final EventAttribute a = getEventAttribute(key.toUpperCase());
             if(a != null) {
@@ -440,7 +440,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         }
         return false;
     }
-    public boolean tryExecuting(String key, HashMap<Entity, Object> recipientValues) {
+    public boolean tryExecuting(String key, HashMap<Entity, String> recipientValues) {
         if(key != null && recipientValues != null && !recipientValues.isEmpty()) {
             final EventAttribute a = getEventAttribute(key.toUpperCase());
             if(a != null) {
@@ -449,7 +449,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         }
         return false;
     }
-    public boolean execute(EventAttribute attribute, Object value) {
+    public boolean execute(EventAttribute attribute, String value) {
         final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
         pluginmanager.callEvent(e);
         final boolean c = !e.isCancelled();
@@ -458,7 +458,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         }
         return c;
     }
-    public boolean execute(EventAttribute attribute, HashMap<Entity, Object> recipientValues) {
+    public boolean execute(EventAttribute attribute, HashMap<Entity, String> recipientValues) {
         final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
         pluginmanager.callEvent(e);
         final boolean c = !e.isCancelled();
@@ -478,17 +478,28 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                 final String first = semi[0].toLowerCase();
                 if(first.equals(e)) {
                     final List<String> conditions = new ArrayList<>();
-                    for(String c : s.split(semi[0] + ";")[1].split("&&")[0].split(";")) {
+                    final HashMap<EventAttribute, String> execute = new HashMap<>();
+                    for(String c : s.split(semi[0] + ";")[1].split(";")) {
                         if(c.contains("=")) {
                             final EventAttribute a = getEventAttribute(c.split("=")[0].toUpperCase());
                             if(a == null) {
                                 conditions.add(c);
+                            } else {
+                                execute.put(a, s.split("=")[1]);
                             }
                         } else {
                             conditions.add(c);
                         }
                     }
                     if(didPassConditions(entities, conditions, cancelled)) {
+                        for(EventAttribute a : execute.keySet()) {
+                            final String value = execute.get(a);
+                            if(value != null) {
+                                a.execute(execute.get(a));
+                            }
+                            //a.execute(null);
+                            //a.executeAt(null);
+                        }
                         Bukkit.broadcastMessage("did pass all " + e + " conditions: " + conditions.toString());
                     }
                 }
@@ -535,7 +546,6 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             tryGeneric(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes);
         }
     }
-
     /*
         RandomPackage Events
      */
