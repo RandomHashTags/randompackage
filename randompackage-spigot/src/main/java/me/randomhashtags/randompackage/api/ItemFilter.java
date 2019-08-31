@@ -44,6 +44,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     private HashMap<String, FileFilterCategory> categories, categoryTitles;
 
     public String getIdentifier() { return "ITEM_FILTER"; }
+    protected RPFeature getFeature() { return getItemFilter(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

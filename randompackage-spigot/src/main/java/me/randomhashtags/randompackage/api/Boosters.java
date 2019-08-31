@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileBooster;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.utils.newEventAttributes;
@@ -44,6 +45,7 @@ public class Boosters extends newEventAttributes {
 	private MCMMOBoosterEvents mcmmoboosters;
 
 	public String getIdentifier() { return "BOOSTERS"; }
+	protected RPFeature getFeature() { return getBoosters(); }
 	public void load() {
 		loadUtils();
 		final long started = System.currentTimeMillis();

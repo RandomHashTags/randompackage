@@ -26,7 +26,7 @@ public class EpicSky extends RPFeature implements Regional {
     private IslandManager im;
 
     public String getIdentifier() { return "REGIONAL_EPICSKYBLOCK"; }
-
+    protected RPFeature getFeature() { return getEpicSkyblock(); }
     public void load() {
         im = EpicSkyblock.getIslandManager();
     }

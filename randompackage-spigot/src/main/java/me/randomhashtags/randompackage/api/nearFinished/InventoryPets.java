@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.addons.InventoryPet;
 import me.randomhashtags.randompackage.utils.addons.FileInventoryPet;
@@ -21,7 +21,7 @@ public class InventoryPets extends RPFeature implements Listener {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "PETS"; }
-
+    protected RPFeature getFeature() { return getInventoryPets(); }
     public void load() {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default pets")) {

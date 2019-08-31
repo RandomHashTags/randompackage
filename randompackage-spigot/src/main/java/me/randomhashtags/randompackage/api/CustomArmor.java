@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.CEAApplyPotionEffectEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantEntityDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.customenchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,6 +38,7 @@ public class CustomArmor extends CustomEnchants implements Listener {
 	private List<Player> inEquipmentLootbox;
 
 	public String getIdentifier() { return "CUSTOM_ARMOR"; }
+	protected RPFeature getFeature() { return getCustomArmor(); }
 	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();

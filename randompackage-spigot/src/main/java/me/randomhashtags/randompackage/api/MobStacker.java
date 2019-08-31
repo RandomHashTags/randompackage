@@ -43,7 +43,7 @@ public class MobStacker extends RPFeature {
     private HashMap<String, Boolean> slaysStack;
 
     public String getIdentifier() { return "MOB_STACKER"; }
-
+    protected RPFeature getFeature() { return getMobStacker(); }
     public void load() {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "mob stacker.yml"));

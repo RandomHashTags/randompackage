@@ -16,6 +16,7 @@ public class RPEvents extends RPFeature implements Listener {
         return instance;
     }
     public String getIdentifier() { return "RP_EVENTS"; }
+    protected RPFeature getFeature() { return getRPEvents(); }
     public void load() {
         for(Player p : Bukkit.getOnlinePlayers()) {
             RPPlayer.get(p.getUniqueId()).load();

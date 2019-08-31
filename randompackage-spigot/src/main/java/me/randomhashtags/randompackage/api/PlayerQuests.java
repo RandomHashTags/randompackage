@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
@@ -46,7 +47,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     private int returnToQuestsSlot;
 
     public String getIdentifier() { return "PLAYER_QUESTS"; }
-
+    protected RPFeature getFeature() { return getPlayerQuests(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Mask;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileMask;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
@@ -44,6 +45,7 @@ public class Masks extends CustomEnchants implements Listener {
     private List<String> maskCanObtain;
 
     public String getIdentifier() { return "MASKS"; }
+    protected RPFeature getFeature() { return getMasks(); }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

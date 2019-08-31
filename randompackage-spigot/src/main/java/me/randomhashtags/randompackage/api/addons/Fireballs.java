@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.RarityFireball;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathFireball;
 import me.randomhashtags.randompackage.utils.addons.PathMagicDust;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -34,6 +35,7 @@ public class Fireballs extends CustomEnchantUtils {
     public ItemStack mysterydust;
 
     public String getIdentifier() { return "FIREBALLS"; }
+    protected RPFeature getFeature() { return getFireballs(); }
     public void load() {
         loadUtils();
         long started = System.currentTimeMillis();

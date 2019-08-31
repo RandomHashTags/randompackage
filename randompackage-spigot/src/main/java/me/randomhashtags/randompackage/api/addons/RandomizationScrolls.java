@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.RandomizationScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.events.RandomizationScrollUseEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathRandomizationScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
@@ -28,6 +29,7 @@ public class RandomizationScrolls extends CustomEnchants {
     }
 
     public String getIdentifier() { return "RANDOMIZATION_SCROLLS"; }
+    protected RPFeature getFeature() { return getRandomizationScrolls(); }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

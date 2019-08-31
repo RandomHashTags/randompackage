@@ -22,6 +22,7 @@ public final class ASky extends RPFeature implements Regional {
     private ASkyBlockAPI api;
 
     public String getIdentifier() { return "REGIONAL_ASKYBLOCK"; }
+    protected RPFeature getFeature() { return getASkyblock(); }
     public void load() {
         api = ASkyBlockAPI.getInstance();
     }

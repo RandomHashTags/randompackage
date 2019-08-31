@@ -43,6 +43,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	private List<UUID> viewingBrag;
 
 	public String getIdentifier() { return "CHAT_EVENTS"; }
+	protected RPFeature getFeature() { return getChatEvents(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		final FileConfiguration f = randompackage.getConfig();

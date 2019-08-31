@@ -6,6 +6,7 @@ import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
 import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Reflect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class MCMMOAPI extends Reflect implements Listener {
 	private GlobalChallenges gc;
 
 	public String getIdentifier() { return "MECHANIC_MCMMO"; }
-
+	protected RPFeature getFeature() { return getMCMMOAPI(); }
 	public void load() {
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
 		gc = GlobalChallenges.getChallenges();

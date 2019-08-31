@@ -9,6 +9,7 @@ import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileCustomEnchant;
 import me.randomhashtags.randompackage.utils.addons.FileEnchantRarity;
@@ -64,6 +65,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
     private List<String> noMoreEnchantsAllowed;
 
     public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
+    protected RPFeature getFeature() { return getCustomEnchants(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
@@ -82,6 +84,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
         return true;
     }
+    @Override
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
@@ -312,6 +315,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
+    @Override
     public void unload() {
         unloadUtils();
         givedpitem.items.remove("transmogscroll");

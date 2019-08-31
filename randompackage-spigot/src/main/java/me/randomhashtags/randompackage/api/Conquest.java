@@ -42,6 +42,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private LivingConquestChest last;
 
     public String getIdentifier() { return "CONQUEST"; }
+    protected RPFeature getFeature() { return getConquest(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);

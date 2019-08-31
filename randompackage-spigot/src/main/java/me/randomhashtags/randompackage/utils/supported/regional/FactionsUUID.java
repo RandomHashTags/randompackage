@@ -35,6 +35,7 @@ public class FactionsUUID extends RPFeature implements Regional {
     private HashMap<String, HashMap<String, List<UUID>>> relations;
 
     public String getIdentifier() { return "REGIONAL_FACTIONS_UUID"; }
+    protected RPFeature getFeature() { return getFactionsUUID(); }
     public void load() {
         fi = FPlayers.getInstance();
         f = Factions.getInstance();

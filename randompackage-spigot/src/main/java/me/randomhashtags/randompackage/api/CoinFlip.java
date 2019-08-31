@@ -55,7 +55,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     private HashMap<Player, CoinFlipMatch> goingToChallenge, active;
 
     public String getIdentifier() { return "COIN_FLIP"; }
-
+    protected RPFeature getFeature() { return getCoinFlip(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

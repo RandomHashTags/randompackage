@@ -43,7 +43,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     private List<Player> itemnametag, itemlorecrystal, explosivesnowball;
 
     public String getIdentifier() { return "GIVEDP_ITEM"; }
-
+    protected RPFeature getFeature() { return givedpitem; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(hasPermission(sender, "RandomPackage.givedp", true)) {

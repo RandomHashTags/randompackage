@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.EventAttributes;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "FACTION_QUESTS"; }
-
+    protected RPFeature getFeature() { return getFactionQuests(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }

@@ -19,7 +19,7 @@ public class Trinkets extends RPFeature {
     }
 
     public String getIdentifier() { return "TRINKETS"; }
-
+    protected RPFeature getFeature() { return getTrinkets(); }
     public void load() {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default trinkets")) {

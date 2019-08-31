@@ -42,7 +42,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 	private List<String> blacklistedMaterials;
 
 	public String getIdentifier() { return "TRADE"; }
-
+	protected RPFeature getFeature() { return getTrade(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");

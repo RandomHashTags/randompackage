@@ -25,6 +25,7 @@ public class SuperiorSky extends RPFeature implements Regional {
     private com.bgsoftware.superiorskyblock.api.SuperiorSkyblock ss;
 
     public String getIdentifier() { return "REGIONAL_SUPERIOR_SKYBLOCK"; }
+    protected RPFeature getFeature() { return getSuperiorSkyblock(); }
     public void load() {
         ss = SuperiorSkyblockAPI.getSuperiorSkyblock();
     }

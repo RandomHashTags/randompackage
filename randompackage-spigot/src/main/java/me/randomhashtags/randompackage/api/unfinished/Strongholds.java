@@ -22,6 +22,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "STRONGHOLDS"; }
+    protected RPFeature getFeature() { return getStrongholds(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }

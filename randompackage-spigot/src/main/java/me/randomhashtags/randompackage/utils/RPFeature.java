@@ -69,7 +69,10 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         try {
             isEnabled = true;
             load();
-            pluginmanager.registerEvents(this, randompackage);
+            final RPFeature f = getFeature();
+            if(f != null) {
+                pluginmanager.registerEvents(f, randompackage);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +82,10 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         try {
             isEnabled = false;
             unload();
-            HandlerList.unregisterAll(this);
+            final RPFeature f = getFeature();
+            if(f != null) {
+                HandlerList.unregisterAll(f);
+            }
             sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,6 +100,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         mcmmoIsEnabled = false;
     }
 
+    protected abstract RPFeature getFeature();
     public abstract void load();
     public abstract void unload();
 
@@ -122,7 +129,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         givedpCategories.add(inv);
     }
     public String toRoman(int number) {
-        /* This code is from "bhlangonijr" at https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java */
+        /* This code is from "bhlangonijr" at https://stackoverflow.com/questions/12967896 */
         if(number <= 0) return "";
         int l = treemap.floorKey(number);
         if(number == l) return treemap.get(number);
@@ -233,7 +240,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                         for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                             try {
                                 flags.add(ItemFlag.valueOf(s.toUpperCase()));
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 System.out.println("[RandomPackage] WARNING: No ItemFlag found for string \"" + s + "\"");
                             }
                         }

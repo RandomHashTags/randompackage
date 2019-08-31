@@ -61,7 +61,7 @@ public class FactionUpgrades extends RPFeature {
     public static HashMap<String, HashMap<FactionUpgrade, Integer>> factionUpgrades;
 
     public String getIdentifier() { return "FACTION_UPGRADES"; }
-
+    protected RPFeature getFeature() { return getFactionUpgrades(); }
     public void load() {
         if(hookedFactionsUUID()) {
             final long started = System.currentTimeMillis();
@@ -157,7 +157,7 @@ public class FactionUpgrades extends RPFeature {
                 fupgrades.save(fupgradesF);
                 fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
                 fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -395,7 +395,7 @@ public class FactionUpgrades extends RPFeature {
 					fapi.setDungeonLootbagBonus(f, value);
 				else if(key.equals("setincomingarmorsetdamagemultiplier"))
 					fapi.setIncomingArmorSetDamageMultiplier(f, value);*/
-            } catch(Exception ee) {
+            } catch (Exception ee) {
                 if(key.equals("allowfactionflight")) {
                 } else if(key.equals("allowsmeltable")) {
                 } else if(key.equals("reducemcmmocooldown")) {

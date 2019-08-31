@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -32,7 +32,7 @@ public class SpawnerStacking extends RPFeature {
     private HashMap<Location, Integer> stacks;
 
     public String getIdentifier() { return "SPAWNER_STACKING"; }
-
+    protected RPFeature getFeature() { return getSpawnerStacking(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "spawner stacking.yml");

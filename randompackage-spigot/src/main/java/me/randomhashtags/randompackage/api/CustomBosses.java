@@ -4,9 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomBoss;
 import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addons.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPStorage;
 import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -40,6 +38,7 @@ public class CustomBosses extends RPFeature {
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 
 	public String getIdentifier() { return "CUSTOM_BOSSES"; }
+	protected RPFeature getFeature() { return getCustomBosses(); }
 	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();

@@ -34,7 +34,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     public ItemStack dimensionweb, enchantedobsidian, fuelcell;
 
     public String getIdentifier() { return "DUNGEONS"; }
-
+    protected RPFeature getFeature() { return getDungeons(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && args.length == 0 && hasPermission(player, "RandomPackage.dungeons", true)) {

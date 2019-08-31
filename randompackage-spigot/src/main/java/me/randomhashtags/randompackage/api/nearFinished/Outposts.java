@@ -49,7 +49,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
     }
 
     public String getIdentifier() { return "OUTPOSTS"; }
-
+    protected RPFeature getFeature() { return getOutposts(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "outposts.yml");

@@ -44,6 +44,7 @@ public class ServerCrates extends RPFeature {
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
 	public String getIdentifier() { return "SERVER_CRATES"; }
+	protected RPFeature getFeature() { return getServerCrates(); }
 	public void load() {
 	    final long started = System.currentTimeMillis();
 		canRevealRarities = new ArrayList<>();

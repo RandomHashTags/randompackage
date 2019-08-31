@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.EnchantmentOrb;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
@@ -25,7 +26,7 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
     }
 
     public String getIdentifier() { return "ENCHANTMENT_ORBS"; }
-
+    protected RPFeature getFeature() { return getEnchantmentOrbs(); }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();

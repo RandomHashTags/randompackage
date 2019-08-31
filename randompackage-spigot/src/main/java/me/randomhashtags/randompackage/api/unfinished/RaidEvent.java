@@ -12,7 +12,7 @@ public class RaidEvent extends RPFeature {
     }
 
     public String getIdentifier() { return "RAID_EVENT"; }
-
+    protected RPFeature getFeature() { return getRaidEvent(); }
     public void load() {
     }
     public void unload() {

@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomKit;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.CustomKitGlobal;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitGlobal;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -43,11 +44,10 @@ public class KitsGlobal extends Kits {
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_GLOBAL"; }
-
+    protected RPFeature getFeature() { return getKitsGlobal(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitGlobal.class; }
     public String getPath() { return "gkits"; }
-
     public void load() {
         loadKitUtils();
         final long started = System.currentTimeMillis();

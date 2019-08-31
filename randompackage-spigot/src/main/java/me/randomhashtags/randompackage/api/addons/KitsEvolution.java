@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addons.objects.KitItem;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitEvolution;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -43,7 +44,7 @@ public class KitsEvolution extends Kits {
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_EVOLUTION"; }
-
+    protected RPFeature getFeature() { return getKitsEvolution(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitEvolution.class; }
     public String getPath() { return "vkits"; }

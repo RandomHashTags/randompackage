@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addons.CustomKitEvolution;
 import me.randomhashtags.randompackage.addons.CustomKitMastery;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.addons.CustomKitGlobal;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileKitMastery;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -38,7 +39,7 @@ public class KitsMastery extends Kits {
     private ItemStack background, cooldown;
 
     public String getIdentifier() { return "KITS_MASTERY"; }
-
+    protected RPFeature getFeature() { return getKitsMastery(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitMastery.class; }
     public String getPath() { return "mkits"; }

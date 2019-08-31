@@ -48,7 +48,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	private HashMap<Player, Integer> deleteSlot;
 
 	public String getIdentifier() { return "SHOWCASE"; }
-
+	protected RPFeature getFeature() { return getShowcase(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;

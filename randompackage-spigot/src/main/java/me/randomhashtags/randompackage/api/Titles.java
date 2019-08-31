@@ -41,7 +41,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 	private HashMap<Player, Integer> pages;
 
 	public String getIdentifier() { return "TITLES"; }
-	
+	protected RPFeature getFeature() { return getTitles(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {

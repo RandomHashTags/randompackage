@@ -33,7 +33,7 @@ public class Wild extends RPFeature implements CommandExecutor {
     private List<String> teleportExceptions;
 
     public String getIdentifier() { return "WILD"; }
-
+    protected RPFeature getFeature() { return getWild(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && cmd.getName().equals("wild")) {

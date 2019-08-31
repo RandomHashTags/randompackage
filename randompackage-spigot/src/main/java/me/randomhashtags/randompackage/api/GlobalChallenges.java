@@ -65,6 +65,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 	private YamlConfiguration data;
 
 	public String getIdentifier() { return "GLOBAL_CHALLENGES"; }
+	protected RPFeature getFeature() { return getChallenges(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && player != null)

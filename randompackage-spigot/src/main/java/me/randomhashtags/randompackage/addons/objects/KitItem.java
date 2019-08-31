@@ -16,6 +16,7 @@ public class KitItem extends RPFeature implements CustomKitItem {
     private List<String> lore;
 
     public String getIdentifier() { return path; }
+    protected RPFeature getFeature() { return null; }
     public void load() {}
     public void unload() {}
 

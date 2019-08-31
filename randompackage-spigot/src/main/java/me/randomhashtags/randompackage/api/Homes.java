@@ -44,6 +44,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private UInventory editicon;
 
 	public String getIdentifier() { return "HOMES"; }
+	protected RPFeature getFeature() { return getHomes(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");

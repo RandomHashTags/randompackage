@@ -29,7 +29,7 @@ public class Duels extends RPFeature implements CommandExecutor {
     private UInventory type, godset;
 
     public String getIdentifier() { return "DUELS"; }
-
+    protected RPFeature getFeature() { return getDuels(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

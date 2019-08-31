@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -15,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -257,6 +259,17 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                             passed = eight ? true : e instanceof LivingEntity && ((LivingEntity) e).hasAI() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "iscollideable=")) {
                             passed = eight ? true : e instanceof LivingEntity && ((LivingEntity) e).isCollidable() == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "health<=")) {
+                            passed = e instanceof LivingEntity && ((LivingEntity) e).getHealth() <= Double.parseDouble(value);
+                        } else if(condition.startsWith(s + "health>=")) {
+                            passed = e instanceof LivingEntity && ((LivingEntity) e).getHealth() >= Double.parseDouble(value);
+                        } else if(condition.startsWith(s + "haspotioneffect=")) {
+                            final PotionEffectType t = getPotionEffectType(value);
+                            passed = t != null && e instanceof LivingEntity && ((LivingEntity) e).hasPotionEffect(t);
+                        } else if(condition.startsWith(s + "nodamageticks<=")) {
+                            passed = e instanceof LivingEntity && ((LivingEntity) e).getNoDamageTicks() <= Double.parseDouble(value);
+                        } else if(condition.startsWith(s + "nodamageticks>=")) {
+                            passed = e instanceof LivingEntity && ((LivingEntity) e).getNoDamageTicks() >= Double.parseDouble(value);
                         /*
                             Minecart conditions
                          */
@@ -390,15 +403,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                         } else if(condition.startsWith(s + "profession=")) {
                             passed = e instanceof Zombie && ((Zombie) e).isVillager() ? ((Zombie) e).getVillagerProfession().name().equalsIgnoreCase(value) : e instanceof Villager && ((Villager) e).getProfession().name().equalsIgnoreCase(value);
                         } else if(condition.startsWith(s + "villagertype=")) {
-                            if(e instanceof Villager) {
-                                if(legacy || thirteen) {
-                                    throw new UnsupportedOperationException("Event if attribute \"<E>VillagerType=\" unsupported in this Server Version; only supports 1.14.4!");
-                                } else {
-                                    passed = ((Villager) e).getVillagerType().name().equalsIgnoreCase(value);
-                                }
-                            } else {
-                                passed = false;
-                            }
+                            passed = e instanceof Villager && !(legacy || thirteen) && ((Villager) e).getVillagerType().name().equalsIgnoreCase(value);
                         /*
                             WitherSkill conditions
                          */
@@ -427,6 +432,15 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             if(i%2 == 1) {
                 e.put((String) values[i-1], (Entity) values[i]);
             }
+        }
+        return e;
+    }
+    public HashMap<String, Entity> getNearbyEntities(Location center, double radius) { return getNearbyEntities(center, radius, radius, radius); }
+    public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
+        final HashMap<String, Entity> e = new HashMap<>();
+        final List<Entity> nearby = new ArrayList<>(center.getWorld().getNearbyEntities(center, radiusX, radiusY, radiusZ));
+        for(int i = 1; i <= nearby.size(); i++) {
+            e.put("Nearby" + i, nearby.get(i));
         }
         return e;
     }
@@ -492,10 +506,18 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                         }
                     }
                     if(didPassConditions(entities, conditions, cancelled)) {
+                        final Player player = (Player) entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
+                        final Entity victim = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
                         for(EventAttribute a : execute.keySet()) {
                             final String value = execute.get(a);
                             if(value != null) {
-                                a.execute(execute.get(a));
+                                a.execute(value);
+                                if(player != null) {
+                                    a.execute(player, value);
+                                    if(victim != null) {
+                                        a.execute(player, victim, value);
+                                    }
+                                }
                             }
                             //a.execute(null);
                             //a.executeAt(null);

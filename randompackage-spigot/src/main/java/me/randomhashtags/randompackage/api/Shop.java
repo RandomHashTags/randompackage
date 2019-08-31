@@ -8,7 +8,6 @@ import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.events.ShopSellEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileShopCategory;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -42,7 +41,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	private HashMap<String, FileShopCategory> titles;
 
 	public String getIdentifier() { return "SHOP"; }
-
+	protected RPFeature getFeature() { return getShop(); }
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save(null, "shop.yml");

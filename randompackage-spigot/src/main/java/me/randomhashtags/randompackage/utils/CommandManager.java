@@ -17,7 +17,6 @@ public class CommandManager extends Reflect {
     public static CommandManager getCommandManager(RandomPackage randompackage) {
         if(instance == null) {
             instance = new CommandManager();
-            instance.randompackage = randompackage;
             instance.config = randompackage.config;
         }
         return instance;
@@ -30,12 +29,11 @@ public class CommandManager extends Reflect {
     private static HashMap<String, PluginCommand> actualCmds;
     private Object dispatcher, nodes;
 
-    private RandomPackage randompackage;
     private FileConfiguration config;
     private ConsoleCommandSender console;
 
     public String getIdentifier() { return "RP_COMMAND_MANAGER"; }
-
+    protected RPFeature getFeature() { return getCommandManager(randompackage); }
     private CommandManager() {
         actualCmds = new HashMap<>();
         try {

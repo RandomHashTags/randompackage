@@ -17,7 +17,7 @@ public class PlayerRanks extends RPFeature {
     private ItemStack interactable;
 
     public String getIdentifier() { return "PLAYER_RANKS"; }
-
+    protected RPFeature getFeature() { return getPlayerRanks(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "player ranks.yml");

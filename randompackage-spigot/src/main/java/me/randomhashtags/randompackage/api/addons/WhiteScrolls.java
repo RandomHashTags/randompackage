@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.WhiteScroll;
 import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathWhiteScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ public class WhiteScrolls extends CustomEnchantUtils {
     }
 
     public String getIdentifier() { return "WHITE_SCROLLS"; }
+    protected RPFeature getFeature() { return getWhiteScrolls(); }
     public void load() {
         loadUtils();
         final long started = System.currentTimeMillis();
