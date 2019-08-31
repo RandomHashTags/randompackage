@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.utils.database.file;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class YamlFile implements DatabaseFile {
@@ -21,16 +22,16 @@ public class YamlFile implements DatabaseFile {
     public double getDouble(String path) { return yml.getDouble(path); }
     public long getLong(String path) { return yml.getLong(path); }
     public List<String> getStringList(String path) { return yml.getStringList(path); }
+    public BigDecimal getBigDecimal(String path) { return BigDecimal.valueOf(getDouble(path)); }
 
     public void save() {
         try {
             yml.save(file);
             file = new File(file.getAbsolutePath());
             yml = YamlConfiguration.loadConfiguration(file);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public void set(String path, Object value) { yml.set(path, value); }
 }

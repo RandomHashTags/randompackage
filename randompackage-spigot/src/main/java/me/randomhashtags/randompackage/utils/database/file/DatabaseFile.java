@@ -46,11 +46,11 @@ public interface DatabaseFile {
         return t != null ? def : null;
     }
 
+    BigDecimal getBigDecimal(String path);
     default BigDecimal getBigDecimal(String path, BigDecimal def) {
-        final Object d = get(path, null);
-        return d != null ? BigDecimal.valueOf((double) d) : def;
+        final BigDecimal d = getBigDecimal(path);
+        return d != null ? d : def;
     }
-
 
     void save();
     void set(String path, Object value);

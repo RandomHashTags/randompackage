@@ -7,7 +7,6 @@ import me.randomhashtags.randompackage.addons.objects.ConquestMob;
 import me.randomhashtags.randompackage.events.ConquestDamageEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileConquestChest;
-import me.randomhashtags.randompackage.utils.objects.Feature;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;

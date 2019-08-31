@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.utils.database.file;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -65,6 +66,10 @@ public class MySQLFile implements DatabaseFile {
     public List<String> getStringList(String query) {
         final Object o = g(query);
         return o != null ? (List<String>) o : null;
+    }
+    public BigDecimal getBigDecimal(String query) {
+        final Object o = g(query);
+        return o != null ? BigDecimal.valueOf((double) o) : BigDecimal.ZERO;
     }
 
     public void save() {}

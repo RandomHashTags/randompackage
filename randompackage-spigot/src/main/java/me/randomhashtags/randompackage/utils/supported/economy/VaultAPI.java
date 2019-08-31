@@ -20,7 +20,7 @@ public class VaultAPI {
         didSetupEco = true;
         final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if(economyProvider != null) economy = economyProvider.getProvider();
-        return (economy != null);
+        return economy != null;
     }
     public Economy getEconomy() {
         if(!didSetupEco) setupEconomy();

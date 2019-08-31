@@ -14,5 +14,4 @@ public interface ArmorSet extends Attributable, Identifiable {
     List<String> getArmorLore();
     List<String> getWeaponLore();
     List<String> getActivateMessage();
-    ArmorSetAbility getAbility();
 }

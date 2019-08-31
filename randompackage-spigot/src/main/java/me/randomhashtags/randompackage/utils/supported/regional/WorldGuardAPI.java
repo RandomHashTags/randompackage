@@ -48,6 +48,26 @@ public class WorldGuardAPI {
         return player != null ? com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().wrapPlayer(player) : null;
     }
 
+    private boolean allows_wg6(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
+        if(hasBypass(player, l)) return true;
+        final com.sk89q.worldguard.LocalPlayer p = getLocalPlayer(player);
+        final com.sk89q.worldguard.protection.ApplicableRegionSet s = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin().getRegionManager(l.getWorld()).getApplicableRegions(l);
+        final com.sk89q.worldguard.protection.flags.StateFlag.State deny = com.sk89q.worldguard.protection.flags.StateFlag.State.DENY;
+        for(com.sk89q.worldguard.protection.flags.StateFlag flag : flags) {
+            if(s.queryState(p, flag) == deny) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean allows_wg7(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
+        if(hasBypass(player, l)) return true;
+        final com.sk89q.worldguard.protection.regions.RegionContainer c = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
+        final com.sk89q.worldguard.protection.regions.RegionQuery q = c.createQuery();
+        final com.sk89q.worldguard.protection.ApplicableRegionSet s = q.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(l));
+        return s.testState(getLocalPlayer(player), flags);
+    }
+
     // unfinished
     public List<Chunk> getChunks(String regionName) {
         final List<Chunk> c = new ArrayList<>();
@@ -79,26 +99,6 @@ public class WorldGuardAPI {
             }
         }
         return c;
-    }
-
-    private boolean allows_wg6(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
-        if(hasBypass(player, l)) return true;
-        final com.sk89q.worldguard.LocalPlayer p = getLocalPlayer(player);
-        final com.sk89q.worldguard.protection.ApplicableRegionSet s = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin().getRegionManager(l.getWorld()).getApplicableRegions(l);
-        final com.sk89q.worldguard.protection.flags.StateFlag.State deny = com.sk89q.worldguard.protection.flags.StateFlag.State.DENY;
-        for(com.sk89q.worldguard.protection.flags.StateFlag flag : flags) {
-            if(s.queryState(p, flag) == deny) {
-                return false;
-            }
-        }
-        return true;
-    }
-    private boolean allows_wg7(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
-        if(hasBypass(player, l)) return true;
-        final com.sk89q.worldguard.protection.regions.RegionContainer c = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
-        final com.sk89q.worldguard.protection.regions.RegionQuery q = c.createQuery();
-        final com.sk89q.worldguard.protection.ApplicableRegionSet s = q.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(l));
-        return s.testState(getLocalPlayer(player), flags);
     }
 }
 

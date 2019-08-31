@@ -109,8 +109,8 @@ public enum WGFlag {
         }
         try {
             flag = (StateFlag) ((six ? com.sk89q.worldguard.protection.flags.DefaultFlag.class : Flags.class).getDeclaredField(n).get(null));
-        } catch(Exception e) {
-            throw new UnsupportedOperationException("Flag " + n + " doesn't exist using WorldGuard " + version + "!");
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("[RandomPackage] Flag " + n + " doesn't exist, running WorldGuard " + version + "!");
         }
         return flag;
     }

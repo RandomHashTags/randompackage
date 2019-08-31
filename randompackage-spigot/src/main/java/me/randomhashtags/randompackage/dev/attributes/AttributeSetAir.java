@@ -9,6 +9,11 @@ import java.util.HashMap;
 public class AttributeSetAir extends AbstractEventAttribute {
     public String getIdentifier() { return "SETAIR"; }
     @Override
+    public void execute(Player player, String value) {
+        final int air = player.getRemainingAir(), max = player.getMaximumAir(), total = (int) evaluate(value.replace("air", Integer.toString(air)));
+        player.setRemainingAir(Math.min(total, max));
+    }
+    @Override
     public void execute(HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             final String s = recipientValues.get(e);
