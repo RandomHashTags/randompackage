@@ -6,6 +6,8 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+
 public class AttributePlaySound extends AbstractEventAttribute {
     public String getIdentifier() { return "PLAYSOUND"; }
     @Override
@@ -26,5 +28,8 @@ public class AttributePlaySound extends AbstractEventAttribute {
                 }
             }
         }
+    }
+    @Override
+    public void executeAt(HashMap<Location, String> locations) {
     }
 }

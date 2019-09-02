@@ -42,7 +42,7 @@ public class FilePlayerQuest extends RPAddon implements PlayerQuest {
         }
         return c;
     }
-    public List<String> getLore() { return api.colorizeListString(yml.getStringList("lore")); }
+    public List<String> getLore() { return colorizeListString(yml.getStringList("lore")); }
     public List<String> getRewards(){ return yml.getStringList("rewards"); }
     public List<String> getTrigger() { return yml.getStringList("trigger"); }
 }

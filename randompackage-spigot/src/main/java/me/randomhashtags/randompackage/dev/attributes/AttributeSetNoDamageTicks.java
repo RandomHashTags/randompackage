@@ -14,7 +14,8 @@ public class AttributeSetNoDamageTicks extends AbstractEventAttribute {
             for(Entity e : recipientValues.keySet()) {
                 final String v = recipientValues.get(e);
                 if(v != null && e instanceof LivingEntity) {
-                    ((LivingEntity) e).setNoDamageTicks(Integer.parseInt(v));
+                    final LivingEntity l = (LivingEntity) e;
+                    l.setNoDamageTicks((int) evaluate(v.replace("ticks", Integer.toString(l.getNoDamageTicks()))));
                 }
             }
         }

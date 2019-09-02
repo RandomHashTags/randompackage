@@ -18,7 +18,7 @@ public class AttributeExecuteCommand extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             final String cmd = recipientValues.get(e);
             if(cmd != null) {
-                s.dispatchCommand(e, cmd);
+                s.dispatchCommand(e, cmd.replace("%entity%", e.getName()));
             }
         }
     }

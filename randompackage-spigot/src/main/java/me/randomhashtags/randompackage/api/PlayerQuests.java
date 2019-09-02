@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
+import me.randomhashtags.randompackage.dev.EventAttributes;
+import me.randomhashtags.randompackage.dev.attributes.AttributeIncreasePlayerQuest;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
@@ -69,6 +70,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "player quests.yml");
 
+        addEventAttribute(new AttributeIncreasePlayerQuest());
         config = YamlConfiguration.loadConfiguration(new File(rpd, "player quests.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
@@ -421,7 +423,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
                             quest.setProgress(n);
                         }
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     System.out.println("[RandomPackage] PlayerQuest error details:");
                     System.out.println("player=" + player.getName() + ";quest=" + quest.getQuest().getIdentifier());
                     System.out.println("completion=" + completion);
@@ -435,11 +437,9 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     private void entityDeathEvent(EntityDeathEvent event) {
         final Player player = event.getEntity().getKiller();
         if(player != null) {
-            final String xp = Integer.toString(event.getDroppedExp());
             final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
             for(ActivePlayerQuest quest : a) {
-                String e = executeAttributes(player, event, quest.getQuest().getTrigger());
-                doCompletion(player, quest, e != null ? e.replace("xp", xp) : null);
+                trigger(event, quest.getQuest().getTrigger());
             }
         }
     }
@@ -448,7 +448,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
     @EventHandler
@@ -456,7 +456,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
     @EventHandler
@@ -464,23 +464,23 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void serverCrateOpenEvent(ServerCrateOpenEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
     @EventHandler
@@ -490,24 +490,24 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             final Player player = (Player) l;
             final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
             for(ActivePlayerQuest quest : a) {
-                doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+                trigger(event, quest.getQuest().getTrigger());
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void randomizationScrollUseEvent(RandomizationScrollUseEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerClaimEnvoyCrateEvent(PlayerClaimEnvoyCrateEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
     @EventHandler
@@ -515,31 +515,31 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void mysteryMobSpawnerOpenEvent(MysteryMobSpawnerOpenEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
-            doCompletion(player, quest, executeAttributes(player, event, quest.getQuest().getTrigger()));
+            trigger(event, quest.getQuest().getTrigger());
         }
     }
 }

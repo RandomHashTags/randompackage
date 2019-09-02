@@ -12,8 +12,7 @@ public class AttributeIgnite extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             final String value = recipientValues.get(e);
             if(value != null) {
-                final int ticks = Integer.parseInt(value);
-                e.setFireTicks(ticks);
+                e.setFireTicks((int) evaluate(value));
             }
         }
     }

@@ -12,12 +12,10 @@ public class AttributeSetHunger extends AbstractEventAttribute {
     public void execute(HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             final Player player = e instanceof Player ? (Player) e : null;
-            if(player != null) {
-                final String v = recipientValues.get(e);
-                if(v != null) {
-                    final int lvl = player.getFoodLevel();
-                    player.setFoodLevel((int) evaluate(v.replace("lvl", Integer.toString(lvl))));
-                }
+            final String v = recipientValues.get(e);
+            if(v != null && player != null) {
+                final int lvl = player.getFoodLevel();
+                player.setFoodLevel((int) evaluate(v.replace("lvl", Integer.toString(lvl))));
             }
         }
     }

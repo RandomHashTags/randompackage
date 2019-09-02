@@ -90,15 +90,15 @@ public abstract class RPStorage extends RegionalAPI {
     }
 
 
-    private YamlConfiguration get(String folder, String yml) {
-        if(cached.containsKey(yml)) return cached.get(yml);
-        final File f = new File(rpd + separator + (folder != null ? folder : ""), yml);
+    private YamlConfiguration get(String folder, String fileName) {
+        if(cached.containsKey(fileName)) return cached.get(fileName);
+        final File f = new File(rpd + separator + (folder != null ? folder : ""), fileName);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
-        cached.put(yml ,c);
+        cached.put(fileName ,c);
         return c;
     }
-    public YamlConfiguration getAddonConfig(String yml) { return get("addons", yml); }
-    public YamlConfiguration getRPConfig(String folder, String yml) { return get(folder, yml); }
+    public YamlConfiguration getAddonConfig(String fileName) { return get("addons", fileName); }
+    public YamlConfiguration getRPConfig(String folder, String fileName) { return get(folder, fileName); }
 
 
     public ArmorSet getArmorSet(String identifier) {
@@ -214,10 +214,11 @@ public abstract class RPStorage extends RegionalAPI {
     public EventAttribute getEventAttribute(String identifier) {
         return eventattributes != null ? eventattributes.getOrDefault(identifier, null) : null;
     }
-    public void addEventAttribute(String identifier, EventAttribute e) {
+    public void addEventAttribute(EventAttribute e) {
         if(eventattributes == null) eventattributes = new LinkedHashMap<>();
-        check(eventattributes, identifier, "event attribute");
-        eventattributes.put(identifier, e);
+        final String i = e.getIdentifier();
+        check(eventattributes, i, "event attribute");
+        eventattributes.put(i, e);
     }
 
     public CustomExplosion getExplosion(String identifier) {

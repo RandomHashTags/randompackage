@@ -1,9 +1,13 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.attributes.AttributeDamage;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.dev.attributes.*;
+import me.randomhashtags.randompackage.events.*;
+import me.randomhashtags.randompackage.events.customenchant.AlchemistExchangeEvent;
+import me.randomhashtags.randompackage.events.customenchant.EnchanterPurchaseEvent;
+import me.randomhashtags.randompackage.events.customenchant.PlayerApplyCustomEnchantEvent;
 import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,24 +15,54 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
 public abstract class EventAttributes extends RPFeature implements Listener {
+    /*
+        Read https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Event-Attributes for all event attribute info
+            * Event specific entity placeholders
+            * Allowed conditions for specific entity types
+            * Available event attributes with their identifier, and what they do
+     */
     private static List<UUID> spawnedFromSpawner = new ArrayList<>();
 
-    private void loadAttributes() {
+    static {
         if(eventattributes == null) {
             eventattributes = new LinkedHashMap<>();
-            final List<EventAttribute> a = Arrays.asList(new AttributeDamage());
-            for(EventAttribute e : a) {
-                e.load();
+        }
+        final List<EventAttribute> list = Arrays.asList(
+                new AttributeAddPotionEffect(),
+                new AttributeDamage(),
+                new AttributeDepleteRarityGem(),
+                new AttributeExecuteCommand(),
+                //new AttributeExplode(),
+                new AttributeIgnite(),
+                new AttributePlaySound(),
+                new AttributeRemovePotionEffect(),
+                new AttributeSendMessage(),
+                new AttributeSetAir(),
+                new AttributeSetHealth(),
+                new AttributeSetHunger(),
+                new AttributeSetNoDamageTicks(),
+                new AttributeSetXp(),
+                new AttributeSmite(),
+                new AttributeStealXp()
+        );
+        for(EventAttribute e : list) {
+            e.load();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void creatureSpawnEvent(CreatureSpawnEvent event) {
+        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
+            final UUID u = event.getEntity().getUniqueId();
+            if(!spawnedFromSpawner.contains(u)) {
+                spawnedFromSpawner.add(u);
             }
         }
     }
@@ -44,24 +78,19 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             }
             if(passed) {
                 for(String s : entities.keySet()) {
+                    final String value = condition.contains("=") ? condition.split("=")[1] : "false";
                     final Entity e = entities.get(s);
                     s = s.toLowerCase();
-                    String value = null;
-                    try {
-                        value = condition.split("=")[1];
-                    } catch (Exception ignored) {}
 
                     if(condition.startsWith(s)) {
                         if(condition.equals(s + "isfromspawner=")) {
                             passed = spawnedFromSpawner.contains(e.getUniqueId()) == Boolean.parseBoolean(value);
-                        } else if(condition.equals(s + "isplayer")) {
-                            passed = e instanceof Player;
-                        } else if(condition.equals(s + "!isplayer")) {
-                            passed = !(e instanceof Player);
-                        } else if(condition.equals(s + "ismob")) {
-                            passed = e instanceof Mob;
-                        } else if(condition.equals(s + "iscreature")) {
-                            passed = e instanceof Creature;
+                        } else if(condition.startsWith(s + "isplayer=")) {
+                            passed = e instanceof Player == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "ismob=")) {
+                            passed = e instanceof Mob == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "iscreature=")) {
+                            passed = e instanceof Creature == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "istype=")) {
                             passed = e.getType().name().toLowerCase().equals(value);
                         } else if(condition.startsWith(s + "isfacing=")) {
@@ -445,57 +474,74 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         return e;
     }
 
-    public boolean tryExecuting(String key, String value) {
-        if(key != null && value != null) {
-            final EventAttribute a = getEventAttribute(key.toUpperCase());
-            if(a != null) {
-                return execute(a, value);
+    private HashMap<RPPlayer, String> getData(HashMap<String, Entity> entities) {
+        final HashMap<RPPlayer, String> a = new HashMap<>();
+        for(String s : entities.keySet()) {
+            final Entity e = entities.get(s);
+            if(e instanceof Player) {
+                a.put(RPPlayer.get(e.getUniqueId()), s);
             }
         }
-        return false;
+        return a;
     }
-    public boolean tryExecuting(String key, HashMap<Entity, String> recipientValues) {
-        if(key != null && recipientValues != null && !recipientValues.isEmpty()) {
-            final EventAttribute a = getEventAttribute(key.toUpperCase());
-            if(a != null) {
-                return execute(a, recipientValues);
+    private HashMap<Entity, String> getRecipientValues(HashMap<String, Entity> entities, HashMap<String, String> entityValues) {
+        final HashMap<Entity, String> a = new HashMap<>();
+        for(String entity : entities.keySet()) {
+            if(entityValues.containsKey(entity)) {
+                a.put(entities.get(entity), entityValues.get(entity));
             }
         }
-        return false;
+        return a;
     }
-    public boolean execute(EventAttribute attribute, String value) {
-        final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
-        pluginmanager.callEvent(e);
-        final boolean c = !e.isCancelled();
-        if(c) {
-            attribute.execute(value);
+
+    public boolean executeAll(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, HashMap<EventAttribute, String> eventAttributes) {
+        final boolean passed = didPassConditions(entities, conditions, cancelled);
+        if(passed) {
+            final Player player = (Player) entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
+            final Entity entity = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
+            final HashMap<RPPlayer, String> data = getData(entities);
+            final HashMap<Entity, String> recipientValues = getRecipientValues(entities, entityValues);
+            final boolean entityvalues = !entityValues.isEmpty(), dadda = !data.isEmpty(), recipientvalues = !recipientValues.isEmpty(), playerNN = player != null, entityNN = entity != null;
+            for(EventAttribute a : eventAttributes.keySet()) {
+                if(entityvalues) {
+                    if(dadda) a.executeData(data);
+                    if(recipientvalues) a.execute(recipientValues);
+                }
+                final String value = eventAttributes.get(a);
+                if(value != null) {
+                    a.execute(value);
+                    if(playerNN && entityNN) {
+                        a.execute(player, entity, value);
+                    }
+                }
+                //a.executeAt(null);
+            }
         }
-        return c;
-    }
-    public boolean execute(EventAttribute attribute, HashMap<Entity, String> recipientValues) {
-        final EventAttributeCallEvent e = new EventAttributeCallEvent(null, attribute);
-        pluginmanager.callEvent(e);
-        final boolean c = !e.isCancelled();
-        if(c) {
-            attribute.execute(recipientValues);
-        }
-        return c;
+        return passed;
     }
 
     private void tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes) {
         if(event != null && attributes != null && !attributes.isEmpty()) {
             final String e = event.getEventName().split("Event")[0].toLowerCase();
-            final boolean cancellable = event instanceof Cancellable;
+            final boolean cancellable = event instanceof Cancellable, cancelled = cancellable && ((Cancellable) event).isCancelled();;
             for(String s : attributes) {
-                final boolean cancelled = cancellable && ((Cancellable) event).isCancelled();
                 final String[] semi = s.split(";");
                 final String first = semi[0].toLowerCase();
                 if(first.equals(e)) {
                     final List<String> conditions = new ArrayList<>();
+                    final HashMap<String, String> entityValues = new HashMap<>();
                     final HashMap<EventAttribute, String> execute = new HashMap<>();
                     for(String c : s.split(semi[0] + ";")[1].split(";")) {
                         if(c.contains("=")) {
-                            final EventAttribute a = getEventAttribute(c.split("=")[0].toUpperCase());
+                            String string = c.split("=")[0].toUpperCase();
+                            for(String entity : entities.keySet()) {
+                                final String E = entity.toUpperCase();
+                                if(string.contains(E)) {
+                                    string = string.replace(E, "");
+                                    entityValues.put(entity, c.split("=")[1]);
+                                }
+                            }
+                            final EventAttribute a = getEventAttribute(string);
                             if(a == null) {
                                 conditions.add(c);
                             } else {
@@ -505,23 +551,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                             conditions.add(c);
                         }
                     }
-                    if(didPassConditions(entities, conditions, cancelled)) {
-                        final Player player = (Player) entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
-                        final Entity victim = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
-                        for(EventAttribute a : execute.keySet()) {
-                            final String value = execute.get(a);
-                            if(value != null) {
-                                a.execute(value);
-                                if(player != null) {
-                                    a.execute(player, value);
-                                    if(victim != null) {
-                                        a.execute(player, victim, value);
-                                    }
-                                }
-                            }
-                            //a.execute(null);
-                            //a.executeAt(null);
-                        }
+                    if(executeAll(entities, conditions, cancelled, entityValues, execute)) {
                         Bukkit.broadcastMessage("did pass all " + e + " conditions: " + conditions.toString());
                     }
                 }
@@ -530,10 +560,16 @@ public abstract class EventAttributes extends RPFeature implements Listener {
     }
 
     private boolean didPass(Event event, List<String> attributes) {
-        loadAttributes();
         return event != null && attributes != null && !attributes.isEmpty();
     }
-
+    public void trigger(Event event, HashMap<String, Entity> entities, List<String> attributes) {
+        if(didPass(event, attributes) && entities != null) {
+            tryGeneric(event, entities, attributes);
+        }
+    }
+    /*
+        Bukkit Events
+     */
     public void trigger(EntityDeathEvent event, List<String> attributes) {
         if(didPass(event, attributes)) {
             final LivingEntity e = event.getEntity();
@@ -543,52 +579,28 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             }
         }
     }
-    public void trigger(EntityDamageEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Victim", event.getEntity()), attributes);
-        }
-    }
-    public void trigger(PlayerEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
-        }
-    }
-    public void trigger(BlockPlaceEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
-        }
-    }
-    public void trigger(BlockBreakEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Player", event.getPlayer()), attributes);
-        }
-    }
-    public void trigger(EntityTameEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes);
-        }
-    }
+    public void trigger(BlockPlaceEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
+    public void trigger(BlockBreakEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
+    public void trigger(EntityDamageEvent event, List<String> attributes) { trigger(event, getEntities("Victim", event.getEntity()), attributes); }
+    public void trigger(EntityTameEvent event, List<String> attributes) { trigger(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes); }
+    public void trigger(FoodLevelChangeEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getEntity()), attributes); }
+    public void trigger(PlayerEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
     /*
         RandomPackage Events
      */
-    public void trigger(PvAnyEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Damager", event.damager, "Victim", event.victim), attributes);
-        }
-    }
-    public void trigger(PlayerArmorEvent event, List<String> attributes) {
-        if(didPass(event, attributes)) {
-            tryGeneric(event, getEntities("Player", event.player), attributes);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
-            final UUID u = event.getEntity().getUniqueId();
-            if(!spawnedFromSpawner.contains(u)) {
-                spawnedFromSpawner.add(u);
-            }
-        }
-    }
+    public void trigger(AlchemistExchangeEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(ArmorSetEquipEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(ArmorSetUnequipEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(EnchanterPurchaseEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(FallenHeroSlainEvent event, List<String> attributes) { trigger(event, getEntities("Killer", event.killer), attributes); }
+    public void trigger(PvAnyEvent event, List<String> attributes) { trigger(event, getEntities("Damager", event.damager, "Victim", event.victim), attributes); }
+    public void trigger(PlayerApplyCustomEnchantEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(PlayerArmorEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(PlayerClaimEnvoyCrateEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(RandomizationScrollUseEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(JackpotPurchaseTicketsEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(MysteryMobSpawnerOpenEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(ServerCrateOpenEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(ShopPurchaseEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
+    public void trigger(ShopSellEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.player), attributes); }
 }
