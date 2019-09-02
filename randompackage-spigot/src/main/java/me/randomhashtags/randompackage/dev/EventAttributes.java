@@ -28,6 +28,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             * Allowed conditions for specific entity types
             * Available event attributes with their identifier, and what they do
      */
+    // TODO: Support individual event value replacements
     private static List<UUID> spawnedFromSpawner = new ArrayList<>();
 
     static {
