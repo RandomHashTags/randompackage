@@ -23,7 +23,6 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class Masks extends CustomEnchants implements Listener {
 
     public String getIdentifier() { return "MASKS"; }
     protected RPFeature getFeature() { return getMasks(); }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "masks.yml");
@@ -79,7 +77,6 @@ public class Masks extends CustomEnchants implements Listener {
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (masks != null ? masks.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    @Override
     public void unload() {
         for(Player p : equippedMasks.keySet()) {
             p.getInventory().setHelmet(equippedMasks.get(p));
@@ -105,7 +102,7 @@ public class Masks extends CustomEnchants implements Listener {
         final ItemStack current = event.getCurrentItem();
         if(current == null || !current.getType().name().endsWith("HELMET")) return;
         final ItemStack mask = event.getCursor();
-        final Mask m = valueOf(mask), onitem = getOnItem(current);
+        final Mask m = valueOfMask(mask), onitem = getMaskOnItem(current);
         final Player player = (Player) event.getWhoClicked();
         if(m != null && onitem == null) {
             event.setCancelled(true);
@@ -136,7 +133,7 @@ public class Masks extends CustomEnchants implements Listener {
         final ItemStack i = equippedMasks.getOrDefault(victim, null);
         if(victim != null && i != null) {
             final PlayerInventory vi = victim.getInventory();
-            final Mask m = valueOf(vi.getHelmet());
+            final Mask m = valueOfMask(vi.getHelmet());
             if(m != null) {
                 vi.setHelmet(i);
                 victim.updateInventory();
@@ -168,7 +165,7 @@ public class Masks extends CustomEnchants implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
-        final Mask m = valueOf(event.getItemInHand());
+        final Mask m = valueOfMask(event.getItemInHand());
         if(m != null) {
             event.setCancelled(true);
             player.updateInventory();
@@ -201,7 +198,7 @@ public class Masks extends CustomEnchants implements Listener {
     public void tryToProcMask(Player player, Event event) {
         if(player != null && event != null) {
             final ItemStack hel = player.getInventory().getHelmet();
-            final Mask m = valueOf(hel), mm = m == null ? getOnItem(hel) : null;
+            final Mask m = valueOfMask(hel), mm = m == null ? getMaskOnItem(hel) : null;
             if(m != null) procMaskAttributes(player, event, m);
             else if(mm != null) procMaskAttributes(player, event, mm);
         }
@@ -270,7 +267,7 @@ public class Masks extends CustomEnchants implements Listener {
         final boolean contains = equippedMasks.keySet().contains(player);
         final ItemStack i = event.getItem().clone(), o = contains ? equippedMasks.get(player) : new ItemStack(Material.AIR);
         if(!contains && r.contains("_EQUIP")) {
-            final Mask m = getOnItem(i);
+            final Mask m = getMaskOnItem(i);
             if(m != null) {
                 final MaskEquipEvent e = new MaskEquipEvent(player, m, o, reason);
                 pluginmanager.callEvent(e);
@@ -284,7 +281,7 @@ public class Masks extends CustomEnchants implements Listener {
                 }
             } else return;
         } else if(contains && r.contains("_UNEQUIP")) {
-            final Mask m = valueOf(i);
+            final Mask m = valueOfMask(i);
             if(m != null) {
                 final MaskUnequipEvent e = new MaskUnequipEvent(player, m, o, reason);
                 pluginmanager.callEvent(e);
@@ -308,28 +305,5 @@ public class Masks extends CustomEnchants implements Listener {
             itemMeta.setLore(lore); lore.clear();
             is.setItemMeta(itemMeta);
         }
-    }
-
-    public Mask valueOf(ItemStack is) {
-        if(masks != null && is != null && is.hasItemMeta()) {
-            for(Mask m : masks.values()) {
-                final ItemStack i = m.getItem();
-                if(i.isSimilar(is))
-                    return m;
-            }
-        }
-        return null;
-    }
-    public Mask getOnItem(ItemStack is) {
-        if(masks != null) {
-            final ItemMeta im = is != null ? is.getItemMeta() : null;
-            if(im != null && im.hasLore()) {
-                final List<String> l = im.getLore();
-                for(Mask m : masks.values())
-                    if(l.contains(m.getApplied()))
-                        return m;
-            }
-        }
-        return null;
     }
 }

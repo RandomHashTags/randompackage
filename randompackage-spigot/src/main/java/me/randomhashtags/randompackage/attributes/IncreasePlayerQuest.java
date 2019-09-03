@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.attributes;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
 import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
-import me.randomhashtags.randompackage.utils.addons.AbstractEventAttribute;
 import me.randomhashtags.randompackage.events.PlayerQuestCompleteEvent;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.entity.Player;

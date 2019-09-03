@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attributes;
 
-import me.randomhashtags.randompackage.utils.addons.AbstractEventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -13,7 +12,7 @@ public class SetHunger extends AbstractEventAttribute {
             final Player player = e instanceof Player ? (Player) e : null;
             if(player != null) {
                 final int lvl = player.getFoodLevel();
-                player.setFoodLevel((int) evaluate(recipientValues.get(e).replace("lvl", Integer.toString(lvl))));
+                player.setFoodLevel((int) evaluate(recipientValues.get(e).replace("hunger", Integer.toString(lvl))));
             }
         }
     }

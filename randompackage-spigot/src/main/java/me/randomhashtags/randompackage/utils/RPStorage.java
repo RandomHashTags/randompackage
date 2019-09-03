@@ -736,6 +736,28 @@ public abstract class RPStorage extends RegionalAPI {
             }
         return null;
     }
+    public Mask valueOfMask(ItemStack is) {
+        if(masks != null && is != null && is.hasItemMeta()) {
+            for(Mask m : masks.values()) {
+                final ItemStack i = m.getItem();
+                if(i.isSimilar(is))
+                    return m;
+            }
+        }
+        return null;
+    }
+    public Mask getMaskOnItem(ItemStack is) {
+        if(masks != null) {
+            final ItemMeta im = is != null ? is.getItemMeta() : null;
+            if(im != null && im.hasLore()) {
+                final List<String> l = im.getLore();
+                for(Mask m : masks.values())
+                    if(l.contains(m.getApplied()))
+                        return m;
+            }
+        }
+        return null;
+    }
     public MagicDust valueOfMagicDust(ItemStack is) {
         if(dusts != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();

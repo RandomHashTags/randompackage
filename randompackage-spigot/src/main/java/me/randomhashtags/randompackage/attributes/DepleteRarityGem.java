@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.attributes;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.utils.addons.AbstractEventAttribute;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

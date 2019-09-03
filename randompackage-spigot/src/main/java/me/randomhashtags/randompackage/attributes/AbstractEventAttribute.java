@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.utils.addons;
+package me.randomhashtags.randompackage.attributes;
 
 import me.randomhashtags.randompackage.addons.EventAttribute;
 import me.randomhashtags.randompackage.utils.RPPlayer;

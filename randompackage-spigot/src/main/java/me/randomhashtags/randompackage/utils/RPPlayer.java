@@ -369,7 +369,7 @@ public class RPPlayer extends RPStorage {
         return f;
     }
 
-    private void loadCustomEnchantEntities() {
+    public List<UUID> getCustomEnchantEntities() {
         if(customEnchantEntities == null) {
             customEnchantEntities = new ArrayList<>();
             final ConfigurationSection c = yml.getConfigurationSection("custom enchant entities");
@@ -379,18 +379,13 @@ public class RPPlayer extends RPStorage {
                 }
             }
         }
-    }
-    public List<UUID> getCustomEnchantEntities() {
-        loadCustomEnchantEntities();
         return customEnchantEntities;
     }
     public void addCustomEnchantEntity(UUID uuid) {
-        loadCustomEnchantEntities();
-        if(!customEnchantEntities.contains(uuid)) customEnchantEntities.add(uuid);
+        if(!getCustomEnchantEntities().contains(uuid)) customEnchantEntities.add(uuid);
     }
     public void removeCustomEnchantEntity(UUID uuid) {
-        loadCustomEnchantEntities();
-        customEnchantEntities.remove(uuid);
+        getCustomEnchantEntities().remove(uuid);
     }
 
     public HashMap<Integer, ItemStack[]> getShowcases() {
@@ -498,10 +493,7 @@ public class RPPlayer extends RPStorage {
         return raritygems;
     }
     public boolean hasActiveRarityGem(RarityGem gem) {
-        if(gem != null) {
-            return getRarityGems().getOrDefault(gem, false);
-        }
-        return false;
+        return gem != null && getRarityGems().getOrDefault(gem, false);
     }
     public void toggleRarityGem(Event event, RarityGem gem) {
         if(event != null && gem != null) {
@@ -734,7 +726,54 @@ public class RPPlayer extends RPStorage {
     public static void loadAllPlayerData() {
         try {
             for(File f : new File(folder).listFiles()) {
-                RPPlayer.get(UUID.fromString(f.getName().split("\\.yml")[0])).load();
+                RPPlayer.get(UUID.fromString(f.getName().split("\\.yml")[0]));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void resetAllPlayerDataToDefault(boolean filter, boolean homes, boolean lootboxes, boolean monthlycrates, boolean playerquests, boolean showcase, boolean titles, boolean unclaimedPurchases) {
+        try {
+            for(File f : new File(folder).listFiles()) {
+                final UUID uuid = UUID.fromString(f.getName().split("\\.yml")[0]);
+                final boolean online = players.containsKey(uuid);
+                final RPPlayer pdata = RPPlayer.get(uuid);
+
+                pdata.xpExhaustionExpiration = 0l;
+
+                if(filter) {
+                    pdata.filter = false;
+                    pdata.filteredItems = new ArrayList<>();
+                }
+                if(homes) {
+                    pdata.homes = new ArrayList<>();
+                }
+                if(lootboxes) {
+                    pdata.claimedLootboxesExpiration = new HashMap<>();
+                    pdata.unclaimedLootboxes = new HashMap<>();
+                }
+                if(monthlycrates) {
+                    pdata.claimedMonthlyCrates = new ArrayList<>();
+                    pdata.ownedMonthlyCrates = new ArrayList<>();
+                }
+                if(playerquests) {
+                    pdata.questTokens = 0;
+                    pdata.quests = new HashMap<>();
+                }
+                if(showcase) {
+                    pdata.showcases = new HashMap<>();
+                    pdata.showcaseSizes = new HashMap<>();
+                }
+                if(titles) {
+                    pdata.activeTitle = null;
+                    pdata.ownedTitles = new ArrayList<>();
+                }
+                if(unclaimedPurchases) {
+                    pdata.unclaimedPurchases = new ArrayList<>();
+                }
+                if(!online) {
+                    pdata.unload();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -742,8 +781,8 @@ public class RPPlayer extends RPStorage {
     }
     public static void unloadAllPlayerData() {
         try {
-            for(File f : new File(folder).listFiles()) {
-                RPPlayer.get(UUID.fromString(f.getName().split("\\.yml")[0])).unload();
+            for(RPPlayer pdata : new ArrayList<>(players.values())) {
+                pdata.unload();
             }
         } catch (Exception e) {
             e.printStackTrace();

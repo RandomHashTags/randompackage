@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.attributes.event.mcmmo;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import me.randomhashtags.randompackage.utils.addons.AbstractEventAttribute;
+import me.randomhashtags.randompackage.attributes.AbstractEventAttribute;
 import org.bukkit.event.Event;
 
 public class SetGainedXp extends AbstractEventAttribute {

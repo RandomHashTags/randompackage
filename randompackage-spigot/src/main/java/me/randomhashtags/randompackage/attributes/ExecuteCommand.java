@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attributes;
 
-import me.randomhashtags.randompackage.utils.addons.AbstractEventAttribute;
 import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 

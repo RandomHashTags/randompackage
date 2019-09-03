@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.attributes.todo;
 
 import me.randomhashtags.randompackage.attributes.AbstractEventAttribute;
-import org.bukkit.entity.Entity;
+import org.bukkit.Location;
 
 import java.util.HashMap;
 
-public class Teleport extends AbstractEventAttribute {
+public class SetBlock extends AbstractEventAttribute {
     // TODO: finish this attribute
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void executeAt(HashMap<Location, String> locations) {
+        for(Location l : locations.keySet()) {
+        }
     }
 }
