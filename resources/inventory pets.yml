@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+items:
+  leash:
+    item: "lead"
+    name: "&6&lPet Leash"
+    lore:
+    - "&7Apply to an Inventory Pet"
+    - "&7to keep it upon death!"
+    applied lore: "&6&lLEASHED"
+  rare candy:
+    item: "???"
+    name: "&c&lRare Candy"
+    lore:
+    - "&7Magical candy imbued with"
+    - "&7powerful growth hormones"
+    - "&7for inventory pets."
+    - " "
+    - "&c&lAbility"
+    - "&7Apply to any inventory pet to instantly"
+    - "&7increase its level by +1 and trigger its"
+    - "&7ability cooldown."
+#

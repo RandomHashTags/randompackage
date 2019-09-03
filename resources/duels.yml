@@ -31,14 +31,17 @@ messages:
   toggle on:
     - "&e&l(!)&r &eDuels have been toggled &a&lON"
   #
-  cannot duel self:
-    - "&cYou cannot duel yourself."
-  cannot duel you toggled off:
-    - "&c&l(!)&r &cYou have duels toggled off."
-  cannot duel player toggled off:
-    - "&c&l(!)&r &cThat player has duels toggled off."
-  cannot duel nonexistent player:
-    - "&cThe player '{INPUT}' does not exist."
+  cannot duel:
+    self:
+      - "&cYou cannot duel yourself."
+    self toggled off:
+      - "&c&l(!)&r &cYou have duels toggled off."
+    target toggled off:
+      - "&c&l(!)&r &cThat player has duels toggled off."
+    target currenly creating one:
+      - "&c&l(!)&r &c{PLAYER} is currently creating a duel."
+    nonexistent player:
+    -   "&cThe player '{INPUT}' does not exist."
   #
   top:
     - " "
@@ -66,12 +69,38 @@ messages:
   no players found in unranked queue:
     - "&c&l(!)&r &cNo players found in queue, please create a duel."
   #
-  canelled duel due to closing selection:
-    - "&e&l(!)&r &eYou closed the &n{SELECTION}&r &eselection."
-    - "&7The duel has been cancelled."
+  canelled duel due to:
+    closing selection:
+      - "&e&l(!)&r &eYou closed the &n{SELECTION}&r &eselection."
+      - "&7The duel has been cancelled."
   #
   duel collection empty:
     - "&cYou do not have any items in your stake collection bin."
+  #
+  request:
+    sent:
+      - " "
+      - "&e&l(!)&r &eYour Duel request has been sent."
+    declined:
+      - "&c&l(!)&r &c&n{TARGET}&r &chas declined the duel."
+  #
+  starting:
+    countdown: 10
+    shortly:
+      - "&e&l(!)&r &eYour duel with &n{OPPONENT}&r &ewill begin shortly..."
+    in:
+      - "&e&l(!)&r &eThe duel will start in &l{TIME}"
+    started:
+      - "&e&lFIGHT!"
+  completed:
+    to contestents:
+      - " "
+      - "&e&l(!)&r &a&n{WINNER}&r &ehas defeated {LOSER}!"
+      - "&e&lInventories:&r &a{WINNER_INV}, &c{LOSER_INV}"
+      - " "
+    title:
+      - "&a&lWinner"
+      - "&7&l{WINNER}"
 #
 top settings:
   show each page: 10

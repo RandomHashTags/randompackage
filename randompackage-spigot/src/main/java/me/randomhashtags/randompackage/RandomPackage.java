@@ -2,11 +2,9 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addons.*;
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.api.nearFinished.InventoryPets;
-import me.randomhashtags.randompackage.api.nearFinished.LastManStanding;
-import me.randomhashtags.randompackage.api.nearFinished.Outposts;
-import me.randomhashtags.randompackage.api.unfinished.*;
+import me.randomhashtags.randompackage.api.nearFinished.*;
+import me.randomhashtags.randompackage.api.partiallyFinished.Duels;
+import me.randomhashtags.randompackage.api.partiallyFinished.Dungeons;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;

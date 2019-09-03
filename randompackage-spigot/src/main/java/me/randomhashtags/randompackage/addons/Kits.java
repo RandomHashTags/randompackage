@@ -50,6 +50,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     public abstract boolean usesTiers();
     public abstract TreeMap<Integer, Float> getCustomEnchantLevelMultipliers();
     public abstract UInventory getPreview();
+    public abstract ItemStack getOmniGem();
     public abstract List<String> getNotInWarzoneMsg();
     public abstract List<String> getAlreadyHaveMaxTierMsg();
     public abstract List<String> getRedeemFallenHeroGemMsg();

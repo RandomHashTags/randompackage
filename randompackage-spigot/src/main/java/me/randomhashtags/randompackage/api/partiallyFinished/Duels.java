@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.partiallyFinished;
 
 import me.randomhashtags.randompackage.dev.DuelArena;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -100,7 +101,9 @@ public class Duels extends RPFeature implements CommandExecutor {
         }
     }
 
-
+    @EventHandler
+    private void entityDeathEvent(EntityDamageEvent event) {
+    }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
     }

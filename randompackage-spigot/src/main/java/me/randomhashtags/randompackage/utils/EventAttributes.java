@@ -17,7 +17,6 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffectType;
@@ -97,7 +96,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                     s = s.toLowerCase();
 
                     if(condition.startsWith(s)) {
-                        if(condition.equals(s + "isfromspawner=")) {
+                        if(condition.startsWith(s + "isfromspawner=")) {
                             passed = spawnedFromSpawner.contains(e.getUniqueId()) == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "isplayer=")) {
                             passed = e instanceof Player == Boolean.parseBoolean(value);

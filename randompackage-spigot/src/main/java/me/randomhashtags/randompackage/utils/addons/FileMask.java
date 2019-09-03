@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.utils.addons;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.randomhashtags.randompackage.addons.Mask;
-import me.randomhashtags.randompackage.api.Masks;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -50,7 +49,7 @@ public class FileMask extends RPAddon implements Mask {
         return item != null ? item.clone() : null;
     }
     public boolean canBeApplied(ItemStack is) {
-        return is != null && is.getType().name().endsWith("_HELMET") && Masks.getMasks().getOnItem(is) == null;
+        return is != null && is.getType().name().endsWith("_HELMET") && getMaskOnItem(is) == null;
     }
     public String getApplied() {
         final Object o = yml.get("added lore"); // changed from List<String> to String in v16.4.0
@@ -62,7 +61,7 @@ public class FileMask extends RPAddon implements Mask {
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
     public List<String> getAppliesTo() { return null; }
 
-    // https://www.spigotmc.org/threads/tutorial-player-skull-with-custom-skin.143323/ , edited by RandomHashTags
+    // https://www.spigotmc.org/threads/143323/ , edited by RandomHashTags
     private ItemStack getSkull(String skinURL, String name, List<String> lore) {
         final ItemStack head = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
         if(skinURL.isEmpty()) return head;
@@ -71,7 +70,7 @@ public class FileMask extends RPAddon implements Mask {
         headMeta.setLore(lore);
         final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         final byte[] encoded;
-        if(version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12") || version.contains("1.13")) {
+        if(isLegacy || version.contains("1.13")) {
             encoded = org.apache.commons.codec.binary.Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL).getBytes());
         } else {
             encoded = org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL).getBytes());

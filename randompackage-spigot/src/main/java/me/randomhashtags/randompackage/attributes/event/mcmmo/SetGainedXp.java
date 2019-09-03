@@ -7,8 +7,8 @@ import org.bukkit.event.Event;
 public class SetGainedXp extends AbstractEventAttribute {
     @Override
     public void execute(Event event, String value) {
-        if(event instanceof McMMOPlayerXpGainEvent) {
-            final McMMOPlayerXpGainEvent e = (McMMOPlayerXpGainEvent) event;
+        final McMMOPlayerXpGainEvent e = event instanceof McMMOPlayerXpGainEvent ? (McMMOPlayerXpGainEvent) event : null;
+        if(e != null) {
             e.setRawXpGained((float) evaluate(value.replace("xp", Float.toString(e.getRawXpGained()))));
         }
     }

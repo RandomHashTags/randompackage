@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.partiallyFinished;
 
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPFeature;

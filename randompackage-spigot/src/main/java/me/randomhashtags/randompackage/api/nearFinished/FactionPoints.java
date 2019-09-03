@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.nearFinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.ConfigurationSection;

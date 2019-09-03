@@ -87,6 +87,7 @@ public class KitsMastery extends Kits {
     public boolean usesTiers() { return false; }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return null; }
     public UInventory getPreview() { return preview; }
+    public ItemStack getOmniGem() { return null; }
     public List<String> getNotInWarzoneMsg() { return null; }
     public List<String> getAlreadyHaveMaxTierMsg() { return null; }
     public List<String> getRedeemFallenHeroGemMsg() { return null; }

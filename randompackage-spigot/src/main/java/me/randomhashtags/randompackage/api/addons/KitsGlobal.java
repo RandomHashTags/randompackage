@@ -37,7 +37,7 @@ public class KitsGlobal extends Kits {
     }
 
     private UInventory gkit, preview;
-    private ItemStack previewBackground, cooldown;
+    private ItemStack previewBackground, cooldown, omniGem;
     public ItemStack gkitFallenHeroBundle;
     public boolean heroicEnchantedEffect, tierZeroEnchantEffect;
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
@@ -71,6 +71,7 @@ public class KitsGlobal extends Kits {
         previewBackground = d(config, "gkits.items.preview");
         gkit = new UInventory(null, config.getInt("gkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gkits.gui.title")));
         preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("gkits.items.preview.title")));
+        omniGem = d(config, "gkits.items.omni gem");
         cooldown = d(config, "gkits.items.cooldown");
         permissionsUnlocked = colorizeListString(config.getStringList("gkits.permissions.unlocked"));
         permissionsLocked = colorizeListString(config.getStringList("gkits.permissions.locked"));
@@ -122,6 +123,7 @@ public class KitsGlobal extends Kits {
     public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
+    public ItemStack getOmniGem() { return omniGem != null ? omniGem.clone() : null; }
     public List<String> getNotInWarzoneMsg() { return config.getStringList("gkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("gkits.messages.already have max"); }
     public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("gkits.messages.redeem"); }

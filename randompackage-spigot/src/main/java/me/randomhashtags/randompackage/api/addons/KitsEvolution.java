@@ -38,7 +38,7 @@ public class KitsEvolution extends Kits {
     }
 
     private UInventory vkit, preview;
-    private ItemStack cooldown, previewBackground, locked;
+    private ItemStack cooldown, previewBackground, locked, omniGem;
     public ItemStack vkitFallenHeroBundle;
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
     private TreeMap<Integer, Float> tiermultipliers;
@@ -64,6 +64,7 @@ public class KitsEvolution extends Kits {
         cooldown = d(config, "vkits.items.cooldown");
         vkit = new UInventory(null, config.getInt("vkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("vkits.gui.title")));
         preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("vkits.items.preview.title")));
+        omniGem = d(config, "vkits.items.omni gem");
         previewBackground = d(config, "vkits.items.preview");
         locked = d(config, "vkits.permissions.locked");
         permissionsUnlocked = colorizeListString(config.getStringList("vkits.permissions.unlocked"));
@@ -112,6 +113,7 @@ public class KitsEvolution extends Kits {
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
+    public ItemStack getOmniGem() { return omniGem != null ? omniGem.clone() : null; }
     public List<String> getNotInWarzoneMsg() { return config.getStringList("vkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("vkits.messages.already have max"); }
     public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("vkits.messages.redeem"); }

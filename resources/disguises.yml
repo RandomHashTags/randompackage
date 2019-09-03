@@ -1,7 +1,12 @@
-#
+# Made by RandomHashTags
 messages:
   unlock access:
     - "&cUnlock access to disguises at &nbuy.yourserver.com&r&c!"
+  activated disguise:
+    - "&a&l(!)&r &aYou have activated the &n{DISGUISE}&r &adisguise!"
+  removed due to:
+    dealing damage:
+      - "&c&l(!)&r &cYour disguise has been removed due to dealing damage!"
 #
 item:
   item: "iron_hoe"

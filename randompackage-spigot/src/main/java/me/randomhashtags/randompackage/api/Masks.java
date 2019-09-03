@@ -6,6 +6,8 @@ import me.randomhashtags.randompackage.utils.addons.FileMask;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Arrow;
@@ -185,7 +187,11 @@ public class Masks extends CustomEnchants implements Listener {
         if(is != null && is.isSimilar(maskgenerator)) {
             event.setCancelled(true);
             removeItem(player, is, 1);
-            giveItem(player, getMask(maskCanObtain.get(random.nextInt(maskCanObtain.size()))).getItem());
+            final ItemStack mask = getMask(maskCanObtain.get(random.nextInt(maskCanObtain.size()))).getItem();
+            for(String s : config.getStringList("items.generator.received msg")) {
+                Bukkit.broadcastMessage(s.replace("{PLAYER}", player.getName()).replace("{MASK}", ChatColor.stripColor(mask.getItemMeta().getDisplayName())));
+            }
+            giveItem(player, mask);
         }
     }
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

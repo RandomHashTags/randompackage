@@ -31,7 +31,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "strongholds.yml");
         if(!otherdata.getBoolean("saved default strongholds")) {
-            final String[] a = new String[] {};
+            final String[] a = new String[] {"FROZEN", "INFERNAL"};
             for(String s : a) save("strongholds", s + ".yml");
             otherdata.set("saved default strongholds", true);
             saveOtherData();
@@ -45,10 +45,10 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

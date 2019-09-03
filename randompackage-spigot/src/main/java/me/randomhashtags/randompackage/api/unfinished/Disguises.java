@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
+import me.randomhashtags.randompackage.dev.Disguise;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -33,13 +34,14 @@ public class Disguises extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        //disguses = null;
     }
 
     public void viewOwned(Player player) {
         if(hasPermission(player, "RandomPackage.disguise", true)) {
         }
     }
-    public void disguise(Player player) {
+    public void disguise(Player player, Disguise disguise) {
     }
     public void undisguise(Player player) {
     }

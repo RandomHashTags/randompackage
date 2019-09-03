@@ -41,6 +41,9 @@ items:
       - "ZEUS"
       - "BUNNY"
       - "JOKER"
+    #
+    received msg:
+      - "&e&l(!)&r &e{PLAYER} has receive a &l{MASK}&r &efrom their Mask Generator!"
 #
 added lore:
   - " "

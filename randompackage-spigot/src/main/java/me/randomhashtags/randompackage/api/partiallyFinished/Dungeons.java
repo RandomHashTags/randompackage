@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.unfinished;
+package me.randomhashtags.randompackage.api.partiallyFinished;
 
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -13,9 +13,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -129,7 +131,13 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void blockBreakEvent(BlockBreakEvent event) {
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void playerTeleportEvent(PlayerTeleportEvent event) {
     }
 }

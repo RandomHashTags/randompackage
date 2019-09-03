@@ -5,11 +5,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
 
 public class FileInventoryPet extends RPAddon implements InventoryPet {
-    private ItemStack item;
+    private ItemStack item, egg;
     public FileInventoryPet(File f) {
         load(f);
         addPet(getIdentifier(), this);
@@ -51,5 +52,11 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         }
         return a;
     }
+    public ItemStack getEgg() {
+        if(egg == null) egg = api.d(yml, "egg");
+        return egg != null ? egg.clone() : null;
+    }
+    public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() { return null; }
+
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
 }
