@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.addons.DuelArena;
+import me.randomhashtags.randompackage.dev.DuelArena;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.Bukkit;

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.Dungeon;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 

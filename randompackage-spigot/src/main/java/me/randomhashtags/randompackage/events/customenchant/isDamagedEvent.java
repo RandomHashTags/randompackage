@@ -1,13 +1,11 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
-import me.randomhashtags.randompackage.events.AbstractEvent;
+import me.randomhashtags.randompackage.events.AbstractCancellable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class isDamagedEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class isDamagedEvent extends AbstractCancellable {
     public final Player victim;
     public final LivingEntity damager;
     public double damage;
@@ -23,7 +21,4 @@ public class isDamagedEvent extends AbstractEvent implements Cancellable {
         this.damager = null;
         this.cause = cause;
     }
-
-    public void setCancelled(boolean cancel) { cancelled = cancel; }
-    public boolean isCancelled() { return cancelled; }
 }

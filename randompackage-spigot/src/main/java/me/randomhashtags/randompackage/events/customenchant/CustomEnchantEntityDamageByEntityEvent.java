@@ -1,15 +1,13 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
 import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.events.AbstractEvent;
+import me.randomhashtags.randompackage.events.AbstractCancellable;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Cancellable;
 
-public class CustomEnchantEntityDamageByEntityEvent extends AbstractEvent implements Cancellable {
+public class CustomEnchantEntityDamageByEntityEvent extends AbstractCancellable {
 	public final LivingCustomEnchantEntity entity;
 	public final Entity damager;
 	public final double finaldamage, initialdamage;
-	private boolean cancelled;
 	public CustomEnchantEntityDamageByEntityEvent(LivingCustomEnchantEntity entity, Entity damager, double finaldamage, double initialdamage) {
 		this.entity = entity;
 		this.damager = damager;
@@ -17,6 +15,4 @@ public class CustomEnchantEntityDamageByEntityEvent extends AbstractEvent implem
 		this.initialdamage = initialdamage;
 	}
 	public LivingCustomEnchantEntity getCustomEnchantEntity() { return entity; }
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

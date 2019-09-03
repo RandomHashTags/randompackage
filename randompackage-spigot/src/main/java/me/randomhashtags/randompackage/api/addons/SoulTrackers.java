@@ -113,9 +113,12 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             if(g != null) {
                 split = g.getSplitMsg();
                 collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
-                if(collectedsouls <= 0) {
+                if(collectedsouls <= 0 || amount > collectedsouls) {
                     sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
                     return;
+                } else {
+                    gems = amount;
+                    item.setItemMeta(g.getItem(collectedsouls-gems).getItemMeta());
                 }
             } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
                 sendStringListMessage(player, config.getStringList("messages.need item with soul tracker"), null);
@@ -161,7 +164,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
                         sendStringListMessage(player, config.getStringList("messages.need to collect more souls"), null);
                         return;
                     } else {
-                        lore.set(applied, appliedst.getApplied().replace("{SOULS}", Integer.toString(totalsouls - amount)));
+                        lore.set(applied, appliedst.getApplied().replace("{SOULS}", Integer.toString(totalsouls-amount)));
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
                         player.updateInventory();
@@ -170,7 +173,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             }
             if(split != null) {
                 if(g == null) g = appliedst.getConvertsTo();
-                item = g.getItem().clone(); itemMeta = item.getItemMeta();
+                item = g.getItem(); itemMeta = item.getItemMeta();
                 itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', g.getColors(gems)) + gems));
                 if(gems != 0) item.setAmount(1);
                 item.setItemMeta(itemMeta);
@@ -178,6 +181,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{SOULS}", Integer.toString(collectedsouls));
                 replacements.put("{GEMS}", Integer.toString(gems));
+                replacements.put("{AMOUNT}", Integer.toString(gems));
                 sendStringListMessage(player, split, replacements);
                 player.updateInventory();
             }

@@ -17,7 +17,6 @@ public class PathRarityGem extends RPAddon implements RarityGem {
 	private String path;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
-	private List<String> splitMessage, toggleon, toggleoffInteract, toggleoffDropped, toggleoffMoved, toggleoffRanOut;
 	private HashMap<Integer, String> colors;
 
 	public PathRarityGem(String path) {
@@ -46,10 +45,7 @@ public class PathRarityGem extends RPAddon implements RarityGem {
 		}
 		return worksFor;
 	}
-	public List<String> getSplitMsg() {
-		if(splitMessage == null) splitMessage = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".split msg"));
-		return splitMessage;
-	}
+	public List<String> getSplitMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".split msg")); }
 	public long getTimeBetweenSameKills() { return getAddonConfig("rarity gems.yml").getLong("rarity gems." + path + ".time between same kills"); }
 	public HashMap<Integer, String> getColors() {
 		if(colors == null) {
@@ -70,26 +66,11 @@ public class PathRarityGem extends RPAddon implements RarityGem {
 		}
 		return colors;
 	}
-	public List<String> getToggleOnMsg() {
-		if(toggleon == null) toggleon = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle on"));
-		return toggleon;
-	}
-	public List<String> getToggleOffInteractMsg() {
-		if(toggleoffInteract == null) toggleoffInteract = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.interact"));
-		return toggleoffInteract;
-	}
-	public List<String> getToggleOffDroppedMsg() {
-		if(toggleoffDropped == null) toggleoffDropped = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.dropped"));
-		return toggleoffDropped;
-	}
-	public List<String> getToggleOffMovedMsg() {
-		if(toggleoffMoved == null) toggleoffMoved = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.moved"));
-		return toggleoffMoved;
-	}
-	public List<String> getToggleOffRanOutMsg() {
-		if(toggleoffRanOut == null) toggleoffRanOut = api.colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.ran out"));
-		return toggleoffRanOut;
-	}
+	public List<String> getToggleOnMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle on")); }
+	public List<String> getToggleOffInteractMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.interact")); }
+	public List<String> getToggleOffDroppedMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.dropped")); }
+	public List<String> getToggleOffMovedMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.moved")); }
+	public List<String> getToggleOffRanOutMsg() { return colorizeListString(getAddonConfig("rarity gems.yml").getStringList("rarity gems." + path + ".toggle off.ran out")); }
 	public String getColors(int soulsCollected) {
 		final HashMap<Integer, String> colors = getColors();
 		if(soulsCollected < 100) return colors.get(0);

@@ -534,7 +534,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
-	private void customEnchantApplyEvent(PlayerApplyCustomEnchantEvent event) {
+	private void customEnchantApplyEvent(CustomEnchantApplyEvent event) {
 		final UUID player = event.player.getUniqueId();
 		final BigDecimal one = BigDecimal.ONE;
 		increase(event, "customenchantsapplied", player, one);

@@ -251,12 +251,14 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
             final JackpotPurchaseTicketsEvent e = new JackpotPurchaseTicketsEvent(player, tickets, cost);
             pluginmanager.callEvent(e);
-            final UUID u = player.getUniqueId();
-            final RPPlayer pdata = RPPlayer.get(u);
-            pdata.jackpotTickets = pdata.jackpotTickets.add(tickets);
-            ticketsSold.put(u, ticketsSold.getOrDefault(u, BigDecimal.ZERO).add(tickets));
-            value = value.add(cost);
-            sendStringListMessage(player, config.getStringList("messages.purchased"), replacements);
+            if(!e.isCancelled()) {
+                final UUID u = player.getUniqueId();
+                final RPPlayer pdata = RPPlayer.get(u);
+                pdata.jackpotTickets = pdata.jackpotTickets.add(tickets);
+                ticketsSold.put(u, ticketsSold.getOrDefault(u, BigDecimal.ZERO).add(tickets));
+                value = value.add(cost);
+                sendStringListMessage(player, config.getStringList("messages.purchased"), replacements);
+            }
         } else {
             sendStringListMessage(player, config.getStringList("messages.cannot afford"), replacements);
         }

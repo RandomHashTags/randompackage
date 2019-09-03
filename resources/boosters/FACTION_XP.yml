@@ -27,4 +27,4 @@ item:
   - "&7{TIME}"
 #
 attributes:
-  - "EntityDeath;VictimIsMob;droppedxp=xp*multiplier"
+  - "EntityDeath;VictimIsMob=true;setDroppedXp=xp*multiplier"

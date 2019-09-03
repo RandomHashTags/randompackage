@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.CustomKit;
-import me.randomhashtags.randompackage.addons.CustomKitMastery;
+import me.randomhashtags.randompackage.dev.CustomKitMastery;
 import me.randomhashtags.randompackage.addons.Kits;
 import me.randomhashtags.randompackage.api.addons.KitsMastery;
 import org.bukkit.ChatColor;

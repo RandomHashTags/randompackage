@@ -2,12 +2,10 @@ package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.objects.ShopItem;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
 import java.math.BigDecimal;
 
-public class ShopPrePurchaseEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class ShopPrePurchaseEvent extends AbstractCancellable {
     public final Player player;
     public final ShopItem item;
     private int amount;
@@ -22,7 +20,4 @@ public class ShopPrePurchaseEvent extends AbstractEvent implements Cancellable {
     public void setAmount(int amount) { this.amount = amount; }
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
-
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

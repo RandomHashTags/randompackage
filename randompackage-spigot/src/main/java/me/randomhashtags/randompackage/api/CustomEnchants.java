@@ -1044,7 +1044,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                                 else                       item = new ItemStack(Material.AIR);
                             }
                             apply = true;
-                            final PlayerApplyCustomEnchantEvent ce = new PlayerApplyCustomEnchantEvent(player, enchant, level, result);
+                            final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, result);
                             pluginmanager.callEvent(ce);
                         }
                     }

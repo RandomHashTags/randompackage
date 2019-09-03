@@ -2,11 +2,9 @@ package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.Mask;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public class MaskUnequipEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class MaskUnequipEvent extends AbstractCancellable {
     public final Player player;
     public final Mask mask;
     public final ItemStack helmet;
@@ -17,6 +15,4 @@ public class MaskUnequipEvent extends AbstractEvent implements Cancellable {
         this.helmet = helmet;
         this.reason = reason;
     }
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

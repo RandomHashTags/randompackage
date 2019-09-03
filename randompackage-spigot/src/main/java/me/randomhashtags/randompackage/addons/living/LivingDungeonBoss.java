@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addons.living;
 
-import me.randomhashtags.randompackage.addons.DungeonBoss;
+import me.randomhashtags.randompackage.dev.DungeonBoss;
 import org.bukkit.Location;
 
 public class LivingDungeonBoss {

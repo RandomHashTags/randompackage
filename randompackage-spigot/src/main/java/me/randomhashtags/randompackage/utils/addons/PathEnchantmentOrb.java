@@ -65,6 +65,8 @@ public class PathEnchantmentOrb extends RPAddon implements EnchantmentOrb {
 						return true;
 					}
 				}
+			} else {
+				return true;
 			}
 		}
 		return false;

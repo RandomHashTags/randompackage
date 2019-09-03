@@ -1,13 +1,11 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.events.AbstractEvent;
+import me.randomhashtags.randompackage.events.AbstractCancellable;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerRevealCustomEnchantEvent extends AbstractEvent implements Cancellable {
-	private boolean cancelled;
+public class PlayerRevealCustomEnchantEvent extends AbstractCancellable {
 	public final Player player;
 	public final CustomEnchant enchant;
 	public final int level;
@@ -18,6 +16,4 @@ public class PlayerRevealCustomEnchantEvent extends AbstractEvent implements Can
 		this.enchant = enchant;
 		this.level = level;
 	}
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

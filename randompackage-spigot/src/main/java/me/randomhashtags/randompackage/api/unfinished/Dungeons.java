@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.unfinished;
 
-import me.randomhashtags.randompackage.addons.Dungeon;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;

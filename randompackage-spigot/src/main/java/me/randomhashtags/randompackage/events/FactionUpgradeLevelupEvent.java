@@ -2,10 +2,8 @@ package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.FactionUpgrade;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
-public class FactionUpgradeLevelupEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class FactionUpgradeLevelupEvent extends AbstractCancellable {
     public final Player player;
     public final FactionUpgrade upgrade;
     public final int fromTier;
@@ -14,6 +12,4 @@ public class FactionUpgradeLevelupEvent extends AbstractEvent implements Cancell
         this.upgrade = upgrade;
         this.fromTier = fromTier;
     }
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
 }

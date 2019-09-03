@@ -4,21 +4,18 @@ import me.randomhashtags.randompackage.RandomPackage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.HashMap;
 
-public class PlayerTeleportDelayEvent extends AbstractEvent implements Cancellable {
+public class PlayerTeleportDelayEvent extends AbstractCancellable {
 	public static final HashMap<Player, PlayerTeleportDelayEvent> teleporting = new HashMap<>();
-	private boolean cancelled;
 	public final Player player;
 	public final double delay;
 	public final Location from, to;
 	public final int task;
 	
 	public PlayerTeleportDelayEvent(Player player, double delay, Location from, Location to) {
-		cancelled = false;
 		this.player = player;
 		this.delay = delay;
 		this.from = from;
@@ -31,7 +28,4 @@ public class PlayerTeleportDelayEvent extends AbstractEvent implements Cancellab
 		this.task = t;
 		teleporting.put(player, this);
 	}
-
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

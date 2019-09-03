@@ -2,10 +2,8 @@ package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.Booster;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.event.Cancellable;
 
-public class BoosterActivateEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class BoosterActivateEvent extends AbstractCancellable {
     public final OfflinePlayer activator;
     public final Booster booster;
     public double multiplier;
@@ -16,6 +14,4 @@ public class BoosterActivateEvent extends AbstractEvent implements Cancellable {
         this.multiplier = multiplier;
         this.duration = duration;
     }
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
 }

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
-import me.randomhashtags.randompackage.dev.EventAttributes;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;

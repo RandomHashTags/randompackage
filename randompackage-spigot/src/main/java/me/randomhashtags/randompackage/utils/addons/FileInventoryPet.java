@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.InventoryPet;
+import me.randomhashtags.randompackage.dev.InventoryPet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 

@@ -10,6 +10,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.io.File;
+
 public class Disguises extends RPFeature {
     private static Disguises instance;
     public static Disguises getDisguises() {
@@ -27,8 +29,7 @@ public class Disguises extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
-        pluginmanager.registerEvents(this, randompackage);
-
+        config = YamlConfiguration.loadConfiguration(new File(rpd, "disguises.yml"));
         sendConsoleMessage("&6[RandomPackage] &aLoaded Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

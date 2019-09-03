@@ -2,10 +2,8 @@ package me.randomhashtags.randompackage.events;
 
 import me.randomhashtags.randompackage.addons.living.LivingConquestChest;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
-public class ConquestDamageEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class ConquestDamageEvent extends AbstractCancellable {
     public final Player damager;
     public final LivingConquestChest livingConquestChest;
     public double damage;
@@ -14,6 +12,4 @@ public class ConquestDamageEvent extends AbstractEvent implements Cancellable {
         this.livingConquestChest = livingConquestChest;
         this.damage = damage;
     }
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

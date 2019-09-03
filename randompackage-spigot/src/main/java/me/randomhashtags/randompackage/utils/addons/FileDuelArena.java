@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.DuelArena;
+import me.randomhashtags.randompackage.dev.DuelArena;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;

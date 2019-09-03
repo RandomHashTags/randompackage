@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.*;
 
-public class YamlUpdater {
+public abstract class YamlUpdater {
     protected boolean updateYaml(File file) {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(file);

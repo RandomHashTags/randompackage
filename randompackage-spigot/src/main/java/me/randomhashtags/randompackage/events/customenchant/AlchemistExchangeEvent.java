@@ -1,12 +1,10 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
-import me.randomhashtags.randompackage.events.AbstractEvent;
+import me.randomhashtags.randompackage.events.AbstractCancellable;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public class AlchemistExchangeEvent extends AbstractEvent implements Cancellable {
-	private boolean cancelled;
+public class AlchemistExchangeEvent extends AbstractCancellable {
 	public final Player player;
 	public final ItemStack one, two, result;
 	public final String currency;
@@ -19,6 +17,4 @@ public class AlchemistExchangeEvent extends AbstractEvent implements Cancellable
 		this.price = price;
 		this.result = result;
 	}
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

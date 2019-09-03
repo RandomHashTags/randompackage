@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
-import me.randomhashtags.randompackage.dev.EventAttributes;
-import me.randomhashtags.randompackage.utils.attributes.IncreasePlayerQuest;
+import me.randomhashtags.randompackage.utils.EventAttributes;
+import me.randomhashtags.randompackage.attributes.IncreasePlayerQuest;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
 import me.randomhashtags.randompackage.events.*;
@@ -70,7 +70,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "player quests.yml");
 
-        addEventAttribute(new IncreasePlayerQuest());
+        new IncreasePlayerQuest().load();
         config = YamlConfiguration.loadConfiguration(new File(rpd, "player quests.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
@@ -246,7 +246,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         String completion = quest.getCompletion();
         try {
             completion = formatDouble(Double.parseDouble(completion)).split("E")[0];
-        } catch(Exception e) {}
+        } catch (Exception ignored) {}
         return completion;
     }
 
@@ -400,39 +400,6 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
     }
 
-    private void doCompletion(Player player, ActivePlayerQuest quest, String completion) {
-        if(player != null && quest != null && completion != null && !quest.isCompleted()) {
-            final PlayerQuest q = quest.getQuest();
-            for(String s : completion.split("&&")) {
-                try {
-                    if(s.startsWith("+")) {
-                        quest.setProgress(quest.getProgress()+Double.parseDouble(s.split("\\+")[1]));
-                        final double timer = q.getTimedCompletion();
-                        if(timer > 0.00) {
-                        } else if(quest.getProgress() >= Double.parseDouble(q.getCompletion())) {
-                            quest.setCompleted(true);
-                            final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, quest);
-                            pluginmanager.callEvent(e);
-                            final HashMap<String, String> replacements = new HashMap<>();
-                            replacements.put("{NAME}", q.getName());
-                            sendStringListMessage(player, config.getStringList("messages.completed"), replacements);
-                        }
-                    } else if(s.startsWith("-")) {
-                        final double n = quest.getProgress()-Double.parseDouble(s.split("-")[1]);
-                        if(n >= 0.00) {
-                            quest.setProgress(n);
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println("[RandomPackage] PlayerQuest error details:");
-                    System.out.println("player=" + player.getName() + ";quest=" + quest.getQuest().getIdentifier());
-                    System.out.println("completion=" + completion);
-                    System.out.println("s=" + s);
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
         final Player player = event.getEntity().getKiller();
@@ -511,7 +478,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
     }
     @EventHandler
-    private void playerApplyCustomEnchantEvent(PlayerApplyCustomEnchantEvent event) {
+    private void playerApplyCustomEnchantEvent(CustomEnchantApplyEvent event) {
         final Player player = event.player;
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {

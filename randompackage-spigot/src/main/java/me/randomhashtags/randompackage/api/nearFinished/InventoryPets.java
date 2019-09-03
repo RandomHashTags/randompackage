@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
-import me.randomhashtags.randompackage.addons.InventoryPet;
+import me.randomhashtags.randompackage.dev.InventoryPet;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.addons.FileInventoryPet;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public class InventoryPets extends RPFeature implements Listener {
+public class InventoryPets extends EventAttributes implements Listener {
     private static InventoryPets instance;
     public static InventoryPets getInventoryPets() {
         if(instance == null) instance = new InventoryPets();

@@ -3,11 +3,11 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.living.ActiveBooster;
 import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileBooster;
 import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.utils.newEventAttributes;
 import me.randomhashtags.randompackage.utils.obj.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -30,7 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public class Boosters extends newEventAttributes {
+public class Boosters extends EventAttributes {
 	private static Boosters instance;
 	public static Boosters getBoosters() {
 	    if(instance == null) instance = new Boosters();
@@ -47,7 +47,6 @@ public class Boosters extends newEventAttributes {
 	public String getIdentifier() { return "BOOSTERS"; }
 	protected RPFeature getFeature() { return getBoosters(); }
 	public void load() {
-		loadUtils();
 		final long started = System.currentTimeMillis();
 		save("_Data", "boosters.yml");
 		dataF = new File(rpd + separator + "_Data", "boosters.yml");
@@ -236,7 +235,8 @@ public class Boosters extends newEventAttributes {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}
 				break;
-			default: // SELF
+			case "SELF":
+			default:
 				if(activePlayerBoosters.containsKey(u) && a.isOnline()) {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}
@@ -274,23 +274,16 @@ public class Boosters extends newEventAttributes {
 			boosters.addAll(getFactionBoosters(u));
 			boosters.addAll(getSelfBoosters(u));
 			for(ActiveBooster ab : boosters) {
-				final double multiplier = ab.getMultiplier();
-				final long duration = ab.getDuration();
-				final String M = Double.toString(multiplier), D = Long.toString(duration);
-				replacements.put("multiplier", M);
-				replacements.put("duration", D);
-				final BoosterPreTriggerEvent pre = new BoosterPreTriggerEvent(event, k, ab);
-				pluginmanager.callEvent(pre);
-				if(!pre.isCancelled()) {
-					final List<ExecutedEventAttributes> e = executeAttributes(event, ab.getBooster().getAttributes(), replacements);
-					if(e != null) {
-						final BoosterTriggerEvent t = new BoosterTriggerEvent(event, k, ab, e);
-						pluginmanager.callEvent(t);
-						replacements.put("{MULTIPLIER}", M);
-						replacements.put("{PLAYER}", ab.getActivator().getName());
-						replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
-						sendNotify(k, ab, replacements);
-					}
+				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
+				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, k, ab);
+				pluginmanager.callEvent(e);
+				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
+					replacements.put("multiplier", M);
+					replacements.put("duration", D);
+					replacements.put("{MULTIPLIER}", M);
+					replacements.put("{PLAYER}", ab.getActivator().getName());
+					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
+					sendNotify(k, ab, replacements);
 				}
 			}
 		}
@@ -313,9 +306,8 @@ public class Boosters extends newEventAttributes {
 		return null;
 	}
 
-
 	private class MCMMOBoosterEvents implements Listener {
-		@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+		@EventHandler(priority = EventPriority.HIGHEST)
 		private void mcmmoPlayerXpGainEvent(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
 			final Player player = event.getPlayer();
 			final List<ActiveBooster> boosters = new ArrayList<>();
@@ -326,62 +318,16 @@ public class Boosters extends newEventAttributes {
 			boosters.addAll(getSelfBoosters(player.getUniqueId()));
 			for(ActiveBooster ab : boosters) {
 				final HashMap<String, String> replacements = new HashMap<>();
-				final double multiplier = ab.getMultiplier();
-				final long duration = ab.getDuration();
-				final String M = Double.toString(multiplier), D = Long.toString(duration);
-				replacements.put("multiplier", M);
-				replacements.put("duration", D);
-				final List<ExecutedEventAttributes> e = executeAttributes(event, ab.getBooster().getAttributes(), replacements);
-				if(e != null) {
+				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
+				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
+				pluginmanager.callEvent(e);
+				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
 					replacements.put("{MULTIPLIER}", M);
 					replacements.put("{PLAYER}", ab.getActivator().getName());
 					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
 					sendNotify(player, ab, replacements);
 				}
 			}
-		}
-		private ExecutedEventAttributes doAttribute(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, Player player, String attribute, String wholeAttribute) {
-			String attributeLowercase = attribute.toLowerCase();
-			final float xp = event.getRawXpGained();
-			final TreeMap<String, Entity> entities = getEntities("Player", player);
-			if(attributeLowercase.startsWith("gainedxp=")) {
-				final String s = attributeLowercase.split("=")[1].replace("xp", Float.toString(xp));
-				event.setRawXpGained((float) evaluate(s));
-				final LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
-				attributes.put(wholeAttribute, attributeLowercase);
-				return new ExecutedEventAttributes(event, attributes);
-			} else {
-				if(player != null && attributeLowercase.contains("playerlocation")) attributeLowercase = attributeLowercase.replace("playerlocation", Boosters.this.toString(player.getLocation()));
-				return doGenericAttribute(event, entities, attribute, attributeLowercase);
-			}
-		}
-		private List<ExecutedEventAttributes> executeAttributes(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, List<String> attributes, HashMap<String, String> attributeReplacements) {
-			if(success(event, attributes, attributeReplacements)) {
-				attributes = replace(attributes, attributeReplacements);
-				final Player player = event.getPlayer();
-				final List<ExecutedEventAttributes> e = new ArrayList<>();
-				final String skill = event.getSkill().name();
-				final TreeMap<String, Entity> entities = getEntities("Player", player);
-				for(String s : attributes) {
-					if(s.toLowerCase().startsWith("mcmmoxpgained;")) {
-						boolean did = true;
-						for(String a : s.split(s.split(";")[0] + ";")[1].split(";")) {
-							final String al = a.toLowerCase();
-							final boolean passed = passedIfs(event, entities, a);
-							if(!passed) return null;
-							else if(al.startsWith("skill=")) {
-								did = skill.equals(al.split("=")[1].toUpperCase());
-							} else if(did) {
-								final ExecutedEventAttributes att = doAttribute(event, player, a, s);
-								if(att != null) e.add(att);
-							}
-						}
-					}
-				}
-				if(player != null) player.updateInventory();
-				if(!e.isEmpty()) return e;
-			}
-			return null;
 		}
 	}
 }

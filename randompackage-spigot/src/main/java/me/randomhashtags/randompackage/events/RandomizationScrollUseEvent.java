@@ -3,10 +3,8 @@ package me.randomhashtags.randompackage.events;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.RandomizationScroll;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 
-public class RandomizationScrollUseEvent extends AbstractEvent implements Cancellable {
-    private boolean cancelled;
+public class RandomizationScrollUseEvent extends AbstractCancellable {
     public final Player player;
     public final CustomEnchant customenchant;
     public final int enchantlevel;
@@ -24,7 +22,4 @@ public class RandomizationScrollUseEvent extends AbstractEvent implements Cancel
     public void setNewSuccess(int success) { newSuccess = success; }
     public int getNewDestroy() { return newDestroy; }
     public void setNewDestroy(int destroy) { newDestroy = destroy; }
-
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

@@ -1,11 +1,9 @@
 package me.randomhashtags.randompackage.events;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerArmorEvent extends AbstractEvent implements Cancellable {
-	private boolean cancelled;
+public class PlayerArmorEvent extends AbstractCancellable {
 	public final Player player;
 	public final ArmorEventReason reason;
 	private final ItemStack item;
@@ -15,7 +13,6 @@ public class PlayerArmorEvent extends AbstractEvent implements Cancellable {
 		this.player = player;
 		this.reason = reason;
 		this.item = item;
-		this.cancelled = false;
 	}
 	public enum ArmorEventReason {
 		DROP,
@@ -35,7 +32,4 @@ public class PlayerArmorEvent extends AbstractEvent implements Cancellable {
 	public void setCurrentItem(ItemStack currentItem) { this.currentItem = currentItem; }
 	public ItemStack getCursor() { return cursor != null ? cursor.clone() : null; }
 	public void setCursor(ItemStack cursor) { this.cursor = cursor; }
-
-	public boolean isCancelled() { return cancelled; }
-	public void setCancelled(boolean cancel) { cancelled = cancel; }
 }

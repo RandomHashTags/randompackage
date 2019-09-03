@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.utils.addons;
 
-import me.randomhashtags.randompackage.addons.Trinket;
+import me.randomhashtags.randompackage.dev.Trinket;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;

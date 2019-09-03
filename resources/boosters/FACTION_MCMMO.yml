@@ -27,4 +27,4 @@ item:
   - "&7{TIME}"
 #
 attributes:
-  - "MCMMOXpGained;cancelled=false;gainedxp=xp*multiplier"
+  - "MCMMOPlayerXpGain;cancelled=false;setGainedXp=xp*multiplier"

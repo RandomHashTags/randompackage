@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.addons.objects.Home;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
+import me.randomhashtags.randompackage.dev.PlayerRank;
 import me.randomhashtags.randompackage.events.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.events.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -283,8 +284,11 @@ public class RPPlayer extends RPStorage {
         if(rank == null) {
             final String strings = yml.getString("strings");
             if(strings != null && !strings.isEmpty()) {
-                final String r = strings.split(";")[1];
-                if(!r.equals("null")) {
+                final String[] a = strings.split(";");
+                if(a.length >= 2) {
+                    final String r = a[1];
+                    if(!r.equals("null")) {
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
+import me.randomhashtags.randompackage.attributes.event.mcmmo.SetGainedXp;
 import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Reflect;
@@ -43,6 +44,8 @@ public class MCMMOAPI extends Reflect implements Listener {
 	public String getIdentifier() { return "MECHANIC_MCMMO"; }
 	protected RPFeature getFeature() { return getMCMMOAPI(); }
 	public void load() {
+		final long started = System.currentTimeMillis();
+		new SetGainedXp().load();
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
 		gc = GlobalChallenges.getChallenges();
 		gcIsEnabled = gc.isEnabled();
@@ -51,7 +54,7 @@ public class MCMMOAPI extends Reflect implements Listener {
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");
 
 		isClassic = pluginmanager.getPlugin("mcMMO").getDescription().getVersion().startsWith("1.");
-		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul"));
+		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		itemsConfig = null;
