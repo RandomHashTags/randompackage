@@ -27,8 +27,7 @@ import java.util.*;
         GitHub - https://github.com/RandomHashTags
         GitLab - https://gitlab.com/RandomHashTags
         MCMarket - https://www.mc-market.org/members/20858/
-        PayPal - imrandomhashtags@gmail.com
-        SpigotMC - https://www.spigotmc.org/members/randomhashtags.76364/
+        SpigotMC - https://www.spigotmc.org/members/76364/
         Twitch - https://www.twitch.tv/randomhashtags
         Twitter - https://twitter.com/irandomhashtags
  */

@@ -16,14 +16,13 @@ import java.util.HashMap;
         GitHub - https://github.com/RandomHashTags
         GitLab - https://gitlab.com/RandomHashTags
         MCMarket - https://www.mc-market.org/members/20858/
-        PayPal - imrandomhashtags@gmail.com
-        SpigotMC - https://www.spigotmc.org/members/randomhashtags.76364/
+        SpigotMC - https://www.spigotmc.org/members/76364/
         Twitch - https://www.twitch.tv/randomhashtags
         Twitter - https://twitter.com/irandomhashtags
  */
 public enum UParticle {
     /*
-        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.3)
+        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
     */
     BARRIER(null, "BARRIER"),
     BLOCK_CRACK("TILE_BREAK", "BLOCK_CRACK"),

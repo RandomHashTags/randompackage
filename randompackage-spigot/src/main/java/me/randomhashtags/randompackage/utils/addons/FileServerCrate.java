@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.ServerCrate;
-import me.randomhashtags.randompackage.utils.addons.objects.SCrateFlare;
+import me.randomhashtags.randompackage.utils.addons.obj.SCrateFlare;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

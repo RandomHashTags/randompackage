@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.attributes.*;
+import me.randomhashtags.randompackage.addons.EventAttribute;
+import me.randomhashtags.randompackage.utils.attributes.*;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.events.customenchant.EnchanterPurchaseEvent;
@@ -8,6 +9,8 @@ import me.randomhashtags.randompackage.events.customenchant.PlayerApplyCustomEnc
 import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
+import me.randomhashtags.randompackage.utils.attributes.event.SetDamage;
+import me.randomhashtags.randompackage.utils.obj.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,22 +39,28 @@ public abstract class EventAttributes extends RPFeature implements Listener {
             eventattributes = new LinkedHashMap<>();
         }
         final List<EventAttribute> list = Arrays.asList(
-                new AttributeAddPotionEffect(),
-                new AttributeDamage(),
-                new AttributeDepleteRarityGem(),
-                new AttributeExecuteCommand(),
-                //new AttributeExplode(),
-                new AttributeIgnite(),
-                new AttributePlaySound(),
-                new AttributeRemovePotionEffect(),
-                new AttributeSendMessage(),
-                new AttributeSetAir(),
-                new AttributeSetHealth(),
-                new AttributeSetHunger(),
-                new AttributeSetNoDamageTicks(),
-                new AttributeSetXp(),
-                new AttributeSmite(),
-                new AttributeStealXp()
+                // event attributes
+                new SetDamage(),
+                // attributes
+                new AddPotionEffect(),
+                new Damage(),
+                new DepleteRarityGem(),
+                new DropItem(),
+                new ExecuteCommand(),
+                //new Explode(),
+                new GiveItem(),
+                new Ignite(),
+                new PlaySound(),
+                new RemovePotionEffect(),
+                new SendMessage(),
+                new SetAir(),
+                new SetHealth(),
+                new SetHunger(),
+                new SetNoDamageTicks(),
+                new SetXp(),
+                new Smite(),
+                new StealXp(),
+                new Wait()
         );
         for(EventAttribute e : list) {
             e.load();
@@ -485,37 +494,34 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         }
         return a;
     }
-    private HashMap<Entity, String> getRecipientValues(HashMap<String, Entity> entities, HashMap<String, String> entityValues) {
-        final HashMap<Entity, String> a = new HashMap<>();
-        for(String entity : entities.keySet()) {
-            if(entityValues.containsKey(entity)) {
-                a.put(entities.get(entity), entityValues.get(entity));
-            }
-        }
-        return a;
-    }
 
-    public boolean executeAll(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, HashMap<EventAttribute, String> eventAttributes) {
+    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, LinkedHashMap<EventAttribute, HashMap<Entity, String>> values) {
         final boolean passed = didPassConditions(entities, conditions, cancelled);
         if(passed) {
             final Player player = (Player) entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
             final Entity entity = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
             final HashMap<RPPlayer, String> data = getData(entities);
-            final HashMap<Entity, String> recipientValues = getRecipientValues(entities, entityValues);
-            final boolean entityvalues = !entityValues.isEmpty(), dadda = !data.isEmpty(), recipientvalues = !recipientValues.isEmpty(), playerNN = player != null, entityNN = entity != null;
-            for(EventAttribute a : eventAttributes.keySet()) {
-                if(entityvalues) {
+            final boolean dadda = !data.isEmpty(), playerNN = player != null, entityNN = entity != null;
+            for(EventAttribute a : values.keySet()) {
+                final HashMap<Entity, String> valuez = values.get(a);
+                final String defaultValue = valuez.getOrDefault(null, null);
+                if(a.getIdentifier().equals("WAIT")) {
+                    final int ticks = (int) evaluate(defaultValue);
+                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attributes = new LinkedHashMap<>(values);
+                    attributes.remove(a);
+                    scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, attributes), ticks);
+                    break;
+                } else {
                     if(dadda) a.executeData(data);
-                    if(recipientvalues) a.execute(recipientValues);
-                }
-                final String value = eventAttributes.get(a);
-                if(value != null) {
-                    a.execute(value);
-                    if(playerNN && entityNN) {
-                        a.execute(player, entity, value);
+                    valuez.remove(null);
+                    a.execute(valuez);
+                    if(defaultValue != null) {
+                        a.execute(event, defaultValue);
+                        if(playerNN && entityNN) {
+                            a.execute(player, entity, defaultValue);
+                        }
                     }
                 }
-                //a.executeAt(null);
             }
         }
         return passed;
@@ -531,28 +537,37 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                 if(first.equals(e)) {
                     final List<String> conditions = new ArrayList<>();
                     final HashMap<String, String> entityValues = new HashMap<>();
-                    final HashMap<EventAttribute, String> execute = new HashMap<>();
+                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> execute = new LinkedHashMap<>();
+
                     for(String c : s.split(semi[0] + ";")[1].split(";")) {
                         if(c.contains("=")) {
-                            String string = c.split("=")[0].toUpperCase();
+                            final String[] values = c.split("=");
+                            final String value1 = values[1];
+                            String string = values[0].toUpperCase();
                             for(String entity : entities.keySet()) {
                                 final String E = entity.toUpperCase();
                                 if(string.contains(E)) {
                                     string = string.replace(E, "");
-                                    entityValues.put(entity, c.split("=")[1]);
+                                    entityValues.put(entity, value1);
                                 }
                             }
                             final EventAttribute a = getEventAttribute(string);
                             if(a == null) {
                                 conditions.add(c);
                             } else {
-                                execute.put(a, s.split("=")[1]);
+                                execute.put(a, new HashMap<>());
+                                final HashMap<Entity, String> E = execute.get(a);
+                                E.put(null, value1);
+                                for(String ss : entities.keySet()) {
+                                    E.put(entities.get(ss), entityValues.get(ss));
+                                }
                             }
                         } else {
                             conditions.add(c);
                         }
                     }
-                    if(executeAll(entities, conditions, cancelled, entityValues, execute)) {
+
+                    if(executeAll(event, entities, conditions, cancelled, execute)) {
                         Bukkit.broadcastMessage("did pass all " + e + " conditions: " + conditions.toString());
                     }
                 }
@@ -583,6 +598,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
     public void trigger(BlockPlaceEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
     public void trigger(BlockBreakEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
     public void trigger(EntityDamageEvent event, List<String> attributes) { trigger(event, getEntities("Victim", event.getEntity()), attributes); }
+    public void trigger(EntityDamageByEntityEvent event, List<String> attributes) { trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes); }
     public void trigger(EntityTameEvent event, List<String> attributes) { trigger(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes); }
     public void trigger(FoodLevelChangeEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getEntity()), attributes); }
     public void trigger(PlayerEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }

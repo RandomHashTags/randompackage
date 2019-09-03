@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileBooster;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.utils.newEventAttributes;
-import me.randomhashtags.randompackage.utils.objects.TObject;
+import me.randomhashtags.randompackage.utils.obj.TObject;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

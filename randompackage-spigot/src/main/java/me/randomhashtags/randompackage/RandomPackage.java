@@ -11,7 +11,7 @@ import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
-import me.randomhashtags.randompackage.utils.objects.Backup;
+import me.randomhashtags.randompackage.utils.obj.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
 import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
 import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;

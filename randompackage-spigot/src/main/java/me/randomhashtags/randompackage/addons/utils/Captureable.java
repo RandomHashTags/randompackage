@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addons.utils;
 
 import me.randomhashtags.randompackage.addons.enums.CaptureType;
-import me.randomhashtags.randompackage.utils.objects.PolyBoundary;
+import me.randomhashtags.randompackage.utils.obj.PolyBoundary;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

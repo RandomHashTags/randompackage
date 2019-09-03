@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.PlayerQuest;
 import me.randomhashtags.randompackage.dev.EventAttributes;
-import me.randomhashtags.randompackage.dev.attributes.AttributeIncreasePlayerQuest;
+import me.randomhashtags.randompackage.utils.attributes.IncreasePlayerQuest;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
 import me.randomhashtags.randompackage.events.*;
@@ -70,7 +70,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "player quests.yml");
 
-        addEventAttribute(new AttributeIncreasePlayerQuest());
+        addEventAttribute(new IncreasePlayerQuest());
         config = YamlConfiguration.loadConfiguration(new File(rpd, "player quests.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));

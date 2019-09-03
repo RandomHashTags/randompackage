@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.dev.EventAttributes;
 import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -96,21 +98,13 @@ public class CustomArmor extends EventAttributes {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		final Entity e = event.getEntity(), d = event.getDamager();
-		if(e instanceof Player) {
-			final ArmorSet a = valueOfArmorSet((Player) e);
-			if(a != null) {
-				trigger(event, a.getAttributes());
-			}
-		}
-		if(d instanceof Player) {
-			final ArmorSet a = valueOfArmorSet((Player) d);
-			if(a != null) {
-				trigger(event, a.getAttributes());
-			}
-		}
+	@EventHandler
+	private void pvanyEvent(PvAnyEvent event) {
+		final LivingEntity victim = event.victim;
+		final Player d = event.damager, v = victim instanceof Player ? (Player) victim : null;
+		final ArmorSet a = valueOfArmorSet(d), b = valueOfArmorSet(v);
+		if(a != null) trigger(event, a.getAttributes());
+		if(b != null) trigger(event, b.getAttributes());
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageEvent(EntityDamageEvent event) {
@@ -119,6 +113,16 @@ public class CustomArmor extends EventAttributes {
 			final ArmorSet a = valueOfArmorSet((Player) e);
 			if(a != null) {
 				trigger(event, a.getAttributes());
+			}
+			if(event instanceof EntityDamageByEntityEvent) {
+				final EntityDamageByEntityEvent E = (EntityDamageByEntityEvent) event;
+				final Entity d = E.getDamager();
+				if(d instanceof Player) {
+					final ArmorSet aa = valueOfArmorSet((Player) d);
+					if(aa != null) {
+						trigger(event, aa.getAttributes());
+					}
+				}
 			}
 		}
 	}
