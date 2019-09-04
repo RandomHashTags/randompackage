@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.attributes.todo.DepleteStackSize;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.addons.objects.StackedEntity;
 import org.bukkit.Bukkit;
@@ -48,6 +49,7 @@ public class MobStacker extends RPFeature {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "mob stacker.yml"));
 
+        new DepleteStackSize().load();
         stackable = new ArrayList<>();
         customNames = new HashMap<>();
         lastDamager = new HashMap<>();

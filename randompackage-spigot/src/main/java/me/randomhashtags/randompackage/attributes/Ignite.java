@@ -8,7 +8,10 @@ public class Ignite extends AbstractEventAttribute {
     @Override
     public void execute(HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
-            e.setFireTicks((int) evaluate(recipientValues.get(e)));
+            ignite(e, recipientValues.get(e));
         }
+    }
+    private void ignite(Entity entity, String value) {
+        entity.setFireTicks((int) evaluate(value));
     }
 }

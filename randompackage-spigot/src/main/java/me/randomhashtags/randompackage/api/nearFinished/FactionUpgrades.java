@@ -479,7 +479,7 @@ public class FactionUpgrades extends RPFeature {
         if(D instanceof Player) {
             final Player damager = (Player) D;
             final String fn = regions.getFactionTag(damager.getUniqueId());
-            event.damage *= getBossDamageMultiplier(fn);
+            event.setDamage(event.getDamage()*getBossDamageMultiplier(fn));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

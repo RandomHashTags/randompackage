@@ -314,15 +314,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
                 }
             }
         }
-        if(isPVAny) {
-            a = a.replace("dmg", Double.toString(((PvAnyEvent) event).damage));
-        } else if(event instanceof CustomBossDamageByEntityEvent) {
-            a = a.replace("dmg", Double.toString(((CustomBossDamageByEntityEvent) event).damage));
-        } else if(event instanceof isDamagedEvent) {
-            a = a.replace("dmg", Double.toString(((isDamagedEvent) event).damage));
-        } else if(event instanceof EntityDamageByEntityEvent) {
-            a = a.replace("dmg", Double.toString(((EntityDamageByEntityEvent) event).getDamage()));
-        }
 
         if(a.contains("random{")) {
             final String e = a.split("random\\{")[1].split("}")[0];
@@ -385,38 +376,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final PotionEffectType type = getPotionEffectType((a.contains("]") ? a.split("]")[1] : a.split("\\{")[1]).split(":")[0].toUpperCase());
             for(LivingEntity l : recipients)
                 removePotionEffect(l, getPotionEffect(l, type), a.contains(":true") ? config.getStringList("messages.remove potion effect") : null, enchant, level);
-        } else if(a.toLowerCase().startsWith("sendmessage{")) {
-            for(LivingEntity l : recipients)
-                sendMessage(enchant, l, a.split("]")[1]);
-        } else if(a.toLowerCase().startsWith("wait{")) {
-            wait(ev, event, enchant, attribute, b, (int) evaluate(a.split("\\{")[1].split("}")[0]), P);
-            return;
-        } else if(a.toLowerCase().startsWith("damage{")) {
-            a = a.toLowerCase();
-            for(LivingEntity l : recipients)
-                damage(l, evaluate(a.split("]")[1].split("}")[0].replace("h", "")), a.contains("h"));
-        } else if(a.toLowerCase().startsWith("ignite{")) {
-            a = a.toLowerCase();
-            final int time = (int) evaluate(a.split("]")[1].split("}")[0]);
-            if(a.split("\\[")[1].split("]")[0].contains("arrow")) {
-                if(event instanceof EntityShootBowEvent)
-                    (((EntityShootBowEvent) event).getProjectile()).setFireTicks(time);
-            }
-            for(LivingEntity l : recipients)
-                if(l != null)
-                    l.setFireTicks(time);
-        } else if(a.toLowerCase().startsWith("heal{")) {
-            a = a.toLowerCase();
-            for(LivingEntity l : recipients)
-                heal(l, evaluate(a.split("]")[1].split("}")[0].replace("h", "")));
-        } else if(a.toLowerCase().startsWith("setdamage{")) {
-            a = a.toLowerCase();
-            final double dmg = evaluate(a.split("\\{")[1].split("}")[0]);
-            if(isPVAny) {
-                ((PvAnyEvent) event).damage = dmg;
-            } else if(event instanceof EntityDamageEvent) {
-                ((EntityDamageEvent) event).setDamage(dmg);
-            }
         } else if(a.toLowerCase().startsWith("setdurability{")) {
             a = a.toLowerCase();
             for(LivingEntity l : recipients) {
@@ -447,47 +406,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
                     p.setDurability((short) (dura < 0 ? 0 : dura));
                 }
             }
-        } else if(a.toLowerCase().startsWith("setdroppedexp{")) {
-            a = a.toLowerCase();
-            int dropped = event instanceof BlockBreakEvent ? ((BlockBreakEvent) event).getExpToDrop() : event instanceof EntityDeathEvent ? ((EntityDeathEvent) event).getDroppedExp() : 0;
-            final int xp = (int) evaluate(a.split("\\{")[1].split("}")[0].replace("droppedxp", Integer.toString(dropped)));
-            if(event instanceof BlockBreakEvent)        ((BlockBreakEvent) event).setExpToDrop(xp);
-            else if(event instanceof EntityDeathEvent)  ((EntityDeathEvent) event).setDroppedExp(xp);
-        } else if(a.toLowerCase().startsWith("refillair{")) {
-            a = a.toLowerCase();
-            for(LivingEntity l : recipients)
-                refillAir(l, Integer.parseInt(a.split("]")[1].split("}")[0]));
-        } else if(event instanceof PlayerInteractEvent && a.toLowerCase().startsWith("breakhitblock")) {
-            breakHitBlock((PlayerInteractEvent) event);
-        } else if(a.toLowerCase().startsWith("sethealth{")) {
-            for(LivingEntity l : recipients)
-                setHealth(l, (int) evaluate(a.split("]")[1].split("}")[0]));
-        } else if(a.toLowerCase().startsWith("smite{")) {
-            final int amount = (int) evaluate(a.split("]")[1].split("}")[0]);
-            if(a.toLowerCase().split("\\[")[1].split("]")[0].contains("arrowloc")) {
-                if(event instanceof ProjectileHitEvent)
-                    smite(((ProjectileHitEvent) event).getEntity().getLocation(), amount);
-            }
-            for(LivingEntity l : recipients)
-                smite(l.getLocation(), amount);
-        } else if(a.toLowerCase().startsWith("givedrops{")) {
-            if(event instanceof BlockBreakEvent) {
-                final BlockBreakEvent bb = (BlockBreakEvent) event;
-                final Collection<ItemStack> drops = bb.getBlock().getDrops();
-                for(LivingEntity l : recipients) {
-                    if(l instanceof Player) {
-                        for(ItemStack i : drops) {
-                            giveItem((Player) l, i);
-                        }
-                    }
-                }
-                bb.setCancelled(true);
-                bb.getBlock().setType(Material.AIR);
-            }
-        } else if(a.toLowerCase().startsWith("setxp{")) {
-            final int value = (int) evaluate(a.toLowerCase().split("setxp\\{")[1].split("}")[0]);
-            for(LivingEntity l : recipients)
-                setXP(l, value);
         } else if(a.toLowerCase().startsWith("setvelocity{")) {
             String U = a.toLowerCase().split("]")[1];
             if(isPVAny) {
@@ -506,14 +424,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final String[] u = U.split(":");
             final Vector knockback = new Vector(evaluate(u[0]), evaluate(u[1]), evaluate(u[2].split("}")[0]));
             for(LivingEntity l : recipients) setVelocity(l, knockback);
-        } else if(a.toLowerCase().startsWith("healhunger{")) {
-            final int h = (int) evaluate(a.split("]")[1].split("}")[0]);
-            for(LivingEntity l : recipients)
-                healHunger(l, h);
-        } else if(a.toLowerCase().startsWith("freeze{")) {
-            final int time = (int) evaluate(a.split("]")[1].split("}")[0]);
-            for(LivingEntity l : recipients)
-                freeze(l, time);
         } else if(a.toLowerCase().startsWith("procenchants{")) {
             for(LivingEntity l : recipients)
                 if(l instanceof Player) {
@@ -525,62 +435,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
                                 procEnchant(event, ce, e.get(ce), is, P);
                     }
                 }
-        } else if(a.startsWith("dropItem{")) {
-            String y = a.split("dropItem\\{")[1].split("]")[1];
-            if(event instanceof PlayerInteractEvent) y = y.replace("player", ((PlayerInteractEvent) event).getPlayer().getName());
-            else if(event instanceof EntityDeathEvent) {
-                final EntityDeathEvent e = (EntityDeathEvent) event;
-                final LivingEntity v = e.getEntity(), d = v.getKiller();
-                if(v instanceof Player) y = y.replace("victim", v.getName());
-                if(d != null) y = y.replace("killer", d.getName());
-            }
-            for(LivingEntity l : recipients)
-                dropItem(l, d(null, y));
-        } else if(a.toLowerCase().startsWith("setgainedxp{") && mcmmoIsEnabled()) {
-            a = a.toLowerCase();
-            if(event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) {
-                final com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent M = (com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event;
-                final int xp = (int) evaluate(a.split("setgainedxp\\{")[1].split("}")[0].replace("xp", Integer.toString(M.getXpGained())));
-                M.setRawXpGained(xp);
-                M.setXpGained(xp);
-            }
-        } else if(a.toLowerCase().startsWith("playsound{")) {
-            a = a.toLowerCase().split("]")[1];
-            final String sound = a.split(":")[0];
-            final int pitch = Integer.parseInt(a.split(":")[1]), volume = Integer.parseInt(a.split(":")[2]), playtimes = Integer.parseInt(a.split(":")[3]);
-            final boolean globalsound = a.toLowerCase().endsWith(":true");
-            for(LivingEntity l : recipients)
-                playSound(sound, pitch, volume, l, playtimes, globalsound);
-        } else if(a.toLowerCase().startsWith("spawnentity{")) {
-            final String[] s = a.split("]")[1].split("}")[0].split(":");
-            final CustomEnchantEntity e = CustomEnchantEntity.paths.get(s[0]);
-            if(e != null) {
-                for(LivingEntity l : recipients) {
-                    e.spawn(l, getRecipient(event, s[2]), event);
-                }
-            }
-        } else if(a.toLowerCase().startsWith("stopenchant{")) {
-            final String J = a.split("]")[1].split("}")[0];
-            final int seconds = Integer.parseInt(J.split(":")[1]);
-            for(LivingEntity l : recipients) {
-                if(l instanceof Player) {
-                    final Player p = (Player) l;
-                    if(J.toLowerCase().startsWith("all")) {
-                        stoppedAllEnchants.add(p);
-                        scheduler.scheduleSyncDelayedTask(randompackage, () -> stoppedAllEnchants.remove(p), 20*seconds);
-                    } else {
-                        final CustomEnchant ce = valueOfCustomEnchant(J.split(":")[0]);
-                        if(ce != null) {
-                            if(!stoppedEnchants.keySet().contains(p)) stoppedEnchants.put(p, new HashMap<>());
-                            if(stoppedEnchants.get(p).keySet().contains(ce)) {
-                                scheduler.cancelTask(stoppedEnchants.get(p).get(ce));
-                            }
-                            int task = scheduler.scheduleSyncDelayedTask(randompackage, () -> stoppedEnchants.get(p).remove(ce), 20*seconds);
-                            stoppedEnchants.get(p).put(ce, task);
-                        }
-                    }
-                }
-            }
         } else if(a.toLowerCase().startsWith("breakblocks{")) {
             a = a.toLowerCase();
             final String[] A = a.split("]")[1].split(":");
@@ -589,10 +443,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             for(LivingEntity le : recipients)
                 if(event instanceof BlockBreakEvent)
                     breakBlocks(UMaterial.match(getItemInHand(le)), ((BlockBreakEvent) event).getBlock(), x1, y1, z1, x2, y2, z2);
-        } else if(a.toLowerCase().startsWith("remove{")) {
-            for(LivingEntity l : recipients)
-                if(!(l instanceof Player))
-                    l.remove();
         } else if(a.toLowerCase().startsWith("replaceblock{")) {
             final String args = a.toLowerCase().split("\\{")[1].split("}")[0];
             final String[] aa = args.split(":");
@@ -603,40 +453,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final Byte data = Byte.parseByte(aa[4]);
             final int ticks = Integer.parseInt(aa[5]);
             setTemporaryBlock(l, type, data, ticks);
-        } else if(a.toLowerCase().startsWith("stealxp{")) {
-            final String arg = a.split("\\{")[1].split("}")[0];
-            final String[] aa = arg.split(":");
-            final LivingEntity receiver = getRecipient(event, aa[0]), target = getRecipient(event, aa[1]);
-            final int amount = Integer.parseInt(aa[2]);
-            if(receiver != null && receiver instanceof Player && target != null && target instanceof Player) {
-
-            }
-        } else if(a.toLowerCase().startsWith("depleteraritygem{")) {
-            final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-            if(fu.isEnabled()) {
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final RarityGem gem = getRarityGem(a.split("\\{")[1].split(":")[0]);
-                if(!pdata.hasActiveRarityGem(gem)) {
-                    ev.didProc = false;
-                    return;
-                }
-                final ItemStack g = getRarityGem(gem, player);
-                if(g != null) {
-                    itemMeta = g.getItemMeta();
-                    final int amount = getRemainingInt(itemMeta.getDisplayName());
-                    final String fn = regions.getFactionTag(player);
-                    int depleteAmount = Integer.parseInt(a.split(":")[1].split("}")[0]);
-                    depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(fn, gem);
-                    if(amount - depleteAmount <= 0) {
-                        pdata.toggleRarityGem(ev, gem);
-                        removeItem(player, g, 1);
-                    } else {
-                        itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
-                        g.setItemMeta(itemMeta);
-                    }
-                    player.updateInventory();
-                }
-            }
         } else if(a.toLowerCase().startsWith("depletestacksize{") && event instanceof MobStackDepleteEvent) {
             final int amount = Integer.parseInt(a.split("\\{")[1].split("}")[0]);
             ((MobStackDepleteEvent) event).amount = amount;
@@ -655,10 +471,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.toLowerCase().startsWith("stopcombo{")) {
             final CustomEnchant n = valueOfCustomEnchant(a.split("\\{")[1].split("}")[0]);
             stopCombo(player, n);
-        } else if(a.toLowerCase().startsWith("explode{")) {
-            final Location l = getRecipientLoc(event, a.split("\\[")[1].split("]")[0]);
-            if(l != null)
-                explode(l, Float.parseFloat(a.split("]")[1].split(":")[0]), Boolean.parseBoolean(a.split(":")[1]), Boolean.parseBoolean(a.split(":")[2].split("}")[0]));
         } else if(a.toLowerCase().startsWith("if{")) {
             doIf(ev, event, enchant, level, a, attribute, b, a.split("\\{")[1], P);
         }
@@ -676,38 +488,19 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
     }
     private boolean doVariable(CustomEnchantProcEvent e, Event event, CustomEnchant enchant, LivingEntity entity, String input) {
-        if(input.startsWith("isHolding("))      return isHolding(entity, input.split("\\(")[1].split("\\)")[0]);
-        else if(input.startsWith("isBlocking")) return isBlocking(entity);
-        else if(input.startsWith("healthIs<=:")) return healthIsLessThanOrEqualTo(entity, evaluate(input.split(":")[1].split(":")[0]));
-        else if(input.startsWith("healthIs>=:")) return healthIsGreaterThanOrEqualTo(entity, evaluate(input.split(":")[1].split(":")[0]));
-        else if(input.startsWith("isUnderwater")) return entity.getRemainingAir() < entity.getMaximumAir();
-        else if(input.startsWith("hitBlock(")) return event instanceof PlayerInteractEvent && hitBlock((PlayerInteractEvent) event, input.split("hitBlock\\(")[1].split("\\)")[0].toUpperCase());
-        else if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && factions.canModify(((PlayerInteractEvent) event).getPlayer().getUniqueId(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
+        if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && factions.canModify(((PlayerInteractEvent) event).getPlayer().getUniqueId(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
         else if(input.startsWith("isHeadshot")) {
             final PvAnyEvent eve = event instanceof PvAnyEvent ? (PvAnyEvent) event : null;
             final Projectile p = eve != null ? eve.proj : null;
             return eve != null && p instanceof Arrow && p.getLocation().getY() > eve.victim.getEyeLocation().getY();
-        } else if(input.startsWith("isSneaking")) return entity instanceof Player && ((Player) entity).isSneaking();
-        else if(input.startsWith("didproc")) return e.didProc;
+        } else if(input.startsWith("didproc")) return e.didProc;
         else if(input.startsWith("didntproc")) return !e.didProc;
-        else if(input.toLowerCase().startsWith("fromspawner")) return spawnedFromSpawner.contains(entity.getUniqueId());
         else if(input.startsWith("enchantIs(")) {
             if(enchant != null) {
                 final String inpu = input.split("enchantIs\\(")[1].split("\\\\")[0];
                 for(String s : inpu.split("\\|\\|")) if(s.equals(enchant.getName())) return true;
             }
             return false;
-        } else if(input.equals("hitCEEntity")) {
-            if(event instanceof PvAnyEvent) {
-                final LivingEntity victim = ((PvAnyEvent) event).victim;
-                return victim != null && LivingCustomEnchantEntity.living.getOrDefault(victim.getUniqueId(), null) != null;
-            }
-        } else if(input.toLowerCase().startsWith("eval{") && event instanceof CEAApplyPotionEffectEvent) {
-            final CEAApplyPotionEffectEvent A = (CEAApplyPotionEffectEvent) event;
-            final int enchantlevel = A.enchantlevel, potionlevel = A.potioneffect.getAmplifier() + 1;
-            String f = input.toLowerCase().split("eval\\{")[1].split("}")[0].replace("level", Integer.toString(enchantlevel)).replace("potionlevel", Integer.toString(potionlevel)),
-                    s = input.toLowerCase().split("eval\\{")[2].split("}")[0].replace("level", Integer.toString(enchantlevel)).replace("potionlevel", Integer.toString(potionlevel));
-
         } else if(input.toLowerCase().startsWith("distancebetween(")) {
             final List<LivingEntity> recipients = getRecipients(event, input.split("distanceBetween\\(")[1].split("\\)")[0], null);
             if(recipients.size() == 2)
@@ -1075,7 +868,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
         return true;
     }
     private String facing(Entity entity) {
-        /*  Code is from "Adrian Sohn" at https://stackoverflow.com/questions/35831619/get-the-direction-a-player-is-looking */
+        /*  Code is from "Adrian Sohn" at https://stackoverflow.com/questions/35831619 */
         float yaw = entity.getLocation().getYaw();
         if (yaw < 0) yaw += 360;
         return yaw >= 314 || yaw < 45 ? "SOUTH" : yaw < 135 ? "WEST" : yaw < 225 ? "NORTH" : yaw < 315 ? "EAST" : "NORTH";

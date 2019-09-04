@@ -419,7 +419,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
                 pluginmanager.callEvent(e);
                 if(!e.isCancelled()) {
-                    event.setDamage(e.damage);
+                    event.setDamage(e.getDamage());
                     procPlayerArmor(e, damager);
                     procPlayerItem(e, damager, getItemInHand(damager));
                 }
@@ -434,7 +434,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     procPlayerItem(e, damager, shotBows.get(u));
                     shotBows.remove(u);
                     shotbows.remove(u);
-                    event.setDamage(e.damage);
+                    event.setDamage(e.getDamage());
                 }
             }
             if(entity instanceof Player && event.getDamager() instanceof LivingEntity && !(event.getDamager() instanceof TNTPrimed) && !(event.getDamager() instanceof Creeper)) {
@@ -443,7 +443,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
                 pluginmanager.callEvent(e);
                 if(!e.isCancelled()) {
-                    event.setDamage(e.damage);
+                    event.setDamage(e.getDamage());
                     procPlayerArmor(e, victim);
                     procPlayerItem(e, victim, getItemInHand(victim));
                 }

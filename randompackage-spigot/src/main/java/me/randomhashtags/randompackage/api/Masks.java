@@ -129,7 +129,7 @@ public class Masks extends CustomEnchants implements Listener {
         player.updateInventory();
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
         final Player victim = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
         final ItemStack i = equippedMasks.getOrDefault(victim, null);
@@ -160,11 +160,11 @@ public class Masks extends CustomEnchants implements Listener {
     private void playerDeathEvent(PlayerDeathEvent event) {
         tryToProcMask(event.getEntity().getKiller(), event);
     }
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
         tryToProcMask(event.getPlayer(), event);
     }
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final Mask m = valueOfMask(event.getItemInHand());
@@ -175,11 +175,11 @@ public class Masks extends CustomEnchants implements Listener {
             tryToProcMask(player, event);
         }
     }
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
         tryToProcMask((Player) event.getEntity(), event);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if(!event.isCancelled()) tryToProcMask(player, event);
@@ -194,7 +194,7 @@ public class Masks extends CustomEnchants implements Listener {
             giveItem(player, mask);
         }
     }
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityShootBowEvent(EntityShootBowEvent event) {
         final Entity e = event.getEntity();
         if(e instanceof Player)

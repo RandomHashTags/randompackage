@@ -42,11 +42,14 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                 new SetDamage(),
                 // attributes
                 new AddPotionEffect(),
+                new BreakHitBlock(),
                 new Damage(),
                 new DepleteRarityGem(),
                 new DropItem(),
                 new ExecuteCommand(),
                 //new Explode(),
+                new Freeze(),
+                new GiveDrops(),
                 new GiveItem(),
                 new Ignite(),
                 new KickWithReason(),
@@ -80,6 +83,16 @@ public abstract class EventAttributes extends RPFeature implements Listener {
         }
     }
 
+    private boolean hasReplacements(List<String> conditions) {
+        for(String s : conditions) {
+            final String l = s.toLowerCase();
+            if(l.startsWith("get") && (l.endsWith("hp") || l.endsWith("exp") || l.endsWith("explevel") || l.endsWith("locx") || l.endsWith("locy") || l.endsWith("locz"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean didPassConditions(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
         boolean passed = true;
 
@@ -90,10 +103,33 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                 passed = random.nextInt(100) < getRemainingInt(condition.split("=")[1]);
             }
             if(passed) {
-                for(String s : entities.keySet()) {
+                final Set<String> keys = entities.keySet();
+                for(String s : keys) {
                     final String value = condition.contains("=") ? condition.split("=")[1] : "false";
                     final Entity e = entities.get(s);
                     s = s.toLowerCase();
+
+                    if(hasReplacements(conditions)) {
+                        // TODO: add more replacements
+                        for(String entity : keys) {
+                            final Entity E = entities.get(entity);
+                            final Location l = E.getLocation();
+                            final boolean isLiving = E instanceof LivingEntity, isPlayer = isLiving && E instanceof Player;
+                            final LivingEntity le = isLiving ? (LivingEntity) E : null;
+                            final Player player = isPlayer ? (Player) E : null;
+                            s = s.replace("get" + entity + "hp", isLiving ? Double.toString(le.getHealth()) : "0");
+                            s = s.replace("get" + entity + "saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
+                            if(s.contains("loc")) {
+                                s = s.replace("get" + entity + "locx", Double.toString(l.getX()));
+                                s = s.replace("get" + entity + "locy", Double.toString(l.getY()));
+                                s = s.replace("get" + entity + "locz", Double.toString(l.getZ()));
+                            }
+                            if(s.contains("exp")) {
+                                s = s.replace("get" + entity + "exp", isPlayer ? Integer.toString(getTotalExperience(player)) : "0");
+                                s = s.replace("get" + entity + "explevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
+                            }
+                        }
+                    }
 
                     if(condition.startsWith(s)) {
                         if(condition.startsWith(s + "isfromspawner=")) {
@@ -610,10 +646,10 @@ public abstract class EventAttributes extends RPFeature implements Listener {
     public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, LinkedHashMap<EventAttribute, HashMap<Entity, String>> values) {
         final boolean passed = didPassConditions(entities, conditions, cancelled);
         if(passed) {
-            final Player player = (Player) entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
-            final Entity entity = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
+            final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
+            final Entity entity2 = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
             final HashMap<RPPlayer, String> data = getData(entities, entityValues);
-            final boolean dadda = !data.isEmpty(), playerNN = player != null, entityNN = entity != null;
+            final boolean dadda = !data.isEmpty(), entity1NN = entity1 != null, entity2NN = entity2 != null;
             for(EventAttribute a : values.keySet()) {
                 final HashMap<Entity, String> valuez = values.get(a);
                 final String defaultValue = valuez.getOrDefault(null, null);
@@ -624,13 +660,14 @@ public abstract class EventAttributes extends RPFeature implements Listener {
                     scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes), ticks);
                     break;
                 } else {
+                    a.execute(event);
                     if(dadda) a.executeData(data);
                     valuez.remove(null);
                     a.execute(valuez);
                     if(defaultValue != null) {
                         a.execute(event, defaultValue);
-                        if(playerNN && entityNN) {
-                            a.execute(player, entity, defaultValue);
+                        if(entity1NN && entity2NN) {
+                            a.execute(entity1, entity2, defaultValue);
                         }
                     }
                 }
@@ -719,6 +756,7 @@ public abstract class EventAttributes extends RPFeature implements Listener {
     }
     public void trigger(BlockPlaceEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
     public void trigger(BlockBreakEvent event, List<String> attributes) { trigger(event, getEntities("Player", event.getPlayer()), attributes); }
+    public void trigger(EntityShootBowEvent event, List<String> attributes) { trigger(event, getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()), attributes); }
     public void trigger(EntityDamageEvent event, List<String> attributes) { trigger(event, getEntities("Victim", event.getEntity()), attributes, getReplacements("dmg", Double.toString(event.getDamage()))); }
     public void trigger(EntityDamageByEntityEvent event, List<String> attributes) { trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes, getReplacements("dmg", Double.toString(event.getDamage()))); }
     public void trigger(EntityTameEvent event, List<String> attributes) { trigger(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes); }
@@ -758,6 +796,9 @@ public abstract class EventAttributes extends RPFeature implements Listener {
     }
     public boolean trigger(JackpotPurchaseTicketsEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, mergeReplacements(getReplacements("amount", event.amount.toBigInteger().toString()), replacements));
+    }
+    public boolean trigger(MobStackDepleteEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Killer", event.killer, "Victim", event.stack.entity), attributes, getReplacements(replacements));
     }
     public boolean trigger(MysteryMobSpawnerOpenEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));

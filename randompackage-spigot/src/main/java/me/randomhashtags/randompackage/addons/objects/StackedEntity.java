@@ -1,24 +1,21 @@
 package me.randomhashtags.randompackage.addons.objects;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.events.MobStackMergeEvent;
-import org.bukkit.Bukkit;
+import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StackedEntity {
+public class StackedEntity extends UVersion {
     public static final List<StackedEntity> stackedEntities = new ArrayList<>();
-    private final PluginManager pm = Bukkit.getPluginManager();
 
     public final long creationTime;
     public final LivingEntity entity;
@@ -36,7 +33,7 @@ public class StackedEntity {
     }
     public void setSize(int size) {
         final MobStackMergeEvent e = new MobStackMergeEvent(this, size);
-        pm.callEvent(e);
+        pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
             this.size = size;
             entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
@@ -44,7 +41,7 @@ public class StackedEntity {
     }
     public void kill(LivingEntity killer, int amount) {
         final MobStackDepleteEvent e = new MobStackDepleteEvent(this, killer, amount);
-        pm.callEvent(e);
+        pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
             amount = e.amount;
             final World w = entity.getWorld();
@@ -58,15 +55,17 @@ public class StackedEntity {
                 size -= amount;
             }
             if(stackedEntities.contains(this)) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(RandomPackage.getPlugin, () -> entity.setNoDamageTicks(0), 0);
+                scheduler.scheduleSyncDelayedTask(randompackage, () -> entity.setNoDamageTicks(0), 0);
                 entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
                 for(int i = 1; i <= amount; i++) {
                     final LivingEntity d = (LivingEntity) w.spawnEntity(lo, t);
                     final EntityEquipment ee = d.getEquipment();
-                    ee.setHelmet(null);
-                    ee.setChestplate(null);
-                    ee.setLeggings(null);
-                    ee.setBoots(null);
+                    if(ee != null) {
+                        ee.setHelmet(null);
+                        ee.setChestplate(null);
+                        ee.setLeggings(null);
+                        ee.setBoots(null);
+                    }
                     d.setCustomNameVisible(false);
                     d.setCustomName("");
                     d.setHealth(0.0001);
@@ -78,7 +77,7 @@ public class StackedEntity {
     public void merge(LivingEntity target) {
         final StackedEntity se = valueOf(target.getUniqueId());
         final MobStackMergeEvent e = new MobStackMergeEvent(this, se != null ? size+se.size : size+1);
-        pm.callEvent(e);
+        pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
             size += se != null ? se.size : 1;
             if(se != null && creationTime > se.creationTime) {
@@ -99,16 +98,18 @@ public class StackedEntity {
     }
 
     public static StackedEntity valueOf(UUID uuid) {
-        for(StackedEntity s : stackedEntities)
+        for(StackedEntity s : stackedEntities) {
             if(s.uuid.equals(uuid))
                 return s;
+        }
         return null;
     }
     public static List<StackedEntity> valueOf(EntityType type) {
         final List<StackedEntity> list = new ArrayList<>();
-        for(StackedEntity s : stackedEntities)
+        for(StackedEntity s : stackedEntities) {
             if(s.entity.getType().equals(type))
                 list.add(s);
+        }
         return list;
     }
 

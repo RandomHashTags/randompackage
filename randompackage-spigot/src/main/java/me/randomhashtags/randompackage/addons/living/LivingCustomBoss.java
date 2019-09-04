@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -86,7 +85,7 @@ public class LivingCustomBoss extends UVersion {
         pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
             final boolean legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
-            final double d = e.damage;
+            final double d = e.getDamage();
             final HashMap<Integer, List<String>> messages = type.getMessages();
             UUID i = null;
             if(damager instanceof Player) {
