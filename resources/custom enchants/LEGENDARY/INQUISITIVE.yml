@@ -12,4 +12,4 @@ alchemist: "9000:11000:14000"
 tinkerer: "121:144:167:190"
 #
 attributes:
-- "KilledEntity;setDroppedExp{3+(droppedxp*level)}"
+- "EntityDeath;SetDroppedExp=3+(droppedxp*level)"

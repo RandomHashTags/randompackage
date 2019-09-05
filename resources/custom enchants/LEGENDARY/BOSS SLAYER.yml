@@ -13,4 +13,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- "CustomBossIsDamaged;setDamage{dmg*(1+(0.05*level))}"
+- "CustomBossIsDamaged;SetDamage=dmg*(1+(0.05*level))"

@@ -13,4 +13,4 @@ alchemist: "2500:3000"
 tinkerer: "72:81:90"
 #
 attributes:
-- "PvA;chance=14+(2*level);sendMessage{[damager]&b&l* VAMPIRE **};wait{20*3};heal{[damager]level}"
+- "PvA;chance=14+(2*level);DamagerSendMessage=&b&l** VAMPIRE **;Wait=20*3;DamagerHeal=level"

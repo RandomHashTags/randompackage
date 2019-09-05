@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
+import me.randomhashtags.randompackage.attributes.StopEnchant;
 import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
@@ -99,6 +100,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         tinkereraccept = d(config, "tinkerer.accept");
         noMoreEnchantsAllowed = colorizeListString(config.getStringList("settings.no more enchants"));
 
+        new StopEnchant().load();
         int X = 0;
         for(String s : alchemistaccept.getItemMeta().getLore()) {
             if(s.contains("{COST}")) alchemistCostSlot = X;
@@ -115,8 +117,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         setupInventory(alchemist);
         setupInventory(tinkerer);
 
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default custom enchants")) {
+        if(!otherdata.getBoolean("saved default custom enchants")) {
             final String[] mas = new String[] {
                     "_settings",
                     "AUTO SELL",
@@ -251,7 +252,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             for(String s : uni) save("custom enchants" + separator + "UNIQUE", s + ".yml");
             for(String s : sim) save("custom enchants" + separator + "SIMPLE", s + ".yml");
 
-            a.set("saved default custom enchants", true);
+            otherdata.set("saved default custom enchants", true);
             saveOtherData();
         }
         final String p = rpd + separator + "custom enchants";
@@ -282,7 +283,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 }
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + enabled.size() + "e, &c" + disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
 
         boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
@@ -316,6 +316,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 ei.setItem(i, item);
             }
         }
+        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + enabled.size() + "e, &c" + disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         givedpitem.items.remove("transmogscroll");
@@ -325,7 +326,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         disabled = null;
         rarities = null;
     }
-
 
     public void viewEnchants(CommandSender sender, int page) {
         final ChatEvents cea = ChatEvents.getChatEvents();

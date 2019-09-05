@@ -13,4 +13,4 @@ alchemist: "1500:2000:2500:3000:3500:4000"
 tinkerer: "51:60:69:78:87:96:105"
 #
 attributes:
-- "PvA;chance=7+level;if{[victim]healthIs<=:3+level:->addPotionEffect{[damager]strength:level-1:20*level}&&sendMessage{[damager]&e&l** EXECUTE **}}"
+- "PvA;chance=7+level;VictimHealth<=3+level;DamagerAddPotionEffect=strength:level-1:20*level;DamagerSendMessage=&e&l** EXECUTE **"

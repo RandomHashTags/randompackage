@@ -13,4 +13,4 @@ alchemist: "850:1700"
 tinkerer: "54:63:72"
 #
 attributes:
-- "PvA;chance=6+(2+level);addPotionEffect{[victim]confusion:level+2:120+(20*level)}"
+- "PvA;chance=6+(2+level);VictimAddPotionEffect=confusion:level+2:120+(20*level)"

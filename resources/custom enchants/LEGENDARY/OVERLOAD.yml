@@ -12,6 +12,6 @@ alchemist: "7000:9500"
 tinkerer: "143:154:165"
 #
 attributes:
-- "ArmorEquip;addPotionEffect{[player]health_boost:level-1:99999:true}"
-- "ArmorUnequip;removePotionEffect{[player]health_boost:true}"
-- "ArmorPieceBreak;removePotionEffect{[player]health_boost:true}"
+- "ArmorEquip;PlayerAddPotionEffect=health_boost:level-1:99999:true"
+- "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
+- "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"

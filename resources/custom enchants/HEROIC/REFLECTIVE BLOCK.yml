@@ -17,5 +17,5 @@ alchemist: ""
 tinkerer: ""
 #
 attribute:
-- "isDamaged;chance=12*level;if{[victim]isBlocking->setDamage{dmg*(1-(level*0.25))}}"
-- "isDamaged;chance=10*level;damage{[damager]dmg}"
+- "isDamaged;chance=12*level;VictimIsBlocking=true;SetDamage=dmg*(1-(level*0.25))"
+- "isDamaged;chance=10*level;DamagerDamage=dmg"

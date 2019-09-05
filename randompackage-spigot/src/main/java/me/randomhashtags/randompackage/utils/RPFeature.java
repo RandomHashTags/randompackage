@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.addons.utils.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
-import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.economy.Vault;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import net.milkbowl.vault.economy.Economy;
@@ -43,7 +43,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
     public static final File rpd = getPlugin.getDataFolder();
     public static final String separator = File.separator;
     public static final RegionalAPI regions = RegionalAPI.getRegionalAPI();
-    protected static final Economy eco = VaultAPI.getVaultAPI().getEconomy();
+    protected static final Economy eco = Vault.getVault().getEconomy();
     private static final TreeMap<Integer, String> treemap = new TreeMap<>();
 
     public static YamlConfiguration otherdata;
@@ -188,7 +188,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                 if(e != null) {
                     int level = 1;
                     if(P.split(":").length == 3)
-                        level = P.split(":")[2].equals("random") ? 1 + random.nextInt(e.getMaxLevel()) : P.split(":")[2].contains("-") ? Integer.parseInt(P.split(":")[2].split("\\-")[0]) + random.nextInt(Integer.parseInt(P.split(":")[2].split("\\-")[1])) : Integer.parseInt(P.split(":")[2]);
+                        level = P.split(":")[2].equals("random") ? 1 + random.nextInt(e.getMaxLevel()) : P.split(":")[2].contains("-") ? Integer.parseInt(P.split(":")[2].split("-")[0]) + random.nextInt(Integer.parseInt(P.split(":")[2].split("-")[1])) : Integer.parseInt(P.split(":")[2]);
                     item = new ItemStack(Material.ENCHANTED_BOOK, amount);
                     final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
                     meta.addStoredEnchant(e, level, true);
@@ -236,7 +236,9 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                 item.setItemMeta(itemMeta);
                 if(name != null && name.contains("{ENCHANT_SIZE}")) {
                     final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                    if(t.isEnabled()) t.applyTransmogScroll(item, getTransmogScroll("REGULAR"));
+                    if(t.isEnabled()) {
+                        t.applyTransmogScroll(item, getTransmogScroll("REGULAR"));
+                    }
                 }
             }
         }

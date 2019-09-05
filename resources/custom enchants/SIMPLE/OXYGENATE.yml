@@ -12,4 +12,4 @@ applies to: "pickaxe"
 tinkerer: "73"
 #
 attributes:
-- "BlockBreak;chance=70+(5*level);if{[player]isUnderwater->refillAir{[player]40}}"
+- "BlockBreak;chance=70+(5*level);PlayerIsUnderwater;PlayerSetAir=air+40"

@@ -13,6 +13,6 @@ alchemist: "10000:15000:20000"
 tinkerer: "109:144:179:214"
 #
 attributes:
-- "ArmorEquip;addPotionEffect{[player]strength:level-1:99999:true};addPotionEffect{[player]slowness:level-1:99999:true};addPotionEffect{[player]mining_fatigue:level-1:99999:true}"
-- "ArmorUnequip;removePotionEffect{[player]strength:true};removePotionEffect{[player]slowness:true};removePotionEffect{[player]mining_fatigue:true}"
-- "ArmorPieceBreak;removePotionEffect{[player]strength:true}"
+- "ArmorEquip;PlayerAddPotionEffect=strength:level-1:99999:true;PlayerAddPotionEffect=slowness:level-1:99999:true;PlayerAddPotionEffect=mining_fatigue:level-1:99999:true"
+- "ArmorUnequip;PlayerRemovePotionEffect=strength:true;PlayerRemovePotionEffect=slowness:true;PlayerRemovePotionEffect=mining_fatigue:true"
+- "ArmorPieceBreak;PlayerRemovePotionEffect=strength:true"

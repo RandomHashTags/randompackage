@@ -16,4 +16,4 @@ alchemist: "2250:2750"
 tinkerer: "68:82:96"
 #
 attributes:
-- "ArmorUnequip;addPotionEffect{[player]absorption:level+1:30+(10*level):true}"
+- "ArmorUnequip;PlayerAddPotionEffect=absorption:level+1:30+(10*level):true"

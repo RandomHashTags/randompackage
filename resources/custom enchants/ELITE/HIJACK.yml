@@ -14,4 +14,4 @@ alchemist: "3500:4000:4500"
 tinkerer: "49:57:65:73"
 #
 attributes:
-- "ArrowHit;chance=20+(10*level);if{hitCEEntity->setOwner{[shooter]}}"
+- "ArrowHit;chance=20+(10*level);HitCEEntity;SetOwner=Shooter"

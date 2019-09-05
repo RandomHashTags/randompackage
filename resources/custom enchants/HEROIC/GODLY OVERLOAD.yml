@@ -16,6 +16,6 @@ tinkerer: "1430:1540:1650"
 requires: "Overload;3"
 #
 attributes:
-- "ArmorEquip;addPotionEffect{health_boost:level+2:99999:true}"
-- "ArmorUnequip;removePotionEffect{health_boost:true}"
-- "ArmorPieceBreak;removePotionEffect{health_boost:true}"
+- "ArmorEquip;PlayerAddPotionEffect=health_boost:level+2:99999:true"
+- "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
+- "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"

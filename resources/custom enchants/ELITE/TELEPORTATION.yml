@@ -13,4 +13,4 @@ alchemist: "3200:4200:5200:6200"
 tinkerer: "51:64:77:90:103"
 #
 attributes:
-  - "ArrowHit;"
+  - "ProjectileHit;cancelled=true;VictimIsAlly"

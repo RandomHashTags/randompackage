@@ -31,7 +31,6 @@ public class EpicSky extends RPFeature implements Regional {
         im = EpicSkyblock.getIslandManager();
     }
     public void unload() {
-        im = null;
     }
 
     private User getUser(UUID player) {

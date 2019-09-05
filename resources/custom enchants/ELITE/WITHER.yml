@@ -12,4 +12,4 @@ alchemist: "2000:2200:2400:2600"
 tinkerer: "69:77:85:93:101"
 #
 attributes:
-- "isDamaged;chance=Lucky+(4+(2*level));addPotionEffect{[damager]wither:level-1:40+(40*level):false}"
+- "isDamaged;chance=Lucky+(4+(2*level));DamagerAddPotionEffect=wither:level-1:40+(40*level):false"

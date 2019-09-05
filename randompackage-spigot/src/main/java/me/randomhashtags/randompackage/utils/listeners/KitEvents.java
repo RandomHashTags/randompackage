@@ -50,7 +50,9 @@ public class KitEvents extends RPStorage implements Listener {
                 spawn.getKitClass().trySpawningFallenHero(player, is, spawn, event.getClickedBlock().getLocation());
             } else if(gem != null) {
                 gem.getKitClass().tryIncreaseTier(player, is, gem);
-            }
+            } else return;
+            event.setCancelled(true);
+            player.updateInventory();
         }
     }
 }

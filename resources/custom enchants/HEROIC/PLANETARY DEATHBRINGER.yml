@@ -16,4 +16,4 @@ tinkerer: ""
 requires: "Deathbringer;3"
 #
 attributes:
-- "PvA;chance=Lucky+(2*level);setDamage{dmg*2.5}"
+- "PvA;chance=Lucky+(2*level);SetDamage=dmg*2.5"

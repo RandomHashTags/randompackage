@@ -8,9 +8,13 @@ import me.randomhashtags.randompackage.attributes.event.SetDamage;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
@@ -43,6 +47,9 @@ public abstract class EventAttributes extends RPFeature {
                 // attributes
                 new AddPotionEffect(),
                 new BreakHitBlock(),
+                new ComboAdd(),
+                new ComboDeplete(),
+                new ComboStop(),
                 new Damage(),
                 new DepleteRarityGem(),
                 new DropItem(),
@@ -51,6 +58,7 @@ public abstract class EventAttributes extends RPFeature {
                 new Freeze(),
                 new GiveDrops(),
                 new GiveItem(),
+                new Heal(),
                 new Ignite(),
                 new KickWithReason(),
                 new PerformCommand(),
@@ -59,11 +67,17 @@ public abstract class EventAttributes extends RPFeature {
                 new SendMessage(),
                 new SetAir(),
                 new SetCancelled(),
+                new SetCompassTarget(),
                 new SetDroppedXp(),
                 new SetDurability(),
+                new SetFlySpeed(),
+                new SetGameMode(),
                 new SetHealth(),
                 new SetHunger(),
                 new SetNoDamageTicks(),
+                new SetSneaking(),
+                new SetSprinting(),
+                new SetWalkSpeed(),
                 new SetXp(),
                 new Smite(),
                 new StealXp(),
@@ -97,6 +111,27 @@ public abstract class EventAttributes extends RPFeature {
         }
         return false;
     }
+    private void doReplacements(HashMap<String, Entity> entities, Set<String> keys, String s) {
+        // TODO: add more replacements
+        for(String entity : keys) {
+            final Entity E = entities.get(entity);
+            final Location l = E.getLocation();
+            final boolean isLiving = E instanceof LivingEntity, isPlayer = isLiving && E instanceof Player;
+            final LivingEntity le = isLiving ? (LivingEntity) E : null;
+            final Player player = isPlayer ? (Player) E : null;
+            s = s.replace("get" + entity + "hp", isLiving ? Double.toString(le.getHealth()) : "0");
+            s = s.replace("get" + entity + "saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
+            if(s.contains("loc")) {
+                s = s.replace("get" + entity + "locx", Double.toString(l.getX()));
+                s = s.replace("get" + entity + "locy", Double.toString(l.getY()));
+                s = s.replace("get" + entity + "locz", Double.toString(l.getZ()));
+            }
+            if(s.contains("exp")) {
+                s = s.replace("get" + entity + "exp", isPlayer ? Integer.toString(getTotalExperience(player)) : "0");
+                s = s.replace("get" + entity + "explevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
+            }
+        }
+    }
 
     public boolean didPassConditions(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
         final boolean eight = version.contains("1.8"), nine = version.contains("1.9"), ten = version.contains("1.10"), eleven = version.contains("1.11"), thirteen = version.contains("1.13"), legacy = isLegacy;
@@ -122,25 +157,7 @@ public abstract class EventAttributes extends RPFeature {
                         s = s.toLowerCase();
 
                         if(hasReplacements(conditions)) {
-                            // TODO: add more replacements
-                            for(String entity : keys) {
-                                final Entity E = entities.get(entity);
-                                final Location l = E.getLocation();
-                                final boolean isLiving = E instanceof LivingEntity, isPlayer = isLiving && E instanceof Player;
-                                final LivingEntity le = isLiving ? (LivingEntity) E : null;
-                                final Player player = isPlayer ? (Player) E : null;
-                                s = s.replace("get" + entity + "hp", isLiving ? Double.toString(le.getHealth()) : "0");
-                                s = s.replace("get" + entity + "saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
-                                if(s.contains("loc")) {
-                                    s = s.replace("get" + entity + "locx", Double.toString(l.getX()));
-                                    s = s.replace("get" + entity + "locy", Double.toString(l.getY()));
-                                    s = s.replace("get" + entity + "locz", Double.toString(l.getZ()));
-                                }
-                                if(s.contains("exp")) {
-                                    s = s.replace("get" + entity + "exp", isPlayer ? Integer.toString(getTotalExperience(player)) : "0");
-                                    s = s.replace("get" + entity + "explevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
-                                }
-                            }
+                            doReplacements(entities, keys, s);
                         }
 
                         if(condition.startsWith(s)) {
@@ -162,27 +179,29 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = e.isOp() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isinsidevehicle=")) {
                                 passed = e.isInsideVehicle() == Boolean.parseBoolean(value);
+                            } else if(condition.startsWith(s + "isriding=")) {
+                                passed = e.isInsideVehicle() && e.getVehicle().getType().name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "iscustomnamevisible=")) {
                                 passed = e.isCustomNameVisible() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isonground=")) {
                                 passed = e.isOnGround() == Boolean.parseBoolean(value);
-                        /*
-                            Ageable conditions
-                         */
+                            /*
+                                Ageable conditions
+                             */
                             } else if(condition.startsWith(s + "isadult=")) {
                                 passed = e instanceof Ageable && ((Ageable) e).isAdult() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isbaby=")) {
                                 passed = e instanceof Zombie && ((Zombie) e).isBaby() || e instanceof Ageable && ((Ageable) e).isAdult() != Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "canbreed=")) {
                                 passed = e instanceof Ageable && ((Ageable) e).canBreed() == Boolean.parseBoolean(value);
-                        /*
-                            Animals conditions
-                         */
+                            /*
+                                Animals conditions
+                             */
                             } else if(condition.startsWith(s + "inlovemode=")) {
                                 passed = !legacy && !thirteen && e instanceof Animals && ((Animals) e).isLoveMode() == Boolean.parseBoolean(value);
-                        /*
-                            ArmorStand conditions
-                         */
+                            /*
+                                ArmorStand conditions
+                             */
                             } else if(condition.startsWith(s + "hasbaseplate=")) {
                                 passed = e instanceof ArmorStand && ((ArmorStand) e).hasBasePlate() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "hasarms=")) {
@@ -193,14 +212,14 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = e instanceof ArmorStand && ((ArmorStand) e).isSmall() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isvisible=")) {
                                 passed = e instanceof ArmorStand && ((ArmorStand) e).isVisible() == Boolean.parseBoolean(value);
-                        /*
-                            Bat conditions
-                         */
+                            /*
+                                Bat conditions
+                             */
                             } else if(condition.startsWith(s + "isawake=")) {
                                 passed = e instanceof Bat && ((Bat) e).isAwake() == Boolean.parseBoolean(value);
-                        /*
-                            Cat conditions
-                         */
+                            /*
+                                Cat conditions
+                             */
                             } else if(condition.startsWith(s + "cattype=")) {
                                 passed = isLegacy ? e instanceof Ocelot && ((Ocelot) e).getCatType().name().equalsIgnoreCase(value) : e instanceof Cat && ((Cat) e).getCatType().name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "collarcolor=")) {
@@ -212,43 +231,48 @@ public abstract class EventAttributes extends RPFeature {
                                     passed = false;
                                 }
 
-                        /*
-                            ChestedHorse conditions
-                         */
+                            /*
+                                ChestedHorse conditions
+                             */
                             } else if(condition.startsWith(s + "iscarryingchest=")) {
                                 if(eight || nine || ten) {
                                     passed = e instanceof Horse && ((Horse) e).isCarryingChest() == Boolean.parseBoolean(value);
                                 } else {
                                     passed = e instanceof ChestedHorse && ((ChestedHorse) e).isCarryingChest() == Boolean.parseBoolean(value);
                                 }
-                        /*
-                            Creeper conditions
-                         */
+                            /*
+                                Creeper conditions
+                             */
                             } else if(condition.startsWith(s + "ispowered=")) {
                                 passed = e instanceof Creeper && ((Creeper) e).isPowered() == Boolean.parseBoolean(value);
-                        /*
-                            EnderCrystal conditions
-                         */
+                            /*
+                                EnderCrystal conditions
+                             */
                             } else if(condition.startsWith(s + "isshowingbottom=")) {
                                 passed = eight ? true : e instanceof EnderCrystal && ((EnderCrystal) e).isShowingBottom() == Boolean.parseBoolean(value);
-                        /*
-                            EnderDragon conditions
-                         */
+                            /*
+                                EnderDragon conditions
+                             */
                             } else if(condition.startsWith(s + "phase=")) {
                                 passed = eight ? true : e instanceof EnderDragon && ((EnderDragon) e).getPhase().name().equalsIgnoreCase(value);
-                        /*
-                            Enderman conditions
-                         */
+                            /*
+                                Enderman conditions
+                             */
                             } else if(condition.startsWith(s + "iscarrying=")) {
                                 passed = e instanceof Enderman && UMaterial.match(((Enderman) e).getCarriedMaterial().getItemType().name()).name().equalsIgnoreCase(value);
-                        /*
-                            Endermite conditions
-                         */
+                            /*
+                                Endermite conditions
+                             */
                             } else if(condition.startsWith(s + "isplayerspawned=")) {
                                 passed = legacy || thirteen ? false : e instanceof Endermite && ((Endermite) e).isPlayerSpawned() == Boolean.parseBoolean(value);
-                        /*
-                            Version dependent Entity conditions
-                         */
+                            /*
+                                Entity conditions
+                             */
+                            } else if(condition.startsWith(s + "inbiome=")) {
+                                final Chunk chunk = e.getLocation().getChunk();
+                                passed = e.getWorld().getBiome(chunk.getX(), chunk.getZ()).name().equalsIgnoreCase(value);
+                            } else if(condition.startsWith(s + "inworld=")) {
+                                passed = e.getWorld().getName().equals(value);
                             } else if(condition.startsWith(s + "isglowing=")) {
                                 passed = !eight && e.isGlowing() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isinvulnerable=")) {
@@ -257,43 +281,45 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = !eight && !nine && e.isSilent() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "hasgravity=")) {
                                 passed = e instanceof ArmorStand && ((ArmorStand) e).hasGravity() || !eight && !nine && !ten && e.hasGravity() == Boolean.parseBoolean(value);
-                        /*
-                            Evoker conditions
-                         */
+                            } else if(condition.startsWith(s + "worlddifficulty=")) {
+                                passed = e.getWorld().getDifficulty().name().equalsIgnoreCase(value);
+                            /*
+                                Evoker conditions
+                             */
                             } else if(condition.startsWith(s + "currentspell=")) {
                                 passed = eight || nine | ten ? false : e instanceof Evoker && ((Evoker) e).getCurrentSpell().name().equalsIgnoreCase(value);
-                        /*
-                            Explosive conditions
-                         */
+                            /*
+                                Explosive conditions
+                             */
                             } else if(condition.startsWith(s + "isincendiary=")) {
                                 passed = e instanceof Explosive && ((Explosive) e).isIncendiary() == Boolean.parseBoolean(value);
-                        /*
-                            FallingBlock conditions
-                         */
+                            /*
+                                FallingBlock conditions
+                             */
                             } else if(condition.startsWith(s + "material=")) {
                                 passed = e instanceof FallingBlock && UMaterial.match(((FallingBlock) e).getMaterial().name()).name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "canhurtentities=")) {
                                 passed = e instanceof FallingBlock && ((FallingBlock) e).canHurtEntities() == Boolean.parseBoolean(value);
-                        /*
-                            Firework conditions
-                         */
+                            /*
+                                Firework conditions
+                             */
                             } else if(condition.startsWith(s + "isshotatangle=")) {
                                 passed = isLegacy || thirteen ? false : e instanceof Firework && ((Firework) e).isShotAtAngle() == Boolean.parseBoolean(value);
-                        /*
-                            Fox conditions
-                         */
+                            /*
+                                Fox conditions
+                             */
                             } else if(condition.startsWith(s + "foxtype=")) {
                                 passed = isLegacy || thirteen ? false : e instanceof Fox && ((Fox) e).getFoxType().name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "iscrouching=")) {
                                 passed = isLegacy || thirteen ? false : e instanceof Fox && ((Fox) e).isCrouching() == Boolean.parseBoolean(value);
-                        /*
-                            Guardian conditions
-                         */
+                            /*
+                                Guardian conditions
+                             */
                             } else if(condition.startsWith(s + "iselder=")) {
                                 passed = e instanceof Guardian && ((Guardian) e).isElder() == Boolean.parseBoolean(value);
-                        /*
-                            Horse (+MushroomCow, Llama, Colorable) conditions
-                         */
+                            /*
+                                Horse (+MushroomCow, Llama, Colorable) conditions
+                             */
                             } else if(condition.startsWith(s + "isvariant=")) {
                                 if(e instanceof Horse) {
                                     passed = ((Horse) e).getVariant().name().equalsIgnoreCase(value);
@@ -316,9 +342,9 @@ public abstract class EventAttributes extends RPFeature {
                                 }
                             } else if(condition.startsWith(s + "style=")) {
                                 passed = e instanceof Horse && ((Horse) e).getStyle().name().equalsIgnoreCase(value);
-                        /*
-                            Husk conditions
-                         */
+                            /*
+                                Husk conditions
+                             */
                             } else if(condition.startsWith(s + "isconverting=")) {
                                 if(legacy || thirteen) {
                                     passed = false;
@@ -326,19 +352,19 @@ public abstract class EventAttributes extends RPFeature {
                                     final boolean b = Boolean.parseBoolean(value);
                                     passed = b && (e instanceof Husk && ((Husk) e).isConverting() || e instanceof PigZombie && ((PigZombie) e).isConverting() || e instanceof Zombie && ((Zombie) e).isConverting());
                                 }
-                        /*
-                            IronGolem conditions
-                         */
+                            /*
+                                IronGolem conditions
+                             */
                             } else if(condition.startsWith(s + "isplayercreated=")) {
                                 passed = e instanceof IronGolem && ((IronGolem) e).isPlayerCreated() == Boolean.parseBoolean(value);
-                        /*
-                            LightningStrike conditions
-                         */
+                            /*
+                                LightningStrike conditions
+                             */
                             } else if(condition.startsWith(s + "iseffect=")) {
                                 passed = e instanceof LightningStrike && ((LightningStrike) e).isEffect() == Boolean.parseBoolean(value);
-                        /*
-                            LivingEntity conditions
-                         */
+                            /*
+                                LivingEntity conditions
+                             */
                             } else if(condition.startsWith(s + "isleashed=")) {
                                 passed = e instanceof LivingEntity && ((LivingEntity) e).isLeashed() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "isswimming=")) {
@@ -370,30 +396,30 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = e instanceof LivingEntity && ((LivingEntity) e).getRemainingAir() <= Integer.parseInt(value);
                             } else if(condition.startsWith(s + "remainingair>=")) {
                                 passed = e instanceof LivingEntity && ((LivingEntity) e).getRemainingAir() >= Integer.parseInt(value);
-                        /*
-                            Minecart conditions
-                         */
+                            /*
+                                Minecart conditions
+                             */
                             } else if(condition.startsWith(s + "isslowwhenempty=")) {
                                 passed = e instanceof Minecart && ((Minecart) e).isSlowWhenEmpty() == Boolean.parseBoolean(value);
                             } else if(condition.startsWith(s + "displayedblock=")) {
                                 passed = e instanceof Minecart && UMaterial.match(((Minecart) e).getDisplayBlock().getItemType().name()).name().equalsIgnoreCase(value);
-                        /*
-                            Mob conditions
-                         */
+                            /*
+                                Mob conditions
+                             */
                             } else if(condition.startsWith(s + "hastarget=")) {
                                 if(!legacy) {
                                     passed = e instanceof Mob && ((Mob) e).getTarget() != null;
                                 } else {
                                     passed = false;
                                 }
-                        /*
-                            Painting conditions
-                         */
+                            /*
+                                Painting conditions
+                             */
                             } else if(condition.startsWith(s + "art=")) {
                                 passed = e instanceof Painting && ((Painting) e).getArt().name().equalsIgnoreCase(value);
-                        /*
-                            Panda conditions
-                         */
+                            /*
+                                Panda conditions
+                             */
                             } else if(condition.startsWith(s + "maingene=")) {
                                 passed = legacy || thirteen ? false : e instanceof Panda && ((Panda) e).getMainGene().name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "maingeneisrecessive=")) {
@@ -402,14 +428,14 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = legacy || thirteen ? false : e instanceof Panda && ((Panda) e).getHiddenGene().name().equalsIgnoreCase(value);
                             } else if(condition.startsWith(s + "hiddengeneisrecessive=")) {
                                 passed = legacy || thirteen ? false : e instanceof Panda && ((Panda) e).getHiddenGene().isRecessive() == Boolean.parseBoolean(value);
-                        /*
-                            Pig conditions
-                         */
+                            /*
+                                Pig conditions
+                             */
                             } else if(condition.startsWith(s + "hassaddle=")) {
                                 passed = e instanceof Pig && ((Pig) e).hasSaddle() == Boolean.parseBoolean(value);
-                        /*
-                            PigZombie conditions
-                         */
+                            /*
+                                PigZombie conditions
+                             */
                             } else if(condition.startsWith(s + "isangry=")) {
                                 if(e instanceof PigZombie) {
                                     passed = ((PigZombie) e).isAngry() == Boolean.parseBoolean(value);
@@ -471,6 +497,18 @@ public abstract class EventAttributes extends RPFeature {
                                 passed = legacy || e instanceof Player && ((Player) e).getClientViewDistance() >= Integer.parseInt(value);
                             } else if(condition.startsWith(s + "language=")) {
                                 passed = eight || nine || ten || eleven || e instanceof Player && ((Player) e).getLocale().equalsIgnoreCase(value);
+                            } else if(condition.startsWith(s + "walkspeed=")) {
+                                passed = e instanceof Player && ((Player) e).getWalkSpeed() == Float.parseFloat(value);
+                            } else if(condition.startsWith(s + "walkspeed<=")) {
+                                passed = e instanceof Player && ((Player) e).getWalkSpeed() <= Float.parseFloat(value);
+                            } else if(condition.startsWith(s + "walkspeed>=")) {
+                                passed = e instanceof Player && ((Player) e).getWalkSpeed() >= Float.parseFloat(value);
+                            } else if(condition.startsWith(s + "flyspeed=")) {
+                                passed = e instanceof Player && ((Player) e).getFlySpeed() == Float.parseFloat(value);
+                            } else if(condition.startsWith(s + "flyspeed<=")) {
+                                passed = e instanceof Player && ((Player) e).getFlySpeed() <= Float.parseFloat(value);
+                            } else if(condition.startsWith(s + "flyspeed>=")) {
+                                passed = e instanceof Player && ((Player) e).getFlySpeed() >= Float.parseFloat(value);
                             /*
                                 Projectile conditions
                              */
@@ -551,14 +589,14 @@ public abstract class EventAttributes extends RPFeature {
                             } else if(condition.startsWith(s + "villagertype=")) {
                                 passed = e instanceof Villager && !(legacy || thirteen) && ((Villager) e).getVillagerType().name().equalsIgnoreCase(value);
                             /*
-                                WitherSkill conditions
+                                WitherSkull conditions
                              */
                             } else if(condition.startsWith(s + "ischarged=")) {
                                 passed = e instanceof WitherSkull && ((WitherSkull) e).isCharged() == Boolean.parseBoolean(value);
                             /*
                                 Zombie conditions
                              */
-                            } else if(condition.startsWith(s + "isvillager=")) {
+                            } else if(c.startsWith(s + "isvillager=")) {
                                 passed = e instanceof Zombie && ((Zombie) e).isVillager() == Boolean.parseBoolean(value);
                             /*
                                 RandomPackage conditions
@@ -606,7 +644,6 @@ public abstract class EventAttributes extends RPFeature {
         return passed;
     }
 
-
     protected HashMap<String, Entity> getEntities(Object...values) {
         final HashMap<String, Entity> e = new HashMap<>();
         for(int i = 0; i < values.length; i++) {
@@ -640,6 +677,19 @@ public abstract class EventAttributes extends RPFeature {
         }
         return e;
     }
+    private HashMap<String, Entity> getNearbyType(Player player, double radiusX, double radiusY, double radiusZ, String type) {
+        final UUID u = player.getUniqueId();
+        final List<UUID> t = type.equals("ALLY") ? regions.getAllies(u) : type.equals("ENEMY") ? regions.getEnemies(u) : type.equals("TRUCE") ? regions.getTruces(u) : regions.getAssociates(u);
+        final HashMap<String, Entity> n = new HashMap<>();
+        final HashMap<String, Entity> nearby = getNearbyEntities(player.getLocation(), radiusX, radiusY, radiusZ);
+        for(String s : nearby.keySet()) {
+            final Entity entity = nearby.get(s);
+            if(entity instanceof Player && t.contains(entity.getUniqueId())) {
+                n.put(s, entity);
+            }
+        }
+        return n;
+    }
 
     private HashMap<RPPlayer, String> getData(HashMap<String, Entity> entities, HashMap<String, String> entityValues) {
         final HashMap<RPPlayer, String> a = new HashMap<>();
@@ -662,23 +712,25 @@ public abstract class EventAttributes extends RPFeature {
             final HashMap<RPPlayer, String> data = getData(entities, entityValues);
             final boolean dadda = !data.isEmpty(), entity1NN = entity1 != null, entity2NN = entity2 != null;
             for(EventAttribute a : values.keySet()) {
-                final HashMap<Entity, String> valuez = values.get(a);
-                final String defaultValue = valuez.getOrDefault(null, null);
-                if(a.getIdentifier().equals("WAIT")) {
-                    final int ticks = (int) evaluate(defaultValue);
-                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attributes = new LinkedHashMap<>(values);
-                    attributes.remove(a);
-                    scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes), ticks);
-                    break;
-                } else {
-                    a.execute(event);
-                    if(dadda) a.executeData(data);
-                    valuez.remove(null);
-                    a.execute(valuez);
-                    if(defaultValue != null) {
-                        a.execute(event, defaultValue);
-                        if(entity1NN && entity2NN) {
-                            a.execute(entity1, entity2, defaultValue);
+                if(!a.isCancelled()) {
+                    final HashMap<Entity, String> valuez = values.get(a);
+                    final String defaultValue = valuez.getOrDefault(null, null);
+                    if(a.getIdentifier().equals("WAIT")) {
+                        final int ticks = (int) evaluate(defaultValue);
+                        final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attributes = new LinkedHashMap<>(values);
+                        attributes.remove(a);
+                        scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes), ticks);
+                        break;
+                    } else {
+                        a.execute(event);
+                        if(dadda) a.executeData(data);
+                        valuez.remove(null);
+                        a.execute(valuez);
+                        if(defaultValue != null) {
+                            a.execute(event, defaultValue);
+                            if(entity1NN && entity2NN) {
+                                a.execute(entity1, entity2, defaultValue);
+                            }
                         }
                     }
                 }
@@ -705,7 +757,7 @@ public abstract class EventAttributes extends RPFeature {
 
                     for(String c : s.split(semi[0] + ";")[1].split(";")) {
                         if(c.contains("=")) {
-                            final String[] values = c.split("=");
+                            final String[] values = c.split("="), fvalues = values[0].split("\\(");
                             String value1 = values[1], string = values[0].toUpperCase();
                             if(hasReplacements) {
                                 for(String r : replacements.keySet()) {
@@ -714,7 +766,24 @@ public abstract class EventAttributes extends RPFeature {
                             }
                             for(String entity : entities.keySet()) {
                                 final String E = entity.toUpperCase();
-                                if(string.contains(E)) {
+                                if(string.startsWith("NEARBY" + E)) {
+                                    final String radius = fvalues[1].split("\\)")[0];
+                                    final boolean ally = string.contains(E + "ALLIES"), enemy = string.contains(E + "ENEMIES"), truce = string.contains(E + "TRUCES"), member = string.contains(E + "MEMBERS");
+                                    if(ally || enemy || truce || member) {
+                                        string = string.replace("NEARBY" + E + (ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS") + "(" + radius + ")", "");
+                                        final Entity en = entities.get(entity);
+                                        if(en instanceof Player) {
+                                            final Player player = (Player) en;
+                                            final String[] a = radius.split(":");
+                                            final double x = evaluate(a[0]), y = evaluate(a[1]), z = evaluate(a[2]);
+                                            final HashMap<String, Entity> nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : "MEMBER");
+                                            entities.putAll(nearby);
+                                            for(String n : nearby.keySet()) {
+                                                entityValues.put(n, value1);
+                                            }
+                                        }
+                                    }
+                                } else if(string.contains(E)) {
                                     string = string.replace(E, "");
                                     entityValues.put(entity, value1);
                                 }

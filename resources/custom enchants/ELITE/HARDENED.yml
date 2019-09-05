@@ -12,4 +12,4 @@ alchemist: "4500:6500"
 tinkerer: "91:105:119"
 #
 attributes:
-- "isDurabilityDamaged;chance=16+(8*level);cancel"
+- "isDurabilityDamaged;chance=16+(8*level);SetCancelled=true"

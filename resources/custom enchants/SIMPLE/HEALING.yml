@@ -1,5 +1,5 @@
 # Made by RandomHashTags
-enabled: false
+enabled: true
 #
 name: "Healing"
 lore:
@@ -15,4 +15,4 @@ alchemist: "950:1400:1850"
 tinkerer: "54:63:72:81"
 #
 attributes:
-- ""
+- "ProjectileHit;VictimIsAlly=true;VictimHeal=2;chance=10*level"

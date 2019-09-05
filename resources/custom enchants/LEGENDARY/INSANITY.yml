@@ -15,4 +15,4 @@ alchemist: "6000:7000:8000:9000:10000:11000:12000"
 tinkerer: "76:88:100:112:124:136:148:160"
 #
 attributes:
-- "PvP;chance=4+(2*level);if{[victim]isHolding(SWORD)->setDamage{dmg*(.5*level)}}"
+- "PvP;chance=4+(2*level);VictimIsHolding=SWORD;SetDamage=dmg*(.5*level)"

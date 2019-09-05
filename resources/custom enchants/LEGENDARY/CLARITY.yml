@@ -13,4 +13,4 @@ alchemist: "6000:7000"
 tinkerer: "87:100:113"
 #
 attributes:
-- "CEApplyPotionEffect;if{level<=potionlevel->cancel}"
+- "CEApplyPotionEffect;level<=potionlevel;SetCancelled=true"

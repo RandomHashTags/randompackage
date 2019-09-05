@@ -36,45 +36,22 @@ import java.util.*;
 public abstract class CustomEnchantUtils extends RPFeature {
     public String getIdentifier() { return "CUSTOM_ENCHANT_UTILS"; }
 
-    private static boolean isEnabled = false;
-    public static YamlConfiguration config;
-
-    public static List<UUID> spawnedFromSpawner;
-    public static List<Player> stoppedAllEnchants, frozen;
     public static HashMap<CustomEnchant, Integer> timerenchants;
     public static HashMap<Player, HashMap<CustomEnchant, Integer>> stoppedEnchants;
-    public static HashMap<Player, HashMap<CustomEnchant, Double>> combos;
     public static HashMap<Location, HashMap<ItemStack, HashMap<Block, Integer>>> temporaryblocks; // <block location <original block, <temporary new block, ticks>>>>
     public static HashMap<UUID, ItemStack> shotBows;
     public static HashMap<UUID, Player> shotbows;
 
     public void loadUtils() {
-        if(isEnabled) return;
-        isEnabled = true;
-        save(null, "custom enchants.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
-
-        spawnedFromSpawner = new ArrayList<>();
-        stoppedAllEnchants = new ArrayList<>();
-        frozen = new ArrayList<>();
         timerenchants = new HashMap<>();
         stoppedEnchants = new HashMap<>();
-        combos = new HashMap<>();
         temporaryblocks = new HashMap<>();
         shotBows = new HashMap<>();
         shotbows = new HashMap<>();
     }
     public void unloadUtils() {
-        if(!isEnabled) return;
-        isEnabled = false;
-        config = null;
-        spawnedFromSpawner = null;
         timerenchants = null;
-        stoppedAllEnchants = null;
-        for(Player p : frozen) p.setWalkSpeed(0.2f);
-        frozen = null;
         stoppedEnchants = null;
-        combos = null;
         temporaryblocks = null;
         shotBows = null;
         shotbows = null;
@@ -291,11 +268,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             int r = min + random.nextInt(max - min + 1);
             a = a.replace("random{" + e + "}", Integer.toString(r));
         }
-        if(a.contains("combo{")) {
-            final String e = a.split("combo\\{")[1].split("}")[0], o = e.split(":")[0];
-            final double combo = combos.keySet().contains(player) && combos.get(player).keySet().contains(o) ? combos.get(player).get(o) : 1.00;
-            a = a.replace("combo{" + e + "}", Double.toString(combo));
-        }
         if(a.contains("direction")) {
             final String type = "direction" + (a.contains("directionXOf") ? "X" : a.contains("directionYOf") ? "Y" : a.contains("directionZOf") ? "Z" : "") + "Of", r = a.split(type + "\\{")[1].split("}")[0];
             final LivingEntity recip = getRecipient(event, r);
@@ -387,21 +359,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.toLowerCase().startsWith("depletestacksize{") && event instanceof MobStackDepleteEvent) {
             final int amount = Integer.parseInt(a.split("\\{")[1].split("}")[0]);
             ((MobStackDepleteEvent) event).amount = amount;
-        } else if(a.toLowerCase().startsWith("createcombo{")) {
-            final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
-            createCombo(player, n, Double.parseDouble(path.split(":")[1]));
-        } else if(a.toLowerCase().startsWith("addcombo{")) {
-            final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
-            addCombo(player, n, Double.parseDouble(path.split(":")[1]));
-        } else if(a.toLowerCase().startsWith("depletecombo{")) {
-            final String path = a.split("\\{")[1].split("}")[0];
-            final CustomEnchant n = valueOfCustomEnchant(path.split(":")[0]);
-            depleteCombo(player, n, Double.parseDouble(path.split(":")[1]));
-        } else if(a.toLowerCase().startsWith("stopcombo{")) {
-            final CustomEnchant n = valueOfCustomEnchant(a.split("\\{")[1].split("}")[0]);
-            stopCombo(player, n);
         } else if(a.toLowerCase().startsWith("if{")) {
             doIf(ev, event, enchant, level, a, attribute, b, a.split("\\{")[1], P);
         }
@@ -587,26 +544,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
     /*
         ATTRIBUTES
      */
-    public void createCombo(Player player, CustomEnchant source, double base) {
-        if(!combos.keySet().contains(player)) combos.put(player, new HashMap<>());
-        if(!combos.get(player).keySet().contains(source)) combos.get(player).put(source, base);
-    }
-    public void addCombo(Player player, CustomEnchant source, double addition) {
-        if(!combos.containsKey(player)) combos.put(player, new HashMap<>());
-        final double prev = combos.get(player).getOrDefault(source, 0.00);
-        combos.get(player).put(source, prev+addition);
-    }
-    public void depleteCombo(Player player, CustomEnchant source, double depletion) {
-        if(combos.containsKey(player) && combos.get(player).containsKey(source)) {
-            final double d = combos.get(player).get(source), de = d-depletion;
-            combos.get(player).put(source, de < 0.00 ? 0.00 : round(de, 2));
-        }
-    }
-    public void stopCombo(Player player, CustomEnchant source) {
-        if(combos.containsKey(player) && combos.get(player).containsKey(source)) {
-            combos.get(player).remove(source);
-        }
-    }
     public void addPotionEffect(Event event, Player player, LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
         if(entity != null) {
             final CEAApplyPotionEffectEvent e = new CEAApplyPotionEffectEvent(event, player, entity, enchant, level, potioneffect);

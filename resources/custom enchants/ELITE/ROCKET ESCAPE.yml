@@ -12,4 +12,4 @@ alchemist: "1250:1750"
 tinkerer: "128:139:150"
 #
 attributes:
-- "isDamaged;(Lucky*2)+(65+(5*level));if{[victim]healthIs<=:8:->addPotionEffect{[victim]jump:19+level:20+(20*level):true}&&addPotionEffect{[victim]regeneration:level:20+(20*level):true}"
+- "isDamaged;(Lucky*2)+(65+(5*level));VictimHealth<=8;VictimAddPotionEffect=jump:19+level:20+(20*level):true;VictimAddPotionEffect=regeneration:level:20+(20*level):true"

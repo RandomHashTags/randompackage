@@ -43,10 +43,6 @@ public class FactionsUUID extends RPFeature implements Regional {
         relations = new HashMap<>();
     }
     public void unload() {
-        fi = null;
-        f = null;
-        b = null;
-        relations = null;
     }
 
     private Faction getFaction(UUID player) {
@@ -68,14 +64,15 @@ public class FactionsUUID extends RPFeature implements Regional {
         if(relations.get(faction).containsKey(TYPE)) {
             return relations.get(faction).get(TYPE);
         } else {
+            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
             for(FPlayer fp : fi.getAllFPlayers()) {
-                final Relation t = fp.getRelationTo(f);
-                if(TYPE.equals("MEMBERS") && t.isMember()
-                        || TYPE.equals("ENEMIES") && t.isEnemy()
-                        || TYPE.equals("ALLIES") && t.isAlly()
-                        || TYPE.equals("TRUCES") && t.isTruce()
-                        || TYPE.equals("NEUTRAL") && t.isNeutral()
+                final Relation r = fp.getRelationTo(f);
+                if(m && r.isMember()
+                        || e && r.isEnemy()
+                        || a && r.isAlly()
+                        || t && r.isTruce()
+                        || n && r.isNeutral()
                 )
                     members.add(fp.getPlayer().getUniqueId());
             }

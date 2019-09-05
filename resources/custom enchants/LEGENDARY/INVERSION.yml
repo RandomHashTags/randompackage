@@ -14,4 +14,4 @@ alchemist: "6500:7500:8500"
 tinkerer: "67:76:85:94"
 #
 attributes:
-- "isDamaged;chance=6+(2*level);setDamage{0};heal{[victim]random{0:3}};sendMessage{[victim]&6&l** INVERSION **}"
+- "isDamaged;chance=6+(2*level);SetDamage=0;VictimHeal=random{0:3};VictimSendMessage=&6&l** INVERSION **"

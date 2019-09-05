@@ -6,10 +6,10 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class VaultAPI {
-    private static VaultAPI instance;
-    public static VaultAPI getVaultAPI() {
-        if(instance == null) instance = new VaultAPI();
+public class Vault {
+    private static Vault instance;
+    public static Vault getVault() {
+        if(instance == null) instance = new Vault();
         return instance;
     }
     private boolean didSetupEco = false;

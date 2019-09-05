@@ -32,7 +32,7 @@ public class CommandManager extends Reflect {
     private FileConfiguration config;
     private ConsoleCommandSender console;
 
-    public String getIdentifier() { return "RP_COMMAND_MANAGER"; }
+    public String getIdentifier() { return "COMMAND_MANAGER"; }
     protected RPFeature getFeature() { return getCommandManager(randompackage); }
     private CommandManager() {
         actualCmds = new HashMap<>();
@@ -119,7 +119,7 @@ public class CommandManager extends Reflect {
                 features.put(f.getIdentifier(), f);
             }
         } catch (Exception e) {
-            console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage &cERROR&6] &c&lError trying to load feature:&r &f" + f.getIdentifier()));
+            console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier()));
             e.printStackTrace();
         }
     }

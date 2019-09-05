@@ -11,7 +11,7 @@ import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.obj.Backup;
 import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
-import me.randomhashtags.randompackage.utils.supported.economy.VaultAPI;
+import me.randomhashtags.randompackage.utils.supported.economy.Vault;
 import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
@@ -79,7 +79,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         api = RandomPackageAPI.api;
         rpevents = RPEvents.getRPEvents();
 
-        VaultAPI.getVaultAPI().setupEconomy();
+        Vault.getVault().setupEconomy();
 
         api.enable();
         getCommand("randompackage").setExecutor(api);

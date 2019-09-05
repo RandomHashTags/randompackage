@@ -13,4 +13,4 @@ alchemist: "3000:3500:4000"
 tinkerer: "104:115:126:137"
 #
 attributes:
-- "isDamaged;chance=Lucky+13+(2*level);smite([damage]1)"
+- "isDamaged;chance=Lucky+13+(2*level);DamagerSmite=1"

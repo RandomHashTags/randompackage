@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Mighty Cleave"
 lore:
-- "&eThe heroic v of Cleave. Deals"
+- "&eThe heroic version of Cleave. Deals"
 - "&eup to 8 damage in up to a 4.25 block"
 - "&eradius."
 #
@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Cleave;7"
 #
 attributes:
-- "PvA;chance=4+(3*level);damage{nearby{damager:victim:1.0625*level:1.0625*level:1.0625*level}level*2}"
+- "PvA;chance=4+(3*level);NearbyEnemies(victim:1.0625*level:1.0625*level:1.0625*level)Damage=level*2"

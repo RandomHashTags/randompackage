@@ -13,4 +13,4 @@ alchemist: "2000"
 tinkerer: "58:66"
 #
 attributes:
-- "isDamaged;chance=25+(25*level);damage{[damager]level}"
+- "isDamaged;chance=25+(25*level);DamagerDamage=level"

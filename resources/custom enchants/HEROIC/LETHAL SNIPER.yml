@@ -17,4 +17,4 @@ tinkerer: ""
 requires: "Sniper;5"
 #
 attributes:
-- "ArrowHit;chance=40+(5*level);if{isHeadshot->setDamage{dmg*(3.5+(random{0:level}*0.2))}}"
+- "ArrowHit;chance=40+(5*level);IsHeadshot=true;SetDamage=dmg*(3.5+(random{0:level}*0.2))"

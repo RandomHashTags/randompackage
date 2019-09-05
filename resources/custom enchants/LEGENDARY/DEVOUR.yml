@@ -14,4 +14,4 @@ alchemist: "6000:7000:8000"
 tinkerer: "108:117:126:135"
 #
 attributes:
-- "PvP;if{hasBleedStacks->setDamage{dmg*(1+(0.05*level))}}"
+- "PvP;VictimHasBleedStacks=true;SetDamage=dmg*(1+(0.05*level))"

@@ -13,4 +13,4 @@ alchemist: "2000:2500"
 tinkerer: "59:66:73"
 #
 attributes:
-- "KilledPlayer;chance=20*level;dropItem{[victim]player_head_item;owner=victim;amount=1}"
+- "EntityDeath;VictimIsPlayer=true;chance=20*level;VictimDropItem=player_head_item:Victim}"

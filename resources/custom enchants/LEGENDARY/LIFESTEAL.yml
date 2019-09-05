@@ -13,4 +13,4 @@ alchemist: "6500:8000:9500:11000"
 tinkerer: "124:136:148:160:172"
 #
 attributes:
-- "PvA;chance=2*level;heal{[damager]1h};setHealth{[victim]healthOf(VICTIM)-1};sendMessage{[damager]&6&l** LIFESTEAL **}"
+- "PvA;chance=2*level;DamagerHeal=2;VictimSetHealth=VictimHealth-1;DamagerSendMessage=&6&l** LIFESTEAL **"

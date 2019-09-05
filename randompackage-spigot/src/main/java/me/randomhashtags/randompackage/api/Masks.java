@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Mask;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileMask;
 import me.randomhashtags.randompackage.events.*;
@@ -10,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,7 +21,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -33,7 +32,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
-public class Masks extends CustomEnchants implements Listener {
+public class Masks extends EventAttributes implements Listener {
     private static Masks instance;
     public static Masks getMasks() {
         if(instance == null) instance = new Masks();
@@ -209,68 +208,13 @@ public class Masks extends CustomEnchants implements Listener {
             else if(mm != null) procMaskAttributes(player, event, mm);
         }
     }
-    public void procMaskAttributes(Player player, Event event, Mask mask) {
-        for(String attr : mask.getAttributes()) {
-            final String A = attr.split(";")[0].toLowerCase();
-            if(event instanceof PlayerArmorEvent && (A.equals("armorequip") && ((PlayerArmorEvent) event).reason.name().contains("_EQUIP") || A.equals("armorunequip") && ((PlayerArmorEvent) event).reason.name().contains("_UNEQUIP") || A.equals("armorpiecebreak") && ((PlayerArmorEvent) event).reason.equals(PlayerArmorEvent.ArmorEventReason.BREAK))
-                    || event instanceof PvAnyEvent && (A.equals("pva") || A.equals("pvp") && ((PvAnyEvent) event).victim instanceof Player || A.equals("pve") && !(((PvAnyEvent) event).victim instanceof Player))
 
-                    || event instanceof isDamagedEvent && (A.equals("isdamaged") || A.equals("hitbyarrow") && ((isDamagedEvent) event).damager instanceof Arrow || A.startsWith("damagedby(") && ((isDamagedEvent) event).cause != null && A.toUpperCase().contains(((isDamagedEvent) event).cause.name()))
-
-                    || event instanceof CustomEnchantEntityDamageByEntityEvent && A.startsWith("ceentityisdamaged")
-                    || event instanceof CustomBossDamageByEntityEvent && A.startsWith("custombossisdamaged")
-
-                    || event instanceof ArmorSetEquipEvent && A.equals("armorsetequip")
-                    || event instanceof ArmorSetUnequipEvent && A.equals("armorsetunequip")
-
-                    || event instanceof BlockPlaceEvent && A.equals("blockplace")
-                    || event instanceof BlockBreakEvent && A.equals("blockbreak")
-
-                    || event instanceof FoodLevelChangeEvent && (A.equals("foodlevelgained") && ((FoodLevelChangeEvent) event).getFoodLevel() > ((Player) ((FoodLevelChangeEvent) event).getEntity()).getFoodLevel() || A.equals("foodlevellost") && ((FoodLevelChangeEvent) event).getFoodLevel() < ((Player) ((FoodLevelChangeEvent) event).getEntity()).getFoodLevel())
-
-                    || event instanceof PlayerItemDamageEvent && A.equals("isdurabilitydamaged")
-
-                    || event instanceof PlayerInteractEvent && A.equals("playerinteract")
-                    || event instanceof ProjectileHitEvent && (A.equals("arrowhit") && ((ProjectileHitEvent) event).getEntity() instanceof Arrow && (((ProjectileHitEvent) event).getEntity()).getShooter() instanceof Player && shotbows.keySet().contains(((ProjectileHitEvent) event).getEntity().getUniqueId()) || A.equals("arrowland") && ((ProjectileHitEvent) event).getEntity() instanceof Arrow && getHitEntity((ProjectileHitEvent) event) == null)
-                    || event instanceof EntityShootBowEvent && A.equals("shootbow")
-
-                    || event instanceof PlayerDeathEvent && (A.equals("playerdeath") || A.equals("killedplayer"))
-                    || event instanceof EntityDeathEvent && A.equals("killedentity") && !(((EntityDeathEvent) event).getEntity() instanceof Player)
-
-                    || event instanceof CustomEnchantProcEvent && A.equals("enchantproc")
-                    || event instanceof CEAApplyPotionEffectEvent && A.equals("ceapplypotioneffect")
-
-                    || event instanceof MobStackDepleteEvent && A.equals("mobstackdeplete")
-
-                    || event instanceof MaskEquipEvent && A.equals("maskequip")
-                    || event instanceof MaskUnequipEvent && A.equals("maskunequip")
-
-                    || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
-            ) {
-                executeAttributes(player, event, attr);
-            }
-        }
-    }
-
-    private void executeAttributes(Player player, Event event, String attribute) {
-        for(String a : attribute.substring(attribute.split(";")[0].length()).split(";")) {
-            if(event != null && a.toLowerCase().startsWith("cancel")) {
-                ((Cancellable) event).setCancelled(true);
-                if(event instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent) event).getDamager() instanceof Arrow) {
-                    ((EntityDamageByEntityEvent) event).getDamager().remove();
-                }
-                return;
-            } else {
-                w(null, event, null, getRecipients(event, a.contains("[") ? a.split("\\[")[1].split("]")[0] : a, null), a, attribute, -1, player);
-            }
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerArmorEvent(PlayerArmorEvent event) {
         final PlayerArmorEvent.ArmorEventReason reason = event.reason;
         final String r = reason.name();
         final Player player = event.player;
-        final boolean contains = equippedMasks.keySet().contains(player);
+        final boolean contains = equippedMasks.containsKey(player);
         final ItemStack i = event.getItem().clone(), o = contains ? equippedMasks.get(player) : new ItemStack(Material.AIR);
         if(!contains && r.contains("_EQUIP")) {
             final Mask m = getMaskOnItem(i);

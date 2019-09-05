@@ -12,4 +12,4 @@ alchemist: "1500:2500"
 tinkerer: "115:126:137"
 #
 attributes:
-- "isDamaged;chance=4*level;addPotionEffect{[damager]slowness:level-1:20+(30*level)}"
+- "isDamaged;chance=4*level;DamagerAddPotionEffect=slowness:level-1:20+(30*level)"

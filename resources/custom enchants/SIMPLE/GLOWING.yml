@@ -11,6 +11,6 @@ applies to: "helmet"
 tinkerer: "84"
 #
 attributes:
-- "ArmorEquip;addPotionEffect{[player]night_vision:level-1:99999:true}"
-- "ArmorUnequip;removePotionEffect{[player]night_vision:true}"
-- "ArmorPieceBreak;removePotionEffect{[player]night_vision:true}"
+- "ArmorEquip;PlayerAddPotionEffect=night_vision:level-1:99999:true"
+- "ArmorUnequip;PlayerRemovePotionEffect=night_vision:true"
+- "ArmorPieceBreak;PlayerRemovePotionEffect=night_vision:true"

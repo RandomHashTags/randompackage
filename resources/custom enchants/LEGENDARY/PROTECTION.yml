@@ -13,4 +13,4 @@ alchemist: "7000:8000:9000:10000"
 tinkerer: "65:76:87:98:109"
 #
 attributes:
-- "Timer(120);heal{nearbyAllies{player:player:5*level:5*level:5*level}1h}"
+- "Timer(120);NearbyAllies(Player:5*level:5*level:5*level)Heal=2"
