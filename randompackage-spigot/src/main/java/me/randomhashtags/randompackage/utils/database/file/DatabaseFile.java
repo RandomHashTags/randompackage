@@ -58,4 +58,6 @@ public interface DatabaseFile {
         set(path, value);
         if(save) save();
     }
+
+    void convertTo(Class<? extends DatabaseFile> file);
 }

@@ -95,7 +95,7 @@ public abstract class RPStorage extends RegionalAPI {
         if(cached.containsKey(fileName)) return cached.get(fileName);
         final File f = new File(rpd + separator + (folder != null ? folder : ""), fileName);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
-        cached.put(fileName ,c);
+        cached.put(fileName, c);
         return c;
     }
     public YamlConfiguration getAddonConfig(String fileName) { return get("addons", fileName); }

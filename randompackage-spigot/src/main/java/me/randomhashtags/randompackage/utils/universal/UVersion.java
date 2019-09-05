@@ -514,25 +514,28 @@ public class UVersion extends YamlUpdater {
         final List<Location> l = new ArrayList<>();
         final int x = chunk.getX()*16, z = chunk.getZ()*16;
         final World world = chunk.getWorld();
-        for(int xx = x; xx < x+16; xx++)
-            for(int zz = z; zz < z+16; zz++)
+        for(int xx = x; xx < x+16; xx++) {
+            for(int zz = z; zz < z+16; zz++) {
                 l.add(new Location(world, xx, 0, zz));
+            }
+        }
         return l;
     }
     public ItemStack getItemInHand(LivingEntity entity) {
         if(entity == null) return null;
         else {
             final EntityEquipment e = entity.getEquipment();
-            if(version.contains("1.8")) return e.getItemInHand();
-            else                        return e.getItemInMainHand();
+            return version.contains("1.8") ? e.getItemInHand() : e.getItemInMainHand();
         }
     }
     public Entity getEntity(UUID uuid) {
         if(uuid != null) {
             if(version.contains("1.8") || version.contains("1.9")) {
-                for(World w : Bukkit.getWorlds())
-                    for(LivingEntity le : w.getLivingEntities())
+                for(World w : Bukkit.getWorlds()) {
+                    for(LivingEntity le : w.getLivingEntities()) {
                         if(uuid.equals(le.getUniqueId())) return le;
+                    }
+                }
             } else {
                 return Bukkit.getEntity(uuid);
             }

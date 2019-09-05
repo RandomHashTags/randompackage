@@ -10,9 +10,6 @@ import me.randomhashtags.randompackage.events.customenchant.*;
 import me.randomhashtags.randompackage.events.MaskEquipEvent;
 import me.randomhashtags.randompackage.events.MaskUnequipEvent;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -30,7 +27,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -38,28 +34,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public abstract class CustomEnchantUtils extends RPFeature {
-    private enum RomanNumeralValues {
-        I(1), X(10), C(100), M(1000), V(5), L(50), D(500);
-        private int val;
-        RomanNumeralValues(int val) { this.val = val; }
-        public int asInt() { return val; }
-    }
-
     public String getIdentifier() { return "CUSTOM_ENCHANT_UTILS"; }
-
-    private int fromRoman(String num) {
-        /* This code is from "batman" at https://stackoverflow.com/questions/9073150/converting-roman-numerals-to-decimal */
-        num = ChatColor.stripColor(num.toUpperCase());
-        int intNum = 0, prev = 0;
-        for(int i = num.length() - 1; i >= 0; i--) {
-            final String character = num.substring(i, i + 1);
-            int temp = RomanNumeralValues.valueOf(character).asInt();
-            if(temp < prev) intNum -= temp;
-            else            intNum += temp;
-            prev = temp;
-        }
-        return intNum;
-    }
 
     private static boolean isEnabled = false;
     public static YamlConfiguration config;
@@ -105,10 +80,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         shotbows = null;
     }
 
-    public int getEnchantmentLevel(String string) {
-        string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
-        return fromRoman(string);
-    }
     public void procPlayerArmor(Event event, Player player) {
         if(player != null) {
             for(ItemStack is : player.getInventory().getArmorContents()) {
@@ -135,7 +106,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
                 }
             }
         }
-
     }
     public void tryProcEnchant(Event event, Player player, CustomEnchant enchant) {
         if(player != null) {
@@ -367,46 +337,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             a = a.replace("nearby" + (allies ? "Allies" : enemies ? "Enemies" : "") + "Size{" + e + "}", Integer.toString(size));
         }
 
-        if(a.toLowerCase().startsWith("addpotioneffect{")) {
-            final PotionEffectType type = getPotionEffectType((a.contains("]") ? a.split("]")[1] : a.split("\\{")[1]).split(":")[0].toUpperCase());
-            final PotionEffect pe = new PotionEffect(type, (int) evaluate(a.split(":")[2].split("}")[0]), (int) evaluate(a.split(":")[1]));
-            for(LivingEntity l : recipients)
-                addPotionEffect(event, ev != null ? player : null, l, pe, a.contains(":true") ? config.getStringList("messages.apply potion effect") : null, enchant, level);
-        } else if(a.toLowerCase().startsWith("removepotioneffect{")) {
-            final PotionEffectType type = getPotionEffectType((a.contains("]") ? a.split("]")[1] : a.split("\\{")[1]).split(":")[0].toUpperCase());
-            for(LivingEntity l : recipients)
-                removePotionEffect(l, getPotionEffect(l, type), a.contains(":true") ? config.getStringList("messages.remove potion effect") : null, enchant, level);
-        } else if(a.toLowerCase().startsWith("setdurability{")) {
-            a = a.toLowerCase();
-            for(LivingEntity l : recipients) {
-                ItemStack p = null;
-                double difference = -1;
-                if(a.contains("mostdamaged")) {
-                    for(ItemStack A : l.getEquipment().getArmorContents())
-                        if(A != null && A.getType() != Material.AIR) {
-                            double newdif = Double.parseDouble(Short.toString(A.getDurability())) / Double.parseDouble(Short.toString(A.getType().getMaxDurability()));
-                            if(difference == -1 || newdif > difference) {
-                                difference = newdif;
-                                p = A;
-                            }
-                        }
-                } else if(a.contains("helmet") && l.getEquipment().getHelmet() != null) p = l.getEquipment().getHelmet();
-                else if(a.contains("chestplate") && l.getEquipment().getChestplate() != null) p = l.getEquipment().getChestplate();
-                else if(a.contains("leggings") && l.getEquipment().getLeggings() != null) p = l.getEquipment().getLeggings();
-                else if(a.contains("boots") && l.getEquipment().getBoots() != null) p = l.getEquipment().getBoots();
-                else if(a.contains("all")) {
-                    for(ItemStack q : l.getEquipment().getArmorContents())
-                        q.setDurability((short) (evaluate(a.split(":")[1].split("}")[0].replace("durability", Short.toString(q.getDurability())))));
-                } else if(a.contains("iteminhand")) p = getItemInHand(l);
-                else if(a.contains("item")) p = ev.itemWithEnchant;
-                else return;
-                if(p != null) {
-                    a = a.replace("durability", Short.toString(p.getDurability()));
-                    final double dura = evaluate(a.split(":")[1].split("}")[0]);
-                    p.setDurability((short) (dura < 0 ? 0 : dura));
-                }
-            }
-        } else if(a.toLowerCase().startsWith("setvelocity{")) {
+        if(a.toLowerCase().startsWith("setvelocity{")) {
             String U = a.toLowerCase().split("]")[1];
             if(isPVAny) {
                 final PvAnyEvent E = (PvAnyEvent) event;
@@ -618,25 +549,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return recipients;
     }
-    private Location getRecipientLoc(Event event, String input) {
-        if(event instanceof PlayerArmorEvent) {
-            return ((PlayerArmorEvent) event).player.getLocation();
-        } else if(event instanceof PlayerInteractEvent) {
-            return ((PlayerInteractEvent) event).getPlayer().getLocation();
-        } else if(event instanceof ProjectileHitEvent) {
-            final ProjectileHitEvent e = (ProjectileHitEvent) event;
-            if(input.toLowerCase().contains("arrow") && e.getEntity() instanceof Arrow) return e.getEntity().getLocation();
-            if(input.toLowerCase().contains("shooter") && e.getEntity().getShooter() instanceof LivingEntity) return ((LivingEntity) e.getEntity().getShooter()).getLocation();
-        } else if(event instanceof PvAnyEvent) {
-            final PvAnyEvent e = (PvAnyEvent) event;
-            final LivingEntity v = e.victim;
-            final Projectile pro = e.proj;
-            if(input.contains("damager")) return e.proj != null ? e.proj.getLocation() : e.damager.getLocation();
-            if(input.contains("victim") && v != null) return v.getLocation();
-            if(input.contains("shooter") && pro != null) return ((LivingEntity) pro.getShooter()).getLocation();
-        }
-        return null;
-    }
     private LivingEntity getRecipient(Event event, String input) {
         if(event instanceof PlayerArmorEvent) {
             return ((PlayerArmorEvent) event).player;
@@ -667,52 +579,14 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-    public HashMap<ItemStack, HashMap<CustomEnchant, Integer>> getEnchants(Player player) { // <Inventory Slot, <FileCustomEnchant, FileCustomEnchant level>>
-        final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> L = new HashMap<>();
-        if(player != null) {
-            final PlayerInventory pi = player.getInventory();
-            final ItemStack p = pi.getItem(pi.getHeldItemSlot());
-            if(p != null) {
-                L.put(p, getEnchants(p));
-            }
-            for(ItemStack is : pi.getArmorContents()) L.put(is, getEnchants(is));
-        }
-        return L;
-    }
-    public HashMap<CustomEnchant, Integer> getEnchants(ItemStack is) { // <FileCustomEnchant, FileCustomEnchant level>
-        final HashMap<CustomEnchant, Integer> enchants = new HashMap<>();
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            for(String s : is.getItemMeta().getLore()) {
-                final CustomEnchant e = valueOfCustomEnchant(s);
-                if(e != null) enchants.put(e, getEnchantmentLevel(s));
-            }
-        }
-        return enchants;
-    }
-    public boolean isOnCorrectItem(CustomEnchant enchant, ItemStack is) {
-        final String i = is != null ? is.getType().name() : null;
-        if(enchant != null && i != null) for(String s : enchant.getAppliesTo()) if(i.endsWith(s.toUpperCase())) return true;
-        return false;
-    }
+
+
     public boolean canProcOn(Entity e) {
         return config.getStringList("settings.can proc on").contains(e.getType().name());
     }
     /*
         ATTRIBUTES
      */
-    private void wait(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, String attribute, int number, int ticks, Player P) {
-        String t = "";
-        for(int i = number+1; i < attribute.split(";").length; i++)
-            t = t + attribute.split(";")[i] + ";";
-        final String w = t;
-        scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-            int b = number;
-            for(String s : w.split(";")) {
-                b += 1;
-                executeAttribute(ev, event, enchant, s, attribute, b, P);
-            }
-        }, ticks);
-    }
     public void createCombo(Player player, CustomEnchant source, double base) {
         if(!combos.keySet().contains(player)) combos.put(player, new HashMap<>());
         if(!combos.get(player).keySet().contains(source)) combos.get(player).put(source, base);
@@ -761,30 +635,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }
         }
     }
-    private void damage(LivingEntity entity, double damage, boolean heartDmg) {
-        if(entity != null) {
-            final double h = entity.getHealth();
-            if(!heartDmg && h-damage <= 0.00 || h-((int) damage) <= 0.00) {
-                damage = h;
-            }
-            entity.damage(heartDmg ? ((int) damage) : damage);
-        }
-    }
-    private void explode(Location l, float power, boolean setFire, boolean breakBlocks) {
-        l.getWorld().createExplosion(l.getX(), l.getY(), l.getZ(), power, setFire, breakBlocks);
-    }
-    private void heal(LivingEntity entity, double by) {
-        final double hp = entity.getHealth(), max = entity.getMaxHealth();
-        if(hp < max) {
-            entity.setHealth(Math.min(hp+by, max));
-        }
-    }
-    private void healHunger(LivingEntity entity, int by) {
-        final Player player = entity instanceof Player ? (Player) entity : null;
-        if(player != null && player.getFoodLevel() + by <= 20) {
-            player.setFoodLevel(player.getFoodLevel() + by);
-        }
-    }
     private void setTemporaryBlock(Location l, Material m, byte data, int ticks) {
         final World w = l.getWorld();
         final Block prev = w.getBlockAt(l);
@@ -805,36 +655,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }, ticks);
         }
     }
-    private void setHealth(LivingEntity entity, double newHealth) {
-        if(newHealth < 0.00) entity.setHealth(0.00);
-        else entity.setHealth(newHealth);
-    }
-    private boolean isHolding(LivingEntity entity, String input) {
-        final ItemStack i = getItemInHand(entity);
-        return i != null && i.getType().name().endsWith(input.toUpperCase());
-    }
-    private boolean isBlocking(LivingEntity entity) { return entity instanceof Player && ((Player) entity).isBlocking(); }
-    private boolean healthIsLessThanOrEqualTo(LivingEntity entity, double target) { return entity.getHealth() <= target; }
-    private boolean healthIsGreaterThanOrEqualTo(LivingEntity entity, double target) { return entity.getHealth() >= target; }
-    private boolean hitBlock(PlayerInteractEvent event, String block) {
-        final Block c = event.getClickedBlock();
-        return c != null && c.getType().name().equals(block.toUpperCase());
-    }
-    private void breakHitBlock(PlayerInteractEvent event) { event.getClickedBlock().breakNaturally(); }
-    private void refillAir(LivingEntity entity, int addedAir) {
-        final int r = entity.getRemainingAir(), m = entity.getMaximumAir();
-        entity.setRemainingAir(r + addedAir > m ? m : r + addedAir);
-    }
     private int getXP(LivingEntity entity) { return entity instanceof Player ? getTotalExperience((Player) entity) : 0; }
-    private void setXP(LivingEntity entity, int value) {
-        if(entity instanceof Player) {
-            setTotalExperience((Player) entity, value);
-        }
-    }
-    private void dropItem(LivingEntity entity, ItemStack is) { entity.getWorld().dropItem(entity.getLocation(), is); }
-    private void particle(String particle, Location location, boolean global) {
-
-    }
     private void breakBlocks(UMaterial usedItem, Block b, int x1, int y1, int z1, int x2, int y2, int z2) {
         if(usedItem != null && b != null) {
             final World w = b.getWorld();
@@ -876,32 +697,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
     private double distanceBetween(Entity e1, Entity e2) {
         return e1.getLocation().distance(e2.getLocation());
     }
-    private void sendMessage(CustomEnchant enchant, LivingEntity entity, String message) {
-        if(message.contains("\\n")) for(String s : message.split("\\\\n")) entity.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("}", "").replace("%ENCHANT%", enchant.getName())));
-        else                                                               entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("}", "").replace("%ENCHANT%", enchant.getName())));
-    }
-    private void smite(Location loc, int times) {
-        for(int i = 1; i <= times; i++)
-            loc.getWorld().strikeLightning(loc);
-    }
     private void setVelocity(LivingEntity entity, Vector vel) {
         entity.setVelocity(vel);
-    }
-    private void stopEnchant(Player player, String input, int ticks) {
-        final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-        if(input.toLowerCase().equals("all")) {
-        }
-    }
-    private void freeze(LivingEntity entity, int ticks) {
-        if(entity instanceof Player) {
-            final Player player = (Player) entity;
-            final float walkspeed = player.getWalkSpeed();
-            frozen.add(player);
-            player.setWalkSpeed(0);
-            scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-                player.setWalkSpeed(walkspeed);
-                frozen.remove(player);
-            }, ticks);
-        }
     }
 }

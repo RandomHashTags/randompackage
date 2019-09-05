@@ -25,8 +25,8 @@ public class StopEnchant extends AbstractEventAttribute {
     }
     @Override
     public void execute(Event event) {
-        final CustomEnchantProcEvent c = event instanceof CustomEnchantProcEvent ? (CustomEnchantProcEvent) event : null;
-        if(c != null) {
+        if(event instanceof CustomEnchantProcEvent) {
+            final CustomEnchantProcEvent c = (CustomEnchantProcEvent) event;
             final UUID u = c.player.getUniqueId();
             if(stoppedEnchants.containsKey(u)) {
                 final CustomEnchant e = c.enchant;

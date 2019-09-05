@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileCustomEnchant;
@@ -38,6 +38,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -47,13 +48,14 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
-public class CustomEnchants extends CustomEnchantUtils implements CommandExecutor {
+public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private static CustomEnchants instance;
     public static CustomEnchants getCustomEnchants() {
         if(instance == null) instance = new CustomEnchants();
         return instance;
     }
 
+    public YamlConfiguration config;
     public boolean levelZeroRemoval;
     private String alchemistcurrency, enchantercurrency;
     private int alchemistCostSlot;
@@ -66,7 +68,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
 
     public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
     protected RPFeature getFeature() { return getCustomEnchants(); }
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
         if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true))
@@ -84,10 +86,10 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
         return true;
     }
-    @Override
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
+        save(null, "custom enchants.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
         enchantercurrency = config.getString("enchanter.currency").toUpperCase();
@@ -315,9 +317,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @Override
     public void unload() {
-        unloadUtils();
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
@@ -332,8 +332,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         final String format = randompackage.getConfig().getString("enchants.format");
         final List<String> L = colorizeListString(randompackage.getConfig().getStringList("enchants.hover"));
         final int size = enabled.size(), maxpage = size/10;
-        page = page > maxpage ? maxpage : page;
+        page = Math.min(page, maxpage);
         final int starting = page*10;
+        final String max = Integer.toString(maxpage), p = Integer.toString(page);
         for(String s : randompackage.getConfig().getStringList("enchants.msg")) {
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
@@ -356,7 +357,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                     }
                 }
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{MAX_PAGE}", Integer.toString(maxpage)).replace("{PAGE}", Integer.toString(page))));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{MAX_PAGE}", max).replace("{PAGE}", p)));
             }
         }
     }
@@ -388,14 +389,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
     }
 
-    public void stopTimerEnchant(CustomEnchant enchant) {
-        sendConsoleMessage("&6[RandomPackage.CustomEnchants] &3Stopped Timer for enchant &7" + enchant.getName());
-        scheduler.cancelTask(timerenchants.get(enchant));
-        timerenchants.remove(enchant);
-    }
-
-
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerArmorEvent(PlayerArmorEvent event) {
         if(!event.isCancelled()) {
             final ItemStack itemstack = event.getItem();
@@ -408,7 +402,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if(event.isCancelled()) {
 
@@ -472,7 +466,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
         if(!event.isCancelled()) {
             final Entity d = event.damager;
@@ -483,7 +477,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void mobStackDepleteEvent(MobStackDepleteEvent event) {
         if(!event.isCancelled()) {
             final Player killer = event.killer instanceof Player ? (Player) event.killer : null;
@@ -545,41 +539,94 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
         return item;
     }
-    @EventHandler(priority = EventPriority.HIGH)
-    private void entityDamageEvent(EntityDamageEvent event) {
-        final EntityDamageEvent.DamageCause c = event.getCause();
-        final Entity E = event.getEntity();
-        if(!event.isCancelled() &&E instanceof Player && !c.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-            final Player victim = (Player) E;
-            final isDamagedEvent e = new isDamagedEvent(victim, c);
-            pluginmanager.callEvent(e);
-            if(!e.isCancelled()) {
-                procPlayerArmor(e, victim);
-                procPlayerItem(e, victim, null);
+    public int getEnchantmentLevel(String string) {
+        string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
+        return fromRoman(string);
+    }
+    public boolean isOnCorrectItem(CustomEnchant enchant, ItemStack is) {
+        final String i = is != null ? is.getType().name() : null;
+        if(enchant != null && i != null) {
+            for(String s : enchant.getAppliesTo()) {
+                if(i.endsWith(s.toUpperCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getEnchants(Player player) {
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> L = new LinkedHashMap<>();
+        if(player != null) {
+            final PlayerInventory pi = player.getInventory();
+            final ItemStack p = pi.getItem(pi.getHeldItemSlot());
+            if(p != null) {
+                L.put(p, getEnchants(p));
+            }
+            for(ItemStack is : pi.getArmorContents()) L.put(is, getEnchants(is));
+        }
+        return L;
+    }
+    public LinkedHashMap<CustomEnchant, Integer> getEnchants(ItemStack is) {
+        final LinkedHashMap<CustomEnchant, Integer> enchants = new LinkedHashMap<>();
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            for(String s : is.getItemMeta().getLore()) {
+                final CustomEnchant e = valueOfCustomEnchant(s);
+                if(e != null) {
+                    enchants.put(e, getEnchantmentLevel(s));
+                }
+            }
+        }
+        return enchants;
+    }
+
+    public void tryProcing(Event event, Player player) {
+        tryProcing(event, player, getEnchants(player));
+    }
+    public void tryProcing(Event event, Player player, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+        if(event != null && player != null && enchants != null && !enchants.isEmpty()) {
+            for(ItemStack is : enchants.keySet()) {
+                final LinkedHashMap<CustomEnchant, Integer> en = enchants.get(is);
+                for(CustomEnchant enchant : en.keySet()) {
+                    final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, enchant, en.get(enchant), is, player);
+                    pluginmanager.callEvent(e);
+                    trigger(e, enchant.getAttributes());
+                }
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void entityDamageEvent(EntityDamageEvent event) {
+        final EntityDamageEvent.DamageCause c = event.getCause();
+        final Entity E = event.getEntity();
+        if(E instanceof Player && !c.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            final Player victim = (Player) E;
+            final isDamagedEvent e = new isDamagedEvent(victim, c);
+            pluginmanager.callEvent(e);
+            trigger(e, getEnchants(victim));
+            tryProcing(e, victim);
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = event.getPlayer();
-            procPlayerArmor(event, player);
-            procPlayerItem(event, player, null);
-        }
+        final Player player = event.getPlayer();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+        trigger(event, enchants);
+        tryProcing(event, player, enchants);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-        if(!event.isCancelled()) {
-            final Player player = event.getPlayer();
-            procPlayerArmor(event, player);
-            procPlayerItem(event, player, null);
-        }
+        final Player player = event.getPlayer();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+        trigger(event, enchants);
+        tryProcing(event, player, enchants);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerJoinEvent(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        procPlayerArmor(event, player);
-        procPlayerItem(event, player, null);
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+        trigger(event, enchants);
+        tryProcing(event, player, enchants);
     }
     @EventHandler(priority = EventPriority.HIGH)
     private void playerInteractEvent(PlayerInteractEvent event) {
@@ -611,7 +658,7 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 for(String s : config.getStringList("rarities.apply info")) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityShootBowEvent(EntityShootBowEvent event) {
         if(!event.isCancelled() && event.getEntity() instanceof Player) {
             final Player p = (Player) event.getEntity();
@@ -622,12 +669,12 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             shotbows.put(u, p);
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void projectileHitEvent(ProjectileHitEvent event) {
         final Projectile e = event.getEntity();
         final UUID u = e.getUniqueId();
         final ProjectileSource shooter = e.getShooter();
-        if(shooter instanceof Player && shotBows.keySet().contains(u)) {
+        if(shooter instanceof Player && shotBows.containsKey(u)) {
             scheduler.scheduleSyncDelayedTask(randompackage, () -> {
                 final ItemStack is = shotBows.get(u);
                 procPlayerItem(event, (Player) shooter, is);
@@ -636,26 +683,27 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }, 0);
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerDeathEvent(PlayerDeathEvent event) {
-        final Player p = event.getEntity(), k = p.getKiller();
-        procPlayerArmor(event, p);
-        procPlayerItem(event, p, null);
-        procPlayerArmor(event, k);
-        procPlayerItem(event, k, null);
+        final Player victim = event.getEntity(), killer = victim.getKiller();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> victimEnchants = getEnchants(victim), killerEnchants = getEnchants(killer);
+        trigger(event, victimEnchants);
+        tryProcing(event, victim, victimEnchants);
+        trigger(event, killerEnchants);
+        tryProcing(event, killer, killerEnchants);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerItemDamageEvent(PlayerItemDamageEvent event) {
-        if(!event.isCancelled()) {
-            procPlayerItem(event, event.getPlayer(), event.getItem());
-        }
+        final Player player = event.getPlayer();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+        trigger(event, enchants);
+        tryProcing(event, player, enchants);
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         final LivingEntity e = event.getEntity();
         final Player k = e.getKiller();
         final UUID u = e.getUniqueId();
-        spawnedFromSpawner.remove(u);
         if(!(e instanceof Player) && k != null) {
             procPlayerArmor(event, k);
             procPlayerItem(event, k, null);
@@ -676,94 +724,83 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
-        final Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
-        if(!event.isCancelled() && player != null) {
-            procPlayerArmor(event, player);
-            procPlayerItem(event, player, null);
-        }
+        final Player player = (Player) event.getEntity();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+        trigger(event, enchants);
+        tryProcing(event, player, enchants);
     }
-    @EventHandler(priority = EventPriority.HIGH)
-    private void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if(!event.isCancelled() && event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
-            spawnedFromSpawner.add(event.getEntity().getUniqueId());
-        }
-    }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void tinkererClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(!event.isCancelled() && top.getHolder() == player) {
-            final String t = event.getView().getTitle();
-            if(t.equals(tinkerer.getTitle())) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final int r = event.getRawSlot(), size = top.getSize();
-                int SLOT = top.firstEmpty();
-                final ItemStack cur = event.getCurrentItem();
-                final String c = event.getClick().name(), cu = cur != null ? cur.getType().name() : null;
-                if(r < 0 || !c.contains("LEFT") && !c.contains("RIGHT") || cu == null || cu.equals("AIR")) return;
+        if(top.getHolder() == player && event.getView().getTitle().equals(tinkerer.getTitle())) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final int r = event.getRawSlot(), size = top.getSize();
+            int SLOT = top.firstEmpty();
+            final ItemStack cur = event.getCurrentItem();
+            final String c = event.getClick().name(), cu = cur != null ? cur.getType().name() : null;
+            if(r < 0 || !c.contains("LEFT") && !c.contains("RIGHT") || cu == null || cu.equals("AIR")) return;
 
-                final CustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(cur.getItemMeta().getDisplayName()) : null;
-                if(r >= 4 && r <= 8
-                        || r >= 13 && r <= 17
-                        || r >= 22 && r <= 26
-                        || r >= 31 && r <= 35
-                        || r >= 40 && r <= 44
-                        || r >= 49 && r <= 53) {
-                    return;
-                } else if(cur.equals(tinkereraccept)) {
-                    invAccepting.add(player);
-                    player.closeInventory();
-                    return;
-                } else if(r < size) {
-                    giveItem(player, cur);
-                    item = new ItemStack(Material.AIR);
-                    SLOT = r;
-                } else if(top.firstEmpty() < 0) {
-                    return;
-                } else if(e != null) {
-                    final EnchantRarity R = valueOfEnchantRarity(e);
-                    final RarityFireball f = valueOfFireball(Arrays.asList(R));
-                    if(f != null) {
-                        final ItemStack itemstack = f.getItem();
-                        if(itemstack == null) return;
-                        item = itemstack.clone();
-                    } else {
-                        return;
-                    }
-                } else if(cur.getItemMeta().hasEnchants() && (cu.endsWith("HELMET") || cu.endsWith("CHESTPLATE") || cu.endsWith("LEGGINGS") || cu.endsWith("BOOTS") || cu.endsWith("SWORD") || cu.endsWith("AXE") || cu.endsWith("SPADE") || cu.endsWith("SHOVEL") || cu.endsWith("HOE") || cu.endsWith("BOW"))) {
-                    final BigDecimal zero = BigDecimal.ZERO;
-                    BigDecimal xp = BigDecimal.ZERO;
-                    for(Enchantment enchant : cur.getEnchantments().keySet())
-                        xp = xp.add(BigDecimal.valueOf(Integer.parseInt(config.getString("tinkerer.enchant values." + enchant.getName().toLowerCase()))));
-                    if(cur.hasItemMeta() && cur.getItemMeta().hasLore()) {
-                        final HashMap<CustomEnchant, Integer> enchants = getEnchants(cur);
-                        for(CustomEnchant enchant : enchants.keySet()) xp = xp.add(enchant.getTinkererValue(enchants.get(enchant)));
-                    }
-                    if(!xp.equals(zero)) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
+            final CustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(cur.getItemMeta().getDisplayName()) : null;
+            if(r >= 4 && r <= 8
+                    || r >= 13 && r <= 17
+                    || r >= 22 && r <= 26
+                    || r >= 31 && r <= 35
+                    || r >= 40 && r <= 44
+                    || r >= 49 && r <= 53) {
+                return;
+            } else if(cur.equals(tinkereraccept)) {
+                invAccepting.add(player);
+                player.closeInventory();
+                return;
+            } else if(r < size) {
+                giveItem(player, cur);
+                item = new ItemStack(Material.AIR);
+                SLOT = r;
+            } else if(top.firstEmpty() < 0) {
+                return;
+            } else if(e != null) {
+                final EnchantRarity R = valueOfEnchantRarity(e);
+                final RarityFireball f = valueOfFireball(Arrays.asList(R));
+                if(f != null) {
+                    final ItemStack itemstack = f.getItem();
+                    if(itemstack == null) return;
+                    item = itemstack.clone();
                 } else {
-                    sendStringListMessage(player, config.getStringList("tinkerer.messages.doesnt want item"), null);
                     return;
                 }
-                final int first = top.firstEmpty();
-                int slot = first <= 3 || r <= 3 ? 4 : 5;
-                top.setItem(SLOT + slot, item);
-                if(r >= size) top.setItem(first, cur);
-                event.setCurrentItem(new ItemStack(Material.AIR));
-                player.updateInventory();
+            } else if(cur.getItemMeta().hasEnchants() && (cu.endsWith("HELMET") || cu.endsWith("CHESTPLATE") || cu.endsWith("LEGGINGS") || cu.endsWith("BOOTS") || cu.endsWith("SWORD") || cu.endsWith("AXE") || cu.endsWith("SPADE") || cu.endsWith("SHOVEL") || cu.endsWith("HOE") || cu.endsWith("BOW"))) {
+                final BigDecimal zero = BigDecimal.ZERO;
+                BigDecimal xp = BigDecimal.ZERO;
+                for(Enchantment enchant : cur.getEnchantments().keySet())
+                    xp = xp.add(BigDecimal.valueOf(Integer.parseInt(config.getString("tinkerer.enchant values." + enchant.getName().toLowerCase()))));
+                if(cur.hasItemMeta() && cur.getItemMeta().hasLore()) {
+                    final HashMap<CustomEnchant, Integer> enchants = getEnchants(cur);
+                    for(CustomEnchant enchant : enchants.keySet()) xp = xp.add(enchant.getTinkererValue(enchants.get(enchant)));
+                }
+                if(!xp.equals(zero)) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
+            } else {
+                sendStringListMessage(player, config.getStringList("tinkerer.messages.doesnt want item"), null);
+                return;
             }
+            final int first = top.firstEmpty();
+            int slot = first <= 3 || r <= 3 ? 4 : 5;
+            top.setItem(SLOT+slot, item);
+            if(r >= size) top.setItem(first, cur);
+            event.setCurrentItem(new ItemStack(Material.AIR));
+            player.updateInventory();
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         final String title = event.getView().getTitle();
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
-        if(!event.isCancelled()
-                && cursor != null && current != null
+        if(cursor != null && current != null
                 && cursor.hasItemMeta()
                 && cursor.getItemMeta().hasDisplayName()
                 && cursor.getItemMeta().hasLore()
@@ -1086,8 +1123,9 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
                 CustomEnchant enchant = null;
                 final int hb = event.getHotbarButton();
                 item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
-                if(item.hasItemMeta() && item.getItemMeta().hasDisplayName())
+                if(item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                     enchant = valueOfCustomEnchant(item.getItemMeta().getDisplayName());
+                }
                 if(enchant != null) {
                     event.setCancelled(true);
                     player.updateInventory();
@@ -1124,27 +1162,11 @@ public class CustomEnchants extends CustomEnchantUtils implements CommandExecuto
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    private void customEnchantProcEvent(CustomEnchantProcEvent event) {
-        final Event e = event.event;
-        if(e instanceof CustomEnchantProcEvent && !event.isCancelled() && !((CustomEnchantProcEvent) e).isCancelled()) {
-            final Player p = event.player;
-            procPlayerArmor(e, p);
-            procPlayerItem(e, p, null);
-        }
-    }
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void customEnchantProcEventCancel(CustomEnchantProcEvent event) {
-        final Player player = event.player;
-        if(stoppedAllEnchants.contains(player) || stoppedEnchants.containsKey(player) && stoppedEnchants.get(player).containsKey(event.enchant)) {
-            event.setCancelled(true);
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
         final Entity E = event.getEntity();
         final LivingEntity EE = event.getTarget();
-        if(!event.isCancelled() && E instanceof LivingEntity && EE instanceof Player) {
+        if(E instanceof LivingEntity && EE instanceof Player) {
             final UUID u = E.getUniqueId();
             final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
             if(L != null) {

@@ -34,4 +34,10 @@ public class YamlFile implements DatabaseFile {
         }
     }
     public void set(String path, Object value) { yml.set(path, value); }
+
+    public void convertTo(Class<? extends DatabaseFile> file) {
+        if(file.isInstance(JSONFile.class)) {
+        } else if(file.isInstance(MySQLFile.class)) {
+        }
+    }
 }

@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileTrinket;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -49,7 +50,7 @@ public class Trinkets extends RPFeature {
         trinkets = null;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
     }
 }

@@ -84,4 +84,10 @@ public class JSONFile implements DatabaseFile {
         obj.put(path, value);
         pending.add(obj);
     }
+
+    public void convertTo(Class<? extends DatabaseFile> file) {
+        if(file.isInstance(YamlFile.class)) {
+        } else if(file.isInstance(MySQLFile.class)) {
+        }
+    }
 }

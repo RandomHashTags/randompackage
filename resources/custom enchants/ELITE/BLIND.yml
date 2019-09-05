@@ -13,4 +13,4 @@ alchemist: "6000:6500"
 tinkerer: "54:64:74"
 #
 attributes:
-- "PvA;chance=5*level;addPotionEffect{[victim]blindness:level-1:(20*level)+40:false}"
+- "PvAny;chance=5*level;VictimAddPotionEffect=blindness:level-1:(20*level)+40:false"

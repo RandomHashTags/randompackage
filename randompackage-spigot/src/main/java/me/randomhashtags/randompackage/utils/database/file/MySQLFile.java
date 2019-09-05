@@ -75,4 +75,10 @@ public class MySQLFile implements DatabaseFile {
     public void save() {}
 
     public void set(String query, Object value) { }
+
+    public void convertTo(Class<? extends DatabaseFile> file) {
+        if(file.isInstance(YamlFile.class)) {
+        } else if(file.isInstance(JSONFile.class)) {
+        }
+    }
 }

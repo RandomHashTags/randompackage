@@ -135,6 +135,25 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         if(number == l) return treemap.get(number);
         return treemap.get(l) + toRoman(number - l);
     }
+    private enum RomanNumeralValues {
+        I(1), X(10), C(100), M(1000), V(5), L(50), D(500);
+        private int val;
+        RomanNumeralValues(int val) { this.val = val; }
+        public int asInt() { return val; }
+    }
+    protected int fromRoman(String num) {
+        /* This code is from "batman" at https://stackoverflow.com/questions/9073150 */
+        num = ChatColor.stripColor(num.toUpperCase());
+        int intNum = 0, prev = 0;
+        for(int i = num.length()-1; i >= 0; i--) {
+            final String character = num.substring(i, i+1);
+            int temp = RomanNumeralValues.valueOf(character).asInt();
+            if(temp < prev) intNum -= temp;
+            else            intNum += temp;
+            prev = temp;
+        }
+        return intNum;
+    }
     public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) return true;
         else if(sendNoPermMessage) {
