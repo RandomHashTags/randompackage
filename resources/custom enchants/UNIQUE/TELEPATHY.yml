@@ -13,4 +13,4 @@ alchemist: "2000:2650:3300"
 tinkerer: "50:61:72:83"
 #
 attributes:
-- "BlockBreak;chance=25*level;giveDrops{[player]}"
+- "BlockBreak;chance=25*level;PlayerGiveDrops=true"

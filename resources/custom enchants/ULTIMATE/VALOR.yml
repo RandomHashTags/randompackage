@@ -14,4 +14,4 @@ alchemist: "2000:2500:3000:3500"
 tinkerer: "52:64:76:88:100"
 #
 attributes:
-- "isDamaged;if{[victim]isHolding(_SWORD)->setDamage{dmg*(0.045*level)}}"
+- "isDamaged;VictimIsHolding=_SWORD;SetDamage=dmg*(0.045*level)"

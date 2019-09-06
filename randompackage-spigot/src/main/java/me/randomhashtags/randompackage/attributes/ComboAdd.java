@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.attributes;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class ComboAdd extends AbstractEventAttribute implements Combo {
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             final UUID u = e.getUniqueId();
             final String[] values = recipientValues.get(e).split(":");

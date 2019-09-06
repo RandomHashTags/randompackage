@@ -13,4 +13,4 @@ alchemist: "4000:5000:6000:7000"
 tinkerer: "63:75:87:99:111"
 #
 attributes:
-- "PvA;SetDamage=dmg*(1+(.05*(nearbyAlliesSize{damager:level+6:level+6:level+6}*(.25*level))))"
+- "PvAny;SetDamage=dmg*(1+(.05*(nearbyAlliesSize{damager:level+6:level+6:level+6}*(.25*level))))"

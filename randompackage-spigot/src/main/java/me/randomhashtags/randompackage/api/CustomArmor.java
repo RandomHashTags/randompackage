@@ -1,10 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
+import me.randomhashtags.randompackage.events.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.events.armor.ArmorPieceBreakEvent;
+import me.randomhashtags.randompackage.events.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
 import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
@@ -70,38 +72,42 @@ public class CustomArmor extends EventAttributes {
 	public void unload() {
 		armorsets = null;
 	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void playerArmorEvent(PlayerArmorEvent event) {
-		final Player player = event.player;
-		final String n = event.reason.name();
-		if(n.contains("_EQUIP")) {
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-				final ArmorSet W = valueOfArmorSet(player);
-				if(W != null) {
-					sendStringListMessage(player, W.getActivateMessage(), null);
-					final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
-					pluginmanager.callEvent(e);
-					trigger(e, W.getAttributes());
-				}
-			}, 0);
-		} else if(n.contains("_UNEQUIP")) {
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void armorEquipEvent(ArmorEquipEvent event) {
+		final Player player = event.getPlayer();
+		scheduler.scheduleSyncDelayedTask(randompackage, () -> {
 			final ArmorSet W = valueOfArmorSet(player);
 			if(W != null) {
-				final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
+				sendStringListMessage(player, W.getActivateMessage(), null);
+				final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
 				pluginmanager.callEvent(e);
 				trigger(e, W.getAttributes());
 			}
-		} else if(n.equals("BREAK")) {
-			final ArmorSet W = valueOfArmorSet(player);
-			if(W != null) trigger(event, W.getAttributes());
+		}, 0);
+	}
+	@EventHandler
+	private void armorUnequipEvent(ArmorUnequipEvent event) {
+		final Player player = event.getPlayer();
+		final ArmorSet W = valueOfArmorSet(player);
+		if(W != null) {
+			final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
+			pluginmanager.callEvent(e);
+			trigger(e, W.getAttributes());
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void armorPieceBreakEvent(ArmorPieceBreakEvent event) {
+		final ArmorSet W = valueOfArmorSet(event.getPlayer());
+		if(W != null) {
+			trigger(event, W.getAttributes());
 		}
 	}
 
 	@EventHandler
-	private void pvanyEvent(PvAnyEvent event) {
-		final LivingEntity victim = event.victim;
-		final Player d = event.damager, v = victim instanceof Player ? (Player) victim : null;
+	private void pvAnyEvent(PvAnyEvent event) {
+		final LivingEntity victim = event.getEntity();
+		final Player d = event.getDamager(), v = victim instanceof Player ? (Player) victim : null;
 		final ArmorSet a = valueOfArmorSet(d), b = valueOfArmorSet(v);
 		if(a != null) trigger(event, a.getAttributes());
 		if(b != null) trigger(event, b.getAttributes());

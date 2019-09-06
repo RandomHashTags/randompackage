@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Vengeful Diminish"
@@ -24,4 +24,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-  - ""
+- ""

@@ -14,4 +14,4 @@ alchemist: "1500:2200:2900"
 tinkerer: "113:125:137:149"
 #
 attributes:
-- "PvA;chance=8+(2*level);VictimSmite=1;VictimAddPotionEffect=slowness:level-1:40+(20*level):false;VictimAddPotionEffect=mining_fatigue:level-1:40+(20*level):false"
+- "PvAny;chance=8+(2*level);VictimSmite=1;VictimAddPotionEffect=slowness:level-1:40+(20*level):false;VictimAddPotionEffect=mining_fatigue:level-1:40+(20*level):false"

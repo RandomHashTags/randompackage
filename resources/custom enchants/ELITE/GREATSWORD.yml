@@ -14,4 +14,4 @@ alchemist: "6000:7000:8000:9000"
 tinkerer: "118:127:136:145:154"
 #
 attributes:
-- "PvA;chance=12+level;VictimIsHolding=SWORD;SetDamage=dmg*(1+(.15*level));DamagerSendMessage=&b&l** GREATSWORD **"
+- "PvAny;chance=12+level;VictimIsHolding=BOW;SetDamage=dmg*(1+(.15*level));DamagerSendMessage=&b&l** GREATSWORD **"

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addons;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.TransmogScroll;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathTransmogScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -21,17 +21,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TransmogScrolls extends CustomEnchantUtils {
+public class TransmogScrolls extends CustomEnchants {
     private static TransmogScrolls instance;
     public static TransmogScrolls getTransmogScrolls() {
         if(instance == null) instance = new TransmogScrolls();
         return instance;
     }
 
+    @Override
     public String getIdentifier() { return "TRANSMOG_SCROLLS"; }
+    @Override
     protected RPFeature getFeature() { return getTransmogScrolls(); }
+    @Override
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "transmog scrolls.yml");
         final ConfigurationSection c = getAddonConfig("transmog scrolls.yml").getConfigurationSection("transmog scrolls");
@@ -44,8 +46,8 @@ public class TransmogScrolls extends CustomEnchantUtils {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (transmogscrolls != null ? transmogscrolls.size() : 0) + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
-        unloadUtils();
         transmogscrolls = null;
     }
 

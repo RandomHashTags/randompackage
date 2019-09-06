@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Dodge"
@@ -14,5 +14,5 @@ alchemist: "5000:5800:6600:7400"
 tinkerer: "58:67:76:85:94"
 #
 attributes:
-- "isDamaged;chance=Lucky+(3+(4*level));if{[victim]isSneaking->cancel&&sendMessage{[victim]&e*DODGE*}}"
+- "isDamaged;chance=Lucky+(3+(4*level));VictimIsSneaking=true;SetCancelled=true;VictimSendMessage=&e*DODGE*"
 - "isDamaged;chance=Lucky+(3+(2*level));if{didntproc->cancel&&sendMessage{[victim]&e*DODGE*}}"

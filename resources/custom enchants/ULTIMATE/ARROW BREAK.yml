@@ -15,4 +15,4 @@ alchemist: "5300:5500:5700:5900:6100"
 tinkerer: "59:70:84:96:112:121"
 #
 attributes:
-- "HitByArrow;chance=19+(6*level);if{[victim]isHolding(_AXE)->cancel&&sendMessage{[victim]&e&l** ARROW BREAK **}}"
+- "HitByArrow;chance=19+(6*level);VictimIsHolding=_AXE;SetCancelled=true;VictimSendMessage=&e&l** ARROW BREAK **"

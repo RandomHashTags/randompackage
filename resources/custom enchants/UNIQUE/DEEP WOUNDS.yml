@@ -13,4 +13,4 @@ alchemist: "1500:2500"
 tinkerer: "119:151:183"
 #
 attributes:
-- "PvA;chance=12+level;addPotionEffect{[victim]wither:level-1:140:false}"
+- "PvA;chance=12+level;VictimAddPotionEffect=wither:level-1:140"

@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Anti Gank"
@@ -16,4 +16,4 @@ alchemist: "5500:5750:6000"
 tinkerer: "92:108:113:124"
 #
 attributes:
-- "PvA;"
+- "PvAny;"

@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.PathRarityGem;
@@ -22,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class RarityGems extends CustomEnchantUtils {
+public class RarityGems extends RPFeature {
     private static RarityGems instance;
     public static RarityGems getRarityGems() {
         if(instance == null) instance = new RarityGems();
@@ -32,7 +31,6 @@ public class RarityGems extends CustomEnchantUtils {
     public String getIdentifier() { return "RARITY_GEMS"; }
     protected RPFeature getFeature() { return getRarityGems(); }
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "rarity gems.yml");
         final YamlConfiguration config = getAddonConfig("rarity gems.yml");
@@ -56,7 +54,6 @@ public class RarityGems extends CustomEnchantUtils {
     }
     public void unload() {
         raritygems = null;
-        unloadUtils();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

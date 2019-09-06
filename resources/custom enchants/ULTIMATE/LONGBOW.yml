@@ -14,4 +14,4 @@ alchemist: "4500:5000:5500"
 tinkerer: "58:71:84:97"
 #
 attributes:
-- "ArrowHit;chance=45+(5*level);if{[victim]isHolding(BOW)->setDamage{dmg*(1+(0.12*level))}&&sendMessage{[damager]&e&l** LONGBOW **}}"
+- "ArrowHit;chance=45+(5*level);VictimIsHolding=BOW;SetDamage=dmg*(1+(0.12*level));DamagerSendMessage=&e&l** LONGBOW **"

@@ -13,4 +13,4 @@ alchemist: "1250:1500:1750:2000"
 tinkerer: "111:123:135:147:159"
 #
 attributes:
-- "PlayerInteract;chance=6*level;if{canBreakHitBlock&&hitBlock(OBSIDIAN)->breakHitBlock}"
+- "PlayerInteract;chance=6*level;PlayerCanBreakHitBlock;HitBlock=OBSIDIAN;BreakHitBlock"

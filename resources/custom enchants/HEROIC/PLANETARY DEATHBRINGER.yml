@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Planetary Deathbringer"
@@ -16,4 +16,4 @@ tinkerer: ""
 requires: "Deathbringer;3"
 #
 attributes:
-- "PvA;chance=Lucky+(2*level);SetDamage=dmg*2.5"
+- "PvAny;chance=Lucky+(2*level);SetDamage=dmg*2.5"

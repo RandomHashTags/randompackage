@@ -13,4 +13,4 @@ alchemist: "3500:5000"
 tinkerer: "79:90:101"
 #
 attributes:
-- "Timer(180);chance=40+(10*level);heal{[player]1h};healHunger{[player]1}"
+- "Timer(180);chance=40+(10*level);PlayerHeal=2;PlayerHealHunger=1"

@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.WhiteScroll;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathWhiteScroll;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhiteScrolls extends CustomEnchantUtils {
+public class WhiteScrolls extends RPFeature {
     private static WhiteScrolls instance;
     public static WhiteScrolls getWhiteScrolls() {
         if(instance == null) instance = new WhiteScrolls();
@@ -27,7 +26,6 @@ public class WhiteScrolls extends CustomEnchantUtils {
     public String getIdentifier() { return "WHITE_SCROLLS"; }
     protected RPFeature getFeature() { return getWhiteScrolls(); }
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "white scrolls.yml");
         final ConfigurationSection c = getAddonConfig("white scrolls.yml").getConfigurationSection("white scrolls");
@@ -41,7 +39,6 @@ public class WhiteScrolls extends CustomEnchantUtils {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (whitescrolls != null ? whitescrolls.size() : 0) + " White Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        unloadUtils();
         whitescrolls = null;
     }
 

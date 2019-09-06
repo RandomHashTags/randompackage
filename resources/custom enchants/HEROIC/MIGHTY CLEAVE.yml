@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Mighty Cleave"
@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Cleave;7"
 #
 attributes:
-- "PvA;chance=4+(3*level);NearbyEnemies(victim:1.0625*level:1.0625*level:1.0625*level)Damage=level*2"
+- "PvAny;chance=4+(3*level);NearbyEnemies(victim:1.0625*level:1.0625*level:1.0625*level)Damage=level*2"

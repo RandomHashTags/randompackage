@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.RarityGem;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 public class DepleteRarityGem extends AbstractEventAttribute {
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
                 final String value = recipientValues.get(e);
@@ -27,11 +28,11 @@ public class DepleteRarityGem extends AbstractEventAttribute {
                             final int amount = getRemainingInt(itemMeta.getDisplayName());
                             int depleteAmount = Integer.parseInt(s[1]);
 
-                        /*
-                        final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-                        if(fu.isEnabled() && hookedFactionsUUID()) {
-                            depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(factions.getRegionalIdentifier(u), gem);
-                        }*/
+                            /*
+                            final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
+                            if(fu.isEnabled() && hookedFactionsUUID()) {
+                                depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(factions.getRegionalIdentifier(u), gem);
+                            }*/
 
                             if(amount - depleteAmount <= 0) {
                                 depleteAmount = amount;

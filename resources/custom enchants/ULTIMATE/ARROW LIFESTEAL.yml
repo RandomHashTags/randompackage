@@ -13,4 +13,4 @@ alchemist: "5800:6000:6200:6400"
 tinkerer: "53:65:77:89:101"
 #
 attributes:
-- "ArrowHit;chance=20+(8*level);damage{[victim]1h};heal{[shooter]1h};sendMessage{[shooter]&e&l** ARROW LIFESTEAL **}"
+- "ProjectileHit;chance=20+(8*level);VictimDamage=2;ShooterHeal=2;ShooterSendMessage=&e&l** ARROW LIFESTEAL **"

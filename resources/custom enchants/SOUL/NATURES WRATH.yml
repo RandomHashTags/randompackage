@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Natures Wrath"
@@ -16,4 +16,4 @@ alchemist: "7500:15000:22500"
 tinkerer: "180:205:230:255"
 #
 attributes:
-- "isDamaged;chance=level;DepleteRarityGem{SOUL:75};smite{nearbyEnemies{victim:victim:45:45:45}11};sendMessage{nearbyEnemies{victim:victim:45:45:45}&2&l** NATURE'S WRATH **}"
+- "isDamaged;chance=level;VictimDepleteRarityGem=SOUL:75;NearbyEnemies{Victim:45:45:45}Smite=11;NearbyEnemies{Victim:45:45:45}SendMessage=&2&l** NATURE'S WRATH **"

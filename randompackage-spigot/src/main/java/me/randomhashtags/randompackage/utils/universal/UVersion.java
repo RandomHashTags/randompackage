@@ -491,22 +491,24 @@ public class UVersion extends YamlUpdater {
         }
     }
     public PotionEffectType getPotionEffectType(String input) {
-        if(input != null && input != "") {
-            input = input.toUpperCase();
-            if(input.contains("STRENGTH")) return PotionEffectType.INCREASE_DAMAGE;
-            else if(input.contains("MINING_FATIGUE")) return PotionEffectType.SLOW_DIGGING;
-            else if(input.contains("SLOWNESS")) return PotionEffectType.SLOW;
-            else if(input.contains("HASTE")) return PotionEffectType.FAST_DIGGING;
-            else if(input.contains("JUMP")) return PotionEffectType.JUMP;
-            else if(input.contains("INSTANT_H")) return PotionEffectType.HEAL;
-            else if(input.contains("INSTANT_D")) return PotionEffectType.HARM;
-            else {
-                for(PotionEffectType p : PotionEffectType.values()) {
-                    if(p != null && input.equals(p.getName())) {
-                        return p;
+        if(input != null && !input.isEmpty()) {
+            switch (input.toUpperCase()) {
+                case "STRENGTH": return PotionEffectType.INCREASE_DAMAGE;
+                case "MINING_FATIGUE": return PotionEffectType.SLOW_DIGGING;
+                case "SLOWNESS": return PotionEffectType.SLOW;
+                case "HASTE": return PotionEffectType.FAST_DIGGING;
+                case "JUMP": return PotionEffectType.JUMP;
+                case "INSTANT_HEAL":
+                case "INSTANT_HEALTH": return PotionEffectType.HEAL;
+                case "INSTANT_HARM":
+                case "INSTANT_DAMAGE": return PotionEffectType.HARM;
+                default:
+                    for(PotionEffectType p : PotionEffectType.values()) {
+                        if(p != null && input.equalsIgnoreCase(p.getName())) {
+                            return p;
+                        }
                     }
-                }
-                return null;
+                    return null;
             }
         } else return null;
     }

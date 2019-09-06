@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Auto Smelt"
@@ -13,4 +13,4 @@ alchemist: "1000:1500"
 tinkerer: "76:84:92"
 #
 attributes:
-- "BlockBreak;chance=20+(20*level);"
+- "BlockBreak;chance=20+(20*level);ConvertDropToIngot=true"

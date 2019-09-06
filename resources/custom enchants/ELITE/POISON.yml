@@ -12,4 +12,4 @@ alchemist: "2500:3000"
 tinkerer: "75:84:93"
 #
 attributes:
-- "PvA;chance=7+level;VictimAddPotionEffect=poison:level-1:40+(40*level):false"
+- "PvAny;chance=7+level;VictimAddPotionEffect=poison:level-1:40+(40*level)"

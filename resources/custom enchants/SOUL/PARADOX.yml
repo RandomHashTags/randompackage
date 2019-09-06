@@ -16,4 +16,4 @@ alchemist: "7000:9000:11000:13000"
 tinkerer: "170:195:220:245:270"
 #
 attributes:
-- "isDamaged;DepleteRarityGem{SOUL:5};heal{nearbyAllies{victim:victim:75:75:75}dmg/2}"
+- "isDamaged;VictimDepleteRarityGem=SOUL:5;NearbyAllies{Victim:75:75:75}Heal=dmg/2"

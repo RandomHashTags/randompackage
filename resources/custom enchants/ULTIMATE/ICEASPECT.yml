@@ -13,4 +13,4 @@ alchemist: "2000:2750"
 tinkerer: "72:85:98"
 #
 attributes:
-- "PvA;chance=5*level;addPotionEffect{[victim]slowness:level-1:40+(40*level):false}"
+- "PvAny;chance=5*level;VictimAddPotionEffect=slowness:level-1:40+(40*level)"

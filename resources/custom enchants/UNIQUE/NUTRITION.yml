@@ -12,4 +12,4 @@ alchemist: "900:1400"
 tinkerer: "53:64:75"
 #
 attributes:
-- "FoodLevelGained;cancel;healHunger{[player]level+1}"
+- "FoodLevelGained;SetCancelled=true;PlayerHealHunger=level+1"

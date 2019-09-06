@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Self Destruct"
@@ -13,4 +13,4 @@ alchemist: "1500:2000"
 tinkerer: "54:65:76"
 #
 attributes:
-- ""
+- "isDamaged;chance=20*level;"

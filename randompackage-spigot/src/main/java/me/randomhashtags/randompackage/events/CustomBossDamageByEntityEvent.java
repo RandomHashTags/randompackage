@@ -2,13 +2,14 @@ package me.randomhashtags.randompackage.events;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class CustomBossDamageByEntityEvent extends DamageEvent {
-	public final LivingEntity boss;
-	public final Entity damager;
+	private LivingEntity boss;
 	public CustomBossDamageByEntityEvent(LivingEntity boss, Entity damager, double damage) {
+		super(damager, boss, EntityDamageEvent.DamageCause.CUSTOM, damage);
 		this.boss = boss;
-		this.damager = damager;
-		setDamage(damage);
 	}
+	@Override
+	public LivingEntity getEntity() { return boss; }
 }

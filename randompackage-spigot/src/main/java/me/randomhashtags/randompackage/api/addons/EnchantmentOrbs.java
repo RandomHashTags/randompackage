@@ -1,7 +1,6 @@
 package me.randomhashtags.randompackage.api.addons;
 
 import me.randomhashtags.randompackage.addons.EnchantmentOrb;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
@@ -18,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentOrbs extends CustomEnchantUtils {
+public class EnchantmentOrbs extends RPFeature {
     private static EnchantmentOrbs instance;
     public static EnchantmentOrbs getEnchantmentOrbs() {
         if(instance == null) instance = new EnchantmentOrbs();
@@ -28,7 +27,6 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
     public String getIdentifier() { return "ENCHANTMENT_ORBS"; }
     protected RPFeature getFeature() { return getEnchantmentOrbs(); }
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         final List<ItemStack > orbs = new ArrayList<>();
         save("addons", "enchantment orbs.yml");
@@ -60,7 +58,6 @@ public class EnchantmentOrbs extends CustomEnchantUtils {
     }
     public void unload() {
         enchantmentorbs = null;
-        unloadUtils();
     }
 
 

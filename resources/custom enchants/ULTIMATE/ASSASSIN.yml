@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Assassin"
@@ -16,4 +16,4 @@ alchemist: "6000:6250:6500:6750"
 tinkerer: "58:67:79:95:108"
 #
 attributes:
-- "PvA;chance=6*level;if{distanceBetween(victim,damager)<=2.0->setDamage{dmg*(1+(.05*level))}&&sendMessage{[damager]&e&l** ASSASSIN **}-<setDamage{dmg*(1-(.05*level))}}"
+- "PvAny;chance=6*level;if{distanceBetween(victim,damager)<=2.0->setDamage{dmg*(1+(.05*level))}&&sendMessage{[damager]&e&l** ASSASSIN **}-<setDamage{dmg*(1-(.05*level))}}"

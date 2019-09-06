@@ -13,4 +13,4 @@ alchemist: "5600:6400:7200:8000"
 tinkerer: "67:81:105:114:129"
 #
 attributes:
-- "PvA;chance=4*level;addPotionEffect{[damager]strength:level-1:40+(20*level):true};addPotionEffect{[damager]mining_fatigue:level-1:40+(20*level):true}"
+- "PvAny;chance=4*level;DamagerAddPotionEffect=strength:level-1:40+(20*level):true;DamagerAddPotionEffect=mining_fatigue:level-1:40+(20*level):true"

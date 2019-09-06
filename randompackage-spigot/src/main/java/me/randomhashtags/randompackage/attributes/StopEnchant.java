@@ -41,7 +41,7 @@ public class StopEnchant extends AbstractEventAttribute {
         }
     }
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             final CustomEnchant enchant = valueOfCustomEnchant(recipientValues.get(e));
             if(enchant != null && enchant.isEnabled()) {

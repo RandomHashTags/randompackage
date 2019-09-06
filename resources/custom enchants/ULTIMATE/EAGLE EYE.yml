@@ -13,4 +13,4 @@ alchemist: "6000:6350:6700:7050"
 tinkerer: "120:132:147:153:171"
 #
 attributes:
-- "ArrowHit;chance=8*level;setDurability{[victim]all:durability+random{1:4}}"
+- "ArrowHit;chance=8*level;VictimSetDurability=all:durability+random{1:4}"

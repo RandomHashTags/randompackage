@@ -126,8 +126,7 @@ public class MCMMOAPI extends Reflect implements Listener {
 		}
 
 		final CustomEnchants e = CustomEnchants.getCustomEnchants();
-		e.procPlayerArmor(event, player);
-		e.procPlayerItem(event, player, null);
+		e.tryProcing(event, player);
 
 		if(gcIsEnabled) {
 			final GlobalChallenges gc = GlobalChallenges.getChallenges();

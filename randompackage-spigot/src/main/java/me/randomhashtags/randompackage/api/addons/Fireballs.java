@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.MagicDust;
 import me.randomhashtags.randompackage.addons.RarityFireball;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathFireball;
 import me.randomhashtags.randompackage.utils.addons.PathMagicDust;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
-public class Fireballs extends CustomEnchantUtils {
+public class Fireballs extends CustomEnchants {
     private static Fireballs instance;
     public static Fireballs getFireballs() {
         if(instance == null) instance = new Fireballs();
@@ -34,10 +34,12 @@ public class Fireballs extends CustomEnchantUtils {
 
     public ItemStack mysterydust;
 
+    @Override
     public String getIdentifier() { return "FIREBALLS"; }
+    @Override
     protected RPFeature getFeature() { return getFireballs(); }
+    @Override
     public void load() {
-        loadUtils();
         long started = System.currentTimeMillis();
         save("addons", "fireballs.yml");
         final YamlConfiguration config = getAddonConfig("fireballs.yml");
@@ -63,8 +65,8 @@ public class Fireballs extends CustomEnchantUtils {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dusts != null ? dusts.size() : 0) + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
-        unloadUtils();
         fireballs = null;
         dusts = null;
     }

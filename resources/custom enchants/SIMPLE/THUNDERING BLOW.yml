@@ -12,4 +12,4 @@ alchemist: "2000:3000"
 tinkerer: "73:86:99"
 #
 attributes:
-- "PvA;chance=5+level;VictimSmite=1"
+- "PvAny;chance=5+level;VictimSmite=1"

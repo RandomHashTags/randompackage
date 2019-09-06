@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Bleed"
@@ -15,4 +15,4 @@ alchemist: "5000:5500:6000:6500:7000"
 tinkerer: "56:65:74:83:92:101"
 #
 attributes:
-- "PvA;chance=5+(5*level);"
+- "PvAny;chance=5+(5*level);"

@@ -5,12 +5,13 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
 public class PlaySound extends AbstractEventAttribute {
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             playsound(e, recipientValues.get(e));
         }

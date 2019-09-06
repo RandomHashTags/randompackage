@@ -17,4 +17,4 @@ alchemist: "5700:5800:5900:6000"
 tinkerer: "115:137:159:181:203"
 #
 attributes:
-- "isDamaged;chance=Lucky+6+(2*level);addPotionEffect{[victim]regeneration:level-1:20+(20*level)}"
+- "isDamaged;chance=Lucky+6+(2*level);VictimAddPotionEffect=regeneration:level-1:20+(20*level)"

@@ -14,4 +14,4 @@ alchemist: "4500:5000:5500"
 tinkerer: "59:68:77:86"
 #
 attributes:
-  - "isDamaged;chance=Lucky+(6*level);if{[damager]isHolding(_AXE)->setDamage{dmg-(dmg*(.0185*level))}}"
+  - "isDamaged;chance=Lucky+(6*level);DamagerIsHolding=_AXE;SetDamage=dmg-(dmg*(.0185*level))"

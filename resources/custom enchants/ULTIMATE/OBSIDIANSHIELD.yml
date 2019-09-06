@@ -11,6 +11,6 @@ applies to: "helmet;chestplate;leggings;boots"
 tinkerer: "164"
 #
 attributes:
-- "ArmorEquip;addPotionEffect{[player]fire_resistance:level-1:99999:true}"
-- "ArmorUnequip;removePotionEffect{[player]fire_resistance:true}"
-- "ArmorPieceBreak;removePotionEffect{[player]fire_resistance:true}"
+- "ArmorEquip;PlayerAddPotionEffect=fire_resistance:level-1:99999:true"
+- "ArmorUnequip;PlayerRemovePotionEffect=fire_resistance:true"
+- "ArmorPieceBreak;PlayerRemovePotionEffect=fire_resistance:true"

@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.addons.BlackScroll;
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.utils.CustomEnchantUtils;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.addons.PathBlackScroll;
 import org.bukkit.Material;
@@ -19,17 +18,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class BlackScrolls extends CustomEnchantUtils {
+public class BlackScrolls extends CustomEnchants {
     private static BlackScrolls instance;
     public static BlackScrolls getBlackScrolls() {
         if(instance == null) instance = new BlackScrolls();
         return instance;
     }
 
+    @Override
     public String getIdentifier() { return "BLACK_SCROLLS"; }
+    @Override
     protected RPFeature getFeature() { return getBlackScrolls(); }
+    @Override
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "black scrolls.yml");
         final ConfigurationSection cs = getAddonConfig("black scrolls.yml").getConfigurationSection("black scrolls");
@@ -39,8 +40,8 @@ public class BlackScrolls extends CustomEnchantUtils {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (blackscrolls != null ? blackscrolls.size() : 0) + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
-        unloadUtils();
         blackscrolls = null;
     }
 

@@ -13,4 +13,4 @@ tinkerer: ""
 requires: "Rocket Escape;3"
 #
 attributes:
-- "isDamaged;(Lucky*2)+(65+(5*level));VictimHealth<=10;VictimAddPotionEffect=jump:24+level:20+(20*level):true;VictimAddPotionEffect=regeneration:level+2:20+(20*level):true"
+- "isDamaged;chance=(Lucky*2)+(65+(5*level));VictimHealth<=10;VictimAddPotionEffect=jump:24+level:20+(20*level):true;VictimAddPotionEffect=regeneration:level+2:20+(20*level):true"

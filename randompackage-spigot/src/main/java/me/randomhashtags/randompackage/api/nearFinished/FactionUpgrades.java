@@ -475,7 +475,7 @@ public class FactionUpgrades extends RPFeature {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
-        final Entity D = event.damager;
+        final Entity D = event.getDamager();
         if(D instanceof Player) {
             final Player damager = (Player) D;
             final String fn = regions.getFactionTag(damager.getUniqueId());

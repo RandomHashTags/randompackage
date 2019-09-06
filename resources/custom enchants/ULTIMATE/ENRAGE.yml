@@ -13,4 +13,4 @@ alchemist: "5000:6000"
 tinkerer: "58:70:82"
 #
 attributes:
-- "PvA;chance=10+(2*level);setDamage{dmg+(0.25*(maxHealthOf(DAMAGER)-healthOf(DAMAGER)))};sendMessage{[damager]&e&l** ENRAGE **}"
+- "PvA;chance=10+(2*level);SetDamage=dmg+(0.25*(DamagerGetMaxHP-DamagerGetHP));DamagerSendMessage=&e&l** ENRAGE **"

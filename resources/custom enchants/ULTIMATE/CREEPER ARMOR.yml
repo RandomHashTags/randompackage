@@ -15,6 +15,6 @@ alchemist: "6000:7000"
 tinkerer: "89:105:121"
 #
 attributes:
-- "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);setDamage(0);setDurability{[victim]all:durability-1}"
+- "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);SetDamage=0;VictimSetDurability=all:durability-1"
 - "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);chance=30*level;setVelocity{0:0:0}"
-- "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);chance=20*level;heal{[victim]2h}"
+- "DamagedBy(BLOCK_EXPLOSION||ENTITY_EXPLOSION);chance=20*level;VictimHeal=4"

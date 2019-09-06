@@ -12,4 +12,4 @@ alchemist: "6000:7000"
 tinkerer: "143:157:171"
 #
 attributes:
-- "PvA;chance=Lucky+(2*level);SetDamage=dmg*2;DamagerSendMessage=&6&l** DEATHBRINGER **"
+- "PvAny;chance=Lucky+(2*level);SetDamage=dmg*2;DamagerSendMessage=&6&l** DEATHBRINGER **"

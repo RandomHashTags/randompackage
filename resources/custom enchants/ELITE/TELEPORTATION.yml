@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: false
 #
 name: "Teleportation"
@@ -13,4 +13,4 @@ alchemist: "3200:4200:5200:6200"
 tinkerer: "51:64:77:90:103"
 #
 attributes:
-  - "ProjectileHit;cancelled=true;VictimIsAlly"
+- "ProjectileHit;cancelled=true;VictimIsAlly=true;"

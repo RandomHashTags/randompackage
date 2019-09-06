@@ -13,4 +13,4 @@ alchemist: "6000:6500:7000:7500"
 tinkerer: "84:93:102:111:120"
 #
 attributes:
-- "mcMMOXpGained;setXP{xp*(1+(.05*level))}"
+- "MCMMOPlayerXpGained;setGainedXP=xp*(1+(.05*level))"

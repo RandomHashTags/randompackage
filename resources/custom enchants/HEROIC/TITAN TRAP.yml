@@ -1,4 +1,4 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 enabled: true
 #
 name: "Titan Trap"
@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Trap;3"
 #
 attributes:
-- "PvA;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level):false"
+- "PvA;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"

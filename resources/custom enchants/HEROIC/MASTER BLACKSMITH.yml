@@ -20,4 +20,4 @@ tinkerer: ""
 requires: "Blacksmith;5"
 #
 attributes:
-- "PvP;chance=30+(5*level);DamagerSetDurability=mostDamaged:durability-random{2:3};SetDamage=dmg*(1+(level*0.05))"
+- "PvAny;VictimIsPlayer=true;chance=30+(5*level);DamagerSetDurability=mostDamaged:durability-random{2:3};SetDamage=dmg*(1+(level*0.05))"

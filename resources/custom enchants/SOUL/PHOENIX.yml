@@ -16,4 +16,4 @@ alchemist: "8500:13500"
 tinkerer: "190:215:240"
 #
 attributes:
-- "isDamaged;if{[victim]healthIs<=:dmg:->DepleteRarityGem{SOUL:random{1000:1500}}&&setDamage{0}&&damage{[victim]0}&&setHealth{[victim]maxHealthOf(VICTIM)}}"
+- "isDamaged;VictimHealth<=dmg;VictimDepleteRarityGem=SOUL:random{1000:1500};SetDamage=0;VictimSetHealth=getVictimMaxHP"

@@ -13,4 +13,4 @@ alchemist: "4000:4500:5000:5500:6000:6500:7000:7500:8000"
 tinkerer: "56:67:78:89:100:111:122:133:144:155"
 #
 attributes:
-- "isDamaged;chance=level;spawnEntity{[victim]guardian:1:damager}"
+- "isDamaged;chance=level;VictimSpawnEntity=guardian:1:Damager"

@@ -28,10 +28,12 @@ public class RandomizationScrolls extends CustomEnchants {
         return instance;
     }
 
+    @Override
     public String getIdentifier() { return "RANDOMIZATION_SCROLLS"; }
+    @Override
     protected RPFeature getFeature() { return getRandomizationScrolls(); }
+    @Override
     public void load() {
-        loadUtils();
         final long started = System.currentTimeMillis();
         save("addons", "randomization scrolls.yml");
         final ConfigurationSection cs = getAddonConfig("randomization scrolls.yml").getConfigurationSection("randomization scrolls");
@@ -44,8 +46,8 @@ public class RandomizationScrolls extends CustomEnchants {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (randomizationscrolls != null ? randomizationscrolls.size() : 0) + " Randomization Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
-        unloadUtils();
         randomizationscrolls = null;
     }
 

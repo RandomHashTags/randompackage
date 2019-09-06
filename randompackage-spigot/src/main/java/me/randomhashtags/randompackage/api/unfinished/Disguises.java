@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.io.File;
 
@@ -52,5 +53,8 @@ public class Disguises extends RPFeature {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
+    }
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void playerMoveEvent(PlayerMoveEvent event) {
     }
 }

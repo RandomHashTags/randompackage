@@ -12,4 +12,4 @@ alchemist: "1250:2500:3750"
 tinkerer: "104:116:128:140"
 #
 attributes:
-- "isDamaged;chance=8*level;ignite{[damager]60*level}"
+- "isDamaged;chance=8*level;DamagerIgnite=60*level"

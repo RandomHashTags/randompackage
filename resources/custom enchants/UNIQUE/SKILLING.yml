@@ -13,8 +13,8 @@ alchemist: "1750:1850:1950:2050:2150:2250:2350:2450:2550"
 tinkerer: "58:69:80:91:102:113:124:135:146:157"
 #
 attributes:
-- "mcMMOXpGained:EXCAVATION;setGainedXP{xp*(.05*level)}"
-- "mcMMOXpGained:REPAIR;setGainedXP{xp*(.05*level)}"
-- "mcMMOXpGained:MINING;setGainedXP{xp*(.05*level)}"
-- "mcMMOXpGained:HERBALISM;setGainedXP{xp*(.05*level)}"
-- "mcMMOXpGained:MINING;setGainedXP{xp*(.05*level)}"
+- "MCMMOPlayerXpGained;Skill=EXCAVATION;SetGainedXP=xp*(.05*level)"
+- "MCMMOPlayerXpGained;Skill=REPAIR;SetGainedXP=xp*(.05*level)"
+- "MCMMOPlayerXpGained;Skill=MINING;SetGainedXP=xp*(.05*level)"
+- "MCMMOPlayerXpGained;Skill=HERBALISM;SetGainedXP=xp*(.05*level)"
+- "MCMMOPlayerXpGained;Skill=MINING;SetGainedXP=xp*(.05*level)"

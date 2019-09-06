@@ -2,6 +2,9 @@ package me.randomhashtags.randompackage.api.unfinished;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class Captcha extends RPFeature {
     private static Captcha instance;
@@ -19,5 +22,12 @@ public class Captcha extends RPFeature {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Captcha &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+    }
+
+    @EventHandler
+    private void entityDeathEvent(EntityDeathEvent event) {
+    }
+    @EventHandler
+    private void inventoryClickEvent(InventoryClickEvent event) {
     }
 }

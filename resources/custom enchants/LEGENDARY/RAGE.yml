@@ -13,4 +13,4 @@ alchemist: "6000:7000:8000:9000:10000"
 tinkerer: "139:151:163:175:187:199"
 #
 attributes:
-- "PvA;SetDamage=dmg*DamagerGetCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"
+- "PvAny;SetDamage=dmg*DamagerGetCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"

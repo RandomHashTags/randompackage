@@ -11,4 +11,4 @@ applies to: "sword;_axe"
 tinkerer: "92"
 #
 attributes:
-- "PvA;chance=6+(5*level);VictimFreeze=60;VictimSendMessage=&b&l** YOU'VE BEEN FROZEN **;DamagerSendMessage=&b&l** ICE FREEZE **"
+- "PvAny;chance=6+(5*level);VictimFreeze=60;VictimSendMessage=&b&l** YOU'VE BEEN FROZEN **;DamagerSendMessage=&b&l** ICE FREEZE **"

@@ -4,7 +4,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-public class SetDroppedXp extends AbstractEventAttribute {
+public class SetDroppedExp extends AbstractEventAttribute {
     @Override
     public void execute(Event event, String value) {
         if(event instanceof EntityDeathEvent) {

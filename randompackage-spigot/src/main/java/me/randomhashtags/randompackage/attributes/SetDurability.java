@@ -23,7 +23,7 @@ public class SetDurability extends AbstractEventAttribute {
         }
     }
     @Override
-    public void execute(HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             setDurability(e, recipientValues.get(e));
         }

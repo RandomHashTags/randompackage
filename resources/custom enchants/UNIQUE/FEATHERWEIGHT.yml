@@ -12,4 +12,4 @@ alchemist: "3000:3500"
 tinkerer: "138:162:186"
 #
 attributes:
-- "PvA;chance=10+(4*level);addPotionEffect{[damager]haste:level-1:40*level}"
+- "PvA;chance=10+(4*level);DamagerAddPotionEffect=haste:level-1:40*level"

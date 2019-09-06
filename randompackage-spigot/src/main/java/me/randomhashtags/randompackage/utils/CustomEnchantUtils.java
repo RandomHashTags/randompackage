@@ -1,159 +1,11 @@
 package me.randomhashtags.randompackage.utils;
 
-import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
-import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.events.MaskEquipEvent;
-import me.randomhashtags.randompackage.events.MaskUnequipEvent;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.*;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.util.Vector;
-
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.*;
-
 public abstract class CustomEnchantUtils extends RPFeature {
+    /*
     public String getIdentifier() { return "CUSTOM_ENCHANT_UTILS"; }
 
     public static HashMap<CustomEnchant, Integer> timerenchants;
-    public static HashMap<Player, HashMap<CustomEnchant, Integer>> stoppedEnchants;
     public static HashMap<Location, HashMap<ItemStack, HashMap<Block, Integer>>> temporaryblocks; // <block location <original block, <temporary new block, ticks>>>>
-    public static HashMap<UUID, ItemStack> shotBows;
-    public static HashMap<UUID, Player> shotbows;
-
-    public void loadUtils() {
-        timerenchants = new HashMap<>();
-        stoppedEnchants = new HashMap<>();
-        temporaryblocks = new HashMap<>();
-        shotBows = new HashMap<>();
-        shotbows = new HashMap<>();
-    }
-    public void unloadUtils() {
-        timerenchants = null;
-        stoppedEnchants = null;
-        temporaryblocks = null;
-        shotBows = null;
-        shotbows = null;
-    }
-
-    public void procPlayerArmor(Event event, Player player) {
-        if(player != null) {
-            for(ItemStack is : player.getInventory().getArmorContents()) {
-                if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-                    for(String s : is.getItemMeta().getLore()) {
-                        final CustomEnchant e = valueOfCustomEnchant(s);
-                        if(e != null) {
-                            procEnchant(event, e, getEnchantmentLevel(s), is, player);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    public void procPlayerItem(Event event, Player player, ItemStack is) {
-        if(player != null) {
-            final ItemStack h = is == null ? player.getInventory().getItemInHand() : is;
-            if(h != null && h.hasItemMeta() && h.getItemMeta().hasLore()) {
-                for(String s : h.getItemMeta().getLore()) {
-                    final CustomEnchant e = valueOfCustomEnchant(s);
-                    if(e != null) {
-                        procEnchant(event, e, getEnchantmentLevel(s), h, player);
-                    }
-                }
-            }
-        }
-    }
-    public void tryProcEnchant(Event event, Player player, CustomEnchant enchant) {
-        if(player != null) {
-            for(ItemStack is : player.getInventory().getArmorContents()) {
-                if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-                    for(String s : is.getItemMeta().getLore()) {
-                        final CustomEnchant e = valueOfCustomEnchant(s);
-                        if(e != null && e.equals(enchant)) {
-                            procEnchant(event, e, getEnchantmentLevel(s), is, player);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void procEnchant(Event event, CustomEnchant enchant, int level, ItemStack itemWithEnchant, Player P) {
-        final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, enchant, level, itemWithEnchant, P);
-        pluginmanager.callEvent(e);
-        if(!e.isCancelled() && (!(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) || event instanceof PluginEnableEvent) {
-            executeAttributes(e, e.player);
-        }
-    }
-
-    public void executeAttributes(CustomEnchantProcEvent e, Player P) {
-        final Event event = e.event;
-        final CustomEnchant enchant = e.enchant;
-        for(String attr : enchant.getAttributes()) {
-            final String A = attr.split(";")[0].toLowerCase();
-            if(event instanceof PlayerArmorEvent && (A.equals("armorequip") && ((PlayerArmorEvent) event).reason.name().contains("_EQUIP") || A.equals("armorunequip") && (((PlayerArmorEvent) event).reason.name().contains("_UNEQUIP") || ((PlayerArmorEvent) event).reason.name().contains("DROP")) || A.equals("armorpiecebreak") && ((PlayerArmorEvent) event).reason.equals(PlayerArmorEvent.ArmorEventReason.BREAK))
-                    || event instanceof PvAnyEvent && (A.equals("pva") || A.equals("pvp") && ((PvAnyEvent) event).victim instanceof Player || A.equals("pve") && !(((PvAnyEvent) event).victim instanceof Player) || A.equals("arrowhit") && ((PvAnyEvent) event).proj != null && ((PvAnyEvent) event).proj instanceof Arrow && shotbows.keySet().contains(((PvAnyEvent) event).proj.getUniqueId()))
-
-                    || event instanceof isDamagedEvent && (A.equals("isdamaged") || A.equals("hitbyarrow") && ((isDamagedEvent) event).damager instanceof Arrow || A.startsWith("damagedby(") && ((isDamagedEvent) event).cause != null && A.toUpperCase().contains(((isDamagedEvent) event).cause.name()))
-
-                    || event instanceof CustomEnchantEntityDamageByEntityEvent && A.startsWith("ceentityisdamaged")
-                    || event instanceof CustomBossDamageByEntityEvent && A.startsWith("custombossisdamaged")
-
-                    || event instanceof ArmorSetEquipEvent && A.equals("armorsetequip")
-                    || event instanceof ArmorSetUnequipEvent && A.equals("armorsetunequip")
-
-                    || event instanceof BlockPlaceEvent && A.equals("blockplace")
-                    || event instanceof BlockBreakEvent && A.equals("blockbreak")
-
-                    || event instanceof FoodLevelChangeEvent && A.equals("foodlevelgained") && ((FoodLevelChangeEvent) event).getEntity() instanceof Player && ((FoodLevelChangeEvent) event).getFoodLevel() > ((Player) ((FoodLevelChangeEvent) event).getEntity()).getFoodLevel()
-                    || event instanceof FoodLevelChangeEvent && A.equals("foodlevellost") && ((FoodLevelChangeEvent) event).getEntity() instanceof Player && ((FoodLevelChangeEvent) event).getFoodLevel() < ((Player) ((FoodLevelChangeEvent) event).getEntity()).getFoodLevel()
-
-                    || event instanceof PlayerItemDamageEvent && A.equals("isdurabilitydamaged")
-
-                    || event instanceof PlayerInteractEvent && A.equals("playerinteract")
-
-                    || event instanceof ProjectileHitEvent && A.equals("arrowland") && ((ProjectileHitEvent) event).getEntity() instanceof Arrow && getHitEntity((ProjectileHitEvent) event) == null
-                    || event instanceof EntityShootBowEvent && A.equals("shootbow")
-
-                    || event instanceof PlayerDeathEvent && (A.equals("playerdeath") || A.equals("killedplayer"))
-                    || event instanceof EntityDeathEvent && A.equals("killedentity") && !(((EntityDeathEvent) event).getEntity() instanceof Player)
-
-                    || event instanceof CustomEnchantProcEvent && A.equals("enchantproc")
-                    || event instanceof CEAApplyPotionEffectEvent && A.equals("ceapplypotioneffect")
-
-                    || event instanceof MobStackDepleteEvent && A.equals("mobstackdeplete")
-
-                    || event instanceof PluginEnableEvent && A.startsWith("timer(")
-                    || attr.toLowerCase().contains(";didproc;") && e.didProc
-
-                    || mcmmoIsEnabled() && event instanceof com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent && (A.equals("mcmmoxpgained") || A.equals("mcmmoxpgained:" + ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getSkill().name().toLowerCase()))
-
-            ) {
-                doAttribute(e, attr, enchant, P);
-            }
-        }
-    }
 
     private void doAttribute(CustomEnchantProcEvent e, String attribute, CustomEnchant enchant, Player P) {
         final int level = e.level;
@@ -170,19 +22,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             b++;
             if(a.toLowerCase().startsWith("didproc") && !e.didProc) {
                 return;
-            } else if(a.toLowerCase().startsWith("chance=")) {
-                HashMap<ItemStack, HashMap<CustomEnchant, Integer>> o = getEnchants(e.player);
-                for(ItemStack q : o.keySet())
-                    for(CustomEnchant E : o.get(q).keySet())
-                        if(a.split("=")[1].contains(E.getName()))
-                            a = a.replace(E.getName(), Integer.toString((int) evaluate(E.getEnchantProcValue().replace("level", Integer.toString(o.get(q).get(E))))));
-                final int chance = (int) evaluate(a.split("=")[1].replaceAll("\\p{L}", "0"));
-                final boolean didproc = random.nextInt(100) <= chance;
-                if(!didproc) {
-                    e.didProc = false;
-                    return;
-                }
-                e.didProc = true;
             } else if(!a.equals(attribute.split(";")[0]) && !a.toLowerCase().startsWith("chance=") && (!attribute.toLowerCase().contains("chance=") || e.didProc)) {
                 if(!attribute.toLowerCase().contains("chance=")) e.didProc = true;
                 executeAttribute(e, e.event, enchant, a, attribute, b, P);
@@ -225,42 +64,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
         final Player player = ev != null ? ev.player : null;
         final int level = ev != null ? ev.level : 0;
         final boolean isPVAny = event instanceof PvAnyEvent;
-        final HashMap<String, LivingEntity> recipientss = getRecipients(event, P);
-        for(String s : recipientss.keySet()) {
-            if(a.contains(s + "X"))
-                a = a.replace(s + "X", Integer.toString(recipientss.get(s).getLocation().getBlockX()));
-            if(a.contains(s + "Y"))
-                a = a.replace(s + "Y", Integer.toString(recipientss.get(s).getLocation().getBlockY()));
-            if(a.contains(s + "Z"))
-                a = a.replace(s + "Z", Integer.toString(recipientss.get(s).getLocation().getBlockZ()));
-        }
-        for(int i = 1; i <= 6; i++) {
-            if(a.contains("maxHealthOf(") || a.contains("healthOf(")) {
-                String value = a.contains("maxHealthOf(") ? "maxHealthOf" : "healthOf";
-                value = value + "(" + a.split(value + "\\(")[1].split("\\)")[0] + ")";
-                if(isPVAny) {
-                    final PvAnyEvent e = (PvAnyEvent) event;
-                    final LivingEntity damager = e.damager, victim = e.victim;
-                    if(value.contains("DAMAGER"))
-                        a = a.replace(value, BigDecimal.valueOf(value.startsWith("max") ? damager.getMaxHealth() : damager.getHealth()).toPlainString());
-                    if(value.contains("VICTIM"))
-                        a = a.replace(value, victim != null ? BigDecimal.valueOf(value.startsWith("max") ? victim.getMaxHealth() : victim.getHealth()).toPlainString() : "0");
-                }
-            }
-            if(a.contains("getXP(")) {
-                String value = a.contains("getXP(") ? "getXP" : "";
-                if(!value.equals("")) {
-                    value = value + "(" + a.split(value + "\\(")[1].split("\\)")[0] + ")";
-                    if(isPVAny) {
-                        final PvAnyEvent E = (PvAnyEvent) event;
-                        if(value.contains("DAMAGER"))
-                            a = a.replace("DAMAGER", Integer.toString(getXP(E.damager)));
-                        if(value.contains("VICTIM"))
-                            a = a.replace("VICTIM", E != null && E.victim instanceof Player ? Integer.toString(getXP(E.victim)) : "0");
-                    }
-                }
-            }
-        }
 
         if(a.contains("random{")) {
             final String e = a.split("random\\{")[1].split("}")[0];
@@ -309,25 +112,7 @@ public abstract class CustomEnchantUtils extends RPFeature {
             a = a.replace("nearby" + (allies ? "Allies" : enemies ? "Enemies" : "") + "Size{" + e + "}", Integer.toString(size));
         }
 
-        if(a.toLowerCase().startsWith("setvelocity{")) {
-            String U = a.toLowerCase().split("]")[1];
-            if(isPVAny) {
-                final PvAnyEvent E = (PvAnyEvent) event;
-                final Player d = E.damager;
-                final Vector dv = d.getVelocity();
-                final LivingEntity victim = E.victim;
-                U = U.replace("velocityxof(damager)", Double.toString(dv.getX())).replace("velocityyof(damager)", Double.toString(dv.getY())).replace("velocityzof(damager)", Double.toString(dv.getZ()));
-                U = U.replace("velocityof(damager)", dv.getX() + ":" + dv.getY() + ":" + dv.getZ());
-                if(victim != null) {
-                    final Vector v = victim.getVelocity();
-                    U = U.replace("velocityxof(victim)", Double.toString(v.getX())).replace("velocityyof(victim)", Double.toString(v.getY())).replace("velocityzof(victim)", Double.toString(v.getZ()));
-                    U = U.replace("velocityof(victim)", v.getX() + ":" + v.getY() + ":" + v.getZ());
-                }
-            }
-            final String[] u = U.split(":");
-            final Vector knockback = new Vector(evaluate(u[0]), evaluate(u[1]), evaluate(u[2].split("}")[0]));
-            for(LivingEntity l : recipients) setVelocity(l, knockback);
-        } else if(a.toLowerCase().startsWith("procenchants{")) {
+        if(a.toLowerCase().startsWith("procenchants{")) {
             for(LivingEntity l : recipients)
                 if(l instanceof Player) {
                     final HashMap<ItemStack, HashMap<CustomEnchant, Integer>> enchants = getEnchants((Player) l);
@@ -359,29 +144,11 @@ public abstract class CustomEnchantUtils extends RPFeature {
         } else if(a.toLowerCase().startsWith("depletestacksize{") && event instanceof MobStackDepleteEvent) {
             final int amount = Integer.parseInt(a.split("\\{")[1].split("}")[0]);
             ((MobStackDepleteEvent) event).amount = amount;
-        } else if(a.toLowerCase().startsWith("if{")) {
-            doIf(ev, event, enchant, level, a, attribute, b, a.split("\\{")[1], P);
-        }
-    }
-    private void doIf(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, int level, String a, String attribute, int b, String input, Player P) {
-        final ArrayList<Boolean> ifs = new ArrayList<>();
-        for(LivingEntity l : getRecipients(event, input, P)) {
-            for(String s : (a.split("->")[0].contains("]") ? a.split("->")[0].split("]")[1] : a.split("->")[0].split("\\{")[1]).split("&&"))
-                ifs.add(doVariable(ev, event, enchant, l, s));
-        }
-        if(!ifs.contains(false)) {
-            for(String q : (a.split("->")[1].contains("-<") ? a.split("->")[1].split("-<")[0] : a.split("->")[1]).split("&&")) executeAttribute(ev, event, enchant, q, attribute, b, P);
-        } else if(a.contains("-<")) {
-            for(String q : a.split("-<")[1].split("&&")) executeAttribute(ev, event, enchant, q, attribute, b, P);
         }
     }
     private boolean doVariable(CustomEnchantProcEvent e, Event event, CustomEnchant enchant, LivingEntity entity, String input) {
         if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && factions.canModify(((PlayerInteractEvent) event).getPlayer().getUniqueId(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
-        else if(input.startsWith("isHeadshot")) {
-            final PvAnyEvent eve = event instanceof PvAnyEvent ? (PvAnyEvent) event : null;
-            final Projectile p = eve != null ? eve.proj : null;
-            return eve != null && p instanceof Arrow && p.getLocation().getY() > eve.victim.getEyeLocation().getY();
-        } else if(input.startsWith("didproc")) return e.didProc;
+        else if(input.startsWith("didproc")) return e.didProc;
         else if(input.startsWith("didntproc")) return !e.didProc;
         else if(input.startsWith("enchantIs(")) {
             if(enchant != null) {
@@ -394,136 +161,8 @@ public abstract class CustomEnchantUtils extends RPFeature {
             if(recipients.size() == 2)
                 return input.split("distanceBetween\\(")[1].split("\\)")[1].startsWith("<=") ? distanceBetween(recipients.get(0), recipients.get(1)) <= evaluate(input.split("\\)<=")[1]) : distanceBetween(recipients.get(0), recipients.get(1)) >= evaluate(input.split("\\)>=")[1]);
             return false;
-        } else if(input.toLowerCase().startsWith("isfacing(")) {
-            final String facing = facing(entity).toLowerCase();
-            for(String s : input.toLowerCase().split("isfacing\\(")[1].split("\\)")[0].split("\\|\\|")) {
-                if(facing.toLowerCase().startsWith(s.toLowerCase())) return true;
-            }
-            return false;
         }
         return false;
-    }
-    public HashMap<String, LivingEntity> getRecipients(Event event, Player p) {
-        final HashMap<String, LivingEntity> recipients = new HashMap<>();
-        if(event instanceof CustomEnchantEntityDamageByEntityEvent) {
-            final CustomEnchantEntityDamageByEntityEvent e = (CustomEnchantEntityDamageByEntityEvent) event;
-            recipients.put("OWNER", e.getCustomEnchantEntity().getSummoner());
-            if(e.damager instanceof LivingEntity) recipients.put("DAMAGER", (LivingEntity) e.damager);
-        } else if(event instanceof ArmorSetEquipEvent) {
-            recipients.put("PLAYER", ((ArmorSetEquipEvent) event).player);
-        } else if(event instanceof ArmorSetUnequipEvent) {
-            recipients.put("PLAYER", ((ArmorSetUnequipEvent) event).player);
-        } else if(event instanceof PlayerArmorEvent) {
-            recipients.put("PLAYER", ((PlayerArmorEvent) event).player);
-        } else if(event instanceof PlayerInteractEvent) {
-            recipients.put("PLAYER", ((PlayerInteractEvent) event).getPlayer());
-        } else if(event instanceof BlockBreakEvent) {
-            recipients.put("PLAYER", ((BlockBreakEvent) event).getPlayer());
-        } else if(event instanceof PlayerItemDamageEvent) {
-            recipients.put("PLAYER", ((PlayerItemDamageEvent) event).getPlayer());
-        } else if(event instanceof FoodLevelChangeEvent) {
-            recipients.put("PLAYER", ((FoodLevelChangeEvent) event).getEntity());
-        } else if(event instanceof EntityDeathEvent) {
-            final EntityDeathEvent e = (EntityDeathEvent) event;
-            final LivingEntity en = e.getEntity();
-            recipients.put("VICTIM", en);
-            recipients.put("DAMAGER", en.getKiller());
-        } else if(event instanceof CEAApplyPotionEffectEvent) {
-            final CEAApplyPotionEffectEvent e = (CEAApplyPotionEffectEvent) event;
-            recipients.put("VICTIM", e.appliedto);
-            recipients.put("DAMAGER", e.player);
-        } else if(event instanceof PvAnyEvent) {
-            final PvAnyEvent pva = (PvAnyEvent) event;
-            recipients.put("DAMAGER", pva.damager);
-            final LivingEntity v = pva.victim;
-            if(v != null) {
-                if(v instanceof Arrow && ((Arrow) v).getShooter() instanceof Player) recipients.put("SHOOTER", (Player) ((Arrow) v).getShooter());
-                recipients.put("VICTIM", v);
-            }
-        } else if(event instanceof EntityDamageEvent) {
-            recipients.put("VICTIM", (LivingEntity) ((EntityDamageEvent) event).getEntity());
-        } else if(event instanceof PluginEnableEvent) {
-            recipients.put("PLAYER", p);
-        }
-        return recipients;
-    }
-    public List<LivingEntity> getRecipients(Event event, String input, Player p) {
-        ArrayList<LivingEntity> recipients = new ArrayList<>();
-        if(event instanceof CustomEnchantEntityDamageByEntityEvent) {
-            final CustomEnchantEntityDamageByEntityEvent e = (CustomEnchantEntityDamageByEntityEvent) event;
-            if(input.toLowerCase().contains("owner")) recipients.add(e.getCustomEnchantEntity().getSummoner());
-            if(input.toLowerCase().contains("damager") && e.damager instanceof LivingEntity) recipients.add((LivingEntity) e.damager);
-        } else if(event instanceof ArmorSetEquipEvent) {
-            recipients.add(((ArmorSetEquipEvent) event).player);
-        } else if(event instanceof ArmorSetUnequipEvent) {
-            recipients.add(((ArmorSetUnequipEvent) event).player);
-        } else if(event instanceof PlayerArmorEvent) {
-            recipients.add(((PlayerArmorEvent) event).player);
-        } else if(event instanceof MobStackDepleteEvent) {
-            final MobStackDepleteEvent e = (MobStackDepleteEvent) event;
-            final Entity k = e.killer;
-            if(k instanceof LivingEntity)
-                recipients.add((LivingEntity) k);
-        } else if(event instanceof PlayerInteractEvent) {
-            recipients.add(((PlayerInteractEvent) event).getPlayer());
-        } else if(event instanceof BlockBreakEvent) {
-            recipients.add(((BlockBreakEvent) event).getPlayer());
-        } else if(event instanceof PlayerItemDamageEvent) {
-            recipients.add(((PlayerItemDamageEvent) event).getPlayer());
-        } else if(event instanceof FoodLevelChangeEvent) {
-            recipients.add(((FoodLevelChangeEvent) event).getEntity());
-        } else if(event instanceof EntityDeathEvent) {
-            final EntityDeathEvent e = (EntityDeathEvent) event;
-            if(input.toLowerCase().contains("victim")) recipients.add(e.getEntity());
-            if(input.toLowerCase().contains("damager")) recipients.add(e.getEntity().getKiller());
-        } else if(event instanceof CEAApplyPotionEffectEvent) {
-            final CEAApplyPotionEffectEvent e = (CEAApplyPotionEffectEvent) event;
-            if(input.toLowerCase().contains("victim")) recipients.add(e.appliedto);
-            if(input.toLowerCase().contains("damager")) recipients.add(e.player);
-        } else if(event instanceof ProjectileHitEvent) {
-            final ProjectileHitEvent e = (ProjectileHitEvent) event;
-            if(input.toLowerCase().contains("shooter") && e.getEntity().getShooter() instanceof LivingEntity) recipients.add((LivingEntity) e.getEntity().getShooter());
-            final LivingEntity hit = getHitEntity(e);
-            if(input.toLowerCase().contains("victim") && hit != null) recipients.add(hit);
-        } else if(event instanceof PvAnyEvent) {
-            final PvAnyEvent e = (PvAnyEvent) event;
-            final LivingEntity v = e.victim;
-            final Projectile pro = e.proj;
-            if(input.toLowerCase().contains("damager")) recipients.add(e.damager);
-            if(input.toLowerCase().contains("victim") && v != null) recipients.add(v);
-            if(input.toLowerCase().contains("shooter") && pro != null && pro.getShooter() instanceof LivingEntity) recipients.add((LivingEntity) pro.getShooter());
-        } else if(event instanceof isDamagedEvent) {
-            final isDamagedEvent is = (isDamagedEvent) event;
-            if(input.toLowerCase().contains("victim")) recipients.add(is.victim);
-            if(input.toLowerCase().contains("damager")) recipients.add(is.damager);
-        } else if(event instanceof EntityDamageEvent && !(event instanceof EntityDamageByEntityEvent)) {
-            recipients.add((LivingEntity) ((EntityDamageEvent) event).getEntity());
-        } else if(event instanceof MaskEquipEvent || event instanceof MaskUnequipEvent) {
-            final boolean e = event instanceof MaskEquipEvent;
-            recipients.add(e ? ((MaskEquipEvent) event).player : ((MaskUnequipEvent) event).player);
-        } else if(event instanceof PluginEnableEvent) {
-            recipients.add(p);
-        }
-        return recipients;
-    }
-    private LivingEntity getRecipient(Event event, String input) {
-        if(event instanceof PlayerArmorEvent) {
-            return ((PlayerArmorEvent) event).player;
-        } else if(event instanceof PlayerInteractEvent) {
-            return ((PlayerInteractEvent) event).getPlayer();
-        } else if(event instanceof ProjectileHitEvent) {
-            final ProjectileHitEvent e = (ProjectileHitEvent) event;
-            if(input.toLowerCase().contains("arrow") && e.getEntity() instanceof Arrow) return (LivingEntity) e.getEntity();
-            if(input.toLowerCase().contains("shooter") && e.getEntity().getShooter() != null && e.getEntity().getShooter() instanceof LivingEntity) return (LivingEntity) e.getEntity().getShooter();
-        } else if(event instanceof PvAnyEvent) {
-            final PvAnyEvent e = (PvAnyEvent) event;
-            final LivingEntity v = e.victim;
-            final Projectile pro = e.proj;
-            if(input.contains("damager")) return pro instanceof LivingEntity ? (LivingEntity) pro : e.damager;
-            if(input.contains("victim") && v != null) return v;
-            if(input.contains("shooter") && pro != null) return (LivingEntity) pro.getShooter();
-        }
-        return null;
     }
     public ItemStack getRarityGem(RarityGem gem, Player player) {
         final PlayerInventory pi = player.getInventory();
@@ -536,42 +175,9 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return null;
     }
-
-
-    public boolean canProcOn(Entity e) {
-        return config.getStringList("settings.can proc on").contains(e.getType().name());
-    }
     /*
         ATTRIBUTES
-     */
-    public void addPotionEffect(Event event, Player player, LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
-        if(entity != null) {
-            final CEAApplyPotionEffectEvent e = new CEAApplyPotionEffectEvent(event, player, entity, enchant, level, potioneffect);
-            pluginmanager.callEvent(e);
-            if(!e.isCancelled()) {
-                entity.addPotionEffect(potioneffect);
-                dopotioneffect(entity, potioneffect, message, enchant, level);
-            } else if(entity instanceof Player) {
-                procPlayerArmor(e, (Player) entity);
-                procPlayerItem(e, (Player) entity, null);
-            }
-        }
-    }
-    private void removePotionEffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
-        if(potioneffect != null && entity != null && entity.hasPotionEffect(potioneffect.getType())) {
-            entity.removePotionEffect(potioneffect.getType());
-            dopotioneffect(entity, potioneffect, message, enchant, level);
-        }
-    }
-    private void dopotioneffect(LivingEntity entity, PotionEffect potioneffect, List<String> message, CustomEnchant enchant, int level) {
-        if(message != null) {
-            for(String s : message) {
-                if(s.contains("{ENCHANT}")) s = s.replace("{ENCHANT}", enchant.getName() + " " + toRoman(level));
-                if(s.contains("{POTION_EFFECT}")) s = s.replace("{POTION_EFFECT}", potioneffect.getType().getName() + " " + toRoman(potioneffect.getAmplifier() + 1));
-                entity.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-            }
-        }
-    }
+     *//*
     private void setTemporaryBlock(Location l, Material m, byte data, int ticks) {
         final World w = l.getWorld();
         final Block prev = w.getBlockAt(l);
@@ -625,16 +231,10 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return true;
     }
-    private String facing(Entity entity) {
-        /*  Code is from "Adrian Sohn" at https://stackoverflow.com/questions/35831619 */
-        float yaw = entity.getLocation().getYaw();
-        if (yaw < 0) yaw += 360;
-        return yaw >= 314 || yaw < 45 ? "SOUTH" : yaw < 135 ? "WEST" : yaw < 225 ? "NORTH" : yaw < 315 ? "EAST" : "NORTH";
-    }
     private double distanceBetween(Entity e1, Entity e2) {
         return e1.getLocation().distance(e2.getLocation());
     }
     private void setVelocity(LivingEntity entity, Vector vel) {
         entity.setVelocity(vel);
-    }
+    }*/
 }

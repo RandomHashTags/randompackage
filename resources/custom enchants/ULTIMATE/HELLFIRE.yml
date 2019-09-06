@@ -13,4 +13,4 @@ alchemist: "3500:4000:4500:5000"
 tinkerer: "54:63:72:81:90"
 #
 attributes:
-- "ShootBow;chance=10+(12*level);ignite{[arrow]200}"
+- "EntityShootBow;chance=10+(12*level);ProjectileIgnite=200"

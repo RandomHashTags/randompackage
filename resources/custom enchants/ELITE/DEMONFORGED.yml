@@ -13,4 +13,4 @@ alchemist: "4500:5000:5500"
 tinkerer: "68:80:92:104"
 #
 attributes:
-- "PvP;chance=9+level;VictimSetDurability=all:durability+random{1:level}"
+- "PvAny;VictimIsPlayer=true;chance=9+level;VictimSetDurability=all:durability+random{1:level}"

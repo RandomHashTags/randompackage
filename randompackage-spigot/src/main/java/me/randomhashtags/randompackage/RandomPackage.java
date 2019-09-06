@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.*;
 import me.randomhashtags.randompackage.api.partiallyFinished.Duels;
 import me.randomhashtags.randompackage.api.partiallyFinished.Dungeons;
-import me.randomhashtags.randompackage.events.PlayerArmorEvent;
+import me.randomhashtags.randompackage.events.armor.*;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
@@ -22,7 +22,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
@@ -251,50 +250,53 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             final PlayerInventory inv = player.getInventory();
             final String cursor = cursoritem.getType().name(), current = currentitem.getType().name();
             if((st.equals(InventoryType.SlotType.QUICKBAR) || st.equals(InventoryType.SlotType.CONTAINER)) && ct.equals(ClickType.CONTROL_DROP)) return;
-            PlayerArmorEvent a = null, b = null;
+            ArmorUnequipEvent unequip = null;
+            ArmorEquipEvent equip = null;
             if(st.equals(InventoryType.SlotType.ARMOR) && ct.equals(ClickType.NUMBER_KEY)) {
                 final int rawslot = event.getRawSlot();
                 final ItemStack prev = inv.getItem(event.getSlot()), hb = inv.getItem(event.getHotbarButton());
                 final String t = hb != null ? hb.getType().name() : "AIR";
                 if(prev != null && !prev.getType().name().equals("AIR"))
-                    a = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.NUMBER_KEY_UNEQUIP, prev);
+                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.NUMBER_KEY_UNEQUIP, prev);
                 if(canBeUsed(rawslot, t))
-                    b = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.NUMBER_KEY_EQUIP, hb);
+                    equip = new ArmorEquipEvent(player, ArmorEventReason.NUMBER_KEY_EQUIP, hb);
             } else if(event.isShiftClick()) {
-                if(st.equals(InventoryType.SlotType.ARMOR))
-                    a = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.SHIFT_UNEQUIP, currentitem);
-                else {
+                if(st.equals(InventoryType.SlotType.ARMOR)) {
+                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.SHIFT_UNEQUIP, currentitem);
+                } else {
                     final int t = getTargetSlot(current);
                     if(t == -1) return;
                     final ItemStack prevArmor = inv.getArmorContents()[t == 5 ? 3 : t == 6 ? 2 : t == 7 ? 1 : 0];
-                    if((prevArmor == null || prevArmor.getType().equals(Material.AIR)) && canBeUsed(t, current)) a = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.SHIFT_EQUIP, currentitem);
+                    if((prevArmor == null || prevArmor.getType().equals(Material.AIR)) && canBeUsed(t, current)) {
+                        equip = new ArmorEquipEvent(player, ArmorEventReason.SHIFT_EQUIP, currentitem);
+                    }
                 }
             } else if(st.equals(InventoryType.SlotType.ARMOR)) {
                 if(ct.name().contains("DROP") && !current.equals("AIR")) {
-                    a = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.DROP, currentitem);
+                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.DROP, currentitem);
                 } else if(ct.equals(ClickType.LEFT) || ct.equals(ClickType.RIGHT)) {
                     final int rawslot = event.getRawSlot();
                     if(!current.equals("AIR")) {
                         final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
                         if(c1 == c2 || rawslot == c1)
-                            a = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
+                            unequip = new ArmorUnequipEvent(player, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
                     }
                     if(!cursor.equals("AIR")) {
                         final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
                         if(c1 == c2 || rawslot == c2)
-                            b = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.INVENTORY_EQUIP, cursoritem);
+                            equip = new ArmorEquipEvent(player, ArmorEventReason.INVENTORY_EQUIP, cursoritem);
                     }
                 }
             }
-            if(a != null) {
-                pm.callEvent(a);
-                final ItemStack y = a.getCurrentItem(), z = a.getCursor();
+            if(unequip != null) {
+                pm.callEvent(unequip);
+                final ItemStack y = unequip.getCurrentItem(), z = unequip.getCursor();
                 if(y != null) event.setCurrentItem(y);
                 if(z != null) event.setCursor(z);
             }
-            if(b != null) {
-                pm.callEvent(b);
-                final ItemStack y = b.getCurrentItem(), z = b.getCursor();
+            if(equip != null) {
+                pm.callEvent(equip);
+                final ItemStack y = equip.getCurrentItem(), z = equip.getCursor();
                 if(y != null) event.setCurrentItem(y);
                 if(z != null) event.setCursor(z);
             }
@@ -323,21 +325,22 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(item.endsWith("HELMET") && PI.getHelmet() == null || item.endsWith("CHESTPLATE") && PI.getChestplate() == null || item.endsWith("LEGGINGS") && PI.getLeggings() == null || item.endsWith("BOOTS") && PI.getBoots() == null) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
                     if(!player.getGameMode().equals(GameMode.CREATIVE) && player.getItemInHand().equals(i)) return;
-                    PlayerArmorEvent armorevent = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.HOTBAR_EQUIP, i);
-                    pm.callEvent(armorevent);
+                    final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, i);
+                    pm.callEvent(e);
                 }, 0);
             } else if(item.endsWith("HELMET") && PI.getHelmet() != null || item.endsWith("CHESTPLATE") && PI.getChestplate() != null || item.endsWith("LEGGINGS") && PI.getLeggings() != null || item.endsWith("BOOTS") && PI.getBoots() != null) {
-                PlayerArmorEvent armorevent = new PlayerArmorEvent(player, PlayerArmorEvent.ArmorEventReason.HOTBAR_SWAP, i);
-                pm.callEvent(armorevent);
+                final ArmorEvent e = new ArmorEvent(player, ArmorEventReason.HOTBAR_SWAP, i);
+                pm.callEvent(e);
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     private void playerItemBreakEvent(PlayerItemBreakEvent event) {
-        final ItemStack i = event.getBrokenItem();
-        if(i.getType().name().endsWith("HELMET") || i.getType().name().endsWith("CHESTPLATE") || i.getType().name().endsWith("LEGGINGS") || i.getType().name().endsWith("BOOTS")) {
-            PlayerArmorEvent armorevent = new PlayerArmorEvent(event.getPlayer(), PlayerArmorEvent.ArmorEventReason.BREAK, i);
-            pm.callEvent(armorevent);
+        final ItemStack is = event.getBrokenItem();
+        final String i = is.getType().name();
+        if(i.endsWith("HELMET") || i.endsWith("CHESTPLATE") || i.endsWith("LEGGINGS") || i.endsWith("BOOTS")) {
+            final ArmorPieceBreakEvent e = new ArmorPieceBreakEvent(event.getPlayer(), is);
+            pm.callEvent(e);
         }
     }
 }
