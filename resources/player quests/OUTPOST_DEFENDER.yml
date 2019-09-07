@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "OutpostCaptured;+1"
+- "OutpostCapture;PlayerIncreasePQuest=OUTPOST_DEFENDER:1"

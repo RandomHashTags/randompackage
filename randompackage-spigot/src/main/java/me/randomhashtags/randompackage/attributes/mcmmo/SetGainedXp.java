@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.attributes.event.mcmmo;
+package me.randomhashtags.randompackage.attributes.mcmmo;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.attributes.AbstractEventAttribute;

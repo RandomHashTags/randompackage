@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "Definitely AFK"
   completion: 500000
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "KilledEntity;isMob;+xp"
+- "EntityDeath;VictimIsMob=true;KillerIncreasePQuest=DEFINITELY_AFK:xp"

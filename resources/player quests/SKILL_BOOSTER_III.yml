@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "ActivateBooster;nameContains=MCMMO;+1"
+- "ActivateBooster;booster=FACTION_MCMMO;PlayerIncreasePQuest=FACTION_MCMMO:1"

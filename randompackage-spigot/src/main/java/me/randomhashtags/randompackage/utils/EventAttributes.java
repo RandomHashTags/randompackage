@@ -1,10 +1,11 @@
 package me.randomhashtags.randompackage.utils;
 
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
+import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attributes.*;
-import me.randomhashtags.randompackage.attributes.event.SetDamage;
+import me.randomhashtags.randompackage.attributes.conditions.*;
 import me.randomhashtags.randompackage.events.*;
 import me.randomhashtags.randompackage.events.armor.ArmorEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
@@ -19,9 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
@@ -44,7 +43,7 @@ public abstract class EventAttributes extends RPFeature implements Combo {
         if(eventattributes == null) {
             eventattributes = new LinkedHashMap<>();
         }
-        final List<EventAttribute> list = Arrays.asList(
+        final List<EventAttribute> attributes = Arrays.asList(
                 // event attributes
                 new SetDamage(),
                 // attributes
@@ -86,9 +85,15 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                 new StealXp(),
                 new Wait()
         );
-        for(EventAttribute e : list) {
-            e.load();
-        }
+        for(EventAttribute e : attributes) e.load();
+        final List<EventCondition> conditions = Arrays.asList(
+                new HasCombo(),
+                new HasCustomEnchantEquipped(),
+                new HitBlock(),
+                new HitCEEntity(),
+                new IsHeadshot()
+        );
+        for(EventCondition c : conditions) c.load();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -116,7 +121,7 @@ public abstract class EventAttributes extends RPFeature implements Combo {
     private boolean hasReplacements(List<String> conditions) {
         for(String s : conditions) {
             final String l = s.toLowerCase();
-            if(l.startsWith("get") && (l.endsWith("hp") || l.endsWith("exp") || l.endsWith("explevel") || l.endsWith("locx") || l.endsWith("locy") || l.endsWith("locz"))) {
+            if(l.startsWith("get") && (l.endsWith("hp") || l.endsWith("saturation") || l.endsWith("exp") || l.endsWith("explevel") || l.endsWith("locx") || l.endsWith("locy") || l.endsWith("locz"))) {
                 return true;
             }
         }
@@ -145,7 +150,7 @@ public abstract class EventAttributes extends RPFeature implements Combo {
         }
     }
 
-    public boolean didPassConditions(HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
+    public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
         final boolean eight = version.contains("1.8"), nine = version.contains("1.9"), ten = version.contains("1.10"), eleven = version.contains("1.11"), thirteen = version.contains("1.13"), legacy = isLegacy;
         boolean passed = true;
 
@@ -173,8 +178,12 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                             passed = e instanceof Player == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "ismob=")) {
                             passed = e instanceof Mob == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "ismonster=")) {
+                            passed = e instanceof Monster == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "iscreature=")) {
                             passed = e instanceof Creature == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "isanimal=")) {
+                            passed = e instanceof Animals == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "isflying=")) {
                             passed = e instanceof Flying || e instanceof Player && ((Player) e).isFlying() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "istype=")) {
@@ -285,6 +294,8 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                             passed = !eight && e.isInvulnerable() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "issilent=")) {
                             passed = !eight && !nine && e.isSilent() == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith(s + "isitem=")) {
+                            passed = e instanceof Item == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "hasgravity=")) {
                             passed = e instanceof ArmorStand && ((ArmorStand) e).hasGravity() || !eight && !nine && !ten && e.hasGravity() == Boolean.parseBoolean(value);
                         } else if(condition.startsWith(s + "worlddifficulty=")) {
@@ -300,10 +311,12 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                         } else if(condition.startsWith(s + "isincendiary=")) {
                             passed = e instanceof Explosive && ((Explosive) e).isIncendiary() == Boolean.parseBoolean(value);
                         /*
-                            FallingBlock conditions
+                            FallingBlock (+BlockEvents) conditions
                          */
                         } else if(condition.startsWith(s + "material=")) {
-                            passed = e instanceof FallingBlock && UMaterial.match(((FallingBlock) e).getMaterial().name()).name().equalsIgnoreCase(value);
+                            passed = e instanceof FallingBlock && UMaterial.match(((FallingBlock) e).getMaterial().name()).name().equalsIgnoreCase(value)
+                                    || event instanceof BlockPlaceEvent && UMaterial.match(((BlockPlaceEvent) event).getBlock().getType().name()).name().equalsIgnoreCase(value)
+                                    || event instanceof BlockBreakEvent && UMaterial.match(((BlockBreakEvent) event).getBlock().getType().name()).name().equalsIgnoreCase(value);
                         } else if(condition.startsWith(s + "canhurtentities=")) {
                             passed = e instanceof FallingBlock && ((FallingBlock) e).canHurtEntities() == Boolean.parseBoolean(value);
                         /*
@@ -643,8 +656,8 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                         /*
                             Event specific conditions
                          */
-                        } else if(condition.startsWith(s + "cause=")) {
-                            final EntityDamageEvent d = e instanceof EntityDamageEvent ? (EntityDamageEvent) e : null;
+                        } else if(condition.startsWith("cause=")) {
+                            final EntityDamageEvent d = event instanceof EntityDamageEvent ? (EntityDamageEvent) event : null;
                             final boolean is = d != null;
                             passed = is;
                             if(is) {
@@ -655,6 +668,35 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                                     did.add(cause.equalsIgnoreCase(ss));
                                 }
                                 passed = did.contains(true);
+                            }
+                        } else if(condition.startsWith("tier=")) {
+                            passed = event instanceof PlayerClaimEnvoyCrateEvent && ((PlayerClaimEnvoyCrateEvent) event).type.getType().getIdentifier().equals(value);
+                        } else if(condition.startsWith("israritybook=")) {
+                            passed = event instanceof EnchanterPurchaseEvent && valueOfEnchantRarity(valueOfCustomEnchant(((EnchanterPurchaseEvent) event).purchased)) != null;
+                        } else if(condition.startsWith("result=")) {
+                            passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).result.equalsIgnoreCase(value);
+                        } else if(condition.startsWith("rarity=")) {
+                            final EnchanterPurchaseEvent epe = event instanceof EnchanterPurchaseEvent ? (EnchanterPurchaseEvent) event : null;
+                            final CustomEnchant enchant = epe != null ? valueOfCustomEnchant(epe.purchased) : null;
+                            final EnchantRarity rarity = enchant != null ? valueOfEnchantRarity(enchant) : null;
+                            passed = event instanceof CustomEnchantApplyEvent && valueOfEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier().equals(value)
+                                    || event instanceof RandomizationScrollUseEvent && ((RandomizationScrollUseEvent) event).scroll.getIdentifier().equals(value)
+                                    || event instanceof ServerCrateOpenEvent && ((ServerCrateOpenEvent) event).crate.getIdentifier().equals(value)
+                                    || rarity != null && rarity.getIdentifier().equals(value);
+                        } else if(condition.startsWith("success<=")) {
+                            passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).success <= evaluate(value);
+                        } else if(condition.startsWith("destroy<=")) {
+                            passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).destroy <= evaluate(value);
+                        } else if(condition.startsWith("didproc=")) {
+                            passed = event instanceof CustomEnchantProcEvent && ((CustomEnchantProcEvent) event).didProc == Boolean.parseBoolean(value);
+                        } else if(condition.startsWith("booster=")) {
+                            passed = event instanceof BoosterActivateEvent && ((BoosterActivateEvent) event).booster.getIdentifier().equals(value);
+                        } else {
+                            final String target = condition.split("=")[0].split(s)[1];
+                            final EventCondition con = getEventCondition(target);
+                            if(con != null) {
+                                final Entity entity = entities.get(s);
+                                passed = con.check(event) && con.check(event, value) && con.check(event, entity) && con.check(entity, value);
                             }
                         }
                     }
@@ -674,7 +716,8 @@ public abstract class EventAttributes extends RPFeature implements Combo {
         }
         return e;
     }
-    protected HashMap<String, String> getReplacements(String...replacements) {
+    protected HashMap<String, String> getReplacements(String...replacements) { return getReplacements(null, replacements); }
+    protected HashMap<String, String> getReplacements(List<String> addedReplacements, String...replacements) {
         final HashMap<String, String> r = new HashMap<>();
         if(replacements != null) {
             for(int i = 0; i < replacements.length; i++) {
@@ -683,11 +726,14 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                 }
             }
         }
+        if(addedReplacements != null && !addedReplacements.isEmpty()) {
+            for(int i = 0; i < addedReplacements.size(); i++) {
+                if(i%2 == 1) {
+                    r.put(addedReplacements.get(i-1), addedReplacements.get(i));
+                }
+            }
+        }
         return !r.isEmpty() ? r : null;
-    }
-    private HashMap<String, String> mergeReplacements(HashMap<String, String> left, String...right) {
-        if(right != null) left.putAll(getReplacements(right));
-        return left;
     }
     public HashMap<String, Entity> getNearbyEntities(Location center, double radius) { return getNearbyEntities(center, radius, radius, radius); }
     public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
@@ -726,7 +772,7 @@ public abstract class EventAttributes extends RPFeature implements Combo {
     }
 
     public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values) {
-        final boolean passed = didPassConditions(entities, conditions, cancelled);
+        final boolean passed = didPassConditions(event, entities, conditions, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
             final Entity entity2 = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
@@ -857,26 +903,26 @@ public abstract class EventAttributes extends RPFeature implements Combo {
             final LivingEntity e = event.getEntity();
             final Player k = e.getKiller();
             if(k != null) {
-                return tryGeneric(event, getEntities("Victim", e, "Killer", k), attributes, getReplacements(replacements));
+                return tryGeneric(event, getEntities("Victim", e, "Killer", k), attributes, getReplacements(Arrays.asList("xp", Integer.toString(event.getDroppedExp())), replacements));
             }
         }
         return false;
     }
-    public boolean trigger(BlockPlaceEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
+    public boolean trigger(BlockPlaceEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(replacements));
     }
-    public boolean trigger(BlockBreakEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
+    public boolean trigger(BlockBreakEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(Arrays.asList("xp", Integer.toString(event.getExpToDrop())), replacements));
     }
-    public boolean trigger(EntityShootBowEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()), attributes);
+    public boolean trigger(EntityShootBowEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()), attributes, getReplacements(replacements));
     }
-    public boolean trigger(ProjectileHitEvent event, List<String> attributes) {
+    public boolean trigger(ProjectileHitEvent event, List<String> attributes, String...replacements) {
         final Projectile p = event.getEntity();
-        return trigger(event, getEntities("Projectile", p, "Shooter", p.getShooter(), "Victim", getHitEntity(event)), attributes);
+        return trigger(event, getEntities("Projectile", p, "Shooter", p.getShooter(), "Victim", getHitEntity(event)), attributes, getReplacements(replacements));
     }
-    public boolean trigger(EntityDamageEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Victim", event.getEntity()), attributes, getReplacements("dmg", Double.toString(event.getDamage())));
+    public boolean trigger(EntityDamageEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Victim", event.getEntity()), attributes, getReplacements(replacements));
     }
     public boolean trigger(EntityDamageByEntityEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes, getReplacements(replacements));
@@ -890,6 +936,12 @@ public abstract class EventAttributes extends RPFeature implements Combo {
     public boolean trigger(PlayerDeathEvent event, List<String> attributes) {
         final Player victim = event.getEntity(), killer = victim.getKiller();
         return trigger(event, getEntities("Player", victim, "Victim", victim, "Killer", killer), attributes);
+    }
+    public boolean trigger(PlayerExpChangeEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(replacements));
+    }
+    public boolean trigger(PlayerFishEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.getPlayer(), "Caught", event.getCaught()), attributes, getReplacements(replacements));
     }
     public boolean trigger(PlayerInteractEvent event, List<String> attributes) {
         return trigger(event, getEntities("Player", event.getPlayer()), attributes);
@@ -915,17 +967,23 @@ public abstract class EventAttributes extends RPFeature implements Combo {
     public boolean trigger(ArmorSetUnequipEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
+    public boolean trigger(CoinFlipEndEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Winner", event.winner, "Loser", event.loser), attributes, getReplacements(replacements));
+    }
     public boolean trigger(CustomEnchantProcEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
     public boolean trigger(DamageEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes, getReplacements(replacements));
+        return trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes, getReplacements(Arrays.asList("dmg", Double.toString(event.getDamage())), replacements));
     }
     public boolean trigger(EnchanterPurchaseEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
     public boolean trigger(FallenHeroSlainEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities("Killer", event.killer), attributes, getReplacements(replacements));
+        return trigger(event, getEntities("Victim", event.hero.getEntity(), "Killer", event.killer), attributes, getReplacements(replacements));
+    }
+    public boolean trigger(FundDepositEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(Arrays.asList("amount", event.amount.toString()), replacements));
     }
     public boolean trigger(CustomEnchantApplyEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
@@ -933,11 +991,14 @@ public abstract class EventAttributes extends RPFeature implements Combo {
     public boolean trigger(PlayerClaimEnvoyCrateEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
+    public boolean trigger(PlayerRevealCustomEnchantEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
+    }
     public boolean trigger(RandomizationScrollUseEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
     public boolean trigger(JackpotPurchaseTicketsEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities("Player", event.player), attributes, mergeReplacements(getReplacements("amount", event.amount.toBigInteger().toString()), replacements));
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(Arrays.asList("amount", event.amount.toBigInteger().toString()), replacements));
     }
     public boolean trigger(MaskEquipEvent event, List<String> attributes, String...replacements) {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
@@ -955,13 +1016,13 @@ public abstract class EventAttributes extends RPFeature implements Combo {
         return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
     }
     public boolean trigger(ShopPurchaseEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(Arrays.asList("total", event.cost.toString()), replacements));
     }
     public boolean trigger(ShopSellEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(replacements));
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(Arrays.asList("total", event.profit.toString()), replacements));
     }
-    public boolean trigger(McMMOPlayerXpGainEvent event, List<String> attributes, String...replacements) { // TODO: fix this if they don't have mcmmo installed
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(replacements));
+    public boolean trigger(TinkererTradeEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities("Player", event.player), attributes, getReplacements(Arrays.asList("tradesize", Integer.toString(event.trades.size())), replacements));
     }
     /*
         CustomEnchant
@@ -998,6 +1059,14 @@ public abstract class EventAttributes extends RPFeature implements Combo {
             }
         }
     }
+    public void trigger(EntityDamageEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+        for(ItemStack is : enchants.keySet()) {
+            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
+            for(CustomEnchant enchant : e.keySet()) {
+                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
+            }
+        }
+    }
     public void trigger(EntityDamageByEntityEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
@@ -1015,6 +1084,14 @@ public abstract class EventAttributes extends RPFeature implements Combo {
         }
     }
     public void trigger(EntityShootBowEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+        for(ItemStack is : enchants.keySet()) {
+            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
+            for(CustomEnchant enchant : e.keySet()) {
+                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
+            }
+        }
+    }
+    public void trigger(EntityTameEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {
@@ -1085,5 +1162,15 @@ public abstract class EventAttributes extends RPFeature implements Combo {
                 trigger(event, execute(e.get(enchant), enchant.getAttributes()));
             }
         }
+    }
+
+    /*
+        Other plugins
+     */
+    public boolean trigger(McMMOPlayerAbilityActivateEvent event, List<String> attributes, String...replacements) { // TODO: fix this if they don't have mcmmo installed
+        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(replacements));
+    }
+    public boolean trigger(McMMOPlayerXpGainEvent event, List<String> attributes, String...replacements) { // TODO: fix this if they don't have mcmmo installed
+        return trigger(event, getEntities("Player", event.getPlayer()), attributes, getReplacements(replacements));
     }
 }

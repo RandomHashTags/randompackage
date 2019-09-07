@@ -23,7 +23,7 @@ dependencies {
     implementation 'net.milkbowl.vault:VaultAPI:1.7'
     implementation 'com.wasteofplastic:askyblock:3.0.9.4'
     implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
-    implementation 'com.massivecraft:Factions:1.6.9.5-U0.4.3'
+    implementation 'com.massivecraft:Factions:1.6.9.5-U0.5.0'
     //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'
     //implementation 'com.sk89q.worldguard:worldedit-bukkit:7.0.1'
     //implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.1-SNAPSHOT'

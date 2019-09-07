@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "KilledPlayer;inOutpost;+1"
+- "EntityDeath;VictimIsPlayer=true;KillerInOutpost=true;KillerIncreasePQuest=THIRSTY:1"

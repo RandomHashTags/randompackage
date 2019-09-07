@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "KilledPlayer;isEnemy;+1"
+- "EntityDeath;VictimIsPlayer=true;VictimIsEnemy=true;KillerIncreasePQuest=SLAUGHTER_HOUSE_I:1"

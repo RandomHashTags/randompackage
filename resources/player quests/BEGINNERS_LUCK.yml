@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "Beginners Luck"
   completion: 1
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CustomEnchantApply;cancelled=false;"
+- "CustomEnchantApply;success<=10;PlayerIncreasePQuest=BEGINNERS_LUCK:1"

@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "DIAMOND_ORE:0_Mined"
   duration: 86400
   type: "Diamond ore Mined"
 #
@@ -8,3 +7,5 @@ item:
   item: "diamond_ore"
   name: "&a&lMost Diamond Ore Mined"
 #
+attributes:
+- "BlockBreak;material=DIAMOND_ORE;PlayerIncreaseGlobalChallenge=DIAMOND_ORE_MINED:1"

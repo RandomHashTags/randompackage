@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "BlockMined;material=_PICKAXE;+1"
+- "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreasePQuest=MASTER_MINER:1"

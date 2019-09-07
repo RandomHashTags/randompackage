@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.*;
 import me.randomhashtags.randompackage.api.partiallyFinished.Duels;
 import me.randomhashtags.randompackage.api.partiallyFinished.Dungeons;
+import me.randomhashtags.randompackage.events.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.events.armor.*;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -22,11 +23,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -237,12 +240,12 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     /*
      *
-     * PlayerArmorEvent Listener
+     * Listeners
      *
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.isCancelled() && !event.getClick().equals(ClickType.DOUBLE_CLICK) && event.getCurrentItem() != null && event.getCursor() != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
+        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && event.getCurrentItem() != null && event.getCursor() != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
             final Player player = (Player) event.getWhoClicked();
             final InventoryType.SlotType st = event.getSlotType();
             final ClickType ct = event.getClick();
@@ -341,6 +344,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         if(i.endsWith("HELMET") || i.endsWith("CHESTPLATE") || i.endsWith("LEGGINGS") || i.endsWith("BOOTS")) {
             final ArmorPieceBreakEvent e = new ArmorPieceBreakEvent(event.getPlayer(), is);
             pm.callEvent(e);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerExpChangeEvent(PlayerExpChangeEvent event) {
+        final int amount = event.getAmount();
+        if(amount > 0) {
+            final PlayerExpGainEvent e = new PlayerExpGainEvent(event.getPlayer(), amount);
+            pm.callEvent(e);
+            event.setAmount(e.getAmount());
         }
     }
 }

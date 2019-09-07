@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "RandomizationScrollUsed;+1"
+- "RandomizationScrollUse;PlayerIncreasePQuest=RANDOMIZER_II:1"

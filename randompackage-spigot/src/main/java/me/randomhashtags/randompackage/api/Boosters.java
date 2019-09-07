@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addons.Booster;
 import me.randomhashtags.randompackage.addons.living.ActiveBooster;
-import me.randomhashtags.randompackage.addons.objects.ExecutedEventAttributes;
 import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
@@ -16,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -264,7 +262,7 @@ public class Boosters extends EventAttributes {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDeathEvent(EntityDeathEvent event) {
 		final Player k = event.getEntity().getKiller();
 		if(k != null) {

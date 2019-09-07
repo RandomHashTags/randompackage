@@ -1,6 +1,6 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 settings:
-  tracks: "Jackpot$Spent"
+  event: "Jackpot$Spent"
   duration: 86400
   type: "Money Put in Jackpot"
 #

@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "CustomEnchantsRevealed"
   duration: 86400
   type: "Custom Enchant Books Opened"
 #
@@ -8,3 +7,5 @@ item:
   item: "book"
   name: "&a&lMost Custom Enchant Books Opened"
 #
+attributes:
+- "CustomEnchantsReveal;PlayerIncreaseGlobalChallenge=CUSTOM_ENCHANTS_REVEALED:1"

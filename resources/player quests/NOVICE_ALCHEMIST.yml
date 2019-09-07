@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "AlchemistExchange;+1"
+- "AlchemistExchange;PlayerIncreasePQuest=NOVICE_ALCHEMIST:1"

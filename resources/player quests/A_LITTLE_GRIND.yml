@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "EntityDeath;VictimIsType=BLAZE;KillerIncreasePlayerQuest=A_LITTLE_GRIND:1"
+- "EntityDeath;VictimIsType=BLAZE;KillerIncreasePQuest=A_LITTLE_GRIND:1"

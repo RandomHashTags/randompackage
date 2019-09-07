@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "AlchemistExchanges"
   duration: 86400
   type: "Alchemist Exchanges"
 #
@@ -8,3 +7,5 @@ item:
   item: "diamond_chestplate"
   name: "&a&lMost Alchemist Exchanges"
 #
+attributes:
+- "AlchemistExchange;PlayerIncreaseGlobalChallenge=ALCHEMIST_EXCHANGES:1"

@@ -2,10 +2,8 @@ package me.randomhashtags.randompackage.utils.supported.mechanics;
 
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.attributes.event.mcmmo.SetGainedXp;
+import me.randomhashtags.randompackage.attributes.mcmmo.SetGainedXp;
 import me.randomhashtags.randompackage.events.MCMMOXpGainEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.Reflect;
@@ -22,10 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
 
@@ -39,7 +35,6 @@ public class MCMMOAPI extends Reflect implements Listener {
 	public boolean isClassic = false, gcIsEnabled = false;
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
-	private GlobalChallenges gc;
 
 	public String getIdentifier() { return "MECHANIC_MCMMO"; }
 	protected RPFeature getFeature() { return getMCMMOAPI(); }
@@ -47,8 +42,6 @@ public class MCMMOAPI extends Reflect implements Listener {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
-		gc = GlobalChallenges.getChallenges();
-		gcIsEnabled = gc.isEnabled();
 		creditVoucher = givedpitem.items.get("mcmmocreditvoucher");
 		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");
@@ -127,23 +120,6 @@ public class MCMMOAPI extends Reflect implements Listener {
 
 		final CustomEnchants e = CustomEnchants.getCustomEnchants();
 		e.tryProcing(event, player);
-
-		if(gcIsEnabled) {
-			final GlobalChallenges gc = GlobalChallenges.getChallenges();
-			final UUID p = player.getUniqueId();
-			gc.increase(event, "mcmmoxpgained", p, BigDecimal.valueOf(xp));
-			gc.increase(event, "mcmmoxpgainedin_" + skill, p, BigDecimal.valueOf(xp));
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void mcmmoAbilityActivateEvent(McMMOPlayerAbilityActivateEvent event) {
-		if(gcIsEnabled) {
-			final UUID player = event.getPlayer().getUniqueId();
-			final BigDecimal one = BigDecimal.ONE;
-			gc.increase(event, "mcmmoabilityused", player, one);
-			gc.increase(event, "mcmmoabilityused_" + event.getAbility().name(), player, one);
-		}
 	}
 	
 	@EventHandler

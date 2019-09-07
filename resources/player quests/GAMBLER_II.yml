@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "JackpotPurchaseTickets;cancelled=false;PlayerIncreasePlayerQuest=GAMBLER_II:amount"
+- "JackpotPurchaseTicket;PlayerIncreasePQuest=GAMBLER_II:amount"

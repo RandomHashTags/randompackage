@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "ServerCrateOpen;rarity=SIMPLE;+1"
+- "ServerCrateOpen;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_LOOTER:1"

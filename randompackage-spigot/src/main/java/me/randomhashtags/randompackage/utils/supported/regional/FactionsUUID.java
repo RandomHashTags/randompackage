@@ -5,12 +5,13 @@ import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.iface.RelationParticipator;
 import me.randomhashtags.randompackage.events.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.events.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.events.regional.RegionRenameEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.utils.Reflect;
 import me.randomhashtags.randompackage.utils.supported.Regional;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FactionsUUID extends RPFeature implements Regional {
+public class FactionsUUID extends Reflect implements Regional {
     private static FactionsUUID instance;
     public static FactionsUUID getFactionsUUID() {
         if(instance == null) instance = new FactionsUUID();
@@ -33,6 +34,7 @@ public class FactionsUUID extends RPFeature implements Regional {
     private Factions f;
     private Board b;
     private HashMap<String, HashMap<String, List<UUID>>> relations;
+    private Class<?> legacy;
 
     public String getIdentifier() { return "REGIONAL_FACTIONS_UUID"; }
     protected RPFeature getFeature() { return getFactionsUUID(); }
@@ -41,8 +43,28 @@ public class FactionsUUID extends RPFeature implements Regional {
         f = Factions.getInstance();
         b = Board.getInstance();
         relations = new HashMap<>();
+        try {
+            legacy = Class.forName("com.massivecraft.factions.struct.Relation");
+        } catch (Exception e) {
+            legacy = null;
+        }
     }
     public void unload() {
+    }
+
+    private boolean isRelation(FPlayer fp, Faction f, String type, boolean isLegacy) {
+        final Class<? extends FPlayer> c = fp.getClass();
+        String n = "";
+        try {
+            if(isLegacy) {
+                n = ((com.massivecraft.factions.struct.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(f)).name();
+            } else {
+                n = ((com.massivecraft.factions.perms.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(f)).name();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n.equalsIgnoreCase(type);
     }
 
     private Faction getFaction(UUID player) {
@@ -64,15 +86,14 @@ public class FactionsUUID extends RPFeature implements Regional {
         if(relations.get(faction).containsKey(TYPE)) {
             return relations.get(faction).get(TYPE);
         } else {
-            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
+            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL"), legacy = this.legacy != null;
             final List<UUID> members = new ArrayList<>();
             for(FPlayer fp : fi.getAllFPlayers()) {
-                final Relation r = fp.getRelationTo(f);
-                if(m && r.isMember()
-                        || e && r.isEnemy()
-                        || a && r.isAlly()
-                        || t && r.isTruce()
-                        || n && r.isNeutral()
+                if(m && isRelation(fp, f, "MEMBER", legacy)
+                        || e && isRelation(fp, f, "ENEMY", legacy)
+                        || a && isRelation(fp, f, "ALLY", legacy)
+                        || t && isRelation(fp, f, "TRUCE", legacy)
+                        || n && isRelation(fp, f, "NEUTRAL", legacy)
                 )
                     members.add(fp.getPlayer().getUniqueId());
             }

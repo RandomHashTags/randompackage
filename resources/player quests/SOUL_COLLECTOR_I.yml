@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "Soul Collector I"
   completion: 10
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- ""
+  - "SoulCollectEvent;KillerIncreasePQuest=SOUL_COLLECTOR_I:1"

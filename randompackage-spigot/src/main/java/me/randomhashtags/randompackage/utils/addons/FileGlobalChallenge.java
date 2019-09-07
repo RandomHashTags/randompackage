@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.List;
 
 public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
     private ItemStack display;
@@ -17,7 +18,7 @@ public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
         if(display == null) display = api.d(yml, "item");
         return display.clone();
     }
-    public String getTracks() { return yml.getString("settings.tracks"); }
     public long getDuration() { return yml.getLong("settings.duration"); }
     public String getType() { return yml.getString("settings.type"); }
+    public List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

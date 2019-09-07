@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "Novice Tinkerer"
   completion: 50
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- ""
+  - "TinkererTrade;PlayerIncreasePQuest=NOVICE_TINKERER:tradesize"

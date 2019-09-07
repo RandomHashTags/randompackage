@@ -1,6 +1,6 @@
-# Made by RandomHashTags
+# Made by RandomHashTags | TODO: fix this
 settings:
-  tracks: "JackpotTicketsBought"
+  event: "JackpotTicketsBought"
   duration: 86400
   type: "Jackpot Tickets Bought"
 #

@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "EnchanterPurchase;isRarityBook;rarity=SIMPLE;+1"
+- "EnchanterPurchase;IsRarityBook=true;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_ENCHANTER:1"

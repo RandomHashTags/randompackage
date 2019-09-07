@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "FallenHeroSlain;+1"
+- "FallenHeroSlain;KillerIncreasePQuest=HERO_DOMINATOR:1"

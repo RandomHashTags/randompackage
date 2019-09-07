@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "ShopPurchaseItem;+cost"
+- "ShopPurchaseItem;PlayerIncreasePQuest=BIGGER_SPENDER:total"

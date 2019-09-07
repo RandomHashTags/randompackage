@@ -38,7 +38,7 @@ boots:
   - "&cThe silent sandals of the Phantom."
 #
 attributes:
-  - "PvA;setDamage{dmg*1.25}"
+  - "PvAny;SetDamage=dmg*1.25"
 #
 activate message:
   - "&c&lPHANTOM SET BONUS&r&c: +25% DMG"

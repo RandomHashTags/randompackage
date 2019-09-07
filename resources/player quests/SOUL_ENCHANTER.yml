@@ -12,5 +12,5 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CustomEnchantApplied;result=SUCCESS_APPLY;rarity=SOUL;+1"
-- "CustomEnchantApplied;result=SUCCESS_UPGRADE;rarity=SOUL;+1"
+  - "CustomEnchantApply;result=SUCCESS_APPLY;rarity=SOUL;PlayerIncreasePQuest=SOUL_ENCHANTER:1"
+  - "CustomEnchantApply;result=SUCCESS_UPGRADE;rarity=SOUL;PlayerIncreasePQuest=SOUL_ENCHANTER:1"

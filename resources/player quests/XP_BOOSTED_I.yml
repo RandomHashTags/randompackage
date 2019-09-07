@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "XP Boosted I"
   completion: 1
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- ""
+  - "BoosterActivate;booster=FACTION_XP;PlayerIncreasePQuest=XP_BOOSTED_I:1"

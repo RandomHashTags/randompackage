@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "PvPDamage"
   duration: 86400
   type: "Damage Inflicted on Players"
 #
@@ -8,3 +7,5 @@ item:
   item: "player_head_item"
   name: "&a&lMost Damage Inflicted on Players"
 #
+attributes:
+- "PvAny;VictimIsPlayer=true;DamagerIncreaseGlobalChallenge=PVP_DAMAGE:dmg"

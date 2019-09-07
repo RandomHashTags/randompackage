@@ -10,9 +10,8 @@ public abstract class AbstractEventCondition extends RPStorage implements EventC
         final String[] n = getClass().getName().split("\\.");
         return n[n.length-1].toUpperCase();
     }
-    public void load() {
-        //addEventCondition(this);
-    }
+    public void load() { addEventCondition(this); }
+    public void unload() {}
 
     public boolean check(Event event) { return true; }
     public boolean check(Event event, Entity entity) { return true; }

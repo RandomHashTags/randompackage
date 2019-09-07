@@ -12,4 +12,4 @@ rewards:
 - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "BlockMined;material=_SHOVEL;+1"
+- "BlockBreak;material=_SHOVEL;+1"

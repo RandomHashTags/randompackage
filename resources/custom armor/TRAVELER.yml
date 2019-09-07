@@ -46,7 +46,7 @@ boots:
   - "&7to perform impossible feats."
 #
 attributes:
-  - "PvA;setDamage{dmg*1.30}"
+  - "PvAny;SetDamage=dmg*1.30"
 #
 armor crystal:
   item: "nether_star"

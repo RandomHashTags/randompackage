@@ -12,5 +12,5 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "CustomEnchantApplied;result=SUCCESS_APPLY;rarity=HEROIC;+1"
-- "CustomEnchantApplied;result=SUCCESS_UPGRADE;rarity=HEROIC;+1"
+- "CustomEnchantApplied;result=SUCCESS_APPLY;rarity=HEROIC;PlayerIncreasePQuest=HEROIC_ENCHANTER:1"
+- "CustomEnchantApplied;result=SUCCESS_UPGRADE;rarity=HEROIC;PlayerIncreasePQuest=HEROIC_ENCHANTER:1"

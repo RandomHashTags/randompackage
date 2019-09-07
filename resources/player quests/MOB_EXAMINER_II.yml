@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   name: "Mob Examiner II"
   completion: 3
   expiration: 86400
@@ -11,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "MysteryMobSpawnerOpened;cancelled=false;+1"
+- "MysteryMobSpawnerOpened;PlayerIncreasePQuest=MOB_EXAMINER_II:1"

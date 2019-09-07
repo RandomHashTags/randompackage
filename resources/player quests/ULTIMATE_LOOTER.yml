@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "ServerCrateOpen;rarity=ULTIMATE;+1"
+- "ServerCrateOpen;rarity=ULTIMATE;PlayerIncreasePQuest=ULTIMATE_LOOTER:1"

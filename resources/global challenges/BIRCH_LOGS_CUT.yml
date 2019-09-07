@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "BIRCH_WOOD:0_Mined"
   duration: 86400
   type: "Birch Logs Broken"
 #
@@ -8,3 +7,5 @@ item:
   item: "birch_wood"
   name: "&a&lMost Birch Logs Cut"
 #
+attributes:
+- "BlockBreak;material=BIRCH_WOOD;PlayerIncreaseGlobalChallenge=BIRCH_LOGS_CUT:1"

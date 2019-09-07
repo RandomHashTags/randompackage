@@ -9,7 +9,9 @@ import java.util.List;
 public class FilePlayerQuest extends RPAddon implements PlayerQuest {
     public FilePlayerQuest(File f) {
         load(f);
-        addPlayerQuest(getIdentifier(), this);
+        if(isEnabled()) {
+            addPlayerQuest(getIdentifier(), this);
+        }
     }
     public String getIdentifier() { return getYamlName(); }
 

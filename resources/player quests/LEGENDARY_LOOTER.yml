@@ -12,4 +12,4 @@ rewards:
 - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "ServerCrateOpen;rarity=LEGENDARY;+1"
+- "ServerCrateOpen;rarity=LEGENDARY;PlayerIncreasePQuest=LEGENDARY_LOOTER:1"

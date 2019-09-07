@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "EnchanterPurchase;isRarityBook;rarity=ULTIMATE;+1"
+- "EnchanterPurchase;IsRarityBook=true;rarity=ULTIMATE;PlayerIncreasePQuest=ULTIMATE_ENCHANTER:1"

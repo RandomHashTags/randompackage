@@ -1,10 +1,10 @@
 # Made by RandomHashTags
 armor lore:
-- " "
-- "&f&lYIJKI SET BONUS"
-- "&f&l*&r &fEnemies deal 30% less damage to you."
-- "&f&l*&r &fRevenge of Yijki Passive Ability"
-- "&7&o(Requires all 4 yijki items.)"
+  - " "
+  - "&f&lYIJKI SET BONUS"
+  - "&f&l*&r &fEnemies deal 30% less damage to you."
+  - "&f&l*&r &fRevenge of Yijki Passive Ability"
+  - "&7&o(Requires all 4 yijki items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -43,7 +43,7 @@ boots:
   - "&f&oa mountain - the footwraps of Yijki."
 #
 attributes:
-  - "isDamaged;setDamage{dmg*0.70}"
+  - "isDamaged;SetDamage=dmg*0.70"
   - "isDamaged;chance=10;{lightning;10;10;3},{message=&5&l** REVENGE OF YIJKI (&r&c<PLAYER> [1.5s]&5&l) **;radius=10}"
 #
 activate message:

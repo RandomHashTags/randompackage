@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.addons;
 
 import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.addons.utils.Attributable;
 import me.randomhashtags.randompackage.addons.utils.Itemable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.UUID;
 
-public interface GlobalChallenge extends Itemable {
-    String getTracks();
+public interface GlobalChallenge extends Attributable, Itemable {
     long getDuration();
     String getType();
 

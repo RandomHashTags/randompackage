@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "LAPIS_ORE:0_Mined"
   duration: 86400
   type: "Lapis Ore Mined"
 #
@@ -8,3 +7,5 @@ item:
   item: "lapis_ore"
   name: "&a&lMost Lapis Ore Mined"
 #
+attributes:
+- "BlockBreak;material=LAPIS_ORE;PlayerIncreaseGlobalChallenge=LAPIS_ORE_MINED:1"

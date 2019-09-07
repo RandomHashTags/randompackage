@@ -9,10 +9,10 @@ public class SetDroppedExp extends AbstractEventAttribute {
     public void execute(Event event, String value) {
         if(event instanceof EntityDeathEvent) {
             final EntityDeathEvent e = (EntityDeathEvent) event;
-            e.setDroppedExp((int) evaluate(value.replace("xp", Integer.toString(e.getDroppedExp()))));
+            e.setDroppedExp((int) evaluate(value));
         } else if(event instanceof BlockBreakEvent) {
             final BlockBreakEvent e = (BlockBreakEvent) event;
-            e.setExpToDrop((int) evaluate(value.replace("xp", Integer.toString(e.getExpToDrop()))));
+            e.setExpToDrop((int) evaluate(value));
         }
     }
 }

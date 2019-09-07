@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   name: "Rigged"
   completion: 25000000
   expiration: 86400
@@ -12,4 +12,4 @@ rewards:
 - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CoinFlipWin;+woncash"
+- "CoinFlipEnd;WinnerIncreasePQuest=RIGGED:woncash"

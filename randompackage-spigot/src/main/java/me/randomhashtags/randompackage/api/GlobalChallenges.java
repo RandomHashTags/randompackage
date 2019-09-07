@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.EnchantRarity;
 import me.randomhashtags.randompackage.addons.GlobalChallenge;
 import me.randomhashtags.randompackage.addons.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addons.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addons.objects.GlobalChallengePrizeObject;
+import me.randomhashtags.randompackage.attributes.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.events.FundDepositEvent;
-import me.randomhashtags.randompackage.events.GlobalChallengeParticipateEvent;
+import me.randomhashtags.randompackage.events.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.events.customenchant.*;
+import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileGlobalChallenge;
@@ -20,14 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.*;
-import org.bukkit.event.Event;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -38,7 +36,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -50,7 +47,7 @@ import java.util.*;
 import static java.util.stream.Collectors.toMap;
 import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 
-public class GlobalChallenges extends RPFeature implements CommandExecutor {
+public class GlobalChallenges extends EventAttributes implements CommandExecutor {
 	private static GlobalChallenges instance;
 	public static GlobalChallenges getChallenges() {
 		if(instance == null) instance = new GlobalChallenges();
@@ -92,6 +89,7 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 
 	public void load() {
 	    final long started = System.currentTimeMillis();
+	    new IncreaseGlobalChallenge().load();
 		save(null, "global challenges.yml");
 		save("_Data", "global challenges.yml");
 		if(mcmmo != null) {
@@ -407,148 +405,162 @@ public class GlobalChallenges extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	public void increase(Event event, String input, UUID player, BigDecimal increaseBy) {
-		input = input.toLowerCase();
-		for(ActiveGlobalChallenge g : ActiveGlobalChallenge.active.values()) {
-			final String t = g.getType().getTracks().split(";")[0].toLowerCase();
-			if(t.equals(input)
-					|| t.startsWith("blocksminedbymaterial_") && input.startsWith("blocksminedbymaterial_") && input.split("blocksminedbymaterial_")[1].endsWith(t.split("blocksminedbymaterial_")[1])
-					|| t.startsWith("customenchantmprocs_") && input.startsWith("customenchantmprocs_") && input.split("customenchantmprocs_")[1].endsWith(t.split("customenchantmprocs")[1])) {
-				final GlobalChallengeParticipateEvent e = new GlobalChallengeParticipateEvent(g, event, input, increaseBy);
-				pluginmanager.callEvent(e);
-				if(!e.isCancelled()) {
-					g.increaseValue(player, e.value);
-				}
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		final UUID damager = event.getDamager().getUniqueId();
-		if(event.getDamager() instanceof Player) {
-			final BigDecimal dmg = BigDecimal.valueOf(event.getFinalDamage());
-			increase(event, "pvadamage", damager, dmg);
-			final Entity e = event.getEntity();
-			if(e instanceof Player) increase(event, "pvpdamage", damager, dmg);
-			else if(e instanceof LivingEntity) increase(event, "pvedamage", damager, dmg);
-		}
+		tryIncreasing(event);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDeathEvent(EntityDeathEvent event) {
-		final LivingEntity e = event.getEntity();
-		final UUID u = e.getUniqueId();
-		if(e instanceof Player) {
-			increase(event, "playerdeaths", u, BigDecimal.ONE);
-		} else {
-		    final Player killer = e.getKiller();
-            if(killer != null) {
-                final UUID k = killer.getUniqueId();
-                if(e instanceof Monster) increase(event, "hostilemobskilled", k, BigDecimal.ONE);
-                else increase(event, "passivemobskilled", k, BigDecimal.ONE);
-                increase(event, "mobskilled", k, BigDecimal.ONE);
-            }
-		}
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void blockPlaceEvent(BlockPlaceEvent event) {
-		final UUID player = event.getPlayer().getUniqueId();
-		final BigDecimal one = BigDecimal.ONE;
-		increase(event, "blocksplaced", player, one);
-		final Block b = event.getBlock();
-		increase(event, b.getType().name() + ":" + b.getData() + "_placed", player, one);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void blockBreakEvent(BlockBreakEvent event) {
-		final Player player = event.getPlayer();
-		final UUID u = player.getUniqueId();
-		increase(event, "blocksmined", u, BigDecimal.ONE);
-		final Block b = event.getBlock();
-		increase(event, b.getType().name() + ":" + b.getData() + "_mined", u, BigDecimal.ONE);
-		final String m = getItemInHand(player).getType().name();
-		increase(event, "blocksminedbymaterial_" + m, u, BigDecimal.ONE);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void playerFishEvent(PlayerFishEvent event) {
-		final State s = event.getState();
-		final UUID player = event.getPlayer().getUniqueId();
-		final BigDecimal one = BigDecimal.ONE;
-		if(s.equals(State.CAUGHT_FISH)) {
-			increase(event, "fishcaught", player, one);
-			if(event.getCaught() instanceof Fish) increase(event, event.getCaught().getType().name() + "_Caught", player, one);
-		} else if(s.equals(State.CAUGHT_ENTITY)) {
-			increase(event, "treasurecaught", player, one);
-			if(event.getCaught() instanceof Item) {
-				final ItemStack i = ((Item) event.getCaught()).getItemStack();
-				increase(event, i.getType().name() + ":" + i.getData().getData() + "_caught", player, one);
-			}
-		}
+		tryIncreasing(event);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
-	private void playerExpChangeEvent(PlayerExpChangeEvent event) {
-		final int a = event.getAmount();
-		if(a > 0) {
-			increase(event, "expgained", event.getPlayer().getUniqueId(), BigDecimal.valueOf(a));
-		}
+	private void blockPlaceEvent(BlockPlaceEvent event) {
+		tryIncreasing(event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void blockBreakEvent(BlockBreakEvent event) {
+		tryIncreasing(event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void playerFishEvent(PlayerFishEvent event) {
+		tryIncreasing(event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void playerExpChangeEvent(PlayerExpGainEvent event) {
+		tryIncreasing(event);
 	}
 	/*
 	 * RandomPackage Events
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
-		increase(event, "alchemistexchanges", event.player.getUniqueId(), BigDecimal.ONE);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void playerRevealCustomEnchantEvent(PlayerRevealCustomEnchantEvent event) {
-		final UUID player = event.player.getUniqueId();
-		final BigDecimal one = BigDecimal.ONE;
-		increase(event, "customenchantsrevealed", player, one);
-		final EnchantRarity e = valueOfEnchantRarity(event.enchant);
-		if(e != null) increase(event, "customenchantsrevealed_" + e.getIdentifier(), player, one);
+		tryIncreasing(event);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
-	private void coinFlipChallengeEndEvent(CoinFlipEndEvent event) {
-		final UUID winner = event.winner, loser = event.loser;
-		final BigDecimal one = BigDecimal.ONE;
-		final BigDecimal wager = event.wager, total = BigDecimal.valueOf(wager.doubleValue()*2*event.tax.doubleValue());
-		increase(event, "coinflipswon", winner, one);
-		increase(event, "coinflipslost", loser, one);
-		increase(event, "$wonincoinflip", winner, total);
-		increase(event, "$lostincoinflip", loser, total);
+	private void playerRevealCustomEnchantEvent(PlayerRevealCustomEnchantEvent event) {
+		tryIncreasing(event);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void coinFlipEndEvent(CoinFlipEndEvent event) {
+		tryIncreasing(event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void fundDepositEvent(FundDepositEvent event) {
-		increase(event, "$funddeposited", event.player.getUniqueId(), event.amount);
+		tryIncreasing(event);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void customEnchantProcEvent(CustomEnchantProcEvent event) {
-		if(event.player != null) {
-			final UUID player = event.player.getUniqueId();
-			final CustomEnchant enchant = event.enchant;
-			final BigDecimal one = BigDecimal.ONE;
-			increase(event, "customenchantprocs", player, one);
-			increase(event, "customenchantprocs_" + valueOfEnchantRarity(enchant).getIdentifier(), player, one);
-			increase(event, "customenchantproc'd_" + enchant.getIdentifier(), player, one);
-			final ItemStack i = event.itemWithEnchant;
-			increase(event, "customenchantmprocs_" + i.getType().name() + ":" + i.getData().getData(), player, one);
-		}
+		tryIncreasing(event);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void customEnchantApplyEvent(CustomEnchantApplyEvent event) {
-		final UUID player = event.player.getUniqueId();
-		final BigDecimal one = BigDecimal.ONE;
-		increase(event, "customenchantsapplied", player, one);
-		increase(event, "customenchantsapplied_" + valueOfEnchantRarity(event.enchant).getIdentifier(), player, one);
+		tryIncreasing(event);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
-		final UUID player = event.getPlayer().getUniqueId();
-		increase(event, "enchanterpurchases", player, BigDecimal.ONE);
+		tryIncreasing(event);
 	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void tinkererTradeEvent(TinkererTradeEvent event) {
-		final UUID player = event.player.getUniqueId();
-		increase(event, "tinkerertrades", player, BigDecimal.ONE);
-		increase(event, "tinkereritemtrades", player, BigDecimal.valueOf(event.trades.size()));
+		tryIncreasing(event);
+	}
+	/*
+		Bukkit Events
+	 */
+	public void tryIncreasing(BlockBreakEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(BlockPlaceEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(EntityDamageByEntityEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(EntityDeathEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(PlayerFishEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	/*
+		RandomPackage
+	 */
+	public void tryIncreasing(AlchemistExchangeEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(CoinFlipEndEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(CustomEnchantApplyEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(CustomEnchantProcEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(EnchanterPurchaseEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(FundDepositEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(PlayerExpChangeEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(PlayerRevealCustomEnchantEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+	public void tryIncreasing(TinkererTradeEvent event, String...replacements) {
+		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+			trigger(event, g.getAttributes(), replacements);
+		}
+	}
+
+	private class MCMMOChallenges {
+		@EventHandler(priority = EventPriority.HIGHEST)
+		private void mcmmoAbilityActivateEvent(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
+			tryIncreasing(event);
+		}
+		@EventHandler(priority = EventPriority.HIGHEST)
+		private void mcmmoPlayerXpGainEvent(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
+			tryIncreasing(event);
+		}
+		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event, String...replacements) {
+			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+				trigger(event, g.getAttributes(), replacements);
+			}
+		}
+		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, String...replacements) {
+			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
+				trigger(event, g.getAttributes(), replacements);
+			}
+		}
 	}
 }

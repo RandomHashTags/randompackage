@@ -47,12 +47,11 @@ boots:
   - "&c&oconverting clout into flight."
 #
 attributes:
-  - "ArmorSetEquip;removePotionEffect{speed:false}"
-  - "ArmorSetEquip;addPotionEffect{speed:3:99999:false}"
-  - "ArmorSetUnequip;removePotionEffect{speed:false}"
-  - "ArmorPieceBreak;removePotionEffect{speed:false}"
-  - "DamagedBy(FALL);cancel"
+  - "ArmorSetEquip;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:99999"
+  - "ArmorSetUnequip;PlayerRemovePotionEffect=speed"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=speed:false"
+  - "EntityDamage;cause=FALL;SetCancelled=true"
   - "FoodLevelLost;cancel"
-  - "PvA;setDamage{dmg*1.15}"
+  - "PvAny;SetDamage=dmg*1.15"
   - "HitByArrow;setDamage{dmg*1.10}"
 #

@@ -37,7 +37,10 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, CustomBoss> bosses;
     protected static LinkedHashMap<String, ConquestChest> conquestchests;
     protected static TreeMap<String, CustomEnchant> enabled, disabled;
+
     protected static LinkedHashMap<String, EventAttribute> eventattributes;
+    protected static LinkedHashMap<String, EventCondition> eventconditions;
+
     protected static LinkedHashMap<String, DuelArena> duelArenas;
     protected static LinkedHashMap<String, Dungeon> dungeons;
     protected static LinkedHashMap<String, MagicDust> dusts;
@@ -220,6 +223,15 @@ public abstract class RPStorage extends RegionalAPI {
         final String i = e.getIdentifier();
         check(eventattributes, i, "event attribute");
         eventattributes.put(i, e);
+    }
+    public EventCondition getEventCondition(String identifier) {
+        return eventconditions != null ? eventconditions.getOrDefault(identifier, null) : null;
+    }
+    public void addEventCondition(EventCondition e) {
+        if(eventconditions == null) eventconditions = new LinkedHashMap<>();
+        final String i = e.getIdentifier();
+        check(eventconditions, i, "event condition");
+        eventconditions.put(i, e);
     }
 
     public CustomExplosion getExplosion(String identifier) {

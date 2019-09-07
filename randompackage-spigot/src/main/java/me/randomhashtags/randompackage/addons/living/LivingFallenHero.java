@@ -59,6 +59,7 @@ public class LivingFallenHero implements ILivingFallenHero {
         }
         living.put(fallenhero.getUniqueId(), this);
     }
+    public LivingEntity getEntity() { return fallenhero; }
     public CustomKit getKit() { return kit; }
     public Kits getKitClass() { return kitclass; }
     public FallenHero getFallenHero() { return type; }
