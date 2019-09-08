@@ -108,8 +108,9 @@ public abstract class RPStorage extends RegionalAPI {
     public ArmorSet getArmorSet(String identifier) {
         return armorsets != null ? armorsets.getOrDefault(identifier, null) : null;
     }
-    public void addArmorSet(String identifier, ArmorSet a) {
+    public void addArmorSet(ArmorSet a) {
         if(armorsets == null) armorsets = new LinkedHashMap<>();
+        final String identifier = a.getIdentifier();
         check(armorsets, identifier, "armor set");
         armorsets.put(identifier, a);
     }
@@ -117,8 +118,9 @@ public abstract class RPStorage extends RegionalAPI {
     public BlackScroll getBlackScroll(String identifier) {
         return blackscrolls != null ? blackscrolls.getOrDefault(identifier, null) : null;
     }
-    public void addBlackScroll(String identifier, BlackScroll a) {
+    public void addBlackScroll(BlackScroll a) {
         if(blackscrolls == null) blackscrolls = new LinkedHashMap<>();
+        final String identifier = a.getIdentifier();
         check(blackscrolls, identifier, "black scroll");
         blackscrolls.put(identifier, a);
     }
@@ -126,8 +128,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Booster getBooster(String identifier) {
         return boosters != null ? boosters.getOrDefault(identifier, null) : null;
     }
-    public void addBooster(String identifier, Booster b) {
+    public void addBooster(Booster b) {
         if(boosters == null) boosters = new LinkedHashMap<>();
+        final String identifier = b.getIdentifier();
         check(boosters, identifier, "booster");
         boosters.put(identifier, b);
     }
@@ -135,8 +138,9 @@ public abstract class RPStorage extends RegionalAPI {
     public CustomBoss getBoss(String identifier) {
         return bosses != null ? bosses.getOrDefault(identifier, null) : null;
     }
-    public void addBoss(String identifier, CustomBoss b) {
+    public void addBoss(CustomBoss b) {
         if(bosses == null) bosses = new LinkedHashMap<>();
+        final String identifier = b.getIdentifier();
         check(bosses, identifier, "custom boss");
         bosses.put(identifier, b);
     }
@@ -144,8 +148,9 @@ public abstract class RPStorage extends RegionalAPI {
     public ConquestChest getConquestChest(String identifier) {
         return conquestchests != null ? conquestchests.getOrDefault(identifier, null) : null;
     }
-    public void addConquestChest(String identifier, ConquestChest b) {
+    public void addConquestChest(ConquestChest b) {
         if(conquestchests == null) conquestchests = new LinkedHashMap<>();
+        final String identifier = b.getIdentifier();
         check(conquestchests, identifier, "conquest chest");
         conquestchests.put(identifier, b);
     }
@@ -153,37 +158,41 @@ public abstract class RPStorage extends RegionalAPI {
     public DuelArena getDuelArena(String identifier) {
         return duelArenas != null ? duelArenas.getOrDefault(identifier, null) : null;
     }
-    public void addDuelArena(String identifier, DuelArena e) {
+    public void addDuelArena(DuelArena d) {
         if(duelArenas == null) duelArenas = new LinkedHashMap<>();
+        final String identifier = d.getIdentifier();
         check(duelArenas, identifier, "duel arena");
-        duelArenas.put(identifier, e);
+        duelArenas.put(identifier, d);
     }
 
     public Dungeon getDungeon(String identifier) {
         return dungeons != null ? dungeons.getOrDefault(identifier, null) : null;
     }
-    public void addDungeon(String identifier, Dungeon e) {
+    public void addDungeon(Dungeon d) {
         if(dungeons == null) dungeons = new LinkedHashMap<>();
+        final String identifier = d.getIdentifier();
         check(dungeons, identifier, "dungeon");
-        dungeons.put(identifier, e);
+        dungeons.put(identifier, d);
     }
 
     public MagicDust getDust(String identifier) {
         return dusts != null ? dusts.getOrDefault(identifier, null) : null;
     }
-    public void addDust(String identifier, MagicDust e) {
+    public void addDust(MagicDust m) {
         if(dusts == null) dusts = new LinkedHashMap<>();
+        final String identifier = m.getIdentifier();
         check(dusts, identifier, "rarity dust");
-        dusts.put(identifier, e);
+        dusts.put(identifier, m);
     }
 
     public CustomEnchant getEnchant(String identifier) {
         return enabled != null && enabled.containsKey(identifier) ? enabled.get(identifier) : disabled != null && disabled.containsKey(identifier) ? disabled.get(identifier) : null;
     }
-    public void addEnchant(String identifier, CustomEnchant enchant) {
+    public void addEnchant(CustomEnchant enchant) {
         final boolean e = enchant.isEnabled();
         if(e && enabled == null) enabled = new TreeMap<>();
         else if(!e && disabled == null) disabled = new TreeMap<>();
+        final String identifier = enchant.getIdentifier();
         check(e ? enabled : disabled, identifier, "custom enchant");
         (e ? enabled : disabled).put(identifier, enchant);
     }
@@ -191,17 +200,19 @@ public abstract class RPStorage extends RegionalAPI {
     public EnchantmentOrb getEnchantmentOrb(String identifier) {
         return enchantmentorbs != null ? enchantmentorbs.get(identifier) : null;
     }
-    public void addEnchantmentOrb(String identifier, EnchantmentOrb enchantmentorb) {
+    public void addEnchantmentOrb(EnchantmentOrb enchantmentorb) {
         if(enchantmentorbs == null) enchantmentorbs = new LinkedHashMap<>();
-        //check(enchantmentorbs, identifier, "enchantment orb"); Allows the same identifier
+        final String identifier = enchantmentorb.getIdentifier();
+        check(enchantmentorbs, identifier, "enchantment orb");
         enchantmentorbs.put(identifier, enchantmentorb);
     }
 
     public EnchantRarity getEnchantRarity(String identifier) {
         return rarities != null ? rarities.getOrDefault(identifier, null) : null;
     }
-    public void addEnchantRarity(String identifier, EnchantRarity rarity) {
+    public void addEnchantRarity(EnchantRarity rarity) {
         if(rarities == null) rarities = new LinkedHashMap<>();
+        final String identifier = rarity.getIdentifier();
         check(rarities, identifier, "enchant rarity");
         rarities.put(identifier, rarity);
     }
@@ -209,8 +220,9 @@ public abstract class RPStorage extends RegionalAPI {
     public EnvoyCrate getEnvoyCrate(String identifier) {
         return envoycrates != null ? envoycrates.getOrDefault(identifier, null) : null;
     }
-    public void addEnvoyCrate(String identifier, EnvoyCrate e) {
+    public void addEnvoyCrate(EnvoyCrate e) {
         if(envoycrates == null) envoycrates = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(envoycrates, identifier, "envoy crate");
         envoycrates.put(identifier, e);
     }
@@ -237,8 +249,9 @@ public abstract class RPStorage extends RegionalAPI {
     public CustomExplosion getExplosion(String identifier) {
         return explosions != null ? explosions.getOrDefault(identifier, null) : null;
     }
-    public void addExplosion(String identifier, CustomExplosion e) {
+    public void addExplosion(CustomExplosion e) {
         if(explosions == null) explosions = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(explosions, identifier, "custom explosion");
         explosions.put(identifier, e);
     }
@@ -246,8 +259,9 @@ public abstract class RPStorage extends RegionalAPI {
     public FactionUpgrade getFactionUpgrade(String identifier) {
         return factionupgrades != null ? factionupgrades.getOrDefault(identifier, null) : null;
     }
-    public void addFactionUpgrade(String identifier, FactionUpgrade e) {
+    public void addFactionUpgrade(FactionUpgrade e) {
         if(factionupgrades == null) factionupgrades = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(factionupgrades, identifier, "faction upgrade");
         factionupgrades.put(identifier, e);
     }
@@ -255,8 +269,9 @@ public abstract class RPStorage extends RegionalAPI {
     public FactionUpgradeType getFactionUpgradeType(String identifier) {
         return factionupgradetypes != null ? factionupgradetypes.getOrDefault(identifier, null) : null;
     }
-    public void addFactionUpgradeType(String identifier, FactionUpgradeType e) {
+    public void addFactionUpgradeType(FactionUpgradeType e) {
         if(factionupgradetypes == null) factionupgradetypes = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(factionupgradetypes, identifier, "faction upgrade type");
         factionupgradetypes.put(identifier, e);
     }
@@ -264,8 +279,9 @@ public abstract class RPStorage extends RegionalAPI {
     public FallenHero getFallenHero(String identifier) {
         return fallenheroes != null ? fallenheroes.getOrDefault(identifier, null) : null;
     }
-    public void addFallenHero(String identifier, FallenHero rarity) {
+    public void addFallenHero(FallenHero rarity) {
         if(fallenheroes == null) fallenheroes = new LinkedHashMap<>();
+        final String identifier = rarity.getIdentifier();
         check(fallenheroes, identifier, "fallen hero");
         fallenheroes.put(identifier, rarity);
     }
@@ -273,8 +289,9 @@ public abstract class RPStorage extends RegionalAPI {
     public FilterCategory getFilterCategory(String identifier) {
         return filtercategories != null ? filtercategories.getOrDefault(identifier, null) : null;
     }
-    public void addFilterCategory(String identifier, FilterCategory e) {
+    public void addFilterCategory(FilterCategory e) {
         if(filtercategories == null) filtercategories = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(filtercategories, identifier, "filter category");
         filtercategories.put(identifier, e);
     }
@@ -282,8 +299,9 @@ public abstract class RPStorage extends RegionalAPI {
     public RarityFireball getFireball(String identifier) {
         return fireballs != null ? fireballs.getOrDefault(identifier, null) : null;
     }
-    public void addFireball(String identifier, RarityFireball e) {
+    public void addFireball(RarityFireball e) {
         if(fireballs == null) fireballs = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(fireballs, identifier, "rarity fireball");
         fireballs.put(identifier, e);
     }
@@ -291,8 +309,9 @@ public abstract class RPStorage extends RegionalAPI {
     public GlobalChallenge getGlobalChallenge(String identifier) {
         return globalchallenges != null ? globalchallenges.getOrDefault(identifier, null) : null;
     }
-    public void addGlobalChallenge(String identifier, GlobalChallenge e) {
+    public void addGlobalChallenge(GlobalChallenge e) {
         if(globalchallenges == null) globalchallenges = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(globalchallenges, identifier, "global challenge");
         globalchallenges.put(identifier, e);
     }
@@ -300,8 +319,9 @@ public abstract class RPStorage extends RegionalAPI {
     public GlobalChallengePrize getGlobalChallengePrize(String identifier) {
         return globalchallengeprizes != null ? globalchallengeprizes.getOrDefault(identifier, null) : null;
     }
-    public void addGlobalChallengePrize(String identifier, GlobalChallengePrize e) {
+    public void addGlobalChallengePrize(GlobalChallengePrize e) {
         if(globalchallengeprizes == null) globalchallengeprizes = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(globalchallengeprizes, identifier, "global challenge prize");
         globalchallengeprizes.put(identifier, e);
     }
@@ -309,8 +329,9 @@ public abstract class RPStorage extends RegionalAPI {
     public CustomKit getKit(String identifier) {
         return kits != null ? kits.getOrDefault(identifier, null) : null;
     }
-    public void addKit(String identifier, CustomKit e) {
+    public void addKit(CustomKit e) {
         if(kits == null) kits = new LinkedHashMap<>();
+        final String identifier = e.getIdentifier();
         check(kits, identifier, "custom kit");
         kits.put(identifier, e);
     }
@@ -318,8 +339,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Lootbox getLootbox(String identifier) {
         return lootboxes != null ? lootboxes.getOrDefault(identifier, null) : null;
     }
-    public void addLootbox(String identifier, Lootbox l) {
+    public void addLootbox(Lootbox l) {
         if(lootboxes == null) lootboxes = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(lootboxes, identifier, "lootbox");
         lootboxes.put(identifier, l);
     }
@@ -327,8 +349,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Mask getMask(String identifier) {
         return masks != null ? masks.getOrDefault(identifier, null) : null;
     }
-    public void addMask(String identifier, Mask l) {
+    public void addMask(Mask l) {
         if(masks == null) masks = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(masks, identifier, "mask");
         masks.put(identifier, l);
     }
@@ -336,8 +359,9 @@ public abstract class RPStorage extends RegionalAPI {
     public MonthlyCrate getMonthlyCrate(String identifier) {
         return monthlycrates != null ? monthlycrates.getOrDefault(identifier, null) : null;
     }
-    public void addMonthlyCrate(String identifier, MonthlyCrate l) {
+    public void addMonthlyCrate(MonthlyCrate l) {
         if(monthlycrates == null) monthlycrates = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(monthlycrates, identifier, "monthly crate");
         monthlycrates.put(identifier, l);
     }
@@ -345,8 +369,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Outpost getOutpost(String identifier) {
         return outposts != null ? outposts.getOrDefault(identifier, null) : null;
     }
-    public void addOutpost(String identifier, Outpost l) {
+    public void addOutpost(Outpost l) {
         if(outposts == null) outposts = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(outposts, identifier, "outpost");
         outposts.put(identifier, l);
     }
@@ -354,8 +379,9 @@ public abstract class RPStorage extends RegionalAPI {
     public InventoryPet getPet(String identifier) {
         return inventorypets != null ? inventorypets.getOrDefault(identifier, null) : null;
     }
-    public void addPet(String identifier, InventoryPet l) {
+    public void addPet(InventoryPet l) {
         if(inventorypets == null) inventorypets = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(inventorypets, identifier, "pet");
         inventorypets.put(identifier, l);
     }
@@ -363,8 +389,9 @@ public abstract class RPStorage extends RegionalAPI {
     public PlayerQuest getPlayerQuest(String identifier) {
         return playerquests != null ? playerquests.getOrDefault(identifier, null) : null;
     }
-    public void addPlayerQuest(String identifier, PlayerQuest l) {
+    public void addPlayerQuest(PlayerQuest l) {
         if(playerquests == null) playerquests = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(playerquests, identifier, "player quest");
         playerquests.put(identifier, l);
     }
@@ -372,8 +399,9 @@ public abstract class RPStorage extends RegionalAPI {
     public RandomizationScroll getRandomizationScroll(String identifier) {
         return randomizationscrolls != null ? randomizationscrolls.getOrDefault(identifier, null) : null;
     }
-    public void addRandomizationScroll(String identifier, RandomizationScroll l) {
+    public void addRandomizationScroll(RandomizationScroll l) {
         if(randomizationscrolls == null) randomizationscrolls = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(randomizationscrolls, identifier, "randomization scroll");
         randomizationscrolls.put(identifier, l);
     }
@@ -392,8 +420,9 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public void addRarityGem(String identifier, RarityGem l) {
+    public void addRarityGem(RarityGem l) {
         if(raritygems == null) raritygems = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(raritygems, identifier, "rarity gem");
         raritygems.put(identifier, l);
     }
@@ -401,8 +430,9 @@ public abstract class RPStorage extends RegionalAPI {
     public ServerCrate getServerCrate(String identifier) {
         return servercrates != null ? servercrates.getOrDefault(identifier, null) : null;
     }
-    public void addServerCrate(String identifier, ServerCrate l) {
+    public void addServerCrate(ServerCrate l) {
         if(servercrates == null) servercrates = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(servercrates, identifier, "server crate");
         servercrates.put(identifier, l);
     }
@@ -410,8 +440,9 @@ public abstract class RPStorage extends RegionalAPI {
     public ShopCategory getShopCategory(String identifier) {
         return shopcategories != null ? shopcategories.getOrDefault(identifier, null) : null;
     }
-    public void addShopCategory(String identifier, ShopCategory l) {
+    public void addShopCategory(ShopCategory l) {
         if(shopcategories == null) shopcategories = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(shopcategories, identifier, "shop category");
         shopcategories.put(identifier, l);
     }
@@ -419,8 +450,9 @@ public abstract class RPStorage extends RegionalAPI {
     public SoulTracker getSoulTracker(String identifier) {
         return soultrackers != null ? soultrackers.getOrDefault(identifier, null) : null;
     }
-    public void addSoulTracker(String identifier, SoulTracker l) {
+    public void addSoulTracker(SoulTracker l) {
         if(soultrackers == null) soultrackers = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(soultrackers, identifier, "soul tracker");
         soultrackers.put(identifier, l);
     }
@@ -428,8 +460,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Title getTitle(String identifier) {
         return titles != null ? titles.getOrDefault(identifier, null) : null;
     }
-    public void addTitle(String identifier, Title l) {
+    public void addTitle(Title l) {
         if(titles == null) titles = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(titles, identifier, "title");
         titles.put(identifier, l);
     }
@@ -437,8 +470,9 @@ public abstract class RPStorage extends RegionalAPI {
     public TransmogScroll getTransmogScroll(String identifier) {
         return transmogscrolls != null ? transmogscrolls.getOrDefault(identifier, null) : null;
     }
-    public void addTransmogScroll(String identifier, TransmogScroll t) {
+    public void addTransmogScroll(TransmogScroll t) {
         if(transmogscrolls == null) transmogscrolls = new LinkedHashMap<>();
+        final String identifier = t.getIdentifier();
         check(transmogscrolls, identifier, "transmog scroll");
         transmogscrolls.put(identifier, t);
     }
@@ -446,8 +480,9 @@ public abstract class RPStorage extends RegionalAPI {
     public Trinket getTrinket(String identifier) {
         return trinkets != null ? trinkets.getOrDefault(identifier, null) : null;
     }
-    public void addTrinket(String identifier, Trinket l) {
+    public void addTrinket(Trinket l) {
         if(trinkets == null) trinkets = new LinkedHashMap<>();
+        final String identifier = l.getIdentifier();
         check(trinkets, identifier, "trinket");
         trinkets.put(identifier, l);
     }
@@ -455,8 +490,9 @@ public abstract class RPStorage extends RegionalAPI {
     public WhiteScroll getWhiteScroll(String identifier) {
         return whitescrolls != null ? whitescrolls.getOrDefault(identifier, null) : null;
     }
-    public void addWhiteScroll(String identifier, WhiteScroll w) {
+    public void addWhiteScroll(WhiteScroll w) {
         if(whitescrolls == null) whitescrolls = new LinkedHashMap<>();
+        final String identifier = w.getIdentifier();
         check(whitescrolls, identifier, "white scroll");
         whitescrolls.put(identifier, w);
     }

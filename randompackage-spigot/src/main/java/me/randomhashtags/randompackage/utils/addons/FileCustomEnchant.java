@@ -15,14 +15,14 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
 
     public FileCustomEnchant(File f) {
         load(f);
-        addEnchant(getIdentifier(), this);
+        addEnchant(this);
     }
     public String getIdentifier() { return getYamlName(); }
 
     public boolean isEnabled() { return yml.getBoolean("enabled"); }
     public String getName() { return yml.getString("name"); }
     public List<String> getLore() {
-        if(lore == null) lore = api.colorizeListString(yml.getStringList("lore"));
+        if(lore == null) lore = colorizeListString(yml.getStringList("lore"));
         return lore;
     }
     public int getMaxLevel() { return yml.getInt("max level"); }
@@ -59,9 +59,11 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     }
     public String getEnchantProcValue() {
         if(value == null) {
-            for(String s : getAttributes())
-                if(s.toLowerCase().startsWith("enchantproc;value="))
-                    value = s.toLowerCase().split("enchantproc;value=")[1];
+            for(String s : getAttributes()) {
+                final String l = s.toLowerCase();
+                if(l.startsWith("enchantproc;value="))
+                    value = l.split("enchantproc;value=")[1];
+            }
         }
         return value;
     }

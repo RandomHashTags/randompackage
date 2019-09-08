@@ -12,7 +12,7 @@ public class PathWhiteScroll extends RPAddon implements WhiteScroll {
     private ItemStack item;
     public PathWhiteScroll(String path) {
         this.path = path;
-        addWhiteScroll(getIdentifier(), this);
+        addWhiteScroll(this);
     }
     public String getIdentifier() { return path; }
 

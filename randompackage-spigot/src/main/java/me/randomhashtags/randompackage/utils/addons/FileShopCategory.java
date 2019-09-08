@@ -18,7 +18,7 @@ public class FileShopCategory extends ShopCategory {
 
     public FileShopCategory(File f) {
         load(f);
-        addShopCategory(getIdentifier(), this);
+        addShopCategory(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

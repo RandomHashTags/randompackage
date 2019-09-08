@@ -10,7 +10,7 @@ public class FilePlayerQuest extends RPAddon implements PlayerQuest {
     public FilePlayerQuest(File f) {
         load(f);
         if(isEnabled()) {
-            addPlayerQuest(getIdentifier(), this);
+            addPlayerQuest( this);
         }
     }
     public String getIdentifier() { return getYamlName(); }

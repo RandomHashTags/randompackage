@@ -18,27 +18,8 @@ public abstract class CustomEnchantUtils extends RPFeature {
             int r = min + random.nextInt(max - min + 1);
             attribute = attribute.replace("random{" + ee + "}", Integer.toString(r));
         }
-        for(String a : attribute.split(";")) {
-            b++;
-            if(a.toLowerCase().startsWith("didproc") && !e.didProc) {
-                return;
-            } else if(!a.equals(attribute.split(";")[0]) && !a.toLowerCase().startsWith("chance=") && (!attribute.toLowerCase().contains("chance=") || e.didProc)) {
-                if(!attribute.toLowerCase().contains("chance=")) e.didProc = true;
-                executeAttribute(e, e.event, enchant, a, attribute, b, P);
-                if(a.toLowerCase().startsWith("wait{")) return;
-            }
-        }
     }
 
-    public void executeAttribute(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, String a, String attribute, int b, Player P) {
-        if(event != null && a.toLowerCase().startsWith("cancel")) {
-            if(event instanceof Cancellable) {
-                ((Cancellable) event).setCancelled(true);
-            }
-        } else {
-            w(ev, event, enchant, getRecipients(event, a.contains("[") ? a.split("\\[")[1].split("]")[0] : a, P), a, attribute, b, P);
-        }
-    }
     public void w(CustomEnchantProcEvent ev, Event event, CustomEnchant enchant, List<LivingEntity> recipients, String a, String attribute, int b, Player P) {
         try {
             executeAttributes(ev, event, enchant, recipients, a, attribute, b, P);
@@ -148,8 +129,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
     }
     private boolean doVariable(CustomEnchantProcEvent e, Event event, CustomEnchant enchant, LivingEntity entity, String input) {
         if(input.startsWith("canBreakHitBlock")) return event instanceof PlayerInteractEvent && ((PlayerInteractEvent) event).getClickedBlock() != null && factions.canModify(((PlayerInteractEvent) event).getPlayer().getUniqueId(), ((PlayerInteractEvent) event).getClickedBlock().getLocation());
-        else if(input.startsWith("didproc")) return e.didProc;
-        else if(input.startsWith("didntproc")) return !e.didProc;
         else if(input.startsWith("enchantIs(")) {
             if(enchant != null) {
                 final String inpu = input.split("enchantIs\\(")[1].split("\\\\")[0];
@@ -163,17 +142,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             return false;
         }
         return false;
-    }
-    public ItemStack getRarityGem(RarityGem gem, Player player) {
-        final PlayerInventory pi = player.getInventory();
-        final List<String> l = gem.getItem().getItemMeta().getLore();
-        for(int i = 0; i < pi.getSize(); i++) {
-            final ItemStack a = pi.getItem(i);
-            if(a != null && a.hasItemMeta() && a.getItemMeta().hasLore() && a.getItemMeta().getLore().equals(l)) {
-                return a;
-            }
-        }
-        return null;
     }
     /*
         ATTRIBUTES
@@ -198,7 +166,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             }, ticks);
         }
     }
-    private int getXP(LivingEntity entity) { return entity instanceof Player ? getTotalExperience((Player) entity) : 0; }
     private void breakBlocks(UMaterial usedItem, Block b, int x1, int y1, int z1, int x2, int y2, int z2) {
         if(usedItem != null && b != null) {
             final World w = b.getWorld();

@@ -23,7 +23,7 @@ public abstract class FileOutpost extends RPAddon implements Outpost {
     private double controlPercent;
     public FileOutpost(File f) {
         load(f);
-        addOutpost(getIdentifier(), this);
+        addOutpost(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

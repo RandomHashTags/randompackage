@@ -19,7 +19,7 @@ public class FileMask extends RPAddon implements Mask {
 
     public FileMask(File f) {
         load(f);
-        addMask(getIdentifier(), this);
+        addMask(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

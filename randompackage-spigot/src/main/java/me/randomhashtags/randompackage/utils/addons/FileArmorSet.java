@@ -11,7 +11,7 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 
 	public FileArmorSet(File f) {
 		load(f);
-		addArmorSet(getIdentifier(), this);
+		addArmorSet(this);
 	}
 	public String getIdentifier() { return getYamlName(); }
 

@@ -17,12 +17,12 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public class SCrateFlare extends UVersion implements ServerCrateFlare {
+public class ServerCrateFlareObject extends UVersion implements ServerCrateFlare {
 	private FileServerCrate crate;
 	private ItemStack is;
 	private List<UMaterial> cannotLandAbove, cannotLandIn;
 
-	public SCrateFlare(FileServerCrate crate) {
+	public ServerCrateFlareObject(FileServerCrate crate) {
 		this.crate = crate;
 	}
 	public String getIdentifier() { return crate.getYamlName(); }

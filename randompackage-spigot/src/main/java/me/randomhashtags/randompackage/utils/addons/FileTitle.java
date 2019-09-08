@@ -12,7 +12,7 @@ public class FileTitle extends RPAddon implements Title {
     private String title;
     public FileTitle(String title) {
         this.title = title;
-        addTitle(title, this);
+        addTitle(this);
     }
     public String getIdentifier() { return title; }
 

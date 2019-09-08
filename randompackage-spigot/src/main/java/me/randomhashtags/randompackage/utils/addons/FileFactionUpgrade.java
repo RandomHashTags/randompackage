@@ -15,7 +15,7 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
 
     public FileFactionUpgrade(File f) {
         load(f);
-        addFactionUpgrade(getIdentifier(), this);
+        addFactionUpgrade(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

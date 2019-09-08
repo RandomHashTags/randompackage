@@ -18,7 +18,7 @@ public class FileConquestChest extends RPAddon implements ConquestChest {
 
     public FileConquestChest(File f) {
         load(f);
-        addConquestChest(getIdentifier(), this);
+        addConquestChest(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

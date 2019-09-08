@@ -23,7 +23,7 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
             primed = new HashMap<>();
         }
         load(f);
-        addExplosion(getIdentifier(), this);
+        addExplosion(this);
     }
     public String getIdentifier() { return "TNT_" + getYamlName(); }
 

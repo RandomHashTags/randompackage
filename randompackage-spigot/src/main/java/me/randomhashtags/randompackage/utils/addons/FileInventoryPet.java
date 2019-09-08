@@ -13,7 +13,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     private ItemStack item, egg;
     public FileInventoryPet(File f) {
         load(f);
-        addPet(getIdentifier(), this);
+        addPet(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

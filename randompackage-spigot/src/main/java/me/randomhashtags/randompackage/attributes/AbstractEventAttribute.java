@@ -33,6 +33,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
 
     public void execute(Event event) {}
     public void execute(Event event, String value) {}
+    public void execute(Event event, String value, HashMap<String, String> valueReplacements) {}
     public void execute(String value) {}
     public void execute(Entity entity1, Entity entity2, String value) {}
     public void execute(Event event, HashMap<Entity, String> recipientValues) {}

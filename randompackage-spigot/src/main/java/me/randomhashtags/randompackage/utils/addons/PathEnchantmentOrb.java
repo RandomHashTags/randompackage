@@ -29,9 +29,9 @@ public class PathEnchantmentOrb extends RPAddon implements EnchantmentOrb {
 		this.maxenchants = maxenchants;
 		this.appliedlore = ChatColor.translateAlternateColorCodes('&', appliedlore.replace("{SLOTS}", Integer.toString(maxenchants).replace("{ADD_SLOTS}", Integer.toString(increment))));
 		this.increment = increment;
-		addEnchantmentOrb(path + maxenchants, this);
+		addEnchantmentOrb(this);
 	}
-	public String getIdentifier() { return path; }
+	public String getIdentifier() { return path + maxenchants; }
 
 	public String getPath() { return path; }
 	public ItemStack getItem() { return is.clone(); }

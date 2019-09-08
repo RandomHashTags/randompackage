@@ -19,7 +19,7 @@ public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeTyp
 			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
 		}
 		this.path = path;
-		addFactionUpgradeType(path, this);
+		addFactionUpgradeType(this);
 	}
 	public String getIdentifier() { return path; }
 

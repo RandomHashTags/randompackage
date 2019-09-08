@@ -44,7 +44,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -414,6 +413,14 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     trigger(event, getEnchants((Player) shooter));
                 }
             }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGH)
+    private void projectileHitEvent(ProjectileHitEvent event) {
+        final Projectile p = event.getEntity();
+        final ProjectileSource s = p.getShooter();
+        if(s instanceof Player) {
+            trigger(event, getEnchants((Player) s));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -15,7 +15,7 @@ public class PathFireball extends RPAddon implements RarityFireball {
 
 	public PathFireball(String path) {
 		this.path = path;
-		addFireball(getIdentifier(), this);
+		addFireball(this);
 	}
 	public String getIdentifier() { return path; }
 

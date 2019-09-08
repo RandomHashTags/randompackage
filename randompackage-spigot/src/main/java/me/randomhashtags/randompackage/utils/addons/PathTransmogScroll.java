@@ -11,7 +11,7 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
     private ItemStack item;
     public PathTransmogScroll(String path) {
         this.path = path;
-        addTransmogScroll(getIdentifier(), this);
+        addTransmogScroll(this);
     }
     public String getIdentifier() { return path; }
 

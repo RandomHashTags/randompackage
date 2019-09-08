@@ -24,7 +24,7 @@ public class PathMagicDust extends RPAddon implements MagicDust {
 		min = Integer.parseInt(a[0]);
 		max = Integer.parseInt(a[1]);
 		upgradecost = BigDecimal.valueOf(config.getInt("dusts." + path + ".upgrade cost"));
-		addDust(getIdentifier(), this);
+		addDust(this);
 	}
 	public String getIdentifier() { return path; }
 

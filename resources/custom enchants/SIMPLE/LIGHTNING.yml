@@ -13,4 +13,4 @@ alchemist: "1000:2000"
 tinkerer: "77:89:101"
 #
 attributes:
-- "ArrowLand;chance=16+(8*level);Smite=Projectile:1"
+- "ProjectileHit;chance=16+(8*level);ProjectileSmite=@Projectile:1"

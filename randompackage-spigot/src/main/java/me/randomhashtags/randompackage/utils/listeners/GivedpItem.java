@@ -192,12 +192,13 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(random.nextInt(101));
             EnchantmentOrb o = getEnchantmentOrb(p);
             if(o == null) {
+                final List<EnchantmentOrb> e = new ArrayList<>();
                 for(String s : enchantmentorbs.keySet()) {
-                    if(p.equals(s)) {
-                        o = getEnchantmentOrb(s);
-                        break;
+                    if(s.startsWith(p)) {
+                        e.add(enchantmentorbs.get(s));
                     }
                 }
+                o = !e.isEmpty() ? e.get(random.nextInt(e.size())) : null;
             }
             final boolean h = percent.contains("-");
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+random.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;

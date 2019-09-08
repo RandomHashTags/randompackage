@@ -12,7 +12,7 @@ public class FileTrinket extends RPAddon implements Trinket {
 
     public FileTrinket(File f) {
         load(f);
-        addTrinket(getIdentifier(), this);
+        addTrinket(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

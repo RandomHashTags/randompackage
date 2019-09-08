@@ -17,6 +17,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffectType;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 public abstract class Conditions extends RPFeature implements Combo {
     protected static List<UUID> spawnedFromSpawner = new ArrayList<>();
+    protected static HashMap<UUID, EntityShootBowEvent> projectileEvents = new HashMap<>();
 
     private boolean passed = false;
     protected boolean passedAllConditions(Event event, Entity entity, String condition, String s, String value, boolean legacy, boolean eight, boolean nine, boolean ten, boolean eleven, boolean thirteen) {

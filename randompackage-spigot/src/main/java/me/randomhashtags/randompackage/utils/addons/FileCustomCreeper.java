@@ -20,7 +20,7 @@ public class FileCustomCreeper extends RPAddon implements CustomExplosion {
             living = new HashMap<>();
         }
         load(f);
-        addExplosion(getIdentifier(), this);
+        addExplosion(this);
     }
     public String getIdentifier() { return "CREEPER_" + getYamlName(); }
 

@@ -11,7 +11,7 @@ public class FileFilterCategory extends RPAddon implements FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
         load(f);
-        addFilterCategory(getIdentifier(), this);
+        addFilterCategory(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

@@ -17,7 +17,7 @@ public class PathBlackScroll extends RPAddon implements BlackScroll {
 		final String[] p = getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".percents").split(";");
 		min = Integer.parseInt(p[0]);
 		max = Integer.parseInt(p[1]);
-		addBlackScroll(getIdentifier(), this);
+		addBlackScroll(this);
 	}
 	public String getIdentifier() { return path; }
 

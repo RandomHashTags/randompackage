@@ -26,7 +26,7 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
 
     public FileCustomBoss(File f) {
         load(f);
-        addBoss(getIdentifier(), this);
+        addBoss(this);
     }
     public String getIdentifier() { return getYamlName();  }
 

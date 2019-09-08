@@ -16,7 +16,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
 
     public FileLootbox(File f) {
         load(f);
-        addLootbox(getIdentifier(), this);
+        addLootbox(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

@@ -357,7 +357,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         if(amount > 0) {
             final PlayerExpGainEvent e = new PlayerExpGainEvent(event.getPlayer(), amount);
             pm.callEvent(e);
-            event.setAmount(e.getAmount());
+            if(!e.isCancelled()) {
+                event.setAmount(e.getAmount());
+            }
         }
     }
 }

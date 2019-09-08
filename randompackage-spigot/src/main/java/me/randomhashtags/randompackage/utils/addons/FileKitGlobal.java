@@ -15,7 +15,7 @@ public class FileKitGlobal extends RPKit implements CustomKitGlobal {
 
     public FileKitGlobal(File f) {
         load(f);
-        addKit(getIdentifier(), this);
+        addKit(this);
     }
     public String getIdentifier() { return getYamlName(); }
     public Kits getKitClass() { return KitsGlobal.getKitsGlobal(); }

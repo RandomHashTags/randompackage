@@ -20,7 +20,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
 
     public FileEnvoyCrate(File f) {
         load(f);
-        addEnvoyCrate(getIdentifier(), this);
+        addEnvoyCrate(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

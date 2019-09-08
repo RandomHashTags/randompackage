@@ -13,7 +13,7 @@ public class PathSoulTracker extends RPAddon implements SoulTracker {
     private List<String> apply, split;
     public PathSoulTracker(String path) {
         this.path = path;
-        addSoulTracker(getIdentifier(), this);
+        addSoulTracker(this);
     }
     public String getIdentifier() { return path; }
 

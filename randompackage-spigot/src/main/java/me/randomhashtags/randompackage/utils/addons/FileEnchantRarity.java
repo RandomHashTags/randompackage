@@ -22,7 +22,7 @@ public class FileEnchantRarity extends RPAddon implements EnchantRarity {
         this.folder = folder;
         load(f);
         enchants = new ArrayList<>();
-        addEnchantRarity(getIdentifier(), this);
+        addEnchantRarity(this);
     }
     public String getIdentifier() { return folder.getName(); }
 

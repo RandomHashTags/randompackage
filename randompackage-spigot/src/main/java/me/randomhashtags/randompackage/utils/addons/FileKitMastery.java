@@ -19,7 +19,7 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
     private LinkedHashMap<CustomKit, Integer> requiredKits;
     public FileKitMastery(File f) {
         load(f);
-        addKit(getIdentifier(), this);
+        addKit(this);
     }
     public String getIdentifier() { return getYamlName(); }
     public Kits getKitClass() { return KitsMastery.getKitsMastery(); }

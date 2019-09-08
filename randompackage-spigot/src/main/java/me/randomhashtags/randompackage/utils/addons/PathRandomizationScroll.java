@@ -13,7 +13,7 @@ public class PathRandomizationScroll extends RPAddon implements RandomizationScr
 	private List<EnchantRarity> appliesto;
 	public PathRandomizationScroll(String path) {
 		this.path = path;
-		addRandomizationScroll(getIdentifier(), this);
+		addRandomizationScroll(this);
 	}
 	public String getIdentifier() { return path; }
 

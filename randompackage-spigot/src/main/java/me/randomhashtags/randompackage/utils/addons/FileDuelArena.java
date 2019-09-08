@@ -13,7 +13,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
     private ItemStack item;
     public FileDuelArena(File f) {
         load(f);
-        addDuelArena(getIdentifier(), this);
+        addDuelArena(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

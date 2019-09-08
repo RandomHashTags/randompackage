@@ -20,7 +20,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
 
     public FileMonthlyCrate(File f) {
         load(f);
-        addMonthlyCrate(getIdentifier(), this);
+        addMonthlyCrate(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

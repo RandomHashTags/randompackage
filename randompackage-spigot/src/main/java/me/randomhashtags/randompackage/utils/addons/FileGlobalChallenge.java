@@ -10,7 +10,7 @@ public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
     private ItemStack display;
     public FileGlobalChallenge(File f) {
         load(f);
-        addGlobalChallenge(getIdentifier(), this);
+        addGlobalChallenge(this);
     }
     public String getIdentifier() { return getYamlName();  }
 

@@ -12,7 +12,7 @@ public class FileBooster extends RPAddon implements Booster {
     private ItemStack item;
     public FileBooster(File f) {
         load(f);
-        addBooster(getIdentifier(), this);
+        addBooster(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

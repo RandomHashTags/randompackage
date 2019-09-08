@@ -12,7 +12,7 @@ public class FileKitEvolution extends RPKit implements CustomKitEvolution {
 
     public FileKitEvolution(File f) {
         load(f);
-        addKit(getIdentifier(), this);
+        addKit(this);
     }
     public String getIdentifier() { return getYamlName(); }
     public Kits getKitClass() { return KitsEvolution.getKitsEvolution(); }

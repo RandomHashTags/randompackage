@@ -18,7 +18,7 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         this.amount = amount;
         this.placement = placement;
         this.rewards = rewards;
-        addGlobalChallengePrize(getIdentifier(), this);
+        addGlobalChallengePrize(this);
     }
     public String getIdentifier() { return "GLOBAL_CHALLENGE_PRIZE_" + placement; }
 

@@ -18,7 +18,7 @@ public class FileFallenHero extends RPFallenHero implements FallenHero {
 
     public FileFallenHero(File f) {
         load(f);
-        addFallenHero(getIdentifier(), this);
+        addFallenHero(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

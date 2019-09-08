@@ -13,7 +13,7 @@ public abstract class FileDungeon extends RPAddon implements Dungeon {
 
     public FileDungeon(File f) {
         load(f);
-        addDungeon(getIdentifier(), this);
+        addDungeon(this);
     }
     public String getIdentifier() { return getYamlName(); }
 

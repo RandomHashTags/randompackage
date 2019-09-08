@@ -21,7 +21,7 @@ public class PathRarityGem extends RPAddon implements RarityGem {
 
 	public PathRarityGem(String path) {
 		this.path = path;
-		addRarityGem(getIdentifier(), this);
+		addRarityGem(this);
 	}
 	public String getIdentifier() { return path; }
 
