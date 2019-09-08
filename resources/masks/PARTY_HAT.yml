@@ -5,13 +5,13 @@ item:
   item: "player_head_item"
   name: "&f&lParty Hat Mask"
   lore:
-  - "&c-5 ENEMY DMG"
+  - "&c-5% ENEMY DMG"
   - "&c+4% DMG"
   - "&7Everywhere you are is a party."
   - " &6&l*&r &6New Years 2018"
 #
 attributes:
-  - "PvA;setDamage{dmg*1.04}"
-  - "isDamaged;setDamage{dmg*0.95}"
+  - "PvAny;SetDamage=dmg*1.04"
+  - "isDamaged;SetDamage=dmg*0.95"
 #
 added lore: "&7&lATTACHED:&r &f&lParty Hat Mask&r &f(&c-5 ENEMY DMG, +4% DMG&f)"

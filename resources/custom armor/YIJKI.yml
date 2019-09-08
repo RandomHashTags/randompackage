@@ -5,6 +5,13 @@ armor lore:
   - "&f&l*&r &fEnemies deal 30% less damage to you."
   - "&f&l*&r &fRevenge of Yijki Passive Ability"
   - "&7&o(Requires all 4 yijki items.)"
+weapon lore:
+  - " "
+  - "&f&lYIJKI WEAPON BONUS"
+  - "&fDeal +20% damage to all enemies."
+  - "&f125% Revenge of Yijki Ability"
+  - "&fImmune to Rot and Decay"
+  - "&7&o(Requires all 4 yijki items)"
 #
 helmet:
   item: "diamond_helmet"
@@ -42,9 +49,29 @@ boots:
   - "&f&oLight as a feather, heavy as"
   - "&f&oa mountain - the footwraps of Yijki."
 #
-attributes:
+weapon:
+  item: "diamond_sword"
+  name: "&f&lYijki's World Ender"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "&7An absolutely massive, corrupted"
+    - "&7executioner blade imbued with"
+    - "&7highly destructive dark magic."
+#
+armor attributes:
   - "isDamaged;SetDamage=dmg*0.70"
   - "isDamaged;chance=10;{lightning;10;10;3},{message=&5&l** REVENGE OF YIJKI (&r&c<PLAYER> [1.5s]&5&l) **;radius=10}"
+#
+weapon attributes:
+  - "PvAny;SetDamage=dmg*1.20"
+#
+crystal:
+  name: "&f&lMother of Yijki"
+  perks:
+    - "  &f&l*&r &f-5% Incoming DMG"
+    - "  &f&l*&r &f20% Revenge of Yijki Ability"
+  attributes:
+    - "isDamaged;SetDamage=dmg*0.95"
 #
 activate message:
   - "&c&l(!) MOTHER OF YIJKI SET BONUS: &C-30% DMG"

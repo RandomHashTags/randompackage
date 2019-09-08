@@ -3,7 +3,11 @@ enabled: false
 #
 name: "Poltergeist"
 lore:
-- "&e"
+  - "&eImmune to Nature's Wrath snare, a"
+  - "&echance to negate Dimensional Traveler"
+  - "&eand mother of Yijki stun and damage"
+  - "&efrom set abilities. Also negates all"
+  - "&efall damage."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Conditions extends RPFeature implements Combo {
+public abstract class EventConditions extends RPFeature implements Combo {
     protected static List<UUID> spawnedFromSpawner = new ArrayList<>();
     protected static HashMap<UUID, EntityShootBowEvent> projectileEvents = new HashMap<>();
 

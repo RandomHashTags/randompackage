@@ -29,4 +29,13 @@ transmog scrolls:
       - CHESTPLATE
       - LEGGINGS
       - BOOTS
+  GODLY:
+    item: "paper"
+    name: "&6&lGodly Transmog Scroll"
+    lore:
+    - "&7Apply to equipment to &6&ncustomize"
+    - "&7the order of &dcustom &benchantments"
+    - "&7displayed on the item."
+    - " "
+    - "&6&oPlace scroll on item to apply"
 #

@@ -22,11 +22,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.*;
 
-public abstract class EventExecutor extends Conditions {
+public abstract class EventExecutor extends EventConditions {
     private boolean hasReplacements(List<String> conditions) {
         for(String s : conditions) {
             final String l = s.toLowerCase();
@@ -376,8 +375,7 @@ public abstract class EventExecutor extends Conditions {
     public boolean trigger(DamageEvent event, List<String> attributes) {
         final Entity d = event.getDamager(), v = event.getEntity();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
-        final String dmg = Double.toString(event.getDamage());
-        final HashMap<String, String> re = getReplacements("dmg", dmg);
+        final HashMap<String, String> re = getReplacements("dmg", Double.toString(event.getDamage()));
         r.put(d, re);
         r.put(v, re);
         return trigger(event, getEntities("Damager", d, "Victim", v), attributes, r);

@@ -17,4 +17,4 @@ tinkerer: "85:97:109:115:129"
 requires: "Inquisitive;4"
 #
 attributes:
-- "EntityDeath;SetDroppedExp=droppedxp*(1+(.75*level))"
+- "EntityDeath;SetDroppedExp=xp*(1+(.75*level))"

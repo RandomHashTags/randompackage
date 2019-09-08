@@ -12,6 +12,6 @@ item:
   - " &6&l*&r &6Death Knight Mastery Kit"
 #
 attributes:
-  - "PvA;setDamage{dmg*1.025}"
+  - "PvAny;SetDamage=dmg*1.025"
 #
 added lore: "&7&lATTACHED:&r &9&lDeath Knight Mask&r &f(&c50% chance to negate enemy's Phoenix&f)"

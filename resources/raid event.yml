@@ -12,14 +12,25 @@ messages:
   beacon destroyed - self destruct:
     - "&6&l(!)&r &6This /raid event world will be destroyed in &e{TIME}"
   #
+  map unknown: "???"
   info active:
+    - " "
     - "&e&l***&r &6&lRAID EVENT&r &e&l***"
     - "&e&lRaid Event:&r {STATUS}"
     - "&e&lNext Scheduled Raid Event:&r &c&l{NEXT_EVENT}"
-    - "&e&lMap:&r &e{MAP}"
+    - "&e&lPrevious Winner:&r &6{PREVIOUS_WINNER}"
+    - "&e&lMap:&r &6{MAP}"
     - "&e&lPhase:&r {PHASE}"
     - "&e&lPlayers:&r &6{PLAYERS}"
     - "&e&lRuntime:&r &6{RUNTIME}"
+    - " "
+    - "&7** Raid Events are held at set times every other day. Raid Events are a"
+    - " &7faction raiding minigame where players compete in a custom world to be the first to"
+    - " &7breach or destroy the server faction base. Whichever faction launches the TNT that"
+    - " &7destroys the central Beacon Block first, &nWINS!&r&7, the winning faction will be rewarded with"
+    - " &7some of the &nbest loot available in the Servoverse.&r &7Use &6&l/raid loot&r &7to view an example"
+    - " &7reward."
+    - " "
 #
 settings:
   starting phase: OPEN
@@ -50,5 +61,31 @@ raid phases:
     self destruct countdown: 600
     warpable: false
 #
+reward size: 15
+can repeat rewards: true
 rewards:
-  - ""
+  - "factioncrystal;amount=100"
+  - "heroicfactioncrystal;amount=25"
+  - "customarmor:ENGINEER:helmet||customarmor:ENGINEER:chestplate||customarmor:ENGINEER:leggings||customarmor:ENGINEER:boots"
+  - "rarecandy;chance=10"
+  - "petleash;chance=10"
+  - "raritybook:HEROIC;amount=2;chance=20"
+  - "raritybook:SOUL;amount=2;chance=20"
+  - "mysterypetbox;chance=20"
+  - "mysterypetbox;chance=20"
+  - "customexplosion:CREEPER_LUCKY;amount=16;chance=20"
+  - "customexplosion:CREEPER_GIGANTIC;amount=32;chance=20"
+  - "transmogscroll:GODLY;chance=20"
+  - "enchantmentorb:armor13;chance=20"
+  - "enchantmentorb:armor14;chance=20"
+  - "enchantmentorb:weapon13;chance=20"
+  - "enchantmentorb:weapon14;chance=20"
+  - "randomizationscroll:LEGENDARY;chance=20"
+  - "randomizationscroll:ULTIMATE;chance=20"
+  - "servercrate:GODLY;chance=20"
+  - "maskgenerator;chance=20"
+  - "inventorypet:BLESS;chance=20"
+  - "inventorypet:SELL_BOT;chance=20"
+  - "blackscroll:HEROIC:25-30;chance=20"
+  - "mask:ANONYMOUS;chance=20"
+  - "trinket:EMP_PULSE;chance=20"

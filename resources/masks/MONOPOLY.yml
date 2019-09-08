@@ -6,12 +6,12 @@ item:
   name: "&b&lMonopoly Mask"
   lore:
   - "&c33% Holy White Scroll negation"
-  - "&c-5% DMG"
+  - "&c-5% ENEMY DMG"
   - "&7The mask of a man who has it all,"
   - "&7a truly powerful entity to contest with."
   - " &6&l*&r &6Black Friday 2018"
 #
 attributes:
-  - "PvA;setDamage{dmg*0.95}"
+  - "isDamaged;SetDamage=dmg*0.95"
 #
 added lore: "&7&lATTACHED:&r &b&lMonopoly Mask&r &f(&c33% Holy White Scroll negation&f)"

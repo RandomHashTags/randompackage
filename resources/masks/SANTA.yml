@@ -12,7 +12,7 @@ item:
   - " &6&l*&r &6Christmas 2018"
 #
 attributes:
-  - "MaskEquip;addPotionEffect{health_boost:0:99999}"
-  - "MaskUnequip;removePotionEffect{health_boost:false}"
+  - "MaskEquip;PlayerAddPotionEffect=health_boost:0:99999"
+  - "MaskUnequip;PlayerRemovePotionEffect=health_boost"
 #
 added lore: "&7&lATTACHED:&r &b&lSanta Mask&r &f(&c+2 Max Hearts&f)"

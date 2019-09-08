@@ -82,9 +82,10 @@ public abstract class YamlUpdater {
     }
 
     private LinkedHashMap<String, Object> putAll(Object[] values) {
+        final List<Object> objects = new ArrayList<>();
+        objects.addAll(Arrays.asList(values));
         final LinkedHashMap<String, Object> tree = new LinkedHashMap<>();
-        for(int i = 0; i < values.length; i++) {
-            final Object o = values[i];
+        for(Object o : values) {
             if(o instanceof Object[]) {
                 final Object[] obj = (Object[]) o;
                 for(int z = 0; z < obj.length; z++) {
@@ -92,9 +93,15 @@ public abstract class YamlUpdater {
                         tree.put((String) obj[z-1], obj[z]);
                     }
                 }
-            } else if(i%2 == 1) {
-                tree.put(values[i-1].toString(), o);
+                objects.remove(o);
             }
+        }
+        int i = 0;
+        for(Object obj : objects) {
+            if(i%2 == 1) {
+                tree.put(objects.get(i-1).toString(), obj);
+            }
+            i++;
         }
         return tree;
     }
@@ -204,7 +211,12 @@ public abstract class YamlUpdater {
         return null;
     }
     private LinkedHashMap<String, Object> getCustomArmor() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.5.0
+                newItemStack("items.crystal", "nether_star", "&6&lArmor Crystal (&r{NAME}&r&6&l)", newStringList("&a{PERCENT}% Success Rate", "&7Can be applied to any non", "&7armor set that is not", "&7already equipped with a", "&7bonus crystal to gain", "&7a passive advantage!", " ", "&6&lCrystal Bonus:", " {NAME}", "{PERKS}")),
+                "items.crystal.applied lore", "&6&lArmor Crystal (&r{NAME}}&r&6&l)"
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getCustomEnchants() {
         return null;
@@ -272,7 +284,38 @@ public abstract class YamlUpdater {
         return null;
     }
     private LinkedHashMap<String, Object> getLootboxes() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.5.0
+                newItemStack("items.mystery lootbox", "chest", "&6&lMystery Lootbox&r &7(Right Click)", newStringList(
+                        "&7Click to receive one of the",
+                        "&7following random lootboxes:",
+                        " &6&l*&r &f&lLootbox:&r &2&l#&a&lLucky",
+                        " &6&l*&r &f&lLootbox:&r &5&lDark Dreams",
+                        " &6&l*&r &f&lLootbox:&r &4&lBox&r &c&lof&r &4&lChocolates",
+                        " &6&l*&r &f&lLootbox:&r &4&l&a&lApril&r &2&lShowers",
+                        " &6&l*&r &f&lLootbox:&r &9&lS&b&ln&9&lo&b&lw&r &f&lDay!",
+                        " &6&l*&r &f&lLootbox:&r &e&lHangover",
+                        " &6&l*&r &f&lLootbox:&r &d&lEaster&r &e&l2&b&l0&d&l1&a&l9",
+                        " &6&l*&r &f&lLootbox:&r &9&lIcy Adventures",
+                        " &6&l*&r &f&lLootbox:&r &5&lStackable",
+                        " &6&l*&r &f&lLootbox:&r &e&lSummer&r &4&l&oSavage",
+                        " &6&l*&r &f&lLootbox:&r &4&lDungeon&r &c&lCrawler",
+                        " &6&l*&r &f&lLootbox:&r &c&lPrimal",
+                        " &6&l*&r &f&lLootbox:&r &c&lCollectors&r &4&lEdition",
+                        " &6&l*&r &f&lLootbox:&r &9&lParadox",
+                        " &6&l*&r &f&lLootbox:&r &9&lSugar&r &5&lDaddy",
+                        " &6&l*&r &f&lLootbox:&r &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw",
+                        " &6&l*&r &f&lLootbox:&r &5&lSuper&d&lnova",
+                        " &6&l*&r &f&lLootbox:&r &b&lServer&r &d&lCrate",
+                        " &6&l*&r &f&lLootbox:&r &c&lE&4&lx&c&lp&4&ll&c&lo&4&ls&c&li&4&lv&c&le",
+                        " &6&l*&r &f&lLootbox:&r &9&lPet&r &5&lCollector",
+                        " &6&l*&r &f&lLootbox:&r &e&lEnd&r &6&lof&r &c&lSummer"
+                        )
+                ),
+                "items.mystery lootbox.reward size", 1,
+                "items.mystery lootbox.obtainable lootboxes", newStringList("LUCKY", "DARK_DREAMS", "BOX_OF_CHOCOLATES", "APRIL_SHOWERS", "SURVIVAL_KIT", "SNOW_DAY", "HANGOVER", "EASTER_2019", "ICY_ADVENTURES", "STACKABLE", "SUMMER_SAVAGE", "DUNGEON_CRAWLER", "PRIMAL", "COLLECTORS_EDITION", "PARADOX", "SUGAR_DADDY", "RAINBOW", "SUPERNOVA", "SERVER_CRATE", "PET_COLLECTOR", "END_OF_SUMMER")
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getMasks() {
         return null;
@@ -322,20 +365,20 @@ public abstract class YamlUpdater {
     }
 
     private Object[] newInventory(String key, String title, int size) {
-        return new Object[]{
+        return new Object[] {
                 key + ".title", title,
                 key + ".size", size
         };
     }
     private Object[] newItemStack(String key, String material, String name, List<String> lore) {
-        return new Object[]{
+        return new Object[] {
                 key + ".item", material,
                 key + ".name", name,
                 key + ".lore", lore,
         };
     }
     private Object[] newItemStack(String key, int slot, String material, String name, List<String> lore, String picksup) {
-        return new Object[]{
+        return new Object[] {
                 key + ".slot", slot,
                 key + ".item", material,
                 key + ".name", name,

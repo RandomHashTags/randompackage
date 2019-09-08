@@ -137,6 +137,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "DEEP BLEED", "DEMONIC_LIFESTEAL", "DIVINE ENLIGHTED",
                     "ETHEREAL DODGE",
                     "GHOSTLY GHOST", "GODLY OVERLOAD", "GUIDED ROCKET ESCAPE",
+                    "HEROIC ENCHANT REFLECT",
                     "INFINITE LUCK",
                     "LETHAL SNIPER",
                     "MASTER BLACKSMITH", "MASTER INQUISITIVE", "MIGHTY CACTUS", "MIGHTY CLEAVE",
@@ -423,7 +424,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             trigger(event, getEnchants((Player) s));
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity();
         if(entity instanceof LivingEntity && canProcOn(entity)) {
@@ -431,24 +432,20 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             if(damager != null) {
                 final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
                 pluginmanager.callEvent(e);
-                if(!e.isCancelled()) {
-                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(damager);
-                    tryProcing(event, damager, enchants);
-                    trigger(event, enchants);
-                    event.setDamage(e.getDamage());
-                }
+                final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(damager);
+                tryProcing(event, damager, enchants);
+                trigger(event, enchants);
+                event.setDamage(e.getDamage());
             }
             if(entity instanceof Player && event.getDamager() instanceof LivingEntity && !(event.getDamager() instanceof TNTPrimed) && !(event.getDamager() instanceof Creeper)) {
                 final Player victim = (Player) entity;
                 final LivingEntity d = (LivingEntity) event.getDamager();
                 final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
                 pluginmanager.callEvent(e);
-                if(!e.isCancelled()) {
-                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
-                    tryProcing(event, victim, enchants);
-                    trigger(event, enchants);
-                    event.setDamage(e.getDamage());
-                }
+                final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
+                tryProcing(event, victim, enchants);
+                trigger(event, enchants);
+                event.setDamage(e.getDamage());
             }
             if(canProcOn(entity)) {
                 final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;

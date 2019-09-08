@@ -12,6 +12,6 @@ item:
   - " &6&l*&r &6Halloween 2018"
 #
 attributes:
-  - "PvA;setDamage{dmg*1.025}"
+  - "PvAny;SetDamage=dmg*1.025"
 #
 added lore: "&7&lATTACHED:&r &c&lPurge Mask&r &f(&c+2.5% DMG&f)"

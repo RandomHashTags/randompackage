@@ -12,7 +12,7 @@ item:
   - " &6&l*&r &6Timeless Dragon Update"
 #
 attributes:
-  - "PvA;setDamage{dmg*1.05}"
-  - "DamagedBy(FIRE||FIRE_TICK||LAVA);cancel"
+  - "PvAny;SetDamage=dmg*1.05"
+  - "isDamaged;cause=FIRE||FIRE_TICK||LAVA;SetCancelled=true"
 #
 added lore: "&7&lATTACHED:&r &4&lDragon Mask&r &f(&c+5% DMG&f)"

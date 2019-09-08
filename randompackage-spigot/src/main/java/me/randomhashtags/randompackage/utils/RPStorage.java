@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.legacy.ShopCategory;
+import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addons.EventAttribute;
 import me.randomhashtags.randompackage.dev.*;
@@ -512,6 +513,41 @@ public abstract class RPStorage extends RegionalAPI {
                                 && l != null && l.hasItemMeta() && l.getItemMeta().hasLore() && l.getItemMeta().getLore().containsAll(a)
                                 && b != null && b.hasItemMeta() && b.getItemMeta().hasLore() && b.getItemMeta().getLore().containsAll(a))) {
                     return set;
+                }
+            }
+        }
+        return null;
+    }
+    public ArmorSet valueOfArmorSet(ItemStack is) {
+        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            for(ArmorSet a : armorsets.values()) {
+                if(l.containsAll(a.getArmorLore())) {
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+    public ArmorSet valueOfArmorCrystal(ItemStack is) {
+        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final CustomArmor armor = CustomArmor.getCustomArmor();
+            final int percent = getRemainingInt(is.getItemMeta().getLore().get(armor.percentSlot));
+            for(ArmorSet a : armorsets.values()) {
+                if(is.isSimilar(armor.getCrystal(a, percent))) {
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+    public ArmorSet getArmorCrystalOnItem(ItemStack is) {
+        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final String added = CustomArmor.getCustomArmor().crystalAddedLore;
+            final List<String> l = is.getItemMeta().getLore();
+            for(ArmorSet a : armorsets.values()) {
+                if(l.contains(added.replace("{NAME}", a.getCrystalName()))) {
+                    return a;
                 }
             }
         }

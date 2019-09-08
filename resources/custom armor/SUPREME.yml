@@ -8,6 +8,12 @@ armor lore:
   - "&4&l*&r &4Enemy arrows deal 10% more damage to you."
   - "&4&l*&r &4+200% Clout"
   - "&7&o(Requires all 4 supreme items.)"
+weapon lore:
+  - " "
+  - "&4&lSUPREME WEAPON BONUS"
+  - "&4Deal +20% damage to all enemies"
+  - "&4Enemies deal 10% less damage to you"
+  - "&7&o(Requires all 4 supreme items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -46,7 +52,17 @@ boots:
   - "&c&oSupreme boots capable of"
   - "&c&oconverting clout into flight."
 #
-attributes:
+weapon:
+  item: "diamond_sword"
+  name: "&4&lSupreme Fanny Pack"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "&7They laughed at you, they"
+    - "&7told you a fanny pack is not"
+    - "&7a practical piece of clothing..."
+    - "&7now they will pay for their ignorance!"
+#
+armor attributes:
   - "ArmorSetEquip;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:99999"
   - "ArmorSetUnequip;PlayerRemovePotionEffect=speed"
   - "ArmorPieceBreak;PlayerRemovePotionEffect=speed:false"
@@ -55,3 +71,26 @@ attributes:
   - "PvAny;SetDamage=dmg*1.15"
   - "HitByArrow;setDamage{dmg*1.10}"
 #
+weapon attributes:
+  - "PvAny;SetDamage=dmg*1.20"
+  - "isDamaged=SetDamage=dmg*0.90"
+#
+crystal:
+  name: "&4&lSupreme"
+  perks:
+    - "  &c&l*&r &c+3% Outgoing DMG"
+  attributes:
+    - "PvAny;SetDamage=dmg*1.03"
+#
+heroic upgrade:
+  item: "yellow_dye"
+  name: "&6&lHeroic&r &6(&4&lSupreme&r&6) &lUpgrade"
+  lore:
+    - " "
+    - "&7Apply to any &4&lSupreme&r &7armor"
+    - "&7for a &6{PERCENT}% &7chance to imbue it"
+    - "&7with the power of Heroic Armor!"
+    - " "
+    - "&7This will increase the armor's base"
+    - "&7stats as well as add a &612.5% negation"
+    - "&7to enemy &6Infinite Luck &7enchantments."

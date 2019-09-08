@@ -5,6 +5,13 @@ armor lore:
   - "&b&l*&r &bDeal +10% damage to all enemies."
   - "&b&l*&r &bEnemies deal 10% less damage to you."
   - "&7&o(Requires all 4 yeti items.)"
+weapon lore:
+  - " "
+  - "&b&lYETI WEAPON BONUS"
+  - "&bDeal +75% Durability Damage"
+  - "&bDeal +7.5% DMG to enemies"
+  - "&bBypass 50% of Heroic Armor"
+  - "&7&o(Requires all 4 yeti items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -38,9 +45,32 @@ boots:
   - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape;Ender Walker;Repair Guard;Hardened;Valor;Angelic}"
   - "&bBigfoot has nothing on these boots."
 #
-attributes:
+weapon:
+  item: "diamond_axe"
+  name: "&b&lYeti Maul"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "&7A penetrating axe used by a Yeti."
+#
+armor attributes:
   - "PvAny;SetDamage=dmg*1.10"
   - "isDamaged;SetDamage=dmg*0.90"
 #
+weapon attributes:
+  - "PvAny;SetDamage=dmg*1.075"
+#
 activate message:
   - "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"
+#
+heroic upgrade:
+  item: "yellow_dye"
+  name: "&6&lHeroic&r &6(&b&lYeti&r&6) &lUpgrade"
+  lore:
+    - " "
+    - "&7Apply to any &b&lYeti&r &7armor"
+    - "&7for a &6{PERCENT}% &7chance to imbue it"
+    - "&7with the power of Heroic Armor!"
+    - " "
+    - "&7This will increase the armor's base"
+    - "&7stats as well as add a &612.5% negation"
+    - "&7to enemy &6Infinite Luck &7enchantments."

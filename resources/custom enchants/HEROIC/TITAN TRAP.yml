@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Trap;3"
 #
 attributes:
-- "PvA;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"
+  - "PvAny;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"

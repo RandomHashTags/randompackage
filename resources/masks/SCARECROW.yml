@@ -11,6 +11,6 @@ item:
   - " &6&l*&r &7November 2018 CC"
 #
 attributes:
-  - "FoodLevelLost;cancel"
+  - "FoodLevelLost;SetCancelled=true"
 #
 added lore: "&7&lATTACHED:&r &e&lScarecrow Mask&r &f(&cInfinite Food&f)"

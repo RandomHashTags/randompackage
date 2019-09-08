@@ -45,22 +45,29 @@ boots:
   - "&7dimensional barriers to allow the barer"
   - "&7to perform impossible feats."
 #
-attributes:
+armor attributes:
   - "PvAny;SetDamage=dmg*1.30"
 #
-armor crystal:
-  item: "nether_star"
-  name: "&6&lArmor Crystal (&r&5&lDimensional Traveler&r&6&l)"
+weapon attributes:
+  - ""
+#
+crystal:
+  name: "&5&lDimensional Traveler"
+  perks:
+    - "  &5&l*&r &5+7.5% Outgoing DMG"
+    - "  &5&l*&r &520% Dimensional Shift Ability"
+  attributes:
+    - "PvAny;SetDamage=dmg*1.075"
+#
+heroic upgrade:
+  item: "yellow_dye"
+  name: "&6&lHeroic&r &6(&5&lDimensional Traveler&r&6) &lUpgrade"
   lore:
-  - "&a{PERCENT}% Success Rate"
-  - "&7Can be applied to any non"
-  - "&7armor set that is not"
-  - "&7already equipped with a"
-  - "&7bonus crystal to gain"
-  - "&7a passive advantage!"
-  - " "
-  - "&6&lCrystal Bonus:"
-  - " &5&lDimensional Traveler"
-  - "  &5&l*&r &5+7.5% Outgoing DMG"
-  - "  &5&l*&r &520% Dimensional Shift Ability"
-  applied lore: "&6&lArmor Crystal (&r&5&lDimensional Traveler&r&6&l)"
+    - " "
+    - "&7Apply to any &5&lDimensional Traveler&r &7armor"
+    - "&7for a &6{PERCENT}% &7chance to imbue it"
+    - "&7with the power of Heroic Armor!"
+    - " "
+    - "&7This will increase the armor's base"
+    - "&7stats as well as add a &612.5% negation"
+    - "&7to enemy &6Infinite Luck &7enchantments."

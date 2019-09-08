@@ -37,8 +37,19 @@ boots:
   - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape}"
   - "&cThe silent sandals of the Phantom."
 #
-attributes:
+armor attributes:
   - "PvAny;SetDamage=dmg*1.25"
+#
+weapon attributes:
+  - ""
+#
+crystal:
+  item: "nether_star"
+  name: "&c&lPhantom"
+  perks:
+    - "  &c&l*&r &c+5% DMG"
+  attributes:
+    - "PvAny;SetDamage=dmg*1.05"
 #
 activate message:
   - "&c&lPHANTOM SET BONUS&r&c: +25% DMG"

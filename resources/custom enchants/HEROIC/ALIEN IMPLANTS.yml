@@ -3,10 +3,15 @@ enabled: false
 #
 name: "Alien Implants"
 lore:
-- ""
+  - "&eAutomatically heal 2x the HP of"
+  - "&enormal Implants at 2x the rate, and"
+  - "&eat max level all hunger loss is"
+  - "&edisabled. Ince applied, this"
+  - "&eenchantment can only be extracted"
+  - "&efrom items with heroic black scrolls."
 #
 max level: 3
-applies to: ""
+applies to: "helmet"
 requires: "Implants;3"
 #
 alchemist: ""

@@ -48,9 +48,12 @@ boots:
   - "&a&oLightweight footgear for"
   - "&a&oan ancient nimble Ranger."
 #
-attributes:
+armor attributes:
   - "ArrowHit;setDamage{dmg*1.30}"
   - "HitByArrow;setDamage{dmg*0.75}"
+#
+weapon attributes:
+  - ""
 #
 heroic upgrade:
   item: "yellow_dye"

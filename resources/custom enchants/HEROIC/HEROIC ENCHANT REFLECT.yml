@@ -1,0 +1,17 @@
+# Made by RandomHashTags | TODO: fix this
+enabled: false
+#
+name: "Heroic Enchant Reflect"
+lore:
+  - "&eChance to cause enemy offensive"
+  - "&eenchants up to Heroic (up to level)"
+  - "&eto proc on themselves instead of you."
+#
+max level: 10
+applies to: "helmet;chestplate;leggings;boots"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

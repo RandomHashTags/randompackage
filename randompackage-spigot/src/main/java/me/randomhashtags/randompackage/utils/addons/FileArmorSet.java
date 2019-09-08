@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.utils.addons;
 
 import me.randomhashtags.randompackage.addons.ArmorSet;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
 
 public class FileArmorSet extends RPAddon implements ArmorSet {
-	private ItemStack helmet, chestplate, leggings, boots;
+	private ItemStack helmet, chestplate, leggings, boots, weapon;
 
 	public FileArmorSet(File f) {
 		load(f);
@@ -33,6 +34,17 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 	}
 	public List<String> getArmorLore() { return colorizeListString(yml.getStringList("armor lore")); }
 	public List<String> getWeaponLore() { return colorizeListString(yml.getStringList("weapon lore")); }
-	public List<String> getAttributes() { return yml.getStringList("attributes"); }
+	public List<String> getArmorAttributes() { return yml.getStringList("armor attributes"); }
+	public ItemStack getWeapon() {
+		if(weapon == null) weapon = api.d(yml, "weapon");
+		return weapon != null ? weapon.clone() : null;
+	}
+	public List<String> getWeaponAttributes() { return yml.getStringList("armor attributes"); }
+	public String getCrystalName() {
+		final String s = yml.getString("crystal.name");
+		return s != null ? ChatColor.translateAlternateColorCodes('&', s) : getIdentifier() + " crystal doesn't exist!";
+	}
+	public List<String> getCrystalPerks() { return colorizeListString(yml.getStringList("crystal.perks")); }
+	public List<String> getCrystalAttributes() { return yml.getStringList("crystal.attributes"); }
 	public List<String> getActivateMessage() { return colorizeListString(yml.getStringList("activate message")); }
 }

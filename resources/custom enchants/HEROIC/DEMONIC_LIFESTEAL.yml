@@ -1,5 +1,5 @@
-# Made by RandomHashTags | TODO: fix this
-enabled: false
+# Made by RandomHashTags
+enabled: true
 #
 name: "Demonic Lifesteal"
 lore:
@@ -17,4 +17,4 @@ tinkerer: ""
 requires: "Lifesteal;3"
 #
 attributes:
-- ""
+  - "PvAny;chance=3*level;DamagerHeal=4;VictimSetHealth=VictimHealth-2;DamagerSendMessage=&d&l** DEMONIC LIFESTEAL **"

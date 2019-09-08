@@ -1,10 +1,10 @@
 # Made by RandomHashTags | TODO: fix this
-enabled: false
+enabled: true
 #
 name: "Infinite Luck"
 lore:
-- "&eNegates incoming Armor Set bonuses"
-- "&edepending on enchantment level.."
+  - "&eNegates incoming Armor Set bonuses"
+  - "&edepending on enchantment level."
 #
 max level: 5
 applies to: "helmet;chestplate;leggings;boots"
@@ -14,4 +14,4 @@ tinkerer: ""
 requires: "Lucky;10"
 #
 attributes:
-- ""
+  - "isDamaged;DamagerHasArmorSetEquipped=true;SetDamage=dmg*(0.03*level)"

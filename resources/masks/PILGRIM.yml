@@ -10,6 +10,6 @@ item:
   - " &6&l*&r &6Thanksgiving 2018"
 #
 attributes:
-  - "KilledEntity;setDroppedExp{droppedxp*1.25}"
+  - "EntityDeath;VictimIsMob=true;SetDroppedExp=xp*1.25"
 #
 added lore: "&7&lATTACHED:&r &e&lPilgrim Mask&r &f(&c+25% XP/Drops&f)"

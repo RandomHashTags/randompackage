@@ -35,9 +35,22 @@ items:
       - "customarmor:RANGER:random"
       - "customarmor:SUPREME:random"
       - "customarmor:TRAVELER:random"
+  crystal:
+    item: "nether_star"
+    name: "&6&lArmor Crystal (&r{NAME}&r&6&l)"
+    lore:
+    - "&a{PERCENT}% Success Rate"
+    - "&7Can be applied to any non"
+    - "&7armor set that is not"
+    - "&7already equipped with a"
+    - "&7bonus crystal to gain"
+    - "&7a passive advantage!"
+    - " "
+    - "&6&lCrystal Bonus:"
+    - " {NAME}"
+    - "{PERKS}"
+    applied lore: "&6&lArmor Crystal (&r{NAME}&r&6&l)"
 #
-# Armor only works when all 4 armor pieces are worn.
-
 # Lightning feature
 ### chance=<chance of causing the lightning effect>;{lightning;<radius of strikes>;<how many strikes per 10 ticks>;<how many times lightning strikes>}
 #

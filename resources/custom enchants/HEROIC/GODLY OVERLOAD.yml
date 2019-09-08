@@ -6,7 +6,7 @@ lore:
 - "&eHeroic Enchantment. A very large"
 - "&epermanent increase in hearts."
 - "&eRequires Overload III enchant on item"
-- "&eto apply."
+- "&eto apply. Cannot be black-scrolled."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"

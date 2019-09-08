@@ -3,7 +3,8 @@ enabled: false
 #
 name: "Bidirectional Teleportation"
 lore:
-- "&e"
+  - "&eChance to repel an enemy towards you,"
+  - "&eor trap them for 1-2s."
 #
 max level: 5
 applies to: "bow"
@@ -13,4 +14,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - ""

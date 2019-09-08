@@ -36,8 +36,19 @@ boots:
   - "VEnchants{Protection4;;Unbreaking3}"
   - "RPEnchants{Armored;Gears;Enlighted;Deathbringer;Angelic;Tank;Rocket Escape}"
 #
-attributes:
+armor attributes:
   - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.20"
-  - "PvAny;VictimIsPlayer=false;VictimisMob=true;SetDamage=dmg*1.50"
+  - "PvAny;VictimisMob=true;SetDamage=dmg*1.50"
   - "EntityDamage;cause=FALL;SetCancelled=true"
 #
+weapon attributes:
+  - ""
+#
+crystal:
+  name: "&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;"
+  perks:
+    - "  &b&l*&r &b+5% PvP DMG"
+    - "  &b&l*&r &b+12.5% PvE DMG"
+  attributes:
+    - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.05"
+    - "PvAny;VictimIsMob=true;SetDamage=dmg*1.125"

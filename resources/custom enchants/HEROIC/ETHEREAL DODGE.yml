@@ -3,13 +3,13 @@ enabled: false
 #
 name: "Ethereal Dodge"
 lore:
-- "&eIncreased proc rate over normal"
-- "&eDodge, with a small chance to gain"
-- "&eSpeed V for a few seconds on"
-- "&esuccessful dodge. All fall damage is"
-- "&edisabled. Once applied, this"
-- "&eenchantment can only be extracted"
-- "&efrom items with heroic black scrolls."
+  - "&eIncreased proc rate over normal"
+  - "&eDodge, with a small chance to gain"
+  - "&eSpeed V for a few seconds on"
+  - "&esuccessful dodge. All fall damage is"
+  - "&edisabled. Once applied, this"
+  - "&eenchantment can only be extracted"
+  - "&efrom items with heroic black scrolls."
 #
 max level: 1
 applies to: "boots"

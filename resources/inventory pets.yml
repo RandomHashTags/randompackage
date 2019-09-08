@@ -8,7 +8,7 @@ items:
     - "&7to keep it upon death!"
     applied lore: "&6&lLEASHED"
   rare candy:
-    item: "???"
+    item: "red_mushroom"
     name: "&c&lRare Candy"
     lore:
     - "&7Magical candy imbued with"
@@ -19,4 +19,35 @@ items:
     - "&7Apply to any inventory pet to instantly"
     - "&7increase its level by +1 and trigger its"
     - "&7ability cooldown."
+  #
+  pet box:
+    item: "ender_chest"
+    name: "&6&lMystery Pet Box&r &7(Right Click)"
+    lore:
+      - "&7A mysterious, magical box"
+      - "&7that contains one of the"
+      - "&7following inventory pets:"
+      - " &6&l*&r &e&lLava Elemental Pet"
+      - " &6&l*&r &e&lWater Elemental Pet"
+      - " &6&l*&r &e&lXP Booster Pet"
+      - " &6&l*&r &e&lAnti Teleblock Pet"
+      - " &6&l*&r &e&lBless Pet"
+      - " &6&l*&r &e&lStronghold Sell Pet"
+      - " &6&l*&r &e&lRaid Creeper Pet"
+      - " &6&l*&r &e&lBanner Pet"
+      - " &6&l*&r &e&lAlchemist Pet"
+      - " &6&l*&r &e&lFeign Death Pet"
+      - " &6&l*&r &e&lEnchanter Pet"
+      - " &6&l*&r &e&lGaia Pet"
+      - " &6&l*&r &e&lBlackscroll Pet"
+      - " &6&l*&r &e&lTesla Pet"
+      - " &6&l*&r &e&lYijki Controller Pet"
+      - " &6&l*&r &e&lVile Creeper Pet"
+      - " &6&l*&r &e&lWarlock Pet"
+      - " &6&l*&r &e&lEvolution Pet"
+      - " &6&l*&r &e&lSmite Pet"
+      - " &6&l*&r &e&lWarlock Pet"
+    reward size: 1
+    obtainable pets:
+      - LAVA
 #
