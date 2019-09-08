@@ -13,7 +13,7 @@ import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.RPPlayer;
 import me.randomhashtags.randompackage.utils.addons.FileGlobalChallenge;
-import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
+import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import me.randomhashtags.randompackage.utils.universal.UMaterial;
 import org.bukkit.Bukkit;

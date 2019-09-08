@@ -5,9 +5,11 @@ import org.bukkit.World;
 
 public class PolyBoundary {
     private final Location center;
+    private int radius;
     private final int maxX, minX, maxZ, minZ, maxY, minY;
     public PolyBoundary(Location center, int radius) {
         this(center, radius, radius, radius);
+        this.radius = radius;
     }
     public PolyBoundary(Location center, int x, int y, int z) {
         this.center = center;
@@ -25,6 +27,7 @@ public class PolyBoundary {
     }
     public World getWorld() { return center.getWorld(); }
     public Location getCenter() { return center; }
+    public int getRadius() { return radius; }
     public int getMaxM() { return maxX; }
     public int getMinX() { return minX; }
     public int getMaxZ() { return maxZ; }

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.utils.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.utils.YamlUpdater;
-import me.randomhashtags.randompackage.utils.supported.mechanics.SpawnerAPI;
+import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

@@ -18,6 +18,16 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
     public void load() { addEventAttribute(this); }
     public void unload() {}
 
+    protected String replaceValue(String value, HashMap<String, String> valueReplacements) {
+        String string = value;
+        if(valueReplacements != null) {
+            for(String s : valueReplacements.keySet()) {
+                string = string.replace(s, valueReplacements.get(s));
+            }
+        }
+        return string;
+    }
+
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
 
@@ -26,6 +36,7 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
     public void execute(String value) {}
     public void execute(Entity entity1, Entity entity2, String value) {}
     public void execute(Event event, HashMap<Entity, String> recipientValues) {}
+    public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<Entity, HashMap<String, String>> valueReplacements) { }
     public void executeAt(HashMap<Location, String> locations) {}
     public void executeData(HashMap<RPPlayer, String> recipientValues) {}
 }

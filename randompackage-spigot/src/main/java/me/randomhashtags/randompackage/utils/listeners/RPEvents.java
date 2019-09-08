@@ -5,11 +5,10 @@ import me.randomhashtags.randompackage.utils.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class RPEvents extends RPFeature implements Listener {
+public class RPEvents extends RPFeature {
     private static RPEvents instance;
     public static RPEvents getRPEvents() {
         if(instance == null) instance = new RPEvents();
@@ -19,10 +18,11 @@ public class RPEvents extends RPFeature implements Listener {
     protected RPFeature getFeature() { return getRPEvents(); }
     public void load() {
         for(Player p : Bukkit.getOnlinePlayers()) {
-            RPPlayer.get(p.getUniqueId()).load();
+            RPPlayer.get(p.getUniqueId());
         }
     }
     public void unload() {
+        backup();
     }
 
     public void backup() {

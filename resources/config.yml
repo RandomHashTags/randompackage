@@ -45,7 +45,7 @@ chat cmds:
       - "&cYou do not have permission to link items in chat with [ITEM]!"
       - "&7Purchase a rank at &nbuy.yourserver.com&r &7and try again!"
 #
-backup interval: 360 # Measured in minutes
+backup interval: 720 # Measured in minutes
 #
 alchemist:
   enabled: true

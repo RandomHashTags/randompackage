@@ -67,7 +67,7 @@ public class RPPlayer extends RPStorage {
     private HashMap<Integer, ItemStack[]> showcases;
     private HashMap<RarityGem, Boolean> raritygems;
     private HashMap<GlobalChallengePrize, Integer> challengeprizes;
-    private HashMap<PlayerQuest, ActivePlayerQuest> quests;
+    private LinkedHashMap<PlayerQuest, ActivePlayerQuest> quests;
 
     private HashMap<CustomKit, Integer> kitLevels;
     private HashMap<CustomKit, Long> kitCooldowns;
@@ -638,17 +638,14 @@ public class RPPlayer extends RPStorage {
 
     private void loadQuests() {
         if(quests == null) {
-            quests = new HashMap<>();
+            quests = new LinkedHashMap<>();
             final PlayerQuests QQ = PlayerQuests.getPlayerQuests();
             if(QQ.isEnabled()) {
-                quests = new HashMap<>();
                 questTasks.put(uuid, new ArrayList<>());
                 final ConfigurationSection c = yml.getConfigurationSection("quests");
                 final boolean isEnabled = getPlugin.isEnabled();
                 if(c != null) {
                     final long time = System.currentTimeMillis();
-                    final BukkitScheduler scheduler = api.scheduler;
-                    final PluginManager pm = api.pluginmanager;
                     for(String s : c.getKeys(false)) {
                         final PlayerQuest q = getPlayerQuest(s);
                         if(q != null) {
@@ -656,7 +653,7 @@ public class RPPlayer extends RPStorage {
                             final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
                             if(!a.isExpired()) {
                                 quests.put(q, a);
-                                if(isEnabled) startExpire(time, scheduler, pm, q, a);
+                                if(isEnabled) startExpire(time, scheduler, pluginmanager, q, a);
                             }
                         }
                     }
@@ -715,7 +712,7 @@ public class RPPlayer extends RPStorage {
         loadQuests();
         return quests;
     }
-    public void setQuests(HashMap<PlayerQuest, ActivePlayerQuest> quests) {
+    public void setQuests(LinkedHashMap<PlayerQuest, ActivePlayerQuest> quests) {
         this.quests = quests;
         if(quests == null) {
             yml.set("quests", null);
@@ -758,7 +755,7 @@ public class RPPlayer extends RPStorage {
                 }
                 if(playerquests) {
                     pdata.questTokens = 0;
-                    pdata.quests = new HashMap<>();
+                    pdata.quests = new LinkedHashMap<>();
                 }
                 if(showcase) {
                     pdata.showcases = new HashMap<>();

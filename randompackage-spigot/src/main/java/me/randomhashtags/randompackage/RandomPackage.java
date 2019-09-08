@@ -3,17 +3,21 @@ package me.randomhashtags.randompackage;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addons.*;
 import me.randomhashtags.randompackage.api.nearFinished.*;
-import me.randomhashtags.randompackage.api.partiallyFinished.Duels;
-import me.randomhashtags.randompackage.api.partiallyFinished.Dungeons;
+import me.randomhashtags.randompackage.dev.nearFinished.InventoryPets;
+import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
+import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
+import me.randomhashtags.randompackage.dev.nearFinished.Trinkets;
+import me.randomhashtags.randompackage.dev.partiallyFinished.Duels;
+import me.randomhashtags.randompackage.dev.partiallyFinished.Dungeons;
 import me.randomhashtags.randompackage.events.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.events.armor.*;
 import me.randomhashtags.randompackage.utils.CommandManager;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
 import me.randomhashtags.randompackage.utils.obj.Backup;
-import me.randomhashtags.randompackage.utils.supported.RegionalAPI;
-import me.randomhashtags.randompackage.utils.supported.economy.Vault;
-import me.randomhashtags.randompackage.utils.supported.standalone.PAPI;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import me.randomhashtags.randompackage.supported.economy.Vault;
+import me.randomhashtags.randompackage.supported.standalone.PAPI;
 import me.randomhashtags.randompackage.utils.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -203,25 +207,25 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
         CommandManager.getCommandManager(null).disable();
         RPFeature.d();
-        HandlerList.unregisterAll((Listener) this);
+        HandlerList.unregisterAll((Plugin) this);
         Bukkit.getScheduler().cancelTasks(this);
     }
 
     public void checkForUpdate() {
         final BukkitScheduler s = Bukkit.getScheduler();
-        final int l = 20*60*15;
+        final int l = 20*60*30;
         s.scheduleSyncRepeatingTask(this, () -> {
             s.runTaskAsynchronously(this, () -> {
                 String msg = null;
                 try {
                     final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
                     final URLConnection con = checkURL.openConnection();
-                    final String v = RandomPackage.getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                    final String v = getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
                     final boolean canUpdate = !v.equals(newVersion);
                     if(canUpdate) {
                         msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion);
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!");
                 }
                 if(msg != null) {

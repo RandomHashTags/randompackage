@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.listeners.RPEvents;
-import me.randomhashtags.randompackage.utils.supported.mechanics.MCMMOAPI;
+import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
