@@ -39,7 +39,7 @@ purchase:
   title: "Purchase Faction Points"
   size: 9
   #
-  daily purchases: 8363
+  max daily purchases: 1824
   cost per point: 100000
   #
   added lore:

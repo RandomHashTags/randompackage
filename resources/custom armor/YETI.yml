@@ -1,4 +1,6 @@
 # Made by RandomHashTags
+name: "&b&lYeti&r&6"
+#
 armor lore:
   - " "
   - "&b&lYETI SET BONUS"
@@ -50,27 +52,16 @@ weapon:
   name: "&b&lYeti Maul"
   lore:
     - "VEnchants{Sharpness5;Unbreaking3}"
+    - "RPEnchants{Lifesteal;Silence}"
     - "&7A penetrating axe used by a Yeti."
 #
-armor attributes:
-  - "PvAny;SetDamage=dmg*1.10"
+attributes:
+  armor:
+    - "PvAny;SetDamage=dmg*1.10"
   - "isDamaged;SetDamage=dmg*0.90"
-#
-weapon attributes:
-  - "PvAny;SetDamage=dmg*1.075"
+  weapon:
+    - "PvAny;SetDamage=dmg*1.075"
 #
 activate message:
   - "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"
 #
-heroic upgrade:
-  item: "yellow_dye"
-  name: "&6&lHeroic&r &6(&b&lYeti&r&6) &lUpgrade"
-  lore:
-    - " "
-    - "&7Apply to any &b&lYeti&r &7armor"
-    - "&7for a &6{PERCENT}% &7chance to imbue it"
-    - "&7with the power of Heroic Armor!"
-    - " "
-    - "&7This will increase the armor's base"
-    - "&7stats as well as add a &612.5% negation"
-    - "&7to enemy &6Infinite Luck &7enchantments."

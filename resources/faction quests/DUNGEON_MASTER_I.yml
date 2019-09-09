@@ -9,5 +9,5 @@ lore:
 rewards:
 - ""
 #
-trigger:
-- ""
+attributes:
+  - "DungeonComplete;PlayerIncreaseFQuest=DUNGEON_MASTER_I:1"

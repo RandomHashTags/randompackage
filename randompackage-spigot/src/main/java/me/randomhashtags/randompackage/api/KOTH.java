@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.events.KothCaptureEvent;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import me.randomhashtags.randompackage.utils.universal.UInventory;
 import org.bukkit.*;
@@ -324,22 +325,26 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		//
 		if(!status.equals("STOPPED")) {
 			if(T <= 0 && currentPlayerCapturing != null && !status.equals("CAPTURED")) {
-				status = "CAPTURED";
-				for(Player player : center.getWorld().getPlayers()) {
-					for(String string : this.captured) {
-						if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-						player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+				final KothCaptureEvent e = new KothCaptureEvent(currentPlayerCapturing);
+				pluginmanager.callEvent(e);
+				if(!e.isCancelled()) {
+					status = "CAPTURED";
+					for(Player player : center.getWorld().getPlayers()) {
+						for(String string : this.captured) {
+							if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+						}
 					}
+					item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
+					for(String string : itemMeta.getLore()) {
+						if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
+						lore.add(string);
+					}
+					itemMeta.setLore(lore); lore.clear();
+					item.setItemMeta(itemMeta);
+					giveItem(currentPlayerCapturing, item.clone());
+					return;
 				}
-				item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
-				for(String string : itemMeta.getLore()) {
-					if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-					lore.add(string);
-				}
-				itemMeta.setLore(lore); lore.clear();
-				item.setItemMeta(itemMeta);
-				giveItem(currentPlayerCapturing, item.clone());
-				return;
 			} else {
 				if(!status.equals("CAPTURED") && T/1000 <= startCapCountdown && currentPlayerCapturing != null) broadcastCapping();
 			}

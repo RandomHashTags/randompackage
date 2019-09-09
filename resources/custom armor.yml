@@ -35,6 +35,18 @@ items:
       - "customarmor:RANGER:random"
       - "customarmor:SUPREME:random"
       - "customarmor:TRAVELER:random"
+  heroic upgrade:
+    item: "yellow_dye"
+    name: "&6&lHeroic&r &6({NAME}&r&6) &lUpgrade"
+    lore:
+      - " "
+      - "&7Apply to any {NAME}&r &7armor"
+      - "&7for a &6{PERCENT}% &7chance to imbue it"
+      - "&7with the power of Heroic Armor!"
+      - " "
+      - "&7This will increase the armor's base"
+      - "&7stats as well as add a &612.5% negation"
+      - "&7to enemy &6Infinite Luck &&enchantments."
   crystal:
     item: "nether_star"
     name: "&6&lArmor Crystal (&r{NAME}&r&6&l)"

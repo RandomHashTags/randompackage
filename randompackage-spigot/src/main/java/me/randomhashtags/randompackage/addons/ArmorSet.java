@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public interface ArmorSet extends Identifiable {
+    String getName();
     ItemStack getHelmet();
     ItemStack getChestplate();
     ItemStack getLeggings();
@@ -13,10 +14,9 @@ public interface ArmorSet extends Identifiable {
     ItemStack getWeapon();
     List<String> getArmorLore();
     List<String> getWeaponLore();
+    List<String> getCrystalPerks();
     List<String> getArmorAttributes();
     List<String> getWeaponAttributes();
-    String getCrystalName();
-    List<String> getCrystalPerks();
     List<String> getCrystalAttributes();
     List<String> getActivateMessage();
 }

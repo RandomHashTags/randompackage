@@ -1,4 +1,6 @@
 # Made by RandomHashTags
+name: "&4&lSupreme"
+#
 armor lore:
   - " "
   - "&4&lSUPREME SET BONUS"
@@ -57,40 +59,27 @@ weapon:
   name: "&4&lSupreme Fanny Pack"
   lore:
     - "VEnchants{Sharpness5;Unbreaking3}"
+    - "RPEnchants{Reflective Block}"
     - "&7They laughed at you, they"
     - "&7told you a fanny pack is not"
     - "&7a practical piece of clothing..."
     - "&7now they will pay for their ignorance!"
 #
-armor attributes:
-  - "ArmorSetEquip;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:99999"
-  - "ArmorSetUnequip;PlayerRemovePotionEffect=speed"
-  - "ArmorPieceBreak;PlayerRemovePotionEffect=speed:false"
-  - "EntityDamage;cause=FALL;SetCancelled=true"
-  - "FoodLevelLost;cancel"
-  - "PvAny;SetDamage=dmg*1.15"
-  - "HitByArrow;setDamage{dmg*1.10}"
-#
-weapon attributes:
-  - "PvAny;SetDamage=dmg*1.20"
-  - "isDamaged=SetDamage=dmg*0.90"
-#
-crystal:
-  name: "&4&lSupreme"
-  perks:
-    - "  &c&l*&r &c+3% Outgoing DMG"
-  attributes:
+attributes:
+  armor:
+    - "ArmorSetEquip;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:99999"
+    - "ArmorSetUnequip;PlayerRemovePotionEffect=speed"
+    - "ArmorPieceBreak;PlayerRemovePotionEffect=speed"
+    - "EntityDamage;cause=FALL;SetCancelled=true"
+    - "FoodLevelLost;cancel"
+    - "PvAny;SetDamage=dmg*1.15"
+    - "HitByArrow;setDamage{dmg*1.10}"
+  weapon:
+    - "PvAny;SetDamage=dmg*1.20"
+    - "isDamaged=SetDamage=dmg*0.90"
+  crystal:
     - "PvAny;SetDamage=dmg*1.03"
 #
-heroic upgrade:
-  item: "yellow_dye"
-  name: "&6&lHeroic&r &6(&4&lSupreme&r&6) &lUpgrade"
-  lore:
-    - " "
-    - "&7Apply to any &4&lSupreme&r &7armor"
-    - "&7for a &6{PERCENT}% &7chance to imbue it"
-    - "&7with the power of Heroic Armor!"
-    - " "
-    - "&7This will increase the armor's base"
-    - "&7stats as well as add a &612.5% negation"
-    - "&7to enemy &6Infinite Luck &7enchantments."
+crystal perks:
+  - "  &c&l*&r &c+3% Outgoing DMG"
+#

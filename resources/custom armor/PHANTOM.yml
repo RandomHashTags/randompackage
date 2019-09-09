@@ -1,8 +1,15 @@
 # Made by RandomHashTags
+name: "&c&lPhantom"
+#
 armor lore:
   - " "
   - "&c&lPHANTOM SET BONUS"
   - "&cDeal +25% damage to all enemies."
+  - "&7&o(Requires all 4 phantom items.)"
+weapon lore:
+  - " "
+  - "&c&lPHANTOM WEAPON BONUS"
+  - "&cDeal +10% damage to all enemies."
   - "&7&o(Requires all 4 phantom items.)"
 #
 helmet:
@@ -37,19 +44,24 @@ boots:
   - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape}"
   - "&cThe silent sandals of the Phantom."
 #
-armor attributes:
-  - "PvAny;SetDamage=dmg*1.25"
+weapon:
+  item: "diamond_sword"
+  name: "&c&lPhantom Scythe"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "&7An eerie blade designed to"
+    - "&7cut through the enemies."
 #
-weapon attributes:
-  - ""
-#
-crystal:
-  item: "nether_star"
-  name: "&c&lPhantom"
-  perks:
-    - "  &c&l*&r &c+5% DMG"
-  attributes:
+attributes:
+  armor:
+    - "PvAny;SetDamage=dmg*1.25"
+  weapon:
+    - "PvAny;SetDamage=dmg*1.10"
+  crystal:
     - "PvAny;SetDamage=dmg*1.05"
+#
+crystal perks:
+  - "  &c&l*&r &c+5% DMG"
 #
 activate message:
   - "&c&lPHANTOM SET BONUS&r&c: +25% DMG"

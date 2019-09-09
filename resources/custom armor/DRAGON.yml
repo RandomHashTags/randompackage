@@ -1,0 +1,58 @@
+# Made by RandomHashTags
+name: "&e&lDragon"
+#
+armor lore:
+  - " "
+  - "&e&lDRAGON SLAYER SET BONUS"
+  - "&e&l*&r &e+15% PvP Damage"
+  - "&e&l*&r &e-20% Incoming Damage"
+  - "&e&l*&r &eIImmune to Freezes"
+  - "&e&l*&r &eMastery Enchant Reflect X"
+  - "&e&l*&r &eNegate 75% of Enemy Silence"
+  - "&e&l*&r &e25% Mastery Enchant Negation"
+  - "&e&o(Requires all 4 dragon slayer items)"
+#
+helmet:
+  item: "diamond_chestplate"
+  name: "&e&lDecapitated Dragon Skull&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection5;Unbreaking3}"
+  - "RPEnchants{Planetary Deathbringer;Paladin Armored;Death God;Drunk;Valor;Implants;Angelic;Tank;Repair Guard;Ender Shift}"
+  - "&e&oThe mythical helmet of a Slayer of Dragons."
+#
+chestplate:
+  item: "diamond_chestplate"
+  name: "&e&lFirey Chestplate of Dragons&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Enchant Reflect;Aegis;Armorred;Leadership;Overload;Dodge;Valor;Angelic;Tank;Frozen}"
+  - "&e&oThe mythical chestplate of a Slayer of Dragons."
+#
+leggings:
+  item: "diamond_leggings"
+  name: "&e&lScorched Leggings of Dragons&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;Unbreaking3}"
+  - "RPEnchants{Clarity;Armored;Enlighted;Arrow Deflect;Angelic;Valor;Tank;Obsidianshield;Lucky;Cactus}"
+  - "&e&oThe mythical leggings of a Slayer of Dragons."
+#
+boots:
+  item: "diamond_boots"
+  name: "&e&lDragon Slayer Battle Boots&r {ENCHANT_SIZE}"
+  lore:
+  - "VEnchants{Protection4;;Unbreaking3}"
+  - "RPEnchants{Armored;Gears;Ghost;Ender Walker;Angelic;Valor;Tank;Coodoo;Springs;Rocket Escape}"
+  - "&e&oThe mythical boots of a Slayer of Dragons."
+#
+crystal perks:
+  - ""
+#
+attributes:
+  armor:
+    - "PvAny;SetDamage=dmg*1.15"
+    - "isDamaged;SetDamage=dmg*0.80"
+  weapon:
+    - ""
+  crystal:
+    - ""
+#

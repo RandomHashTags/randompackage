@@ -1,4 +1,6 @@
 # Made by RandomHashTags
+name: "&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;"
+#
 armor lore:
   - " "
   - "&d&lKOTH SET BONUS"
@@ -7,6 +9,16 @@ armor lore:
   - "&d&l*&r &dAuto Bless"
   - "&d&l*&r &dNo Fall Damage"
   - "&7&o(Requires all 4 koth items)"
+axe lore:
+  - " "
+  - "&c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&lWEAPON BONUS"
+  - " &f&l*&r &fDeal +50% Durability Damage"
+  - "&7&o(Requires all 4 koth armor items)"
+sword lore:
+  - " "
+  - "&c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&lWEAPON BONUS"
+  - " &f&l*&r &fDeal +7.5% damage to all enemies"
+  - "&7&o(Requires all 4 koth armor items)"
 #
 helmet:
   item: "leather_helmet"
@@ -36,19 +48,29 @@ boots:
   - "VEnchants{Protection4;;Unbreaking3}"
   - "RPEnchants{Armored;Gears;Enlighted;Deathbringer;Angelic;Tank;Rocket Escape}"
 #
-armor attributes:
-  - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.20"
-  - "PvAny;VictimisMob=true;SetDamage=dmg*1.50"
-  - "EntityDamage;cause=FALL;SetCancelled=true"
+axe:
+  item: "gold_axe"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "RPEnchants{Demonic Lifesteal;Silence}"
+sword:
+  item: "gold_sword"
+  lore:
+    - "VEnchants{Sharpness5;Unbreaking3}"
+    - "RPEnchants{Demonic Lifesteal;Silence}"
 #
-weapon attributes:
-  - ""
+crystal perks:
+  - "  &b&l*&r &b+5% PvP DMG"
+  - "  &b&l*&r &b+12.5% PvE DMG"
 #
-crystal:
-  name: "&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;"
-  perks:
-    - "  &b&l*&r &b+5% PvP DMG"
-    - "  &b&l*&r &b+12.5% PvE DMG"
-  attributes:
+attributes:
+  armor attributes:
+    - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.20"
+    - "PvAny;VictimisMob=true;SetDamage=dmg*1.50"
+    - "EntityDamage;cause=FALL;SetCancelled=true"
+  weapon attributes:
+    - ""
+  crystal:
     - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.05"
     - "PvAny;VictimIsMob=true;SetDamage=dmg*1.125"
+#

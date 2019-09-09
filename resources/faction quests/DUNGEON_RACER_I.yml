@@ -9,5 +9,5 @@ lore:
 rewards:
 - ""
 #
-trigger:
-- ""
+attributes:
+  - "DungeonComplete;CompletedTime<=800;PlayerIncreaseFQuest=DUNGEON_RACER_I:1"

@@ -1,15 +1,17 @@
 # Made by RandomHashTags
+name: "&a&lRanger"
+#
 armor lore:
   - " "
   - "&a&lRANGER SET BONUS"
   - "&a&l*&r &aEnemies bows deal 25% less damage to you."
   - "&a&l*&r &aRanger Bow grants 30% increased bow damage."
   - "&7&o(Requires all 4 ranger items.)"
-#
 weapon lore:
   - " "
   - "&a&lRANGER WEAPON BONUS"
   - "&a&l*&r &aRanger Bow grants 30% increased bow damage."
+  - "&a&l*&r &aEnemies deal 25% less damage to you."
   - "&7(Requires all 4 ranger armor items.)"
 #
 helmet:
@@ -48,22 +50,25 @@ boots:
   - "&a&oLightweight footgear for"
   - "&a&oan ancient nimble Ranger."
 #
-armor attributes:
-  - "ArrowHit;setDamage{dmg*1.30}"
-  - "HitByArrow;setDamage{dmg*0.75}"
+weapon:
+  item: "bow"
+  name: "&a&lRanger Bow&r {ENCHANT_SIZE}"
+  lore:
+    - "VEnchants{Power5;Unbreaking3;Flare2;Infinity1}"
+    - "RPEnchants{Lethal Sniper;Rage;Silence;Piercing;Hellfire;Arrow Lifesteal;Eagle Eye;Snare;Venom;Blind;Virus;Healing}"
+    - "&aA finely crafted bow imbued"
+    - "&awith the energy of the Sun."
 #
-weapon attributes:
+crystal perks:
   - ""
 #
-heroic upgrade:
-  item: "yellow_dye"
-  name: "&6&lHeroic&r &6(&a&lRanger&r&6) &lUpgrade"
-  lore:
-  - " "
-  - "&7Apply to any &a&lRanger&r &7armor"
-  - "&7for a &6{PERCENT}% &7chance to imbue it"
-  - "&7with the power of Heroic Armor!"
-  - " "
-  - "&7This will increase the armor's base"
-  - "&7stats as well as add a &612.5% negation"
-  - "&7to enemy &6Infinite Luck &7enchantments."
+attributes:
+  armor:
+    - "ArrowHit;setDamage{dmg*1.30}"
+    - "isDamaged;DamagerIsType=ARROW;SetDamage=dmg*0.75"
+  weapon:
+    - "HitArrow;SetDamage=dmg*1.30"
+    - "isDamaged=SetDamage=dmg*0.75"
+  crystal:
+    - ""
+#

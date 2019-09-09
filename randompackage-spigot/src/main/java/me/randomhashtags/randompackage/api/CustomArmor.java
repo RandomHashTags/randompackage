@@ -63,7 +63,7 @@ public class CustomArmor extends EventAttributes {
 
 		final YamlConfiguration a = otherdata;
 		if(!a.getBoolean("saved default custom armor")) {
-			final String[] c = new String[] {"ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"};
+			final String[] c = new String[] {"DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"};
 			for(String s : c) save("custom armor", s + ".yml");
 			a.set("saved default custom armor", true);
 			saveOtherData();
@@ -85,7 +85,7 @@ public class CustomArmor extends EventAttributes {
 		armorsets = null;
 	}
 	public ItemStack getCrystal(ArmorSet set, int percent) {
-		final String p = Integer.toString(percent), n = set.getCrystalName();
+		final String p = Integer.toString(percent), n = set.getName();
 		item = null;
 		if(n != null) {
 			final List<String> perks = set.getCrystalPerks();
@@ -216,27 +216,35 @@ public class CustomArmor extends EventAttributes {
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
 		final ArmorSet crystal = valueOfArmorCrystal(curs);
-		if(crystal != null && cur != null && curs != null) {
+		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
 			final Player player = (Player) event.getWhoClicked();
-			final String mat = cur.getType().name();
-			if(valueOfArmorSet(cur) == null && getArmorCrystalOnItem(cur) == null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
-				event.setCancelled(true);
-				player.updateInventory();
-				itemMeta = cur.getItemMeta(); lore.clear();
-				if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-				lore.add(crystalAddedLore.replace("{NAME}", crystal.getCrystalName()));
-				itemMeta.setLore(lore); lore.clear();
-				cur.setItemMeta(itemMeta);
-				final int a = curs.getAmount();
-				if(a == 1) item = new ItemStack(Material.AIR);
-				else {
-					curs.setAmount(a-1);
-					item = curs;
-				}
-				event.setCursor(item);
-				player.updateInventory();
+			event.setCancelled(true);
+			player.updateInventory();
+			final int a = curs.getAmount();
+			if(a == 1) item = new ItemStack(Material.AIR);
+			else {
+				curs.setAmount(a-1);
+				item = curs;
 			}
+			event.setCursor(item);
+			player.updateInventory();
 		}
+	}
+
+	public byte tryApplyingCrystal(ArmorSet type, int percent, ItemStack is) {
+		final String mat = is != null ? is.getType().name() : null;
+		if(mat != null && valueOfArmorSet(is) == null && getArmorCrystalOnItem(is) == null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
+			if(random.nextInt(100) < percent) {
+				itemMeta = is.getItemMeta(); lore.clear();
+				if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+				lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
+				itemMeta.setLore(lore); lore.clear();
+				is.setItemMeta(itemMeta);
+				return 2;
+			}
+			return 1;
+		}
+		return 0;
 	}
 
 	public ItemStack getRandomEquipmentLootboxLoot() {

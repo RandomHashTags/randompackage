@@ -9,5 +9,5 @@ lore:
 rewards:
 - ""
 #
-trigger:
-- "KilledEntity;type=BLAZE;+1"
+attributes:
+  - "EntityDeath;VictimIsType=BLAZE;KillerIncreaseFQuest=KILL_BLAZE_I:1"

@@ -1,4 +1,6 @@
 # Made by RandomHashTags
+name: "&6&lEngineer"
+#
 armor lore:
   - " "
   - "&6&lENGINEER SET BONUS"
@@ -32,7 +34,6 @@ leggings:
   - "VEnchants{Protection4;Unbreaking3}"
   - "RPEnchants{Explosives Expert;Natures Wrath;Armored;Aegis;Creeper Armor;Angelic;Valor;Tank;Lucky;Dodge;Obsidianshield;Cactus}"
   - "&6&oNext-gen Gnometech leggings for demolition specialists."
-
 #
 boots:
   item: "leather_boots"
@@ -42,16 +43,15 @@ boots:
   - "RPEnchants{Lava Strider;Phoenix;Armored;Gears;Angelic;Valor;Tank;Springs;Ender Shift}"
   - "&6&oNext-gen Gnometech boots for demolition specialists."
 #
-armor attributes:
-  - "isDamaged;SetDamage=dmg*0.65"
+crystal perks:
+  - "  &6&l*&r &6-9% Incoming DMG"
+  - "  &6&l*&r &620% B-2 Bomber Passive Ability"
 #
-weapon attributes:
-  - ""
-#
-crystal:
-  name: "&6&lEngineer"
-  perks:
-    - "  &6&l*&r &6-9% Incoming DMG"
-    - "  &6&l*&r &620% B-2 Bomber Passive Ability"
-  attributes:
+attributes:
+  armor:
+    - "isDamaged;SetDamage=dmg*0.65"
+  weapon:
+    - ""
+  crystal:
     - "isDamaged;SetDamage=dmg*0.91"
+#

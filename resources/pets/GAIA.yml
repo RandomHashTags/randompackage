@@ -5,6 +5,7 @@ settings:
     1: 600
   exp to level:
     2: 2000
+    4: 3000
 #
 item:
   texture: ""

@@ -1,4 +1,6 @@
 # Made by RandomHashTags
+name: "&f&lMother of Yijki"
+#
 armor lore:
   - " "
   - "&f&lYIJKI SET BONUS"
@@ -58,19 +60,17 @@ weapon:
     - "&7executioner blade imbued with"
     - "&7highly destructive dark magic."
 #
-armor attributes:
-  - "isDamaged;SetDamage=dmg*0.70"
-  - "isDamaged;chance=10;{lightning;10;10;3},{message=&5&l** REVENGE OF YIJKI (&r&c<PLAYER> [1.5s]&5&l) **;radius=10}"
+crystal perks:
+  - "  &f&l*&r &f-5% Incoming DMG"
+  - "  &f&l*&r &f20% Revenge of Yijki Ability"
 #
-weapon attributes:
-  - "PvAny;SetDamage=dmg*1.20"
-#
-crystal:
-  name: "&f&lMother of Yijki"
-  perks:
-    - "  &f&l*&r &f-5% Incoming DMG"
-    - "  &f&l*&r &f20% Revenge of Yijki Ability"
-  attributes:
+attributes:
+  armor:
+    - "isDamaged;SetDamage=dmg*0.70"
+    - "isDamaged;chance=10;{lightning;10;10;3},{message=&5&l** REVENGE OF YIJKI (&r&c<PLAYER> [1.5s]&5&l) **;radius=10}"
+  weapon:
+    - "PvAny;SetDamage=dmg*1.20"
+  crystal:
     - "isDamaged;SetDamage=dmg*0.95"
 #
 activate message:

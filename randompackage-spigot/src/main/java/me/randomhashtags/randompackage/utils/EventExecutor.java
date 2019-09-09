@@ -158,22 +158,37 @@ public abstract class EventExecutor extends EventConditions {
         return executeAll(event, entities, conditions, cancelled, entityValues, values, new HashMap<>());
     }
     public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<Entity, HashMap<String, String>> valueReplacements) {
+        return executeAll(event, entities, conditions, cancelled, entityValues, values, valueReplacements, 0);
+    }
+    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<Entity, HashMap<String, String>> valueReplacements, int repeatID) {
         final boolean passed = didPassConditions(event, entities, conditions, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
             final Entity entity2 = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
             final HashMap<RPPlayer, String> data = getData(entities, entityValues);
             final boolean dadda = !data.isEmpty(), entity1NN = entity1 != null, entity2NN = entity2 != null;
+            final String repeatid = Integer.toString(repeatID);
             for(LinkedHashMap<EventAttribute, HashMap<Entity, String>> hashmap : values) {
                 for(EventAttribute a : hashmap.keySet()) {
                     if(!a.isCancelled()) {
                         final HashMap<Entity, String> valuez = hashmap.get(a);
-                        final String defaultValue = valuez.getOrDefault(null, null);
-                        if(a.getIdentifier().equals("WAIT")) {
+                        String defaultValue = valuez.getOrDefault(null, null);
+                        if(defaultValue != null) {
+                            defaultValue = defaultValue.replace("RepeatID", repeatid);
+                        }
+                        final String id = a.getIdentifier();
+                        if(id.equals("WAIT")) {
                             final int ticks = (int) evaluate(defaultValue);
                             final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
                             attributes.remove(hashmap);
                             scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
+                            break;
+                        } else if(id.equals("REPEAT")) {
+                            final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
+                            attributes.remove(hashmap);
+                            for(int i = 1; i <= evaluate(defaultValue); i++) {
+                                executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
+                            }
                             break;
                         } else {
                             a.execute(event);

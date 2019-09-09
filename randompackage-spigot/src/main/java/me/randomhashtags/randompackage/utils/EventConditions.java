@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.utils;
 
 import me.randomhashtags.randompackage.addons.*;
 import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.attributes.Combo;
 import me.randomhashtags.randompackage.events.BoosterActivateEvent;
 import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
@@ -636,7 +637,7 @@ public abstract class EventConditions extends RPFeature implements Combo {
             final Title t = RPPlayer.get(e.getUniqueId()).getActiveTitle();
             passed = t != null &&  e instanceof Player && t.getIdentifier().equals(value);
         } else if(condition.startsWith(s + "hasactivefilter=")) {
-            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).filter;
+            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).filter == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hasactiveplayerquest=")) {
             final PlayerQuest q = e instanceof Player ? getPlayerQuest(value) : null;
             final HashMap<PlayerQuest, ActivePlayerQuest> a = q != null ? RPPlayer.get(e.getUniqueId()).getQuests() : null;
@@ -644,20 +645,22 @@ public abstract class EventConditions extends RPFeature implements Combo {
         } else if(condition.startsWith(s + "hasactiveraritygem=")) {
             passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).hasActiveRarityGem(getRarityGem(value));
         } else if(condition.startsWith(s + "hasactivetitle=")) {
-            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).getActiveTitle() != null;
+            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).getActiveTitle() != null == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hascustomentities=")) {
-            passed = e instanceof Player && !RPPlayer.get(e.getUniqueId()).getCustomEnchantEntities().isEmpty();
+            passed = e instanceof Player && !RPPlayer.get(e.getUniqueId()).getCustomEnchantEntities().isEmpty() == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hasequippedarmorset=")) {
-            passed = e instanceof Player && valueOfArmorSet((Player) e) != null;
+            passed = e instanceof Player && valueOfArmorSet((Player) e) != null == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hasequippedmask=")) {
             final EntityEquipment eq = e instanceof Player ? ((Player) e).getEquipment() : null;
-            passed = eq != null && valueOfMask(eq.getHelmet()) != null;
+            passed = eq != null && valueOfMask(eq.getHelmet()) != null == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hasfiltereditem=")) {
             final List<UMaterial> m = e instanceof Player ? RPPlayer.get(e.getUniqueId()).getFilteredItems() : null;
             passed = m != null && m.contains(UMaterial.match(value));
         } else if(condition.startsWith(s + "ownstitle=")) {
             final Title t = e instanceof Player ? getTitle(value) : null;
             passed = t != null && RPPlayer.get(e.getUniqueId()).getTitles().contains(t);
+        } else if(condition.startsWith(s + "iscustomboss=")) {
+            passed = LivingCustomBoss.living != null && LivingCustomBoss.living.containsKey(e.getUniqueId()) == Boolean.parseBoolean(value);
         }
     }
 }
