@@ -17,10 +17,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -296,36 +293,44 @@ public abstract class EventExecutor extends EventConditions {
 
 
 
+    public HashMap<String, Entity> getEntities(EntityDeathEvent event) {
+        final LivingEntity v = event.getEntity(), k = v.getKiller();
+        final HashMap<String, Entity> e = getEntities("Victim", v);
+        if(k != null) e.put("Killer", k);
+        return e;
+    }
+    public HashMap<String, Entity> getEntities(BlockPlaceEvent event) { return getEntities("Player", event.getPlayer()); }
+    public HashMap<String, Entity> getEntities(BlockBreakEvent event) { return getEntities("Player", event.getPlayer()); }
+    public HashMap<String, Entity> getEntities(EntityShootBowEvent event) { return getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()); }
+    public HashMap<String, Entity> getEntities(ProjectileHitEvent event) { return getEntities("Projectile", event.getEntity(), "Victim", getHitEntity(event)); }
+    public HashMap<String, Entity> getEntities(EntityTameEvent event) { return getEntities("Entity", event.getEntity(), "Owner", event.getOwner()); }
+    public HashMap<String, Entity> getEntities(FoodLevelChangeEvent event) { return getEntities("Player", event.getEntity()); }
+    public HashMap<String, Entity> getEntities(PlayerDeathEvent event) {
+        final Player p = event.getEntity(), k = p.getKiller();
+        final HashMap<String, Entity> e = getEntities("Victim", p);
+        if(k != null) e.put("Killer", k);
+        return e;
+    }
+    public HashMap<String, Entity> getEntities(EntityDamageEvent event) { return getEntities("Victim", event.getEntity()); }
+    public HashMap<String, Entity> getEntities(EntityDamageByEntityEvent event) { return getEntities("Damager", event.getDamager(), "Victim", event.getEntity()); }
+    public HashMap<String, Entity> getEntities(PlayerEvent event) { return getEntities("Player", event.getPlayer()); }
+    public HashMap<String, Entity> getEntities(PlayerFishEvent event) { return getEntities("Player", event.getPlayer(), "Caught", event.getCaught()); }
 
+    public HashMap<String, String> getReplacements(EntityDeathEvent event) { return getReplacements("xp", Integer.toString(event.getDroppedExp())); }
+    public HashMap<String, String> getReplacements(BlockBreakEvent event) { return getReplacements("xp", Integer.toString(event.getExpToDrop())); }
+    public HashMap<String, String> getReplacements(EntityDamageEvent event) { return getReplacements("dmg", Double.toString(event.getDamage())); }
     /*
         Bukkit Events
      */
-    public boolean trigger(EntityDeathEvent event, List<String> attributes, String...replacements) {
+    public boolean trigger(Event event, HashMap<String, Entity> entities, List<String> attributes, String...replacements) {
         if(didPass(event, attributes)) {
-            final LivingEntity e = event.getEntity();
-            final Player k = e.getKiller();
-            if(k != null) {
-                final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
-                final HashMap<String, String> re = getReplacements(Arrays.asList(replacements), "xp", Integer.toString(event.getDroppedExp()));
-                r.put(e, re);
-                r.put(k, re);
-                return tryGeneric(event, getEntities("Victim", e, "Killer", k), attributes, r);
-            }
+            final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
+            final HashMap<String, String> re = getReplacements(replacements);
+            return tryGeneric(event, entities, attributes, r);
         }
         return false;
     }
-    public boolean trigger(BlockPlaceEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
-    public boolean trigger(BlockBreakEvent event, List<String> attributes) {
-        final Player player = event.getPlayer();
-        final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
-        r.put(player, getReplacements("xp", Integer.toString(event.getExpToDrop())));
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes, r);
-    }
-    public boolean trigger(EntityShootBowEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()), attributes);
-    }
+
     public boolean trigger(ProjectileHitEvent event, List<String> attributes) {
         final Projectile p = event.getEntity();
         final Entity shooter = (Entity) p.getShooter();
@@ -335,57 +340,20 @@ public abstract class EventExecutor extends EventConditions {
         r.put(shooter, locations);
         return trigger(event, getEntities("Projectile", p, "Shooter", shooter, "Victim", getHitEntity(event)), attributes, r);
     }
-    public boolean trigger(EntityDamageEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Victim", event.getEntity()), attributes);
-    }
-    public boolean trigger(EntityDamageByEntityEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Damager", event.getDamager(), "Victim", event.getEntity()), attributes);
-    }
-    public boolean trigger(EntityTameEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Entity", event.getEntity(), "Owner", event.getOwner()), attributes);
-    }
-    public boolean trigger(FoodLevelChangeEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getEntity()), attributes);
-    }
-    public boolean trigger(PlayerDeathEvent event, List<String> attributes) {
-        final Player victim = event.getEntity(), killer = victim.getKiller();
-        return trigger(event, getEntities("Player", victim, "Victim", victim, "Killer", killer), attributes);
-    }
-    public boolean trigger(PlayerFishEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer(), "Caught", event.getCaught()), attributes);
-    }
-    public boolean trigger(PlayerInteractEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
-    public boolean trigger(PlayerItemDamageEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
-    public boolean trigger(PlayerJoinEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
     /*
         RandomPackage Events
      */
-    public boolean trigger(AlchemistExchangeEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(ArmorEvent event, List<String> attributes) {
+    public boolean trigger(RPEvent event, List<String> attributes) {
         return trigger(event, getEntities("Player", event.getPlayer()), attributes);
     }
     public boolean trigger(ArmorEvent event, List<String> attributes, LinkedHashMap<Entity, HashMap<String, String>> valueReplacements) {
         return trigger(event, getEntities("Player", event.getPlayer()), attributes, valueReplacements);
     }
-    public boolean trigger(ArmorSetEquipEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(ArmorSetUnequipEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
     public boolean trigger(CoinFlipEndEvent event, List<String> attributes) {
         return trigger(event, getEntities("Winner", event.winner, "Loser", event.loser), attributes);
     }
     public boolean trigger(CustomEnchantProcEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
+        return trigger(event, getEntities("Player", event), attributes);
     }
     public boolean trigger(DamageEvent event, List<String> attributes) {
         final Entity d = event.getDamager(), v = event.getEntity();
@@ -395,71 +363,41 @@ public abstract class EventExecutor extends EventConditions {
         r.put(v, re);
         return trigger(event, getEntities("Damager", d, "Victim", v), attributes, r);
     }
-    public boolean trigger(EnchanterPurchaseEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
     public boolean trigger(FallenHeroSlainEvent event, List<String> attributes) {
         return trigger(event, getEntities("Victim", event.hero.getEntity(), "Killer", event.killer), attributes);
     }
     public boolean trigger(FundDepositEvent event, List<String> attributes) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
         r.put(player, getReplacements("amount", event.amount.toString()));
-        return trigger(event, getEntities("Player", event.player), attributes, r);
-    }
-    public boolean trigger(CustomEnchantApplyEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(PlayerClaimEnvoyCrateEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(PlayerRevealCustomEnchantEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(RandomizationScrollUseEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
+        return trigger(event, getEntities("Player", player), attributes, r);
     }
     public boolean trigger(JackpotPurchaseTicketsEvent event, List<String> attributes) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
         r.put(player, getReplacements("amount", event.amount.toBigInteger().toString()));
-        return trigger(event, getEntities("Player", event.player), attributes, r);
-    }
-    public boolean trigger(MaskEquipEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(MaskUnequipEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
+        return trigger(event, getEntities("Player", player), attributes, r);
     }
     public boolean trigger(MobStackDepleteEvent event, List<String> attributes) {
         return trigger(event, getEntities("Killer", event.killer, "Victim", event.stack.entity), attributes);
     }
-    public boolean trigger(MysteryMobSpawnerOpenEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
-    public boolean trigger(PlayerExpGainEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
-    public boolean trigger(ServerCrateOpenEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Player", event.player), attributes);
-    }
     public boolean trigger(ShopPurchaseEvent event, List<String> attributes) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
         r.put(player, getReplacements("total", event.cost.toString()));
-        return trigger(event, getEntities("Player", event.player), attributes, r);
+        return trigger(event, getEntities("Player", player), attributes, r);
     }
     public boolean trigger(ShopSellEvent event, List<String> attributes) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
         r.put(player, getReplacements("total", event.profit.toString()));
-        return trigger(event, getEntities("Player", event.player), attributes, r);
+        return trigger(event, getEntities("Player", player), attributes, r);
     }
     public boolean trigger(TinkererTradeEvent event, List<String> attributes) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final LinkedHashMap<Entity, HashMap<String, String>> r = new LinkedHashMap<>();
         r.put(player, getReplacements("tradesize", Integer.toString(event.trades.size())));
-        return trigger(event, getEntities("Player", event.player), attributes, r);
+        return trigger(event, getEntities("Player", player), attributes, r);
     }
     /*
         CustomEnchant
@@ -471,6 +409,14 @@ public abstract class EventExecutor extends EventConditions {
             a.add(s.replace("level", lvl));
         }
         return a;
+    }
+    private void trigger(Event event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants, String...replacements) {
+        for(ItemStack is : enchants.keySet()) {
+            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
+            for(CustomEnchant enchant : e.keySet()) {
+                trigger(event, entities, execute(e.get(enchant), enchant.getAttributes()));
+            }
+        }
     }
     public void trigger(BlockBreakEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         for(ItemStack is : enchants.keySet()) {
@@ -512,11 +458,11 @@ public abstract class EventExecutor extends EventConditions {
             }
         }
     }
-    public void trigger(EntityDeathEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+    public void trigger(EntityDeathEvent event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {
-                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
+                trigger(event, entities, execute(e.get(enchant), enchant.getAttributes()));
             }
         }
     }
@@ -566,31 +512,7 @@ public abstract class EventExecutor extends EventConditions {
             }
         }
     }
-    public void trigger(PlayerDeathEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
-        for(ItemStack is : enchants.keySet()) {
-            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
-            for(CustomEnchant enchant : e.keySet()) {
-                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
-            }
-        }
-    }
-    public void trigger(PlayerInteractEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
-        for(ItemStack is : enchants.keySet()) {
-            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
-            for(CustomEnchant enchant : e.keySet()) {
-                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
-            }
-        }
-    }
-    public void trigger(PlayerItemDamageEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
-        for(ItemStack is : enchants.keySet()) {
-            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
-            for(CustomEnchant enchant : e.keySet()) {
-                trigger(event, execute(e.get(enchant), enchant.getAttributes()));
-            }
-        }
-    }
-    public void trigger(PlayerJoinEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+    public void trigger(PlayerEvent event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {

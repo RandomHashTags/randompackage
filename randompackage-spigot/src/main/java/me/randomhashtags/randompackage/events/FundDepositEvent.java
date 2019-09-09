@@ -5,13 +5,12 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 
-public class FundDepositEvent extends AbstractCancellable {
+public class FundDepositEvent extends RPEventCancellable {
 	private static final Fund fund = Fund.getFund();
-	public Player player;
 	public BigDecimal amount;
 	private final BigDecimal total;
 	public FundDepositEvent(Player player, BigDecimal amount) {
-		this.player = player;
+		super(player);
 		this.amount = amount;
 		total = fund.total;
 	}

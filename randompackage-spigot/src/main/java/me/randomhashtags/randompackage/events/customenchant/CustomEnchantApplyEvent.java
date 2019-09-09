@@ -1,16 +1,15 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.events.AbstractEvent;
+import me.randomhashtags.randompackage.events.RPEvent;
 import org.bukkit.entity.Player;
 
-public class CustomEnchantApplyEvent extends AbstractEvent {
-	public final Player player;
+public class CustomEnchantApplyEvent extends RPEvent {
 	public final CustomEnchant enchant;
 	public final int level, success, destroy;
 	public final String result;
 	public CustomEnchantApplyEvent(Player player, CustomEnchant enchant, int level, int success, int destroy, String result) {
-		this.player = player;
+		super(player);
 		this.enchant = enchant;
 		this.level = level;
 		this.success = success;

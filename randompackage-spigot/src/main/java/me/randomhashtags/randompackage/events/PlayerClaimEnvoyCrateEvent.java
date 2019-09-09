@@ -4,12 +4,11 @@ import me.randomhashtags.randompackage.addons.living.LivingEnvoyCrate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class PlayerClaimEnvoyCrateEvent extends AbstractCancellable {
-	public final Player player;
+public class PlayerClaimEnvoyCrateEvent extends RPEventCancellable {
 	public final Location location;
 	public final LivingEnvoyCrate type;
 	public PlayerClaimEnvoyCrateEvent(Player player, Location location, LivingEnvoyCrate type) {
-		this.player = player;
+		super(player);
 		this.location = location;
 		this.type = type;
 	}

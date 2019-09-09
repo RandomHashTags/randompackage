@@ -6,14 +6,13 @@ import org.bukkit.event.Event;
 
 import java.math.BigDecimal;
 
-public class GlobalChallengeParticipateEvent extends AbstractCancellable {
+public class GlobalChallengeParticipateEvent extends RPEventCancellable {
 	public final Event event;
-	public final Player player;
 	public final ActiveGlobalChallenge challenge;
 	public BigDecimal value;
 	public GlobalChallengeParticipateEvent(Event event, Player player, ActiveGlobalChallenge challenge, BigDecimal value) {
+		super(player);
 		this.challenge = challenge;
-		this.player = player;
 		this.event = event;
 		this.value = value;
 	}

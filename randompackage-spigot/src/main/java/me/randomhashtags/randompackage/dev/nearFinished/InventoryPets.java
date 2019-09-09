@@ -5,16 +5,19 @@ import me.randomhashtags.randompackage.utils.EventAttributes;
 import me.randomhashtags.randompackage.utils.addons.FileInventoryPet;
 import me.randomhashtags.randompackage.utils.RPFeature;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.List;
 
 public class InventoryPets extends EventAttributes implements Listener {
     private static InventoryPets instance;
@@ -71,10 +74,22 @@ public class InventoryPets extends EventAttributes implements Listener {
     }
 
     @EventHandler
+    private void entityDeathEvent(EntityDeathEvent event) {
+    }
+    @EventHandler
     private void playerDeathEvent(PlayerDeathEvent event) {
     }
     @EventHandler
     private void playerRespawnEvent(PlayerRespawnEvent event) {
+    }
+
+    public void tryLeashing(ItemStack is) {
+        if(inventorypets != null && is != null && !is.getType().equals(Material.AIR) && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            for(InventoryPet p : inventorypets.values()) {
+                final ItemStack pet = p.getItem();
+            }
+        }
     }
 
     @EventHandler

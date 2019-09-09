@@ -613,7 +613,7 @@ public abstract class EventConditions extends RPFeature implements Combo {
         } else if(condition.startsWith("destroy<=")) {
             passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).destroy <= evaluate(value);
         } else if(condition.startsWith("didproc=")) {
-            passed = event instanceof CustomEnchantProcEvent && ((CustomEnchantProcEvent) event).didProc == Boolean.parseBoolean(value);
+            passed = event instanceof CustomEnchantProcEvent && ((CustomEnchantProcEvent) event).didProc() == Boolean.parseBoolean(value);
         } else if(condition.startsWith("booster=")) {
             passed = event instanceof BoosterActivateEvent && ((BoosterActivateEvent) event).booster.getIdentifier().equals(value);
         }

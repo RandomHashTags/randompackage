@@ -29,6 +29,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new SetDamage(),
                 // attributes
                 new AddPotionEffect(),
+                new AddToList(),
                 new BreakHitBlock(),
                 new ComboAdd(),
                 new ComboDeplete(),
@@ -74,7 +75,8 @@ public abstract class EventAttributes extends EventExecutor {
                 new HasCustomEnchantEquipped(),
                 new HitBlock(),
                 new HitCEEntity(),
-                new IsHeadshot()
+                new IsHeadshot(),
+                new IsInList()
         );
         for(EventCondition c : conditions) {
             c.load();

@@ -8,15 +8,14 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.HashMap;
 
-public class PlayerTeleportDelayEvent extends AbstractCancellable {
+public class PlayerTeleportDelayEvent extends RPEventCancellable {
 	public static final HashMap<Player, PlayerTeleportDelayEvent> teleporting = new HashMap<>();
-	public final Player player;
 	public final double delay;
 	public final Location from, to;
 	public final int task;
 	
 	public PlayerTeleportDelayEvent(Player player, double delay, Location from, Location to) {
-		this.player = player;
+		super(player);
 		this.delay = delay;
 		this.from = from;
 		this.to = to;

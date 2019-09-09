@@ -580,15 +580,15 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         return enchants;
     }
 
-    public void tryProcing(Event event, Player player) {
-        tryProcing(event, player, getEnchants(player));
+    public void tryProcing(Event event, Player player, Entity entity) {
+        tryProcing(event, player, entity, getEnchants(player));
     }
-    public void tryProcing(Event event, Player player, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+    public void tryProcing(Event event, Player player, Entity entity, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         if(event != null && player != null && enchants != null && !enchants.isEmpty()) {
             for(ItemStack is : enchants.keySet()) {
                 final LinkedHashMap<CustomEnchant, Integer> en = enchants.get(is);
                 for(CustomEnchant enchant : en.keySet()) {
-                    final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, enchant, en.get(enchant), is, player);
+                    final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, player, entity, enchant, en.get(enchant), is);
                     pluginmanager.callEvent(e);
                     final List<String> attributes = enchant.getAttributes();
                     trigger(e, attributes);
@@ -606,7 +606,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final isDamagedEvent e = new isDamagedEvent(victim, c, event.getDamage());
             pluginmanager.callEvent(e);
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
-            tryProcing(event, victim, enchants);
+            tryProcing(event, victim, null, enchants);
             trigger(event, enchants);
         }
     }
@@ -616,7 +616,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         if(a instanceof Player) {
             final Player player = (Player) a;
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-            tryProcing(event, player, enchants);
+            tryProcing(event, player, event.getEntity(), enchants);
             trigger(event, enchants);
         }
     }
@@ -624,21 +624,21 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private void blockBreakEvent(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-        tryProcing(event, player, enchants);
+        tryProcing(event, player, null, enchants);
         trigger(event, enchants);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-        tryProcing(event, player, enchants);
+        tryProcing(event, player, null, enchants);
         trigger(event, enchants);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerJoinEvent(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-        tryProcing(event, player, enchants);
+        tryProcing(event, player, null, enchants);
         trigger(event, enchants);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -647,7 +647,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Player player = event.getPlayer();
         if(!event.isCancelled()) {
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-            tryProcing(event, player, enchants);
+            tryProcing(event, player, null, enchants);
             trigger(event, enchants);
         }
         EnchantRarity rarity = valueOfEnchantRarity(I);
@@ -680,7 +680,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         if(e instanceof Player) {
             final Player player = (Player) e;
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
-            tryProcing(event, player, enchants);
+            tryProcing(event, player, null, enchants);
             trigger(event, enchants);
         }
     }
@@ -706,9 +706,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Player k = e.getKiller();
         final UUID u = e.getUniqueId();
         if(!(e instanceof Player) && k != null) {
+            final HashMap<String, Entity> entities = getEntities(event);
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(k);
             tryProcing(event, k, enchants);
-            trigger(event, enchants);
+            trigger(event, entities, enchants);
         }
         final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
         if(L != null) {

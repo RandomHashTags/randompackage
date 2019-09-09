@@ -1,16 +1,15 @@
 package me.randomhashtags.randompackage.events.customenchant;
 
-import me.randomhashtags.randompackage.events.AbstractCancellable;
+import me.randomhashtags.randompackage.events.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class AlchemistExchangeEvent extends AbstractCancellable {
-	public final Player player;
+public class AlchemistExchangeEvent extends RPEventCancellable {
 	public final ItemStack one, two, result;
 	public final String currency;
 	public double price;
 	public AlchemistExchangeEvent(Player player, ItemStack one, ItemStack two, String currency, double price, ItemStack result) {
-		this.player = player;
+		super(player);
 		this.one = one;
 		this.two = two;
 		this.currency = currency;

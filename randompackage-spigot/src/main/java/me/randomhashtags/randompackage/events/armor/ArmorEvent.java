@@ -1,19 +1,17 @@
 package me.randomhashtags.randompackage.events.armor;
 
-import me.randomhashtags.randompackage.events.AbstractCancellable;
+import me.randomhashtags.randompackage.events.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ArmorEvent extends AbstractCancellable {
-    private Player player;
+public class ArmorEvent extends RPEventCancellable {
     private ArmorEventReason reason;
     private ItemStack item, currentItem, cursor;
     public ArmorEvent(Player player, ArmorEventReason reason, ItemStack item) {
-        this.player = player;
+        super(player);
         this.reason = reason;
         this.item = item;
     }
-    public Player getPlayer() { return player; }
     public ArmorEventReason getReason() { return reason; }
     public ItemStack getItem() { return item; }
 

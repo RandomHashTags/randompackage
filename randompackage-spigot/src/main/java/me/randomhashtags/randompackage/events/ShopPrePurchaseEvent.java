@@ -5,13 +5,12 @@ import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 
-public class ShopPrePurchaseEvent extends AbstractCancellable {
-    public final Player player;
+public class ShopPrePurchaseEvent extends RPEventCancellable {
     public final ShopItem item;
     private int amount;
     private BigDecimal cost;
     public ShopPrePurchaseEvent(Player player, ShopItem item, int amount, BigDecimal cost) {
-        this.player = player;
+        super(player);
         this.item = item;
         this.amount = amount;
         this.cost = cost;

@@ -2,23 +2,33 @@ package me.randomhashtags.randompackage.events.customenchant;
 
 import me.randomhashtags.randompackage.addons.CustomEnchant;
 import me.randomhashtags.randompackage.events.AbstractCancellable;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class CustomEnchantProcEvent extends AbstractCancellable {
-	public final Event event;
-	public final CustomEnchant enchant;
-	public final int level;
-	public final ItemStack itemWithEnchant;
-	public boolean didProc;
-	public final Player player;
-	public CustomEnchantProcEvent(Event event, CustomEnchant enchant, int level, ItemStack itemWithEnchant, Player player) {
+	private Event event;
+	private HashMap<String, Entity> entities;
+	private CustomEnchant enchant;
+	private int level;
+	private ItemStack itemWithEnchant;
+	private boolean didProc;
+	public CustomEnchantProcEvent(Event event, HashMap<String, Entity> entities, CustomEnchant enchant, int level, ItemStack itemWithEnchant) {
 		this.event = event;
+		this.entities = entities;
 		this.enchant = enchant;
 		this.level = level;
 		this.itemWithEnchant = itemWithEnchant;
-		this.player = player;
-		didProc = false;
 	}
+
+	public boolean didProc() { return didProc; }
+	public void setDidProc(boolean proc) { this.didProc = proc; }
+	public Event getEvent() { return event; }
+	public HashMap<String, Entity> getEntities() { return entities; }
+	public CustomEnchant getEnchant() { return enchant; }
+	public int getEnchantLevel() { return level; }
+	public ItemStack getItemWithEnchant() { return itemWithEnchant; }
+
 }

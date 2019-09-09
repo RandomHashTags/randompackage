@@ -3,11 +3,10 @@ package me.randomhashtags.randompackage.events;
 import me.randomhashtags.randompackage.addons.ArmorSet;
 import org.bukkit.entity.Player;
 
-public class ArmorSetUnequipEvent extends AbstractEvent {
-	public final Player player;
+public class ArmorSetUnequipEvent extends RPEvent {
 	public final ArmorSet set;
 	public ArmorSetUnequipEvent(Player player, ArmorSet set) {
-		this.player = player;
+		super(player);
 		this.set = set;
 	}
 }
