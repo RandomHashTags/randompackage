@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.Booster;
-import me.randomhashtags.randompackage.addons.living.ActiveBooster;
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.events.regional.RegionDisbandEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileBooster;
-import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.utils.obj.TObject;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.Booster;
+import me.randomhashtags.randompackage.addon.living.ActiveBooster;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileBooster;
+import me.randomhashtags.randompackage.event.*;
+import me.randomhashtags.randompackage.util.obj.TObject;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

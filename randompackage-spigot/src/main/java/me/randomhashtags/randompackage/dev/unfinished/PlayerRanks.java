@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.unfinished;
 
 import me.randomhashtags.randompackage.dev.PlayerRank;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;

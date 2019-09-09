@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.ConquestChest;
-import me.randomhashtags.randompackage.addons.living.LivingConquestChest;
-import me.randomhashtags.randompackage.addons.living.LivingConquestMob;
-import me.randomhashtags.randompackage.addons.objects.ConquestMob;
-import me.randomhashtags.randompackage.events.ConquestDamageEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileConquestChest;
+import me.randomhashtags.randompackage.addon.ConquestChest;
+import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
+import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
+import me.randomhashtags.randompackage.addon.obj.ConquestMob;
+import me.randomhashtags.randompackage.event.ConquestDamageEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileConquestChest;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;

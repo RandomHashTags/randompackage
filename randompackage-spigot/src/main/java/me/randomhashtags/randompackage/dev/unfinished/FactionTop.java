@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.unfinished;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class FactionTop extends RPFeature {

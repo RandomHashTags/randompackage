@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.ServerCrate;
-import me.randomhashtags.randompackage.addons.ServerCrateFlare;
-import me.randomhashtags.randompackage.addons.living.LivingServerCrate;
-import me.randomhashtags.randompackage.events.ServerCrateCloseEvent;
-import me.randomhashtags.randompackage.events.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileServerCrate;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.ServerCrate;
+import me.randomhashtags.randompackage.addon.ServerCrateFlare;
+import me.randomhashtags.randompackage.addon.living.LivingServerCrate;
+import me.randomhashtags.randompackage.event.ServerCrateCloseEvent;
+import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileServerCrate;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

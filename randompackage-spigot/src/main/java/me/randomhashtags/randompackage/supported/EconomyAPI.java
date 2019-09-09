@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.supported;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 
 public class EconomyAPI extends RPFeature {
     private static EconomyAPI instance;

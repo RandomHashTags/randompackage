@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.PlayerQuest;
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.attributes.IncreasePlayerQuest;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FilePlayerQuest;
-import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.addons.living.ActivePlayerQuest;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
+import me.randomhashtags.randompackage.addon.PlayerQuest;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.attribute.IncreasePlayerQuest;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FilePlayerQuest;
+import me.randomhashtags.randompackage.event.*;
+import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
+import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

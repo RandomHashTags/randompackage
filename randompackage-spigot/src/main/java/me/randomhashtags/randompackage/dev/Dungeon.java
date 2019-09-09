@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Attributable;
-import me.randomhashtags.randompackage.addons.utils.Itemable;
-import me.randomhashtags.randompackage.addons.utils.Scheduleable;
+import me.randomhashtags.randompackage.addon.util.Attributable;
+import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.Scheduleable;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;

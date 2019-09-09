@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Attributable;
-import me.randomhashtags.randompackage.addons.utils.Rewardable;
+import me.randomhashtags.randompackage.addon.util.Attributable;
+import me.randomhashtags.randompackage.addon.util.Rewardable;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.LinkedHashMap;

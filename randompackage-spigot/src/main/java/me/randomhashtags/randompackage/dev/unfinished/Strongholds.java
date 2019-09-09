@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.unfinished;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

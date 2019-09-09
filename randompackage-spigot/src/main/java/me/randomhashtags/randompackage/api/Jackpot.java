@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
+import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

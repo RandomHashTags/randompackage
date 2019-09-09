@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.supported.regional;
 
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Scheduleable;
-import me.randomhashtags.randompackage.addons.utils.Scoreboardable;
+import me.randomhashtags.randompackage.addon.util.Scheduleable;
+import me.randomhashtags.randompackage.addon.util.Scoreboardable;
 import org.bukkit.Location;
 
 import java.util.List;

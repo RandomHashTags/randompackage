@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
-import me.randomhashtags.randompackage.addons.Outpost;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
+import me.randomhashtags.randompackage.addon.Outpost;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

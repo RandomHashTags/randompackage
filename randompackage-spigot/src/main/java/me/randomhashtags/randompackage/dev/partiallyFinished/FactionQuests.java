@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.partiallyFinished;
 
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

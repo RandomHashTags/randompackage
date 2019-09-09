@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.listeners.RPEvents;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     public static final RandomPackageAPI api = new RandomPackageAPI();

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.obj.PolyBoundary;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

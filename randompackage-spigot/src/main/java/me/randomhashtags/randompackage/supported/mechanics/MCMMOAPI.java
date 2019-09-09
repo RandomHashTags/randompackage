@@ -3,10 +3,10 @@ package me.randomhashtags.randompackage.supported.mechanics;
 import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.attributes.mcmmo.SetGainedXp;
-import me.randomhashtags.randompackage.events.MCMMOPlayerXpGainEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.Reflect;
+import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
+import me.randomhashtags.randompackage.event.MCMMOPlayerXpGainEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.Reflect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class MCMMOAPI extends Reflect implements Listener {
 	private static MCMMOAPI instance;

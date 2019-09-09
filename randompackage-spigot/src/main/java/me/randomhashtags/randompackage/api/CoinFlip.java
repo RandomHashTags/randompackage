@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.objects.CoinFlipMatch;
-import me.randomhashtags.randompackage.addons.objects.CoinFlipOption;
-import me.randomhashtags.randompackage.addons.objects.CoinFlipStats;
-import me.randomhashtags.randompackage.events.CoinFlipEndEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.obj.CoinFlipMatch;
+import me.randomhashtags.randompackage.addon.obj.CoinFlipOption;
+import me.randomhashtags.randompackage.addon.obj.CoinFlipStats;
+import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

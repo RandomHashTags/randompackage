@@ -4,7 +4,7 @@ import com.peaches.epicskyblock.EpicSkyblock;
 import com.peaches.epicskyblock.Island;
 import com.peaches.epicskyblock.IslandManager;
 import com.peaches.epicskyblock.User;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;

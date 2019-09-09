@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.attributes.todo.DepleteStackSize;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.objects.StackedEntity;
+import me.randomhashtags.randompackage.attribute.todo.DepleteStackSize;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.addon.obj.StackedEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

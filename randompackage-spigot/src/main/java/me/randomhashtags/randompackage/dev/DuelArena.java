@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.addon.util.Itemable;
 import org.bukkit.Location;
 
 import java.util.List;

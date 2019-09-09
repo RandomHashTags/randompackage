@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.objects.CollectionChest;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.obj.CollectionChest;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;

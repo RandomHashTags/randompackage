@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api.nearFinished;
 
-import me.randomhashtags.randompackage.addons.FactionUpgrade;
-import me.randomhashtags.randompackage.addons.FactionUpgradeType;
-import me.randomhashtags.randompackage.addons.RarityGem;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.FactionUpgradeLevelupEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileFactionUpgrade;
-import me.randomhashtags.randompackage.utils.addons.FileFactionUpgradeType;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.FactionUpgrade;
+import me.randomhashtags.randompackage.addon.FactionUpgradeType;
+import me.randomhashtags.randompackage.addon.RarityGem;
+import me.randomhashtags.randompackage.event.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileFactionUpgrade;
+import me.randomhashtags.randompackage.util.addon.FileFactionUpgradeType;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -35,7 +35,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class FactionUpgrades extends RPFeature {
     private static FactionUpgrades instance;

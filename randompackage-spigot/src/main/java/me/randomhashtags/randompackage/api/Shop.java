@@ -1,15 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.legacy.ShopCategory;
-import me.randomhashtags.randompackage.addons.objects.ShopItem;
-import me.randomhashtags.randompackage.events.ShopPrePurchaseEvent;
-import me.randomhashtags.randompackage.events.ShopPreSellEvent;
-import me.randomhashtags.randompackage.events.ShopPurchaseEvent;
-import me.randomhashtags.randompackage.events.ShopSellEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileShopCategory;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
+import me.randomhashtags.randompackage.addon.obj.ShopItem;
+import me.randomhashtags.randompackage.event.ShopPurchaseEvent;
+import me.randomhashtags.randompackage.event.ShopSellEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileShopCategory;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -121,19 +119,20 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     final ItemStack is = si.getPurchased().clone();
                                     int amountPurchased = cl.equals("LEFT") ? 1 : is.getMaxStackSize();
                                     cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
-                                    final ShopPrePurchaseEvent e = new ShopPrePurchaseEvent(player, si, amountPurchased, cost);
-                                    pluginmanager.callEvent(e);
-                                    if(e.isCancelled()) return;
-                                    cost = e.getCost();
-                                    amountPurchased = e.getAmount();
                                     item = is;
                                     item.setAmount(is.getAmount()*amountPurchased);
+                                    final ShopPurchaseEvent e = new ShopPurchaseEvent(player, si, item, amountPurchased, cost);
+                                    pluginmanager.callEvent(e);
+                                    if(e.isCancelled()) return;
+                                    cost = e.getTotal();
+                                    amountPurchased = e.getAmount();
+                                    item = is;
+                                    item.setAmount(is.getAmount());
                                     boolean purchased = false;
                                     if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
                                         purchased = true;
                                         giveItem(player, item);
-                                        final ShopPurchaseEvent ev = new ShopPurchaseEvent(player, si, item, amountPurchased, cost);
-                                        pluginmanager.callEvent(ev);
+
                                     }
                                     playSound(config, "sounds." + (purchased ? "buy" : "not enough balance"), player, player.getLocation(), false);
                                     final HashMap<String, String> replacements = new HashMap<>();
@@ -147,7 +146,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                 }
                             } else if(cl.endsWith("RIGHT")) {
                                 if(sell.doubleValue() > 0.00) {
-                                    final ItemStack A = si.getPurchased().clone();
+                                    ItemStack A = si.getPurchased().clone();
                                     final Inventory inv = player.getInventory();
                                     String p = "messages.sell" + (!inv.containsAtLeast(A, 1) ? " incomplete" : "");
                                     final BigDecimal price = si.sellPrice;
@@ -160,15 +159,14 @@ public class Shop extends RPFeature implements CommandExecutor {
                                         amountSold = Math.min(has, amountSold);
                                         if(inv.containsAtLeast(A, amountSold)) {
                                             BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
-                                            final ShopPreSellEvent e = new ShopPreSellEvent(player, si, amountSold, profit);
+                                            final ShopSellEvent e = new ShopSellEvent(player, si, A, amountSold, profit);
                                             pluginmanager.callEvent(e);
                                             if(e.isCancelled()) return;
-                                            profit = e.getProfit();
+                                            A = e.getItem();
+                                            profit = e.getTotal();
                                             amountSold = e.getAmount();
                                             eco.depositPlayer(player, profit.doubleValue());
                                             removeItem(player, A, amountSold);
-                                            final ShopSellEvent ee = new ShopSellEvent(player, si, A, amountSold, profit);
-                                            pluginmanager.callEvent(ee);
                                         } else {
                                             p = "messages.sell incomplete";
                                         }

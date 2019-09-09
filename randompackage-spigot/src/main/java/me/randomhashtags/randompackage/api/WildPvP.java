@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.objects.PvPCountdownMatch;
-import me.randomhashtags.randompackage.addons.objects.PvPMatch;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.addon.obj.PvPCountdownMatch;
+import me.randomhashtags.randompackage.addon.obj.PvPMatch;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

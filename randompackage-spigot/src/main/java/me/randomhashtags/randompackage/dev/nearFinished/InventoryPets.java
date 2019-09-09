@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
 import me.randomhashtags.randompackage.dev.InventoryPet;
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.utils.addons.FileInventoryPet;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.addon.FileInventoryPet;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;

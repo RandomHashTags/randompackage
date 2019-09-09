@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.events.PlayerTeleportDelayEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private static SecondaryEvents instance;

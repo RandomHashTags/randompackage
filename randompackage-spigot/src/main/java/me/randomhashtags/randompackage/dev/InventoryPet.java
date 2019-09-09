@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Attributable;
-import me.randomhashtags.randompackage.addons.utils.Itemable;
+import me.randomhashtags.randompackage.addon.util.Attributable;
+import me.randomhashtags.randompackage.addon.util.Itemable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.LinkedHashMap;

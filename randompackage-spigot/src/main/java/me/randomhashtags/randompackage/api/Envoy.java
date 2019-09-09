@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.EnvoyCrate;
-import me.randomhashtags.randompackage.utils.addons.FileEnvoyCrate;
-import me.randomhashtags.randompackage.events.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.addons.living.LivingEnvoyCrate;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.EnvoyCrate;
+import me.randomhashtags.randompackage.util.addon.FileEnvoyCrate;
+import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +23,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class Envoy extends RPFeature implements CommandExecutor {
 	private static Envoy instance;

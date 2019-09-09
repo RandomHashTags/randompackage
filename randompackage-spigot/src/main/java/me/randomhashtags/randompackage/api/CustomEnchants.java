@@ -1,21 +1,21 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.*;
-import me.randomhashtags.randompackage.addons.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addons.objects.CustomEnchantEntity;
-import me.randomhashtags.randompackage.api.addons.TransmogScrolls;
-import me.randomhashtags.randompackage.attributes.StopEnchant;
-import me.randomhashtags.randompackage.events.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.events.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.events.armor.ArmorEvent;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.addons.FileCustomEnchant;
-import me.randomhashtags.randompackage.utils.addons.FileEnchantRarity;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.*;
+import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
+import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
+import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
+import me.randomhashtags.randompackage.attribute.StopEnchant;
+import me.randomhashtags.randompackage.event.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorEvent;
+import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.addon.FileCustomEnchant;
+import me.randomhashtags.randompackage.util.addon.FileEnchantRarity;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +47,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private static CustomEnchants instance;

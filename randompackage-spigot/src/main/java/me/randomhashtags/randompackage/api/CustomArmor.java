@@ -1,18 +1,18 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.ArmorSet;
-import me.randomhashtags.randompackage.events.armor.ArmorEquipEvent;
-import me.randomhashtags.randompackage.events.armor.ArmorEvent;
-import me.randomhashtags.randompackage.events.armor.ArmorPieceBreakEvent;
-import me.randomhashtags.randompackage.events.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.events.customenchant.isDamagedEvent;
-import me.randomhashtags.randompackage.utils.EventAttributes;
-import me.randomhashtags.randompackage.events.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.events.ArmorSetUnequipEvent;
-import me.randomhashtags.randompackage.events.customenchant.PvAnyEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileArmorSet;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.ArmorSet;
+import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
+import me.randomhashtags.randompackage.event.customenchant.isDamagedEvent;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.event.ArmorSetEquipEvent;
+import me.randomhashtags.randompackage.event.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.event.customenchant.PvAnyEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileArmorSet;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class CustomArmor extends EventAttributes {
 	private static CustomArmor instance;

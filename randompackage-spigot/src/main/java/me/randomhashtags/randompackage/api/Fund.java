@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.events.FundDepositEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.event.FundDepositEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

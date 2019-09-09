@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.CustomEnchant;
-import me.randomhashtags.randompackage.addons.Mask;
-import me.randomhashtags.randompackage.events.armor.ArmorEquipEvent;
-import me.randomhashtags.randompackage.events.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileMask;
-import me.randomhashtags.randompackage.events.*;
-import me.randomhashtags.randompackage.events.customenchant.*;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.Mask;
+import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileMask;
+import me.randomhashtags.randompackage.event.*;
+import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.utils.listeners.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class Masks extends CustomEnchants {
     private static Masks instance;

@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.Title;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.addons.FileTitle;
+import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.addon.FileTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

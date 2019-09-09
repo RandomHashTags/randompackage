@@ -4,7 +4,7 @@ import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandRole;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;

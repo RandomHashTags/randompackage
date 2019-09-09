@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.Lootbox;
-import me.randomhashtags.randompackage.addons.enums.LootboxRewardType;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.RPPlayer;
-import me.randomhashtags.randompackage.utils.addons.FileLootbox;
-import me.randomhashtags.randompackage.utils.universal.UInventory;
+import me.randomhashtags.randompackage.addon.Lootbox;
+import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.addon.FileLootbox;
+import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

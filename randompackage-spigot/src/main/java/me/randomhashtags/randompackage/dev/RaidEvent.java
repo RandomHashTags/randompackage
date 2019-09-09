@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Rewardable;
-import me.randomhashtags.randompackage.addons.utils.Scheduleable;
+import me.randomhashtags.randompackage.addon.util.Rewardable;
+import me.randomhashtags.randompackage.addon.util.Scheduleable;
 import org.bukkit.Location;
 
 import java.math.BigDecimal;

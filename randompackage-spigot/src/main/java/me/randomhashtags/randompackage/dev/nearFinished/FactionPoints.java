@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 

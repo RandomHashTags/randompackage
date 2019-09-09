@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addons.CustomBoss;
-import me.randomhashtags.randompackage.addons.living.LivingCustomBoss;
-import me.randomhashtags.randompackage.addons.living.LivingCustomMinion;
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.addons.FileCustomBoss;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.addon.CustomBoss;
+import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
+import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.addon.FileCustomBoss;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

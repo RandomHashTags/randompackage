@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addons.utils.Rewardable;
+import me.randomhashtags.randompackage.addon.util.Rewardable;
 
 import java.util.List;
 

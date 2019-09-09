@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
-import me.randomhashtags.randompackage.utils.RPFeature;
-import me.randomhashtags.randompackage.utils.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
