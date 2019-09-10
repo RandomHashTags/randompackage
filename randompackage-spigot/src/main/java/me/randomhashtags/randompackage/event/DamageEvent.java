@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class DamageEvent extends AbstractCancellable {
+public abstract class DamageEvent extends AbstractCancellable {
     private Entity damagee, damager;
     private EntityDamageEvent.DamageCause cause;
     private double damage;

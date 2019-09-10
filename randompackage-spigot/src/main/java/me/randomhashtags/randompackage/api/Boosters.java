@@ -272,10 +272,10 @@ public class Boosters extends EventAttributes {
 			boosters.addAll(getFactionBoosters(u));
 			boosters.addAll(getSelfBoosters(u));
 			for(ActiveBooster ab : boosters) {
-				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
 				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, k, ab);
 				pluginmanager.callEvent(e);
-				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
+				if(trigger(event, ab.getBooster().getAttributes())) {
+					final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
 					replacements.put("multiplier", M);
 					replacements.put("duration", D);
 					replacements.put("{MULTIPLIER}", M);

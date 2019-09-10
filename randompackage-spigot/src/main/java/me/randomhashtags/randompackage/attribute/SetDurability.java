@@ -19,7 +19,7 @@ public class SetDurability extends AbstractEventAttribute {
             setDurability(e.getPlayer(), value, e.getItem());
         } else if(event instanceof CustomEnchantProcEvent) {
             final CustomEnchantProcEvent e = (CustomEnchantProcEvent) event;
-            setDurability(e.player, value, e.getItemWithEnchant());
+            setDurability(e.getEntities().get("Player"), value, e.getItemWithEnchant());
         }
     }
     @Override

@@ -1,5 +1,5 @@
 # Made by RandomHashTags
-name: "&b&lYeti&r&6"
+name: "&b&lYeti"
 #
 armor lore:
   - " "
@@ -58,7 +58,7 @@ weapon:
 attributes:
   armor:
     - "PvAny;SetDamage=dmg*1.10"
-  - "isDamaged;SetDamage=dmg*0.90"
+    - "isDamaged;SetDamage=dmg*0.90"
   weapon:
     - "PvAny;SetDamage=dmg*1.075"
 #

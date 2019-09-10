@@ -400,7 +400,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         final Player player = event.getEntity().getKiller();
         if(player != null) {
@@ -410,25 +410,24 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void shopPurchaseEvent(ShopPurchaseEvent event) {
-        final Player player = event.player;
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        didShopEvent(event);
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void shopSellEvent(ShopSellEvent event) {
-        final Player player = event.player;
+        didShopEvent(event);
+    }
+    private void didShopEvent(ShopEvent event) {
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void jackpotPurchaseTicketsEvent(JackpotPurchaseTicketsEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -436,7 +435,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void serverCrateOpenEvent(ServerCrateOpenEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -463,7 +462,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void randomizationScrollUseEvent(RandomizationScrollUseEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -471,7 +470,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerClaimEnvoyCrateEvent(PlayerClaimEnvoyCrateEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -479,7 +478,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler
     private void playerApplyCustomEnchantEvent(CustomEnchantApplyEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -487,7 +486,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -495,7 +494,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());
@@ -503,7 +502,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void mysteryMobSpawnerOpenEvent(MysteryMobSpawnerOpenEvent event) {
-        final Player player = event.player;
+        final Player player = event.getPlayer();
         final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
         for(ActivePlayerQuest quest : a) {
             trigger(event, quest.getQuest().getTrigger());

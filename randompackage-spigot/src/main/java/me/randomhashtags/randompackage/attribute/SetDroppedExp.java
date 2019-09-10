@@ -10,7 +10,8 @@ public class SetDroppedExp extends AbstractEventAttribute {
     @Override
     public void execute(Event event, String value, HashMap<String, String> valueReplacements) {
         if(event instanceof EntityDeathEvent) {
-            final int amount = (int) evaluate(replaceValue(value, valueReplacements));
+            final String v = replaceValue(value, valueReplacements);
+            final int amount = (int) evaluate(v);
             final EntityDeathEvent e = (EntityDeathEvent) event;
             e.setDroppedExp(amount);
         } else if(event instanceof BlockBreakEvent) {

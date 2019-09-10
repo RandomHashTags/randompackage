@@ -13,10 +13,10 @@ public class IncreasePlayerQuest extends AbstractEventAttribute {
     @Override
     public String getIdentifier() { return "INCREASEPQUEST"; }
     @Override
-    public void executeData(HashMap<RPPlayer, String> recipientValues) {
+    public void executeData(HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {
         final List<String> msg = getRPConfig(null, "player quests.yml").getStringList("messages.completed");
         for(RPPlayer pdata : recipientValues.keySet()) {
-            final String value = recipientValues.get(pdata);
+            final String value = replaceValue(recipientValues.get(pdata), valueReplacements);
             if(value != null) {
                 final HashMap<PlayerQuest, ActivePlayerQuest> quests = pdata.getQuests();
                 if(quests != null && !quests.isEmpty()) {

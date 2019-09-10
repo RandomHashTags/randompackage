@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ArmorEvent extends RPEventCancellable {
+public abstract class ArmorEvent extends RPEventCancellable {
     private ArmorEventReason reason;
     private ItemStack item, currentItem, cursor;
     public ArmorEvent(Player player, ArmorEventReason reason, ItemStack item) {

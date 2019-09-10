@@ -324,19 +324,22 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        if(event.getItem() != null && event.getAction().name().contains("RIGHT")) {
-            final ItemStack i = event.getItem().clone();
-            final String item = i.getType().name();
+        final ItemStack is = event.getItem();
+        if(is != null && event.getAction().name().contains("RIGHT")) {
+            final String item = is.getType().name();
+            final boolean helmet = item.endsWith("HELMET"), chestplate = item.endsWith("CHESTPLATE"), leggings = item.endsWith("LEGGINGS"), boots = item.endsWith("BOOTS");
+            if(!helmet && !chestplate && !leggings && !boots) return;
             final Player player = event.getPlayer();
             final PlayerInventory PI = player.getInventory();
-            if(item.endsWith("HELMET") && PI.getHelmet() == null || item.endsWith("CHESTPLATE") && PI.getChestplate() == null || item.endsWith("LEGGINGS") && PI.getLeggings() == null || item.endsWith("BOOTS") && PI.getBoots() == null) {
+            final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
+            if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-                    if(!player.getGameMode().equals(GameMode.CREATIVE) && player.getItemInHand().equals(i)) return;
-                    final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, i);
+                    if(!player.getGameMode().equals(GameMode.CREATIVE) && player.getItemInHand().equals(is)) return;
+                    final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, is);
                     pm.callEvent(e);
                 }, 0);
-            } else if(item.endsWith("HELMET") && PI.getHelmet() != null || item.endsWith("CHESTPLATE") && PI.getChestplate() != null || item.endsWith("LEGGINGS") && PI.getLeggings() != null || item.endsWith("BOOTS") && PI.getBoots() != null) {
-                final ArmorEvent e = new ArmorEvent(player, ArmorEventReason.HOTBAR_SWAP, i);
+            } else {
+                final ArmorEvent e = new ArmorSwapEvent(player, ArmorEventReason.HOTBAR_SWAP, is, helmet ? h : chestplate ? c : leggings ? l : b);
                 pm.callEvent(e);
             }
         }

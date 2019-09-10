@@ -4,7 +4,6 @@ import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
-import me.randomhashtags.randompackage.event.MCMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.Reflect;
 import org.bukkit.ChatColor;
@@ -112,14 +111,8 @@ public class MCMMOAPI extends Reflect implements Listener {
 			return;
 		}
 
-		final MCMMOPlayerXpGainEvent ev = new MCMMOPlayerXpGainEvent(player, skill, xp);
-		pluginmanager.callEvent(ev);
-		if(!ev.isCancelled()) {
-			event.setRawXpGained(ev.xp);
-		}
-
 		final CustomEnchants e = CustomEnchants.getCustomEnchants();
-		e.tryProcing(event, player);
+		e.tryProcing(event, player, null);
 	}
 	
 	@EventHandler

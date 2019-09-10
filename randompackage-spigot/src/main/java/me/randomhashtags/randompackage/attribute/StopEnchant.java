@@ -27,7 +27,7 @@ public class StopEnchant extends AbstractEventAttribute {
     public void execute(Event event) {
         if(event instanceof CustomEnchantProcEvent) {
             final CustomEnchantProcEvent c = (CustomEnchantProcEvent) event;
-            final UUID u = c.player.getUniqueId();
+            final UUID u = c.getEntities().get("Player").getUniqueId();
             if(stoppedEnchants.containsKey(u)) {
                 final CustomEnchant e = c.getEnchant();
                 final HashMap<CustomEnchant, TObject> t = stoppedEnchants.get(u);

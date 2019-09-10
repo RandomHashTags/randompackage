@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
-public class ShopEvent extends RPEventCancellable {
+public abstract class ShopEvent extends RPEventCancellable {
     private ShopItem shopitem;
     private ItemStack item;
     private int amount;

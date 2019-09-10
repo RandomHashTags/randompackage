@@ -483,9 +483,9 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 			trigger(event, g.getAttributes());
 		}
 	}
-	public void tryIncreasing(EntityDeathEvent event, String...replacements) {
+	public void tryIncreasing(EntityDeathEvent event) {
 		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes(), replacements);
+			trigger(event, g.getAttributes());
 		}
 	}
 	public void tryIncreasing(PlayerFishEvent event) {

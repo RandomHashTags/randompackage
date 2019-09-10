@@ -248,7 +248,7 @@ public class Masks extends CustomEnchants {
                     equippedMasks.remove(player);
                     final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
                     enchants.put(h, getEnchants(h));
-                    tryProcing(event, player, enchants);
+                    tryProcing(event, player, null, enchants);
                 }
             }
         }
