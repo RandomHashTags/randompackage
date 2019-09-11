@@ -180,6 +180,7 @@ public abstract class YamlUpdater {
                 "withdraw.cmds", Arrays.asList("withdraw"),
                 "xpbottle.cmds", Arrays.asList("xpbottle"),
                 // 16.5.0
+                "inventory pets.enabled", true,
                 "sethome.enabled", true,
                 "sethome.cmds", Arrays.asList("sethome"),
         };

@@ -31,4 +31,5 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerInteract;IsInventoryPet=XP_BOOSTER;InventoryPetOnCooldown=false;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*5;PlayerRemoveFromList=PET_XP_BOOSTER"
+  - "EntityDeath;KillerIsInList=PET_XP_BOOSTER;SetDroppedExp=xp*1.15"

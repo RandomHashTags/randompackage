@@ -207,6 +207,9 @@ home:
     - home
     - homes
 #
+inventory pets:
+  enabled: true
+#
 item filter:
   enabled: true
   cmds:
@@ -261,9 +264,6 @@ outposts:
   cmds:
     - outpost
     - outposts
-#
-pets:
-  enabled: false
 #
 player quests:
   enabled: true

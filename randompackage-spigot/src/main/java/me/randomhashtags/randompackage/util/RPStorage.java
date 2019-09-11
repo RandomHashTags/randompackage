@@ -377,7 +377,7 @@ public abstract class RPStorage extends RegionalAPI {
         outposts.put(identifier, l);
     }
 
-    public InventoryPet getPet(String identifier) {
+    public InventoryPet getInventoryPet(String identifier) {
         return inventorypets != null ? inventorypets.getOrDefault(identifier, null) : null;
     }
     public void addPet(InventoryPet l) {

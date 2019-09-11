@@ -13,7 +13,6 @@ import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileGlobalChallenge;
-import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -44,7 +43,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
-import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 
 public class GlobalChallenges extends EventAttributes implements CommandExecutor {
 	private static GlobalChallenges instance;
@@ -91,10 +89,6 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	    new IncreaseGlobalChallenge().load();
 		save(null, "global challenges.yml");
 		save("_Data", "global challenges.yml");
-		if(mcmmo != null) {
-			final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
-			m.gcIsEnabled = true;
-		}
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "global challenges.yml"));
 		dataF = new File(rpd + separator + "_Data", "global challenges.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);

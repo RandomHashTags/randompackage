@@ -31,4 +31,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "CustomEnchantApply;increaseSuccess=1"

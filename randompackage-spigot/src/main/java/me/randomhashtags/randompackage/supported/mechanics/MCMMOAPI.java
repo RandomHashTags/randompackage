@@ -31,7 +31,7 @@ public class MCMMOAPI extends Reflect implements Listener {
 		return instance;
 	}
 
-	public boolean isClassic = false, gcIsEnabled = false;
+	public boolean isClassic = false;
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 

@@ -19,7 +19,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class EventConditions extends RPFeature implements Combo {
+public abstract class EventConditions extends RPFeature implements Combo, RPItemStack {
     protected static List<UUID> spawnedFromSpawner = new ArrayList<>();
     protected static HashMap<UUID, EntityShootBowEvent> projectileEvents = new HashMap<>();
 
@@ -616,6 +618,10 @@ public abstract class EventConditions extends RPFeature implements Combo {
             passed = event instanceof CustomEnchantProcEvent && ((CustomEnchantProcEvent) event).didProc() == Boolean.parseBoolean(value);
         } else if(condition.startsWith("booster=")) {
             passed = event instanceof BoosterActivateEvent && ((BoosterActivateEvent) event).booster.getIdentifier().equals(value);
+        } else if(condition.startsWith("inventorypetoncooldown=")) {
+            final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
+            final String info = is != null ? getRPItemStackValue(is, "InventoryPetInfo") : null;
+            passed = info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[3]) == Boolean.parseBoolean(value);
         }
     }
     private void passedCustomCondition(Event event, Entity e, String condition, String s, String value) {

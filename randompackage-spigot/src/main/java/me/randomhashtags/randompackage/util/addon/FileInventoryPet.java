@@ -5,9 +5,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 public class FileInventoryPet extends RPAddon implements InventoryPet {
     private ItemStack item, egg;
@@ -17,6 +17,8 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public int getMaxLevel() { return yml.getInt("settings.max level"); }
+    public int getLevelSlot() { return get("{LEVEL}"); }
     public int getCooldownSlot() { return get("{COOLDOWN}"); }
     public int getExpSlot() { return get("{EXP}"); }
     private int get(String input) {
@@ -28,8 +30,8 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         }
         return -1;
     }
-    public TreeMap<Integer, Long> getCooldowns() {
-        final TreeMap<Integer, Long> a = new TreeMap<>();
+    public HashMap<Integer, Long> getCooldowns() {
+        final HashMap<Integer, Long> a = new HashMap<>();
         final ConfigurationSection c = yml.getConfigurationSection("settings.cooldowns");
         if(c != null) {
             for(String s : c.getKeys(false)) {
@@ -38,12 +40,8 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         }
         return a;
     }
-    public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
-        return item.clone();
-    }
-    public TreeMap<Integer, Long> getRequiredXp() {
-        final TreeMap<Integer, Long> a = new TreeMap<>();
+    public HashMap<Integer, Long> getRequiredXp() {
+        final HashMap<Integer, Long> a = new HashMap<>();
         final ConfigurationSection c = yml.getConfigurationSection("settings.exp to level");
         if(c != null) {
             for(String s : c.getKeys(false)) {
@@ -52,6 +50,11 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         }
         return a;
     }
+    public ItemStack getItem() {
+        if(item == null) item = api.d(yml, "item");
+        return item.clone();
+    }
+
     public ItemStack getEgg() {
         if(egg == null) egg = api.d(yml, "egg");
         return egg != null ? egg.clone() : null;
