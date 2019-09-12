@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
-import me.randomhashtags.randompackage.api.nearFinished.*;
+import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.dev.nearFinished.InventoryPets;
 import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
 import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
@@ -11,13 +11,14 @@ import me.randomhashtags.randompackage.dev.partiallyFinished.Duels;
 import me.randomhashtags.randompackage.dev.partiallyFinished.Dungeons;
 import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.event.armor.*;
-import me.randomhashtags.randompackage.util.CommandManager;
-import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.listener.RPEvents;
-import me.randomhashtags.randompackage.util.obj.Backup;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.PAPI;
+import me.randomhashtags.randompackage.util.CommandManager;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.RPEvents;
+import me.randomhashtags.randompackage.util.obj.Backup;
 import me.randomhashtags.randompackage.util.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -204,6 +205,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private void disable() {
         rpevents.disable();
         api.disable();
+        EventAttributes.unloadEventAttributes();
 
         CommandManager.getCommandManager(null).disable();
         RPFeature.d();

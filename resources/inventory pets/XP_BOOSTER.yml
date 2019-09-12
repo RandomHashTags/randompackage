@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   max level: 10
   cooldown:
     1: 3600
@@ -31,5 +32,5 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;IsInventoryPet=XP_BOOSTER;InventoryPetOnCooldown=false;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*5;PlayerRemoveFromList=PET_XP_BOOSTER"
-  - "EntityDeath;KillerIsInList=PET_XP_BOOSTER;SetDroppedExp=xp*1.15"
+  - "PlayerInteract;IsInventoryPet=XP_BOOSTER;InventoryPetOnCooldown=false;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*5+(level-1)*1.4444444444;PlayerRemoveFromList=PET_XP_BOOSTER"
+  - "EntityDeath;KillerIsInList=PET_XP_BOOSTER;SetDroppedExp=xp*1.25+(level-1)*0.194444444444"

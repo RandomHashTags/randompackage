@@ -84,6 +84,12 @@ public abstract class EventAttributes extends EventExecutor {
             c.load();
         }
     }
+
+    public static void unloadEventAttributes() {
+        Combo.combos.clear();
+        Listable.list.clear();
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void creatureSpawnEvent(CreatureSpawnEvent event) {
         if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {

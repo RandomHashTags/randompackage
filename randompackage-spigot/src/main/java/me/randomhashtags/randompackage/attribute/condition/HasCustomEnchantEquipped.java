@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
 public class HasCustomEnchantEquipped extends AbstractEventCondition {
+    @Override
     public boolean check(Entity entity, String value) {
         if(entity instanceof LivingEntity) {
             final EntityEquipment e = ((LivingEntity) entity).getEquipment();

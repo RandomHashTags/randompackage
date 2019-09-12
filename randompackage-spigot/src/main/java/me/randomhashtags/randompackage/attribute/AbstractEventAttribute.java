@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.EventAttribute;
+import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Location;
@@ -9,7 +10,7 @@ import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute {
+public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute, EventReplacer {
     private boolean cancelled;
     public String getIdentifier() {
         final String[] n = getClass().getName().split("\\.");
@@ -17,16 +18,6 @@ public abstract class AbstractEventAttribute extends RPStorage implements EventA
     }
     public void load() { addEventAttribute(this); }
     public void unload() {}
-
-    protected String replaceValue(String value, HashMap<String, String> valueReplacements) {
-        String string = value;
-        if(valueReplacements != null) {
-            for(String s : valueReplacements.keySet()) {
-                string = string.replace(s, valueReplacements.get(s));
-            }
-        }
-        return string;
-    }
 
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }

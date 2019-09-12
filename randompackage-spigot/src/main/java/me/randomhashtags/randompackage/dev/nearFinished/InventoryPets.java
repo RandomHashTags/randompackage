@@ -16,12 +16,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InventoryPets extends EventAttributes implements RPItemStack {
@@ -66,7 +68,10 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
         final File folder = new File(rpd + separator + "inventory pets");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                pets.add(new FileInventoryPet(f).getItem(1, 0));
+                final InventoryPet p = new FileInventoryPet(f);
+                if(p.isEnabled()) {
+                    pets.add(p.getItem(1, 0));
+                }
             }
         }
         addGivedpCategory(pets, UMaterial.PLAYER_HEAD_ITEM, "Inventory Pets", "Givedp: Inventory Pets");
@@ -82,19 +87,33 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
         inventorypets = null;
     }
 
-    @EventHandler
-    private void entityDeathEvent(EntityDeathEvent event) {
-    }
-    @EventHandler
-    private void playerDeathEvent(PlayerDeathEvent event) {
-    }
-    @EventHandler
-    private void playerRespawnEvent(PlayerRespawnEvent event) {
+    public HashMap<InventoryPet, String> isInventoryPet(ItemStack is) {
+        final String info = getRPItemStackValue(is, "InventoryPetInfo");
+        final boolean isPet = info != null;
+        final HashMap<InventoryPet, String> pet = new HashMap<>();
+        if(isPet) pet.put(getInventoryPet(info.split(":")[0]), info);
+        return isPet ? pet : null;
     }
 
-    public boolean isInventoryPet(ItemStack is) { return getRPItemStackValue(is, "InventoryPetIdentifier") != null; }
-
-
+    public List<HashMap<InventoryPet, String>> getPets(Player player) {
+        final List<HashMap<InventoryPet, String>> a = new ArrayList<>();
+        final List<ItemStack> skull = new ArrayList<>();
+        for(ItemStack is : player.getInventory()) {
+            if(is != null) {
+                final String n = is.getType().name();
+                if(n.contains("SKULL") || n.contains("HEAD")) {
+                    skull.add(is);
+                }
+            }
+        }
+        for(ItemStack is : skull) {
+            final HashMap<InventoryPet, String> i = isInventoryPet(is);
+            if(i != null) {
+                a.add(i);
+            }
+        }
+        return a;
+    }
     public boolean tryLeashing(ItemStack is) {
         if(inventorypets != null && is != null && !is.getType().equals(Material.AIR) && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final String id = getRPItemStackValue(is, "InventoryPetIdentifier");
@@ -113,6 +132,18 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    private void entityDeathEvent(EntityDeathEvent event) {
+        final Player p = event.getEntity().getKiller();
+        if(p != null) {
+            for(HashMap<InventoryPet, String> pets : getPets(p)) {
+                for(InventoryPet pet : pets.keySet()) {
+                    final String[] info = pets.get(pet).split(":");
+                    trigger(event, pet.getAttributes(), "level", info[1]);
+                }
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
         if(is != null) {
@@ -120,10 +151,12 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
             final String id = getRPItemStackValue(is, "InventoryPetInfo");
             if(id != null) {
                 final String[] info = id.split(":");
-                final int level = Integer.parseInt(info[1]), exp = Integer.parseInt(info[2]);
+                final String lvl = info[1];
+                final int level = Integer.parseInt(lvl), exp = Integer.parseInt(info[2]);
                 final long expiration = Long.parseLong(info[3]), time = System.currentTimeMillis();
                 final InventoryPet pet = getInventoryPet(info[0]);
                 if(time >= expiration) {
+                    trigger(event, pet.getAttributes(), "level", lvl);
                     pet.setItem(is, level, exp, time+pet.getCooldown(level));
                 } else {
                 }
@@ -133,5 +166,8 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
             event.setCancelled(true);
             player.updateInventory();
         }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
     }
 }

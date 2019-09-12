@@ -5,6 +5,7 @@ import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
+import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.customenchant.*;
@@ -24,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public abstract class EventExecutor extends EventConditions {
+public abstract class EventExecutor extends EventConditions implements EventReplacer {
     private boolean hasReplacements(List<String> conditions) {
         for(String s : conditions) {
             final String l = s.toLowerCase();
@@ -66,7 +67,7 @@ public abstract class EventExecutor extends EventConditions {
             if(passed) {
                 final Set<String> keys = entities.keySet();
                 for(String s : keys) {
-                    final String value = condition.contains("=") ? condition.split("=")[1] : "false";
+                    final String value = c.contains("=") ? c.split("=")[1] : "false";
                     final Entity e = entities.get(s);
                     s = s.toLowerCase();
 
@@ -98,7 +99,7 @@ public abstract class EventExecutor extends EventConditions {
         return e;
     }
 
-    protected LinkedHashMap<String, String> getReplacements(String...replacements) { return getReplacements(null, replacements); }
+    protected LinkedHashMap<String, String> getReplacements(String...replacements) { return getReplacements((List<String>) null, replacements); }
     protected LinkedHashMap<String, String> getReplacements(List<String> addedReplacements, String...replacements) {
         final LinkedHashMap<String, String> r = new LinkedHashMap<>();
         if(replacements != null) {
@@ -167,6 +168,8 @@ public abstract class EventExecutor extends EventConditions {
             final HashMap<RPPlayer, String> data = getData(entities, entityValues);
             final boolean dadda = !data.isEmpty(), entity1NN = entity1 != null, entity2NN = entity2 != null;
             final String repeatid = Integer.toString(repeatID);
+            final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> previousHashMaps = new ArrayList<>();
+            outerloop:
             for(LinkedHashMap<EventAttribute, HashMap<Entity, String>> hashmap : values) {
                 for(EventAttribute a : hashmap.keySet()) {
                     if(!a.isCancelled()) {
@@ -177,19 +180,22 @@ public abstract class EventExecutor extends EventConditions {
                         }
                         final String id = a.getIdentifier();
                         if(id.equals("WAIT")) {
-                            final int ticks = (int) evaluate(defaultValue);
+                            final int ticks = (int) evaluate(replaceValue(defaultValue, valueReplacements));
                             final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
+                            attributes.removeAll(previousHashMaps);
                             attributes.remove(hashmap);
                             scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
-                            break;
+                            break outerloop;
                         } else if(id.equals("REPEAT")) {
                             final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
+                            attributes.removeAll(previousHashMaps);
                             attributes.remove(hashmap);
                             for(int i = 1; i <= evaluate(defaultValue); i++) {
                                 executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
                             }
-                            break;
+                            break outerloop;
                         } else {
+                            previousHashMaps.add(hashmap);
                             a.execute(event);
                             if(dadda) a.executeData(data, valueReplacements);
                             valuez.remove(null);
@@ -371,16 +377,20 @@ public abstract class EventExecutor extends EventConditions {
     public String[] getReplacements(CustomEnchantProcEvent event) {
         final HashMap<String, Entity> e = event.getEntities();
         final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(e.get("Player").getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
-        final List<String> c = new ArrayList<>();
-        c.addAll(Arrays.asList(a));
-        c.addAll(Arrays.asList(b));
-        return c.toArray(new String[a.length+b.length]);
+        return getReplacements(a, b);
     }
     public String[] getReplacements(DamageEvent event) { return new String[] { "dmg", Double.toString(event.getDamage())}; }
     public String[] getReplacements(FundDepositEvent event) { return new String[] { "amount", event.amount.toString()}; }
     public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "amount", event.amount.toBigInteger().toString()}; }
     public String[] getReplacements(ShopEvent event) { return new String[] { "total", event.getTotal().toString()}; }
     public String[] getReplacements(TinkererTradeEvent event) { return new String[] { "tradesize", Integer.toString(event.trades.size()) };}
+
+    public String[] getReplacements(String[] a, String[] b) {
+        final List<String> c = new ArrayList<>();
+        c.addAll(Arrays.asList(a));
+        c.addAll(Arrays.asList(b));
+        return c.toArray(new String[a.length+b.length]);
+    }
     /*
         Bukkit Events
      */
@@ -388,11 +398,11 @@ public abstract class EventExecutor extends EventConditions {
     public boolean trigger(BlockPlaceEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(EntityDamageEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(EntityDamageByEntityEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
-    public boolean trigger(EntityDeathEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(EntityDeathEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
     public boolean trigger(EntityShootBowEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(FoodLevelChangeEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(PlayerFishEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
-    public boolean trigger(PlayerInteractEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(PlayerInteractEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
     public boolean trigger(ProjectileHitEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     /*
         RandomPackage Events

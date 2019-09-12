@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.util.addon;
 
+import me.randomhashtags.randompackage.addon.util.Skullable;
 import me.randomhashtags.randompackage.dev.InventoryPet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -9,14 +10,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FileInventoryPet extends RPAddon implements InventoryPet {
+public class FileInventoryPet extends RPAddon implements InventoryPet, Skullable {
     private ItemStack item, egg;
     public FileInventoryPet(File f) {
         load(f);
-        addPet(this);
+        if(isEnabled()) addPet(this);
     }
     public String getIdentifier() { return getYamlName(); }
 
+    public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public int getMaxLevel() { return yml.getInt("settings.max level"); }
     public int getLevelSlot() { return get("{LEVEL}"); }
     public int getCooldownSlot() { return get("{COOLDOWN}"); }
@@ -50,8 +52,14 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         }
         return a;
     }
+    public String getOwner() {
+        final String tex = yml.getString("item.texture");
+        return tex != null ? tex : yml.getString("item.owner");
+    }
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) {
+            item = api.d(yml, "item");
+        }
         return item.clone();
     }
 

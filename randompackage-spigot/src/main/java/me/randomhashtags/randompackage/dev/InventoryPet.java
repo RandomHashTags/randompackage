@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.Toggleable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,7 +11,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public interface InventoryPet extends Itemable, Attributable, RPItemStack {
+public interface InventoryPet extends Itemable, Attributable, Toggleable, RPItemStack {
     HashMap<Integer, Long> getCooldowns();
     default long getCooldown(int level) { return getCooldowns().getOrDefault(level, 0l); }
     HashMap<Integer, Long> getRequiredXp();

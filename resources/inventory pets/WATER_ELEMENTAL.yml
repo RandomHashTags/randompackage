@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   max level: 10
   cooldown:
     1: 300
