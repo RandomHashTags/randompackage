@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.util.addon;
 
 import me.randomhashtags.randompackage.addon.util.Skullable;
-import me.randomhashtags.randompackage.dev.InventoryPet;
+import me.randomhashtags.randompackage.addon.InventoryPet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.dev.InventoryPet;
+import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

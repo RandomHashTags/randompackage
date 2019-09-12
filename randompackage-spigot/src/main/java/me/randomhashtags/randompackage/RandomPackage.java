@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.dev.nearFinished.InventoryPets;
+import me.randomhashtags.randompackage.api.InventoryPets;
 import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
 import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
 import me.randomhashtags.randompackage.dev.nearFinished.Trinkets;
