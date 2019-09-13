@@ -38,6 +38,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new ComboStop(),
                 new Damage(),
                 new DepleteRarityGem(),
+                new DepleteStackSize(),
                 new DropItem(),
                 new ExecuteCommand(),
                 //new Explode(),
@@ -53,8 +54,10 @@ public abstract class EventAttributes extends EventExecutor {
                 new RemovePotionEffect(),
                 new Repeat(),
                 new SendMessage(),
+                new SendTitle(),
                 new SetAir(),
                 new SetAllowed(),
+                new SetBlock(),
                 new SetCancelled(),
                 new SetCompassTarget(),
                 new SetDurability(),
@@ -69,6 +72,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new SetXp(),
                 new Smite(),
                 new StealXp(),
+                new Teleport(),
                 new Wait()
         );
         for(EventAttribute e : attributes) {

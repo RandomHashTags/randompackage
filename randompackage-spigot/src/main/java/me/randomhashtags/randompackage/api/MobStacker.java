@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.attribute.todo.DepleteStackSize;
+import me.randomhashtags.randompackage.attribute.DepleteStackSize;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.obj.StackedEntity;
 import org.bukkit.Bukkit;

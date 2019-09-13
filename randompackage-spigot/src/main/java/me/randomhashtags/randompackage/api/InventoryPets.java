@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.attribute.condition.ItemIsInventoryPet;
 import me.randomhashtags.randompackage.event.DamageEvent;
 import me.randomhashtags.randompackage.event.customenchant.PvAnyEvent;
 import me.randomhashtags.randompackage.event.customenchant.isDamagedEvent;
@@ -48,7 +47,6 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
     public void load() {
         final long started = System.currentTimeMillis();
         new GivePetExp().load();
-        new ItemIsInventoryPet().load();
         save(null, "inventory pets.yml");
         if(!otherdata.getBoolean("saved default inventory pets")) {
             final String[] p = new String[] {
