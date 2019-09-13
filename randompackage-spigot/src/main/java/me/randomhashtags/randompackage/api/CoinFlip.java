@@ -38,7 +38,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     }
     public YamlConfiguration config;
 
-    private boolean isLegacy = false;
+    private boolean isLegacy;
     private UInventory gui, options, challenge;
     private int countdownStart;
     private ItemStack countdown;
@@ -86,7 +86,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         save(null, "coinflip.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "coinflip.yml"));
 
-        isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
+        isLegacy = EIGHT || NINE || TEN || ELEVEN;
 
         minWager = config.getLong("min wager");
         tax = config.getDouble("wager.tax");

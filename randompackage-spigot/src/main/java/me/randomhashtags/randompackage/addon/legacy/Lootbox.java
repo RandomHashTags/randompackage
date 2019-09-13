@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.addon.legacy;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Lootbox extends RPAddon implements Itemable {
-    public abstract String getName();
+public abstract class Lootbox extends RPAddon implements Itemable, Nameable {
     public abstract String getGuiTitle();
     public abstract String getPreviewTitle();
     public abstract String getRegularLootSize();

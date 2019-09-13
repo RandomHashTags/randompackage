@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.MaxLevelable;
+import me.randomhashtags.randompackage.addon.util.Slotable;
 import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 
 import java.util.List;
 
-public interface FactionUpgrade extends Itemable {
+public interface FactionUpgrade extends Itemable, MaxLevelable, Slotable {
     FactionUpgradeType getType();
-    int getSlot();
-    int getMaxTier();
     boolean itemAmountEqualsTier();
     List<String> getPerks();
     List<String> getRequirements();

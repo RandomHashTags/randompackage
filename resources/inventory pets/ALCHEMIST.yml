@@ -3,7 +3,7 @@ settings:
   enabled: false
   max level: 10
   cooldown:
-    1: 43200
+    all: 43200
   exp to level:
     2: 1500
 #

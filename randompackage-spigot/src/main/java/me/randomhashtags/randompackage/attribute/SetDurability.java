@@ -47,8 +47,7 @@ public class SetDurability extends AbstractEventAttribute {
         }
     }
     private ItemStack[] getTargets(EntityEquipment e, String value, ItemStack item) {
-        final boolean eight = version.contains("1.8");
-        final ItemStack helmet = e.getHelmet(), chestplate = e.getChestplate(), leggings = e.getLeggings(), boots = e.getBoots(), mhand = eight ? e.getItemInHand() : e.getItemInMainHand(), ohand = eight ? null : e.getItemInOffHand();
+        final ItemStack helmet = e.getHelmet(), chestplate = e.getChestplate(), leggings = e.getLeggings(), boots = e.getBoots(), mhand = EIGHT ? e.getItemInHand() : e.getItemInMainHand(), ohand = EIGHT ? null : e.getItemInOffHand();
         double difference = -1;
         ItemStack toSet = null;
         switch (value.toLowerCase()) {

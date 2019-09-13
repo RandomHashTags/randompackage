@@ -41,7 +41,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&6&m&l---------------------------------------------",
                             "&7- Author: &6RandomHashTags",
                             "&7- RandomPackage Version: &b" + randompackage.getDescription().getVersion(),
-                            "&7- Server Version: &f" + version,
+                            "&7- Server Version: &f" + VERSION,
                             "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             //"&7- Faction Plugin: " + (fapi.factions != null ? "&3" + fapi.factions + " &7(&2" + pluginmanager.getPlugin("Factions").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),

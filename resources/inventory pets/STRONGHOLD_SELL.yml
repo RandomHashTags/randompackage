@@ -1,9 +1,9 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   max level: 10
   cooldown:
-    1: 1800
+    all: 1800
   exp to level:
     2: 500
 #
@@ -29,4 +29,5 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerInteract;InventoryPetOnCooldown=false;PlayerAddToList=PET_STRONGHOLD_SELL;wait=20*15+(level-1)*0.2222222222;PlayerRemoveFromList=PET_STRONGHOLD_SELL"
+  - "PlayerCommandPreprocess;cancelled=true;Command=/sh sell;SetAllowed=true"

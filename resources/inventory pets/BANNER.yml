@@ -2,7 +2,7 @@
 settings:
   enabled: false
   cooldown:
-    1: 720
+    all: 720
   exp to level:
     2: 1000
 #

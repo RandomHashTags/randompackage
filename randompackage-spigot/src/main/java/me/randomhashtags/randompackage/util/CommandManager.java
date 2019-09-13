@@ -37,7 +37,7 @@ public final class CommandManager extends Reflect {
     private CommandManager() {
         actualCmds = new HashMap<>();
         try {
-            if(!isLegacy) {
+            if(!LEGACY) {
                 final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
                 o.setAccessible(true);
                 if(THIRTEEN) {
@@ -59,7 +59,7 @@ public final class CommandManager extends Reflect {
         features = new HashMap<>();
         try {
             commandMap = (SimpleCommandMap) getPrivateField(Bukkit.getServer().getPluginManager(), "commandMap");
-            knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands", !isLegacy);
+            knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands", !LEGACY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,7 +135,7 @@ public final class CommandManager extends Reflect {
     }
 
     private void updateBrigadierCmd(PluginCommand cmd, boolean unregister) {
-        if(isLegacy) return;
+        if(LEGACY) return;
         final String s = cmd.getName();
         final Map<String, com.mojang.brigadier.tree.CommandNode<?>> o = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) nodes;
         if(unregister) {

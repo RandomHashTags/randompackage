@@ -59,7 +59,6 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     }
 
     public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
-        final boolean eight = version.contains("1.8"), nine = version.contains("1.9"), ten = version.contains("1.10"), eleven = version.contains("1.11"), thirteen = version.contains("1.13"), legacy = isLegacy;
         boolean passed = true;
 
         outerloop: for(String c : conditions) {
@@ -69,7 +68,6 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 final String value = c.contains("=") ? c.split("=")[1] : "false";
                 final Entity e = entities.get(s);
                 s = s.toLowerCase();
-
                 if(hasReplacements(conditions)) {
                     doReplacements(entities, keys, s);
                 }
@@ -79,7 +77,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
                 } else if(condition.startsWith(s)) {
-                    passed = passedAllConditions(event, e, condition, s, value, legacy, eight, nine, ten, eleven, thirteen);
+                    passed = passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
                 }
                 if(!passed) break outerloop;
             }
@@ -412,6 +410,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public boolean trigger(EntityShootBowEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(FoodLevelChangeEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     public boolean trigger(PlayerFishEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(PlayerEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
     public boolean trigger(PlayerInteractEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
     public boolean trigger(ProjectileHitEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     /*

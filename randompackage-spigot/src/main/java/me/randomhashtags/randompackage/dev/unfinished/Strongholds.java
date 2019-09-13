@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Strongholds extends RPFeature implements CommandExecutor {
@@ -55,5 +56,8 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     private void projectileLaunchEvent(ProjectileLaunchEvent event) {
         if(event.getEntity() instanceof EnderPearl) {
         }
+    }
+    @EventHandler(ignoreCancelled = true)
+    private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
     }
 }

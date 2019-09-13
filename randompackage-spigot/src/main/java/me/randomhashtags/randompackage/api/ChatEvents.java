@@ -196,19 +196,19 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	}
 
 	private String asNMSCopy(ItemStack itemstack) {
-		if(version.contains("1.8")) {
+		if(EIGHT) {
 			return org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_8_R3.NBTTagCompound()).toString();
-		} else if(version.contains("1.9")) {
+		} else if(NINE) {
 			return org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_9_R2.NBTTagCompound()).toString();
-		} else if(version.contains("1.10")) {
+		} else if(TEN) {
 			return org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_10_R1.NBTTagCompound()).toString();
-		} else if(version.contains("1.11")) {
+		} else if(ELEVEN) {
 			return org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_11_R1.NBTTagCompound()).toString();
-		} else if(version.contains("1.12")) {
+		} else if(TWELVE) {
 			return org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_12_R1.NBTTagCompound()).toString();
-		} else if(version.contains("1.13")) {
+		} else if(THIRTEEN) {
 			return org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_13_R2.NBTTagCompound()).toString();
-		} else if(version.contains("1.14")) {
+		} else if(FOURTEEN) {
 			return org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_14_R1.NBTTagCompound()).toString();
 		} else {
 			return null;

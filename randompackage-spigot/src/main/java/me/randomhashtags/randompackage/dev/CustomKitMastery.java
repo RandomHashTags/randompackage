@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -8,8 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface CustomKitMastery extends CustomKit {
-    String getName();
+public interface CustomKitMastery extends CustomKit, Nameable {
     ItemStack getRedeem();
     LinkedHashMap<CustomKit, Integer> getRequiredKits();
     boolean losesRequiredKits();

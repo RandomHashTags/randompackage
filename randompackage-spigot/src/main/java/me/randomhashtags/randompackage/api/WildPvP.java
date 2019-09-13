@@ -74,7 +74,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "wild pvp.yml");
 
-        legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11");
+        legacy = EIGHT || NINE || TEN || ELEVEN;
         config = YamlConfiguration.loadConfiguration(new File(rpd, "wild pvp.yml"));
         blockedCommands = new ArrayList<>();
         for(String s : config.getStringList("settings.blocked commands")) {

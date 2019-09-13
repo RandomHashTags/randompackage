@@ -8,7 +8,6 @@ import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.dev.*;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,9 +24,7 @@ import static me.randomhashtags.randompackage.util.RPFeature.rpd;
 import static me.randomhashtags.randompackage.util.RPFeature.separator;
 
 public abstract class RPStorage extends RegionalAPI {
-    protected static final String version = Bukkit.getVersion();
     protected static final Random random = new Random();
-    protected static final boolean isLegacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
 
     private static HashMap<String, YamlConfiguration> cached = new HashMap<>();
 

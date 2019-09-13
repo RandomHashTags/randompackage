@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -10,11 +11,10 @@ import java.util.Random;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public interface Lootbox extends Itemable {
+public interface Lootbox extends Itemable, Nameable {
     int getPriority();
     long getAvailableFor();
     int getGuiSize();
-    String getName();
     String getGuiTitle();
     String getPreviewTitle();
     String getRegularLootSize();

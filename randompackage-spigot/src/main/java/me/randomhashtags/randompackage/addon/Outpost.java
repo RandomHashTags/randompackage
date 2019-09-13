@@ -2,14 +2,14 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.enums.OutpostStatus;
 import me.randomhashtags.randompackage.addon.util.Captureable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Scoreboardable;
+import me.randomhashtags.randompackage.addon.util.Slotable;
 import org.bukkit.Location;
 
 import java.util.List;
 
-public interface Outpost extends Captureable, Scoreboardable {
-    String getName();
-    int getSlot();
+public interface Outpost extends Captureable, Nameable, Slotable, Scoreboardable {
     List<String> getLostControlMsg();
     List<String> getClaimedMsg();
     List<String> getLimits();

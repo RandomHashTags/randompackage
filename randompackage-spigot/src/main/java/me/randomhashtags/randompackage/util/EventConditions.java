@@ -197,7 +197,7 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
     }
     private void passedCat(Entity e, String condition, String s, String value, boolean legacy, boolean thirteen) {
         if(condition.startsWith(s + "cattype=")) {
-            passed = isLegacy ? e instanceof Ocelot && ((Ocelot) e).getCatType().name().equalsIgnoreCase(value) : e instanceof Cat && ((Cat) e).getCatType().name().equalsIgnoreCase(value);
+            passed = LEGACY ? e instanceof Ocelot && ((Ocelot) e).getCatType().name().equalsIgnoreCase(value) : e instanceof Cat && ((Cat) e).getCatType().name().equalsIgnoreCase(value);
         } else if(condition.startsWith(s + "collarcolor=")) {
             if(e instanceof Wolf) {
                 passed = ((Wolf) e).getCollarColor().name().equalsIgnoreCase(value);

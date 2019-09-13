@@ -4,6 +4,8 @@ import me.randomhashtags.randompackage.addon.FallenHero;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
+import me.randomhashtags.randompackage.addon.util.MaxLevelable;
+import me.randomhashtags.randompackage.addon.util.Slotable;
 import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -11,10 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CustomKit extends RPAddon implements Itemable {
+public abstract class CustomKit extends RPAddon implements Itemable, MaxLevelable, Slotable {
     public abstract Kits getKitClass();
-    public abstract int getSlot();
-    public abstract int getMaxLevel();
     public abstract long getCooldown();
     public abstract List<KitItem> getItems();
     public abstract FallenHero getFallenHero();

@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Attributable;
+import me.randomhashtags.randompackage.addon.util.MaxLevelable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Toggleable;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface CustomEnchant extends Attributable, Toggleable {
-    String getName();
+public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Toggleable {
     List<String> getLore();
-    int getMaxLevel();
     List<String> getAppliesTo();
     String getRequiredEnchant();
     BigDecimal[] getAlchemist();

@@ -17,8 +17,7 @@ public class HasCustomEnchantEquipped extends AbstractEventCondition {
             if(e != null) {
                 final CustomEnchant c = valueOfCustomEnchant(value);
                 if(c != null) {
-                    final boolean eight = version.contains("1.8");
-                    final ItemStack[] items = new ItemStack[] {e.getHelmet(), e.getChestplate(), e.getLeggings(), e.getBoots(), eight ? e.getItemInHand() : e.getItemInMainHand(), eight ? null : e.getItemInOffHand()};
+                    final ItemStack[] items = new ItemStack[] {e.getHelmet(), e.getChestplate(), e.getLeggings(), e.getBoots(), EIGHT ? e.getItemInHand() : e.getItemInMainHand(), EIGHT ? null : e.getItemInOffHand()};
                     for(ItemStack is : items) {
                         if(getCustomEnchants().getEnchants(is).containsKey(c)) {
                             return true;

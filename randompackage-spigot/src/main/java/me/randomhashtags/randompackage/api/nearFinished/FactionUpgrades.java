@@ -212,7 +212,7 @@ public class FactionUpgrades extends RPFeature {
             if(item.hasItemMeta() && itemMeta.hasLore()) {
                 for(String s : itemMeta.getLore()) {
                     if(s.equals("{TIER}")) {
-                        lore.add(tier == 0 ? L : W.replace("{MAX_TIER}", Integer.toString(f.getMaxTier())).replace("{TIER}", Integer.toString(tier)));
+                        lore.add(tier == 0 ? L : W.replace("{MAX_TIER}", Integer.toString(f.getMaxLevel())).replace("{TIER}", Integer.toString(tier)));
                     } else {
                         boolean did = false;
                         int a = 0;
@@ -223,7 +223,7 @@ public class FactionUpgrades extends RPFeature {
                                 final int targetTier = getRemainingInt(p.replace("#", Integer.toString(a)).split(";")[0]);
                                 lore.add(ChatColor.translateAlternateColorCodes('&', (tier >= targetTier ? perkAchived : perkUnachived) + p.replace("#", Integer.toString(a)).split(";")[2]));
                                 if(a == 1 && f.getPerks().size() == 1 && p.split(";")[0].contains("#")) {
-                                    for(int g = a + 1; g <= f.getMaxTier(); g++) {
+                                    for(int g = a + 1; g <= f.getMaxLevel(); g++) {
                                         lore.add(ChatColor.translateAlternateColorCodes('&', (tier >= g ? perkAchived : perkUnachived) + p.replace("#", Integer.toString(g)).split(";")[2]));
                                     }
                                 }
@@ -308,7 +308,7 @@ public class FactionUpgrades extends RPFeature {
         final String f = regions.getFactionTag(player.getUniqueId());
         final HashMap<FactionUpgrade, Integer> upgrades = factionUpgrades.get(f);
         final int ti = upgrades.getOrDefault(fu, 0);
-        if(ti >= fu.getMaxTier()) return;
+        if(ti >= fu.getMaxLevel()) return;
         BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
         ItemStack requiredItem = null;
         final HashMap<String, String> replacements = new HashMap<>();

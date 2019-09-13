@@ -2,16 +2,16 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.MaxLevelable;
+import me.randomhashtags.randompackage.addon.util.Slotable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface CustomKit extends Itemable {
+public interface CustomKit extends Itemable, MaxLevelable, Slotable {
     Kits getKitClass();
-    int getSlot();
-    int getMaxLevel();
     long getCooldown();
     List<KitItem> getItems();
     FallenHero getFallenHero();

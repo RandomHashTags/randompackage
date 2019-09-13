@@ -2,7 +2,9 @@ package me.randomhashtags.randompackage.addon.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -20,8 +22,9 @@ public interface Skullable {
         if(cached.containsKey(skinURL)) return cached.get(skinURL);
         final ItemStack head = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
         final SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        if(skinURL.isEmpty()) return head;
-        else if(skinURL.startsWith("http")) {
+        if(skinURL.isEmpty()) {
+            return head;
+        } else if(skinURL.startsWith("http")) {
             headMeta.setDisplayName(name);
             headMeta.setLore(lore);
             final GameProfile profile = new GameProfile(UUID.randomUUID(), null);

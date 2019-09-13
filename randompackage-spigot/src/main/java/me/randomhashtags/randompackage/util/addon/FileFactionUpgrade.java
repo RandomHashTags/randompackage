@@ -38,7 +38,7 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
     }
     public FactionUpgradeType getType() { return getFactionUpgradeType(yml.getString("settings.type")); }
     public int getSlot() { return yml.getInt("settings.slot"); }
-    public int getMaxTier() { return yml.getInt("settings.max tier"); }
+    public int getMaxLevel() { return yml.getInt("settings.max tier"); }
     public boolean itemAmountEqualsTier() { return yml.getBoolean("settings.item amount=tier"); }
     public List<String> getPerks() { return yml.getStringList("perks"); }
     public List<String> getRequirements() { return yml.getStringList("requirements"); }

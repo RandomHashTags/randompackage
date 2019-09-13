@@ -3,14 +3,14 @@ package me.randomhashtags.randompackage.dev;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Scheduleable;
+import me.randomhashtags.randompackage.addon.util.Slotable;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 import java.util.List;
 
-public interface Dungeon extends Attributable, Itemable, Scheduleable {
-    int getSlot();
+public interface Dungeon extends Attributable, Itemable, Scheduleable, Slotable {
     ItemStack getKey();
     ItemStack getKeyLocked();
     ItemStack getPortal();

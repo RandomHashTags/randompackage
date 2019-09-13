@@ -1,4 +1,8 @@
 # Made by RandomHashTags
+messages:
+  on cooldown:
+    - "&c&l(!)&r &cThis pet is on cooldown! You can use its ability again in {TIME}."
+#
 items:
   leash:
     item: "lead"

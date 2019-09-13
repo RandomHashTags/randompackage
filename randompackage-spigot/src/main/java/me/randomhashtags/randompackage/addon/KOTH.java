@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Captureable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Scheduleable;
 import me.randomhashtags.randompackage.addon.util.Scoreboardable;
 import me.randomhashtags.randompackage.dev.KOTHMonster;
@@ -11,8 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.HashMap;
 import java.util.List;
 
-public interface KOTH extends Captureable, Scheduleable, Scoreboardable {
-    String getName();
+public interface KOTH extends Captureable, Nameable, Scheduleable, Scoreboardable {
     List<String> getAllowedCommands();
 
     String getFlag();

@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface CustomKitItem extends Identifiable {
+public interface CustomKitItem extends Identifiable, Nameable {
     CustomKit getKit();
     String getItem();
     String getAmount();
-    String getName();
     List<String> getLore();
     int getChance();
     int getRequiredLevel();

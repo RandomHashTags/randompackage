@@ -1,8 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
-import me.randomhashtags.randompackage.addon.util.Attributable;
-import me.randomhashtags.randompackage.addon.util.Itemable;
-import me.randomhashtags.randompackage.addon.util.Toggleable;
+import me.randomhashtags.randompackage.addon.util.*;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -11,16 +9,22 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public interface InventoryPet extends Itemable, Attributable, Toggleable, RPItemStack {
-    HashMap<Integer, Long> getCooldowns();
-    default long getCooldown(int level) { return getCooldowns().getOrDefault(level, 0l); }
-    HashMap<Integer, Long> getRequiredXp();
+public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack {
+    HashMap<Integer, Integer> getCooldowns();
+    default long getCooldown(int level) {
+        final HashMap<Integer, Integer> cooldowns = getCooldowns();
+        return cooldowns.getOrDefault(-1, cooldowns.getOrDefault(level, 3600));
+    }
+    HashMap<Integer, Integer> getRequiredXp();
+    default int getRequiredXp(int level) {
+        final HashMap<Integer, Integer> r = getRequiredXp();
+        return r.getOrDefault(-1, r.getOrDefault(level, 1000));
+    }
 
-    int getMaxLevel();
-
-    default ItemStack getItem(int level, int exp) {
-        final HashMap<Integer, Long> cooldowns = getCooldowns();
-        final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = api.formatLong(getRequiredXp().getOrDefault(level+1, 0l)), cooldown = api.getRemainingTime(cooldowns.getOrDefault(level, 1000l));
+    default ItemStack getItem(int level) { return getItem(level, getRequiredXp(level)); }
+    default ItemStack getItem(int level, int exp) { return getItem(level, exp, System.currentTimeMillis()+getCooldown(level)); }
+    default ItemStack getItem(int level, int exp, long cooldownExpiration) {
+        final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = api.formatInt(exp), cooldown = api.getRemainingTime(getCooldown(level));
         final ItemStack is = getItem();
         final ItemMeta m = is.getItemMeta();
         m.setDisplayName(m.getDisplayName().replace("{LEVEL}", lvl));
@@ -30,16 +34,18 @@ public interface InventoryPet extends Itemable, Attributable, Toggleable, RPItem
         }
         m.setLore(l);
         is.setItemMeta(m);
-        return (ItemStack) createRPItemStack(is, new HashMap<String, String>() {{
-            put("InventoryPetInfo", getIdentifier() + ":" + lvl + ":" + XP + ":0");
+        setItem(is, getIdentifier(), level, exp, cooldownExpiration);
+        return is;
+    }
+
+    default void setItem(ItemStack is, String identifier, int level, int exp, long cooldownExpiration) {
+        setRPItemStackValues(is, new HashMap<String, String>() {{
+            put("InventoryPetInfo", identifier + ":" + level + ":" + exp + ":" + cooldownExpiration);
         }});
     }
 
-    default void setItem(ItemStack is, int level, int exp, long cooldown) {
-        final String[] info = getRPItemStackValue(is, "InventoryPetInfo").split(":");
-        setRPItemStackValues(is, new HashMap<String, String>() {{
-            put("InventoryPetInfo", info[0] + ":" + level + ":" + exp + ":" + cooldown);
-        }});
+    default void didUse(ItemStack is, String identifier, int level, int exp) {
+        setItem(is, identifier, level, exp, System.currentTimeMillis()+getCooldown(level));
     }
 
     ItemStack getEgg();
