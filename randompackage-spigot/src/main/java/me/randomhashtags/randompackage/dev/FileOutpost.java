@@ -1,7 +1,8 @@
-package me.randomhashtags.randompackage.util.addon;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Outpost;
 import me.randomhashtags.randompackage.addon.enums.OutpostStatus;
+import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +32,7 @@ public abstract class FileOutpost extends RPAddon implements Outpost {
     public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "gui");
-        return item;
+        return getClone(item);
     }
     public List<String> getLostControlMsg() {
         if(lostControl == null) lostControl = colorizeListString(yml.getStringList("messages.lost control"));

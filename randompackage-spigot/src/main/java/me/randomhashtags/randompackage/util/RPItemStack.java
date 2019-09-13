@@ -5,9 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public interface RPItemStack {
-    String VERSION = Bukkit.getVersion();
-    boolean EIGHT = VERSION.contains("1.8"), NINE = VERSION.contains("1.9"), TEN = VERSION.contains("1.10"), ELEVEN = VERSION.contains("1.11"), TWELVE = VERSION.contains("1.12"), THIRTEEN = VERSION.contains("1.13"), FOURTEEN = VERSION.contains("1.14");
+public interface RPItemStack extends Versionable {
     default Object createRPItemStack(ItemStack is, HashMap<String, String> values) {
         if(EIGHT) {
             final net.minecraft.server.v1_8_R3.ItemStack n = org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack.asNMSCopy(is);

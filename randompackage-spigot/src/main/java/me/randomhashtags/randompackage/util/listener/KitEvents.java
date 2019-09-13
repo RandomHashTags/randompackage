@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class KitEvents extends RPStorage implements Listener {
+public final class KitEvents extends RPStorage implements Listener {
     private static KitEvents instance;
     public static KitEvents getKitEvents() {
         if(instance == null) instance = new KitEvents();

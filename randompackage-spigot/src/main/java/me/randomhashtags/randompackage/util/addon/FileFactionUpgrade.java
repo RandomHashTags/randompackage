@@ -34,7 +34,7 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
             m.setLore(l);
             item.setItemMeta(m);
         }
-        return item.clone();
+        return getClone(item);
     }
     public FactionUpgradeType getType() { return getFactionUpgradeType(yml.getString("settings.type")); }
     public int getSlot() { return yml.getInt("settings.slot"); }
@@ -45,5 +45,6 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
 
     public void didLevelup(FactionUpgradeLevelupEvent event) {
         if(event.isCancelled()) return;
+        // TODO
     }
 }

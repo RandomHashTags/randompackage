@@ -33,7 +33,7 @@ public class StopEnchant extends AbstractEventAttribute {
                 final HashMap<CustomEnchant, TObject> t = stoppedEnchants.get(u);
                 if(t.containsKey(e)) {
                     final TObject o = t.get(e);
-                    if(c.getEnchantLevel() <= (int) o.first()) {
+                    if(c.getEnchantLevel() <= (int) o.getFirst()) {
                         c.setCancelled(true);
                     }
                 }
@@ -57,7 +57,7 @@ public class StopEnchant extends AbstractEventAttribute {
     }
     private void stopTasks(UUID uuid) {
         for(TObject t : stoppedEnchants.get(uuid).values()) {
-            scheduler.cancelTask((int) t.second());
+            scheduler.cancelTask((int) t.getSecond());
         }
     }
     private int resumeEnchant(UUID player, CustomEnchant enchant, int ticks) {

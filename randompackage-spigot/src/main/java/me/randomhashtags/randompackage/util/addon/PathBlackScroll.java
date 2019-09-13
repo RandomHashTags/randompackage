@@ -23,7 +23,7 @@ public class PathBlackScroll extends RPAddon implements BlackScroll {
 
 	public ItemStack getItem() {
 		if(is == null) is = api.d(getAddonConfig("black scrolls.yml"), "black scrolls." + path);
-		return is.clone();
+		return getClone(is);
 	}
 
 	public int getMinPercent() { return min; }

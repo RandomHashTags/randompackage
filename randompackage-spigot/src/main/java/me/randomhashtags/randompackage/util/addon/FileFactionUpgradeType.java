@@ -15,9 +15,7 @@ public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeTyp
 	private String path;
 	private List<String> unlock, upgrade, maxed, format;
 	public FileFactionUpgradeType(String path) {
-		if(yml == null) {
-			yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
-		}
+		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
 		this.path = path;
 		addFactionUpgradeType(this);
 	}
@@ -27,19 +25,19 @@ public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeTyp
 	public String getPerkUnachievedPrefix() { return ChatColor.translateAlternateColorCodes('&', yml.getString("types." + path + ".perk unachieved prefix")); }
 	public String getRequirementsPrefix() { return ChatColor.translateAlternateColorCodes('&', yml.getString("types." + path + ".requirements prefix")); }
 	public List<String> getUnlock() {
-		if(unlock == null) unlock = api.colorizeListString(yml.getStringList("types." + path + ".unlock"));
+		if(unlock == null) unlock = colorizeListString(yml.getStringList("types." + path + ".unlock"));
 		return unlock;
 	}
 	public List<String> getUpgrade() {
-		if(upgrade == null) upgrade = api.colorizeListString(yml.getStringList("types." + path + ".upgrade"));
+		if(upgrade == null) upgrade = colorizeListString(yml.getStringList("types." + path + ".upgrade"));
 		return upgrade;
 	}
 	public List<String> getMaxed() {
-		if(maxed == null) maxed = api.colorizeListString(yml.getStringList("types." + path + ".maxed"));
+		if(maxed == null) maxed = colorizeListString(yml.getStringList("types." + path + ".maxed"));
 		return maxed;
 	}
 	public List<String> getFormat() {
-		if(format == null) format = api.colorizeListString(yml.getStringList("types." + path + ".format"));
+		if(format == null) format = colorizeListString(yml.getStringList("types." + path + ".format"));
 		return format;
 	}
 }

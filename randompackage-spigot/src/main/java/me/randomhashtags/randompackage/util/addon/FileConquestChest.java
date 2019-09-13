@@ -50,23 +50,23 @@ public class FileConquestChest extends RPAddon implements ConquestChest {
     public List<String> getRewards() { return yml.getStringList("rewards"); }
     public List<String> getHitAttributes() { return yml.getStringList("hit attributes"); }
     public List<String> getSpawnMsg() {
-        if(spawnMsg == null) spawnMsg = api.colorizeListString(yml.getStringList("messages.spawn"));
+        if(spawnMsg == null) spawnMsg = colorizeListString(yml.getStringList("messages.spawn"));
         return spawnMsg;
     }
     public List<String> getWillSpawnMsg() {
-        if(willSpawnMsg == null) willSpawnMsg = api.colorizeListString(yml.getStringList("messages.will spawn"));
+        if(willSpawnMsg == null) willSpawnMsg = colorizeListString(yml.getStringList("messages.will spawn"));
         return willSpawnMsg;
     }
     public List<String> getStillAliveMsg() {
-        if(stillAliveMsg == null) stillAliveMsg = api.colorizeListString(yml.getStringList("messages.still alive"));
+        if(stillAliveMsg == null) stillAliveMsg = colorizeListString(yml.getStringList("messages.still alive"));
         return stillAliveMsg;
     }
     public List<String> getHealthMsg() {
-        if(healthMsg == null) healthMsg = api.colorizeListString(yml.getStringList("messages.health"));
+        if(healthMsg == null) healthMsg = colorizeListString(yml.getStringList("messages.health"));
         return healthMsg;
     }
     public List<String> getUnlockedMsg() {
-        if(unlockedMsg == null) unlockedMsg = api.colorizeListString(yml.getStringList("messages.unlocked"));
+        if(unlockedMsg == null) unlockedMsg = colorizeListString(yml.getStringList("messages.unlocked"));
         return unlockedMsg;
     }
 

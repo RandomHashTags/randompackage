@@ -30,7 +30,7 @@ public class FileMask extends RPAddon implements Mask, Skullable {
                 item = getSkull(im.getDisplayName(), im.getLore(), isLegacy || version.contains("1.13"));
             }
         }
-        return item != null ? item.clone() : null;
+        return getClone(item);
     }
     public boolean canBeApplied(ItemStack is) {
         return is != null && is.getType().name().endsWith("_HELMET") && getMaskOnItem(is) == null;

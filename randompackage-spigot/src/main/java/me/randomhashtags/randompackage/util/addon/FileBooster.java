@@ -19,7 +19,7 @@ public class FileBooster extends RPAddon implements Booster {
     public String getRecipients() { return yml.getString("settings.recipients"); }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
-        return item.clone();
+        return getClone(item);
     }
     public ItemStack getItem(long duration, double multiplier) {
         final String d = getRemainingTime(duration), mu = Double.toString(api.round(multiplier, 4));

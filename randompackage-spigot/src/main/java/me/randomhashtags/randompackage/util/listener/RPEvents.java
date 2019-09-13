@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class RPEvents extends RPFeature {
+public final class RPEvents extends RPFeature {
     private static RPEvents instance;
     public static RPEvents getRPEvents() {
         if(instance == null) instance = new RPEvents();

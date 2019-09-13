@@ -19,11 +19,11 @@ public class FileKitEvolution extends RPKit implements CustomKitEvolution {
 
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "gui settings");
-        return item.clone();
+        return getClone(item);
     }
     public int getUpgradeChance() { return yml.getInt("settings.upgrade chance"); }
     public ItemStack getUpgradeGem() {
         if(upgradeGem == null) upgradeGem = api.d(yml, "upgrade gem");
-        return upgradeGem != null ? upgradeGem.clone() : null;
+        return getClone(upgradeGem);
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SuperiorSky extends RPFeature implements Regional {
+public final class SuperiorSky extends RPFeature implements Regional {
     private static SuperiorSky instance;
     public static SuperiorSky getSuperiorSkyblock() {
         if(instance == null) instance = new SuperiorSky();

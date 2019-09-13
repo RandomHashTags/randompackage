@@ -24,7 +24,7 @@ public class FileTitle extends RPAddon implements Title {
 
     public ItemStack getItem() {
         final String title = getIdentifier();
-        final ItemStack item = i.clone();
+        final ItemStack item = getClone(i);
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> a = new ArrayList<>();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", ChatColor.translateAlternateColorCodes('&', title)));

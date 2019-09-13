@@ -46,11 +46,8 @@ public class Masks extends CustomEnchants {
     public ItemStack maskgenerator;
     private List<String> maskCanObtain;
 
-    @Override
     public String getIdentifier() { return "MASKS"; }
-    @Override
     protected RPFeature getFeature() { return getMasks(); }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "masks.yml");
@@ -83,7 +80,6 @@ public class Masks extends CustomEnchants {
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (masks != null ? masks.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    @Override
     public void unload() {
         for(Player p : equippedMasks.keySet()) {
             p.getInventory().setHelmet(equippedMasks.get(p));

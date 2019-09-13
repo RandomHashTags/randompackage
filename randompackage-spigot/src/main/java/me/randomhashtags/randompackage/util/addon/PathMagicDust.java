@@ -33,7 +33,7 @@ public class PathMagicDust extends RPAddon implements MagicDust {
 	public int getMaxPercent() { return max; }
 	public ItemStack getItem() {
 		if(is == null) is = api.d(getAddonConfig("fireballs.yml"), "dusts." + path);
-		return is.clone();
+		return getClone(is);
 	}
 
 	public List<EnchantRarity> getAppliesToRarities() {

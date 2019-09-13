@@ -20,24 +20,12 @@ public class FileInventoryPet extends RPAddon implements InventoryPet, Skullable
 
     public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public int getMaxLevel() { return yml.getInt("settings.max level"); }
-    public int getLevelSlot() { return get("{LEVEL}"); }
-    public int getCooldownSlot() { return get("{COOLDOWN}"); }
-    public int getExpSlot() { return get("{EXP}"); }
-    private int get(String input) {
-        final List<String> l = getItem().getItemMeta().getLore();
-        for(int i = 0; i < l.size(); i++) {
-            if(l.get(i).contains(input)) {
-                return i;
-            }
-        }
-        return -1;
-    }
     public HashMap<Integer, Long> getCooldowns() {
         final HashMap<Integer, Long> a = new HashMap<>();
-        final ConfigurationSection c = yml.getConfigurationSection("settings.cooldowns");
+        final ConfigurationSection c = yml.getConfigurationSection("settings.cooldown");
         if(c != null) {
             for(String s : c.getKeys(false)) {
-                a.put(Integer.parseInt(s), yml.getLong("settings.cooldowns." + s));
+                a.put(Integer.parseInt(s), yml.getLong("settings.cooldown." + s)*1000);
             }
         }
         return a;

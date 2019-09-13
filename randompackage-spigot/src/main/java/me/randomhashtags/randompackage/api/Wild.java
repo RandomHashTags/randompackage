@@ -71,7 +71,7 @@ public class Wild extends RPFeature implements CommandExecutor {
 
     private BigDecimal get(World w, HashMap<String, TObject> coords, boolean max) {
         final TObject o = coords.get(w.getName());
-        return o != null ? (BigDecimal) (max ? o.first() : o.second()) : null;
+        return o != null ? (BigDecimal) (max ? o.getFirst() : o.getSecond()) : null;
     }
 
     public BigDecimal getMaxX(World w) { return get(w, xcoords, true); }

@@ -11,7 +11,6 @@ import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.customenchant.*;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
-import org.bukkit.Warning;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -40,7 +39,6 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         // TODO: add more replacements
         for(String entity : keys) {
             final Entity E = entities.get(entity);
-            final Location l = E.getLocation();
             final boolean isLiving = E instanceof LivingEntity, isPlayer = isLiving && E instanceof Player;
             final LivingEntity le = isLiving ? (LivingEntity) E : null;
             final Player player = isPlayer ? (Player) E : null;
@@ -48,6 +46,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             s = s.replace("get" + entity + "hp", isLiving ? Double.toString(le.getHealth()) : "0");
             s = s.replace("get" + entity + "saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
             if(s.contains("loc")) {
+                final Location l = E.getLocation();
                 s = s.replace("get" + entity + "locx", Double.toString(l.getX()));
                 s = s.replace("get" + entity + "locy", Double.toString(l.getY()));
                 s = s.replace("get" + entity + "locz", Double.toString(l.getZ()));
@@ -63,28 +62,26 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         final boolean eight = version.contains("1.8"), nine = version.contains("1.9"), ten = version.contains("1.10"), eleven = version.contains("1.11"), thirteen = version.contains("1.13"), legacy = isLegacy;
         boolean passed = true;
 
-        for(String c : conditions) {
+        outerloop: for(String c : conditions) {
             final String condition = c.toLowerCase();
-            if(passed) {
-                final Set<String> keys = entities.keySet();
-                for(String s : keys) {
-                    final String value = c.contains("=") ? c.split("=")[1] : "false";
-                    final Entity e = entities.get(s);
-                    s = s.toLowerCase();
+            final Set<String> keys = entities.keySet();
+            for(String s : keys) {
+                final String value = c.contains("=") ? c.split("=")[1] : "false";
+                final Entity e = entities.get(s);
+                s = s.toLowerCase();
 
-                    if(hasReplacements(conditions)) {
-                        doReplacements(entities, keys, s);
-                    }
-
-                    if(condition.startsWith("cancelled=")) {
-                        passed = cancelled == Boolean.parseBoolean(value);
-                    } else if(condition.startsWith("chance=")) {
-                        passed = random.nextInt(100) < evaluate(value);
-                    } else if(condition.startsWith(s)) {
-                        passed = passedAllConditions(event, e, condition, s, value, legacy, eight, nine, ten, eleven, thirteen);
-                    }
-                    if(!passed) break;
+                if(hasReplacements(conditions)) {
+                    doReplacements(entities, keys, s);
                 }
+
+                if(condition.startsWith("cancelled=")) {
+                    passed = cancelled == Boolean.parseBoolean(value);
+                } else if(condition.startsWith("chance=")) {
+                    passed = random.nextInt(100) < evaluate(value);
+                } else if(condition.startsWith(s)) {
+                    passed = passedAllConditions(event, e, condition, s, value, legacy, eight, nine, ten, eleven, thirteen);
+                }
+                if(!passed) break outerloop;
             }
         }
         return passed;
@@ -428,8 +425,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public boolean trigger(CustomEnchantProcEvent event, List<String> attributes) {
         return trigger(event, event.getEntities(), attributes, getReplacements(event));
     }
-    public boolean trigger(DamageEvent event, List<String> attributes) {
-        return trigger(event, getEntities(event), attributes, getReplacements(event));
+    public boolean trigger(DamageEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements));
     }
     public boolean trigger(FallenHeroSlainEvent event, List<String> attributes) {
         return trigger(event, getEntities("Victim", event.hero.getEntity(), "Killer", event.killer), attributes);

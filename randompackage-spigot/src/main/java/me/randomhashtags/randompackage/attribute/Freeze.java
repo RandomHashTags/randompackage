@@ -19,8 +19,8 @@ public class Freeze extends AbstractEventAttribute {
     public void unload() {
         for(Player p : tasks.keySet()) {
             final TObject t = tasks.get(p);
-            scheduler.cancelTask((int) t.first());
-            p.setWalkSpeed((float) t.second());
+            scheduler.cancelTask((int) t.getFirst());
+            p.setWalkSpeed((float) t.getSecond());
         }
         tasks = null;
     }
@@ -31,8 +31,8 @@ public class Freeze extends AbstractEventAttribute {
             final Player player = q.getPlayer();
             final TObject t = tasks.getOrDefault(player, null);
             if(t != null) {
-                scheduler.cancelTask((int) t.first());
-                player.setWalkSpeed((float) t.second());
+                scheduler.cancelTask((int) t.getFirst());
+                player.setWalkSpeed((float) t.getSecond());
                 tasks.remove(player);
             }
         }

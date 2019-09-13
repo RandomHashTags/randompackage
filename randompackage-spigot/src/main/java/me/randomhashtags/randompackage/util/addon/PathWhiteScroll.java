@@ -35,7 +35,7 @@ public class PathWhiteScroll extends RPAddon implements WhiteScroll {
     public boolean removesRequiredAfterApplication() { return getAddonConfig("white scrolls.yml").getBoolean("white scrolls." + path + ".removes required after application"); }
     public ItemStack getItem() {
         if(item == null) item = api.d(getAddonConfig("white scrolls.yml"), "white scrolls." + path);
-        return item.clone();
+        return getClone(item);
     }
     public String getApplied() {
         if(apply == null) apply = ChatColor.translateAlternateColorCodes('&', getAddonConfig("white scrolls.yml").getString("white scrolls." + path + ".apply"));

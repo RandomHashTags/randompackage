@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.util.addon;
+package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.BattlefieldEvent;
+import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.Location;
 
 import java.util.List;

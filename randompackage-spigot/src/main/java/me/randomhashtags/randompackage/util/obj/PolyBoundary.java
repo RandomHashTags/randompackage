@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.util.obj;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class PolyBoundary {
+public final class PolyBoundary {
     private final Location center;
     private int radius;
     private final int maxX, minX, maxZ, minZ, maxY, minY;

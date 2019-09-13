@@ -16,7 +16,7 @@ public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
 
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "item");
-        return display.clone();
+        return getClone(display);
     }
     public long getDuration() { return yml.getLong("settings.duration"); }
     public String getType() { return yml.getString("settings.type"); }

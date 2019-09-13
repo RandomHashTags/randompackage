@@ -125,7 +125,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         return m ? min+random.nextInt(Integer.parseInt(a[1])-min+1) : Integer.parseInt(input);
     }
 
-    public ItemStack valueOf(String input) {
+    public final  ItemStack valueOf(String input) {
         final String Q = input.split(";")[0];
         input = input.toLowerCase();
         if(input.startsWith("banknote:")) {

@@ -53,7 +53,7 @@ public class ServerCrateFlareObject extends UVersion implements ServerCrateFlare
 
 	public ItemStack getItem() {
 		if(is == null) is = api.d(getYaml(), "flare");
-		return is.clone();
+		return getClone(is);
 	}
 	public List<String> getRewards() { return null; }
 	public int getSpawnRadius() { return getYaml().getInt("flare.settings.spawn radius"); }

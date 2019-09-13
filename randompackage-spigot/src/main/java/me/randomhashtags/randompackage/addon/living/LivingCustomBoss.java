@@ -84,7 +84,6 @@ public class LivingCustomBoss extends UVersion {
         final CustomBossDamageByEntityEvent e = new CustomBossDamageByEntityEvent(customboss, damager, damage);
         pluginmanager.callEvent(e);
         if(!e.isCancelled()) {
-            final boolean legacy = version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12");
             final double d = e.getDamage();
             final HashMap<Integer, List<String>> messages = type.getMessages();
             UUID i = null;
@@ -108,7 +107,11 @@ public class LivingCustomBoss extends UVersion {
                         if(att.startsWith("delay=")) {
                             final int r = Integer.parseInt(att.split("delay=")[1].split("\\{")[0]);
                             final ArrayList<Location> locations = new ArrayList<>();
-                            for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) if(entity instanceof Player) locations.add(entity.getLocation());
+                            for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                if(entity instanceof Player) {
+                                    locations.add(entity.getLocation());
+                                }
+                            }
 
                             scheduler.scheduleSyncDelayedTask(randompackage, () -> {
                                 String ss = att.replace("delay=" + r, ""), sss = null;
@@ -124,14 +127,14 @@ public class LivingCustomBoss extends UVersion {
                                     z2 = Integer.parseInt(sss.split(":")[5]);
                                     for(Location l : locations) {
                                         final UMaterial replacee = UMaterial.match(sss.split(":")[6]);
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + replacee.getVersionName().toLowerCase() + (legacy ? " " + replacee.getData() : "") + " replace " + UMaterial.match(sss.split(":")[7]).getVersionName().toLowerCase());
+                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + replacee.getVersionName().toLowerCase() + (LEGACY ? " " + replacee.getData() : "") + " replace " + UMaterial.match(sss.split(":")[7]).getVersionName().toLowerCase());
                                     }
                                 } else {
                                     String replace = ss.replace("{", "").replace("}", "").replace("/", "");
                                     if(ss.startsWith("{/effect")) {
                                         for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
                                             if(entity instanceof Player) {
-                                                Bukkit.dispatchCommand(entity, "/effect " + (legacy ? "" : "give ") + replace.replace("~player", entity.getName()));
+                                                Bukkit.dispatchCommand(entity, "/effect " + (LEGACY ? "" : "give ") + replace.replace("~player", entity.getName()));
                                             }
                                         }
                                     } else if(ss.startsWith("{/")) {

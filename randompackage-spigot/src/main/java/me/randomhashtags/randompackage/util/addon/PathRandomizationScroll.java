@@ -19,7 +19,7 @@ public class PathRandomizationScroll extends RPAddon implements RandomizationScr
 
 	public ItemStack getItem() {
 		if(is == null) is = api.d(getAddonConfig("randomization scrolls.yml"), "randomization scrolls." + path);
-		return is.clone();
+		return getClone(is);
 	}
 	public List<EnchantRarity> getAppliesToRarities() {
 		if(appliesto == null) {

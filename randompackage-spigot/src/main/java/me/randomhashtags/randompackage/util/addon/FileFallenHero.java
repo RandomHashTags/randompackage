@@ -24,22 +24,22 @@ public class FileFallenHero extends RPFallenHero implements FallenHero {
 
     public int getGemDropChance() { return yml.getInt("gem.chance"); }
     public List<String> getSummonMsg() {
-        if(summonMsg == null) summonMsg = api.colorizeListString(yml.getStringList("messages.summon"));
+        if(summonMsg == null) summonMsg = colorizeListString(yml.getStringList("messages.summon"));
         return summonMsg;
     }
     public List<String> getReceiveKitMsg() {
-        if(receiveKitMsg == null) receiveKitMsg = api.colorizeListString(yml.getStringList("messages.receive kit"));
+        if(receiveKitMsg == null) receiveKitMsg = colorizeListString(yml.getStringList("messages.receive kit"));
         return receiveKitMsg;
     }
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() { return new ArrayList<>(); }
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
-        return spawnitem.clone();
+        return getClone(spawnitem);
     }
     public ItemStack getGem() {
         if(gem == null) gem = api.d(yml, "gem");
-        return gem.clone();
+        return getClone(gem);
     }
     public void spawn(LivingEntity summoner, Location loc, CustomKit kit) {
         if(loc != null && kit != null) {

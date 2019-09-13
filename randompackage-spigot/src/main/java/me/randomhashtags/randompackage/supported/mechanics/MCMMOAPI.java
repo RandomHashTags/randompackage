@@ -12,7 +12,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +23,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public class MCMMOAPI extends Reflect implements Listener {
+public final class MCMMOAPI extends Reflect {
 	private static MCMMOAPI instance;
 	public static MCMMOAPI getMCMMOAPI() {
 		if(instance == null) instance = new MCMMOAPI();

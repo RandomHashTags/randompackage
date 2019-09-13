@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CommandManager extends Reflect {
+public final class CommandManager extends Reflect {
     private static CommandManager instance;
     public static CommandManager getCommandManager(RandomPackage randompackage) {
         if(instance == null) {
@@ -40,7 +40,7 @@ public class CommandManager extends Reflect {
             if(!isLegacy) {
                 final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
                 o.setAccessible(true);
-                if(v.contains("1.13")) {
+                if(THIRTEEN) {
                     final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
                     dispatcher = d;
                     nodes = o.get(d.getRoot());

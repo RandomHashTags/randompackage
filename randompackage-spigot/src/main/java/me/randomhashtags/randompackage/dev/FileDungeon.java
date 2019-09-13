@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.util.addon;
+package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.Dungeon;
+import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,29 +20,29 @@ public abstract class FileDungeon extends RPAddon implements Dungeon {
     public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "gui");
-        return display.clone();
+        return getClone(display);
     }
     public ItemStack getKey() {
         if(key == null) key = api.d(yml, "key");
-        return key.clone();
+        return getClone(key);
     }
     public ItemStack getKeyLocked() {
         if(keyLocked == null) keyLocked = api.d(yml, "gui.key locked");
-        return keyLocked.clone();
+        return getClone(keyLocked);
     }
     public ItemStack getPortal() {
         if(portal == null) portal = api.d(yml, "portal");
-        return portal.clone();
+        return getClone(portal);
     }
     public ItemStack getLootbag() {
         if(lootbag == null) lootbag = api.d(yml, "lootbag");
-        return lootbag.clone();
+        return getClone(lootbag);
     }
     public List<String> getLootbagRewards() {
         return yml.getStringList("lootbag.rewards");
     }
 
-    public Location getTeleportLocation() { return api.toLocation(yml.getString("settings.warp location")); }
+    public Location getTeleportLocation() { return toLocation(yml.getString("settings.warp location")); }
     public long getFastestCompletion() { return fastestCompletion; }
     public void setFastestCompletion(long fastestCompletion) { this.fastestCompletion = fastestCompletion; }
 }

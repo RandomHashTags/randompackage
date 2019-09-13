@@ -63,7 +63,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
     }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
-        return item.clone();
+        return getClone(item);
     }
     public List<String> getRewards() {
         return yml.getStringList("rewards");

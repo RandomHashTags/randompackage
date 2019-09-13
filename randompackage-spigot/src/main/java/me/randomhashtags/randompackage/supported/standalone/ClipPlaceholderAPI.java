@@ -12,13 +12,13 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public class PAPI extends PlaceholderExpansion {
-    private static PAPI instance;
-    public static PAPI getPAPI() {
-        if(instance == null) instance = new PAPI();
+public final class ClipPlaceholderAPI extends PlaceholderExpansion {
+    private static ClipPlaceholderAPI instance;
+    public static ClipPlaceholderAPI getPAPI() {
+        if(instance == null) instance = new ClipPlaceholderAPI();
         return instance;
     }
-    private PAPI() {
+    private ClipPlaceholderAPI() {
         api.sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI");
         register();
     }
@@ -27,12 +27,10 @@ public class PAPI extends PlaceholderExpansion {
     public String getIdentifier() {
         return "randompackage";
     }
-
     @Override
     public String getAuthor() {
         return "RandomHashTags";
     }
-
     @Override
     public String getVersion() {
         return RandomPackage.getPlugin.getDescription().getVersion();

@@ -44,15 +44,15 @@ public class PathSoulTracker extends RPAddon implements SoulTracker {
     }
     public ItemStack getItem() {
         if(is == null) is = api.d(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
-        return is.clone();
+        return getClone(is);
     }
     public String getApplied() { return ChatColor.translateAlternateColorCodes('&', getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }
     public List<String> getApplyMsg() {
-        if(apply == null) apply = api.colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".apply msg"));
+        if(apply == null) apply = colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".apply msg"));
         return apply;
     }
     public List<String> getSplitMsg() {
-        if(split == null) split = api.colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".split msg"));
+        if(split == null) split = colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".split msg"));
         return split;
     }
 }

@@ -39,7 +39,7 @@ public class FileTrinket extends RPAddon implements Trinket {
     }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
-        return item.clone();
+        return getClone(item);
     }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class EpicSky extends RPFeature implements Regional {
+public final class EpicSky extends RPFeature implements Regional {
     private static EpicSky instance;
     public static EpicSky getEpicSkyblock() {
         if(instance == null) instance = new EpicSky();

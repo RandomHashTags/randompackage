@@ -10,9 +10,9 @@ import me.randomhashtags.randompackage.event.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.event.regional.RegionRenameEvent;
+import me.randomhashtags.randompackage.supported.Regional;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.Reflect;
-import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FactionsUUID extends Reflect implements Regional {
+public final class FactionsUUID extends Reflect implements Regional {
     private static FactionsUUID instance;
     public static FactionsUUID getFactionsUUID() {
         if(instance == null) instance = new FactionsUUID();

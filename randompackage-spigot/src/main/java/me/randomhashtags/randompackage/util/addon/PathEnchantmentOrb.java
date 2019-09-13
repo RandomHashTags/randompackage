@@ -34,7 +34,7 @@ public class PathEnchantmentOrb extends RPAddon implements EnchantmentOrb {
 	public String getIdentifier() { return path + maxenchants; }
 
 	public String getPath() { return path; }
-	public ItemStack getItem() { return is.clone(); }
+	public ItemStack getItem() { return getClone(is); }
 	public ItemStack getItem(int percent) {
 		final int slot = getPercentLoreSlot();
 		final ItemStack i = getItem();

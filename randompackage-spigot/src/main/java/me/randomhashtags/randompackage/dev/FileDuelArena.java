@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.util.addon;
+package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.DuelArena;
+import me.randomhashtags.randompackage.util.addon.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +19,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
 
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
-        return item.clone();
+        return getClone(item);
     }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
     public List<Location> getLocations() {

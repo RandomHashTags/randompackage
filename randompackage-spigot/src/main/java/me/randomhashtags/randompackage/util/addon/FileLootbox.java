@@ -30,15 +30,15 @@ public class FileLootbox extends RPAddon implements Lootbox {
     public String getBonusLootSize() { return yml.getString("bonus loot size"); }
     public List<String> getGuiFormat() { return yml.getStringList("gui.format"); }
     public List<String> getRegularLootFormat() {
-        if(regularLootFormat == null) regularLootFormat = api.colorizeListString(yml.getStringList("lore formats.regular loot"));
+        if(regularLootFormat == null) regularLootFormat = colorizeListString(yml.getStringList("lore formats.regular loot"));
         return regularLootFormat;
     }
     public List<String> getJackpotLootFormat() {
-        if(jackpotLootFormat == null) jackpotLootFormat = api.colorizeListString(yml.getStringList("lore formats.jackpot loot"));
+        if(jackpotLootFormat == null) jackpotLootFormat = colorizeListString(yml.getStringList("lore formats.jackpot loot"));
         return jackpotLootFormat;
     }
     public List<String> getBonusLootFormat() {
-        if(bonusLootFormat == null) bonusLootFormat = api.colorizeListString(yml.getStringList("lore formats.bonus loot"));
+        if(bonusLootFormat == null) bonusLootFormat = colorizeListString(yml.getStringList("lore formats.bonus loot"));
         return bonusLootFormat;
     }
     public List<String> getRegularLoot() { return yml.getStringList("regular loot"); }
@@ -59,7 +59,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : regularLootFormat) {
-                            final String it = d != null ? d : api.toMaterial(t, false);
+                            final String it = d != null ? d : toMaterial(t, false);
                             lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
                         }
                     }
@@ -68,7 +68,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : jackpotLootFormat) {
-                            final String it = d != null ? d : api.toMaterial(t, false);
+                            final String it = d != null ? d : toMaterial(t, false);
                             lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
                         }
                     }
@@ -77,7 +77,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
                         final ItemMeta m = is.getItemMeta();
                         final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
                         for(String z : bonusLootFormat) {
-                            final String it = d != null ? d : api.toMaterial(t, false);
+                            final String it = d != null ? d : toMaterial(t, false);
                             lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
                         }
                     }
@@ -93,6 +93,6 @@ public class FileLootbox extends RPAddon implements Lootbox {
     }
     public ItemStack getBackground() {
         if(background == null) background = api.d(yml, "gui.background");
-        return background.clone();
+        return getClone(background);
     }
 }

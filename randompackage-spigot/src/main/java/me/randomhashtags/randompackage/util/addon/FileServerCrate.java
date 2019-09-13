@@ -67,23 +67,23 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	}
 	public ItemStack getItem() {
 		if(physicalItem == null) physicalItem = api.d(yml, "item");
-		return physicalItem;
+		return getClone(physicalItem);
 	}
 	public ItemStack getDisplay() {
 		if(display == null) display = api.d(yml, "display");;
-		return display.clone();
+		return getClone(display);
 	}
 	public ItemStack getOpenGui() {
 		if(opengui == null) opengui = api.d(yml, "open gui");
-		return opengui.clone();
+		return getClone(opengui);
 	}
 	public ItemStack getSelected() {
 		if(selected == null) selected = api.d(yml, "selected");
-		return selected.clone();
+		return getClone(selected);
 	}
 	public ItemStack getRevealSlotRarity() {
 		if(revealSlotRarity == null) revealSlotRarity = api.d(yml, "reveal slot rarity");
-		return revealSlotRarity.clone();
+		return getClone(revealSlotRarity);
 	}
 	public HashMap<String, List<String>> getRewards() {
 		if(rewards == null) {
@@ -96,11 +96,11 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	}
 	public ItemStack getBackground() {
 		if(background == null) background = api.d(yml, "settings.background");
-		return background.clone();
+		return getClone(background);
 	}
 	public ItemStack getBackground2() {
 		if(background2 == null) background2 = api.d(yml, "settings.background 2");
-		return background2.clone();
+		return getClone(background2);
 	}
 	public ServerCrateFlareObject getFlare() {
 		if(flare == null) flare = new ServerCrateFlareObject(this);

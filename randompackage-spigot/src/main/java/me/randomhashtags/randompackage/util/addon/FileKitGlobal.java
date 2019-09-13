@@ -30,6 +30,6 @@ public class FileKitGlobal extends RPKit implements CustomKitGlobal {
                 item.setItemMeta(m);
             }
         }
-        return item.clone();
+        return getClone(item);
     }
 }

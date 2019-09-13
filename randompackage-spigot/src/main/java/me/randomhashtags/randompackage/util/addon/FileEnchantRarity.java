@@ -33,11 +33,11 @@ public class FileEnchantRarity extends RPAddon implements EnchantRarity {
     }
     public ItemStack getRevealItem() {
         if(revealItem == null) revealItem = api.d(yml, "reveal item");
-        return revealItem != null ? revealItem.clone() : null;
+        return getClone(revealItem);
     }
     public ItemStack getRevealedItem() {
         if(revealedItem == null) revealedItem = api.d(yml, "revealed item");
-        return revealedItem != null ? revealedItem.clone() : null;
+        return getClone(revealedItem);
     }
     public String getNameColors() { return ChatColor.translateAlternateColorCodes('&', yml.getString("revealed item.name colors")); }
     public String getApplyColors() { return ChatColor.translateAlternateColorCodes('&', yml.getString("revealed item.apply colors")); }

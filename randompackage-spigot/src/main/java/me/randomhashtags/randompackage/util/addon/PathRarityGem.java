@@ -27,7 +27,7 @@ public class PathRarityGem extends RPAddon implements RarityGem {
 
 	public ItemStack getItem() {
 		if(item == null) item = api.d(getAddonConfig("rarity gems.yml"), "rarity gems." + path);
-		return item.clone();
+		return getClone(item);
 	}
 	public ItemStack getItem(int souls) {
 		final ItemStack item = getItem();

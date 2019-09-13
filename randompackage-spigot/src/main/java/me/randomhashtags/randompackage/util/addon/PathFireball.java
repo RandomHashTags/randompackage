@@ -21,7 +21,7 @@ public class PathFireball extends RPAddon implements RarityFireball {
 
 	public ItemStack getItem() {
 		if(is == null) is = api.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
-		return is.clone();
+		return getClone(is);
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
 		getReveals();

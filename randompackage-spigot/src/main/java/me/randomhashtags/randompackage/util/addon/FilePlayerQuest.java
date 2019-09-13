@@ -9,9 +9,7 @@ import java.util.List;
 public class FilePlayerQuest extends RPAddon implements PlayerQuest {
     public FilePlayerQuest(File f) {
         load(f);
-        if(isEnabled()) {
-            addPlayerQuest( this);
-        }
+        if(isEnabled()) addPlayerQuest( this);
     }
     public String getIdentifier() { return getYamlName(); }
 
@@ -45,6 +43,6 @@ public class FilePlayerQuest extends RPAddon implements PlayerQuest {
         return c;
     }
     public List<String> getLore() { return colorizeListString(yml.getStringList("lore")); }
-    public List<String> getRewards(){ return yml.getStringList("rewards"); }
+    public List<String> getRewards() { return yml.getStringList("rewards"); }
     public List<String> getTrigger() { return yml.getStringList("trigger"); }
 }

@@ -13,6 +13,16 @@ repositories {
     maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
     //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
     maven { url "https://maven.enginehub.org/repo/" } // WorldEdit & WorldGuard
+
+    /*
+        EpicSkyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/PeachesMLG/EpicSkyblock
+
+        SilkSpawners -> https://dev.bukkit.org/projects/silkspawners | https://github.com/timbru31/SilkSpawners
+        EpicSpawners -> https://songoda.com/marketplace/product/13 | https://gitlab.com/Songoda/epicspawners
+
+        McMMO Classic -> https://www.spigotmc.org/resources/2445/ | https://github.com/mcMMO-Dev/mcMMO-Classic
+        McMMO Overhaul -> https://www.spigotmc.org/resources/64348/ | https://github.com/mcMMO-Dev/mcMMO
+     */
 }
 
 dependencies {

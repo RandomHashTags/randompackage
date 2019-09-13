@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.util.Date;
 
-public class Backup extends UVersion {
+public final class Backup extends UVersion {
     public Backup() {
         final String folder = randompackage.getDataFolder().getAbsolutePath() + "_backups";
         final File[] total = new File(folder).listFiles();

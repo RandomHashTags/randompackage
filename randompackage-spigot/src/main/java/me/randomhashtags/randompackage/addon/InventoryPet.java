@@ -17,9 +17,6 @@ public interface InventoryPet extends Itemable, Attributable, Toggleable, RPItem
     HashMap<Integer, Long> getRequiredXp();
 
     int getMaxLevel();
-    int getCooldownSlot();
-    int getLevelSlot();
-    int getExpSlot();
 
     default ItemStack getItem(int level, int exp) {
         final HashMap<Integer, Long> cooldowns = getCooldowns();
