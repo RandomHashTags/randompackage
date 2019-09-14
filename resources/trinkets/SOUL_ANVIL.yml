@@ -1,7 +1,7 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   cooldown: 30
-  soul cost: 100
 #
 items:
   item: "anvil"
@@ -15,4 +15,4 @@ items:
   - "&5&nCooldown:&r &d30s"
 #
 attributes:
-  - ""
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerDepleteRarityGem=SOUL:100;PlayerSetDurability=all:durability*1.10"

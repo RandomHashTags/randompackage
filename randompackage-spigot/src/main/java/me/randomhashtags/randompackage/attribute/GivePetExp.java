@@ -18,7 +18,8 @@ public class GivePetExp extends AbstractEventAttribute implements RPItemStack {
             for(Entity e : recipientValues.keySet()) {
                 if(e instanceof Player) {
                     final String[] values = recipientValues.get(e).split(":");
-                    givePetExp((Player) e, is, (int) evaluate(replaceValue(values[0], valueReplacements)), Boolean.parseBoolean(values[1]));
+                    final int l = values.length;
+                    givePetExp((Player) e, is, (int) evaluate(replaceValue(values[0], valueReplacements)), l >= 2 && Boolean.parseBoolean(values[1]));
                 }
             }
         }

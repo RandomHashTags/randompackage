@@ -15,6 +15,11 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         final HashMap<Integer, Integer> cooldowns = getCooldowns();
         return cooldowns.getOrDefault(-1, cooldowns.getOrDefault(level, 3600));
     }
+    default long getCooldown(ItemStack is) {
+        final String v = getRPItemStackValue(is, "InventoryPetInfo");
+        return v != null ? Long.parseLong(v.split(":")[3]) : -1;
+    }
+
     HashMap<Integer, Integer> getRequiredXp();
     default int getRequiredXp(int level) {
         final HashMap<Integer, Integer> r = getRequiredXp();

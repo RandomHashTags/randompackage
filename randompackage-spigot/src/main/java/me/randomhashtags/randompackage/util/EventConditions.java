@@ -622,6 +622,10 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
             final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
             final String info = is != null ? getRPItemStackValue(is, "InventoryPetInfo") : null;
             passed = info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[3]) == Boolean.parseBoolean(value);
+        } else if(condition.startsWith("trinketoncooldown=")) {
+            final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
+            final String info = is != null ? getRPItemStackValue(is, "TrinketInfo") : null;
+            passed = info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[1]) == Boolean.parseBoolean(value);
         }
     }
     private void passedCustomCondition(Event event, Entity e, String condition, String s, String value) {

@@ -104,14 +104,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
                                 procEnchant(event, ce, e.get(ce), is, P);
                     }
                 }
-        } else if(a.toLowerCase().startsWith("breakblocks{")) {
-            a = a.toLowerCase();
-            final String[] A = a.split("]")[1].split(":");
-            final int x1 = Integer.parseInt(A[0]), y1 = Integer.parseInt(A[1]), z1 = Integer.parseInt(A[2]);
-            final int x2 = Integer.parseInt(A[3]), y2 = Integer.parseInt(A[4]), z2 = Integer.parseInt(A[5].split("}")[0]);
-            for(LivingEntity le : recipients)
-                if(event instanceof BlockBreakEvent)
-                    breakBlocks(UMaterial.match(getItemInHand(le)), ((BlockBreakEvent) event).getBlock(), x1, y1, z1, x2, y2, z2);
         } else if(a.toLowerCase().startsWith("replaceblock{")) {
             final String args = a.toLowerCase().split("\\{")[1].split("}")[0];
             final String[] aa = args.split(":");
@@ -122,9 +114,6 @@ public abstract class CustomEnchantUtils extends RPFeature {
             final Byte data = Byte.parseByte(aa[4]);
             final int ticks = Integer.parseInt(aa[5]);
             setTemporaryBlock(l, type, data, ticks);
-        } else if(a.toLowerCase().startsWith("depletestacksize{") && event instanceof MobStackDepleteEvent) {
-            final int amount = Integer.parseInt(a.split("\\{")[1].split("}")[0]);
-            ((MobStackDepleteEvent) event).amount = amount;
         }
     }
     private boolean doVariable(CustomEnchantProcEvent e, Event event, CustomEnchant enchant, LivingEntity entity, String input) {
@@ -198,10 +187,5 @@ public abstract class CustomEnchantUtils extends RPFeature {
         }
         return true;
     }
-    private double distanceBetween(Entity e1, Entity e2) {
-        return e1.getLocation().distance(e2.getLocation());
-    }
-    private void setVelocity(LivingEntity entity, Vector vel) {
-        entity.setVelocity(vel);
-    }*/
+    */
 }

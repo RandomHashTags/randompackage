@@ -33,11 +33,11 @@ public abstract class EventAttributes extends EventExecutor {
                 // attributes
                 new AddPotionEffect(),
                 new AddToList(),
+                new BreakBlocks(),
                 new ComboAdd(),
                 new ComboDeplete(),
                 new ComboStop(),
                 new Damage(),
-                new DepleteRarityGem(),
                 new DepleteStackSize(),
                 new DropItem(),
                 new ExecuteCommand(),
@@ -79,6 +79,7 @@ public abstract class EventAttributes extends EventExecutor {
             e.load();
         }
         final List<EventCondition> conditions = Arrays.asList(
+                new DepleteRarityGem(),
                 new HasCombo(),
                 new HasCustomEnchantEquipped(),
                 new HitBlock(),

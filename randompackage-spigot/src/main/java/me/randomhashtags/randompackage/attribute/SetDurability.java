@@ -34,11 +34,12 @@ public class SetDurability extends AbstractEventAttribute {
             final LivingEntity l = (LivingEntity) entity;
             final EntityEquipment e = l.getEquipment();
             if(e != null) {
-                final ItemStack[] toSet = getTargets(e, value, item);
+                final String[] values = value.split(":");
+                final ItemStack[] toSet = getTargets(e, values[0], item);
                 if(toSet != null) {
                     for(ItemStack is : toSet) {
                         if(is != null) {
-                            final double dura = evaluate(value.replace("durability", Short.toString(is.getDurability())));
+                            final double dura = evaluate(values[1].replace("durability", Short.toString(is.getDurability())));
                             is.setDurability((short) (dura < 0 ? 0 : dura));
                         }
                     }

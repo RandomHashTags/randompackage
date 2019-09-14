@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
+import me.randomhashtags.randompackage.dev.Trinket;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileTrinket;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.event.EventHandler;
@@ -12,7 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Trinkets extends RPFeature {
+public class Trinkets extends RPFeature implements RPItemStack {
     private static Trinkets instance;
     public static Trinkets getTrinkets() {
         if(instance == null) instance = new Trinkets();
@@ -29,7 +31,9 @@ public class Trinkets extends RPFeature {
                     "EMP_PULSE",
                     "FACTION_BANNER",
                     "PHOENIX_FEATHER",
-                    "SOUL_ANVIL", "SOUL_PEARL", "SPEED"
+                    "SOUL_ANVIL",
+                    "SOUL_PEARL",
+                    "SPEED"
             };
             for(String s : a) save("trinkets", s + ".yml");
             otherdata.set("saved default trinkets", true);
@@ -40,10 +44,13 @@ public class Trinkets extends RPFeature {
         final File folder = new File(rpd + separator + "trinkets");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                t.add(new FileTrinket(f).getItem());
+                final Trinket trinket = new FileTrinket(f);
+                if(trinket.isEnabled()) {
+                    t.add(trinket.getItem());
+                }
             }
         }
-        if(trinkets != null) addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
+        addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (trinkets != null ? trinkets.size() : 0) + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
