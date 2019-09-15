@@ -31,15 +31,17 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
     default ItemStack getItem(int level, int exp, long cooldownExpiration) {
         final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = api.formatInt(exp), cooldown = api.getRemainingTime(getCooldown(level));
         final ItemStack is = getItem();
-        final ItemMeta m = is.getItemMeta();
-        m.setDisplayName(m.getDisplayName().replace("{LEVEL}", lvl));
-        final List<String> l = new ArrayList<>();
-        for(String s : m.getLore()) {
-            l.add(s.replace("{LEVEL}", lvl).replace("{XP}", XP).replace("{COMPLETION}", xp).replace("{COOLDOWN}", cooldown));
+        if(is != null) {
+            final ItemMeta m = is.getItemMeta();
+            m.setDisplayName(m.getDisplayName().replace("{LEVEL}", lvl));
+            final List<String> l = new ArrayList<>();
+            for(String s : m.getLore()) {
+                l.add(s.replace("{LEVEL}", lvl).replace("{XP}", XP).replace("{COMPLETION}", xp).replace("{COOLDOWN}", cooldown));
+            }
+            m.setLore(l);
+            is.setItemMeta(m);
+            setItem(is, getIdentifier(), level, exp, cooldownExpiration);
         }
-        m.setLore(l);
-        is.setItemMeta(m);
-        setItem(is, getIdentifier(), level, exp, cooldownExpiration);
         return is;
     }
 

@@ -619,11 +619,17 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
         } else if(condition.startsWith("booster=")) {
             passed = event instanceof BoosterActivateEvent && ((BoosterActivateEvent) event).booster.getIdentifier().equals(value);
         } else if(condition.startsWith("inventorypetoncooldown=")) {
-            final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
+            ItemStack is = null;
+            if(event instanceof PlayerInteractEvent) {
+                is = ((PlayerInteractEvent) event).getItem();
+            }
             final String info = is != null ? getRPItemStackValue(is, "InventoryPetInfo") : null;
             passed = info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[3]) == Boolean.parseBoolean(value);
         } else if(condition.startsWith("trinketoncooldown=")) {
-            final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
+            ItemStack is = null;
+            if(event instanceof PlayerInteractEvent) {
+                is = ((PlayerInteractEvent) event).getItem();
+            }
             final String info = is != null ? getRPItemStackValue(is, "TrinketInfo") : null;
             passed = info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[1]) == Boolean.parseBoolean(value);
         }
@@ -632,7 +638,7 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
         final String target = condition.split("=")[0].split(s)[1];
         final EventCondition con = getEventCondition(target.toUpperCase());
         if(con != null) {
-            passed = con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value);
+            passed = con.check(value) && con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value);
         }
     }
     private void passedRandomPackage(Entity e, String condition, String s, String value) {
@@ -653,7 +659,9 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
             final HashMap<PlayerQuest, ActivePlayerQuest> a = q != null ? RPPlayer.get(e.getUniqueId()).getQuests() : null;
             passed = a != null && a.containsKey(q) && !a.get(q).isExpired();
         } else if(condition.startsWith(s + "hasactiveraritygem=")) {
-            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).hasActiveRarityGem(getRarityGem(value));
+            final String[] values = value.split(":");
+            final int l = values.length;
+            passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).hasActiveRarityGem(getRarityGem(values[0])) == l < 2 || Boolean.parseBoolean(values[1]);
         } else if(condition.startsWith(s + "hasactivetitle=")) {
             passed = e instanceof Player && RPPlayer.get(e.getUniqueId()).getActiveTitle() != null == Boolean.parseBoolean(value);
         } else if(condition.startsWith(s + "hascustomentities=")) {

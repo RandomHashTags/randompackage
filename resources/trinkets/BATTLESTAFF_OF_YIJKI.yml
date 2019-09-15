@@ -1,7 +1,7 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   cooldown: 120
-  soul cost: 375
 #
 item:
   item: "blaze_rod"

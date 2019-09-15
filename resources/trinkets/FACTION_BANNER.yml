@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  soul cost: 500
+  enabled: false
   duration: 10
 #
 item:
@@ -18,4 +18,4 @@ item:
     - "&7by using the /f assist command."
 #
 attributes:
-  - ""
+  - "BlockPlace;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true"

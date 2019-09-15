@@ -61,7 +61,9 @@ public class RarityGems extends RPFeature {
         final RarityGem gem = valueOfRarityGem(event.getItemDrop().getItemStack());
         if(gem != null) {
             final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-            if(pdata.hasActiveRarityGem(gem)) pdata.toggleRarityGem(event, gem);
+            if(pdata.hasActiveRarityGem(gem)) {
+                pdata.toggleRarityGem(gem, gem.getToggleOffDroppedMsg());
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -99,7 +101,8 @@ public class RarityGems extends RPFeature {
             player.updateInventory();
             final int souls = getRemainingInt(I.getItemMeta().getDisplayName());
             if(souls > 0) {
-                RPPlayer.get(player.getUniqueId()).toggleRarityGem(event, gem);
+                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                pdata.toggleRarityGem(gem, pdata.hasActiveRarityGem(gem) ? gem.getToggleOffInteractMsg() : gem.getToggleOnMsg());
             }
         }
     }
@@ -109,8 +112,9 @@ public class RarityGems extends RPFeature {
         final UUID u = e.getUniqueId();
         if(e instanceof Player) {
             final RPPlayer pdata = RPPlayer.get(u);
-            for(RarityGem g : pdata.getRarityGems().keySet())
-                pdata.toggleRarityGem(event, g);
+            for(RarityGem g : pdata.getRarityGems().keySet()) {
+                pdata.toggleRarityGem(g, g.getToggleOffDroppedMsg());
+            }
         }
     }
 }

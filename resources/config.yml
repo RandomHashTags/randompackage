@@ -324,7 +324,7 @@ trade:
     - trade
 #
 trinkets:
-  enabled: false
+  enabled: true
 #
 vkits:
   enabled: true

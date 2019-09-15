@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   cooldown: 90
 #
 item:
@@ -14,4 +15,5 @@ item:
     - "&3&nCooldown:&r &b90s"
 #
 attributes:
-  - ""
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:false;PlayerSendMessage=&c&l(!)&r &cYou need SOUL MODE toggled on to use this trinket!;Return=false"
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:100;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:20*7"

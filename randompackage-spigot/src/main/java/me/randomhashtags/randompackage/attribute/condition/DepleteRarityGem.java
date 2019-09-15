@@ -32,7 +32,7 @@ public class DepleteRarityGem extends AbstractEventCondition {
 
                         if(amount - depleteAmount <= 0) {
                             depleteAmount = amount;
-                            pdata.toggleRarityGem(null, gem);
+                            pdata.toggleRarityGem(gem, gem.getToggleOffRanOutMsg());
                         }
                         itemMeta = g.getItemMeta();
                         itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));

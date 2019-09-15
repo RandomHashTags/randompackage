@@ -157,7 +157,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         return executeAll(event, entities, conditions, cancelled, entityValues, values, valueReplacements, 0);
     }
     public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<String, String> valueReplacements, int repeatID) {
-        final boolean passed = didPassConditions(event, entities, conditions, cancelled);
+        boolean passed = didPassConditions(event, entities, conditions, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
             final Entity entity2 = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
@@ -190,6 +190,9 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                                 executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
                             }
                             break outerloop;
+                        } else if(id.equals("RETURN")) {
+                            passed = Boolean.parseBoolean(defaultValue);
+                            if(!passed) break outerloop;
                         } else {
                             previousHashMaps.add(hashmap);
                             a.execute(event);

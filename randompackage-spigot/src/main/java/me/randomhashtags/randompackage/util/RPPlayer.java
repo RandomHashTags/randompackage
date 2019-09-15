@@ -495,12 +495,10 @@ public class RPPlayer extends RPStorage {
     public boolean hasActiveRarityGem(RarityGem gem) {
         return gem != null && getRarityGems().getOrDefault(gem, false);
     }
-    public void toggleRarityGem(Event event, RarityGem gem) {
-        if(event != null && gem != null) {
-            final boolean prev = getRarityGems().getOrDefault(gem, false), on = !prev;
-            raritygems.put(gem, on);
-            final List<String> msg = on ? gem.getToggleOnMsg() : event instanceof PlayerInteractEvent ? gem.getToggleOffInteractMsg() : event instanceof InventoryClickEvent ? gem.getToggleOffMovedMsg() : event instanceof PlayerDropItemEvent ? gem.getToggleOffDroppedMsg() : gem.getToggleOffRanOutMsg();
-            api.sendStringListMessage(Bukkit.getPlayer(uuid), msg, null);
+    public void toggleRarityGem(RarityGem gem, List<String> msg) {
+        if(gem != null) {
+            raritygems.put(gem, !getRarityGems().getOrDefault(gem, false));
+            sendStringListMessage(Bukkit.getPlayer(uuid), msg, null);
         }
     }
 

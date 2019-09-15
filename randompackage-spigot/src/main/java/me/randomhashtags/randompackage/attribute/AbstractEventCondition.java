@@ -13,6 +13,7 @@ public abstract class AbstractEventCondition extends RPStorage implements EventC
     public void load() { addEventCondition(this); }
     public void unload() {}
 
+    public boolean check(String value) { return true; }
     public boolean check(Event event) { return true; }
     public boolean check(Event event, Entity entity) { return true; }
     public boolean check(Event event, String value) { return true; }

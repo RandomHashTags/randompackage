@@ -9,6 +9,7 @@ import org.bukkit.event.Event;
 public interface EventCondition extends Identifiable, Mathable {
     void load();
     void unload();
+    boolean check(@NotNull String value);
     boolean check(@NotNull Event event);
     boolean check(@NotNull Event event, @NotNull Entity entity);
     boolean check(@NotNull Event event, @NotNull String value);

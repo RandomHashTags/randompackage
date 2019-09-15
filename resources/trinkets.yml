@@ -1,0 +1,4 @@
+# Made by RandomHashTags
+messages:
+  on cooldown:
+    - "&c&l(!)&r &cThis trinket is on cooldown! You can use its ability again in {TIME}."

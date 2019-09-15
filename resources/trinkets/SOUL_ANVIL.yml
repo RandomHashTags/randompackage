@@ -3,16 +3,17 @@ settings:
   enabled: true
   cooldown: 30
 #
-items:
+item:
   item: "anvil"
   name: "&5&lSoul Anvil"
   lore:
-  - "&dA powerful /dungeon trinket that"
-  - "&dheals durability of all equipped"
-  - "&darmor by 10% in exchange for souls."
-  - " "
-  - "&5&nSouls Cost:&r &d100/use"
-  - "&5&nCooldown:&r &d30s"
+    - "&dA powerful /dungeon trinket that"
+    - "&dheals durability of all equipped"
+    - "&darmor by 10% in exchange for souls."
+    - " "
+    - "&5&nSouls Cost:&r &d100/use"
+    - "&5&nCooldown:&r &d30s"
 #
 attributes:
-  - "PlayerInteract;TrinketOnCooldown=false;PlayerDepleteRarityGem=SOUL:100;PlayerSetDurability=all:durability*1.10"
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:false;PlayerSendMessage=&c&l(!)&r &cYou need SOUL MODE toggled on to use this trinket!;Return=false"
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:100;PlayerSetDurability=all:durability*1.10"

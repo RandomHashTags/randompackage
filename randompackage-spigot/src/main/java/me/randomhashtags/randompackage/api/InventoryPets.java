@@ -221,8 +221,9 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
                 final long expiration = Long.parseLong(info[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
 
                 if(remainingtime <= 0) {
-                    trigger(event, pet.getAttributes(), "level", lvl);
-                    pet.didUse(is, identifier, level, exp);
+                    if(trigger(event, pet.getAttributes(), "level", lvl)) {
+                        pet.didUse(is, identifier, level, exp);
+                    }
                 } else {
                     final HashMap<String, String> replacements = new HashMap<>();
                     replacements.put("{TIME}", getRemainingTime(remainingtime));

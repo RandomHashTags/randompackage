@@ -1,5 +1,6 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   radius: 7;128;7
   cooldown: 300
 #
