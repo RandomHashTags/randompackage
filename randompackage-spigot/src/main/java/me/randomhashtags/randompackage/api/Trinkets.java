@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.nearFinished;
+package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.dev.Trinket;
 import me.randomhashtags.randompackage.util.EventAttributes;
@@ -33,7 +33,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         final long started = System.currentTimeMillis();
         save(null, "trinkets.yml");
         if(!otherdata.getBoolean("saved default trinkets")) {
-            final String[] a = new String[]{
+            final String[] a = new String[] {
                     "BATTLESTAFF_OF_YIJKI",
                     "EMP_PULSE",
                     "FACTION_BANNER",

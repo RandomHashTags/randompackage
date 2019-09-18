@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.event.CustomMinionDeathEvent;
+import me.randomhashtags.randompackage.event.mob.CustomMinionDeathEvent;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: DEFAULT
   slot: 10
-  max tier: 5
   item amount=tier: true
 #
 item:
@@ -11,16 +11,32 @@ item:
   lore:
   - "&7Increase growth speed of crops in claims."
 #
-perks:
-  - "Tier1;SetCropGrowthMultiplier{1.25};125% Growth Speed"
-  - "Tier2;SetCropGrowthMultiplier{1.50};150% Growth Speed"
-  - "Tier3;SetCropGrowthMultiplier{2.00};200% Growth Speed"
-  - "Tier4;SetCropGrowthMultiplier{2.50};250% Growth Speed"
-  - "Tier5;SetCropGrowthMultiplier{3.00};300% Growth Speed"
+levels:
+  1:
+    value: 1.25
+    string: "125% Growth Speed"
+    cost:
+      - Cash{5000000};$5,000,000
+  2:
+    value: 1.50
+    string: "150% Growth Speed"
+    cost:
+      - Cash{10000000};$10,000,000
+  3:
+    value: 2.00
+    string: "200% Growth Speed"
+    cost:
+      - Cash{15000000};$15,000,000
+  4:
+    value: 2.50
+    string: "250% Growth Speed"
+    cost:
+      - Cash{20000000};$20,000,000
+  5:
+    value: 3.00
+    string: "300% Growth Speed"
+    cost:
+      - Cash{25000000};$25,000,000
 #
-requirements:
-  - "Tier1;Cash{5000000};$5,000,000"
-  - "Tier2;Cash{10000000};$10,000,000"
-  - "Tier3;Cash{15000000};$15,000,000"
-  - "Tier4;Cash{20000000};$20,000,000"
-  - "Tier5;Cash{25000000};$25,000,000"
+attributes:
+  - ""

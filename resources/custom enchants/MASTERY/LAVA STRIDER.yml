@@ -1,0 +1,20 @@
+# Made by RandomHashTags | TODO: fix this
+enabled: false
+#
+name: "Lava Strider"
+lore:
+  - "&eDepth Strider, but for lava. This"
+  - "&eenchantment requires the user to be"
+  - "&eon the ServerClient"
+  - "&e(https://serverclient.com) to"
+  - "&efunction properly due to vanilla"
+  - "&eclient limitations."
+#
+max level: 10
+applies to: "boots"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+- ""

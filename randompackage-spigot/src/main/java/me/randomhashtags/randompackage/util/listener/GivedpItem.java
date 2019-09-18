@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.dev.nearFinished.Trinkets;
+import me.randomhashtags.randompackage.api.Trinkets;
 import me.randomhashtags.randompackage.dev.Trinket;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.util.RPFeature;

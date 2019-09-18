@@ -3,7 +3,7 @@ enabled: false
 #
 name: "Horrify"
 lore:
-- "&e"
+  - "&e"
 #
 max level: 4
 applies to: "helmet;chestplate;leggings;boots"

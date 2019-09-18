@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 11
-  max tier: 3
   item amount=tier: true
 #
 item:
@@ -12,13 +12,24 @@ item:
   - "&7Decrease enemy damage dealt to"
   - "&7friendly players in your faction claims."
 #
-perks:
-  - "Tier1;SetEnemyDamageMultiplier{0.90};10% Damage Reduction"
-  - "Tier2;SetEnemyDamageMultiplier{0.80};20% Damage Reduction"
-  - "Tier3;SetEnemyDamageMultiplier{0.70};30% Damage Reduction"
+levels:
+  1:
+    value: 0.90
+    string: "10% Damage Reduction"
+    cost:
+      - Item{factioncrystal;amount=80};80x Faction Crystals
+      - Cash{10000000};$10,000,000
+  2:
+    value: 0.80
+    string: "20% Damage Reduction"
+    cost:
+      - Item{factioncrystal;amount=100};100x Faction Crystals
+      - Cash{25000000};$25,000,000
+  3:
+    value: 0.70
+    string: "30% Damage Reduction"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
-  - "Tier1;Cash{10000000};$10,000,000"
-  - "Tier2;Item{factioncrystal;amount=100};100x Faction Crystals"
-  - "Tier2;Cash{25000000};$25,000,000"
+attributes:
+  - "isDamaged;SetDamage=dmg*value"

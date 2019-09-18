@@ -2,11 +2,14 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
+import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
+import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
+import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
+import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileBooster;
-import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;

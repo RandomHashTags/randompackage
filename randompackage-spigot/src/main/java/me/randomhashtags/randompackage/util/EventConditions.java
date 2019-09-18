@@ -4,13 +4,13 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.attribute.Combo;
-import me.randomhashtags.randompackage.event.BoosterActivateEvent;
+import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.event.customenchant.CustomEnchantApplyEvent;
-import me.randomhashtags.randompackage.event.customenchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.event.customenchant.EnchanterPurchaseEvent;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.event.enchant.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.entity.*;
@@ -603,19 +603,32 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
         } else if(condition.startsWith("result=")) {
             passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).result.equalsIgnoreCase(value);
         } else if(condition.startsWith("rarity=")) {
-            final EnchanterPurchaseEvent epe = event instanceof EnchanterPurchaseEvent ? (EnchanterPurchaseEvent) event : null;
-            final CustomEnchant enchant = epe != null ? valueOfCustomEnchant(epe.purchased) : null;
-            final EnchantRarity rarity = enchant != null ? valueOfEnchantRarity(enchant) : null;
-            passed = event instanceof CustomEnchantApplyEvent && valueOfEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier().equals(value)
-                    || event instanceof RandomizationScrollUseEvent && ((RandomizationScrollUseEvent) event).scroll.getIdentifier().equals(value)
-                    || event instanceof ServerCrateOpenEvent && ((ServerCrateOpenEvent) event).crate.getIdentifier().equals(value)
-                    || rarity != null && rarity.getIdentifier().equals(value);
+            String identifier = null;
+            if(event instanceof CustomEnchantApplyEvent) {
+                identifier = valueOfEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier();
+            } else if(event instanceof EnchanterPurchaseEvent) {
+                final EnchanterPurchaseEvent epe = (EnchanterPurchaseEvent) event;
+                final CustomEnchant enchant = valueOfCustomEnchant(epe.purchased);
+                final EnchantRarity rarity = enchant != null ? valueOfEnchantRarity(enchant) : null;
+                identifier = rarity != null ? rarity.getIdentifier() : null;
+            } else if(event instanceof RandomizationScrollUseEvent) {
+                identifier = ((RandomizationScrollUseEvent) event).scroll.getIdentifier();
+            } else if(event instanceof ServerCrateOpenEvent) {
+                identifier = ((ServerCrateOpenEvent) event).crate.getIdentifier();
+            }
+            passed = identifier != null && identifier.equals(value);
+        } else if(condition.startsWith("enchant=")) {
+            CustomEnchant enchant = null;
+            if(event instanceof CustomEnchantApplyEvent) {
+                enchant = ((CustomEnchantApplyEvent) event).enchant;
+            } else if(event instanceof CustomEnchantProcEvent) {
+                enchant = ((CustomEnchantProcEvent) event).getEnchant();
+            }
+            passed = enchant != null && enchant.getIdentifier().equals(value);
         } else if(condition.startsWith("success<=")) {
             passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).success <= evaluate(value);
         } else if(condition.startsWith("destroy<=")) {
             passed = event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).destroy <= evaluate(value);
-        } else if(condition.startsWith("didproc=")) {
-            passed = event instanceof CustomEnchantProcEvent && ((CustomEnchantProcEvent) event).didProc() == Boolean.parseBoolean(value);
         } else if(condition.startsWith("booster=")) {
             passed = event instanceof BoosterActivateEvent && ((BoosterActivateEvent) event).booster.getIdentifier().equals(value);
         } else if(condition.startsWith("inventorypetoncooldown=")) {

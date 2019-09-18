@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: HEROIC
   slot: 40
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -12,15 +12,28 @@ item:
   - "&7Gain an increasing chance to unlock"
   - "&7a bonus item from a Dungeons Lootbag."
 #
-perks:
-  - "Tier1;SetDungeonLootbagBonus{5:1};5% chance for +1 Lootbag item"
-  - "Tier2;SetDungeonLootbagBonus{8:1};8% chance for +1 Lootbag item"
-  - "Tier3;SetDungeonLootbagBonus{15:1};15% chance for +1 Lootbag item"
-  - "Tier4;SetDungeonLootbagBonus{25:1};25% chance for +1 Lootbag item"
+levels:
+  1:
+    value: 5
+    string: "5% chance for +1 Lootbag item"
+    cost:
+      - SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value
+      - Cash{100000000};$100,000,000
+  2:
+    value: 8
+    string: "8% chance for +1 Lootbag item"
+    cost:
+      - SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value
+  3:
+    value: 15
+    string: "15% chance for +1 Lootbag item"
+    cost:
+      - SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value
+  4:
+    value: 25
+    string: "25% chance for +1 Lootbag item"
+    cost:
+      - SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value
 #
-requirements:
-  - "Tier1;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
-  - "Tier1;Cash{100000000};$100,000,000"
-  - "Tier2;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
-  - "Tier3;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
-  - "Tier4;SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value"
+attributes:
+  - ""

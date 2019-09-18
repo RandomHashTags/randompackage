@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.event.customenchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

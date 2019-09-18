@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: HEROIC
   slot: 41
-  max tier: 3
   item amount=tier: true
 #
 item:
@@ -11,14 +11,31 @@ item:
   lore:
   - "&7Increases damage dealt to Boss monsters."
 #
-perks:
-  - "Tier1;SetBossDamageMultiplier{2.05};+105% Boss Damage"
-  - "Tier2;SetBossDamageMultiplier{2.15};+115% Boss Damage"
-  - "Tier3;SetBossDamageMultiplier{2.25};+125% Boss Damage"
+levels:
+  1:
+    value: 1.05
+    string: "+105% Boss Damage"
+    cost:
+      - FactionUpgrade{BOSS_MASTERY:level=4};Boss Mastery IV /f upgrade
+      - SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value
+      - Item{heroicfactioncrystal;amount=16};16x Heroic Faction Crystals
+  2:
+    value: 1.15
+    string: "+115% Boss Damage"
+    cost:
+      - SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value
+  3:
+    value: 1.25
+    string: "+125% Boss Damage"
+    cost:
+      - SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value
 #
-requirements:
-  - "Tier1;FactionUpgrade{BOSS_MASTERY:level=4};Boss Mastery IV /f upgrade"
-  - "Tier1;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
-  - "Tier1;Item{heroicfactioncrystal;amount=16};16x Heroic Faction Crystals"
-  - "Tier2;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
-  - "Tier3;SpawnerValue{950000000};$950,000,000 &nFaction Spawner Value"
+perks:
+  - "Tier1;SetBossDamageMultiplier{2.05};"
+  - "Tier2;SetBossDamageMultiplier{2.15};"
+  - "Tier3;SetBossDamageMultiplier{2.25};"
+#
+attributes:
+  - "CustomBossDamageByEntity;SetDamage=dmg*value"
+  - "ConquestMobDamageByEntity;SetDamage=dmg*value"
+  - "KOTHMobDamageByEntity;SetDamage=dmg*value"

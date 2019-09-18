@@ -14,4 +14,4 @@ item:
   - "&5&nSoul Cost:&r &d5/pearl"
 #
 attributes:
-  - ""
+  - "ProjectileLaunch;"

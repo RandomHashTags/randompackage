@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.event.customenchant;
+package me.randomhashtags.randompackage.event.enchant;
 
 import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;

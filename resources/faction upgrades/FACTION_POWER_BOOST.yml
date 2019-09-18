@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: DEFAULT
   slot: 4
-  max tier: 5
   item amount=tier: true
 #
 item:
@@ -11,9 +11,36 @@ item:
   lore:
   - "&7Adds passive faction power boosts."
 #
+levels:
+  1:
+    value: 20
+    string: "+20 Faction Power"
+    cost:
+      - Item{factioncrystal;amount=80};80x Faction Crystals
+      - Cash{5000000};$5,000,000
+  2:
+    value: 40
+    string: "+40 Faction Power"
+    cost:
+      -
+  3:
+    value: 60
+    string: "+60 Faction Power"
+    cost:
+      -
+  4:
+    value: 80
+    string: "+80 Faction Power"
+    cost:
+      -
+  5:
+    value: 100
+    string: "+100 Faction Power"
+    cost:
+      -
+#
 perks:
   - "Tier#;IncreaseFactionPower{(20*#)};+(20*#) Faction Power"
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=80};80x Faction Crystals"
-  - "Tier1;Cash{5000000};$5,000,000"
+attributes:
+  - ""

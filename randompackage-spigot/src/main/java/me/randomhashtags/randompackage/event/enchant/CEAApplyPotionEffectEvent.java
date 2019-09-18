@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.event.customenchant;
+package me.randomhashtags.randompackage.event.enchant;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.event.RPEventCancellable;

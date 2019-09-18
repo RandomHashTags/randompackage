@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileMask;
 import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.dev.unfinished;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -24,10 +25,10 @@ public class Captcha extends RPFeature {
     public void unload() {
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
     }
 }

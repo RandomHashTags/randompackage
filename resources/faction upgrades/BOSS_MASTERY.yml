@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 17
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -11,14 +11,26 @@ item:
   lore:
   - "&7Increases damage dealt to Boss monsters."
 #
-perks:
-  - "Tier1;SetBossDamageMultiplier{1.25};+25% Boss Damage"
-  - "Tier2;SetBossDamageMultiplier{1.50};+50% Boss Damage"
-  - "Tier3;SetBossDamageMultiplier{1.75};+75% Boss Damage"
-  - "Tier4;SetBossDamageMultiplier{2.00};+100% Boss Damage"
+levels:
+  1:
+    value: 1.25
+    string: "+25% Boss Damage"
+    cost:
+      - Item{factioncrystal;amount=32};32x Faction Crystals
+      - Cash{5000000};$5,000,000
+  2:
+    value: 1.50
+    string: "+50% Boss Damage"
+    cost:
+      - Item{factioncrystal;amount=64};64x Faction Crystals
+      - Cash{10000000};$10,000,000
+  3:
+    value: 1.75
+    string: "+75% Boss Damage"
+  4:
+    value: 2.00
+    string: "+100% Boss Damage"
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=32};32x Faction Crystals"
-  - "Tier1;Cash{5000000};$5,000,000"
-  - "Tier2;Item{factioncrystal;amount=64};64x Faction Crystals"
-  - "Tier2;Cash{10000000};$10,000,000"
+attributes:
+  - "FactionUpgradeLevelup;FactionUpgrade=BOSS_MASTERY;PlayerSetMultiplier=F_UPGRADE_BOSS_MASTERY:value"
+  - "CustomBossDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*getDamagerMultiplier(F_UPGRADE_BOSS_MASTERY)"

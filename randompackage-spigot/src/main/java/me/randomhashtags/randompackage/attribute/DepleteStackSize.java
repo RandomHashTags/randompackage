@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.event.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import org.bukkit.event.Event;
 
 public class DepleteStackSize extends AbstractEventAttribute {

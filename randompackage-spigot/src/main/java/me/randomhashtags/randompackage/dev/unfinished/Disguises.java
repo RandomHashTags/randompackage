@@ -32,10 +32,10 @@ public class Disguises extends RPFeature {
         final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "disguises.yml"));
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (disguises != null ? disguises.size() : 0) + " Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        //disguses = null;
+        disguises = null;
     }
 
     public void viewOwned(Player player) {

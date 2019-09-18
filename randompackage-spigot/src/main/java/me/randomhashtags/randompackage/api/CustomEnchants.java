@@ -5,13 +5,13 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
-import me.randomhashtags.randompackage.event.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.event.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -607,9 +607,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 final LinkedHashMap<CustomEnchant, Integer> en = enchants.get(is);
                 for(CustomEnchant enchant : en.keySet()) {
                     final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, entities, enchant, en.get(enchant), is);
-                    pluginmanager.callEvent(e);
-                    final List<String> attributes = enchant.getAttributes();
-                    trigger(e, attributes);
+                    if(trigger(e, enchant.getAttributes())) {
+                        pluginmanager.callEvent(e);
+                    }
                 }
             }
         }

@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 15
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -11,14 +11,29 @@ item:
   lore:
   - "&7Deal more damage to Conquest Chest bosses."
 #
-perks:
-  - "Tier1;SetConquestMobDamageMultiplier{2.50};+150% Conquest Mob Damage"
-  - "Tier2;SetConquestMobDamageMultiplier{3.00};+200% Conquest Mob Damage"
-  - "Tier3;SetConquestMobDamageMultiplier{3.50};+250% Conquest Mob Damage"
-  - "Tier4;SetConquestMobDamageMultiplier{4.00};+300% Conquest Mob Damage"
+levels:
+  1:
+    value: 1.50
+    string: "+150% Conquest Mob Damage"
+    cost:
+      - Item{factioncrystal;amount=40};40x Faction Crystals
+      - Cash{4000000};$4,000,000
+  2:
+    value: 2.00
+    string: "+200% Conquest Mob Damage"
+    cost:
+      - Item{factioncrystal;amount=80};80x Faction Crystals
+      - Cash{8000000};$8,000,000
+  3:
+    value: 2.50
+    string: "+250% Conquest Mob Damage"
+    cost:
+      - Item{factioncrystal;amount=120};120x Faction Crystals
+      - Cash{12000000};$12,000,000
+  4:
+    value: 3.00
+    string: "+300% Conquest Mob Damage"
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
-  - "Tier1;Cash{4000000};$4,000,000"
-  - "Tier2;Item{factioncrystal;amount=80};80x Faction Crystals"
-  - "Tier2;Cash{8000000};$8,000,000"
+attributes:
+  - "FactionUpgradeLevelup;FactionUpgrade=CONQUEST_MASTERY;PlayerSetMultiplier=F_UPGRADE_CONQUEST_MASTERY:value"
+  - "ConquestMobDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*getDamagerMultiplier(F_UPGRADE_CONQUEST_MASTERY)"

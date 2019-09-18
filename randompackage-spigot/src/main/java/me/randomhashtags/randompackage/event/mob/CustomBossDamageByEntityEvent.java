@@ -1,5 +1,6 @@
-package me.randomhashtags.randompackage.event;
+package me.randomhashtags.randompackage.event.mob;
 
+import me.randomhashtags.randompackage.event.DamageEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;

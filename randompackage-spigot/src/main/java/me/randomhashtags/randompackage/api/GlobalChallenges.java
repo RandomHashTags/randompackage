@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
 import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
-import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;

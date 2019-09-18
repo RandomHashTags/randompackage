@@ -3,11 +3,11 @@ enabled: false
 #
 name: "Polymorphic Metaphysical"
 lore:
-- "&eA chance to resist the slowness given"
-- "&eby enemy Trap, Snare, Pummel, and Ice"
-- "&eAspect enchantments. At max level,"
-- "&eyou will only be affected approx. 10%"
-- "&eof the time."
+  - "&eA chance to resist the slowness given"
+  - "&eby enemy Trap, Snare, Pummel, and Ice"
+  - "&eAspect enchantments. At max level,"
+  - "&eyou will only be affected approx. 10%"
+  - "&eof the time."
 #
 max level: 4
 applies to: "boots"

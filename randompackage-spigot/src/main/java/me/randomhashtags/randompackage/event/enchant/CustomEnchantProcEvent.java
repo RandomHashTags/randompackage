@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.event.customenchant;
+package me.randomhashtags.randompackage.event.enchant;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.event.AbstractCancellable;
@@ -14,7 +14,6 @@ public class CustomEnchantProcEvent extends AbstractCancellable {
 	private CustomEnchant enchant;
 	private int level;
 	private ItemStack itemWithEnchant;
-	private boolean didProc;
 	public CustomEnchantProcEvent(Event event, HashMap<String, Entity> entities, CustomEnchant enchant, int level, ItemStack itemWithEnchant) {
 		this.event = event;
 		this.entities = entities;
@@ -22,13 +21,9 @@ public class CustomEnchantProcEvent extends AbstractCancellable {
 		this.level = level;
 		this.itemWithEnchant = itemWithEnchant;
 	}
-
-	public boolean didProc() { return didProc; }
-	public void setDidProc(boolean proc) { this.didProc = proc; }
 	public Event getEvent() { return event; }
 	public HashMap<String, Entity> getEntities() { return entities; }
 	public CustomEnchant getEnchant() { return enchant; }
 	public int getEnchantLevel() { return level; }
 	public ItemStack getItemWithEnchant() { return itemWithEnchant; }
-
 }

@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 5
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -11,12 +11,28 @@ item:
   lore:
   - "&7Shorter mcMMO Active Ability Cooldowns"
 #
-perks:
-  - "Tier1;ReduceMCMMOCooldown{all:2.5};-2.5% mcMMO Cooldown"
-  - "Tier2;ReduceMCMMOCooldown{all:5.0};-5.0% mcMMO Cooldown"
-  - "Tier3;ReduceMCMMOCooldown{all:12.5};-12.5% mcMMO Cooldown"
-  - "Tier4;ReduceMCMMOCooldown{all:15.0};-15.0% mcMMO Cooldown"
+levels:
+  1:
+    value: 0.975
+    string: "-2.5% mcMMO Cooldown"
+    cost:
+      - Item{factioncrystal;amount=40};40x Faction Crystals
+      - Cash{5000000};$5,000,000
+  2:
+    value: 0.95
+    string: "-5.0% mcMMO Cooldown"
+    cost:
+      -
+  3:
+    value: 0.875
+    string: "-12.5% mcMMO Cooldown"
+    cost:
+      -
+  4:
+    value: 0.85
+    string: "-15.0% mcMMO Cooldown"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
-  - "Tier1;Cash{5000000};$5,000,000"
+attributes:
+  - "McMMOPlayerAbilityActivate;SetCooldown=cooldown*value"

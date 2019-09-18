@@ -3,10 +3,10 @@ enabled: true
 #
 name: "Planetary Deathbringer"
 lore:
-- "&eHeroic Enchantment. An increased"
-- "&echance to deal 2.5x damage. Requires"
-- "&eDeathbringer III enchant on item to"
-- "&eapply. Cannot be black-scrolled."
+  - "&eHeroic Enchantment. An increased"
+  - "&echance to deal 2.5x damage. Requires"
+  - "&eDeathbringer III enchant on item to"
+  - "&eapply. Cannot be black-scrolled."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"

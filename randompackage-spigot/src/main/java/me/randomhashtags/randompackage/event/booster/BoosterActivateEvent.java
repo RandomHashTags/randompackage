@@ -1,6 +1,7 @@
-package me.randomhashtags.randompackage.event;
+package me.randomhashtags.randompackage.event.booster;
 
 import me.randomhashtags.randompackage.addon.Booster;
+import me.randomhashtags.randompackage.event.AbstractCancellable;
 import org.bukkit.OfflinePlayer;
 
 public class BoosterActivateEvent extends AbstractCancellable {

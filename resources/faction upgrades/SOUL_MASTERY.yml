@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 12
-  max tier: 3
   item amount=tier: true
 #
 item:
@@ -11,13 +11,24 @@ item:
   lore:
   - "&7Decreases soul cost of passive soul enchantment."
 #
-perks:
-  - "Tier1;DecreaseRarityGemCost{SOUL:0.05};-5% Soul Cost"
-  - "Tier2;DecreaseRarityGemCost{SOUL:0.10};-10% Soul Cost"
-  - "Tier3;DecreaseRarityGemCost{SOUL:0.25};-25% Soul Cost"
+levels:
+  1:
+    value: 0.95
+    string: "-5% Soul Cost"
+    cost:
+      - Item{factioncrystal;amount=40};40x Faction Crystals
+      - Cash{10000000};$10,000,000
+  2:
+    value: 0.90
+    string: "-10% Soul Cost"
+    cost:
+      - Item{factioncrystal;amount=80};80x Faction Crystals
+      - Cash{20000000};$20,000,000
+  3:
+    value: 0.75
+    string: "-25% Soul Cost"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
-  - "Tier1;Cash{10000000};$10,000,000"
-  - "Tier2;Item{factioncrystal;amount=80};80x Faction Crystals"
-  - "Tier2;Cash{20000000};$20,000,000"
+attributes:
+  - "DepleteRarityGem;rarity=SOUL;SetDepleted=amount*value"

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.nearFinished;
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
 import me.randomhashtags.randompackage.addon.RarityGem;
-import me.randomhashtags.randompackage.event.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileFactionUpgrade;

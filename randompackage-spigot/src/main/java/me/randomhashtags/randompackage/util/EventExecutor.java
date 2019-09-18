@@ -8,7 +8,10 @@ import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
-import me.randomhashtags.randompackage.event.customenchant.*;
+import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
+import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -29,20 +32,20 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     private boolean hasReplacements(List<String> conditions) {
         for(String s : conditions) {
             final String l = s.toLowerCase();
-            if(l.startsWith("get") && (l.contains("hp") || l.endsWith("saturation") || l.contains("exp") || l.contains("loc"))) {
+            if(l.startsWith("get") && (l.contains("combo") || l.contains("multiplier") || l.contains("hp") || l.endsWith("saturation") || l.contains("exp") || l.contains("loc"))) {
                 return true;
             }
         }
         return false;
     }
-    private void doReplacements(HashMap<String, Entity> entities, Set<String> keys, String s) {
+    private void doReplacements(HashMap<String, Entity> entities, Set<String> keys, String s, String original) {
         // TODO: add more replacements
         for(String entity : keys) {
             final Entity E = entities.get(entity);
             final boolean isLiving = E instanceof LivingEntity, isPlayer = isLiving && E instanceof Player;
             final LivingEntity le = isLiving ? (LivingEntity) E : null;
             final Player player = isPlayer ? (Player) E : null;
-            s = s.replace("get" + entity + "maxhp", isLiving ? Double.toString(le.getHealth()) : "0");
+            s = s.replace("get" + entity + "maxhp", isLiving ? Double.toString(le.getMaxHealth()) : "0");
             s = s.replace("get" + entity + "hp", isLiving ? Double.toString(le.getHealth()) : "0");
             s = s.replace("get" + entity + "saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
             if(s.contains("loc")) {
@@ -55,6 +58,12 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 s = s.replace("get" + entity + "exp", isPlayer ? Integer.toString(getTotalExperience(player)) : "0");
                 s = s.replace("get" + entity + "explevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
             }
+            final boolean hasCombo = s.contains("combo(");
+            if(hasCombo || s.contains("multiplier(")) {
+                final UUID u = E.getUniqueId();
+                final String combo = original.split("\\(")[1].split("\\)")[0];
+                s = s.replace("get" + entity + (hasCombo ? "combo" : "multiplier") + "(" + combo.toLowerCase() + ")", isPlayer ? Double.toString(getCombo(u, combo)) : "1");
+            }
         }
     }
 
@@ -65,11 +74,11 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
             for(String s : keys) {
-                final String value = c.contains("=") ? c.split("=")[1] : "false";
+                final String value = c.contains("=") ? c.split("=")[1] : "false", original = s;
                 final Entity e = entities.get(s);
                 s = s.toLowerCase();
                 if(hasReplacements(conditions)) {
-                    doReplacements(entities, keys, s);
+                    doReplacements(entities, keys, s, original);
                 }
 
                 if(condition.startsWith("cancelled=")) {

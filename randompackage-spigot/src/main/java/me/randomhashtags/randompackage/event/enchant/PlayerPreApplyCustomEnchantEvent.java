@@ -1,17 +1,15 @@
-package me.randomhashtags.randompackage.event.customenchant;
+package me.randomhashtags.randompackage.event.enchant;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerRevealCustomEnchantEvent extends RPEventCancellable {
+public class PlayerPreApplyCustomEnchantEvent extends RPEventCancellable {
 	public final CustomEnchant enchant;
 	public final int level;
-	public final ItemStack item;
-	public PlayerRevealCustomEnchantEvent(Player player, ItemStack item, CustomEnchant enchant, int level) {
+	public PlayerPreApplyCustomEnchantEvent(Player player, CustomEnchant enchant, int level, ItemStack applytoItem) {
 		super(player);
-		this.item = item;
 		this.enchant = enchant;
 		this.level = level;
 	}

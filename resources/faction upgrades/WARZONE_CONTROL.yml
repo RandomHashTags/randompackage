@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: DEFAULT
   slot: 13
-  max tier: 3
   item amount=tier: true
 #
 item:
@@ -12,13 +12,29 @@ item:
   - "&7Increases /warzone \"Last Man Standing\""
   - "&7$ and XP payouts."
 #
+levels:
+  1:
+    value: 1.25
+    string: "+1.25x LMS Rewards"
+    cost:
+      - Item{factioncrystal;amount=32};32x Faction Crystals
+      - Cash{10000000};$10,000,000
+  2:
+    value: 1.50
+    string: "+1.50x LMS Rewards"
+    cost:
+      - Item{factioncrystal;amount=64};64x Faction Crystals
+      - Cash{20000000};$20,000,000
+  3:
+    value: 2
+    string: "+2.00x LMS Rewards"
+    cost:
+      -
+#
 perks:
   - "Tier1;LMSMultiplier{1.25};+1.25x LMS Rewards"
   - "Tier2;LMSMultiplier{1.50};+1.50x LMS Rewards"
   - "Tier3;LMSMultiplier{2.00};+2.00x LMS Rewards"
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=32};32x Faction Crystals"
-  - "Tier1;Cash{10000000};$10,000,000"
-  - "Tier2;Item{factioncrystal;amount=64};64x Faction Crystals"
-  - "Tier2;Cash{20000000};$20,000,000"
+attributes:
+  - ""

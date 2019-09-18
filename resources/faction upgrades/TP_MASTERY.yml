@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 8
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -11,12 +11,28 @@ item:
   lore:
   - "&7Decreases teleportation casting time."
 #
-perks:
-  - "Tier1;SetTeleportDelayMultiplier{0.9};-10% Teleport Delay"
-  - "Tier2;SetTeleportDelayMultiplier{0.85};-15% Teleport Delay"
-  - "Tier3;SetTeleportDelayMultiplier{0.75};-25% Teleport Delay"
-  - "Tier4;SetTeleportDelayMultiplier{0.65};-35% Teleport Delay"
+levels:
+  1:
+    value: 0.90
+    string: "-10% Teleport Delay"
+    cost:
+      - Item{factioncrystal;amount=40};40x Faction Crystals
+      - Cash{2500000};$2,500,000
+  2:
+    value: 0.85
+    string: "-15% Teleport Delay"
+    cost:
+      -
+  3:
+    value: 0.75
+    string: "-25% Teleport Delay"
+    cost:
+      -
+  4:
+    value: 0.65
+    string: "-35% Teleport Delay"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=40};40x Faction Crystals"
-  - "Tier1;Cash{2500000};$2,500,000"
+attributes:
+  - "TeleportDelayed;SetDelay=delay*value"

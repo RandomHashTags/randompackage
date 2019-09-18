@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: HEROIC
   slot: 29
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -12,16 +12,29 @@ item:
   - "&7Reduces rate at which faction members"
   - "&7get hungry and need to /feed."
 #
-perks:
-  - "Tier1;SetHungerMultiplier{0.70};-30% Hunger increase rate"
-  - "Tier2;SetHungerMultiplier{0.65};-35% Hunger increase rate"
-  - "Tier3;SetHungerMultiplier{0.55};-45% Hunger increase rate"
-  - "Tier4;SetHungerMultiplier{0.50};-50% Hunger increase rate"
+levels:
+  1:
+    value: 30
+    string: "-30% Hunger increase rate"
+    cost:
+      - FactionUpgrade{WELL_FED:level=4};Well Fed IV /f upgrade
+      - SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value
+      - Cash{5000000};$5,000,000
+  2:
+    value: 35
+    string: "-35% Hunger increase rate"
+    cost:
+      - SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value
+  3:
+    value: 45
+    string: "-45% Hunger increase rate"
+    cost:
+      - SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value
+  4:
+    value: 50
+    string: "-50% Hunger increase rate"
+    cost:
+      - SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value
 #
-requirements:
-  - "Tier1;FactionUpgrade{WELL_FED:level=4};Well Fed IV /f upgrade"
-  - "Tier1;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
-  - "Tier1;Cash{5000000};$5,000,000"
-  - "Tier2;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
-  - "Tier3;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
-  - "Tier4;SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+attributes:
+  - "FoodLevelLose;chance=value;SetCancelled=true"

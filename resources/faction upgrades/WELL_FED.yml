@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: DEFAULT
   slot: 9
-  max tier: 4
   item amount=tier: true
 #
 item:
@@ -12,14 +12,29 @@ item:
   - "&7Reduces rate at which faction members"
   - "&7get hungry and need to /feed."
 #
-perks:
-  - "Tier1;SetHungerMultiplier{0.95};-5% Hunger increase rate"
-  - "Tier2;SetHungerMultiplier{0.90};-10% Hunger increase rate"
-  - "Tier3;SetHungerMultiplier{0.85};-15% Hunger increase rate"
-  - "Tier4;SetHungerMultiplier{0.75};-25% Hunger increase rate"
+levels:
+  1:
+    value: 5
+    string: "-5% Hunger increase rate"
+    cost:
+      - Item{factioncrystal;amount=16};16x Faction Crystal
+      - Cash{500000};$500,000
+  2:
+    value: 10
+    string: "-10% Hunger increase rate"
+    cost:
+      - Item{factioncrystal;amount=32};32x Faction Crystal
+      - Cash{2000000};$2,000,000
+  3:
+    value: 15
+    string: "-15% Hunger increase rate"
+    cost:
+      -
+  4:
+    value: 25
+    string: "-25% Hunger increase rate"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystal"
-  - "Tier1;Cash{500000};$500,000"
-  - "Tier2;Item{factioncrystal;amount=32};32x Faction Crystal"
-  - "Tier2;Cash{2000000};$2,000,000"
+attributes:
+  - "FoodLevelLose;chance=value;SetCancelled=true"

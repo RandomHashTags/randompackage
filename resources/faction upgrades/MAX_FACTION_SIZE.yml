@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: DEFAULT
   slot: 3
-  max tier: 10
   item amount=tier: true
 #
 item:
@@ -11,9 +11,46 @@ item:
   lore:
   - "&7Increases max faction size."
 #
+levels:
+  1:
+    value: 1
+    string: ""
+    cost:
+      - Item{factioncrystal;amount=16};16x Faction Crystals
+      - Cash{1000000};$1,000,000
+  2:
+    value: 2
+    string: ""
+    cost:
+      -
+  3:
+    value: 3
+    string: ""
+    cost:
+      -
+  4:
+    value: 4
+    string: ""
+    cost:
+      -
+  5:
+    value: 5
+    string: ""
+    cost:
+      -
+  6:
+    value: 6
+  7:
+    value: 7
+  8:
+    value: 8
+  9:
+    value: 9
+  10:
+    value: 10
+#
 perks:
   - "Tier#;IncreaseMaxFactionSize{#};+# Max Faction Size"
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
-  - "Tier1;Cash{1000000};$1,000,000"
+attributes:
+  - ""

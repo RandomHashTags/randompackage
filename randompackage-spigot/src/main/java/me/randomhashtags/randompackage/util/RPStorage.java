@@ -39,6 +39,7 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, EventAttribute> eventattributes;
     protected static LinkedHashMap<String, EventCondition> eventconditions;
 
+    protected static LinkedHashMap<String, Disguise> disguises;
     protected static LinkedHashMap<String, DuelArena> duelArenas;
     protected static LinkedHashMap<String, Dungeon> dungeons;
     protected static LinkedHashMap<String, MagicDust> dusts;

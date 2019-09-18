@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: HEROIC
   slot: 32
-  max tier: 3
   item amount=tier: true
 #
 item:
@@ -12,14 +12,24 @@ item:
   - "&7Reduces the time it takes for"
   - "&7a Dungeons Portal to close."
 #
-perks:
-  - "Tier1;SetDungeonPortalAppearanceTime{90};90s Dungeons Portal Close Time"
-  - "Tier2;SetDungeonPortalAppearanceTime{80};80s Dungeons Portal Close Time"
-  - "Tier3;SetDungeonPortalAppearanceTime{45};45s Dungeons Portal Close Time"
+levels:
+  1:
+    value: 90
+    string: "90s Dungeons Portal Close Time"
+    cost:
+      - SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value
+      - Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals
+      - Cash{25000000};$25,000,000
+  2:
+    value: 80
+    string: "80s Dungeons Portal Close Time"
+    cost:
+      - SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value
+  3:
+    value: 45
+    string: "45s Dungeons Portal Close Time"
+    cost:
+      - SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value
 #
-requirements:
-  - "Tier1;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
-  - "Tier1;Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals"
-  - "Tier1;Cash{25000000};$25,000,000"
-  - "Tier2;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
-  - "Tier3;SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+attributes:
+  - ""

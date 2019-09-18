@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: false
   type: DEFAULT
   slot: 14
-  max tier: 5
   item amount=tier: true
 #
 item:
@@ -11,15 +11,32 @@ item:
   lore:
   - "&7Capture and Assault /outposts faster."
 #
-perks:
-  - "Tier1;SetOutpostCapMultiplier{1.10};+10% Outpost Cap Speed"
-  - "Tier2;SetOutpostCapMultiplier{1.25};+25% Outpost Cap Speed"
-  - "Tier3;SetOutpostCapMultiplier{1.50};+50% Outpost Cap Speed"
-  - "Tier4;SetOutpostCapMultiplier{2.00};+100% Outpost Cap Speed"
-  - "Tier5;SetOutpostCapMultiplier{2.25};+125% Outpost Cap Speed"
+levels:
+  1:
+    value: 1.10
+    string: "+10% Outpost Cap Speed"
+    cost:
+      - Item{factioncrystal;amount=16};16x Faction Crystals
+      - Cash{2500000};$2,500,000
+  2:
+    value: 1.25
+    string: "+25% Outpost Cap Speed"
+    cost:
+      - Item{factioncrystal;amount=32};32x Faction Crystals
+      - Cash{5000000};$5,000,000
+  3:
+    value: 1.50
+    string: "+50% Outpost Cap Speed"
+    cost:
+      -
+  4:
+    value: 2.00
+    string: "+100% Outpost Cap Speed"
+    cost:
+      -
+  5:
+    value: 2.25
+    string: "+125% Outpost Cap Speed"
+    cost:
+      -
 #
-requirements:
-  - "Tier1;Item{factioncrystal;amount=16};16x Faction Crystals"
-  - "Tier1;Cash{2500000};$2,500,000"
-  - "Tier2;Item{factioncrystal;amount=32};32x Faction Crystals"
-  - "Tier2;Cash{5000000};$5,000,000"

@@ -1,8 +1,8 @@
 # Made by RandomHashTags
 settings:
+  enabled: true
   type: HEROIC
   slot: 38
-  max tier: 2
   item amount=tier: true
 #
 item:
@@ -11,13 +11,20 @@ item:
   lore:
   - "&7Decreases soul cost of passive soul enchantments."
 #
-perks:
-  - "Tier1;DecreaseRarityGemCost{SOUL:30};-30% Soul Cost"
-  - "Tier2;DecreaseRarityGemCost{SOUL:45};-45% Soul Cost"
+levels:
+  1:
+    value: 0.70
+    string: "-30% Soul Cost"
+    cost:
+      - FactionUpgrade{SOUL_MASTERY:level=3};Soul Mastery III /f upgrade
+      - SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value
+      - Item{heroicfactioncrystal;amount=15};15x Heroic Faction Crystals
+      - Cash{75000000};$75,000,000
+  2:
+    value: 0.55
+    string: "-45% Soul Cost"
+    cost:
+      - SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value
 #
-requirements:
-  - "Tier1;FactionUpgrade{SOUL_MASTERY:level=3};Soul Mastery III /f upgrade"
-  - "Tier1;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
-  - "Tier1;Item{heroicfactioncrystal;amount=15};15x Heroic Faction Crystals"
-  - "Tier1;Cash{75000000};$75,000,000"
-  - "Tier2;SpawnerValue{675000000};$675,000,000 &nFaction Spawner Value"
+attributes:
+  - "DepleteRarityGem;rarity=SOUL;SetDepleted=amount*value"

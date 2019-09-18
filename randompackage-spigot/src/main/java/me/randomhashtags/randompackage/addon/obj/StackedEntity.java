@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.obj;
 
-import me.randomhashtags.randompackage.event.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.event.MobStackMergeEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackMergeEvent;
 import me.randomhashtags.randompackage.util.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
