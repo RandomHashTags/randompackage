@@ -151,10 +151,10 @@ public class CustomExplosions extends RPFeature {
 		FileCustomTNT.primed = null;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void blockBreakEvent(BlockBreakEvent event) {
 		final Block b = event.getBlock();
-		if(!event.isCancelled() && b.getType().equals(Material.TNT)) {
+		if(b.getType().equals(Material.TNT)) {
 			final Location l = b.getLocation();
 			final HashMap<Location, FileCustomTNT> p = FileCustomTNT.placed;
 			if(p != null && p.containsKey(l)) {
@@ -165,15 +165,13 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void blockPlaceEvent(BlockPlaceEvent event) {
-		if(!event.isCancelled()) {
-			final ItemStack i = event.getItemInHand();
-			if(i.getType().equals(Material.TNT) && i.hasItemMeta()) {
-				final CustomExplosion ce = valueOfCustomExplosion(i);
-				if(ce instanceof FileCustomTNT) {
-					((FileCustomTNT) ce).place(event.getBlockPlaced().getLocation());
-				}
+		final ItemStack i = event.getItemInHand();
+		if(i.getType().equals(Material.TNT) && i.hasItemMeta()) {
+			final CustomExplosion ce = valueOfCustomExplosion(i);
+			if(ce instanceof FileCustomTNT) {
+				((FileCustomTNT) ce).place(event.getBlockPlaced().getLocation());
 			}
 		}
 	}
@@ -195,7 +193,7 @@ public class CustomExplosions extends RPFeature {
 			} else {
 				final CustomExplosion c = valueOfCustomExplosion(i);
 				if(c instanceof FileCustomCreeper) {
-					final Location lo = l.clone().add(0, 1, 0);
+					final Location lo = l.clone().add(0.5, 1, 0.5);
 					event.setCancelled(true);
 					removeItem(event.getPlayer(), i, 1);
 					((FileCustomCreeper) c).spawn(lo);

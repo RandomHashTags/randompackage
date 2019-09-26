@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -29,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class SecondaryEvents extends RPFeature implements CommandExecutor {
@@ -111,7 +111,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                         item = givedpitem.getBanknote(amount, player.getName());
                         giveItem(player, item);
                         m = "withdraw.success";
-                    }
+                    } else return true;
                     for(String string : config.getStringList(m)) {
                         if(string.contains("{VALUE}")) string = string.replace("{VALUE}", formattedAmount);
                         if(string.contains("{BALANCE}")) string = string.replace("{BALANCE}", formatDouble(eco.getBalance(player)));
@@ -125,9 +125,13 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     final String a = args[0];
                     final BigDecimal amount = BigDecimal.valueOf(getRemainingInt(a));
                     final int i = amount.intValue();
-                    if(i <= 0) sendStringListMessage(sender, config.getStringList("xpbottle.withdraw at least"), null);
-                    else if(i > getTotalExperience(player)) sendStringListMessage(player, config.getStringList("xpbottle.not enough to bottle"), null);
-                    else                                         xpbottle(player, amount);
+                    if(i <= 0) {
+                        sendStringListMessage(sender, config.getStringList("xpbottle.withdraw at least"), null);
+                    } else if(i > getTotalExperience(player)) {
+                        sendStringListMessage(player, config.getStringList("xpbottle.not enough to bottle"), null);
+                    } else {
+                        xpbottle(player, amount);
+                    }
                 }
             }
         }
@@ -214,7 +218,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         final PlayerTeleportDelayEvent tel = PlayerTeleportDelayEvent.teleporting.getOrDefault(player, null);
         if(tel != null) {
             final Location pl = player.getLocation();
-            Location L = tel.from;
+            Location L = tel.getFrom();
             if(L.getBlockX() == pl.getBlockX()
                     && L.getBlockY() == pl.getBlockY()
                     && L.getBlockZ() == pl.getBlockZ()) {
@@ -224,7 +228,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 for(String s : config.getStringList("xpbottle.teleport cancelled"))
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
                 tel.setCancelled(true);
-                scheduler.cancelTask(events.get(player).task);
+                scheduler.cancelTask(events.get(player).getTask());
                 events.remove(player);
             }
         }
@@ -264,26 +268,33 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 }
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
+                final PlayerTeleportDelayEvent previous = events.getOrDefault(player, null);
+                final boolean hasPrevious = previous != null;
                 final double mindelay = getTeleportMinDelay(w);
                 delay -= getTotalExperience(player) / getTeleportationVariable(w);
                 delay = round(delay, 3);
                 if(delay < mindelay) delay = mindelay;
-                final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-                final double m = fu.isEnabled() ? fu.getTeleportDelayMultiplier(regions.getFactionTag(u)) : 1.00, uu = delay*m;
-                if(events.containsKey(player)) {
-                    events.get(player).setCancelled(true);
-                    scheduler.cancelTask(events.get(player).task);
+                if(hasPrevious) {
+                    previous.setCancelled(true);
+                    scheduler.cancelTask(previous.getTask());
                     events.remove(player);
                 }
-                final PlayerTeleportDelayEvent e = new PlayerTeleportDelayEvent(player, uu, event.getFrom(), event.getTo());
+                final PlayerTeleportDelayEvent e = new PlayerTeleportDelayEvent(player, delay, event.getFrom(), event.getTo());
                 pluginmanager.callEvent(e);
                 if(!e.isCancelled()) {
+                    final long de = (long) ((((long) delay * 20)) + (20 * Double.parseDouble("0." + Double.toString(e.getDelay()).split("\\.")[1])));
+                    final int t = scheduler.scheduleSyncDelayedTask(getPlugin, () -> {
+                        player.teleport(e.getTo(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        events.remove(player);
+                    }, de);
+                    e.setTask(t);
+                    events.put(player, e);
                     for(String s : config.getStringList("xpbottle.pending teleport")) {
-                        if(s.contains("{SECS}")) s = s.replace("{SECS}", roundDoubleString(e.delay, 3));
+                        if(s.contains("{SECS}")) s = s.replace("{SECS}", roundDoubleString(e.getDelay(), 3));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
                     }
                 } else {
-                    scheduler.cancelTask(events.get(player).task);
+                    scheduler.cancelTask(e.getTask());
                     events.remove(player);
                 }
             }

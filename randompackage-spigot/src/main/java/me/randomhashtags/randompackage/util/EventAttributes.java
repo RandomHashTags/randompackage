@@ -61,6 +61,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new SetCancelled(),
                 new SetCombo(),
                 new SetCompassTarget(),
+                new SetDelay(),
                 new SetDurability(),
                 new SetFlySpeed(),
                 new SetGameMode(),

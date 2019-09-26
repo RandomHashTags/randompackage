@@ -35,4 +35,4 @@ levels:
       -
 #
 attributes:
-  - "TeleportDelayed;SetDelay=delay*value"
+  - "PlayerTeleportDelay;SetDelay=delay*value"

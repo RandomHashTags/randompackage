@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage;
 
+import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
-import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;

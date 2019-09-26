@@ -5,10 +5,14 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Slotable;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public interface FactionUpgrade extends Itemable, MaxLevelable, Slotable, Attributable {
     FactionUpgradeType getType();
     boolean itemAmountEqualsTier();
-    HashMap<Integer, FactionUpgradeLevel> getLevels();
+    LinkedHashMap<Integer, FactionUpgradeLevel> getLevels();
+    default int getMaxLevel() {
+        final LinkedHashMap<Integer, FactionUpgradeLevel> levels = getLevels();
+        return (int) levels.keySet().toArray()[levels.size()-1];
+    }
 }

@@ -239,8 +239,9 @@ public class KitsEvolution extends Kits {
             pdata.getKitCooldowns().put(vkit, System.currentTimeMillis()+(vkit.getCooldown()*1000));
         player.updateInventory();
         final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-        int upgradechance = vkit.getUpgradeChance(), a = fu.isEnabled() && hookedFactionsUUID() ? (int) (fu.getVkitLevelingChance(factions.getFactionTag(u))*100) : 0;
-        upgradechance += a;
+        // TODO: fix this
+        int upgradechance = vkit.getUpgradeChance();//, a = fu.isEnabled() && hookedFactionsUUID() ? (int) (fu.getVkitLevelingChance(factions.getFactionTag(u))*100) : 0;
+        //upgradechance += a;
         if(!preview && random.nextInt(100) <= upgradechance) {
             final int newlvl = vkitlvl+1;
             if(newlvl > vkit.getMaxLevel()) return;

@@ -3,7 +3,6 @@ settings:
   enabled: false
   type: DEFAULT
   slot: 6
-  max tier: 4
   item amount=tier: true
 #
 item:

@@ -14,49 +14,68 @@ item:
 levels:
   1:
     value: 1
-    string: ""
+    string: "+1 Max Faction Warps"
     cost:
       - Cash{150000};$150,000
   2:
-    value: 1
-    string: ""
+    value: 2
+    string: "+2 Max Faction Warps"
     cost:
       - Item{factioncrystal;amount=16};16x Faction Crystals
       - Cash{300000};$300,000
   3:
-    value: 1
-    string: ""
+    value: 3
+    string: "+3 Max Faction Warps"
     cost:
-      - Cash{300000};$450,000
+      - Cash{450000};$450,000
   4:
-    value: 1
-    string: ""
+    value: 4
+    string: "+4 Max Faction Warps"
     cost:
-      - Cash{300000};$600,000
+      - Cash{600000};$600,000
   5:
-    value: 1
-    string: ""
+    value: 5
+    string: "+5 Max Faction Warps"
     cost:
-      - Cash{300000};$750,000
+      - Cash{750000};$750,000
   6:
+    value: 6
+    string: "+6 Max Faction Warps"
+    cost:
+      - Cash{900000};900,000
   7:
+    value: 7
+    string: "+7 Max Faction Warps"
+    cost:
+      - Cash{1050000};1,500,000
   8:
+    value: 8
+    string: "+8 Max Faction Warps"
+    cost:
+      - Cash{1200000};1,200,000
   9:
+    value: 9
+    string: "+9 Max Faction Warps"
+    cost:
+      - Cash{1350000};$1,350,000
   10:
+    value: 10
+    string: "+10 Max Faction Warps"
+    cost:
+      - Cash{1500000};$1,500,000
   11:
+    value: 11
+    string: "+11 Max Faction Warps"
+    cost:
+      - Cash{1650000};1,650,000
   12:
+    value: 12
+    string: "+12 Max Faction Warps"
+    cost:
+      - Cash{1800000};$1,800,000
 #
 perks:
   - "Tier#;IncreaseMaxFactionWarps{#};+# Max Faction Warps"
-#
-requirements:
-  - "Tier6;Cash{300000};$900,000"
-  - "Tier7;Cash{300000};$1,050,000"
-  - "Tier8;Cash{300000};$1,200,000"
-  - "Tier9;Cash{300000};$1,350,000"
-  - "Tier10;Cash{300000};$1,500,000"
-  - "Tier11;Cash{300000};$1,650,000"
-  - "Tier12;Cash{300000};$1,800,000"
 #
 attributes:
   - ""

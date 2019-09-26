@@ -35,5 +35,5 @@ levels:
     string: "+300% Conquest Mob Damage"
 #
 attributes:
-  - "FactionUpgradeLevelup;FactionUpgrade=CONQUEST_MASTERY;PlayerSetMultiplier=F_UPGRADE_CONQUEST_MASTERY:value"
+  - "FactionUpgradeLevelup;PlayerSetMultiplier=F_UPGRADE_CONQUEST_MASTERY:value"
   - "ConquestMobDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*getDamagerMultiplier(F_UPGRADE_CONQUEST_MASTERY)"

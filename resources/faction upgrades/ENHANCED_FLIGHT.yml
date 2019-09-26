@@ -20,7 +20,7 @@ levels:
       - Cash{1000000};$1,000,000
   2:
     value: 1
-    string: ";All allies can fly."
+    string: "All allies can fly."
     cost:
       - Item{factioncrystal;amount=120};120x Faction Crystals
       - Cash{1000000};$1,500,000

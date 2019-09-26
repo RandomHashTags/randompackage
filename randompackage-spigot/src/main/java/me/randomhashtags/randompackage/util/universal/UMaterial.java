@@ -29,7 +29,6 @@ import java.util.*;
         MCMarket - https://www.mc-market.org/members/20858/
         SpigotMC - https://www.spigotmc.org/members/76364/
         Twitch - https://www.twitch.tv/randomhashtags
-        Twitter - https://twitter.com/irandomhashtags
  */
 public enum UMaterial {
     /*

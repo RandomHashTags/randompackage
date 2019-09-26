@@ -21,6 +21,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
@@ -345,6 +346,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
 
     private String[] getReplacements(Event event) {
         if(event instanceof EntityDeathEvent) return getReplacements((EntityDeathEvent) event);
+        else if(event instanceof BlockGrowEvent) return getReplacements((BlockGrowEvent) event);
         else if(event instanceof BlockPlaceEvent) return getReplacements((BlockPlaceEvent) event);
         else if(event instanceof PlayerFishEvent) return getReplacements((PlayerFishEvent) event);
         else if(event instanceof EntityDamageByEntityEvent) return getReplacements((EntityDamageByEntityEvent) event);
@@ -359,8 +361,10 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         else if(event instanceof DamageEvent) return getReplacements((DamageEvent) event);
         else if(event instanceof FundDepositEvent) return getReplacements((FundDepositEvent) event);
         else if(event instanceof JackpotPurchaseTicketsEvent) return getReplacements((JackpotPurchaseTicketsEvent) event);
+        else if(event instanceof PlayerTeleportDelayEvent) return getReplacements((PlayerTeleportDelayEvent) event);
         else if(event instanceof ShopEvent) return getReplacements((ShopEvent) event);
         else if(event instanceof TinkererTradeEvent) return getReplacements((TinkererTradeEvent) event);
+
         else return new String[]{};
     }
     // Bukkit event replacements
@@ -370,7 +374,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         final String[] a = new String[] {"xp", Integer.toString(event.getDroppedExp()), "@Victim", toString(e.getLocation())}, b = NN ? new String[]{"@Killer", toString(k.getLocation())} : null;
         return NN ? getReplacements(a, b) : a;
     }
-    public String[] getReplacements(BlockBreakEvent event) { return new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Player", toString(event.getPlayer().getLocation())}; }
+    public String[] getReplacements(BlockBreakEvent event) { return new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Player", toString(event.getPlayer().getLocation()), "@Block", toString(event.getBlock().getLocation())}; }
+    public String[] getReplacements(BlockGrowEvent event) { return new String[] {"@Block", toString(event.getBlock().getLocation())}; }
     public String[] getReplacements(BlockPlaceEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation())}; }
     public String[] getReplacements(PlayerFishEvent event) { return new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Player", toString(event.getPlayer().getLocation()), "@Caught", toString(event.getCaught().getLocation())}; }
     public String[] getReplacements(EntityDamageEvent event) { return new String[] {"dmg", Double.toString(event.getDamage()), "@Victim", toString(event.getEntity().getLocation())}; }
@@ -397,11 +402,14 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(e.get("Player").getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
         return getReplacements(a, b);
     }
-    public String[] getReplacements(DamageEvent event) { return new String[] { "dmg", Double.toString(event.getDamage())}; }
-    public String[] getReplacements(FundDepositEvent event) { return new String[] { "amount", event.amount.toString()}; }
-    public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "amount", event.amount.toBigInteger().toString()}; }
-    public String[] getReplacements(ShopEvent event) { return new String[] { "total", event.getTotal().toString()}; }
-    public String[] getReplacements(TinkererTradeEvent event) { return new String[] { "tradesize", Integer.toString(event.trades.size()) };}
+    public String[] getReplacements(DamageEvent event) { return new String[] { "@Damager", toString(event.getDamager().getLocation()), "dmg", Double.toString(event.getDamage())}; }
+    public String[] getReplacements(FundDepositEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toString()}; }
+    public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toBigInteger().toString()}; }
+    public String[] getReplacements(PlayerTeleportDelayEvent event) {
+        return new String[] { "@Player", toString(event.getPlayer().getLocation()), "delay", Double.toString(event.getDelay())};
+    }
+    public String[] getReplacements(ShopEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "total", event.getTotal().toString()}; }
+    public String[] getReplacements(TinkererTradeEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "tradesize", Integer.toString(event.trades.size())}; }
 
     public String[] getReplacements(String[] a, String[] b) {
         final List<String> c = new ArrayList<>();
@@ -450,6 +458,9 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     }
     public boolean trigger(MobStackDepleteEvent event, List<String> attributes) {
         return trigger(event, getEntities("Killer", event.killer, "Victim", event.stack.entity), attributes);
+    }
+    public boolean trigger(PlayerTeleportDelayEvent event, List<String> attributes, String...replacements) {
+        return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements));
     }
     public boolean trigger(ShopEvent event, List<String> attributes) {
         return trigger(event, getEntities(event), attributes, getReplacements(event));
