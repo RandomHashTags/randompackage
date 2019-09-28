@@ -10,6 +10,7 @@ import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.lootbag.LootbagClaimEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -68,16 +69,19 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         }
     }
 
-    public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled) {
+    public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
         boolean passed = true;
 
         outerloop: for(String c : conditions) {
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
             for(String s : keys) {
-                final String value = c.contains("=") ? c.split("=")[1] : "false", original = s;
+                String value = c.contains("=") ? c.split("=")[1] : "false", original = s;
                 final Entity e = entities.get(s);
                 s = s.toLowerCase();
+                for(String r : valueReplacements.keySet()) {
+                    s = s.replace(r.toLowerCase(), valueReplacements.get(r));
+                }
                 if(hasReplacements(conditions)) {
                     doReplacements(entities, keys, s, original);
                 }
@@ -167,7 +171,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         return executeAll(event, entities, conditions, cancelled, entityValues, values, valueReplacements, 0);
     }
     public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<String, String> valueReplacements, int repeatID) {
-        boolean passed = didPassConditions(event, entities, conditions, cancelled);
+        boolean passed = didPassConditions(event, entities, conditions, valueReplacements, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
             final Entity entity2 = entities.getOrDefault("Victim", entities.getOrDefault("Entity", null));
@@ -361,6 +365,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         else if(event instanceof DamageEvent) return getReplacements((DamageEvent) event);
         else if(event instanceof FundDepositEvent) return getReplacements((FundDepositEvent) event);
         else if(event instanceof JackpotPurchaseTicketsEvent) return getReplacements((JackpotPurchaseTicketsEvent) event);
+        else if(event instanceof LootbagClaimEvent) return getReplacements((LootbagClaimEvent) event);
         else if(event instanceof PlayerTeleportDelayEvent) return getReplacements((PlayerTeleportDelayEvent) event);
         else if(event instanceof ShopEvent) return getReplacements((ShopEvent) event);
         else if(event instanceof TinkererTradeEvent) return getReplacements((TinkererTradeEvent) event);
@@ -405,6 +410,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public String[] getReplacements(DamageEvent event) { return new String[] { "@Damager", toString(event.getDamager().getLocation()), "dmg", Double.toString(event.getDamage())}; }
     public String[] getReplacements(FundDepositEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toString()}; }
     public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toBigInteger().toString()}; }
+    public String[] getReplacements(LootbagClaimEvent event) { return new String[]{"@Player", toString(event.getPlayer().getLocation()), "size", Integer.toString(event.getRewardSize())}; }
     public String[] getReplacements(PlayerTeleportDelayEvent event) {
         return new String[] { "@Player", toString(event.getPlayer().getLocation()), "delay", Double.toString(event.getDelay())};
     }

@@ -65,7 +65,7 @@ public final class FactionsUUID extends Reflect implements Regional {
         return n.equalsIgnoreCase(type);
     }
 
-    private Faction getFaction(UUID player) {
+    public Faction getFaction(UUID player) {
         final FPlayer fp = getFPlayer(player);
         return fp != null ? fp.getFaction() : null;
     }

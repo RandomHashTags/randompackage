@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: HEROIC
   slot: 33
   item amount=tier: true
@@ -55,4 +55,4 @@ perks:
   - "Tier6;ReduceDungeonLootRedeemable{36:0:0};"
 #
 attributes:
-  - ""
+  - "DungeonComplete;SetLootClaimableCooldown=cooldown-value"

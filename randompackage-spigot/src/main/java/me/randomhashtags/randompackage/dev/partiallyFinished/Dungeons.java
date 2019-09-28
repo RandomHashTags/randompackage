@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev.partiallyFinished;
 
+import me.randomhashtags.randompackage.attribute.SetOpenDuration;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
@@ -47,6 +48,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
+        new SetOpenDuration().load();
         save(null, "dungeons.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "dungeons.yml"));
 

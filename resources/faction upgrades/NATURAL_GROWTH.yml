@@ -39,4 +39,4 @@ levels:
       - Cash{25000000};$25,000,000
 #
 attributes:
-  - ""
+  - "BlockGrow;"

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: HEROIC
   slot: 40
   item amount=tier: true
@@ -36,4 +36,4 @@ levels:
       - SpawnerValue{875000000};$875,000,000 &nFaction Spawner Value
 #
 attributes:
-  - ""
+  - "DungeonLootbagClaim;chance=value;SetRewardSize=size+1"

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: HEROIC
   slot: 30
   item amount=tier: true
@@ -13,27 +13,27 @@ item:
 #
 levels:
   1:
-    value: -0.25
+    value: 0.25*20
     string: "-0.25s Combat Tag Timer"
     cost:
       - SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value
       - Item{heroicfactioncrystal;amount=8};8x Heroic Faction Crystals
       - Cash{20000000};$20,000,000
   2:
-    value: -0.50
+    value: 0.50*20
     string: "-0.5s Combat Tag Timer"
     cost:
       - SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value
   3:
-    value: -1
+    value: 1*20
     string: "-1.0s Combat Tag Timer"
     cost:
       - SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value
   4:
-    value: -2
+    value: 2*20
     string: "-2.0s Combat Tag Timer"
     cost:
       - SpawnerValue{200000000};$200,000,000 &nFaction Spawner Value
 #
 attributes:
-  - ""
+  - "CombatTagged;SetDuration=duration-value"

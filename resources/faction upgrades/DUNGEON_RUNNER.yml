@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: HEROIC
   slot: 32
   item amount=tier: true
@@ -32,4 +32,4 @@ levels:
       - SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value
 #
 attributes:
-  - ""
+  - "DungeonPortalOpen;SetOpenDuration=value*20"

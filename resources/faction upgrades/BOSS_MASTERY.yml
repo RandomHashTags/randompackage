@@ -32,5 +32,4 @@ levels:
     string: "+100% Boss Damage"
 #
 attributes:
-  - "FactionUpgradeLevelup;PlayerSetMultiplier=F_UPGRADE_BOSS_MASTERY:value"
-  - "CustomBossDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*getDamagerMultiplier(F_UPGRADE_BOSS_MASTERY)"
+  - "CustomBossDamageByEntity;DamagerIsType=PLAYER;VictimIsCustomBoss=true;SetDamage=dmg*value"

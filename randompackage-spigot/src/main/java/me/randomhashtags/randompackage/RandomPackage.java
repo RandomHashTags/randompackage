@@ -2,13 +2,12 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
-import me.randomhashtags.randompackage.api.InventoryPets;
+import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
 import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
-import me.randomhashtags.randompackage.api.Trinkets;
 import me.randomhashtags.randompackage.dev.partiallyFinished.Duels;
 import me.randomhashtags.randompackage.dev.partiallyFinished.Dungeons;
+import me.randomhashtags.randompackage.event.FoodLevelLostEvent;
 import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
@@ -31,6 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -67,6 +67,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     public boolean placeholderapi = false;
 
     private PluginManager pm;
+    private BukkitScheduler scheduler;
 
     public void onEnable() {
         getPlugin = this;
@@ -78,6 +79,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
 
     private void enable() {
         pm = Bukkit.getPluginManager();
+        scheduler = Bukkit.getScheduler();
         pm.registerEvents(this, this);
         checkForUpdate();
         checkFiles();
@@ -149,7 +151,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
 
         final int interval = config.getInt("backup interval")*20*60;
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
+        scheduler.scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
     }
     private boolean isTrue(String path, boolean exact) {
         return config.getBoolean(path + (exact ? "" : ".enabled"));
@@ -210,14 +212,13 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         CommandManager.getCommandManager(null).disable();
         RPFeature.d();
         HandlerList.unregisterAll((Plugin) this);
-        Bukkit.getScheduler().cancelTasks(this);
+        scheduler.cancelTasks(this);
     }
 
     public void checkForUpdate() {
-        final BukkitScheduler s = Bukkit.getScheduler();
         final int l = 20*60*30;
-        s.scheduleSyncRepeatingTask(this, () -> {
-            s.runTaskAsynchronously(this, () -> {
+        scheduler.scheduleSyncRepeatingTask(this, () -> {
+            scheduler.runTaskAsynchronously(this, () -> {
                 String msg = null;
                 try {
                     final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
@@ -335,7 +336,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             final PlayerInventory PI = player.getInventory();
             final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
             if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+                scheduler.scheduleSyncDelayedTask(this, () -> {
                     if(!player.getGameMode().equals(GameMode.CREATIVE) && player.getItemInHand().equals(is)) return;
                     final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, is);
                     pm.callEvent(e);
@@ -346,7 +347,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerItemBreakEvent(PlayerItemBreakEvent event) {
         final ItemStack is = event.getBrokenItem();
         final String i = is.getType().name();
@@ -365,6 +366,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             if(!e.isCancelled()) {
                 event.setAmount(e.getAmount());
             }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
+        final Player player = (Player) event.getEntity();
+        final int l = player.getFoodLevel(), lvl = event.getFoodLevel();
+        if(l > lvl) {
+            final FoodLevelLostEvent e = new FoodLevelLostEvent(player, player.getFoodLevel(), lvl);
+            e.setCancelled(event.isCancelled());
+            pm.callEvent(e);
         }
     }
 }

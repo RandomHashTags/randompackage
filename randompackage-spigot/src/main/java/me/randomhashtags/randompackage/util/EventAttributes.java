@@ -70,6 +70,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new SetLevelupChance(),
                 new SetMultiplier(),
                 new SetNoDamageTicks(),
+                new SetRewardSize(),
                 new SetSneaking(),
                 new SetSprinting(),
                 new SetWalkSpeed(),

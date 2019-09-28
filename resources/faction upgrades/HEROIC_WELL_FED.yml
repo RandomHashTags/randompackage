@@ -37,4 +37,4 @@ levels:
       - SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value
 #
 attributes:
-  - "FoodLevelLose;chance=value;SetCancelled=true"
+  - "FoodLevelLost;chance=value;SetCancelled=true"

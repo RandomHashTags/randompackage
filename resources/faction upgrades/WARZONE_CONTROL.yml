@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: DEFAULT
   slot: 13
   item amount=tier: true
@@ -37,4 +37,4 @@ perks:
   - "Tier3;LMSMultiplier{2.00};+2.00x LMS Rewards"
 #
 attributes:
-  - ""
+  - "LMSReceiveRewards;SetAmount=amount*value"

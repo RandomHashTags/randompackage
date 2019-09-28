@@ -13,27 +13,26 @@ item:
 #
 levels:
   1:
-    value: 1.50
+    value: 2.50
     string: "+150% Conquest Mob Damage"
     cost:
       - Item{factioncrystal;amount=40};40x Faction Crystals
       - Cash{4000000};$4,000,000
   2:
-    value: 2.00
+    value: 3.00
     string: "+200% Conquest Mob Damage"
     cost:
       - Item{factioncrystal;amount=80};80x Faction Crystals
       - Cash{8000000};$8,000,000
   3:
-    value: 2.50
+    value: 3.50
     string: "+250% Conquest Mob Damage"
     cost:
       - Item{factioncrystal;amount=120};120x Faction Crystals
       - Cash{12000000};$12,000,000
   4:
-    value: 3.00
+    value: 4.00
     string: "+300% Conquest Mob Damage"
 #
 attributes:
-  - "FactionUpgradeLevelup;PlayerSetMultiplier=F_UPGRADE_CONQUEST_MASTERY:value"
-  - "ConquestMobDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*getDamagerMultiplier(F_UPGRADE_CONQUEST_MASTERY)"
+  - "ConquestMobDamageByEntity;DamagerIsType=PLAYER;SetDamage=dmg*value"

@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.CustomKitEvolution;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitEvolution;

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: DEFAULT
   slot: 14
   item amount=tier: true
@@ -41,4 +41,4 @@ levels:
       -
 #
 attributes:
-  - ""
+  - "OutpostCaptureIncrement;SetIncrement=increment*value"

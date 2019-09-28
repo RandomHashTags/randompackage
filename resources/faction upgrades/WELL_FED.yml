@@ -37,4 +37,4 @@ levels:
       -
 #
 attributes:
-  - "FoodLevelLose;chance=value;SetCancelled=true"
+  - "FoodLevelLost;chance=value;SetCancelled=true"

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   type: DEFAULT
   slot: 4
   item amount=tier: true
@@ -43,4 +43,4 @@ perks:
   - "Tier#;IncreaseFactionPower{(20*#)};+(20*#) Faction Power"
 #
 attributes:
-  - ""
+  - "FactionUpgradeLevelup;PlayerAddFactionPower=value"

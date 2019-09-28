@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.nearFinished;
+package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
@@ -214,7 +214,7 @@ public class FactionUpgrades extends EventAttributes {
                     requiredItem = a;
                     a.setAmount(Integer.parseInt(s.split("\\{")[1].split("amount=")[1].split("}")[0]));
                     if(!player.getInventory().containsAtLeast(a, a.getAmount())) {
-                        //replacements.put("{ITEM}", req.split("};")[1]);
+                        replacements.put("{ITEM}", s.split("};")[1]);
                         sendStringListMessage(player, config.getStringList("messages.dont have item"), replacements);
                         return;
                     }

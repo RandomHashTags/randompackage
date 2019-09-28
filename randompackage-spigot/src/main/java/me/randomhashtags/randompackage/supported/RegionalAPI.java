@@ -1,7 +1,8 @@
 package me.randomhashtags.randompackage.supported;
 
 import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.api.nearFinished.FactionUpgrades;
+import me.randomhashtags.randompackage.api.FactionUpgrades;
+import me.randomhashtags.randompackage.attribute.faction.AddFactionPower;
 import me.randomhashtags.randompackage.supported.regional.ASky;
 import me.randomhashtags.randompackage.supported.regional.EpicSky;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
@@ -48,6 +49,7 @@ public class RegionalAPI extends UVersion {
             factions.enable();
             hooked("FactionsUUID");
             FactionUpgrades.getFactionUpgrades().enable();
+            new AddFactionPower().load();
         }
     }
     public void trySupportingASkyblock() {
