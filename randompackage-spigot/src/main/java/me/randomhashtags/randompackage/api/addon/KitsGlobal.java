@@ -166,7 +166,7 @@ public class KitsGlobal extends Kits {
                     } else if(tiers.containsKey(gkit) && !cooldowns.containsKey(gkit)
                             || !tiers.containsKey(gkit) && player.hasPermission("RandomPackage.kit." + n) && !cooldowns.containsKey(gkit)
                             || cooldowns.containsKey(gkit) && cooldowns.get(gkit) <= System.currentTimeMillis()) {
-                        give(player, gkit, tier, false, true);
+                        tryGiving(pdata, player, gkit, tier, 100, true);
                         setCooldown(player, gkit);
                     }
                 }

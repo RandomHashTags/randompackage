@@ -10,6 +10,8 @@ import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
+import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.event.lootbag.LootbagClaimEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
@@ -90,7 +92,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                     passed = cancelled == Boolean.parseBoolean(value);
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
-                } else if(condition.startsWith(s)) {
+                } else {
                     passed = passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
                 }
                 if(!passed) break outerloop;
@@ -365,6 +367,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         else if(event instanceof DamageEvent) return getReplacements((DamageEvent) event);
         else if(event instanceof FundDepositEvent) return getReplacements((FundDepositEvent) event);
         else if(event instanceof JackpotPurchaseTicketsEvent) return getReplacements((JackpotPurchaseTicketsEvent) event);
+        else if(event instanceof KitClaimEvent) return getReplacements((KitClaimEvent) event);
+        else if(event instanceof KitPreClaimEvent) return getReplacements((KitPreClaimEvent) event);
         else if(event instanceof LootbagClaimEvent) return getReplacements((LootbagClaimEvent) event);
         else if(event instanceof PlayerTeleportDelayEvent) return getReplacements((PlayerTeleportDelayEvent) event);
         else if(event instanceof ShopEvent) return getReplacements((ShopEvent) event);
@@ -410,6 +414,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public String[] getReplacements(DamageEvent event) { return new String[] { "@Damager", toString(event.getDamager().getLocation()), "dmg", Double.toString(event.getDamage())}; }
     public String[] getReplacements(FundDepositEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toString()}; }
     public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toBigInteger().toString()}; }
+    public String[] getReplacements(KitClaimEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "level", Integer.toString(event.getLevel())}; }
+    public String[] getReplacements(KitPreClaimEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "chance", Integer.toString(event.getLevelupChance()), "level", Integer.toString(event.getLevel())}; }
     public String[] getReplacements(LootbagClaimEvent event) { return new String[]{"@Player", toString(event.getPlayer().getLocation()), "size", Integer.toString(event.getRewardSize())}; }
     public String[] getReplacements(PlayerTeleportDelayEvent event) {
         return new String[] { "@Player", toString(event.getPlayer().getLocation()), "delay", Double.toString(event.getDelay())};
@@ -444,36 +450,18 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
      */
     public boolean trigger(RPEvent event, List<String> attributes) { return trigger(event, getEntities("Player", event.getPlayer()), attributes); }
     public boolean trigger(BoosterTriggerEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
-    public boolean trigger(CoinFlipEndEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Winner", event.winner, "Loser", event.loser), attributes);
-    }
-    public boolean trigger(CustomEnchantProcEvent event, List<String> attributes) {
-        return trigger(event, event.getEntities(), attributes, getReplacements(event));
-    }
-    public boolean trigger(DamageEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements));
-    }
-    public boolean trigger(FallenHeroSlainEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Victim", event.hero.getEntity(), "Killer", event.killer), attributes);
-    }
-    public boolean trigger(FundDepositEvent event, List<String> attributes) {
-        return trigger(event, getEntities(event), attributes, getReplacements(event));
-    }
-    public boolean trigger(JackpotPurchaseTicketsEvent event, List<String> attributes) {
-        return trigger(event, getEntities(event), attributes, getReplacements(event));
-    }
-    public boolean trigger(MobStackDepleteEvent event, List<String> attributes) {
-        return trigger(event, getEntities("Killer", event.killer, "Victim", event.stack.entity), attributes);
-    }
-    public boolean trigger(PlayerTeleportDelayEvent event, List<String> attributes, String...replacements) {
-        return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements));
-    }
-    public boolean trigger(ShopEvent event, List<String> attributes) {
-        return trigger(event, getEntities(event), attributes, getReplacements(event));
-    }
-    public boolean trigger(TinkererTradeEvent event, List<String> attributes) {
-        return trigger(event, getEntities(event), attributes, getReplacements(event));
-    }
+    public boolean trigger(CoinFlipEndEvent event, List<String> attributes) { return trigger(event, getEntities("Winner", event.winner, "Loser", event.loser), attributes); }
+    public boolean trigger(CustomEnchantProcEvent event, List<String> attributes) { return trigger(event, event.getEntities(), attributes, getReplacements(event)); }
+    public boolean trigger(DamageEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
+    public boolean trigger(FallenHeroSlainEvent event, List<String> attributes) { return trigger(event, getEntities("Victim", event.hero.getEntity(), "Killer", event.killer), attributes); }
+    public boolean trigger(FundDepositEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(JackpotPurchaseTicketsEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(KitClaimEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(KitPreClaimEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(MobStackDepleteEvent event, List<String> attributes) { return trigger(event, getEntities("Killer", event.killer, "Victim", event.stack.entity), attributes); }
+    public boolean trigger(PlayerTeleportDelayEvent event, List<String> attributes, String...replacements) { return trigger(event, getEntities(event), attributes, getReplacements(getReplacements(event), replacements)); }
+    public boolean trigger(ShopEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
+    public boolean trigger(TinkererTradeEvent event, List<String> attributes) { return trigger(event, getEntities(event), attributes, getReplacements(event)); }
     /*
         CustomEnchant
      */

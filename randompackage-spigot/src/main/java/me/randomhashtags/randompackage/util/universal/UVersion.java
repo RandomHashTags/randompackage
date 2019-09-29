@@ -337,7 +337,7 @@ public class UVersion extends YamlUpdater implements Versionable {
             for(int s = 0; s < i.getSize(); s++) {
                 final ItemStack t = i.getItem(s);
                 if(amountLeft > 0 && t != null && t.getItemMeta().equals(meta) && UMaterial.match(t) == m) {
-                    final int a = t.getAmount(), toMax = max-a, given = amountLeft <= toMax ? amountLeft : toMax;
+                    final int a = t.getAmount(), toMax = max-a, given = Math.min(amountLeft, toMax);
                     if(given > 0) {
                         t.setAmount(a+given);
                         amountLeft -= given;

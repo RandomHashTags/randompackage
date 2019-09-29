@@ -67,7 +67,6 @@ public abstract class EventAttributes extends EventExecutor {
                 new SetGameMode(),
                 new SetHealth(),
                 new SetHunger(),
-                new SetLevelupChance(),
                 new SetMultiplier(),
                 new SetNoDamageTicks(),
                 new SetRewardSize(),

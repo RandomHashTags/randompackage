@@ -2,6 +2,9 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
+import me.randomhashtags.randompackage.attribute.SetLevelupChance;
+import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
+import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileFallenHero;
@@ -66,6 +69,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         loadedInstances++;
         if(!isEnabled) {
             final long started = System.currentTimeMillis();
+            new SetLevelupChance().load();
             isEnabled = true;
             save(null, "kits.yml");
             config = YamlConfiguration.loadConfiguration(new File(rpd, "kits.yml"));
@@ -171,20 +175,34 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public final void give(Player player, CustomKit kit, int tier, boolean allItems, boolean addCooldown) {
-        if(player != null && kit != null) {
-            final List<KitItem> kitItems = kit.getItems();
-            if(kitItems == null) return;
-            final String pn = player.getName();
-            final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(tier, 0f);
-            for(KitItem ki : kitItems) {
-                final ItemStack is = allItems ? ki.getItemStack() : ki.getItemStack(pn, tier, multiplier);
-                if(is != null) {
-                    giveItem(player, is);
+    public final boolean tryGiving(RPPlayer pdata, Player player, CustomKit kit, int tier, int chanceOfGiving, boolean addCooldown) {
+        if(pdata != null && player != null && kit != null && random.nextInt(100) < chanceOfGiving) {
+            final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, kit, tier, chanceOfGiving);
+            pluginmanager.callEvent(event);
+            if(random.nextInt(100) < event.getChance()) {
+                final String pn = player.getName();
+                final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(tier, 1f);
+                final List<ItemStack> loot = new ArrayList<>();
+                for(KitItem ki : kit.getItems()) {
+                    final ItemStack is = ki.getItemStack(pn, tier, multiplier);
+                    if(is != null) {
+                        loot.add(is);
+                    }
+                }
+                final KitClaimEvent e = new KitClaimEvent(pdata, player, kit, tier, loot);
+                pluginmanager.callEvent(e);
+                if(!e.isCancelled()) {
+                    for(ItemStack is : e.getLootObtained()) {
+                        giveItem(player, is);
+                    }
+                    if(addCooldown) {
+                        setCooldown(pdata, kit);
+                    }
+                    return true;
                 }
             }
-            if(addCooldown) setCooldown(RPPlayer.get(player.getUniqueId()), kit);
         }
+        return false;
     }
     public final void resetAll(CommandSender sender, String target, Class type) {
         final RPPlayer pdata = r(sender, target);

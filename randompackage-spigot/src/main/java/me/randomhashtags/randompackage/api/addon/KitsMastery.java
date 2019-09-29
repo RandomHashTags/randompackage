@@ -148,7 +148,6 @@ public class KitsMastery extends Kits {
                     preview(player, k, k.getMaxLevel());
                 } else {
                     if(pdata.getKitLevels().containsKey(m)) {
-
                     } else {
                         sendStringListMessage(player, config.getStringList("mkits.messages.not unlocked"), null);
                     }

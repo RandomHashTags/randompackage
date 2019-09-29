@@ -6,7 +6,8 @@ import me.randomhashtags.randompackage.addon.CustomKitEvolution;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
-import me.randomhashtags.randompackage.api.FactionUpgrades;
+import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
+import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitEvolution;
@@ -195,7 +196,7 @@ public class KitsEvolution extends Kits {
             player.openInventory(Bukkit.createInventory(player, s, this.preview.getTitle()));
         }
         final Inventory top = player.getOpenInventory().getTopInventory();
-        for(ItemStack is : rewards) {
+        for(ItemStack is : new ArrayList<>(rewards)) {
             if(is != null) {
                 item = is.clone(); itemMeta = item.getItemMeta(); lore.clear();
                 if(item.hasItemMeta()) {
@@ -220,15 +221,19 @@ public class KitsEvolution extends Kits {
                                     if(level == -1) level = random.nextInt(enchant.getMaxLevel());
                                     lore.add(valueOfEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
                                 }
-                            } else
+                            } else {
                                 lore.add(s.replace("{LEVEL}", Integer.toString(vkitlvl)));
+                            }
                         }
                         itemMeta.setLore(lore); lore.clear();
                     }
                     item.setItemMeta(itemMeta);
                 }
                 if(preview) top.addItem(item);
-                else        giveItem(player, item);
+                else {
+                    rewards.remove(is);
+                    rewards.add(item);
+                }
             }
         }
         final int fe = top.firstEmpty();
@@ -238,19 +243,28 @@ public class KitsEvolution extends Kits {
         if(!preview)
             pdata.getKitCooldowns().put(vkit, System.currentTimeMillis()+(vkit.getCooldown()*1000));
         player.updateInventory();
-        final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
-        // TODO: fix this
-        int upgradechance = vkit.getUpgradeChance();//, a = fu.isEnabled() && hookedFactionsUUID() ? (int) (fu.getVkitLevelingChance(factions.getFactionTag(u))*100) : 0;
-        //upgradechance += a;
-        if(!preview && random.nextInt(100) <= upgradechance) {
-            final int newlvl = vkitlvl+1;
-            if(newlvl > vkit.getMaxLevel()) return;
-            final String name = vkit.getItem().getItemMeta().getDisplayName();
-            pdata.getKitLevels().put(vkit, newlvl);
-            for(String s : config.getStringList("vkits.messages.upgrade"))
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
-            for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+        int upgradechance = vkit.getUpgradeChance();
+        final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
+        event.setLevelupChance(upgradechance);
+        pluginmanager.callEvent(event);
+        if(!event.isCancelled()) {
+            final KitClaimEvent e = new KitClaimEvent(pdata, player, vkit, vkitlvl, rewards);
+            pluginmanager.callEvent(e);
+            if(!e.isCancelled() && !preview) {
+                for(ItemStack is : rewards) {
+                    giveItem(player, is);
+                }
+                if(random.nextInt(100) < event.getLevelupChance()) {
+                    final int newlvl = vkitlvl+1;
+                    if(newlvl > vkit.getMaxLevel()) return;
+                    final String name = vkit.getItem().getItemMeta().getDisplayName();
+                    pdata.getKitLevels().put(vkit, newlvl);
+                    for(String s : config.getStringList("vkits.messages.upgrade"))
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
+                    for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
+                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+                }
+            }
         }
     }
 

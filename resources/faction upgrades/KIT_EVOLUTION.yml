@@ -41,4 +41,4 @@ levels:
       - SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value
 #
 attributes:
-  - "KitClaim;KitType=VKIT;SetLevelupChance=chance+value"
+  - "KitPreClaim;KitType=VKIT;SetLevelupChance=chance+value"

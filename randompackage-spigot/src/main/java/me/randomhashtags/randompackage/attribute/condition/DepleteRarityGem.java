@@ -30,7 +30,7 @@ public class DepleteRarityGem extends AbstractEventCondition {
                             depleteAmount -= depleteAmount*fu.getDecreaseRarityGemPercent(factions.getRegionalIdentifier(u), gem);
                         }*/
 
-                        if(amount - depleteAmount <= 0) {
+                        if(amount-depleteAmount <= 0) {
                             depleteAmount = amount;
                             pdata.toggleRarityGem(gem, gem.getToggleOffRanOutMsg());
                         }
