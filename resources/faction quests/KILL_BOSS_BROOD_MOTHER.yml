@@ -4,10 +4,10 @@ settings:
   completion: 1
 #
 lore:
-- "&7Kill a &5&lBrood Mother"
+  - "&7Kill a &5&lBrood Mother"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""

@@ -4,10 +4,10 @@ settings:
   completion: 5
 #
 lore:
-- "&7Spawn 5 Dungeon Portals"
+  - "&7Spawn 5 Dungeon Portals"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - "DungeonPortalSpawn;PlayerIncreaseFQuest=DUNGEON_PORTALS_I:1"

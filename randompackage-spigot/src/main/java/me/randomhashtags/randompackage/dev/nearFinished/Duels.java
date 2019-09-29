@@ -1,6 +1,9 @@
-package me.randomhashtags.randompackage.dev.partiallyFinished;
+package me.randomhashtags.randompackage.dev.nearFinished;
 
+import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.dev.DuelArena;
+import me.randomhashtags.randompackage.dev.DuelEndReason;
+import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -9,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +23,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Duels extends RPFeature implements CommandExecutor {
     private static Duels instance;
@@ -28,6 +34,7 @@ public class Duels extends RPFeature implements CommandExecutor {
     }
     public YamlConfiguration config;
     private UInventory type, godset;
+    public List<ActiveDuel> activeDuels;
 
     public String getIdentifier() { return "DUELS"; }
     protected RPFeature getFeature() { return getDuels(); }
@@ -55,10 +62,21 @@ public class Duels extends RPFeature implements CommandExecutor {
         type = new UInventory(null, config.getInt("type.size"), ChatColor.translateAlternateColorCodes('&', config.getString("type.title")));
         godset = new UInventory(null, config.getInt("godset.size"), ChatColor.translateAlternateColorCodes('&', config.getString("godset.title")));
 
+        activeDuels = new ArrayList<>();
+
         sendConsoleMessage("&6[RandomPackage] &aLoaded Duels &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         duelArenas = null;
+    }
+
+    public ActiveDuel valueOf(Player player) {
+        for(ActiveDuel duel : activeDuels) {
+            if(duel.getAccepter().equals(player) || duel.getRequester().equals(player)) {
+                return duel;
+            }
+        }
+        return null;
     }
 
     public void viewTypes(Player player) {
@@ -101,18 +119,38 @@ public class Duels extends RPFeature implements CommandExecutor {
         }
     }
 
-    @EventHandler
-    private void entityDeathEvent(EntityDamageEvent event) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void isDamaged(isDamagedEvent event) {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void entityDamageEvent(EntityDamageEvent event) {
+        final Entity victim = event.getEntity();
+        if(victim instanceof Player) {
+            final Player player = (Player) victim;
+            if(player.getHealth()-event.getDamage() <= 0.00) {
+                event.setCancelled(true);
+                player.updateInventory();
+                final ActiveDuel duel = valueOf(player);
+                if(duel != null) {
+                    duel.end(DuelEndReason.CHOOSE_WINNER);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
     }
-
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerQuitEvent(PlayerQuitEvent event) {
+        final ActiveDuel duel = valueOf(event.getPlayer());
+        if(duel != null) {
+            duel.end(DuelEndReason.PLAYER_LEFT_QUIT);
+        }
     }
 }

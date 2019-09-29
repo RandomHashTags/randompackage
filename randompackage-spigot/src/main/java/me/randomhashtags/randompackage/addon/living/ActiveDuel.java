@@ -1,0 +1,89 @@
+package me.randomhashtags.randompackage.addon.living;
+
+import me.randomhashtags.randompackage.dev.DuelArena;
+import me.randomhashtags.randompackage.dev.DuelEndReason;
+import me.randomhashtags.randompackage.dev.DuelSetting;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+
+import java.util.Collection;
+import java.util.List;
+
+public class ActiveDuel {
+    private Location requesterAcceptLocation, accepterAcceptLocation;
+    private PlayerInventory requesterAcceptInventory, accepterAcceptInventory;
+    private double requesterHP, accepterHP;
+    private Collection<PotionEffect> requesterPEs, accepterPEs;
+    private Player requester, accepter;
+    private List<DuelSetting> settings;
+    private DuelArena arena;
+
+    public ActiveDuel(Player requester, Player accepter, List<DuelSetting> settings, DuelArena arena) {
+        this.requester = requester;
+        this.accepter = accepter;
+        this.settings = settings;
+        this.arena = arena;
+        start();
+    }
+    public Player getRequester() { return requester; }
+    public Player getAccepter() { return accepter; }
+    public List<DuelSetting> getSettings() { return settings; }
+    public DuelArena getArena() { return arena; }
+
+    private void start() {
+        requesterAcceptLocation = requester.getLocation();
+        accepterAcceptLocation = accepter.getLocation();
+
+        requesterAcceptInventory = requester.getInventory();
+        accepterAcceptInventory = accepter.getInventory();
+
+        requesterHP = requester.getHealth();
+        accepterHP = accepter.getHealth();
+
+        requesterPEs = requester.getActivePotionEffects();
+        accepterPEs = accepter.getActivePotionEffects();
+
+        removePotionEffects(requester);
+        removePotionEffects(accepter);
+    }
+
+    private void removePotionEffects(Player player) {
+        for(PotionEffect pe : player.getActivePotionEffects()) {
+            player.removePotionEffect(pe.getType());
+        }
+    }
+    private void resetPotionEffects(Player player, Collection<PotionEffect> previous) {
+        removePotionEffects(player);
+        for(PotionEffect pe : previous) {
+            player.addPotionEffect(pe);
+        }
+    }
+    private void setPreviousContents() {
+        requester.getInventory().setContents(requesterAcceptInventory.getContents());
+        requester.updateInventory();
+        requester.setHealth(requesterHP);
+        resetPotionEffects(requester, requesterPEs);
+
+        accepter.getInventory().setContents(requesterAcceptInventory.getContents());
+        accepter.updateInventory();
+        accepter.setHealth(accepterHP);
+        resetPotionEffects(accepter, accepterPEs);
+    }
+
+    public void end(DuelEndReason reason) {
+        List<String> msg = null;
+        switch (reason) {
+            case CHOOSE_WINNER:
+            case PLAYER_LEFT_CMD:
+            case PLAYER_LEFT_QUIT:
+            default:
+                setPreviousContents();
+                final PlayerTeleportEvent.TeleportCause cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
+                requester.teleport(requesterAcceptLocation, cause);
+                accepter.teleport(accepterAcceptLocation, cause);
+        }
+    }
+}

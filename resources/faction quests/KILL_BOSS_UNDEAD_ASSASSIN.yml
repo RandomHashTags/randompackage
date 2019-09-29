@@ -4,10 +4,10 @@ settings:
   completion: 1
 #
 lore:
-- "&7Kill a &c&lUndead Assassin"
+  - "&7Kill a &c&lUndead Assassin"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""

@@ -133,10 +133,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     }
 
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageEvent(EntityDamageEvent event) {
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

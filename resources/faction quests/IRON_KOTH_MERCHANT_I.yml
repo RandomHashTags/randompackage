@@ -4,10 +4,10 @@ settings:
   completion: 1000
 #
 lore:
-- "&7Sell 1,000 Iron Blocks at Vanilla Outpost"
+  - "&7Sell 1,000 Iron Blocks at Vanilla Outpost"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""

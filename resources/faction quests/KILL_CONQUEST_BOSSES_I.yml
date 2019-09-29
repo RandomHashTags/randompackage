@@ -4,10 +4,10 @@ settings:
   completion: 5
 #
 lore:
-- "&7Kill 5x Conquest Bosses"
+  - "&7Kill 5x Conquest Bosses"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""

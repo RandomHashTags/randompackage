@@ -4,10 +4,10 @@ settings:
   completion: <=15m
 #
 lore:
-- "&7Complete Dungeon in 15m or less"
+  - "&7Complete Dungeon in 15m or less"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - "DungeonComplete;CompletedTime<=800;PlayerIncreaseFQuest=DUNGEON_RACER_I:1"

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.unfinished;
+package me.randomhashtags.randompackage.dev.nearFinished;
 
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.ChatColor;
@@ -36,7 +36,6 @@ public class FatBuckets extends RPFeature {
     public void unload() {
     }
 
-    /*
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void itemDespawnEvent(ItemDespawnEvent event) {
         final ItemStack i = event.getEntity().getItemStack();
@@ -111,7 +110,7 @@ public class FatBuckets extends RPFeature {
                 w.getBlockAt(getPlacedLocation(l, event.getBlockFace())).setType(Material.LAVA);
             }
         }
-    }*/
+    }
     private int getDirectionX(BlockFace b) {
         switch (b) {
             case WEST: return -1;
@@ -136,5 +135,4 @@ public class FatBuckets extends RPFeature {
     private Location getPlacedLocation(Location l, BlockFace b) {
         return new Location(l.getWorld(), l.getBlockX()+getDirectionX(b), l.getBlockY()+getDirectionY(b), l.getBlockZ()+getDirectionZ(b));
     }
-
 }

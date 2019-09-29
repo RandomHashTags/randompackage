@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.partiallyFinished;
+package me.randomhashtags.randompackage.dev.nearFinished;
 
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -54,6 +54,7 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
                     "KOTH_CAPTURER_I",
                     "LEGENDARY_ENCHANTER_I",
                     "LMS_DEFENDER_I",
+                    "TOP_DOG",
                     "ULTIMATE_ENCHANTER_I",
             };
             for(String s : q) save("faction quests", s + ".yml");

@@ -13,7 +13,7 @@ messages:
     - "&6&l(!)&r &6This /raid event world will be destroyed in &e{TIME}"
   #
   map unknown: "???"
-  info active:
+  active:
     - " "
     - "&e&l***&r &6&lRAID EVENT&r &e&l***"
     - "&e&lRaid Event:&r {STATUS}"
@@ -30,6 +30,17 @@ messages:
     - " &7destroys the central Beacon Block first, &nWINS!&r&7, the winning faction will be rewarded with"
     - " &7some of the &nbest loot available in the Servoverse.&r &7Use &6&l/raid loot&r &7to view an example"
     - " &7reward."
+    - " "
+  #
+  help:
+    - " "
+    - "&e&l*** Server:&r &6&lRAID EVENT&r &e&l***"
+    - "&7** Server Raid Events are held at set times every other day. Raid Events are a"
+    - "&7 faction raiding minigame where players compete in a custom world to be the first to"
+    - "&7breach or destroy the server faction base. Whichever faction launches the TNT that"
+    - "&7destroys the central Beacon Block first, &nWINS!&r&7, the winning faction will be rewarded"
+    - "&7with some of the &nbest loot available in the Serverse.&r &7Use &6&l/raid loot&r &7to view a random"
+    - "&7reward."
     - " "
 #
 settings:

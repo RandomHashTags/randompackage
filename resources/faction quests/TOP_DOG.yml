@@ -1,10 +1,10 @@
 # Made by RandomHashTags
 settings:
-  name: "Hold Hero Outpost I"
-  completion: 3h
+  name: "Top Dog"
+  completion: 1
 #
 lore:
-  - "&7Hold Hero Outpost for 3h"
+  - "&7Get top damage on a WarZone Boss"
 #
 rewards:
   - ""

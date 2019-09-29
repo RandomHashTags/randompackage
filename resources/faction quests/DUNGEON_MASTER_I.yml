@@ -4,10 +4,10 @@ settings:
   completion: 3
 #
 lore:
-- "&7Complete 3 Dungeons"
+  - "&7Complete 3 Dungeons"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - "DungeonComplete;PlayerIncreaseFQuest=DUNGEON_MASTER_I:1"

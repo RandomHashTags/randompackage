@@ -4,10 +4,10 @@ settings:
   completion: 1
 #
 lore:
-- "&7Kill a &e&lKing Slime"
+  - "&7Kill a &e&lKing Slime"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""

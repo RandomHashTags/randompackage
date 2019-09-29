@@ -4,10 +4,10 @@ settings:
   completion: 3h
 #
 lore:
-- "&7Hold Trainee Outpost for 3h"
+  - "&7Hold Trainee Outpost for 3h"
 #
 rewards:
-- ""
+  - ""
 #
 attributes:
   - ""
