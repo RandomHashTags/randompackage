@@ -72,7 +72,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     }
 
     public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
-        boolean passed = true;
+        boolean passed = true, hasCancelled = false;
 
         outerloop: for(String c : conditions) {
             final String condition = c.toLowerCase();
@@ -87,13 +87,13 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 if(hasReplacements(conditions)) {
                     doReplacements(entities, keys, s, original);
                 }
-
                 if(condition.startsWith("cancelled=")) {
                     passed = cancelled == Boolean.parseBoolean(value);
+                    hasCancelled = true;
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
                 } else {
-                    passed = passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
+                    passed = (hasCancelled || !cancelled) && passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
                 }
                 if(!passed) break outerloop;
             }
@@ -411,7 +411,16 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(e.get("Player").getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
         return getReplacements(a, b);
     }
-    public String[] getReplacements(DamageEvent event) { return new String[] { "@Damager", toString(event.getDamager().getLocation()), "dmg", Double.toString(event.getDamage())}; }
+    public String[] getReplacements(DamageEvent event) {
+        final String[] a = new String[]{"dmg", Double.toString(event.getDamage())};
+        final List<String> b = new ArrayList<>();
+        final Entity damager = event.getDamager();
+        if(damager != null) {
+            b.add("@Damager");
+            b.add(toString(damager.getLocation()));
+        }
+        return getReplacements(a, b);
+    }
     public String[] getReplacements(FundDepositEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toString()}; }
     public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toBigInteger().toString()}; }
     public String[] getReplacements(KitClaimEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "level", Integer.toString(event.getLevel())}; }
@@ -423,6 +432,12 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public String[] getReplacements(ShopEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "total", event.getTotal().toString()}; }
     public String[] getReplacements(TinkererTradeEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "tradesize", Integer.toString(event.trades.size())}; }
 
+    public String[] getReplacements(String[] a, List<String> b) {
+        final List<String> c = new ArrayList<>();
+        c.addAll(Arrays.asList(a));
+        c.addAll(b);
+        return c.toArray(new String[a.length+b.size()]);
+    }
     public String[] getReplacements(String[] a, String[] b) {
         final List<String> c = new ArrayList<>();
         c.addAll(Arrays.asList(a));

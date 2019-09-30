@@ -50,6 +50,7 @@ public abstract class RPStorage extends RegionalAPI {
     protected static LinkedHashMap<String, FactionUpgrade> factionupgrades;
     protected static LinkedHashMap<String, FactionUpgradeType> factionupgradetypes;
     protected static LinkedHashMap<String, FallenHero> fallenheroes;
+    protected static LinkedHashMap<String, FatBucket> fatbuckets;
     protected static LinkedHashMap<String, FilterCategory> filtercategories;
     protected static LinkedHashMap<String, RarityFireball> fireballs;
     protected static LinkedHashMap<String, GlobalChallenge> globalchallenges;
@@ -283,6 +284,16 @@ public abstract class RPStorage extends RegionalAPI {
         final String identifier = rarity.getIdentifier();
         check(fallenheroes, identifier, "fallen hero");
         fallenheroes.put(identifier, rarity);
+    }
+
+    public FatBucket getFatBucket(String identifier) {
+        return fatbuckets != null ? fatbuckets.getOrDefault(identifier, null) : null;
+    }
+    public void addFatBucket(FatBucket fb) {
+        if(fatbuckets == null) fatbuckets = new LinkedHashMap<>();
+        final String identifier = fb.getIdentifier();
+        check(fatbuckets, identifier, "fat bucket");
+        fatbuckets.put(identifier, fb);
     }
 
     public FilterCategory getFilterCategory(String identifier) {

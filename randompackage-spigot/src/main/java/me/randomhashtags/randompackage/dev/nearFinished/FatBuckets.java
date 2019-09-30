@@ -1,25 +1,29 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
+import me.randomhashtags.randompackage.dev.FatBucket;
+import me.randomhashtags.randompackage.dev.FileFatBucket;
 import me.randomhashtags.randompackage.util.RPFeature;
-import org.bukkit.ChatColor;
+import me.randomhashtags.randompackage.util.RPItemStack;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class FatBuckets extends RPFeature {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class FatBuckets extends RPFeature implements RPItemStack {
     private static FatBuckets instance;
     public static FatBuckets getFatBuckets() {
         if(instance == null) instance = new FatBuckets();
@@ -32,83 +36,71 @@ public class FatBuckets extends RPFeature {
     protected RPFeature getFeature() { return getFatBuckets(); }
 
     public void load() {
+        final long started = System.currentTimeMillis();
+        if(!otherdata.getBoolean("saved default fat buckets")) {
+            final String[] a = new String[]{"LAVA"};
+            for(String s : a) save("fat buckets", s + ".yml");
+            otherdata.set("saved default fat buckets", true);
+            saveOtherData();
+        }
+        final List<ItemStack> buckets = new ArrayList<>();
+        for(File f : new File(rpd + separator + "fat buckets").listFiles()) {
+            final FileFatBucket ffb = new FileFatBucket(f);
+            buckets.add(ffb.getItem(ffb.getUses()));
+        }
+        addGivedpCategory(buckets, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fatbuckets != null ? fatbuckets.size() : 0) + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        fatbuckets = null;
+    }
+
+    public HashMap<FatBucket, String> isFatBucket(ItemStack is) {
+        final String info = getRPItemStackValue(is, "FatBucketInfo");
+        if(info != null) {
+            final HashMap<FatBucket, String> bucket = new HashMap<>();
+            bucket.put(getFatBucket(info.split(":")[0]), info);
+            return bucket;
+        }
+        return null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void itemDespawnEvent(ItemDespawnEvent event) {
-        final ItemStack i = event.getEntity().getItemStack();
-        if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
-            final ProgressBucket p = ProgressBucket.valueOf(i);
-            if(p != null) ProgressBucket.buckets.remove(p.uuid);
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void entityCombustEvent(EntityCombustEvent event) {
-        final ItemStack i = event.getEntity() instanceof Item ? ((Item) event.getEntity()).getItemStack() : null;
-        if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
-            final ProgressBucket p = ProgressBucket.valueOf(i);
-            if(p != null) ProgressBucket.buckets.remove(p.uuid);
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerBucketFillEvent(PlayerBucketFillEvent event) {
         final Player player = event.getPlayer();
-        final Block clicked = event.getBlockClicked();
-        if(progressBuckets.keySet().contains(player)) {
+        final ItemStack is = player.getItemInHand();
+        final HashMap<FatBucket, String> fb = isFatBucket(is);
+        if(fb != null) {
             event.setCancelled(true);
-            final ProgressBucket pb = progressBuckets.get(player);
-            final CustomBucket b = pb.bucket;
+            final FatBucket target = (FatBucket) fb.keySet().toArray()[0];
+            final Block clicked = event.getBlockClicked();
             if(clicked.getType().name().contains("WATER")) {
                 clicked.setType(Material.WATER);
+            } else if(target.getFillableInWorlds().contains(clicked.getWorld().getName())) {
+                clicked.setType(Material.AIR);
+                target.didFill(is);
             } else {
-                if(b.fillableWorlds.contains(clicked.getWorld().getName())) {
-                    clicked.setType(Material.AIR);
-                    pb.progress += 1;
-                    final double p = (((double) pb.progress)/(b.sourcesRequired))*100;
-                    player.setItemInHand(b.getPercent((int) p, pb.uuid, true));
-                } else {
-                    clicked.setType(Material.LAVA);
-                    for(String s : b.filledMsg) player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-                }
+                clicked.setType(Material.LAVA);
+                sendStringListMessage(player, target.getOnlyFillableInWorldsMsg(), null);
             }
             player.updateInventory();
-            using.remove(player);
-            progressBuckets.remove(player);
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerInteractEvent(PlayerInteractEvent event) {
-        final Player player = event.getPlayer();
-        final ItemStack i = event.getItem();
-        final CustomBucket c = CustomBucket.valueOfUses(i);
-        if(c != null) {
-            using.put(player, i);
-            usesBuckets.put(player, c);
-        }
-        final ProgressBucket b = ProgressBucket.valueOf(i);
-        if(b != null) {
-            using.put(player, i);
-            progressBuckets.put(player, b);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
         final Player player = event.getPlayer();
-        if(usesBuckets.keySet().contains(player)) {
+        final ItemStack is = player.getItemInHand();
+        final HashMap<FatBucket, String> fb = isFatBucket(is);
+        if(fb != null) {
             event.setCancelled(true);
-            final ItemStack i = using.get(player);
-            final CustomBucket b = usesBuckets.get(player);
             final Location l = event.getBlockClicked().getLocation();
             final World w = l.getWorld();
-            if(b.usableWorlds.contains(w.getName())) {
-                player.setItemInHand(b.getUses(getRemainingInt(i.getItemMeta().getDisplayName())-1));
-                player.updateInventory();
-                usesBuckets.remove(player);
-                using.remove(player);
+            final FatBucket target = (FatBucket) fb.keySet().toArray()[0];
+            if(target.getEnabledWorlds().contains(w.getName())) {
+                target.didPlace(is);
                 w.getBlockAt(getPlacedLocation(l, event.getBlockFace())).setType(Material.LAVA);
             }
+            player.updateInventory();
         }
     }
     private int getDirectionX(BlockFace b) {

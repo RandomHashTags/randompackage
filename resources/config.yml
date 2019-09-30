@@ -183,6 +183,9 @@ faction upgrades:
   cmds:
     - f upgrade
 #
+fat buckets:
+  enabled: true
+#
 fund:
   enabled: true
   cmds:

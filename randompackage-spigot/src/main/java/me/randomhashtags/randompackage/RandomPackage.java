@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
+import me.randomhashtags.randompackage.dev.nearFinished.FatBuckets;
 import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
 import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
 import me.randomhashtags.randompackage.dev.nearFinished.Duels;
@@ -122,6 +123,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(Dungeons.getDungeons(), getHash("dungeon", "dungeons"), isTrue("dungeons"));
         cmd.tryLoadingg(Envoy.getEnvoy(), Arrays.asList("envoy"), isTrue("envoy"));
         cmd.tryLoading(FactionUpgrades.getFactionUpgrades(), null, isTrue("faction upgrades"));
+        cmd.tryLoading(FatBuckets.getFatBuckets(), null, isTrue("fat buckets"));
         cmd.tryLoadingg(Fund.getFund(), Arrays.asList("fund"), isTrue("fund"));
         cmd.tryLoading(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
         cmd.tryLoadingg(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
