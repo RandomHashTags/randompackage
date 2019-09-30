@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.util.RPItemStack;

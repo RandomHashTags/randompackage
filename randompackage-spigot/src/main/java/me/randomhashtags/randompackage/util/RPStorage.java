@@ -467,6 +467,16 @@ public abstract class RPStorage extends RegionalAPI {
         soultrackers.put(identifier, l);
     }
 
+    public Stronghold getStronghold(String identifier) {
+        return strongholds != null ? strongholds.getOrDefault(identifier, null) : null;
+    }
+    public void addStronghold(Stronghold s) {
+        if(strongholds == null) strongholds = new LinkedHashMap<>();
+        final String identifier = s.getIdentifier();
+        check(strongholds, identifier, "stronghold");
+        strongholds.put(identifier, s);
+    }
+
     public Title getTitle(String identifier) {
         return titles != null ? titles.getOrDefault(identifier, null) : null;
     }

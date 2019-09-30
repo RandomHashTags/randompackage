@@ -1,6 +1,6 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.util.addon;
 
-import me.randomhashtags.randompackage.util.addon.RPAddon;
+import me.randomhashtags.randompackage.addon.FatBucket;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 

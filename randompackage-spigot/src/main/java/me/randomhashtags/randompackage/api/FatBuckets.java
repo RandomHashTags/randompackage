@@ -1,7 +1,7 @@
-package me.randomhashtags.randompackage.dev.nearFinished;
+package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.dev.FatBucket;
-import me.randomhashtags.randompackage.dev.FileFatBucket;
+import me.randomhashtags.randompackage.addon.FatBucket;
+import me.randomhashtags.randompackage.util.addon.FileFatBucket;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.universal.UMaterial;

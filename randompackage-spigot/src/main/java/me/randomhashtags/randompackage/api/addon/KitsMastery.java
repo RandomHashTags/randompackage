@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;
-import me.randomhashtags.randompackage.dev.CustomKitMastery;
+import me.randomhashtags.randompackage.addon.CustomKitMastery;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.util.RPFeature;

@@ -22,19 +22,9 @@ public final class ClipPlaceholderAPI extends PlaceholderExpansion {
         api.sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI");
         register();
     }
-
-    @Override
-    public String getIdentifier() {
-        return "randompackage";
-    }
-    @Override
-    public String getAuthor() {
-        return "RandomHashTags";
-    }
-    @Override
-    public String getVersion() {
-        return RandomPackage.getPlugin.getDescription().getVersion();
-    }
+    public String getIdentifier() { return "randompackage"; }
+    public String getAuthor() { return "RandomHashTags"; }
+    public String getVersion() { return RandomPackage.getPlugin.getDescription().getVersion(); }
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {

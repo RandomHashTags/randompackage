@@ -1,18 +1,27 @@
-package me.randomhashtags.randompackage.dev.unfinished;
+package me.randomhashtags.randompackage.dev.nearFinished;
 
+import me.randomhashtags.randompackage.dev.FileStronghold;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.universal.UInventory;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+
+import java.io.File;
 
 public class Strongholds extends RPFeature implements CommandExecutor {
     private static Strongholds instance;
@@ -20,11 +29,16 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         if(instance == null) instance = new Strongholds();
         return instance;
     }
+
     public YamlConfiguration config;
+    private UInventory gui;
 
     public String getIdentifier() { return "STRONGHOLDS"; }
     protected RPFeature getFeature() { return getStrongholds(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if(sender instanceof Player) {
+            viewStrongholds((Player) sender);
+        }
         return true;
     }
 
@@ -37,12 +51,46 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             otherdata.set("saved default strongholds", true);
             saveOtherData();
         }
+
+        config = YamlConfiguration.loadConfiguration(new File(rpd, "strongholds.yml"));
+        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        final Inventory gi = gui.getInventory();
+
+        for(File f : new File(rpd + separator + "strongholds").listFiles()) {
+            final FileStronghold s = new FileStronghold(f);
+            gi.setItem(s.getSlot(), s.getItem());
+        }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         strongholds = null;
     }
 
+    public void viewStrongholds(Player player) {
+        if(hasPermission(player, "RandomPackage.stronghold", true)) {
+            player.closeInventory();
+            final int size = gui.getSize();
+            player.openInventory(Bukkit.createInventory(player, size, gui.getTitle()));
+            final Inventory top = player.getOpenInventory().getTopInventory();
+            top.setContents(gui.getInventory().getContents());
+            for(int i = 0; i < size; i++) {
+                item = top.getItem(i);
+                if(item != null) {
+                    itemMeta = item.getItemMeta();
+                }
+            }
+            player.updateInventory();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+        if(event.getView().getTitle().equals(gui.getTitle())) {
+            final Player player = (Player) event.getWhoClicked();
+            event.setCancelled(true);
+            player.updateInventory();
+        }
+    }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
     }
@@ -57,7 +105,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         if(event.getEntity() instanceof EnderPearl) {
         }
     }
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
     }
 }

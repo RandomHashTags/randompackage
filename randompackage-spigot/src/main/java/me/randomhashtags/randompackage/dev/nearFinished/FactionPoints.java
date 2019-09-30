@@ -3,6 +3,9 @@ package me.randomhashtags.randompackage.dev.nearFinished;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -62,4 +65,8 @@ public class FactionPoints extends RPFeature {
     public int getPoints(String identifier) { return points.getOrDefault(identifier, 0); }
     public void addPoints(String identifier, int points) { setPoints(identifier, getPoints(identifier)+points); }
     public void setPoints(String identifier, int points) { this.points.put(identifier, points); }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+    }
 }

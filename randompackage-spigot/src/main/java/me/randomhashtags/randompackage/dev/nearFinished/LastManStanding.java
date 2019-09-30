@@ -66,6 +66,10 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         scheduler.cancelTask(task);
+    }
+
+    public void setBoundary(PolyBoundary boundary) {
+        this.boundary = boundary;
         otherdata.set("last man standing.boundary", toString(boundary.getCenter()) + "|" + boundary.getRadius());
         saveOtherData();
     }

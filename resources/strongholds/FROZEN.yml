@@ -30,7 +30,10 @@ gui:
     - "&7these rewards for you and your faction!"
 #
 settings:
-  location: "world;-5001;67;-5000;0;0"
+  center: "world;-5001;67;-5000;0;0"
+  capture type: SQUARE
+  capture radius: 50
+  allows afk capturing: true
 #
 rewards:
   - "CFTaxMultiplier=0.00"

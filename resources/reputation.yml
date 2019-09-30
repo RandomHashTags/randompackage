@@ -1,0 +1,26 @@
+# Made by RandomHashTags
+messages:
+  view:
+    - " "
+    - "&b&lYour Reputation Level:&r &5&n{LEVEL}"
+    - "&7This level is increased by being in one of the"
+    - "&7top 10 /f top factions at the end of each season."
+    - " "
+    - "&7Use &b/rep <player> &7to view other player's reputations."
+    - "&7Use &b/rep top &7to view the top ranking players."
+    - " "
+  view player:
+    - " "
+    - "&b&l{PLAYER}'s Reputation Level:&r &d&n{LEVEL}"
+    - "&7This level is increased by being in one of the"
+    - "&7top 10 /f top factions at the end of each season."
+    - " "
+  placing: "&b&l{PLACE}.&r &f{PLAYER} &b- &d&l{POINTS}&r &dRep Points"
+  players per page: 15
+  max pages: 300
+  top:
+    - " "
+    - "&b&lTop Player Reputation (&r&d&l{PAGE}&r&b&l/&r&d&l{MAX_PAGE}&r&b&l)"
+    - "{PLACINGS}"
+    - " "
+#

@@ -74,6 +74,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
         boolean passed = true, hasCancelled = false;
 
+        final boolean isInteract = event instanceof PlayerInteractEvent;
+
         outerloop: for(String c : conditions) {
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
@@ -93,7 +95,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
                 } else {
-                    passed = (hasCancelled || !cancelled) && passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
+                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
                 }
                 if(!passed) break outerloop;
             }

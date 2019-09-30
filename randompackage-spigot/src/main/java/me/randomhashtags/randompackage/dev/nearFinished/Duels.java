@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -119,28 +120,30 @@ public class Duels extends RPFeature implements CommandExecutor {
         }
     }
 
+    private void tryEnding(Cancellable event, Player player, double damage) {
+        if(player.getHealth()-damage <= 0.00) {
+            event.setCancelled(true);
+            player.updateInventory();
+            final ActiveDuel duel = valueOf(player);
+            if(duel != null) {
+                duel.end(DuelEndReason.CHOOSE_WINNER);
+            }
+        }
+    }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void isDamaged(isDamagedEvent event) {
+        tryEnding(event, event.getEntity(), event.getDamage());
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageEvent(EntityDamageEvent event) {
         final Entity victim = event.getEntity();
         if(victim instanceof Player) {
-            final Player player = (Player) victim;
-            if(player.getHealth()-event.getDamage() <= 0.00) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final ActiveDuel duel = valueOf(player);
-                if(duel != null) {
-                    duel.end(DuelEndReason.CHOOSE_WINNER);
-                }
-            }
+            tryEnding(event, (Player) victim, event.getDamage());
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

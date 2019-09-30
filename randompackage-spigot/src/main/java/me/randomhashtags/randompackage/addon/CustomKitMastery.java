@@ -1,6 +1,5 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.addon;
 
-import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
