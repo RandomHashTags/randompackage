@@ -4,11 +4,11 @@ import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
 import me.randomhashtags.randompackage.addon.obj.FactionUpgradeInfo;
+import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
 import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileFactionUpgrade;
@@ -22,6 +22,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -34,7 +35,10 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
@@ -407,52 +411,34 @@ public class FactionUpgrades extends EventAttributes {
         }
     }
 
+    private void triggerFactionUpgrades(Event event, String faction) {
+        if(faction != null && factionUpgrades.containsKey(faction)) {
+            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(faction);
+            for(FactionUpgradeInfo info : upgrades) {
+                trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
+            }
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
-        final Entity D = event.getDamager();
-        if(D instanceof Player) {
-            final Player damager = (Player) D;
-            final String fac = getFactionTag(damager);
-            if(fac != null && factionUpgrades.containsKey(fac)) {
-                final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(fac);
-                for(FactionUpgradeInfo info : upgrades) {
-                    trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
-                }
-            }
+        final Entity damager = event.getDamager();
+        if(damager instanceof Player) {
+            triggerFactionUpgrades(event, getFactionTag((Player) damager));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void pvAnyEvent(PvAnyEvent event) {
-        final String fac = getFactionTag(event.getDamager());
-        if(fac != null && factionUpgrades.containsKey(fac)) {
-            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(fac);
-            for(FactionUpgradeInfo info : upgrades) {
-                trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
-            }
-        }
+        triggerFactionUpgrades(event, getFactionTag(event.getDamager()));
     }
     @EventHandler
     private void isDamagedEvent(isDamagedEvent event) {
-        final String fac = getFactionTag(event.getEntity());
-        if(fac != null && factionUpgrades.containsKey(fac)) {
-            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(fac);
-            for(FactionUpgradeInfo info : upgrades) {
-                trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
-            }
-        }
+        triggerFactionUpgrades(event, getFactionTag(event.getEntity()));
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerTeleportDelayEvent(PlayerTeleportDelayEvent event) {
-        final String fac = getFactionTag(event.getPlayer());
-        if(fac != null && factionUpgrades.containsKey(fac)) {
-            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(fac);
-            for(FactionUpgradeInfo info : upgrades) {
-                trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
-            }
-        }
+        triggerFactionUpgrades(event, getFactionTag(event.getPlayer()));
     }
-
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {

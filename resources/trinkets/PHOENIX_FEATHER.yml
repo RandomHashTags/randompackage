@@ -1,6 +1,7 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
+  passive: true
 #
 item:
   item: "feather"
@@ -18,4 +19,5 @@ item:
     - "&7do not have the Phoenix enchantment equipped."
 #
 attributes:
-  - ""
+  - "isDamaged;VictimDoesDieFromDamage=true;VictimHasCustomEnchantEquipped=PHOENIX:false;SetDamage=0;VictimSetHealth=getVictimMaxHP;VictimRemoveItem=trinket:PHOENIX_FEATHER"
+  - "isDamaged;VictimDoesDieFromDamage=true;VictimHasCustomEnchantEquipped=PHOENIX:true;SetDamage=0;VictimSetHealth=getVictimMaxHP;VictimRemoveItem=trinket:PHOENIX_FEATHER"

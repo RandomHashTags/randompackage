@@ -1,15 +1,20 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Trinket;
+import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
+import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileTrinket;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -67,11 +72,36 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         trinkets = null;
     }
 
+    public HashMap<Trinket, String> isTrinket(ItemStack is) {
+        final HashMap<Trinket, String> info = new HashMap<>();
+        final String value = getRPItemStackValue(is, "TrinketInfo");
+        if(value != null) {
+            final String[] values = value.split(":");
+            info.put(getTrinket(values[0]), value);
+        }
+        return info;
+    }
+
+    private void triggerPassive(Event event, Player player) {
+        for(ItemStack is : player.getInventory().getContents()) {
+            if(is != null) {
+                final HashMap<Trinket, String> trinket = isTrinket(is);
+                for(Trinket t : trinket.keySet()) {
+                    final String s = t.getSetting("passive");
+                    if(s != null && s.equalsIgnoreCase("true") && trigger(event, t.getAttributes())) {
+                        t.didUse(is, t.getIdentifier());
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        triggerPassive(event, player);
         final ItemStack is = event.getItem();
         if(is != null) {
-            final Player player = event.getPlayer();
             final String id = getRPItemStackValue(is, "TrinketInfo");
             if(id != null) {
                 event.setCancelled(true);
@@ -92,6 +122,21 @@ public class Trinkets extends EventAttributes implements RPItemStack {
                     sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
                 }
             }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void isDamagedEvent(isDamagedEvent event) {
+        triggerPassive(event, event.getEntity());
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void pvAnyEvent(PvAnyEvent event) {
+        triggerPassive(event, event.getDamager());
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void entityDamageEvent(EntityDamageEvent event) {
+        final Entity e = event.getEntity();
+        if(e instanceof Player) {
+            triggerPassive(event, (Player) e);
         }
     }
 }

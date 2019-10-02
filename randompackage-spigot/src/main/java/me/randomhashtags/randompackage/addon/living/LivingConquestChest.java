@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.ConquestChest;
-import me.randomhashtags.randompackage.event.ConquestDamageEvent;
+import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -90,9 +90,9 @@ public class LivingConquestChest {
         final double d = type.getDamageDelay();
         if(d <= 0 || t >= damageDelayExpire) {
             if(d > 0) damageDelayExpire = (long) (t+(d/20*1000));
-            ConquestDamageEvent cde;
+            ConquestBlockDamageEvent cde;
             if(callEvent) {
-                cde = new ConquestDamageEvent(player, this, type.getDamagePerHit());
+                cde = new ConquestBlockDamageEvent(player, this, type.getDamagePerHit());
                 pluginmanager.callEvent(cde);
                 if(cde.isCancelled()) return;
             }

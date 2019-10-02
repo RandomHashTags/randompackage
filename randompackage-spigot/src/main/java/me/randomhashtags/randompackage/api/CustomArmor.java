@@ -1,15 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
-import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
-import me.randomhashtags.randompackage.event.armor.ArmorEvent;
-import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
-import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
-import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.event.ArmorSetEquipEvent;
 import me.randomhashtags.randompackage.event.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
+import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
+import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileArmorSet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -20,6 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -264,40 +264,7 @@ public class CustomArmor extends EventAttributes {
 		return i;
 	}
 
-
-	private void tryCrystal(Player player, ArmorEvent event) {
-		for(ItemStack is : getItems(player)) {
-			final ArmorSet crystal = getArmorCrystalOnItem(is);
-			if(crystal != null) {
-				trigger(event, crystal.getCrystalAttributes());
-			}
-		}
-	}
-	private void tryCrystal(Player player, EntityDamageEvent event) {
-		for(ItemStack is : getItems(player)) {
-			final ArmorSet crystal = getArmorCrystalOnItem(is);
-			if(crystal != null) {
-				trigger(event, crystal.getCrystalAttributes());
-			}
-		}
-	}
-	private void tryCrystal(Player player, FoodLevelChangeEvent event) {
-		for(ItemStack is : getItems(player)) {
-			final ArmorSet crystal = getArmorCrystalOnItem(is);
-			if(crystal != null) {
-				trigger(event, crystal.getCrystalAttributes());
-			}
-		}
-	}
-	private void tryCrystal(Player player, isDamagedEvent event) {
-		for(ItemStack is : getItems(player)) {
-			final ArmorSet crystal = getArmorCrystalOnItem(is);
-			if(crystal != null) {
-				trigger(event, crystal.getCrystalAttributes());
-			}
-		}
-	}
-	private void tryCrystal(Player player, PvAnyEvent event) {
+	private void tryCrystal(Player player, Event event) {
 		for(ItemStack is : getItems(player)) {
 			final ArmorSet crystal = getArmorCrystalOnItem(is);
 			if(crystal != null) {

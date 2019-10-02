@@ -12,8 +12,11 @@ public class SetHealth extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof LivingEntity) {
                 final LivingEntity l = (LivingEntity) e;
-                final double hp = l.getHealth(), max = l.getMaxHealth(), total = evaluate(recipientValues.get(e).replace("hp", Double.toString(hp)));
-                l.setHealth(total < 0.00 ? 0.00 : Math.min(total, max));
+                final String value = recipientValues.get(e);
+                if(value != null) {
+                    final double total = evaluate(value);
+                    l.setHealth(total < 0.00 ? 0.00 : Math.min(total, l.getMaxHealth()));
+                }
             }
         }
     }

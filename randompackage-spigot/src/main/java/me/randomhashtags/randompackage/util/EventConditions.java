@@ -612,7 +612,8 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
         }
     }
     private boolean passedCustomCondition(Event event, Entity e, String condition, String s, String value) {
-        final String target = condition.startsWith(s) ? condition.split(s)[1] : condition;
+        String target = condition.startsWith(s) ? condition.split(s)[1] : condition;
+        if(target.contains("=")) target = target.split("=")[0];
         final EventCondition con = getEventCondition(target.toUpperCase());
         return con == null || con.check(value) && con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value);
     }

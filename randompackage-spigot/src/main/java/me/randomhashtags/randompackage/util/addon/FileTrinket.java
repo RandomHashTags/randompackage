@@ -17,7 +17,7 @@ public class FileTrinket extends RPAddon implements Trinket {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled")); }
+    public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled", "false")); }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return getClone(item);

@@ -25,11 +25,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -399,7 +401,10 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		}
 	}
 
-
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void entityDamageEvent(EntityDamageEvent event) {
+		tryIncreasing(event);
+	}
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		tryIncreasing(event);
@@ -462,75 +467,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	/*
 		Bukkit Events
 	 */
-	public void tryIncreasing(BlockBreakEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(BlockPlaceEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(EntityDamageByEntityEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(EntityDeathEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(PlayerFishEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	/*
-		RandomPackage
-	 */
-	public void tryIncreasing(AlchemistExchangeEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(CoinFlipEndEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(CustomEnchantApplyEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(CustomEnchantProcEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(EnchanterPurchaseEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(FundDepositEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(PlayerExpGainEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(PlayerRevealCustomEnchantEvent event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
-		}
-	}
-	public void tryIncreasing(TinkererTradeEvent event) {
+	public void tryIncreasing(Event event) {
 		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
 			trigger(event, g.getAttributes());
 		}
@@ -547,12 +484,12 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-				trigger(event, g.getAttributes());
+				triggerCustomEnchants(event, g.getAttributes());
 			}
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, String...replacements) {
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-				trigger(event, g.getAttributes(), replacements);
+				triggerCustomEnchants(event, g.getAttributes(), replacements);
 			}
 		}
 	}

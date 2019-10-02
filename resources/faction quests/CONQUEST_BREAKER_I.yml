@@ -10,4 +10,4 @@ rewards:
   - ""
 #
 attributes:
-  - "ConquestChestBreak;PlayerIncreaseFQuest=CONQUEST_BREAKER_I:1"
+  - "ConquestBlockBreak;PlayerIncreaseFQuest=CONQUEST_BREAKER_I:1"

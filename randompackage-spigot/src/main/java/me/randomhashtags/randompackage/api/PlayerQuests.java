@@ -1,16 +1,17 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.PlayerQuest;
-import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.util.EventAttributes;
-import me.randomhashtags.randompackage.attribute.IncreasePlayerQuest;
-import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.FilePlayerQuest;
-import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.enchant.*;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
+import me.randomhashtags.randompackage.attribute.IncreasePlayerQuest;
+import me.randomhashtags.randompackage.event.*;
+import me.randomhashtags.randompackage.event.enchant.AlchemistExchangeEvent;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
+import me.randomhashtags.randompackage.event.enchant.EnchanterPurchaseEvent;
+import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.addon.FilePlayerQuest;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,7 +32,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class PlayerQuests extends EventAttributes implements CommandExecutor {
     private static PlayerQuests instance;
@@ -402,9 +407,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void entityDeathEvent(EntityDeathEvent event) {
-        final Player player = event.getEntity().getKiller();
+    private void triggerPQuests(Event event, Player player) {
         if(player != null) {
             final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
             for(ActivePlayerQuest quest : a) {
@@ -412,102 +415,60 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             }
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void entityDeathEvent(EntityDeathEvent event) {
+        triggerPQuests(event, event.getEntity().getKiller());
+    }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void shopPurchaseEvent(ShopPurchaseEvent event) {
-        didShopEvent(event);
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void shopSellEvent(ShopSellEvent event) {
-        didShopEvent(event);
-    }
-    private void didShopEvent(ShopEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void jackpotPurchaseTicketsEvent(JackpotPurchaseTicketsEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void serverCrateOpenEvent(ServerCrateOpenEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler
     private void fallenHeroSlainEvent(FallenHeroSlainEvent event) {
         final LivingEntity l = event.killer;
         if(l instanceof Player) {
-            final Player player = (Player) l;
-            final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-            for(ActivePlayerQuest quest : a) {
-                trigger(event, quest.getQuest().getTrigger());
-            }
+            triggerPQuests(event, (Player) l);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void randomizationScrollUseEvent(RandomizationScrollUseEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerClaimEnvoyCrateEvent(PlayerClaimEnvoyCrateEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler
     private void playerApplyCustomEnchantEvent(CustomEnchantApplyEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void mysteryMobSpawnerOpenEvent(MysteryMobSpawnerOpenEvent event) {
-        final Player player = event.getPlayer();
-        final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
-        for(ActivePlayerQuest quest : a) {
-            trigger(event, quest.getQuest().getTrigger());
-        }
+        triggerPQuests(event, event.getPlayer());
     }
 }

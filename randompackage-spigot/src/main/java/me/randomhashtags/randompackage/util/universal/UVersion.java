@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.util.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import me.randomhashtags.randompackage.util.Versionable;
 import me.randomhashtags.randompackage.util.YamlUpdater;
-import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -362,21 +362,42 @@ public class UVersion extends YamlUpdater implements Versionable {
         for(int i = 1; i <= amount; i++) {
             if(nextslot >= 0) {
                 final ItemStack is = inv.getItem(nextslot);
-                if(is.getAmount() == 1) {
+                final int a = is.getAmount();
+                if(a == 1) {
                     inv.setItem(nextslot, new ItemStack(Material.AIR));
                     nextslot = getNextSlot(player, itemstack);
                 } else {
-                    is.setAmount(is.getAmount() - 1);
+                    is.setAmount(a-1);
                 }
             }
         }
         player.updateInventory();
     }
+    private boolean isSimilar(ItemStack is, ItemStack target) {
+        return isSimilar(is, target, false);
+    }
+    private boolean isSimilar(ItemStack is, ItemStack target, boolean matchAbsoluteMeta) {
+        if(matchAbsoluteMeta) {
+            return is.isSimilar(target);
+        } else if(is != null && target != null && is.getType().equals(target.getType()) && is.hasItemMeta() == target.hasItemMeta()
+                && (!LEGACY || is.getData().getData() == target.getData().getData())
+                && is.getDurability() == target.getDurability()) {
+            final ItemMeta m1 = is.getItemMeta(), m2 = target.getItemMeta();
+            if(m1.isUnbreakable() == m2.isUnbreakable()
+                    && m1.hasDisplayName() == m2.hasDisplayName() && m1.getDisplayName().equals(m2.getDisplayName())
+                    && m1.hasLore() == m2.hasLore() && m1.getLore().equals(m2.getLore())
+                    && m1.hasEnchants() == m2.hasEnchants() && m1.getEnchants().equals(m2.getEnchants())
+                    && m1.getItemFlags().equals(m2.getItemFlags())) {
+                return true;
+            }
+        }
+        return false;
+    }
     private int getNextSlot(Player player, ItemStack itemstack) {
         final PlayerInventory inv = player.getInventory();
         for(int i = 0; i < inv.getSize(); i++) {
             item = inv.getItem(i);
-            if(item != null && item.isSimilar(itemstack)) {
+            if(item != null && isSimilar(item, itemstack)) {
                 return i;
             }
         }

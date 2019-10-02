@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.database.file.YamlFile;
 
 import java.io.File;
 
-public class Database {
+public final class Database {
     private static DatabaseType type;
     public static void setDatabase(DatabaseType type) { Database.type = type; }
     public static DatabaseType getType() { return type; }

@@ -11,7 +11,10 @@ import java.util.HashMap;
 public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack {
     HashMap<String, String> getSettings();
     default String getSetting(String identifier) {
-        return getSettings().getOrDefault(identifier, "");
+        return getSetting(identifier, "");
+    }
+    default String getSetting(String identifier, String def) {
+        return getSettings().getOrDefault(identifier, def);
     }
     default long getCooldown() {
         final String s = getSetting("cooldown");

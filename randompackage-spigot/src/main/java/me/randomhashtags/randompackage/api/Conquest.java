@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.ConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
-import me.randomhashtags.randompackage.event.ConquestDamageEvent;
+import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileConquestChest;
 import org.bukkit.*;
@@ -140,7 +140,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 event.setCancelled(true);
                 player.updateInventory();
                 if(!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) return;
-                final ConquestDamageEvent cde = new ConquestDamageEvent(player, cc, cc.type.getDamagePerHit());
+                final ConquestBlockDamageEvent cde = new ConquestBlockDamageEvent(player, cc, cc.type.getDamagePerHit());
                 pluginmanager.callEvent(cde);
                 if(!cde.isCancelled()) {
                     cc.damage(player, cde.damage, false);

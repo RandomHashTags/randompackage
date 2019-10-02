@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.event.DamageEvent;
 import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
 import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
@@ -13,6 +12,7 @@ import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -238,54 +238,28 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void isDamagedEvent(isDamagedEvent event) {
-        tryTriggering(event, event.getEntity());
+        triggerInventoryPets(event, event.getEntity());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void pvAnyEvent(PvAnyEvent event) {
-        tryTriggering(event, event.getDamager());
+        triggerInventoryPets(event, event.getDamager());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
-        tryTriggering(event, event.getEntity().getKiller());
+        triggerInventoryPets(event, event.getEntity().getKiller());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        tryTriggering(event, event.getPlayer());
+        triggerInventoryPets(event, event.getPlayer());
     }
 
-    private void tryTriggering(DamageEvent event, Player player) {
+    private void triggerInventoryPets(Event event, Player player) {
         for(HashMap<ItemStack, HashMap<InventoryPet, String>> pets : getPets(player)) {
             for(ItemStack is : pets.keySet()) {
                 final HashMap<InventoryPet, String> a = pets.get(is);
                 for(InventoryPet pet : a.keySet()) {
                     final String[] info = pets.get(is).get(pet).split(":");
                     trigger(event, pet.getAttributes(), "level", info[1]);
-                }
-            }
-        }
-    }
-    private void tryTriggering(EntityDeathEvent event, Player player) {
-        if(player != null) {
-            for(HashMap<ItemStack, HashMap<InventoryPet, String>> pets : getPets(player)) {
-                for(ItemStack is : pets.keySet()) {
-                    final HashMap<InventoryPet, String> a = pets.get(is);
-                    for(InventoryPet pet : a.keySet()) {
-                        final String[] info = pets.get(is).get(pet).split(":");
-                        trigger(event, pet.getAttributes(), "level", info[1]);
-                    }
-                }
-            }
-        }
-    }
-    private void tryTriggering(PlayerCommandPreprocessEvent event, Player player) {
-        if(player != null) {
-            for(HashMap<ItemStack, HashMap<InventoryPet, String>> pets : getPets(player)) {
-                for(ItemStack is : pets.keySet()) {
-                    final HashMap<InventoryPet, String> a = pets.get(is);
-                    for(InventoryPet pet : a.keySet()) {
-                        final String[] info = pets.get(is).get(pet).split(":");
-                        trigger(event, pet.getAttributes(), "level", info[1]);
-                    }
                 }
             }
         }

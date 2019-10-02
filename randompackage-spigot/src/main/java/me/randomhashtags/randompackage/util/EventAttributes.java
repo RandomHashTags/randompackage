@@ -50,6 +50,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new PlaySound(),
                 new Remove(),
                 new RemoveFromList(),
+                new RemoveItem(),
                 new RemovePotionEffect(),
                 new Repeat(),
                 new Return(),
@@ -84,6 +85,7 @@ public abstract class EventAttributes extends EventExecutor {
         }
         final List<EventCondition> conditions = Arrays.asList(
                 new DepleteRarityGem(),
+                new DoesDieFromDamage(),
                 new HasCombo(),
                 new HasCustomEnchantEquipped(),
                 new HitBlock(),
