@@ -98,7 +98,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
             }
         }
     }
-    private int didTriggerTrinket(Event event, ItemStack is, Player player) {
+    private byte didTriggerTrinket(Event event, ItemStack is, Player player) {
         final String id = getRPItemStackValue(is, "TrinketInfo");
         if(id != null) {
             final String[] info = id.split(":");

@@ -10,9 +10,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 
-public class LaunchProjectile extends AbstractEventAttribute {
-    @Override
-    public String getIdentifier() { return "LAUNCHPROJ"; }
+public class LaunchProj extends AbstractEventAttribute {
     @Override
     public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
         Vector v = null;

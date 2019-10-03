@@ -16,4 +16,4 @@ item:
 #
 attributes:
   - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:false;PlayerSendMessage=&c&l(!)&r &cYou need SOUL MODE toggled on to use this trinket!;Return=false"
-  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:100;PlayerSetDurability=all:durability*1.10"
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:100;PlayerSetDurability=all:durability-maxdurability*0.10;PlayerSendMessage=&a&l+10% Armor Durability;PlayerSendMessage=&c&l-100 Souls"

@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.List;
 
-public class IncreasePlayerQuest extends AbstractEventAttribute {
-    @Override
-    public String getIdentifier() { return "INCREASEPQUEST"; }
+public class IncreasePQuest extends AbstractEventAttribute {
     @Override
     public void executeData(HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {
         final List<String> msg = getRPConfig(null, "player quests.yml").getStringList("messages.completed");
