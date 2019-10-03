@@ -86,7 +86,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
             for(String s : keys) {
-                String value = c.contains("=") ? doReplacements(entities, keys, c.split("=")[1]) : "false", original = s;
+                String value = c.contains("=") ? doReplacements(entities, keys, c.split("=")[1]) : "false";
                 final Entity e = entities.get(s);
                 s = s.toLowerCase();
                 for(String r : valueReplacements.keySet()) {
@@ -389,6 +389,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             case "playervelocity": return getEntities((PlayerEvent) event);
 
             case "projectilehit": return getEntities((ProjectileHitEvent) event);
+            case "projectilelaunch": return getEntities((ProjectileLaunchEvent) event);
 
             case "isdamaged": return getEntities((isDamagedEvent) event);
             case "pvany": return getEntities((PvAnyEvent) event);
@@ -452,6 +453,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             default: return new HashMap<>();
         }
     }
+
     public HashMap<String, Entity> getEntities(BlockPlaceEvent event) { return getEntities("Player", event.getPlayer()); }
     public HashMap<String, Entity> getEntities(BlockBreakEvent event) { return getEntities("Player", event.getPlayer()); }
     public HashMap<String, Entity> getEntities(EntityDeathEvent event) {
@@ -470,6 +472,10 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public HashMap<String, Entity> getEntities(ProjectileHitEvent event) {
         final Projectile p = event.getEntity();
         return getEntities("Projectile", p, "Shooter", p.getShooter(), "Victim", getHitEntity(event));
+    }
+    public HashMap<String, Entity> getEntities(ProjectileLaunchEvent event) {
+        final Projectile p = event.getEntity();
+        return getEntities("Projectile", p, "Shooter", p.getShooter());
     }
     // RandomPackage event entities
     public HashMap<String, Entity> getEntities(CoinFlipEndEvent event) { return getEntities("Winner", event.winner, "Loser", event.loser); }
@@ -492,6 +498,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             case "foodlevelchange": return getReplacements((FoodLevelChangeEvent) event);
             case "playerinteract": return getReplacements((PlayerInteractEvent) event);
             case "projectilehit": return getReplacements((ProjectileHitEvent) event);
+            case "projectilelaunch": return getReplacements((ProjectileLaunchEvent) event);
 
             case "boostertrigger": return getReplacements((BoosterTriggerEvent) event);
             case "customenchantproc": return getReplacements((CustomEnchantProcEvent) event);
@@ -514,6 +521,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             default: return new String[]{};
         }
     }
+
     // Bukkit event replacements
     public String[] getReplacements(EntityDeathEvent event) {
         final LivingEntity e = event.getEntity(), k = e.getKiller();
@@ -521,28 +529,33 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         final String[] a = new String[] {"xp", Integer.toString(event.getDroppedExp()), "@Victim", toString(e.getLocation())}, b = NN ? new String[]{"@Killer", toString(k.getLocation())} : null;
         return NN ? getReplacements(a, b) : a;
     }
-    public String[] getReplacements(BlockBreakEvent event) { return new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Player", toString(event.getPlayer().getLocation()), "@Block", toString(event.getBlock().getLocation())}; }
+    public String[] getLocationReplacements(Entity entity, String id) {
+        final String[] a = new String[]{"@" + id, toString(entity.getLocation())};
+        return entity instanceof LivingEntity ?  getReplacements(a, new String[]{"@" + id + "EyeLocation", toString(((LivingEntity) entity).getEyeLocation())}) : a;
+    }
+
+    private String[] getProjectileReplacements(Projectile p) { return getReplacements(getLocationReplacements(p, "Projectile"), getLocationReplacements((Entity) p.getShooter(), "Shooter")); }
+
+    public String[] getReplacements(BlockBreakEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Block", toString(event.getBlock().getLocation())}); }
     public String[] getReplacements(BlockGrowEvent event) { return new String[] {"@Block", toString(event.getBlock().getLocation())}; }
-    public String[] getReplacements(BlockPlaceEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation())}; }
-    public String[] getReplacements(PlayerFishEvent event) { return new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Player", toString(event.getPlayer().getLocation()), "@Caught", toString(event.getCaught().getLocation())}; }
-    public String[] getReplacements(EntityDamageEvent event) { return new String[] {"dmg", Double.toString(event.getDamage()), "@Victim", toString(event.getEntity().getLocation())}; }
+    public String[] getReplacements(BlockPlaceEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), (String[]) null); }
+    public String[] getReplacements(PlayerFishEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Caught", toString(event.getCaught().getLocation())}); }
+    public String[] getReplacements(EntityDamageEvent event) { return getReplacements(getLocationReplacements(event.getEntity(), "Victim"), new String[] {"dmg", Double.toString(event.getDamage())}); }
     public String[] getReplacements(EntityDamageByEntityEvent event) { return new String[] {"dmg", Double.toString(event.getDamage()), "@Damager", toString(event.getDamager().getLocation()), "@Victim", toString(event.getEntity().getLocation())}; }
     public String[] getReplacements(EntityShootBowEvent event) { return new String[] {"@Shooter", toString(event.getEntity().getLocation()), "@Projectile", toString(event.getProjectile().getLocation())}; }
-    public String[] getReplacements(EntityTameEvent event) { return new String[] {"@Entity", toString(event.getEntity().getLocation())}; }
+    public String[] getReplacements(EntityTameEvent event) { return getReplacements(getLocationReplacements(event.getEntity(), "Entity"), (String[]) null); }
     public String[] getReplacements(FoodLevelChangeEvent event) {
         final ItemStack is = event.getItem();
         final String m = is != null ? is.getType().name() : "AIR";
-        return new String[] {"@Player", toString(event.getEntity().getLocation()), "{ITEM}", UMaterial.match(m).name()};
+        return getReplacements(getLocationReplacements(event.getEntity(), "Player"), new String[] {"{ITEM}", UMaterial.match(m).name()});
     }
-    public String[] getReplacements(PlayerInteractEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation())}; }
-    public String[] getReplacements(ProjectileHitEvent event) {
-        final Projectile p = event.getEntity();
-        return new String[] {"@Projectile", toString(p.getLocation()), "@Shooter", toString(((Entity) p.getShooter()).getLocation())};
-    }
+    public String[] getReplacements(PlayerInteractEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), (String[]) null); }
+    public String[] getReplacements(ProjectileHitEvent event) { return getProjectileReplacements(event.getEntity()); }
+    public String[] getReplacements(ProjectileLaunchEvent event) { return getProjectileReplacements(event.getEntity()); }
     // RandomPackage event replacements
     public String[] getReplacements(BoosterTriggerEvent event) {
         final ActiveBooster a = event.booster;
-        return new String[] {"@Player", toString(event.getPlayer().getLocation()), "multiplier", Double.toString(a.getMultiplier()), "duration", Long.toString(a.getDuration())};
+        return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"multiplier", Double.toString(a.getMultiplier()), "duration", Long.toString(a.getDuration())});
     }
     public String[] getReplacements(CustomEnchantProcEvent event) {
         final HashMap<String, Entity> e = event.getEntities();
@@ -559,14 +572,14 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         }
         return getReplacements(a, b);
     }
-    public String[] getReplacements(FundDepositEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toString()}; }
-    public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "amount", event.amount.toBigInteger().toString()}; }
-    public String[] getReplacements(KitClaimEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "level", Integer.toString(event.getLevel())}; }
-    public String[] getReplacements(KitPreClaimEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "chance", Integer.toString(event.getLevelupChance()), "level", Integer.toString(event.getLevel())}; }
-    public String[] getReplacements(LootbagClaimEvent event) { return new String[]{"@Player", toString(event.getPlayer().getLocation()), "size", Integer.toString(event.getRewardSize())}; }
-    public String[] getReplacements(PlayerTeleportDelayEvent event) { return new String[] { "@Player", toString(event.getPlayer().getLocation()), "delay", Double.toString(event.getDelay())}; }
-    public String[] getReplacements(ShopEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "total", event.getTotal().toString()}; }
-    public String[] getReplacements(TinkererTradeEvent event) { return new String[] {"@Player", toString(event.getPlayer().getLocation()), "tradesize", Integer.toString(event.trades.size())}; }
+    public String[] getReplacements(FundDepositEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"amount", event.amount.toString()}); }
+    public String[] getReplacements(JackpotPurchaseTicketsEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"amount", event.amount.toBigInteger().toString()}); }
+    public String[] getReplacements(KitClaimEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"level", Integer.toString(event.getLevel())}); }
+    public String[] getReplacements(KitPreClaimEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"chance", Integer.toString(event.getLevelupChance()), "level", Integer.toString(event.getLevel())}); }
+    public String[] getReplacements(LootbagClaimEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"size", Integer.toString(event.getRewardSize())}); }
+    public String[] getReplacements(PlayerTeleportDelayEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"delay", Double.toString(event.getDelay())}); }
+    public String[] getReplacements(ShopEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"total", event.getTotal().toString()}); }
+    public String[] getReplacements(TinkererTradeEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"tradesize", Integer.toString(event.trades.size())}); }
 
     public String[] getReplacements(String[] a, List<String> b) {
         final List<String> c = new ArrayList<>();
@@ -576,9 +589,16 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     }
     public String[] getReplacements(String[] a, String[] b) {
         final List<String> c = new ArrayList<>();
-        c.addAll(Arrays.asList(a));
-        c.addAll(Arrays.asList(b));
-        return c.toArray(new String[a.length+b.length]);
+        int al = 0, bl = 0;
+        if(a != null) {
+            c.addAll(Arrays.asList(a));
+            al = a.length;
+        }
+        if(b != null) {
+            c.addAll(Arrays.asList(b));
+            bl = b.length;
+        }
+        return c.toArray(new String[al+bl]);
     }
     /*
         CustomEnchant

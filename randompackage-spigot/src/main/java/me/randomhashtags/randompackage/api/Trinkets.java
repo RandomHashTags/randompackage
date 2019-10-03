@@ -11,12 +11,15 @@ import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,33 +98,38 @@ public class Trinkets extends EventAttributes implements RPItemStack {
             }
         }
     }
+    private int didTriggerTrinket(Event event, ItemStack is, Player player) {
+        final String id = getRPItemStackValue(is, "TrinketInfo");
+        if(id != null) {
+            final String[] info = id.split(":");
+            final String identifier = info[0];
+            final Trinket trinket = getTrinket(identifier);
+            final long expiration = Long.parseLong(info[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+
+            if(remainingtime <= 0) {
+                if(trigger(event, trinket.getAttributes())) {
+                    trinket.didUse(is, identifier);
+                    return 1;
+                }
+            } else {
+                final HashMap<String, String> replacements = new HashMap<>();
+                replacements.put("{TIME}", getRemainingTime(remainingtime));
+                sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
+                return 0;
+            }
+        }
+        return -1;
+    }
+
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         triggerPassive(event, player);
-        final ItemStack is = event.getItem();
-        if(is != null) {
-            final String id = getRPItemStackValue(is, "TrinketInfo");
-            if(id != null) {
-                event.setCancelled(true);
-                player.updateInventory();
-
-                final String[] info = id.split(":");
-                final String identifier = info[0];
-                final Trinket trinket = getTrinket(identifier);
-                final long expiration = Long.parseLong(info[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
-
-                if(remainingtime <= 0) {
-                    if(trigger(event, trinket.getAttributes())) {
-                        trinket.didUse(is, identifier);
-                    }
-                } else {
-                    final HashMap<String, String> replacements = new HashMap<>();
-                    replacements.put("{TIME}", getRemainingTime(remainingtime));
-                    sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
-                }
-            }
+        final int id = didTriggerTrinket(event, event.getItem(), player);
+        if(id >= 0) {
+            event.setCancelled(true);
+            player.updateInventory();
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -137,6 +145,16 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         final Entity e = event.getEntity();
         if(e instanceof Player) {
             triggerPassive(event, (Player) e);
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void projectileLaunchEvent(ProjectileLaunchEvent event) {
+        final Projectile p = event.getEntity();
+        final ProjectileSource s = p.getShooter();
+        if(s instanceof Player) {
+            final Player player = (Player) s;
+            triggerPassive(event, player);
+            didTriggerTrinket(event, player.getItemInHand(), player);
         }
     }
 }

@@ -36,11 +36,11 @@ rarity gems:
     #
     toggle on:
       - "&a&l** SOUL MODE: &nON&r &a&l**"
-      - "&7Active soul enchantments will now drain soul gkit gems."
+      - "&7Active soul enchantments will now drain soul gems."
     toggle off:
       interact:
         - "&c&l** SOUL MODE: &nOFF&r &c&l**"
-        - "&7Soul enchantments will no longer drain soul gkit gems."
+        - "&7Soul enchantments will no longer drain soul gems."
       dropped:
         - "&c&l** SOUL MODE: &nOFF&r &c&l**"
         - "&7You have left Soul Mode, because you have dropped the Soul Gem!"

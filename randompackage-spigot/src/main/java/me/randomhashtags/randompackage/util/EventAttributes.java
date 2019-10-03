@@ -46,6 +46,7 @@ public abstract class EventAttributes extends EventExecutor {
                 new Heal(),
                 new Ignite(),
                 new KickWithReason(),
+                new LaunchProjectile(),
                 new PerformCommand(),
                 new PlaySound(),
                 new Remove(),

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
 #
 item:
   item: "ender_pearl"
@@ -14,4 +14,5 @@ item:
   - "&5&nSoul Cost:&r &d5/pearl"
 #
 attributes:
-  - "ProjectileLaunch;"
+  - "ProjectileLaunch;SetCancelled=true;ShooterHasActiveRarityGem=SOUL:false;ShooterSendMessage=&c&l(!)&r &cYou need SOUL MODE toggled on to use this trinket!;Return=false"
+  - "ProjectileLaunch;SetCancelled=true;ShooterHasActiveRarityGem=SOUL:true;ShooterDepleteRarityGem=SOUL:5;ShooterLaunchProj=ENDER_PEARL"
