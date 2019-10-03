@@ -190,8 +190,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             final String repeatid = Integer.toString(repeatID);
             final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> previousHashMaps = new ArrayList<>();
             final Set<String> entityKeys = entities.keySet();
-            outerloop:
-            for(LinkedHashMap<EventAttribute, HashMap<Entity, String>> hashmap : values) {
+            attributeLooper: for(LinkedHashMap<EventAttribute, HashMap<Entity, String>> hashmap : values) {
                 for(EventAttribute a : hashmap.keySet()) {
                     if(!a.isCancelled()) {
                         final HashMap<Entity, String> valuez = hashmap.get(a);
@@ -199,45 +198,47 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                         if(defaultValue != null) {
                             defaultValue = defaultValue.replace("RepeatID", repeatid);
                         }
-                        final String id = a.getIdentifier();
-                        if(id.equals("WAIT")) {
-                            final int ticks = (int) evaluate(replaceValue(defaultValue, valueReplacements));
-                            final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
-                            attributes.removeAll(previousHashMaps);
-                            attributes.remove(hashmap);
-                            scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
-                            break outerloop;
-                        } else if(id.equals("REPEAT")) {
-                            final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
-                            attributes.removeAll(previousHashMaps);
-                            attributes.remove(hashmap);
-                            for(int i = 1; i <= evaluate(defaultValue); i++) {
-                                executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
-                            }
-                            break outerloop;
-                        } else if(id.equals("RETURN")) {
-                            passed = Boolean.parseBoolean(defaultValue);
-                            if(!passed) break outerloop;
-                        } else {
-                            previousHashMaps.add(hashmap);
-                            a.execute(event);
-                            if(dadda) a.executeData(data, valueReplacements);
-                            valuez.remove(null);
-                            for(Entity e : valuez.keySet()) {
-                                final String og = valuez.get(e);
-                                if(og != null) {
-                                    valuez.put(e, doReplacements(entities, entityKeys, og));
+                        switch (a.getIdentifier()) {
+                            case "WAIT":
+                                final int ticks = (int) evaluate(replaceValue(defaultValue, valueReplacements));
+                                List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
+                                attributes.removeAll(previousHashMaps);
+                                attributes.remove(hashmap);
+                                scheduler.scheduleSyncDelayedTask(randompackage, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
+                                break attributeLooper;
+                            case "REPEAT":
+                                attributes = new ArrayList<>(values);
+                                attributes.removeAll(previousHashMaps);
+                                attributes.remove(hashmap);
+                                for(int i = 1; i <= evaluate(defaultValue); i++) {
+                                    executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
                                 }
-                            }
-                            a.execute(event, valuez);
-                            a.execute(event, valuez, valueReplacements);
-                            if(defaultValue != null) {
-                                a.execute(event, defaultValue);
-                                a.execute(event, defaultValue, valueReplacements);
-                                if(entity1NN && entity2NN) {
-                                    a.execute(entity1, entity2, defaultValue);
+                                break attributeLooper;
+                            case "RETURN":
+                                passed = Boolean.parseBoolean(defaultValue);
+                                if(!passed) {
+                                    break attributeLooper;
                                 }
-                            }
+                            default:
+                                previousHashMaps.add(hashmap);
+                                a.execute(event);
+                                if(dadda) a.executeData(data, valueReplacements);
+                                valuez.remove(null);
+                                for(Entity e : valuez.keySet()) {
+                                    final String og = valuez.get(e);
+                                    if(og != null) {
+                                        valuez.put(e, doReplacements(entities, entityKeys, og));
+                                    }
+                                }
+                                a.execute(event, valuez);
+                                a.execute(event, valuez, valueReplacements);
+                                if(defaultValue != null) {
+                                    a.execute(event, defaultValue);
+                                    a.execute(event, defaultValue, valueReplacements);
+                                    if(entity1NN && entity2NN) {
+                                        a.execute(entity1, entity2, defaultValue);
+                                    }
+                                }
                         }
                     }
                 }

@@ -4,12 +4,10 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.api.Trinkets;
-import me.randomhashtags.randompackage.addon.Trinket;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
+import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -442,7 +440,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(item == null || item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
-            } else if(item.getType().name().endsWith("BOW") || item.getType().name().endsWith("_AXE") || item.getType().name().endsWith("SWORD") || item.getType().name().endsWith("HELMET") || item.getType().name().endsWith("CHESTPLATE") || item.getType().name().endsWith("LEGGINGS") || item.getType().name().endsWith("BOOTS")) {
+            } else if(isEquipment(item)) {
                 itemMeta = item.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(message);
                 item.setItemMeta(itemMeta);
@@ -465,24 +463,26 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(item == null || item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.cannot addlore air"), null);
                 giveItem(player, items.get("itemlorecrystal").clone());
-            } else if(item.getType().name().endsWith("BOW") || item.getType().name().endsWith("_AXE") || item.getType().name().endsWith("SWORD") || item.getType().name().endsWith("HELMET") || item.getType().name().endsWith("CHESTPLATE") || item.getType().name().endsWith("LEGGINGS") || item.getType().name().endsWith("BOOTS")) {
+            } else if(isEquipment(item)) {
                 itemMeta = item.getItemMeta(); lore.clear();
+                final String msg = ChatColor.stripColor(event.getMessage());
                 boolean did = false;
                 if(itemMeta.hasLore()) {
                     lore.addAll(itemMeta.getLore());
                     for(int i = 0; i < lore.size(); i++) {
-                        if(!did && lore.get(i).startsWith(apply)) {
+                        if(lore.get(i).startsWith(apply)) {
                             did = true;
-                            lore.set(i, apply + ChatColor.stripColor(event.getMessage()));
+                            lore.set(i, apply + msg);
+                            break;
                         }
                     }
                 }
-                if(!did) lore.add(apply + ChatColor.stripColor(event.getMessage()));
+                if(!did) lore.add(apply + msg);
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
                 player.updateInventory();
                 for(String string : itemsConfig.getStringList("item lore crystal.add lore")) {
-                    if(string.contains("{LORE}")) string = string.replace("{LORE}", apply.replace("{LORE}", ChatColor.stripColor(event.getMessage())));
+                    if(string.contains("{LORE}")) string = string.replace("{LORE}", apply.replace("{LORE}", msg));
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
                 }
             } else {
@@ -490,5 +490,12 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 giveItem(player, items.get("itemlorecrystal").clone());
             }
         }
+    }
+    private boolean isEquipment(ItemStack is) {
+        if(is != null) {
+            final String m = is.getType().name();
+            return m.endsWith("BOW") || m.endsWith("_AXE") || m.endsWith("SWORD") || m.endsWith("HELMET") || m.endsWith("CHESTPLATE") || m.endsWith("LEGGINGS") || m.endsWith("BOOTS");
+        }
+        return false;
     }
 }
