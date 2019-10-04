@@ -6,6 +6,7 @@ settings:
     all: 3600
   exp to level:
     2: 2250
+    11: 11250
 #
 item:
   texture: ""
@@ -32,4 +33,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "CustomEnchantApply;increaseSuccess=1"
+  - "CustomEnchantApply;SetSuccess=success+1"

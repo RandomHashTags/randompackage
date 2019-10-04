@@ -2,6 +2,9 @@
 settings:
   enabled: false
   max level: 10
+  levels:
+    1:
+      values
   cooldown:
     all: 300
   exp to level:

@@ -34,10 +34,10 @@ rewards:
   - "itemnametag;amount=5"
   - "itemlorecrystal;amount=5"
   - "spaceflare:GODLY;amount=3-4||spaceflare:GODLY;amount=3-4"
-  - "enchantmentorb:armor12:80-90;amount=1-2||enchantmentorb:weapon12:80-90;amount=1-2"
   - "customboss:BROOD_MOTHER;amount=1-2"
+  - "enchantmentorb:armor12:80-90;amount=1-2||enchantmentorb:weapon12:80-90;amount=1-2"
   - "fallenherogem:GKIT||fallenherogem:VKIT"
-  - "mysterycrate"
+  - "heroicmysterycrate"
 #
 bonus:
   - "ce:GODLY_OVERLOAD:random:random:random"

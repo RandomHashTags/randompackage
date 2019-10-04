@@ -181,7 +181,7 @@ public abstract class YamlUpdater {
                 "xpbottle.cmds", Arrays.asList("xpbottle"),
                 // 16.5.0
                 "fat buckets.enabled", true,
-                "inventory pets.enabled", true,
+                "inventory pets.enabled", false,
                 "sethome.enabled", true,
                 "sethome.cmds", Arrays.asList("sethome"),
         };

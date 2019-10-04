@@ -65,6 +65,9 @@ weapon:
     - "&7a practical piece of clothing..."
     - "&7now they will pay for their ignorance!"
 #
+crystal perks:
+  - "  &4&l*&r &4+3% DMG"
+#
 attributes:
   armor:
     - "ArmorSetEquip;PlayerRemovePotionEffect=speed;PlayerAddPotionEffect=speed:3:99999"
@@ -79,7 +82,4 @@ attributes:
     - "isDamaged=SetDamage=dmg*0.90"
   crystal:
     - "PvAny;SetDamage=dmg*1.03"
-#
-crystal perks:
-  - "  &c&l*&r &c+3% Outgoing DMG"
 #

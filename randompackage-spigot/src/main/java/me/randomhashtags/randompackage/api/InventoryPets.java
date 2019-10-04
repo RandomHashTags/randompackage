@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class InventoryPets extends EventAttributes implements RPItemStack {
+    // TODO: fix the inventory pet ymls
     private static InventoryPets instance;
     public static InventoryPets getInventoryPets() {
         if(instance == null) instance = new InventoryPets();
@@ -108,20 +109,22 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
     public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(Player player) {
         final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> a = new ArrayList<>();
         final List<ItemStack> skull = new ArrayList<>();
-        for(ItemStack is : player.getInventory()) {
-            if(is != null) {
-                final String n = is.getType().name();
-                if(n.contains("SKULL") || n.contains("HEAD")) {
-                    skull.add(is);
+        if(player != null) {
+            for(ItemStack is : player.getInventory()) {
+                if(is != null) {
+                    final String n = is.getType().name();
+                    if(n.contains("SKULL") || n.contains("HEAD")) {
+                        skull.add(is);
+                    }
                 }
             }
-        }
-        for(ItemStack is : skull) {
-            final HashMap<InventoryPet, String> i = isInventoryPet(is);
-            if(i != null) {
-                final HashMap<ItemStack, HashMap<InventoryPet, String>> p = new HashMap<>();
-                p.put(is, i);
-                a.add(p);
+            for(ItemStack is : skull) {
+                final HashMap<InventoryPet, String> i = isInventoryPet(is);
+                if(i != null) {
+                    final HashMap<ItemStack, HashMap<InventoryPet, String>> p = new HashMap<>();
+                    p.put(is, i);
+                    a.add(p);
+                }
             }
         }
         return a;
@@ -168,6 +171,31 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
         return false;
     }
 
+    private byte didTriggerPet(Event event, ItemStack is, Player player) {
+        final String id = getRPItemStackValue(is, "InventoryPetInfo");
+        if(id != null) {
+            final String[] info = id.split(":");
+            final String identifier = info[0];
+            final InventoryPet pet = getInventoryPet(identifier);
+            final String lvl = info[1];
+            final int level = Integer.parseInt(lvl), exp = Integer.parseInt(info[2]);
+            final long expiration = Long.parseLong(info[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+
+            if(remainingtime <= 0) {
+                if(trigger(event, pet.getAttributes(), "level", lvl)) {
+                    pet.didUse(is, identifier, level, exp);
+                    return 1;
+                }
+            } else {
+                final HashMap<String, String> replacements = new HashMap<>();
+                replacements.put("{TIME}", getRemainingTime(remainingtime));
+                sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
+                return 0;
+            }
+        }
+        return -1;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerDeathEvent(PlayerDeathEvent event) {
         final Player player = event.getEntity();
@@ -211,24 +239,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
         final ItemStack is = event.getItem();
         if(is != null) {
             final Player player = event.getPlayer();
-            final String id = getRPItemStackValue(is, "InventoryPetInfo");
-            if(id != null) {
-                final String[] info = id.split(":");
-                final String identifier = info[0];
-                final InventoryPet pet = getInventoryPet(identifier);
-                final String lvl = info[1];
-                final int level = Integer.parseInt(lvl), exp = Integer.parseInt(info[2]);
-                final long expiration = Long.parseLong(info[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
-
-                if(remainingtime <= 0) {
-                    if(trigger(event, pet.getAttributes(), "level", lvl)) {
-                        pet.didUse(is, identifier, level, exp);
-                    }
-                } else {
-                    final HashMap<String, String> replacements = new HashMap<>();
-                    replacements.put("{TIME}", getRemainingTime(remainingtime));
-                    sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
-                }
+            if(didTriggerPet(event, is, player) >= 0) {
             } else if(is.isSimilar(leash) || is.isSimilar(rarecandy)) {
             } else return;
             event.setCancelled(true);

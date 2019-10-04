@@ -36,7 +36,7 @@ rewards:
   - "bone"
   - "raritybook:HEROIC;amount=1-3"
   - "gkitfallenherobundle||vkitfallenherobundle"
-  - "mysterycrate||superiorcrate"
+  - "heroicmysterycrate||superiorcrate"
   - "monthlycrate:SCHOOL_2016||monthlycrate:SCHOOL_2017"
 #
 bonus:

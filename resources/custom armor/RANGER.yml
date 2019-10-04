@@ -60,7 +60,8 @@ weapon:
     - "&awith the energy of the Sun."
 #
 crystal perks:
-  - ""
+  - "  &a&l*&r &a-5% Incoming Bow DMG"
+  - "  &a&l*&r &a20% Revenge Of Yijki Ability"
 #
 attributes:
   armor:
@@ -70,5 +71,5 @@ attributes:
     - "HitArrow;SetDamage=dmg*1.30"
     - "isDamaged=SetDamage=dmg*0.75"
   crystal:
-    - ""
+    - "isDamaged;DamagerIsType=ARROW;SetDamage=dmg*0.95"
 #

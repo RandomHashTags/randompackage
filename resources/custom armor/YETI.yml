@@ -61,6 +61,13 @@ attributes:
     - "isDamaged;SetDamage=dmg*0.90"
   weapon:
     - "PvAny;SetDamage=dmg*1.075"
+  crystal:
+    - "PvAny;SetDamage=dmg*1.025"
+    - "isDamaged=SetDamage=dmg*0.975"
+#
+crystal perks:
+  - "  &b&l*&r &b+2.5% DMG"
+  - "  &b&l*&r &b-2.5% Incoming DMG"
 #
 activate message:
   - "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"

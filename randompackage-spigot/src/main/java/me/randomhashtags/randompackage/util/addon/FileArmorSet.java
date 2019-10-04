@@ -21,8 +21,8 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 	public String getIdentifier() { return getYamlName(); }
 
 	public String getName() {
-		final String s = yml.getString("crystal.name");
-		return s != null ? ChatColor.translateAlternateColorCodes('&', s) : getIdentifier() + " crystal doesn't exist!";
+		final String s = yml.getString("name");
+		return s != null ? ChatColor.translateAlternateColorCodes('&', s) : getIdentifier() + " name doesn't exist!";
 	}
 	public ItemStack getHelmet() {
 		if(helmet == null) helmet = api.d(yml, "helmet");

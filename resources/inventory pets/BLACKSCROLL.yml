@@ -6,6 +6,7 @@ settings:
     all: 900
   exp to level:
     2: 2250
+    11: 11250
 #
 item:
   texture: ""

@@ -45,7 +45,10 @@ boots:
   - "&e&oThe mythical boots of a Slayer of Dragons."
 #
 crystal perks:
-  - ""
+  - "  &e&l*&r &e+3% PvP DMG"
+  - "  &e&l*&r &e-5% Incoming DMG"
+  - "  &e&l*&r &e10% Silence Immunity"
+  - "  &e&l*&r &e10% Freeze Immunity"
 #
 attributes:
   armor:
@@ -54,5 +57,6 @@ attributes:
   weapon:
     - ""
   crystal:
-    - ""
+    - "PvAny;VictimIsType=PLAYER;SetDamage=dmg*1.03"
+    - "isDamaged;SetDamage=dmg*0.95"
 #
