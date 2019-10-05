@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.api.FatBuckets;
+import me.randomhashtags.randompackage.dev.nearFinished.InventoryPets;
 import me.randomhashtags.randompackage.dev.nearFinished.LastManStanding;
 import me.randomhashtags.randompackage.dev.nearFinished.Outposts;
 import me.randomhashtags.randompackage.dev.nearFinished.Duels;
@@ -95,6 +96,8 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         getCommand("randompackage").setExecutor(api);
         rpevents.enable();
         RegionalAPI.getRegionalAPI().setup(this);
+
+        EventAttributes.loadEventAttributes();
 
         final CommandManager cmd = CommandManager.getCommandManager(this);
 

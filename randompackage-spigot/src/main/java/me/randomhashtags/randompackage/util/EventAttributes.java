@@ -20,7 +20,7 @@ public abstract class EventAttributes extends EventExecutor {
             * Allowed conditions for specific entity types
             * Available event attributes with their identifier, and what they do
      */
-    static {
+    public static void loadEventAttributes() {
         if(eventattributes == null) {
             eventattributes = new LinkedHashMap<>();
         }
@@ -98,8 +98,9 @@ public abstract class EventAttributes extends EventExecutor {
             c.load();
         }
     }
-
     public static void unloadEventAttributes() {
+        eventattributes = null;
+        eventconditions = null;
         Combo.combos.clear();
         Listable.list.clear();
     }

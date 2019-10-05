@@ -237,7 +237,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 final List<AuctionedItem> p = auctions.get(u);
                 for(String a : data.getConfigurationSection("auctions." + uuid).getKeys(false)) {
                     final long l = Long.parseLong(a);
-                    final ItemStack i = d(data, "auctions." + uuid + "." + a);
+                    final ItemStack i = data.getItemStack("auctions." + uuid + "." + a + ".item");
                     final AuctionedItem ai = new AuctionedItem(l, u, i, BigDecimal.valueOf(data.getDouble("auctions." + uuid + "." + a + ".price")));
                     ai.claimable = data.getBoolean("auctions." + uuid + "." + a + ".claimable");
                     final boolean c = ai.claimable;
@@ -274,6 +274,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private void save() {
         try {
             data.save(dataF);
+            dataF = new File(rpd + separator + "_Data", "auctions.yml");
             data = YamlConfiguration.loadConfiguration(dataF);
         } catch(IOException e) {
             e.printStackTrace();
@@ -284,34 +285,14 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         else dobackup();
     }
     private void dobackup() {
-        if(!isEnabled()) return;
         data.set("auctions", null);
         for(UUID u : auctions.keySet()) {
             final String s = u.toString(), p = "auctions." + s + ".";
             for(AuctionedItem a : auctions.get(u)) {
                 final long l = a.auctionTime;
-                final ItemStack i = a.item();
-                final int amount = i.getAmount();
-                final ItemMeta im = i.getItemMeta();
                 data.set(p + l + ".price", a.price);
                 data.set(p + l + ".claimable", a.claimable);
-                data.set(p + l + ".item", UMaterial.match(i).name());
-                if(amount != 1) data.set(p + l + ".amount", amount);
-                if(im != null) {
-                    if(im.hasDisplayName()) data.set(p + l + ".name", im.getDisplayName());
-                    final List<String> lo = new ArrayList<>();
-                    if(im.hasEnchants()) {
-                        StringBuilder en = new StringBuilder();
-                        final Map<Enchantment, Integer> enchants = im.getEnchants();
-                        for(Enchantment e : enchants.keySet()) {
-                            en.append(e.getName()).append(enchants.get(e)).append(";");
-                        }
-                        lo.add("VEnchants{" + en.toString().substring(0, en.length()-1) + "}");
-                    }
-                    if(im.hasLore()) lo.addAll(im.getLore());
-                    if(!lo.isEmpty()) data.set(p + l + ".lore", lo);
-                }
-
+                data.set(p + l + ".item", a.item());
             }
         }
         save();
