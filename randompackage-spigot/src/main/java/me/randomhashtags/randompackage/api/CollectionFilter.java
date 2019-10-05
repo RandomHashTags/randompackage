@@ -157,15 +157,16 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         sendStringListMessage(player, config.getStringList("messages.view filter"), replacements);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         final Entity e = event.getEntity();
         final HashMap<UUID, CollectionChest> a = CollectionChest.chests;
         if(a != null && config.getStringList("enabled worlds").contains(e.getWorld().getName())) {
+            final Chunk c = e.getLocation().getChunk();
+            final List<ItemStack> drops = event.getDrops();
             for(CollectionChest cc : a.values()) {
-                if(cc.getLocation().getChunk().equals(e.getLocation().getChunk())) {
+                if(cc.getLocation().getChunk().equals(c)) {
                     final UMaterial f = cc.getFilter();
-                    final List<ItemStack> drops = event.getDrops();
                     final Inventory i = cc.getInventory();
                     final List<ItemStack> added = new ArrayList<>();
                     for(ItemStack is : drops) {

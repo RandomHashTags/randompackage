@@ -205,29 +205,35 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             for(int p = 0; p < L.length(); p++) {
                 final int slot = i*9+p;
                 final String s = L.substring(p, p+1);
-                if(s.equals("X"))  {
-                    top.setItem(slot, background);
-                } else if(s.equals("C")) {
-                    item = background.clone();
-                    item.setAmount(countdownStart);
-                    top.setItem(slot, item);
-                    countdownSlots.add(slot);
-                } else if(s.equals("B")) {
-                    final int a = random.nextInt(bonus.size());
-                    if(a >= 0) {
-                        final ItemStack b = bonus.get(a);
-                        top.setItem(slot, b);
-                        bonus.remove(b);
-                        bonusSlots.add(slot);
-                    }
-                } else if(s.equals("L")) {
-                    final int a = random.nextInt(regular.size());
-                    if(a >= 0) {
-                        final ItemStack r = regular.get(a);
-                        top.setItem(slot, r);
-                        regular.remove(r);
-                        lootSlots.add(slot);
-                    }
+                switch (s) {
+                    case "X":
+                        top.setItem(slot, background);
+                        break;
+                    case "C":
+                        item = background.clone();
+                        item.setAmount(countdownStart);
+                        top.setItem(slot, item);
+                        countdownSlots.add(slot);
+                        break;
+                    case "B":
+                        int a = random.nextInt(bonus.size());
+                        if(a >= 0) {
+                            final ItemStack b = bonus.get(a);
+                            top.setItem(slot, b);
+                            bonus.remove(b);
+                            bonusSlots.add(slot);
+                        }
+                        break;
+                    case "L":
+                        a = random.nextInt(regular.size());
+                        if(a >= 0) {
+                            final ItemStack r = regular.get(a);
+                            top.setItem(slot, r);
+                            regular.remove(r);
+                            lootSlots.add(slot);
+                        }
+                        break;
+                    default: break;
                 }
             }
         }

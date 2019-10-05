@@ -121,7 +121,6 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         return -1;
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();

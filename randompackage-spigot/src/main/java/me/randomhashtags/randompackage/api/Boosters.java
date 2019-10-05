@@ -151,7 +151,9 @@ public class Boosters extends EventAttributes {
 			if(m != null) {
 				event.setCancelled(true);
 				player.updateInventory();
-				if(activateBooster(player, (Booster) m.getFirst(), (double) m.getSecond(), (long) m.getThird())) removeItem(player, is, 1);
+				if(activateBooster(player, (Booster) m.getFirst(), (double) m.getSecond(), (long) m.getThird())) {
+					removeItem(player, is, 1);
+				}
 			}
 		}
 	}

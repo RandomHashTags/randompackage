@@ -39,7 +39,6 @@ public class CustomBosses extends RPFeature {
 
 	public String getIdentifier() { return "CUSTOM_BOSSES"; }
 	protected RPFeature getFeature() { return getCustomBosses(); }
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();
@@ -63,7 +62,6 @@ public class CustomBosses extends RPFeature {
 		loadBackup();
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (bosses != null ? bosses.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
-	@Override
 	public void unload() {
 		backup();
 		LivingCustomBoss.living = null;

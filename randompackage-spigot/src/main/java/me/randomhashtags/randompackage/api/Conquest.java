@@ -173,7 +173,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         final Chunk c = event.getChunk();
         final LivingConquestChest l = LivingConquestChest.valueOf(c);
         if(l != null && event instanceof Cancellable) {
-            final Cancellable ca = ((Cancellable) event);
+            final Cancellable ca = (Cancellable) event;
             if(!ca.isCancelled()) {
                 ca.setCancelled(true);
             }

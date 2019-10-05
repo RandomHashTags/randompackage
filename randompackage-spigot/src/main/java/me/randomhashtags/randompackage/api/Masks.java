@@ -2,12 +2,15 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.Mask;
+import me.randomhashtags.randompackage.event.MaskApplyEvent;
+import me.randomhashtags.randompackage.event.MaskEquipEvent;
+import me.randomhashtags.randompackage.event.MaskUnequipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
+import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
+import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileMask;
-import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,7 +18,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
@@ -260,57 +265,7 @@ public class Masks extends CustomEnchants {
         }
     }
 
-
-    public void tryToProcMask(Player player, BlockBreakEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, BlockPlaceEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, EntityDeathEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, EntityShootBowEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, FoodLevelChangeEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, DamageEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, PlayerDeathEvent event) {
-        final ItemStack hel = player.getInventory().getHelmet();
-        final Mask m = valueOfMask(hel);
-        if(m != null) {
-            trigger(event, m.getAttributes());
-        }
-    }
-    public void tryToProcMask(Player player, PlayerInteractEvent event) {
+    public void tryToProcMask(Player player, Event event) {
         final ItemStack hel = player.getInventory().getHelmet();
         final Mask m = valueOfMask(hel);
         if(m != null) {

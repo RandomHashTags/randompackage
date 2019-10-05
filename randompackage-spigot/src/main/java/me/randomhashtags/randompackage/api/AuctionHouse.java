@@ -13,7 +13,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +20,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -313,91 +311,96 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             for(int i : slots) top.setItem(i, air);
             final int p = page.get(player), S = auctionHouse.size()-1, starting = (p-1)*(slots.size()-1);
             final String v = viewing.get(player);
-            if(v.equals("CATEGORY_VIEW")) {
-                int cat = 0, cate = 0;
-                HashMap<UMaterial, HashMap<String, List<AuctionedItem>>> y = new HashMap<>();
-                for(UMaterial u : category.keySet()) {
-                    y.put(u, new HashMap<>());
-                    cate += category.get(u).keySet().size();
-                    for(String s : category.get(u).keySet()) {
-                        if(cate > starting && slots.contains(cat)) {
-                            y.get(u).put(s, category.get(u).get(s));
-                            cat++;
-                        }
-                    }
-                }
-                y = y.entrySet().stream().sorted(comparingByKey()).collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
-                int slot = (int) slots.toArray()[0];
-                for(UMaterial u : y.keySet()) {
-                    for(String s : y.get(u).keySet()) {
-                        final String listings = Integer.toString(y.get(u).get(s).size());
-                        BigDecimal lowestPrice = BigDecimal.ZERO;
-                        for(AuctionedItem ai : y.get(u).get(s)) {
-                            final BigDecimal price = ai.price;
-                            if(lowestPrice.equals(BigDecimal.ZERO) || price.doubleValue() < lowestPrice.doubleValue()) {
-                                lowestPrice = price;
+            switch (v) {
+                case "CATEGORY_VIEW":
+                    int cat = 0, cate = 0;
+                    HashMap<UMaterial, HashMap<String, List<AuctionedItem>>> y = new HashMap<>();
+                    for(UMaterial u : category.keySet()) {
+                        y.put(u, new HashMap<>());
+                        cate += category.get(u).keySet().size();
+                        for(String s : category.get(u).keySet()) {
+                            if(cate > starting && slots.contains(cat)) {
+                                y.get(u).put(s, category.get(u).get(s));
+                                cat++;
                             }
                         }
-                        final String lowest = formatBigDecimal(lowestPrice);
-                        item = u.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
-                        itemMeta.setDisplayName(s);
-                        for(String x : categoryFormat) {
-                            lore.add(x.replace("{LISTINGS}", listings).replace("{LOWEST_PRICE}", lowest));
-                        }
-                        itemMeta.setLore(lore); lore.clear();
-                        item.setItemMeta(itemMeta);
-                        top.setItem(slot, item);
-                        if(slot+1 < slots.size()) slot = (int) slots.toArray()[slot+1];
                     }
-                }
-                setPages(v, cate, top, air, p);
-            } else if(v.equals("AUCTION_HOUSE")) {
-                setPages(v, 0, top, air, p);
-                final UUID u = player.getUniqueId();
-                int ahitem = starting+(p == 1 ? 0 : 1);
-                for(int i : slots) {
-                    if(ahitem <= S) {
-                        final long l = (long) auctionHouse.keySet().toArray()[ahitem];
-                        final AuctionedItem a = auctionHouse.get(l);
-                        final UUID auctioner = a.auctioner;
-                        final String pr = formatBigDecimal(a.price), seller = Bukkit.getOfflinePlayer(auctioner).getName();
-                        item = a.item(); itemMeta = item.getItemMeta();
-                        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                        for(String s : format) {
-                            if(s.equals("{STATUS}")) {
-                                lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
-                            } else {
-                                lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", pr).replace("{SELLER}", seller)));
+                    y = y.entrySet().stream().sorted(comparingByKey()).collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
+                    int slot = (int) slots.toArray()[0];
+                    for(UMaterial u : y.keySet()) {
+                        for(String s : y.get(u).keySet()) {
+                            final String listings = Integer.toString(y.get(u).get(s).size());
+                            BigDecimal lowestPrice = BigDecimal.ZERO;
+                            for(AuctionedItem ai : y.get(u).get(s)) {
+                                final BigDecimal price = ai.price;
+                                if(lowestPrice.equals(BigDecimal.ZERO) || price.doubleValue() < lowestPrice.doubleValue()) {
+                                    lowestPrice = price;
+                                }
                             }
+                            final String lowest = formatBigDecimal(lowestPrice);
+                            item = u.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
+                            itemMeta.setDisplayName(s);
+                            for(String x : categoryFormat) {
+                                lore.add(x.replace("{LISTINGS}", listings).replace("{LOWEST_PRICE}", lowest));
+                            }
+                            itemMeta.setLore(lore); lore.clear();
+                            item.setItemMeta(itemMeta);
+                            top.setItem(slot, item);
+                            if(slot+1 < slots.size()) slot = (int) slots.toArray()[slot+1];
                         }
-                        itemMeta.setLore(lore); lore.clear();
-                        item.setItemMeta(itemMeta);
-                        top.setItem(i, item);
-                        ahitem++;
                     }
-                }
-            } else if(v.equals("COLLECTION_BIN")) {
-                final List<AuctionedItem> cb = getCollectionBin(player);
-                int slot = (int) slots.toArray()[0];
-                for(AuctionedItem a : cb) {
-                    if(slots.contains(slot)) {
-                        final String price = formatBigDecimal(a.price);
-                        item = a.item(); itemMeta = item.getItemMeta(); lore.clear();
-                        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                        final boolean c = a.claimable;
-                        final List<String> type = c ? collectionBinClaim : collectionBinInAuction;
-                        final String t = getRemainingTime(a.auctionTime+(c ? collectionbinExpiration : auctionExpiration)-System.currentTimeMillis());
-                        for(String s : type) {
-                            lore.add(s.replace("{PRICE}", price).replace("{TIME}", t));
+                    setPages(v, cate, top, air, p);
+                    break;
+                case "AUCTION_HOUSE":
+                    setPages(v, 0, top, air, p);
+                    final UUID u = player.getUniqueId();
+                    int ahitem = starting+(p == 1 ? 0 : 1);
+                    for(int i : slots) {
+                        if(ahitem <= S) {
+                            final long l = (long) auctionHouse.keySet().toArray()[ahitem];
+                            final AuctionedItem a = auctionHouse.get(l);
+                            final UUID auctioner = a.auctioner;
+                            final String pr = formatBigDecimal(a.price), seller = Bukkit.getOfflinePlayer(auctioner).getName();
+                            item = a.item(); itemMeta = item.getItemMeta();
+                            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                            for(String s : format) {
+                                if(s.equals("{STATUS}")) {
+                                    lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
+                                } else {
+                                    lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", pr).replace("{SELLER}", seller)));
+                                }
+                            }
+                            itemMeta.setLore(lore); lore.clear();
+                            item.setItemMeta(itemMeta);
+                            top.setItem(i, item);
+                            ahitem++;
                         }
-                        itemMeta.setLore(lore); lore.clear();
-                        item.setItemMeta(itemMeta);
-                        top.setItem(slot, item);
-                        if(slot+1 < slots.size()) slot = (int) slots.toArray()[slot+1];
-                        else slot = -1;
                     }
-                }
-                setPages(v, cb.size(), top, air, p);
+                    break;
+                case "COLLECTION_BIN":
+                    final List<AuctionedItem> cb = getCollectionBin(player);
+                    slot = (int) slots.toArray()[0];
+                    for(AuctionedItem a : cb) {
+                        if(slots.contains(slot)) {
+                            final String price = formatBigDecimal(a.price);
+                            item = a.item(); itemMeta = item.getItemMeta(); lore.clear();
+                            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                            final boolean c = a.claimable;
+                            final List<String> type = c ? collectionBinClaim : collectionBinInAuction;
+                            final String t = getRemainingTime(a.auctionTime+(c ? collectionbinExpiration : auctionExpiration)-System.currentTimeMillis());
+                            for(String s : type) {
+                                lore.add(s.replace("{PRICE}", price).replace("{TIME}", t));
+                            }
+                            itemMeta.setLore(lore); lore.clear();
+                            item.setItemMeta(itemMeta);
+                            top.setItem(slot, item);
+                            if(slot+1 < slots.size()) slot = (int) slots.toArray()[slot+1];
+                            else slot = -1;
+                        }
+                    }
+                    setPages(v, cb.size(), top, air, p);
+                    break;
+                default: break;
             }
             for(int i = 0; i < top.getSize(); i++) {
                 if(!slots.contains(i)) {
@@ -635,21 +638,21 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         final String T = type;
         type = type.toUpperCase();
         final int page = this.page.getOrDefault(player, 0), p = (page-1)*slots.size();
-        if(type.equals("COLLECTION_BIN")) {
-            final List<AuctionedItem> bin = getCollectionBin(player);
-            return bin.size() > p+slot ? (AuctionedItem) bin.toArray()[p+slot] : null;
-        } else if(type.equals("AUCTION_HOUSE")) {
-            final Collection<AuctionedItem> ah = auctionHouse.values();
-            return ah.size() > p+slot ? (AuctionedItem) ah.toArray()[p+slot] : null;
-        } else if(type.startsWith("CATEGORY")) {
-            final UMaterial u = viewingCategory.get(player);
-            final String a = "CATEGORY_" + u.name() + "_";
-            final String[] b = T.split(a);
-            String s = b.length == 1 ? null : b[1];
-            final List<AuctionedItem> i = category.get(u).get(s);
-            return slot < i.size() ? i.get(slot) : null;
+        switch (type) {
+            case "COLLECTION_BIN":
+                final List<AuctionedItem> bin = getCollectionBin(player);
+                return bin.size() > p+slot ? (AuctionedItem) bin.toArray()[p+slot] : null;
+            case "AUCTION_HOUSE":
+                final Collection<AuctionedItem> ah = auctionHouse.values();
+                return ah.size() > p+slot ? (AuctionedItem) ah.toArray()[p+slot] : null;
+            default:
+                final UMaterial u = viewingCategory.get(player);
+                final String a = "CATEGORY_" + u.name() + "_";
+                final String[] b = T.split(a);
+                String s = b.length == 1 ? null : b[1];
+                final List<AuctionedItem> i = category.get(u).get(s);
+                return slot < i.size() ? i.get(slot) : null;
         }
-        return null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

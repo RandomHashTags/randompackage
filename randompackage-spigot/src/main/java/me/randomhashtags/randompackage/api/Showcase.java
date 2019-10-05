@@ -202,7 +202,6 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			}
         }
     }
-	
 
 	public void confirmAddition(Player player, ItemStack item) {
 		if(hasPermission(player, "RandomPackage.showcase.add", true)) {

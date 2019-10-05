@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api.addon;
+package me.randomhashtags.randompackage.dev.nearFinished;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;

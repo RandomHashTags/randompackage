@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.util.addon;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitMastery;
 import me.randomhashtags.randompackage.addon.Kits;
-import me.randomhashtags.randompackage.api.addon.KitsMastery;
+import me.randomhashtags.randompackage.dev.nearFinished.KitsMastery;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

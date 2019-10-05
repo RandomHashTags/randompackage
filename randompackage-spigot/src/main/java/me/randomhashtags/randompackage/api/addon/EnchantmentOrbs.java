@@ -60,7 +60,6 @@ public class EnchantmentOrbs extends RPFeature {
         enchantmentorbs = null;
     }
 
-
     public void applyEnchantmentOrb(Player player, ItemStack is, ItemStack enchantmentorb, EnchantmentOrb orb) {
         EnchantmentOrb prevOrb = null;
         final int percent = getRemainingInt(enchantmentorb.getItemMeta().getLore().get(orb.getPercentLoreSlot()));

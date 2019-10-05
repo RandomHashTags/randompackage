@@ -68,23 +68,23 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
 			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", message.split("\\[").length > 0 ? message.split("\\[")[0] : "")), suffix = new TextComponent(message.split("]").length > 1 ? message.split("]")[1] : "");
+			event.setCancelled(true);
 			if(brag) {
-				event.setCancelled(true);
 				if(hasPermission(player, "RandomPackage.chat.brag", false)) {
 					sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
 				} else {
 					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
 				}
-			}
-			if(item) {
-				event.setCancelled(true);
+			} else {
 				if(hasPermission(player, "RandomPackage.chat.item", false)) {
 					ItemStack i = getItemInHand(player);
 					if(i != null && !i.getType().equals(Material.AIR)) {
 						String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
 						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
 					}
-				} else sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
+				} else {
+					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
+				}
 			}
 		}
 	}
@@ -93,8 +93,9 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		final TextComponent m = new TextComponent(message);
 		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
 		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId().toString()));
-		for(Player p : recipients)
+		for(Player p : recipients) {
 			send(player, p, prefix, m, suffix);
+		}
 		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
 	}
 	public void sendItemMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
@@ -103,8 +104,9 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		final String u = asNMSCopy(i);
 		if(u == null || u.isEmpty()) return;
 		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(u).create()));
-		for(Player p : recipients)
+		for(Player p : recipients) {
 			send(player, p, prefix, m, suffix);
+		}
 		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
 	}
 	public void sendHoverMessage(Player player, String message, List<String> hoverMessage, HashMap<String, List<String>> replacements) {
