@@ -177,7 +177,7 @@ vkits:
       - "&7&l**&r &f{PLAYER}'s {VKIT}&r &7/vkit has evolved to level &f&n{LEVEL}&r&7!"
     upgrade:
       - " "
-      - "&e&l>>&r &eCongratulations! Your &r{VKIT}&r &e/vkit is now level &n{LEVEL}&r&e!"
+      - "&e&l>>&r &eCongratulations! Your &r{NAME}&r &e/vkit is now level &n{LEVEL}&r&e!"
       - "&7You will now receive higher enchantment levels the next time you claim this /vkit!"
   #
   permissions:

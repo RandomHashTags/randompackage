@@ -118,6 +118,7 @@ public class KitsEvolution extends Kits {
     public List<String> getNotInWarzoneMsg() { return config.getStringList("vkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("vkits.messages.already have max"); }
     public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("vkits.messages.redeem"); }
+    public List<String> getUpgradeMsg() { return config.getStringList("vkits.messages.upgrade"); }
     public List<String> getResetTargetDoesntExist() { return config.getStringList("vkits.messages.target doesnt exist"); }
     public List<String> getResetSuccess() { return config.getStringList("vkits.messages.success"); }
     public ItemStack getPreviewBackground() { return previewBackground.clone(); }
@@ -143,7 +144,7 @@ public class KitsEvolution extends Kits {
                 final CustomKit v = valueOfCustomKit(i, CustomKitEvolution.class);
                 if(v != null) {
                     final String identifier = v.getIdentifier();
-                    final int lvl = tiers.getOrDefault(tiers.get(v), player.hasPermission("RandomPackage.kit." + identifier) ? 1 : 0);
+                    final int lvl = tiers.getOrDefault(v, player.hasPermission("RandomPackage.kit." + identifier) ? 1 : 0);
                     final boolean hasPerm = hasPermissionToObtain(player, v), cooldown = cooldowns.containsKey(v) && cooldowns.get(v) > System.currentTimeMillis();
                     if(!hasPerm) item = locked.clone();
                     else if(cooldown) setCooldown(player, v);
@@ -259,7 +260,7 @@ public class KitsEvolution extends Kits {
                     if(newlvl > vkit.getMaxLevel()) return;
                     final String name = vkit.getItem().getItemMeta().getDisplayName();
                     pdata.getKitLevels().put(vkit, newlvl);
-                    for(String s : config.getStringList("vkits.messages.upgrade"))
+                    for(String s : getUpgradeMsg())
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
                     for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
                         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
@@ -326,7 +327,7 @@ public class KitsEvolution extends Kits {
                         kits.put(e, lvl+1);
                     }
                     removeItem(player, is, 1);
-                    for(String s : config.getStringList("vkits.messages.upgrade"))
+                    for(String s : getUpgradeMsg())
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
                     for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
                         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));

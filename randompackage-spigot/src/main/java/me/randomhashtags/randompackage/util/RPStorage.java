@@ -736,11 +736,8 @@ public abstract class RPStorage extends RegionalAPI {
     public CustomKit valueOfCustomKit(int slot, Class<?> type) {
         if(kits != null && type != null) {
             for(CustomKit k : kits.values()) {
-                if(k.getSlot() == slot) {
-                    final boolean isKit = type.isAssignableFrom(k.getClass());
-                    if(isKit) {
-                        return k;
-                    }
+                if(k.getSlot() == slot && type.isAssignableFrom(k.getClass())) {
+                    return k;
                 }
             }
         }
@@ -748,8 +745,9 @@ public abstract class RPStorage extends RegionalAPI {
     }
     public CustomKitEvolution valueOfCustomKitUpgradeGem(ItemStack is) {
         if(is != null && kits != null) {
+            final Class clazz = CustomKitEvolution.class;
             for(CustomKit k : kits.values()) {
-                if(k instanceof CustomKitEvolution) {
+                if(k.getClass().isAssignableFrom(clazz)) {
                     final CustomKitEvolution e = (CustomKitEvolution) k;
                     final ItemStack i = e.getUpgradeGem();
                     if(i != null && i.isSimilar(is)) {
@@ -762,9 +760,9 @@ public abstract class RPStorage extends RegionalAPI {
     }
     public CustomKitMastery valueOfCustomKitRedeem(ItemStack is) {
         if(kits != null && is != null) {
-            final Class a = CustomKitMastery.class;
             for(CustomKit k : kits.values()) {
-                if(k.getClass().isInstance(a)) {
+                final boolean istype = k instanceof CustomKitMastery;
+                if(istype) {
                     final CustomKitMastery m = (CustomKitMastery) k;
                     final ItemStack r = m.getRedeem();
                     if(r != null && r.isSimilar(is)) {
@@ -775,6 +773,7 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
+
     public Dungeon valueOfDungeonFromKey(ItemStack is) {
         if(dungeons != null && is != null) {
             for(Dungeon d : dungeons.values()) {

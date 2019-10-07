@@ -127,6 +127,7 @@ public class KitsGlobal extends Kits {
     public List<String> getNotInWarzoneMsg() { return config.getStringList("gkits.messages.not in warzone"); }
     public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("gkits.messages.already have max"); }
     public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("gkits.messages.redeem"); }
+    public List<String> getUpgradeMsg() { return config.getStringList("gkits.messages.upgrade"); }
     public List<String> getResetTargetDoesntExist() { return config.getStringList("gkits.messages.target doesnt exist"); }
     public List<String> getResetSuccess() { return config.getStringList("gkits.messages.success"); }
     public ItemStack getPreviewBackground() { return previewBackground.clone(); }

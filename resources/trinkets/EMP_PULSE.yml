@@ -18,4 +18,4 @@ item:
     - "&3&nCooldown:&r &b300s"
 #
 attributes:
-  - ""
+  - "PlayerInteract;TrinketOnCooldown=false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:300"

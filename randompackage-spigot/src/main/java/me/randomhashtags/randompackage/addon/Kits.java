@@ -57,6 +57,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     public abstract List<String> getNotInWarzoneMsg();
     public abstract List<String> getAlreadyHaveMaxTierMsg();
     public abstract List<String> getRedeemFallenHeroGemMsg();
+    public abstract List<String> getUpgradeMsg();
     public abstract List<String> getResetTargetDoesntExist();
     public abstract List<String> getResetSuccess();
     public abstract ItemStack getPreviewBackground();
@@ -119,20 +120,30 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
     public final void tryIncreaseTier(Player player, ItemStack is, CustomKit kit) {
         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-        final String n = kit.getIdentifier();
+        final FallenHero fh = kit.getFallenHero();
+        final String n = kit.getIdentifier(), name = fh != null ? kit.getFallenHeroName() : kit.getItem().getItemMeta().getDisplayName();
         final HashMap<String, String> replacements = new HashMap<>();
         final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
-        if(!tiers.containsKey(kit) && player.hasPermission("RandomPackage.kit." + n)) tiers.put(kit, 0);
-        if(tiers.containsKey(kit)) {
+        boolean diduse = false;
+        if(!tiers.containsKey(kit) && player.hasPermission("RandomPackage.kit." + n)) {
+            diduse = true;
+            tiers.put(kit, 0);
+        }
+        replacements.put("{NAME}", name);
+        if(!diduse && tiers.containsKey(kit)) {
             final int l = tiers.get(kit);
-            if(l != kit.getMaxLevel()) {
-                tiers.put(kit, l+1);
+            if(l < kit.getMaxLevel()) {
+                final int newlevel = l+1;
+                final String s = Integer.toString(newlevel);
+                replacements.put("{LEVEL}", s);
+                replacements.put("{TIER}", s);
+                tiers.put(kit, newlevel);
+                sendStringListMessage(player, getUpgradeMsg(), replacements);
             } else {
                 sendStringListMessage(player, getAlreadyHaveMaxTierMsg(), null);
                 return;
             }
         } else {
-            replacements.put("{NAME}", kit.getFallenHeroName());
             tiers.put(kit, 1);
             sendStringListMessage(player, getRedeemFallenHeroGemMsg(), replacements);
         }

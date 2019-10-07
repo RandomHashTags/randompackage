@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.nearFinished;
+package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;
@@ -9,6 +9,7 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitMastery;
 import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -58,6 +59,7 @@ public class KitsMastery extends Kits {
         gui = new UInventory(null, config.getInt("mkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("mkits.gui.title")));
         background = d(config, "mkits.gui.background");
 
+        final List<ItemStack> gems = new ArrayList<>();
         final Inventory mi = gui.getInventory();
         final File folder = new File(rpd + separator + "kits");
         int loaded = 0;
@@ -66,10 +68,12 @@ public class KitsMastery extends Kits {
                 if(f.getName().startsWith("MKIT_")) {
                     final FileKitMastery m = new FileKitMastery(f);
                     mi.setItem(m.getSlot(), m.getItem());
+                    gems.add(m.getRedeem());
                     loaded++;
                 }
             }
         }
+        addGivedpCategory(gems, UMaterial.DIAMOND, "Mkit Gems", "Givedp: Mkit Gems");
         for(int i = 0; i < gui.getSize(); i++) {
             if(mi.getItem(i) == null)
                 mi.setItem(i, background);
@@ -79,7 +83,9 @@ public class KitsMastery extends Kits {
     public void unload() {
         if(kits != null) {
             for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof CustomKitMastery) kits.remove(k.getIdentifier());
+                if(k instanceof CustomKitMastery) {
+                    kits.remove(k.getIdentifier());
+                }
             }
         }
         unloadKitUtils();
@@ -91,6 +97,7 @@ public class KitsMastery extends Kits {
     public List<String> getNotInWarzoneMsg() { return null; }
     public List<String> getAlreadyHaveMaxTierMsg() { return null; }
     public List<String> getRedeemFallenHeroGemMsg() { return null; }
+    public List<String> getUpgradeMsg() { return null; }
     public List<String> getResetTargetDoesntExist() { return null; }
     public List<String> getResetSuccess() { return null; }
     public ItemStack getPreviewBackground() { return null; }
