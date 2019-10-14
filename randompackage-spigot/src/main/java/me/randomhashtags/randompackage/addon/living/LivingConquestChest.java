@@ -2,8 +2,9 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.ConquestChest;
-import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
+import me.randomhashtags.randompackage.api.Conquest;
+import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -110,6 +111,7 @@ public class LivingConquestChest {
                 final List<String> msg = health <= 0.00 ? type.getUnlockedMsg() : type.getHealthMsg();
                 if(health <= 0.00) {
                     conquerer = player.getName();
+                    Conquest.getConquest().lastConquerer = player.getName();
                     delete(true);
                 }
                 for(Entity e : nearby)
@@ -129,20 +131,6 @@ public class LivingConquestChest {
             }
         }
         living.remove(this);
-        random = null;
-        scheduler = null;
-        location = null;
-        x = 0;
-        y = 0;
-        z = 0;
-        announceTask = 0;
-        despawnTask = 0;
-        minutes = 0;
-        type = null;
-        spawnedTime = 0;
-        damageDelayExpire = 0;
-        health = 0;
-        conquerer = null;
         if(living.isEmpty()) {
             living = null;
             pluginmanager = null;

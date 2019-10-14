@@ -39,7 +39,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         if(l == 0 && player != null) {
             if(hasPermission(sender, "RandomPackage." + c, true))
                 view(player);
-        } else if(args[0].equals("reset") && type != null) {
+        } else if(l >= 1 && args[0].equals("reset") && type != null) {
             if(l == 2 && hasPermission(sender, "RandomPackage." + c + ".reset", true)) resetAll(player, args[1], type);
             else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) reset(player, args[1], getKit(args[2]));
         }

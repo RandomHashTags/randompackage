@@ -38,7 +38,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public FileConfiguration config;
     private List<Integer> tasks;
-    private LivingConquestChest last;
+    private long lastSpawnTime;
+    private Location lastLocation;
+    public String lastConquerer;
 
     public String getIdentifier() { return "CONQUEST"; }
     protected RPFeature getFeature() { return getConquest(); }
@@ -86,7 +88,10 @@ public class Conquest extends RPFeature implements CommandExecutor {
                     final int xMin = Integer.parseInt(sr[1].split(":")[0]), xMax = Integer.parseInt(sr[1].split(":")[1]), x = xMin + random.nextInt(xMax-xMin+1), zMin = Integer.parseInt(sr[2].split(":")[0]), zMax = Integer.parseInt(sr[2].split(":")[1]), z = zMin + random.nextInt(zMax-zMin+1);
                     final Location l = new Location(w, x, 256, z);
                     l.setY(w.getHighestBlockYAt(l));
-                    last = c.spawn(l);
+                    c.spawn(l);
+                    lastSpawnTime = System.currentTimeMillis();
+                    lastLocation = l;
+                    lastConquerer = null;
                 }, spawninterval, spawninterval));
             }
         }
@@ -183,11 +188,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
     public void viewLast(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
-            final boolean j = last != null;
-            final Location L = j ? last.location : null;
-            replacements.put("{LAST}", j ? (System.currentTimeMillis()-last.spawnedTime) + "ms" : "N/A");
-            replacements.put("{LOCATION}", j ? L.getBlockX() + "x " + L.getBlockY() + "y " + L.getBlockZ() + "z" : "N/A");
-            replacements.put("{CONQUERER}", j && last.conquerer != null ? last.conquerer : "N/A");
+            replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
+            replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
+            replacements.put("{CONQUERER}", lastConquerer != null ? lastConquerer : "N/A");
             sendStringListMessage(sender, config.getStringList("messages.command"), replacements);
         }
     }
@@ -200,7 +203,10 @@ public class Conquest extends RPFeature implements CommandExecutor {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
             final List<ConquestChest> chests = new ArrayList<>(conquestchests.values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
-            last = chests.get(random.nextInt(chests.size())).spawn(l);
+            chests.get(random.nextInt(chests.size())).spawn(l);
+            lastSpawnTime = System.currentTimeMillis();
+            lastLocation = l;
+            lastConquerer = null;
         }
     }
 }

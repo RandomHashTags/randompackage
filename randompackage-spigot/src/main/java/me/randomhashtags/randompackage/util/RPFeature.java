@@ -173,13 +173,17 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             String P = PP.toLowerCase();
 
             int amount = config != null && config.get(path + ".amount") != null ? config.getInt(path + ".amount") : 1;
-            if(P.toLowerCase().contains(";amount=")) {
+            if(P.contains(";amount=")) {
                 final String A = P.split("=")[1];
                 final boolean B = P.contains("-");
                 final int min = B ? Integer.parseInt(A.split("-")[0]) : 0;
                 amount = B ? min+random.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
                 path = path.split(";amount=")[0];
                 P = P.split(";")[0];
+            }
+            final boolean hasChance = P.contains("chance=");
+            if(hasChance && random.nextInt(100) > Integer.parseInt(P.split("chance=")[1].split(";")[0])) {
+                return null;
             }
             if(P.contains("spawner") && !P.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
                 return getSpawner(P);
