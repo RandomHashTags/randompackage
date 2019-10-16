@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Lifebloom"
 lore:
-- "&eCompletely heals allies and truces on"
-- "&eyour death."
+  - "&eCompletely heals allies and truces on"
+  - "&eyour death."
 #
 max level: 5
 applies to: "leggings"
@@ -13,4 +13,4 @@ alchemist: "4000:5000:6000:7000"
 tinkerer: "60:72:84:96:108"
 #
 attributes:
-- "PlayerDeath;40+(10*level);NearbyAllies(player:level+8:level+8:level+8)Heal=40"
+  - "PlayerDeath;40+(10*level);NearbyPlayerAllies(level+8:level+8:level+8)Heal=40"

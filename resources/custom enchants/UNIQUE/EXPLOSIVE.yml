@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Explosive"
 lore:
-- "&eExplosive arrows."
+  - "&eExplosive arrows."
 #
 max level: 5
 applies to: "bow"
@@ -12,4 +12,4 @@ alchemist: "1000:1750:2500:3250"
 tinkerer: "113:137:161:185:209"
 #
 attributes:
-- "ArrowLand;chance=20+(10*level);Explode=@Projectile:2:false:false}"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=20+(10*level);Explode=@Projectile:2:false:false}"

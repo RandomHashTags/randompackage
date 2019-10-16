@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Nimble"
 lore:
-- "&eIncreases mcMMO XP gained in Acrobatics"
-- "&ewhile equipped."
+  - "&eIncreases mcMMO XP gained in Acrobatics"
+  - "&ewhile equipped."
 #
 max level: 5
 applies to: "boots"
@@ -13,4 +13,4 @@ alchemist: "6000:6500:7000:7500"
 tinkerer: "84:93:102:111:120"
 #
 attributes:
-- "MCMMOPlayerXpGained;setGainedXP=xp*(1+(.05*level))"
+  - "MCMMOPlayerXpGained;SetGainedXP=xp*(1+(.05*level))"

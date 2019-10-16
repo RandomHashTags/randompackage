@@ -3,8 +3,8 @@ enabled: false
 #
 name: "Self Destruct"
 lore:
-- "&eWhen close to death, buffed TNT spawns"
-- "&earound you."
+  - "&eWhen close to death, buffed TNT spawns"
+  - "&earound you."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"
@@ -13,4 +13,4 @@ alchemist: "1500:2000"
 tinkerer: "54:65:76"
 #
 attributes:
-- "isDamaged;chance=20*level;"
+  - "isDamaged;chance=20*level;"

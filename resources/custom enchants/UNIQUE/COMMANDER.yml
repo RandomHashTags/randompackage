@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Commander"
 lore:
-- "&eNearby allies are given haste."
+  - "&eNearby allies are given haste."
 #
 max level: 5
 applies to: "helmet;chestplate;leggings;boots"
@@ -12,4 +12,4 @@ alchemist: "1000:1500:2000:2500"
 tinkerer: "116:137:158:179:200"
 #
 attributes:
-- "Timer(200);NearbyAllies(Player:5+(2*level):5+(2*level):5+(2*level))AddPotionEffect=haste:0:30*level"
+  - "Timer(200);NearbyAllies(Player:5+(2*level):5+(2*level):5+(2*level))AddPotionEffect=haste:0:30*level"
