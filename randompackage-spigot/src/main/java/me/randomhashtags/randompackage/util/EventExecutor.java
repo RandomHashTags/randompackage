@@ -8,10 +8,7 @@ import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
-import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
-import me.randomhashtags.randompackage.event.enchant.TinkererTradeEvent;
-import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
+import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.event.lootbag.LootbagClaimEvent;
@@ -142,7 +139,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
         final HashMap<String, Entity> e = new HashMap<>();
         final List<Entity> nearby = new ArrayList<>(center.getWorld().getNearbyEntities(center, radiusX, radiusY, radiusZ));
-        for(int i = 1; i <= nearby.size(); i++) {
+        for(int i = 0; i < nearby.size(); i++) {
             e.put("Nearby" + i, nearby.get(i));
         }
         return e;
@@ -255,6 +252,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             final List<Boolean> checks = new ArrayList<>();
             final String e = event.getEventName().split("Event")[0].toLowerCase();
             final boolean cancellable = event instanceof Cancellable, cancelled = cancellable && ((Cancellable) event).isCancelled();
+            final List<String> entityKeys = new ArrayList<>(entities.keySet());
             for(String s : attributes) {
                 final String[] semi = s.split(";");
                 final String first = semi[0].toLowerCase();
@@ -266,8 +264,9 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                     for(String c : s.split(semi[0] + ";")[1].split(";")) {
                         if(c.contains("=")) {
                             final String[] values = c.split("="), fvalues = values[0].split("\\(");
-                            String value1 = values[1], string = values[0].toUpperCase();
-                            for(String entity : entities.keySet()) {
+                            final String value1 = values[1];
+                            String string = values[0].toUpperCase();
+                            for(String entity : entityKeys) {
                                 final String E = entity.toUpperCase();
                                 if(string.startsWith("NEARBY" + E)) {
                                     final String radius = fvalues[1].split("\\)")[0];
@@ -275,10 +274,12 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                                     if(ally || enemy || truce || member) {
                                         string = string.replace("NEARBY" + E + (ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS") + "(" + radius + ")", "");
                                         final Entity en = entities.get(entity);
+                                        entities.remove(entity);
                                         if(en instanceof Player) {
                                             final Player player = (Player) en;
                                             final String[] a = radius.split(":");
-                                            final double x = evaluate(a[0]), y = evaluate(a[1]), z = evaluate(a[2]);
+                                            final int length = a.length;
+                                            final double x = evaluate(a[0]), y = length >= 2 ? evaluate(a[1]) : x, z = length >= 3 ? evaluate(a[2]) : x;
                                             final HashMap<String, Entity> nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : "MEMBER");
                                             entities.putAll(nearby);
                                             for(String n : nearby.keySet()) {
@@ -416,6 +417,8 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
 
             case "dungeonlootbagclaim":
             case "kothlootbagclaim":
+
+            case "customenchanttimer":
 
             case "armorsetequip":
             case "armorsetunequip":
@@ -618,9 +621,11 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {
-                final int lvl = e.get(enchant);
-                final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)};
-                trigger(event, entities, replaceCE(e.get(enchant), enchant.getAttributes()), getReplacements(getReplacements(event), replacements));
+                if(enchant.isOnCorrectItem(is)) {
+                    final int lvl = e.get(enchant);
+                    final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)};
+                    trigger(event, entities, replaceCE(e.get(enchant), enchant.getAttributes()), getReplacements(getReplacements(event), replacements));
+                }
             }
         }
     }

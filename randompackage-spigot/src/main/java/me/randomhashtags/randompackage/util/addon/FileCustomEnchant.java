@@ -10,7 +10,7 @@ import java.util.List;
 public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     private List<String> lore;
     private String value;
-    private List<String> appliesto;
+    private List<String> appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 
     public FileCustomEnchant(File f) {
@@ -67,5 +67,8 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
         }
         return value;
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public List<String> getAttributes() {
+        if(attributes == null) attributes = yml.getStringList("attributes");
+        return attributes;
+    }
 }

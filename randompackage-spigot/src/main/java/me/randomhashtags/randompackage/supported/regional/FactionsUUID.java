@@ -45,7 +45,9 @@ public final class FactionsUUID extends Reflect implements Regional {
         relations = new HashMap<>();
         try {
             legacy = Class.forName("com.massivecraft.factions.struct.Relation");
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+            legacy = null;
+        }
     }
     public void unload() {
     }

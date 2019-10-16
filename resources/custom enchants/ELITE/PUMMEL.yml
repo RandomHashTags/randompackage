@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Pummel"
 lore:
-- "&eChance to slow down nearby enemy players"
-- "&efor a short period."
+  - "&eChance to slow down nearby enemy players"
+  - "&efor a short period."
 #
 max level: 3
 applies to: "_axe"
@@ -13,4 +13,4 @@ alchemist: "2600:3300"
 tinkerer: "59:70:81"
 #
 attributes:
-- "PvAny;chance=11+(3*level);NearbyEnemies(Damager:7+level:7+level:7+level)AddPotionEffect=slowness:level:20*(2*level);DamagerSendMessage=&b&l** PUMMEL **"
+  - "PvAny;chance=11+(3*level);NearbyDamagerEnemies(7+level)AddPotionEffect=slowness:level:20*(2*level);DamagerSendMessage=&b&l** PUMMEL **"

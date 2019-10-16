@@ -70,6 +70,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private List<Player> invAccepting;
     private List<String> noMoreEnchantsAllowed;
 
+    private HashMap<CustomEnchant, Integer> timedEnchants;
+
     public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
     protected RPFeature getFeature() { return getCustomEnchants(); }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -259,8 +261,11 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             otherdata.set("saved default custom enchants", true);
             saveOtherData();
         }
+
+        timedEnchants = new HashMap<>();
         final String p = rpd + separator + "custom enchants";
         final List<ItemStack> raritybooks = new ArrayList<>();
+        final HashMap<String, Integer> enchantTicks = new HashMap<>();
         final File folder = new File(p);
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
@@ -280,6 +285,33 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                                 if(!ff.getName().startsWith("_settings")) {
                                     final FileCustomEnchant e = new FileCustomEnchant(ff);
                                     rarity.getEnchants().add(e);
+                                    for(String s : e.getAttributes()) {
+                                        final String[] split = s.split(";");
+                                        final String l = split[0].toLowerCase();
+                                        if(l.equals("customenchanttimer")) {
+                                            final int ticks = (int) evaluate(split[1].split("=")[1]);
+                                            final int id = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+                                                final Collection<? extends Player> online = Bukkit.getOnlinePlayers();
+                                                for(Player player : online) {
+                                                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchant = new LinkedHashMap<>();
+                                                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
+                                                    for(ItemStack is : enchants.keySet()) {
+                                                        if(is != null && enchants.get(is).containsKey(e)) {
+                                                            enchant.put(is, new LinkedHashMap<>());
+                                                            enchant.get(is).put(e, enchants.get(is).get(e));
+                                                        }
+                                                    }
+                                                    if(!enchant.isEmpty()) {
+                                                        final CustomEnchantTimerEvent event = new CustomEnchantTimerEvent(player, enchant);
+                                                        pluginmanager.callEvent(event);
+                                                        triggerCustomEnchants(event, getEntities("Player", player), enchant);
+                                                    }
+                                                }
+                                            }, ticks, ticks);
+                                            timedEnchants.put(e, id);
+                                            enchantTicks.put(rarity.getApplyColors() + e.getName(), ticks);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -287,6 +319,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 }
             }
         }
+        sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
 
         boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
@@ -323,6 +356,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + enabled.size() + "e, &c" + disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        for(CustomEnchant e : timedEnchants.keySet()) {
+            scheduler.cancelTask(timedEnchants.get(e));
+        }
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
@@ -443,7 +479,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity();
         if(entity instanceof LivingEntity && canProcOn(entity)) {
-            Player damager = event.getDamager() instanceof Player ? (Player) event.getDamager() : null;
+            final Entity damagerr = event.getDamager();
+            Player damager = damagerr instanceof Player ? (Player) damagerr : null;
             if(damager != null) {
                 final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
                 pluginmanager.callEvent(e);
@@ -452,7 +489,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 triggerCustomEnchants(e, getEntities(event), enchants);
                 event.setDamage(e.getDamage());
             }
-            if(entity instanceof Player && event.getDamager() instanceof LivingEntity && !(event.getDamager() instanceof TNTPrimed) && !(event.getDamager() instanceof Creeper)) {
+            if(entity instanceof Player && damagerr instanceof LivingEntity && !(damagerr instanceof TNTPrimed) && !(damagerr instanceof Creeper)) {
                 final Player victim = (Player) entity;
                 final LivingEntity d = (LivingEntity) event.getDamager();
                 final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
@@ -467,7 +504,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 if(L != null) {
                     final LivingCustomEnchantEntity cee = L.getOrDefault(entity.getUniqueId(), null);
                     if(cee != null) {
-                        final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, event.getDamager(), event.getFinalDamage(), event.getDamage());
+                        final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, damagerr, event.getFinalDamage(), event.getDamage());
                         pluginmanager.callEvent(e);
                         if(!e.isCancelled()) {
                             event.setDamage(e.initialdamage);

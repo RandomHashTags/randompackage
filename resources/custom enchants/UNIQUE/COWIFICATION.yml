@@ -12,5 +12,5 @@ alchemist: "750:900"
 tinkerer: "104:129:154"
 #
 attributes:
-  - "ShootBow;"
-  - "ArrowLand;"
+  - "EntityShootBow;"
+  - "ProjectileHit;"

@@ -12,7 +12,8 @@ public class Heal extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof LivingEntity) {
                 final LivingEntity l = (LivingEntity) e;
-                final double total = evaluate(recipientValues.get(e).replace("hp", Double.toString(l.getHealth())));
+                final String value = recipientValues.get(e).replace("hp", Double.toString(l.getHealth()));
+                final double total = evaluate(value);
                 l.setHealth(Math.min(l.getMaxHealth(), total));
             }
         }

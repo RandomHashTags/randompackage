@@ -16,5 +16,5 @@ alchemist: "8500:13500"
 tinkerer: "190:215:240"
 #
 attributes:
-  - "isDamaged=VictimIsInList=SOUL_TRAPPED;Return=false"
+  - "isDamaged;VictimIsInList=SOUL_TRAPPED;Return=false"
   - "isDamaged;VictimHealth<=dmg;VictimHasActiveRarityGem=SOUL:true;VictimDepleteRarityGem=SOUL:random{1000:1500};SetDamage=0;VictimSetHealth=getVictimMaxHP"
