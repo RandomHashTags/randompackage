@@ -3,8 +3,8 @@ enabled: false
 #
 name: "Teleportation"
 lore:
-- "&eWhen an ally or faction member is hit,"
-- "&eyou teleport to them."
+  - "&eWhen an ally or faction member is hit,"
+  - "&eyou teleport to them."
 #
 max level: 5
 applies to: "bow"
@@ -13,4 +13,4 @@ alchemist: "3200:4200:5200:6200"
 tinkerer: "51:64:77:90:103"
 #
 attributes:
-- "ProjectileHit;cancelled=true;VictimIsAlly=true;"
+  - "ProjectileHit;cancelled=true;VictimIsAlly=true;"

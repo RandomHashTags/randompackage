@@ -3,9 +3,9 @@ enabled: true
 #
 name: "Shackle"
 lore:
-- "&ePrevents mobs spawned from mob"
-- "&espawners from suffering from"
-- "&eknockback from your attacks."
+  - "&ePrevents mobs spawned from mob"
+  - "&espawners from suffering from"
+  - "&eknockback from your attacks."
 #
 max level: 3
 applies to: "sword;_axe"
@@ -14,4 +14,4 @@ alchemist: "2500:5000"
 tinkerer: "71:80:89"
 #
 attributes:
-- "PvAny;VictimIsFromSpawner=true;SetCancelled=true;VictimDamage=dmg"
+  - "PvAny;VictimIsFromSpawner=true;SetCancelled=true;VictimDamage=dmg"

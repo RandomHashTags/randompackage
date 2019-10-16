@@ -3,10 +3,10 @@ enabled: true
 #
 name: "Godly Overload"
 lore:
-- "&eHeroic Enchantment. A very large"
-- "&epermanent increase in hearts."
-- "&eRequires Overload III enchant on item"
-- "&eto apply. Cannot be black-scrolled."
+  - "&eHeroic Enchantment. A very large"
+  - "&epermanent increase in hearts."
+  - "&eRequires Overload III enchant on item"
+  - "&eto apply. Cannot be black-scrolled."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"
@@ -16,6 +16,6 @@ tinkerer: "1430:1540:1650"
 requires: "Overload;3"
 #
 attributes:
-- "ArmorEquip;PlayerAddPotionEffect=health_boost:level+2:99999:true"
-- "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
-- "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"
+  - "ArmorEquip;PlayerAddPotionEffect=health_boost:level+2:99999:true"
+  - "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"

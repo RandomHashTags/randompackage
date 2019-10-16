@@ -3,11 +3,11 @@ enabled: true
 #
 name: "Divine Enlighted"
 lore:
-- "&eHeroic Enchantment. High chance of"
-- "&ehealing lots of HP while taking"
-- "&edamage. Requires Enlighted III"
-- "&eenchant on item to apply. cannot be"
-- "&eblack-scrolled."
+  - "&eHeroic Enchantment. High chance of"
+  - "&ehealing lots of HP while taking"
+  - "&edamage. Requires Enlighted III"
+  - "&eenchant on item to apply. cannot be"
+  - "&eblack-scrolled."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"
@@ -17,4 +17,4 @@ alchemist: "6000:6250:6500:6750:7000"
 tinkerer: "85:97:109:115:129"
 #
 attributes:
-- "isDamaged;chance=Lucky+7+(8*level);VictimHeal=3*level;VictimSendMessage=&d&l* DIVINE ENLIGHTED *"
+  - "isDamaged;chance=Lucky+7+(8*level);VictimHeal=3*level;VictimSendMessage=&d&l* DIVINE ENLIGHTED *"

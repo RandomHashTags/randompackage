@@ -3,9 +3,9 @@ enabled: true
 #
 name: "Titan Trap"
 lore:
-- "&eA chance to give a longer lasting"
-- "&ebuffed slowness effect. More"
-- "&eresilent against metaphysical."
+  - "&eA chance to give a longer lasting"
+  - "&ebuffed slowness effect. More"
+  - "&eresilent against metaphysical."
 #
 max level: 3
 applies to: "sword"
@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Trap;3"
 #
 attributes:
-  - "PvAny;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"
+    - "PvAny;chance=6+(2*level);VictimAddPotionEffect=slowness:level:20+(80*level)"

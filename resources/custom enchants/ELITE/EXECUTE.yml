@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Execute"
 lore:
-- "&eDamage buff when your target is at"
-- "&elow hp."
+  - "&eDamage buff when your target is at"
+  - "&elow hp."
 #
 max level: 7
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "1500:2000:2500:3000:3500:4000"
 tinkerer: "51:60:69:78:87:96:105"
 #
 attributes:
-- "PvAny;chance=7+level;VictimHealth<=3+level;DamagerAddPotionEffect=strength:level-1:20*level;DamagerSendMessage=&e&l** EXECUTE **"
+  - "PvAny;chance=7+level;VictimHealth<=3+level;DamagerAddPotionEffect=strength:level-1:20*level;DamagerSendMessage=&e&l** EXECUTE **"

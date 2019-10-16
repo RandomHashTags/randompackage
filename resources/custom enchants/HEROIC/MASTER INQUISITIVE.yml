@@ -3,11 +3,11 @@ enabled: true
 #
 name: "Master Inquisitive"
 lore:
-- "&eHeroic Enchantment. Massively"
-- "&eincreases EXP drops from mobs."
-- "&eRequires Inquisitive IV enchant on"
-- "&eitem to apply. Cannot be"
-- "&eblack-scrolled."
+  - "&eHeroic Enchantment. Massively"
+  - "&eincreases EXP drops from mobs."
+  - "&eRequires Inquisitive IV enchant on"
+  - "&eitem to apply. Cannot be"
+  - "&eblack-scrolled."
 #
 max level: 4
 applies to: "sword"
@@ -17,4 +17,4 @@ tinkerer: "85:97:109:115:129"
 requires: "Inquisitive;4"
 #
 attributes:
-- "EntityDeath;SetDroppedExp=xp*(1+(.75*level))"
+  - "EntityDeath;SetDroppedExp=xp*(1+(.75*level))"

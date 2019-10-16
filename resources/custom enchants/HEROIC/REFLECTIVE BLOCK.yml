@@ -1,13 +1,13 @@
-# Made by RandomHashTags | TODO: fix this
-enabled: false
+# Made by RandomHashTags
+enabled: true
 #
 name: "Reflective Block"
 lore:
-- "&eA high chance to greatly decrease or"
-- "&ecompletely negate incoming damage"
-- "&ewhile blocking, and to reflect an"
-- "&e incoming attack back on the attacker"
-- "&ewhether you are blocking or not."
+  - "&eA high chance to greatly decrease or"
+  - "&ecompletely negate incoming damage"
+  - "&ewhile blocking, and to reflect an"
+  - "&eincoming attack back on the attacker"
+  - "&ewhether you are blocking or not."
 #
 max level: 3
 applies to: "sword"
@@ -17,5 +17,5 @@ alchemist: ""
 tinkerer: ""
 #
 attribute:
-- "isDamaged;chance=12*level;VictimIsBlocking=true;SetDamage=dmg*(1-(level*0.25))"
-- "isDamaged;chance=10*level;DamagerDamage=dmg"
+  - "isDamaged;chance=12*level;VictimIsBlocking=true;SetDamage=dmg*(1-(level*0.25))"
+  - "isDamaged;didProc;chance=20*level;DamagerDamage=dmg"

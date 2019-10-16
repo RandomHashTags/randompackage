@@ -3,9 +3,9 @@ enabled: false
 #
 name: "Mighty Cactus"
 lore:
-- "&eHeroic Enchantment. +50% chance per"
-- "&elevel to negate all Thorns"
-- "&eenchantment damage."
+  - "&eHeroic Enchantment. +50% chance per"
+  - "&elevel to negate all Thorns"
+  - "&eenchantment damage."
 #
 max level: 2
 applies to: "helmet;chestplate;leggings;boots"
@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Cactus;2"
 #
 attributes:
-- ""
+  - ""

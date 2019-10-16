@@ -3,11 +3,11 @@ enabled: false
 #
 name: "Resilience"
 lore:
-- "&eIncreases HP of your NPC if you get"
-- "&ecombat logged by 15% per level. Also"
-- "&ehas a chance to negate 50% of damage"
-- "&efrom incoming attacks that would"
-- "&enormally kill you."
+  - "&eIncreases HP of your NPC if you get"
+  - "&ecombat logged by 15% per level. Also"
+  - "&ehas a chance to negate 50% of damage"
+  - "&efrom incoming attacks that would"
+  - "&enormally kill you."
 #
 max level: 4
 applies to: "helmet"
@@ -16,4 +16,4 @@ alchemist: "2500:3000:4000"
 tinkerer: "64:76:88:100"
 #
 attributes:
-- ""
+  - "PlayerQuit;"

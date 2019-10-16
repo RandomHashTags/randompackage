@@ -3,9 +3,9 @@ enabled: true
 #
 name: "Hijack"
 lore:
-- "&eChance to convert summoned enemy"
-- "&eGuardians into your own when they are"
-- "&eshot with an arrow."
+  - "&eChance to convert summoned enemy"
+  - "&eGuardians into your own when they are"
+  - "&eshot with an arrow."
 #
 max level: 5
 applies to: "bow"
@@ -14,4 +14,4 @@ alchemist: "3500:4000:4500"
 tinkerer: "49:57:65:73"
 #
 attributes:
-- "ArrowHit;chance=20+(10*level);HitCEEntity;SetOwner=Shooter"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=20+(10*level);HitCEEntity;SetOwner=Shooter"

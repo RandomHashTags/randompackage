@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Demonforged"
 lore:
-- "&eIncreases durability loss on your"
-- "&eenemy's armor."
+  - "&eIncreases durability loss on your"
+  - "&eenemy's armor."
 #
 max level: 4
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "4500:5000:5500"
 tinkerer: "68:80:92:104"
 #
 attributes:
-- "PvAny;VictimIsPlayer=true;chance=9+level;VictimSetDurability=all:durability+random{1:level}"
+  - "PvAny;VictimIsPlayer=true;chance=9+level;VictimSetDurability=all:durability+random{1:level}"

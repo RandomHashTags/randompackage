@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Blind"
 lore:
-- "&eA chance of causing blindness when"
-- "&eattacking."
+  - "&eA chance of causing blindness when"
+  - "&eattacking."
 #
 max level: 3
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "6000:6500"
 tinkerer: "54:64:74"
 #
 attributes:
-- "PvAny;chance=5*level;VictimAddPotionEffect=blindness:level-1:(20*level)+40:false"
+  - "PvAny;chance=5*level;VictimAddPotionEffect=blindness:level-1:(20*level)+40:false"

@@ -3,11 +3,11 @@ enabled: false
 #
 name: "Deep Bleed"
 lore:
-- "&eThe heroic v of Bleed. Enemies"
-- "&eaffected by the Deep Bleed are slowed up"
-- "&eto 200% more, take more damage, and"
-- "&eheal allied players with Blood Lust"
-- "&efor up to 200% more."
+  - "&eThe heroic v of Bleed. Enemies"
+  - "&eaffected by the Deep Bleed are slowed up"
+  - "&eto 200% more, take more damage, and"
+  - "&eheal allied players with Blood Lust"
+  - "&efor up to 200% more."
 #
 max level: 3
 applies to: "_axe"
@@ -17,4 +17,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - ""

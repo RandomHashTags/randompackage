@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Voodoo"
 lore:
-- "&eGives a chance to deal weakness."
+  - "&eGives a chance to deal weakness."
 #
 max level: 6
 applies to: "helmet;chestplate;leggings;boots"
@@ -12,4 +12,4 @@ alchemist: "1750:2000:2150:2300:2450"
 tinkerer: "59:68:77:86:95:104"
 #
 attributes:
-- "isDamaged;chance=Lucky+(6+(2*level));DamagerAddPotionEffect=weakness:level-1:40+(40*level)"
+  - "isDamaged;chance=Lucky+(6+(2*level));DamagerAddPotionEffect=weakness:level-1:40+(40*level)"

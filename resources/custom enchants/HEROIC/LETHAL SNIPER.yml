@@ -3,11 +3,11 @@ enabled: true
 #
 name: "Lethal Sniper"
 lore:
-- "&eHeroic Enchantment. High chance of"
-- "&eheadshots with projectiles to deal"
-- "&eatleast 3.5x damage up to 4.5x."
-- "&eRequires Sniper V enchant on item to"
-- "&eapply. Cannot be black-scrolled."
+  - "&eHeroic Enchantment. High chance of"
+  - "&eheadshots with projectiles to deal"
+  - "&eatleast 3.5x damage up to 4.5x."
+  - "&eRequires Sniper V enchant on item to"
+  - "&eapply. Cannot be black-scrolled."
 #
 max level: 5
 applies to: "bow"
@@ -17,4 +17,4 @@ tinkerer: ""
 requires: "Sniper;5"
 #
 attributes:
-- "ArrowHit;chance=40+(5*level);IsHeadshot=true;SetDamage=dmg*(3.5+(random{0:level}*0.2))"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=40+(5*level);IsHeadshot=true;SetDamage=dmg*(3.5+(random{0:level}*0.2))"

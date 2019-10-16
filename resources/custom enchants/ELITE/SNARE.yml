@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Snare"
 lore:
-- "&eChance to slow and fatigue enemies"
-- "&ewith projectiles."
+  - "&eChance to slow and fatigue enemies"
+  - "&ewith projectiles."
 #
 max level: 4
 applies to: "bow"
@@ -13,4 +13,4 @@ alchemist: "3500:4000:4500"
 tinkerer: "60:70:80:90"
 #
 attributes:
-- "ArrowHit;chance=25+(3*level);VictimAddPotionEffect=slowness:level-1:20+(20*level);VictimAddPotionEffect=mining_fatigue:level-1:20+(20*level)"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=25+(3*level);VictimAddPotionEffect=slowness:level-1:20+(20*level);VictimAddPotionEffect=mining_fatigue:level-1:20+(20*level)"

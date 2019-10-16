@@ -3,7 +3,7 @@ enabled: false
 #
 name: "Shockwave"
 lore:
-- "&eA chance to push back your attacker."
+  - "&eA chance to push back your attacker."
 #
 max level: 5
 applies to: "chestplate"
@@ -12,4 +12,4 @@ alchemist: "2000:3000:4000:5000"
 tinkerer: "58:67:76:85:94"
 #
 attributes:
-- ""
+  - ""

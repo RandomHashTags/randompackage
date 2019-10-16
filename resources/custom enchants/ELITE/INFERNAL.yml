@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Infernal"
 lore:
-- "&eExplosive fire effect."
+  - "&eExplosive fire effect."
 #
 max level: 3
 applies to: "bow"
@@ -12,5 +12,5 @@ alchemist: "3500:4500"
 tinkerer: "75:83:91"
 #
 attributes:
-- "EntityShootBow;ProjectileIgnite=200"
-- "ArrowHit;chance=30+(10*level);NearbyEnemies(Shooter:5+(level*2):5+(level*2):5+(level*2))Ignite=random{40*level:60+(40*level)}"
+  - "EntityShootBow;ProjectileIgnite=200"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=30+(10*level);NearbyEnemies(Shooter:5+(level*2):5+(level*2):5+(level*2))Ignite=random{40*level:60+(40*level)}"
