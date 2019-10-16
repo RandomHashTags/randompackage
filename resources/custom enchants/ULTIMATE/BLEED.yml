@@ -15,4 +15,4 @@ alchemist: "5000:5500:6000:6500:7000"
 tinkerer: "56:65:74:83:92:101"
 #
 attributes:
-  - "PvAny;chance=5+(5*level);VictimSetMultiplier=BLEED_STACKS:0.1+VictimGetMultiplier(BLEED_STACKS);Wait=20*5;VictimMultiplierDeplete=BLEED_STACKS:0.1"
+  - "PvAny;chance=5+(5*level);VictimAddToList=BLEED_STACKS;Wait=20*5;VictimRemoveFromList=BLEED_STACKS"

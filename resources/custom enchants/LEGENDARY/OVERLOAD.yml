@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Overload"
 lore:
-- "&ePermanent increase in hearts."
+  - "&ePermanent increase in hearts."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"
@@ -12,6 +12,6 @@ alchemist: "7000:9500"
 tinkerer: "143:154:165"
 #
 attributes:
-- "ArmorEquip;PlayerAddPotionEffect=health_boost:level-1:99999:true"
-- "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
-- "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"
+  - "ArmorEquip;PlayerAddPotionEffect=health_boost:level-1:99999:true"
+  - "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"

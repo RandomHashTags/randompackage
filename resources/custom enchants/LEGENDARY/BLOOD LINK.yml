@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Blood Link"
 lore:
-- "&eA chance to heal you for 1-2hp"
-- "&ewhenever your Guardians take damage."
+  - "&eA chance to heal you for 1-2hp"
+  - "&ewhenever your Guardians take damage."
 #
 max level: 5
 applies to: "helmet;chestplate;leggings;boots"
@@ -13,4 +13,4 @@ alchemist: "4400:4600:4800:5000"
 tinkerer: "73:86:99:112:125"
 #
 attributes:
-- "CEEntityIsDamaged;chance=6+level;OwnerHeal=random{1:2};OwnerSendMessage=&6&l** BLOOD LINK +random{1:2}HP **"
+  - "CEEntityIsDamaged;chance=6+level;OwnerHeal=random{1:2};OwnerSendMessage=&6&l** BLOOD LINK +random{1:2}HP **"

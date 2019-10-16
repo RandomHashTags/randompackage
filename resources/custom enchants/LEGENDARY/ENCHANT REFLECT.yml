@@ -3,10 +3,10 @@ enabled: false
 #
 name: "Enchant Reflect"
 lore:
-- "&eChance to cause enemy offensive"
-- "&eenchants up to Legendary (up to"
-- "&elevel) to proc on themselves instead"
-- "&eof you."
+  - "&eChance to cause enemy offensive"
+  - "&eenchants up to Legendary (up to"
+  - "&elevel) to proc on themselves instead"
+  - "&eof you."
 #
 max level: 10
 applies to: "helmet;chestplate;leggings;boots"
@@ -15,4 +15,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - ""

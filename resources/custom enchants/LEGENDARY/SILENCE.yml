@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Silence"
 lore:
-- "&eChance to stop activation of your"
-- "&eenemy's custom enchants."
+  - "&eChance to stop activation of your"
+  - "&eenemy's custom enchants."
 #
 max level: 4
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "5500:6500:7500"
 tinkerer: "67:76:85:94"
 #
 attributes:
-- "EnchantProc;VictimStopEnchant=all:random{3:3+level};VictimSendMessage=&5&l* SILENCED&r &7[random{3:3+level}s] &5&l*"
+  - "CustomEnchantProc;VictimStopEnchant=all:random{3:3+level};VictimSendMessage=&5&l* SILENCED&r &7[random{3:3+level}s] &5&l*"

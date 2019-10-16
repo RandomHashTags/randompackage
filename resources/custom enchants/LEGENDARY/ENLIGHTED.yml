@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Enlighted"
 lore:
-- "&eCan heal hearts while taking damage."
+  - "&eCan heal hearts while taking damage."
 #
 max level: 3
 applies to: "helmet;chestplate;leggings;boots"
@@ -12,4 +12,4 @@ alchemist: "10000:15000"
 tinkerer: "106:127:148"
 #
 attributes:
-- "PvAny;chance=Lucky+7+(8*level);VictimHeal=4;VictimSendMessage=&6&l** ENLIGHTED **"
+  - "PvAny;chance=Lucky+7+(8*level);VictimHeal=4;VictimSendMessage=&6&l** ENLIGHTED **"

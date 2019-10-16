@@ -3,11 +3,11 @@ enabled: false
 #
 name: "Anti Gank"
 lore:
-- "&eIf more than (6-level) enemies hit"
-- "&eyou in a short period, your outgoing"
-- "&edamage will be multiplied by up to"
-- "&e1.5x depending on the amount of"
-- "&eenemies nearby."
+  - "&eIf more than (6-level) enemies hit"
+  - "&eyou in a short period, your outgoing"
+  - "&edamage will be multiplied by up to"
+  - "&e1.5x depending on the amount of"
+  - "&eenemies nearby."
 #
 max level: 4
 applies to: "_axe"
@@ -16,4 +16,5 @@ alchemist: "5500:5750:6000"
 tinkerer: "92:108:113:124"
 #
 attributes:
-- "PvAny;"
+  - "isDamaged;"
+  - "PvAny;"

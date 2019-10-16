@@ -3,10 +3,10 @@ enabled: true
 #
 name: "Death God"
 lore:
-- "&eAttacks that bring your HP to"
-- "&e(level+4) hearts or lower have a"
-- "&echance to heal you for (level+5)"
-- "&ehearts instead."
+  - "&eAttacks that bring your HP to"
+  - "&e(level+4) hearts or lower have a"
+  - "&echance to heal you for (level+5)"
+  - "&ehearts instead."
 #
 max level: 3
 applies to: "helmet"
@@ -15,4 +15,4 @@ alchemist: "8000:9000"
 tinkerer: "96:108:120"
 #
 attributes:
-- "isDamaged;chance=8*level;VictimHealth<=dmg+(level+4);VictimHeal=level+5;VictimSendMessage=&6&l** DEATH GOD **"
+  - "isDamaged;chance=8*level;VictimHealth<=dmg+(level+4);VictimHeal=level+5;VictimSendMessage=&6&l** DEATH GOD **"

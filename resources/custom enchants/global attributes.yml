@@ -3,3 +3,4 @@ attributes:
   - "PvAny;DamagerIsInList=DOMINATE;SetDamage=dmg*0.95"
   - "ProjectileHit;ShooterIsInList=UNFOCUS;SetDamage=dmg*0.50"
   - "EntityDamage;Cause=WITHER||POISON;VictimIsInList=VIRUS;VictimDamage=1"
+  - "PvAny;DamagerIsInList=HEX;DamagerDamage=dmg*0.15"

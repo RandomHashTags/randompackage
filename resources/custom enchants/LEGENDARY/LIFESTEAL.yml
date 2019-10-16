@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Lifesteal"
 lore:
-- "&eA chance to regain health when"
-- "&eattacking."
+  - "&eA chance to regain health when"
+  - "&eattacking."
 #
 max level: 5
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "6500:8000:9500:11000"
 tinkerer: "124:136:148:160:172"
 #
 attributes:
-- "PvAny;chance=2*level;DamagerHeal=2;VictimSetHealth=VictimHealth-1;DamagerSendMessage=&6&l** LIFESTEAL **"
+  - "PvAny;chance=2*level;DamagerHeal=2;VictimSetHealth=VictimHealth-1;DamagerSendMessage=&6&l** LIFESTEAL **"

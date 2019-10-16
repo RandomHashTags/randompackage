@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Boss Slayer"
 lore:
-- "&eDeal an extra (level x 5%) base"
-- "&edamage to bosses."
+  - "&eDeal an extra (level x 5%) base"
+  - "&edamage to bosses."
 #
 max level: 5
 applies to: "_axe"
@@ -13,4 +13,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- "CustomBossIsDamaged;SetDamage=dmg*(1+(0.05*level))"
+  - "CustomBossIsDamaged;SetDamage=dmg*(1+(0.05*level))"

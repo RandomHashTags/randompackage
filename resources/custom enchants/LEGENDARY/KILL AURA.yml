@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Kill Aura"
 lore:
-- "&eChance to kill multiple monsters in a"
-- "&estack each death event."
+  - "&eChance to kill multiple monsters in a"
+  - "&estack each death event."
 #
 max level: 5
 applies to: "sword"
@@ -13,4 +13,4 @@ alchemist: "4000:5000:6000:7000"
 tinkerer: "63:75:87:99:111"
 #
 attributes:
-- "MobStackDeplete;chance=level*4;depleteStackSize{random{2:4}};PlayerSendMessage=&e&l*** random{2:4}X MOB KILL ***"
+  - "MobStackDeplete;chance=level*4;depleteStackSize{random{2:4}};PlayerSendMessage=&e&l*** random{2:4}X MOB KILL ***"

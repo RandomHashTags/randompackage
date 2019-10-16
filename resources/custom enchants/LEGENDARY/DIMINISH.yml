@@ -3,13 +3,13 @@ enabled: false
 #
 name: "Diminish"
 lore:
-- "&eWhen this effect procs, the next"
-- "&eattack dealt to you cannot deal more"
-- "&ethan the (total amount of damage / 2)"
-- "&eyou took from the previous attack."
-- "&e(i.e. if you're damaged for 2HP, the"
-- "&enext attack cannot deal more than 1HP"
-- "&eof damage.)"
+  - "&eWhen this effect procs, the next"
+  - "&eattack dealt to you cannot deal more"
+  - "&ethan the (total amount of damage / 2)"
+  - "&eyou took from the previous attack."
+  - "&e(i.e. if you're damaged for 2HP, the"
+  - "&enext attack cannot deal more than 1HP"
+  - "&eof damage.)"
 #
 max level: 6
 applies to: "chestplate"
@@ -18,4 +18,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - "isDamaged;"
