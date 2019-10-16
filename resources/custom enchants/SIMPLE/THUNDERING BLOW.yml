@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Thundering Blow"
 lore:
-- "&eCan cause smite effect on your enemy"
+  - "&eCan cause smite effect on your enemy"
 #
 max level: 3
 applies to: "sword"
@@ -12,4 +12,4 @@ alchemist: "2000:3000"
 tinkerer: "73:86:99"
 #
 attributes:
-- "PvAny;chance=5+level;VictimSmite=1"
+  - "PvAny;chance=5+level;VictimSmite=1"

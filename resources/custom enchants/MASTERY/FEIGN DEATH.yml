@@ -3,7 +3,7 @@ enabled: false
 #
 name: "Feign Death"
 lore:
-- "&e"
+  - "&e"
 #
 max level: 4
 applies to: "helmet;chestplate;leggings;boots"
@@ -12,4 +12,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - ""

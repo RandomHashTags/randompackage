@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Glowing"
 lore:
-- "&eGives permanent night vision."
+  - "&eGives permanent night vision."
 #
 max level: 1
 applies to: "helmet"
@@ -11,6 +11,6 @@ applies to: "helmet"
 tinkerer: "84"
 #
 attributes:
-- "ArmorEquip;PlayerAddPotionEffect=night_vision:level-1:99999:true"
-- "ArmorUnequip;PlayerRemovePotionEffect=night_vision:true"
-- "ArmorPieceBreak;PlayerRemovePotionEffect=night_vision:true"
+  - "ArmorEquip;PlayerAddPotionEffect=night_vision:level-1:99999:true"
+  - "ArmorUnequip;PlayerRemovePotionEffect=night_vision:true"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=night_vision:true"

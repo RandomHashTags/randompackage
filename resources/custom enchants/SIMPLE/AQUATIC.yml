@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Aquatic"
 lore:
-- "&eGives permanent water breathing."
+  - "&eGives permanent water breathing."
 #
 max level: 1
 applies to: "helmet"
@@ -11,6 +11,6 @@ applies to: "helmet"
 tinkerer: "134"
 #
 attributes:
-- "ArmorEquip;PlayerAddPotionEffect=water_breathing:level-1:99999:true"
-- "ArmorUnequip;PlayerRemovePotionEffect=water_breathing:true"
-- "ArmorPieceBreak;PlayerRemovePotionEffect=water_breathing:true"
+  - "ArmorEquip;PlayerAddPotionEffect=water_breathing:level-1:99999:true"
+  - "ArmorUnequip;PlayerRemovePotionEffect=water_breathing:true"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=water_breathing:true"

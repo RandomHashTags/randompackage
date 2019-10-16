@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Experience"
 lore:
-- "&eGives more exp when mining blocks."
+  - "&eGives more exp when mining blocks."
 #
 max level: 5
 applies to: "pickaxe"
@@ -12,4 +12,4 @@ alchemist: "1000:2250:3500:4750"
 tinkerer: "58:66:74:82:90"
 #
 attributes:
-- "BlockBreak;chance=15*level;SetDroppedExp=droppedxp+random{level:level+3}"
+  - "BlockBreak;chance=15*level;SetDroppedExp=droppedxp+random{level:level+3}"

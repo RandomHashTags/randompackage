@@ -3,7 +3,7 @@ enabled: false
 #
 name: "Chain Lifesteal"
 lore:
-- ""
+  - ""
 #
 max level: 5
 applies to: "helmet"
@@ -12,4 +12,4 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - ""

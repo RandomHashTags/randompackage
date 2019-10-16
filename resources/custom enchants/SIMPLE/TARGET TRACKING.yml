@@ -3,7 +3,7 @@ enabled: false
 #
 name: "Target Tracking"
 lore:
-- "&eAutomatically /f focus any target you hit."
+  - "&eAutomatically /f focus any target you hit."
 #
 max level: 1
 applies to: "bow"
@@ -11,4 +11,4 @@ applies to: "bow"
 tinkerer: "81"
 #
 attributes:
-- ""
+  - ""
