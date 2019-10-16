@@ -3,12 +3,12 @@ enabled: false
 #
 name: "Divine Immolation"
 lore:
-- "&eActive Soul Enchantment. Your weapons"
-- "&eare imbued with divine fire, turning"
-- "&eall your physical attacks into Area"
-- "&eof Effect spells and igniting divine"
-- "&efire upon all nearby enemies. Costs"
-- "&e20 souls per second."
+  - "&eActive Soul Enchantment. Your weapons"
+  - "&eare imbued with divine fire, turning"
+  - "&eall your physical attacks into Area"
+  - "&eof Effect spells and igniting divine"
+  - "&efire upon all nearby enemies. Costs"
+  - "&e20 souls per second."
 #
 max level: 4
 applies to: "sword"
@@ -17,4 +17,5 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- "Timer(20);"
+  - "PvAny;DamagerIsInList=SOUL_TRAPPED;Return=false"
+  - "PvAny;DamagerHasActiveRarityGem=SOUL:true;NearbyVictimEnemies(level*4:level+6:level*4)Ignite=20*level+40"

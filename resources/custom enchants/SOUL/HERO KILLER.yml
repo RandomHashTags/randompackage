@@ -13,4 +13,5 @@ alchemist: ""
 tinkerer: ""
 #
 attributes:
-- ""
+  - "PvAny;DamagerIsInList=SOUL_TRAPPED;Return=false"
+  - "PvAny;VictimIsType=PLAYER;;SetDamage=dmg*(level*1.05)"

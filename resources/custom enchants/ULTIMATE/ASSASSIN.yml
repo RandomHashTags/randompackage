@@ -1,13 +1,13 @@
 # Made by RandomHashTags | TODO: fix this
-enabled: true
+enabled: false
 #
 name: "Assassin"
 lore:
-- "&eThe closer you are to your enemy, the"
-- "&emore damage you deal (up to 1.25x)."
-- "&eHowever, if you are more than 2"
-- "&eblocks away, you will deal LESS"
-- "&edamage than normal."
+  - "&eThe closer you are to your enemy, the"
+  - "&emore damage you deal (up to 1.25x)."
+  - "&eHowever, if you are more than 2"
+  - "&eblocks away, you will deal LESS"
+  - "&edamage than normal."
 #
 max level: 5
 applies to: "sword"
@@ -16,4 +16,4 @@ alchemist: "6000:6250:6500:6750"
 tinkerer: "58:67:79:95:108"
 #
 attributes:
-- "PvAny;chance=6*level;if{distanceBetween(victim,damager)<=2.0->setDamage{dmg*(1+(.05*level))}&&sendMessage{[damager]&e&l** ASSASSIN **}-<setDamage{dmg*(1-(.05*level))}}"
+  - "PvAny;chance=6*level;if{distanceBetween(victim,damager)<=2.0->setDamage{dmg*(1+(.05*level))}&&sendMessage{[damager]&e&l** ASSASSIN **}-<setDamage{dmg*(1-(.05*level))}}"

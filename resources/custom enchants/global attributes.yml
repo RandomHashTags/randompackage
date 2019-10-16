@@ -1,0 +1,4 @@
+# Made by RandomHashTags
+attributes:
+  - "PvAny;DamagerIsInList=DOMINATE;SetDamage=dmg*0.95"
+  - "ProjectileHit;ShooterIsInList=UNFOCUS;SetDamage=dmg*0.50"

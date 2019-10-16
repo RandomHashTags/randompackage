@@ -1,14 +1,14 @@
 # Made by RandomHashTags | TODO: fix this
-enabled: false
+enabled: true
 #
 name: "Soul Trap"
 lore:
-- "&eActive Soul Enchantment. Your axe is"
-- "&eimbued with sealing magic, and has a"
-- "&echance to disable/negate all soul"
-- "&eenchantments of your enemies on hit"
-- "&efor (level x 4) seconds. Costs 2"
-- "&esouls per second."
+  - "&eActive Soul Enchantment. Your axe is"
+  - "&eimbued with sealing magic, and has a"
+  - "&echance to disable/negate all soul"
+  - "&eenchantments of your enemies on hit"
+  - "&efor (level x 4) seconds. Costs 2"
+  - "&esouls per second."
 #
 max level: 3
 applies to: "_axe"
@@ -17,4 +17,4 @@ alchemist: "9000:16000"
 tinkerer: "172:197:222"
 #
 attributes:
-- ""
+  - "PvAny;chance=level*5;VictimIsType=PLAYER;DamagerHasActiveRarityGem=SOUL:true;VictimAddToList=SOUL_TRAPPED;Wait=level*4*20;VictimRemoveFromList=SOUL_TRAPPED"

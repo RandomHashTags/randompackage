@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Ender Walker"
 lore:
-- "&eWither and Poison do not injure and"
-- "&ehave a chance to heal at high levels."
+  - "&eWither and Poison do not injure and"
+  - "&ehave a chance to heal at high levels."
 #
 max level: 5
 applies to: "boots"
@@ -13,5 +13,5 @@ alchemist: "2000:3250:4500:5750"
 tinkerer: "57:66:75:84:93"
 #
 attributes:
-- "EntityDamage;Cause=POISON||WITHER;SetCancelled=true"
-- "EntityDamage;Cause=POISON||WITHER;chance=7*level;VictimHeal=2"
+  - "EntityDamage;Cause=POISON||WITHER;SetCancelled=true"
+  - "EntityDamage;Cause=POISON||WITHER;chance=7*level;VictimHeal=2"

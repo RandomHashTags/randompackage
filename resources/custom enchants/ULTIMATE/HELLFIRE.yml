@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Hellfire"
 lore:
-- "&eAll arrows shot by you turn into"
-- "&eexplosive fireballs."
+  - "&eAll arrows shot by you turn into"
+  - "&eexplosive fireballs."
 #
 max level: 5
 applies to: "bow"
@@ -13,4 +13,4 @@ alchemist: "3500:4000:4500:5000"
 tinkerer: "54:63:72:81:90"
 #
 attributes:
-- "EntityShootBow;chance=10+(12*level);ProjectileIgnite=200"
+  - "EntityShootBow;chance=10+(12*level);ProjectileIgnite=200"

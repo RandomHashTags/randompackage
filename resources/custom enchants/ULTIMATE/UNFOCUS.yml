@@ -1,11 +1,11 @@
-# Made by RandomHashTags | TODO: fix this
-enabled: false
+# Made by RandomHashTags
+enabled: true
 #
 name: "Unfocus"
 lore:
-- "&eChance to Unfocus target player,"
-- "&ereducing their outgoing bow damage by"
-- "&e50% for up to 10 seconds."
+  - "&eChance to Unfocus target player,"
+  - "&ereducing their outgoing bow damage by"
+  - "&e50% for up to 10 seconds."
 #
 max level: 5
 applies to: "bow"
@@ -13,5 +13,5 @@ applies to: "bow"
 alchemist: "2300:2600:2900:3200"
 tinkerer: "60:72:84:96:108"
 #
-attributes:
-- ""
+attributes: # Negation in "global attributes.yml"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=level*4;VictimAddToList=UNFOCUS;Wait=level*20*2;VictimRemoveFromList=UNFOCUS"

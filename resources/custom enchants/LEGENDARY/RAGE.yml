@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Rage"
 lore:
-- "&eFor every combo hit you land, your"
-- "&edamage is multiplied by 1.1x."
+  - "&eFor every combo hit you land, your"
+  - "&edamage is multiplied by 1.1x."
 #
 max level: 6
 applies to: "sword;_axe;bow"
@@ -13,4 +13,5 @@ alchemist: "6000:7000:8000:9000:10000"
 tinkerer: "139:151:163:175:187:199"
 #
 attributes:
-- "PvAny;SetDamage=dmg*DamagerGetCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"
+  - "PvAny;DamagerIsInList=PACIFY;Return=false"
+  - "PvAny;SetDamage=dmg*DamagerGetCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"

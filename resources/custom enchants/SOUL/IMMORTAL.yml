@@ -15,4 +15,5 @@ alchemist: "10000:17500:25000"
 tinkerer: "183:197:211:225"
 #
 attributes:
-- "PlayerItemDamaged;PlayerDepleteRarityGem=SOUL:random{5:20};SetCancelled=true"
+  - "PlayerItemDamaged;PlayerIsInList=SOUL_TRAPPED;Return=false"
+  - "PlayerItemDamaged;PlayerDepleteRarityGem=SOUL:random{5:20};SetCancelled=true"

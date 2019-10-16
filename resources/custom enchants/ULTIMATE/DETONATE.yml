@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Detonate"
 lore:
-- "&eSummons up to a 3x3x3 explosion"
-- "&earound any blocks you break."
+  - "&eSummons up to a 3x3x3 explosion"
+  - "&earound any blocks you break."
 #
 max level: 9
 applies to: "pickaxe"
@@ -13,7 +13,7 @@ alchemist: "3500:3700:3900:4100:4300:4500:4700:4900"
 tinkerer: "54:63:72:81:90:99:108:117:126"
 #
 attributes:
-- "BlockBreak;chance=10*level;PlayerIsFacing=NORTH;BreakBlocks=Player:-1:-1:0:1:1:-2}}"
-- "BlockBreak;didProc;if{[player]isFacing(EAST)->breakBlocks{[player]0:-1:-1:2:1:1}}"
-- "BlockBreak;didProc;if{[player]isFacing(SOUTH)->breakBlocks{[player]1:-1:0:-1:1:2}}"
-- "BlockBreak;didProc;if{[player]isFacing(WEST)->breakBlocks{[player]0:-1:1:-2:1:-1}}"
+  - "BlockBreak;chance=10*level;PlayerIsFacing=NORTH;BreakBlocks=Player:-1:-1:0:1:1:-2}}"
+  - "BlockBreak;didProc;if{[player]isFacing(EAST)->breakBlocks{[player]0:-1:-1:2:1:1}}"
+  - "BlockBreak;didProc;if{[player]isFacing(SOUTH)->breakBlocks{[player]1:-1:0:-1:1:2}}"
+  - "BlockBreak;didProc;if{[player]isFacing(WEST)->breakBlocks{[player]0:-1:1:-2:1:-1}}"

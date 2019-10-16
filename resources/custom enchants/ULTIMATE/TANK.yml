@@ -3,9 +3,9 @@ enabled: true
 #
 name: "Tank"
 lore:
-- "&eDecreases damage from enemy axes by"
-- "&e1.85% per level, this enchantment is"
-- "&estackable."
+  - "&eDecreases damage from enemy axes by"
+  - "&e1.85% per level, this enchantment is"
+  - "&estackable."
 #
 max level: 4
 applies to: "helmet;chestplate;leggings;boots"

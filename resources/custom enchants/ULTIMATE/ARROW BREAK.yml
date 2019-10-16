@@ -3,10 +3,10 @@ enabled: true
 #
 name: "Arrow Break"
 lore:
-- "&eChance for arrows to bounce off and"
-- "&edo no damage to you whenever you are"
-- "&ewielding an axe with this enchantment"
-- "&eon it."
+  - "&eChance for arrows to bounce off and"
+  - "&edo no damage to you whenever you are"
+  - "&ewielding an axe with this enchantment"
+  - "&eon it."
 #
 max level: 6
 applies to: "_axe"
@@ -15,4 +15,4 @@ alchemist: "5300:5500:5700:5900:6100"
 tinkerer: "59:70:84:96:112:121"
 #
 attributes:
-- "HitByArrow;chance=19+(6*level);VictimIsHolding=_AXE;SetCancelled=true;VictimSendMessage=&e&l** ARROW BREAK **"
+  - "isDamaged;DamagerIsType=ARROW;chance=19+(6*level);VictimIsHolding=_AXE;SetCancelled=true;VictimSendMessage=&e&l** ARROW BREAK **"

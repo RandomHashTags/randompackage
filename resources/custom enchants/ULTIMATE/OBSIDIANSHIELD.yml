@@ -3,7 +3,7 @@ enabled: true
 #
 name: "Obsidianshield"
 lore:
-- "&eGives permanent fire resistance."
+  - "&eGives permanent fire resistance."
 #
 max level: 1
 applies to: "helmet;chestplate;leggings;boots"
@@ -11,6 +11,6 @@ applies to: "helmet;chestplate;leggings;boots"
 tinkerer: "164"
 #
 attributes:
-- "ArmorEquip;PlayerAddPotionEffect=fire_resistance:level-1:99999:true"
-- "ArmorUnequip;PlayerRemovePotionEffect=fire_resistance:true"
-- "ArmorPieceBreak;PlayerRemovePotionEffect=fire_resistance:true"
+  - "ArmorEquip;PlayerAddPotionEffect=fire_resistance:level-1:99999:true"
+  - "ArmorUnequip;PlayerRemovePotionEffect=fire_resistance:true"
+  - "ArmorPieceBreak;PlayerRemovePotionEffect=fire_resistance:true"

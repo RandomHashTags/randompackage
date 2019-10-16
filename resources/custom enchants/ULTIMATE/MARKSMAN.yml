@@ -3,8 +3,8 @@ enabled: true
 #
 name: "Marksman"
 lore:
-- "&eIncreases damage dealt with bows,"
-- "&ethis enchantment is stackable."
+  - "&eIncreases damage dealt with bows,"
+  - "&ethis enchantment is stackable."
 #
 max level: 4
 applies to: "helmet;chestplate;leggings;boots"
@@ -13,4 +13,4 @@ alchemist: "4000:4500:5000"
 tinkerer: "121:137:150:161"
 #
 attributes:
-- "ArrowHit;chance=60+(6*level);SetDamage=dmg*(1+(.09*level))"
+  - "ProjectileHit;ProjectileIsType=ARROW;chance=60+(6*level);SetDamage=dmg*(1+(.09*level))"

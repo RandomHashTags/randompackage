@@ -3,12 +3,12 @@ enabled: true
 #
 name: "Angelic"
 lore:
-- "&eHeals health over time whenever"
-- "&edamaged, this enchantment IS"
-- "&estackable in terms of activation"
-- "&echance; however you can only have 1"
-- "&eactive healing task from Angelic at"
-- "&eany given time."
+  - "&eHeals health over time whenever"
+  - "&edamaged, this enchantment IS"
+  - "&estackable in terms of activation"
+  - "&echance; however you can only have 1"
+  - "&eactive healing task from Angelic at"
+  - "&eany given time."
 #
 max level: 5
 applies to: "helmet;chestplate;leggings;boots"
@@ -17,4 +17,4 @@ alchemist: "5700:5800:5900:6000"
 tinkerer: "115:137:159:181:203"
 #
 attributes:
-- "isDamaged;chance=Lucky+6+(2*level);VictimAddPotionEffect=regeneration:level-1:20+(20*level)"
+  - "isDamaged;chance=Lucky+6+(2*level);VictimAddPotionEffect=regeneration:level-1:20+(20*level)"

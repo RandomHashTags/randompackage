@@ -16,4 +16,5 @@ alchemist: "7500:15000:22500"
 tinkerer: "180:205:230:255"
 #
 attributes:
-- "isDamaged;chance=level;VictimDepleteRarityGem=SOUL:75;NearbyEnemies{Victim:45:45:45}Smite=11;NearbyEnemies{Victim:45:45:45}SendMessage=&2&l** NATURE'S WRATH **"
+  - "isDamaged;VictimIsInList=SOUL_TRAPPED;Return=false"
+  - "isDamaged;chance=level;VictimDepleteRarityGem=SOUL:75;NearbyVictimEnemies(45:45:45)Smite=11;NearbyVictimEnemies(45:45:45)SendMessage=&2&l** NATURE'S WRATH **"
