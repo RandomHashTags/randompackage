@@ -324,7 +324,7 @@ public class Boosters extends EventAttributes {
 				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
 				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
 				pluginmanager.callEvent(e);
-				if(triggerCustomEnchants(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
+				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
 					replacements.put("{MULTIPLIER}", M);
 					replacements.put("{PLAYER}", ab.getActivator().getName());
 					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));

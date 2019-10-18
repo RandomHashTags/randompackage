@@ -23,9 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -52,6 +50,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	}
 	
 	public YamlConfiguration config;
+	private MCMMOChallenges mcmmoChallenges;
 	private UInventory inv, leaderboard, claimPrizes;
 	private int topPlayersSize = 54;
 
@@ -134,6 +133,11 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 			}
 		}
 
+		if(mcmmoIsEnabled()) {
+		    mcmmoChallenges = new MCMMOChallenges();
+		    pluginmanager.registerEvents(mcmmoChallenges, randompackage);
+        }
+
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (globalchallenges != null ? globalchallenges.size() : 0) + " global challenges and " + (globalchallengeprizes != null ? globalchallengeprizes.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		reloadChallenges();
 	}
@@ -154,6 +158,11 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		if(mcmmoChallenges != null) {
+            HandlerList.unregisterAll(mcmmoChallenges);
+        }
+
 		globalchallenges = null;
 		globalchallengeprizes = null;
 	}
@@ -471,7 +480,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		}
 	}
 
-	private class MCMMOChallenges {
+	private class MCMMOChallenges implements Listener {
 		@EventHandler(priority = EventPriority.HIGHEST)
 		private void mcmmoAbilityActivateEvent(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
 			tryIncreasing(event);
@@ -482,12 +491,12 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-				triggerCustomEnchants(event, g.getAttributes());
+                trigger(event, getEntities("Player", event.getPlayer()), g.getAttributes());
 			}
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, String...replacements) {
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-				triggerCustomEnchants(event, g.getAttributes(), replacements);
+                trigger(event, getEntities("Player", event.getPlayer()), g.getAttributes(), replacements);
 			}
 		}
 	}

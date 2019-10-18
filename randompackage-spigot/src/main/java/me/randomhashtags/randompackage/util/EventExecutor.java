@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.util;
 
-import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
-import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
@@ -643,14 +641,5 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 }
             }
         }
-    }
-    /*
-        Other plugins
-     */
-    public boolean triggerCustomEnchants(McMMOPlayerAbilityActivateEvent event, List<String> attributes) { // TODO: fix this if they don't have mcmmo installed
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes);
-    }
-    public boolean triggerCustomEnchants(McMMOPlayerXpGainEvent event, List<String> attributes, String...replacements) { // TODO: fix this if they don't have mcmmo installed
-        return trigger(event, getEntities("Player", event.getPlayer()), attributes, replacements);
     }
 }
