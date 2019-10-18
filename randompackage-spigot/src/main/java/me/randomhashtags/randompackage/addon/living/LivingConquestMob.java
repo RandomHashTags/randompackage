@@ -46,27 +46,35 @@ public class LivingConquestMob {
         }
         for(String a : type.equipment) {
             final String A = a;
-            a = a.toLowerCase();
-            if(a.startsWith("helmet=")) {
-                e.setHelmet(api.d(null, A.substring(7)));
-            } else if(a.startsWith("chestplate=")) {
-                e.setChestplate(api.d(null, A.substring(11)));
-            } else if(a.startsWith("leggings=")) {
-                e.setLeggings(api.d(null, A.substring(9)));
-            } else if(a.startsWith("boots=")) {
-                e.setBoots(api.d(null, A.substring(6)));
-            } else if(a.startsWith("weapon=")) {
-                e.setItemInHand(api.d(null, A.substring(7)));
+            a = a.toLowerCase().split("=")[0];
+            switch (a.toLowerCase().split("=")[0]) {
+                case "helmet":
+                    e.setHelmet(api.d(null, A.substring(7)));
+                    break;
+                case "chestplate":
+                    e.setChestplate(api.d(null, A.substring(11)));
+                    break;
+                case "leggings":
+                    e.setLeggings(api.d(null, A.substring(9)));
+                    break;
+                case "boots":
+                    e.setBoots(api.d(null, A.substring(6)));
+                    break;
+                case "weapon":
+                    e.setItemInHand(api.d(null, A.substring(7)));
+                    break;
             }
         }
         for(String a : type.attributes) {
-            a = a.toLowerCase();
-            if(a.startsWith("health=")) {
-                entity.setMaxHealth(Double.parseDouble(a.split("=")[1]));
-                entity.setHealth(entity.getMaxHealth());
-            } else if(a.startsWith("pe=")) {
-                final String[] b = a.split("=")[1].split(":");
-                entity.addPotionEffect(new PotionEffect(api.getPotionEffectType(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
+            switch (a.toLowerCase().split("=")[0]) {
+                case "health":
+                    entity.setMaxHealth(Double.parseDouble(a.split("=")[1]));
+                    entity.setHealth(entity.getMaxHealth());
+                    break;
+                case "pe":
+                    final String[] b = a.split("=")[1].split(":");
+                    entity.addPotionEffect(new PotionEffect(api.getPotionEffectType(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
+                    break;
             }
         }
         living.put(entity.getUniqueId(), this);
@@ -89,8 +97,6 @@ public class LivingConquestMob {
             }
         }
         living.remove(entity.getUniqueId());
-        entity = null;
-        type = null;
     }
 
     public static void deleteAll() {

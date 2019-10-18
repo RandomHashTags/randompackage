@@ -8,12 +8,17 @@ import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
-import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.event.PvAnyEvent;
+import me.randomhashtags.randompackage.event.TinkererTradeEvent;
+import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.event.lootbag.LootbagClaimEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -614,14 +619,24 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         }
         return a;
     }
+
+    private Player getSource(Event event) {
+        switch (event.getEventName().toLowerCase().split("=")[0]) {
+            case "pvany": return ((PvAnyEvent) event).getDamager();
+            case "isdamaged": return ((isDamagedEvent) event).getEntity();
+            // TODO: fix dis bruh
+            default: return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
+        }
+    }
     public void triggerCustomEnchants(Event event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         triggerCustomEnchants(event, getEntities(event), enchants);
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+        final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {
-                if(enchant.isOnCorrectItem(is)) {
+                if(enchant.isOnCorrectItem(is) && enchant.canBeTriggered(player, is)) {
                     final int lvl = e.get(enchant);
                     final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)};
                     trigger(event, entities, replaceCE(e.get(enchant), enchant.getAttributes()), getReplacements(getReplacements(event), replacements));

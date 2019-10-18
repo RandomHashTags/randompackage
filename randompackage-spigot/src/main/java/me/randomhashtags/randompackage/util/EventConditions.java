@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.event.enchant.EnchanterPurchaseEvent;
+import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;

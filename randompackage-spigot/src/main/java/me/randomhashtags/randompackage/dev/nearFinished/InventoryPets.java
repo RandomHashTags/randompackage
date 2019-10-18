@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.dev.nearFinished;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.event.enchant.PvAnyEvent;
-import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
+import me.randomhashtags.randompackage.event.PvAnyEvent;
+import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;

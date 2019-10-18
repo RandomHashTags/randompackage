@@ -39,16 +39,14 @@ public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Tog
                 if(mat.endsWith(s.toUpperCase())) {
                     if(mat.contains("HELMET")) {
                         return is.equals(inv.getHelmet());
-                    } else if(mat.contains("CHESTPLATE")) {
+                    } else if(mat.contains("CHESTPLATE") || mat.equals("ELYTRA")) {
                         return is.equals(inv.getChestplate());
                     } else if(mat.contains("LEGGINGS")) {
                         return is.equals(inv.getLeggings());
                     } else if(mat.contains("BOOTS")) {
                         return is.equals(inv.getBoots());
-                    } else if(mat.contains("AXE") || mat.contains("SHOVEL") || mat.contains("SPADE") || mat.contains("SWORD") || mat.contains("BOW")) {
-                        return is.equals(inv.getItemInMainHand()) || !EIGHT && is.equals(inv.getItemInOffHand());
                     } else {
-                        return false;
+                        return is.equals(inv.getItemInHand()) || !EIGHT && is.equals(inv.getItemInOffHand());
                     }
                 }
             }

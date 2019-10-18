@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.dev.nearFinished;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.dev.DuelArena;
 import me.randomhashtags.randompackage.dev.DuelEndReason;
-import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
+import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;

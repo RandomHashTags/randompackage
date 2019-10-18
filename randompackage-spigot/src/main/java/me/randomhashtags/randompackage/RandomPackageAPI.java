@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
@@ -37,13 +38,14 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
             if(args.length == 0) {
                 if(player != null && player.getName().equals("RandomHashTags") || hasPermission(sender, "RandomPackage.randompackage", true)) {
                     final Plugin spawner = RandomPackage.spawnerPlugin, mcmmo = RandomPackage.mcmmo;
+                    final Plugin fac = pluginmanager.getPlugin("Factions");
                     for(String string : Arrays.asList(" ",
                             "&6&m&l---------------------------------------------",
                             "&7- Author: &6RandomHashTags",
                             "&7- RandomPackage Version: &b" + randompackage.getDescription().getVersion(),
                             "&7- Server Version: &f" + VERSION,
                             "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
-                            //"&7- Faction Plugin: " + (fapi.factions != null ? "&3" + fapi.factions + " &7(&2" + pluginmanager.getPlugin("Factions").getDescription().getVersion() + "&7)" : "&cfalse"),
+                            "&7- Faction Plugin: " + (regions.hookedFactionsUUID() ? "&3" + getFactionType(fac) + " &7(&2" + fac.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Home",
@@ -64,6 +66,13 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
             }
         }
         return true;
+    }
+    private String getFactionType(Plugin factions) {
+        if(factions != null) {
+            final List<String> authors = factions.getDescription().getAuthors();
+            return authors.contains("SavagePro") ? "SavageFactions" : "FactionsUUID";
+        }
+        return null;
     }
 
     public void load() {

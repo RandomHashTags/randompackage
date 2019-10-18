@@ -148,7 +148,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 final ConquestBlockDamageEvent cde = new ConquestBlockDamageEvent(player, cc, cc.type.getDamagePerHit());
                 pluginmanager.callEvent(cde);
                 if(!cde.isCancelled()) {
-                    cc.damage(player, cde.damage, false);
+                    cc.damage(player, cde.getDamage(), false);
                 }
             }
         }

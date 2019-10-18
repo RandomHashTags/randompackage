@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.attribute.condition;
 
 import me.randomhashtags.randompackage.attribute.AbstractEventCondition;
-import me.randomhashtags.randompackage.event.enchant.isDamagedEvent;
+import me.randomhashtags.randompackage.event.isDamagedEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
