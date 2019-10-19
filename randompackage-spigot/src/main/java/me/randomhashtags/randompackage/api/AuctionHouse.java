@@ -69,25 +69,31 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         final int l = args.length;
         if(l == 0) {
             if(i) view(player, 1);
-        } else if(l == 1) {
-            final String a = args[0];
-            if(a.equals("sell")) {
-            } else if(a.equals("collect")) {
-                viewCollectionBin(player);
-            }
         } else {
-            final String a = args[0], b = args[1];
-            if(a.equals("sell")) {
-                final BigDecimal price = BigDecimal.valueOf(getRemainingDouble(b));
-                final ItemStack is = player.getItemInHand();
-                if(is == null || is.getType().equals(Material.AIR)) {
-                    sendStringListMessage(player, config.getStringList("messages.need to be holding item"), null);
-                } else if(price.doubleValue() <= 0.00) {
-                    sendStringListMessage(player, config.getStringList("messages.must enter valid price"), null);
-                } else {
-                    confirmAuction(player, is, price);
-                }
-            } else if(a.equals("collect")) {
+            final String arg0 = args[0], arg1 = l >= 2 ? args[1] : null;
+            switch (arg0) {
+                case "sell":
+                    if(arg1 != null) {
+                        final BigDecimal price = BigDecimal.valueOf(getRemainingDouble(arg1));
+                        final ItemStack is = player.getItemInHand();
+                        if(is.getType().equals(Material.AIR)) {
+                            sendStringListMessage(player, config.getStringList("messages.need to be holding item"), null);
+                        } else if(price.doubleValue() <= 0.00) {
+                            sendStringListMessage(player, config.getStringList("messages.must enter valid price"), null);
+                        } else {
+                            confirmAuction(player, is, price);
+                        }
+                    }
+                    break;
+                case "collect":
+                    viewCollectionBin(player);
+                    break;
+                case "help":
+                    viewHelp(sender);
+                    break;
+                default:
+                    if(i) view(player, 1);
+                    break;
             }
         }
         return true;
@@ -303,6 +309,11 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         for(AuctionedItem i : task.keySet()) scheduler.cancelTask(task.get(i));
     }
 
+    public void viewHelp(CommandSender sender) {
+        if(hasPermission(sender, "RandomPackage.ah.help", true)) {
+            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+        }
+    }
 
     public void updatePage(Player player) {
         if(viewing.containsKey(player)) {

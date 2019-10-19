@@ -10,11 +10,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.UUID;
+
+import static me.randomhashtags.randompackage.addon.Kits.previewing;
 
 public final class KitEvents extends RPStorage implements Listener {
     private static KitEvents instance;
@@ -54,5 +57,9 @@ public final class KitEvents extends RPStorage implements Listener {
             event.setCancelled(true);
             player.updateInventory();
         }
+    }
+    @EventHandler
+    private void inventoryCloseEvent(InventoryCloseEvent event) {
+        previewing.remove(event.getPlayer());
     }
 }

@@ -1,10 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
-import me.randomhashtags.randompackage.addon.CustomKit;
-import me.randomhashtags.randompackage.addon.CustomKitEvolution;
-import me.randomhashtags.randompackage.addon.CustomKitMastery;
-import me.randomhashtags.randompackage.addon.Kits;
-import me.randomhashtags.randompackage.addon.CustomKitGlobal;
+import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitMastery;
@@ -38,6 +34,7 @@ public class KitsMastery extends Kits {
 
     private UInventory gui, preview;
     private ItemStack background, cooldown;
+    private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
 
     public String getIdentifier() { return "KITS_MASTERY"; }
     protected RPFeature getFeature() { return getKitsMastery(); }
@@ -57,6 +54,10 @@ public class KitsMastery extends Kits {
         }
 
         gui = new UInventory(null, config.getInt("mkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("mkits.gui.title")));
+        permissionsUnlocked = colorizeListString(config.getStringList("mkits.permissions.unlocked"));
+        permissionsLocked = colorizeListString(config.getStringList("mkits.permissions.locked.lore"));
+        permissionsPreview = colorizeListString(config.getStringList("mkits.permissions.preview"));
+        preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("mkits.items.preview.title")));
         background = d(config, "mkits.gui.background");
 
         final List<ItemStack> gems = new ArrayList<>();
@@ -102,9 +103,9 @@ public class KitsMastery extends Kits {
     public List<String> getResetSuccess() { return null; }
     public ItemStack getPreviewBackground() { return null; }
     public ItemStack getCooldown() { return cooldown.clone(); }
-    public List<String> getPermissionsUnlocked() { return null; }
-    public List<String> getPermissionsLocked() { return null; }
-    public List<String> getPermissionsPreview() { return null; }
+    public List<String> getPermissionsUnlocked() { return permissionsUnlocked; }
+    public List<String> getPermissionsLocked() { return permissionsLocked; }
+    public List<String> getPermissionsPreview() { return permissionsPreview; }
 
     public void view(Player player) {
         player.closeInventory();
@@ -159,6 +160,9 @@ public class KitsMastery extends Kits {
                         sendStringListMessage(player, config.getStringList("mkits.messages.not unlocked"), null);
                     }
                 }
+            } else if(previewing.contains(player)) {
+                event.setCancelled(true);
+                player.updateInventory();
             }
         }
     }

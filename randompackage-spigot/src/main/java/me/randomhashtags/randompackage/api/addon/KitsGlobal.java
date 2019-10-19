@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
+import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitGlobal;
@@ -141,18 +141,19 @@ public class KitsGlobal extends Kits {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR) && top.getHolder() == player) {
-            final String t = event.getView().getTitle(), preview = this.preview.getTitle();
-            final int r = event.getRawSlot();
-            if(t.equals(gkit.getTitle()) || t.equals(preview)) {
+            final boolean inPreview = previewing.contains(player);
+            final String t = event.getView().getTitle();
+            if(t.equals(gkit.getTitle()) || inPreview) {
                 event.setCancelled(true);
                 player.updateInventory();
+                final int r = event.getRawSlot();
                 final CustomKit k = valueOfCustomKit(r, CustomKitGlobal.class);
                 if(gkit == null || r < 0 || r >= top.getSize() || k == null) return;
 
                 final CustomKitGlobal gkit = (CustomKitGlobal) k;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final int level = pdata.getKitLevel(gkit), tier = level <= 0 ? 1 : level;
-                if(t.equals(preview)) {
+                if(inPreview) {
                     player.closeInventory();
                     sendStringListMessage(player, config.getStringList("gkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {

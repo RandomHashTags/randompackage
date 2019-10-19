@@ -17,6 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     private static boolean isEnabled = false;
     private static byte loadedInstances = 0;
     public static YamlConfiguration config;
+    public static List<HumanEntity> previewing;
 
     public final boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final boolean b = executeCommand(sender, cmd, commandLabel, args);
@@ -88,6 +90,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                     new FileFallenHero(f);
                 }
             }
+            previewing = new ArrayList<>();
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fallenheroes != null ? fallenheroes.size() : 0) + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
@@ -254,7 +257,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         }
         int s = rewards.size();
         s = s > 54 ? 54 : s%9 == 0 ? s : ((s+9)/9)*9;
-        player.openInventory(Bukkit.createInventory(player, s, getPreview().getTitle()));
+        player.openInventory(Bukkit.createInventory(player, s, getPreview().getTitle().replace("{KIT}", kit.getIdentifier())));
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(ItemStack i : rewards) top.setItem(top.firstEmpty(), i);
         final ItemStack bg = getPreviewBackground();
@@ -264,5 +267,6 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 top.setItem(i, bg);
         }
         player.updateInventory();
+        previewing.add(player);
     }
 }

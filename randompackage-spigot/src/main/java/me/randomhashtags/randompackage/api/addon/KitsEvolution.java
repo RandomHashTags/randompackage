@@ -273,15 +273,16 @@ public class KitsEvolution extends Kits {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         if(player.getOpenInventory().getTopInventory().getHolder() == player) {
-            final String t = event.getView().getTitle(), preview = this.preview.getTitle();
-            if(t.equals(vkit.getTitle()) || t.equals(preview)) {
+            final boolean inPreview = previewing.contains(player);
+            final String t = event.getView().getTitle();
+            if(t.equals(vkit.getTitle()) || inPreview) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();
                 if(r >= player.getOpenInventory().getTopInventory().getSize()) return;
 
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                if(t.equals(preview)) {
+                if(inPreview) {
                     player.closeInventory();
                     sendStringListMessage(player, config.getStringList("vkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {

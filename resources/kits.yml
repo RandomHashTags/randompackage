@@ -287,6 +287,27 @@ mkits:
       - "&c&l(!)&r &cYou do not have the required '{KIT}&r&c' Tier {TIER} /vkit unlocked!"
       - "&7Purchase a Fallen Hero at &nbuy.yourserver.com&r &7to unlock and level-up your /vkit!"
   #
+  permissions:
+    unlocked:
+      - " "
+      - "&a&lUNLOCKED"
+      - "&7Click to receive kit."
+    #
+    locked:
+      item: "red_stained_glass_pane"
+      lore:
+        - " "
+        - "&c&lLOCKED"
+        - "&7Unlock at &nbuy.yourserver.com"
+    preview:
+      - "&7Right-Click to preview kit items."
+  #
+  items:
+    preview:
+      title: "{KIT} Kit Preview"
+      item: "black_stained_glass_pane"
+      name: " "
+  #
   settings:
     max anti crystals on item: 1
   #
@@ -305,14 +326,7 @@ mkits:
       - "{LORE}"
       - "&c&l{LOCKED}"
       - "&7Unlock at &nbuy.yourserver.com"
-    unlocked lore:
-      - "&a&lUNLOCKED"
-    preview lore:
-      - "&7Right-click to preview kit items."
     redeem added lore:
       - " "
       - "&7Right-click to unlock this Mastery Kit!"
-#
-custom kit addon:
-  woot woot ree ree, howdedoo?: "vroom vroom im a broom;splash splash your opinion is trash;esprugnsruigbergbserygbosertuygbp"
 #

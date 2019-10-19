@@ -46,6 +46,25 @@ shard:
   applied lore:
   - "&6&l* Mastery Shard&r &6(&3&lGhost&r&6)"
 #
+items:
+  helmet:
+    item: "leather_helmet"
+    name: "&3&lGhostly Hood&r {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{Feign Death;Mark of the Beast;Paladin Armored;Protection;Death God;Drunk;Angelic;Valor;Arrow Deflect;Implants;Frozen;Resilience}"
+  chestplate:
+    item: "leather_chestplate"
+    name: "&3&lGhostly Shroud&r {ENCHANT_SIZE}"
+  leggings:
+    item: "leather_leggings"
+    name: "&3&lGhostly Robes&r {ENCHANT_SIZE}"
+  boots:
+    item: "leather_boots"
+    name: "&3&lGhostly Whisp&r {ENCHANT_SIZE}"
+  mask:
+    item: "mask:GHOST"
+#
 kit bundle:
   item: "chest"
   name: "&3&lGhost Kit Bundle"
