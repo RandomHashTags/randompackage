@@ -70,7 +70,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     private String getFactionType(Plugin factions) {
         if(factions != null) {
             final List<String> authors = factions.getDescription().getAuthors();
-            return authors.contains("SavagePro") ? "SavageFactions" : "FactionsUUID";
+            return authors.contains("ProSavage") ? "SavageFactions" : "FactionsUUID";
         }
         return null;
     }

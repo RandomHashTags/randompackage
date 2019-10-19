@@ -33,13 +33,19 @@ dependencies {
     implementation 'net.milkbowl.vault:VaultAPI:1.7'
     implementation 'com.wasteofplastic:askyblock:3.0.9.4'
     implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
-    implementation 'com.massivecraft:Factions:1.6.9.5-U0.5.0'
+    implementation 'com.massivecraft:Factions:1.6.9.5-U0.5.3'
     //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'
     //implementation 'com.sk89q.worldguard:worldedit-bukkit:7.0.1'
     //implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.1-SNAPSHOT'
 }
 
 configurations {
+    compile.exclude group: 'com.typesafe'
+    compile.exclude group: 'org.apache'
+    compile.exclude group: 'org.kitteh'
+    compile.exclude group: 'org.spongepowered'
+    compile.exclude group: 'commons-codec'
+
     compile.exclude group: 'com.darkblade12'
     compile.exclude group: 'org.hamcrest'
     compile.exclude group: 'me.lucko'

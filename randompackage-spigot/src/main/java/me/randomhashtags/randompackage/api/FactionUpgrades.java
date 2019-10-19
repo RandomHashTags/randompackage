@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -131,6 +132,7 @@ public class FactionUpgrades extends EventAttributes {
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + (factionupgrades != null ? factionupgrades.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
         } else {
             sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
+            HandlerList.unregisterAll(instance);
             disable();
         }
     }

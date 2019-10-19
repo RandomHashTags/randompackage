@@ -471,7 +471,7 @@ public class UVersion extends YamlUpdater implements Versionable {
         }
     }
     public final Entity getHitEntity(ProjectileHitEvent event) {
-        if(EIGHT) {
+        if(EIGHT || NINE || TEN) {
             final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);
             return n.size() > 0 ? n.get(0) : null;
         } else {

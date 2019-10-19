@@ -69,9 +69,11 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         try {
             isEnabled = true;
             load();
-            final RPFeature f = getFeature();
-            if(f != null) {
-                pluginmanager.registerEvents(f, randompackage);
+            if(isEnabled) {
+                final RPFeature f = getFeature();
+                if(f != null) {
+                    pluginmanager.registerEvents(f, randompackage);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,11 +84,13 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         try {
             isEnabled = false;
             unload();
-            final RPFeature f = getFeature();
-            if(f != null) {
-                HandlerList.unregisterAll(f);
+            if(!isEnabled) {
+                final RPFeature f = getFeature();
+                if(f != null) {
+                    HandlerList.unregisterAll(f);
+                }
+                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
             }
-            sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
         } catch (Exception e) {
             e.printStackTrace();
         }
