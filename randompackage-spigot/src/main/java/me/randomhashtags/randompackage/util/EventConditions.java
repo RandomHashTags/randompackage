@@ -36,8 +36,8 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
     protected static List<UUID> spawnedFromSpawner = new ArrayList<>();
     protected static HashMap<UUID, EntityShootBowEvent> projectileEvents = new HashMap<>();
 
-    protected boolean passedAllConditions(Event event, Entity entity, String condition, String s, String value, boolean legacy, boolean eight, boolean nine, boolean ten, boolean eleven, boolean thirteen) {
-        final boolean pre = passedCustomCondition(event, entity, condition, s, value) && passedEvent(event, entity, condition, s, value), isEntity = condition.startsWith(s);
+    protected boolean passedAllConditions(Event event, HashMap<String, Entity> entities, String entityKey, Entity entity, String condition, String s, String value, boolean legacy, boolean eight, boolean nine, boolean ten, boolean eleven, boolean thirteen) {
+        final boolean pre = passedCustomCondition(event, entities, entityKey, entity, condition, s, value) && passedEvent(event, entity, condition, s, value), isEntity = condition.startsWith(s);
         condition = condition.substring(s.length()).split("=")[0];
         return pre && (!isEntity
                 || passedBasic(entity, condition, s, value)
@@ -95,7 +95,7 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
             case "iscreature": return e instanceof Creature == Boolean.parseBoolean(value);
             case "isanimal": return e instanceof Animals == Boolean.parseBoolean(value);
             case "isflying": return e instanceof Flying || e instanceof Player && ((Player) e).isFlying() == Boolean.parseBoolean(value);
-            case "istype": return e.getType().name().toLowerCase().equals(value);
+            case "istype": return e.getType().name().equalsIgnoreCase(value);
             case "isfacing": return e.getFacing().name().toLowerCase().startsWith(value);
             case "isop": return e.isOp() == Boolean.parseBoolean(value);
             case "isinsidevehicle": return e.isInsideVehicle() == Boolean.parseBoolean(value);
@@ -611,11 +611,11 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
                 return true;
         }
     }
-    private boolean passedCustomCondition(Event event, Entity e, String condition, String s, String value) {
+    private boolean passedCustomCondition(Event event, HashMap<String, Entity> entities, String entityKey, Entity e, String condition, String s, String value) {
         String target = condition.startsWith(s) ? condition.split(s)[1] : condition;
         if(target.contains("=")) target = target.split("=")[0];
         final EventCondition con = getEventCondition(target.toUpperCase());
-        return con == null || con.check(value) && con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value);
+        return con == null || con.check(value) && con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value) && con.check(entityKey, entities, value);
     }
     private boolean passedRandomPackage(Entity e, String condition, String s, String value) {
         switch (condition) {

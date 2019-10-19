@@ -1,0 +1,12 @@
+# Made by RandomHashTags
+creeper name: "&b&lArcane Creeper"
+#
+item:
+  item: "creeper_spawn_egg"
+  name: "&bArcane Creeper"
+  lore:
+    - "&7&oBanishes all Enchantment"
+    - "&7&oTables in a 3x3 radius."
+#
+attributes:
+  - "AFFECTS_ONLY;enchantment_table"

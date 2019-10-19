@@ -53,13 +53,17 @@ public class CustomExplosions extends RPFeature {
 
 		final YamlConfiguration a = otherdata;
 		if(!a.getBoolean("saved default custom creepers")) {
-			final String[] c = new String[] {"GIGANTIC", "LUCKY", "STUN", "TACTICAL"};
+			final String[] c = new String[] {
+					"ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL"
+			};
 			for(String s : c) save("custom creepers", s + ".yml");
 			a.set("saved default custom creepers", true);
 			saveOtherData();
 		}
 		if(!a.getBoolean("saved default custom tnt")) {
-			final String[] c = new String[] {"GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL"};
+			final String[] c = new String[] {
+					"GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL"
+			};
 			for(String s : c) save("custom tnt", s + ".yml");
 			a.set("saved default custom tnt", true);
 			saveOtherData();

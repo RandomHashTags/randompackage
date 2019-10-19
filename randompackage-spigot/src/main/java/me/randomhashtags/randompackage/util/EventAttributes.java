@@ -11,7 +11,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.UUID;
 
 public abstract class EventAttributes extends EventExecutor {
     /*
@@ -93,7 +96,8 @@ public abstract class EventAttributes extends EventExecutor {
                 new HitBlock(),
                 new HitCEEntity(),
                 new IsHeadshot(),
-                new IsInList()
+                new IsInList(),
+                new IsRelation()
         );
         for(EventCondition c : conditions) {
             c.load();

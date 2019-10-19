@@ -5,6 +5,8 @@ import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
+import java.util.HashMap;
+
 public abstract class AbstractEventCondition extends RPStorage implements EventCondition {
     public String getIdentifier() {
         final String[] n = getClass().getName().split("\\.");
@@ -18,4 +20,5 @@ public abstract class AbstractEventCondition extends RPStorage implements EventC
     public boolean check(Event event, Entity entity) { return true; }
     public boolean check(Event event, String value) { return true; }
     public boolean check(Entity entity, String value) { return true; }
+    public boolean check(String entity, HashMap<String, Entity> entities, String value) { return true; }
 }

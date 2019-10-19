@@ -6,6 +6,8 @@ import me.randomhashtags.randompackage.addon.util.Mathable;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
+import java.util.HashMap;
+
 public interface EventCondition extends Identifiable, Mathable {
     void load();
     void unload();
@@ -14,4 +16,5 @@ public interface EventCondition extends Identifiable, Mathable {
     boolean check(@NotNull Event event, @NotNull Entity entity);
     boolean check(@NotNull Event event, @NotNull String value);
     boolean check(@NotNull Entity entity, @NotNull String value);
+    boolean check(@NotNull String entity, @NotNull HashMap<String, Entity> entities, @NotNull String value);
 }

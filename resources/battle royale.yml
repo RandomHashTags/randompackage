@@ -1,0 +1,61 @@
+# Made by RandomHashTags
+messages:
+  active:
+    - "&e&l***&r &6&lENVOY BATTLE ROTALE&r &e&l***"
+    - "&e&lStatus:&r {STATUS}"
+    - "&e&lPlayers Alive:&r &f{PLAYERS_ALIVE} &7/ {TOTAL_PLAYERS}"
+    - "&e&lRuntime:&r &f{RUNTIME}"
+    - "&e&lBorder:&r &f{BORDER} blocks"
+  waiting for next game:
+    - "&e&l***&r &6&lENVOY BATTLE ROYALE&r &e&l***"
+    - "&e&lStatus:&r &6Awaiting next match..."
+    - "&e&lNext Match:&r &7{NEXT_MATCH}"
+#
+settings:
+  max players: 99
+  team sizes: 3
+  type: ENVOY
+  world border:
+    start x: 100
+    start z: 100
+#
+statuses:
+  active: "&a&lIN PROGRESS!"
+  waiting for next game: "&6Awaiting next match..."
+#
+loadout:
+  helmet:
+    slot: HELMET
+    item: "diamond_helmet"
+    lore:
+      - "VEnchants{Protection4}"
+  chestplate:
+    slot: CHESTPLATE
+    item: "diamond_chestplate"
+    lore:
+      - "VEnchants{Protection4}"
+  leggings:
+    slot: LEGGINGS
+    item: "diamond_leggings"
+    lore:
+      - "VEnchants{Protection4}"
+  boots:
+    slot: BOOTS
+    item: "diamond_boots"
+    lore:
+      - "VEnchants{Protection4}"
+  sword:
+    slot: 0
+    item: "diamond_sword"
+    lore:
+      - "VEnchants{Sharpness5}"
+#
+lootbag:
+  item: ""
+  name: ""
+  lore:
+    - ""
+  #
+  rewards:
+    - ""
+#

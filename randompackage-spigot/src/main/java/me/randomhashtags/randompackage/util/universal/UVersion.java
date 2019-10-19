@@ -470,9 +470,13 @@ public class UVersion extends YamlUpdater implements Versionable {
             }
         }
     }
-    public final LivingEntity getHitEntity(ProjectileHitEvent event) {
-        final List<Entity> n = event.getEntity().getNearbyEntities(0.0, 0.0, 0.0);
-        return n.size() > 0 && n.get(0) instanceof LivingEntity ? (LivingEntity) n.get(0) : null;
+    public final Entity getHitEntity(ProjectileHitEvent event) {
+        if(EIGHT) {
+            final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);
+            return n.size() > 0 ? n.get(0) : null;
+        } else {
+            return event.getHitEntity();
+        }
     }
     public final void playParticle(FileConfiguration config, String path, Location location, int count) {
         if(config != null && config.get(path) != null) {

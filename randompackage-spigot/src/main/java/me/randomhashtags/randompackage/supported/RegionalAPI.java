@@ -158,7 +158,7 @@ public class RegionalAPI extends UVersion {
     }
     private void add(UUID player, int type, Regional plugin, List<UUID> list) {
         List<UUID> l = null;
-        switch(type) {
+        switch (type) {
             case 0:
                 l = plugin.getAssociates(player);
                 if(l != null) list.addAll(l);

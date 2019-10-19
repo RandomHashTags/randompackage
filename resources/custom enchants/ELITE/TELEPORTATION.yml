@@ -1,5 +1,5 @@
-# Made by RandomHashTags | TODO: fix this
-enabled: false
+# Made by RandomHashTags
+enabled: true
 #
 name: "Teleportation"
 lore:
@@ -13,4 +13,4 @@ alchemist: "3200:4200:5200:6200"
 tinkerer: "51:64:77:90:103"
 #
 attributes:
-  - "ProjectileHit;cancelled=true;VictimIsAlly=true;"
+  - "ProjectileHit;chance=17*level;ShooterIsRelation=Victim:ALLY;ShooterTeleport=@Projectile;ProjectileRemove=true"

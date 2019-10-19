@@ -32,7 +32,7 @@ public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Tog
         return false;
     }
     default boolean canBeTriggered(Player player, ItemStack is) {
-        if(is != null) {
+        if(player != null && is != null) {
             final String mat = is.getType().name();
             final PlayerInventory inv = player.getInventory();
             for(String s : getAppliesTo()) {

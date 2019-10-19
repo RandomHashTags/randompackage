@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.*;
 
@@ -86,8 +87,9 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
             for(String s : keys) {
+                final String entityKey = s;
+                final Entity e = entities.get(entityKey);
                 String value = c.contains("=") ? doReplacements(entities, keys, c.split("=")[1]) : "false";
-                final Entity e = entities.get(s);
                 s = s.toLowerCase();
                 for(String r : valueReplacements.keySet()) {
                     s = s.replace(r.toLowerCase(), valueReplacements.get(r));
@@ -101,7 +103,7 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
                 } else {
-                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
+                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, entities, entityKey, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
                 }
                 if(!passed) break outerloop;
             }
@@ -619,9 +621,17 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     }
 
     private Player getSource(Event event) {
-        switch (event.getEventName().toLowerCase().split("=")[0]) {
+        switch (event.getEventName().toLowerCase().split("event")[0]) {
             case "pvany": return ((PvAnyEvent) event).getDamager();
             case "isdamaged": return ((isDamagedEvent) event).getEntity();
+
+            case "entityshootbow":
+                final Entity e = ((EntityShootBowEvent) event).getEntity();
+                return e instanceof Player ? (Player) e : null;
+            case "projectilehit":
+                final Projectile proj = ((ProjectileHitEvent) event).getEntity();
+                final ProjectileSource shooter = proj.getShooter();
+                return shooter instanceof Player ? (Player) shooter : null;
             // TODO: fix dis bruh
             default: return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
         }

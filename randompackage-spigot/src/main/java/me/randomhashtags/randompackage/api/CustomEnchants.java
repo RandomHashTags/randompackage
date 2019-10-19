@@ -8,14 +8,14 @@ import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
-import me.randomhashtags.randompackage.event.isDamagedEvent;
-import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.isDamagedEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -461,7 +461,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Entity damager = event.getDamager();
         final UUID u = damager.getUniqueId();
         if(projectileEvents.containsKey(u)) {
-            final Projectile e = (Projectile) event.getDamager();
+            final Projectile e = (Projectile) damager;
             final EntityShootBowEvent p = projectileEvents.getOrDefault(u, null);
             if(p != null) {
                 final ProjectileSource shooter = e.getShooter();
