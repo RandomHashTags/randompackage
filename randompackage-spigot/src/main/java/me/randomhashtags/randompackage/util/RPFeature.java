@@ -31,7 +31,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public abstract class RPFeature extends RPStorage implements Listener, Identifiable, Mathable {
@@ -40,8 +39,6 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
     public boolean isEnabled() { return isEnabled; }
     protected boolean mcmmoIsEnabled() { return mcmmoIsEnabled; }
 
-    public static final File rpd = getPlugin.getDataFolder();
-    public static final String separator = File.separator;
     public static final RegionalAPI regions = RegionalAPI.getRegionalAPI();
     protected static final Economy eco = Vault.getVault().getEconomy();
     private static final TreeMap<Integer, String> treemap = new TreeMap<>();

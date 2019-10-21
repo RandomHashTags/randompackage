@@ -1,0 +1,47 @@
+# Made by RandomHashTags
+messages:
+  member:
+    joined:
+      - "&e&l(!) {PLAYER}&r &ehas logged in."
+    quit:
+    - "&e&l(!) &e&l{PLAYER}&r &ehas logged out."
+  chat:
+  cant hurt target:
+    - "&7You can't hurt %randompackage_faction_relation%{PLAYER}&r&7."
+
+#
+settings:
+  max tag: 16
+  min tag: 3
+#
+relationships:
+  default: NEUTRAL
+  #
+  ALLY:
+    string: "ally"
+    color: "&a"
+  TRUCE:
+    string: "truce"
+  NEUTRAL:
+    string: "neutral"
+  ENEMY:
+    string: "enemy"
+    color: "&c"
+#
+roles:
+  default creator: OWNER
+  default joiner: MEMBER
+  #
+  OWNER:
+    string: "owner"
+  COLEADER:
+    string: "coleader"
+  ADMIN:
+    string: "admin"
+  MODERATOR:
+    string: "mod"
+  RECRUIT:
+    string: "recruit"
+  MEMBER:
+    string: "member"
+#

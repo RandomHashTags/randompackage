@@ -1,5 +1,15 @@
 # Made by RandomHashTags
+messages:
+  block durability:
+    - "&bBlock Durability: &l{DURABILITY}"
+#
 gui:
   title: "Strongholds"
   size: 9
 #
+settings:
+  default:
+    block durability: 15
+  blacklisted repair blocks:
+    - OBSIDIAN
+    - BEDROCK

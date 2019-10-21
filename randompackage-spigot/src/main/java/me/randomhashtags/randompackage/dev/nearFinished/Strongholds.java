@@ -1,15 +1,21 @@
 package me.randomhashtags.randompackage.dev.nearFinished;
 
+import me.randomhashtags.randompackage.dev.ActiveStronghold;
 import me.randomhashtags.randompackage.dev.FileStronghold;
+import me.randomhashtags.randompackage.dev.Stronghold;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
+import java.util.Collection;
 
 public class Strongholds extends RPFeature implements CommandExecutor {
     private static Strongholds instance;
@@ -32,10 +39,22 @@ public class Strongholds extends RPFeature implements CommandExecutor {
 
     public YamlConfiguration config;
     private UInventory gui;
+    private int captureTask;
 
     public String getIdentifier() { return "STRONGHOLDS"; }
     protected RPFeature getFeature() { return getStrongholds(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        final Player player = sender instanceof Player ? (Player) sender : null;
+        final int l = args.length;
+        switch (l) {
+            case 1:
+                if(args[0].equals("sell")) {
+                }
+                break;
+            default:
+                if(player != null) viewStrongholds(player);
+                break;
+        }
         if(sender instanceof Player) {
             viewStrongholds((Player) sender);
         }
@@ -62,9 +81,20 @@ public class Strongholds extends RPFeature implements CommandExecutor {
                 gi.setItem(s.getSlot(), s.getItem());
             }
         }
+
+        captureTask = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+            for(Stronghold s : strongholds.values()) {
+                final ActiveStronghold a = s.getActiveStronghold();
+                if(a != null) {
+                    final Collection<Entity> entities = s.getSquareCaptureZone().getEntities();
+                }
+            }
+        }, 20, 20);
+
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        scheduler.cancelTask(captureTask);
         strongholds = null;
     }
 
@@ -93,14 +123,31 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    @EventHandler
-    private void playerInteractEvent(PlayerInteractEvent event) {
-    }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
+        final Player player = event.getPlayer();
+        final Block b = event.getBlock();
+        final Location l = b.getLocation();
+        for(Stronghold s : strongholds.values()) {
+            final ActiveStronghold a = s.getActiveStronghold();
+            if(a != null && s.getZone().contains(l)) {
+                break;
+            }
+        }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
+        final Player player = event.getPlayer();
+        final Block b = event.getBlock();
+        final Location l = b.getLocation();
+        for(Stronghold s : strongholds.values()) {
+            final ActiveStronghold a = s.getActiveStronghold();
+            if(a != null && s.getZone().contains(l)) {
+                event.setCancelled(true);
+                player.updateInventory();
+                break;
+            }
+        }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void projectileLaunchEvent(ProjectileLaunchEvent event) {

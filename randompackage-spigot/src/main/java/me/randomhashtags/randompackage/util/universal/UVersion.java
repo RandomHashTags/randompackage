@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class UVersion extends YamlUpdater implements Versionable {
@@ -39,6 +40,9 @@ public class UVersion extends YamlUpdater implements Versionable {
         if(instance == null) instance = new UVersion();
         return instance;
     }
+
+    public static final File rpd = getPlugin.getDataFolder();
+    public static final String separator = File.separator;
 
     public final RandomPackage randompackage = RandomPackage.getPlugin;
     public final PluginManager pluginmanager = Bukkit.getPluginManager();

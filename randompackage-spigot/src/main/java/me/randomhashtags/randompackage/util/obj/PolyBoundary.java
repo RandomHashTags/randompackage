@@ -2,6 +2,9 @@ package me.randomhashtags.randompackage.util.obj;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+
+import java.util.Collection;
 
 public final class PolyBoundary {
     private final Location center;
@@ -28,10 +31,12 @@ public final class PolyBoundary {
     public World getWorld() { return center.getWorld(); }
     public Location getCenter() { return center; }
     public int getRadius() { return radius; }
-    public int getMaxM() { return maxX; }
+    public int getMaxX() { return maxX; }
     public int getMinX() { return minX; }
     public int getMaxZ() { return maxZ; }
     public int getMinZ() { return minZ; }
     public int getMaxY() { return maxY; }
     public int getMinY() { return minY; }
+
+    public Collection<Entity> getEntities() { return getWorld().getNearbyEntities(center, radius, radius, radius); }
 }
