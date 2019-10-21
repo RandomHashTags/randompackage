@@ -44,7 +44,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "strongholds.yml");
+        save("strongholds", "_settings.yml");
         if(!otherdata.getBoolean("saved default strongholds")) {
             final String[] a = new String[] {"FROZEN", "INFERNAL"};
             for(String s : a) save("strongholds", s + ".yml");
@@ -52,13 +52,15 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "strongholds.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "strongholds", "_settings.yml"));
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
 
         for(File f : new File(rpd + separator + "strongholds").listFiles()) {
-            final FileStronghold s = new FileStronghold(f);
-            gi.setItem(s.getSlot(), s.getItem());
+            if(!f.getName().equals("_settings.yml")) {
+                final FileStronghold s = new FileStronghold(f);
+                gi.setItem(s.getSlot(), s.getItem());
+            }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }

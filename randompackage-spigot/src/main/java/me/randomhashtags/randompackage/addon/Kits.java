@@ -74,8 +74,8 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             final long started = System.currentTimeMillis();
             new SetLevelupChance().load();
             isEnabled = true;
-            save(null, "kits.yml");
-            config = YamlConfiguration.loadConfiguration(new File(rpd, "kits.yml"));
+            save("kits", "_settings.yml");
+            config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "kits", "_settings.yml"));
             pluginmanager.registerEvents(KitEvents.getKitEvents(), randompackage);
 
             if(!otherdata.getBoolean("saved default fallen heroes")) {

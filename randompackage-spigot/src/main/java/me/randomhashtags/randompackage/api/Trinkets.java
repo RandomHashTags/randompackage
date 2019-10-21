@@ -39,7 +39,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
     protected RPFeature getFeature() { return getTrinkets(); }
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "trinkets.yml");
+        save("trinkets", "_settings.yml");
         if(!otherdata.getBoolean("saved default trinkets")) {
             final String[] a = new String[] {
                     "BATTLESTAFF_OF_YIJKI",
@@ -56,9 +56,8 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
 
         final List<ItemStack> t = new ArrayList<>();
-        final File folder = new File(rpd + separator + "trinkets");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "trinkets").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 final Trinket trinket = new FileTrinket(f);
                 if(trinket.isEnabled()) {
                     t.add(trinket.getItem(0));
@@ -68,7 +67,6 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "trinkets.yml"));
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (trinkets != null ? trinkets.size() : 0) + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

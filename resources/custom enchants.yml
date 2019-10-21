@@ -13,9 +13,15 @@ messages:
   - "&c&l[-]&r &c{ENCHANT}: &7removing {POTION_EFFECT}"
 #
 settings:
+  enabled worlds:
+    - "world"
+    - "world_nether"
+    - "world_the_end"
+    - "koth"
+    - "battle_royale"
   # If an item contains this lore, then enchants will not be able to be applied to it
   no more enchants:
-  - "&7&lMax Custom Enchantments Reached"
+    - "&7&lMax Custom Enchantments Reached"
   proc self harm: false
   # Required bow charging percent before enchants can proc from the bow. Default is 80.
   proc bow percent: 80

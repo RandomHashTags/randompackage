@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.api.FatBuckets;
+import me.randomhashtags.randompackage.dev.finished.InventoryPets;
 import me.randomhashtags.randompackage.dev.nearFinished.*;
 import me.randomhashtags.randompackage.dev.partiallyFinished.Dungeons;
 import me.randomhashtags.randompackage.event.FoodLevelLostEvent;

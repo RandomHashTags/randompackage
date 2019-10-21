@@ -52,7 +52,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
     protected RPFeature getFeature() { return getOutposts(); }
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "outposts.yml");
+        save("outposts", "_settings.yml");
 
         if(!otherdata.getBoolean("saved default outposts")) {
             final String[] o = new String[]{"HERO", "SERVONAUT", "TRAINEE", "VANILLA"};
@@ -61,7 +61,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "outposts.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "outposts", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
@@ -69,9 +69,8 @@ public class Outposts extends RPFeature implements CommandExecutor {
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
             statuses.put(s.toUpperCase().replace(" ", "_"), ChatColor.translateAlternateColorCodes('&', config.getString("status." + s)));
         }
-        final File folder = new File(rpd + separator + "outposts");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "outposts").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 //final FileOutpost o = new FileOutpost(f);
                 //o.setOutpostStatus(OutpostStatus.UNCONTESTED);
                 //gi.setItem(o.getSlot(), o.getItem());
@@ -88,7 +87,6 @@ public class Outposts extends RPFeature implements CommandExecutor {
     public void unload() {
         outposts = null;
     }
-
 
     public void viewStatus(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost", true)) {

@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
+import me.randomhashtags.randompackage.api.util.RandomizedLoot;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -342,8 +343,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return customitems.get(Q).clone();
         } else if(items != null && items.containsKey(input)) {
             return items.get(input).clone();
+        } else {
+            final RandomizedLoot r = RandomizedLoot.getRandomizedLoot();
+            return r.isEnabled() ? r.items.getOrDefault(Q, null) : null;
         }
-        return null;
     }
 
     public ItemStack getBanknote(BigDecimal value, String signer) {

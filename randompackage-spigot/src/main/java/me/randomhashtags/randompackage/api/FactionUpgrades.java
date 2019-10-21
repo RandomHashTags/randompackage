@@ -70,7 +70,7 @@ public class FactionUpgrades extends EventAttributes {
     public void load() {
         if(hookedFactionsUUID()) {
             final long started = System.currentTimeMillis();
-            save(null, "faction upgrades.yml");
+            save("faction upgrades", "_settings.yml");
             save("_Data", "faction upgrades.yml");
 
             if(!otherdata.getBoolean("saved default faction upgrades")) {
@@ -94,22 +94,20 @@ public class FactionUpgrades extends EventAttributes {
                 for(String s : a) save("faction upgrades", s + ".yml");
                 otherdata.set("saved default faction upgrades", true);
             }
-            config = YamlConfiguration.loadConfiguration(new File(rpd, "faction upgrades.yml"));
+            config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "faction upgrades", "_settings.yml"));
             for(String s : config.getConfigurationSection("types").getKeys(false)) {
                 new FileFactionUpgradeType(s);
             }
             gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
-            final File folder = new File(rpd + separator + "faction upgrades");
-            if(folder.exists()) {
-                for(File f : folder.listFiles()) {
+            for(File f : new File(rpd + separator + "faction upgrades").listFiles()) {
+                if(!f.getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());
                 }
             }
 
             cropGrowthRate = new HashMap<>();
-
             fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
             aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");

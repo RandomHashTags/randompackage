@@ -59,8 +59,8 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long sc = System.currentTimeMillis();
-        save(null, "lootboxes.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "lootboxes.yml"));
+        save("lootboxes", "_settings.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "lootboxes", "_settings.yml"));
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");

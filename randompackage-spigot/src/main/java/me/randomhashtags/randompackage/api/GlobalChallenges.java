@@ -86,9 +86,9 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    new IncreaseGlobalChallenge().load();
-		save(null, "global challenges.yml");
+		save("global challenges", "_settings.yml");
 		save("_Data", "global challenges.yml");
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "global challenges.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "global challenges", "_settings.yml"));
 		dataF = new File(rpd + separator + "_Data", "global challenges.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 
@@ -115,9 +115,8 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}
-		final File folder = new File(rpd + separator + "global challenges");
-		if(folder.exists()) {
-			for(File f : folder.listFiles()) {
+		for(File f : new File(rpd + separator + "global challenges").listFiles()) {
+			if(!f.getName().equals("_settings.yml")) {
 				new FileGlobalChallenge(f);
 			}
 		}

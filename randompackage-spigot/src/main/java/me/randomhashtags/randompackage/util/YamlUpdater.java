@@ -221,7 +221,10 @@ public abstract class YamlUpdater {
         return putAll(values);
     }
     private LinkedHashMap<String, Object> getCustomEnchants() {
-        return null;
+        final Object[] values = new Object[] {
+                "settings.enabled worlds", newStringList("world", "world_nether", "world_the_end")
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getCustomExplosions() {
         return null;

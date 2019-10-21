@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+default colors:
+  less than 100: "&f"
+  100s: "&a"
+  200s: "&a"
+  300s: "&a"
+  400s: "&a"
+  500s: "&b"
+  600s: "&b"
+  700s: "&b"
+  800s: "&b"
+  900s: "&b"
+  1000s: "&6&l"
+  2000s: "&b&l"
+  else: "&6&l" # If the soul gem amount doesn't fall under one of these, this is the color
+#
+default cooldown msg:
+  - "&c&l(!)&r &cYou can collect {VICTIM}'s Soul again in {TIME}!"

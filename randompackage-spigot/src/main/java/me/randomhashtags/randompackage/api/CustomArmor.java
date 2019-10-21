@@ -51,10 +51,10 @@ public class CustomArmor extends EventAttributes {
 	protected RPFeature getFeature() { return getCustomArmor(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
-		save(null, "custom armor.yml");
+		save("custom armor", "_settings.yml");
 
 		inEquipmentLootbox = new ArrayList<>();
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "custom armor.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom armor", "_settings.yml"));
 		equipmentLootbox = d(config, "items.equipment lootbox");
 		crystal = d(config, "items.crystal");
 		crystalAddedLore = ChatColor.translateAlternateColorCodes('&', config.getString("items.crystal.applied lore"));
@@ -68,10 +68,9 @@ public class CustomArmor extends EventAttributes {
 			a.set("saved default custom armor", true);
 			saveOtherData();
 		}
-		final File folder = new File(rpd + separator + "custom armor");
 		final List<ItemStack> crystals = new ArrayList<>();
-		if(folder.exists()) {
-			for(File f : folder.listFiles()) {
+		for(File f : new File(rpd + separator + "custom armor").listFiles()) {
+			if(!f.getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {
 					crystals.add(is);

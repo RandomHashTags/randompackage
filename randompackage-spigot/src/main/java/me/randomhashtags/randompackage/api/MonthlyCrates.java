@@ -62,7 +62,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "monthly crates.yml");
+        save("monthly crates", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "monthly crates.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
@@ -104,8 +104,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         givedpitem.items.put("superiormysterycrate", superiormysterycrate);
         givedpitem.items.put("superiorcrate", superiormysterycrate);
 
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default monthly crates")) {
+        if(!otherdata.getBoolean("saved default monthly crates")) {
             final String[] c = new String[] {
                     "APRIL_2016", "APRIL_2017", "APRIL_2018",
                     "AUGUST_2016", "AUGUST_2017", "AUGUST_2018",
@@ -128,14 +127,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             };
             for(String s : c) save("monthly crates", s + ".yml");
 
-            a.set("saved default monthly crates", true);
+            otherdata.set("saved default monthly crates", true);
             saveOtherData();
         }
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> K = new HashMap<>();
-        final File folder = new File(rpd + separator + "monthly crates");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "monthly crates").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 final FileMonthlyCrate m = new FileMonthlyCrate(f);
                 final int z = m.getCategory();
                 if(!categorySlots.containsKey(z)) categorySlots.put(z, new HashMap<>());

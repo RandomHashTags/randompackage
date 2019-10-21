@@ -1,25 +1,135 @@
 # Made by RandomHashTags
 messages:
   active:
+    - " "
     - "&e&l***&r &6&lENVOY BATTLE ROTALE&r &e&l***"
     - "&e&lStatus:&r {STATUS}"
     - "&e&lPlayers Alive:&r &f{PLAYERS_ALIVE} &7/ {TOTAL_PLAYERS}"
     - "&e&lRuntime:&r &f{RUNTIME}"
     - "&e&lBorder:&r &f{BORDER} blocks"
+    - " "
+    - "&6&l(!)&r &7Use &6/battle help &7to learn more!"
+    - "&6Next Match: &e&n{NEXT_MATCH}"
+    - " "
   waiting for next game:
+    - " "
     - "&e&l***&r &6&lENVOY BATTLE ROYALE&r &e&l***"
     - "&e&lStatus:&r &6Awaiting next match..."
     - "&e&lNext Match:&r &7{NEXT_MATCH}"
+    - " "
+    - "&6&l(!)&r &uUse &6&n/battle join&r &7to join an open match (if one is available), and &6&n/battle help&r &7to learn more!"
+    - " "
+  help:
+    - " "
+    - "&e&l***&r &6&lENVOY BATTLE ROYALE&r &e&l***"
+    - " "
+    - "&7An adrenaline pumping exclusing PvP event that will put your &eMLG Minecraft skills &7to the ultimate test!"
+    - " "
+    - "&7All participants..."
+    - " "
+    - "&6&l*&r &7Are grouped into &nRANDOM&r &7teams of 3"
+    - "&6&l*&r &7Start with the same inventory/equipment"
+    - "&6&l*&r &7Loot envoy chests in the arena for upgrades"
+    - "&6&l*&r &7Lose nothing on death!"
+    - " "
+    - "&7Each player on the winning team will receive an..."
+    - "&6&l&nEnvoy Battle Royale Lootbag!&r &e/battle loot"
+    - " "
+  joinable countdown:
+    - "5m"
+    - "4m"
+    - "3m"
+    - "2m"
+    - "1m"
+    - "30s"
+    - "10s"
+    - "5s"
+    - "4s"
+    - "3s"
+    - "2s"
+    - "1s"
+  will be joinable in:
+    - "&6&l**&r &6Envoy /battle Royale will be joinable in &e&n{TIME}!&r &6&l**"
+  not joinable:
+    - "&c&l(!)&r &cThe Envoy Battle Royale is not currently joinable - wait until the next match opens!"
+  now joinable:
+    - " "
+    - "&6&l**&r &6Envoy /battle Royale will being in 1 minute! **"
+    - "&7Join the queue with &e/battle join"
+    - " "
+  cannot hurt team members:
+    - "&c&l*&r &cYou cannot hurt your team members!"
+  border shrinking:
+    - "&c&l(!)&r &cWorld border is shrinking!"
+  border shrinking in:
+    - "&c&l(!)&r &cWorld Border will shrink again in {TIME}!"
+  ending countdown:
+    - "10s"
+    - "5s"
+    - "4s"
+    - "3s"
+    - "2s"
+    - "1s"
+  ending match in:
+    - "&c&l(!)&r &cEnding match in &l{TIME}&r&c..."
+  alive color: "&6"
+  dead color: "&c"
+  ended:
+    - " "
+    - "&6&l[/battle]&r {TEAM} &ewon an Envoy Battle Royale match! All members of the team have been awarded an &6&lEnvoy Battle Royale Lootbag!&r &e(/battle loot)"
+    - " "
+  won:
+    title: "&6Victory!"
+    subtitle: "&eYou won the /battle match!"
+    received lootbag:
+      - "&6&l(!)&r &7You have received a &f&l**&r &6&lEnvoy Royale Lootbag&r &f&l**&r &6for your team's /battle royale victory!"
+  #
+  player eliminated:
+    - "&c&l(!)&r &c&n{PLAYER}&r &chas been eliminated"
+  leave:
+    not in match:
+      - "&c&l(!)&r &cYou are not currently inside of a Envoy Battle Royale match!"
+    success:
+      - ""
 #
 settings:
+  game interval: 60*60 # Measured in seconds
   max players: 99
   team sizes: 3
   type: ENVOY
+  world: "battle_royale"
   world border:
-    start x: 100
-    start z: 100
+    start x: 385
+    start z: 385
+    # <shrinks at>:<shrink interval>:<shrinks every x second>:<shrinks for seconds>
+    shrink stats:
+      - 60:3:1:30
+      - 210:3:1:30 # 3m30s
+      - 360:3:1:30
+      - 570:1:5:600 # 9m30s
+#
+scoreboard:
+  score start: 12
+  title: "&e&l&nEnvoy&r &6&l&n/battle"
+  teammate alive color: "&a"
+  teammate dead color: "&f&m"
+  list:
+    - "&a"
+    - "&6&lTeam Members"
+    - "{TEAMS}"
+    - "&b"
+    - "&6&lPlayers Left"
+    - "&e{PLAYERS}"
+    - "&c"
+    - "&6&lBorder Size"
+    - "&e&l{BORDER_SIZE} blocks"
+    - "&d"
+    - "&6&lRunetime"
+    - "&e&l{RUNTIME}"
 #
 statuses:
+  joinable: "&f&lOPEN!"
+  ending: "&fENDING"
   active: "&a&lIN PROGRESS!"
   waiting for next game: "&6Awaiting next match..."
 #
@@ -51,11 +161,32 @@ loadout:
       - "VEnchants{Sharpness5}"
 #
 lootbag:
+  title: "Loot Table (1 items)"
+  #
   item: ""
   name: ""
   lore:
     - ""
   #
+  reward size: 1
   rewards:
-    - ""
+    - "superiormysterycrate"
+    - "heroicmysterycrate"
+    - "whitescroll:HOLY"
+    - "omnigem:VKIT"
+    - "omnigem:GKIT"
+    - "mysterysoulgem"
+    - "pvppetlootbox"
+    - "mysterypetbox"
+    - "enchantmentorbgenerator"
+    - "mkitgemgenerator"
+    - "petleash"
+    - "maskgenerator"
+    - "dungeonkey:DESTROYED_OUTPOST:-1;amount=2"
+    - "dungeonkey:ABANDONED_SPACESHIP:-1;amount=2"
+    - "heroicequipmentlootbox"
+    - "equipmentlootbox"
+    - "dungeonportal:ABANDONED_SPACESHIP;amount=2"
+    - "dungeonportal:DESTROYED_OUTPOST;amount=2"
+    - "dungeonportallootbox"
 #

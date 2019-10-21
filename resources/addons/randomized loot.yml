@@ -1,0 +1,179 @@
+# Made by RandomHashTags
+mysterysoulgem:
+  item: "emerald"
+  name: "&4&lMystery&r &c&lSoul Gem"
+  lore:
+    - "VEnchants{Unbreaking10}"
+    - " "
+    - "&7&nRight-click&r &7to receive"
+    - "&7between &a250 &7and &4&l25000&r &7souls!"
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 1
+  rewards:
+    - "raritygem:SOUL:250"
+    - "raritygem:SOUL:500"
+    - "raritygem:SOUL:1000"
+    - "raritygem:SOUL:1500"
+    - "raritygem:SOUL:2000"
+    - "raritygem:SOUL:2500"
+    - "raritygem:SOUL:3000"
+    - "raritygem:SOUL:3500"
+    - "raritygem:SOUL:4000"
+    - "raritygem:SOUL:4500"
+    - "raritygem:SOUL:5000"
+    - "raritygem:SOUL:7500"
+    - "raritygem:SOUL:10000"
+    - "raritygem:SOUL:25000"
+#
+mysterypetbox:
+  item: "ender_chest"
+  name: "&6&lMystery Pet Box&r &7(Right Click)"
+  lore:
+    - "&7A mysterious, magical box"
+    - "&7that contains one of the"
+    - "&7following inventory pets:"
+    - " &6&l*&r &e&l{ITEM}"
+  reward size: 1
+  rewards:
+    - "inventorypet:LAVA"
+    - "inventorypet:WATER"
+    - "inventorypet:XP_BOOSTER"
+    - "inventorypet:ANTI_TELEBLOCK"
+    - "inventorypet:BLESS"
+    - "inventorypet:STRONGHOLD"
+    - "inventorypet:RAID_CREEPER"
+    - "inventorypet:BANNER"
+    - "inventorypet:ALCHEMIST"
+    - "inventorypet:FEIGN_DEATH"
+    - "inventorypet:ENCHANTER"
+    - "inventorypet:GAIA"
+    - "inventorypet:BLACKSCROLL"
+    - "inventorypet:TESLA"
+    - "inventorypet:YIJKI_CONTROLLER"
+    - "inventorypet:VILE_CREEPER"
+    - "inventorypet:WARLOCK"
+    - "inventorypet:EVOLUTION"
+    - "inventorypet:SMITE"
+#
+pvppetlootbox:
+  item: "magma_cube_spawn_egg"
+  name: "&4&lPvP Pet Lootbox"
+  lore:
+    - ""
+    - " "
+    - "&7A collection of only the most"
+    - "&c&nhighly coveted&r &7PvP companions!"
+    - " "
+    - "&7&nRight-click&r &7to reveal which pet will be yours!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x &e&l{ITEM}"
+  reward size: 1
+  rewards:
+    - "inventorypet:WARLOCK"
+    - "inventorypet:VILE_CREEPER"
+    - "inventorypet:BLESS"
+    - "inventorypet:SMITE"
+    - "inventorypet:GAIA"
+    - "inventorypet:BLACKSCROLL"
+    - "inventorypet:ENCHANTER"
+    - "inventorypet:WORLD_DESTROYER"
+#
+mysterylootbox:
+  item: "chest"
+  name: "&6&lMystery Lootbox&r &7(Right Click)"
+  lore:
+    - "&7Click to receive one of the"
+    - "&7following random lootboxes:"
+    - " &6&l*&r {ITEM}"
+  reward size: 1
+  rewards:
+    - "lootbox:LUCKY"
+    - "lootbox:DARK_DREAMS"
+    - "lootbox:BOX_OF_CHOCOLATES"
+    - "lootbox:APRIL_SHOWERS"
+    - "lootbox:SURVIVAL_KIT"
+    - "lootbox:SNOW_DAY"
+    - "lootbox:HANGOVER"
+    - "lootbox:EASTER_2019"
+    - "lootbox:ICY_ADVENTURES"
+    - "lootbox:STACKABLE"
+    - "lootbox:SUMMER_SAVAGE"
+    - "lootbox:DUNGEON_CRAWLER"
+    - "lootbox:PRIMAL"
+    - "lootbox:COLLECTORS_EDITION"
+    - "lootbox:PARADOX"
+    - "lootbox:SUGAR_DADDY"
+    - "lootbox:RAINBOW"
+    - "lootbox:SUPERNOVA"
+    - "lootbox:SERVER_CRATE"
+    - "lootbox:PET_COLLECTOR"
+    - "lootbox:END_OF_SUMMER"
+#
+enchantmentorbgenerator:
+  item: "ender_eye"
+  name: "&6&lRandom Enchantment orb Generator"
+  lore:
+    - " "
+    - " "
+    - "&7&nRight-click&r &7to receive a random &612, 13, or 14 lore"
+    - "&6Armor &7or &6Weapon Enchantment Orb!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 1
+  rewards:
+    - "enchantmentorb:armor12"
+    - "enchantmentorb:armor13"
+    - "enchantmentorb:armor14"
+    - "enchantmentorb:weapon12"
+    - "enchantmentorb:weapon13"
+    - "enchantmentorb:weapon14"
+#
+mkitgemgenerator:
+  item: "cyan_dye"
+  name: "&6&lRandom&r &4&lM-Kit Gem&r &6&lGenerator"
+  lore:
+    - " "
+    - " "
+    - "&7&nRight-click&r &7to receive one &4&lM-Kit Gem"
+    - "&7completely unlocking the affiliated kit &nPERMANENTLY!"
+    - " "
+    - "&7Note: To unlock an /mkit you must have, and be willing to"
+    - "&7sacrifice, the tier 3 /gkits associated with that /mkit!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 1
+  rewards:
+    - "mkitredeem:GHOST"
+    - "mkitredeem:DEATH_KNIGHT"
+    - "mkitredeem:NECROMANCER"
+#
+swagbag:
+  item: "chest"
+  name: "&d&lSwag&r &b&lBag!"
+  lore:
+    - "&7&nRight-click&r &7to reveal which"
+    - "&7items you will receive from the list below!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} items&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 3
+  rewards:
+    - "raritybook:HEROIC;amount=2"
+    - "enchantedbook:DepthStrider"
+    - "servercrateflare:GODLY;amount=3"
+    #- "title:KOTH"
+    - "servercrateflare:LEGENDARY;amount=3"
+    - "raritybook:LEGENDARY;amount=4"
+    - "randomizationscroll:GODLY;amount=2"
+    - "randomizationscroll:LEGENDARY;amount=2"
+    - "blackscroll:REGULAR;amount=8"
+    - "whitescroll:REGULAR;amount=4"
+    - "raritybook:ULTIMATE;amount=6"
+    - "itemnametag;amount=6"
+    - "maxhomeincrease;amount=3"
+    - "itemlorecrystal;amount=3"
+    - "showcaseexpansion;amount=2"

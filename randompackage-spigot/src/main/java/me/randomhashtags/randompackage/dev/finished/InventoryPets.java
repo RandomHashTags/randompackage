@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.nearFinished;
+package me.randomhashtags.randompackage.dev.finished;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
@@ -48,7 +48,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
     public void load() {
         final long started = System.currentTimeMillis();
         new GivePetExp().load();
-        save(null, "inventory pets.yml");
+        save("inventory pets", "_settings.yml");
         if(!otherdata.getBoolean("saved default inventory pets")) {
             final String[] p = new String[] {
                     "ALCHEMIST", "ANTI_TELEBLOCK",
@@ -70,9 +70,8 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
             saveOtherData();
         }
         final List<ItemStack> pets = new ArrayList<>();
-        final File folder = new File(rpd + separator + "inventory pets");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "inventory pets").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
                 if(p.isEnabled()) {
                     pets.add(p.getItem(1, 0));

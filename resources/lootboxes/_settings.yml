@@ -1,0 +1,41 @@
+# Made by RandomHashTags
+messages:
+  unlock:
+  - "&c&l(!)&r &cUnlock this Lootbox at &nlootbox.yourserver.com&r&c!"
+  - "&7Use '/help lootbox' for more information!"
+  #
+  opened:
+  - " "
+  - "&6&l(!)&r &6{PLAYER} opened a {NAME}&r &6and received:"
+  - "{REWARDS}"
+  reward format:
+  - " &6&l*&r &f{AMOUNT}x {ITEM_NAME}"
+#
+gui:
+  title: "Server Lootbox"
+  type: DISPENSER
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  #
+  lootbox:
+    slot: 4
+    item: "lootbox:LATEST"
+#
+lores:
+  available:
+    - " "
+    - "{NAME}&r &esale ends in &l{TIME}&r&e..."
+  preview:
+    - "&7Right-Click to view lootbox items"
+  expired:
+    - " "
+    - "&c&lNO LONGER AVAILABLE"
+#
+settings:
+  countdown start: 8
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+#

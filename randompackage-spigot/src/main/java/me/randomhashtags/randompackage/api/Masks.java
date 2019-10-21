@@ -55,8 +55,8 @@ public class Masks extends CustomEnchants {
     protected RPFeature getFeature() { return getMasks(); }
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "masks.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "masks.yml"));
+        save("masks", "_settings.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "masks", "_settings.yml"));
 
         equippedMasks = new HashMap<>();
         maskgenerator = d(config, "items.generator");
@@ -75,9 +75,8 @@ public class Masks extends CustomEnchants {
             a.set("saved default masks", true);
             saveOtherData();
         }
-        final File folder = new File(rpd + separator + "masks");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "masks").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
                 ms.add(m.getItem());
             }

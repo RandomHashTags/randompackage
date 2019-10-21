@@ -1,0 +1,20 @@
+# Made by RandomHashTags | TODO: fix this
+enabled: false
+#
+name: "Web Walker"
+lore:
+  - "&eDepth Strider, but for spider webs."
+  - "&eThis enchantment requires the user to"
+  - "&ebe on the CosmicClient"
+  - "&e(https://cosmicclient.com) to"
+  - "&efunction properly due to vanilla"
+  - "&eclient limitations."
+#
+max level: 1
+applies to: "boots"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+  - ""

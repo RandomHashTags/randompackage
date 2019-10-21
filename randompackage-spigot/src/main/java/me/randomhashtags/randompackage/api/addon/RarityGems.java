@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.addon.PathRarityGem;
+import me.randomhashtags.randompackage.util.addon.FileRarityGem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,28 +33,30 @@ public class RarityGems extends RPFeature {
     protected RPFeature getFeature() { return getRarityGems(); }
     public void load() {
         final long started = System.currentTimeMillis();
-        save("addons", "rarity gems.yml");
-        final YamlConfiguration config = getAddonConfig("rarity gems.yml");
-        final ConfigurationSection cs = config.getConfigurationSection("rarity gems");
-        if(cs != null) {
-            PathRarityGem.defaultColors = new HashMap<>();
-            final HashMap<Integer, String> d = PathRarityGem.defaultColors;
-            final ConfigurationSection C = config.getConfigurationSection("default settings.colors");
-            d.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.else")));
-            d.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors.less than 100")));
-            for(String s : C.getKeys(false)) {
-                if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                    d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', config.getString("default settings.colors." + s)));
-                }
+        save("rarity gems", "_settings.yml");
+        final YamlConfiguration config = getRPConfig("rarity gems", "_settings.yml");
+
+        FileRarityGem.defaultColors = new HashMap<>();
+        final HashMap<Integer, String> d = FileRarityGem.defaultColors;
+        final ConfigurationSection C = config.getConfigurationSection("default colors");
+        d.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("default colors.else")));
+        d.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("default colors.less than 100")));
+        for(String s : C.getKeys(false)) {
+            if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
+                d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', config.getString("default colors." + s)));
             }
-            for(String s : cs.getKeys(false)) {
-                new PathRarityGem(s);
-            }
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
+
+        for(File f : new File(rpd + separator + "rarity gems").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
+                new FileRarityGem(f);
+            }
+        }
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         raritygems = null;
+        FileRarityGem.defaultColors = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -91,7 +94,7 @@ public class RarityGems extends RPFeature {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack I = event.getItem();
         final Player player = event.getPlayer();

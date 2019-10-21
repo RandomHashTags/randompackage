@@ -81,18 +81,19 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
-        if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true))
+        if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true)) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', disabled.keySet().toString()));
-        else if(player != null && n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true))viewAlchemist(player);
-        else if(player != null && n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true))viewEnchanter(player);
-        else if(player != null && n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true))  viewTinkerer(player);
-        else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
+        } else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
             if(args.length == 0)
                 viewEnchants(sender, 1);
             else {
                 final int page = getRemainingInt(args[0]);
                 viewEnchants(sender, page > 0 ? page : 1);
             }
+        } else if(player != null) {
+            if(n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true))viewAlchemist(player);
+            else if(n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true))viewEnchanter(player);
+            else if(n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true))  viewTinkerer(player);
         }
         return true;
     }
@@ -138,6 +139,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "MARK OF THE BEAST",
                     "PERMAFROST", "POLTERGEIST",
                     "TOMBSTONE",
+                    "WEB WALKER"
             };
             final String[] her = new String[] {
                     "_settings",
@@ -163,7 +165,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "IMMORTAL",
                     "NATURES WRATH",
                     "PARADOX", "PHOENIX",
-                    "SOUL TRAP",
+                    "SABOTAGE", "SOUL TRAP",
                     "TELEBLOCK",
             };
             final String[] leg = new String[] {
@@ -434,6 +436,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     public boolean canProcOn(Entity e) {
         return config.getStringList("settings.can proc on").contains(e.getType().name());
     }
+
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void armorEquipEvent(ArmorEquipEvent event) {

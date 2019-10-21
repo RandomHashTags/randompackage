@@ -62,8 +62,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     }
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "item filter.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "item filter.yml"));
+        save("filter categories", "_settings.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "filter categories", "_settings.yml"));
 
         categorySlots = new HashMap<>();
         categories = new HashMap<>();
@@ -90,16 +90,14 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
             }
         }
 
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default filter categories")) {
+        if(!otherdata.getBoolean("saved default filter categories")) {
             final String[] f = new String[] {"EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY"};
             for(String s : f) save("filter categories", s + ".yml");
-            a.set("saved default filter categories", true);
+            otherdata.set("saved default filter categories", true);
             saveOtherData();
         }
-        final File folder = new File(rpd + separator + "filter categories");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "filter categories").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);
                 categoryTitles.put(fc.getTitle(), fc);

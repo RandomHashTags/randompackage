@@ -4,14 +4,8 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
-import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
-import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
-import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
-import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -79,10 +73,10 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "player quests.yml");
+        save("player quests", "_settings.yml");
 
         new IncreasePQuest().load();
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "player quests.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "player quests", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         shop = new UInventory(null, config.getInt("shop.size"), ChatColor.translateAlternateColorCodes('&', config.getString("shop.title")));
@@ -195,9 +189,8 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             otherdata.set("saved default player quests", true);
             saveOtherData();
         }
-        final File folder = new File(rpd + separator + "player quests");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "player quests").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
                 new FilePlayerQuest(f);
             }
         }

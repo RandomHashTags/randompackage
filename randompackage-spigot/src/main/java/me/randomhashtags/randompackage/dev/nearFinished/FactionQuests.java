@@ -30,9 +30,8 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "faction quests.yml");
-
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "faction quests.yml"));
+        save("faction quests", "_settings.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "faction quests", "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default faction quests")) {
             final String[] q = new String[]{
@@ -61,9 +60,8 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
             otherdata.set("saved default faction quests", true);
             saveOtherData();
         }
-        final File folder = new File(rpd + separator + "faction quests");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
+        for(File f : new File(rpd + separator + "faction quests").listFiles()) {
+            if(!f.getName().equals("_settings.yml")) {
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
