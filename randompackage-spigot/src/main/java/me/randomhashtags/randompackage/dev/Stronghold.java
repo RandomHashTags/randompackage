@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface Stronghold extends Captureable, Slotable, Scoreboardable {
     PolyBoundary getZone();
+    int getBlockDurability();
     ActiveStronghold getActiveStronghold();
     List<String> getContestedMsg();
 }

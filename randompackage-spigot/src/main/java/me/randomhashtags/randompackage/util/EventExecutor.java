@@ -636,18 +636,20 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
             default: return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
         }
     }
-    public void triggerCustomEnchants(Event event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
-        triggerCustomEnchants(event, getEntities(event), enchants);
+    public void triggerCustomEnchants(Event event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants, List<String> globalattributes) {
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
+    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants, List<String> globalattributes) {
+        final boolean doGlobal = globalattributes != null;
         final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
             for(CustomEnchant enchant : e.keySet()) {
                 if(enchant.isOnCorrectItem(is) && enchant.canBeTriggered(player, is)) {
                     final int lvl = e.get(enchant);
-                    final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)};
-                    trigger(event, entities, replaceCE(e.get(enchant), enchant.getAttributes()), getReplacements(getReplacements(event), replacements));
+                    final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
+                    final boolean passed = !doGlobal || trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
+                    if(passed) trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
                 }
             }
         }

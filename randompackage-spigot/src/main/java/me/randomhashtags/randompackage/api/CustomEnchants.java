@@ -72,7 +72,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private HashMap<Integer, Long> enchantercost;
     private HashMap<Integer, ItemStack> enchanterpurchase;
     private List<Player> invAccepting;
-    private List<String> noMoreEnchantsAllowed;
+    private List<String> noMoreEnchantsAllowed, globalattributes;
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
 
@@ -110,6 +110,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         tinkereraccept = d(config, "tinkerer.accept");
         noMoreEnchantsAllowed = colorizeListString(config.getStringList("settings.no more enchants"));
 
+        save("custom enchants", "global attributes");
+        globalattributes = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "global attributes.yml")).getStringList("attributes");
+
         new StopEnchant().load();
         int X = 0;
         for(String s : alchemistaccept.getItemMeta().getLore()) {
@@ -130,55 +133,56 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         if(!otherdata.getBoolean("saved default custom enchants")) {
             final String[] mas = new String[] {
                     "_settings",
-                    "AUTO SELL",
-                    "CHAIN LIFESTEAL",
-                    "DEATH PACT",
-                    "EXPLOSIVES EXPERT",
-                    "FEIGN DEATH",
+                    "AUTO_SELL",
+                    "CHAIN_LIFESTEAL",
+                    "DEATH_PACT",
+                    "EXPLOSIVES_EXPERT",
+                    "FEIGN_DEATH",
                     "HORRIFY",
-                    "MARK OF THE BEAST",
+                    "LAVA_STRIDER",
+                    "MARK_OF_THE_BEAST",
                     "PERMAFROST", "POLTERGEIST",
                     "TOMBSTONE",
-                    "WEB WALKER"
+                    "WEB_WALKER"
             };
             final String[] her = new String[] {
                     "_settings",
-                    "ALIEN IMPLANTS", "ATOMIC DETONATE",
+                    "ALIEN_IMPLANTS", "ATOMIC_DETONATE",
                     "BIDIRECTIONAL TELEPORTATION",
-                    "DEEP BLEED", "DEMONIC_LIFESTEAL", "DIVINE ENLIGHTED",
-                    "ETHEREAL DODGE",
-                    "GHOSTLY GHOST", "GODLY OVERLOAD", "GUIDED ROCKET ESCAPE",
-                    "HEROIC ENCHANT REFLECT",
-                    "INFINITE LUCK",
-                    "LETHAL SNIPER",
-                    "MASTER BLACKSMITH", "MASTER INQUISITIVE", "MIGHTY CACTUS", "MIGHTY CLEAVE",
-                    "PLANETARY DEATHBRINGER", "POLYMORPHIC METAPHYSICAL",
-                    "REFLECTIVE BLOCK",
-                    "SHADOW ASSASSIN",
-                    "TITAN TRAP",
-                    "VENGEFUL DIMINISH",
+                    "DEEP_BLEED", "DEMONIC_LIFESTEAL", "DIVINE_ENLIGHTED",
+                    "ETHEREAL_DODGE",
+                    "GHOSTLY_GHOST", "GODLY_OVERLOAD", "GUIDED_ROCKET_ESCAPE",
+                    "HEROIC_ENCHANT_REFLECT",
+                    "INFINITE_LUCK",
+                    "LETHAL_SNIPER",
+                    "MASTER_BLACKSMITH", "MASTER_INQUISITIVE", "MIGHTY_CACTUS", "MIGHTY_CLEAVE",
+                    "PLANETARY_DEATHBRINGER", "POLYMORPHIC_METAPHYSICAL",
+                    "REFLECTIVE_BLOCK",
+                    "SHADOW_ASSASSIN",
+                    "TITAN_TRAP",
+                    "VENGEFUL_DIMINISH",
             };
             final String[] sou = new String[] {
                     "_settings",
-                    "DIVINE IMMOLATION",
-                    "HERO KILLER",
+                    "DIVINE_IMMOLATION",
+                    "HERO_KILLER",
                     "IMMORTAL",
-                    "NATURES WRATH",
+                    "NATURES_WRATH",
                     "PARADOX", "PHOENIX",
-                    "SABOTAGE", "SOUL TRAP",
+                    "SABOTAGE", "SOUL_TRAP",
                     "TELEBLOCK",
             };
             final String[] leg = new String[] {
                     "_settings",
-                    "AEGIS", "ANTI GANK", "ARMORED",
-                    "BARBARIAN", "BLACKSMITH", "BLOOD LINK", "BLOOD LUST", "BOSS SLAYER",
+                    "AEGIS", "ANTI_GANK", "ARMORED",
+                    "BARBARIAN", "BLACKSMITH", "BLOOD_LINK", "BLOOD_LUST", "BOSS_SLAYER",
                     "CLARITY",
-                    "DEATH GOD", "DEATHBRINGER", "DESTRUCTION", "DEVOUR", "DIMINISH", "DISARMOR", "DOUBLE STRIKE", "DRUNK",
-                    "ENCHANT REFLECT", "ENLIGHTED",
+                    "DEATH_GOD", "DEATHBRINGER", "DESTRUCTION", "DEVOUR", "DIMINISH", "DISARMOR", "DOUBLE_STRIKE", "DRUNK",
+                    "ENCHANT_REFLECT", "ENLIGHTED",
                     "GEARS",
                     "HEX",
                     "INQUISITIVE", "INSANITY", "INVERSION",
-                    "KILL AURA",
+                    "KILL_AURA",
                     "LEADERSHIP", "LIFESTEAL",
                     "OVERLOAD",
                     "PROTECTION",
@@ -187,11 +191,11 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             };
             final String[] ult = new String[] {
                     "_settings",
-                    "ANGELIC", "ARROW BREAK", "ARROW DEFLECT", "ARROW LIFESTEAL", "ASSASSIN", "AVENGING ANGEL",
+                    "ANGELIC", "ARROW_BREAK", "ARROW_DEFLECT", "ARROW_LIFESTEAL", "ASSASSIN", "AVENGING_ANGEL",
                     "BLEED", "BLESSED", "BLOCK",
-                    "CLEAVE", "CORRUPT", "CREEPER ARMOR",
-                    "DETONATE", "DIMENSION RIFT", "DISINTEGRATE", "DODGE", "DOMINATE",
-                    "EAGLE EYE", "ENDER WALKER", "ENRAGE",
+                    "CLEAVE", "CORRUPT", "CREEPER_ARMOR",
+                    "DETONATE", "DIMENSION_RIFT", "DISINTEGRATE", "DODGE", "DOMINATE",
+                    "EAGLE_EYE", "ENDER_WALKER", "ENRAGE",
                     "FUSE",
                     "GHOST", "GUARDIANS",
                     "HEAVY", "HELLFIRE",
@@ -207,7 +211,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             };
             final String[] eli = new String[] {
                     "_settings",
-                    "ANTI GRAVITY",
+                    "ANTI_GRAVITY",
                     "BLIND",
                     "CACTUS",
                     "DEMONFORGED",
@@ -215,12 +219,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "FARCAST", "FROZEN",
                     "GREATSWORD",
                     "HARDENED", "HIJACK",
-                    "ICE FREEZE", "INFERNAL",
+                    "ICE_FREEZE", "INFERNAL",
                     "PARALYZE", "POISON", "POISONED", "PUMMEL",
-                    "REFORGED", "REPAIR GUARD", "RESILIENCE", "ROCKET ESCAPE",
-                    "SHACKLE", "SHOCKWAVE", "SMOKE BOMB", "SNARE", "SOLITUDE", "SPIRIT LINK", "SPRINGS", "STORMCALLER",
+                    "REFORGED", "REPAIR_GUARD", "RESILIENCE", "ROCKET_ESCAPE",
+                    "SHACKLE", "SHOCKWAVE", "SMOKE_BOMB", "SNARE", "SOLITUDE", "SPIRIT_LINK", "SPRINGS", "STORMCALLER",
                     "TELEPORTATION", "TRAP", "TRICKSTER",
-                    "UNDEAD RUSE",
+                    "UNDEAD_RUSE",
                     "VAMPIRE", "VENOM", "VOODOO",
                     "WITHER",
             };
@@ -228,22 +232,22 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "_settings",
                     "BERSERK",
                     "COMMANDER", "COWIFICATION", "CURSE",
-                    "DEEP WOUNDS",
-                    "ENDER SHIFT", "EXPLOSIVE",
+                    "DEEP_WOUNDS",
+                    "ENDER_SHIFT", "EXPLOSIVE",
                     "FEATHERWEIGHT",
                     "LIFEBLOOM",
                     "MOLTEN",
                     "NIMBLE", "NUTRITION",
-                    "OBSIDIAN DESTROYER",
-                    "PLAGUE CARRIER",
+                    "OBSIDIAN_DESTROYER",
+                    "PLAGUE_CARRIER",
                     "RAGDOLL", "RAVENOUS",
-                    "SELF DESTRUCT", "SKILL SWIPE", "SKILLING",
+                    "SELF_DESTRUCT", "SKILL_SWIPE", "SKILLING",
                     "TELEPATHY", "TRAINING",
                     "VIRUS",
             };
             final String[] sim = new String[] {
                     "_settings",
-                    "AQUATIC", "AUTO SMELT",
+                    "AQUATIC", "AUTO_SMELT",
                     "CONFUSION",
                     "DECAPITATION",
                     "EPICNESS", "EXPERIENCE",
@@ -253,7 +257,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                     "INSOMNIA",
                     "LIGHTNING",
                     "OBLITERATE",
-                    "TARGET TRACKING", "THUNDERING BLOW",
+                    "TARGET_TRACKING", "THUNDERING_BLOW",
             };
             for(String s : mas) save("custom enchants" + separator + "MASTERY", s + ".yml");
             for(String s : her) save("custom enchants" + separator + "HEROIC", s + ".yml");
@@ -310,7 +314,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                                                     if(!enchant.isEmpty()) {
                                                         final CustomEnchantTimerEvent event = new CustomEnchantTimerEvent(player, enchant);
                                                         pluginmanager.callEvent(event);
-                                                        triggerCustomEnchants(event, getEntities("Player", player), enchant);
+                                                        triggerCustomEnchants(event, getEntities("Player", player), enchant, globalattributes);
                                                     }
                                                 }
                                             }, ticks, ticks);
@@ -455,7 +459,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final ItemStack is = event.getItem();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
         enchants.put(is, getEnchants(is));
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         tryProcing(event, player, null, enchants);
     }
 
@@ -469,7 +473,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             if(p != null) {
                 final ProjectileSource shooter = e.getShooter();
                 if(shooter instanceof Player) {
-                    triggerCustomEnchants(event, getEntities(event), getEnchants((Player) shooter));
+                    triggerCustomEnchants(event, getEntities(event), getEnchants((Player) shooter), globalattributes);
                 }
             }
         }
@@ -479,7 +483,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Projectile p = event.getEntity();
         final ProjectileSource s = p.getShooter();
         if(s instanceof Player) {
-            triggerCustomEnchants(event, getEnchants((Player) s));
+            triggerCustomEnchants(event, getEnchants((Player) s), globalattributes);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -493,7 +497,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 pluginmanager.callEvent(e);
                 final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(damager);
                 tryProcing(e, damager, entity, enchants);
-                triggerCustomEnchants(e, getEntities(event), enchants);
+                triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
                 event.setDamage(e.getDamage());
             }
             if(entity instanceof Player && damagerr instanceof LivingEntity && !(damagerr instanceof TNTPrimed) && !(damagerr instanceof Creeper)) {
@@ -503,7 +507,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                 pluginmanager.callEvent(e);
                 final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
                 tryProcing(e, victim, null, enchants);
-                triggerCustomEnchants(e, getEntities(event), enchants);
+                triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
                 event.setDamage(e.getDamage());
             }
             if(canProcOn(entity)) {
@@ -520,7 +524,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
                             if(player != null) {
                                 final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
                                 tryProcing(event, player, cee.getEntity(), enchants);
-                                triggerCustomEnchants(event, getEntities(event), enchants);
+                                triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
                             }
                         }
                     }
@@ -535,7 +539,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final Player damager = (Player) d;
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(damager);
             tryProcing(event, damager, event.getEntity(), enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants);
+            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -544,7 +548,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         if(killer != null) {
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(killer);
             tryProcing(event, killer, event.stack.entity, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants);
+            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         }
     }
 
@@ -669,7 +673,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             pluginmanager.callEvent(e);
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
             tryProcing(event, victim, null, enchants);
-            triggerCustomEnchants(event, getEntities(e), enchants);
+            triggerCustomEnchants(event, getEntities(e), enchants, globalattributes);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -679,7 +683,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final Player player = (Player) a;
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
             tryProcing(event, player, event.getEntity(), enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants);
+            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -687,21 +691,21 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerJoinEvent(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
@@ -710,7 +714,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         if(!event.isCancelled()) {
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
             tryProcing(event, player, null, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants);
+            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         }
         EnchantRarity rarity = valueOfEnchantRarity(I);
         if(rarity != null) {
@@ -743,7 +747,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final Player player = (Player) e;
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
             tryProcing(event, player, null, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants);
+            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -752,16 +756,16 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Player victim = event.getEntity(), killer = victim.getKiller();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> victimEnchants = getEnchants(victim), killerEnchants = getEnchants(killer);
         tryProcing(event, victim, null, victimEnchants);
-        triggerCustomEnchants(event, entities, victimEnchants);
+        triggerCustomEnchants(event, entities, victimEnchants, globalattributes);
         tryProcing(event, killer, null, killerEnchants);
-        triggerCustomEnchants(event, entities, killerEnchants);
+        triggerCustomEnchants(event, entities, killerEnchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerItemDamageEvent(PlayerItemDamageEvent event) {
         final Player player = event.getPlayer();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
@@ -772,7 +776,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final HashMap<String, Entity> entities = getEntities(event);
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(k);
             tryProcing(event, k, null, enchants);
-            triggerCustomEnchants(event, entities, enchants);
+            triggerCustomEnchants(event, entities, enchants, globalattributes);
         }
         final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
         if(L != null) {
@@ -795,7 +799,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         final Player player = (Player) event.getEntity();
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(player);
         tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants);
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void tinkererClickEvent(InventoryClickEvent event) {

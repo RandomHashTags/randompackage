@@ -4,11 +4,12 @@ import me.randomhashtags.randompackage.dev.ActiveStronghold;
 import me.randomhashtags.randompackage.dev.FileStronghold;
 import me.randomhashtags.randompackage.dev.Stronghold;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,11 +25,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 public class Strongholds extends RPFeature implements CommandExecutor {
     private static Strongholds instance;
@@ -131,6 +133,13 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         for(Stronghold s : strongholds.values()) {
             final ActiveStronghold a = s.getActiveStronghold();
             if(a != null && s.getZone().contains(l)) {
+                final List<PolyBoundary> walls = a.getRepairableWalls();
+                for(PolyBoundary p : walls) {
+                    if(p.contains(l)) {
+                        a.getBlockDurability().put(l, s.getBlockDurability());
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -145,6 +154,16 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             if(a != null && s.getZone().contains(l)) {
                 event.setCancelled(true);
                 player.updateInventory();
+                final HashMap<Location, Integer> durability = a.getBlockDurability();
+                final int bd = durability.getOrDefault(l, -1);
+                if(bd != -1) {
+                    final int next = bd-1;
+                    if(next == 0) {
+                        l.getWorld().getBlockAt(l).setType(Material.AIR);
+                    } else {
+                        durability.put(l, next);
+                    }
+                }
                 break;
             }
         }
