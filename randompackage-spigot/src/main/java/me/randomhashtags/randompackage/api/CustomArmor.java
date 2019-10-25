@@ -70,7 +70,7 @@ public class CustomArmor extends EventAttributes {
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
 		for(File f : new File(rpd + separator + "custom armor").listFiles()) {
-			if(!f.getName().equals("_settings.yml")) {
+			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {
 					crystals.add(is);

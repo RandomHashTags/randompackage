@@ -97,7 +97,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
         for(File f : new File(rpd + separator + "filter categories").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);
                 categoryTitles.put(fc.getTitle(), fc);

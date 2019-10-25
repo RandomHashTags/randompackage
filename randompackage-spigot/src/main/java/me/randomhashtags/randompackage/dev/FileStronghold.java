@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileStronghold extends RPAddon implements Stronghold {
+public abstract class FileStronghold extends RPAddon implements Stronghold {
     private ItemStack is;
     private Location center;
     private CaptureType captureType;

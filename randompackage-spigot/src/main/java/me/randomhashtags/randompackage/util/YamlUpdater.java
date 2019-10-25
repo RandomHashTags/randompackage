@@ -7,9 +7,9 @@ import java.io.File;
 import java.util.*;
 
 public abstract class YamlUpdater {
-    protected boolean updateYaml(File file) {
+    protected boolean updateYaml(String folder, File file) {
         if(file.exists()) {
-            final LinkedHashMap<String, Object> changes = getChanges(file);
+            final LinkedHashMap<String, Object> changes = getChanges(folder, file);
             if(changes != null && !changes.isEmpty()) {
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
                 boolean changed = false;
@@ -35,42 +35,51 @@ public abstract class YamlUpdater {
         return false;
     }
 
-    public LinkedHashMap<String, Object> getChanges(File file) { // Implemented since v16.3.1
+    public LinkedHashMap<String, Object> getChanges(String folder, File file) { // Implemented since v16.3.1 - Updated v16.5.0
         final String n = file.getName().split("\\.yml")[0];
-        switch(n) {
+        switch (n) {
+            case "_settings":
+                switch (folder) {
+                    case "conquests": return getConquests();
+                    case "custom armor": return getCustomArmor();
+                    case "custom enchants": return getCustomEnchants();
+                    case "duel arenas": return getDuels();
+                    case "dungeons": return getDungeons();
+                    case "envoy tiers": return getEnvoy();
+                    case "faction quests": return getFactionQuests();
+                    case "faction upgrades": return getFactionUpgrades();
+                    case "filter categories": return getItemFilter();
+                    case "global challenges": return getGlobalChallenges();
+                    case "kits": return getKits();
+                    case "masks": return getMasks();
+                    case "monthly crates": return getMonthlyCrates();
+                    case "outposts": return getOutposts();
+                    case "player quests": return getPlayerQuests();
+                    case "shops": return getShop();
+                    case "strongholds": return getStrongholds();
+                    case "trinkets": return getTrinkets();
+                    default: return null;
+                }
             case "auction house": return getAH();
+            case "battle royale": return getBattleRoyale();
             case "coinflip": return getCoinFlip();
             case "collection filter": return getCollectionFilter();
             case "config": return getConfig();
-            case "conquests": return getConquests();
-            case "custom armor": return getCustomArmor();
-            case "custom enchants": return getCustomEnchants();
             case "custom explosions": return getCustomExplosions();
             case "disguises": return getDisguises();
-            case "duels": return getDuels();
-            case "dungeons": return getDungeons();
-            case "envoy": return getEnvoy();
             case "faction points": return getFactionPoints();
-            case "faction quests": return getFactionQuests();
-            case "faction upgrades": return getFactionUpgrades();
             case "fund": return getFund();
-            case "global challenges": return getGlobalChallenges();
             case "homes": return getHomes();
-            case "item filter": return getItemFilter();
             case "items": return getItems();
             case "jackpot": return getJackpot();
-            case "kits": return getKits();
             case "koth": return getKOTH();
             case "last man standing": return getLastManStanding();
             case "lootboxes": return getLootboxes();
-            case "masks": return getMasks();
             case "mob stacker": return getMobStacker();
-            case "monthly crates": return getMonthlyCrates();
-            case "outposts": return getOutposts();
-            case "player quests": return getPlayerQuests();
+            case "reputation": return getReputation();
             case "secondary": return getSecondary();
-            case "shop": return getShop();
             case "showcase": return getShowcase();
+            case "spawner stacking": return getSpawnerStacking();
             case "titles": return getTitles();
             case "trade": return getTrade();
             case "wild": return getWild();
@@ -189,6 +198,9 @@ public abstract class YamlUpdater {
     }
 
     private LinkedHashMap<String, Object> getAH() {
+        return null;
+    }
+    private LinkedHashMap<String, Object> getBattleRoyale() {
         return null;
     }
     private LinkedHashMap<String, Object> getCoinFlip() {
@@ -337,6 +349,9 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getPlayerQuests() {
         return null;
     }
+    private LinkedHashMap<String, Object> getReputation() {
+        return null;
+    }
     private LinkedHashMap<String, Object> getSecondary() {
         return null;
     }
@@ -346,10 +361,19 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getShowcase() {
         return null;
     }
+    private LinkedHashMap<String, Object> getSpawnerStacking() {
+        return null;
+    }
+    private LinkedHashMap<String, Object> getStrongholds() {
+        return null;
+    }
     private LinkedHashMap<String, Object> getTitles() {
         return null;
     }
     private LinkedHashMap<String, Object> getTrade() {
+        return null;
+    }
+    private LinkedHashMap<String, Object> getTrinkets() {
         return null;
     }
     private LinkedHashMap<String, Object> getWild() {

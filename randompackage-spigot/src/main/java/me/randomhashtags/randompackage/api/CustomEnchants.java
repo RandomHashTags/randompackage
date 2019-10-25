@@ -99,8 +99,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     }
     public void load() {
         final long started = System.currentTimeMillis();
-        save(null, "custom enchants.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "custom enchants.yml"));
+        save("custom enchants", "_settings.yml");
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "_settings.yml"));
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
         enchantercurrency = config.getString("enchanter.currency").toUpperCase();
@@ -110,7 +110,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
         tinkereraccept = d(config, "tinkerer.accept");
         noMoreEnchantsAllowed = colorizeListString(config.getStringList("settings.no more enchants"));
 
-        save("custom enchants", "global attributes");
+        save("custom enchants", "global attributes.yml");
         globalattributes = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "global attributes.yml")).getStringList("attributes");
 
         new StopEnchant().load();
@@ -148,7 +148,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             final String[] her = new String[] {
                     "_settings",
                     "ALIEN_IMPLANTS", "ATOMIC_DETONATE",
-                    "BIDIRECTIONAL TELEPORTATION",
+                    "BIDIRECTIONAL_TELEPORTATION",
                     "DEEP_BLEED", "DEMONIC_LIFESTEAL", "DIVINE_ENLIGHTED",
                     "ETHEREAL_DODGE",
                     "GHOSTLY_GHOST", "GODLY_OVERLOAD", "GUIDED_ROCKET_ESCAPE",

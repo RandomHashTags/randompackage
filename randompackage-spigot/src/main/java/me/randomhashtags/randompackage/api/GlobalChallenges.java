@@ -116,7 +116,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 			saveOtherData();
 		}
 		for(File f : new File(rpd + separator + "global challenges").listFiles()) {
-			if(!f.getName().equals("_settings.yml")) {
+			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				new FileGlobalChallenge(f);
 			}
 		}

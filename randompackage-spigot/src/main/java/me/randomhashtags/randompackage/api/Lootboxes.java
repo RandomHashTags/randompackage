@@ -92,7 +92,9 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         final File folder = new File(rpd + separator + "lootboxes");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
-                new FileLootbox(f);
+                if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
+                    new FileLootbox(f);
+                }
             }
         }
 

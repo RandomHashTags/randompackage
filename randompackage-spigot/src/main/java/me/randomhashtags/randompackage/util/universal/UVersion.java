@@ -56,18 +56,14 @@ public class UVersion extends YamlUpdater implements Versionable {
     public List<String> lore = new ArrayList<>();
 
     public final void save(String folder, String file) {
-        File f;
-        final File d = randompackage.getDataFolder();
-        if(folder != null && !folder.equals(""))
-            f = new File(d + File.separator + folder + File.separator, file);
-        else
-            f = new File(d + File.separator, file);
+        final boolean hasFolder = folder != null && !folder.equals("");
+        final File f = new File(rpd + separator + (hasFolder ? folder + separator : ""), file);
         if(!f.exists()) {
             f.getParentFile().mkdirs();
-            randompackage.saveResource(folder != null && !folder.equals("") ? folder + File.separator + file : file, false);
+            randompackage.saveResource(hasFolder ? folder + separator + file : file, false);
         }
         if(folder == null || !folder.equals("_Data")) {
-            updateYaml(f);
+            updateYaml(folder, f);
         }
     }
     public final ItemStack getClone(ItemStack is) {

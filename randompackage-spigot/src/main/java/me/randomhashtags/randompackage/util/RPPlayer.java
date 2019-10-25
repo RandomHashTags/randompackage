@@ -48,7 +48,7 @@ public class RPPlayer extends RPStorage {
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
     public long xpExhaustionExpiration = 0;
-    public int jackpotWins = 0, addedMaxHomes = 0, questTokens = 0;
+    public int jackpotWins , addedMaxHomes , questTokens , reputationPoints;
     public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
     public boolean isLoaded = false, activeTitleIsLoaded = false;
 
@@ -104,7 +104,7 @@ public class RPPlayer extends RPStorage {
         final PlayerRank rank = getRank();
         final String strings = (T != null ? T.getIdentifier() : "null") + ";" + (rank != null ? rank.getIdentifier() : "null");
         final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
-        final String ints = jackpotTickets.intValue() + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens;
+        final String ints = jackpotTickets.intValue() + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens + ";" + reputationPoints;
         final String longs = jackpotWonCash.doubleValue() + ";" + xpExhaustionExpiration;
         yml.set("strings", strings);
         yml.set("booleans", booleans);
@@ -227,8 +227,10 @@ public class RPPlayer extends RPStorage {
                 final String[] ints = intz.split(";");
                 jackpotTickets = BigDecimal.valueOf(Integer.parseInt(ints[0]));
                 jackpotWins = Integer.parseInt(ints[1]);
-                if(ints.length >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
-                if(ints.length >= 4) questTokens = Integer.parseInt(ints[3]);
+                final int l = ints.length;
+                if(l >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
+                if(l >= 4) questTokens = Integer.parseInt(ints[3]);
+                if(l >= 5) reputationPoints = Integer.parseInt(ints[4]);
             }
             if(longz != null) {
                 final String[] longs = longz.split(";");
@@ -713,6 +715,9 @@ public class RPPlayer extends RPStorage {
             save();
         }
     }
+
+    public int getReputationPoints() { return reputationPoints; }
+    public void setReputationPoints(int reputationPoints) { this.reputationPoints = reputationPoints; }
 
     public static void loadAllPlayerData() {
         try {

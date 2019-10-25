@@ -101,7 +101,7 @@ public class FactionUpgrades extends EventAttributes {
             gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
             for(File f : new File(rpd + separator + "faction upgrades").listFiles()) {
-                if(!f.getName().equals("_settings.yml")) {
+                if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());
                 }

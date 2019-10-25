@@ -303,7 +303,7 @@ showcase:
     - showcase
 #
 spawner stacking:
-  enabled: false
+  enabled: true
 #
 splitsouls:
   enabled: true

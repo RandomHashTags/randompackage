@@ -63,7 +63,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("conquests", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "conquests.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "conquests", "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default conquests")) {
             save("conquests", "NORMAL.yml");
@@ -78,7 +78,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), ChatColor.translateAlternateColorCodes('&', config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
         for(File f : new File(rpd + separator + "conquests").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
                 tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {

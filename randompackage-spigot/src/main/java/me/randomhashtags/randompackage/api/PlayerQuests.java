@@ -190,7 +190,7 @@ public class PlayerQuests extends EventAttributes implements CommandExecutor {
             saveOtherData();
         }
         for(File f : new File(rpd + separator + "player quests").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FilePlayerQuest(f);
             }
         }

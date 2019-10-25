@@ -57,7 +57,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
 
         final List<ItemStack> t = new ArrayList<>();
         for(File f : new File(rpd + separator + "trinkets").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final Trinket trinket = new FileTrinket(f);
                 if(trinket.isEnabled()) {
                     t.add(trinket.getItem(0));

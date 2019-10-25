@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.dev.DuelArena;
-import me.randomhashtags.randompackage.dev.DuelEndReason;
-import me.randomhashtags.randompackage.dev.DuelSetting;
+import me.randomhashtags.randompackage.dev.duels.DuelArena;
+import me.randomhashtags.randompackage.dev.duels.DuelEndReason;
+import me.randomhashtags.randompackage.dev.duels.DuelSetting;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;

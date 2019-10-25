@@ -10,7 +10,7 @@ public final class SpawnerAPI {
         if(instance == null) {
             instance = new SpawnerAPI();
             final String plugin = RandomPackage.spawner;
-            instance.plugin = plugin;
+            instance.plugin = plugin == null ? "" : plugin;
             if(plugin != null && plugin.equals("SilkSpawners")) {
                 instance.util = de.dustplanet.util.SilkUtil.hookIntoSilkSpanwers();
             }
@@ -21,18 +21,22 @@ public final class SpawnerAPI {
     private Object util;
 
     public ItemStack getItem(String entitytype) {
-        if(plugin != null) {
-            switch (plugin) {
-                case "EpicSpawners5": return es5(entitytype);
-                case "EpicSpawners6": return es6(entitytype);
-                case "SilkSpawners":  return ss(entitytype);
-                default: return null;
-            }
+        switch (plugin) {
+            case "EpicSpawners5": return getItemES5(entitytype);
+            case "EpicSpawners6": return getItemES6(entitytype);
+            case "SilkSpawners":  return getItemSS(entitytype);
+            default: return null;
         }
-        return null;
+    }
+    public EntityType getType(ItemStack is) {
+        switch (plugin) {
+            case "EpicSpawners6": return getTypeES6(is);
+            case "SilkSpawners": return getTypeSS(is);
+            default: return null;
+        }
     }
 
-    private ItemStack es5(String entitytype) {
+    private ItemStack getItemES5(String entitytype) {
         final String type = entitytype.toUpperCase().replace("_", "").replace(" ", "");
         com.songoda.epicspawners.api.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.api.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawnersPlugin.getInstance().getSpawnerManager().getAllSpawnerData()) {
@@ -41,7 +45,12 @@ public final class SpawnerAPI {
         }
         return data != null ? data.toItemStack() : null;
     }
-    private ItemStack es6(String entitytype) {
+
+    private EntityType getTypeES6(ItemStack is) {
+        final com.songoda.epicspawners.spawners.spawner.SpawnerData data = com.songoda.epicspawners.EpicSpawners.getInstance().getSpawnerManager().getSpawnerData(is);
+        return data != null ? data.getEntities().get(0) : null;
+    }
+    private ItemStack getItemES6(String entitytype) {
         final String type = entitytype.toUpperCase().replace("_", "").replace(" ", "");
         com.songoda.epicspawners.spawners.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.spawners.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawners.getInstance().getSpawnerManager().getAllSpawnerData()) {
@@ -50,7 +59,11 @@ public final class SpawnerAPI {
         }
         return data != null ? data.toItemStack() : null;
     }
-    private ItemStack ss(String entitytype) {
+
+    private EntityType getTypeSS(ItemStack is) {
+        return EntityType.fromId(((de.dustplanet.util.SilkUtil) util).getStoredSpawnerItemEntityID(is));
+    }
+    private ItemStack getItemSS(String entitytype) {
         final String input = entitytype.toUpperCase().replace("_", "").replace(" ", "");
         for(EntityType t : EntityType.values()) {
             if(input.equals(t.name().replace("_", "").replace(" ", ""))) {

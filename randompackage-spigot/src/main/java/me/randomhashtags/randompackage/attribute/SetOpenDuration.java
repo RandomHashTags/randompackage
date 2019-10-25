@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.dev.DungeonPortalOpenEvent;
+import me.randomhashtags.randompackage.dev.dungeons.DungeonPortalOpenEvent;
 import org.bukkit.event.Event;
 
 import java.util.HashMap;

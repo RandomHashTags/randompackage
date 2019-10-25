@@ -76,7 +76,7 @@ public class Masks extends CustomEnchants {
             saveOtherData();
         }
         for(File f : new File(rpd + separator + "masks").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
                 ms.add(m.getItem());
             }

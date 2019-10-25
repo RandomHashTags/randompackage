@@ -58,7 +58,7 @@ public class Shop extends RPFeature implements CommandExecutor {
         ShopCategory.shop = this;
         titles = new HashMap<>();
         for(File f : new File(rpd + separator + "shops").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileShopCategory c = new FileShopCategory(f);
                 titles.put(c.getTitle(), c);
             }

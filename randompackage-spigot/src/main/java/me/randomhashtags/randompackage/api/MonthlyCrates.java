@@ -63,7 +63,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("monthly crates", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "monthly crates.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "monthly crates", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
         categoryView = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("category view.title")));
@@ -133,7 +133,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> K = new HashMap<>();
         for(File f : new File(rpd + separator + "monthly crates").listFiles()) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMonthlyCrate m = new FileMonthlyCrate(f);
                 final int z = m.getCategory();
                 if(!categorySlots.containsKey(z)) categorySlots.put(z, new HashMap<>());
