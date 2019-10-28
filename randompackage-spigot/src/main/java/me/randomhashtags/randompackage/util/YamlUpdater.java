@@ -178,7 +178,7 @@ public abstract class YamlUpdater {
                 "roll.cmds", Arrays.asList("roll"),
                 "shop.cmds", Arrays.asList("shop"),
                 "showcase.cmds", Arrays.asList("showcase"),
-                "spawner stacking.enabled", true,
+                "spawner stacking.enabled", false,
                 "splitsouls.enabled", true,
                 "splitsouls.cmds", Arrays.asList("splitsouls"),
                 "tinkerer.cmds", Arrays.asList("tinkerer"),

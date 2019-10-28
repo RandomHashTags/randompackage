@@ -343,15 +343,16 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
 
     public HashMap<String, Entity> getEntities(Event event) {
         switch (event.getEventName().toLowerCase().split("event")[0]) {
-            case "blockbreak": return getEntities((BlockBreakEvent) event);
-            case "blockplace": return getEntities((BlockPlaceEvent) event);
             case "entitydeath": return getEntities((EntityDeathEvent) event);
             case "entitydamage": return getEntities((EntityDamageEvent) event);
             case "entitydamagebyentity": return getEntities((EntityDamageByEntityEvent) event);
             case "entityshootbow": return getEntities((EntityShootBowEvent) event);
             case "entitytame": return getEntities((EntityTameEvent) event);
-            case "foodlevelchange": return getEntities((FoodLevelChangeEvent) event);
             case "playerfish": return getEntities((PlayerFishEvent) event);
+
+            case "blockbreak":
+            case "blockplace":
+            case "foodlevelchange":
 
             case "playeradvancementdone":
             case "playeranimation":
@@ -462,8 +463,6 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
         }
     }
 
-    public HashMap<String, Entity> getEntities(BlockPlaceEvent event) { return getEntities("Player", event.getPlayer()); }
-    public HashMap<String, Entity> getEntities(BlockBreakEvent event) { return getEntities("Player", event.getPlayer()); }
     public HashMap<String, Entity> getEntities(EntityDeathEvent event) {
         final LivingEntity v = event.getEntity(), k = v.getKiller();
         final HashMap<String, Entity> e = getEntities("Victim", v);
@@ -474,7 +473,6 @@ public abstract class EventExecutor extends EventConditions implements EventRepl
     public HashMap<String, Entity> getEntities(EntityDamageByEntityEvent event) { return getEntities("Damager", event.getDamager(), "Victim", event.getEntity()); }
     public HashMap<String, Entity> getEntities(EntityShootBowEvent event) { return getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()); }
     public HashMap<String, Entity> getEntities(EntityTameEvent event) { return getEntities("Entity", event.getEntity(), "Owner", event.getOwner()); }
-    public HashMap<String, Entity> getEntities(FoodLevelChangeEvent event) { return getEntities("Player", event.getEntity()); }
     public HashMap<String, Entity> getEntities(PlayerEvent event) { return getEntities("Player", event.getPlayer()); }
     public HashMap<String, Entity> getEntities(PlayerFishEvent event) { return getEntities("Player", event.getPlayer(), "Caught", event.getCaught()); }
     public HashMap<String, Entity> getEntities(ProjectileHitEvent event) {

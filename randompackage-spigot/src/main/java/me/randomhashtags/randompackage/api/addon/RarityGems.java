@@ -47,6 +47,15 @@ public class RarityGems extends RPFeature {
             }
         }
 
+        if(!otherdata.getBoolean("saved default rarity gems")) {
+            final String[] g = new String[]{ "SOUL" };
+            for(String s : g) {
+                save("rarity gems", s + ".yml");
+            }
+            otherdata.set("saved default rarity gems", true);
+            saveOtherData();
+        }
+
         for(File f : new File(rpd + separator + "rarity gems").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
                 new FileRarityGem(f);

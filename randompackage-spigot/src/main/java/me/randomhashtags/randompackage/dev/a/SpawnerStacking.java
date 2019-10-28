@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.api;
+package me.randomhashtags.randompackage.dev.a;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.StackedSpawner;
@@ -200,9 +200,20 @@ public class SpawnerStacking extends RPFeature {
         final Block b = event.getBlock();
         final Location l = b.getLocation();
         if(isSpawner(b) && stacks.containsKey(l)) {
-            // TODO: fix dis
-            //final int size = stacks.get(l).getStack();
-            stacks.remove(l);
+            final Player player = event.getPlayer();
+            final StackedSpawner spawner = stacks.get(l);
+            final int stack = spawner.getStack();
+            if(stack == 1) {
+                stacks.remove(l);
+            } else {
+                event.setCancelled(true);
+                player.updateInventory();
+                spawner.setStack(stack-1);
+                final ItemStack is = getSpawnerAPI().getItem(spawner.getType().name());
+                if(is != null) {
+                    l.getWorld().dropItem(l.clone().add(0, 1, 0), is);
+                }
+            }
         }
     }
 }
