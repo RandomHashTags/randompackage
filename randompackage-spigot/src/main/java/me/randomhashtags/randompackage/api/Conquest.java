@@ -82,15 +82,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
                 tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
-                    final String[] sr = c.getSpawnRegion().split(";");
-                    final World w = Bukkit.getWorld(sr[0]);
-                    final int xMin = Integer.parseInt(sr[1].split(":")[0]), xMax = Integer.parseInt(sr[1].split(":")[1]), x = xMin + random.nextInt(xMax-xMin+1), zMin = Integer.parseInt(sr[2].split(":")[0]), zMax = Integer.parseInt(sr[2].split(":")[1]), z = zMin + random.nextInt(zMax-zMin+1);
-                    final Location l = new Location(w, x, 256, z);
-                    l.setY(w.getHighestBlockYAt(l));
-                    c.spawn(l);
-                    lastSpawnTime = System.currentTimeMillis();
-                    lastLocation = l;
-                    lastConquerer = null;
+                    spawn(c, getRandomLocation(c));
                 }, spawninterval, spawninterval));
             }
         }
@@ -131,6 +123,31 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 l.delete(false);
                 C.remove(l);
             }
+        }
+    }
+    public void spawn(ConquestChest chest, Location l) {
+        chest.spawn(l);
+        lastSpawnTime = System.currentTimeMillis();
+        lastLocation = l;
+        lastConquerer = null;
+    }
+    public Location getRandomLocation(ConquestChest chest) {
+        final String[] sr = chest.getSpawnRegion().split(";");
+        final String[] xValues = sr[1].split(":"), zValues = sr[2].split(":");
+        final String world = sr[0];
+        final World w = Bukkit.getWorld(world);
+        if(w != null) {
+            final int xMin = Integer.parseInt(xValues[0]), xMax = Integer.parseInt(xValues[1]), zMin = Integer.parseInt(zValues[0]), zMax = Integer.parseInt(zValues[1]);
+            final int xDifference = xMax-xMin, zDifference = zMax-zMin;
+            final int xNum = xDifference < 0 ? -1 : 1, zNum = zDifference < 0 ? -1 : 1;
+            final int X = xNum*xDifference, Z = zNum*zDifference;
+            final int x = xNum*(xMax-random.nextInt(X)), z = zNum*(zMax-random.nextInt(Z));
+            final Location l = new Location(w, x, 256, z);
+            l.setY(w.getHighestBlockYAt(l));
+            return l;
+        } else {
+            sendConsoleMessage("&6[RandomPackage] &cERROR &eInvalid world &f\"" + world + "\"&e for conquest \"" + chest.getIdentifier() + "\" spawn location!");
+            return null;
         }
     }
 
@@ -202,10 +219,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
             final List<ConquestChest> chests = new ArrayList<>(conquestchests.values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
-            chests.get(random.nextInt(chests.size())).spawn(l);
-            lastSpawnTime = System.currentTimeMillis();
-            lastLocation = l;
-            lastConquerer = null;
+            spawn(chests.get(random.nextInt(chests.size())), l);
         }
     }
 }
