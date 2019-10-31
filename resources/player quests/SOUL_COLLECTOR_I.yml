@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Collect 10 souls with a melee weapon"
+  - "&7Collect 10 souls with a melee weapon"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
   - "SoulCollectEvent;KillerIncreasePQuest=SOUL_COLLECTOR_I:1"

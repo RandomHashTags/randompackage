@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Earn a total of 500,000 EXP from grinding."
+  - "&7Earn a total of 500,000 EXP from grinding."
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "EntityDeath;VictimIsMob=true;KillerIncreasePQuest=DEFINITELY_AFK:xp"
+  - "EntityDeath;VictimIsMob=true;KillerIncreasePQuest=DEFINITELY_AFK:xp"

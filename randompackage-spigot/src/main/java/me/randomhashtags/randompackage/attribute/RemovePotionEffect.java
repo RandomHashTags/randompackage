@@ -27,7 +27,7 @@ public class RemovePotionEffect extends AbstractEventAttribute {
                         replacements.putAll(valueReplacements);
                     }
                     replacements.put("{POTION_EFFECT}", type.getName());
-                    sendStringListMessage(entity, getRPConfig(null, "custom enchants.yml").getStringList("messages.remove potion effect"), replacements);
+                    sendStringListMessage(entity, getRPConfig("custom enchants", "_settings.yml").getStringList("messages.remove potion effect"), replacements);
                 }
             }
         }

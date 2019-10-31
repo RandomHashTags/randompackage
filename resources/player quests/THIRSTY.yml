@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 3 players at an Outpost"
+  - "&7Kill 3 players at an Outpost"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "EntityDeath;VictimIsPlayer=true;KillerInOutpost=true;KillerIncreasePQuest=THIRSTY:1"
+  - "EntityDeath;VictimIsPlayer=true;KillerInOutpost=true;KillerIncreasePQuest=THIRSTY:1"

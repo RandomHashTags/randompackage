@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Open 3 Mystery Mob Spawners"
+  - "&7Open 3 Mystery Mob Spawners"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "MysteryMobSpawnerOpened;PlayerIncreasePQuest=MOB_EXAMINER_II:1"
+  - "MysteryMobSpawnerOpened;PlayerIncreasePQuest=MOB_EXAMINER_II:1"

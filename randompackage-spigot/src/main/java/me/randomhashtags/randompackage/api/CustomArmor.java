@@ -1,13 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
-import me.randomhashtags.randompackage.event.ArmorSetEquipEvent;
-import me.randomhashtags.randompackage.event.ArmorSetUnequipEvent;
+import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.event.PvAnyEvent;
-import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileArmorSet;
@@ -196,13 +193,17 @@ public class CustomArmor extends EventAttributes {
 		if(i != null) {
 			final Player player = event.getPlayer();
 			if(i.isSimilar(equipmentLootbox)) {
-				removeItem(player, i, 1);
 				final ItemStack is = getRandomEquipmentLootboxLoot();
-				giveItem(player, is);
+				final EquipmentLootboxOpenEvent e = new EquipmentLootboxOpenEvent(player, is);
+				pluginmanager.callEvent(e);
+				if(!e.isCancelled()) {
+					removeItem(player, i, 1);
+					giveItem(player, is);
 
-				final String p = player.getName(), it = is.getItemMeta().getDisplayName();
-				for(String s : config.getStringList("messages.receive loot from Equipment Lootbox")) {
-					Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+					final String p = player.getName(), it = is.getItemMeta().getDisplayName();
+					for(String s : config.getStringList("messages.receive loot from Equipment Lootbox")) {
+						Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+					}
 				}
 			} else if(valueOfArmorCrystal(i) != null) {
 			} else return;

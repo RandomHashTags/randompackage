@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Mine 5,000 blocks with a pickaxe"
+  - "&7Mine 5,000 blocks with a pickaxe"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreasePQuest:1"
+  - "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreasePQuest=NOVICE_MINER:1"

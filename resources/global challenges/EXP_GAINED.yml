@@ -1,4 +1,4 @@
-# Made by RandomHashTags | TODO: fix this
+# Made by RandomHashTags
 settings:
   duration: 86400
   type: "EXP Gained"
@@ -8,4 +8,4 @@ item:
   name: "&a&lMost EXP Gained"
 #
 attributes:
-  - "PlayerExpGain"
+  - "PlayerExpGain;PlayerIncreaseGlobalChallenge=EXP_GAINED:xp"

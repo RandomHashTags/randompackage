@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Use 20 Randomization Scrolls"
+  - "&7Use 20 Randomization Scrolls"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "RandomizationScrollUse;PlayerIncreasePQuest=RANDOMIZER_III:1"
+  - "RandomizationScrollUse;PlayerIncreasePQuest=RANDOMIZER_III:1"

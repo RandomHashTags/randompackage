@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Complete all other quests for the day"
+  - "&7Complete all other quests for the day"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "QuestCompleted;allQuestsAreCompleted;+1"
+  - "QuestCompleted;allQuestsAreCompleted;+1"

@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Equip a disguise for 30m"
+  - "&7Equip a disguise for 30m"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- ""
+  - ""

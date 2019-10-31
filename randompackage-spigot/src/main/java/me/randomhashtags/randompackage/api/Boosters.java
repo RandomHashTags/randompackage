@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Booster;
+import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
-import me.randomhashtags.randompackage.util.EventAttributes;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
+import me.randomhashtags.randompackage.util.EACoreListener;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileBooster;
 import me.randomhashtags.randompackage.util.obj.TObject;
@@ -19,19 +20,20 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
-public class Boosters extends EventAttributes {
+public class Boosters extends EACoreListener implements EventAttributeListener {
 	private static Boosters instance;
 	public static Boosters getBoosters() {
 	    if(instance == null) instance = new Boosters();
@@ -49,6 +51,7 @@ public class Boosters extends EventAttributes {
 	protected RPFeature getFeature() { return getBoosters(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
+		registerEventAttributeListener(this);
 		save("_Data", "boosters.yml");
 		dataF = new File(rpd + separator + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
@@ -165,11 +168,13 @@ public class Boosters extends EventAttributes {
 		if(!cancelled) {
 			final BoosterActivateEvent ee = new BoosterActivateEvent(player, booster, multiplier, duration);
 			pluginmanager.callEvent(ee);
-			if(!ee.isCancelled()) finish(ee);
+			if(!ee.isCancelled()) {
+				return finish(ee);
+			}
 		}
 		return !cancelled;
 	}
-	private void finish(BoosterActivateEvent event) {
+	private boolean finish(BoosterActivateEvent event) {
 		final Booster b = event.booster;
 		if(b instanceof FileBooster) {
 			final OfflinePlayer player = event.activator;
@@ -196,8 +201,10 @@ public class Boosters extends EventAttributes {
 							if(!activeRegionalBoosters.containsKey(faction)) activeRegionalBoosters.put(faction, new ArrayList<>());
 							activeRegionalBoosters.get(faction).add(booster);
 						}
+					} else {
+						return false;
 					}
-					break;
+					return true;
 				case "SELF":
 					final ActiveBooster booster = new ActiveBooster(event, System.currentTimeMillis()+duration);
 					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
@@ -206,9 +213,12 @@ public class Boosters extends EventAttributes {
 					}
 					if(!activePlayerBoosters.containsKey(u)) activePlayerBoosters.put(u, new ArrayList<>());
 					activePlayerBoosters.get(u).add(booster);
-					break;
+					return true;
+				default:
+					return false;
 			}
 		}
+		return false;
 	}
 	@EventHandler
 	private void boosterExpireEvent(BoosterExpireEvent event) {
@@ -267,26 +277,24 @@ public class Boosters extends EventAttributes {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDeathEvent(EntityDeathEvent event) {
-		final Player k = event.getEntity().getKiller();
-		if(k != null) {
-			final UUID u = k.getUniqueId();
+	private void triggerBoosters(Player player, Event event) {
+		if(player != null) {
+			final UUID u = player.getUniqueId();
 			final HashMap<String, String> replacements = new HashMap<>();
 			final List<ActiveBooster> boosters = new ArrayList<>();
 			boosters.addAll(getFactionBoosters(u));
 			boosters.addAll(getSelfBoosters(u));
 			for(ActiveBooster ab : boosters) {
-				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, k, ab);
+				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
 				pluginmanager.callEvent(e);
-				if(trigger(event, ab.getBooster().getAttributes())) {
-					final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
+				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
+				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
 					replacements.put("multiplier", M);
 					replacements.put("duration", D);
 					replacements.put("{MULTIPLIER}", M);
 					replacements.put("{PLAYER}", ab.getActivator().getName());
 					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
-					sendNotify(k, ab, replacements);
+					sendNotify(player, ab, replacements);
 				}
 			}
 		}
@@ -309,28 +317,29 @@ public class Boosters extends EventAttributes {
 		return null;
 	}
 
+	public void called(Event event) {
+		if(event instanceof PlayerEvent) {
+			triggerBoosters(((PlayerEvent) event).getPlayer(), event);
+		} else {
+			switch (event.getEventName().toLowerCase().split("event")[0]) {
+				case "entitydeath":
+					final EntityDeathEvent e = (EntityDeathEvent) event;
+					final Player k = e.getEntity().getKiller();
+					if(k != null) {
+						triggerBoosters(k, e);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	private class MCMMOBoosterEvents implements Listener {
 		@EventHandler(priority = EventPriority.HIGHEST)
 		private void mcmmoPlayerXpGainEvent(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
 			final Player player = event.getPlayer();
-			final List<ActiveBooster> boosters = new ArrayList<>();
-			if(hookedFactionsUUID()) {
-				final String f = factions.getFactionTag(player.getUniqueId());
-				boosters.addAll(getRegionalBoosters(f));
-			}
-			boosters.addAll(getSelfBoosters(player.getUniqueId()));
-			for(ActiveBooster ab : boosters) {
-				final HashMap<String, String> replacements = new HashMap<>();
-				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
-				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
-				pluginmanager.callEvent(e);
-				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
-					replacements.put("{MULTIPLIER}", M);
-					replacements.put("{PLAYER}", ab.getActivator().getName());
-					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
-					sendNotify(player, ab, replacements);
-				}
-			}
+			triggerBoosters(player, event);
 		}
 	}
 }

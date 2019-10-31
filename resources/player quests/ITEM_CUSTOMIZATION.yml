@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Use an Item Nametag"
+  - "&7Use an Item Nametag"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "ItemNameTagUsed;cancelled=false;+1"
+  - "ItemNameTagUsed;cancelled=false;+1"

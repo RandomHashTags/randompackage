@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "mcMMOXpGainedIn_Unarmed"
   duration: 86400
   type: "XP Gained in Unarmed"
 #
@@ -8,3 +7,5 @@ item:
   item: "gold_sword"
   name: "&a&lMost mcMMO XP Gain in Unarmed"
 #
+attributes:
+  - "MCMMOPlayerXpGain;skill=UNARMED;PlayerIncreaseGlobalChallenge=MCMMO_XP_GAINED_IN_UNARMED:xp"

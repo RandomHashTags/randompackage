@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "mcMMOXpGainedIn_Swords"
   duration: 86400
   type: "XP Gained in Swords"
 #
@@ -8,3 +7,5 @@ item:
   item: "gold_sword"
   name: "&a&lMost mcMMO XP Gain in Swords"
 #
+attributes:
+  - "MCMMOPlayerXpGain;skill=SWORDS;PlayerIncreaseGlobalChallenge=MCMMO_XP_GAINED_IN_SWORDS:xp"

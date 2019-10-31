@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Blocks Placed"
 #
 attributes:
-- "BlockPlace;PlayerIncreaseGlobalChallenge=BLOCKS_PLACED:1"
+  - "BlockPlace;PlayerIncreaseGlobalChallenge=BLOCKS_PLACED:1"

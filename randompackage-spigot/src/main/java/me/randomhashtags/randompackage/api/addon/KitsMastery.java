@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,11 +44,10 @@ public class KitsMastery extends Kits {
     public void load() {
         loadKitUtils();
         final long started = System.currentTimeMillis();
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default mkits")) {
+        if(!otherdata.getBoolean("saved default mkits")) {
             final String[] v = new String[] {"DEATH_KNIGHT", "GHOST", "NECROMANCER"};
             for(String s : v) save("kits", "MKIT_" + s + ".yml");
-            a.set("saved default mkits", true);
+            otherdata.set("saved default mkits", true);
             saveOtherData();
         }
 

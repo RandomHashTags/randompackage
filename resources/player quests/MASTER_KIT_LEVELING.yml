@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Tier up a /gkit to Tier 3"
+  - "&7Tier up a /gkit to Tier 3"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
   - "CustomKitLevelUp;KitType=GKIT_;toLevel=3;PlayerIncreasePQuest=MASTER_KIT_LEVELING:1"

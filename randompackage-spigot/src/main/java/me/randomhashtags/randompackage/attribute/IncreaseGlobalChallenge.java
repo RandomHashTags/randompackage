@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class IncreaseGlobalChallenge extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
         final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
@@ -21,7 +21,7 @@ public class IncreaseGlobalChallenge extends AbstractEventAttribute {
                 if(c != null) {
                     final ActiveGlobalChallenge a = active.getOrDefault(c, null);
                     if(a != null) {
-                        final BigDecimal by = BigDecimal.valueOf(evaluate(values[1]));
+                        final BigDecimal by = BigDecimal.valueOf(evaluate(replaceValue(values[1], valueReplacements)));
                         final GlobalChallengeParticipateEvent ev = new GlobalChallengeParticipateEvent(event, (Player) e, a, by);
                         pluginmanager.callEvent(ev);
                         if(!ev.isCancelled()) {

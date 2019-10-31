@@ -1,4 +1,4 @@
-# Made by RandomHashTags | TODO: fix this
+# Made by RandomHashTags
 settings:
   event: "Jackpot$Spent"
   duration: 86400
@@ -8,3 +8,5 @@ item:
   item: "gold_ingot"
   name: "&a&lMost Money Put in Jackpot"
 #
+attributes:
+  - "JackpotPurchaseTickets;PlayerIncreaseGlobalChallenge=JACKPOT_MONEY_SPENT:moneySpent"

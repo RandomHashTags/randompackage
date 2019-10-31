@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Apply an enchant book with less than 10% success rate"
+  - "&7Apply an enchant book with less than 10% success rate"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CustomEnchantApply;success<=10;PlayerIncreasePQuest=BEGINNERS_LUCK:1"
+  - "CustomEnchantApply;success<=10;PlayerIncreasePQuest=BEGINNERS_LUCK:1"

@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Birch Logs Cut"
 #
 attributes:
-- "BlockBreak;material=BIRCH_WOOD;PlayerIncreaseGlobalChallenge=BIRCH_LOGS_CUT:1"
+  - "BlockBreak;material=BIRCH_WOOD;PlayerIncreaseGlobalChallenge=BIRCH_LOGS_CUT:1"

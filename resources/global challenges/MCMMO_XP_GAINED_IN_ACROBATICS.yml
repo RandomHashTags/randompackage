@@ -1,6 +1,5 @@
 # Made by RandomHashTags
 settings:
-  tracks: "mcMMOXpGainedIn_Acrobatics"
   duration: 86400
   type: "XP Gained in Acrobatics"
 #
@@ -8,3 +7,5 @@ item:
   item: "gold_sword"
   name: "&a&lMost mcMMO XP Gain in Acrobatics"
 #
+attributes:
+  - "MCMMOPlayerXpGain;skill=ACROBATICS;PlayerIncreaseGlobalChallenge=MCMMO_XP_GAINED_IN_ACROBATICS:xp"

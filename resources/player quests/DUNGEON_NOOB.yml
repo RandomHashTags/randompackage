@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Die in a dungeon 3 times"
+  - "&7Die in a dungeon 3 times"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- ""
+  - ""

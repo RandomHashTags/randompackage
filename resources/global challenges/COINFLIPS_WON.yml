@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Coinflips Won"
 #
 attributes:
-  - "CoinFlipEnd;WinnerIncreaseGlobalChallenge=COINFLIPS_WON:1"
+    - "CoinFlipEnd;WinnerIncreaseGlobalChallenge=COINFLIPS_WON:1"

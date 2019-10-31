@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Successfully apply 1 Soul Book"
+  - "&7Successfully apply 1 Soul Book"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
   - "CustomEnchantApply;result=SUCCESS_APPLY;rarity=SOUL;PlayerIncreasePQuest=SOUL_ENCHANTER:1"

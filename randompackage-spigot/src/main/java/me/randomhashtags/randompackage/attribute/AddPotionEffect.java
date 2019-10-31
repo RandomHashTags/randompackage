@@ -35,7 +35,7 @@ public class AddPotionEffect extends AbstractEventAttribute {
                     replacements.put("{DURATION_SECONDS}", Integer.toString(duration/20));
                     replacements.put("{AMPLIFIER}", Integer.toString(amplifier));
                     replacements.put("{LEVEL}", Integer.toString(amplifier-1));
-                    sendStringListMessage(entity, getRPConfig(null, "custom enchants.yml").getStringList("messages.apply potion effect"), replacements);
+                    sendStringListMessage(entity, getRPConfig("custom enchants", "_settings.yml").getStringList("messages.apply potion effect"), replacements);
                 }
             }
         }

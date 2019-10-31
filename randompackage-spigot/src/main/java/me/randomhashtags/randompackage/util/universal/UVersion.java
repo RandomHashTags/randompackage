@@ -44,13 +44,14 @@ public class UVersion extends YamlUpdater implements Versionable {
     public static final File rpd = getPlugin.getDataFolder();
     public static final String separator = File.separator;
 
-    public final RandomPackage randompackage = RandomPackage.getPlugin;
-    public final PluginManager pluginmanager = Bukkit.getPluginManager();
-    public final Random random = new Random();
+    public static final RandomPackage randompackage = RandomPackage.getPlugin;
+    public static final PluginManager pluginmanager = Bukkit.getPluginManager();
+    public static final Random random = new Random();
 
-    public final BukkitScheduler scheduler = Bukkit.getScheduler();
-    public final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-    public final ConsoleCommandSender console = Bukkit.getConsoleSender();
+    public static final BukkitScheduler scheduler = Bukkit.getScheduler();
+    public static final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
+    public static final ConsoleCommandSender console = Bukkit.getConsoleSender();
+
     public ItemStack item = new ItemStack(Material.APPLE);
     public ItemMeta itemMeta = item.getItemMeta();
     public List<String> lore = new ArrayList<>();
@@ -176,8 +177,59 @@ public class UVersion extends YamlUpdater implements Versionable {
                 default: return null;
             }
         }
-
     }
+    public final boolean isPassive(EntityType type) {
+        if(type.isSpawnable()) {
+            switch (type.name().toLowerCase()) {
+                case "bat":
+                case "cat":
+                case "chicken":
+                case "cod":
+                case "cow":
+                case "dolphin":
+                case "donkey":
+                case "fox":
+                case "horse":
+                case "player":
+                case "llama":
+                case "mule":
+                case "mushroom_cow":
+                case "ocelot":
+                case "panda":
+                case "parrot":
+                case "pig":
+                case "pufferfish":
+                case "rabbit":
+                case "salmon":
+                case "sheep":
+                case "squid":
+                case "tropical_fish":
+                case "turtle":
+                case "villager":
+                case "wandering_trader":
+                case "zombie_horse": return true;
+                default: return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    public final boolean isAggressive(EntityType type) {
+        return !isPassive(type);
+    }
+    public final boolean isNeutral(EntityType type) {
+        if(type.isSpawnable() && !isPassive(type)) {
+            switch (type.name()) {
+                case "enderman":
+                case "iron_golem":
+                case "polar_bear":
+                case "wolf":
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public final void sendConsoleMessage(String msg) {
         console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }

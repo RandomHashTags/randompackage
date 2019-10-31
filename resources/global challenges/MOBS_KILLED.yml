@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Mobs Killed"
 #
 attributes:
-- "EntityDeath;VictimIsMob=true;KillerIncreaseGlobalChallenge=MOBS_KILLED:1"
+  - "EntityDeath;VictimIsMob=true;KillerIncreaseGlobalChallenge=MOBS_KILLED:1"

@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Make $1,000,000 in /shop"
+  - "&7Make $1,000,000 in /shop"
 #
 rewards:
-- "questtokens=2: 2x Quest Token"
+  - "questtokens=2: 2x Quest Token"
 #
 trigger:
-- "ShopSellItem;+profit"
+  - "ShopSellItem;+profit"

@@ -13,6 +13,7 @@ import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
+import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.entity.*;
@@ -53,6 +54,8 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
                 && passedEnderman(entity, condition, s, value)
                 && passedEndermite(entity, condition, s, value, legacy, thirteen)
                 && passedEntity(entity, condition, s, value, eight, nine, ten)
+                && passedEvoker(entity, condition, s, value, eight, nine, ten)
+                && passedExplosive(entity, condition, s, value)
                 && passedFallenBlock(event, entity, condition, s, value)
                 && passedFirework(entity, condition, s, value, legacy, thirteen)
                 && passedFox(entity, condition, s, value, legacy, thirteen)
@@ -86,6 +89,7 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
                 && passedZombie(entity, condition, s, value))
         ;
     }
+
     private boolean passedBasic(Entity e, String condition, String s, String value) {
         switch (condition) {
             case "isfromspawner": return spawnedFromSpawner.contains(e.getUniqueId()) == Boolean.parseBoolean(value);
@@ -101,6 +105,9 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
             case "isinsidevehicle": return e.isInsideVehicle() == Boolean.parseBoolean(value);
             case "isriding": return e.isInsideVehicle() && e.getVehicle().getType().name().equalsIgnoreCase(value);
             case "iscustomnamevisible": return e.isCustomNameVisible() == Boolean.parseBoolean(value);
+            case "isaggressive": return isAggressive(e.getType()) == Boolean.parseBoolean(value);
+            case "isneutral": return isNeutral(e.getType()) == Boolean.parseBoolean(value);
+            case "ispassive": return isPassive(e.getType()) == Boolean.parseBoolean(value);
             case "isonground": return e.isOnGround() == Boolean.parseBoolean(value);
             default: return true;
         }
@@ -221,9 +228,9 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
     private boolean passedFallenBlock(Event event, Entity e, String condition, String s, String value) {
         switch (condition) {
             case "material":
-                return e instanceof FallingBlock && UMaterial.match(((FallingBlock) e).getMaterial().name()).name().equalsIgnoreCase(value)
-                    || event instanceof BlockPlaceEvent && UMaterial.match(((BlockPlaceEvent) event).getBlock().getType().name()).name().equalsIgnoreCase(value)
-                    || event instanceof BlockBreakEvent && UMaterial.match(((BlockBreakEvent) event).getBlock().getType().name()).name().equalsIgnoreCase(value);
+                return e instanceof FallingBlock && value.equalsIgnoreCase(UMaterial.match(((FallingBlock) e).getMaterial().name()).name())
+                    || event instanceof BlockPlaceEvent && value.equalsIgnoreCase(UMaterial.match(((BlockPlaceEvent) event).getBlock().getType().name()).name())
+                    || event instanceof BlockBreakEvent && value.equalsIgnoreCase(UMaterial.match(((BlockBreakEvent) event).getBlock().getType().name()).name());
             case "canhurtentities": return e instanceof FallingBlock && ((FallingBlock) e).canHurtEntities() == Boolean.parseBoolean(value);
             default: return true;
         }
@@ -607,6 +614,11 @@ public abstract class EventConditions extends RPFeature implements Combo, RPItem
             case "kittype":
                 final CustomKit kit = e instanceof KitPreClaimEvent ? ((KitPreClaimEvent) e).getKit() : e instanceof KitClaimEvent ? ((KitClaimEvent) e).getKit() : null;
                 return kit != null && kit.getIdentifier().startsWith(value);
+
+            case "skill":
+                final com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent ev = (com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event;
+                final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(ev);
+                return skill != null && skill.equalsIgnoreCase(value);
             default:
                 return true;
         }

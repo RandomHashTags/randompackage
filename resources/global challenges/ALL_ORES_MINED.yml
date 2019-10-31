@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Ores Mined"
 #
 attributes:
-- "BlockBreak;material=_ORE;PlayerIncreaseGlobalChallenge=ALL_ORES_MINED:1"
+  - "BlockBreak;material=_ORE;PlayerIncreaseGlobalChallenge=ALL_ORES_MINED:1"

@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Alchemist Exchanges"
 #
 attributes:
-- "AlchemistExchange;PlayerIncreaseGlobalChallenge=ALCHEMIST_EXCHANGES:1"
+  - "AlchemistExchange;PlayerIncreaseGlobalChallenge=ALCHEMIST_EXCHANGES:1"

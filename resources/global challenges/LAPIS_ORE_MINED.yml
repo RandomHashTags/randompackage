@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Lapis Ore Mined"
 #
 attributes:
-- "BlockBreak;material=LAPIS_ORE;PlayerIncreaseGlobalChallenge=LAPIS_ORE_MINED:1"
+  - "BlockBreak;material=LAPIS_ORE;PlayerIncreaseGlobalChallenge=LAPIS_ORE_MINED:1"

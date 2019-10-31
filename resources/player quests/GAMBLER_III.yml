@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Buy 1,000 Jackpot Tickets"
+  - "&7Buy 1,000 Jackpot Tickets"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "JackpotPurchaseTicket;PlayerIncreasePQuest=GAMBLER_III:amount"
+  - "JackpotPurchaseTicket;PlayerIncreasePQuest=GAMBLER_III:tickets"

@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Purchase 240 Simple Books"
+  - "&7Purchase 240 Simple Books"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "EnchanterPurchase;IsRarityBook=true;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_ENCHANTER:1"
+  - "EnchanterPurchase;IsRarityBook=true;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_ENCHANTER:1"

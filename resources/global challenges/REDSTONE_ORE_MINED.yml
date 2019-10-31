@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Redstone Ore Mined"
 #
 attributes:
-- "BlockBreak;material=REDSTONE_ORE;PlayerIncreaseGlobalChallenge=REDSTONE_ORE_MINED:1"
+  - "BlockBreak;material=REDSTONE_ORE;PlayerIncreaseGlobalChallenge=REDSTONE_ORE_MINED:1"

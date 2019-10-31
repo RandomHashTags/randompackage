@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Complete a Dungeon"
+  - "&7Complete a Dungeon"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- ""
+  - ""

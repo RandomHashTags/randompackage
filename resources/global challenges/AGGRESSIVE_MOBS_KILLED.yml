@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Aggressive Mobs Killed"
 #
 attributes:
-- "EntityDeath;VictimIsMonster=true;KillerIncreaseGlobalChallenge=AGGRESSIVE_MOBS_KILLED:1"
+  - "EntityDeath;VictimIsMonster=true;KillerIncreaseGlobalChallenge=AGGRESSIVE_MOBS_KILLED:1"

@@ -12,7 +12,7 @@ import java.util.List;
 public class IncreasePQuest extends AbstractEventAttribute {
     @Override
     public void executeData(HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {
-        final List<String> msg = getRPConfig(null, "player quests.yml").getStringList("messages.completed");
+        final List<String> msg = getRPConfig("player quests", "_settings.yml").getStringList("messages.completed");
         for(RPPlayer pdata : recipientValues.keySet()) {
             final String value = replaceValue(recipientValues.get(pdata), valueReplacements);
             if(value != null) {

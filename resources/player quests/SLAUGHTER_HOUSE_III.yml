@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 25 enemy faction players"
+  - "&7Kill 25 enemy faction players"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
   - "EntityDeath;VictimIsPlayer=true;VictimIsEnemy=true;KillerIncreasePQuest=SLAUGHTER_HOUSE_III:1"

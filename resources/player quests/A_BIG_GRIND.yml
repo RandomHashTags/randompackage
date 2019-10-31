@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 5,000 Magma Cubes"
+  - "&7Kill 5,000 Magma Cubes"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "EntityDeath;VictimIsType=MAGMA_CUBE;KillerIncreasePQuest=A_BIG_GRIND:1"
+  - "EntityDeath;VictimIsType=MAGMA_CUBE;KillerIncreasePQuest=A_BIG_GRIND:1"

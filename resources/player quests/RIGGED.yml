@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Win $25,000,000 in /coinflip"
+  - "&7Win $25,000,000 in /coinflip"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "CoinFlipEnd;WinnerIncreasePQuest=RIGGED:woncash"
+  - "CoinFlipEnd;WinnerIncreasePQuest=RIGGED:woncash"

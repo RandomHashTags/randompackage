@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Blocks Mined Using Pick"
 #
 attributes:
-- "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreaseGlobalChallenge=BLOCKS_MINED_BY_PICKAXE:1"
+  - "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreaseGlobalChallenge=BLOCKS_MINED_BY_PICKAXE:1"

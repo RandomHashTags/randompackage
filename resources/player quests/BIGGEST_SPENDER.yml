@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Spend $10,000,000 in /shop"
+  - "&7Spend $10,000,000 in /shop"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "ShopPurchaseItem;PlayerIncreasePQuest=BIGGEST_SPENDER:total"
+  - "ShopPurchaseItem;PlayerIncreasePQuest=BIGGEST_SPENDER:total"

@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Purchase 50 Ultimate Books"
+  - "&7Purchase 50 Ultimate Books"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "EnchanterPurchase;IsRarityBook;rarity=UNIQUE;PlayerIncreasePQuest=1"
+  - "EnchanterPurchase;IsRarityBook;rarity=UNIQUE;PlayerIncreasePQuest=1"

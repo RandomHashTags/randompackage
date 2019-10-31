@@ -1,13 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
-import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.enchant.*;
-import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.util.EACoreListener;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileGlobalChallenge;
@@ -22,16 +21,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -42,7 +36,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 
-public class GlobalChallenges extends EventAttributes implements CommandExecutor {
+public class GlobalChallenges extends EACoreListener implements CommandExecutor, EventAttributeListener {
 	private static GlobalChallenges instance;
 	public static GlobalChallenges getChallenges() {
 		if(instance == null) instance = new GlobalChallenges();
@@ -57,8 +51,9 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	private File dataF;
 	private YamlConfiguration data;
 
-	public String getIdentifier() { return "GLOBAL_CHALLENGES"; }
-	protected RPFeature getFeature() { return getChallenges(); }
+	@Override public String getIdentifier() { return "GLOBAL_CHALLENGES"; }
+	@Override protected RPFeature getFeature() { return getChallenges(); }
+
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && player != null)
@@ -86,6 +81,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    new IncreaseGlobalChallenge().load();
+		registerEventAttributeListener(this);
 		save("global challenges", "_settings.yml");
 		save("_Data", "global challenges.yml");
 		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "global challenges", "_settings.yml"));
@@ -164,6 +160,7 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 
 		globalchallenges = null;
 		globalchallengeprizes = null;
+		unregisterEventAttributeListener(this);
 	}
 	public void reloadChallenges() {
 		final int max = config.getInt("challenge settings.max at once");
@@ -407,73 +404,10 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDamageEvent(EntityDamageEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDeathEvent(EntityDeathEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void blockPlaceEvent(BlockPlaceEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void blockBreakEvent(BlockBreakEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void playerFishEvent(PlayerFishEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void playerExpChangeEvent(PlayerExpGainEvent event) {
-		tryIncreasing(event);
-	}
-	/*
-	 * RandomPackage Events
-	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void playerRevealCustomEnchantEvent(PlayerRevealCustomEnchantEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void coinFlipEndEvent(CoinFlipEndEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void fundDepositEvent(FundDepositEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void customEnchantProcEvent(CustomEnchantProcEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void customEnchantApplyEvent(CustomEnchantApplyEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void enchanterPurchaseEvent(EnchanterPurchaseEvent event) {
-		tryIncreasing(event);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void tinkererTradeEvent(TinkererTradeEvent event) {
-		tryIncreasing(event);
-	}
 	/*
 		Bukkit Events
 	 */
-	public void tryIncreasing(Event event) {
+	public void called(Event event) {
 		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
 			trigger(event, g.getAttributes());
 		}
@@ -489,13 +423,16 @@ public class GlobalChallenges extends EventAttributes implements CommandExecutor
 			tryIncreasing(event);
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
+			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-                trigger(event, getEntities("Player", event.getPlayer()), g.getAttributes());
+                trigger(event, entities, g.getAttributes());
 			}
 		}
-		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event, String...replacements) {
+		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
+			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
+			final String[] replacements = new String[] {"xp", Float.toString(event.getRawXpGained())};
 			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-                trigger(event, getEntities("Player", event.getPlayer()), g.getAttributes(), replacements);
+                trigger(event, entities, g.getAttributes(), replacements);
 			}
 		}
 	}

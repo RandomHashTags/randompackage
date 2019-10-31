@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Spend 1h 30m in The End"
+  - "&7Spend 1h 30m in The End"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- ""
+  - ""

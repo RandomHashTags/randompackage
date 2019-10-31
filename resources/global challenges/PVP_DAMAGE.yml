@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Damage Inflicted on Players"
 #
 attributes:
-- "PvAny;VictimIsPlayer=true;DamagerIncreaseGlobalChallenge=PVP_DAMAGE:dmg"
+  - "PvAny;VictimIsPlayer=true;DamagerIncreaseGlobalChallenge=PVP_DAMAGE:dmg"

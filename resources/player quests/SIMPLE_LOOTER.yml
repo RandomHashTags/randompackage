@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Open 10 Simple Chests"
+  - "&7Open 10 Simple Chests"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "ServerCrateOpen;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_LOOTER:1"
+  - "ServerCrateOpen;rarity=SIMPLE;PlayerIncreasePQuest=SIMPLE_LOOTER:1"

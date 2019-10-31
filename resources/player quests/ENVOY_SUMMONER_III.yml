@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Summon 5 Envoys"
+  - "&7Summon 5 Envoys"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "EnvoySummon;PlayerIncreasePQuest=ENVOY_SUMMONER_III:1"
+  - "EnvoySummon;PlayerIncreasePQuest=ENVOY_SUMMONER_III:1"

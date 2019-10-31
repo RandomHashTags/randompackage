@@ -30,7 +30,7 @@ public final class MCMMOAPI extends Reflect {
 		return instance;
 	}
 
-	public boolean isClassic = false;
+	private boolean isClassic = false;
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
@@ -51,6 +51,7 @@ public final class MCMMOAPI extends Reflect {
 		itemsConfig = null;
 	}
 
+	public boolean isClassic() { return isClassic; }
 	public String getSkillName(String input, String o) {
 		if(isClassic) {
 			for(com.gmail.nossr50.datatypes.skills.SkillType type : com.gmail.nossr50.datatypes.skills.SkillType.values()) {
@@ -83,6 +84,23 @@ public final class MCMMOAPI extends Reflect {
 			return a[random.nextInt(a.length)].name();
 		}
 	}
+	public String getSkillName(McMMOPlayerXpGainEvent event) {
+		try {
+			final String skill;
+			final Field f = getPrivateField(event.getClass(), "skill", true);
+			f.setAccessible(true);
+			if(isClassic) {
+				skill = ((com.gmail.nossr50.datatypes.skills.SkillType) f.get(event)).name().toLowerCase();
+			} else {
+				skill = ((com.gmail.nossr50.datatypes.skills.PrimarySkillType) f.get(event)).name().toLowerCase();
+			}
+			f.setAccessible(false);
+			return skill;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public void addRawXP(Player player, String skill, int xp) {
 		ExperienceAPI.addRawXP(player, skill, xp);
@@ -95,23 +113,11 @@ public final class MCMMOAPI extends Reflect {
 	private void mcmmoPlayerXpGainEvent(McMMOPlayerXpGainEvent event) {
 		final Player player = event.getPlayer();
 		final float xp = event.getRawXpGained();
-		final String skill;
-		try {
-			final Field f = getPrivateField(event.getClass(), "skill", true);
-			f.setAccessible(true);
-			if(isClassic) {
-				skill = ((com.gmail.nossr50.datatypes.skills.SkillType) f.get(event)).name().toLowerCase();
-			} else {
-				skill = ((com.gmail.nossr50.datatypes.skills.PrimarySkillType) f.get(event)).name().toLowerCase();
-			}
-			f.setAccessible(false);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+		final String skill = getSkillName(event);
+		if(skill != null) {
+			final CustomEnchants e = CustomEnchants.getCustomEnchants();
+			e.tryProcing(event, player, null);
 		}
-
-		final CustomEnchants e = CustomEnchants.getCustomEnchants();
-		e.tryProcing(event, player, null);
 	}
 	
 	@EventHandler

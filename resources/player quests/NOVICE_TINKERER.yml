@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Tinker 50 items"
+  - "&7Tinker 50 items"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
   - "TinkererTrade;PlayerIncreasePQuest=NOVICE_TINKERER:tradesize"

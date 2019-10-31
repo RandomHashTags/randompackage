@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Be the first to loot 1 Stronghold Chest"
+  - "&7Be the first to loot 1 Stronghold Chest"
 #
 rewards:
-- "questtokens=1: 1x Quest Token"
+  - "questtokens=1: 1x Quest Token"
 #
 trigger:
-- "StronholdChestLooted;+1"
+  - "StronholdChestLooted;+1"

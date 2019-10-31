@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Open 5 Legendary Chests"
+  - "&7Open 5 Legendary Chests"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "ServerCrateOpen;rarity=LEGENDARY;PlayerIncreasePQuest=LEGENDARY_LOOTER:1"
+  - "ServerCrateOpen;rarity=LEGENDARY;PlayerIncreasePQuest=LEGENDARY_LOOTER:1"

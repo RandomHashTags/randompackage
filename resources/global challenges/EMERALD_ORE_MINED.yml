@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Emerald Ore Mined"
 #
 attributes:
-- "BlockBreak;material=EMERALD_ORE;PlayerIncreaseGlobalChallenge=EMERALD_ORE_MINED:1"
+  - "BlockBreak;material=EMERALD_ORE;PlayerIncreaseGlobalChallenge=EMERALD_ORE_MINED:1"

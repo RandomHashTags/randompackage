@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 5 Fallen Heroes"
+  - "&7Kill 5 Fallen Heroes"
 #
 rewards:
-- "questtokens=3: 3x Quest Tokens"
+  - "questtokens=3: 3x Quest Tokens"
 #
 trigger:
-- "FallenHeroSlain;KillerIncreasePQuest=HERO_DOMINATOR:1"
+  - "FallenHeroSlain;KillerIncreasePQuest=HERO_DOMINATOR:1"

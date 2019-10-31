@@ -104,7 +104,6 @@ public abstract class RPStorage extends RegionalAPI {
     public YamlConfiguration getAddonConfig(String fileName) { return get("addons", fileName); }
     public YamlConfiguration getRPConfig(String folder, String fileName) { return get(folder, fileName); }
 
-
     public ArmorSet getArmorSet(String identifier) {
         return armorsets != null ? armorsets.getOrDefault(identifier, null) : null;
     }

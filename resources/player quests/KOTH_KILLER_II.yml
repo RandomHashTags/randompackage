@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 5 players in KOTH arena"
+  - "&7Kill 5 players in KOTH arena"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "EntityDeath;VictimIsPlayer=true;VictimWorld=koth;KillerIncreasePQuest=KOTH_KILLER_II:1"
+  - "EntityDeath;VictimIsPlayer=true;VictimWorld=koth;KillerIncreasePQuest=KOTH_KILLER_II:1"

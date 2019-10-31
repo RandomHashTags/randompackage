@@ -46,7 +46,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&7- Server Version: &f" + VERSION,
                             "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Faction Plugin: " + (regions.hookedFactionsUUID() ? "&3" + getFactionType(fac) + " &7(&2" + fac.getDescription().getVersion() + "&7)" : "&cfalse"),
-                            "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
+                            "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic() ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Wiki: &9https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Home",
                             "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/&r &f%%__NONCE__%%",

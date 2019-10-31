@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Open 10 Ultimate Chests"
+  - "&7Open 10 Ultimate Chests"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "ServerCrateOpen;rarity=ULTIMATE;PlayerIncreasePQuest=ULTIMATE_LOOTER:1"
+  - "ServerCrateOpen;rarity=ULTIMATE;PlayerIncreasePQuest=ULTIMATE_LOOTER:1"

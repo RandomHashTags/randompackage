@@ -4,25 +4,20 @@ import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.Listener;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.UUID;
 
-public abstract class EventAttributes extends EventExecutor {
+public abstract class EventAttributes extends EventExecutor implements Listener {
     /*
         Read https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Event-Attributes for all event attribute info
             * Event specific entity placeholders
             * Allowed conditions for specific entity types
             * Available event attributes with their identifier, and what they do
      */
+
     public static void loadEventAttributes() {
         if(eventattributes == null) {
             eventattributes = new LinkedHashMap<>();
@@ -102,33 +97,13 @@ public abstract class EventAttributes extends EventExecutor {
         for(EventCondition c : conditions) {
             c.load();
         }
+        EACoreListener.getEventAttributeListener().enable();
     }
     public static void unloadEventAttributes() {
         eventattributes = null;
         eventconditions = null;
         Combo.combos.clear();
         Listable.list.clear();
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void creatureSpawnEvent(CreatureSpawnEvent event) {
-        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
-            final UUID u = event.getEntity().getUniqueId();
-            if(!spawnedFromSpawner.contains(u)) {
-                spawnedFromSpawner.add(u);
-            }
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void entityDeathEvent(EntityDeathEvent event) {
-        spawnedFromSpawner.remove(event.getEntity().getUniqueId());
-    }
-    @EventHandler(priority = EventPriority.LOWEST)
-    private void entityShootBowEvent(EntityShootBowEvent event) {
-        projectileEvents.put(event.getProjectile().getUniqueId(), event);
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void projectileHitEvent(ProjectileHitEvent event) {
-        projectileEvents.remove(event.getEntity().getUniqueId());
+        EACoreListener.getEventAttributeListener().disable();
     }
 }

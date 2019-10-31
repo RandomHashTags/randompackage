@@ -8,4 +8,4 @@ item:
   name: "&a&lMost Envoy Chests Broken"
 #
 attributes:
-- "PlayerClaimEnvoyCrate;PlayerIncreaseGlobalChallenge=ENVOY_CHESTS_LOOTED:1"
+  - "PlayerClaimEnvoyCrate;PlayerIncreaseGlobalChallenge=ENVOY_CHESTS_LOOTED:1"

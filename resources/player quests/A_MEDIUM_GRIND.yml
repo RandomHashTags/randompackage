@@ -6,10 +6,10 @@ settings:
   expiration: 86400
 #
 lore:
-- "&7Kill 5,000 Blazes"
+  - "&7Kill 5,000 Blazes"
 #
 rewards:
-- "questtokens=2: 2x Quest Tokens"
+  - "questtokens=2: 2x Quest Tokens"
 #
 trigger:
-- "EntityDeath;VictimIsType=BLAZE;KillerIncreasePQuest=A_MEDIUM_GRIND:1"
+  - "EntityDeath;VictimIsType=BLAZE;KillerIncreasePQuest=A_MEDIUM_GRIND:1"
