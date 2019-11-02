@@ -36,8 +36,8 @@ mysterypetbox:
     - " &6&l*&r &e&l{ITEM}"
   reward size: 1
   rewards:
-    - "inventorypet:LAVA"
-    - "inventorypet:WATER"
+    - "inventorypet:LAVA_ELEMENTAL"
+    - "inventorypet:WATER_ELEMENTAL"
     - "inventorypet:XP_BOOSTER"
     - "inventorypet:ANTI_TELEBLOCK"
     - "inventorypet:BLESS"
@@ -60,7 +60,7 @@ pvppetlootbox:
   item: "magma_cube_spawn_egg"
   name: "&4&lPvP Pet Lootbox"
   lore:
-    - ""
+    - "VEnchants{Unbreaking10}"
     - " "
     - "&7A collection of only the most"
     - "&c&nhighly coveted&r &7PvP companions!"
@@ -115,7 +115,7 @@ enchantmentorbgenerator:
   item: "ender_eye"
   name: "&6&lRandom Enchantment orb Generator"
   lore:
-    - " "
+    - "VEnchants{Unbreaking10}"
     - " "
     - "&7&nRight-click&r &7to receive a random &612, 13, or 14 lore"
     - "&6Armor &7or &6Weapon Enchantment Orb!"
@@ -131,11 +131,32 @@ enchantmentorbgenerator:
     - "enchantmentorb:weapon13"
     - "enchantmentorb:weapon14"
 #
+armorcrystalgenerator:
+  item: "chest"
+  name: "&6&lRandom Armor Crystal Generator"
+  lore:
+    - " "
+    - "&7&nRight-click&r &7to receive a &650% Armor Crystal"
+    - "&7for one of the special Armor Sets!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 1
+  rewards:
+    - "customarmorcrystal:RANGER:50"
+    - "customarmorcrystal:YETI:50"
+    - "customarmorcrystal:SUPREME:50"
+    - "customarmorcrystal:PHANTOM:50"
+    - "customarmorcrystal:YIJKI:50"
+    - "customarmorcrystal:DRAGON:50"
+    - "customarmorcrystal:ENGINEER:50"
+    - "customarmorcrystal:TRAVELER:50"
+#
 mkitgemgenerator:
   item: "cyan_dye"
   name: "&6&lRandom&r &4&lM-Kit Gem&r &6&lGenerator"
   lore:
-    - " "
+    - "VEnchants{Unbreaking10]"
     - " "
     - "&7&nRight-click&r &7to receive one &4&lM-Kit Gem"
     - "&7completely unlocking the affiliated kit &nPERMANENTLY!"
@@ -163,7 +184,7 @@ swagbag:
   reward size: 3
   rewards:
     - "raritybook:HEROIC;amount=2"
-    - "enchantedbook:DepthStrider"
+    - "enchantedbook:Depth_Strider:random"
     - "servercrateflare:GODLY;amount=3"
     #- "title:KOTH"
     - "servercrateflare:LEGENDARY;amount=3"

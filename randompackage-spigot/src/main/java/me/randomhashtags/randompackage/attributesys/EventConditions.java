@@ -1,19 +1,22 @@
-package me.randomhashtags.randompackage.util;
+package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.attribute.Combo;
-import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
+import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
+import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
-import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPItemStack;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.entity.*;

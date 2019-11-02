@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.util.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EACoreListener;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FilePlayerQuest;

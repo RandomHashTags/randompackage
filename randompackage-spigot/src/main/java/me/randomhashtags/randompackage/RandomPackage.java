@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.api.FatBuckets;
+import me.randomhashtags.randompackage.api.RandomizedLoot;
 import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.dev.a.*;
@@ -16,7 +17,7 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPlaceholderAPI;
 import me.randomhashtags.randompackage.util.CommandManager;
-import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
@@ -147,14 +148,16 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(MonthlyCrates.getMonthlyCrates(), getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
         cmd.tryLoadingg(ServerCrates.getServerCrates(), null, isTrue("server crates"));
         cmd.tryLoadingg(Titles.getTitles(), Arrays.asList("title"), isTrue("title"));
+        cmd.tryLoadingg(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
         cmd.tryLoading(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
         cmd.tryLoading(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
         cmd.tryLoadingg(Shop.getShop(), Arrays.asList("shop"), isTrue("shop"));
-        cmd.tryLoadingg(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
         cmd.tryLoading(SpawnerStacking.getSpawnerStacking(), null, isTrue("spawner stacking"));
         cmd.tryLoadingg(Trade.getTrade(), Arrays.asList("trade"), isTrue("trade"));
         cmd.tryLoadingg(Wild.getWild(), Arrays.asList("wild"), isTrue("wild"));
         cmd.tryLoading(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
+
+        RandomizedLoot.getRandomizedLoot().enable();
 
         final int interval = config.getInt("backup interval")*20*60;
         scheduler.scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);

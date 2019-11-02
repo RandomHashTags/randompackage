@@ -277,19 +277,20 @@ public class UVersion extends YamlUpdater implements Versionable {
         long time = 0;
         if(fromString != null) {
             fromString = ChatColor.stripColor(fromString);
-            if(fromString.contains("d")) {
+            final boolean hasDays = fromString.contains("d"), hasHrs = fromString.contains("h"), hasMins = fromString.contains("m"), hasSecs = fromString.contains("s");
+            if(hasDays) {
                 time += getRemainingDouble(fromString.split("d")[0])*24*60*60;
-                if(fromString.contains("h") || fromString.contains("m") || fromString.contains("s")) fromString = fromString.split("d")[1];
+                if(hasHrs || hasMins || hasSecs) fromString = fromString.split("d")[1];
             }
-            if(fromString.contains("h")) {
+            if(hasHrs) {
                 time += getRemainingDouble(fromString.split("h")[0])*60*60;
-                if(fromString.contains("m") || fromString.contains("s")) fromString = fromString.split("h")[1];
+                if(hasMins || hasSecs) fromString = fromString.split("h")[1];
             }
-            if(fromString.contains("m")) {
+            if(hasMins) {
                 time += getRemainingDouble(fromString.split("m")[0])*60;
-                if(fromString.contains("s")) fromString = fromString.split("m")[1];
+                if(hasSecs) fromString = fromString.split("m")[1];
             }
-            if(fromString.contains("s")) {
+            if(hasSecs) {
                 time += getRemainingDouble(fromString.split("s")[0]);
                 //fromString = fromString.split("s")[0];
             }
@@ -298,9 +299,12 @@ public class UVersion extends YamlUpdater implements Versionable {
     }
     public final Enchantment getEnchantment(String string) {
         if(string != null) {
-            for(Enchantment enchant : Enchantment.values())
-                if(enchant != null && enchant.getName() != null && string.toLowerCase().replace("_", "").startsWith(enchant.getName().toLowerCase().replace("_", ""))) return enchant;
             string = string.toLowerCase().replace("_", "");
+            for(Enchantment enchant : Enchantment.values()) {
+                if(enchant != null && string.startsWith(enchant.getName().toLowerCase().replace("_", ""))) {
+                    return enchant;
+                }
+            }
             if(string.startsWith("po")) { return Enchantment.ARROW_DAMAGE; // Power
             } else if(string.startsWith("fl")) { return Enchantment.ARROW_FIRE; // Flame
             } else if(string.startsWith("i")) { return Enchantment.ARROW_INFINITE; // Infinity

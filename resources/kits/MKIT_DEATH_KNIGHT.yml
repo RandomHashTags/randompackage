@@ -23,6 +23,22 @@ gui settings:
   - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
   - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
 #
+redeem:
+  item: "cyan_dye"
+  name: "&d&lMastery Kit&r &d(&9&lDeath Knight&r&d)"
+  lore:
+    - " "
+    - "&c&lNOTE:&r &7Once unlocked, you will lose"
+    - "&7access to the required Global Kits"
+    - "&7in exchange for access to this Mastery Kit!"
+    - " "
+    - "&6&l/gkit Requirements:"
+    - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+    - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+    - " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+    - " "
+    - "&7Right-click to unlock this Mastery Kit!"
+#
 shard:
   item: "cyan_dye"
   name: "&6&lMastery Shard&r &6(&9&lDeath Knight&r&6)"

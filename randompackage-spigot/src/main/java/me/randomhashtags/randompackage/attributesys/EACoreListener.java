@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.util;
+package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.event.*;
@@ -6,10 +6,11 @@ import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorSwapEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
+import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.enchant.PlayerRevealCustomEnchantEvent;
-import org.bukkit.Bukkit;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,7 +54,6 @@ public class EACoreListener extends EventExecutor implements Listener {
     public final void callEventAttributeListeners(Event event) {
         if(eventListeners != null) {
             for(EventAttributeListener f : eventListeners) {
-                Bukkit.broadcastMessage("calledEventAttributeListener=" + f.getIdentifier());
                 f.called(event);
             }
         }
@@ -145,6 +145,10 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void equipmentLootboxOpenEvent(EquipmentLootboxOpenEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void itemNameTagUseEvent(ItemNameTagUseEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)

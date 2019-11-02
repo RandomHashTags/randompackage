@@ -1,9 +1,10 @@
-package me.randomhashtags.randompackage.util;
+package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
+import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.event.Listener;
 
 import java.util.Arrays;
@@ -19,8 +20,8 @@ public abstract class EventAttributes extends EventExecutor implements Listener 
      */
 
     public static void loadEventAttributes() {
-        if(eventattributes == null) {
-            eventattributes = new LinkedHashMap<>();
+        if(RPStorage.eventattributes == null) {
+            RPStorage.eventattributes = new LinkedHashMap<>();
         }
         final List<EventAttribute> attributes = Arrays.asList(
                 // event attributes
@@ -100,8 +101,8 @@ public abstract class EventAttributes extends EventExecutor implements Listener 
         EACoreListener.getEventAttributeListener().enable();
     }
     public static void unloadEventAttributes() {
-        eventattributes = null;
-        eventconditions = null;
+        RPStorage.eventattributes = null;
+        RPStorage.eventconditions = null;
         Combo.combos.clear();
         Listable.list.clear();
         EACoreListener.getEventAttributeListener().disable();

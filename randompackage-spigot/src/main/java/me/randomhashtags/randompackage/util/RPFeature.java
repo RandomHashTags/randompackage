@@ -189,11 +189,16 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             if(P.contains("spawner") && !P.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
                 return getSpawner(P);
             } else if(P.startsWith("enchantedbook:")) {
-                final Enchantment e = getEnchantment(P.split(":")[1]);
+                final String[] values = P.split(":");
+                final Enchantment e = getEnchantment(values[1]);
                 if(e != null) {
                     int level = 1;
-                    if(P.split(":").length == 3)
-                        level = P.split(":")[2].equals("random") ? 1 + random.nextInt(e.getMaxLevel()) : P.split(":")[2].contains("-") ? Integer.parseInt(P.split(":")[2].split("-")[0]) + random.nextInt(Integer.parseInt(P.split(":")[2].split("-")[1])) : Integer.parseInt(P.split(":")[2]);
+                    if(values.length == 3) {
+                        final String[] ints = values[2].split("-");
+                        final boolean isRandom = ints[0].equalsIgnoreCase("random");
+                        final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
+                        level = isRandom ? 1+random.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+random.nextInt(Integer.parseInt(ints[1])) : min;
+                    }
                     item = new ItemStack(Material.ENCHANTED_BOOK, amount);
                     final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
                     meta.addStoredEnchant(e, level, true);

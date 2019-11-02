@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
-import me.randomhashtags.randompackage.util.EventAttributes;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileInventoryPet;
@@ -51,8 +51,11 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
         save("inventory pets", "_settings.yml");
         if(!otherdata.getBoolean("saved default inventory pets")) {
             final String[] p = new String[] {
-                    "ALCHEMIST", "ANTI_TELEBLOCK",
-                    "BANNER", "BLACKSCROLL",
+                    "ALCHEMIST",
+                    "ANTI_TELEBLOCK",
+                    "BANNER",
+                    "BLACKSCROLL",
+                    "BLESS",
                     "ENCHANTER",
                     "FEIGN_DEATH",
                     "GAIA",

@@ -11,8 +11,10 @@ default colors:
   800s: "&b"
   900s: "&b"
   1000s: "&6&l"
-  2000s: "&b&l"
-  else: "&6&l" # If the soul gem amount doesn't fall under one of these, this is the color
+  2000s: "&6&l"
+  3000s: "&6&l"
+  4000s: "&6&l"
+  else: "&4&l" # If the rarity gem amount doesn't fall under one of these, this is the color
 #
 default cooldown msg:
   - "&c&l(!)&r &cYou can collect {VICTIM}'s Soul again in {TIME}!"
