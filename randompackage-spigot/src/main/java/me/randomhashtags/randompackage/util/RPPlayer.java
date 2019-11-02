@@ -48,8 +48,8 @@ public class RPPlayer extends RPStorage {
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
     public long xpExhaustionExpiration = 0;
-    public int jackpotWins , addedMaxHomes , questTokens , reputationPoints;
-    public boolean coinflipNotifications = true, jackpotCountdown = true, filter = false;
+    public int jackpotWins, addedMaxHomes , questTokens , reputationPoints;
+    private boolean coinflipNotifications = true, jackpotNotifications = true, filter = false;
     public boolean isLoaded = false, activeTitleIsLoaded = false;
 
     private List<Home> homes;
@@ -103,7 +103,7 @@ public class RPPlayer extends RPStorage {
         final Title T = getActiveTitle();
         final PlayerRank rank = getRank();
         final String strings = (T != null ? T.getIdentifier() : "null") + ";" + (rank != null ? rank.getIdentifier() : "null");
-        final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotCountdown;
+        final String booleans = coinflipNotifications + ";" + filter + ";" + jackpotNotifications;
         final String ints = jackpotTickets.intValue() + ";" + jackpotWins + ";" + addedMaxHomes + ";" + questTokens + ";" + reputationPoints;
         final String longs = jackpotWonCash.doubleValue() + ";" + xpExhaustionExpiration;
         yml.set("strings", strings);
@@ -221,7 +221,7 @@ public class RPPlayer extends RPStorage {
                 final String[] booleans = bools.split(";");
                 coinflipNotifications = Boolean.parseBoolean(booleans[0]);
                 filter = Boolean.parseBoolean(booleans[1]);
-                jackpotCountdown = Boolean.parseBoolean(booleans[2]);
+                jackpotNotifications = Boolean.parseBoolean(booleans[2]);
             }
             if(intz != null) {
                 final String[] ints = intz.split(";");
@@ -305,6 +305,11 @@ public class RPPlayer extends RPStorage {
         }
         return coinflipStats;
     }
+    public boolean doesReceiveCoinFlipNotifications() { return coinflipNotifications; }
+    public void setReceivesCoinFlipNotifications(boolean bool) { coinflipNotifications = bool; }
+
+    public boolean doesReceiveJackpotNotifications() { return jackpotNotifications; }
+    public void setReceivesJackpotNotifications(boolean bool) { jackpotNotifications = bool; }
 
     public List<Home> getHomes() {
         if(homes == null) {

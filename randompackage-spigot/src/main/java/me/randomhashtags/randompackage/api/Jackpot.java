@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -45,30 +46,47 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     protected RPFeature getFeature() { return getJackpot(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        if(args.length == 0) {
+        final int l = args.length;
+        if(l == 0) {
             view(sender);
         } else {
             final String a = args[0];
-            final int l = args.length;
-            if(a.equals("pickwinner") && hasPermission(sender, "RandomSky.jackpot.pickwinner", true)) {
-                pickWinner();
-            } else if(a.equals("stats") && player != null) {
-                viewStats(player);
-            } else if(a.equals("top")) {
-
-            } else if(a.equals("buy")) {
-                final List<String> b = config.getStringList("messages.enter valid ticket amount");
-                if(l == 1) {
-                    sendStringListMessage(player, b, null);
-                } else {
-                    final int amount = getRemainingInt(args[1]);
-                    if(amount < minTickets.intValue() || amount > maxTickets.intValue()) {
+            switch (a) {
+                case "pickwinner":
+                    if(hasPermission(sender, "RandomSky.jackpot.pickwinner", true)) {
+                        pickWinner();
+                    }
+                    break;
+                case "stats":
+                    if(player != null) {
+                        viewStats(player);
+                    }
+                    break;
+                case "top":
+                    break;
+                case "buy":
+                    final List<String> b = config.getStringList("messages.enter valid ticket amount");
+                    if(l == 1) {
                         sendStringListMessage(player, b, null);
                     } else {
-                        confirmPurchaseTickets(player, BigDecimal.valueOf(amount));
+                        final int amount = getRemainingInt(args[1]);
+                        if(amount < minTickets.intValue() || amount > maxTickets.intValue()) {
+                            sendStringListMessage(player, b, null);
+                        } else {
+                            confirmPurchaseTickets(player, BigDecimal.valueOf(amount));
+                        }
                     }
-                }
-            } else if(a.equals("help")) {
+                    break;
+                case "toggle":
+                    if(player != null) {
+                        tryToggleNotifications(player);
+                    }
+                    break;
+                default:
+                    viewHelp(sender);
+                    break;
+            }
+            if(a.equals("help")) {
                 viewHelp(sender);
             }
         }
@@ -191,13 +209,13 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     public double getPercent(BigDecimal tickets, int size) {
         return round(tickets.divide(BigDecimal.valueOf((double) (size == 0 ? 1 : size))).multiply(BigDecimal.valueOf(100)).doubleValue(), 2);
     }
-    public void broadcastCountdown(long timeleft) {
+    private void broadcastCountdown(long timeleft) {
         final List<String> c = config.getStringList("messages.countdown");
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{TIME}", getRemainingTime(timeleft));
         replacements.put("{$}", formatBigDecimal(value));
         for(Player p : Bukkit.getOnlinePlayers()) {
-            if(RPPlayer.get(p.getUniqueId()).jackpotCountdown) {
+            if(RPPlayer.get(p.getUniqueId()).doesReceiveJackpotNotifications()) {
                 sendStringListMessage(p, c, replacements);
             }
         }
@@ -218,7 +236,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             }, pick-delay));
         }
     }
-    public void confirmPurchaseTickets(Player player, BigDecimal tickets) {
+    public void confirmPurchaseTickets(@NotNull Player player, @NotNull BigDecimal tickets) {
         if(hasPermission(player, "RandomPackage.jackpot.buy", true)) {
             player.closeInventory();
             purchasing.put(player.getUniqueId(), tickets);
@@ -243,7 +261,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public void purchaseTickets(Player player, BigDecimal tickets) {
+    public void purchaseTickets(@NotNull Player player, @NotNull BigDecimal tickets) {
         final BigDecimal cost = tickets.multiply(ticketCost);
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{AMOUNT}", formatBigDecimal(tickets));
@@ -264,7 +282,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         }
     }
 
-    public void view(CommandSender sender) {
+    public void view(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.jackpot", true)) {
             final String time = getRemainingTime(pickNextWinner-System.currentTimeMillis());
             final HashMap<String, String> replacements = new HashMap<>();
@@ -278,7 +296,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             sendStringListMessage(sender, config.getStringList("messages.view"), replacements);
         }
     }
-    public void viewStats(Player player) {
+    public void viewStats(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.jackpot.stats", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
@@ -288,9 +306,17 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, config.getStringList("messages.stats"), replacements);
         }
     }
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.jackpot.help", true)) {
             sendStringListMessage(sender, config.getStringList("messages.help"), null);
+        }
+    }
+    public void tryToggleNotifications(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.jackpot.toggle", true)) {
+            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+            final boolean status = !pdata.doesReceiveJackpotNotifications();
+            pdata.setReceivesJackpotNotifications(status);
+            sendStringListMessage(player, config.getStringList("messages.toggle notifications." + (status ? "on" : "off")), null);
         }
     }
 

@@ -1,0 +1,23 @@
+# Made by RandomHashTags
+settings:
+  chance of captcha: 2
+  captcha trigger types:
+    - MOB_KILLED
+    - RANDOMPACKAGE_SELL
+  #
+  gui open duration: 10 # Measured in seconds
+  max attempts: 1
+  correct material sound: ENTITY_VILLAGER_YES
+  incorrect material sound: ENTITY_VILLAGER_NO
+#
+gui:
+  title: "CHALLENGE: Click to &n{MATERIAL}"
+  size: 36
+  #
+  correct materials:
+    - MAP
+    - LAVA_BUCKET
+  incorrect materials:
+    - REDSTONE_REPEATER
+  #
+#

@@ -15,6 +15,23 @@ messages:
     - "&c&l(!)&r &cYou must enter a valid wager amount!"
   already in a match:
     - "&c&l(!)&r &cYou are already in a Coin Flip match!"
+  toggle notifications:
+    on:
+      - "&7Coin Flip notifications turned &a&lON."
+    off:
+      - "&7Coin Flip notifications turned &c&lOFF."
+  help:
+    - "&e&l&nCoin Flip Help"
+    - "&e/coinflip"
+    - "&7View all active Coin Flip matches."
+    - "&e/coinflip <amount>"
+    - "&7Start a Coin Flip match with the given wager."
+    - "&e/coinflip cancel"
+    - "&7Cancel the pending Coin Flip match."
+    - "&e/coinflip toggle"
+    - "&7Toggle Coin Flip win notifications."
+    - "&e/coinflip stats"
+    - "&7View your current Coin Flip stats."
   #
   created:
     - "&a&l(!)&r &aCoin Flip queued, waiting for opponent to /coinflip."

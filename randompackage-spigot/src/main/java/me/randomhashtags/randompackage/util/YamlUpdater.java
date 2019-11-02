@@ -204,7 +204,13 @@ public abstract class YamlUpdater {
         return null;
     }
     private LinkedHashMap<String, Object> getCoinFlip() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.5.0
+                "messages.toggle notifications.on", newStringList("&7Coin Flip notifications turned &a&lON."),
+                "messages.toggle notifications.off", newStringList("&7Coin Flip notifications turned &c&lOFF."),
+                "messages.help", newStringList("&e&l&nCoin Flip Help", "&e/coinflip", "&7View all active Coin Flip matches.", "&e/coinflip <amount>", "&7Start a Coin Flip match with the given wager.", "&e/coinflip cancel", "&7Cancel the pending Coin Flip match.", "&e/coinflip toggle", "&7Toggle Coin Flip win notifications.", "&e/coinflip stats", "&7View your current Coin Flip stats.")
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getCollectionFilter() {
         final Object[] values = new Object[] {
@@ -289,7 +295,12 @@ public abstract class YamlUpdater {
         return putAll(values);
     }
     private LinkedHashMap<String, Object> getJackpot() {
-        return null;
+        final Object[] values = new Object[] {
+                // 16.5.0
+                "messages.toggle notifications.on", newStringList("&eJackpot Notifications &a&lENABLED"),
+                "messages.toggle notifications.off", newStringList("&eJackpot Notifications &c&lDISABLED", "&7You will no longer see Jackpot countdown notifications!")
+        };
+        return putAll(values);
     }
     private LinkedHashMap<String, Object> getKits() {
         return null;

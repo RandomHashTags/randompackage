@@ -12,13 +12,13 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public final class ClipPlaceholderAPI extends PlaceholderExpansion {
-    private static ClipPlaceholderAPI instance;
-    public static ClipPlaceholderAPI getPAPI() {
-        if(instance == null) instance = new ClipPlaceholderAPI();
+public final class ClipPAPI extends PlaceholderExpansion {
+    private static ClipPAPI instance;
+    public static ClipPAPI getPAPI() {
+        if(instance == null) instance = new ClipPAPI();
         return instance;
     }
-    private ClipPlaceholderAPI() {
+    private ClipPAPI() {
         api.sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI");
         register();
     }
@@ -38,13 +38,13 @@ public final class ClipPlaceholderAPI extends PlaceholderExpansion {
             else if(identifier.endsWith("_won$")) return s.wonCash.toString();
             else if(identifier.endsWith("_losses")) return s.losses.toString();
             else if(identifier.endsWith("_lost$")) return s.lostCash.toString();
-            else if(identifier.endsWith("_notifications")) return Boolean.toString(pdata.coinflipNotifications);
+            else if(identifier.endsWith("_notifications")) return Boolean.toString(pdata.doesReceiveCoinFlipNotifications());
         } else if(identifier.startsWith("title_")) {
             final Title t = pdata.getActiveTitle();
             return t != null ? identifier.equals("title_chat") ? " " + t.getChatTitle() : t.getTabTitle() : "";
         } else {
             switch (identifier) {
-                case "jackpot_countdown": return Boolean.toString(pdata.jackpotCountdown);
+                case "jackpot_countdown": return Boolean.toString(pdata.doesReceiveJackpotNotifications());
                 case "jackpot_wins": return Integer.toString(pdata.jackpotWins);
                 case "jackpot_won$": return api.formatBigDecimal(pdata.jackpotWonCash);
                 case "jackpot_tickets": return api.formatBigDecimal(pdata.jackpotTickets);

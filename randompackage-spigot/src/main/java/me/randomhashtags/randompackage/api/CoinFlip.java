@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipMatch;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipOption;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipStats;
@@ -64,18 +65,28 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             viewCoinFlips(player);
         } else {
             final String a = args[0];
-            if(a.equals("cancel")) {
-                tryCancelling(player);
-            } else if(a.equals("stats")) {
-                viewStats(player);
-            } else {
-                final long m = a.endsWith("k") ? 1000 : a.endsWith("m") ? 1000000 : a.endsWith("b") ? 1000000000 : 1;
-                final BigDecimal w = BigDecimal.valueOf(getRemainingDouble(a)*m);
-                if(w.doubleValue() <= 0) {
-                    sendStringListMessage(player, config.getStringList("messages.must enter valid amount"), null);
-                } else {
-                    tryCreating(player, w);
-                }
+            switch (a) {
+                case "cancel":
+                    tryCancelling(player);
+                    break;
+                case "stats":
+                    viewStats(player);
+                    break;
+                case "toggle":
+                    tryToggleNotifications(player);
+                    break;
+                case "help":
+                    viewHelp(player);
+                    break;
+                default:
+                    final long m = a.endsWith("k") ? 1000 : a.endsWith("m") ? 1000000 : a.endsWith("b") ? 1000000000 : 1;
+                    final BigDecimal w = BigDecimal.valueOf(getRemainingDouble(a)*m);
+                    if(w.doubleValue() <= 0) {
+                        sendStringListMessage(player, config.getStringList("messages.must enter valid amount"), null);
+                    } else {
+                        tryCreating(player, w);
+                    }
+                    break;
             }
         }
         return true;
@@ -172,7 +183,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         CoinFlipMatch.matches = null;
     }
 
-    public void viewCoinFlips(Player player) {
+    public void viewCoinFlips(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.coinflip.view", true)) {
             player.closeInventory();
             final int size = ((available.size()+9)/9)*9;
@@ -204,7 +215,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public void viewStats(Player player) {
+    public void viewStats(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.coinflip.stats", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
@@ -217,7 +228,20 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, config.getStringList("messages.stats"), replacements);
         }
     }
-    public void tryCreating(Player player, BigDecimal w) {
+    public void tryToggleNotifications(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.coinflip.toggle", true)) {
+            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+            final boolean status = !pdata.doesReceiveCoinFlipNotifications();
+            pdata.setReceivesCoinFlipNotifications(status);
+            sendStringListMessage(player, config.getStringList("messages.toggle notifications." + (status ? "on" : "off")), null);
+        }
+    }
+    public void viewHelp(@NotNull CommandSender sender) {
+        if(hasPermission(sender, "RandomPackage.coinflip.help", true)) {
+            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+        }
+    }
+    public void tryCreating(@NotNull Player player, @NotNull  BigDecimal w) {
         if(hasPermission(player, "RandomPackage.coinflip.create", true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOf(player);
             if(m != null) {
@@ -258,7 +282,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void tryCancelling(Player player) {
+    public void tryCancelling(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.coinflip.cancel", true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOf(player);
             if(m == null) {
@@ -271,7 +295,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void tryChallenging(Player player, CoinFlipMatch match) {
+    public void tryChallenging(@NotNull Player player, @NotNull CoinFlipMatch match) {
         if(hasPermission(player, "RandomPackage.coinflip.challenge", true)) {
             player.closeInventory();
             final CoinFlipMatch f = CoinFlipMatch.valueOf(player);
@@ -499,7 +523,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             sendConsoleMessage(s);
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
-            if(RPPlayer.get(p.getUniqueId()).coinflipNotifications) {
+            if(RPPlayer.get(p.getUniqueId()).doesReceiveCoinFlipNotifications()) {
                 sendStringListMessage(p, w, replacements);
             }
         }

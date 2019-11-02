@@ -15,7 +15,7 @@ import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
-import me.randomhashtags.randompackage.supported.standalone.ClipPlaceholderAPI;
+import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
 import me.randomhashtags.randompackage.util.CommandManager;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -194,7 +194,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         tryLoadingSpawner();
         if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pm.isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
-            ClipPlaceholderAPI.getPAPI();
+            ClipPAPI.getPAPI();
         }
     }
     public void tryLoadingMCMMO() {

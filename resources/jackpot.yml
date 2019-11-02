@@ -29,6 +29,12 @@ messages:
     - "&a&l(!)&r &aYou have purchase {AMOUNT} ticket(s) for &l$&r&a{$}"
     - "&7Use &n/jackpot&r &7to view current Jackpot information!"
     - " "
+  toggle notifications:
+    on:
+      - "&eJackpot Notifications &a&lENABLED"
+    off:
+      - "&eJackpot Notifications &c&lDISABLED"
+      - "&7You will no longer see Jackpot countdown notifications!"
   #
   countdowns:
     - "5m"
