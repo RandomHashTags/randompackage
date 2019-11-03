@@ -360,7 +360,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
             final ItemMeta m1 = is.getItemMeta(), m2 = target.getItemMeta();
             if(m1.isUnbreakable() == m2.isUnbreakable()
                     && m1.hasDisplayName() == m2.hasDisplayName() && m1.getDisplayName().equals(m2.getDisplayName())
-                    && m1.hasLore() == m2.hasLore() && m1.getLore().equals(m2.getLore())
+                    && m1.hasLore() == m2.hasLore() && (m1.getLore() == m2.getLore() || m1.getLore().equals(m2.getLore()))
                     && m1.hasEnchants() == m2.hasEnchants() && m1.getEnchants().equals(m2.getEnchants())
                     && m1.getItemFlags().equals(m2.getItemFlags())) {
                 return true;

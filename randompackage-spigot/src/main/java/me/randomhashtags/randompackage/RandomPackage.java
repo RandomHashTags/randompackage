@@ -131,7 +131,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoadingg(Fund.getFund(), Arrays.asList("fund"), isTrue("fund"));
         cmd.tryLoading(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
         cmd.tryLoadingg(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
-        cmd.tryLoadingg(ItemFilter.getItemFilter(), Arrays.asList("filter"), isTrue("filter"));
+        cmd.tryLoading(ItemFilter.getItemFilter(), getHash("filter", "item filter"), isTrue("item filter"));
         cmd.tryLoadingg(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
 
         cmd.tryLoading(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));

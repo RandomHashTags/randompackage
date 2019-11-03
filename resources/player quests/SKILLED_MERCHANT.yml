@@ -12,4 +12,4 @@ rewards:
   - "questtokens=2: 2x Quest Token"
 #
 trigger:
-  - "ShopSellItem;+profit"
+  - "ShopSell;PlayerIncreasePQuest=SKILLED_MERCHANT:total"

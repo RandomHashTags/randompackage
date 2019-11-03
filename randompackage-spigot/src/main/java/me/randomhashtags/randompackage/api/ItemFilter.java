@@ -18,6 +18,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -29,7 +30,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemFilter extends RPFeature implements CommandExecutor {
+public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     private static ItemFilter instance;
     public static ItemFilter getItemFilter() {
         if(instance == null) instance = new ItemFilter();
@@ -52,11 +53,15 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         if(l == 0) {
             viewHelp(player);
         } else {
-            final String a = args[0];
-            if(a.equals("toggle")) {
-                toggleFilter(player);
-            } else if(a.equals("edit")) {
-                viewCategories(player);
+            switch (args[0]) {
+                case "toggle":
+                    toggleFilter(player);
+                    break;
+                case "edit":
+                    viewCategories(player);
+                    break;
+                default:
+                    break;
             }
         }
         return true;

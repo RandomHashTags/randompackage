@@ -12,4 +12,4 @@ rewards:
   - "questtokens=1: 1x Quest Token"
 #
 trigger:
-  - "ShopSellItem;PlayerIncreasePQuest=NOVICE_MERCHANT:total"
+  - "ShopSell;PlayerIncreasePQuest=NOVICE_MERCHANT:total"

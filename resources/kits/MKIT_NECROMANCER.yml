@@ -47,15 +47,38 @@ shard:
 items:
   helmet:
     item: "leather_helmet"
-    name: " {ENCHANT_SIZE}"
+    name: "&2&lSkull of Souls {ENCHANT_SIZE}"
     lore:
     - "VEnchants{protection4;unbreaking3}"
+    - "RPEnchants{Demonic Gateway;Soul Siphon;Mortal Coil;Protection;Death God;Drunk;Armored;Tank;Valor;Arrow Deflect;Implants;Resilience;Ender Shift}"
+    - "&7&oA floating skull imbued with"
+    - "&7&oevil enchantments and demonic energy."
   chestplate:
     item: "leather_chestplate"
+    name: "&2&lRobe of the Necromancer {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{Divine Enlighted;Blood Lust;Leadership;Aegis;Diminish;Enlighted;Deathbringer;Overload;Armored;Tank;Angelic;Valor;Shockwave}"
+      - "&7&oSpider Silk woven robes that camouflage"
+      - "&7&ointo the darkness of the night"
   leggings:
     item: "leather_leggings"
+    name: "&2&lTattered Wrappings of Death {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{Demonic Gateway;Rot and Decay;Natures Wrath;Clarity;Armored;Tank;Angelic;Valor;Spirits;Lucky;Obsidianshield;Voodoo;Cactus}"
+      - "&7&oOce tormented by death, it now"
+      - "&7&oloyally serves and protects you."
   boots:
     item: "leather_boots"
+    name: "&2&lDemon Foot {ENCHANT_SIZE}"
+    lore:
+      - "VEnchants{Protection4;Unbreaking3}"
+      - "RPEnchants{Soul Siphon;Paladin Armored;Phoenix;Gears;Tank;Angelic;Valor;Guardians;Dodge;Ender Walker;Metaphysical;Rocket Escape;Springs}"
+      - "&7&oA good luck charm for those who are"
+      - "&7&omasters of the dark magic of necromancy."
+  mask:
+    item: "mask:NECROMANCER"
 #
 kit bundle:
   item: "chest"
