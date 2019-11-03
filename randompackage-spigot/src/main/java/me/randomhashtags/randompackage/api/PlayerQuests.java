@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,7 +34,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlayerQuests extends EACoreListener implements CommandExecutor, EventAttributeListener {
+public class PlayerQuests extends EACoreListener implements CommandExecutor, EventAttributeListener, Listener {
     private static PlayerQuests instance;
     public static PlayerQuests getPlayerQuests() {
         if(instance == null) instance = new PlayerQuests();

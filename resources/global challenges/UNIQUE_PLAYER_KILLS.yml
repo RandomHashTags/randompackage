@@ -1,6 +1,6 @@
 # Made by RandomHashTags | TODO: fix this
 settings:
-  tracks: "UniquePlayerKills"
+  enabled: false
   duration: 86400
   type: "Unique Player Kills"
 #
@@ -8,3 +8,5 @@ item:
   item: "diamond_sword"
   name: "&a&lMost Unique Player Kills"
 #
+attributes:
+  - ""

@@ -9,7 +9,6 @@ import java.util.List;
 
 public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     private List<String> lore;
-    private String value;
     private List<String> appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 
@@ -58,14 +57,7 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
         return tinkerer;
     }
     public String getEnchantProcValue() {
-        if(value == null) {
-            for(String s : getAttributes()) {
-                final String l = s.toLowerCase();
-                if(l.startsWith("enchantproc;value="))
-                    value = l.split("enchantproc;value=")[1];
-            }
-        }
-        return value;
+        return yml.getString("enchant proc value", "0");
     }
     public List<String> getAttributes() {
         if(attributes == null) attributes = yml.getStringList("attributes");

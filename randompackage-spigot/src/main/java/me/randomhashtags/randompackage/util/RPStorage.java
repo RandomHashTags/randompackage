@@ -24,8 +24,6 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public abstract class RPStorage extends RegionalAPI {
-    protected static final Random random = new Random();
-
     private static HashMap<String, YamlConfiguration> cached = new HashMap<>();
 
     private static LinkedHashMap<UUID, RPPlayer> players;
@@ -95,10 +93,10 @@ public abstract class RPStorage extends RegionalAPI {
 
 
     private YamlConfiguration get(String folder, String fileName) {
-        if(cached.containsKey(fileName)) return cached.get(fileName);
+        if(cached.containsKey(folder + fileName)) return cached.get(folder + fileName);
         final File f = new File(rpd + separator + (folder != null ? folder : ""), fileName);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
-        cached.put(fileName, c);
+        cached.put(folder+fileName, c);
         return c;
     }
     public YamlConfiguration getAddonConfig(String fileName) { return get("addons", fileName); }
@@ -235,7 +233,7 @@ public abstract class RPStorage extends RegionalAPI {
         check(eventattributes, i, "event attribute");
         eventattributes.put(i, e);
     }
-    public EventCondition getEventCondition(String identifier) {
+    public static EventCondition getEventCondition(String identifier) {
         return eventconditions != null ? eventconditions.getOrDefault(identifier, null) : null;
     }
     public void addEventCondition(EventCondition e) {
@@ -395,7 +393,7 @@ public abstract class RPStorage extends RegionalAPI {
         inventorypets.put(identifier, l);
     }
 
-    public PlayerQuest getPlayerQuest(String identifier) {
+    public static PlayerQuest getPlayerQuest(String identifier) {
         return playerquests != null ? playerquests.getOrDefault(identifier, null) : null;
     }
     public void addPlayerQuest(PlayerQuest l) {
@@ -415,7 +413,7 @@ public abstract class RPStorage extends RegionalAPI {
         randomizationscrolls.put(identifier, l);
     }
 
-    public RarityGem getRarityGem(String identifier) {
+    public static RarityGem getRarityGem(String identifier) {
         return raritygems != null ? raritygems.getOrDefault(identifier, null) : null;
     }
     public ItemStack getRarityGem(RarityGem gem, Player player) {
@@ -476,7 +474,7 @@ public abstract class RPStorage extends RegionalAPI {
         strongholds.put(identifier, s);
     }
 
-    public Title getTitle(String identifier) {
+    public static Title getTitle(String identifier) {
         return titles != null ? titles.getOrDefault(identifier, null) : null;
     }
     public void addTitle(Title l) {
@@ -519,7 +517,7 @@ public abstract class RPStorage extends RegionalAPI {
     /*
         Value Of
      */
-    public ArmorSet valueOfArmorSet(Player player) {
+    public static ArmorSet valueOfArmorSet(Player player) {
         if(armorsets != null && player != null) {
             final PlayerInventory pi = player.getInventory();
             final ItemStack h = pi.getHelmet(), c = pi.getChestplate(), l = pi.getLeggings(), b = pi.getBoots();
@@ -663,7 +661,7 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public EnchantRarity valueOfEnchantRarity(CustomEnchant enchant) {
+    public static EnchantRarity valueOfEnchantRarity(CustomEnchant enchant) {
         if(rarities != null) {
             for(EnchantRarity e : rarities.values()) {
                 if(e.getEnchants().contains(enchant)) {
@@ -705,8 +703,8 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
-    public CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
+    public static CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
+    public static CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
         if(string != null) {
             final String s = ChatColor.stripColor(string);
             if(enabled != null) {
@@ -724,7 +722,7 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public CustomEnchant valueOfCustomEnchant(ItemStack is) {
+    public static CustomEnchant valueOfCustomEnchant(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final CustomEnchant e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
             final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfEnchantRarity(e);
@@ -837,7 +835,7 @@ public abstract class RPStorage extends RegionalAPI {
             }
         return null;
     }
-    public Mask valueOfMask(ItemStack is) {
+    public static Mask valueOfMask(ItemStack is) {
         if(masks != null && is != null && is.hasItemMeta()) {
             for(Mask m : masks.values()) {
                 final ItemStack i = m.getItem();

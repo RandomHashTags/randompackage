@@ -1,6 +1,6 @@
-# Made by RandomHashTags | TODO: fix this
+# Made by RandomHashTags
 settings:
-  tracks: "$WonInCoinflip"
+  enabled: true
   duration: 86400
   type: "Money Won in Coinflips"
 #
@@ -8,3 +8,5 @@ item:
   item: "anvil"
   name: "&a&lMost Money Won in Coinflips"
 #
+attributes:
+  - "CoinFlipEnd;WinnerIncreaseGlobalChallenge=MONEY_WON_IN_COINFLIPS:woncash"

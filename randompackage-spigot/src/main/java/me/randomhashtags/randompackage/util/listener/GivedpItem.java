@@ -275,7 +275,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(sk);
                     final boolean r = a[2].contains("-");
                     final int min = r ? Integer.parseInt(a[2].split("-")[0]) : Integer.parseInt(a[2]), amt = r ? min+random.nextInt(Integer.parseInt(a[2].split("-")[1])-min+1) : min;
-                    final String n = ChatColor.translateAlternateColorCodes('&', itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase()));
+                    final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
+                    final String n = name != null ? ChatColor.translateAlternateColorCodes('&', name) : "UNKNOWN";
                     itemMeta = i.getItemMeta();
                     lore.clear();
                     for(String s : itemMeta.getLore()) {
@@ -435,7 +436,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 final Location l = event.getClickedBlock().getLocation();
                 final int x = l.getBlockX(), y = l.getBlockY(), z = l.getBlockZ();
                 removeItem(player, i, 1);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + player.getName() + " " + x + " " + y + " " + z + " particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
+                if(EIGHT || NINE || TEN || ELEVEN || TWELVE) {
+                    Bukkit.dispatchCommand(console, "execute " + player.getName() + " " + x + " " + y + " " + z + " particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
+                } else {
+                    Bukkit.dispatchCommand(console, "execute facing " + x + " " + y + " " + z + " run particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
+                }
                 playSound(itemsConfig, "explosive cake.sounds.placed", player, player.getLocation(), false);
             }
         }

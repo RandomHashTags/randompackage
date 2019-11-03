@@ -78,6 +78,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     }
                     break;
                 case "toggle":
+                case "stfu":
                     if(player != null) {
                         tryToggleNotifications(player);
                     }

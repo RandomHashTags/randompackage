@@ -1,5 +1,6 @@
 # Made by RandomHashTags | TODO: fix this
 settings:
+  enabled: false
   duration: 86400
   type: "Ranked Duels Won"
 #

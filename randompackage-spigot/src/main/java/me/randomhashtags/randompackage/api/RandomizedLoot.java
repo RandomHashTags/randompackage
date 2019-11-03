@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
-
 public class RandomizedLoot extends RPFeature {
     private static RandomizedLoot instance;
     public static RandomizedLoot getRandomizedLoot() {

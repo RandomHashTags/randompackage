@@ -5,12 +5,14 @@ import me.randomhashtags.randompackage.attribute.GivePetExp;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.util.Packeter;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileInventoryPet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -29,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class InventoryPets extends EventAttributes implements RPItemStack {
+public class InventoryPets extends EventAttributes implements RPItemStack, Packeter {
     // TODO: fix the inventory pet ymls
     private static InventoryPets instance;
     public static InventoryPets getInventoryPets() {
@@ -186,6 +188,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack {
             if(remainingtime <= 0) {
                 if(trigger(event, pet.getAttributes(), "level", lvl)) {
                     pet.didUse(is, identifier, level, exp);
+                    //sendItemCooldownPacket(player, is.getType(), 20*20);
                     return 1;
                 }
             } else {

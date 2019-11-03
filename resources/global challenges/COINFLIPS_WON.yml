@@ -1,5 +1,6 @@
 # Made by RandomHashTags | TODO: fix this
 settings:
+  enabled: true
   duration: 86400
   type: "Coinflips Won"
 #

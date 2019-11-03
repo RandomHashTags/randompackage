@@ -17,9 +17,12 @@ public interface EventAttribute extends Cancellable, Identifiable, Mathable {
     void execute(@NotNull Event event);
     void execute(@NotNull Event event, @NotNull String value);
     void execute(@NotNull Event event, @NotNull String value, @NotNull HashMap<String, String> valueReplacements);
+    void execute(@NotNull Event event, @NotNull HashMap<String, Entity> entities, @NotNull String value, @NotNull HashMap<String, String> valueReplacements);
     void execute(@NotNull Entity entity1, @NotNull Entity entity2, @NotNull String value);
     void execute(@NotNull Event event, @NotNull HashMap<Entity, String> recipientValues);
-    void execute(@NotNull Event event, @NotNull HashMap<Entity, String> recipientValues, @NotNull HashMap<String, String> valueReplacements);
+    void execute(@NotNull Event event, @NotNull HashMap<String, Entity> entities, @NotNull HashMap<Entity, String> recipientValues);
+    void execute(@NotNull Event event, @NotNull HashMap<String, Entity> entities, @NotNull HashMap<Entity, String> recipientValues, @NotNull HashMap<String, String> valueReplacements);
     void executeAt(@NotNull HashMap<Location, String> locations);
     void executeData(@NotNull HashMap<RPPlayer, String> recipientValues, @NotNull HashMap<String, String> valueReplacements);
+    void executeData(@NotNull HashMap<String, Entity> entities, @NotNull HashMap<RPPlayer, String> recipientValues, @NotNull HashMap<String, String> valueReplacements);
 }

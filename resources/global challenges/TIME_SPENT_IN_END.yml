@@ -1,6 +1,6 @@
 # Made by RandomHashTags | TODO: fix this
 settings:
-  tracks: "TimeSpentIn_End"
+  enabled: false
   duration: 86400
   type: "Time Spent in End"
 #
@@ -8,3 +8,5 @@ item:
   item: "dragon_egg"
   name: "&a&lMost Time Spent in End"
 #
+attributes:
+  - ""

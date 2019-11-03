@@ -12,7 +12,10 @@ public class Damage extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             final LivingEntity l = e instanceof LivingEntity ? (LivingEntity) e : null;
             if(l != null) {
-                l.damage(evaluate(recipientValues.get(e)));
+                final String value = recipientValues.get(e);
+                if(value != null) {
+                    l.damage(evaluate(value));
+                }
             }
         }
     }

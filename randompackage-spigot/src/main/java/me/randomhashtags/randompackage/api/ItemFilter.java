@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FilterCategory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -109,12 +110,12 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         filtercategories = null;
     }
 
-    public void viewHelp(Player player) {
-        if(hasPermission(player, "RandomPackage.filter", true)) {
-            sendStringListMessage(player, config.getStringList("messages.help"), null);
+    public void viewHelp(@NotNull CommandSender sender) {
+        if(hasPermission(sender, "RandomPackage.filter", true)) {
+            sendStringListMessage(sender, config.getStringList("messages.help"), null);
         }
     }
-    public void viewCategories(Player player) {
+    public void viewCategories(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.filter.view", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
@@ -135,14 +136,15 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
         else is.removeEnchantment(Enchantment.ARROW_DAMAGE);
         return is;
     }
-    public void toggleFilter(Player player) {
+    public void toggleFilter(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.filter.toggle", true)) {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            pdata.filter = !pdata.filter;
-            sendStringListMessage(player, config.getStringList("messages." + (pdata.filter ? "en" : "dis") + "able"), null);
+            final boolean status = !pdata.hasActiveFilter();
+            pdata.setActiveFilter(status);
+            sendStringListMessage(player, config.getStringList("messages." + (status ? "en" : "dis") + "able"), null);
         }
     }
-    public void viewCategory(Player player, FilterCategory category) {
+    public void viewCategory(@NotNull Player player, @NotNull FilterCategory category) {
         if(hasPermission(player, "RandomPackage.filter.view." + category.getIdentifier(), true)) {
             player.closeInventory();
             final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
@@ -198,10 +200,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-        if(pdata.filter) {
-            if(!pdata.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
-                event.setCancelled(true);
-            }
+        if(pdata.hasActiveFilter() && !pdata.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
+            event.setCancelled(true);
         }
     }
     @EventHandler

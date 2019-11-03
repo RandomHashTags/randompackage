@@ -11,7 +11,7 @@ public abstract class YamlUpdater {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(folder, file);
             if(changes != null && !changes.isEmpty()) {
-                YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+                final YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
                 boolean changed = false;
                 final ConfigurationSection section = yml.getConfigurationSection("");
                 final Set<String> keys = section.getKeys(true);

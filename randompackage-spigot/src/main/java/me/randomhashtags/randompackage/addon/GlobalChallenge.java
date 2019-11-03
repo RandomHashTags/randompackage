@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.util.Toggleable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.UUID;
 
-public interface GlobalChallenge extends Attributable, Itemable {
+public interface GlobalChallenge extends Attributable, Itemable, Toggleable {
     long getDuration();
     String getType();
 

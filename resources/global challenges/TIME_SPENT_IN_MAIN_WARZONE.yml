@@ -1,6 +1,6 @@
 # Made by RandomHashTags | TODO: fix this
 settings:
-  tracks: "TimeSpentInMainWarZone"
+  enabled: false
   duration: 86400
   type: "Time Spent in Main Warzone"
 #
@@ -8,3 +8,5 @@ item:
   item: "diamond_axe"
   name: "&a&lMost Time Spent in Main Warzone"
 #
+attributes:
+  - ""

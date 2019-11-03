@@ -195,6 +195,7 @@ public class KitsEvolution extends Kits {
             int s = rewards.size();
             s = s > 54 ? 54 : s%9 == 0 ? s : ((s+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, s, this.preview.getTitle()));
+            previewing.add(player);
         }
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(ItemStack is : new ArrayList<>(rewards)) {

@@ -4,8 +4,12 @@ import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Toggleable;
+import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorEvent;
+import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -31,9 +35,22 @@ public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Tog
         }
         return false;
     }
-    default boolean canBeTriggered(Player player, ItemStack is) {
-        if(player != null && is != null) {
+    default boolean canBeTriggered(Event event, Player player, ItemStack is) {
+        if(event != null && player != null && is != null) {
             final String mat = is.getType().name();
+            final ItemStack target;
+            switch (event.getEventName().toLowerCase().split("event")[0]) {
+                case "armorequip":
+                case "armorunequip":
+                case "armorpiecebreak":
+                    target = ((ArmorEvent) event).getItem();
+                    break;
+                default:
+                    target = null;
+                    break;
+            }
+            final boolean other = is.equals(target);
+            if(other) return true;
             final PlayerInventory inv = player.getInventory();
             for(String s : getAppliesTo()) {
                 if(mat.endsWith(s.toUpperCase())) {

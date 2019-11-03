@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class LaunchProj extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
         Vector v = null;
         if(event instanceof ProjectileLaunchEvent) {
             v = ((ProjectileLaunchEvent) event).getEntity().getVelocity();
@@ -21,7 +21,7 @@ public class LaunchProj extends AbstractEventAttribute {
             String value = recipientValues.get(e);
             if(value != null && e instanceof LivingEntity) {
                 final LivingEntity l = (LivingEntity) e;
-                value = replaceValue(value, valueReplacements);
+                value = replaceValue(entities, value, valueReplacements);
                 final EntityType type = EntityType.valueOf(value.toUpperCase());
                 final Projectile proj = (Projectile) l.getWorld().spawnEntity(l.getEyeLocation(), type);
                 if(v != null) proj.setVelocity(v);

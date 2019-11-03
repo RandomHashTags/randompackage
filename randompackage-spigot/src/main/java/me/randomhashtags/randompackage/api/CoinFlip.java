@@ -73,6 +73,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                     viewStats(player);
                     break;
                 case "toggle":
+                case "stfu":
                     tryToggleNotifications(player);
                     break;
                 case "help":

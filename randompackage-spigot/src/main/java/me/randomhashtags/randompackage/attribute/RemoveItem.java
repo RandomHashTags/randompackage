@@ -11,10 +11,10 @@ import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpite
 
 public class RemoveItem extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
-                final String value = replaceValue(recipientValues.get(e), valueReplacements);
+                final String value = replaceValue(entities, recipientValues.get(e), valueReplacements);
                 final ItemStack g = givedpitem.valueOf(value);
                 if(g != null) {
                     removeItem((Player) e, g, g.getAmount());

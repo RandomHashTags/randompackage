@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
@@ -16,7 +17,6 @@ import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileCustomEnchant;
@@ -33,6 +33,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
@@ -56,7 +57,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public class CustomEnchants extends EventAttributes implements CommandExecutor {
+public class CustomEnchants extends EventAttributes implements CommandExecutor, Listener {
     private static CustomEnchants instance;
     public static CustomEnchants getCustomEnchants() {
         if(instance == null) instance = new CustomEnchants();
@@ -467,9 +468,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
     private void projectileHitEvent(EntityDamageByEntityEvent event) {
         final Entity damager = event.getDamager();
         final UUID u = damager.getUniqueId();
-        if(projectileEvents.containsKey(u)) {
+        if(PROJECTILE_EVENTS.containsKey(u)) {
             final Projectile e = (Projectile) damager;
-            final EntityShootBowEvent p = projectileEvents.getOrDefault(u, null);
+            final EntityShootBowEvent p = PROJECTILE_EVENTS.getOrDefault(u, null);
             if(p != null) {
                 final ProjectileSource shooter = e.getShooter();
                 if(shooter instanceof Player) {
@@ -627,7 +628,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor {
             if(p != null) {
                 L.put(p, getEnchants(p));
             }
-            for(ItemStack is : pi.getArmorContents()) L.put(is, getEnchants(is));
+            for(ItemStack is : pi.getArmorContents()) {
+                L.put(is, getEnchants(is));
+            }
         }
         return L;
     }

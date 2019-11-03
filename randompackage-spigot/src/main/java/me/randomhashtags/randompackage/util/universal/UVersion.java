@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.util.Versionable;
 import me.randomhashtags.randompackage.util.YamlUpdater;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -18,10 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -31,26 +27,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public class UVersion extends YamlUpdater implements Versionable {
+public class UVersion extends YamlUpdater implements Versionable, UVersionable {
     private static UVersion instance;
     public static UVersion getUVersion() {
         if(instance == null) instance = new UVersion();
         return instance;
     }
-
-    public static final File rpd = getPlugin.getDataFolder();
-    public static final String separator = File.separator;
-
-    public static final RandomPackage randompackage = RandomPackage.getPlugin;
-    public static final PluginManager pluginmanager = Bukkit.getPluginManager();
-    public static final Random random = new Random();
-
-    public static final BukkitScheduler scheduler = Bukkit.getScheduler();
-    public static final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-    public static final ConsoleCommandSender console = Bukkit.getConsoleSender();
 
     public ItemStack item = new ItemStack(Material.APPLE);
     public ItemMeta itemMeta = item.getItemMeta();
@@ -178,61 +162,7 @@ public class UVersion extends YamlUpdater implements Versionable {
             }
         }
     }
-    public final boolean isPassive(EntityType type) {
-        if(type.isSpawnable()) {
-            switch (type.name().toLowerCase()) {
-                case "bat":
-                case "cat":
-                case "chicken":
-                case "cod":
-                case "cow":
-                case "dolphin":
-                case "donkey":
-                case "fox":
-                case "horse":
-                case "player":
-                case "llama":
-                case "mule":
-                case "mushroom_cow":
-                case "ocelot":
-                case "panda":
-                case "parrot":
-                case "pig":
-                case "pufferfish":
-                case "rabbit":
-                case "salmon":
-                case "sheep":
-                case "squid":
-                case "tropical_fish":
-                case "turtle":
-                case "villager":
-                case "wandering_trader":
-                case "zombie_horse": return true;
-                default: return false;
-            }
-        } else {
-            return false;
-        }
-    }
-    public final boolean isAggressive(EntityType type) {
-        return !isPassive(type);
-    }
-    public final boolean isNeutral(EntityType type) {
-        if(type.isSpawnable() && !isPassive(type)) {
-            switch (type.name()) {
-                case "enderman":
-                case "iron_golem":
-                case "polar_bear":
-                case "wolf":
-                    return true;
-            }
-        }
-        return false;
-    }
 
-    public final void sendConsoleMessage(String msg) {
-        console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
-    }
     public final Double getRemainingDouble(String string) {
         string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
         return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
@@ -250,17 +180,6 @@ public class UVersion extends YamlUpdater implements Versionable {
             }
         } else e = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
         return e;
-    }
-    public final String toString(Location loc) {
-        return loc.getWorld().getName() + ";" + loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw() + ";" + loc.getPitch();
-    }
-    public final Location toLocation(String string) {
-        if(string != null && string.contains(";")) {
-            final String[] a = string.split(";");
-            return new Location(Bukkit.getWorld(a[0]), Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), Float.parseFloat(a[4]), Float.parseFloat(a[5]));
-        } else {
-            return null;
-        }
     }
     public final String getRemainingTime(long time) {
         int sec = (int) TimeUnit.MILLISECONDS.toSeconds(time), min = sec/60, hr = min/60, d = hr/24;
@@ -469,20 +388,7 @@ public class UVersion extends YamlUpdater implements Versionable {
         }
         return amount;
     }
-    public final int getTotalExperience(Player player) {
-        final double levelxp = LevelToExp(player.getLevel()), nextlevelxp = LevelToExp(player.getLevel() + 1), difference = nextlevelxp - levelxp;
-        final double p = (levelxp + (difference * player.getExp()));
-        return (int) Math.round(p);
-    }
-    public final void setTotalExperience(Player player, int total) {
-        player.setTotalExperience(0);
-        player.setExp(0f);
-        player.setLevel(0);
-        player.giveExp(total);
-    }
-    private double LevelToExp(int level) {
-        return level <= 16 ? (level * level) + (level * 6) : level <= 31 ? (2.5 * level * level) - (40.5 * level) + 360 : (4.5 * level * level) - (162.5 * level) + 2220;
-    }
+
     public final String toReadableDate(Date d, String format) {
         return new SimpleDateFormat(format).format(d);
     }
@@ -526,14 +432,6 @@ public class UVersion extends YamlUpdater implements Versionable {
             }
         }
     }
-    public final Entity getHitEntity(ProjectileHitEvent event) {
-        if(EIGHT || NINE || TEN) {
-            final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);
-            return n.size() > 0 ? n.get(0) : null;
-        } else {
-            return event.getHitEntity();
-        }
-    }
     public final void playParticle(FileConfiguration config, String path, Location location, int count) {
         if(config != null && config.get(path) != null) {
             final String target = config.getString(path);
@@ -559,28 +457,7 @@ public class UVersion extends YamlUpdater implements Versionable {
             }
 		}
     }
-    public final PotionEffectType getPotionEffectType(String input) {
-        if(input != null && !input.isEmpty()) {
-            switch (input.toUpperCase()) {
-                case "STRENGTH": return PotionEffectType.INCREASE_DAMAGE;
-                case "MINING_FATIGUE": return PotionEffectType.SLOW_DIGGING;
-                case "SLOWNESS": return PotionEffectType.SLOW;
-                case "HASTE": return PotionEffectType.FAST_DIGGING;
-                case "JUMP": return PotionEffectType.JUMP;
-                case "INSTANT_HEAL":
-                case "INSTANT_HEALTH": return PotionEffectType.HEAL;
-                case "INSTANT_HARM":
-                case "INSTANT_DAMAGE": return PotionEffectType.HARM;
-                default:
-                    for(PotionEffectType p : PotionEffectType.values()) {
-                        if(p != null && input.equalsIgnoreCase(p.getName())) {
-                            return p;
-                        }
-                    }
-                    return null;
-            }
-        } else return null;
-    }
+
     public final List<Location> getChunkLocations(Chunk chunk) {
         final List<Location> l = new ArrayList<>();
         final int x = chunk.getX()*16, z = chunk.getZ()*16;

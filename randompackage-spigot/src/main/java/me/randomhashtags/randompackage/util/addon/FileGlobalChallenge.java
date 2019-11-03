@@ -10,10 +10,13 @@ public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
     private ItemStack display;
     public FileGlobalChallenge(File f) {
         load(f);
-        addGlobalChallenge(this);
+        if(isEnabled()) {
+            addGlobalChallenge(this);
+        }
     }
     public String getIdentifier() { return getYamlName();  }
 
+    public boolean isEnabled() { return yml.getBoolean("settings.enabled", false); }
     public ItemStack getItem() {
         if(display == null) display = api.d(yml, "item");
         return getClone(display);

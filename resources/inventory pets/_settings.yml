@@ -3,6 +3,9 @@ messages:
   on cooldown:
     - "&c&l(!)&r &cThis pet is on cooldown! You can use its ability again in {TIME}."
 #
+settings:
+  show graphic overlay cooldown: true
+#
 items:
   leash:
     item: "lead"

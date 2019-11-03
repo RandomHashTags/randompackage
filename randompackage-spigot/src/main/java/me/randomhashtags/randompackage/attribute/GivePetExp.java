@@ -12,14 +12,14 @@ import java.util.HashMap;
 
 public class GivePetExp extends AbstractEventAttribute implements RPItemStack {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
         final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
         if(is != null) {
             for(Entity e : recipientValues.keySet()) {
                 if(e instanceof Player) {
                     final String[] values = recipientValues.get(e).split(":");
                     final int l = values.length;
-                    givePetExp((Player) e, is, (int) evaluate(replaceValue(values[0], valueReplacements)), l >= 2 && Boolean.parseBoolean(values[1]));
+                    givePetExp((Player) e, is, (int) evaluate(replaceValue(entities, values[0], valueReplacements)), l >= 2 && Boolean.parseBoolean(values[1]));
                 }
             }
         }

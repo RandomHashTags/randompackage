@@ -104,6 +104,7 @@ public final class CommandManager extends Reflect {
                             baseCmd.setAliases(cmds);
                             for(String s : cmds) {
                                 commandMap.register(s, baseCmd);
+                                knownCommands.put(s, baseCmd);
                                 knownCommands.put("randompackage:" + s, baseCmd);
                             }
                             baseCmd.register(commandMap);

@@ -1,6 +1,6 @@
 # Made by RandomHashTags
 settings:
-  event: "JackpotTicketsBought"
+  enabled: true
   duration: 86400
   type: "Jackpot Tickets Bought"
 #

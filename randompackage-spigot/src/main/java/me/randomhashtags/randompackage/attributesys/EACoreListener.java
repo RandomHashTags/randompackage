@@ -68,18 +68,18 @@ public class EACoreListener extends EventExecutor implements Listener {
     private void creatureSpawnEvent(CreatureSpawnEvent event) {
         if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPAWNER)) {
             final UUID u = event.getEntity().getUniqueId();
-            if(!spawnedFromSpawner.contains(u)) {
-                spawnedFromSpawner.add(u);
+            if(!SPAWNED_FROM_SPAWNER.contains(u)) {
+                SPAWNED_FROM_SPAWNER.add(u);
             }
         }
     }
     @EventHandler(priority = EventPriority.LOWEST)
     private void entityShootBowEvent(EntityShootBowEvent event) {
-        projectileEvents.put(event.getProjectile().getUniqueId(), event);
+        PROJECTILE_EVENTS.put(event.getProjectile().getUniqueId(), event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void projectileHitEvent(ProjectileHitEvent event) {
-        projectileEvents.remove(event.getEntity().getUniqueId());
+        PROJECTILE_EVENTS.remove(event.getEntity().getUniqueId());
     }
 
 
@@ -94,7 +94,7 @@ public class EACoreListener extends EventExecutor implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         callEventAttributeListeners(event);
-        spawnedFromSpawner.remove(event.getEntity().getUniqueId());
+        SPAWNED_FROM_SPAWNER.remove(event.getEntity().getUniqueId());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {

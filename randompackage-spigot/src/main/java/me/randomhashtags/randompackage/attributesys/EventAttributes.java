@@ -5,13 +5,12 @@ import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
 import me.randomhashtags.randompackage.util.RPStorage;
-import org.bukkit.event.Listener;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public abstract class EventAttributes extends EventExecutor implements Listener {
+public abstract class EventAttributes extends EventExecutor {
     /*
         Read https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Event-Attributes for all event attribute info
             * Event specific entity placeholders

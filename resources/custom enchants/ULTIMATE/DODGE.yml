@@ -1,4 +1,4 @@
-# Made by RandomHashTags | TODO: fix this
+# Made by RandomHashTags
 enabled: true
 #
 name: "Dodge"
@@ -15,4 +15,3 @@ tinkerer: "58:67:76:85:94"
 #
 attributes:
   - "isDamaged;chance=Lucky+(3+(4*level));VictimIsSneaking=true;SetCancelled=true;VictimSendMessage=&e*DODGE*"
-  - "isDamaged;chance=Lucky+(3+(2*level));if{didntproc->cancel&&sendMessage{[victim]&e*DODGE*}}"

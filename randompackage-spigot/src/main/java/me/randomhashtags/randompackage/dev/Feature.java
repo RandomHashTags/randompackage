@@ -1,0 +1,46 @@
+package me.randomhashtags.randompackage.dev;
+
+public enum Feature {
+    ARMOR_SET,
+    BLACK_SCROLL,
+    BOOSTER,
+    CONQUEST_CHEST,
+
+    CUSTOM_BOSS,
+    CUSTOM_ENCHANT,
+    CUSTOM_ENCHANT_RARITY,
+    CUSTOM_EXPLOSION,
+    CUSTOM_KIT,
+
+    DISGUISE,
+    DUEL_ARENA,
+    DUNGEON,
+
+    ENCHANTMENT_ORB,
+    ENVOY_CRATE,
+
+    EVENT_ATTRIBUTE,
+    EVENT_CONDITION,
+
+    FACTION_UPGRADE,
+    FACTION_UPGRADE_TYPE,
+    FALLEN_HERO,
+    FAT_BUCKET,
+    FILTER_CATEGORY,
+
+    GLOBAL_CHALLENGE,
+
+    INVENTORY_PET,
+
+    LOOTBOX,
+
+    OUTPOST,
+
+    PLAYER_QUEST,
+
+    RARITY_GEM,
+
+    SERVER_CRATE,
+
+    MAGIC_DUST,
+}

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.util;
 
 public interface Mathable {
-    // Code by 'Boann' (https://stackoverflow.com/users/964243/boann) from https://stackoverflow.com/questions/3422673
+    // Code by 'Boann' (https://stackoverflow.com/users/964243) from https://stackoverflow.com/questions/3422673
     default double evaluate(final String str) {
         return new Object() {
             int pos = -1, ch;

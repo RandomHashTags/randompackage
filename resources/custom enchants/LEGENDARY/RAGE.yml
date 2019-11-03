@@ -14,4 +14,5 @@ tinkerer: "139:151:163:175:187:199"
 #
 attributes:
   - "PvAny;DamagerIsInList=PACIFY;Return=false"
-  - "PvAny;SetDamage=dmg*DamagerGetCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"
+  - "PvAny;HasCombo=Rage:false;DamagerAddCombo=Rage:1.0"
+  - "PvAny;SetDamage=dmg*getDamagerCombo(Rage);DamagerAddCombo=Rage:0.1;Wait=80;DamagerDepleteCombo=Rage:0.1"

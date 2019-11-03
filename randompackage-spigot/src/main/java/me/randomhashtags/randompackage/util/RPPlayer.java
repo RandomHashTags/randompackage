@@ -353,22 +353,23 @@ public class RPPlayer extends RPStorage {
         return Homes.getHomes().defaultMax+addedMaxHomes;
     }
 
-    private void loadFilteredItems() {
+    public boolean hasActiveFilter() { return filter; }
+    public void setActiveFilter(boolean bool) { filter = bool; }
+
+    public List<UMaterial> getFilteredItems() {
         if(filteredItems == null) {
             filteredItems = new ArrayList<>();
             for(String s : yml.getStringList("filtered items")) {
                 filteredItems.add(UMaterial.valueOf(s));
             }
         }
-    }
-    public List<UMaterial> getFilteredItems() {
-        loadFilteredItems();
         return filteredItems;
     }
     public List<String> getFilteredItemz() {
-        loadFilteredItems();
         final List<String> f = new ArrayList<>();
-        for(UMaterial u : filteredItems) f.add(u.name());
+        for(UMaterial u : getFilteredItems()) {
+            f.add(u.name());
+        }
         return f;
     }
 
@@ -385,7 +386,9 @@ public class RPPlayer extends RPStorage {
         return customEnchantEntities;
     }
     public void addCustomEnchantEntity(UUID uuid) {
-        if(!getCustomEnchantEntities().contains(uuid)) customEnchantEntities.add(uuid);
+        if(!getCustomEnchantEntities().contains(uuid)) {
+            customEnchantEntities.add(uuid);
+        }
     }
     public void removeCustomEnchantEntity(UUID uuid) {
         getCustomEnchantEntities().remove(uuid);

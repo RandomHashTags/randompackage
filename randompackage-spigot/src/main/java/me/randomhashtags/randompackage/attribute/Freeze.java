@@ -38,7 +38,7 @@ public class Freeze extends AbstractEventAttribute {
         }
     }
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues) {
         for(Entity e : recipientValues.keySet()) {
             final Player player = e instanceof Player ? (Player) e : null;
             if(player != null) {
