@@ -106,7 +106,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "isanimal": return e instanceof Animals == Boolean.parseBoolean(value);
             case "isflying": return e instanceof Flying || e instanceof Player && ((Player) e).isFlying() == Boolean.parseBoolean(value);
             case "istype": return e.getType().name().equalsIgnoreCase(value);
-            case "isfacing": return e.getFacing().name().toLowerCase().startsWith(value);
+            case "isfacing": return getFacing(e).name().toLowerCase().startsWith(value);
             case "isop": return e.isOp() == Boolean.parseBoolean(value);
             case "isinsidevehicle": return e.isInsideVehicle() == Boolean.parseBoolean(value);
             case "isriding": return e.isInsideVehicle() && e.getVehicle().getType().name().equalsIgnoreCase(value);

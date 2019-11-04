@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -32,6 +33,8 @@ public interface UVersionable extends Versionable {
     BukkitScheduler scheduler = Bukkit.getScheduler();
     ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     ConsoleCommandSender console = Bukkit.getConsoleSender();
+
+    BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
 
     default int getTotalExperience(Player player) {
         final double levelxp = LevelToExp(player.getLevel()), nextlevelxp = LevelToExp(player.getLevel() + 1), difference = nextlevelxp - levelxp;
@@ -105,8 +108,7 @@ public interface UVersionable extends Versionable {
                 case "enderman":
                 case "iron_golem":
                 case "polar_bear":
-                case "wolf":
-                    return true;
+                case "wolf": return true;
             }
         }
         return false;
@@ -145,5 +147,9 @@ public interface UVersionable extends Versionable {
         } else {
             return null;
         }
+    }
+
+    default BlockFace getFacing(Entity entity) {
+        return LEGACY || THIRTEEN ? BLOCK_FACES[Math.round(entity.getLocation().getYaw() / 45f) & 0x7] : entity.getFacing();
     }
 }

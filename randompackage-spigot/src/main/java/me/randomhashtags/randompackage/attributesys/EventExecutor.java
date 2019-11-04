@@ -342,8 +342,19 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 if(onCorrectItem) {
                     final int lvl = e.get(enchant);
                     final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
-                    trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
-                    trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
+                    try {
+                        trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
+                    } catch (Exception error) {
+                        sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error!");
+                        error.printStackTrace();
+                    }
+
+                    try {
+                        trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
+                    } catch (Exception error) {
+                        sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error!");
+                        error.printStackTrace();
+                    }
                 }
             }
         }

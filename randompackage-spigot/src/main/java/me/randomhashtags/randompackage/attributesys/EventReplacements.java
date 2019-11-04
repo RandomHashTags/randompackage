@@ -113,7 +113,7 @@ public interface EventReplacements extends EventEntities {
     default String[] getReplacements(EntityShootBowEvent event) { return new String[] {"@Shooter", toString(event.getEntity().getLocation()), "@Projectile", toString(event.getProjectile().getLocation())}; }
     default String[] getReplacements(EntityTameEvent event) { return getReplacements(getLocationReplacements(event.getEntity(), "Entity"), (String[]) null); }
     default String[] getReplacements(FoodLevelChangeEvent event) {
-        final ItemStack is = event.getItem();
+        final ItemStack is = LEGACY || THIRTEEN ? null : event.getItem();
         final String m = is != null ? is.getType().name() : "AIR";
         return getReplacements(getLocationReplacements(event.getEntity(), "Player"), new String[] {"{ITEM}", UMaterial.match(m).name()});
     }
