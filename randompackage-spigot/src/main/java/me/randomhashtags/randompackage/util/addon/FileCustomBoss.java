@@ -16,13 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FileCustomBoss extends RPSpawnable implements CustomBoss {
-    private String scoreboardTitle;
-    private DisplaySlot scoreboardSlot;
+    private Scoreboard scoreboard;
 
     private ItemStack spawnitem;
     private HashMap<Integer, List<String>> messages;
     private List<CustomBossAttack> attacks;
     private CustomMinion minion;
+    private List<String> scores;
 
     public FileCustomBoss(File f) {
         load(f);
@@ -33,24 +33,30 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
     public String getType() { return yml.getString("type").toUpperCase(); }
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("name")); }
     public Scoreboard getScoreboard() {
-        if(scoreboardTitle == null) {
-            scoreboardTitle = ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title"));
-            scoreboardSlot = DisplaySlot.valueOf(yml.getString("scoreboard.display slot").toUpperCase());
+        if(scoreboard == null) {
+            scoreboard = scoreboardManager.getNewScoreboard();
+            scoreboard.registerNewObjective("dummy", "dummy");
+            final Objective o = scoreboard.getObjective("dummy");
+            o.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title")));
+            o.setDisplaySlot(DisplaySlot.valueOf(yml.getString("scoreboard.display slot").toUpperCase()));
+            int i = 15;
+            final List<String> scores = new ArrayList<>();
+            for(String sc : yml.getStringList("scoreboard.scores")) {
+                final String score = ChatColor.translateAlternateColorCodes('&', sc);
+                o.getScore(score).setScore(i);
+                i--;
+                scores.add(score);
+            }
+            this.scores = scores;
         }
-        final Scoreboard s = scoreboardManager.getNewScoreboard();
-        s.registerNewObjective("dummy", "dummy");
-        final Objective o = s.getObjective("dummy");
-        o.setDisplayName(scoreboardTitle);
-        o.setDisplaySlot(scoreboardSlot);
-        int i = 15;
-        for(String score : yml.getStringList("scoreboard.scores")) {
-            o.getScore(score).setScore(i);
-            i--;
-        }
-        return s;
+        return scoreboard;
     }
     public int getScoreboardRadius() { return getMessageRadius(); }
     public int getScoreboardUpdateInterval() { return 20; }
+    public List<String> getScores() {
+        getScoreboard();
+        return scores;
+    }
 
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = api.d(yml, "spawn item");

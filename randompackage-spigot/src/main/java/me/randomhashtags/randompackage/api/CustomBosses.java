@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.CustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileCustomBoss;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomBosses extends RPFeature {
+public class CustomBosses extends EventAttributes {
 	private static CustomBosses instance;
 	public static CustomBosses getCustomBosses() {
 		if(instance == null) instance = new CustomBosses();
@@ -43,11 +44,10 @@ public class CustomBosses extends RPFeature {
 		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();
 
-		final YamlConfiguration a = otherdata;
-		if(!a.getBoolean("saved default custom bosses")) {
+		if(!otherdata.getBoolean("saved default custom bosses")) {
 			final String[] s = new String[] { "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER" };
 			for(String o : s) save("custom bosses", o + ".yml");
-			a.set("saved default custom bosses", true);
+			otherdata.set("saved default custom bosses", true);
 			saveOtherData();
 		}
 		final List<ItemStack> j = new ArrayList<>();
@@ -83,27 +83,29 @@ public class CustomBosses extends RPFeature {
 				for(LivingCustomMinion lcm : b.minions) m.add(lcm.entity.getUniqueId().toString());
 				a.set(p + "minions", m);
 				final HashMap<UUID, Double> D = b.damagers;
-				for(UUID u : D.keySet())
-					a.set(p + "damager." + u.toString(), D.get(u));
+				for(UUID u : D.keySet()) {
+                    a.set(p + "damager." + u.toString(), D.get(u));
+                }
 			}
 		}
 		saveOtherData();
 	}
 	public void loadBackup() {
-		final YamlConfiguration a = otherdata;
-		final ConfigurationSection bosses = a.getConfigurationSection("custom bosses");
+		final ConfigurationSection bosses = otherdata.getConfigurationSection("custom bosses");
 		if(bosses != null) {
 			for(String s : bosses.getKeys(false)) {
 				final UUID u = UUID.fromString(s);
 				final Entity e = getEntity(u);
 				if(e != null && !e.isDead()) {
-					final String p = "custom bosses." + s + ".", S = a.getString(p + "summoner");
+					final String p = "custom bosses." + s + ".", S = otherdata.getString(p + "summoner");
 					final LivingEntity summoner = S != null && !S.equals("null") ? (LivingEntity) getEntity(UUID.fromString(S)) : null;
-					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, getBoss((a.getString(p + "type"))));
-					final ConfigurationSection d = a.getConfigurationSection(p + "damager");
-					if(d != null)
-						for(String aa : d.getKeys(false))
-							l.damagers.put(UUID.fromString(aa), a.getDouble(p + "damager." + a));
+					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, getBoss(otherdata.getString(p + "type")));
+					final ConfigurationSection d = otherdata.getConfigurationSection(p + "damager");
+					if(d != null) {
+						for(String aa : d.getKeys(false)) {
+                            l.damagers.put(UUID.fromString(aa), otherdata.getDouble(p + "damager." + aa));
+                        }
+                    }
 				}
 			}
 		}

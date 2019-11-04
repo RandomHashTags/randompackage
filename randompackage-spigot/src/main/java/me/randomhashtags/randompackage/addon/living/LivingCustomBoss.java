@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -189,8 +190,9 @@ public class LivingCustomBoss extends UVersion {
             final HashMap<Integer, List<String>> messages = type.getMessages();
             final int messageRadius = type.getMessageRadius();
             for(Entity e : l.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
-                if(e instanceof Player)
-                    ((Player) e).setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                if(e instanceof Player) {
+                    ((Player) e).setScoreboard(scoreboardManager.getNewScoreboard());
+                }
             }
             double totaldamage = 0.00;
             for(UUID d : damagers.keySet()) totaldamage += damagers.get(d);
@@ -252,10 +254,13 @@ public class LivingCustomBoss extends UVersion {
         if(boss == null || boss.isDead() || minions.size() + amount > type.getMaxMinions()) return;
         final int messageRadius = type.getMessageRadius();
         LivingEntity target = entity instanceof Creature ? ((Creature) entity).getTarget() : null;
-        if(target == null)
-            for(Entity e : boss.getNearbyEntities(messageRadius, messageRadius, messageRadius))
-                if(target == null && e instanceof Player)
+        if(target == null) {
+            for(Entity e : boss.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
+                if(target == null && e instanceof Player) {
                     target = (LivingEntity) e;
+                }
+            }
+        }
         final CustomMinion t = type.getMinion();
         if(target != null) {
             final LivingCustomMinion l = new LivingCustomMinion(getEntity(t.type, entity.getLocation(), true), target, t, this);
@@ -265,21 +270,30 @@ public class LivingCustomBoss extends UVersion {
     private void updateScoreboards(LivingEntity boss, double dmg) {
         final String g = formatDouble(round(boss.getHealth()-dmg, 2)), m = formatInt(minions.size());
         final int messageRadius = type.getMessageRadius();
+        final Scoreboard src = type.getScoreboard();
+        final List<String> entries = type.getScores();
+
+        final Objective srcObj = src.getObjective("dummy");
+        final DisplaySlot ds = srcObj.getDisplaySlot();
+        final String dn = srcObj.getDisplayName();
         for(Entity e : boss.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
             if(e instanceof Player) {
-                final Scoreboard src = type.getScoreboard();
-                final Objective o = src.getObjective("dummy");
+                final Scoreboard sb = scoreboardManager.getNewScoreboard();
+                sb.registerNewObjective("dummy", "dummy");
+                final Objective obj = sb.getObjective("dummy");
+                obj.setDisplaySlot(ds);
+                obj.setDisplayName(dn);
+
                 final UUID u = e.getUniqueId();
                 int h = 15;
-                for(String s : src.getEntries()) {
-                    if(s.contains("{HEALTH}")) s = s.replace("{HEALTH}", g);
-                    if(s.contains("{MINIONS}")) s = s.replace("{MINIONS}", m);
-                    if(s.contains("{DAMAGE_DEALT}")) s = s.replace("{DAMAGE_DEALT}", formatDouble(round(damagers.getOrDefault(u, 0.00), 0)));
-                    if(s.contains("{DAMAGE_DEALT%}")) s = s.replace("{DAMAGE_DEALT%}", roundDoubleString(getDamagePercentDone(u), 1));
-                    o.getScore(ChatColor.translateAlternateColorCodes('&', s)).setScore(h);
+                for(String s : entries) {
+                    s = s.replace("{HEALTH}", g).replace("{MINIONS}", m);
+                    s = s.replace("{DAMAGE_DEALT}", formatDouble(round(damagers.getOrDefault(u, 0.00), 0)));
+                    s = s.replace("{DAMAGE_DEALT%}", roundDoubleString(getDamagePercentDone(u), 1));
+                    obj.getScore(ChatColor.translateAlternateColorCodes('&', s)).setScore(h);
                     h -= 1;
                 }
-                ((Player) e).setScoreboard(src);
+                ((Player) e).setScoreboard(sb);
             }
         }
     }

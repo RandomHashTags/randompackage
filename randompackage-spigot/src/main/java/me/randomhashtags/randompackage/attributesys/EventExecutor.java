@@ -104,10 +104,11 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         return e;
     }
     private HashMap<String, Entity> getNearbyType(Player player, double radiusX, double radiusY, double radiusZ, String type) {
+        final HashMap<String, Entity> nearby = getNearbyEntities(player.getLocation(), radiusX, radiusY, radiusZ);
+        if(type.equals("ENTITIES")) return nearby;
         final UUID u = player.getUniqueId();
         final List<UUID> t = type.equals("ALLY") ? regions.getAllies(u) : type.equals("ENEMY") ? regions.getEnemies(u) : type.equals("TRUCE") ? regions.getTruces(u) : regions.getAssociates(u);
         final HashMap<String, Entity> n = new HashMap<>();
-        final HashMap<String, Entity> nearby = getNearbyEntities(player.getLocation(), radiusX, radiusY, radiusZ);
         for(String s : nearby.keySet()) {
             final Entity entity = nearby.get(s);
             if(entity instanceof Player && t.contains(entity.getUniqueId())) {
@@ -245,7 +246,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                                 final String[] a = radius.split(":");
                                                 final int length = a.length;
                                                 final double x = evaluate(a[0]), y = length >= 2 ? evaluate(a[1]) : x, z = length >= 3 ? evaluate(a[2]) : x;
-                                                final HashMap<String, Entity> nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : "MEMBER");
+                                                final HashMap<String, Entity> nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : member ? "MEMBER" : "ENTITIES");
                                                 entities.putAll(nearby);
                                                 for(String n : nearby.keySet()) {
                                                     entityValues.put(n, value1);
