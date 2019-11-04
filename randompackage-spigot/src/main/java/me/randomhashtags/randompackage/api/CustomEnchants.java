@@ -73,7 +73,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private HashMap<Integer, Long> enchantercost;
     private HashMap<Integer, ItemStack> enchanterpurchase;
     private List<Player> invAccepting;
-    private List<String> noMoreEnchantsAllowed, globalattributes;
+    private List<String> noMoreEnchantsAllowed;
+    public static List<String> globalattributes;
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
 
@@ -653,7 +654,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public void tryProcing(Event event, Player player, Entity entity, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants) {
         if(event != null && player != null && enchants != null && !enchants.isEmpty()) {
             final HashMap<String, Entity> entities = getEntities("Player", player);
-            if(entity != null) entities.put("Victim", entity);
+            if(entity != null) {
+                entities.put("Victim", entity);
+            }
             for(ItemStack is : enchants.keySet()) {
                 final LinkedHashMap<CustomEnchant, Integer> en = enchants.get(is);
                 for(CustomEnchant enchant : en.keySet()) {

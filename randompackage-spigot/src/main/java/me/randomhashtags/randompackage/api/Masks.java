@@ -2,13 +2,9 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.Mask;
-import me.randomhashtags.randompackage.event.MaskApplyEvent;
-import me.randomhashtags.randompackage.event.MaskEquipEvent;
-import me.randomhashtags.randompackage.event.MaskUnequipEvent;
+import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.event.PvAnyEvent;
-import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileMask;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -223,7 +219,7 @@ public class Masks extends CustomEnchants {
                 pluginmanager.callEvent(e);
                 trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
-                    equippedMasks.put(player, i);
+                    equippedMasks.put(player, i.clone());
                     scheduler.scheduleSyncDelayedTask(randompackage, () -> {
                         player.getInventory().setHelmet(m.getItem().clone());
                         player.updateInventory();
@@ -237,9 +233,9 @@ public class Masks extends CustomEnchants {
         final Player player = event.getPlayer();
         if(equippedMasks.containsKey(player)) {
             final ItemStack i = event.getItem();
-            final Mask m = getMaskOnItem(i);
+            final Mask m = valueOfMask(i);
             if(m != null) {
-                final MaskUnequipEvent e = new MaskUnequipEvent(player, m, i, event.getReason());
+                final MaskUnequipEvent e = new MaskUnequipEvent(player, m, equippedMasks.get(player), event.getReason());
                 pluginmanager.callEvent(e);
                 trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
@@ -248,6 +244,7 @@ public class Masks extends CustomEnchants {
                     equippedMasks.remove(player);
                     final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
                     enchants.put(h, getEnchants(h));
+                    triggerCustomEnchants(event, enchants, CustomEnchants.globalattributes);
                     tryProcing(event, player, null, enchants);
                 }
             }

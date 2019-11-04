@@ -850,9 +850,11 @@ public abstract class RPStorage extends RegionalAPI {
             final ItemMeta im = is != null ? is.getItemMeta() : null;
             if(im != null && im.hasLore()) {
                 final List<String> l = im.getLore();
-                for(Mask m : masks.values())
-                    if(l.contains(m.getApplied()))
+                for(Mask m : masks.values()) {
+                    if(l.contains(m.getApplied())) {
                         return m;
+                    }
+                }
             }
         }
         return null;

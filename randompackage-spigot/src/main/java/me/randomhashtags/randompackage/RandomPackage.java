@@ -275,10 +275,12 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 final int rawslot = event.getRawSlot();
                 final ItemStack prev = inv.getItem(event.getSlot()), hb = inv.getItem(event.getHotbarButton());
                 final String t = hb != null ? hb.getType().name() : "AIR";
-                if(prev != null && !prev.getType().name().equals("AIR"))
+                if(prev != null && !prev.getType().name().equals("AIR")) {
                     unequip = new ArmorUnequipEvent(player, ArmorEventReason.NUMBER_KEY_UNEQUIP, prev);
-                if(canBeUsed(rawslot, t))
+                }
+                if(canBeUsed(rawslot, t)) {
                     equip = new ArmorEquipEvent(player, ArmorEventReason.NUMBER_KEY_EQUIP, hb);
+                }
             } else if(event.isShiftClick()) {
                 if(st.equals(InventoryType.SlotType.ARMOR)) {
                     unequip = new ArmorUnequipEvent(player, ArmorEventReason.SHIFT_UNEQUIP, currentitem);
@@ -297,8 +299,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                     final int rawslot = event.getRawSlot();
                     if(!current.equals("AIR")) {
                         final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
-                        if(c1 == c2 || rawslot == c1)
+                        if(c1 == c2 || rawslot == c1) {
                             unequip = new ArmorUnequipEvent(player, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
+                        }
                     }
                     if(!cursor.equals("AIR")) {
                         final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
@@ -307,17 +310,29 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                     }
                 }
             }
+            boolean update = false;
             if(unequip != null) {
                 pm.callEvent(unequip);
-                final ItemStack y = unequip.getCurrentItem(), z = unequip.getCursor();
-                if(y != null) event.setCurrentItem(y);
-                if(z != null) event.setCursor(z);
+                if(!unequip.isCancelled()) {
+                    update = true;
+                    final ItemStack x = unequip.getCurrentItem(), y = unequip.getCursor();
+                    if(x != null) event.setCurrentItem(x);
+                    if(y != null) event.setCursor(y);
+                }
             }
             if(equip != null) {
                 pm.callEvent(equip);
-                final ItemStack y = equip.getCurrentItem(), z = equip.getCursor();
-                if(y != null) event.setCurrentItem(y);
-                if(z != null) event.setCursor(z);
+                if(!equip.isCancelled()) {
+                    update = true;
+                    final ItemStack x = equip.getCurrentItem(), y = equip.getCursor();
+                    if(x != null) event.setCurrentItem(x);
+                    if(y != null) event.setCursor(y);
+                }
+            }
+            if(update) {
+                scheduler.scheduleSyncDelayedTask(this, () -> {
+                    player.updateInventory();
+                });
             }
         }
     }

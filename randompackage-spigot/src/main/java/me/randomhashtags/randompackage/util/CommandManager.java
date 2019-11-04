@@ -160,11 +160,14 @@ public final class CommandManager extends Reflect {
         for(int i = 0; i < keys.size(); i++) {
             final String otherCmd = (String) keys.toArray()[i];
             if(!otherCmd.startsWith("RandomPackage:") && otherCmd.split(":")[otherCmd.split(":").length-1].equals(c)) { // gives the last plugin that has the cmd.getName() the command priority
-                final PluginCommand pc = (PluginCommand) knownCommands.values().toArray()[i];
-                if(!pc.getPlugin().equals(randompackage)) {
-                    hasOtherCmd = true;
-                    knownCommands.replace(c, cmd, pc);
-                    break;
+                final Object obj = knownCommands.values().toArray()[i];
+                if(obj instanceof PluginCommand) {
+                    final PluginCommand pc = (PluginCommand) obj;
+                    if(!pc.getPlugin().equals(randompackage)) {
+                        hasOtherCmd = true;
+                        knownCommands.replace(c, cmd, pc);
+                        break;
+                    }
                 }
             }
         }

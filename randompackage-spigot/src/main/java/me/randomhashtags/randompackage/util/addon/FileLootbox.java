@@ -56,11 +56,13 @@ public class FileLootbox extends RPAddon implements Lootbox {
             for(String s : itemMeta.getLore()) {
                 if(s.equals("{REGULAR_LOOT}")) {
                     for(ItemStack is : regular) {
-                        final ItemMeta m = is.getItemMeta();
-                        final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
-                        for(String z : regularLootFormat) {
-                            final String it = d != null ? d : toMaterial(t, false);
-                            lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                        if(is != null) {
+                            final ItemMeta m = is.getItemMeta();
+                            final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
+                            for(String z : regularLootFormat) {
+                                final String it = d != null ? d : toMaterial(t, false);
+                                lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                            }
                         }
                     }
                 } else if(s.equals("{JACKPOT_LOOT}")) {

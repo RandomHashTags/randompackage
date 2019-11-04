@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -17,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -358,11 +356,14 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
                 && (!LEGACY || is.getData().getData() == target.getData().getData())
                 && is.getDurability() == target.getDurability()) {
             final ItemMeta m1 = is.getItemMeta(), m2 = target.getItemMeta();
-            if(m1.isUnbreakable() == m2.isUnbreakable()
-                    && m1.hasDisplayName() == m2.hasDisplayName() && m1.getDisplayName().equals(m2.getDisplayName())
-                    && m1.hasLore() == m2.hasLore() && (m1.getLore() == m2.getLore() || m1.getLore().equals(m2.getLore()))
-                    && m1.hasEnchants() == m2.hasEnchants() && m1.getEnchants().equals(m2.getEnchants())
-                    && m1.getItemFlags().equals(m2.getItemFlags())) {
+
+            if(m1 == m2
+                    || m1 != null && m2 != null
+                    && Objects.equals(m1.getLore(), m2.getLore())
+                    && Objects.equals(m1.getDisplayName(), m2.getDisplayName())
+                    && Objects.equals(m1.getEnchants(), m2.getEnchants())
+                    && Objects.equals(m1.getItemFlags(), m2.getItemFlags())
+                    && (EIGHT || m1.isUnbreakable() == m2.isUnbreakable())) {
                 return true;
             }
         }

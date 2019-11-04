@@ -14,6 +14,7 @@ public abstract class ArmorEvent extends RPEventCancellable {
     }
     public ArmorEventReason getReason() { return reason; }
     public ItemStack getItem() { return item; }
+    public void setItem(ItemStack is) { item = is; }
 
     public ItemStack getCurrentItem() { return currentItem != null ? currentItem.clone() : null; }
     public void setCurrentItem(ItemStack currentItem) { this.currentItem = currentItem; }

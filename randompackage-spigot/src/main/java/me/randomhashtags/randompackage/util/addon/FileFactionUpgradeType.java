@@ -15,7 +15,7 @@ public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeTyp
 	private String path;
 	private List<String> unlock, upgrade, maxed, format;
 	public FileFactionUpgradeType(String path) {
-		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder(), "faction upgrades.yml"));
+		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(getPlugin.getDataFolder() + separator + "faction upgrades", "_settings.yml"));
 		this.path = path;
 		addFactionUpgradeType(this);
 	}

@@ -46,7 +46,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	public YamlConfiguration config;
 	private MCMMOChallenges mcmmoChallenges;
 	private UInventory inv, leaderboard, claimPrizes;
-	private int topPlayersSize = 54;
+	private int topPlayersSize = 54, max;
 
 	private File dataF;
 	private YamlConfiguration data;
@@ -117,6 +117,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 		}
 
+		max = config.getInt("challenge settings.max at once");
 		inv = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
 		topPlayersSize = config.getInt("challenge leaderboard.how many");
 		leaderboard = new UInventory(null, ((topPlayersSize+9)/9)*9, ChatColor.translateAlternateColorCodes('&', config.getString("challenge leaderboard.title")));
@@ -160,35 +161,36 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 		globalchallenges = null;
 		globalchallengeprizes = null;
+		ActiveGlobalChallenge.active = null;
 		unregisterEventAttributeListener(this);
 	}
 	public void reloadChallenges() {
-		final int max = config.getInt("challenge settings.max at once");
 		int maxAtOnce = max;
 		final ConfigurationSection EEE = data.getConfigurationSection("active global challenges");
 		if(globalchallenges != null) {
 			if(EEE != null) {
 				final long started = System.currentTimeMillis();
-				int loadeD = 0;
+				int loaded = 0;
 				for(String s : EEE.getKeys(false)) {
-					if(maxAtOnce > 0) {
-						loadeD += 1;
-						final GlobalChallenge g = getGlobalChallenge(s);
-						if(g != null) {
-							final HashMap<UUID, BigDecimal> participants = new HashMap<>();
-							final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
-							if(partic != null) {
-								for(String u : partic.getKeys(false)) {
-									final UUID uuid = UUID.fromString(u);
-									participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + s + ".participants." + u)));
-								}
+					final GlobalChallenge g = getGlobalChallenge(s);
+					if(g != null) {
+						loaded += 1;
+						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
+						final ConfigurationSection partic = data.getConfigurationSection("active global challenges." + s + ".participants");
+						if(partic != null) {
+							for(String u : partic.getKeys(false)) {
+								final UUID uuid = UUID.fromString(u);
+								participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + s + ".participants." + u)));
 							}
-							maxAtOnce -= 1;
-							g.start(Long.parseLong(data.getString("active global challenges." + s + ".started")), participants);
+						}
+						g.start(Long.parseLong(data.getString("active global challenges." + s + ".started")), participants);
+						maxAtOnce -= 1;
+						if(maxAtOnce == 0) {
+							break;
 						}
 					}
 				}
-				sendConsoleMessage("&6[RandomPackage] &aStarted " + loadeD + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
+				sendConsoleMessage("&6[RandomPackage] &aStarted " + loaded + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 			}
 			if(maxAtOnce > 0) {
 				final long started = System.currentTimeMillis();
@@ -211,17 +213,21 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 				final String p = config.getString("gui." + i + ".item");
 				if(p.toUpperCase().equals("{CHALLENGE}")) {
 					ActiveGlobalChallenge z = f < ActiveGlobalChallenge.active.size() ? (ActiveGlobalChallenge) ActiveGlobalChallenge.active.values().toArray()[f] : null;
-					if(z == null) z = getRandomChallenge().start();
-					final GlobalChallenge T = z.getType();
-					final String n = T.getType();
-					item = T.getItem().clone();
-					itemMeta = item.getItemMeta(); lore.clear();
-					for(String s : config.getStringList("challenge settings.added lore")) {
-						lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TYPE}", n)));
+					if(z == null && f < max) {
+						z = getRandomChallenge().start();
 					}
-					itemMeta.setLore(lore); lore.clear();
-					item.setItemMeta(itemMeta);
-					f += 1;
+					if(z != null) {
+						final GlobalChallenge T = z.getType();
+						final String n = T.getType();
+						item = T.getItem().clone();
+						itemMeta = item.getItemMeta(); lore.clear();
+						for(String s : config.getStringList("challenge settings.added lore")) {
+							lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TYPE}", n)));
+						}
+						itemMeta.setLore(lore); lore.clear();
+						item.setItemMeta(itemMeta);
+						f += 1;
+					}
 				} else {
 					item = d(config, "gui." + i);
 				}
