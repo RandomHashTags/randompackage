@@ -137,13 +137,15 @@ public class CustomBosses extends RPFeature {
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	private void slimeSplitEvent(SlimeSplitEvent event) {
 		final UUID u = event.getEntity().getUniqueId();
 		if(deadBosses.containsKey(u)) {
 			for(String a : deadBosses.get(u).type.getAttributes()) {
-				if(a.toLowerCase().startsWith("split=false"))
+				if(a.toLowerCase().startsWith("split=false")) {
 					event.setCancelled(true);
+					break;
+				}
 			}
 			deadBosses.remove(u);
 		}

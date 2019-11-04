@@ -86,7 +86,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 } else if(condition.startsWith("chance=")) {
                     passed = random.nextInt(100) < evaluate(value);
                 } else {
-                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, entities, entityKey, e, condition, s, value, LEGACY, EIGHT, NINE, TEN, ELEVEN, THIRTEEN);
+                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, entities, entityKey, e, condition, s, value);
                 }
                 if(!passed) break outerloop;
             }
