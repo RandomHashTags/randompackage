@@ -34,10 +34,8 @@ public class Fireballs extends CustomEnchants {
 
     public ItemStack mysterydust;
 
-    @Override
-    public String getIdentifier() { return "FIREBALLS"; }
-    @Override
-    protected RPFeature getFeature() { return getFireballs(); }
+    @Override public String getIdentifier() { return "FIREBALLS"; }
+    @Override protected RPFeature getFeature() { return getFireballs(); }
     @Override
     public void load() {
         long started = System.currentTimeMillis();
@@ -82,8 +80,8 @@ public class Fireballs extends CustomEnchants {
             ItemStack reward = fireball.getRevealedItem(true);
             if(reward == null) {
                 reward = mysterydust.clone();
-                playParticle(config, "dust.particles.default.mystery", player.getEyeLocation(), 15);
-                playSound(config, "dust.sounds.reveal dust", player, player.getLocation(), false);
+                playParticle(config, "particles.dust.default.mystery", player.getEyeLocation(), 15);
+                playSound(config, "sounds.dust.reveal dust", player, player.getLocation(), false);
             }
             giveItem(player, reward);
         }

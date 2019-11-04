@@ -433,7 +433,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             } else if(i.isSimilar(items.get("explosivesnowball"))) {
                 explosivesnowball.add(player);
             } else if(i.isSimilar(items.get("explosivecake"))) {
-                final Location l = event.getClickedBlock().getLocation();
+                event.setCancelled(true);
+                final Location l = event.getAction().name().endsWith("_CLICK_BLOCK") ? event.getClickedBlock().getLocation() : player.getLocation();
                 final int x = l.getBlockX(), y = l.getBlockY(), z = l.getBlockZ();
                 removeItem(player, i, 1);
                 if(EIGHT || NINE || TEN || ELEVEN || TWELVE) {
