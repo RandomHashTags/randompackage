@@ -12,6 +12,8 @@ alchemist: "2000:3500"
 tinkerer: "78:86:94"
 #
 attributes:
+  - "PlayerJoin;PlayerAddPotionEffect=jump:level-1:99999:true"
+  - "PlayerQuit;PlayerRemovePotionEffect=jump:false"
   - "ArmorEquip;PlayerAddPotionEffect=jump:level-1:99999:true"
   - "ArmorUnequip;PlayerRemovePotionEffect=jump:true"
   - "ArmorPieceBreak;PlayerRemovePotionEffect=jump:true"

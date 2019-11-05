@@ -15,7 +15,7 @@ public final class Vault {
     private boolean didSetupEco = false;
     private Economy economy = null;
     public Chat chat = null;
-    public Permission perms = null;
+    public static Permission permissions = null;
     public boolean setupEconomy() {
         didSetupEco = true;
         final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
@@ -33,7 +33,7 @@ public final class Vault {
     }
     public boolean setupPermissions() {
         final RegisteredServiceProvider<Permission> rsp = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp != null ? rsp.getProvider() : null;
-        return perms != null;
+        permissions = rsp != null ? rsp.getProvider() : null;
+        return permissions != null;
     }
 }

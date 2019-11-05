@@ -16,6 +16,8 @@ tinkerer: "1430:1540:1650"
 requires: "Overload;3"
 #
 attributes:
+  - "PlayerJoin;PlayerAddPotionEffect=health_boost:level+2:99999:true"
+  - "PlayerQuit;PlayerRemovePotionEffect=health_boost:false"
   - "ArmorEquip;PlayerAddPotionEffect=health_boost:level+2:99999:true"
   - "ArmorUnequip;PlayerRemovePotionEffect=health_boost:true"
   - "ArmorPieceBreak;PlayerRemovePotionEffect=health_boost:true"

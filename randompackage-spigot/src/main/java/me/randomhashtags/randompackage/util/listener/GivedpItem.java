@@ -49,19 +49,20 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(hasPermission(sender, "RandomPackage.givedp", true)) {
-            if(args.length == 0 && player != null)
+            if(args.length == 0 && player != null) {
                 viewGivedp(player);
-            else if(args.length >= 2) {
+            } else if(args.length >= 2) {
                 final OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                 final String i = args[1];
                 item = d(null, i);
                 if(item != null) {
-                    if(args.length >= 3) item.setAmount(getRemainingInt(args[2]));
+                    if(args.length >= 3) {
+                        item.setAmount(getRemainingInt(args[2]));
+                    }
                     if(p.isOnline()) {
                         p.getPlayer().getInventory().addItem(item);
                     } else {
                         final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
-                        pdata.load();
                         pdata.getUnclaimedPurchases().add(item);
                         pdata.unload();
                     }

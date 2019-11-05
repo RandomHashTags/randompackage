@@ -118,10 +118,17 @@ public class Fund extends RPFeature implements CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		final String me = event.getMessage(), cmd = (me.contains(":") ? me.split(":")[1].split(" ")[0] : me.substring(1).split(" ")[0]).toLowerCase();
+		final String msg = event.getMessage(), cmd;
+		if(msg.contains(":")) {
+			final String[] values = msg.split(":");
+			cmd = values.length > 1 ? values[1].split(" ")[0].toLowerCase() : null;
+			if(cmd == null) return;
+		} else {
+			cmd = msg.substring(1).split(" ")[0].toLowerCase();
+		}
 		final PluginCommand p = Bukkit.getPluginCommand(cmd);
 		if(p != null) {
-			final String pl = p.getName(), m = me.toLowerCase();
+			final String pl = p.getName(), m = msg.toLowerCase();
 			final List<String> a = p.getAliases();
 			for(String s : unlockstring.keySet()) {
 				final String us = unlockstring.get(s);

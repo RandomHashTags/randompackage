@@ -92,9 +92,14 @@ public class Masks extends CustomEnchants {
     private void playerQuitEvent(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         if(equippedMasks.containsKey(player)) {
-            player.getInventory().setHelmet(equippedMasks.get(player));
-            player.updateInventory();
-            equippedMasks.remove(player);
+            final PlayerInventory i = player.getInventory();
+            final Mask m = valueOfMask(i.getHelmet());
+            if(m != null) {
+                trigger(event, m.getAttributes());
+                i.setHelmet(equippedMasks.get(player));
+                player.updateInventory();
+                equippedMasks.remove(player);
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

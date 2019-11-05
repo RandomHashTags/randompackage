@@ -87,9 +87,6 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     viewHelp(sender);
                     break;
             }
-            if(a.equals("help")) {
-                viewHelp(sender);
-            }
         }
         return true;
     }

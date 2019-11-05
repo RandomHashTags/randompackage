@@ -91,7 +91,9 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         api = RandomPackageAPI.api;
         rpevents = RPEvents.getRPEvents();
 
-        Vault.getVault().setupEconomy();
+        final Vault vault = Vault.getVault();
+        vault.setupEconomy();
+        vault.setupPermissions();
 
         api.enable();
         getCommand("randompackage").setExecutor(api);

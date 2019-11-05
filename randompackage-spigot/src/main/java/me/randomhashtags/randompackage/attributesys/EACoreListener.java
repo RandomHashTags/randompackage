@@ -19,6 +19,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +108,14 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerFishEvent(PlayerFishEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerJoinEvent(PlayerJoinEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerQuitEvent(PlayerQuitEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)

@@ -270,6 +270,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             for(String s : uni) save("custom enchants" + separator + "UNIQUE", s + ".yml");
             for(String s : sim) save("custom enchants" + separator + "SIMPLE", s + ".yml");
 
+            save("custom enchants" + separator + "RANDOM", "_settings.yml");
+
             otherdata.set("saved default custom enchants", true);
             saveOtherData();
         }

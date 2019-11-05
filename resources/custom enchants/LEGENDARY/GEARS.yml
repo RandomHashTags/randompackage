@@ -12,6 +12,8 @@ alchemist: "7500:10000"
 tinkerer: "142:163:184"
 #
 attributes:
+  - "PlayerJoin;PlayerAddPotionEffect=speed:level-1:99999:true"
+  - "PlayerQuit;PlayerRemovePotionEffect=speed:false"
   - "ArmorEquip;PlayerAddPotionEffect=speed:level-1:99999:true"
   - "ArmorUnequip;PlayerRemovePotionEffect=speed:true"
   - "ArmorPieceBreak;PlayerRemovePotionEffect=speed:true"

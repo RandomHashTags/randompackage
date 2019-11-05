@@ -9,6 +9,73 @@ spawnable regions:
     coop islands: true
     while visiting: false
 #
+type: SPIDER
+name: "&5&lBrood Mother"
+spawn item:
+  item: "spider_spawn_egg"
+  name: "&5&lBrood Mother"
+  lore:
+    - "&7This monster egg contains a"
+    - "&c&ndangerous&r &7warzone boss"
+    - " "
+    - "&5&lLORE"
+    - "&7&oThe mother of all spiders, with the"
+    - "&7&omost deadly venom in all the"
+    - "&7&oCosmoverse. No one has survived a"
+    - "&7&obite from the Brood Mother."
+    - " "
+    - "&5&lDIFFICULTY"
+    - "&5Ultimate"
+#
+scoreboard:
+  title: "&5&lBrood Mother"
+  score start: 15
+  display slot: "SIDEBAR"
+  scores:
+    - "&a"
+    - "&c&lHealth"
+    - "&c{HEALTH}"
+    - "&b"
+    - "&e&lMinions"
+    - "&e{MINIONS}"
+    - "&c"
+    - "&a&lDamage Dealt"
+    - "&a{DAMAGE_DEALT} &7[{DAMAGE_DEALT%}%]"
+#
+attributes:
+  - "maxhealth=2000"
+  - "addPotionEffect{fire_resistance:1:99999}"
+  - "addPotionEffect{regeneration:3:99999}"
+  - "addPotionEffect{increase_damage:3:99999}"
+#
+rewards:
+  # "<who>;{<item>};<amount>;<what it shows as in chat>"
+  - "top1;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+  - "top1;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top2;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
+  - "top3;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
+#
+attacks:
+  0:
+    chance: 15
+    radius: 0
+    attack:
+      - "delay=0{summonminions}"
+      - "delay=0{MESSAGE0}"
+  1:
+    chance: 5
+    radius: 25
+    attack:
+      - "delay=0{MESSAGE1}"
+      - "delay=0{surround:1:1:1:-1:0:-1:web:air}"
+      - "delay=100{surround:1:1:1:-1:0:-1:air:web}"
+  2:
+    chance: 5
+    radius: 25
+    attack:
+      - "delay=0{/minecraft:effect ~PLAYER poison 5 1}"
+      - "delay=0{MESSAGE2}"
+#
 messages:
   radius: 100
   summon:
@@ -32,65 +99,21 @@ messages:
     - "&a&l5.&r &a{TOP5} - &l{TOP5%}%"
     - " "
   #
+  0:
+    - "&5&lBrood Mother >>&r &f&oOne bite, and you'll be mine."
+  1:
+    - "&5&lBrood Mother >>&r &f&oGo my children, devour their very souls!"
+  2:
+    - "&5&lBrood Mother >>&r &f&oFeel the despair wash over you, for you have fallen into my trap."
   3:
     - "&c&l* BITTEN *"
     - "&5&lBrood Mother >>&r &fYou have been poisoned!"
-#
-boss:
-  type: SPIDER
-  name: "&5&lBrood Mother"
-  modifiers:
-    - "maxhealth=2000"
-    - "AddPotionEffect=fire_resistance:1:99999"
-    - "AddPotionEffect=regeneration:3:99999"
-    - "AddPotionEffect=increase_damage:3:99999"
-  scoreboard:
-    title: "&5&lBrood Mother"
-    score start: 15
-    display slot: "SIDEBAR"
-    scores:
-      - "&a"
-      - "&c&lHealth"
-      - "&c{HEALTH}"
-      - "&b"
-      - "&e&lMinions"
-      - "&e{MINIONS}"
-      - "&c"
-      - "&a&lDamage Dealt"
-      - "&a{DAMAGE_DEALT} &7[{DAMAGE_DEALT%}%]"
-  attributes:
-    - "isDamaged;chance=15;SummonMinions;NearbyEntities(25)SendMessage=&5&lBrood Mother >>&r &f&oGo my children, devour their very souls!"
-    - "isDamaged;chance=5;NearbyEntities(25)Surround=1:1:1:-1:0:-1:web:air:100;NearbyEntities(25)SendMessage=&5&lBrood Mother >>&r &f&oFeel the despair wash over you, for you have fallen into my trap."
-    - "isDamaged;chance=5;NearbyEntities(25)AddPotionEffect=poison:1:1000;NearbyEntities(100)SendMessage=&5&lBrood Mother >>&r &f&oOne bite, and you'll be mine."
-#
-spawn item:
-  item: "spider_spawn_egg"
-  name: "&5&lBrood Mother"
-  lore:
-  - "&7This monster egg contains a"
-  - "&c&ndangerous&r &7warzone boss"
-  - " "
-  - "&5&lLORE"
-  - "&7&oThe mother of all spiders, with the"
-  - "&7&omost deadly venom in all the"
-  - "&7&oCosmoverse. No one has survived a"
-  - "&7&obite from the Brood Mother."
-  - " "
-  - "&5&lDIFFICULTY"
-  - "&5Ultimate"
-#
-rewards:
-  # "<who>;{<item>};<amount>;<what it shows as in chat>"
-  - "top1;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
-  - "top1;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
-  - "top2;{servercrate:LEGENDARY};1;&6&l1x LEGENDARY"
-  - "top3;{servercrate:ULTIMATE};1;&e&l1x ULTIMATE"
 #
 minion:
   max: 15
   type: CAVE_SPIDER
   name: "&5&lBrood Spawn"
-  modifiers:
+  attributes:
     - "maxhealth=32"
     - "addPotionEffect{fire_resistance:1:99999}"
     - "addPotionEffect{regeneration:1:99999}"

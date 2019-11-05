@@ -33,6 +33,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.supported.economy.Vault.permissions;
 
 public class RPPlayer extends RPStorage {
     private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
@@ -110,79 +111,117 @@ public class RPPlayer extends RPStorage {
         yml.set("booleans", booleans);
         yml.set("ints", ints);
         yml.set("longs", longs);
-        final CoinFlipStats coinflipStats = getCoinFlipStats();
-        yml.set("coinflip stats", coinflipStats.wins + ";" + coinflipStats.losses + ";" + coinflipStats.wonCash + ";" + coinflipStats.lostCash + ";" + coinflipStats.taxesPaid);
-        final List<String> homez = new ArrayList<>(), titles = new ArrayList<>();
-        for(Home h : getHomes()) homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
-        yml.set("homes", homez);
+
+        if(coinflipStats != null) {
+            final CoinFlipStats coinflipStats = getCoinFlipStats();
+            yml.set("coinflip stats", coinflipStats.wins + ";" + coinflipStats.losses + ";" + coinflipStats.wonCash + ";" + coinflipStats.lostCash + ";" + coinflipStats.taxesPaid);
+        }
+
+        if(homes != null) {
+            final List<String> homez = new ArrayList<>();
+            for(Home h : getHomes()) {
+                homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
+            }
+            yml.set("homes", homez);
+        }
+
         yml.set("filtered items", getFilteredItemz());
-        for(Title t : getTitles()) titles.add(t.getIdentifier());
-        yml.set("owned titles", titles);
-        yml.set("owned monthly crates", getMonthlyCrates());
-        yml.set("claimed monthly crates", getClaimedMonthlyCrates());
-        yml.set("unclaimed lootboxes", getUnclaimedLootboxes());
-        final List<ItemStack> ucp = getUnclaimedPurchases();
-        yml.set("unclaimed purchases", null);
-        for(ItemStack is : ucp) {
-            if(is != null && !is.getType().equals(Material.AIR)) {
-                final String s = "unclaimed purchases." + UUID.randomUUID() + ".";
-                yml.set(s + "item", UMaterial.match(is).name());
-                final ItemMeta m = is.getItemMeta();
-                if(m.hasDisplayName()) yml.set(s + "name", m.getDisplayName().replace("§", "&"));
-                if(m.hasLore()) {
-                    final List<String> l = new ArrayList<>();
-                    for(String p : m.getLore()) l.add(p.replace("§", "&"));
-                    yml.set(s + "lore", l);
+
+        if(ownedTitles != null) {
+            final List<String> titles = new ArrayList<>();
+            for(Title t : getTitles()) {
+                titles.add(t.getIdentifier());
+            }
+            yml.set("owned titles", titles);
+        }
+
+        if(ownedMonthlyCrates != null) {
+            yml.set("owned monthly crates", ownedMonthlyCrates);
+        }
+
+        if(claimedMonthlyCrates != null) {
+            yml.set("claimed monthly crates", claimedMonthlyCrates);
+        }
+
+        if(unclaimedLootboxes != null) {
+            yml.set("unclaimed lootboxes", unclaimedLootboxes);
+        }
+
+        if(unclaimedPurchases != null) {
+            final List<ItemStack> ucp = getUnclaimedPurchases();
+            yml.set("unclaimed purchases", null);
+            for(ItemStack is : ucp) {
+                if(is != null && !is.getType().equals(Material.AIR)) {
+                    final String s = "unclaimed purchases." + UUID.randomUUID() + ".";
+                    yml.set(s + "item", UMaterial.match(is).name());
+                    final ItemMeta m = is.getItemMeta();
+                    if(m.hasDisplayName()) yml.set(s + "name", m.getDisplayName().replace("§", "&"));
+                    if(m.hasLore()) {
+                        final List<String> l = new ArrayList<>();
+                        for(String p : m.getLore()) l.add(p.replace("§", "&"));
+                        yml.set(s + "lore", l);
+                    }
                 }
             }
         }
-        final List<UUID> cee = getCustomEnchantEntities();
-        yml.set("custom enchant entities", null);
-        for(UUID u : cee) {
-            final HashMap<UUID, LivingCustomEnchantEntity> e = LivingCustomEnchantEntity.living;
-            if(e != null) {
-                final LivingCustomEnchantEntity l = e.get(u);
-                if(l != null) {
-                    final String p = "custom enchant entities." + u.toString() + ".";
-                    final LivingEntity summoner = l.getSummoner();
-                    yml.set(p + "type", l.getType().getPath());
-                    yml.set(p + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
+
+        if(customEnchantEntities != null) {
+            final List<UUID> cee = getCustomEnchantEntities();
+            yml.set("custom enchant entities", null);
+            for(UUID u : cee) {
+                final HashMap<UUID, LivingCustomEnchantEntity> e = LivingCustomEnchantEntity.living;
+                if(e != null) {
+                    final LivingCustomEnchantEntity l = e.get(u);
+                    if(l != null) {
+                        final String p = "custom enchant entities." + u.toString() + ".";
+                        final LivingEntity summoner = l.getSummoner();
+                        yml.set(p + "type", l.getType().getPath());
+                        yml.set(p + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
+                    }
                 }
             }
         }
 
-        final HashMap<RarityGem, Boolean> r = getRarityGems();
-        yml.set("rarity gems", null);
-        for(RarityGem g : r.keySet()) {
-            yml.set("rarity gems." + g.getIdentifier(), r.get(g));
-        }
-
-        final HashMap<GlobalChallengePrize, Integer> prizes = getGlobalChallengePrizes();
-        yml.set("global challenge prizes", null);
-        for(GlobalChallengePrize p : prizes.keySet()) {
-            yml.set("global challenge prizes." + p.getPlacement(), prizes.get(p));
-        }
-
-        final HashMap<CustomKit, Integer> kitLevels = getKitLevels();
-        final HashMap<CustomKit, Long> kitCooldowns = getKitCooldowns();
-        yml.set("kits", null);
-        for(CustomKit k : kitCooldowns.keySet()) {
-            final String i = k.getIdentifier();
-            yml.set("kits." + i + ".level", kitLevels.getOrDefault(k, -1));
-            yml.set("kits." + i + ".cooldown expiration", kitCooldowns.get(k));
-        }
-
-        final HashMap<PlayerQuest, ActivePlayerQuest> apq = getQuests();
-        yml.set("quests", null);
-        if(apq != null) {
-            for(PlayerQuest q : apq.keySet()) {
-                final ActivePlayerQuest A = apq.get(q);
-                yml.set("quests." + q.getIdentifier(), A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
+        if(raritygems != null) {
+            final HashMap<RarityGem, Boolean> r = getRarityGems();
+            yml.set("rarity gems", null);
+            for(RarityGem g : r.keySet()) {
+                yml.set("rarity gems." + g.getIdentifier(), r.get(g));
             }
         }
 
-        final HashMap<Integer, ItemStack[]> showcase = getShowcases();
+        if(globalchallengeprizes != null) {
+            final HashMap<GlobalChallengePrize, Integer> prizes = getGlobalChallengePrizes();
+            yml.set("global challenge prizes", null);
+            for(GlobalChallengePrize p : prizes.keySet()) {
+                yml.set("global challenge prizes." + p.getPlacement(), prizes.get(p));
+            }
+        }
+
+        if(kitLevels != null && kitCooldowns != null) {
+            final HashMap<CustomKit, Integer> kitLevels = getKitLevels();
+            final HashMap<CustomKit, Long> kitCooldowns = getKitCooldowns();
+            yml.set("kits", null);
+            for(CustomKit k : kitCooldowns.keySet()) {
+                final String i = k.getIdentifier();
+                yml.set("kits." + i + ".level", kitLevels.getOrDefault(k, -1));
+                yml.set("kits." + i + ".cooldown expiration", kitCooldowns.get(k));
+            }
+        }
+
+        if(quests != null) {
+            final HashMap<PlayerQuest, ActivePlayerQuest> quests = getQuests();
+            yml.set("quests", null);
+            if(quests != null) {
+                for(PlayerQuest q : quests.keySet()) {
+                    final ActivePlayerQuest A = quests.get(q);
+                    yml.set("quests." + q.getIdentifier(), A.getStartedTime() + ";" + A.getProgress() + ";" + A.isCompleted() + ";" + A.hasClaimedRewards());
+                }
+            }
+        }
+
         if(showcases != null) {
+            final HashMap<Integer, ItemStack[]> showcase = getShowcases();
             for(int p : showcase.keySet()) {
                 yml.set("showcases." + p, null);
                 yml.set("showcases." + p + ".size", getShowcaseSize(p));
@@ -211,6 +250,7 @@ public class RPPlayer extends RPStorage {
                 }
             }
         }
+
         save();
     }
     public RPPlayer load() {
@@ -603,27 +643,16 @@ public class RPPlayer extends RPStorage {
         if(kit != null) getKitCooldowns().put(kit, cooldownExpiration);
     }
 
-    private void loadOwnedMonthlyCrates() {
-        if(ownedMonthlyCrates == null) {
-            ownedMonthlyCrates = yml.getStringList("owned monthly crates");
-        }
-    }
-    private void loadClaimedMonthlyCrates() {
-        if(claimedMonthlyCrates == null) {
-            claimedMonthlyCrates = yml.getStringList("claimed monthly crates");
-        }
-    }
     public List<String> getMonthlyCrates() {
-        loadOwnedMonthlyCrates();
+        if(ownedMonthlyCrates == null) ownedMonthlyCrates = yml.getStringList("owned monthly crates");
         return ownedMonthlyCrates;
     }
     public List<String> getClaimedMonthlyCrates() {
-        loadClaimedMonthlyCrates();
+        if(claimedMonthlyCrates == null) claimedMonthlyCrates = yml.getStringList("claimed monthly crates");
         return claimedMonthlyCrates;
     }
 
-
-    private void loadUnclaimedLootboxes() {
+    public HashMap<String, Integer> getUnclaimedLootboxes() {
         if(unclaimedLootboxes == null) {
             unclaimedLootboxes = new HashMap<>();
             final ConfigurationSection a = yml.getConfigurationSection("unclaimed lootboxes");
@@ -633,12 +662,8 @@ public class RPPlayer extends RPStorage {
                 }
             }
         }
-    }
-    public HashMap<String, Integer> getUnclaimedLootboxes() {
-        loadUnclaimedLootboxes();
         return unclaimedLootboxes;
     }
-
 
     private void loadQuests() {
         if(quests == null) {
@@ -657,16 +682,27 @@ public class RPPlayer extends RPStorage {
                             final ActivePlayerQuest a = new ActivePlayerQuest(Long.parseLong(b[0]), q, Double.parseDouble(b[1]), Boolean.parseBoolean(b[2]), Boolean.parseBoolean(b[3]));
                             if(!a.isExpired()) {
                                 quests.put(q, a);
-                                if(isEnabled) startExpire(time, scheduler, pluginmanager, q, a);
+                                if(isEnabled) {
+                                    startExpire(time, scheduler, pluginmanager, q, a);
+                                }
                             }
                         }
                     }
                 }
                 int permfor = 0;
                 final int max = QQ.questSlots.size();
-                final Player p = Bukkit.getPlayer(uuid);
+                final OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
+                Player player = null;
+                boolean useVault = false;
+                if(p.isOnline()) {
+                    player = p.getPlayer();
+                } else if(permissions != null) {
+                    useVault = true;
+                } else {
+                    return;
+                }
                 for(int i = 1; i <= max; i++) {
-                    if(p.hasPermission("RandomPackage.playerquests." + i)) {
+                    if(useVault && permissions.playerHas(null, p, "RandomPackage.playerquests." + i) || !useVault && player.hasPermission("RandomPackage.playerquests." + i)) {
                         permfor = i;
                     }
                 }

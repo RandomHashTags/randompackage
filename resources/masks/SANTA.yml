@@ -14,5 +14,6 @@ item:
 attributes:
   - "MaskEquip;PlayerAddPotionEffect=health_boost:0:99999"
   - "MaskUnequip;PlayerRemovePotionEffect=health_boost"
+  - "PlayerQuit;PlayerRemovePotionEffect=health_boost"
 #
 added lore: "&7&lATTACHED:&r &b&lSanta Mask&r &f(&c+2 Max Hearts&f)"

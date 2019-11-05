@@ -56,23 +56,40 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
-		if(args.length == 0 && player != null)
-		    viewCurrent(player);
-		else if(args.length >= 2 && args[0].equals("stop")) {
-			if(hasPermission(player, "RandomPackage.globalchallenges.stop", true))
-				stopChallenge(getGlobalChallenge(args[1].replace("_", " ")), false);
-		} else if(player != null && args.length >= 1 && args[0].equals("claim"))
-			viewPrizes(player);
-		else if(args.length >= 1 && args[0].equals("reload")) {
-			if(hasPermission(sender, "RandomPackage.globalchallenges.reload", true))
-				reloadChallenges();
-		} else if(args.length >= 3 && args[0].equals("giveprize")) {
-			if(hasPermission(sender, "RandomPackage.globalchallenges.giveprize", true)) {
-				final OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
-				final int placing = getRemainingInt(args[2]);
-				if(op != null && placing != -1) {
-					RPPlayer.get(op.getUniqueId()).addGlobalChallengePrize(valueOfGlobalChallengePrize(placing));
-				}
+		final int l = args.length;
+		if(l == 0) {
+			if(player != null) {
+				viewCurrent(player);
+			}
+		} else {
+			final String a = args[0];
+			switch (a) {
+				case "stop":
+					if(l >= 2 && hasPermission(player, "RandomPackage.globalchallenges.stop", true)) {
+						stopChallenge(getGlobalChallenge(args[1].replace("_", " ")), false);
+					}
+					break;
+				case "claim":
+					if(player != null) {
+						viewPrizes(player);
+					}
+					break;
+				case "reload":
+					if(hasPermission(sender, "RandomPackage.globalchallenges.reload", true)) {
+						reloadChallenges();
+					}
+					break;
+				case "giveprize":
+					if(l >= 3 && hasPermission(sender, "RandomPackage.globalchallenges.giveprize", true)) {
+						final OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
+						final int placing = getRemainingInt(args[2]);
+						if(placing != -1) {
+							RPPlayer.get(op.getUniqueId()).addGlobalChallengePrize(valueOfGlobalChallengePrize(placing));
+						}
+					}
+					break;
+				default:
+					break;
 			}
 		}
 		return true;
