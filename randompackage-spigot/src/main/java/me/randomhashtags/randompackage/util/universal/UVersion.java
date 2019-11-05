@@ -441,7 +441,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
     }
     public final void playSound(FileConfiguration config, String path, Player player, Location location, boolean globalsound) {
-		if(config.get(path) != null) {
+		if(config != null && config.get(path) != null) {
 		    final String[] p = config.getString(path).split(":");
 			final String s = p[0].toUpperCase();
 			final int v = Integer.parseInt(p[1]), pp = Integer.parseInt(p[2]);
