@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileArmorSet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -27,11 +28,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public class CustomArmor extends EventAttributes {
+public class CustomArmor extends EventAttributes implements RPItemStack {
 	private static CustomArmor instance;
 	public static CustomArmor getCustomArmor() {
 		if(instance == null) instance = new CustomArmor();
@@ -215,9 +217,9 @@ public class CustomArmor extends EventAttributes {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
+		final Player player = (Player) event.getWhoClicked();
 		final ArmorSet crystal = valueOfArmorCrystal(curs);
-		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
-			final Player player = (Player) event.getWhoClicked();
+		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(player, crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
 			event.setCancelled(true);
 			player.updateInventory();
 			final int a = curs.getAmount();
@@ -231,15 +233,24 @@ public class CustomArmor extends EventAttributes {
 		}
 	}
 
-	public byte tryApplyingCrystal(ArmorSet type, int percent, ItemStack is) {
+	public byte tryApplyingCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
 		final String mat = is != null ? is.getType().name() : null;
-		if(mat != null && valueOfArmorSet(is) == null && getArmorCrystalOnItem(is) == null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
+		final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
+		if(mat != null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
+			if(set != null) {
+				sendStringListMessage(player, config.getStringList("messages.cannot apply.armor set piece"), null);
+				return -1;
+			} else if(crystal != null) {
+				sendStringListMessage(player, config.getStringList("messages.cannot apply.already has crystal"), null);
+				return -2;
+			}
 			if(random.nextInt(100) < percent) {
 				itemMeta = is.getItemMeta(); lore.clear();
 				if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
 				lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
 				itemMeta.setLore(lore); lore.clear();
 				is.setItemMeta(itemMeta);
+				sendStringListMessage(player, type.getCrystalAppliedMsg(), null);
 				return 2;
 			}
 			return 1;
@@ -252,6 +263,18 @@ public class CustomArmor extends EventAttributes {
 		String l = r.get(random.nextInt(r.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[random.nextInt(l.split("\\|\\|").length)];
 		return givedpitem.valueOf(l);
+	}
+
+	public boolean isHeroic(ItemStack is) {
+		return Boolean.parseBoolean(getRPItemStackValue(is, "RPCustomArmorIsHeroic"));
+	}
+	public void setHeroicVariant(ItemStack is) {
+		if(getRPItemStackValue(is, "RPCustomArmorIsHeroic") == null) {
+			final ArmorSet a = valueOfArmorSet(is);
+			if(a != null) {
+				setRPItemStackValues(is, new HashMap<String, String>(){{ put("RPCustomArmorIsHeroic", "true"); }});
+			}
+		}
 	}
 
 	private List<ItemStack> getItems(Player player) {

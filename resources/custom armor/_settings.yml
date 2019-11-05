@@ -2,6 +2,12 @@
 messages:
   receive loot from Equipment Lootbox: # Broadcasted
   - "&6&l(!)&r &6{PLAYER} received a {ITEM}&r &6from a Equipment Lootbox!"
+  #
+  cannot apply:
+    armor set piece:
+      - "&c&l(!)&r &cYou cannot apply an Armor Set Crystal to an existing Armor Set piece!"
+    already has crystal:
+      - "&c&l(!)&r &cYou cannot apply multiple Armor Set crystals to a single piece of gear!"
 #
 items:
   equipment lootbox:

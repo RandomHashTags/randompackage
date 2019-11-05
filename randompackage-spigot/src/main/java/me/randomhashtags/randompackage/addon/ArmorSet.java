@@ -18,4 +18,5 @@ public interface ArmorSet extends Identifiable, Nameable {
     List<String> getArmorAttributes();
     List<String> getCrystalAttributes();
     List<String> getActivateMessage();
+    List<String> getCrystalAppliedMsg();
 }

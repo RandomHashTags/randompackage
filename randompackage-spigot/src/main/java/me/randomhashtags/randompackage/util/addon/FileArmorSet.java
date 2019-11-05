@@ -57,4 +57,5 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 	public List<String> getArmorAttributes() { return yml.getStringList("attributes.armor"); }
 	public List<String> getCrystalAttributes() { return yml.getStringList("attributes.crystal"); }
 	public List<String> getActivateMessage() { return colorizeListString(yml.getStringList("activate message")); }
+	public List<String> getCrystalAppliedMsg() { return colorizeListString(yml.getStringList("crystal applied msg")); }
 }

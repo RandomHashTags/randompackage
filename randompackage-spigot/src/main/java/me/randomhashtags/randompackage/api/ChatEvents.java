@@ -59,7 +59,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
-		final String message = event.getMessage();
+		final String message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
 		final boolean brag = message.contains("[brag]"), item = message.contains("[item]");
 		if(brag || item) {
 			final Player player = event.getPlayer();

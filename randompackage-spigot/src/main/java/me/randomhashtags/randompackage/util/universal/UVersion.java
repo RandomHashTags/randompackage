@@ -269,8 +269,10 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
 
     public final List<String> colorizeListString(List<String> input) {
         final List<String> i = new ArrayList<>();
-        for(String s : input) {
-            i.add(ChatColor.translateAlternateColorCodes('&', s));
+        if(input != null) {
+            for(String s : input) {
+                i.add(ChatColor.translateAlternateColorCodes('&', s));
+            }
         }
         return i;
     }

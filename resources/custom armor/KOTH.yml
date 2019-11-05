@@ -75,3 +75,8 @@ attributes:
     - "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.05"
     - "PvAny;VictimIsMob=true;SetDamage=dmg*1.125"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+5% PvP DMG"
+  - " &6&l*&r &6+12.5% PvE DMG"

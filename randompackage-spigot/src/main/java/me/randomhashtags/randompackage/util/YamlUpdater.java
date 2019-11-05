@@ -234,7 +234,10 @@ public abstract class YamlUpdater {
         final Object[] values = new Object[] {
                 // 16.5.0
                 newItemStack("items.crystal", "nether_star", "&6&lArmor Crystal (&r{NAME}&r&6&l)", newStringList("&a{PERCENT}% Success Rate", "&7Can be applied to any non", "&7armor set that is not", "&7already equipped with a", "&7bonus crystal to gain", "&7a passive advantage!", " ", "&6&lCrystal Bonus:", " {NAME}", "{PERKS}")),
-                "items.crystal.applied lore", "&6&lArmor Crystal (&r{NAME}}&r&6&l)"
+                "items.crystal.applied lore", "&6&lArmor Crystal (&r{NAME}}&r&6&l)",
+                // 16.5.3
+                "messages.cannot apply.armor set piece", newStringList("&c&l(!)&r &cYou cannot apply an Armor Set Crystal to an existing Armor Set piece!"),
+                "messages.cannot apply.already has crystal", newStringList("&c&l(!)&r &cYou cannot apply multiple Armor Set crystals to a single piece of gear!")
         };
         return putAll(values);
     }

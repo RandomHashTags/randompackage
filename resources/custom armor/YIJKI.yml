@@ -75,3 +75,9 @@ attributes:
 #
 activate message:
   - "&c&l(!) MOTHER OF YIJKI SET BONUS: &C-30% DMG"
+#
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&f&lMother of Yijki&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6-5% Incoming DMG"
+  - " &6&l*&r &620% Revenge of Yijki Ability"

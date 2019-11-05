@@ -60,3 +60,10 @@ attributes:
     - "PvAny;VictimIsType=PLAYER;SetDamage=dmg*1.03"
     - "isDamaged;SetDamage=dmg*0.95"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&e&lDragon&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+3% PvP DMG"
+  - " &6&l*&r &6-5% Incoming DMG"
+  - " &6&l*&r &610% Silence"
+  - " &6&l*&r &610% Freeze Immunity"

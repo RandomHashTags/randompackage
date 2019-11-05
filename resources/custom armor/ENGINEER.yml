@@ -55,3 +55,8 @@ attributes:
   crystal:
     - "isDamaged;SetDamage=dmg*0.91"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (Engineer)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6-9% Incoming DMG"
+  - " &6&l*&r &620% B-2 Bomber Passive Ability"

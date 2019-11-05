@@ -83,3 +83,7 @@ attributes:
   crystal:
     - "PvAny;SetDamage=dmg*1.03"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&4&lSupreme&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+3% DMG"

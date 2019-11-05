@@ -72,3 +72,8 @@ crystal perks:
 activate message:
   - "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&b&lYeti&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+2.5% DMG"
+  - " &6&l*&r &6-2.5% Incoming DMG"

@@ -230,8 +230,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             scheduler.runTaskAsynchronously(this, () -> {
                 String msg = null;
                 try {
-                    final URL checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501");
-                    final URLConnection con = checkURL.openConnection();
+                    final URLConnection con = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501").openConnection();
                     final String v = getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
                     final boolean canUpdate = !v.equals(newVersion);
                     if(canUpdate) {

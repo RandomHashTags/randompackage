@@ -59,3 +59,8 @@ crystal perks:
   - "  &5&l*&r &5+7.5% Outgoing DMG"
   - "  &5&l*&r &520% Dimensional Shift Ability"
 #
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&5&lDimension Traveler&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+7.5% Outgoing DMG"
+  - " &6&l*&r &6+20% Dimensional Shift Ability"

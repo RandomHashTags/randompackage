@@ -65,3 +65,8 @@ crystal perks:
 #
 activate message:
   - "&c&lPHANTOM SET BONUS&r&c: +25% DMG"
+#
+crystal applied msg:
+  - "&6&l(!) Armor Crystal (&r&c&lPhantom&r&6&l)"
+  - "&6&lCrystal Bonus:"
+  - " &6&l*&r &6+5% DMG"
