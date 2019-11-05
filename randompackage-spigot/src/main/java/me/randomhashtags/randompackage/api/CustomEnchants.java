@@ -589,6 +589,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         for(int i = 1; i <= 100; i++) {
             final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
             if(enchant.isEnabled()) {
+                rarity = valueOfEnchantRarity(enchant);
                 final int level = random.nextInt(enchant.getMaxLevel()+1);
                 item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
