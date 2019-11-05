@@ -745,7 +745,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {
             final CustomEnchant enchant = valueOfCustomEnchant(I);
             if(enchant != null) {
-                sendStringListMessage(player, config.getStringList("rarities.apply info"), null);
+                sendStringListMessage(player, config.getStringList("messages.apply info"), null);
             }
         }
     }

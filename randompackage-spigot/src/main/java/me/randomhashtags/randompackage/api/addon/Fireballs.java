@@ -12,7 +12,6 @@ import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,7 +39,7 @@ public class Fireballs extends CustomEnchants {
     public void load() {
         long started = System.currentTimeMillis();
         save("addons", "fireballs.yml");
-        final YamlConfiguration config = getAddonConfig("fireballs.yml");
+        config = getAddonConfig("fireballs.yml");
         mysterydust = d(config, "items.mystery dust");
         givedpitem.items.put("mysterydust", mysterydust);
 
