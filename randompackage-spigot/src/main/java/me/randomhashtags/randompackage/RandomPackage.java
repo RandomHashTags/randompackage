@@ -2,14 +2,13 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
-import me.randomhashtags.randompackage.api.FactionUpgrades;
-import me.randomhashtags.randompackage.api.FatBuckets;
-import me.randomhashtags.randompackage.api.RandomizedLoot;
-import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
-import me.randomhashtags.randompackage.dev.a.*;
-import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.a.LastManStanding;
 import me.randomhashtags.randompackage.dev.a.Outposts;
+import me.randomhashtags.randompackage.dev.a.SpawnerStacking;
+import me.randomhashtags.randompackage.dev.duels.Duels;
+import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
 import me.randomhashtags.randompackage.event.FoodLevelLostEvent;
 import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.event.armor.*;
@@ -17,15 +16,14 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
 import me.randomhashtags.randompackage.util.CommandManager;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import me.randomhashtags.randompackage.util.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -362,11 +360,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             final PlayerInventory PI = player.getInventory();
             final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
             if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
-                scheduler.scheduleSyncDelayedTask(this, () -> {
-                    if(!player.getGameMode().equals(GameMode.CREATIVE) && player.getItemInHand().equals(is)) return;
+                final Block block = event.getClickedBlock();
+                if(block == null || !block.getType().isInteractable()) {
                     final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, is);
                     pm.callEvent(e);
-                }, 0);
+                }
             } else {
                 final ArmorEvent e = new ArmorSwapEvent(player, ArmorEventReason.HOTBAR_SWAP, is, helmet ? h : chestplate ? c : leggings ? l : b);
                 pm.callEvent(e);
