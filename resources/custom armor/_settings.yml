@@ -53,6 +53,8 @@ items:
       - "&7This will increase the armor's base"
       - "&7stats as well as add a &612.5% negation"
       - "&7to enemy &6Infinite Luck &7enchantments."
+    attributes:
+      - ""
   crystal:
     item: "nether_star"
     name: "&6&lArmor Crystal (&r{NAME}&r&6&l)"

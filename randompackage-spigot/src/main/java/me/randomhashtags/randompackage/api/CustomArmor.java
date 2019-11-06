@@ -41,7 +41,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	}
 	
 	public YamlConfiguration config;
-	public ItemStack equipmentLootbox, crystal;
+	public ItemStack equipmentLootbox, crystal, heroicUpgrade;
 	public int percentSlot;
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
@@ -56,6 +56,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom armor", "_settings.yml"));
 		equipmentLootbox = d(config, "items.equipment lootbox");
 		crystal = d(config, "items.crystal");
+		heroicUpgrade = d(config, "items.heroic upgrade");
 		crystalAddedLore = ChatColor.translateAlternateColorCodes('&', config.getString("items.crystal.applied lore"));
 
 		givedpitem.items.put("equipmentlootbox", equipmentLootbox);
@@ -257,6 +258,9 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 		return 0;
 	}
+	public byte tryApplyingUpgrade(Player player, ArmorSet type, int percent, ItemStack is) {
+		return 0;
+	}
 
 	public ItemStack getRandomEquipmentLootboxLoot() {
 		final List<String> r = config.getStringList("items.equipment lootbox.rewards");
@@ -265,6 +269,18 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		return givedpitem.valueOf(l);
 	}
 
+	public ItemStack getHeroicUpgrade(ArmorSet set) { return getHeroicUpgrade(set, random.nextInt(101)); }
+	public ItemStack getHeroicUpgrade(ArmorSet set, int percent) {
+		final String name = set.getName(), persent = Integer.toBinaryString(percent);
+		item = heroicUpgrade.clone(); itemMeta = item.getItemMeta(); lore.clear();
+		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
+		for(String s : itemMeta.getLore()) {
+			lore.add(s.replace("{NAME}", name).replace("{PERCENT}", persent));
+		}
+		itemMeta.setLore(lore); lore.clear();
+		item.setItemMeta(itemMeta);
+		return item;
+	}
 	public boolean isHeroic(ItemStack is) {
 		return Boolean.parseBoolean(getRPItemStackValue(is, "RPCustomArmorIsHeroic"));
 	}

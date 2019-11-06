@@ -63,6 +63,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     }
                     break;
                 case "top":
+                    viewTop(sender, l == 1 ? 1 : getRemainingInt(args[1]));
                     break;
                 case "buy":
                     final List<String> b = config.getStringList("messages.enter valid ticket amount");
@@ -302,6 +303,21 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             replacements.put("{TICKETS}", formatBigDecimal(pdata.jackpotTickets));
             replacements.put("{WINS}", formatInt(pdata.jackpotWins));
             sendStringListMessage(player, config.getStringList("messages.stats"), replacements);
+        }
+    }
+    public void viewTop(@NotNull CommandSender sender, int page) {
+        if(hasPermission(sender, "RandomPackage.jackpot.top", true)) {
+            final List<String> list = colorizeListString(config.getStringList("messages.top"));
+            final String p = Integer.toString(page);
+            final int perPage = config.getInt("messages.players per page");
+            for(String s : list) {
+                if(s.contains("{PLACE}")) {
+                    // TODO: fix dis
+                } else {
+                    s = s.replace("{PAGE}", p);
+                    sender.sendMessage(s);
+                }
+            }
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {

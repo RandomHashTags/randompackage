@@ -144,7 +144,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
             triggerPassive(event, (Player) e);
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     private void projectileLaunchEvent(ProjectileLaunchEvent event) {
         final Projectile p = event.getEntity();
         final ProjectileSource s = p.getShooter();
