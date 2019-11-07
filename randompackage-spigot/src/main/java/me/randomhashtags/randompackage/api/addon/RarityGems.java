@@ -8,11 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -119,12 +118,11 @@ public class RarityGems extends RPFeature {
         }
     }
     @EventHandler
-    private void entityDeathEvent(EntityDeathEvent event) {
-        final LivingEntity e = event.getEntity();
-        final UUID u = e.getUniqueId();
-        if(e instanceof Player) {
-            final RPPlayer pdata = RPPlayer.get(u);
-            for(RarityGem g : pdata.getRarityGems().keySet()) {
+    private void playerDeathEvent(PlayerDeathEvent event) {
+        final UUID u = event.getEntity().getUniqueId();
+        final RPPlayer pdata = RPPlayer.get(u);
+        for(RarityGem g : pdata.getRarityGems().keySet()) {
+            if(pdata.hasActiveRarityGem(g)) {
                 pdata.toggleRarityGem(g, g.getToggleOffDroppedMsg());
             }
         }

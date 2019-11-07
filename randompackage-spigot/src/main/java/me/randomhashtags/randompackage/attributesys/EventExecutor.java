@@ -39,7 +39,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 involved = null;
                 break;
         }
-        boolean passed = true, hasCancelled = false;
+        boolean passed = true, hasCancelled = false, didProc = false;
 
         final boolean isInteract = event instanceof PlayerInteractEvent;
 
@@ -80,15 +80,23 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                         s = s.replace(r.toLowerCase(), valueReplacements.get(r));
                     }
                 }
-                if(condition.startsWith("cancelled=")) {
+                if(!hasCancelled && cancelled && !isInteract) {
+                    passed = false;
+                } else if(condition.startsWith("cancelled=")) {
                     passed = cancelled == Boolean.parseBoolean(value);
                     hasCancelled = true;
                 } else if(condition.startsWith("chance=")) {
-                    passed = random.nextInt(100) < evaluate(value);
+                    final boolean check = random.nextInt(100) < evaluate(value);
+                    passed = check;
+                    didProc = check;
+                } else if(condition.startsWith("didproc")) {
+                    passed = didProc;
                 } else {
-                    passed = (hasCancelled || !cancelled || isInteract) && passedAllConditions(event, entities, entityKey, e, condition, s, value);
+                    passed = passedAllConditions(event, entities, entityKey, e, condition, s, value);
                 }
-                if(!passed) break outerloop;
+                if(!passed) {
+                    break outerloop;
+                }
             }
         }
         return passed;
