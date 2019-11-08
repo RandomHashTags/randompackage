@@ -59,17 +59,41 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	protected RPFeature getFeature() { return getKOTH(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
-		if(args.length == 0)
-			viewStatus(sender);
-		else {
-			final String a = args[0];
-			if(a.equals("stop") && hasPermission(sender, "RandomPackage.koth.stop", true))        stopKOTH();
-			else if(a.equals("start") && hasPermission(sender, "RandomPackage.koth.start", true)) startKOTH();
-			else if(player != null) {
-				if(a.equals("teleport") || a.equals("tp") || a.equals("warp")) teleportToKOTH(player);
-				else if(a.equals("loot")) previewLootbag(player);
-				else if(a.equals("setcenter")) setCenter(player, player.getLocation());
-			}
+		switch (args.length) {
+			case 0:
+				viewStatus(sender);
+				break;
+			default:
+				switch (args[0]) {
+					case "stop":
+						if(hasPermission(sender, "RandomPackage.koth.stop", true)) {
+							stopKOTH();
+						}
+						break;
+					case "start":
+						if(hasPermission(sender, "RandomPackage.koth.start", true)) {
+							startKOTH();
+						}
+						break;
+					case "teleport":
+					case "tp":
+					case "warp":
+						if(player != null) {
+							teleportToKOTH(player);
+						}
+						break;
+					case "loot":
+						if(player != null) {
+							previewLootbag(player);
+						}
+						break;
+					case "setcenter":
+						if(player != null) {
+							setCenter(player, player.getLocation());
+						}
+						break;
+				}
+				break;
 		}
 		return true;
 	}
@@ -117,8 +141,9 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		saveOtherData();
 
 		if(center != null && !status.equals("STOPPED")) {
-			for(Player player : center.getWorld().getPlayers())
+			for(Player player : center.getWorld().getPlayers()) {
 				player.setScoreboard(scoreboardManager.getNewScoreboard());
+			}
 		}
 		stopKOTH();
 	}
@@ -241,11 +266,12 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerTeleportEvent(PlayerTeleportEvent event) {
 		final World w = center != null ? center.getWorld() : null;
-		final Player player = event.getPlayer();
 		if(w != null) {
-			if(event.getTo().getWorld().equals(w) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (status.equals("STOPPED") || status.equals("CAPTURED"))) {
+			final Player player = event.getPlayer();
+			final boolean stopped = status.equals("STOPPED");
+			if(event.getTo().getWorld().equals(w) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (stopped || status.equals("CAPTURED"))) {
 				event.setCancelled(true);
-				sendStringListMessage(player, null, config.getStringList("messages." + (status.equals("STOPPED") ? "no event running" : "already capped")), -1, null);
+				sendStringListMessage(player, null, config.getStringList("messages." + (stopped ? "no event running" : "already capped")), -1, null);
 			} else if(event.getFrom().getWorld().equals(w)) {
 				player.setScoreboard(scoreboardManager.getNewScoreboard());
 			}
@@ -413,8 +439,11 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			}
 			if(!did) {
 				sendStringListMessage(player, null, config.getStringList("messages.blocked command"), -1, null);
-				if(!player.isOp()) event.setCancelled(true);
-				else player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eSince you're OP, the command has been executed."));
+				if(!player.isOp()) {
+					event.setCancelled(true);
+				} else {
+					player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eSince you're OP, the command has been executed."));
+				}
 			}
 		}
 	}
@@ -444,9 +473,9 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				for(ItemStack is : lootbag) {
 					z++;
 					giveItem(player, is);
-					if(is.hasItemMeta() && is.getItemMeta().hasDisplayName())
+					if(is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
 						loot.add(is.getItemMeta().getDisplayName());
-					else if(is.getType().equals(Material.ENCHANTED_BOOK)) {
+					} else if(is.getType().equals(Material.ENCHANTED_BOOK)) {
 						loot.add(ChatColor.YELLOW + "Enchanted Book");
 						item = lootbag.get(z); itemMeta = item.getItemMeta();
 						itemMeta.setDisplayName(loot.get(loot.size() - 1));
@@ -483,18 +512,19 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		if(hasPermission(player, "RandomPackage.koth.teleport", true) && teleportLocation != null) {
 			final boolean captured = status.equals("CAPTURED");
 			sendStringListMessage(player, null, config.getStringList("messages." + (captured ? "already capped" : "teleport")), 0, null);
-			if(!captured) player.teleport(teleportLocation);
+			if(!captured) {
+				player.teleport(teleportLocation);
+			}
 		}
 	}
 
 	private void sendStringListMessage(Player sender, Player target, List<String> message, int number, Location location) {
-		for(String string : message) {
-			if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", formatInt(number));
-			if(string.contains("{SENDER}")) string = string.replace("{SENDER}", sender.getName());
-			if(string.contains("{TARGET}")) string = string.replace("{TARGET}", target.getName());
-			if(string.contains("{LOCATION}")) string = string.replace("{LOCATION}", location.getBlockX() + "x " + location.getBlockY() + "y " + location.getBlockZ() + "z");
-			if(string.contains("{KOTH}")) string = string.replace("{KOTH}", "" + kothname);
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
-		}
+		final HashMap<String, String> replacements = new HashMap<>();
+		replacements.put("{AMOUNT}", formatInt(number));
+		replacements.put("{SENDER}", sender.getName());
+		replacements.put("{TARGET}", target != null ? target.getName() : "null");
+		replacements.put("{LOCATION}", location.getBlockX() + "x " + location.getBlockY() + "y " + location.getBlockZ() + "z");
+		replacements.put("{KOTH}", kothname);
+		sendStringListMessage(sender, message, replacements);
 	}
 }
