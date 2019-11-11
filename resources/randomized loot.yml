@@ -156,7 +156,7 @@ mkitgemgenerator:
   item: "cyan_dye"
   name: "&6&lRandom&r &4&lM-Kit Gem&r &6&lGenerator"
   lore:
-    - "VEnchants{Unbreaking10]"
+    - "VEnchants{Unbreaking10}"
     - " "
     - "&7&nRight-click&r &7to receive one &4&lM-Kit Gem"
     - "&7completely unlocking the affiliated kit &nPERMANENTLY!"

@@ -218,7 +218,8 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         if(string != null) {
             string = string.toLowerCase().replace("_", "");
             for(Enchantment enchant : Enchantment.values()) {
-                if(enchant != null && string.startsWith(enchant.getName().toLowerCase().replace("_", ""))) {
+                final String name = enchant != null ? enchant.getName() : null;
+                if(name != null && string.startsWith(name.toLowerCase().replace("_", ""))) {
                     return enchant;
                 }
             }
