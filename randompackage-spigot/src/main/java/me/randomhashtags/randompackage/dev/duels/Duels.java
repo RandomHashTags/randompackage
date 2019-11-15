@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -57,8 +56,8 @@ public class Duels extends RPFeature implements CommandExecutor {
         save("duel arenas", "_settings.yml");
 
         config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "duel arenas", "_settings.yml"));
-        type = new UInventory(null, config.getInt("type.size"), ChatColor.translateAlternateColorCodes('&', config.getString("type.title")));
-        godset = new UInventory(null, config.getInt("godset.size"), ChatColor.translateAlternateColorCodes('&', config.getString("godset.title")));
+        type = new UInventory(null, config.getInt("type.size"), colorize(config.getString("type.title")));
+        godset = new UInventory(null, config.getInt("godset.size"), colorize(config.getString("godset.title")));
 
         activeDuels = new ArrayList<>();
 

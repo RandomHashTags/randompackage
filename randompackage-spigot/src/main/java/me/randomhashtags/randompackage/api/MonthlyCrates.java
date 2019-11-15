@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileMonthlyCrate;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -64,8 +63,8 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         save("monthly crates", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "monthly crates", "_settings.yml"));
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        categoryView = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("category view.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
+        categoryView = new UInventory(null, 54, colorize(config.getString("category view.title")));
         regularRewardsLeft = new HashMap<>();
         bonusRewardsLeft = new HashMap<>();
         playertimers = new HashMap<>();

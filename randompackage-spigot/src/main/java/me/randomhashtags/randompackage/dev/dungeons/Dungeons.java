@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,8 +54,8 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         fuelcell = d(config, "items.fuel cell");
         addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        master = new UInventory(null, config.getInt("master.size"), ChatColor.translateAlternateColorCodes('&', config.getString("master.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
+        master = new UInventory(null, config.getInt("master.size"), colorize(config.getString("master.title")));
         final ItemStack background = d(config, "gui.background");
         final ItemStack undisDungeon = d(config, "gui.undiscovered.dungeon"), undisKey = d(config, "gui.undiscovered.key");
         final Inventory di = gui.getInventory();

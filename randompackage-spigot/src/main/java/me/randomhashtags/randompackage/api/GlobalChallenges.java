@@ -7,13 +7,11 @@ import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileGlobalChallenge;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -133,10 +131,10 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 
 		max = config.getInt("challenge settings.max at once");
-		inv = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+		inv = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
 		topPlayersSize = config.getInt("challenge leaderboard.how many");
-		leaderboard = new UInventory(null, ((topPlayersSize+9)/9)*9, ChatColor.translateAlternateColorCodes('&', config.getString("challenge leaderboard.title")));
-		claimPrizes = new UInventory(null, 9, ChatColor.translateAlternateColorCodes('&', config.getString("rewards.title")));
+		leaderboard = new UInventory(null, ((topPlayersSize+9)/9)*9, colorize(config.getString("challenge leaderboard.title")));
+		claimPrizes = new UInventory(null, 9, colorize(config.getString("rewards.title")));
 
 		for(String s : config.getConfigurationSection("rewards").getKeys(false)) {
 			if(!s.equals("title")) {
@@ -237,7 +235,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						item = T.getItem().clone();
 						itemMeta = item.getItemMeta(); lore.clear();
 						for(String s : config.getStringList("challenge settings.added lore")) {
-							lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TYPE}", n)));
+							lore.add(colorize(s.replace("{TYPE}", n)));
 						}
 						itemMeta.setLore(lore); lore.clear();
 						item.setItemMeta(itemMeta);
@@ -277,7 +275,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			if(sendMessage) {
 				final String placing = prize.getPlacement() + "";
 				for(String s : config.getStringList("messages.claimed prize"))
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLACING}", placing)));
+					p.sendMessage(colorize(s.replace("{PLACING}", placing)));
 			}
 		}
 	}
@@ -368,7 +366,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		player.closeInventory();
 		player.openInventory(Bukkit.createInventory(player, leaderboard.getSize(), leaderboard.getTitle()));
 		final Inventory top = player.getOpenInventory().getTopInventory();
-		final String n = ChatColor.translateAlternateColorCodes('&', config.getString("challenge leaderboard.name")), N = active.getType().getType();
+		final String n = colorize(config.getString("challenge leaderboard.name")), N = active.getType().getType();
 		final HashMap<Integer, UUID> rankings = getRankings(active);
 		final List<String> a = config.getStringList("challenge leaderboard.lore");
 		item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
@@ -381,7 +379,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			skm.setDisplayName(n.replace("{PLAYER}", name));
 			skm.setOwner(name); lore.clear();
 			for(String s : a) {
-				lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{RANKING}", ranking).replace("{CHALLENGE}", N).replace("{VALUE}", value)));
+				lore.add(colorize(s.replace("{RANKING}", ranking).replace("{CHALLENGE}", N).replace("{VALUE}", value)));
 			}
 			skm.setLore(lore); lore.clear();
 			item.setItemMeta(skm);

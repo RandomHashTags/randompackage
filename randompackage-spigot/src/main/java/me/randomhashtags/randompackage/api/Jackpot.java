@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -96,7 +95,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         save(null, "jackpot.yml");
         config = YamlConfiguration.loadConfiguration(new File(rpd, "jackpot.yml"));
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
         final ItemStack confirm = d(config, "gui.confirm"), cancel = d(config, "gui.cancel");
         confirmSlots = new ArrayList<>();
@@ -183,7 +182,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             final Collection<? extends Player> o = Bukkit.getOnlinePlayers();
             for(String s : config.getStringList("messages.won")) {
                 for(String r : replacements.keySet()) s = s.replace(r, replacements.get(r));
-                s = ChatColor.translateAlternateColorCodes('&', s);
+                s = colorize(s);
                 for(Player p : o) {
                     p.sendMessage(s);
                 }

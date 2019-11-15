@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -51,16 +50,16 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
                             "&7- Purchaser: &a&nhttps://www.spigotmc.org/members/%%__USER__%%/&r &f%%__NONCE__%%",
                             "&6&m&l---------------------------------------------",
                             " "))
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                        sender.sendMessage(colorize(string));
                 }
             } else {
                 final String a = args[0];
                 if(a.equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
                     getPlugin.reload();
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aReload complete!"));
+                    sender.sendMessage(colorize("&6[RandomPackage] &aReload complete!"));
                 } else if(a.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
                     RPEvents.getRPEvents().backup();
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aPlayer backup complete!"));
+                    sender.sendMessage(colorize("&6[RandomPackage] &aPlayer backup complete!"));
                 }
             }
         }

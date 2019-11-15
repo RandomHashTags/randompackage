@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -140,7 +139,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         collectionBinClaim = colorizeListString(config.getStringList("collection bin.claim"));
         collectionBinInAuction = colorizeListString(config.getStringList("collection bin.in auction"));
 
-        ah = new UInventory(null, config.getInt("auction house.size"), ChatColor.translateAlternateColorCodes('&', config.getString("auction house.title")));
+        ah = new UInventory(null, config.getInt("auction house.size"), colorize(config.getString("auction house.title")));
         previousPage = d(config, "auction house.previous page");
         previousPageSlot = config.getInt("auction house.previous page.slot");
         nextPage = d(config, "auction house.next page");
@@ -159,7 +158,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         ahi.setItem(previousPageSlot, previousPage);
         ahi.setItem(nextPageSlot, nextPage);
 
-        purchaseItem = new UInventory(null, config.getInt("purchase item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("purchase item.title")));
+        purchaseItem = new UInventory(null, config.getInt("purchase item.size"), colorize(config.getString("purchase item.title")));
         final Inventory pii = purchaseItem.getInventory();
         final ItemStack confirmPurchase = d(config, "purchase item.confirm"), cancelPurchase = d(config, "purchase item.cancel");
         for(String s : config.getConfigurationSection("purchase item").getKeys(false)) {
@@ -174,7 +173,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             }
         }
 
-        confirmAuction = new UInventory(null, config.getInt("confirm auction.size"), ChatColor.translateAlternateColorCodes('&', config.getString("confirm auction.title")));
+        confirmAuction = new UInventory(null, config.getInt("confirm auction.size"), colorize(config.getString("confirm auction.title")));
         final Inventory cai = confirmAuction.getInventory();
         final ItemStack confirmAuctionAccept = d(config, "confirm auction.accept"), confirmAuctionDecline = d(config, "confirm auction.decline");
         for(String s : config.getConfigurationSection("confirm auction").getKeys(false)) {
@@ -189,7 +188,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             }
         }
 
-        categories = new UInventory(null, config.getInt("categories.size"), ChatColor.translateAlternateColorCodes('&', config.getString("categories.title")));
+        categories = new UInventory(null, config.getInt("categories.size"), colorize(config.getString("categories.title")));
         final Inventory ci = categories.getInventory();
         for(String s : config.getConfigurationSection("categories").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("format") && !s.equals("groups")) {
@@ -200,7 +199,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             }
         }
 
-        categoryItems = new UInventory(null, config.getInt("category items.size"), ChatColor.translateAlternateColorCodes('&', config.getString("category items.title")));
+        categoryItems = new UInventory(null, config.getInt("category items.size"), colorize(config.getString("category items.title")));
         final Inventory cii = categoryItems.getInventory();
         for(String s : config.getConfigurationSection("category items").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size")) {
@@ -211,7 +210,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             }
         }
 
-        collectionbin = new UInventory(null, config.getInt("collection bin.size"), ChatColor.translateAlternateColorCodes('&', config.getString("collection bin.title")));
+        collectionbin = new UInventory(null, config.getInt("collection bin.size"), colorize(config.getString("collection bin.title")));
         final Inventory cbi = collectionbin.getInventory();
         for(String s : config.getConfigurationSection("collection bin").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("not enough inventory space") && !s.equals("in auction") && !s.equals("claim")) {
@@ -377,7 +376,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                                 if(s.equals("{STATUS}")) {
                                     lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
                                 } else {
-                                    lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", pr).replace("{SELLER}", seller)));
+                                    lore.add(colorize(s.replace("{PRICE}", pr).replace("{SELLER}", seller)));
                                 }
                             }
                             itemMeta.setLore(lore); lore.clear();
@@ -436,7 +435,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 if(s.equals("{STATUS}")) {
                     lore.addAll(auctioner.equals(u) ? cancelStatus : clickToBuyStatus);
                 } else {
-                    lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{PRICE}", price).replace("{SELLER}", seller)));
+                    lore.add(colorize(s.replace("{PRICE}", price).replace("{SELLER}", seller)));
                 }
             }
             itemMeta.setLore(lore); lore.clear();

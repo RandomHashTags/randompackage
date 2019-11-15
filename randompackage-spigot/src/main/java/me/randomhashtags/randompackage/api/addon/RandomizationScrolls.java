@@ -5,10 +5,8 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.PathRandomizationScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -68,7 +66,7 @@ public class RandomizationScrolls extends CustomEnchants {
                     for(String string : itemMeta.getLore()) {
                         if(string.equals(s.replace("{PERCENT}", "" + getRemainingInt(string))))        string = s.replace("{PERCENT}", "" + newSuccess);
                         else if(string.equals(d.replace("{PERCENT}", "" + getRemainingInt(string))))   string = d.replace("{PERCENT}", "" + newDestroy);
-                        lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                        lore.add(colorize(string));
                     }
                     itemMeta.setLore(lore); lore.clear();
                     //playSuccess((Player) event.getWhoClicked());

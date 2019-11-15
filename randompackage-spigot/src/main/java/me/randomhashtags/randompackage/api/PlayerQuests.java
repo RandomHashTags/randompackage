@@ -4,14 +4,12 @@ import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
-import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FilePlayerQuest;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -77,8 +75,8 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         registerEventAttributeListener(this);
         config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "player quests", "_settings.yml"));
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        shop = new UInventory(null, config.getInt("shop.size"), ChatColor.translateAlternateColorCodes('&', config.getString("shop.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
+        shop = new UInventory(null, config.getInt("shop.size"), colorize(config.getString("shop.title")));
         background = d(config, "shop.background");
         returnToQuests = d(config, "shop.return to quests");
         returnToQuestsSlot = config.getInt("shop.return to quests.slot");

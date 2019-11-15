@@ -1,13 +1,11 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.*;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitMastery;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,11 +48,11 @@ public class KitsMastery extends Kits {
             saveOtherData();
         }
 
-        gui = new UInventory(null, config.getInt("mkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("mkits.gui.title")));
+        gui = new UInventory(null, config.getInt("mkits.gui.size"), colorize(config.getString("mkits.gui.title")));
         permissionsUnlocked = colorizeListString(config.getStringList("mkits.permissions.unlocked"));
         permissionsLocked = colorizeListString(config.getStringList("mkits.permissions.locked.lore"));
         permissionsPreview = colorizeListString(config.getStringList("mkits.permissions.preview"));
-        preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("mkits.items.preview.title")));
+        preview = new UInventory(null, 54, colorize(config.getString("mkits.items.preview.title")));
         background = d(config, "mkits.gui.background");
 
         final List<ItemStack> gems = new ArrayList<>();

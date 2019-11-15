@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -54,6 +55,17 @@ public interface UVersionable extends Versionable {
     default void sendConsoleMessage(String msg) {
         console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }
+    default List<String> colorizeListString(List<String> input) {
+        final List<String> i = new ArrayList<>();
+        if(input != null) {
+            for(String s : input) {
+                i.add(ChatColor.translateAlternateColorCodes('&', s));
+            }
+        }
+        return i;
+    }
+    default String colorize(String input) { return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL"; }
+
     default Entity getHitEntity(ProjectileHitEvent event) {
         if(EIGHT || NINE || TEN) {
             final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);

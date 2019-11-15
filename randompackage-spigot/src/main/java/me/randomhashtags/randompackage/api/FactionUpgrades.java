@@ -4,13 +4,12 @@ import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
 import me.randomhashtags.randompackage.addon.obj.FactionUpgradeInfo;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileFactionUpgrade;
 import me.randomhashtags.randompackage.util.addon.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.util.universal.UInventory;
@@ -97,7 +96,7 @@ public class FactionUpgrades extends EventAttributes {
             for(String s : config.getConfigurationSection("types").getKeys(false)) {
                 new FileFactionUpgradeType(s);
             }
-            gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+            gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
             for(File f : new File(rpd + separator + "faction upgrades").listFiles()) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
@@ -244,7 +243,7 @@ public class FactionUpgrades extends EventAttributes {
             if(requiredItem != null) removeItem(player, requiredItem, requiredItem.getAmount());
             info.setLevel(nextLevel);
             final int slot = upgrade.getSlot();
-            player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, ChatColor.translateAlternateColorCodes('&', config.getString("gui.tier")), ChatColor.translateAlternateColorCodes('&', config.getString("gui.locked.tier"))));
+            player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, colorize(config.getString("gui.tier")), colorize(config.getString("gui.locked.tier"))));
             player.updateInventory();
         }
     }
@@ -264,7 +263,7 @@ public class FactionUpgrades extends EventAttributes {
                 final List<String> achievedPerks = new ArrayList<>(), unachievedPerks = new ArrayList<>();
                 for(int i = 1; i <= max; i++) {
                     final boolean achieved = tier >= i;
-                    (achieved ? achievedPerks : unachievedPerks).add(ChatColor.translateAlternateColorCodes('&', (achieved ? perkAchieved : perkUnachieved) + levels.get(i).getString()));
+                    (achieved ? achievedPerks : unachievedPerks).add(colorize((achieved ? perkAchieved : perkUnachieved) + levels.get(i).getString()));
                 }
                 if(item.hasItemMeta() && itemMeta.hasLore()) {
                     for(String s : itemMeta.getLore()) {
@@ -278,7 +277,7 @@ public class FactionUpgrades extends EventAttributes {
                                 final FactionUpgradeLevel next = levels.getOrDefault(tier+1, null);
                                 if(next != null) {
                                     for(String r : next.getCost()) {
-                                        lore.add(ChatColor.translateAlternateColorCodes('&', requirementsPrefix + r.split("};")[1]));
+                                        lore.add(colorize(requirementsPrefix + r.split("};")[1]));
                                     }
                                 }
                             } else {
@@ -287,7 +286,7 @@ public class FactionUpgrades extends EventAttributes {
                         }
                     }
                     for(String s : isTierZero ? type.getUnlock() : type.getUpgrade()) {
-                        lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                        lore.add(colorize(s));
                     }
                     itemMeta.setLore(lore); lore.clear();
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
@@ -318,7 +317,7 @@ public class FactionUpgrades extends EventAttributes {
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
-            final String W = ChatColor.translateAlternateColorCodes('&', config.getString("gui.tier")), L = ChatColor.translateAlternateColorCodes('&', config.getString("gui.locked.tier"));
+            final String W = colorize(config.getString("gui.tier")), L = colorize(config.getString("gui.locked.tier"));
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null) {

@@ -173,7 +173,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             if(split != null) {
                 if(g == null) g = appliedst.getConvertsTo();
                 item = g.getItem(); itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', g.getColors(gems)) + gems));
+                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", colorize(g.getColors(gems)) + gems));
                 if(gems != 0) item.setAmount(1);
                 item.setItemMeta(itemMeta);
                 giveItem(player, item);

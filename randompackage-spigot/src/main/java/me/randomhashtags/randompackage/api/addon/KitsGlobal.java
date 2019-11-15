@@ -4,13 +4,11 @@ import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitGlobal;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -68,8 +66,8 @@ public class KitsGlobal extends Kits {
         heroicEnchantedEffect = config.getBoolean("gkits.items.heroic.enchanted effect");
         tierZeroEnchantEffect = config.getBoolean("gkits.gui.settings.tier zero enchant effect");
         previewBackground = d(config, "gkits.items.preview");
-        gkit = new UInventory(null, config.getInt("gkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gkits.gui.title")));
-        preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("gkits.items.preview.title")));
+        gkit = new UInventory(null, config.getInt("gkits.gui.size"), colorize(config.getString("gkits.gui.title")));
+        preview = new UInventory(null, 54, colorize(config.getString("gkits.items.preview.title")));
         omniGem = d(config, "gkits.items.omni gem");
         cooldown = d(config, "gkits.items.cooldown");
         permissionsUnlocked = colorizeListString(config.getStringList("gkits.permissions.unlocked"));
@@ -80,7 +78,7 @@ public class KitsGlobal extends Kits {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));
         }
 
-        FileKitGlobal.heroicprefix = ChatColor.translateAlternateColorCodes('&', config.getString("gkits.items.heroic.prefix"));
+        FileKitGlobal.heroicprefix = colorize(config.getString("gkits.items.heroic.prefix"));
 
         final Inventory gi = gkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
@@ -214,11 +212,11 @@ public class KitsGlobal extends Kits {
                     final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(k) && !(tier < 1));
                     if(usesTiers) {
                         for(String s : config.getStringList("gkits.gui.settings.pre lore"))
-                            lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxLevel()))));
+                            lore.add(colorize(s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxLevel()))));
                     }
                     if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    for(String s : config.getStringList("gkits.gui.settings." + (has ? "un" : "") + "locked")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
-                    for(String s : config.getStringList("gkits.items.preview.added gui lore")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                    for(String s : config.getStringList("gkits.gui.settings." + (has ? "un" : "") + "locked")) lore.add(colorize(s));
+                    for(String s : config.getStringList("gkits.items.preview.added gui lore")) lore.add(colorize(s));
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     if(q) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     itemMeta.setLore(lore); lore.clear();

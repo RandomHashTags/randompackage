@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.addon.EnchantmentOrb;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -38,7 +37,7 @@ public class EnchantmentOrbs extends RPFeature {
             int increm = increment;
             for(int k = starting; k <= config.getInt("enchantment orbs." + A + ".final max slots"); k += increment) {
                 if(k != starting) increm += increment;
-                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = ChatColor.translateAlternateColorCodes('&', config.getString("enchantment orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
+                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = colorize(config.getString("enchantment orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
                 final ItemStack i = item.clone(); itemMeta = i.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
                 if(itemMeta.hasLore()) {

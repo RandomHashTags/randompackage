@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -165,15 +164,15 @@ public class Fund extends RPFeature implements CommandExecutor {
 					ss = ss.replace(r, R);
 				}
 			}
-			if(broadcasted) Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', ss));
-			else            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', ss));
+			if(broadcasted) Bukkit.broadcastMessage(colorize(ss));
+			else            sender.sendMessage(colorize(ss));
 			return;
 		}
 	}
 
 	public void reset(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.reset", true)) {
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
+			Bukkit.broadcastMessage(colorize("&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
 			total = BigDecimal.ZERO;
 			deposits.clear();
 		}
@@ -181,7 +180,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public void view(CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund", true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
-			final String symbol = config.getString("messages.progress bar.symbol"), achieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.achieved")), notachieved = ChatColor.translateAlternateColorCodes('&', config.getString("messages.progress bar.not achieved"));
+			final String symbol = config.getString("messages.progress bar.symbol"), achieved = colorize(config.getString("messages.progress bar.achieved")), notachieved = colorize(config.getString("messages.progress bar.not achieved"));
 			for(String s : config.getStringList("messages.view")) {
 				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
@@ -191,7 +190,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 						final int q = req.intValue();
 						final String percent = roundDoubleString((t/d) * 100 > 100.000 ? 100 : (t/d) * 100, pdigits), abb = getAbbreviation(d), qq = formatInt(q);
 						for(String k : config.getStringList("messages.content")) {
-							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", t >= d ? ChatColor.translateAlternateColorCodes('&', config.getString("messages.completed")) : "");
+							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", t >= d ? colorize(config.getString("messages.completed")) : "");
 							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
 							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
 							if(k.contains("{PROGRESS_BAR}")) {
@@ -201,11 +200,11 @@ public class Fund extends RPFeature implements CommandExecutor {
 							}
 							if(k.contains("{REQ}")) k = k.replace("{REQ}", abb);
 							if(k.contains("{REQ$}")) k = k.replace("{REQ$}", qq);
-							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', k));
+							sender.sendMessage(colorize(k));
 						}
 					}
 				}
-				if(!s.equals("{CONTENT}")) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+				if(!s.equals("{CONTENT}")) sender.sendMessage(colorize(s));
 			}
 		}
 	}
@@ -219,6 +218,6 @@ public class Fund extends RPFeature implements CommandExecutor {
 		if(ll.contains(",")) ll = ll.split(",")[0] + "." + ll.split(",")[1];
 		String d = Double.toString(Double.parseDouble(ll));
 		if(d.endsWith(".0") && d.split("\\.")[1].length() == 1) d = d.split("\\.")[0];
-		return d + ChatColor.translateAlternateColorCodes('&', config.getString("messages." + (l >= 13 && l <= 15 ? "trillion" : l >= 10 && l <= 12 ? "billion" : l >= 7 && l <= 9 ? "million" : l >= 4 && l <= 6 ? "thousand" : "")));
+		return d + colorize(config.getString("messages." + (l >= 13 && l <= 15 ? "trillion" : l >= 10 && l <= 12 ? "billion" : l >= 7 && l <= 9 ? "million" : l >= 4 && l <= 6 ? "thousand" : "")));
 	}
 }

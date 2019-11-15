@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.addon.obj.BattleRoyaleTeam;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -85,10 +84,10 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
         scoreboard = scoreboardManager.getNewScoreboard();
         final Objective obj = scoreboard.registerNewObjective("dummy", "dummy");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("scoreboard.title")));
+        obj.setDisplayName(colorize(config.getString("scoreboard.title")));
         int score = config.getInt("scoreboard.score start");
         for(String s : config.getStringList("scoreboard.list")) {
-            obj.getScore(ChatColor.translateAlternateColorCodes('&', s)).setScore(score);
+            obj.getScore(colorize(s)).setScore(score);
             score--;
         }
 

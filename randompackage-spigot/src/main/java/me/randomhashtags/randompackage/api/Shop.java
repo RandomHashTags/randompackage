@@ -9,7 +9,6 @@ import me.randomhashtags.randompackage.util.addon.FileShopCategory;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -62,7 +61,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                 titles.put(c.getTitle(), c);
             }
         }
-        sendConsoleMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &aLoaded " + (shopcategories != null ? shopcategories.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + (shopcategories != null ? shopcategories.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
 	    shopcategories = null;
@@ -175,7 +174,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                         if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", amts);
                                         if(string.contains("{PRICE}")) string = string.replace("{PRICE}", pr);
                                         if(string.contains("{ITEM}")) string = string.replace("{ITEM}", n);
-                                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                                        player.sendMessage(colorize(string));
                                     }
                                 } else {
                                     playSound(config, "sounds.not sellable", player, player.getLocation(), false);
@@ -222,7 +221,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                         buy = true;
                         for(String string : buylore) {
                             if(string.contains("{BUY}")) string = string.replace("{BUY}", b);
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(colorize(string));
                         }
                     }
                     if(sellPrice.doubleValue() > 0.00) {
@@ -230,7 +229,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                         sell = true;
                         for(String string : selllore) {
                             if(string.contains("{SELL}")) string = string.replace("{SELL}", ss);
-                            lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                            lore.add(colorize(string));
                         }
                     }
                     final String single = Integer.toString(item.getAmount()), shift = Integer.toString(item.getMaxStackSize());
@@ -238,7 +237,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                         if(q.equals("LEFT") && buy || q.equals("RIGHT") && sell) {
                             for(String string : config.getStringList("lores." + q.toLowerCase() + " clicks")) {
                                 string = string.replace("{" + q + "_CLICK}", single).replace("{SHIFT_" + q + "_CLICK}", shift);
-                                lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                                lore.add(colorize(string));
                             }
                         }
                     }

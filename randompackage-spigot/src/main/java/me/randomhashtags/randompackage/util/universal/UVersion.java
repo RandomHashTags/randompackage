@@ -256,8 +256,8 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
         return null;
     }
-    // From http://www.baeldung.com/java-round-decimal-number
     public final double round(double input, int decimals) {
+        // From http://www.baeldung.com/java-round-decimal-number
         if(decimals < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(input));
         bd = bd.setScale(decimals, RoundingMode.HALF_UP);
@@ -268,15 +268,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         return Double.toString(d);
     }
 
-    public final List<String> colorizeListString(List<String> input) {
-        final List<String> i = new ArrayList<>();
-        if(input != null) {
-            for(String s : input) {
-                i.add(ChatColor.translateAlternateColorCodes('&', s));
-            }
-        }
-        return i;
-    }
     public final int indexOf(Set<? extends Object> collection, Object value) {
         int i = 0;
         for(Object o : collection) {
@@ -285,11 +276,9 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
         return -1;
     }
-    /*
-     * Credit to "Sahil Mathoo" from StackOverFlow at
-     * https://stackoverflow.com/questions/8154366
-     */
+
     public final String center(String s, int size) {
+        // Credit to "Sahil Mathoo" from StackOverFlow at https://stackoverflow.com/questions/8154366
         return center(s, size, ' ');
     }
     private String center(String s, int size, char pad) {

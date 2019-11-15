@@ -1,11 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.living.ActiveTrade;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,7 +53,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 		accepting = d(config, "gui.accepting");
 		countdown = config.getInt("gui.countdown start");
 		radius = config.getInt("radius");
-		title = ChatColor.translateAlternateColorCodes('&', config.getString("gui.title"));
+		title = colorize(config.getString("gui.title"));
 		q = new UInventory(null, 54, title);
 		accept.setAmount(countdown); accepting.setAmount(countdown);
 		final Inventory qi = q.getInventory();

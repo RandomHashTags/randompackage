@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileRarityGem;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,11 +36,11 @@ public class RarityGems extends RPFeature {
         FileRarityGem.defaultColors = new HashMap<>();
         final HashMap<Integer, String> d = FileRarityGem.defaultColors;
         final ConfigurationSection C = config.getConfigurationSection("default colors");
-        d.put(-1, ChatColor.translateAlternateColorCodes('&', config.getString("default colors.else")));
-        d.put(0, ChatColor.translateAlternateColorCodes('&', config.getString("default colors.less than 100")));
+        d.put(-1, colorize(config.getString("default colors.else")));
+        d.put(0, colorize(config.getString("default colors.less than 100")));
         for(String s : C.getKeys(false)) {
             if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                d.put(Integer.parseInt(s.split("s")[0]), ChatColor.translateAlternateColorCodes('&', config.getString("default colors." + s)));
+                d.put(Integer.parseInt(s.split("s")[0]), colorize(config.getString("default colors." + s)));
             }
         }
 
@@ -89,7 +88,7 @@ public class RarityGems extends RPFeature {
                 event.setCancelled(true);
                 item = cursor.getItem();
                 itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", ChatColor.translateAlternateColorCodes('&', cursor.getColors(combinedTotal)) + combinedTotal));
+                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", colorize(cursor.getColors(combinedTotal)) + combinedTotal));
                 item.setItemMeta(itemMeta);
                 event.setCurrentItem(item);
                 if(cursorAmount == 1) event.setCursor(new ItemStack(Material.AIR));

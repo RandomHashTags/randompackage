@@ -2,17 +2,14 @@ package me.randomhashtags.randompackage.api.dev;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.util.Packeter;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileInventoryPet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -85,7 +82,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
 
         config = YamlConfiguration.loadConfiguration(new File(rpd, "inventory pets.yml"));
         leash = d(config, "items.leash");
-        leashedLore = ChatColor.translateAlternateColorCodes('&', config.getString("items.leash.applied lore"));
+        leashedLore = colorize(config.getString("items.leash.applied lore"));
         rarecandy = d(config, "items.rare candy");
         leashedUponDeath = new HashMap<>();
 

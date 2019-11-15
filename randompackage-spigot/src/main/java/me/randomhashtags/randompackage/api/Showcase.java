@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -90,11 +89,11 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		inOther = new ArrayList<>();
 		deleteSlot = new HashMap<>();
 
-		additems = new UInventory(null, config.getInt("add item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("add item.title")));
-		removeitems = new UInventory(null, config.getInt("remove item.size"), ChatColor.translateAlternateColorCodes('&', config.getString("remove item.title")));
+		additems = new UInventory(null, config.getInt("add item.size"), colorize(config.getString("add item.title")));
+		removeitems = new UInventory(null, config.getInt("remove item.size"), colorize(config.getString("remove item.title")));
 
-		othertitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.other title"));
-		selftitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.self title"));
+		othertitle = colorize(config.getString("settings.other title"));
+		selftitle = colorize(config.getString("settings.self title"));
 		TCOLOR = config.getString("settings.time color");
 
 		addItemConfirm = d(config, "add item.confirm");
@@ -120,11 +119,11 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	}
 	public void unload() {
 		for(Player p : new ArrayList<>(inSelf)) {
-			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
+			p.sendMessage(colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
 		for(Player p : new ArrayList<>(inOther)) {
-			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
+			p.sendMessage(colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
 			p.closeInventory();
 		}
 	}
@@ -232,7 +231,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			final String format = toReadableDate(new Date(), "MMMM dd, yyyy");
 			itemMeta = item.getItemMeta(); lore.clear();
 			if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-			lore.add(ChatColor.translateAlternateColorCodes('&', TCOLOR + format));
+			lore.add(colorize(TCOLOR + format));
 			itemMeta.setLore(lore); lore.clear();
 			item.setItemMeta(itemMeta);
 

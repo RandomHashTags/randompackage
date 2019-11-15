@@ -102,14 +102,14 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		save(null, "koth.yml");
 
 		config = YamlConfiguration.loadConfiguration(new File(rpd, "koth.yml"));
-		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), ChatColor.translateAlternateColorCodes('&', config.getString("items.lootbag.title")));
+		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
 		lootbag = d(config, "items.lootbag");
 		givedpitem.items.put("kothlootbag", lootbag);
 
 		displaySlot = DisplaySlot.valueOf(config.getString("settings.scoreboards.display slot").toUpperCase());
-		kothtitle = ChatColor.translateAlternateColorCodes('&', config.getString("settings.scoreboards.title"));
-		kothname = ChatColor.translateAlternateColorCodes('&', config.getString("settings.name"));
+		kothtitle = colorize(config.getString("settings.scoreboards.title"));
+		kothname = colorize(config.getString("settings.name"));
 
 		status = "Not Active";
 
@@ -118,7 +118,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		startCapCountdown = config.getInt("settings.start cap countdown");
 		captureRadius = config.getInt("settings.capture radius");
 		captured = config.getStringList("messages.captured");
-		rewardformat = ChatColor.translateAlternateColorCodes('&', config.getString("messages.reward format"));
+		rewardformat = colorize(config.getString("messages.reward format"));
 		capturedscoreboard = config.getStringList("settings.scoreboards.captured");
 		cappingscoreboard = config.getStringList("settings.scoreboards.capping");
 		scorestart = config.getInt("settings.scoreboards.score start");
@@ -242,7 +242,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 								|| i.contains("{TIME_LEFT}") || i.contains("{FLAG}") || i.contains("{NEXT_KOTH_TIME}") || i.contains("{CAPTURED_BY}"))
 							i = null;
 					}
-					if(i != null) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', i));
+					if(i != null) sender.sendMessage(colorize(i));
 				}
 			}
 		}
@@ -316,7 +316,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			for(String string : m) {
 				if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
 				if(string.contains("{TIME}")) string = string.replace("{TIME}", t);
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+				player.sendMessage(colorize(string));
 			}
 		}
 	}
@@ -357,7 +357,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 					for(Player player : center.getWorld().getPlayers()) {
 						for(String string : this.captured) {
 							if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-							player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+							player.sendMessage(colorize(string));
 						}
 					}
 					item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
@@ -406,7 +406,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			obj.setDisplaySlot(displaySlot);
 			final String dis = Double.toString(player.getLocation().distance(center)).split("\\.")[0];
 			for(int i = 0; i < liststring.size(); i++) {
-				String score = ChatColor.translateAlternateColorCodes('&', liststring.get(i));
+				String score = colorize(liststring.get(i));
 				if(score.contains("{DISTANCE}")) score = score.replace("{DISTANCE}", dis);
 				if(score.contains("{TIME}")) score = score.replace("{TIME}", time);
 				if(score.contains("{PLAYER}")) score = score.replace("{PLAYER}", closestPlayerToKOTH);
@@ -441,7 +441,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				if(!player.isOp()) {
 					event.setCancelled(true);
 				} else {
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l(!)&r &eSince you're OP, the command has been executed."));
+					player.sendMessage(colorize("&e&l(!)&r &eSince you're OP, the command has been executed."));
 				}
 			}
 		}
@@ -499,7 +499,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 							sendStringListMessage(p, a, null);
 						}
 					} else  {
-						string = ChatColor.translateAlternateColorCodes('&', string);
+						string = colorize(string);
 						for(Player p : online) p.sendMessage(string);
 					}
 				}

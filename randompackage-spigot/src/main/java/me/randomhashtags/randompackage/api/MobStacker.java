@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addon.obj.StackedEntity;
 import me.randomhashtags.randompackage.attribute.DepleteStackSize;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.addon.obj.StackedEntity;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -53,7 +52,7 @@ public class MobStacker extends RPFeature {
         customNames = new HashMap<>();
         lastDamager = new HashMap<>();
 
-        defaultName = ChatColor.translateAlternateColorCodes('&', config.getString("names.default"));
+        defaultName = colorize(config.getString("names.default"));
         for(String s : config.getStringList("settings.stackable")) {
             stackable.add(EntityType.valueOf(s.toUpperCase()));
         }

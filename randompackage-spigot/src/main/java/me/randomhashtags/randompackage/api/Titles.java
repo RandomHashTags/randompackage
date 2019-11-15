@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileTitle;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -67,10 +66,10 @@ public class Titles extends RPFeature implements CommandExecutor {
 		for(String s : config.getStringList("titles")) {
 			new FileTitle(s);
 		}
-		selftitle = ChatColor.translateAlternateColorCodes('&', config.getString("gui.self title"));
-		//othertitle = ChatColor.translateAlternateColorCodes('&', config.getString("gui.other-title"));
-		chatformat = ChatColor.translateAlternateColorCodes('&', config.getString("chat.format"));
-		tabformat = ChatColor.translateAlternateColorCodes('&', config.getString("tab.format"));
+		selftitle = colorize(config.getString("gui.self title"));
+		//othertitle = colorize(config.getString("gui.other-title"));
+		chatformat = colorize(config.getString("chat.format"));
+		tabformat = colorize(config.getString("tab.format"));
 		FileTitle.titleChatFormat = chatformat;
 		FileTitle.titleTabFormat = tabformat;
  		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (titles != null ? titles.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -93,8 +92,8 @@ public class Titles extends RPFeature implements CommandExecutor {
 				final boolean has = pdata.getTitles().contains(T);
 				final List<String> m = config.getStringList("messages." + (has ? "already own" : "redeem"));
 				for(String s : m) {
-					s = s.replace("{TITLE}", ChatColor.translateAlternateColorCodes('&', T.getIdentifier()));
-					player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+					s = s.replace("{TITLE}", colorize(T.getIdentifier()));
+					player.sendMessage(colorize(s));
 				}
 				if(!has) {
 					pdata.addTitle(T);
@@ -124,7 +123,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 			} else if(titles.size() > Z) {
 				final String q = (a != null && a.equals(titles.get(Z).getIdentifier()) ? "un" : "") + "equip";
 				final List<String> s = config.getStringList("messages." + q);
-				for(String h : s) player.sendMessage(ChatColor.translateAlternateColorCodes('&', h.replace("{TITLE}", titles.get(Z).getIdentifier())));
+				for(String h : s) player.sendMessage(colorize(h.replace("{TITLE}", titles.get(Z).getIdentifier())));
 				pdata.setActiveTitle(q.equals("unequip") ? null : titles.get(Z));
 				update(player, pdata);
 			}

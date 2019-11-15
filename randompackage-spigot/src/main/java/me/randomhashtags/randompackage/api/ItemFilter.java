@@ -75,12 +75,12 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         categoryTitles = new HashMap<>();
 
         addedLore = colorizeListString(config.getStringList("settings.categories added lore"));
-        enablePrefix = ChatColor.translateAlternateColorCodes('&', config.getString("settings.enabled prefix"));
+        enablePrefix = colorize(config.getString("settings.enabled prefix"));
         enable = colorizeListString(config.getStringList("settings.enabled lore"));
-        disabledPrefix = ChatColor.translateAlternateColorCodes('&', config.getString("settings.disabled prefix"));
+        disabledPrefix = colorize(config.getString("settings.disabled prefix"));
         disable = colorizeListString(config.getStringList("settings.disabled lore"));
 
-        gui = new UInventory(null, config.getInt("categories.size"), ChatColor.translateAlternateColorCodes('&', config.getString("categories.title")));
+        gui = new UInventory(null, config.getInt("categories.size"), colorize(config.getString("categories.title")));
         final Inventory gi = gui.getInventory();
         for(String s : config.getConfigurationSection("categories").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size")) {

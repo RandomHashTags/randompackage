@@ -46,26 +46,28 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		final FileConfiguration f = randompackage.getConfig();
-		bragDisplay = ChatColor.translateAlternateColorCodes('&', f.getString("chat cmds.brag.display"));
-		itemDisplay = ChatColor.translateAlternateColorCodes('&', f.getString("chat cmds.item.display"));
+		bragDisplay = colorize(f.getString("chat cmds.brag.display"));
+		itemDisplay = colorize(f.getString("chat cmds.item.display"));
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
 		chatformat = randompackage.getConfig().getString("chat cmds.format");
 		sendConsoleMessage("&6[RandomPackage] &aLoaded ChatEvents &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		for(UUID id : viewingBrag) Bukkit.getPlayer(id).closeInventory();
+		for(UUID id : viewingBrag) {
+			Bukkit.getPlayer(id).closeInventory();
+		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
-		final String message = ChatColor.translateAlternateColorCodes('&', event.getMessage());
+		final String message = colorize(event.getMessage());
 		final boolean brag = message.contains("[brag]"), item = message.contains("[item]");
 		if(brag || item) {
 			final Player player = event.getPlayer();
 			final List<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
 
 			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-			final String format = ChatColor.translateAlternateColorCodes('&', chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			final String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", message.split("\\[").length > 0 ? message.split("\\[")[0] : "")), suffix = new TextComponent(message.split("]").length > 1 ? message.split("]")[1] : "");
 			event.setCancelled(true);
 			if(brag) {
@@ -90,7 +92,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	public void sendBragMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
 		bragInventories.put(player.getUniqueId(), player.getInventory());
 		final TextComponent m = new TextComponent(message);
-		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
+		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
 		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId().toString()));
 		for(Player p : recipients) {
 			send(player, p, prefix, m, suffix);
@@ -123,7 +125,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
             hover = hover.replace(s, b.toString());
         }
         TextComponent m = new TextComponent(message);
-	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', hover)).create()));
+	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(hover)).create()));
 	    player.spigot().sendMessage(m);
     }
 	

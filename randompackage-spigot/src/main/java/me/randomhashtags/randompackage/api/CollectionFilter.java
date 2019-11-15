@@ -63,7 +63,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                             setFilter(player, q, defaultType);
                             break;
                         case "all":
-                            setFilter(player, q, ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all")));
+                            setFilter(player, q, colorize(config.getString("collection chests.chest.filter types.all")));
                             break;
                         default:
                             if(args.length == 0) {
@@ -99,11 +99,11 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         editingfilter = new HashMap<>();
 
         collectionchest = d(config, "collection chests.chest");
-        allType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.all"));
-        defaultType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.default"));
-        itemType = ChatColor.translateAlternateColorCodes('&', config.getString("collection chests.chest.filter types.item"));
+        allType = colorize(config.getString("collection chests.chest.filter types.all"));
+        defaultType = colorize(config.getString("collection chests.chest.filter types.default"));
+        itemType = colorize(config.getString("collection chests.chest.filter types.item"));
 
-        collectionchestgui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        collectionchestgui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory cci = collectionchestgui.getInventory();
         final ItemStack background = d(config, "gui.background");
         for(int i = 0; i < collectionchestgui.getSize(); i++) {
@@ -213,7 +213,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             final String f = u == null ? defaultType : toMaterial(u.getMaterial().name(), false);
             for(String s : config.getStringList("messages.set")) {
                 if(s.contains("{ITEM}")) s = s.replace("{ITEM}", f);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                player.sendMessage(colorize(s));
             }
         }
     }
@@ -275,7 +275,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(collectionchestgui.getInventory().getContents());
         player.updateInventory();
-        final String selected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.selected.prefix")), notselected = ChatColor.translateAlternateColorCodes('&', config.getString("gui.not selected.prefix"));
+        final String selected = colorize(config.getString("gui.selected.prefix")), notselected = colorize(config.getString("gui.not selected.prefix"));
         final boolean selectedEnchanted = config.getBoolean("gui.selected.enchanted"), notselectedEnchanted = config.getBoolean("gui.not selected.enchanted");
         final CollectionChest cc = CollectionChest.valueOf(clickedblock);
         final UMaterial filter = cc != null ? cc.getFilter() : getFiltered(player.getItemInHand());
@@ -292,7 +292,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 itemMeta.setDisplayName(itemMeta.getDisplayName() + q);
                 lore.clear();
                 if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                for(String r : config.getStringList("gui." + (sel ? "selected" : "not selected") + ".added lore")) lore.add(ChatColor.translateAlternateColorCodes('&', r));
+                for(String r : config.getStringList("gui." + (sel ? "selected" : "not selected") + ".added lore")) lore.add(colorize(r));
                 if(sel && selectedEnchanted || !sel && notselectedEnchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
@@ -322,7 +322,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final String m = toMaterial(picksup.get(rawslot).name(), false);
         for(int i = 0; i < l.size(); i++) {
             if(i == filtertypeSlot) {
-                lore.add(ChatColor.translateAlternateColorCodes('&', l.get(i).replace("{FILTER_TYPE}", m)));
+                lore.add(colorize(l.get(i).replace("{FILTER_TYPE}", m)));
             } else {
                 lore.add(l.get(i));
             }
@@ -333,7 +333,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         for(String string : config.getStringList("messages.updated cc")) {
             if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", m);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+            player.sendMessage(colorize(string));
         }
         if(player != null) player.updateInventory();
     }
@@ -345,7 +345,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         lore.clear();
         for(String string : config.getStringList("messages.set")) {
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", filter);
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+            player.sendMessage(colorize(string));
         }
     }
 

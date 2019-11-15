@@ -73,7 +73,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
                 if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
                 if(s.contains("{TARGET}")) s = s.replace("{TARGET}", Bukkit.getOfflinePlayer(args[0]).getName());
-                if(!s.equals("{RICHER}")) sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                if(!s.equals("{RICHER}")) sender.sendMessage(colorize(s));
             }
         } else if(player != null) {
             if(n.equals("bless") && hasPermission(player, "RandomPackage.bless", true)) {
@@ -114,7 +114,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     for(String string : config.getStringList(m)) {
                         if(string.contains("{VALUE}")) string = string.replace("{VALUE}", formattedAmount);
                         if(string.contains("{BALANCE}")) string = string.replace("{BALANCE}", formatDouble(eco.getBalance(player)));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                        player.sendMessage(colorize(string));
                     }
                 }
             } else if(n.equals("xpbottle") && hasPermission(sender, "RandomPackage.xpbottle", true)) {
@@ -181,7 +181,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             i++;
         }
 
-        confirm = ChatColor.translateAlternateColorCodes('&', config.getString("confirm.title"));
+        confirm = colorize(config.getString("confirm.title"));
         combineores = new ArrayList<>();
         for(String string : config.getStringList("combine.combine ores")) combineores.add(string.toUpperCase());
         delayed = new HashMap<>();
@@ -225,7 +225,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
                 for(String s : config.getStringList("xpbottle.teleport cancelled"))
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    player.sendMessage(colorize(s));
                 tel.setCancelled(true);
                 scheduler.cancelTask(events.get(player).getTask());
                 events.remove(player);
@@ -263,7 +263,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
                 for(String s : config.getStringList("xpbottle.cannot teleport")) {
                     if(s.contains("{TIME}")) s = s.replace("{TIME}", remaining);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                    player.sendMessage(colorize(s));
                 }
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
@@ -290,7 +290,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     events.put(player, e);
                     for(String s : config.getStringList("xpbottle.pending teleport")) {
                         if(s.contains("{SECS}")) s = s.replace("{SECS}", roundDoubleString(e.getDelay(), 3));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+                        player.sendMessage(colorize(s));
                     }
                 } else {
                     scheduler.cancelTask(e.getTask());
@@ -380,14 +380,14 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     amount = (getTotalAmount(inventory, UMaterial.match(material.name())) / 9) * 9;
                     if(amount != 0) {
                         amountb = amount / 9;
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', f.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", material.name()).replace("{AMOUNT_BLOCK}", "" + amountb).replace("{ITEM_BLOCK}", material.name().replace("ORE", "BLOCK"))));
+                        player.sendMessage(colorize(f.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", material.name()).replace("{AMOUNT_BLOCK}", "" + amountb).replace("{ITEM_BLOCK}", material.name().replace("ORE", "BLOCK"))));
                         for(int z = 1; z <= amount; z++) inventory.removeItem(new ItemStack(material, 1, (byte) 0));
                         inventory.addItem(new ItemStack(block, amountb));
                         if(chest != null) chest.update(); else player.updateInventory();
                     }
                 }
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', string));
+                player.sendMessage(colorize(string));
             }
         }
     }

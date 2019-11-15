@@ -8,13 +8,11 @@ import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileKitEvolution;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -62,8 +60,8 @@ public class KitsEvolution extends Kits {
         vkitFallenHeroBundle = d(config, "vkits.items.fallen hero bundle");
         givedpitem.items.put("vkitfallenherobundle", vkitFallenHeroBundle);
         cooldown = d(config, "vkits.items.cooldown");
-        vkit = new UInventory(null, config.getInt("vkits.gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("vkits.gui.title")));
-        preview = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("vkits.items.preview.title")));
+        vkit = new UInventory(null, config.getInt("vkits.gui.size"), colorize(config.getString("vkits.gui.title")));
+        preview = new UInventory(null, 54, colorize(config.getString("vkits.items.preview.title")));
         omniGem = d(config, "vkits.items.omni gem");
         previewBackground = d(config, "vkits.items.preview");
         locked = d(config, "vkits.permissions.locked");
@@ -164,7 +162,7 @@ public class KitsEvolution extends Kits {
                             lore.addAll(getPermissionsPreview());
                         } else {
                             for(String s : locked.getItemMeta().getLore())
-                                lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                                lore.add(colorize(s));
                         }
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
@@ -261,9 +259,9 @@ public class KitsEvolution extends Kits {
                     final String name = vkit.getItem().getItemMeta().getDisplayName();
                     pdata.getKitLevels().put(vkit, newlvl);
                     for(String s : getUpgradeMsg())
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
+                        player.sendMessage(colorize(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
                     for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
-                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+                        Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
                 }
             }
         }
@@ -329,9 +327,9 @@ public class KitsEvolution extends Kits {
                     }
                     removeItem(player, is, 1);
                     for(String s : getUpgradeMsg())
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
+                        player.sendMessage(colorize(s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
                     for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
-                        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
+                        Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
                 }
                 player.updateInventory();
             } else if(is.isSimilar(vkitFallenHeroBundle)) {

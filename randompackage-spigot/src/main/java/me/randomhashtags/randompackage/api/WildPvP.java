@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.obj.PvPCountdownMatch;
 import me.randomhashtags.randompackage.addon.obj.PvPMatch;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
@@ -80,7 +80,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             blockedCommands.add(s.toLowerCase());
         }
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         enterQueue = d(config, "gui.enter queue");
         request = d(config, "request");
         gui.getInventory().setItem(config.getInt("gui.enter queue.slot"), enterQueue);
@@ -91,7 +91,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         countdown = new HashMap<>();
         viewing = new ArrayList<>();
 
-        viewInventory = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("view inventory.title")));
+        viewInventory = new UInventory(null, 54, colorize(config.getString("view inventory.title")));
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Wild PvP &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }

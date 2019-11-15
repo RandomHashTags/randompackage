@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -72,7 +71,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         }
 
         config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "strongholds", "_settings.yml"));
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
 
         for(File f : new File(rpd + separator + "strongholds").listFiles()) {

@@ -71,7 +71,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         viewing = new ArrayList<>();
         tasks = new HashMap<>();
 
-        final String title = ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")), type = config.getString("gui.type");
+        final String title = colorize(config.getString("gui.title")), type = config.getString("gui.type");
         final int size = config.getInt("gui.size");
         if(type != null) {
             final InventoryType i = InventoryType.valueOf(type);

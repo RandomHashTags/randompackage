@@ -1,17 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileArmorSet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -56,7 +54,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		equipmentLootbox = d(config, "items.equipment lootbox");
 		crystal = d(config, "items.crystal");
 		heroicUpgrade = d(config, "items.heroic upgrade");
-		crystalAddedLore = ChatColor.translateAlternateColorCodes('&', config.getString("items.crystal.applied lore"));
+		crystalAddedLore = colorize(config.getString("items.crystal.applied lore"));
 
 		givedpitem.items.put("equipmentlootbox", equipmentLootbox);
 
@@ -204,7 +202,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 					final String p = player.getName(), it = is.getItemMeta().getDisplayName();
 					for(String s : config.getStringList("messages.receive loot from Equipment Lootbox")) {
-						Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", p).replace("{ITEM}", it)));
 					}
 				}
 			} else if(valueOfArmorCrystal(i) != null) {

@@ -7,7 +7,10 @@ import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.FileConquestChest;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -74,7 +77,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
 
         for(String s : config.getConfigurationSection("bosses").getKeys(false)) {
             final String p = "bosses." + s + ".";
-            new ConquestMob(s, config.getString(p + "type").toUpperCase(), ChatColor.translateAlternateColorCodes('&', config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
+            new ConquestMob(s, config.getString(p + "type").toUpperCase(), colorize(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
         for(File f : new File(rpd + separator + "conquests").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {

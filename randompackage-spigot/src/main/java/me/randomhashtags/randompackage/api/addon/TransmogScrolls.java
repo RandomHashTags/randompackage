@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.api.addon;
 
+import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
-import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.PathTransmogScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;

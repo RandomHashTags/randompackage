@@ -50,7 +50,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			if(a.equals("help")) viewHelp(sender);
 			else if(a.equals("spawn") || a.equals("summon") || a.equals("begin") || a.equals("start")) {
 				if(hasPermission(sender, "RandomPackage.envoy.start", true))
-					spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
+					spawnEnvoy(colorize(config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
 			} else if(a.equals("stop") || a.equals("end")) {
 				if(hasPermission(sender, "RandomPackage.envoy.stop", true)) stopAllEnvoys();
             } else if(player != null && a.equals("preset")) {
@@ -100,7 +100,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 		defaultTier = config.getString("settings.default tier");
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
-		final String defaul = ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type"));
+		final String defaul = colorize(config.getString("messages.default summon type"));
 
 		final long next = getRandomTime();
 		nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
@@ -172,7 +172,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			event.setCancelled(true);
 			player.updateInventory();
 			removeItem(player, i, 1);
-			spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.item summon type").replace("{PLAYER}", player.getName())), false, type);
+			spawnEnvoy(colorize(config.getString("messages.item summon type").replace("{PLAYER}", player.getName())), false, type);
 		} else if(event.getClickedBlock() != null) {
 			final Location l = event.getClickedBlock().getLocation();
 			final LivingEnvoyCrate c = LivingEnvoyCrate.valueOf(l);
@@ -277,13 +277,13 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
 		for(String s : config.getStringList("messages.broadcast")) {
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{SUMMON_TYPE}", summonType)));
+			Bukkit.broadcastMessage(colorize(s.replace("{SUMMON_TYPE}", summonType)));
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
 		if(natural) {
 			final long next = getRandomTime();
 			nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(ChatColor.translateAlternateColorCodes('&', config.getString("messages.default summon type")), true, where), next);
+			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(colorize(config.getString("messages.default summon type")), true, where), next);
 		}
 	}
 	private int getRandomTime() {

@@ -10,7 +10,6 @@ import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -103,18 +102,18 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         tax = config.getDouble("wager.tax");
         wagerAvailable = colorizeListString(config.getStringList("wager.status.can afford"));
         wagerUnavailable = colorizeListString(config.getStringList("wager.status.cannot afford"));
-        wagerName = ChatColor.translateAlternateColorCodes('&', config.getString("wager.name"));
+        wagerName = colorize(config.getString("wager.name"));
         wagerLore = colorizeListString(config.getStringList("wager.lore"));
 
-        yourSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.your selection"));
-        opponentSelection = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.opponent selection"));
+        yourSelection = colorize(config.getString("challenge.your selection"));
+        opponentSelection = colorize(config.getString("challenge.opponent selection"));
         winnerLore = colorizeListString(config.getStringList("challenge.winner.lore"));
         countdown = d(config, "challenge.countdown");
         rollingLore = colorizeListString(config.getStringList("challenge.rolling.lore"));
 
-        gui = new UInventory(null, 54, ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
-        options = new UInventory(null, config.getInt("gui.options.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.options.title")));
-        challenge = new UInventory(null, config.getInt("challenge.size"), ChatColor.translateAlternateColorCodes('&', config.getString("challenge.title")));
+        gui = new UInventory(null, 54, colorize(config.getString("gui.title")));
+        options = new UInventory(null, config.getInt("gui.options.size"), colorize(config.getString("gui.options.title")));
+        challenge = new UInventory(null, config.getInt("challenge.size"), colorize(config.getString("challenge.title")));
         countdownStart = config.getInt("gui.options.countdown");
         addedlore = colorizeListString(config.getStringList("gui.options.added lore"));
         optionz = new LinkedHashMap<>();
@@ -128,7 +127,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                 itemMeta = dis.getItemMeta();
                 itemMeta.setLore(addedlore);
                 dis.setItemMeta(itemMeta);
-                final CoinFlipOption o = new CoinFlipOption(s, slot, ChatColor.translateAlternateColorCodes('&', config.getString(p + "chosen")), dis, d(config, p + "selection"), ChatColor.translateAlternateColorCodes('&', config.getString(p + "selection.color")));
+                final CoinFlipOption o = new CoinFlipOption(s, slot, colorize(config.getString(p + "chosen")), dis, d(config, p + "selection"), colorize(config.getString(p + "selection.color")));
                 optionz.put(slot, o);
                 oi.setItem(slot, dis);
             }
@@ -400,7 +399,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             active.put(p, m);
         }
 
-        final String rollingName = ChatColor.translateAlternateColorCodes('&', config.getString("challenge.rolling.name"));
+        final String rollingName = colorize(config.getString("challenge.rolling.name"));
         final List<Integer> t = tasks.get(m);
         for(int i = 1; i <= countdownStart; i++) {
             final int I = i;
@@ -491,7 +490,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         final String winnerName = winner.getName(), color = winningOption.selectionColor, Lcolor = losingOption.selectionColor;
         eco.depositPlayer(winner, total.doubleValue()-taxed.doubleValue());
         item = winningOption.appear(); itemMeta = item.getItemMeta(); lore.clear();
-        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("challenge.winner.name")).replace("{COLOR}", color).replace("{PLAYER}", winnerName));
+        itemMeta.setDisplayName(colorize(config.getString("challenge.winner.name")).replace("{COLOR}", color).replace("{PLAYER}", winnerName));
         for(String s : winnerLore) {
             lore.add(s.replace("{PLAYER}", winnerName).replace("{COLOR}", color));
         }

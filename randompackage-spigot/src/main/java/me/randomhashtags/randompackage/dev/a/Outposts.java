@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.addon.Outpost;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -67,11 +66,11 @@ public class Outposts extends RPFeature implements CommandExecutor {
 
         config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "outposts", "_settings.yml"));
 
-        gui = new UInventory(null, config.getInt("gui.size"), ChatColor.translateAlternateColorCodes('&', config.getString("gui.title")));
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
         statuses = new HashMap<>();
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
-            statuses.put(s.toUpperCase().replace(" ", "_"), ChatColor.translateAlternateColorCodes('&', config.getString("status." + s)));
+            statuses.put(s.toUpperCase().replace(" ", "_"), colorize(config.getString("status." + s)));
         }
         for(File f : new File(rpd + separator + "outposts").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
@@ -141,7 +140,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             try {
                 player.teleport(outpost.getWarpLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
             } catch(Exception e) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cThis Outpost's world doesn't exist!"));
+                player.sendMessage(colorize("&6[RandomPackage] &cThis Outpost's world doesn't exist!"));
             }
         }
     }

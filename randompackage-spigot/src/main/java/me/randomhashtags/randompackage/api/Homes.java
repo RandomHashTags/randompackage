@@ -1,12 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,7 +59,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		viewingHomes = new ArrayList<>();
 		editingIcons = new HashMap<>();
 
-		editicon = new UInventory(null, config.getInt("edit icon.size"), ChatColor.translateAlternateColorCodes('&', config.getString("edit icon.title")));
+		editicon = new UInventory(null, config.getInt("edit icon.size"), colorize(config.getString("edit icon.title")));
 		final Inventory eii = editicon.getInventory();
 		final List<String> addedlore = colorizeListString(config.getStringList("edit icon.added lore"));
 		for(String s : config.getConfigurationSection("edit icon").getKeys(false)) {
@@ -115,9 +118,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 		if(hasPermission(opener, "RandomPackage.home", true)) {
 			viewingHomes.add(opener);
 			final List<Home> homes = target.getHomes();
-			final String name = ChatColor.translateAlternateColorCodes('&', config.getString("menu.name"));
+			final String name = colorize(config.getString("menu.name"));
 			final List<String> l = config.getStringList("menu.lore");
-			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, ChatColor.translateAlternateColorCodes('&', config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(target.getMaxHomes())))));
+			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(target.getMaxHomes())))));
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			for(Home h : homes) {
 				final Location lo = h.location;
@@ -125,7 +128,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 				final double x = round(lo.getX(), 1), y = round(lo.getY(), 1), z = round(lo.getZ(), 1);
 				item = h.icon.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
 				itemMeta.setDisplayName(name.replace("{HOME}", h.name));
-				for(String s : l) lore.add(ChatColor.translateAlternateColorCodes('&', s.replace("{WORLD}", w).replace("{X}", Double.toString(x)).replace("{Y}", Double.toString(y)).replace("{Z}", Double.toString(z))));
+				for(String s : l) lore.add(colorize(s.replace("{WORLD}", w).replace("{X}", Double.toString(x)).replace("{Y}", Double.toString(y)).replace("{Z}", Double.toString(z))));
 				itemMeta.setLore(lore); lore.clear();
 				item.setItemMeta(itemMeta);
 				top.setItem(top.firstEmpty(), item);

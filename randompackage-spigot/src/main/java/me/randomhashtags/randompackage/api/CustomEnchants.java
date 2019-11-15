@@ -17,7 +17,6 @@ import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.addon.FileCustomEnchant;
 import me.randomhashtags.randompackage.util.addon.FileEnchantRarity;
@@ -83,7 +82,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
         if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true)) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', disabled.keySet().toString()));
+            sender.sendMessage(colorize(disabled.keySet().toString()));
         } else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
             if(args.length == 0)
                 viewEnchants(sender, 1);
@@ -125,9 +124,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         enchanterpurchase = new HashMap<>();
         invAccepting = new ArrayList<>();
 
-        alchemist = new UInventory(null, 27, ChatColor.translateAlternateColorCodes('&', config.getString("alchemist.title")));
-        enchanter = new UInventory(null, config.getInt("enchanter.size"), ChatColor.translateAlternateColorCodes('&', config.getString("enchanter.title")));
-        tinkerer = new UInventory(null, config.getInt("tinkerer.size"), ChatColor.translateAlternateColorCodes('&', config.getString("tinkerer.title")));
+        alchemist = new UInventory(null, 27, colorize(config.getString("alchemist.title")));
+        enchanter = new UInventory(null, config.getInt("enchanter.size"), colorize(config.getString("enchanter.title")));
+        tinkerer = new UInventory(null, config.getInt("tinkerer.size"), colorize(config.getString("tinkerer.title")));
         setupInventory(alchemist);
         setupInventory(tinkerer);
 
@@ -397,7 +396,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getIdentifier()));
                         replacements.put("{DESC}", ce.getLore());
-                        final String msg = ChatColor.translateAlternateColorCodes('&', format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
+                        final String msg = colorize(format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {
                             lore.clear();
                             lore.addAll(L);
@@ -410,7 +409,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     }
                 }
             } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{MAX_PAGE}", max).replace("{PAGE}", p)));
+                sender.sendMessage(colorize(s.replace("{MAX_PAGE}", max).replace("{PAGE}", p)));
             }
         }
     }
@@ -563,16 +562,16 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final List<String> l = enchant.getLore();
         for(String r : rarity.getLoreFormat()) {
             if(r.equals("{SUCCESS}")) {
-                if(success != -1) lore.add(ChatColor.translateAlternateColorCodes('&', S.replace("{PERCENT}", Integer.toString(success))));
+                if(success != -1) lore.add(colorize(S.replace("{PERCENT}", Integer.toString(success))));
             } else if(r.equals("{DESTROY}")) {
-                if(destroy != -1) lore.add(ChatColor.translateAlternateColorCodes('&', D.replace("{PERCENT}", Integer.toString(destroy))));
+                if(destroy != -1) lore.add(colorize(D.replace("{PERCENT}", Integer.toString(destroy))));
             } else if(r.equals("{ENCHANT_LORE}")) {
                 lore.addAll(l);
             } else if(r.equals("{ENCHANT_TYPE}") && showEnchantType) {
                 final String path = enchant.getAppliesTo().toString().toLowerCase().replace(",", ";").replace("[", "").replace("]", "").replaceAll("\\p{Z}", "");
-                lore.add(ChatColor.translateAlternateColorCodes('&', config.getString("enchant types." + path)));
+                lore.add(colorize(config.getString("enchant types." + path)));
             } else if(showOtherLore) {
-                lore.add(ChatColor.translateAlternateColorCodes('&', r));
+                lore.add(colorize(r));
             }
         }
         itemMeta.setLore(lore); lore.clear();
@@ -599,7 +598,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
                     if(s.equals("{ENCHANT_LORE}")) lore.addAll(enchant.getLore());
                     if(s.equals("{ENCHANT_TYPE}")) s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
-                    if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                    if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(colorize(s));
                 }
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
@@ -738,7 +737,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 spawnFirework(rarity.getFirework(), player.getLocation());
                 player.updateInventory();
                 for(String s : rarity.getRevealedEnchantMsg()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', s.replace("{ENCHANT}", displayname)));
+                    player.sendMessage(colorize(s.replace("{ENCHANT}", displayname)));
                 }
             }
         } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {

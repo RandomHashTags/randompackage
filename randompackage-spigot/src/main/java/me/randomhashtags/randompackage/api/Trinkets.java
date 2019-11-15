@@ -1,10 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Trinket;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.addon.FileTrinket;
 import me.randomhashtags.randompackage.util.universal.UMaterial;

@@ -43,7 +43,7 @@ public class RegionalAPI extends UVersion {
         trySupportingEpicSkyblock();
     }
     public void trySupportingFactions() {
-        factionsUUID = isTrue( "supported plugins.regional.FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
+        factionsUUID = isTrue("supported plugins.regional.FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
         if(factionsUUID) {
             factions = FactionsUUID.getFactionsUUID();
             factions.enable();

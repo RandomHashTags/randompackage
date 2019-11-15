@@ -5,11 +5,9 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.addon.PathFireball;
 import me.randomhashtags.randompackage.util.addon.PathMagicDust;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -110,7 +108,7 @@ public class Fireballs extends CustomEnchants {
                             else if(r + percent > 100) { r = 50; percent = 50; }
                             string = SUCCESS.replace("{PERCENT}", "" + (r + percent));
                         }
-                        lore.add(ChatColor.translateAlternateColorCodes('&', string));
+                        lore.add(colorize(string));
                     }
                     itemMeta.setLore(lore); lore.clear();
                     //playSuccess((Player) event.getWhoClicked());
