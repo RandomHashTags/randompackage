@@ -44,7 +44,6 @@ public class KitsGlobal extends Kits {
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_GLOBAL"; }
-    protected RPFeature getFeature() { return getKitsGlobal(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitGlobal.class; }
     public String getPath() { return "gkits"; }

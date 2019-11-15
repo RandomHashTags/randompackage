@@ -36,7 +36,6 @@ public class EACoreListener extends EventExecutor implements Listener {
     private static List<EventAttributeListener> eventListeners;
 
     public String getIdentifier() { return "EVENT_ATTRIBUTE_CORE_LISTENER"; }
-    protected RPFeature getFeature() { return getEventAttributeListener(); }
 
     public void load() {
         eventListeners = new ArrayList<>();

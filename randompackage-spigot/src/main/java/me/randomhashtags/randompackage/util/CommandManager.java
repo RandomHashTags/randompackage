@@ -33,7 +33,6 @@ public final class CommandManager extends Reflect {
     private ConsoleCommandSender console;
 
     public String getIdentifier() { return "COMMAND_MANAGER"; }
-    protected RPFeature getFeature() { return getCommandManager(randompackage); }
     private CommandManager() {
         actualCmds = new HashMap<>();
         try {

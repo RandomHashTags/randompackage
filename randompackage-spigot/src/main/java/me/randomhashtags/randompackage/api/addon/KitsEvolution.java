@@ -45,7 +45,6 @@ public class KitsEvolution extends Kits {
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_EVOLUTION"; }
-    protected RPFeature getFeature() { return getKitsEvolution(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitEvolution.class; }
     public String getPath() { return "vkits"; }

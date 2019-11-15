@@ -36,7 +36,6 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "SOUL_TRACKERS"; }
-    protected RPFeature getFeature() { return getSoulTrackers(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.splitsouls", true)) {

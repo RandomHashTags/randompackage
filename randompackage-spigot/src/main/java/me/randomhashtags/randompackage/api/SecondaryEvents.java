@@ -51,7 +51,6 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private HashMap<String, Double> teleportationDelay, teleportMinDelay, teleportationVariable;
 
     public String getIdentifier() { return "SECONDARY_EVENTS"; }
-    protected RPFeature getFeature() { return getSecondaryEvents(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();

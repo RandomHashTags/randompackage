@@ -52,7 +52,6 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     private int returnToQuestsSlot;
 
     public String getIdentifier() { return "PLAYER_QUESTS"; }
-    protected RPFeature getFeature() { return getPlayerQuests(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;

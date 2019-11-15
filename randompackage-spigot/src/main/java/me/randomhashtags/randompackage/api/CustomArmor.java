@@ -47,7 +47,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	private List<Player> inEquipmentLootbox;
 
 	public String getIdentifier() { return "CUSTOM_ARMOR"; }
-	protected RPFeature getFeature() { return getCustomArmor(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save("custom armor", "_settings.yml");

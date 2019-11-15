@@ -46,7 +46,6 @@ public class SpawnerStacking extends RPFeature {
     private List<String> addedSpawner, viewAmount, onlyStackUpToMax;
 
     public String getIdentifier() { return "SPAWNER_STACKING"; }
-    protected RPFeature getFeature() { return getSpawnerStacking(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "spawner stacking.yml");

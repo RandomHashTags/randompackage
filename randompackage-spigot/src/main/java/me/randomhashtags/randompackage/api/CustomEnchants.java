@@ -79,7 +79,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private HashMap<CustomEnchant, Integer> timedEnchants;
 
     public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
-    protected RPFeature getFeature() { return getCustomEnchants(); }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();

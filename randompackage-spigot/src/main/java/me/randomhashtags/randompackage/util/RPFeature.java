@@ -67,10 +67,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             isEnabled = true;
             load();
             if(isEnabled) {
-                final RPFeature f = getFeature();
-                if(f != null) {
-                    pluginmanager.registerEvents(f, randompackage);
-                }
+                pluginmanager.registerEvents(this, randompackage);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,10 +79,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
             isEnabled = false;
             unload();
             if(!isEnabled) {
-                final RPFeature f = getFeature();
-                if(f != null) {
-                    HandlerList.unregisterAll(f);
-                }
+                HandlerList.unregisterAll(this);
                 sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
             }
         } catch (Exception e) {
@@ -101,7 +95,6 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
         mcmmoIsEnabled = false;
     }
 
-    protected abstract RPFeature getFeature();
     public abstract void load();
     public abstract void unload();
 

@@ -48,7 +48,6 @@ public class Masks extends CustomEnchants {
     private List<String> maskCanObtain;
 
     public String getIdentifier() { return "MASKS"; }
-    protected RPFeature getFeature() { return getMasks(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");

@@ -41,7 +41,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	private long nextNaturalEnvoy;
 
 	public String getIdentifier() { return "ENVOY"; }
-	protected RPFeature getFeature() { return getEnvoy(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;

@@ -23,7 +23,6 @@ public class Reputation extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "REPUTATION"; }
-    protected RPFeature getFeature() { return getReputation(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "reputation.yml");

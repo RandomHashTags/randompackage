@@ -43,7 +43,6 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     public HashMap<UUID, BigDecimal> ticketsSold, top, purchasing;
 
     public String getIdentifier() { return "JACKPOT"; }
-    protected RPFeature getFeature() { return getJackpot(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;

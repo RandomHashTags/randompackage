@@ -18,7 +18,6 @@ public class Vaults extends RPFeature implements CommandExecutor, Listener {
     }
 
     public String getIdentifier() { return "VAULTS"; }
-    protected RPFeature getFeature() { return getVaults(); }
 
     public void load() {
         final long started = System.currentTimeMillis();

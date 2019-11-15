@@ -62,7 +62,6 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private HashMap<AuctionedItem, Integer> task;
 
     public String getIdentifier() { return "AUCTION_HOUSE"; }
-    protected RPFeature getFeature() { return getAuctionHouse(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final boolean i = player != null;

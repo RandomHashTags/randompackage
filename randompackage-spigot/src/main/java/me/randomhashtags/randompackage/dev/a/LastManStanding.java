@@ -29,7 +29,6 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     private int task;
 
     public String getIdentifier() { return "LAST_MAN_STANDING"; }
-    protected RPFeature getFeature() { return getLastManStanding(); }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final int l = args.length;
         if(l == 0 || l == 1 && args[0].equals("help")) viewHelp(sender);

@@ -28,10 +28,7 @@ public class RandomizationScrolls extends CustomEnchants {
         return instance;
     }
 
-    @Override
-    public String getIdentifier() { return "RANDOMIZATION_SCROLLS"; }
-    @Override
-    protected RPFeature getFeature() { return getRandomizationScrolls(); }
+    @Override public String getIdentifier() { return "RANDOMIZATION_SCROLLS"; }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

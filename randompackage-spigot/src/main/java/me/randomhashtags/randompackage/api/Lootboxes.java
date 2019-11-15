@@ -48,7 +48,6 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     private HashMap<Player, List<Integer>> tasks;
 
     public String getIdentifier() { return "LOOTBOXES"; }
-    protected RPFeature getFeature() { return getLootboxes(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {

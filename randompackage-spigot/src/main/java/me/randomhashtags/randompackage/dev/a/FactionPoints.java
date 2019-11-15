@@ -22,7 +22,6 @@ public class FactionPoints extends RPFeature {
     private HashMap<String, Integer> points;
 
     public String getIdentifier() { return "FACTION_POINTS"; }
-    protected RPFeature getFeature() { return getFactionPoints(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "faction points.yml");

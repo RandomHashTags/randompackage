@@ -36,7 +36,6 @@ public class KitsMastery extends Kits {
     private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
 
     public String getIdentifier() { return "KITS_MASTERY"; }
-    protected RPFeature getFeature() { return getKitsMastery(); }
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
     public Class<? extends CustomKit> getCustomKit() { return CustomKitMastery.class; }
     public String getPath() { return "mkits"; }

@@ -37,7 +37,6 @@ public class CustomExplosions extends RPFeature {
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
 
 	public String getIdentifier() { return "CUSTOM_EXPLOSIONS"; }
-	protected RPFeature getFeature() { return getCustomExplosions(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "custom explosions.yml");

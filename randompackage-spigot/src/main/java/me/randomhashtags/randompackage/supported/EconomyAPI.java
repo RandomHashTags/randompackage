@@ -12,7 +12,6 @@ public class EconomyAPI extends RPFeature {
     private boolean vault;
 
     public String getIdentifier() { return "ECONOMY_API"; }
-    protected RPFeature getFeature() { return getEconomyAPI(); }
     public void load() {
     }
     public void unload() {

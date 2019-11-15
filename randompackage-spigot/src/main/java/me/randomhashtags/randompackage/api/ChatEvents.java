@@ -43,7 +43,6 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	private List<UUID> viewingBrag;
 
 	public String getIdentifier() { return "CHAT_EVENTS"; }
-	protected RPFeature getFeature() { return getChatEvents(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		final FileConfiguration f = randompackage.getConfig();
@@ -130,9 +129,9 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	
 	private void send(Player sender, Player recipient, TextComponent prefix, TextComponent m, TextComponent suffix) {
 		final UUID u = sender.getUniqueId();
-		final String f = regions.getFactionTag(u);
+		final String tag = regions.getFactionTag(u);
 		TextComponent ftag = new TextComponent(prefix.toPlainText().contains("{F_TAG}") ?
-				prefix.toLegacyText().replace("{F_TAG}", f != null && !ChatColor.stripColor(f).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + f + " " : "")
+				prefix.toLegacyText().replace("{F_TAG}", tag != null && !ChatColor.stripColor(tag).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + tag + " " : "")
 			: "");
 		TextComponent p = ftag.toPlainText().equals("") ? prefix : ftag;
 		recipient.spigot().sendMessage(p, m, suffix);

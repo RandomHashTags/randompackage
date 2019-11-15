@@ -28,10 +28,7 @@ public class TransmogScrolls extends CustomEnchants {
         return instance;
     }
 
-    @Override
-    public String getIdentifier() { return "TRANSMOG_SCROLLS"; }
-    @Override
-    protected RPFeature getFeature() { return getTransmogScrolls(); }
+    @Override public String getIdentifier() { return "TRANSMOG_SCROLLS"; }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

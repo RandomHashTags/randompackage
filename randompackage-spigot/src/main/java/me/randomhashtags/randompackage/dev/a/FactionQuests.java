@@ -23,7 +23,6 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "FACTION_QUESTS"; }
-    protected RPFeature getFeature() { return getFactionQuests(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }

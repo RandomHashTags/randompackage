@@ -65,7 +65,6 @@ public class Factions extends RPFeature implements CommandExecutor {
     }
 
     public String getIdentifier() { return "FACTIONS"; }
-    protected RPFeature getFeature() { return getFactions(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Factions &e(took " + (System.currentTimeMillis()-started) + "ms)");

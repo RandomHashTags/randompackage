@@ -36,7 +36,6 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public BigDecimal maxfund, total;
 
 	public String getIdentifier() { return "FUND"; }
-	protected RPFeature getFeature() { return getFund(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(args.length == 0) {
 			view(sender);

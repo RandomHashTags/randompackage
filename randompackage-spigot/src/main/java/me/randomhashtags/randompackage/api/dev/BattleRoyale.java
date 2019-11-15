@@ -71,7 +71,6 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     }
 
     public final String getIdentifier() { return "BATTLE_ROYALE"; }
-    protected RPFeature getFeature() { return getBattleRoyale(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");

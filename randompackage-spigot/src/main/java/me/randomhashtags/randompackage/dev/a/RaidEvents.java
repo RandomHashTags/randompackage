@@ -38,7 +38,6 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
     }
 
     public String getIdentifier() { return "RAID_EVENT"; }
-    protected RPFeature getFeature() { return getRaidEvent(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "raid events.yml");

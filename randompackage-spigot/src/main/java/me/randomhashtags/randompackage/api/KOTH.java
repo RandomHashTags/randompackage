@@ -56,7 +56,6 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	public Player currentPlayerCapturing, previouscapturer;
 
 	public String getIdentifier() { return "KOTH"; }
-	protected RPFeature getFeature() { return getKOTH(); }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		switch (args.length) {

@@ -35,7 +35,6 @@ public final class MCMMOAPI extends Reflect {
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
 	public String getIdentifier() { return "MECHANIC_MCMMO"; }
-	protected RPFeature getFeature() { return getMCMMOAPI(); }
 	public void load() {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();

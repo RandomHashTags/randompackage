@@ -33,8 +33,6 @@ public class FatBuckets extends RPFeature implements RPItemStack {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "FAT_BUCKETS"; }
-    protected RPFeature getFeature() { return getFatBuckets(); }
-
     public void load() {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default fat buckets")) {

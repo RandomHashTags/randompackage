@@ -43,7 +43,6 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     private int captureTask;
 
     public String getIdentifier() { return "STRONGHOLDS"; }
-    protected RPFeature getFeature() { return getStrongholds(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;

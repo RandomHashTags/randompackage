@@ -13,7 +13,6 @@ public class WaterLavaMechanics extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "WATER/LAVA_MECHANICS"; }
-    protected RPFeature getFeature() { return getWaterLavaMechanics(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Water/Lava Mechanics &e(took " + (System.currentTimeMillis()-started) + "ms)");

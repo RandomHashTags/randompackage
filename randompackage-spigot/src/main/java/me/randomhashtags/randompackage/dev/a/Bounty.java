@@ -12,7 +12,6 @@ public class Bounty extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "BOUNTY"; }
-    protected RPFeature getFeature() { return getBounty(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Bounty &e(took " + (System.currentTimeMillis()-started) + "ms)");

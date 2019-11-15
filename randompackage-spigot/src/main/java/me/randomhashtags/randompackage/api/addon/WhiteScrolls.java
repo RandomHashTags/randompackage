@@ -24,7 +24,6 @@ public class WhiteScrolls extends RPFeature {
     }
 
     public String getIdentifier() { return "WHITE_SCROLLS"; }
-    protected RPFeature getFeature() { return getWhiteScrolls(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "white scrolls.yml");

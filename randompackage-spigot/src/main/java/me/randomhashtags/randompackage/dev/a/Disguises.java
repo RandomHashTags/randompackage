@@ -24,7 +24,6 @@ public class Disguises extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "DISGUISES"; }
-    protected RPFeature getFeature() { return getDisguises(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }

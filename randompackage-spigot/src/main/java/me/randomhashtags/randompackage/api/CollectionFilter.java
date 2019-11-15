@@ -51,7 +51,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     private HashMap<UUID, Location> editingfilter;
 
     public String getIdentifier() { return "COLLECTION_FILTER"; }
-    protected RPFeature getFeature() { return getCollectionFilter(); }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.collectionfilter", true)) {

@@ -39,7 +39,6 @@ public class Shop extends RPFeature implements CommandExecutor {
 	private HashMap<String, FileShopCategory> titles;
 
 	public String getIdentifier() { return "SHOP"; }
-	protected RPFeature getFeature() { return getShop(); }
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");

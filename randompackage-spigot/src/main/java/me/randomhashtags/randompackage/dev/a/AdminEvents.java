@@ -13,7 +13,6 @@ public class AdminEvents extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "ADMIN_EVENTS"; }
-    protected RPFeature getFeature() { return getAdminEvents(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Admin Events &e(took " + (System.currentTimeMillis()-started) + "ms)");

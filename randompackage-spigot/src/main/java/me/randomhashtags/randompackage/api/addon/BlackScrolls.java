@@ -25,10 +25,7 @@ public class BlackScrolls extends CustomEnchants {
         return instance;
     }
 
-    @Override
-    public String getIdentifier() { return "BLACK_SCROLLS"; }
-    @Override
-    protected RPFeature getFeature() { return getBlackScrolls(); }
+    @Override public String getIdentifier() { return "BLACK_SCROLLS"; }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

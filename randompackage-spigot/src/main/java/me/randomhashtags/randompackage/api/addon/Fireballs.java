@@ -34,7 +34,6 @@ public class Fireballs extends CustomEnchants {
     public ItemStack mysterydust;
 
     @Override public String getIdentifier() { return "FIREBALLS"; }
-    @Override protected RPFeature getFeature() { return getFireballs(); }
     @Override
     public void load() {
         long started = System.currentTimeMillis();

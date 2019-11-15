@@ -21,17 +21,15 @@ public class FactionTop extends RPFeature implements CommandExecutor {
         if(instance == null) instance = new FactionTop();
         return instance;
     }
+
     public static HashMap<String, FactionTopInfo> topFactions;
-
     public HashMap<Integer, String> topFactionPlacements;
-
     public YamlConfiguration config;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return true;
     }
     public String getIdentifier() { return "FACTION_TOP"; }
-    protected RPFeature getFeature() { return getFactionTop(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "faction top.yml");

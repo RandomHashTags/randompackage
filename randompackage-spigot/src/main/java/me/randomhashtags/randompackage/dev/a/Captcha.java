@@ -17,7 +17,6 @@ public class Captcha extends RPFeature {
     public YamlConfiguration config;
 
     public String getIdentifier() { return "CAPTCHA"; }
-    protected RPFeature getFeature() { return getCaptcha(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Captcha &e(took " + (System.currentTimeMillis()-started) + "ms)");

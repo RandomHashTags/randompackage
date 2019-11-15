@@ -29,7 +29,6 @@ public class RarityGems extends RPFeature {
     }
 
     public String getIdentifier() { return "RARITY_GEMS"; }
-    protected RPFeature getFeature() { return getRarityGems(); }
     public void load() {
         final long started = System.currentTimeMillis();
         save("rarity gems", "_settings.yml");

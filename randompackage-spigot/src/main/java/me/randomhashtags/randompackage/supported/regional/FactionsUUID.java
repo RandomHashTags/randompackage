@@ -11,7 +11,6 @@ import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.event.regional.RegionRenameEvent;
 import me.randomhashtags.randompackage.supported.Regional;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.Reflect;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -34,25 +33,24 @@ public final class FactionsUUID extends Reflect implements Regional {
     private Factions f;
     private Board b;
     private HashMap<String, HashMap<String, List<UUID>>> relations;
-    private Class<?> legacy;
+    private boolean isLegacy;
 
     public String getIdentifier() { return "REGIONAL_FACTIONS_UUID"; }
-    protected RPFeature getFeature() { return getFactionsUUID(); }
     public void load() {
         fi = FPlayers.getInstance();
         f = Factions.getInstance();
         b = Board.getInstance();
         relations = new HashMap<>();
         try {
-            legacy = Class.forName("com.massivecraft.factions.struct.Relation");
+            Class.forName("com.massivecraft.factions.struct.Relation");
+            isLegacy = true;
         } catch (Exception ignored) {
-            legacy = null;
         }
     }
     public void unload() {
     }
 
-    private boolean isRelation(FPlayer fp, Faction f, String type, boolean isLegacy) {
+    private boolean isRelation(FPlayer fp, Faction f, String type) {
         final Class<? extends FPlayer> c = fp.getClass();
         String n = "";
         try {
@@ -86,14 +84,14 @@ public final class FactionsUUID extends Reflect implements Regional {
         if(relations.get(faction).containsKey(TYPE)) {
             return relations.get(faction).get(TYPE);
         } else {
-            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL"), legacy = this.legacy != null;
+            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
             for(FPlayer fp : fi.getAllFPlayers()) {
-                if(m && isRelation(fp, f, "MEMBER", legacy)
-                        || e && isRelation(fp, f, "ENEMY", legacy)
-                        || a && isRelation(fp, f, "ALLY", legacy)
-                        || t && isRelation(fp, f, "TRUCE", legacy)
-                        || n && isRelation(fp, f, "NEUTRAL", legacy)
+                if(m && isRelation(fp, f, "MEMBER")
+                        || e && isRelation(fp, f, "ENEMY")
+                        || a && isRelation(fp, f, "ALLY")
+                        || t && isRelation(fp, f, "TRUCE")
+                        || n && isRelation(fp, f, "NEUTRAL")
                 )
                     members.add(fp.getPlayer().getUniqueId());
             }
@@ -129,7 +127,13 @@ public final class FactionsUUID extends Reflect implements Regional {
         return a;
     }
 
-    public String getRole(UUID player) { return getFPlayer(player).getRole().getPrefix(); }
+    public String getRole(UUID player) {
+        if(isLegacy) {
+            sendConsoleMessage("&6[RandomPackage] &cERROR. Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
+            return "";
+        }
+        return getFPlayer(player).getRole().getPrefix();
+    }
     public String getRegionalIdentifier(UUID player) {
         final Faction f = getFaction(player);
         return f != null ? f.getTag() : null;

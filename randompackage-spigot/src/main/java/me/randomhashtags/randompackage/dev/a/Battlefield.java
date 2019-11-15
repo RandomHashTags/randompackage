@@ -13,7 +13,6 @@ public class Battlefield extends RPFeature {
     }
 
     public String getIdentifier() { return "BATTLEFIELD"; }
-    protected RPFeature getFeature() { return getBattlefield(); }
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Battlefield &e(took " + (System.currentTimeMillis()-started) + "ms)");

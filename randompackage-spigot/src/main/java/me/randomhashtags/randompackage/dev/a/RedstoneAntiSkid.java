@@ -10,7 +10,6 @@ public class RedstoneAntiSkid extends RPFeature {
     }
 
     public String getIdentifier() { return "REDSTONE_ANTI_SKID"; }
-    protected RPFeature getFeature() { return getRedstoneAntiSkid(); }
 
     public void load() {
         final long started = System.currentTimeMillis();

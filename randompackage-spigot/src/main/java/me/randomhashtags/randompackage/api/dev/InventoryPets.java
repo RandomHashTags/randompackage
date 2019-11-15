@@ -46,7 +46,6 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
     private HashMap<UUID, List<ItemStack>> leashedUponDeath;
 
     public String getIdentifier() { return "INVENTORY_PETS"; }
-    protected RPFeature getFeature() { return getInventoryPets(); }
     public void load() {
         final long started = System.currentTimeMillis();
         new GivePetExp().load();

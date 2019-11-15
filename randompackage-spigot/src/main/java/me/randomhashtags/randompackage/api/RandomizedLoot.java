@@ -27,8 +27,6 @@ public class RandomizedLoot extends RPFeature {
     public HashMap<String, RandomizedLootItem> items;
 
     public String getIdentifier() { return "RANDOMIZED_LOOT"; }
-    protected RPFeature getFeature() { return getRandomizedLoot(); }
-
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "randomized loot.yml");
