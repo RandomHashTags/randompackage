@@ -76,7 +76,7 @@ public final class FactionsUUID extends Reflect implements Regional {
         return f != null ? f.getColorTo(getFPlayer(target.getUniqueId())) : null;
     }
 
-    private List<UUID> getMembers(UUID player, String TYPE) {
+    private List<UUID> getType(UUID player, String TYPE) {
         final Faction f = getFaction(player);
         final String faction = f != null ? f.getTag() : null;
         if(faction == null) return new ArrayList<>();
@@ -99,11 +99,11 @@ public final class FactionsUUID extends Reflect implements Regional {
             return members;
         }
     }
-    public List<UUID> getAssociates(UUID player) { return getMembers(player, "MEMBERS"); }
-    public List<UUID> getNeutrals(UUID player) { return getMembers(player, "NEUTRAL"); }
-    public List<UUID> getAllies(UUID player) { return getMembers(player, "ALLIES"); }
-    public List<UUID> getTruces(UUID player) { return getMembers(player, "TRUCES"); }
-    public List<UUID> getEnemies(UUID player) { return getMembers(player, "ENEMIES"); }
+    public List<UUID> getAssociates(UUID player) { return getType(player, "MEMBERS"); }
+    public List<UUID> getNeutrals(UUID player) { return getType(player, "NEUTRAL"); }
+    public List<UUID> getAllies(UUID player) { return getType(player, "ALLIES"); }
+    public List<UUID> getTruces(UUID player) { return getType(player, "TRUCES"); }
+    public List<UUID> getEnemies(UUID player) { return getType(player, "ENEMIES"); }
 
     public boolean canModify(UUID player, Location blockLocation) {
         final Faction p = getFPlayer(player).getFaction(), f = b.getFactionAt(new FLocation(blockLocation));

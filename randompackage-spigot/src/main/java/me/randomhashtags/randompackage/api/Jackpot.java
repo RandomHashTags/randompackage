@@ -68,11 +68,12 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     if(l == 1) {
                         sendStringListMessage(player, b, null);
                     } else {
-                        final int amount = getRemainingInt(args[1]);
-                        if(amount < minTickets.intValue() || amount > maxTickets.intValue()) {
+                        final BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[1]));
+                        final int amt = amount.intValue();
+                        if(amt < minTickets.intValue() || amt > maxTickets.intValue()) {
                             sendStringListMessage(player, b, null);
                         } else {
-                            confirmPurchaseTickets(player, BigDecimal.valueOf(amount));
+                            confirmPurchaseTickets(player, amount);
                         }
                     }
                     break;
