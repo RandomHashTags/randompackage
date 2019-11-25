@@ -150,11 +150,14 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     final String n = player.getName(), fac = regions.getFactionTag(player.getUniqueId()), HP = roundDoubleString(hp, 0), N = Integer.toString(nearby);
                     final ItemStack skull = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
                     final SkullMeta sm = (SkullMeta) skull.getItemMeta();
-                    if(legacy) sm.setOwner(player.getName());
-                    else sm.setOwningPlayer(player);
+                    if(legacy) {
+                        sm.setOwner(player.getName());
+                    } else {
+                        sm.setOwningPlayer(player);
+                    }
                     lore.clear();
                     for(String s : request.getItemMeta().getLore()) {
-                        lore.add(s.replace("{NEARBY_PLAYERS}", N).replace("{FACTION}", fac).replace("{HP}", HP));
+                        lore.add(s.replace("{NEARBY_PLAYERS}", N).replace("{FACTION}", fac != null ? fac : "").replace("{HP}", HP));
                     }
                     sm.setLore(lore);
                     skull.setItemMeta(sm);
