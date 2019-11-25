@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.EventAttribute;
-import me.randomhashtags.randompackage.addon.util.EventReplacer;
+import me.randomhashtags.randompackage.attributesys.EventReplacer;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Location;

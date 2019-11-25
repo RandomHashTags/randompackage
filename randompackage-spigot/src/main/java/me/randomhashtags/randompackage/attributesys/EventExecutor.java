@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EventAttribute;
-import me.randomhashtags.randompackage.addon.util.EventReplacer;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
@@ -280,7 +279,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                             if(c.contains("=")) {
                                 final String[] values = c.split("=");
                                 final String v1 = values[1];
-                                final TObject keyObj = replaceAllNearbyUsages(values[0], entityKeys, entities, v1, false), valueObj = replaceAllNearbyUsages(values[1], entityKeys, entities, v1, true);
+                                final TObject keyObj = replaceAllNearbyUsages(values[0], entityKeys, entities, v1, false), valueObj = replaceAllNearbyUsages(v1, entityKeys, entities, v1, true);
                                 final String key = (String) keyObj.getFirst(), value = (String) valueObj.getFirst();
                                 final HashMap<String, String> map = (HashMap<String, String>) keyObj.getSecond();
                                 final HashMap<String, Entity> entitiesMap = (HashMap<String, Entity>) keyObj.getThird();
@@ -290,17 +289,14 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 if(a == null) {
                                     conditions.add(c);
                                 } else {
-                                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> z = new LinkedHashMap<>();
-                                    z.put(a, new LinkedHashMap<>());
-                                    final HashMap<Entity, String> E = z.get(a);
+                                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attribute = new LinkedHashMap<>();
+                                    attribute.put(a, new LinkedHashMap<>());
+                                    final HashMap<Entity, String> attributeEntities = attribute.get(a);
                                     for(Entity entity : entities.values()) {
-                                        E.put(entity, value);
+                                        attributeEntities.put(entity, value);
                                     }
-                                    E.put(null, value);
-                                    for(String ss : entities.keySet()) {
-                                        E.put(entities.get(ss), entityValues.get(ss));
-                                    }
-                                    execute.add(z);
+                                    attributeEntities.put(null, value);
+                                    execute.add(attribute);
                                 }
                             }
                         }

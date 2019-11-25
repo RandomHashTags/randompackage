@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addon.util;
+package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.attribute.Combo;
 import org.bukkit.Location;

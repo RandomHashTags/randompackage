@@ -30,7 +30,7 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
         if(item == null) item = api.d(getAddonConfig("transmog scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }
-    public String getApplied() { return ChatColor.translateAlternateColorCodes('&', getAddonConfig("transmog scrolls.yml").getString("transmog scrolls." + path + ".apply")); }
+    public String getApplied() { return colorize(getAddonConfig("transmog scrolls.yml").getString("transmog scrolls." + path + ".apply")); }
     public List<String> getRarityOrganization() { return getAddonConfig("transmog scrolls.yml").getStringList("transmog scrolls." + path + ".rarity organization"); }
     public List<String> getAppliesTo() { return getAddonConfig("transmog scrolls.yml").getStringList("transmog scrolls." + path + ".applies to"); }
 }

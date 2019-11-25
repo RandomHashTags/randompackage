@@ -10,7 +10,6 @@ import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.enchant.PlayerRevealCustomEnchantEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -166,10 +165,6 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void mysteryMobSpawnerOpenEvent(MysteryMobSpawnerOpenEvent event) {
-        callEventAttributeListeners(event);
-    }
-    @EventHandler
-    private void playerApplyCustomEnchantEvent(CustomEnchantApplyEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
