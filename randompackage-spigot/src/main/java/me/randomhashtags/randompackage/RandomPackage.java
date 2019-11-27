@@ -20,6 +20,7 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import me.randomhashtags.randompackage.util.universal.UVersion;
+import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -41,9 +42,7 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,7 +54,7 @@ import java.util.HashMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public final class RandomPackage extends JavaPlugin implements Listener {
+public final class RandomPackage extends JavaPlugin implements Listener, UVersionable {
     public static RandomPackage getPlugin;
 
     public FileConfiguration config;
@@ -67,9 +66,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     public static Plugin spawnerPlugin, mcmmo;
     public boolean placeholderapi = false;
 
-    private PluginManager pm;
-    private BukkitScheduler scheduler;
-
     public void onEnable() {
         getPlugin = this;
         enable();
@@ -79,9 +75,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     }
 
     private void enable() {
-        pm = Bukkit.getPluginManager();
-        scheduler = Bukkit.getScheduler();
-        pm.registerEvents(this, this);
+        pluginmanager.registerEvents(this, this);
         checkForUpdate();
         checkFiles();
         loadSoftDepends();
@@ -113,7 +107,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
 
         cmd.tryLoading(CustomEnchants.getCustomEnchants(), getHash("alchemist", "alchemist", "disabledenchants", "disabled enchants", "enchanter", "enchanter", "enchants", "enchants", "tinkerer", "tinkerer"), isTrue("alchemist", "disabled enchants", "enchanter", "enchants", "tinkerer"));
-        cmd.tryLoadingg(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.blacks scroll", true));
+        cmd.tryLoadingg(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.blacks scrolls", true));
         cmd.tryLoadingg(EnchantmentOrbs.getEnchantmentOrbs(), null, isTrue("custom enchants.enchantment orbs", true));
         cmd.tryLoadingg(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
         cmd.tryLoadingg(RandomizationScrolls.getRandomizationScrolls(), null, isTrue("custom enchants.randomization scrolls", true));
@@ -192,22 +186,22 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private void loadSoftDepends() {
         tryLoadingMCMMO();
         tryLoadingSpawner();
-        if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pm.isPluginEnabled("PlaceholderAPI")) {
+        if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pluginmanager.isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
             ClipPAPI.getPAPI();
         }
     }
     public void tryLoadingMCMMO() {
-        if(isTrue("supported plugins.mechanics.MCMMO", true) && pm.isPluginEnabled("mcMMO")) {
-            mcmmo = pm.getPlugin("mcMMO");
+        if(isTrue("supported plugins.mechanics.MCMMO", true) && pluginmanager.isPluginEnabled("mcMMO")) {
+            mcmmo = pluginmanager.getPlugin("mcMMO");
         }
     }
     public void tryLoadingSpawner() {
-        final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pm.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
-        final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pm.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pm.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
+        final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pluginmanager.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
+        final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pluginmanager.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pluginmanager.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
         final boolean epic = es != null;
         if(epic || ss != null) {
-            spawnerPlugin = pm.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
+            spawnerPlugin = pluginmanager.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
             spawner = epic ? es : ss;
             final FileConfiguration c = spawnerPlugin.getConfig();
             spawnerchance = epic ? Integer.parseInt(c.getString("Spawner Drops.Chance On TNT Explosion").replace("%", "")): c.getInt("explosionDropChance");
@@ -311,7 +305,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
             }
             boolean update = false;
             if(unequip != null) {
-                pm.callEvent(unequip);
+                pluginmanager.callEvent(unequip);
                 if(!unequip.isCancelled()) {
                     update = true;
                     final ItemStack x = unequip.getCurrentItem(), y = unequip.getCursor();
@@ -320,7 +314,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 }
             }
             if(equip != null) {
-                pm.callEvent(equip);
+                pluginmanager.callEvent(equip);
                 if(!equip.isCancelled()) {
                     update = true;
                     final ItemStack x = equip.getCurrentItem(), y = equip.getCursor();
@@ -362,11 +356,11 @@ public final class RandomPackage extends JavaPlugin implements Listener {
                 final Block block = event.getClickedBlock();
                 if(block == null || !block.getType().isInteractable()) {
                     final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, is);
-                    pm.callEvent(e);
+                    pluginmanager.callEvent(e);
                 }
             } else {
                 final ArmorEvent e = new ArmorSwapEvent(player, ArmorEventReason.HOTBAR_SWAP, is, helmet ? h : chestplate ? c : leggings ? l : b);
-                pm.callEvent(e);
+                pluginmanager.callEvent(e);
             }
         }
     }
@@ -376,7 +370,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         final String i = is.getType().name();
         if(i.endsWith("HELMET") || i.endsWith("CHESTPLATE") || i.endsWith("LEGGINGS") || i.endsWith("BOOTS")) {
             final ArmorPieceBreakEvent e = new ArmorPieceBreakEvent(event.getPlayer(), is);
-            pm.callEvent(e);
+            pluginmanager.callEvent(e);
         }
     }
 
@@ -385,7 +379,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         final int amount = event.getAmount();
         if(amount > 0) {
             final PlayerExpGainEvent e = new PlayerExpGainEvent(event.getPlayer(), amount);
-            pm.callEvent(e);
+            pluginmanager.callEvent(e);
             if(!e.isCancelled()) {
                 event.setAmount(e.getAmount());
             }
@@ -398,7 +392,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         if(l > lvl) {
             final FoodLevelLostEvent e = new FoodLevelLostEvent(player, player.getFoodLevel(), lvl);
             e.setCancelled(event.isCancelled());
-            pm.callEvent(e);
+            pluginmanager.callEvent(e);
         }
     }
 }
