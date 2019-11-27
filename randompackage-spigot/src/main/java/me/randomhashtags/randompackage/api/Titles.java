@@ -139,24 +139,22 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 	private void viewTitles(Player player, RPPlayer pdata, int page) {
 		if(hasPermission(player, "RandomPackage.titles", true)) {
-			final List<Title> titles = pdata.getTitles();
+			final List<Title> owned = pdata.getTitles();
 			page = page-1;
-			int size = titles.size()-(53*page);
+			int size = owned.size()-(53*page);
 			if(size <= 0) {
 				sendStringListMessage(player, config.getStringList("messages.no unlocked titles"), null);
 			} else {
-				final List<Title> owned = pdata.getTitles();
 				final Title A = pdata.getActiveTitle();
 				final String activetitle = A != null ? A.getIdentifier() : null;
 				pages.put(player, page);
-				size = size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9;
-				size = size > 54 ? 54 : size;
+				size = Math.min(size%9 == 0 ? size : ((size+9)/9)*9, 54);
 				player.openInventory(Bukkit.createInventory(player, size, selftitle));
 				final Inventory top = player.getOpenInventory().getTopInventory();
-				for(Title t : owned) {
+				for(Title title : owned) {
 					final int f = top.firstEmpty();
 					if(f > -1) {
-						top.setItem(f, getTitle(activetitle, t));
+						top.setItem(f, getTitle(activetitle, title));
 					} else {
 						break;
 					}
@@ -188,7 +186,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 
 	private ItemStack getTitle(String activetitle, Title input) {
 		final String title = input.getIdentifier();
-		item = title.equals(activetitle) ? active.clone() : inactive.clone();
+		item = (title.equals(activetitle) ? active : inactive).clone();
 		itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", title));
 		item.setItemMeta(itemMeta);

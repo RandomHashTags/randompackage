@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.util;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
@@ -563,21 +565,23 @@ public class RPPlayer extends RPStorage {
         }
         return activeTitle;
     }
-    public void setActiveTitle(Title title) {
+    public void setActiveTitle(@Nullable Title title) {
         activeTitle = title;
     }
 
     public List<Title> getTitles() {
         if(ownedTitles == null) {
             ownedTitles = new ArrayList<>();
-            final List<String> O = yml.getStringList("owned titles");
-            for(String s : O) {
-                ownedTitles.add(getTitle(s));
+            for(String s : yml.getStringList("owned titles")) {
+                final Title t = getTitle(s);
+                if(t != null) {
+                    ownedTitles.add(t);
+                }
             }
         }
         return ownedTitles;
     }
-    public void addTitle(Title title) {
+    public void addTitle(@NotNull Title title) {
         if(!getTitles().contains(title)) {
             ownedTitles.add(title);
         }
@@ -644,11 +648,15 @@ public class RPPlayer extends RPStorage {
     }
 
     public List<String> getMonthlyCrates() {
-        if(ownedMonthlyCrates == null) ownedMonthlyCrates = yml.getStringList("owned monthly crates");
+        if(ownedMonthlyCrates == null) {
+            ownedMonthlyCrates = yml.getStringList("owned monthly crates");
+        }
         return ownedMonthlyCrates;
     }
     public List<String> getClaimedMonthlyCrates() {
-        if(claimedMonthlyCrates == null) claimedMonthlyCrates = yml.getStringList("claimed monthly crates");
+        if(claimedMonthlyCrates == null) {
+            claimedMonthlyCrates = yml.getStringList("claimed monthly crates");
+        }
         return claimedMonthlyCrates;
     }
 

@@ -20,7 +20,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import me.randomhashtags.randompackage.util.universal.UVersion;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,7 +41,9 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,7 +55,7 @@ import java.util.HashMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public final class RandomPackage extends JavaPlugin implements Listener, UVersionable {
+public final class RandomPackage extends JavaPlugin implements Listener {
     public static RandomPackage getPlugin;
 
     public FileConfiguration config;
@@ -66,6 +67,9 @@ public final class RandomPackage extends JavaPlugin implements Listener, UVersio
     public static Plugin spawnerPlugin, mcmmo;
     public boolean placeholderapi = false;
 
+    private BukkitScheduler scheduler;
+    private PluginManager pluginmanager;
+
     public void onEnable() {
         getPlugin = this;
         enable();
@@ -75,6 +79,8 @@ public final class RandomPackage extends JavaPlugin implements Listener, UVersio
     }
 
     private void enable() {
+        scheduler = Bukkit.getScheduler();
+        pluginmanager = Bukkit.getPluginManager();
         pluginmanager.registerEvents(this, this);
         checkForUpdate();
         checkFiles();
