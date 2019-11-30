@@ -82,7 +82,7 @@ public class KitsGlobal extends Kits {
 
         final Inventory gi = gkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
-        final File folder = new File(rpd + separator + "kits");
+        final File folder = new File(dataFolder + separator + "kits");
         int loaded = 0;
         if(folder.exists()) {
             for(File f : folder.listFiles()) {

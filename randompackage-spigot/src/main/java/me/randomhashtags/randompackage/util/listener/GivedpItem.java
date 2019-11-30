@@ -72,7 +72,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     }
     public void load() {
         save(null, "items.yml");
-        itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
+        itemsConfig = YamlConfiguration.loadConfiguration(new File(dataFolder, "items.yml"));
         customitems = new HashMap<>();
         final ConfigurationSection cs = itemsConfig.getConfigurationSection("custom items");
         if(cs != null) {

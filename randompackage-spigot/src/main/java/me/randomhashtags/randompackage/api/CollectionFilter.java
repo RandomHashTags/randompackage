@@ -93,7 +93,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "collection filter.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "collection filter.yml"));
 
         picksup = new HashMap<>();
         editingfilter = new HashMap<>();

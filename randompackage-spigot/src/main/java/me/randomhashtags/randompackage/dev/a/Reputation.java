@@ -26,7 +26,7 @@ public class Reputation extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "reputation.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "reputation.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "reputation.yml"));
         sendConsoleMessage("&6[RandomPackage] &aLoaded Reputation &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

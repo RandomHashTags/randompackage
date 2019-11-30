@@ -94,7 +94,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "jackpot.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "jackpot.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "jackpot.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();

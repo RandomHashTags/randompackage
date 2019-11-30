@@ -75,7 +75,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             new SetLevelupChance().load();
             isEnabled = true;
             save("kits", "_settings.yml");
-            config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "kits", "_settings.yml"));
+            config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "kits", "_settings.yml"));
             pluginmanager.registerEvents(KitEvents.getKitEvents(), randompackage);
 
             if(!otherdata.getBoolean("saved default fallen heroes")) {
@@ -84,7 +84,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 otherdata.set("saved default fallen heroes", true);
                 saveOtherData();
             }
-            final File folder = new File(rpd + separator + "fallen heroes");
+            final File folder = new File(dataFolder + separator + "fallen heroes");
             if(folder.exists()) {
                 for(File f : folder.listFiles()) {
                     new FileFallenHero(f);

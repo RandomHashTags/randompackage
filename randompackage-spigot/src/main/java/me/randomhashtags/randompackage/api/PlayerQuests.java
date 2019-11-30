@@ -73,7 +73,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
 
         new IncreasePQuest().load();
         registerEventAttributeListener(this);
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "player quests", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "player quests", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         shop = new UInventory(null, config.getInt("shop.size"), colorize(config.getString("shop.title")));
@@ -186,7 +186,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             otherdata.set("saved default player quests", true);
             saveOtherData();
         }
-        for(File f : new File(rpd + separator + "player quests").listFiles()) {
+        for(File f : new File(dataFolder + separator + "player quests").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FilePlayerQuest(f);
             }

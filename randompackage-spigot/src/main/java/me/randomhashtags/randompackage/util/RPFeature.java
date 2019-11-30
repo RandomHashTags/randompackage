@@ -51,7 +51,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
     public void enable() {
         if(otherdataF == null) {
             save("_Data", "other.yml");
-            otherdataF = new File(rpd + separator + "_Data", "other.yml");
+            otherdataF = new File(dataFolder + separator + "_Data", "other.yml");
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
 
             treemap.put(1000, "M"); treemap.put(900, "CM"); treemap.put(500, "D"); treemap.put(400, "CD"); treemap.put(100, "C"); treemap.put(90, "XC");
@@ -101,7 +101,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
     public void saveOtherData() {
         try {
             otherdata.save(otherdataF);
-            otherdataF = new File(rpd + separator + "_Data", "other.yml");;
+            otherdataF = new File(dataFolder + separator + "_Data", "other.yml");;
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
         } catch (Exception e) {
             e.printStackTrace();

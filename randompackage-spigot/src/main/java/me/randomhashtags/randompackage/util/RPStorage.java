@@ -94,7 +94,7 @@ public abstract class RPStorage extends RegionalAPI {
 
     private YamlConfiguration get(String folder, String fileName) {
         if(cached.containsKey(folder + fileName)) return cached.get(folder + fileName);
-        final File f = new File(rpd + separator + (folder != null ? folder : ""), fileName);
+        final File f = new File(dataFolder + separator + (folder != null ? folder : ""), fileName);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
         cached.put(folder+fileName, c);
         return c;

@@ -99,9 +99,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
     public void load() {
         save(null, "auction house.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "auction house.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "auction house.yml"));
         save("_Data", "auctions.yml");
-        dataF = new File(rpd + separator + "_Data", "auctions.yml");
+        dataF = new File(dataFolder + separator + "_Data", "auctions.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
 
         purchasing = new HashMap<>();
@@ -276,7 +276,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private void save() {
         try {
             data.save(dataF);
-            dataF = new File(rpd + separator + "_Data", "auctions.yml");
+            dataF = new File(dataFolder + separator + "_Data", "auctions.yml");
             data = YamlConfiguration.loadConfiguration(dataF);
         } catch(IOException e) {
             e.printStackTrace();

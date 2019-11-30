@@ -30,7 +30,7 @@ public class RandomizedLoot extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "randomized loot.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "randomized loot.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "randomized loot.yml"));
 
         final List<ItemStack> values = new ArrayList<>();
         items = new HashMap<>();

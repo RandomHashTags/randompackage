@@ -72,7 +72,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			for(String s : c)
 				preset.add(toLocation(s));
 		}
-		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "envoy tiers", "_settings.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "envoy tiers", "_settings.yml"));
 		type = config.getString("settings.type");
 		envoySummon = d(config, "items.envoy summon");
 
@@ -92,7 +92,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 
 		final List<ItemStack> tiers = new ArrayList<>();
-		for(File f : new File(rpd + separator + "envoy tiers").listFiles()) {
+		for(File f : new File(dataFolder + separator + "envoy tiers").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings")) {
 				final FileEnvoyCrate e = new FileEnvoyCrate(f);
 				tiers.add(e.getItem());

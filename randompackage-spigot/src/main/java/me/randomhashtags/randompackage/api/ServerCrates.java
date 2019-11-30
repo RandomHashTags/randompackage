@@ -61,7 +61,7 @@ public class ServerCrates extends RPFeature {
 			saveOtherData();
 		}
 		final List<ItemStack> flares = new ArrayList<>(), crates = new ArrayList<>();
-		final File folder = new File(rpd + separator + "server crates");
+		final File folder = new File(dataFolder + separator + "server crates");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileServerCrate sc = new FileServerCrate(f);

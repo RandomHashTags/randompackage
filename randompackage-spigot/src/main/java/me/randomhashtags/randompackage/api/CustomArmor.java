@@ -50,7 +50,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		save("custom armor", "_settings.yml");
 
 		inEquipmentLootbox = new ArrayList<>();
-		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom armor", "_settings.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "custom armor", "_settings.yml"));
 		equipmentLootbox = d(config, "items.equipment lootbox");
 		crystal = d(config, "items.crystal");
 		heroicUpgrade = d(config, "items.heroic upgrade");
@@ -66,7 +66,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
-		for(File f : new File(rpd + separator + "custom armor").listFiles()) {
+		for(File f : new File(dataFolder + separator + "custom armor").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {

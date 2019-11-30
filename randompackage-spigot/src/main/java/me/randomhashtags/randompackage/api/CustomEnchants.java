@@ -100,7 +100,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public void load() {
         final long started = System.currentTimeMillis();
         save("custom enchants", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "custom enchants", "_settings.yml"));
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
         enchantercurrency = config.getString("enchanter.currency").toUpperCase();
@@ -111,7 +111,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         noMoreEnchantsAllowed = colorizeListString(config.getStringList("settings.no more enchants"));
 
         save("custom enchants", "global attributes.yml");
-        globalattributes = YamlConfiguration.loadConfiguration(new File(rpd + separator + "custom enchants", "global attributes.yml")).getStringList("attributes");
+        globalattributes = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "custom enchants", "global attributes.yml")).getStringList("attributes");
 
         new StopEnchant().load();
         int X = 0;
@@ -275,7 +275,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
 
         timedEnchants = new HashMap<>();
-        final String p = rpd + separator + "custom enchants";
+        final String p = dataFolder + separator + "custom enchants";
         final List<ItemStack> raritybooks = new ArrayList<>();
         final HashMap<String, Integer> enchantTicks = new HashMap<>();
         final File folder = new File(p);

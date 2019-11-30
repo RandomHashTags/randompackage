@@ -50,7 +50,7 @@ public class Masks extends CustomEnchants {
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "masks", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "masks", "_settings.yml"));
 
         equippedMasks = new HashMap<>();
         maskgenerator = d(config, "items.generator");
@@ -69,7 +69,7 @@ public class Masks extends CustomEnchants {
             a.set("saved default masks", true);
             saveOtherData();
         }
-        for(File f : new File(rpd + separator + "masks").listFiles()) {
+        for(File f : new File(dataFolder + separator + "masks").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
                 ms.add(m.getItem());

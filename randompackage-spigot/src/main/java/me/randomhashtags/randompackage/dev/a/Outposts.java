@@ -64,7 +64,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "outposts", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "outposts", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
@@ -72,7 +72,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
             statuses.put(s.toUpperCase().replace(" ", "_"), colorize(config.getString("status." + s)));
         }
-        for(File f : new File(rpd + separator + "outposts").listFiles()) {
+        for(File f : new File(dataFolder + separator + "outposts").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 //final FileOutpost o = new FileOutpost(f);
                 //o.setOutpostStatus(OutpostStatus.UNCONTESTED);

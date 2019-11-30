@@ -42,7 +42,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             saveOtherData();
         }
         final List<ItemStack> buckets = new ArrayList<>();
-        for(File f : new File(rpd + separator + "fat buckets").listFiles()) {
+        for(File f : new File(dataFolder + separator + "fat buckets").listFiles()) {
             final FileFatBucket ffb = new FileFatBucket(f);
             buckets.add(ffb.getItem(ffb.getUses()));
         }

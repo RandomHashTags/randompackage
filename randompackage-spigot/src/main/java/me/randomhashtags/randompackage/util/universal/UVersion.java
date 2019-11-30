@@ -40,7 +40,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
 
     public final void save(String folder, String file) {
         final boolean hasFolder = folder != null && !folder.equals("");
-        final File f = new File(rpd + separator + (hasFolder ? folder + separator : ""), file);
+        final File f = new File(dataFolder + separator + (hasFolder ? folder + separator : ""), file);
         if(!f.exists()) {
             f.getParentFile().mkdirs();
             randompackage.saveResource(hasFolder ? folder + separator + file : file, false);

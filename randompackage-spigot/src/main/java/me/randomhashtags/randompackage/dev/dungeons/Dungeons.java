@@ -47,7 +47,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         new SetOpenDuration().load();
         save(null, "dungeons.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "dungeons.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "dungeons.yml"));
 
         dimensionweb = d(config, "items.dimension web");
         enchantedobsidian = d(config, "items.enchanted obsidian");

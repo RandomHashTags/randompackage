@@ -42,7 +42,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "shops", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "shops", "_settings.yml"));
         back = d(config, "items.back to categories");
         defaultShop = config.getString("settings./shop opens");
 
@@ -55,7 +55,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 
         ShopCategory.shop = this;
         titles = new HashMap<>();
-        for(File f : new File(rpd + separator + "shops").listFiles()) {
+        for(File f : new File(dataFolder + separator + "shops").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileShopCategory c = new FileShopCategory(f);
                 titles.put(c.getTitle(), c);

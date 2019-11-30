@@ -78,7 +78,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "showcase.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "showcase.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "showcase.yml"));
 		expansion = d(config, "items.expansion");
 		givedpitem.items.put("showcaseexpansion", expansion);
 		givedpitem.items.put("showcaseexpander", expansion);

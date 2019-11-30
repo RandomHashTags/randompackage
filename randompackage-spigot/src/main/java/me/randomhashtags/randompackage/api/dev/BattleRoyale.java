@@ -73,7 +73,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "battle royale.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "battle royale.yml"));
         teams = new LinkedHashMap<>();
         world = config.getString("settings.world");
         cannotHurtTeamMembers = colorizeListString(config.getStringList("messages.cannot hurt team members"));

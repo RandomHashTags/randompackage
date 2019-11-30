@@ -57,7 +57,7 @@ public class KitsMastery extends Kits {
 
         final List<ItemStack> gems = new ArrayList<>();
         final Inventory mi = gui.getInventory();
-        final File folder = new File(rpd + separator + "kits");
+        final File folder = new File(dataFolder + separator + "kits");
         int loaded = 0;
         if(folder.exists()) {
             for(File f : folder.listFiles()) {

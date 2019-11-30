@@ -70,11 +70,11 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "strongholds", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "strongholds", "_settings.yml"));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
 
-        for(File f : new File(rpd + separator + "strongholds").listFiles()) {
+        for(File f : new File(dataFolder + separator + "strongholds").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
                 /*final FileStronghold s = new FileStronghold(f);
                 gi.setItem(s.getSlot(), s.getItem());*/

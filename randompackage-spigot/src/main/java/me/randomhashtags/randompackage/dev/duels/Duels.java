@@ -55,7 +55,7 @@ public class Duels extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save("duel arenas", "_settings.yml");
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "duel arenas", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "duel arenas", "_settings.yml"));
         type = new UInventory(null, config.getInt("type.size"), colorize(config.getString("type.title")));
         godset = new UInventory(null, config.getInt("godset.size"), colorize(config.getString("godset.title")));
 

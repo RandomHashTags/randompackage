@@ -4,7 +4,6 @@ import com.gmail.nossr50.api.ExperienceAPI;
 import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.Reflect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,7 +37,7 @@ public final class MCMMOAPI extends Reflect {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();
-		itemsConfig = YamlConfiguration.loadConfiguration(new File(rpd, "items.yml"));
+		itemsConfig = YamlConfiguration.loadConfiguration(new File(dataFolder, "items.yml"));
 		creditVoucher = givedpitem.items.get("mcmmocreditvoucher");
 		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");

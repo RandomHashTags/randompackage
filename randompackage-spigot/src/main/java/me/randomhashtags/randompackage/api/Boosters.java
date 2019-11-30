@@ -51,7 +51,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		final long started = System.currentTimeMillis();
 		registerEventAttributeListener(this);
 		save("_Data", "boosters.yml");
-		dataF = new File(rpd + separator + "_Data", "boosters.yml");
+		dataF = new File(dataFolder + separator + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 		if(!otherdata.getBoolean("saved default boosters")) {
 			final String[] a = new String[] {"FACTION_MCMMO", "FACTION_XP"};
@@ -69,7 +69,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
-		final File folder = new File(rpd + separator + "boosters");
+		final File folder = new File(dataFolder + separator + "boosters");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileBooster bo = new FileBooster(f);
@@ -136,7 +136,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	private void save() {
 		try {
 			data.save(dataF);
-			dataF = new File(rpd + separator + "_Data", "boosters.yml");
+			dataF = new File(dataFolder + separator + "_Data", "boosters.yml");
 			data = YamlConfiguration.loadConfiguration(dataF);
 		} catch(Exception e) {
 			e.printStackTrace();

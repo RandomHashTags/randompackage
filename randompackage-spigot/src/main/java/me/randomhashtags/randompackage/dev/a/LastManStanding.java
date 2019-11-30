@@ -48,7 +48,7 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
             final String[] a = otherdata.getString("last man standing.boundary").split("\\|");
             boundary = new PolyBoundary(toLocation(a[0]), Integer.parseInt(a[1]));
         }
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "last man standing.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "last man standing.yml"));
         rewards = new HashMap<>();
         final ConfigurationSection c = config.getConfigurationSection("rewards");
         if(c != null) {

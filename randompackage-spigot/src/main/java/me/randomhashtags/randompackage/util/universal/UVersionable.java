@@ -24,7 +24,7 @@ import java.util.Random;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public interface UVersionable extends Versionable {
-    File rpd = getPlugin.getDataFolder();
+    File dataFolder = getPlugin.getDataFolder();
     String separator = File.separator;
 
     RandomPackage randompackage = RandomPackage.getPlugin;

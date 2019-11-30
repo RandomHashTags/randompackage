@@ -5,7 +5,6 @@ import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
-import com.massivecraft.factions.iface.RelationParticipator;
 import me.randomhashtags.randompackage.event.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
@@ -51,18 +50,7 @@ public final class FactionsUUID extends Reflect implements Regional {
     }
 
     private boolean isRelation(FPlayer fp, Faction f, String type) {
-        final Class<? extends FPlayer> c = fp.getClass();
-        String n = "";
-        try {
-            if(isLegacy) {
-                n = ((com.massivecraft.factions.struct.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(f)).name();
-            } else {
-                n = ((com.massivecraft.factions.perms.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(f)).name();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return n.equalsIgnoreCase(type);
+        return fp.getRelationTo(f).name().equalsIgnoreCase(type);
     }
 
     public Faction getFaction(UUID player) {

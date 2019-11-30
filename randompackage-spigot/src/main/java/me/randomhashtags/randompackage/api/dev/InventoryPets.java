@@ -71,7 +71,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             saveOtherData();
         }
         final List<ItemStack> pets = new ArrayList<>();
-        for(File f : new File(rpd + separator + "inventory pets").listFiles()) {
+        for(File f : new File(dataFolder + separator + "inventory pets").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
                 if(p.isEnabled()) {
@@ -80,7 +80,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             }
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "inventory pets.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "inventory pets.yml"));
         leash = d(config, "items.leash");
         leashedLore = colorize(config.getString("items.leash.applied lore"));
         rarecandy = d(config, "items.rare candy");

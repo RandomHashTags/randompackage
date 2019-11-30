@@ -97,8 +97,8 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		registerEventAttributeListener(this);
 		save("global challenges", "_settings.yml");
 		save("_Data", "global challenges.yml");
-		config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "global challenges", "_settings.yml"));
-		dataF = new File(rpd + separator + "_Data", "global challenges.yml");
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "global challenges", "_settings.yml"));
+		dataF = new File(dataFolder + separator + "_Data", "global challenges.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 
 		if(!otherdata.getBoolean("saved default global challenges")) {
@@ -124,7 +124,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}
-		for(File f : new File(rpd + separator + "global challenges").listFiles()) {
+		for(File f : new File(dataFolder + separator + "global challenges").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				new FileGlobalChallenge(f);
 			}
@@ -162,7 +162,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 		try {
 			data.save(dataF);
-			dataF = new File(rpd + separator + "_Data", "global challenges.yml");
+			dataF = new File(dataFolder + separator + "_Data", "global challenges.yml");
 			data = YamlConfiguration.loadConfiguration(dataF);
 		} catch (Exception e) {
 			e.printStackTrace();

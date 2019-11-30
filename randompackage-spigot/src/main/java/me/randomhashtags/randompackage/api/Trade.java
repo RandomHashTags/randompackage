@@ -47,7 +47,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 
 		requests = new HashMap<>();
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "trade.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "trade.yml"));
 		divider = d(config, "gui.divider");
 		accept = d(config, "gui.accept");
 		accepting = d(config, "gui.accepting");

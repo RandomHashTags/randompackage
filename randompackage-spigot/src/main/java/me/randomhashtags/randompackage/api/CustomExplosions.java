@@ -43,7 +43,7 @@ public class CustomExplosions extends RPFeature {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "custom explosions.yml");
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "custom explosions.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "custom explosions.yml"));
 		cannotBreakTNT = new ArrayList<>();
 		cannotBreakCreepers = new ArrayList<>();
 		for(String s : config.getStringList("tnt.cannot break")) {
@@ -71,7 +71,7 @@ public class CustomExplosions extends RPFeature {
 			saveOtherData();
 		}
 
-		final File cf = new File(rpd + separator + "custom creepers"), tf = new File(rpd + separator + "custom tnt");
+		final File cf = new File(dataFolder + separator + "custom creepers"), tf = new File(dataFolder + separator + "custom tnt");
 		if(cf.exists()) {
 			for(File f : cf.listFiles()) {
 				new FileCustomCreeper(f);

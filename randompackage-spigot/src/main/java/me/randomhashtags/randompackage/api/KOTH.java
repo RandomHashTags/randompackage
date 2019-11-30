@@ -101,7 +101,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "koth.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "koth.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "koth.yml"));
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
 		lootbag = d(config, "items.lootbag");

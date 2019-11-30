@@ -68,7 +68,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     public void load() {
         final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "filter categories", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "filter categories", "_settings.yml"));
 
         categorySlots = new HashMap<>();
         categories = new HashMap<>();
@@ -101,7 +101,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             otherdata.set("saved default filter categories", true);
             saveOtherData();
         }
-        for(File f : new File(rpd + separator + "filter categories").listFiles()) {
+        for(File f : new File(dataFolder + separator + "filter categories").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);

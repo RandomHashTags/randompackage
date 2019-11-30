@@ -64,8 +64,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
+        final String folder = dataFolder + separator + "conquests";
         save("conquests", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "conquests", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default conquests")) {
             save("conquests", "NORMAL.yml");
@@ -79,7 +80,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             final String p = "bosses." + s + ".";
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), colorize(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
-        for(File f : new File(rpd + separator + "conquests").listFiles()) {
+        for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
@@ -100,7 +101,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (conquestchests != null ? conquestchests.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(int i : tasks) scheduler.cancelTask(i);
+        for(int i : tasks) {
+            scheduler.cancelTask(i);
+        }
 
         LivingConquestMob.deleteAll();
         final List<LivingConquestChest> C = LivingConquestChest.living;

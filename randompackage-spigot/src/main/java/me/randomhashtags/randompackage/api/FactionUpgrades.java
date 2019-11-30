@@ -92,13 +92,13 @@ public class FactionUpgrades extends EventAttributes {
                 for(String s : a) save("faction upgrades", s + ".yml");
                 otherdata.set("saved default faction upgrades", true);
             }
-            config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "faction upgrades", "_settings.yml"));
+            config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "faction upgrades", "_settings.yml"));
             for(String s : config.getConfigurationSection("types").getKeys(false)) {
                 new FileFactionUpgradeType(s);
             }
             gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
-            for(File f : new File(rpd + separator + "faction upgrades").listFiles()) {
+            for(File f : new File(dataFolder + separator + "faction upgrades").listFiles()) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());
@@ -106,7 +106,7 @@ public class FactionUpgrades extends EventAttributes {
             }
 
             cropGrowthRate = new HashMap<>();
-            fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
+            fupgradesF = new File(dataFolder + separator + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
             aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");
             heroicFactionCrystal = d(config, "items.heroic faction crystal");
@@ -150,7 +150,7 @@ public class FactionUpgrades extends EventAttributes {
             }
             try {
                 fupgrades.save(fupgradesF);
-                fupgradesF = new File(rpd + separator + "_Data", "faction upgrades.yml");
+                fupgradesF = new File(dataFolder + separator + "_Data", "faction upgrades.yml");
                 fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
             } catch (IOException e) {
                 e.printStackTrace();

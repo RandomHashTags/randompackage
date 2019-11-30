@@ -141,7 +141,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
 
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "secondary.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "secondary.yml"));
         xpbottle = givedpitem.items.get("xpbottle");
         int i = 0;
         for(String s : xpbottle.getItemMeta().getLore()) {

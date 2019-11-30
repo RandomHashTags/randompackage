@@ -53,7 +53,7 @@ public class RarityGems extends RPFeature {
             saveOtherData();
         }
 
-        for(File f : new File(rpd + separator + "rarity gems").listFiles()) {
+        for(File f : new File(dataFolder + separator + "rarity gems").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
                 new FileRarityGem(f);
             }

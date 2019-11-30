@@ -51,7 +51,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "homes.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
 		maxHomeIncreaser = d(config, "items.max home increaser");
 		givedpitem.items.put("maxhomeincrease", maxHomeIncreaser);

@@ -59,7 +59,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     public void load() {
         final long sc = System.currentTimeMillis();
         save("lootboxes", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd + separator + "lootboxes", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "lootboxes", "_settings.yml"));
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
@@ -88,7 +88,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             a.set("saved default lootboxes", true);
             saveOtherData();
         }
-        final File folder = new File(rpd + separator + "lootboxes");
+        final File folder = new File(dataFolder + separator + "lootboxes");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {

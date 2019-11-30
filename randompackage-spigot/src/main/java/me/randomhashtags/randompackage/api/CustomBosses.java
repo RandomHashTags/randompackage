@@ -49,7 +49,7 @@ public class CustomBosses extends EventAttributes {
 			saveOtherData();
 		}
 		final List<ItemStack> j = new ArrayList<>();
-		final File folder = new File(rpd + separator + "custom bosses");
+		final File folder = new File(dataFolder + separator + "custom bosses");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileCustomBoss b = new FileCustomBoss(f);

@@ -57,7 +57,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 
 		pages = new HashMap<>();
 
-		config = YamlConfiguration.loadConfiguration(new File(rpd, "titles.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "titles.yml"));
 		interactableItem = d(config, "interactable item");
 		FileTitle.i = interactableItem;
 		nextpage = d(config, "gui.next page");

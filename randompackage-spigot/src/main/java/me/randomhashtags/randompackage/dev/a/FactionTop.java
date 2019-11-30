@@ -34,7 +34,7 @@ public class FactionTop extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save("_Data", "faction top.yml");
         save(null, "faction top.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "faction top.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "faction top.yml"));
 
         topFactions = new HashMap<>();
         topFactionPlacements = new HashMap<>();

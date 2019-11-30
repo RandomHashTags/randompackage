@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.attributesys;
 
+import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
+import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -8,12 +10,14 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public interface EventReplacer extends Combo {
+public interface EventReplacer extends Combo, Mathable, UVersionable {
     default String replaceValue(HashMap<String, Entity> entities, String value, HashMap<String, String> valueReplacements) {
         String string = value;
+
         if(string != null) {
             if(valueReplacements != null) {
                 for(String s : valueReplacements.keySet()) {
@@ -41,6 +45,16 @@ public interface EventReplacer extends Combo {
                 if(string.contains("exp")) {
                     string = string.replace("get" + entity + "Exp", isPlayer ? Integer.toString(api.getTotalExperience(player)) : "0");
                     string = string.replace("get" + entity + "ExpLevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
+                }
+                if(string.contains("getRandom(")) {
+                    final String r = string.split("getRandom\\(")[1];
+                    final String[] values = r.split("\\)");
+                    final String randomString = values[values.length-2];
+                    final String[] bounds = randomString.split(":");
+                    final String min = bounds[0], max = bounds[1];
+                    final double minimum = evaluate(min), maximum = evaluate(max);
+                    final float random = (float) (minimum+ThreadLocalRandom.current().nextDouble(minimum, maximum+1));
+                    string = string.replace("getRandom(" + randomString + ")", Float.toString(random).substring(0, 3));
                 }
                 final boolean hasCombo = string.contains("Combo(");
                 if(hasCombo || string.contains("Multiplier(")) {

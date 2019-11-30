@@ -94,7 +94,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "coinflip.yml");
-        config = YamlConfiguration.loadConfiguration(new File(rpd, "coinflip.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "coinflip.yml"));
 
         isLegacy = EIGHT || NINE || TEN || ELEVEN;
 
