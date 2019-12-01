@@ -74,14 +74,14 @@ public enum USound implements Versionable {
     ENTITY_PLAYER_LEVELUP("LEVEL_UP", "ENTITY_PLAYER_LEVELUP"),
     //
     WEATHER_RAIN("AMBIENCE_RAIN", "WEATHER_RAIN"),
-    WATHER_RAIN_ABOVE("AMBIENCE_RAIN", "WEATHER_RAIN_ABOVE"),
+    WEATHER_RAIN_ABOVE("AMBIENCE_RAIN", "WEATHER_RAIN_ABOVE"),
     ;
     private static final USound[] sounds = USound.values();
     private static final HashMap<String, USound> CACHE = new HashMap<>();
     private static final HashMap<String, Sound> SOUND_CACHE = new HashMap<>();
-    private String[] names = new String[7];
+    private String[] names;
     private Sound sound;
-    USound(String ...names) {
+    USound(String...names) {
         this.names = names;
         this.sound = getVersionSound();
     }
