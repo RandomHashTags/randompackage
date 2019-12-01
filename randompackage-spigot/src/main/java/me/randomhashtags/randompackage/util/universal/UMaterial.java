@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.util.universal;
 
-import org.bukkit.Bukkit;
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,7 +31,7 @@ import java.util.*;
         SpigotMC - https://www.spigotmc.org/members/76364/
         Twitch - https://www.twitch.tv/randomhashtags
  */
-public enum UMaterial {
+public enum UMaterial implements Versionable {
     /*
         <item>(1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
         1.8.9 = http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Material.html
@@ -1358,8 +1359,7 @@ public enum UMaterial {
     ZOMBIE_VILLAGER_SPAWN_EGG(null, null, null, null, null, "ZOMBIE_VILLAGER_SPAWN_EGG"),
     ZOMBIE_WALL_HEAD(2, "SKULL", null, null, null, null, null, "ZOMBIE_WALL_HEAD")
     ;
-    private static String version = Bukkit.getVersion();
-    private static final HashMap<String, UMaterial> inUMemory = new HashMap<>();
+    private static final HashMap<String, UMaterial> CACHE = new HashMap<>();
     private static final HashMap<String, ItemStack> inMemory = new HashMap<>();
     private String[] names = new String[8];
     private String versionName, attributes;
@@ -1399,7 +1399,7 @@ public enum UMaterial {
     public ItemStack getItemStack() {
         final String v = getVersionName();
         final Material m = v != null ? Material.valueOf(v) : null;
-        ItemStack is = m != null ? version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12") ? new ItemStack(m, 1, data) : new ItemStack(m) : null;
+        ItemStack is = m != null ? EIGHT || NINE || TEN || ELEVEN || TWELVE ? new ItemStack(m, 1, data) : new ItemStack(m) : null;
         if(is != null && attributes != null) {
             for(String s : attributes.split(";")) {
                 if(s.startsWith("color=")) {
@@ -1429,7 +1429,7 @@ public enum UMaterial {
     // 5 = 1.13.2
     // 6 = 1.14.4
     private String setupVersionName() {
-        final int ver = version.contains("1.8") ? 0 : version.contains("1.9") ? 1 : version.contains("1.10") ? 2 : version.contains("1.11") ? 3 : version.contains("1.12") ? 4 : version.contains("1.13") ? 5 : version.contains("1.14") ? 6 : names.length-1;
+        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;
         if(names[realver] == null) {
             boolean did = false;
@@ -1448,15 +1448,15 @@ public enum UMaterial {
         return i != null ? Material.matchMaterial(i) : null;
     }
     public static ItemStack getEnchantmentBook(Enchantment enchant, int level, int amount) {
-        final LinkedHashMap<Enchantment, Integer> e = new LinkedHashMap<>();
-        e.put(enchant, level);
+        final LinkedHashMap<Enchantment, Integer> e = new LinkedHashMap<Enchantment, Integer>() {{ put(enchant, level); }};
         return getEnchantmentBook(e, amount);
     }
     public static ItemStack getEnchantmentBook(LinkedHashMap<Enchantment, Integer> enchants, int amount) {
         final ItemStack s = new ItemStack(Material.ENCHANTED_BOOK, amount);
         final EnchantmentStorageMeta sm = (EnchantmentStorageMeta) s;
-        for(Enchantment enchant : enchants.keySet())
+        for(Enchantment enchant : enchants.keySet()) {
             sm.addStoredEnchant(enchant, enchants.get(enchant), true);
+        }
         s.setItemMeta(sm);
         return s;
     }
@@ -1470,12 +1470,12 @@ public enum UMaterial {
     @Deprecated
     public static UMaterial match(String name, byte data) {
         name = name.toUpperCase();
-        if(inUMemory.containsKey(name + data)) return inUMemory.get(name + data);
+        if(CACHE.containsKey(name + data)) return CACHE.get(name + data);
         for(UMaterial u : values()) {
             if(u.getData() == data) {
                 for(String n : u.names) {
                     if(n != null && n.equals(name)) {
-                        inUMemory.put(name + data, u);
+                        CACHE.put(name + data, u);
                         return u;
                     }
                 }
@@ -1502,10 +1502,9 @@ public enum UMaterial {
     }
     public static UMaterial matchSpawnEgg(ItemStack egg) {
         if(egg != null) {
-            final String v = Bukkit.getVersion();
-            if(v.contains("1.8")) {
+            if(EIGHT) {
                 return match("MONSTER_EGG", egg.getData().getData());
-            } else if(v.contains("1.9") || v.contains("1.10") || v.contains("1.11") || v.contains("1.12")) {
+            } else if(NINE || TEN || ELEVEN || TWELVE) {
                 final String id = egg.hasItemMeta() ? egg.getItemMeta().toString().split("id=")[1].split("}")[0].toUpperCase() : "PIG";
                 return match(id + "_SPAWN_EGG");
             } else {
@@ -1550,7 +1549,6 @@ public enum UMaterial {
     }
     public static UMaterial matchPotion(ItemStack potion) {
         if(potion != null && potion.getItemMeta() instanceof PotionMeta) {
-            final String v = Bukkit.getVersion();
             final PotionMeta p = (PotionMeta) potion.getItemMeta();
             final List<PotionEffect> ce = p.getCustomEffects();
             if(ce.size() == 0) {
@@ -1558,7 +1556,7 @@ public enum UMaterial {
                 final PotionEffectType t;
                 final int l, max;
                 final boolean extended;
-                if(v.contains("1.8")) {
+                if(EIGHT) {
                     final Potion po = Potion.fromItemStack(potion);
                     base = po.isSplash() ? "SPLASH_POTION_" : "POTION_";
                     final Collection<PotionEffect> e = po.getEffects();
@@ -1597,11 +1595,13 @@ public enum UMaterial {
     public static UMaterial match(ItemStack item) {
         if(item != null && !item.getType().equals(Material.AIR)) {
             String un = item.getType().name();
-            if(version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12")) {
+            if(EIGHT || NINE || TEN || ELEVEN || TWELVE) {
                 final byte d = un.equals("FLINT_AND_STEEL") ? 0 : item.getData().getData();
                 final UMaterial u = match(un, d), potion = u == null ? matchPotion(item) : null;
                 un = u != null ? u.name() : potion != null ? potion.name() : null;
-                if(un != null) return valueOf(un);
+                if(un != null) {
+                    return valueOf(un);
+                }
             }
             return un != null ? un.contains("SPAWN_EGG") ? matchSpawnEgg(item) : un.contains("ENCHANTED_BOOK") ? matchEnchantedBook(item) : un.contains("POTION") ? matchPotion(item) : match(un) : null;
         }
@@ -1609,10 +1609,10 @@ public enum UMaterial {
     }
     public static UMaterial getItem(Block block) {
         final Material type = block.getType();
-        final String m = type.name(), v = Bukkit.getVersion();
+        final String m = type.name();
         final byte d = block.getData();
         UMaterial t = null;
-        if(!v.contains("1.8") && !v.contains("1.9") && !v.contains("1.10") && !v.contains("1.11") && !v.contains("1.12") || m.contains("TERRACOTTA") || m.startsWith("TORCH") || m.startsWith("REDSTONE_TORCH") || m.contains("STAIRS") || m.equals("FLINT_AND_STEEL") || m.equals("SOIL") || m.equals("LADDER") || m.equals("BONE_BLOCK") || m.equals("OBSERVER") || m.contains("FENCE_GATE") || m.contains("TRAPDOOR") || m.contains("CHEST")
+        if(!EIGHT && !NINE && !TEN && !ELEVEN && !TWELVE || m.contains("TERRACOTTA") || m.startsWith("TORCH") || m.startsWith("REDSTONE_TORCH") || m.contains("STAIRS") || m.equals("FLINT_AND_STEEL") || m.equals("SOIL") || m.equals("LADDER") || m.equals("BONE_BLOCK") || m.equals("OBSERVER") || m.contains("FENCE_GATE") || m.contains("TRAPDOOR") || m.contains("CHEST")
                 || m.equals("DISPENSER") || m.equals("DROPPER") || m.equals("JACK_O_LANTERN") || m.equals("PUMPKIN") || m.equals("HAY_BLOCK") || m.contains("SHULKER_BOX") || m.equals("LEVER") || m.contains("BUTTON") || m.contains("RAIL") || m.equals("FURNACE") || m.equals("VINE") || m.equals("TRIPWIRE_HOOK") || m.equals("HOPPER") || m.equals("END_ROD")) {
             return match(m);
         } else if(m.startsWith("LOG")) {
@@ -1632,7 +1632,7 @@ public enum UMaterial {
             final org.bukkit.material.Leaves l = new org.bukkit.material.Leaves(type, d);
             t = match(l.getSpecies().name().replace("GENERIC", "OAK").replace("REDWOOD", "SPRUCE") + "_LEAVES");
         } else if(m.contains("SAPLING")) {
-            if(v.contains("1.8")) {
+            if(EIGHT) {
                 t = match("SAPLING", d);
             } else {
                 final org.bukkit.material.Sapling s = new org.bukkit.material.Sapling(type, d);
@@ -1644,10 +1644,12 @@ public enum UMaterial {
             final org.bukkit.material.WoodenStep s = new org.bukkit.material.WoodenStep(type, d);
             t = match(s.getSpecies().name().replace("GENERIC", "OAK").replace("REDWOOD", "SPRUCE") + "_SLAB");
         } else if(m.contains("BED_BLOCK")) {
-            if(v.contains("1.12")) {
+            if(TWELVE) {
                 final org.bukkit.block.Bed b = (org.bukkit.block.Bed) block.getState();
                 t = match(b.getColor().name() + "_BED");
-            } else return UMaterial.WHITE_BED;
+            } else {
+                return UMaterial.WHITE_BED;
+            }
         } else if(m.contains("CROP")) {
             return UMaterial.AIR;
         } else if(m.contains("PISTON_")) {
@@ -1670,24 +1672,31 @@ public enum UMaterial {
         }
         return t != null ? t : match(m, d);
     }
-    public static UMaterial match(String name) {
+    public static UMaterial match(@NotNull String name) {
+        name = name.toUpperCase();
         try {
-            return valueOf(name.toUpperCase());
+            final UMaterial material = valueOf(name);
+            CACHE.put(name, material);
+            return material;
         } catch (Exception e) {
-            final byte d = name.contains(":") ? Byte.parseByte(name.split(":")[1]) : 0;
-            name = name.split(":")[0].toUpperCase();
-            if(inUMemory.containsKey(name + d)) return inUMemory.get(name + d);
+            final byte targetData = name.contains(":") ? Byte.parseByte(name.split(":")[1]) : 0;
+            name = name.split(":")[0];
+            if(CACHE.containsKey(name + targetData)) {
+                return CACHE.get(name + targetData);
+            }
             for(UMaterial u : values()) {
-                if(u.name().equals(name)) {
-                    inUMemory.put(name, u);
+                if(name.equals(u.name())) {
+                    CACHE.put(name, u);
                     return u;
                 }
-                final byte D = u.getData();
-                if(D == d) {
+                final byte data = u.getData();
+                if(data == targetData) {
                     final String[] names = u.names;
                     for(String n : names) {
-                        if(n != null && n.equals(name)) {
-                            for(String na : names) inUMemory.put(na, u);
+                        if(name.equals(n)) {
+                            for(String na : names) {
+                                CACHE.put(na, u);
+                            }
                             return u;
                         }
                     }
@@ -1699,9 +1708,7 @@ public enum UMaterial {
     public enum PotionBase { NORMAL, ARROW, TIPPED_ARROW, LINGERING, SPLASH, }
 }
 
-class UPotion {
-    private static final String v = Bukkit.getVersion();
-    private static boolean eight = v.contains("1.8"), nine = v.contains("1.9"), ten = v.contains("1.10"), eleven = v.contains("1.11"), twelve = v.contains("1.12");
+class UPotion implements Versionable {
     private final UMaterial.PotionBase base;
     private final ItemStack potion;
     private final PotionType type;
@@ -1709,11 +1716,11 @@ class UPotion {
     public UPotion(UMaterial.PotionBase base, String type, boolean extended, boolean upgraded) {
         this.base = base;
         type = type.toUpperCase();
-        final PotionType t = eight && (type.equals("AWKWARD") || type.equals("LUCK") || type.equals("MUNDANE") || type.equals("THICK")) || (eight || nine || ten || eleven || twelve) && (type.equals("TURTLE_MASTER") || type.equals("SLOW_FALLING"))
+        final PotionType t = EIGHT && (type.equals("AWKWARD") || type.equals("LUCK") || type.equals("MUNDANE") || type.equals("THICK")) || (EIGHT || NINE || TEN || ELEVEN || TWELVE) && (type.equals("TURTLE_MASTER") || type.equals("SLOW_FALLING"))
                 ? PotionType.WATER : PotionType.valueOf(type);
         this.type = t;
         final String bn = base.name();
-        if(eight) {
+        if(EIGHT) {
             potion = t.equals(PotionType.WATER) ? new Potion(t).toItemStack(1) : new Potion(t, upgraded ? 2 : 1, bn.equals("SPLASH")).toItemStack(1);
             potiondata = potion.getItemMeta();
         } else {

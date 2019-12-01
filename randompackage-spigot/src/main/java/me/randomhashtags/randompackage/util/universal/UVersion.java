@@ -438,15 +438,22 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
 			final String s = p[0].toUpperCase();
 			final int v = Integer.parseInt(p[1]), pp = Integer.parseInt(p[2]);
 			try {
-			    final Sound sound = Sound.valueOf(s);
-                if(player != null) {
-                    if(!globalsound) player.playSound(location, sound, v, pp);
-                    else             player.getWorld().playSound(location, sound, v, pp);
+			    final Sound sound = USound.matchSound(s);
+			    if(sound != null) {
+                    if(player != null) {
+                        if(!globalsound) {
+                            player.playSound(location, sound, v, pp);
+                        } else {
+                            player.getWorld().playSound(location, sound, v, pp);
+                        }
+                    } else {
+                        location.getWorld().playSound(location, sound, v, pp);
+                    }
                 } else {
-                    location.getWorld().playSound(location, sound, v, pp);
+			        sendConsoleMessage("&6[RandomPackage] &cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
                 }
             } catch (Exception e) {
-			    sendConsoleMessage("&6[RandomPackage] &cERROR! Invalid sound name: &f" + s + "&c!");
+			    sendConsoleMessage("&6[RandomPackage] &cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
             }
 		}
     }

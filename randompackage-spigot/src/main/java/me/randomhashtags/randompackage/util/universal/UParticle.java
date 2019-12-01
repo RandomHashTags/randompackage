@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.util.universal;
 
+import com.sun.istack.internal.NotNull;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -80,7 +81,7 @@ public enum UParticle {
     WATER_SPLASH(null, "WATER_SPLASH"),
     WATER_WAKE(null, "WATER_WAKE"),
     ;
-    private static final HashMap<String, UParticle> inMemory = new HashMap<>();
+    private static final HashMap<String, UParticle> CACHE = new HashMap<>();
     private final String v = Bukkit.getVersion();
     private final String[] names;
     private final String versionName;
@@ -155,14 +156,14 @@ public enum UParticle {
         final String t = names[realver], t2 = names.length > ver ? names[ver] : names[names.length-1];
         return t != null ? t : t2;
     }
-    public static UParticle matchParticle(String name) {
+    public static UParticle matchParticle(@NotNull String name) {
         name = name.toUpperCase();
-        if(inMemory.keySet().contains(name)) return inMemory.get(name);
-        for(UParticle u : UParticle.values()) {
-            for(String n : u.names) {
-                if(n != null && n.equals(name)) {
-                    inMemory.put(n, u);
-                    return u;
+        if(CACHE.containsKey(name)) return CACHE.get(name);
+        for(UParticle particle : UParticle.values()) {
+            for(String target : particle.names) {
+                if(name.equals(target)) {
+                    CACHE.put(target, particle);
+                    return particle;
                 }
             }
         }
