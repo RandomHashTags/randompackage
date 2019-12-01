@@ -113,7 +113,7 @@ public final class RandomPackage extends JavaPlugin implements Listener {
         cmd.tryLoading(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
 
         cmd.tryLoading(CustomEnchants.getCustomEnchants(), getHash("alchemist", "alchemist", "disabledenchants", "disabled enchants", "enchanter", "enchanter", "enchants", "enchants", "tinkerer", "tinkerer"), isTrue("alchemist", "disabled enchants", "enchanter", "enchants", "tinkerer"));
-        cmd.tryLoadingg(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.blacks scrolls", true));
+        cmd.tryLoadingg(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.black scrolls", true));
         cmd.tryLoadingg(EnchantmentOrbs.getEnchantmentOrbs(), null, isTrue("custom enchants.enchantment orbs", true));
         cmd.tryLoadingg(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
         cmd.tryLoadingg(RandomizationScrolls.getRandomizationScrolls(), null, isTrue("custom enchants.randomization scrolls", true));
