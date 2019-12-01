@@ -46,8 +46,8 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         outerloop: for(String c : conditions) {
             final String condition = c.toLowerCase();
             final Set<String> keys = entities.keySet();
-            for(String s : keys) {
-                final String entityKey = s;
+            for(String key : keys) {
+                final String entityKey = key;
                 final Entity e = entities.get(entityKey);
                 String value = c.contains("=") ? c.split("=")[1] : "false";
                 if(!value.replaceAll("\\p{L}", "").equals(value)) {
@@ -74,11 +74,15 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                         }
                     }
                 }
-                s = s.toLowerCase();
+                key = key.toLowerCase();
                 if(valueReplacements != null) {
                     for(String r : valueReplacements.keySet()) {
-                        s = s.replace(r.toLowerCase(), valueReplacements.get(r));
+                        final String replacement = valueReplacements.get(r);
+                        if(replacement != null) {
+                            key = key.replace(r.toLowerCase(), replacement);
+                        }
                     }
+                    value = replaceValue(entities, value, valueReplacements);
                 }
                 if(!hasCancelled && cancelled && !isInteract) {
                     passed = false;
@@ -92,7 +96,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 } else if(condition.startsWith("didproc")) {
                     passed = didProc;
                 } else {
-                    passed = passedAllConditions(event, entities, entityKey, e, condition, s, value);
+                    passed = passedAllConditions(event, entities, entityKey, e, condition, key, value);
                 }
                 if(!passed) {
                     break outerloop;

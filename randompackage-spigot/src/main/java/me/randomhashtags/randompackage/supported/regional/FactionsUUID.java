@@ -5,6 +5,7 @@ import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.FactionRenameEvent;
 import com.massivecraft.factions.event.LandClaimEvent;
+import com.massivecraft.factions.iface.RelationParticipator;
 import me.randomhashtags.randompackage.event.regional.FactionClaimLandEvent;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
@@ -49,8 +50,20 @@ public final class FactionsUUID extends Reflect implements Regional {
     public void unload() {
     }
 
-    private boolean isRelation(FPlayer fp, Faction f, String type) {
-        return fp.getRelationTo(f).name().equalsIgnoreCase(type);
+    private boolean isRelation(FPlayer fplayer, Faction f, String type) {
+        final Class<? extends FPlayer> c = fplayer.getClass();
+        String n = "";
+        try {
+            if(isLegacy) {
+                n = ((com.massivecraft.factions.struct.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, f)).name();
+            } else {
+                n = ((com.massivecraft.factions.perms.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, f)).name();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return n.equalsIgnoreCase(type);
+
     }
 
     public Faction getFaction(UUID player) {
@@ -68,9 +81,12 @@ public final class FactionsUUID extends Reflect implements Regional {
         final Faction f = getFaction(player);
         final String faction = f != null ? f.getTag() : null;
         if(faction == null) return new ArrayList<>();
-        if(!relations.containsKey(faction)) relations.put(faction, new HashMap<>());
-        if(relations.get(faction).containsKey(TYPE)) {
-            return relations.get(faction).get(TYPE);
+        if(!relations.containsKey(faction)) {
+            relations.put(faction, new HashMap<>());
+        }
+        final HashMap<String, List<UUID>> list = relations.get(faction);
+        if(list.containsKey(TYPE)) {
+            return list.get(TYPE);
         } else {
             final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
@@ -83,7 +99,7 @@ public final class FactionsUUID extends Reflect implements Regional {
                 )
                     members.add(fp.getPlayer().getUniqueId());
             }
-            relations.get(faction).put(TYPE, members);
+            list.put(TYPE, members);
             return members;
         }
     }
