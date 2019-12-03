@@ -43,7 +43,7 @@ public class BlackScrolls extends CustomEnchants {
 
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
         item = null;
-        final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
+        final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);
         if(is != null && enchants.size() > 0) {
             final Set<CustomEnchant> key = enchants.keySet();
             CustomEnchant enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
@@ -51,7 +51,7 @@ public class BlackScrolls extends CustomEnchants {
             int successP = -1;
             for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
             for(int f = 1; f <= 5; f++) {
-                final EnchantRarity r = valueOfEnchantRarity(enchant);
+                final EnchantRarity r = valueOfCustomEnchantRarity(enchant);
                 if(a.contains(r)) {
                     int enchantlevel = enchants.get(enchant);
                     itemMeta = is.getItemMeta(); lore.clear(); lore.addAll(itemMeta.getLore());
@@ -76,7 +76,7 @@ public class BlackScrolls extends CustomEnchants {
             final Player player = (Player) event.getWhoClicked();
             item = current; itemMeta = current.getItemMeta(); lore.clear();
             HashMap<CustomEnchant, Integer> enchantmentsonitem = null;
-            if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchants(current);
+            if(current.hasItemMeta() && current.getItemMeta().hasLore()) enchantmentsonitem = getEnchantsOnItem(current);
 
             final BlackScroll bs = valueOfBlackScroll(cursor);
             if(bs != null && item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && !enchantmentsonitem.isEmpty()) {

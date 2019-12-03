@@ -273,7 +273,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                         for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                             final CustomEnchant e = valueOfCustomEnchant(s);
                             if(e != null && e.isEnabled()) {
-                                final EnchantRarity r = valueOfEnchantRarity(e);
+                                final EnchantRarity r = valueOfCustomEnchantRarity(e);
                                 if(r != null) {
                                     int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
                                     l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
@@ -290,7 +290,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                         if(en != null && en.isEnabled() && (!c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
                             final int lvl = random.nextInt(en.getMaxLevel()+1);
                             if(lvl != 0 || !levelzeroremoval) {
-                                lore.add(valueOfEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
+                                lore.add(valueOfCustomEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
                             }
                         }
                     } else {

@@ -22,7 +22,7 @@ public class HasCustomEnchantEquipped extends AbstractEventCondition {
                     final CustomEnchants enchants = getCustomEnchants();
                     final ItemStack[] items = new ItemStack[] {e.getHelmet(), e.getChestplate(), e.getLeggings(), e.getBoots(), EIGHT ? e.getItemInHand() : e.getItemInMainHand(), EIGHT ? null : e.getItemInOffHand()};
                     for(ItemStack is : items) {
-                        if(enchants.getEnchants(is).containsKey(c)) {
+                        if(enchants.getEnchantsOnItem(is).containsKey(c)) {
                             has = true;
                             break;
                         }

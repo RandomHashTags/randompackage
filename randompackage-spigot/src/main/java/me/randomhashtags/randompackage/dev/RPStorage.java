@@ -5,6 +5,9 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.api.CustomArmor;
+import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.util.universal.UMaterial;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -242,6 +245,57 @@ public interface RPStorage {
         }
         return null;
     }
+
+    default EnchantRarity valueOfCustomEnchantRarity(ItemStack is) {
+        if(is != null && rarities != null) {
+            for(EnchantRarity r : rarities.values()) {
+                final ItemStack re = r.getRevealItem();
+                if(re != null && re.isSimilar(is)) {
+                    return r;
+                }
+            }
+        }
+        return null;
+    }
+    default EnchantRarity valueOfCustomEnchantRarity(CustomEnchant enchant) {
+        if(rarities != null) {
+            for(EnchantRarity e : rarities.values()) {
+                if(e.getEnchants().contains(enchant)) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+    default CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
+    default CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
+        if(string != null) {
+            final String s = ChatColor.stripColor(string);
+            if(enabled != null) {
+                for(CustomEnchant ce : enabled.values()) {
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
+            }
+            if(checkDisabledEnchants && disabled != null) {
+                for(CustomEnchant ce : disabled.values()) {
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+                        return ce;
+                }
+            }
+        }
+        return null;
+    }
+    default CustomEnchant valueOfCustomEnchant(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final CustomEnchant e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
+            final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfCustomEnchantRarity(e);
+            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
+        }
+        return null;
+    }
+
+
     default ItemStack getRarityGem(@NotNull RarityGem gem, @NotNull Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();

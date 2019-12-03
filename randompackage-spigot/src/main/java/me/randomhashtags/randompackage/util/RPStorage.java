@@ -221,27 +221,6 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public EnchantRarity valueOfEnchantRarity(ItemStack is) {
-        if(is != null && rarities != null) {
-            for(EnchantRarity r : rarities.values()) {
-                final ItemStack re = r.getRevealItem();
-                if(re != null && re.isSimilar(is)) {
-                    return r;
-                }
-            }
-        }
-        return null;
-    }
-    public static EnchantRarity valueOfEnchantRarity(CustomEnchant enchant) {
-        if(rarities != null) {
-            for(EnchantRarity e : rarities.values()) {
-                if(e.getEnchants().contains(enchant)) {
-                    return e;
-                }
-            }
-        }
-        return null;
-    }
     public FactionUpgrade valueOfFactionUpgrade(int slot) {
         if(factionupgrades != null) {
             for(FactionUpgrade f : factionupgrades.values()) {
@@ -271,33 +250,6 @@ public abstract class RPStorage extends RegionalAPI {
                     return k;
                 }
             }
-        }
-        return null;
-    }
-    public static CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
-    public static CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
-        if(string != null) {
-            final String s = ChatColor.stripColor(string);
-            if(enabled != null) {
-                for(CustomEnchant ce : enabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
-                        return ce;
-                }
-            }
-            if(checkDisabledEnchants && disabled != null) {
-                for(CustomEnchant ce : disabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
-                        return ce;
-                }
-            }
-        }
-        return null;
-    }
-    public static CustomEnchant valueOfCustomEnchant(ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomEnchant e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
-            final EnchantRarity r = CustomEnchants.getCustomEnchants().valueOfEnchantRarity(e);
-            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
         }
         return null;
     }

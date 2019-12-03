@@ -92,7 +92,7 @@ public class Fireballs extends CustomEnchants {
             final CustomEnchant enchant = valueOfCustomEnchant(current);
             final MagicDust dust = valueOfMagicDust(cursor);
             if(dust != null && enchant != null) {
-                final EnchantRarity ra = valueOfEnchantRarity(enchant);
+                final EnchantRarity ra = valueOfCustomEnchantRarity(enchant);
                 if(dust.getAppliesToRarities().contains(ra)) {
                     final String SUCCESS = ra.getSuccess();
                     int percent = -1;

@@ -72,7 +72,7 @@ public class TransmogScrolls extends CustomEnchants {
             did = scroll.canBeApplied(is);
             if(did) {
                 final String apply = scroll.getApplied();
-                final HashMap<CustomEnchant, Integer> enchants = getEnchants(is);
+                final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);
                 final int size = enchants.size();
                 int newsize = 0;
                 final String previous = apply.replace("{LORE_COUNT}", Integer.toString(size));
@@ -84,7 +84,7 @@ public class TransmogScrolls extends CustomEnchants {
                         final EnchantRarity r = rarities.get(ss);
                         for(String s : l) {
                             final CustomEnchant enchant = valueOfCustomEnchant(s);
-                            if(enchant != null && valueOfEnchantRarity(enchant) == r) {
+                            if(enchant != null && valueOfCustomEnchantRarity(enchant) == r) {
                                 lore.add(s);
                             }
                         }
@@ -117,7 +117,7 @@ public class TransmogScrolls extends CustomEnchants {
 
     public TransmogScroll getApplied(ItemStack is) {
         if(transmogscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
-            final String size = Integer.toString(getEnchants(is).size()), d = is.getItemMeta().getDisplayName();
+            final String size = Integer.toString(getEnchantsOnItem(is).size()), d = is.getItemMeta().getDisplayName();
             for(TransmogScroll t : transmogscrolls.values()) {
                 if(d.endsWith(t.getApplied().replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size))) {
                     return t;

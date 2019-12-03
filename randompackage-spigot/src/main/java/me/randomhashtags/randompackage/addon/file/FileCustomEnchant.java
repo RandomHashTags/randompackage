@@ -8,8 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileCustomEnchant extends RPAddon implements CustomEnchant {
-    private List<String> lore;
-    private List<String> appliesto, attributes;
+    private List<String> lore, appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 
     public FileCustomEnchant(File f) {
