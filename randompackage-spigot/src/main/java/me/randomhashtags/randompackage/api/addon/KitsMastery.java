@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.addon.FileKitMastery;
+import me.randomhashtags.randompackage.addon.file.FileKitMastery;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;

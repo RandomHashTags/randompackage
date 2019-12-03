@@ -1,7 +1,8 @@
 package me.randomhashtags.randompackage.dev.duels;
 
-import me.randomhashtags.randompackage.dev.duels.DuelArena;
-import me.randomhashtags.randompackage.util.addon.RPAddon;
+import me.randomhashtags.randompackage.addon.DuelArena;
+import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
     private ItemStack item;
     public FileDuelArena(File f) {
         load(f);
-        addDuelArena(this);
+        register(Feature.DUEL_ARENA, this);
     }
     public String getIdentifier() { return getYamlName(); }
 

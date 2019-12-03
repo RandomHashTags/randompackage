@@ -2,10 +2,11 @@ package me.randomhashtags.randompackage.dev;
 
 public enum Feature {
     ARMOR_SET,
+
     BLACK_SCROLL,
     BOOSTER,
-    CONQUEST_CHEST,
 
+    CONQUEST_CHEST,
     CUSTOM_BOSS,
     CUSTOM_ENCHANT,
     CUSTOM_ENCHANT_RARITY,
@@ -32,15 +33,32 @@ public enum Feature {
 
     INVENTORY_PET,
 
+    KING_OF_THE_HILL,
+
+    LOOTBAG,
     LOOTBOX,
+
+    MAGIC_DUST,
+    MASK,
+    MONTHLY_CRATE,
 
     OUTPOST,
 
     PLAYER_QUEST,
 
+    RANDOMIZATION_SCROLL,
+    RARITY_FIREBALL,
     RARITY_GEM,
 
     SERVER_CRATE,
+    SHOP_CATEGORY,
+    SOUL_TRACKER,
+    STRONGHOLD,
 
-    MAGIC_DUST,
+    TITAN_ATTRIBUTE,
+    TITLE,
+    TRANSMOG_SCROLL,
+    TRINKET,
+
+    WHITE_SCROLL,
 }

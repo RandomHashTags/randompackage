@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
-import me.randomhashtags.randompackage.util.addon.PathRandomizationScroll;
+import me.randomhashtags.randompackage.addon.file.PathRandomizationScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

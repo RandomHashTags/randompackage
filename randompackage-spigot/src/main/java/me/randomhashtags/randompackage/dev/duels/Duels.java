@@ -1,8 +1,11 @@
 package me.randomhashtags.randompackage.dev.duels;
 
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -43,10 +46,28 @@ public class Duels extends RPFeature implements CommandExecutor {
             viewTypes(player);
         } else {
             final String a = args[0];
-            if(a.equals("godset")) {
-                viewGodset(player);
-            } else {
-
+            switch (a) {
+                case "ranked":
+                    break;
+                case "godset":
+                    viewGodset(player);
+                    break;
+                case "top":
+                    viewTop(sender, 1);
+                    break;
+                case "toggle":
+                    break;
+                case "collect":
+                    break;
+                case "spectate":
+                    break;
+                case "unranked":
+                    break;
+                case "custom":
+                    break;
+                default:
+                    viewHelp(player);
+                    break;
             }
         }
         return true;
@@ -54,14 +75,29 @@ public class Duels extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("duel arenas", "_settings.yml");
+        final String folder = dataFolder + separator + "duel arenas";
+        config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
+        if(!otherdata.getBoolean("saved default duel arenas")) {
+            final String[] a = new String[] {"DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID"};
+            for(String s : a) {
+                save(folder, s + ".yml");
+            }
+            otherdata.set("saved default duel arenas", true);
+            saveOtherData();
+        }
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "duel arenas", "_settings.yml"));
+        for(File f : new File(folder).listFiles()) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
+                new FileDuelArena(f);
+            }
+        }
+
         type = new UInventory(null, config.getInt("type.size"), colorize(config.getString("type.title")));
         godset = new UInventory(null, config.getInt("godset.size"), colorize(config.getString("godset.title")));
 
         activeDuels = new ArrayList<>();
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Duels &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + duelArenas.size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         duelArenas = null;
@@ -111,8 +147,18 @@ public class Duels extends RPFeature implements CommandExecutor {
     public void acceptRequest(Player player) {
     }
 
+    public void viewHelp(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.duel.help", true)) {
+            sendStringListMessage(player, config.getStringList("messages.help"), null);
+        }
+    }
     public void viewTop(CommandSender sender, int page) {
         if(hasPermission(sender, "RandomPackage.duel.top", true)) {
+        }
+    }
+    public void tryTogglingRequests(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.duel.toggle", true)) {
+            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
         }
     }
 

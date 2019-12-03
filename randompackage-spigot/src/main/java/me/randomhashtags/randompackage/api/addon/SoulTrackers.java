@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.PathSoulTracker;
+import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

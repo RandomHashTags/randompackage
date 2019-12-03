@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.CustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.util.addon.FileCustomBoss;
+import me.randomhashtags.randompackage.addon.file.FileCustomBoss;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;

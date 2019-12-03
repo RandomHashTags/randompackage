@@ -136,6 +136,10 @@ public enum USound implements Versionable {
         return null;
     }
     public static Sound matchSound(@NotNull String name) {
+        name = name.toUpperCase();
+        if(SOUND_CACHE.containsKey(name)) {
+            return SOUND_CACHE.get(name);
+        }
         final USound sound = match(name);
         if(sound != null) {
             return sound.getSound();

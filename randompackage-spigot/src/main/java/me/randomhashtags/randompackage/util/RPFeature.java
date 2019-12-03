@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
+import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.util.universal.UInventory;
@@ -33,7 +34,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public abstract class RPFeature extends RPStorage implements Listener, Identifiable, Mathable {
+public abstract class RPFeature extends RegionalAPI implements Listener, Identifiable, Mathable, RPStorage {
     private boolean isEnabled = false;
     private static boolean mcmmoIsEnabled = false;
     public boolean isEnabled() { return isEnabled; }
@@ -229,7 +230,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                     m.setOwner(owner);
                     itemMeta = m;
                 }
-                itemMeta.setDisplayName(name != null ? ChatColor.translateAlternateColorCodes('&', name) : null);
+                itemMeta.setDisplayName(name != null ? colorize(name) : null);
                 item.setItemMeta(itemMeta);
 
                 if(config != null && config.get(path + ".lore") != null) {
@@ -293,7 +294,7 @@ public abstract class RPFeature extends RPStorage implements Listener, Identifia
                             }
                         }
                     } else {
-                        lore.add(string.isEmpty() ? string : ChatColor.translateAlternateColorCodes('&', string.replace("{MAX_TIER}", max)));
+                        lore.add(string.isEmpty() ? string : colorize(string.replace("{MAX_TIER}", max)));
                     }
                 }
                 m.setLore(lore);

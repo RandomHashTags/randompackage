@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Slotable;
-import me.randomhashtags.randompackage.util.addon.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

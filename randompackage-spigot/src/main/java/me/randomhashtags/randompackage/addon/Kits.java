@@ -3,11 +3,12 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.attribute.SetLevelupChance;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.addon.FileFallenHero;
+import me.randomhashtags.randompackage.addon.file.FileFallenHero;
 import me.randomhashtags.randompackage.util.listener.KitEvents;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 view(player);
         } else if(l >= 1 && args[0].equals("reset") && type != null) {
             if(l == 2 && hasPermission(sender, "RandomPackage." + c + ".reset", true)) resetAll(player, args[1], type);
-            else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) reset(player, args[1], getKit(args[2]));
+            else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) reset(player, args[1], getCustomKit(args[2]));
         }
         return true;
     }
@@ -91,7 +92,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 }
             }
             previewing = new ArrayList<>();
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fallenheroes != null ? fallenheroes.size() : 0) + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+            sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
     protected final void unloadKitUtils() {
@@ -99,8 +100,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         if(isEnabled && loadedInstances == 0) {
             isEnabled = false;
             config = null;
-            fallenheroes = null;
-            kits = null;
+            unregister(Feature.FALLEN_HERO, Feature.CUSTOM_KIT);
             LivingFallenHero.deleteAll();
             KitEvents.getKitEvents().unload();
         }

@@ -1,0 +1,20 @@
+# Made by RandomHashTags
+settings:
+  name: "Atlas"
+  max level: 10
+  slot: 12
+#
+item:
+  item: "spider_eye"
+  lore:
+    - "&c&l\"Compound Punishment\""
+    - "&c% of damage from attacks is combined"
+    - "&cevery 2-5 attacks, depending on level."
+    - " "
+    - "&cExample: If you deal 10 DMG"
+    - "&cper swing, you might deal 2 DMG"
+    - "&cfor 2 swings, followed by 26 DMG"
+    - "&con your 3rd swing."
+#
+attributes:
+  - ""

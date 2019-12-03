@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.dev.Disguise;
+import me.randomhashtags.randompackage.addon.Disguise;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

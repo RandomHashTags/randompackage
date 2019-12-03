@@ -7,10 +7,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +51,13 @@ public class CollectionChest {
 			final ConfigurationSection st = otherdata.getConfigurationSection("collection chests." + s + ".storage");
 			if(st != null) {
 				for(String i : st.getKeys(false)) {
-					final ItemStack a = api.d(otherdata, "collection chests." + s + ".storage." + i);
-					inv.setItem(Integer.parseInt(i), a);
+					ItemStack is;
+					try {
+						is = otherdata.getItemStack("collection chests." + s + ".storage." + i);
+					} catch (Exception e) {
+						is = api.d(otherdata, "collection chests." + s + ".storage." + i);
+					}
+					inv.setItem(Integer.parseInt(i), is);
 				}
 			}
 		}
@@ -62,18 +65,11 @@ public class CollectionChest {
 	}
 	public void backup() {
 		int i = 0;
-		final YamlConfiguration a = otherdata;
 		final String u = uuid.toString();
 		for(ItemStack is : getInventory().getContents()) {
 			if(is != null) {
-				a.set("collection chests." + u + ".info", placer + ":" + api.toString(location) + ":" + (filter != null ? filter.name() : "null"));
-				a.set("collection chests." + u + ".storage." + i + ".item", UMaterial.match(is).name());
-				a.set("collection chests." + u + ".storage." + i + ".amount", is.getAmount());
-				final ItemMeta m = is.getItemMeta();
-				if(m != null) {
-					if(m.hasDisplayName()) a.set("collection chests." + u + ".storage." + i + ".name", m.getDisplayName());
-					if(m.hasLore()) a.set("collection chests." + u + ".storage." + i + ".lore", m.getLore());
-				}
+				otherdata.set("collection chests." + u + ".info", placer + ":" + api.toString(location) + ":" + (filter != null ? filter.name() : "null"));
+				otherdata.set("collection chests." + u + ".storage." + i, is.toString());
 			}
 			i++;
 		}
@@ -97,11 +93,6 @@ public class CollectionChest {
 	}
 	public void delete() {
 		chests.remove(uuid);
-		uuid = null;
-		filter = null;
-		placer = null;
-		location = null;
-		inv = null;
 	}
 	
 	public static CollectionChest valueOf(Block block) {

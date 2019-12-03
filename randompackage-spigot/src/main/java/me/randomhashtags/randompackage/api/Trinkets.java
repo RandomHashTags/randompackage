@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.util.addon.FileTrinket;
+import me.randomhashtags.randompackage.addon.file.FileTrinket;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;

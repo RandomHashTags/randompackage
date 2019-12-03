@@ -2,12 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.util.addon.FileArmorSet;
+import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -58,11 +59,12 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 		givedpitem.items.put("equipmentlootbox", equipmentLootbox);
 
-		final YamlConfiguration a = otherdata;
-		if(!a.getBoolean("saved default custom armor")) {
+		if(!otherdata.getBoolean("saved default custom armor")) {
 			final String[] c = new String[] {"DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"};
-			for(String s : c) save("custom armor", s + ".yml");
-			a.set("saved default custom armor", true);
+			for(String s : c) {
+				save("custom armor", s + ".yml");
+			}
+			otherdata.set("saved default custom armor", true);
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
@@ -75,10 +77,10 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 		}
 		addGivedpCategory(crystals, UMaterial.NETHER_STAR, "Armor Set Crystals", "Givedp: ArmorSet Crystals");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (armorsets != null ? armorsets.size() : 0) + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ARMOR_SET).size() + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		armorsets = null;
+		unregister(Feature.ARMOR_SET);
 	}
 	public ItemStack getCrystal(ArmorSet set, int percent) {
 		final String p = Integer.toString(percent), n = set.getName();

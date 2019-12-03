@@ -1,0 +1,22 @@
+# Made by RandomHashTags
+messages:
+  leveled up:
+    - "&d&l(!)&r &d{ATTRIBUTE} /titan attribute - &lLEVELED UP!"
+    - "&7Your {ATTRIBUTE} /titan attribute is now level: &n{NEW_LEVEL}"
+    - "&7Your upgraded weapon is in your &d&n/collect&r &7inventory."
+  leveled up broadcasted:
+    - "&d&l**&r &d{PLAYER}'s {ATTRIBUTE} /titan attribute is now Level: &l{NEW_LEVEL}"
+  #
+  help:
+    - ""
+#
+settings:
+  max allowed on an item: 1
+#
+gui:
+  title: "Titan Attributes"
+  size: 18
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+#

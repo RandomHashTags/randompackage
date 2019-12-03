@@ -173,17 +173,17 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             return air;
         } else if(input.startsWith("customboss:")) {
-            final CustomBoss b = getBoss(Q.split(":")[1]);
+            final CustomBoss b = getCustomBoss(Q.split(":")[1]);
             return b != null ? b.getSpawnItem() : air;
         } else if(input.startsWith("customexplosion:")) {
-            final CustomExplosion e = getExplosion(Q.split(":")[1]);
+            final CustomExplosion e = getCustomExplosion(Q.split(":")[1]);
             return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
             // ce:<enchant>:<level>:<success>:<destroy>
             final String[] k = Q.split(":");
             final int l = k.length;
-            CustomEnchant e = getEnchant(k[1]);
-            final EnchantRarity r = e == null ? getEnchantRarity(k[1]) : null;
+            CustomEnchant e = getCustomEnchant(k[1]);
+            final EnchantRarity r = e == null ? getCustomEnchantRarity(k[1]) : null;
             if(r != null) {
                 final List<CustomEnchant> a = r.getEnchants();
                 e = a.get(random.nextInt(a.size()));
@@ -194,7 +194,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
         } else if(input.startsWith("dust:")) {
             final String[] a = Q.split(":");
-            final MagicDust d = getDust(a[1]);
+            final MagicDust d = getMagicDust(a[1]);
             final int percent = a.length >= 3 ? Integer.parseInt(a[2]) : -1;
             return d != null ? percent == -1 ? d.getRandomPercentItem(random) : d.getItem(percent) : air;
         } else if(input.startsWith("enchantmentorb:")) {
@@ -222,7 +222,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return air;
         } else if(input.startsWith("fallenherogem")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
-            CustomKit k = type != null ? getKit(type) : null;
+            CustomKit k = type != null ? getCustomKit(type) : null;
             if(type != null && k == null) {
                 final List<CustomKit> list = new ArrayList<>();
                 for(CustomKit kk : kits.values()) {
@@ -238,7 +238,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return f != null ? k.getFallenHeroItem(k, false) : air;
         } else if(input.startsWith("fallenhero")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
-            CustomKit k = type != null ? getKit(type) : null;
+            CustomKit k = type != null ? getCustomKit(type) : null;
             if(type != null && k == null) {
                 final List<CustomKit> list = new ArrayList<>();
                 for(CustomKit kk : kits.values()) {
@@ -298,7 +298,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final EnchantRarity r = rarities != null ? rarities.getOrDefault(Q.split(":")[1], null) : null;
             return r != null ? r.getRevealItem() : air;
         } else if(input.startsWith("rarityfireball:")) {
-            final RarityFireball f = getFireball(Q.split(":")[1]);
+            final RarityFireball f = getRarityFireball(Q.split(":")[1]);
             return f != null ? f.getItem() : air;
         } else if(input.startsWith("raritygem")) {
             final RarityGem g = getRarityGem(Q.split(":")[1]);

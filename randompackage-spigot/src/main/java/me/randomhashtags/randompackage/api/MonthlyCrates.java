@@ -1,9 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.addon.FileMonthlyCrate;
+import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -61,7 +62,8 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("monthly crates", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "monthly crates", "_settings.yml"));
+        final String folder = dataFolder + separator + "monthly crates";
+        config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         categoryView = new UInventory(null, 54, colorize(config.getString("category view.title")));
@@ -130,7 +132,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         }
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> K = new HashMap<>();
-        for(File f : new File(dataFolder + separator + "monthly crates").listFiles()) {
+        for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMonthlyCrate m = new FileMonthlyCrate(f);
                 final int z = m.getCategory();
@@ -171,11 +173,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 inv.setItem(S, O.get(S));
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (monthlycrates != null ? monthlycrates.size() : 0) + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MONTHLY_CRATE).size() + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(Player p : playertimers.keySet()) p.closeInventory();
-        monthlycrates = null;
+        for(Player p : playertimers.keySet()) {
+            p.closeInventory();
+        }
+        unregister(Feature.MONTHLY_CRATE);
     }
 
     public void viewCrates(Player player) {

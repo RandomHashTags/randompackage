@@ -1,12 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.ConquestChest;
+import me.randomhashtags.randompackage.addon.file.FileConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
+import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.FileConquestChest;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -28,10 +31,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Conquest extends RPFeature implements CommandExecutor {
     private static Conquest instance;
@@ -51,12 +51,17 @@ public class Conquest extends RPFeature implements CommandExecutor {
             viewLast(sender);
         } else {
             final String a = args[0];
-            if(a.equals("help")) {
-                viewHelp(sender);
-            } else if(a.equals("stop")) {
-                destroyConquests();
-            } else if(sender instanceof Player && a.equals("spawn")) {
-                spawn((Player) sender);
+            switch (a) {
+                case "stop":
+                    destroyConquests(sender);
+                case "spawn":
+                    if(sender instanceof Player) {
+                        spawn((Player) sender);
+                    }
+                    break;
+                default:
+                    viewHelp(sender);
+                    break;
             }
         }
         return true;
@@ -98,7 +103,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
         final HashMap<String, ConquestMob> CM = ConquestMob.bosses;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (conquestchests != null ? conquestchests.size() : 0) + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         for(int i : tasks) {
@@ -114,19 +119,21 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
             otherdata.set("conquests", con);
         }
-        destroyConquests();
+        destroyConquests(null);
         saveOtherData();
 
         LivingConquestChest.deleteAll(false);
-        conquestchests = null;
         ConquestMob.deleteAll();
+        unregister(Feature.CONQUEST_CHEST);
     }
-    public void destroyConquests() {
-        final List<LivingConquestChest> C = LivingConquestChest.living;
-        if(C != null) {
-            for(LivingConquestChest l : new ArrayList<>(C)) {
-                l.delete(false);
-                C.remove(l);
+    public void destroyConquests(@Nullable CommandSender sender) {
+        if(sender == null || hasPermission(sender, "RandomPackage.conquest.stop", true)) {
+            final List<LivingConquestChest> C = LivingConquestChest.living;
+            if(C != null) {
+                for(LivingConquestChest l : new ArrayList<>(C)) {
+                    l.delete(false);
+                    C.remove(l);
+                }
             }
         }
     }
@@ -222,7 +229,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public void spawn(Player player) {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
-            final List<ConquestChest> chests = new ArrayList<>(conquestchests.values());
+            final List<Identifiable> chests = new ArrayList<>(getAll(Feature.CONQUEST_CHEST).values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
             spawn(chests.get(random.nextInt(chests.size())), l);
         }

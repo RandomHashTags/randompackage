@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
-import me.randomhashtags.randompackage.util.addon.FileBooster;
+import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;

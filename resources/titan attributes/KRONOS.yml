@@ -1,0 +1,16 @@
+# Made by RandomHashTags
+settings:
+  name: "Kronos"
+  max level: 10
+  slot: 13
+#
+item:
+  item: "spider_eye"
+  lore:
+    - "&c&l\"Rage Rampage\""
+    - "&cRage stacks do NOT fully clear"
+    - "&cwhen you take damage. The % that"
+    - "&cDO clear decreases per level."
+#
+attributes:
+  - ""

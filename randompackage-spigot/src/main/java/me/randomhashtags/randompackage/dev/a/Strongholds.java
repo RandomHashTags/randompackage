@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.a;
 
 import me.randomhashtags.randompackage.dev.ActiveStronghold;
-import me.randomhashtags.randompackage.dev.Stronghold;
+import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import me.randomhashtags.randompackage.util.universal.UInventory;

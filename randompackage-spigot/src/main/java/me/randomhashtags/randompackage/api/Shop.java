@@ -2,10 +2,11 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.event.ShopSellEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.FileShopCategory;
+import me.randomhashtags.randompackage.addon.file.FileShopCategory;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -41,8 +42,9 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
+	    final String folder = dataFolder + separator + "shops";
+        config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "shops", "_settings.yml"));
         back = d(config, "items.back to categories");
         defaultShop = config.getString("settings./shop opens");
 
@@ -55,16 +57,16 @@ public class Shop extends RPFeature implements CommandExecutor {
 
         ShopCategory.shop = this;
         titles = new HashMap<>();
-        for(File f : new File(dataFolder + separator + "shops").listFiles()) {
+        for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileShopCategory c = new FileShopCategory(f);
                 titles.put(c.getTitle(), c);
             }
         }
-        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + (shopcategories != null ? shopcategories.size() : 0) + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + getAll(Feature.SHOP_CATEGORY).size() + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
-	    shopcategories = null;
+	    unregister(Feature.SHOP_CATEGORY);
     }
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

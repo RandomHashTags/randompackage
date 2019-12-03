@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipMatch;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipOption;
-import me.randomhashtags.randompackage.addon.obj.CoinFlipStats;
+import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;

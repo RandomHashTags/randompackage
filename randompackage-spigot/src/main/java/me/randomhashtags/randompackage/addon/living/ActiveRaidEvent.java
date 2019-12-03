@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.dev.RaidEventPhase;
+import me.randomhashtags.randompackage.addon.RaidEventPhase;
 import org.bukkit.World;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;

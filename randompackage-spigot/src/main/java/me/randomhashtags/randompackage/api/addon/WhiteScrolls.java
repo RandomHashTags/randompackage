@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.WhiteScroll;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.PathWhiteScroll;
+import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.util.addon.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.Location;
 
 import java.util.List;

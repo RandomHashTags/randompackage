@@ -63,13 +63,13 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     public String getIdentifier() { return "AUCTION_HOUSE"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        final boolean i = player != null;
+        final boolean isPlayer = player != null;
         final int l = args.length;
         if(l == 0) {
-            if(i) view(player, 1);
+            if(isPlayer) view(player, 1);
         } else {
-            final String arg0 = args[0], arg1 = l >= 2 ? args[1] : null;
-            switch (arg0) {
+            final String a = args[0], arg1 = l >= 2 ? args[1] : null;
+            switch (a) {
                 case "sell":
                     if(arg1 != null) {
                         final BigDecimal price = BigDecimal.valueOf(getRemainingDouble(arg1));
@@ -90,7 +90,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                     viewHelp(sender);
                     break;
                 default:
-                    if(i) view(player, 1);
+                    if(isPlayer) view(player, 1);
                     break;
             }
         }

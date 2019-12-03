@@ -134,12 +134,13 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         });
     }
     public void unload() {
-        for(UUID u : editingfilter.keySet()) {
+        for(UUID u : new ArrayList<>(editingfilter.keySet())) {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
-            if(o.isOnline()) o.getPlayer().closeInventory();
+            if(o.isOnline()) {
+                o.getPlayer().closeInventory();
+            }
         }
-        final YamlConfiguration a = otherdata;
-        a.set("collection chests", null);
+        otherdata.set("collection chests", null);
         final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
         if(chests != null) {
             for(CollectionChest c : chests.values()) {

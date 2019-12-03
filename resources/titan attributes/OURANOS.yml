@@ -1,0 +1,18 @@
+# Made by RandomHashTags
+settings:
+  name: "Ouranos"
+  max level: 10
+  slot: 14
+#
+item:
+  item: "spider_eye"
+  lore:
+    - "&c&l\"Omni Combatant\""
+    - "&cYour damage is converted to"
+    - "&cAoE damage around your target."
+    - "&cDamage is diluted, but all enchants"
+    - "&ccan still multi-proc. Your AoE radius"
+    - "&cand max targets scales with level."
+#
+attributes:
+  - ""

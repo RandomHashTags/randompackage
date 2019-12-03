@@ -5,12 +5,13 @@ import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addon.obj.CoinFlipStats;
+import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.addon.obj.Home;
+import me.randomhashtags.randompackage.addon.stats.DuelStats;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
-import me.randomhashtags.randompackage.dev.PlayerRank;
+import me.randomhashtags.randompackage.addon.PlayerRank;
 import me.randomhashtags.randompackage.event.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.event.PlayerQuestStartEvent;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -20,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +38,7 @@ import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.supported.economy.Vault.permissions;
 
 public class RPPlayer extends RPStorage {
-    private static final String s = File.separator, folder = getPlugin.getDataFolder() + s + "_Data" + s + "players";
+    private static final String folder = dataFolder + separator + "_Data" + separator + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
 
@@ -48,6 +48,7 @@ public class RPPlayer extends RPStorage {
 
     private PlayerRank rank;
     private CoinFlipStats coinflipStats;
+    private DuelStats duelStats;
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
     public long xpExhaustionExpiration = 0;
@@ -230,23 +231,7 @@ public class RPPlayer extends RPStorage {
                 int s = 0;
                 for(ItemStack i : showcase.get(p)) {
                     if(i != null && !i.getType().equals(Material.AIR)) {
-                        final UMaterial j = UMaterial.match(i);
-                        yml.set("showcases." + p + "." + s + ".item", j.name());
-                        if(i.hasItemMeta()) {
-                            final ItemMeta m = i.getItemMeta();
-                            if(m.hasDisplayName()) yml.set("showcases." + p + "." + s + ".name", m.getDisplayName());
-                            final List<String> l = new ArrayList<>();
-                            if(m.hasEnchants()) {
-                                String en = "VEnchants{";
-                                final Map<Enchantment, Integer> enchants = m.getEnchants();
-                                for(Enchantment e : enchants.keySet()) {
-                                    en = en.concat(e.getName() + enchants.get(e) + ";");
-                                }
-                                l.add(en + "}");
-                            }
-                            if(m.hasLore()) l.addAll(m.getLore());
-                            if(!l.isEmpty()) yml.set("showcases." + p + "." + s + ".lore", l);
-                        }
+                        yml.set("showcases." + p + "." + s, i.toString());
                     }
                     s++;
                 }
@@ -261,6 +246,7 @@ public class RPPlayer extends RPStorage {
             final String bools = yml.getString("booleans"), intz = yml.getString("ints"), longz = yml.getString("longs");
             if(bools != null) {
                 final String[] booleans = bools.split(";");
+                final int l = booleans.length;
                 coinflipNotifications = Boolean.parseBoolean(booleans[0]);
                 filter = Boolean.parseBoolean(booleans[1]);
                 jackpotNotifications = Boolean.parseBoolean(booleans[2]);
@@ -270,9 +256,15 @@ public class RPPlayer extends RPStorage {
                 jackpotTickets = BigDecimal.valueOf(Integer.parseInt(ints[0]));
                 jackpotWins = Integer.parseInt(ints[1]);
                 final int l = ints.length;
-                if(l >= 3) addedMaxHomes = Integer.parseInt(ints[2]);
-                if(l >= 4) questTokens = Integer.parseInt(ints[3]);
-                if(l >= 5) reputationPoints = Integer.parseInt(ints[4]);
+                if(l >= 3) {
+                    addedMaxHomes = Integer.parseInt(ints[2]);
+                    if(l >= 4) {
+                        questTokens = Integer.parseInt(ints[3]);
+                        if(l >= 5) {
+                            reputationPoints = Integer.parseInt(ints[4]);
+                        }
+                    }
+                }
             }
             if(longz != null) {
                 final String[] longs = longz.split(";");
@@ -450,10 +442,14 @@ public class RPPlayer extends RPStorage {
                     final ItemStack[] items = new ItemStack[54];
                     if(i != null) {
                         for(String sl : i.getKeys(false)) {
-                            if(sl.equals("slot")) {
-                                final int slot = Integer.parseInt(sl);
-                                items[slot] = api.d(yml, "showcases." + s + "." + sl);
+                            final int slot = Integer.parseInt(sl);
+                            ItemStack is;
+                            try {
+                                is = yml.getItemStack("showcases." + s + "." + sl);
+                            } catch (Exception e) {
+                                is = api.d(yml, "showcases." + s + "." + sl);
                             }
+                            items[slot] = is;
                         }
                     }
                     showcases.put(page, items);

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.addon.FileRarityGem;
+import me.randomhashtags.randompackage.addon.file.FileRarityGem;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

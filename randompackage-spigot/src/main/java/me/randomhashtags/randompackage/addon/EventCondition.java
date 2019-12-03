@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.addon;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
+import me.randomhashtags.randompackage.dev.RPStorage;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public interface EventCondition extends Identifiable, Mathable {
+public interface EventCondition extends Identifiable, Mathable, RPStorage {
     void load();
     void unload();
     boolean check(@NotNull String value);

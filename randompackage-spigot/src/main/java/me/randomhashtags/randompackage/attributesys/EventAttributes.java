@@ -4,10 +4,9 @@ import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
-import me.randomhashtags.randompackage.util.RPStorage;
+import me.randomhashtags.randompackage.dev.Feature;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class EventAttributes extends EventExecutor {
@@ -19,9 +18,6 @@ public abstract class EventAttributes extends EventExecutor {
      */
 
     public static void loadEventAttributes() {
-        if(RPStorage.eventattributes == null) {
-            RPStorage.eventattributes = new LinkedHashMap<>();
-        }
         final List<EventAttribute> attributes = Arrays.asList(
                 // event attributes
                 new BreakHitBlock(),
@@ -100,8 +96,7 @@ public abstract class EventAttributes extends EventExecutor {
         EACoreListener.getEventAttributeListener().enable();
     }
     public static void unloadEventAttributes() {
-        RPStorage.eventattributes = null;
-        RPStorage.eventconditions = null;
+        unregister(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
         Combo.combos.clear();
         Listable.list.clear();
         EACoreListener.getEventAttributeListener().disable();

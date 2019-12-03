@@ -50,11 +50,11 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		itemDisplay = colorize(f.getString("chat cmds.item.display"));
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
-		chatformat = randompackage.getConfig().getString("chat cmds.format");
+		chatformat = f.getString("chat cmds.format");
 		sendConsoleMessage("&6[RandomPackage] &aLoaded ChatEvents &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		for(UUID id : viewingBrag) {
+		for(UUID id : new ArrayList<>(viewingBrag)) {
 			Bukkit.getPlayer(id).closeInventory();
 		}
 	}

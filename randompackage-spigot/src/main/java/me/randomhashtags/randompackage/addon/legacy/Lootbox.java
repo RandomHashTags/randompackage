@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.legacy;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
-import me.randomhashtags.randompackage.util.addon.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

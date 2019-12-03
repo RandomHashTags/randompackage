@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.Title;
 import me.randomhashtags.randompackage.api.Envoy;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.obj.CoinFlipStats;
+import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

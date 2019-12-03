@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.addon.FileCustomCreeper;
-import me.randomhashtags.randompackage.util.addon.FileCustomTNT;
+import me.randomhashtags.randompackage.addon.file.FileCustomCreeper;
+import me.randomhashtags.randompackage.addon.file.FileCustomTNT;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

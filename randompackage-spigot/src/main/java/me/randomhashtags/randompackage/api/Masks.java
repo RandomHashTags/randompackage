@@ -2,10 +2,11 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.Mask;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.util.addon.FileMask;
+import me.randomhashtags.randompackage.addon.file.FileMask;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,15 +59,16 @@ public class Masks extends CustomEnchants {
         maskCanObtain = config.getStringList("items.generator.can obtain");
 
         final ArrayList<ItemStack> ms = new ArrayList<>();
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default masks")) {
+        if(!otherdata.getBoolean("saved default masks")) {
             final String[] m = new String[] {
                     "BUNNY", "DEATH_KNIGHT", "DRAGON", "DUNGEON", "GHOST", "GLITCH", "HEADLESS", "JOKER",
                     "LOVER", "MONOPOLY", "NECROMANCER", "PARTY_HAT", "PILGRIM", "PUMPKIN_MONSTER",
                     "PURGE", "REINDEER", "RIFT", "SANTA", "SCARECROW", "SPECTRAL", "TURKEY", "ZEUS"
             };
-            for(String s : m) save("masks", s + ".yml");
-            a.set("saved default masks", true);
+            for(String s : m) {
+                save("masks", s + ".yml");
+            }
+            otherdata.set("saved default masks", true);
             saveOtherData();
         }
         for(File f : new File(dataFolder + separator + "masks").listFiles()) {
@@ -76,14 +78,14 @@ public class Masks extends CustomEnchants {
             }
         }
         addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (masks != null ? masks.size() : 0) + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MASK).size() + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         for(Player p : equippedMasks.keySet()) {
             p.getInventory().setHelmet(equippedMasks.get(p));
             p.updateInventory();
         }
-        masks = null;
+        unregister(Feature.MASK);
     }
 
     @EventHandler
