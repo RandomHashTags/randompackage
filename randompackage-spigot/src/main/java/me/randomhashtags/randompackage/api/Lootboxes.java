@@ -1,10 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.addon.file.FileLootbox;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileLootbox;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -81,11 +83,10 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
         background = d(config, "gui.background");
 
-        final YamlConfiguration a = otherdata;
-        if(!a.getBoolean("saved default lootboxes")) {
+        if(!otherdata.getBoolean("saved default lootboxes")) {
             final String[] l = new String[] {"SNOW_DAY", "ICY_ADVENTURES", "SURVIVAL_KIT", "BOX_OF_CHOCOLATES", "BAKED", "LUCKY"};
             for(String s : l) save("lootboxes", s + ".yml");
-            a.set("saved default lootboxes", true);
+            otherdata.set("saved default lootboxes", true);
             saveOtherData();
         }
         final File folder = new File(dataFolder + separator + "lootboxes");
@@ -112,22 +113,22 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             if(item == null) gi.setItem(i, background);
         }
 
-        final ConfigurationSection c = a.getConfigurationSection("lootboxes.started");
+        final ConfigurationSection c = otherdata.getConfigurationSection("lootboxes.started");
         if(c == null) {
             for(int i : guiLootboxes.keySet()) {
                 started.put(guiLootboxes.get(i), System.currentTimeMillis());
             }
         } else {
             for(String s : c.getKeys(false)) {
-                final ConfigurationSection K = a.getConfigurationSection("lootboxes.started." + s);
+                final ConfigurationSection K = otherdata.getConfigurationSection("lootboxes.started." + s);
                 if(K != null) {
                     for(String k : K.getKeys(false)) {
-                        started.put(getLootbox(k), a.getLong("lootboxes.started." + s));
+                        started.put(getLootbox(k), otherdata.getLong("lootboxes.started." + s));
                     }
                 }
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (lootboxes != null ? lootboxes.size() : 0) + " lootboxes &e(took " + (System.currentTimeMillis()-sc) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.LOOTBOX).size() + " lootboxes &e(took " + (System.currentTimeMillis()-sc) + "ms)");
     }
     public void unload() {
         for(Lootbox l : started.keySet()) {
@@ -135,7 +136,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
         saveOtherData();
         for(Player p : new ArrayList<>(viewing)) p.closeInventory();
-        lootboxes = null;
+        unregister(Feature.LOOTBOX);
     }
 
     public void viewLootbox(Player player) {
@@ -369,29 +370,25 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     }
 
     public Lootbox valueOf(String guiTitle) {
-        if(lootboxes != null) {
-            for(Lootbox l : lootboxes.values()) {
-                if(l.getGuiTitle().equals(guiTitle)) {
-                    return l;
-                }
+        for(Lootbox l : getAllLootboxes().values()) {
+            if(l.getGuiTitle().equals(guiTitle)) {
+                return l;
             }
         }
         return null;
     }
-    public Lootbox valueof(String previewTitle) {
-        if(lootboxes != null) {
-            previewTitle = ChatColor.stripColor(previewTitle);
-            for(Lootbox l : lootboxes.values()) {
-                if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
-                    return l;
-                }
+    public Lootbox valueof(@NotNull String previewTitle) {
+        previewTitle = ChatColor.stripColor(previewTitle);
+        for(Lootbox l : getAllLootboxes().values()) {
+            if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
+                return l;
             }
         }
         return null;
     }
-    public Lootbox valueOf(ItemStack is) {
-        if(lootboxes != null && is != null && is.hasItemMeta()) {
-            for(Lootbox l : lootboxes.values()) {
+    public Lootbox valueOf(@NotNull ItemStack is) {
+        if(is != null && is.hasItemMeta()) {
+            for(Lootbox l : getAllLootboxes().values()) {
                 if(l.getItem().isSimilar(is)) {
                     return l;
                 }
@@ -400,25 +397,21 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         return null;
     }
     public Lootbox valueOf(int priority) {
-        if(lootboxes != null) {
-            for(Lootbox l : lootboxes.values()) {
-                if(l.getPriority() == priority) {
-                    return l;
-                }
+        for(Lootbox l : getAllLootboxes().values()) {
+            if(l.getPriority() == priority) {
+                return l;
             }
         }
         return null;
     }
     public Lootbox latest() {
-        int p = 0;
+        int topPriority = 0;
         Lootbox lo = null;
-        if(lootboxes != null) {
-            for(Lootbox l : lootboxes.values()) {
-                final int P = l.getPriority();
-                if(lo == null || P > p) {
-                    p = P;
-                    lo = l;
-                }
+        for(Lootbox l : getAllLootboxes().values()) {
+            final int targetPriority = l.getPriority();
+            if(lo == null || targetPriority > topPriority) {
+                topPriority = targetPriority;
+                lo = l;
             }
         }
         return lo;

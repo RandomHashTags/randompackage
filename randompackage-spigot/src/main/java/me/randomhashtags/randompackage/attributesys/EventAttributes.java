@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
 import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.dev.RPStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -96,7 +97,7 @@ public abstract class EventAttributes extends EventExecutor {
         EACoreListener.getEventAttributeListener().enable();
     }
     public static void unloadEventAttributes() {
-        unregister(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
+        RPStorage.unregisterAll(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
         Combo.combos.clear();
         Listable.list.clear();
         EACoreListener.getEventAttributeListener().disable();

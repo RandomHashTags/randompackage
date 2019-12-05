@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
@@ -84,7 +85,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
         if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true)) {
-            sender.sendMessage(colorize(disabled.keySet().toString()));
+            sender.sendMessage(colorize(getAll(Feature.CUSTOM_ENCHANT_DISABLED).keySet().toString()));
         } else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
             if(args.length == 0)
                 viewEnchants(sender, 1);
@@ -368,7 +369,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 ei.setItem(i, item);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + enabled.size() + "e, &c" + disabled.size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + getAll(Feature.CUSTOM_ENCHANT_ENABLED).size() + "e, &c" + getAll(Feature.CUSTOM_ENCHANT_DISABLED).size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         for(CustomEnchant e : timedEnchants.keySet()) {
@@ -377,9 +378,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
-        enabled = null;
-        disabled = null;
-        rarities = null;
+        unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }
 
     public void viewEnchants(CommandSender sender, int page) {
@@ -584,7 +583,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public ItemStack getRandomEnabledEnchant(EnchantRarity rarity) {
         final String[] r = rarity.getRevealedEnchantRarities();
         final int l = r.length;
-        final EnchantRarity rar = rarities.get(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
+        final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
         final List<CustomEnchant> enchants = rar.getEnchants();
         item = new ItemStack(Material.BOOK);
         for(int i = 1; i <= 100; i++) {

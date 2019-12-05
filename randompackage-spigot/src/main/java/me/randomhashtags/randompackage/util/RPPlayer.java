@@ -12,8 +12,10 @@ import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
 import me.randomhashtags.randompackage.addon.PlayerRank;
+import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.event.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.event.PlayerQuestStartEvent;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -37,7 +39,7 @@ import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.supported.economy.Vault.permissions;
 
-public class RPPlayer extends RPStorage {
+public class RPPlayer extends RegionalAPI implements RPStorage {
     private static final String folder = dataFolder + separator + "_Data" + separator + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
@@ -622,7 +624,7 @@ public class RPPlayer extends RPStorage {
             final ConfigurationSection c = yml.getConfigurationSection("kits");
             if(c != null) {
                 for(String s : c.getKeys(false)) {
-                    final CustomKit k = getKit(s);
+                    final CustomKit k = getCustomKit(s);
                     if(k != null) {
                         kitLevels.put(k, yml.getInt("kits." + s + ".level"));
                         kitCooldowns.put(k, yml.getLong("kits." + s + ".cooldown expiration"));

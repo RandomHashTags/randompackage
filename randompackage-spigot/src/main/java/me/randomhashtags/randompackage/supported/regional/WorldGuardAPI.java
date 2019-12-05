@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.supported.regional;
 
+import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -11,13 +12,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldGuardAPI {
+public class WorldGuardAPI implements UVersionable {
     private static WorldGuardAPI instance;
     public byte version;
     public static WorldGuardAPI getWorldGuardAPI() {
         if(instance == null) {
             instance = new WorldGuardAPI();
-            final Plugin p = Bukkit.getPluginManager().getPlugin("WorldGuard");
+            final Plugin p = pluginmanager.getPlugin("WorldGuard");
             final String version = p != null && p.isEnabled() ? p.getDescription().getVersion() : null;
             instance.version = (byte) (version != null ? version.startsWith("6") ? 6 : 7 : -1);
         }
@@ -94,7 +95,9 @@ public class WorldGuardAPI {
             if(points != null) {
                 for(com.sk89q.worldedit.BlockVector2D p : points) {
                     final Chunk ch = w.getChunkAt(new Location(w, p.getBlockX(), 0, p.getBlockZ()));
-                    if(!c.contains(ch)) c.add(ch);
+                    if(!c.contains(ch)) {
+                        c.add(ch);
+                    }
                 }
             }
         }

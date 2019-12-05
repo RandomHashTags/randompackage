@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addon.file.PathFireball;
 import me.randomhashtags.randompackage.addon.file.PathMagicDust;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -48,7 +49,7 @@ public class Fireballs extends CustomEnchants {
             }
         }
         addGivedpCategory(z, UMaterial.FIRE_CHARGE, "Rarity Fireballs", "Givedp: Rarity Fireballs");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fireballs != null ? fireballs.size() : 0) + " Fireballs &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_FIREBALL).size() + " Fireballs &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
         started = System.currentTimeMillis();
         cs = config.getConfigurationSection("dusts");
@@ -57,12 +58,11 @@ public class Fireballs extends CustomEnchants {
                 new PathMagicDust(s);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dusts != null ? dusts.size() : 0) + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MAGIC_DUST).size() + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
-        fireballs = null;
-        dusts = null;
+        unregister(Feature.RARITY_FIREBALL, Feature.MAGIC_DUST);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

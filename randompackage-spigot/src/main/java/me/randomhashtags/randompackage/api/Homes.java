@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -76,8 +77,12 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	public void unload() {
 		givedpitem.items.remove("maxhomeincreaser");
-		for(Player p : viewingHomes) p.closeInventory();
-		for(Player player : editingIcons.keySet()) player.closeInventory();
+		for(Player p : new ArrayList<>(viewingHomes)) {
+			p.closeInventory();
+		}
+		for(Player player : new ArrayList<>(editingIcons.keySet())) {
+			player.closeInventory();
+		}
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -114,7 +119,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		for(int i = 0; i < l; i++) s.append(args[i]).append(i == l-1 ? "" : " ");
 		return s.toString();
 	}
-	public void viewHomes(Player opener, RPPlayer target) {
+	public void viewHomes(@NotNull Player opener, RPPlayer target) {
 		if(hasPermission(opener, "RandomPackage.home", true)) {
 			viewingHomes.add(opener);
 			final List<Home> homes = target.getHomes();
@@ -136,11 +141,12 @@ public class Homes extends RPFeature implements CommandExecutor {
 			opener.updateInventory();
 		}
 	}
-	public void teleportToHome(Player player, Home home) {
-		if(hasPermission(player, "RandomPackage.home.teleport", true))
+	public void teleportToHome(@NotNull Player player, @NotNull Home home) {
+		if(hasPermission(player, "RandomPackage.home.teleport", true)) {
 			player.teleport(home.location, TeleportCause.PLUGIN);
+		}
 	}
-	public void editIcon(Player player, Home home) {
+	public void editIcon(@NotNull Player player, @NotNull Home home) {
 		player.closeInventory();
 		player.openInventory(Bukkit.createInventory(player, editicon.getSize(), editicon.getTitle()));
 		player.getOpenInventory().getTopInventory().setContents(editicon.getInventory().getContents());

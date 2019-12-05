@@ -1,9 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.addon.file.FileTitle;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -73,13 +74,13 @@ public class Titles extends RPFeature implements CommandExecutor {
 		tabformat = colorize(config.getString("tab.format"));
 		FileTitle.titleChatFormat = chatformat;
 		FileTitle.titleTabFormat = tabformat;
- 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (titles != null ? titles.size() : 0) + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
+ 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TITLE).size() + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		for(Player p : new ArrayList<>(pages.keySet())) {
 			p.closeInventory();
 		}
-		titles = null;
+		unregister(Feature.TITLE);
 	}
 
 	@EventHandler
@@ -194,9 +195,8 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 
 	public Title valueOf(ItemStack is) {
-		if(is != null && titles != null) {
-			for(String s : titles.keySet()) {
-				final Title T = titles.get(s);
+		if(is != null) {
+			for(Title T : getAllTitles().values()) {
 				if(T.getItem().isSimilar(is)) {
 					return T;
 				}

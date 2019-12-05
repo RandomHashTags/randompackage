@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Trinket;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPItemStack;
@@ -65,10 +66,10 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
 
         config = YamlConfiguration.loadConfiguration(new File(dataFolder, "trinkets.yml"));
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (trinkets != null ? trinkets.size() : 0) + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TRINKET).size() + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        trinkets = null;
+        unregister(Feature.TRINKET);
     }
 
     public HashMap<Trinket, String> isTrinket(ItemStack is) {

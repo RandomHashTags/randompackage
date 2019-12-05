@@ -1,10 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
+import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -119,11 +121,13 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			}
 		}, 0, 20*config.getInt("settings.firework delay"));
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (envoycrates != null ? envoycrates.size() : 0) + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ENVOY_CRATE).size() + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		final List<String> p = new ArrayList<>();
-		for(Location l : preset) p.add(toString(l));
+		for(Location l : preset) {
+			p.add(toString(l));
+		}
 		otherdata.set("envoy.preset", p);
 		saveOtherData();
 		if(!settingPreset.isEmpty()) {
@@ -134,7 +138,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		scheduler.cancelTask(task);
 		stopAllEnvoys();
 		givedpitem.items.remove("envoysummon");
-		envoycrates = null;
+		unregister(Feature.ENVOY_CRATE);
 	}
 
 	public long getNextNaturalEnvoy() { return nextNaturalEnvoy; }
@@ -201,24 +205,21 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 	}
 
-    public void enterEditMode(Player player) {
+    public void enterEditMode(@NotNull Player player) {
 		if(hasPermission(player, "RandomPackage.envoy.preset", true)) {
 			final PlayerInventory i = player.getInventory();
-			if(!settingPreset.contains(player)) {
-				if(settingPreset.isEmpty()) {
-					for(Location l : preset) {
-						l.getWorld().getBlockAt(l).setType(Material.BEDROCK);
-					}
-				}
+			final boolean viewing = settingPreset.contains(player);
+			final Material mat = viewing ? Material.AIR : Material.BEDROCK;
+			if(!viewing) {
 				settingPreset.add(player);
 				i.addItem(presetLocationPlacer);
 			} else {
 				settingPreset.remove(player);
 				i.remove(presetLocationPlacer);
-				if(settingPreset.isEmpty()) {
-					for(Location l : preset) {
-						l.getWorld().getBlockAt(l).setType(Material.AIR);
-					}
+			}
+			if(settingPreset.isEmpty()) {
+				for(Location l : preset) {
+					l.getWorld().getBlockAt(l).setType(mat);
 				}
 			}
 		}
@@ -304,32 +305,30 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final int min = Integer.parseInt(hyphen ? s[0] : as);
 		return hyphen ? min+random.nextInt(Integer.parseInt(s[1])-min+1) : min;
 	}
-	public void viewHelp(CommandSender sender) {
+	public void viewHelp(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.envoy.help", true)) {
 			sendStringListMessage(sender, config.getStringList("messages.envoy help"), null);
 		}
 	}
 
-
 	public EnvoyCrate valueOf(ItemStack is) {
-		if(envoycrates != null && is != null && is.hasItemMeta())
-			for(EnvoyCrate c : envoycrates.values())
-				if(is.isSimilar(c.getItem()))
+		if(is != null && is.hasItemMeta()) {
+			for(EnvoyCrate c : getAllEnvoyCrates().values()) {
+				if(is.isSimilar(c.getItem())) {
 					return c;
+				}
+			}
+		}
 		return null;
 	}
 	public EnvoyCrate getRandomCrate(boolean useChances, String defaultTier) {
-		if(envoycrates != null) {
-			final Random random = new Random();
-			if(useChances) {
-				for(EnvoyCrate c : envoycrates.values())
-					if(random.nextInt(100) <= c.getChance())
-						return c;
-			} else {
-				return envoycrates.get(defaultTier);
+		if(useChances) {
+			for(EnvoyCrate c : getAllEnvoyCrates().values()) {
+				if(random.nextInt(100) <= c.getChance()) {
+					return c;
+				}
 			}
-			return envoycrates.get(defaultTier);
 		}
-		return null;
+		return getEnvoyCrate(defaultTier);
 	}
 }

@@ -17,6 +17,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -54,6 +56,36 @@ public interface UVersionable extends Versionable {
 
     default void sendConsoleMessage(String msg) {
         console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+    }
+    default String formatBigDecimal(BigDecimal b) {
+        return formatBigDecimal(b, false);
+    }
+    default String formatBigDecimal(BigDecimal b, boolean currency) {
+        return (currency ? NumberFormat.getCurrencyInstance() : NumberFormat.getInstance()).format(b);
+    }
+    default BigDecimal getBigDecimal(String value) {
+        return BigDecimal.valueOf(Double.parseDouble(value));
+    }
+    default BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {
+        final BigDecimal range = max.subtract(min);
+        return min.add(range.multiply(new BigDecimal(Math.random())));
+    }
+    default String formatDouble(double d) {
+        String decimals = Double.toString(d).split("\\.")[1];
+        if(decimals.equals("0")) { decimals = ""; } else { decimals = "." + decimals; }
+        return formatInt((int) d) + decimals;
+    }
+    default String formatLong(long l) {
+        final String f = Long.toString(l);
+        final boolean c = f.contains(".");
+        String decimals = c ? f.split("\\.")[1] : f;
+        decimals = c ? decimals.equals("0") ? "" : "." + decimals : "";
+        return formatInt((int) l) + decimals;
+    }
+    default String formatInt(int integer) { return String.format("%,d", integer); }
+    default int getRemainingInt(String string) {
+        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
+        return string.isEmpty() ? -1 : Integer.parseInt(string);
     }
     default List<String> colorizeListString(List<String> input) {
         final List<String> i = new ArrayList<>();

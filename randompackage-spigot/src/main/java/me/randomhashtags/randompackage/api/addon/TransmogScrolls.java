@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addon.file.PathTransmogScroll;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,11 +41,11 @@ public class TransmogScrolls extends CustomEnchants {
             }
             addGivedpCategory(a, UMaterial.PAPER, "Transmog Scrolls", "Givedp: Transmog Scrolls");
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (transmogscrolls != null ? transmogscrolls.size() : 0) + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TRANSMOG_SCROLL).size() + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
-        transmogscrolls = null;
+        unregister(Feature.TRANSMOG_SCROLL);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

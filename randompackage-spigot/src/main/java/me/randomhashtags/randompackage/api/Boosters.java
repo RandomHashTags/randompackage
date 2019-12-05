@@ -2,14 +2,15 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.EventAttributeListener;
+import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
-import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -77,7 +78,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			}
 			addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
 		}
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (boosters != null ? boosters.size() : 0) + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.BOOSTER).size() + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		loadBackup();
 	}
 	public void unload() {
@@ -86,7 +87,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			HandlerList.unregisterAll(mcmmoboosters);
 			mcmmoboosters = null;
 		}
-		boosters = null;
+		unregister(Feature.BOOSTER);
 		activeRegionalBoosters = null;
 		activePlayerBoosters = null;
 	}
@@ -136,7 +137,6 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	private void save() {
 		try {
 			data.save(dataF);
-			dataF = new File(dataFolder + separator + "_Data", "boosters.yml");
 			data = YamlConfiguration.loadConfiguration(dataF);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -299,11 +299,11 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	}
 
 	public TObject valueOf(ItemStack is) {
-		if(boosters != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
 			final ItemMeta m = is.getItemMeta();
 			final String d = m.getDisplayName();
 			final List<String> l = m.getLore();
-			for(Booster b : boosters.values()) {
+			for(Booster b : getAllBoosters().values()) {
 				final ItemStack i = b.getItem();
 				if(d.equals(i.getItemMeta().getDisplayName())) {
 					double multiplier = getRemainingDouble(ChatColor.stripColor(l.get(b.getMultiplierLoreSlot())));

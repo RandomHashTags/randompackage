@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.EnchantmentOrb;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -52,10 +53,10 @@ public class EnchantmentOrbs extends RPFeature {
             }
         }
         addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (enchantmentorbs != null ? enchantmentorbs.size() : 0) + " Enchantment Orbs &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ENCHANTMENT_ORB).size()+ " Enchantment Orbs &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        enchantmentorbs = null;
+        unregister(Feature.ENCHANTMENT_ORB);
     }
 
     public void applyEnchantmentOrb(Player player, ItemStack is, ItemStack enchantmentorb, EnchantmentOrb orb) {

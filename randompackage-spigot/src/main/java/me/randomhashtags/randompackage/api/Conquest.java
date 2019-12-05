@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.ConquestChest;
 import me.randomhashtags.randompackage.addon.file.FileConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
-import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -31,7 +31,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class Conquest extends RPFeature implements CommandExecutor {
     private static Conquest instance;
@@ -137,13 +140,13 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void spawn(ConquestChest chest, Location l) {
+    public void spawn(@NotNull ConquestChest chest, @NotNull Location l) {
         chest.spawn(l);
         lastSpawnTime = System.currentTimeMillis();
         lastLocation = l;
         lastConquerer = null;
     }
-    public Location getRandomLocation(ConquestChest chest) {
+    public Location getRandomLocation(@NotNull ConquestChest chest) {
         final String[] sr = chest.getSpawnRegion().split(";");
         final String[] xValues = sr[1].split(":"), zValues = sr[2].split(":");
         final String world = sr[0];
@@ -213,7 +216,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
     }
 
-    public void viewLast(CommandSender sender) {
+    public void viewLast(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
@@ -222,14 +225,14 @@ public class Conquest extends RPFeature implements CommandExecutor {
             sendStringListMessage(sender, config.getStringList("messages.command"), replacements);
         }
     }
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
             sendStringListMessage(sender, config.getStringList("messages.help"), null);
         }
     }
-    public void spawn(Player player) {
+    public void spawn(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
-            final List<Identifiable> chests = new ArrayList<>(getAll(Feature.CONQUEST_CHEST).values());
+            final List<ConquestChest> chests = new ArrayList<>(getAllConquestChests().values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
             spawn(chests.get(random.nextInt(chests.size())), l);
         }

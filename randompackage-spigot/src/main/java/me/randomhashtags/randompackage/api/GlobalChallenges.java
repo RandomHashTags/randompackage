@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
+import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -147,7 +148,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		    pluginmanager.registerEvents(mcmmoChallenges, randompackage);
         }
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (globalchallenges != null ? globalchallenges.size() : 0) + " global challenges and " + (globalchallengeprizes != null ? globalchallengeprizes.size() : 0) + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		reloadChallenges();
 	}
 	public void unload() {
@@ -172,15 +173,14 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
             HandlerList.unregisterAll(mcmmoChallenges);
         }
 
-		globalchallenges = null;
-		globalchallengeprizes = null;
+		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.active = null;
 		unregisterEventAttributeListener(this);
 	}
 	public void reloadChallenges() {
 		int maxAtOnce = max;
 		final ConfigurationSection EEE = data.getConfigurationSection("active global challenges");
-		if(globalchallenges != null) {
+		if(getAll(Feature.GLOBAL_CHALLENGE).size() > 0) {
 			if(EEE != null) {
 				final long started = System.currentTimeMillis();
 				int loaded = 0;
@@ -388,7 +388,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		player.updateInventory();
 	}
 	public GlobalChallenge getRandomChallenge() {
-		return globalchallenges != null ? (GlobalChallenge) globalchallenges.values().toArray()[random.nextInt(globalchallenges.size())] : null;
+		final HashMap<String, GlobalChallenge> list = getAllGlobalChallenges();
+		final int size = list.size();
+		return size > 0 ? (GlobalChallenge) list.values().toArray()[random.nextInt(size)] : null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

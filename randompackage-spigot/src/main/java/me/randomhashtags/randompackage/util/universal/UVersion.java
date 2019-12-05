@@ -67,36 +67,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         player.updateInventory();
     }
 
-    public final String formatBigDecimal(BigDecimal b) {
-        return formatBigDecimal(b, false);
-    }
-    public final String formatBigDecimal(BigDecimal b, boolean currency) {
-        return (currency ? NumberFormat.getCurrencyInstance() : NumberFormat.getInstance()).format(b);
-    }
-    public final BigDecimal getBigDecimal(String value) {
-        return BigDecimal.valueOf(Double.parseDouble(value));
-    }
-    public final BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {
-        final BigDecimal range = max.subtract(min);
-        return min.add(range.multiply(new BigDecimal(Math.random())));
-    }
-    public final String formatDouble(double d) {
-        String decimals = Double.toString(d).split("\\.")[1];
-        if(decimals.equals("0")) { decimals = ""; } else { decimals = "." + decimals; }
-        return formatInt((int) d) + decimals;
-    }
-    public final String formatLong(long l) {
-        final String f = Long.toString(l);
-        final boolean c = f.contains(".");
-        String decimals = c ? f.split("\\.")[1] : f;
-        decimals = c ? decimals.equals("0") ? "" : "." + decimals : "";
-        return formatInt((int) l) + decimals;
-    }
-    public final String formatInt(int integer) { return String.format("%,d", integer); }
-    public final int getRemainingInt(String string) {
-        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
-        return string.isEmpty() ? -1 : Integer.parseInt(string);
-    }
     public final long getDelay(String input) {
         input = input.toLowerCase();
         long l = 0;

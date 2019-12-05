@@ -3,15 +3,16 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
+import me.randomhashtags.randompackage.addon.file.FileFactionUpgrade;
+import me.randomhashtags.randompackage.addon.file.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.addon.obj.FactionUpgradeInfo;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.addon.file.FileFactionUpgrade;
-import me.randomhashtags.randompackage.addon.file.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -33,7 +34,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,6 @@ public class FactionUpgrades extends EventAttributes {
     }
 
     public YamlConfiguration config;
-
     private File fupgradesF;
     private YamlConfiguration fupgrades;
 
@@ -125,7 +124,7 @@ public class FactionUpgrades extends EventAttributes {
             }
 
             loadBackup();
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (factionupgrades != null ? factionupgrades.size() : 0) + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
+            sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
         } else {
             sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
             HandlerList.unregisterAll(instance);
@@ -135,8 +134,7 @@ public class FactionUpgrades extends EventAttributes {
     public void unload() {
         backup();
         factionUpgrades = null;
-        factionupgrades = null;
-        factionupgradetypes = null;
+        unregister(Feature.FACTION_UPGRADE, Feature.FACTION_UPGRADE_TYPE);
     }
 
     private void backup() {
@@ -150,9 +148,8 @@ public class FactionUpgrades extends EventAttributes {
             }
             try {
                 fupgrades.save(fupgradesF);
-                fupgradesF = new File(dataFolder + separator + "_Data", "faction upgrades.yml");
                 fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

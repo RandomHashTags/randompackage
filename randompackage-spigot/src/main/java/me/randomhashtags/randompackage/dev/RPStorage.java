@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
-public interface RPStorage {
+import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
+
+public interface RPStorage extends UVersionable {
     HashMap<Feature, LinkedHashMap<String, Identifiable>> FEATURES = new HashMap<>();
 
     default void register(Feature f, Identifiable obj) {
@@ -27,8 +30,21 @@ public interface RPStorage {
     default Identifiable get(Feature f, @NotNull String identifier) {
         return FEATURES.containsKey(f) ? FEATURES.get(f).getOrDefault(identifier, null) : null;
     }
-    default LinkedHashMap<String, Identifiable> getAll(Feature f) {
-        return FEATURES.getOrDefault(f, new LinkedHashMap<>());
+    default LinkedHashMap<String, Identifiable> getAll(Feature f) { return FEATURES.getOrDefault(f, new LinkedHashMap<>()); }
+    default LinkedHashMap<String, ArmorSet> getAllArmorSets() { return new LinkedHashMap<>((Map<String, ? extends ArmorSet>) getAll(Feature.ARMOR_SET)); }
+    default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() { return new LinkedHashMap<>((Map<String, ? extends BlackScroll>) getAll(Feature.BLACK_SCROLL)); }
+    default LinkedHashMap<String, Booster> getAllBoosters() { return new LinkedHashMap<>((Map<String, ? extends Booster>) getAll(Feature.BOOSTER)); }
+    default LinkedHashMap<String, ConquestChest> getAllConquestChests() { return new LinkedHashMap<>((Map<String, ? extends ConquestChest>) getAll(Feature.CONQUEST_CHEST)); }
+    default LinkedHashMap<String, EnvoyCrate> getAllEnvoyCrates() { return new LinkedHashMap<>((Map<String, ? extends EnvoyCrate>) getAll(Feature.ENVOY_CRATE)); }
+    default LinkedHashMap<String, GlobalChallenge> getAllGlobalChallenges() { return new LinkedHashMap<>((Map<String, ? extends GlobalChallenge>) getAll(Feature.GLOBAL_CHALLENGE)); }
+    default LinkedHashMap<String, Lootbox> getAllLootboxes() { return new LinkedHashMap<>((Map<String, ? extends Lootbox>) getAll(Feature.LOOTBOX)); }
+    default LinkedHashMap<String, ServerCrate> getAllServerCrates() { return new LinkedHashMap<>((Map<String, ? extends ServerCrate>) getAll(Feature.SERVER_CRATE)); }
+    default LinkedHashMap<String, Title> getAllTitles() { return new LinkedHashMap<>((Map<String, ? extends Title>) getAll(Feature.TITLE)); }
+
+    static void unregisterAll(Feature...features) {
+        for(Feature f : features) {
+            FEATURES.remove(f);
+        }
     }
     default void unregister(Feature...features) {
         for(Feature f : features) {
@@ -36,14 +52,6 @@ public interface RPStorage {
         }
     }
 
-    default Set<ArmorSet> getAllArmorSets() {
-        final Set<Identifiable> i = new HashSet<>(getAll(Feature.ARMOR_SET).values());
-        final Set<ArmorSet> sets = new HashSet<>();
-        for(Identifiable id : i) {
-            sets.add((ArmorSet) id);
-        }
-        return sets;
-    }
     default ArmorSet getArmorSet(@NotNull String identifier) {
         final Identifiable o = get(Feature.ARMOR_SET, identifier);
         return o != null ? (ArmorSet) o : null;
@@ -65,7 +73,7 @@ public interface RPStorage {
         return o != null ? (CustomBoss) o : null;
     }
     default CustomEnchant getCustomEnchant(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_ENCHANT, identifier);
+        final Identifiable o = get(Feature.CUSTOM_ENCHANT_ENABLED, identifier);
         return o != null ? (CustomEnchant) o : null;
     }
     default EnchantRarity getCustomEnchantRarity(@NotNull String identifier) {
@@ -233,22 +241,70 @@ public interface RPStorage {
         }
         return null;
     }
-    default ArmorSet valueOfArmorCrystal(ItemStack is) {
-        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomArmor armor = CustomArmor.getCustomArmor();
-            final int percent = getRemainingInt(is.getItemMeta().getLore().get(armor.percentSlot));
-            for(ArmorSet a : armorsets.values()) {
-                if(is.isSimilar(armor.getCrystal(a, percent))) {
+    default ArmorSet valueOfArmorSet(@NotNull ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            final HashMap<String, Identifiable> sets = getAll(Feature.ARMOR_SET);
+            for(Identifiable id : sets.values()) {
+                final ArmorSet a = (ArmorSet) id;
+                if(l.containsAll(a.getArmorLore())) {
                     return a;
                 }
             }
         }
         return null;
     }
+    default ArmorSet valueOfArmorCrystal(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final CustomArmor armor = getCustomArmor();
+            if(armor.isEnabled()) {
+                final int percent = getRemainingInt(is.getItemMeta().getLore().get(armor.percentSlot));
+                final HashMap<String, Identifiable> sets = getAll(Feature.ARMOR_SET);
+                for(Identifiable id : sets.values()) {
+                    final ArmorSet a = (ArmorSet) id;
+                    if(is.isSimilar(armor.getCrystal(a, percent))) {
+                        return a;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    default ArmorSet getArmorCrystalOnItem(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final CustomArmor armor = getCustomArmor();
+            if(armor.isEnabled()) {
+                final String added = armor.crystalAddedLore;
+                final List<String> l = is.getItemMeta().getLore();
+                final HashMap<String, Identifiable> sets = getAll(Feature.ARMOR_SET);
+                for(Identifiable id : sets.values()) {
+                    final ArmorSet a = (ArmorSet) id;
+                    if(l.contains(added.replace("{NAME}", a.getName()))) {
+                        return a;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
+    default CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
+        if(spawnitem != null && spawnitem.hasItemMeta()) {
+            final HashMap<String, Identifiable> bosses = getAll(Feature.CUSTOM_BOSS);
+            for(Identifiable id : bosses.values()) {
+                final CustomBoss b = (CustomBoss) id;
+                if(b.getSpawnItem().isSimilar(spawnitem)) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
     default EnchantRarity valueOfCustomEnchantRarity(ItemStack is) {
-        if(is != null && rarities != null) {
-            for(EnchantRarity r : rarities.values()) {
+        if(is != null) {
+            final HashMap<String, Identifiable> rarities = getAll(Feature.CUSTOM_ENCHANT_RARITY);
+            for(Identifiable id : rarities.values()) {
+                final EnchantRarity r = (EnchantRarity) id;
                 final ItemStack re = r.getRevealItem();
                 if(re != null && re.isSimilar(is)) {
                     return r;
@@ -257,12 +313,12 @@ public interface RPStorage {
         }
         return null;
     }
-    default EnchantRarity valueOfCustomEnchantRarity(CustomEnchant enchant) {
-        if(rarities != null) {
-            for(EnchantRarity e : rarities.values()) {
-                if(e.getEnchants().contains(enchant)) {
-                    return e;
-                }
+    default EnchantRarity valueOfCustomEnchantRarity(@NotNull CustomEnchant enchant) {
+        final HashMap<String, Identifiable> rarities = getAll(Feature.CUSTOM_ENCHANT_RARITY);
+        for(Identifiable id : rarities.values()) {
+            final EnchantRarity e = (EnchantRarity) id;
+            if(e.getEnchants().contains(enchant)) {
+                return e;
             }
         }
         return null;
@@ -271,16 +327,20 @@ public interface RPStorage {
     default CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
         if(string != null) {
             final String s = ChatColor.stripColor(string);
-            if(enabled != null) {
-                for(CustomEnchant ce : enabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
-                        return ce;
+            final HashMap<String, Identifiable> enabled = getAll(Feature.CUSTOM_ENCHANT_ENABLED);
+            for(Identifiable id : enabled.values()) {
+                final CustomEnchant ce = (CustomEnchant) id;
+                if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
+                    return ce;
                 }
             }
-            if(checkDisabledEnchants && disabled != null) {
-                for(CustomEnchant ce : disabled.values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName())))
+            if(checkDisabledEnchants) {
+                final HashMap<String, Identifiable> disabled = getAll(Feature.CUSTOM_ENCHANT_DISABLED);
+                for(Identifiable id : disabled.values()) {
+                    final CustomEnchant ce = (CustomEnchant) id;
+                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
                         return ce;
+                    }
                 }
             }
         }
@@ -294,7 +354,51 @@ public interface RPStorage {
         }
         return null;
     }
+    default CustomExplosion valueOfCustomExplosion(ItemStack is) {
+        final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
+        for(Identifiable id : explosions.values()) {
+            final CustomExplosion c = (CustomExplosion) id;
+            if(c.getItem().isSimilar(is)) {
+                return c;
+            }
+        }
+        return null;
+    }
 
+    default FactionUpgrade valueOfFactionUpgrade(int slot) {
+        final HashMap<String, Identifiable> upgrades = getAll(Feature.FACTION_UPGRADE);
+        for(Identifiable id : upgrades.values()) {
+            final FactionUpgrade f = (FactionUpgrade) id;
+            if(f.getSlot() == slot) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    default GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
+        final HashMap<String, Identifiable> prizes = getAll(Feature.GLOBAL_CHALLENGE_PRIZE);
+        for(Identifiable id : prizes.values()) {
+            final GlobalChallengePrize p = (GlobalChallengePrize) id;
+            if(p.getPlacement() == placement) {
+                return p;
+            }
+        }
+        return null;
+    }
+    default GlobalChallengePrize valueOfGlobalChallengePrize(ItemStack display) {
+        if(display != null && display.hasItemMeta()) {
+            final HashMap<String, Identifiable> prizes = getAll(Feature.GLOBAL_CHALLENGE_PRIZE);
+            for(Identifiable id : prizes.values()) {
+                final GlobalChallengePrize p = (GlobalChallengePrize) id;
+                final ItemStack d = p.getItem();
+                if(d.isSimilar(display)) {
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
 
     default ItemStack getRarityGem(@NotNull RarityGem gem, @NotNull Player player) {
         final PlayerInventory pi = player.getInventory();

@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
@@ -191,10 +192,10 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                 new FilePlayerQuest(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (playerquests != null ? playerquests.size() : 0) + " Player Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.PLAYER_QUEST).size() + " Player Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        playerquests = null;
+        unregister(Feature.PLAYER_QUEST);
         unregisterEventAttributeListener(this);
     }
 

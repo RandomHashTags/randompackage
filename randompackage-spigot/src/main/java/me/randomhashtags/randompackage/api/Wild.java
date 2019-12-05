@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
@@ -108,7 +109,7 @@ public class Wild extends RPFeature implements CommandExecutor {
         return null;
     }
 
-    public void tryTeleporting(Player player) {
+    public void tryTeleporting(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.wild", true)) {
             final UUID u = player.getUniqueId();
             if(isCooldowned(u)) {

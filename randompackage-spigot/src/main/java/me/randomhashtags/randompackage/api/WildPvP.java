@@ -272,7 +272,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
     }
     @EventHandler
     private void inventoryCloseEvent(InventoryCloseEvent event) {
-        viewing.remove((Player) event.getPlayer());
+        viewing.remove(event.getPlayer());
     }
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {

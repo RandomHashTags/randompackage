@@ -142,16 +142,17 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded Jackpot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        final YamlConfiguration a = otherdata;
-        a.set("jackpot", null);
-        a.set("jackpot.pick next winner", pickNextWinner);
-        a.set("jackpot.value", value);
+        otherdata.set("jackpot", null);
+        otherdata.set("jackpot.pick next winner", pickNextWinner);
+        otherdata.set("jackpot.value", value);
         for(UUID u : ticketsSold.keySet()) {
-            a.set("jackpot." + u.toString(), ticketsSold.get(u).intValue());
+            otherdata.set("jackpot." + u.toString(), ticketsSold.get(u).intValue());
         }
         saveOtherData();
         scheduler.cancelTask(task);
-        for(int i : countdownTasks) scheduler.cancelTask(i);
+        for(int i : countdownTasks) {
+            scheduler.cancelTask(i);
+        }
     }
 
     public void pickWinner() {

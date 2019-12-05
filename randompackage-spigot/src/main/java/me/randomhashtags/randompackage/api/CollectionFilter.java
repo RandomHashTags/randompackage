@@ -264,8 +264,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                     cc.setFilter(picksup.get(r));
                     editingfilter.remove(u);
                     viewFilter(player, cc);
-                } else
+                } else {
                     setFilter(player, getItemInHand(player), r);
+                }
                 player.closeInventory();;
             }
         }
@@ -359,5 +360,4 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
         return null;
     }
-
 }

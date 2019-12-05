@@ -338,7 +338,7 @@ public class KitsEvolution extends Kits {
                 final List<String> s = config.getStringList("vkits.items.fallen hero bundle.reveals");
                 final int size = s.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
                 for(int i = 1; i <= amount; i++) {
-                    final CustomKit k = getKit(s.get(random.nextInt(size)));
+                    final CustomKit k = getCustomKit(s.get(random.nextInt(size)));
                     giveItem(player, k.getFallenHeroItem(k, true));
                 }
             }

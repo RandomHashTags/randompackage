@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.addon.file.FileCustomBoss;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -58,13 +59,13 @@ public class CustomBosses extends EventAttributes {
 			addGivedpCategory(j, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
 		}
 		loadBackup();
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (bosses != null ? bosses.size() : 0) + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.CUSTOM_BOSS).size() + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		backup();
 		LivingCustomBoss.living = null;
 		LivingCustomMinion.deleteAll();
-		bosses = null;
+		unregister(Feature.CUSTOM_BOSS);
 	}
 
 	public void backup() {
@@ -97,7 +98,7 @@ public class CustomBosses extends EventAttributes {
 				if(e != null && !e.isDead()) {
 					final String p = "custom bosses." + s + ".", S = otherdata.getString(p + "summoner");
 					final LivingEntity summoner = S != null && !S.equals("null") ? (LivingEntity) getEntity(UUID.fromString(S)) : null;
-					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, getBoss(otherdata.getString(p + "type")));
+					final LivingCustomBoss l = new LivingCustomBoss(summoner, (LivingEntity) e, getCustomBoss(otherdata.getString(p + "type")));
 					final ConfigurationSection d = otherdata.getConfigurationSection(p + "damager");
 					if(d != null) {
 						for(String aa : d.getKeys(false)) {

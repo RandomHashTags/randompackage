@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addon.file.PathBlackScroll;
+import me.randomhashtags.randompackage.dev.Feature;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -34,11 +35,11 @@ public class BlackScrolls extends CustomEnchants {
             for(String s : cs.getKeys(false))
                 new PathBlackScroll(s);
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (blackscrolls != null ? blackscrolls.size() : 0) + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.BLACK_SCROLL).size() + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
-        blackscrolls = null;
+        unregister(Feature.BLACK_SCROLL);
     }
 
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {

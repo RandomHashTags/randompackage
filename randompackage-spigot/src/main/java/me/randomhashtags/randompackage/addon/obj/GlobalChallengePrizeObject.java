@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.dev.Feature;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         this.amount = amount;
         this.placement = placement;
         this.rewards = rewards;
-        addGlobalChallengePrize(this);
+        register(Feature.GLOBAL_CHALLENGE_PRIZE, this);
     }
     public String getIdentifier() { return "GLOBAL_CHALLENGE_PRIZE_" + placement; }
 

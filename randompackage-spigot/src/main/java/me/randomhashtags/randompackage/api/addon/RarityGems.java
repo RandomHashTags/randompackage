@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileRarityGem;
@@ -58,10 +59,10 @@ public class RarityGems extends RPFeature {
                 new FileRarityGem(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (raritygems != null ? raritygems.size() : 0) + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_GEM).size() + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        raritygems = null;
+        unregister(Feature.RARITY_GEM);
         FileRarityGem.defaultColors = null;
     }
 

@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
+import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
@@ -39,7 +40,7 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.util.RPStorage.*;
 
-public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionable {
+public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionable, RPStorage {
     List<UUID> SPAWNED_FROM_SPAWNER = new ArrayList<>();
     HashMap<UUID, EntityShootBowEvent> PROJECTILE_EVENTS = new HashMap<>();
 
@@ -571,17 +572,17 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "tier":
                 return event instanceof PlayerClaimEnvoyCrateEvent && ((PlayerClaimEnvoyCrateEvent) event).type.getType().getIdentifier().equals(value);
             case "israritybook":
-                return event instanceof EnchanterPurchaseEvent && valueOfEnchantRarity(valueOfCustomEnchant(((EnchanterPurchaseEvent) event).purchased)) != null;
+                return event instanceof EnchanterPurchaseEvent && valueOfCustomEnchantRarity(valueOfCustomEnchant(((EnchanterPurchaseEvent) event).purchased)) != null;
             case "result":
                 return event instanceof CustomEnchantApplyEvent && ((CustomEnchantApplyEvent) event).result.equalsIgnoreCase(value);
             case "rarity":
                 String identifier = null;
                 if(event instanceof CustomEnchantApplyEvent) {
-                    identifier = valueOfEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier();
+                    identifier = valueOfCustomEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier();
                 } else if(event instanceof EnchanterPurchaseEvent) {
                     final EnchanterPurchaseEvent epe = (EnchanterPurchaseEvent) event;
                     final CustomEnchant enchant = valueOfCustomEnchant(epe.purchased);
-                    final EnchantRarity rarity = enchant != null ? valueOfEnchantRarity(enchant) : null;
+                    final EnchantRarity rarity = enchant != null ? valueOfCustomEnchantRarity(enchant) : null;
                     identifier = rarity != null ? rarity.getIdentifier() : null;
                 } else if(event instanceof RandomizationScrollUseEvent) {
                     identifier = ((RandomizationScrollUseEvent) event).scroll.getIdentifier();

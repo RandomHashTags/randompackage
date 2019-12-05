@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.dev.Feature;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
 
     public FileCustomEnchant(File f) {
         load(f);
-        addEnchant(this);
+        register(isEnabled() ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED, this);
     }
     public String getIdentifier() { return getYamlName(); }
 

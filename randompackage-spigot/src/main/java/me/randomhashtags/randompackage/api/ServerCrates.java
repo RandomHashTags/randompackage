@@ -1,12 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.addon.ServerCrateFlare;
+import me.randomhashtags.randompackage.addon.file.FileServerCrate;
 import me.randomhashtags.randompackage.addon.living.LivingServerCrate;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.addon.file.FileServerCrate;
 import me.randomhashtags.randompackage.util.universal.UInventory;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -71,15 +73,19 @@ public class ServerCrates extends RPFeature {
 		}
 		addGivedpCategory(crates, UMaterial.CHEST, "Server Crates", "Givedp: Server Crates");
 		addGivedpCategory(flares, UMaterial.TORCH, "Server Crate Flares", "Givedp: Server Crate Flares");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (servercrates != null ? servercrates.size() : 0) + " server crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SERVER_CRATE).size() + " Server Crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		for(UUID uuid : revealingLoot.keySet()) {
+		for(UUID uuid : new ArrayList<>(revealingLoot.keySet())) {
 			final OfflinePlayer o = Bukkit.getOfflinePlayer(uuid);
-			if(o.isOnline()) o.getPlayer().closeInventory();
+			if(o.isOnline()) {
+				o.getPlayer().closeInventory();
+			}
 		}
-		for(UUID u : tasks.keySet()) stopTasks(u);
-		servercrates = null;
+		for(UUID u : tasks.keySet()) {
+			stopTasks(u);
+		}
+		unregister(Feature.SERVER_CRATE);
 		LivingServerCrate.deleteAll(true);
 	}
 
@@ -180,7 +186,7 @@ public class ServerCrates extends RPFeature {
 		}
 	}
 
-	public void openCrate(Player player, ServerCrate crate) {
+	public void openCrate(@NotNull Player player, @NotNull ServerCrate crate) {
 		final ServerCrateOpenEvent e = new ServerCrateOpenEvent(player, crate);
 		pluginmanager.callEvent(e);
 		if(!e.isCancelled()) {
@@ -281,22 +287,18 @@ public class ServerCrates extends RPFeature {
 	}
 
 	public ServerCrate valueOf(ItemStack item) {
-		if(servercrates != null) {
-			for(ServerCrate crate : servercrates.values()) {
-				if(crate.getItem().isSimilar(item)) {
-					return crate;
-				}
+		for(ServerCrate crate : getAllServerCrates().values()) {
+			if(crate.getItem().isSimilar(item)) {
+				return crate;
 			}
 		}
 		return null;
 	}
 	public ServerCrate valueOfFlare(ItemStack flare) {
-		if(servercrates != null) {
-			for(ServerCrate s : servercrates.values()) {
-				final ServerCrateFlare f = s.getFlare();
-				if(f != null && f.getItem().isSimilar(flare)) {
-					return s;
-				}
+		for(ServerCrate s : getAllServerCrates().values()) {
+			final ServerCrateFlare f = s.getFlare();
+			if(f != null && f.getItem().isSimilar(flare)) {
+				return s;
 			}
 		}
 		return null;

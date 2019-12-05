@@ -78,9 +78,11 @@ public class Shop extends RPFeature implements CommandExecutor {
 	    final BigDecimal zero = BigDecimal.ZERO;
 	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) return zero;
 	    BigDecimal d = zero;
-        for(int k = 1; k <= 100; k++)
-            if(player.hasPermission("RandomPackage.shop.discount." + k))
+        for(int k = 1; k <= 100; k++) {
+            if(player.hasPermission("RandomPackage.shop.discount." + k)) {
                 d = BigDecimal.valueOf(k);
+            }
+        }
         return BigDecimal.valueOf(d.doubleValue()/100);
     }
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

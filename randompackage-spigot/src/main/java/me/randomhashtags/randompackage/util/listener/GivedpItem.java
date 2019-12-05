@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
@@ -295,7 +296,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final RandomizationScroll r = getRandomizationScroll(Q.split(":")[1]);
             return r != null ? r.getItem() : air;
         } else if(input.startsWith("raritybook:")) {
-            final EnchantRarity r = rarities != null ? rarities.getOrDefault(Q.split(":")[1], null) : null;
+            final EnchantRarity r = getCustomEnchantRarity(Q.split(":")[1]);
             return r != null ? r.getRevealItem() : air;
         } else if(input.startsWith("rarityfireball:")) {
             final RarityFireball f = getRarityFireball(Q.split(":")[1]);
@@ -320,7 +321,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 Title t = getTitle(Q.contains(":") ? Q.split(":")[1] : "random");
                 if(t == null) {
                     try {
-                        t = (Title) titles.values().toArray()[getRemainingInt(Q.contains(":") ? Q.split(":")[1] : Q)-1];
+                        t = getTitle((String) getAll(Feature.TITLE).keySet().toArray()[getRemainingInt(Q.contains(":") ? Q.split(":")[1] : Q)-1]);
                     } catch(Exception e) {
                         System.out.println("[RandomPackage] That title doesn't exist!");
                     }
@@ -358,7 +359,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final int min = r ? Integer.parseInt(a[1].split("-")[0]) : Integer.parseInt(a[1]), amt = r ? min+random.nextInt(Integer.parseInt(a[1].split("-")[1])-min+1) : min;
             return getXPBottle(BigDecimal.valueOf(amt), a.length == 3 ? a[2] : null);
         } else if(input.startsWith("mkitredeem:")) {
-            final CustomKit kit = getKit("MKIT_" + Q.split(":")[1]);
+            final CustomKit kit = getCustomKit("MKIT_" + Q.split(":")[1]);
             return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : air;
         } else if(customitems != null && customitems.containsKey(Q)) {
             return customitems.get(Q).clone();

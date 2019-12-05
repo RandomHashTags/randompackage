@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.WhiteScroll;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -35,10 +36,10 @@ public class WhiteScrolls extends RPFeature {
             }
             addGivedpCategory(a, UMaterial.MAP, "White Scrolls", "Givedp: White Scrolls");
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (whitescrolls != null ? whitescrolls.size() : 0) + " White Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.WHITE_SCROLL).size() + " White Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        whitescrolls = null;
+        unregister(Feature.WHITE_SCROLL);
     }
 
 

@@ -116,30 +116,6 @@ public abstract class RPStorage extends RegionalAPI {
         Value Of
      */
 
-    public ArmorSet valueOfArmorSet(ItemStack is) {
-        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            final List<String> l = is.getItemMeta().getLore();
-            for(ArmorSet a : armorsets.values()) {
-                if(l.containsAll(a.getArmorLore())) {
-                    return a;
-                }
-            }
-        }
-        return null;
-    }
-
-    public ArmorSet getArmorCrystalOnItem(ItemStack is) {
-        if(armorsets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            final String added = CustomArmor.getCustomArmor().crystalAddedLore;
-            final List<String> l = is.getItemMeta().getLore();
-            for(ArmorSet a : armorsets.values()) {
-                if(l.contains(added.replace("{NAME}", a.getName()))) {
-                    return a;
-                }
-            }
-        }
-        return null;
-    }
     public BlackScroll valueOfBlackScroll(ItemStack is) {
         if(blackscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();
@@ -153,26 +129,8 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
-        if(bosses != null && spawnitem != null && spawnitem.hasItemMeta()) {
-            for(CustomBoss b : bosses.values()) {
-                if(b.getSpawnItem().isSimilar(spawnitem)) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
-    public CustomExplosion valueOfCustomExplosion(ItemStack is) {
-        if(explosions != null) {
-            for(CustomExplosion c : explosions.values()) {
-                if(c.getItem().isSimilar(is)) {
-                    return c;
-                }
-            }
-        }
-        return null;
-    }
+
+
     public EnchantmentOrb valueOfEnchantmentOrb(ItemStack is) {
         if(enchantmentorbs != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemStack item = is.clone();
@@ -221,16 +179,7 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public FactionUpgrade valueOfFactionUpgrade(int slot) {
-        if(factionupgrades != null) {
-            for(FactionUpgrade f : factionupgrades.values()) {
-                if(f.getSlot() == slot) {
-                    return f;
-                }
-            }
-        }
-        return null;
-    }
+
     public CustomKit valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
         if(is != null && kits != null) {
             for(CustomKit k : kits.values()) {
@@ -339,23 +288,6 @@ public abstract class RPStorage extends RegionalAPI {
                 }
             }
         }
-        return null;
-    }
-    public GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
-        if(globalchallengeprizes != null) {
-            for(GlobalChallengePrize p : globalchallengeprizes.values())
-                if(p.getPlacement() == placement)
-                    return p;
-        }
-        return null;
-    }
-    public GlobalChallengePrize valueOfGlobalChallengePrize(ItemStack display) {
-        if(globalchallengeprizes != null && display != null && display.hasItemMeta())
-            for(GlobalChallengePrize p : globalchallengeprizes.values()) {
-                final ItemStack d = p.getItem();
-                if(d.isSimilar(display))
-                    return p;
-            }
         return null;
     }
     public static Mask valueOfMask(ItemStack is) {

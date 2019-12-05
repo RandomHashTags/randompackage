@@ -1,9 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomExplosion;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.FileCustomCreeper;
 import me.randomhashtags.randompackage.addon.file.FileCustomTNT;
+import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -53,21 +55,20 @@ public class CustomExplosions extends RPFeature {
 			cannotBreakCreepers.add(UMaterial.match(s));
 		}
 
-		final YamlConfiguration a = otherdata;
-		if(!a.getBoolean("saved default custom creepers")) {
+		if(!otherdata.getBoolean("saved default custom creepers")) {
 			final String[] c = new String[] {
 					"ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL"
 			};
 			for(String s : c) save("custom creepers", s + ".yml");
-			a.set("saved default custom creepers", true);
+			otherdata.set("saved default custom creepers", true);
 			saveOtherData();
 		}
-		if(!a.getBoolean("saved default custom tnt")) {
+		if(!otherdata.getBoolean("saved default custom tnt")) {
 			final String[] c = new String[] {
 					"GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL"
 			};
 			for(String s : c) save("custom tnt", s + ".yml");
-			a.set("saved default custom tnt", true);
+			otherdata.set("saved default custom tnt", true);
 			saveOtherData();
 		}
 
@@ -83,24 +84,24 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + (explosions != null ? explosions.size() : 0) + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
+		sendConsoleMessage("&6[RandomPackage] &aLoaded " + explosions.size() + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
 		final ArrayList<ItemStack> E = new ArrayList<>();
-		if(explosions != null) {
-			for(CustomExplosion ae : explosions.values()) {
-				E.add(ae.getItem());
-			}
+		for(Identifiable id : explosions.values()) {
+			final CustomExplosion explosion = (CustomExplosion) id;
+			E.add(explosion.getItem());
 		}
 
 		addGivedpCategory(E, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 
 		int loadedPlaced = 0, loadedPrimed = 0, loadedLiving = 0;
-		final List<String> placedtnt = a.getStringList("tnt.placed"), primedtnt = a.getStringList("tnt.primed"), livingcreepers = a.getStringList("creepers");
+		final List<String> placedtnt = otherdata.getStringList("tnt.placed"), primedtnt = otherdata.getStringList("tnt.primed"), livingcreepers = otherdata.getStringList("creepers");
 		if(placedtnt != null && !placedtnt.isEmpty()) {
 			for(String s : placedtnt) {
 				final Location l = toLocation(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
-					FileCustomTNT.placed.put(l, (FileCustomTNT) getExplosion("TNT_" + s.split(":")[1]));
+					FileCustomTNT.placed.put(l, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
 					loadedPlaced += 1;
 				}
 			}
@@ -111,7 +112,7 @@ public class CustomExplosions extends RPFeature {
 				final UUID u = UUID.fromString(s.split(":")[0]);
 				final Entity en = getEntity(u);
 				if(en != null && !en.isDead()) {
-					FileCustomTNT.primed.put(u, (FileCustomTNT) getExplosion("TNT_" + s.split(":")[1]));
+					FileCustomTNT.primed.put(u, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
 					loadedPrimed += 1;
 				}
 			}
@@ -122,7 +123,7 @@ public class CustomExplosions extends RPFeature {
 				final UUID u = UUID.fromString(s.split(":")[0]);
 				final Entity en = getEntity(u);
 				if(en != null && !en.isDead()) {
-					FileCustomCreeper.living.put(u, (FileCustomCreeper) getExplosion("CREEPER_" + s.split(":")[1]));
+					FileCustomCreeper.living.put(u, (FileCustomCreeper) getCustomExplosion("CREEPER_" + s.split(":")[1]));
 					loadedLiving += 1;
 				}
 			}
@@ -151,7 +152,7 @@ public class CustomExplosions extends RPFeature {
 		a.set("creepers", cree);
 		saveOtherData();
 
-		explosions = null;
+		unregister(Feature.CUSTOM_EXPLOSION);
 		FileCustomCreeper.living = null;
 		FileCustomTNT.placed = null;
 		FileCustomTNT.primed = null;

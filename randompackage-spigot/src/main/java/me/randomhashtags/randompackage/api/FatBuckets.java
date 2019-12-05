@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.FatBucket;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.addon.file.FileFatBucket;
@@ -47,10 +48,10 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             buckets.add(ffb.getItem(ffb.getUses()));
         }
         addGivedpCategory(buckets, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (fatbuckets != null ? fatbuckets.size() : 0) + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FAT_BUCKET).size() + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        fatbuckets = null;
+        unregister(Feature.FAT_BUCKET);
     }
 
     public HashMap<FatBucket, String> isFatBucket(ItemStack is) {

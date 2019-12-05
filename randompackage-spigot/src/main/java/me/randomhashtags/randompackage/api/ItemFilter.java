@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FilterCategory;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileFilterCategory;
@@ -108,10 +109,10 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
                 categoryTitles.put(fc.getTitle(), fc);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (filtercategories != null ? filtercategories.size() : 0) + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FILTER_CATEGORY).size() + " Item Filter categories &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        filtercategories = null;
+        unregister(Feature.FILTER_CATEGORY);
     }
 
     public void viewHelp(@NotNull CommandSender sender) {

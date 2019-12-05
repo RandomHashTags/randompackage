@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
 import me.randomhashtags.randompackage.addon.file.PathRandomizationScroll;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -39,11 +40,11 @@ public class RandomizationScrolls extends CustomEnchants {
             }
             addGivedpCategory(z, UMaterial.PAPER, "Randomization Scrolls", "Givedp: Randomization Scrolls");
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (randomizationscrolls != null ? randomizationscrolls.size() : 0) + " Randomization Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RANDOMIZATION_SCROLL).size() + " Randomization Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
-        randomizationscrolls = null;
+        unregister(Feature.RANDOMIZATION_SCROLL);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -62,7 +64,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 			final BigDecimal v = BigDecimal.valueOf(Double.parseDouble(a[1]));
 			unlockstring.put(a[0], s);
 			needed_unlocks.put(a[2], v);
-			if(v.doubleValue() > maxfund.doubleValue()) maxfund = v;
+			if(v.doubleValue() > maxfund.doubleValue()) {
+				maxfund = v;
+			}
 		}
 
 		total = BigDecimal.valueOf(otherdata.getDouble("fund.total"));
@@ -75,15 +79,14 @@ public class Fund extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Server Fund &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		final YamlConfiguration a = otherdata;
-		a.set("fund.total", total);
+		otherdata.set("fund.total", total);
 		for(UUID u : deposits.keySet()) {
-			a.set("fund.depositors." + u.toString(), deposits.get(u));
+			otherdata.set("fund.depositors." + u.toString(), deposits.get(u));
 		}
 		saveOtherData();
 	}
 	
-	public void deposit(Player player, String arg) {
+	public void deposit(@NotNull Player player, @NotNull String arg) {
 		if(hasPermission(player, "RandomPackage.fund.deposit", true)) {
 			if(total.doubleValue() >= maxfund.doubleValue()) {
 				sendStringListMessage(player, config.getStringList("messages.already complete"), null);
@@ -170,14 +173,14 @@ public class Fund extends RPFeature implements CommandExecutor {
 		}
 	}
 
-	public void reset(CommandSender sender) {
+	public void reset(@Nullable CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.reset", true)) {
 			Bukkit.broadcastMessage(colorize("&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
 			total = BigDecimal.ZERO;
 			deposits.clear();
 		}
 	}
-	public void view(CommandSender sender) {
+	public void view(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund", true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
 			final String symbol = config.getString("messages.progress bar.symbol"), achieved = colorize(config.getString("messages.progress bar.achieved")), notachieved = colorize(config.getString("messages.progress bar.not achieved"));
@@ -208,9 +211,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	public void viewHelp(CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.fund.help", true))
+	public void viewHelp(@NotNull CommandSender sender) {
+		if(hasPermission(sender, "RandomPackage.fund.help", true)) {
 			sendStringListMessage(sender, config.getStringList("messages.help"), null);
+		}
 	}
 	private String getAbbreviation(double input) {
 		final int l = Integer.toString((int) input).length();

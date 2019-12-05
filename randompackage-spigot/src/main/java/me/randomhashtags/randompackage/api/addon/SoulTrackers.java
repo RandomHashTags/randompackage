@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
+import me.randomhashtags.randompackage.dev.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
@@ -56,10 +57,10 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             }
             addGivedpCategory(z, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " +  (soultrackers != null ? soultrackers.size() : 0) + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " +  getAll(Feature.SOUL_TRACKER).size() + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        soultrackers = null;
+        unregister(Feature.SOUL_TRACKER);
     }
 
     public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {

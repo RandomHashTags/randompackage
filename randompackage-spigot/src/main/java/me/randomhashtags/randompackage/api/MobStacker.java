@@ -86,20 +86,21 @@ public class MobStacker extends RPFeature {
         loadBackup();
     }
     public void unload() {
-        for(int i : tasks) scheduler.cancelTask(i);
+        for(int i : tasks) {
+            scheduler.cancelTask(i);
+        }
         backup();
     }
 
     public void backup() {
         final List<StackedEntity> se = StackedEntity.stackedEntities;
-        final YamlConfiguration a = otherdata;
-        a.set("stacked mobs", null);
+        otherdata.set("stacked mobs", null);
         for(StackedEntity e : se) {
             final long c = e.creationTime;
             if(c != 0) {
                 final String u = "stacked mobs." + e.uuid.toString() + ".";
-                a.set(u + "creation", c);
-                a.set(u + "size", e.size);
+                otherdata.set(u + "creation", c);
+                otherdata.set(u + "size", e.size);
             }
         }
         saveOtherData();
@@ -108,13 +109,12 @@ public class MobStacker extends RPFeature {
     public void loadBackup() {
         final long started = System.currentTimeMillis();
         int loaded = 0;
-        final YamlConfiguration a = otherdata;
-        final ConfigurationSection o = a.getConfigurationSection("stacked mobs");
+        final ConfigurationSection o = otherdata.getConfigurationSection("stacked mobs");
         if(o != null) {
             for(String s : o.getKeys(false)) {
                 final Entity e = getEntity(UUID.fromString(s));
                 if(e != null && !e.isDead() && e instanceof LivingEntity) {
-                    new StackedEntity(a.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), a.getInt("stacked mobs." + s + ".size"));
+                    new StackedEntity(otherdata.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), otherdata.getInt("stacked mobs." + s + ".size"));
                     loaded += 1;
                 }
             }
@@ -193,8 +193,9 @@ public class MobStacker extends RPFeature {
     private void entityDeathEvent(EntityDeathEvent event) {
         final UUID u = event.getEntity().getUniqueId();
         final StackedEntity s = StackedEntity.valueOf(u);
-        if(s != null)
+        if(s != null) {
             s.kill(null, 1);
+        }
     }
     @EventHandler
     private void entityDamageEvent(EntityDamageEvent event) {
@@ -209,7 +210,9 @@ public class MobStacker extends RPFeature {
                 le.setFireTicks(0);
                 s.kill(null, 1);
             }
-            if(s.size == 1) StackedEntity.stackedEntities.remove(s);
+            if(s.size == 1) {
+                StackedEntity.stackedEntities.remove(s);
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -223,7 +226,9 @@ public class MobStacker extends RPFeature {
                 e.setHealth(e.getMaxHealth());
                 s.kill(damager, 1);
             }
-            if(s != null && s.size == 1) StackedEntity.stackedEntities.remove(s);
+            if(s != null && s.size == 1) {
+                StackedEntity.stackedEntities.remove(s);
+            }
         }
     }
 }
