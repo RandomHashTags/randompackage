@@ -19,7 +19,7 @@ public class BreakBlocks extends AbstractEventAttribute {
                 final Material m = b.getType();
                 final byte d = b.getData();
                 final BlockState bs = b.getState();
-                scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                     b.setType(m);
                     if(LEGACY) {
                         bs.setRawData(d);

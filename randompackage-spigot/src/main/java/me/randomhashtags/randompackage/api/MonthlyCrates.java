@@ -311,19 +311,19 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     }
     private void stopTimers(Player player) {
         if(playertimers.containsKey(player)) {
-            for(int i : playertimers.get(player)) scheduler.cancelTask(i);
+            for(int i : playertimers.get(player)) SCHEDULER.cancelTask(i);
             playertimers.remove(player);
         }
     }
     public void reset(Player sender, OfflinePlayer target) {
         if(target == null || !target.isOnline()) {
-            sendStringListMessage(sender, config.getStringList("messages.reset.target doesnt exist"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.reset.target doesnt exist"), null);
         } else {
             final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
             pdata.getClaimedMonthlyCrates().clear();
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{TARGET}", target.getName());
-            sendStringListMessage(sender, config.getStringList("messages.reset.success"), replacements);
+            sendStringListMessage(sender, getMessage(config, "messages.reset.success"), replacements);
         }
     }
     public void give(RPPlayer pdata, Player player, MonthlyCrate crate, boolean claimed) {
@@ -396,7 +396,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                     final boolean hasPerm = pdata.getMonthlyCrates().contains(n) || player.hasPermission("RandomPackage.monthlycrates." + n);
                     if(!hasPerm) {
-                        sendStringListMessage(player, config.getStringList("messages.no access"), null);
+                        sendStringListMessage(player, getMessage(config, "messages.no access"), null);
                     } else if(!pdata.getClaimedMonthlyCrates().contains(n)) {
                         give(pdata, player, mc, true);
                     }
@@ -463,7 +463,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             } else if(i.hasItemMeta() && (m.equals(heroicmysterycrate.getItemMeta()) || m.equals(mysterycrate.getItemMeta()) || m.equals(superiormysterycrate.getItemMeta()))) {
                 final String p = m.equals(superiormysterycrate.getItemMeta()) ? "superior mystery crate" : m.equals(heroicmysterycrate.getItemMeta()) ? "heroic mystery crate" : "mystery crate";
                 final List<String> kk = config.getStringList("items." + p + ".can obtain");
-                final String r = kk.get(random.nextInt(kk.size()));
+                final String r = kk.get(RANDOM.nextInt(kk.size()));
                 final ItemStack I = givedpitem.valueOf("monthlycrate:" + r);
                 itemMeta = I.getItemMeta(); lore.clear();
                 if(itemMeta != null && itemMeta.hasLore()) {

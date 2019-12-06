@@ -9,16 +9,31 @@ import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.util.universal.UMaterial;
 import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.File;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
 
 public interface RPStorage extends UVersionable {
     HashMap<Feature, LinkedHashMap<String, Identifiable>> FEATURES = new HashMap<>();
+    HashMap<String, YamlConfiguration> CACHED_YAMLS = new HashMap<>();
+
+    default YamlConfiguration getYaml(String folder, String fileName) {
+        if(CACHED_YAMLS.containsKey(folder + fileName)) return CACHED_YAMLS.get(folder + fileName);
+        final File f = new File(dataFolder + separator + (folder != null ? folder : ""), fileName);
+        final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
+        CACHED_YAMLS.put(folder+fileName, c);
+        return c;
+    }
+    default YamlConfiguration getAddonConfig(String fileName) { return getYaml("addons", fileName); }
+    default YamlConfiguration getRPConfig(String folder, String fileName) { return getYaml(folder, fileName); }
 
     default void register(Feature f, Identifiable obj) {
         if(!FEATURES.containsKey(f)) {
@@ -35,11 +50,23 @@ public interface RPStorage extends UVersionable {
     default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() { return new LinkedHashMap<>((Map<String, ? extends BlackScroll>) getAll(Feature.BLACK_SCROLL)); }
     default LinkedHashMap<String, Booster> getAllBoosters() { return new LinkedHashMap<>((Map<String, ? extends Booster>) getAll(Feature.BOOSTER)); }
     default LinkedHashMap<String, ConquestChest> getAllConquestChests() { return new LinkedHashMap<>((Map<String, ? extends ConquestChest>) getAll(Feature.CONQUEST_CHEST)); }
+    default LinkedHashMap<String, CustomKit> getAllCustomKits() { return new LinkedHashMap<>((Map<String, ? extends CustomKit>) getAll(Feature.CUSTOM_KIT)); }
+    default LinkedHashMap<String, EnchantmentOrb> getAllEnchantmentOrbs() { return new LinkedHashMap<>((Map<String, ? extends EnchantmentOrb>) getAll(Feature.ENCHANTMENT_ORB)); }
     default LinkedHashMap<String, EnvoyCrate> getAllEnvoyCrates() { return new LinkedHashMap<>((Map<String, ? extends EnvoyCrate>) getAll(Feature.ENVOY_CRATE)); }
     default LinkedHashMap<String, GlobalChallenge> getAllGlobalChallenges() { return new LinkedHashMap<>((Map<String, ? extends GlobalChallenge>) getAll(Feature.GLOBAL_CHALLENGE)); }
+    default LinkedHashMap<String, GlobalChallengePrize> getAllGlobalChallengePrizes() { return new LinkedHashMap<>((Map<String, ? extends GlobalChallengePrize>) getAll(Feature.GLOBAL_CHALLENGE_PRIZE)); }
     default LinkedHashMap<String, Lootbox> getAllLootboxes() { return new LinkedHashMap<>((Map<String, ? extends Lootbox>) getAll(Feature.LOOTBOX)); }
+    default LinkedHashMap<String, MagicDust> getAllMagicDust() { return new LinkedHashMap<>((Map<String, ? extends MagicDust>) getAll(Feature.MAGIC_DUST)); }
+    default LinkedHashMap<String, Mask> getAllMasks() { return new LinkedHashMap<>((Map<String, ? extends Mask>) getAll(Feature.MASK)); }
+    default LinkedHashMap<String, MonthlyCrate> getAllMonthlyCrates() { return new LinkedHashMap<>((Map<String, ? extends MonthlyCrate>) getAll(Feature.MONTHLY_CRATE)); }
+    default LinkedHashMap<String, RandomizationScroll> getAllRandomizationScrolls() { return new LinkedHashMap<>((Map<String, ? extends RandomizationScroll>) getAll(Feature.RANDOMIZATION_SCROLL)); }
+    default LinkedHashMap<String, RarityFireball> getAllRarityFireballs() { return new LinkedHashMap<>((Map<String, ? extends RarityFireball>) getAll(Feature.RARITY_FIREBALL)); }
+    default LinkedHashMap<String, RarityGem> getAllRarityGems() { return new LinkedHashMap<>((Map<String, ? extends RarityGem>) getAll(Feature.RARITY_GEM)); }
     default LinkedHashMap<String, ServerCrate> getAllServerCrates() { return new LinkedHashMap<>((Map<String, ? extends ServerCrate>) getAll(Feature.SERVER_CRATE)); }
+    default LinkedHashMap<String, SoulTracker> getAllSoulTrackers() { return new LinkedHashMap<>((Map<String, ? extends SoulTracker>) getAll(Feature.SOUL_TRACKER)); }
     default LinkedHashMap<String, Title> getAllTitles() { return new LinkedHashMap<>((Map<String, ? extends Title>) getAll(Feature.TITLE)); }
+    default LinkedHashMap<String, TransmogScroll> getAllTransmogScrolls() { return new LinkedHashMap<>((Map<String, ? extends TransmogScroll>) getAll(Feature.TRANSMOG_SCROLL)); }
+    default LinkedHashMap<String, WhiteScroll> getAllWhiteScrolls() { return new LinkedHashMap<>((Map<String, ? extends WhiteScroll>) getAll(Feature.WHITE_SCROLL)); }
 
     static void unregisterAll(Feature...features) {
         for(Feature f : features) {
@@ -287,7 +314,61 @@ public interface RPStorage extends UVersionable {
         }
         return null;
     }
-
+    default BlackScroll valueOfBlackScroll(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final Material m = is.getType();
+            final String d = is.getItemMeta().getDisplayName();
+            for(BlackScroll b : getAllBlackScrolls().values()) {
+                final ItemStack i = b.getItem();
+                if(m.equals(i.getType()) && (!LEGACY || is.getData().getData() == i.getData().getData()) && d.equals(i.getItemMeta().getDisplayName())) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+    default EnchantmentOrb valueOfEnchantmentOrb(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final ItemStack item = is.clone();
+            final ItemMeta M = item.getItemMeta();
+            final List<String> l = M.getLore();
+            final int S = l.size();
+            for(EnchantmentOrb orb : getAllEnchantmentOrbs().values()) {
+                final ItemStack its = orb.getItem();
+                final ItemMeta m = its.getItemMeta();
+                final List<String> L = m.getLore();
+                if(L.size() == S) {
+                    final int slot = orb.getPercentLoreSlot();
+                    L.set(slot, l.get(slot));
+                    M.setLore(L);
+                    its.setItemMeta(M);
+                    if(is.isSimilar(its))
+                        return orb;
+                }
+            }
+        }
+        return null;
+    }
+    default EnchantmentOrb valueOfEnchantmentOrb(String appliedlore) {
+        if(appliedlore != null) {
+            for(EnchantmentOrb orb : getAllEnchantmentOrbs().values()) {
+                if(orb.getApplied().equals(appliedlore))
+                    return orb;
+            }
+        }
+        return null;
+    }
+    default EnchantmentOrb getEnchantmentOrb(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> l = is.getItemMeta().getLore();
+            for(EnchantmentOrb e : getAllEnchantmentOrbs().values()) {
+                if(l.contains(e.getApplied())) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
     default CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
         if(spawnitem != null && spawnitem.hasItemMeta()) {
             final HashMap<String, Identifiable> bosses = getAll(Feature.CUSTOM_BOSS);
@@ -377,9 +458,7 @@ public interface RPStorage extends UVersionable {
     }
 
     default GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
-        final HashMap<String, Identifiable> prizes = getAll(Feature.GLOBAL_CHALLENGE_PRIZE);
-        for(Identifiable id : prizes.values()) {
-            final GlobalChallengePrize p = (GlobalChallengePrize) id;
+        for(GlobalChallengePrize p : getAllGlobalChallengePrizes().values()) {
             if(p.getPlacement() == placement) {
                 return p;
             }
@@ -388,9 +467,7 @@ public interface RPStorage extends UVersionable {
     }
     default GlobalChallengePrize valueOfGlobalChallengePrize(ItemStack display) {
         if(display != null && display.hasItemMeta()) {
-            final HashMap<String, Identifiable> prizes = getAll(Feature.GLOBAL_CHALLENGE_PRIZE);
-            for(Identifiable id : prizes.values()) {
-                final GlobalChallengePrize p = (GlobalChallengePrize) id;
+            for(GlobalChallengePrize p : getAllGlobalChallengePrizes().values()) {
                 final ItemStack d = p.getItem();
                 if(d.isSimilar(display)) {
                     return p;
@@ -400,6 +477,118 @@ public interface RPStorage extends UVersionable {
         return null;
     }
 
+    default MagicDust valueOfMagicDust(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final Material m = is.getType();
+            final String d = is.getItemMeta().getDisplayName();
+            for(MagicDust dust : getAllMagicDust().values()) {
+                final ItemStack i = dust.getItem();
+                if(i.getType().equals(m) && i.getItemMeta().getDisplayName().equals(d)) {
+                    return dust;
+                }
+            }
+        }
+        return null;
+    }
+    default Mask valueOfMask(ItemStack is) {
+        if(is != null && is.hasItemMeta()) {
+            for(Mask m : getAllMasks().values()) {
+                final ItemStack i = m.getItem();
+                if(i.isSimilar(is))
+                    return m;
+            }
+        }
+        return null;
+    }
+    default Mask getMaskOnItem(ItemStack is) {
+        if(is != null && is.hasItemMeta()) {
+            final ItemMeta im = is.getItemMeta();
+            if(im.hasLore()) {
+                final List<String> l = im.getLore();
+                for(Mask m : getAllMasks().values()) {
+                    if(l.contains(m.getApplied())) {
+                        return m;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    default MonthlyCrate valueOfMonthlyCrate(String title) {
+        for(MonthlyCrate m : getAllMonthlyCrates().values()) {
+            if(m.getGuiTitle().equals(title)) {
+                return m;
+            }
+        }
+        return null;
+    }
+    default MonthlyCrate valueOfMonthlyCrate(ItemStack item) {
+        for(MonthlyCrate c : getAllMonthlyCrates().values()) {
+            if(c.getItem().isSimilar(item)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    default MonthlyCrate valueOfMonthlyCrate(Player player, ItemStack item) {
+        if(player != null && item != null) {
+            final String p = player.getName();
+            for(MonthlyCrate c : getAllMonthlyCrates().values()) {
+                final ItemStack is = c.getItem(), IS = is.clone();
+                final ItemMeta m = is.getItemMeta();
+                final List<String> s = new ArrayList<>();
+                if(m.hasLore()) {
+                    for(String l : m.getLore()) {
+                        s.add(l.replace("{UNLOCKED_BY}", p));
+                    }
+                    m.setLore(s);
+                }
+                is.setItemMeta(m);
+                if(item.isSimilar(is) || item.isSimilar(IS)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+    default MonthlyCrate valueOfMonthlyCrate(int category, int slot) {
+        for(MonthlyCrate c : getAllMonthlyCrates().values()) {
+            if(category == c.getCategory() && slot == c.getCategorySlot()) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    default RandomizationScroll valueOfRandomizationScroll(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final ItemMeta m = is.getItemMeta();
+            for(RandomizationScroll r : getAllRandomizationScrolls().values()) {
+                if(r.getItem().getItemMeta().equals(m)) {
+                    return r;
+                }
+            }
+        }
+        return null;
+    }
+    default RarityFireball valueOfRarityFireball(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            for(RarityFireball f : getAllRarityFireballs().values()) {
+                if(is.isSimilar(f.getItem())) {
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+    default RarityFireball valueOfRarityFireball(List<EnchantRarity> exchangeablerarities) {
+        for(RarityFireball f : getAllRarityFireballs().values()) {
+            if(f.getExchangeableRarities().equals(exchangeablerarities)) {
+                return f;
+            }
+        }
+        return null;
+    }
     default ItemStack getRarityGem(@NotNull RarityGem gem, @NotNull Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
@@ -411,5 +600,25 @@ public interface RPStorage extends UVersionable {
         }
         return null;
     }
-
+    default RarityGem valueOfRarityGem(ItemStack item) {
+        if(item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            final List<String> l = item.getItemMeta().getLore();
+            for(RarityGem g : getAllRarityGems().values()) {
+                if(g.getItem().getItemMeta().getLore().equals(l)) {
+                    return g;
+                }
+            }
+        }
+        return null;
+    }
+    default TransmogScroll valueOfTransmogScroll(ItemStack is) {
+        if(is != null) {
+            for(TransmogScroll t : getAllTransmogScrolls().values()) {
+                if(t.getItem().isSimilar(is)) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
 }

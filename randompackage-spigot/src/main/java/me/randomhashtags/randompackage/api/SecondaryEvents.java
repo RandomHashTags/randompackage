@@ -227,7 +227,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 for(String s : config.getStringList("xpbottle.teleport cancelled"))
                     player.sendMessage(colorize(s));
                 tel.setCancelled(true);
-                scheduler.cancelTask(events.get(player).getTask());
+                SCHEDULER.cancelTask(events.get(player).getTask());
                 events.remove(player);
             }
         }
@@ -244,7 +244,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         for(String s : config.getStringList("xpbottle.delayed commands")) {
             if(m.startsWith(s.toLowerCase())) {
                 delayed.put(player, s);
-                scheduler.scheduleSyncDelayedTask(randompackage, () -> delayed.remove(player), 1);
+                SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> delayed.remove(player), 1);
                 return;
             }
         }
@@ -275,14 +275,14 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 if(delay < mindelay) delay = mindelay;
                 if(hasPrevious) {
                     previous.setCancelled(true);
-                    scheduler.cancelTask(previous.getTask());
+                    SCHEDULER.cancelTask(previous.getTask());
                     events.remove(player);
                 }
                 final PlayerTeleportDelayEvent e = new PlayerTeleportDelayEvent(player, delay, event.getFrom(), event.getTo());
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 if(!e.isCancelled()) {
                     final long de = (long) ((((long) delay * 20)) + (20 * Double.parseDouble("0." + Double.toString(e.getDelay()).split("\\.")[1])));
-                    final int t = scheduler.scheduleSyncDelayedTask(getPlugin, () -> {
+                    final int t = SCHEDULER.scheduleSyncDelayedTask(getPlugin, () -> {
                         player.teleport(e.getTo(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                         events.remove(player);
                     }, de);
@@ -293,7 +293,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                         player.sendMessage(colorize(s));
                     }
                 } else {
-                    scheduler.cancelTask(e.getTask());
+                    SCHEDULER.cancelTask(e.getTask());
                     events.remove(player);
                 }
             }
@@ -402,7 +402,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         opener.updateInventory();
     }
     public void roll(Player player, String arg0) {
-        final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = random.nextInt(maxroll);
+        final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = RANDOM.nextInt(maxroll);
         final List<Entity> nearby = player.getNearbyEntities(radius, radius, radius);
         final List<Player> p = new ArrayList<>();
         for(Entity entity : nearby) {

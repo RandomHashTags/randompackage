@@ -65,8 +65,8 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
-        opened = colorizeListString(config.getStringList("messages.opened"));
-        rewardFormat = colorizeListString(config.getStringList("messages.reward format"));
+        opened = colorizeListString(getMessage(config, "messages.opened"));
+        rewardFormat = colorizeListString(getMessage(config, "messages.reward format"));
 
         guiLootboxes = new HashMap<>();
         redeeming = new HashMap<>();
@@ -184,7 +184,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 giveItem(player, lootbox.getItem());
             }
         } else {
-            sendStringListMessage(player, config.getStringList("messages.unlock"), null);
+            sendStringListMessage(player, getMessage(config, "messages.unlock"), null);
         }
         player.closeInventory();
     }
@@ -218,7 +218,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                         countdownSlots.add(slot);
                         break;
                     case "B":
-                        int a = random.nextInt(bonus.size());
+                        int a = RANDOM.nextInt(bonus.size());
                         if(a >= 0) {
                             final ItemStack b = bonus.get(a);
                             top.setItem(slot, b);
@@ -227,7 +227,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                         }
                         break;
                     case "L":
-                        a = random.nextInt(regular.size());
+                        a = RANDOM.nextInt(regular.size());
                         if(a >= 0) {
                             final ItemStack r = regular.get(a);
                             top.setItem(slot, r);
@@ -240,7 +240,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }
         }
         tasks.put(player, new ArrayList<>());
-        tasks.get(player).add(scheduler.scheduleSyncDelayedTask(randompackage, () -> startCountdown(player, top, countdownSlots, lootSlots, bonusSlots, background), 10));
+        tasks.get(player).add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> startCountdown(player, top, countdownSlots, lootSlots, bonusSlots, background), 10));
         player.updateInventory();
     }
     private void startCountdown(Player player, Inventory top, List<Integer> countdownSlots, List<Integer> lootSlots, List<Integer> bonusSlots, ItemStack background) {
@@ -252,7 +252,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
 
         for(int i = 1; i <= countdownStart; i++) {
             final int k = i;
-            T.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+            T.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                 item = background.clone();
                 item.setAmount(countdownStart-k);
                 for(int c : countdownSlots) {
@@ -266,10 +266,10 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                     }
                 } else {
                     for(int z = 0; z <= 18; z += 3) {
-                        T.add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                        T.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                             final List<ItemStack> loot = new ArrayList<>(L);
                             for(int s : lootSlots) {
-                                final ItemStack r = loot.get(random.nextInt(loot.size()));
+                                final ItemStack r = loot.get(RANDOM.nextInt(loot.size()));
                                 loot.remove(r);
                                 top.setItem(s, r);
                             }
@@ -316,7 +316,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 }
             } else if(L != null) {
                 player.closeInventory();
-                sendStringListMessage(player, config.getStringList("messages.unlock"), null);
+                sendStringListMessage(player, getMessage(config, "messages.unlock"), null);
             } else {
             }
         }
@@ -363,7 +363,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }
             redeeming.remove(player);
             for(int task : tasks.get(player)) {
-                scheduler.cancelTask(task);
+                SCHEDULER.cancelTask(task);
             }
             tasks.remove(player);
         }

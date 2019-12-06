@@ -23,7 +23,7 @@ public class IncreaseGlobalChallenge extends AbstractEventAttribute {
                     if(a != null) {
                         final BigDecimal by = BigDecimal.valueOf(evaluate(replaceValue(entities, values[1], valueReplacements)));
                         final GlobalChallengeParticipateEvent ev = new GlobalChallengeParticipateEvent(event, (Player) e, a, by);
-                        pluginmanager.callEvent(ev);
+                        PLUGIN_MANAGER.callEvent(ev);
                         if(!ev.isCancelled()) {
                             a.increaseValue(e.getUniqueId(), ev.value);
                         }

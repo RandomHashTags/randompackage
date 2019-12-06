@@ -45,7 +45,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	public String getIdentifier() { return "CHAT_EVENTS"; }
 	public void load() {
 		final long started = System.currentTimeMillis();
-		final FileConfiguration f = randompackage.getConfig();
+		final FileConfiguration f = RANDOM_PACKAGE.getConfig();
 		bragDisplay = colorize(f.getString("chat cmds.brag.display"));
 		itemDisplay = colorize(f.getString("chat cmds.item.display"));
 		viewingBrag = new ArrayList<>();
@@ -74,7 +74,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 				if(hasPermission(player, "RandomPackage.chat.brag", false)) {
 					sendBragMessage(player, bragDisplay.replace("{PLAYER}", player.getName()), prefix, suffix, recipients);
 				} else {
-					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.brag.no perm"), null);
+					sendStringListMessage(player, RANDOM_PACKAGE.getConfig().getStringList("chat cmds.brag.no perm"), null);
 				}
 			} else {
 				if(hasPermission(player, "RandomPackage.chat.item", false)) {
@@ -84,7 +84,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
 					}
 				} else {
-					sendStringListMessage(player, randompackage.getConfig().getStringList("chat cmds.item.no perm"), null);
+					sendStringListMessage(player, RANDOM_PACKAGE.getConfig().getStringList("chat cmds.item.no perm"), null);
 				}
 			}
 		}
@@ -92,7 +92,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 	public void sendBragMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
 		bragInventories.put(player.getUniqueId(), player.getInventory());
 		final TextComponent m = new TextComponent(message);
-		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(randompackage.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
+		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(RANDOM_PACKAGE.getConfig().getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
 		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId().toString()));
 		for(Player p : recipients) {
 			send(player, p, prefix, m, suffix);
@@ -146,7 +146,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 		try {
 			v = UUID.fromString(args[0]);
 		} catch (Exception e) {
-			sendStringListMessage(sender, randompackage.getConfig().getStringList("chat cmds.brag.invalid"), null);
+			sendStringListMessage(sender, RANDOM_PACKAGE.getConfig().getStringList("chat cmds.brag.invalid"), null);
 			return true;
 		}
 		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.containsKey(v)) {
@@ -176,7 +176,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor {
 			}
 			viewingBrag.add(player.getUniqueId());
 		} else {
-			sendStringListMessage(sender, randompackage.getConfig().getStringList("chat cmds.brag.invalid"), null);
+			sendStringListMessage(sender, RANDOM_PACKAGE.getConfig().getStringList("chat cmds.brag.invalid"), null);
 		}
 		return true;
 	}

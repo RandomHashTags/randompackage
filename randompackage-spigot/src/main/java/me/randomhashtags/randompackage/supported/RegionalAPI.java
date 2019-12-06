@@ -43,7 +43,7 @@ public class RegionalAPI extends UVersion {
         trySupportingEpicSkyblock();
     }
     public void trySupportingFactions() {
-        factionsUUID = isTrue("supported plugins.regional.FactionsUUID") && pluginmanager.isPluginEnabled("Factions");
+        factionsUUID = isTrue("supported plugins.regional.FactionsUUID") && PLUGIN_MANAGER.isPluginEnabled("Factions");
         if(factionsUUID) {
             factions = FactionsUUID.getFactionsUUID();
             factions.enable();
@@ -53,7 +53,7 @@ public class RegionalAPI extends UVersion {
         }
     }
     public void trySupportingASkyblock() {
-        askyblock = isTrue("supported plugins.regional.ASkyblock") && pluginmanager.isPluginEnabled("ASkyblock");
+        askyblock = isTrue("supported plugins.regional.ASkyblock") && PLUGIN_MANAGER.isPluginEnabled("ASkyblock");
         if(askyblock) {
             asky = ASky.getASkyblock();
             asky.enable();
@@ -61,7 +61,7 @@ public class RegionalAPI extends UVersion {
         }
     }
     public void trySupportingSuperiorSkyblock() {
-        superiorskyblock = isTrue("supported plugins.regional.SuperiorSkyblock") && pluginmanager.isPluginEnabled("SuperiorSkyblock");
+        superiorskyblock = isTrue("supported plugins.regional.SuperiorSkyblock") && PLUGIN_MANAGER.isPluginEnabled("SuperiorSkyblock");
         if(superiorskyblock) {
             ssky = SuperiorSky.getSuperiorSkyblock();
             ssky.enable();
@@ -69,7 +69,7 @@ public class RegionalAPI extends UVersion {
         }
     }
     public void trySupportingEpicSkyblock() {
-        epicskyblock = isTrue("supported plugins.regional.EpicSkyblock") && pluginmanager.isPluginEnabled("EpicSkyblock");
+        epicskyblock = isTrue("supported plugins.regional.EpicSkyblock") && PLUGIN_MANAGER.isPluginEnabled("EpicSkyblock");
         if(epicskyblock) {
             esky = EpicSky.getEpicSkyblock();
             esky.enable();

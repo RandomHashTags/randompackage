@@ -7,10 +7,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -29,15 +32,35 @@ public interface UVersionable extends Versionable {
     File dataFolder = getPlugin.getDataFolder();
     String separator = File.separator;
 
-    RandomPackage randompackage = RandomPackage.getPlugin;
-    PluginManager pluginmanager = Bukkit.getPluginManager();
-    Random random = new Random();
+    RandomPackage RANDOM_PACKAGE = RandomPackage.getPlugin;
+    PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
+    Random RANDOM = new Random();
 
-    BukkitScheduler scheduler = Bukkit.getScheduler();
-    ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-    ConsoleCommandSender console = Bukkit.getConsoleSender();
+    BukkitScheduler SCHEDULER = Bukkit.getScheduler();
+    ScoreboardManager SCOREBOARD_MANAGER = Bukkit.getScoreboardManager();
+    ConsoleCommandSender CONSOLE = Bukkit.getConsoleSender();
 
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
+
+    HashMap<YamlConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
+
+    default List<String> getMessage(YamlConfiguration yml, String identifier) {
+        if(!FEATURE_MESSAGES.containsKey(yml)) {
+            FEATURE_MESSAGES.put(yml, new HashMap<>());
+        }
+        final HashMap<String, List<String>> messages = FEATURE_MESSAGES.get(yml);
+        if(!messages.containsKey(identifier)) {
+            messages.put(identifier, colorizeListString(yml.getStringList(identifier)));
+        }
+        return messages.get(identifier);
+    }
+
+    default ItemStack getClone(ItemStack is) {
+        return getClone(is, null);
+    }
+    default ItemStack getClone(ItemStack is, ItemStack def) {
+        return is != null ? is.clone() : def;
+    }
 
     default int getTotalExperience(Player player) {
         final double levelxp = LevelToExp(player.getLevel()), nextlevelxp = LevelToExp(player.getLevel() + 1), difference = nextlevelxp - levelxp;
@@ -55,7 +78,7 @@ public interface UVersionable extends Versionable {
     }
 
     default void sendConsoleMessage(String msg) {
-        console.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        CONSOLE.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
     }
     default String formatBigDecimal(BigDecimal b) {
         return formatBigDecimal(b, false);

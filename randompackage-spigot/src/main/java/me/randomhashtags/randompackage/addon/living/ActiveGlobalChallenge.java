@@ -3,9 +3,9 @@ package me.randomhashtags.randompackage.addon.living;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
+import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.event.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-
-public class ActiveGlobalChallenge extends RPStorage {
+public class ActiveGlobalChallenge implements RPStorage {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
     private static GlobalChallenges gc;
     private GlobalChallenge type;
@@ -34,7 +32,7 @@ public class ActiveGlobalChallenge extends RPStorage {
         this.participants = participants;
         long remainingTime = getRemainingTime();
         if(remainingTime < 0) remainingTime = 0;
-        task = scheduler.scheduleSyncDelayedTask(getPlugin, () -> end(true, 3), remainingTime);
+        task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> end(true, 3), remainingTime);
         active.put(type, this);
     }
 
@@ -71,10 +69,10 @@ public class ActiveGlobalChallenge extends RPStorage {
 
     public void end(boolean giveRewards, int recordPlacements) {
         final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         gc.reloadInventory();
         final Map<UUID, BigDecimal> placements = gc.getPlacing(participants);
-        if(task != -1) scheduler.cancelTask(task);
+        if(task != -1) SCHEDULER.cancelTask(task);
         active.remove(type);
         if(giveRewards) {
             int i = 1;
@@ -103,6 +101,5 @@ public class ActiveGlobalChallenge extends RPStorage {
 
     public static void deleteAll() {
         active = null;
-        globalchallenges = null;
     }
 }

@@ -68,7 +68,7 @@ public class EnchantmentOrbs extends RPFeature {
             EnchantmentOrb q = valueOfEnchantmentOrb(s);
             if(q != null) prevOrb = q;
         }
-        if(random.nextInt(100) < percent) {
+        if(RANDOM.nextInt(100) < percent) {
             final String a = orb.getApplied();
             if(prevOrb == null) {
                 lore.add(a);

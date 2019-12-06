@@ -57,11 +57,11 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             if(a.equals("leave")) {
                 final PvPMatch m = PvPMatch.valueOf(player);
                 if(m != null) {
-                    leaveQueue(m, config.getStringList("messages.leave"));
+                    leaveQueue(m, getMessage(config, "messages.leave"));
                 } else if(countdown.containsKey(player)) {
                     leaveCountdown(player);
                 } else {
-                    sendStringListMessage(player, config.getStringList("messages.leave not in queue"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.leave not in queue"), null);
                 }
             } else {
                 viewQueue(player);
@@ -98,7 +98,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
     public void unload() {
         for(Player p : tasks.keySet()) {
             for(int i : tasks.get(p)) {
-                scheduler.cancelTask(i);
+                SCHEDULER.cancelTask(i);
             }
         }
         for(Player p : new ArrayList<>(viewing)) {
@@ -163,15 +163,15 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     skull.setItemMeta(sm);
                     i.setItem(slot, skull);
 
-                    for(String s : colorizeListString(config.getStringList("messages.created broadcast"))) {
+                    for(String s : colorizeListString(getMessage(config, "messages.created broadcast"))) {
                         Bukkit.broadcastMessage(s.replace("{PLAYER}", n));
                     }
-                    sendStringListMessage(player, config.getStringList("messages.created"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.created"), null);
                 } else {
-                    sendStringListMessage(player, config.getStringList("messages.must be in wilderness"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.must be in wilderness"), null);
                 }
             } else {
-                sendStringListMessage(player, config.getStringList("messages.already in queue"), null);
+                sendStringListMessage(player, getMessage(config, "messages.already in queue"), null);
             }
         }
     }
@@ -187,9 +187,9 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             countdown.remove(player);
             final PvPCountdownMatch c = PvPCountdownMatch.valueOf(player);
             if(c != null) {
-                sendStringListMessage(player, config.getStringList("messages.leave"), null);
+                sendStringListMessage(player, getMessage(config, "messages.leave"), null);
                 for(int i : tasks.get(c.getCreator())) {
-                    scheduler.cancelTask(i);
+                    SCHEDULER.cancelTask(i);
                 }
                 c.delete();
             }
@@ -220,7 +220,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
 
             player.teleport(c.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
 
-            final List<String> e = colorizeListString(config.getStringList("messages.invincibility enabled")), expire = colorizeListString(config.getStringList("messages.invincibility expired")), cd = colorizeListString(config.getStringList("messages.invincibility expiring"));
+            final List<String> e = colorizeListString(getMessage(config, "messages.invincibility enabled")), expire = colorizeListString(getMessage(config, "messages.invincibility expired")), cd = colorizeListString(getMessage(config, "messages.invincibility expiring"));
             final HashMap<String, String> r = new HashMap<>();
             r.put("{SEC}", Integer.toString(invincibilityDuration));
 
@@ -233,7 +233,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
 
             for(int i = 0; i <= invincibilityDuration; i++) {
                 final int a = i;
-                tasks.get(c).add(scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                tasks.get(c).add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                     if(cdm.getCreator() != null && cdm.getChallenger() != null) {
                         r.put("{SEC}", Integer.toString(invincibilityDuration-a));
                         if(a == invincibilityDuration) {
@@ -248,7 +248,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     } else {
                         countdown.remove(player);
                         for(int t : tasks.get(c)) {
-                            scheduler.cancelTask(t);
+                            SCHEDULER.cancelTask(t);
                         }
                     }
                 }, 20*i));
@@ -296,7 +296,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             for(String s : blockedCommands) {
                 if(m.toLowerCase().startsWith(s)) {
                     event.setCancelled(true);
-                    sendStringListMessage(player, config.getStringList("messages.cannot use blocked command"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.cannot use blocked command"), null);
                     return;
                 }
             }
@@ -310,7 +310,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             event.setCancelled(true);
             player.updateInventory();
             player.closeInventory();
-            sendStringListMessage(player, config.getStringList("messages.cannot modify inventory"), null);
+            sendStringListMessage(player, getMessage(config, "messages.cannot modify inventory"), null);
         } else {
             final Inventory top = player.getOpenInventory().getTopInventory();
             final boolean v = viewing.contains(player);
@@ -358,7 +358,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             } else {
                 final PvPMatch m = PvPMatch.valueOf(player);
                 if(m != null) {
-                    sendStringListMessage(player, config.getStringList("messages.left due to taken damage"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.left due to taken damage"), null);
                     delete(m);
                 }
             }
@@ -371,7 +371,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         if(m != null) {
             if(player.getLocation().getChunk() != m.getChunk()) {
                 delete(m);
-                sendStringListMessage(player, config.getStringList("messages.left due to leaving chunk"), null);
+                sendStringListMessage(player, getMessage(config, "messages.left due to leaving chunk"), null);
             }
         }
     }

@@ -34,7 +34,7 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
     public String getName() { return colorize(yml.getString("name")); }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
-            scoreboard = scoreboardManager.getNewScoreboard();
+            scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
             scoreboard.registerNewObjective("dummy", "dummy");
             final Objective o = scoreboard.getObjective("dummy");
             o.setDisplayName(colorize(yml.getString("scoreboard.title")));

@@ -47,7 +47,7 @@ public abstract class FileOutpost extends RPAddon implements Outpost {
     public List<String> getRewards() { return yml.getStringList("rewards"); }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
-            scoreboard = scoreboardManager.getNewScoreboard();
+            scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
             final Objective o = scoreboard.registerNewObjective("dummy", "dummy");
             o.setDisplayName(ChatColor.translateAlternateColorCodes('&', yml.getString("scoreboard.title")));
             final int s = yml.getInt("scoreboard.score start");

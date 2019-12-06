@@ -117,7 +117,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
 
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.filter", true)) {
-            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
         }
     }
     public void viewCategories(@NotNull Player player) {
@@ -146,7 +146,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final boolean status = !pdata.hasActiveFilter();
             pdata.setActiveFilter(status);
-            sendStringListMessage(player, config.getStringList("messages." + (status ? "en" : "dis") + "able"), null);
+            sendStringListMessage(player, getMessage(config, "messages." + (status ? "en" : "dis") + "able"), null);
         }
     }
     public void viewCategory(@NotNull Player player, @NotNull FilterCategory category) {
@@ -214,7 +214,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         final Player player = (Player) event.getPlayer();
         final FileFilterCategory c = categoryTitles.getOrDefault(event.getView().getTitle(), null);
         if(c != null) {
-            scheduler.scheduleSyncDelayedTask(randompackage, () -> viewCategories(player), 0);
+            SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> viewCategories(player), 0);
         }
     }
 }

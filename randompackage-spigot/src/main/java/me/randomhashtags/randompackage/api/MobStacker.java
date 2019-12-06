@@ -65,7 +65,7 @@ public class MobStacker extends RPFeature {
             final String[] a = s.split("=");
             final World w = Bukkit.getWorld(a[0]);
             if(w != null) {
-                tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> stackEntities(w), 0, Integer.parseInt(a[1])));
+                tasks.add(SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> stackEntities(w), 0, Integer.parseInt(a[1])));
             }
         }
         maxStackSize = new HashMap<>();
@@ -87,7 +87,7 @@ public class MobStacker extends RPFeature {
     }
     public void unload() {
         for(int i : tasks) {
-            scheduler.cancelTask(i);
+            SCHEDULER.cancelTask(i);
         }
         backup();
     }

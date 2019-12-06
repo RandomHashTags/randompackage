@@ -18,7 +18,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -42,7 +41,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         if(instance == null) instance = new Conquest();
         return instance;
     }
-    public FileConfiguration config;
+    public YamlConfiguration config;
     private List<Integer> tasks;
     private long lastSpawnTime;
     private Location lastLocation;
@@ -92,7 +91,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
-                tasks.add(scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+                tasks.add(SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
                     spawn(c, getRandomLocation(c));
                 }, spawninterval, spawninterval));
             }
@@ -110,7 +109,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         for(int i : tasks) {
-            scheduler.cancelTask(i);
+            SCHEDULER.cancelTask(i);
         }
 
         LivingConquestMob.deleteAll();
@@ -156,7 +155,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             final int xDifference = xMax-xMin, zDifference = zMax-zMin;
             final int xNum = xDifference < 0 ? -1 : 1, zNum = zDifference < 0 ? -1 : 1;
             final int X = xNum*xDifference, Z = zNum*zDifference;
-            final int x = xNum*(xMax-random.nextInt(X)), z = zNum*(zMax-random.nextInt(Z));
+            final int x = xNum*(xMax- RANDOM.nextInt(X)), z = zNum*(zMax- RANDOM.nextInt(Z));
             final Location l = new Location(w, x, 256, z);
             l.setY(w.getHighestBlockYAt(l));
             return l;
@@ -177,7 +176,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 player.updateInventory();
                 if(!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) return;
                 final ConquestBlockDamageEvent cde = new ConquestBlockDamageEvent(player, cc, cc.type.getDamagePerHit());
-                pluginmanager.callEvent(cde);
+                PLUGIN_MANAGER.callEvent(cde);
                 if(!cde.isCancelled()) {
                     cc.damage(player, cde.getDamage(), false);
                 }
@@ -222,19 +221,19 @@ public class Conquest extends RPFeature implements CommandExecutor {
             replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
             replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
             replacements.put("{CONQUERER}", lastConquerer != null ? lastConquerer : "N/A");
-            sendStringListMessage(sender, config.getStringList("messages.command"), replacements);
+            sendStringListMessage(sender, getMessage(config, "messages.command"), replacements);
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
-            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
         }
     }
     public void spawn(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
             final List<ConquestChest> chests = new ArrayList<>(getAllConquestChests().values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
-            spawn(chests.get(random.nextInt(chests.size())), l);
+            spawn(chests.get(RANDOM.nextInt(chests.size())), l);
         }
     }
 }

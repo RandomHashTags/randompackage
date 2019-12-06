@@ -115,10 +115,10 @@ public class Wild extends RPFeature implements CommandExecutor {
             if(isCooldowned(u)) {
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TIME}", getCooldownLeft(u));
-                sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
+                sendStringListMessage(player, getMessage(config, "messages.on cooldown"), replacements);
             } else {
                 if(regions.isPvPZone(player.getLocation())) {
-                    sendStringListMessage(player, config.getStringList("messages.cannot be used in area"), null);
+                    sendStringListMessage(player, getMessage(config, "messages.cannot be used in area"), null);
                 } else {
                     if(!hasPermission(player, "RandomPackage.wild.bypass", false)) {
                         expirations.put(u, System.currentTimeMillis()+cooldown*1000);
@@ -126,7 +126,7 @@ public class Wild extends RPFeature implements CommandExecutor {
                     final Location l = getRandomLocation(player.getWorld(), teleportExceptions);
                     if(l != null) {
                         player.teleport(l, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        sendStringListMessage(player, config.getStringList("messages.teleported"), null);
+                        sendStringListMessage(player, getMessage(config, "messages.teleported"), null);
                     }
                 }
             }

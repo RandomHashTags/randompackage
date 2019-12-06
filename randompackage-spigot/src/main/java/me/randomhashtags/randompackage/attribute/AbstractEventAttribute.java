@@ -2,21 +2,23 @@ package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.attributesys.EventReplacer;
+import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public abstract class AbstractEventAttribute extends RPStorage implements EventAttribute, EventReplacer {
+public abstract class AbstractEventAttribute extends RegionalAPI implements EventAttribute, EventReplacer, RPStorage {
     private boolean cancelled;
     public String getIdentifier() {
         final String[] n = getClass().getName().split("\\.");
         return n[n.length-1].toUpperCase();
     }
-    public void load() { addEventAttribute(this); }
+    public void load() { register(Feature.EVENT_ATTRIBUTE, this); }
     public void unload() {}
 
     public boolean isCancelled() { return cancelled; }

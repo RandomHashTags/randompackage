@@ -102,7 +102,7 @@ public class LivingFallenHero implements ILivingFallenHero {
                 }
             }
             final FallenHeroSlainEvent e = new FallenHeroSlainEvent(event.getEntity().getKiller(), this, droppedGem);
-            kitclass.pluginmanager.callEvent(e);
+            kitclass.PLUGIN_MANAGER.callEvent(e);
         }
         living.remove(fallenhero.getUniqueId());
         if(living.isEmpty()) {

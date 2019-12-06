@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +58,9 @@ public class RandomizationScrolls extends CustomEnchants {
                 if(randomizationscroll.getAppliesToRarities().contains(r)) {
                     item = current; itemMeta = item.getItemMeta(); lore.clear();
                     final String s = r.getSuccess(), d = r.getDestroy();
-                    int newSuccess = random.nextInt(101), newDestroy = random.nextInt(101);
+                    int newSuccess = RANDOM.nextInt(101), newDestroy = RANDOM.nextInt(101);
                     final RandomizationScrollUseEvent e = new RandomizationScrollUseEvent(player, enchant, getEnchantmentLevel(itemMeta.getDisplayName()), randomizationscroll, newSuccess, newDestroy);
-                    pluginmanager.callEvent(e);
+                    PLUGIN_MANAGER.callEvent(e);
                     newSuccess = e.getNewSuccess();
                     newDestroy = e.getNewDestroy();
                     for(String string : itemMeta.getLore()) {
@@ -81,17 +80,5 @@ public class RandomizationScrolls extends CustomEnchants {
                 }
             }
         }
-    }
-
-    public RandomizationScroll valueOfRandomizationScroll(ItemStack is) {
-        if(randomizationscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final ItemMeta m = is.getItemMeta();
-            for(RandomizationScroll r : randomizationscrolls.values()) {
-                if(r.getItem().getItemMeta().equals(m)) {
-                    return r;
-                }
-            }
-        }
-        return null;
     }
 }

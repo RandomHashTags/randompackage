@@ -69,7 +69,7 @@ public class Fireballs extends CustomEnchants {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack I = event.getItem();
         final Player player = event.getPlayer();
-        final RarityFireball fireball = valueOfFireball(I);
+        final RarityFireball fireball = valueOfRarityFireball(I);
         if(fireball != null) {
             event.setCancelled(true);
             removeItem(player, I, 1);

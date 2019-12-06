@@ -106,10 +106,10 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 		final long next = getRandomTime();
 		nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
-		spawnTask = scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(defaul, true, type), next);
+		spawnTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(defaul, true, type), next);
 
 
-		task = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+		task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
 			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
 			if(living != null) {
 				for(int i : living.keySet()) {
@@ -134,8 +134,8 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			for(Player player : settingPreset) player.getInventory().remove(presetLocationPlacer);
 			for(Location l : preset) l.getWorld().getBlockAt(l).setType(Material.AIR);
 		}
-		scheduler.cancelTask(spawnTask);
-		scheduler.cancelTask(task);
+		SCHEDULER.cancelTask(spawnTask);
+		SCHEDULER.cancelTask(task);
 		stopAllEnvoys();
 		givedpitem.items.remove("envoysummon");
 		unregister(Feature.ENVOY_CRATE);
@@ -182,7 +182,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			final LivingEnvoyCrate c = LivingEnvoyCrate.valueOf(l);
 			if(c != null) {
 				final PlayerClaimEnvoyCrateEvent e = new PlayerClaimEnvoyCrateEvent(player, l, c);
-				pluginmanager.callEvent(e);
+				PLUGIN_MANAGER.callEvent(e);
 				if(!e.isCancelled()) {
 					event.setCancelled(true);
 					player.updateInventory();
@@ -273,23 +273,23 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			default: break;
 		}
 		final int t = totalEnvoys;
-		scheduler.scheduleSyncDelayedTask(randompackage, () -> stopEnvoy(t, false), 20*despawn);
+		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stopEnvoy(t, false), 20*despawn);
 		totalEnvoys += 1;
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
-		for(String s : config.getStringList("messages.broadcast")) {
+		for(String s : getMessage(config, "messages.broadcast")) {
 			Bukkit.broadcastMessage(colorize(s.replace("{SUMMON_TYPE}", summonType)));
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
 		if(natural) {
 			final long next = getRandomTime();
 			nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> spawnEnvoy(colorize(config.getString("messages.default summon type")), true, where), next);
+			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(colorize(config.getString("messages.default summon type")), true, where), next);
 		}
 	}
 	private int getRandomTime() {
 		final String r = config.getString("settings.repeats");
-		final int min = r.contains("-") ? Integer.parseInt(r.split("-")[0]) : 0, t = r.contains("-") ? min+random.nextInt(Integer.parseInt(r.split("-")[1])-min+1) : Integer.parseInt(r);
+		final int min = r.contains("-") ? Integer.parseInt(r.split("-")[0]) : 0, t = r.contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(r.split("-")[1])-min+1) : Integer.parseInt(r);
 		return t*20;
 	}
 	private Location getRandomLocation(Random random, List<Location> locs) {
@@ -303,11 +303,11 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final String[] s = as.split("-");
 		final boolean hyphen = as.contains("-");
 		final int min = Integer.parseInt(hyphen ? s[0] : as);
-		return hyphen ? min+random.nextInt(Integer.parseInt(s[1])-min+1) : min;
+		return hyphen ? min+ RANDOM.nextInt(Integer.parseInt(s[1])-min+1) : min;
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.envoy.help", true)) {
-			sendStringListMessage(sender, config.getStringList("messages.envoy help"), null);
+			sendStringListMessage(sender, getMessage(config, "messages.envoy help"), null);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	public EnvoyCrate getRandomCrate(boolean useChances, String defaultTier) {
 		if(useChances) {
 			for(EnvoyCrate c : getAllEnvoyCrates().values()) {
-				if(random.nextInt(100) <= c.getChance()) {
+				if(RANDOM.nextInt(100) <= c.getChance()) {
 					return c;
 				}
 			}

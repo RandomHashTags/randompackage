@@ -33,7 +33,7 @@ public class StackedEntity extends UVersion {
     }
     public void setSize(int size) {
         final MobStackMergeEvent e = new MobStackMergeEvent(this, size);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         if(!e.isCancelled()) {
             this.size = size;
             entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
@@ -41,7 +41,7 @@ public class StackedEntity extends UVersion {
     }
     public void kill(LivingEntity killer, int amount) {
         final MobStackDepleteEvent e = new MobStackDepleteEvent(this, killer, amount);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         if(!e.isCancelled()) {
             amount = e.amount;
             final World w = entity.getWorld();
@@ -55,7 +55,7 @@ public class StackedEntity extends UVersion {
                 size -= amount;
             }
             if(stackedEntities.contains(this)) {
-                scheduler.scheduleSyncDelayedTask(randompackage, () -> entity.setNoDamageTicks(0), 0);
+                SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> entity.setNoDamageTicks(0), 0);
                 entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
                 for(int i = 1; i <= amount; i++) {
                     final LivingEntity d = (LivingEntity) w.spawnEntity(lo, t);
@@ -77,7 +77,7 @@ public class StackedEntity extends UVersion {
     public void merge(LivingEntity target) {
         final StackedEntity se = valueOf(target.getUniqueId());
         final MobStackMergeEvent e = new MobStackMergeEvent(this, se != null ? size+se.size : size+1);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         if(!e.isCancelled()) {
             size += se != null ? se.size : 1;
             if(se != null && creationTime > se.creationTime) {

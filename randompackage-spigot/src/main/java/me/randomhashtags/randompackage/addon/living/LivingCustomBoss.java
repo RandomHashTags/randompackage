@@ -78,12 +78,12 @@ public class LivingCustomBoss extends UVersion {
         if(entity instanceof Creature) ((Creature) entity).setTarget(summoner);
         updateScoreboards(summoner, 0);
         final CustomBossSpawnEvent e = new CustomBossSpawnEvent(summoner, entity.getLocation(), this);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         living.put(entity.getUniqueId(), this);
     }
     public void damage(LivingEntity customboss, Entity damager, double damage) {
         final CustomBossDamageByEntityEvent e = new CustomBossDamageByEntityEvent(customboss, damager, damage);
-        pluginmanager.callEvent(e);
+        PLUGIN_MANAGER.callEvent(e);
         if(!e.isCancelled()) {
             final double d = e.getDamage();
             final HashMap<Integer, List<String>> messages = type.getMessages();
@@ -101,7 +101,7 @@ public class LivingCustomBoss extends UVersion {
             updateScoreboards(customboss, d);
             final int maxMinions = type.getMaxMinions();
             for(CustomBossAttack atk : type.getAttacks()) {
-                if(random.nextInt(100) <= atk.getChance()) {
+                if(RANDOM.nextInt(100) <= atk.getChance()) {
                     final int radius = atk.getRadius();
                     for(String attack : atk.getAttacks()) {
                         final String att = attack.toLowerCase();
@@ -114,7 +114,7 @@ public class LivingCustomBoss extends UVersion {
                                 }
                             }
 
-                            scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                            SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                                 String ss = att.replace("delay=" + r, ""), sss = null;
                                 int x1, y1, z1, x2, y2, z2, a;
                                 List<String> message;
@@ -185,13 +185,13 @@ public class LivingCustomBoss extends UVersion {
     }
     public void kill(LivingEntity l, EntityDamageEvent damagecause) {
         final CustomBossDeathEvent ev = new CustomBossDeathEvent(this);
-        pluginmanager.callEvent(ev);
+        PLUGIN_MANAGER.callEvent(ev);
         if(!ev.isCancelled()) {
             final HashMap<Integer, List<String>> messages = type.getMessages();
             final int messageRadius = type.getMessageRadius();
             for(Entity e : l.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
                 if(e instanceof Player) {
-                    ((Player) e).setScoreboard(scoreboardManager.getNewScoreboard());
+                    ((Player) e).setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
                 }
             }
             double totaldamage = 0.00;
@@ -278,7 +278,7 @@ public class LivingCustomBoss extends UVersion {
         final String dn = srcObj.getDisplayName();
         for(Entity e : boss.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
             if(e instanceof Player) {
-                final Scoreboard sb = scoreboardManager.getNewScoreboard();
+                final Scoreboard sb = SCOREBOARD_MANAGER.getNewScoreboard();
                 sb.registerNewObjective("dummy", "dummy");
                 final Objective obj = sb.getObjective("dummy");
                 obj.setDisplaySlot(ds);

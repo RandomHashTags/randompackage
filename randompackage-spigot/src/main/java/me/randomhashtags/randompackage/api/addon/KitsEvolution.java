@@ -208,16 +208,16 @@ public class KitsEvolution extends Kits {
                                 final String[] a = s.split(":");
                                 final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
                                 final CustomEnchant enchant = valueOfCustomEnchant(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
-                                if(random.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
-                                    lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+random.nextInt(enchant.getMaxLevel())));
+                                if(RANDOM.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
+                                    lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+ RANDOM.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
-                                final String r = s.split(":")[random.nextInt(s.split(":").length)];
+                                final String r = s.split(":")[RANDOM.nextInt(s.split(":").length)];
                                 int level = getRemainingInt(s.split("\\{")[1].split("}")[0]);
                                 final CustomEnchant enchant = valueOfCustomEnchant(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
 
                                 if(enchant != null) {
-                                    if(level == -1) level = random.nextInt(enchant.getMaxLevel());
+                                    if(level == -1) level = RANDOM.nextInt(enchant.getMaxLevel());
                                     lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
                                 }
                             } else {
@@ -245,15 +245,15 @@ public class KitsEvolution extends Kits {
         int upgradechance = vkit.getUpgradeChance();
         final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
         event.setLevelupChance(upgradechance);
-        pluginmanager.callEvent(event);
+        PLUGIN_MANAGER.callEvent(event);
         if(!event.isCancelled()) {
             final KitClaimEvent e = new KitClaimEvent(pdata, player, vkit, vkitlvl, rewards);
-            pluginmanager.callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
             if(!e.isCancelled() && !preview) {
                 for(ItemStack is : rewards) {
                     giveItem(player, is);
                 }
-                if(random.nextInt(100) < event.getLevelupChance()) {
+                if(RANDOM.nextInt(100) < event.getLevelupChance()) {
                     final int newlvl = vkitlvl+1;
                     if(newlvl > vkit.getMaxLevel()) return;
                     final String name = vkit.getItem().getItemMeta().getDisplayName();
@@ -338,7 +338,7 @@ public class KitsEvolution extends Kits {
                 final List<String> s = config.getStringList("vkits.items.fallen hero bundle.reveals");
                 final int size = s.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
                 for(int i = 1; i <= amount; i++) {
-                    final CustomKit k = getCustomKit(s.get(random.nextInt(size)));
+                    final CustomKit k = getCustomKit(s.get(RANDOM.nextInt(size)));
                     giveItem(player, k.getFallenHeroItem(k, true));
                 }
             }

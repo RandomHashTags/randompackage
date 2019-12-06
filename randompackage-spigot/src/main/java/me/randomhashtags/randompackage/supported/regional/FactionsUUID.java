@@ -149,18 +149,18 @@ public final class FactionsUUID extends Reflect implements Regional {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionDisbandEvent(FactionDisbandEvent event) {
-        pluginmanager.callEvent(new RegionDisbandEvent(event.getPlayer(), event.getFaction().getTag()));
+        PLUGIN_MANAGER.callEvent(new RegionDisbandEvent(event.getPlayer(), event.getFaction().getTag()));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionRenameEvent(FactionRenameEvent event) {
-        pluginmanager.callEvent(new RegionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag()));
+        PLUGIN_MANAGER.callEvent(new RegionRenameEvent(event.getPlayer(), event.getOldFactionTag(), event.getFactionTag()));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionLeaveEvent(FPlayerLeaveEvent event) {
-        pluginmanager.callEvent(new FactionLeaveEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag()));
+        PLUGIN_MANAGER.callEvent(new FactionLeaveEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag()));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionClaimEvent(LandClaimEvent event) {
-        pluginmanager.callEvent(new FactionClaimLandEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag(), event.getLocation().getChunk()));
+        PLUGIN_MANAGER.callEvent(new FactionClaimLandEvent(event.getfPlayer().getPlayer(), event.getFaction().getTag(), event.getLocation().getChunk()));
     }
 }

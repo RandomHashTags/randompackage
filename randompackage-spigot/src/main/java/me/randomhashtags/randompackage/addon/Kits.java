@@ -77,7 +77,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             isEnabled = true;
             save("kits", "_settings.yml");
             config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "kits", "_settings.yml"));
-            pluginmanager.registerEvents(KitEvents.getKitEvents(), randompackage);
+            PLUGIN_MANAGER.registerEvents(KitEvents.getKitEvents(), RANDOM_PACKAGE);
 
             if(!otherdata.getBoolean("saved default fallen heroes")) {
                 final String[] f = new String[] {"GKIT", "VKIT", "MKIT"};
@@ -190,10 +190,10 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         }
     }
     public final boolean tryGiving(RPPlayer pdata, Player player, CustomKit kit, int tier, int chanceOfGiving, boolean addCooldown) {
-        if(pdata != null && player != null && kit != null && random.nextInt(100) < chanceOfGiving) {
+        if(pdata != null && player != null && kit != null && RANDOM.nextInt(100) < chanceOfGiving) {
             final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, kit, tier, chanceOfGiving);
-            pluginmanager.callEvent(event);
-            if(random.nextInt(100) < event.getChance()) {
+            PLUGIN_MANAGER.callEvent(event);
+            if(RANDOM.nextInt(100) < event.getChance()) {
                 final String pn = player.getName();
                 final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(tier, 1f);
                 final List<ItemStack> loot = new ArrayList<>();
@@ -204,7 +204,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                     }
                 }
                 final KitClaimEvent e = new KitClaimEvent(pdata, player, kit, tier, loot);
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 if(!e.isCancelled()) {
                     for(ItemStack is : e.getLootObtained()) {
                         giveItem(player, is);

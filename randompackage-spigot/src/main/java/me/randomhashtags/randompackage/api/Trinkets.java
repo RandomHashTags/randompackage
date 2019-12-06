@@ -111,7 +111,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
             } else {
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TIME}", getRemainingTime(remainingtime));
-                sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
+                sendStringListMessage(player, getMessage(config, "messages.on cooldown"), replacements);
                 return 0;
             }
         }

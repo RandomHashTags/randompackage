@@ -145,7 +145,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 		if(mcmmoIsEnabled()) {
 		    mcmmoChallenges = new MCMMOChallenges();
-		    pluginmanager.registerEvents(mcmmoChallenges, randompackage);
+		    PLUGIN_MANAGER.registerEvents(mcmmoChallenges, RANDOM_PACKAGE);
         }
 
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -274,7 +274,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 			if(sendMessage) {
 				final String placing = prize.getPlacement() + "";
-				for(String s : config.getStringList("messages.claimed prize"))
+				for(String s : getMessage(config, "messages.claimed prize"))
 					p.sendMessage(colorize(s.replace("{PLACING}", placing)));
 			}
 		}
@@ -390,7 +390,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	public GlobalChallenge getRandomChallenge() {
 		final HashMap<String, GlobalChallenge> list = getAllGlobalChallenges();
 		final int size = list.size();
-		return size > 0 ? (GlobalChallenge) list.values().toArray()[random.nextInt(size)] : null;
+		return size > 0 ? (GlobalChallenge) list.values().toArray()[RANDOM.nextInt(size)] : null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

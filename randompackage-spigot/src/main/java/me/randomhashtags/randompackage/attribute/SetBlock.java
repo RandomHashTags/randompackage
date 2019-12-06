@@ -27,7 +27,7 @@ public class SetBlock extends AbstractEventAttribute implements TemporaryBlocks 
                 final int c = values.length;
                 if(c >= 2) {
                     tempblocks.put(l, previous);
-                    scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                    SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                        b.setType(previous.getMaterial());
                        if(LEGACY) {
                            state.setRawData(previous.getData());

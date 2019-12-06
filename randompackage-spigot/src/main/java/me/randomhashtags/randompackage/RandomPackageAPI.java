@@ -36,13 +36,13 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
             if(args.length == 0) {
                 if(player != null && player.getName().equals("RandomHashTags") || hasPermission(sender, "RandomPackage.randompackage", true)) {
                     final Plugin spawner = RandomPackage.spawnerPlugin, mcmmo = RandomPackage.mcmmo;
-                    final Plugin fac = pluginmanager.getPlugin("Factions");
+                    final Plugin fac = PLUGIN_MANAGER.getPlugin("Factions");
                     for(String string : Arrays.asList(" ",
                             "&6&m&l---------------------------------------------",
                             "&7- Author: &6RandomHashTags",
-                            "&7- RandomPackage Version: &b" + randompackage.getDescription().getVersion(),
+                            "&7- RandomPackage Version: &b" + RANDOM_PACKAGE.getDescription().getVersion(),
                             "&7- Server Version: &f" + VERSION,
-                            "&7- PlaceholderAPI: " + (randompackage.placeholderapi ? "&atrue &7(&2" + pluginmanager.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
+                            "&7- PlaceholderAPI: " + (RANDOM_PACKAGE.placeholderapi ? "&atrue &7(&2" + PLUGIN_MANAGER.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Faction Plugin: " + (regions.hookedFactionsUUID() ? "&3" + getFactionType(fac) + " &7(&2" + fac.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.getMCMMOAPI().isClassic() ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
@@ -78,7 +78,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
         save("_Data", "other.yml");
 
         givedpitem.enable();
-        randompackage.getCommand("givedp").setExecutor(givedpitem);
+        RANDOM_PACKAGE.getCommand("givedp").setExecutor(givedpitem);
 
         if(mcmmo != null) {
             MCMMOAPI.getMCMMOAPI().enable();
@@ -94,7 +94,7 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     private void pluginEnableEvent(PluginEnableEvent event) {
         final String n = event.getPlugin().getName();
         if(RandomPackage.spawner == null && (n.equals("SilkSpawners") || n.equals("EpicSpawners"))) {
-            randompackage.tryLoadingSpawner();
+            RANDOM_PACKAGE.tryLoadingSpawner();
         } else if(!regions.hookedFactionsUUID() && n.equals("Factions")) {
             regions.trySupportingFactions();
         }

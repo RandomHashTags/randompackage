@@ -64,12 +64,14 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     }
 
     public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {
-        if(is != null && !is.getType().equals(Material.AIR) && soultrackers != null) {
+        if(is != null && !is.getType().equals(Material.AIR)) {
             itemMeta = is.getItemMeta(); lore.clear();
-            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+            if(itemMeta.hasLore()) {
+                lore.addAll(itemMeta.getLore());
+            }
             boolean did = false;
             final String a = soultracker.getApplied(), ist = is.getType().name(), istl = ist.toLowerCase();
-            final Collection<SoulTracker> trackers = soultrackers.values();
+            final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
             for(String s : soultracker.getAppliesTo()) {
                 if(istl.endsWith(s.toLowerCase())) {
                     if(!lore.isEmpty()) {
@@ -104,87 +106,85 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         }
     }
     public void splitsouls(Player player, int amount) {
-        if(soultrackers != null) {
-            item = getItemInHand(player);
-            RarityGem g = valueOfRarityGem(item);
-            int collectedsouls = 0, gems = 0;
-            List<String> split = null;
-            SoulTracker appliedst = null;
-            if(g != null) {
-                split = g.getSplitMsg();
-                collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
-                if(collectedsouls <= 0 || amount > collectedsouls) {
-                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
+        item = getItemInHand(player);
+        RarityGem g = valueOfRarityGem(item);
+        int collectedsouls = 0, gems = 0;
+        List<String> msg = null;
+        SoulTracker appliedTracker = null;
+        if(g != null) {
+            msg = g.getSplitMsg();
+            collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
+            if(collectedsouls <= 0 || amount > collectedsouls) {
+                sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                return;
+            } else {
+                gems = amount;
+                item.setItemMeta(g.getItem(collectedsouls-gems).getItemMeta());
+            }
+        } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
+            sendStringListMessage(player, getMessage(config, "messages.need item with soul tracker"), null);
+        } else {
+            itemMeta = item.getItemMeta();
+            lore.clear();
+            if(itemMeta.hasLore()) {
+                lore.addAll(itemMeta.getLore());
+            }
+            boolean did = false;
+            int appliedSlot = -1, totalsouls = -1;
+            list: for(SoulTracker st : getAllSoulTrackers().values()) {
+                int slot = -1;
+                for(String s : lore) {
+                    slot += 1;
+                    final String a = st.getApplied();
+                    if(s.startsWith(a.replace("{SOULS}", ""))) {
+                        appliedTracker = st;
+                        appliedSlot = slot;
+                        msg = st.getSplitMsg();
+                        collectedsouls = getRemainingInt(s);
+                        totalsouls = collectedsouls;
+                        if(amount == -1) {
+                            amount = collectedsouls;
+                        } else if(collectedsouls <= 0) {
+                            sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                            return;
+                        } else {
+                            collectedsouls = amount;
+                        }
+                        if(amount == 0)  {
+                            sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                            return;
+                        }
+                        gems = (int) (collectedsouls * st.getSoulsCollected());
+                        did = true;
+                        break list;
+                    }
+                }
+            }
+            if(did) {
+                if(totalsouls-amount < 0) {
+                    sendStringListMessage(player, getMessage(config, "messages.need to collect more souls"), null);
                     return;
                 } else {
-                    gems = amount;
-                    item.setItemMeta(g.getItem(collectedsouls-gems).getItemMeta());
-                }
-            } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
-                sendStringListMessage(player, config.getStringList("messages.need item with soul tracker"), null);
-            } else {
-                itemMeta = item.getItemMeta();
-                lore.clear();
-                if(itemMeta.hasLore())
-                    lore.addAll(itemMeta.getLore());
-                boolean did = false;
-                int applied = -1, totalsouls = -1;
-                for(SoulTracker st : soultrackers.values()) {
-                    int i = -1;
-                    if(!did) {
-                        for(String s : lore) {
-                            i += 1;
-                            final String a = st.getApplied();
-                            if(s.startsWith(a.replace("{SOULS}", ""))) {
-                                appliedst = st;
-                                applied = i;
-                                split = st.getSplitMsg();
-                                collectedsouls = getRemainingInt(s);
-                                totalsouls = collectedsouls;
-                                if(amount == -1) {
-                                    amount = collectedsouls;
-                                } else if(collectedsouls <= 0) {
-                                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
-                                    return;
-                                } else {
-                                    collectedsouls = amount;
-                                }
-                                if(amount == 0)  {
-                                    sendStringListMessage(player, config.getStringList("messages.need to collect souls"), null);
-                                    return;
-                                }
-                                gems = (int) (collectedsouls * st.getSoulsCollected());
-                                did = true;
-                            }
-                        }
-                    }
-                }
-                if(did) {
-                    if(totalsouls-amount < 0) {
-                        sendStringListMessage(player, config.getStringList("messages.need to collect more souls"), null);
-                        return;
-                    } else {
-                        lore.set(applied, appliedst.getApplied().replace("{SOULS}", Integer.toString(totalsouls-amount)));
-                        itemMeta.setLore(lore); lore.clear();
-                        item.setItemMeta(itemMeta);
-                        player.updateInventory();
-                    }
+                    lore.set(appliedSlot, appliedTracker.getApplied().replace("{SOULS}", Integer.toString(totalsouls-amount)));
+                    itemMeta.setLore(lore); lore.clear();
+                    item.setItemMeta(itemMeta);
+                    player.updateInventory();
                 }
             }
-            if(split != null) {
-                if(g == null) g = appliedst.getConvertsTo();
-                item = g.getItem(); itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", colorize(g.getColors(gems)) + gems));
-                if(gems != 0) item.setAmount(1);
-                item.setItemMeta(itemMeta);
-                giveItem(player, item);
-                final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{SOULS}", Integer.toString(collectedsouls));
-                replacements.put("{GEMS}", Integer.toString(gems));
-                replacements.put("{AMOUNT}", Integer.toString(gems));
-                sendStringListMessage(player, split, replacements);
-                player.updateInventory();
-            }
+        }
+        if(msg != null) {
+            if(g == null) g = appliedTracker.getConvertsTo();
+            item = g.getItem(); itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", colorize(g.getColors(gems)) + gems));
+            if(gems != 0) item.setAmount(1);
+            item.setItemMeta(itemMeta);
+            giveItem(player, item);
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{SOULS}", Integer.toString(collectedsouls));
+            replacements.put("{GEMS}", Integer.toString(gems));
+            replacements.put("{AMOUNT}", Integer.toString(gems));
+            sendStringListMessage(player, msg, replacements);
+            player.updateInventory();
         }
     }
 
@@ -240,16 +240,17 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     }
 
     public SoulTracker valueOf(RarityGem gem) {
-        if(soultrackers != null)
-            for(SoulTracker st : soultrackers.values())
-                if(st.getConvertsTo().equals(gem))
-                    return st;
+        for(SoulTracker st : getAllSoulTrackers().values()) {
+            if(st.getConvertsTo().equals(gem)) {
+                return st;
+            }
+        }
         return null;
     }
     public SoulTracker valueOf(ItemStack is) {
-        if(soultrackers != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemMeta m = is.getItemMeta();
-            for(SoulTracker s : soultrackers.values()) {
+            for(SoulTracker s : getAllSoulTrackers().values()) {
                 if(s.getItem().getItemMeta().equals(m)) {
                     return s;
                 }
@@ -258,9 +259,9 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         return null;
     }
     public HashMap<Integer, SoulTracker> valueOfApplied(ItemStack is) {
-        if(soultrackers != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> l = is.getItemMeta().getLore();
-            final Collection<SoulTracker> trackers = soultrackers.values();
+            final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
             int slot = 0;
             for(String s : l) {
                 for(SoulTracker t : trackers) {
@@ -277,11 +278,9 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         return null;
     }
     public SoulTracker valueOf(String appliedlore) {
-        if(soultrackers != null) {
-            for(SoulTracker st : soultrackers.values()) {
-                if(appliedlore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
-                    return st;
-                }
+        for(SoulTracker st : getAllSoulTrackers().values()) {
+            if(appliedlore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
+                return st;
             }
         }
         return null;

@@ -188,7 +188,7 @@ public class ServerCrates extends RPFeature {
 
 	public void openCrate(@NotNull Player player, @NotNull ServerCrate crate) {
 		final ServerCrateOpenEvent e = new ServerCrateOpenEvent(player, crate);
-		pluginmanager.callEvent(e);
+		PLUGIN_MANAGER.callEvent(e);
 		if(!e.isCancelled()) {
 			final UInventory i = crate.getInventory();
 			player.openInventory(Bukkit.createInventory(player, i.getSize(), i.getTitle()));
@@ -202,7 +202,7 @@ public class ServerCrates extends RPFeature {
 	private void stopTasks(UUID uuid) {
 		if(tasks.containsKey(uuid)) {
 			for(int i : tasks.get(uuid))
-				scheduler.cancelTask(i);
+				SCHEDULER.cancelTask(i);
 			tasks.remove(uuid);
 		}
 	}
@@ -220,16 +220,16 @@ public class ServerCrates extends RPFeature {
 		final List<Integer> bg = new ArrayList<>(background);
 		for(int i = 1; i <= bgSize; i++) {
 			final int I = i;
-			int k = scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-				final int randomSlot = (int) background.toArray()[random.nextInt(background.size())];
+			int k = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+				final int randomSlot = (int) background.toArray()[RANDOM.nextInt(background.size())];
 				ItemStack reward = c.getRandomReward(c.getRandomRarity(true).getIdentifier());
 				top.setItem(randomSlot, reward);
 				player.updateInventory();
 				background.remove((Object) randomSlot);
 				if(I == bgSize) {
 					for(int n = 1; n <= bgSize; n++) {
-						int K = scheduler.scheduleSyncDelayedTask(randompackage, () -> {
-							final int R = (int) bg.toArray()[random.nextInt(bg.size())];
+						int K = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+							final int R = (int) bg.toArray()[RANDOM.nextInt(bg.size())];
 							top.setItem(R, c.getBackground2());
 							player.updateInventory();
 							bg.remove((Object) R);
@@ -271,12 +271,12 @@ public class ServerCrates extends RPFeature {
 			final List<ItemStack> l = revealingloot.get(uuid);
 			final int ri = c.getRedeemableItems(), s = revealingloot.get(uuid).size();
 			for(int i = 1; i <= ri-s; i++) {
-				l.add(c.getRandomReward((String) cr.keySet().toArray()[random.nextInt(cr.size())]));
+				l.add(c.getRandomReward((String) cr.keySet().toArray()[RANDOM.nextInt(cr.size())]));
 			}
 			selectedSlots.remove(uuid);
 			if(player.isOnline()) {
 				final ServerCrateCloseEvent e = new ServerCrateCloseEvent(player, c, l);
-				pluginmanager.callEvent(e);
+				PLUGIN_MANAGER.callEvent(e);
 				for(ItemStack is : l) {
 					giveItem(player, is);
 				}

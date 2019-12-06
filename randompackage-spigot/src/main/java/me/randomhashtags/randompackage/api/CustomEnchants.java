@@ -306,7 +306,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                         final String l = split[0].toLowerCase();
                                         if(l.equals("customenchanttimer")) {
                                             final int ticks = (int) evaluate(split[1].split("=")[1]);
-                                            final int id = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+                                            final int id = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
                                                 final Collection<? extends Player> online = Bukkit.getOnlinePlayers();
                                                 for(Player player : online) {
                                                     final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchant = new LinkedHashMap<>();
@@ -319,7 +319,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                                     }
                                                     if(!enchant.isEmpty()) {
                                                         final CustomEnchantTimerEvent event = new CustomEnchantTimerEvent(player, enchant);
-                                                        pluginmanager.callEvent(event);
+                                                        PLUGIN_MANAGER.callEvent(event);
                                                         triggerCustomEnchants(event, getEntities("Player", player), enchant, globalattributes);
                                                     }
                                                 }
@@ -373,7 +373,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public void unload() {
         for(CustomEnchant e : timedEnchants.keySet()) {
-            scheduler.cancelTask(timedEnchants.get(e));
+            SCHEDULER.cancelTask(timedEnchants.get(e));
         }
         givedpitem.items.remove("transmogscroll");
         givedpitem.items.remove("whitescroll");
@@ -383,13 +383,13 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     public void viewEnchants(CommandSender sender, int page) {
         final ChatEvents cea = ChatEvents.getChatEvents();
-        final String format = randompackage.getConfig().getString("enchants.format");
-        final List<String> L = colorizeListString(randompackage.getConfig().getStringList("enchants.hover"));
+        final String format = RANDOM_PACKAGE.getConfig().getString("enchants.format");
+        final List<String> L = colorizeListString(RANDOM_PACKAGE.getConfig().getStringList("enchants.hover"));
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
         final int starting = page*10;
         final String max = Integer.toString(maxpage), p = Integer.toString(page);
-        for(String s : randompackage.getConfig().getStringList("enchants.msg")) {
+        for(String s : RANDOM_PACKAGE.getConfig().getStringList("enchants.msg")) {
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
@@ -498,7 +498,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             Player damager = damagerr instanceof Player ? (Player) damagerr : null;
             if(damager != null) {
                 final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(damager);
                 tryProcing(e, damager, entity, enchants);
                 triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
@@ -508,7 +508,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 final Player victim = (Player) entity;
                 final LivingEntity d = (LivingEntity) event.getDamager();
                 final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
                 tryProcing(e, victim, null, enchants);
                 triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
@@ -520,7 +520,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     final LivingCustomEnchantEntity cee = L.getOrDefault(entity.getUniqueId(), null);
                     if(cee != null) {
                         final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, damagerr, event.getFinalDamage(), event.getDamage());
-                        pluginmanager.callEvent(e);
+                        PLUGIN_MANAGER.callEvent(e);
                         if(!e.isCancelled()) {
                             event.setDamage(e.initialdamage);
                             final LivingEntity le = cee.getSummoner();
@@ -583,18 +583,18 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public ItemStack getRandomEnabledEnchant(EnchantRarity rarity) {
         final String[] r = rarity.getRevealedEnchantRarities();
         final int l = r.length;
-        final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[random.nextInt(l)]);
+        final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[RANDOM.nextInt(l)]);
         final List<CustomEnchant> enchants = rar.getEnchants();
         item = new ItemStack(Material.BOOK);
         for(int i = 1; i <= 100; i++) {
-            final CustomEnchant enchant = enchants.get(random.nextInt(enchants.size()));
+            final CustomEnchant enchant = enchants.get(RANDOM.nextInt(enchants.size()));
             if(enchant.isEnabled()) {
                 rarity = valueOfCustomEnchantRarity(enchant);
-                final int level = random.nextInt(enchant.getMaxLevel()+1);
+                final int level = RANDOM.nextInt(enchant.getMaxLevel()+1);
                 item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
                 final String appliesto = enchant.getAppliesTo().toString().replace(" ", "").replace(",", ";");
-                final int sp = random.nextInt(101), dp = rarity.percentsAddUpto100() ? 100-sp : random.nextInt(101);
+                final int sp = RANDOM.nextInt(101), dp = rarity.percentsAddUpto100() ? 100-sp : RANDOM.nextInt(101);
                 for(String s : rarity.getLoreFormat()) {
                     if(s.equals("{SUCCESS}")) s = rarity.getSuccess().replace("{PERCENT}", Integer.toString(sp));
                     if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
@@ -673,7 +673,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 for(CustomEnchant enchant : en.keySet()) {
                     final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, entities, enchant, en.get(enchant), is);
                     if(trigger(e, enchant.getAttributes())) {
-                        pluginmanager.callEvent(e);
+                        PLUGIN_MANAGER.callEvent(e);
                     }
                 }
             }
@@ -687,7 +687,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         if(E instanceof Player && !c.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             final Player victim = (Player) E;
             final isDamagedEvent e = new isDamagedEvent(victim, c, event.getDamage());
-            pluginmanager.callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
             final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getEnchants(victim);
             tryProcing(event, victim, null, enchants);
             triggerCustomEnchants(event, getEntities(e), enchants, globalattributes);
@@ -739,7 +739,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             final String displayname = r.getItemMeta().getDisplayName();
             final CustomEnchant enchant = valueOfCustomEnchant(r);
             final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, I, enchant, getEnchantmentLevel(displayname));
-            pluginmanager.callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
             if(!e.isCancelled()) {
                 event.setCancelled(true);
                 removeItem(player, I, 1);
@@ -753,7 +753,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {
             final CustomEnchant enchant = valueOfCustomEnchant(I);
             if(enchant != null) {
-                sendStringListMessage(player, config.getStringList("messages.apply info"), null);
+                sendStringListMessage(player, getMessage(config, "messages.apply info"), null);
             }
         }
     }
@@ -851,7 +851,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 return;
             } else if(e != null) {
                 final EnchantRarity R = valueOfCustomEnchantRarity(e);
-                final RarityFireball f = valueOfFireball(Arrays.asList(R));
+                final RarityFireball f = valueOfRarityFireball(Arrays.asList(R));
                 if(f != null) {
                     final ItemStack itemstack = f.getItem();
                     if(itemstack == null) return;
@@ -917,7 +917,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     } else if(r == 22 && top.getItem(3) != null && top.getItem(5) != null && !top.getItem(13).equals(alchemistpreview)) {
                         final int cost = getRemainingInt(top.getItem(22).getItemMeta().getLore().get(alchemistCostSlot));
                         final AlchemistExchangeEvent e = new AlchemistExchangeEvent(player, top.getItem(3), top.getItem(5), alchemistcurrency, cost,top.getItem(13));
-                        pluginmanager.callEvent(e);
+                        PLUGIN_MANAGER.callEvent(e);
                         if(!e.isCancelled()) {
                             final Location l = player.getLocation();
                             if(!player.getGameMode().equals(GameMode.CREATIVE)) {
@@ -1058,7 +1058,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
                     if(give) {
                         final EnchanterPurchaseEvent e = new EnchanterPurchaseEvent(player, item, enchantercurrency, cost);
-                        pluginmanager.callEvent(e);
+                        PLUGIN_MANAGER.callEvent(e);
                         if(e.isCancelled()) return;
                         boolean bought = true;
                         cost = e.cost;
@@ -1093,7 +1093,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 final int level = getEnchantmentLevel(d);
                 int enchantsize = 0;
                 final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(d), current);
-                pluginmanager.callEvent(ev);
+                PLUGIN_MANAGER.callEvent(ev);
                 if(!ev.isCancelled() && isOnCorrectItem(enchant, current)) {
                     boolean apply = false;
                     item = current.clone(); itemMeta = item.getItemMeta(); lore.clear();
@@ -1139,7 +1139,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                             final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
                             if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) return;
                             //
-                            if(random.nextInt(100) <= success) {
+                            if(RANDOM.nextInt(100) <= success) {
                                 final String a = rar.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
                                 if(lore.isEmpty()) {
                                     lore.add(e);
@@ -1164,7 +1164,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                     lore.set(prevslot, a + en + " " + toRoman(level > prevlevel ? level : prevlevel + 1));
                                 }
                                 result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
-                            } else if(random.nextInt(100) <= destroy) {
+                            } else if(RANDOM.nextInt(100) <= destroy) {
                                 final WhiteScroll w = getWhiteScroll("REGULAR");
                                 final String applied = w != null ? w.getApplied() : null;
                                 result = applied != null && lore.contains(applied) ? "DESTROY_WHITE_SCROLL" : "DESTROY";
@@ -1173,7 +1173,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                             }
                             apply = true;
                             final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, success, destroy, result);
-                            pluginmanager.callEvent(ce);
+                            PLUGIN_MANAGER.callEvent(ce);
                         }
                     }
                     if(apply) {

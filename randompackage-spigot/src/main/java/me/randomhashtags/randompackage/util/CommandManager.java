@@ -162,7 +162,7 @@ public final class CommandManager extends Reflect {
                 final Object obj = knownCommands.values().toArray()[i];
                 if(obj instanceof PluginCommand) {
                     final PluginCommand pc = (PluginCommand) obj;
-                    if(!pc.getPlugin().equals(randompackage)) {
+                    if(!pc.getPlugin().equals(RANDOM_PACKAGE)) {
                         hasOtherCmd = true;
                         knownCommands.replace(c, cmd, pc);
                         break;

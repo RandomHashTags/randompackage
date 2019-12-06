@@ -20,12 +20,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static java.io.File.separator;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
 public class UVersion extends YamlUpdater implements Versionable, UVersionable {
@@ -44,17 +42,11 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         final File f = new File(dataFolder + separator + (hasFolder ? folder + separator : ""), file);
         if(!f.exists()) {
             f.getParentFile().mkdirs();
-            randompackage.saveResource(hasFolder ? folder + separator + file : file, false);
+            RANDOM_PACKAGE.saveResource(hasFolder ? folder + separator + file : file, false);
         }
         if(folder == null || !folder.equals("_Data")) {
             updateYaml(folder, f);
         }
-    }
-    public final ItemStack getClone(ItemStack is) {
-        return getClone(is, null);
-    }
-    public final ItemStack getClone(ItemStack is, ItemStack def) {
-        return is != null ? is.clone() : def;
     }
     public final void didApply(InventoryClickEvent event, Player player, ItemStack current, ItemStack cursor) {
         event.setCancelled(true);
@@ -376,7 +368,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
                 if(is != null) {
                     return is;
                 } else {
-                    console.sendMessage("[RandomPackage] SilkSpawners or EpicSpawners is required to use this feature!");
+                    CONSOLE.sendMessage("[RandomPackage] SilkSpawners or EpicSpawners is required to use this feature!");
                 }
             }
         }

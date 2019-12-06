@@ -115,7 +115,7 @@ public class Masks extends CustomEnchants {
         if(m != null && onitem == null) {
             event.setCancelled(true);
             final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
-            pluginmanager.callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
             apply(m, current);
             item = m.getItem();
             final int a = item.getAmount()-mask.getAmount();
@@ -198,7 +198,7 @@ public class Masks extends CustomEnchants {
         if(is != null && is.isSimilar(maskgenerator)) {
             event.setCancelled(true);
             removeItem(player, is, 1);
-            final ItemStack mask = getMask(maskCanObtain.get(random.nextInt(maskCanObtain.size()))).getItem();
+            final ItemStack mask = getMask(maskCanObtain.get(RANDOM.nextInt(maskCanObtain.size()))).getItem();
             for(String s : config.getStringList("items.generator.received msg")) {
                 Bukkit.broadcastMessage(s.replace("{PLAYER}", player.getName()).replace("{MASK}", ChatColor.stripColor(mask.getItemMeta().getDisplayName())));
             }
@@ -221,11 +221,11 @@ public class Masks extends CustomEnchants {
             final Mask m = getMaskOnItem(i);
             if(m != null) {
                 final MaskEquipEvent e = new MaskEquipEvent(player, m, i, event.getReason());
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
                     equippedMasks.put(player, i.clone());
-                    scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+                    SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                         player.getInventory().setHelmet(m.getItem().clone());
                         player.updateInventory();
                     }, 0);
@@ -241,7 +241,7 @@ public class Masks extends CustomEnchants {
             final Mask m = valueOfMask(i);
             if(m != null) {
                 final MaskUnequipEvent e = new MaskUnequipEvent(player, m, equippedMasks.get(player), event.getReason());
-                pluginmanager.callEvent(e);
+                PLUGIN_MANAGER.callEvent(e);
                 trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
                     final ItemStack h = e.helmet;

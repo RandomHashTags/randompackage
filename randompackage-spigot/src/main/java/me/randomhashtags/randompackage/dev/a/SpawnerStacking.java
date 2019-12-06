@@ -84,7 +84,7 @@ public class SpawnerStacking extends RPFeature {
     }
 
     public void loadBackup(boolean async) {
-        if(async) scheduler.runTaskAsynchronously(randompackage, () -> loadbackup(true));
+        if(async) SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> loadbackup(true));
         else loadbackup(false);
     }
     private void loadbackup(boolean async) {

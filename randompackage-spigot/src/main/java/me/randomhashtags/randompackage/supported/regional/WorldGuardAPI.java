@@ -18,7 +18,7 @@ public class WorldGuardAPI implements UVersionable {
     public static WorldGuardAPI getWorldGuardAPI() {
         if(instance == null) {
             instance = new WorldGuardAPI();
-            final Plugin p = pluginmanager.getPlugin("WorldGuard");
+            final Plugin p = PLUGIN_MANAGER.getPlugin("WorldGuard");
             final String version = p != null && p.isEnabled() ? p.getDescription().getVersion() : null;
             instance.version = (byte) (version != null ? version.startsWith("6") ? 6 : 7 : -1);
         }

@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
-import me.randomhashtags.randompackage.util.RPStorage;
+import me.randomhashtags.randompackage.util.universal.UVersionable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomizedLootItem extends RPStorage implements Itemable {
+public class RandomizedLootItem implements Itemable, UVersionable {
     private String key, rewardSize;
     private ItemStack item;
     private List<String> rewards;
@@ -28,12 +28,12 @@ public class RandomizedLootItem extends RPStorage implements Itemable {
         if(excluding != null && !excluding.isEmpty()) {
             a.removeAll(excluding);
         }
-        return a.get(random.nextInt(a.size()));
+        return a.get(RANDOM.nextInt(a.size()));
     }
     public int getRandomRewardSize() {
         final String[] values = rewardSize.split("-");
         final int min = Integer.parseInt(values[0]);
-        return values.length == 1 ? min : min+random.nextInt(Integer.parseInt(values[1])-min+1);
+        return values.length == 1 ? min : min+ RANDOM.nextInt(Integer.parseInt(values[1])-min+1);
     }
     public List<String> getRandomRewards(boolean canRepeatRewards) {
         final List<String> a = new ArrayList<>(), excluding = new ArrayList<>();

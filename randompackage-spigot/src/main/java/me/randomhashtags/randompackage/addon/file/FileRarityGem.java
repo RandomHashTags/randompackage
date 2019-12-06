@@ -17,9 +17,11 @@ public class FileRarityGem extends RPAddon implements RarityGem {
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
 	private HashMap<Integer, String> colors;
+	private HashMap<String, List<String>> messages;
 
 	public FileRarityGem(File f) {
 		load(f);
+		messages = new HashMap<>();
 		register(Feature.RARITY_GEM, this);
 	}
 	public String getIdentifier() { return getYamlName(); }
@@ -62,11 +64,17 @@ public class FileRarityGem extends RPAddon implements RarityGem {
 		}
 		return colors;
 	}
-	public List<String> getToggleOnMsg() { return colorizeListString(yml.getStringList("messages.toggle on")); }
-	public List<String> getToggleOffInteractMsg() { return colorizeListString(yml.getStringList("messages.toggle off.interact")); }
-	public List<String> getToggleOffDroppedMsg() { return colorizeListString(yml.getStringList("messages.toggle off.dropped")); }
-	public List<String> getToggleOffMovedMsg() { return colorizeListString(yml.getStringList("messages.toggle off.moved")); }
-	public List<String> getToggleOffRanOutMsg() { return colorizeListString(yml.getStringList("messages.toggle off.ran out")); }
+	private List<String> getMessage(String identifier) {
+		if(!messages.containsKey(identifier)) {
+			messages.put(identifier, colorizeListString(yml.getStringList(identifier)));
+		}
+		return messages.get(identifier);
+	}
+	public List<String> getToggleOnMsg() { return getMessage("messages.toggle on"); }
+	public List<String> getToggleOffInteractMsg() { return getMessage("messages.toggle off.interact"); }
+	public List<String> getToggleOffDroppedMsg() { return getMessage("messages.toggle off.dropped"); }
+	public List<String> getToggleOffMovedMsg() { return getMessage("messages.toggle off.moved"); }
+	public List<String> getToggleOffRanOutMsg() { return getMessage("messages.toggle off.ran out"); }
 	public String getColors(int soulsCollected) {
 		HashMap<Integer, String> colors = getColors();
 		if(colors == null) colors = defaultColors;

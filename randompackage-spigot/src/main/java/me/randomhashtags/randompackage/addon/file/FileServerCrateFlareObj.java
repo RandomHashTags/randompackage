@@ -62,7 +62,7 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 	public List<String> getNearbySpawnMsg() { return colorizeListString(getYaml().getStringList("flare.nearby spawn msg")); }
 
 	private Location getRandomLocation(World w, int bx, int bz, int sr) {
-		final int x = (random.nextInt(2) == 0 ? 1 : -1)*random.nextInt(sr), z = (random.nextInt(2) == 0 ? 1 : -1)*random.nextInt(sr);
+		final int x = (RANDOM.nextInt(2) == 0 ? 1 : -1)* RANDOM.nextInt(sr), z = (RANDOM.nextInt(2) == 0 ? 1 : -1)* RANDOM.nextInt(sr);
 		final Location l = new Location(w, bx+x, 0, bz+z);
 		l.setY(w.getHighestBlockYAt(l));
 		return l;
@@ -98,7 +98,7 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 					}
 				}
 			}
-			scheduler.scheduleSyncDelayedTask(randompackage, () -> w.getBlockAt(l).setType(getBlock().getMaterial()), 20*getSpawnInDelay());
+			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> w.getBlockAt(l).setType(getBlock().getMaterial()), 20*getSpawnInDelay());
 			return l;
 		}
 		return null;

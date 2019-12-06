@@ -46,7 +46,7 @@ public class KitItem extends RPFeature implements CustomKitItem {
 
     public ItemStack getItemStack(String player, int level, float enchantMultiplier) {
         ItemStack i = null;
-        if(item != null && level >= getRequiredLevel() && (chance >= 100 || random.nextInt(100) < chance)) {
+        if(item != null && level >= getRequiredLevel() && (chance >= 100 || RANDOM.nextInt(100) < chance)) {
             i = d(null, item, level, enchantMultiplier);
             if(i != null) {
                 final String lvl = Integer.toString(level), max = Integer.toString(kit.getMaxLevel());
@@ -62,7 +62,7 @@ public class KitItem extends RPFeature implements CustomKitItem {
                     final boolean range = amount.contains("-");
                     final String[] r = range ? amount.split("-") : null;
                     final int min = r != null ? Integer.parseInt(r[0]) : -1;
-                    i.setAmount(range ? min+random.nextInt(Integer.parseInt(r[1])-min+1) : Integer.parseInt(amount));
+                    i.setAmount(range ? min+ RANDOM.nextInt(Integer.parseInt(r[1])-min+1) : Integer.parseInt(amount));
                 }
             }
         }

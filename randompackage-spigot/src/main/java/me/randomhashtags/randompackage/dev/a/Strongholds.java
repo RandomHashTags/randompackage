@@ -81,7 +81,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             }
         }
 
-        captureTask = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+        captureTask = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
             for(Stronghold s : strongholds.values()) {
                 final ActiveStronghold a = s.getActiveStronghold();
                 if(a != null) {
@@ -93,7 +93,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        scheduler.cancelTask(captureTask);
+        SCHEDULER.cancelTask(captureTask);
         strongholds = null;
     }
 

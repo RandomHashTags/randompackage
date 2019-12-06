@@ -82,7 +82,7 @@ public class TransmogScrolls extends CustomEnchants {
                 if(itemMeta.hasLore()) {
                     final List<String> l = itemMeta.getLore();
                     for(String ss : scroll.getRarityOrganization()) {
-                        final EnchantRarity r = rarities.get(ss);
+                        final EnchantRarity r = getCustomEnchantRarity(ss);
                         for(String s : l) {
                             final CustomEnchant enchant = valueOfCustomEnchant(s);
                             if(enchant != null && valueOfCustomEnchantRarity(enchant) == r) {
@@ -103,7 +103,9 @@ public class TransmogScrolls extends CustomEnchants {
                 if(itemMeta.hasDisplayName()) {
                     name = itemMeta.getDisplayName();
                     if(name.contains(previous)) name = name.replace(previous, current);
-                } else name = is.getType().name();
+                } else {
+                    name = is.getType().name();
+                }
                 if(name.equals(material)) name = toMaterial(material, false);
                 name = name.replace("{ENCHANT_SIZE}", current);
                 if(!name.contains(previous)) name = name.concat(" " + current);
@@ -117,9 +119,9 @@ public class TransmogScrolls extends CustomEnchants {
     }
 
     public TransmogScroll getApplied(ItemStack is) {
-        if(transmogscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final String size = Integer.toString(getEnchantsOnItem(is).size()), d = is.getItemMeta().getDisplayName();
-            for(TransmogScroll t : transmogscrolls.values()) {
+            for(TransmogScroll t : getAllTransmogScrolls().values()) {
                 if(d.endsWith(t.getApplied().replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size))) {
                     return t;
                 }
@@ -128,9 +130,9 @@ public class TransmogScrolls extends CustomEnchants {
         return null;
     }
     public void update(ItemStack is, int prevSize, int newSize) {
-        if(transmogscrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final String size = Integer.toString(prevSize), newsize = Integer.toString(newSize), d = is.getItemMeta().getDisplayName();
-            for(TransmogScroll t : transmogscrolls.values()) {
+            for(TransmogScroll t : getAllTransmogScrolls().values()) {
                 final String a = t.getApplied(), actual = a.replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size);
                 if(d.endsWith(actual)) {
                     itemMeta = is.getItemMeta();

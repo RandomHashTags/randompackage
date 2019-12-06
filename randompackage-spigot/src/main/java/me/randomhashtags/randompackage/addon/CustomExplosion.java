@@ -98,8 +98,8 @@ public interface CustomExplosion extends Attributable, Itemable {
         } else if(input.startsWith("repeat_explode;")) {
             final double x = loc.getX(), y = loc.getY(), z = loc.getZ();
             final int delay = Integer.parseInt(input.split(";")[1]);
-            final BukkitScheduler s = api.scheduler;
-            final Plugin rp = api.randompackage;
+            final BukkitScheduler s = api.SCHEDULER;
+            final Plugin rp = api.RANDOM_PACKAGE;
 
             for(int i = 1; i <= Integer.parseInt(input.split(";")[2]); i++) {
                 s.scheduleSyncDelayedTask(rp, () -> {

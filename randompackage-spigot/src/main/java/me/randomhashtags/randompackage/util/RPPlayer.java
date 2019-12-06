@@ -101,7 +101,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
     }
     public static RPPlayer get(UUID player) { return players.getOrDefault(player, new RPPlayer(player)).load(); }
     public void backup(boolean async) {
-        if(async) scheduler.runTaskAsynchronously(randompackage, () -> backup());
+        if(async) SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> backup());
         else backup();
     }
     public void backup() {
@@ -278,7 +278,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         return players.get(uuid);
     }
     public void unload(boolean async) {
-        if(async) scheduler.runTaskAsynchronously(randompackage, () -> unload());
+        if(async) SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> unload());
         else unload();
     }
     public void unload() {
@@ -291,7 +291,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
             isLoaded = false;
 
             if(questTasks.containsKey(uuid)) {
-                for(int i : questTasks.get(uuid)) scheduler.cancelTask(i);
+                for(int i : questTasks.get(uuid)) SCHEDULER.cancelTask(i);
                 questTasks.remove(uuid);
             }
             players.remove(uuid);
@@ -689,7 +689,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
                             if(!a.isExpired()) {
                                 quests.put(q, a);
                                 if(isEnabled) {
-                                    startExpire(time, scheduler, pluginmanager, q, a);
+                                    startExpire(time, SCHEDULER, PLUGIN_MANAGER, q, a);
                                 }
                             }
                         }
@@ -728,8 +728,8 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
         for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getIdentifier());
         final int pqs = pq.size();
-        final BukkitScheduler s = api.scheduler;
-        final PluginManager pm = api.pluginmanager;
+        final BukkitScheduler s = api.SCHEDULER;
+        final PluginManager pm = api.PLUGIN_MANAGER;
         final boolean isEnabled = getPlugin.isEnabled();
         for(int z = 1; z <= 100; z++) {
             final PlayerQuest ran = (PlayerQuest) pq.values().toArray()[random.nextInt(pqs)];

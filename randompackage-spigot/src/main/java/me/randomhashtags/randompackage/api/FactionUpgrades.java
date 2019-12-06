@@ -205,7 +205,7 @@ public class FactionUpgrades extends EventAttributes {
                     requiredCash = BigDecimal.valueOf(amount);
                     if(eco.getBalance(player) < amount) {
                         replacements.put("{COST}", formatDouble(requiredCash.doubleValue()).split("E")[0]);
-                        sendStringListMessage(player, config.getStringList("messages.dont have enough cash"), replacements);
+                        sendStringListMessage(player, getMessage(config, "messages.dont have enough cash"), replacements);
                         return;
                     }
                 } else if(s.startsWith("item{")) {
@@ -214,12 +214,12 @@ public class FactionUpgrades extends EventAttributes {
                     a.setAmount(Integer.parseInt(s.split("\\{")[1].split("amount=")[1].split("}")[0]));
                     if(!player.getInventory().containsAtLeast(a, a.getAmount())) {
                         replacements.put("{ITEM}", s.split("};")[1]);
-                        sendStringListMessage(player, config.getStringList("messages.dont have item"), replacements);
+                        sendStringListMessage(player, getMessage(config, "messages.dont have item"), replacements);
                         return;
                     }
                 } else if(s.startsWith("spawnervalue{")) {
                     replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(Double.parseDouble(s.split("\\{")[1].split("}")[0]))));
-                    sendStringListMessage(player, config.getStringList("messages.dont have enough spawner value"), replacements);
+                    sendStringListMessage(player, getMessage(config, "messages.dont have enough spawner value"), replacements);
                     return;
                 } else if(s.startsWith("factionupgrade{")) {
                     final String p = s.split("\\{")[1].split("}")[0];
@@ -228,13 +228,13 @@ public class FactionUpgrades extends EventAttributes {
                     if(!upgrades.contains(getFactionUpgradeInfo(target, faction))) {
                         final String di = ChatColor.stripColor(target.getItem().getItemMeta().getDisplayName());
                         replacements.put("{UPGRADE}", di + " " + toRoman(lvl));
-                        sendStringListMessage(player, config.getStringList("messages.dont have f upgrade"), replacements);
+                        sendStringListMessage(player, getMessage(config, "messages.dont have f upgrade"), replacements);
                         return;
                     }
                 }
             }
             final FactionUpgradeLevelupEvent e = new FactionUpgradeLevelupEvent(player, upgrade, tier);
-            pluginmanager.callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
             if(e.isCancelled()) return;
             if(!requiredCash.equals(BigDecimal.ZERO)) eco.withdrawPlayer(player, requiredCash.doubleValue());
             if(requiredItem != null) removeItem(player, requiredItem, requiredItem.getAmount());

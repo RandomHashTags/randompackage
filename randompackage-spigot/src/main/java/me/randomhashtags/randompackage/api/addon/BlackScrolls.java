@@ -47,7 +47,7 @@ public class BlackScrolls extends CustomEnchants {
         final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);
         if(is != null && enchants.size() > 0) {
             final Set<CustomEnchant> key = enchants.keySet();
-            CustomEnchant enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
+            CustomEnchant enchant = (CustomEnchant) key.toArray()[RANDOM.nextInt(key.size())];
             final List<EnchantRarity> a = bs.getAppliesToRarities();
             int successP = -1;
             for(String string : blackscroll.getItemMeta().getLore()) if(getRemainingInt(string) != -1) successP = getRemainingInt(string);
@@ -64,7 +64,7 @@ public class BlackScrolls extends CustomEnchants {
                     itemMeta.setLore(lore); lore.clear();
                     is.setItemMeta(itemMeta);
                     return CustomEnchants.getCustomEnchants().getRevealedItem(enchant, enchantlevel, successP, 100, true, true).clone();
-                } else enchant = (CustomEnchant) key.toArray()[random.nextInt(key.size())];
+                } else enchant = (CustomEnchant) key.toArray()[RANDOM.nextInt(key.size())];
             }
         }
         return item;

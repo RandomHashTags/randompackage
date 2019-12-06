@@ -242,7 +242,7 @@ public class CustomExplosions extends RPFeature {
 					final ItemStack target = i.getItem(d);
 					if(target != null && target.isSimilar(it)) {
 						final int e = d;
-						scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+						SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
 							final ItemStack a = i.getItem(e);
 							if(a.getAmount() == 1) i.setItem(e, new ItemStack(Material.AIR));
 							else                   target.setAmount(a.getAmount() - 1);
@@ -264,7 +264,7 @@ public class CustomExplosions extends RPFeature {
 		final FileCustomTNT tnt = creeper == null && CT != null ? CT.getOrDefault(uuid, null) : null;
 		if(creeper == null && tnt == null) return;
 		final Location l = e.getLocation();
-		if(creeper != null) creeper.explode(event, l, random);
-		else tnt.explode(event, l, random);
+		if(creeper != null) creeper.explode(event, l, RANDOM);
+		else tnt.explode(event, l, RANDOM);
 	}
 }

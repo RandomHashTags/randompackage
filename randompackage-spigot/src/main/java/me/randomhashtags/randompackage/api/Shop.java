@@ -123,7 +123,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     item = is;
                                     item.setAmount(is.getAmount()*amountPurchased);
                                     final ShopPurchaseEvent e = new ShopPurchaseEvent(player, si, item, amountPurchased, cost);
-                                    pluginmanager.callEvent(e);
+                                    PLUGIN_MANAGER.callEvent(e);
                                     if(e.isCancelled()) return;
                                     cost = e.getTotal();
                                     amountPurchased = e.getAmount();
@@ -141,7 +141,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     replacements.put("{TOTAL}", formatBigDecimal(cost));
                                     replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
                                     replacements.put("{ITEM}", item.getType().name());
-                                    sendStringListMessage(player, config.getStringList("messages.purchase" + (purchased ? "" : " incomplete")), replacements);
+                                    sendStringListMessage(player, getMessage(config, "messages.purchase" + (purchased ? "" : " incomplete")), replacements);
                                 } else {
                                     playSound(config, "sounds.not buyable", player, player.getLocation(), false);
                                 }
@@ -161,7 +161,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                         if(inv.containsAtLeast(A, amountSold)) {
                                             BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
                                             final ShopSellEvent e = new ShopSellEvent(player, si, A, amountSold, profit);
-                                            pluginmanager.callEvent(e);
+                                            PLUGIN_MANAGER.callEvent(e);
                                             if(e.isCancelled()) return;
                                             A = e.getItem();
                                             profit = e.getTotal();

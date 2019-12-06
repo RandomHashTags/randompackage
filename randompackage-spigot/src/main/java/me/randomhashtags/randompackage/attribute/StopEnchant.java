@@ -57,11 +57,11 @@ public class StopEnchant extends AbstractEventAttribute {
     }
     private void stopTasks(UUID uuid) {
         for(TObject t : stoppedEnchants.get(uuid).values()) {
-            scheduler.cancelTask((int) t.getSecond());
+            SCHEDULER.cancelTask((int) t.getSecond());
         }
     }
     private int resumeEnchant(UUID player, CustomEnchant enchant, int ticks) {
-        return scheduler.scheduleSyncDelayedTask(randompackage, () -> {
+        return SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
             stoppedEnchants.get(player).remove(enchant);
         }, ticks);
     }

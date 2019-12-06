@@ -42,7 +42,7 @@ public final class MCMMOAPI extends Reflect {
 		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");
 
-		isClassic = pluginmanager.getPlugin("mcMMO").getDescription().getVersion().startsWith("1.");
+		isClassic = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion().startsWith("1.");
 		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
@@ -76,10 +76,10 @@ public final class MCMMOAPI extends Reflect {
 	public String getRandomSkill() {
 		if(isClassic) {
 			final com.gmail.nossr50.datatypes.skills.SkillType[] a = com.gmail.nossr50.datatypes.skills.SkillType.values();
-			return a[random.nextInt(a.length)].name();
+			return a[RANDOM.nextInt(a.length)].name();
 		} else {
 			final com.gmail.nossr50.datatypes.skills.PrimarySkillType[] a = com.gmail.nossr50.datatypes.skills.PrimarySkillType.values();
-			return a[random.nextInt(a.length)].name();
+			return a[RANDOM.nextInt(a.length)].name();
 		}
 	}
 	public String getSkillName(McMMOPlayerXpGainEvent event) {

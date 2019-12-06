@@ -63,7 +63,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 
 		if(mcmmoIsEnabled()) {
 			mcmmoboosters = new MCMMOBoosterEvents();
-			pluginmanager.registerEvents(mcmmoboosters, randompackage);
+			PLUGIN_MANAGER.registerEvents(mcmmoboosters, RANDOM_PACKAGE);
 		}
 
 		activeRegionalBoosters = new HashMap<>();
@@ -109,7 +109,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		save();
 	}
 	public void loadBackup() {
-		scheduler.runTaskAsynchronously(randompackage, () -> {
+		SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
 			int loaded = 0, expired = 0;
 			final ConfigurationSection c = data.getConfigurationSection("factions");
 			if(c != null) {
@@ -161,11 +161,11 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 
 	private boolean activateBooster(Player player, Booster booster, double multiplier, long duration) {
 		final BoosterPreActivateEvent e = new BoosterPreActivateEvent(player, booster, multiplier, duration);
-		pluginmanager.callEvent(e);
+		PLUGIN_MANAGER.callEvent(e);
 		final boolean cancelled = e.isCancelled();
 		if(!cancelled) {
 			final BoosterActivateEvent ee = new BoosterActivateEvent(player, booster, multiplier, duration);
-			pluginmanager.callEvent(ee);
+			PLUGIN_MANAGER.callEvent(ee);
 			if(!ee.isCancelled()) {
 				return finish(ee);
 			}
@@ -284,7 +284,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			boosters.addAll(getSelfBoosters(u));
 			for(ActiveBooster ab : boosters) {
 				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
-				pluginmanager.callEvent(e);
+				PLUGIN_MANAGER.callEvent(e);
 				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
 				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
 					replacements.put("multiplier", M);

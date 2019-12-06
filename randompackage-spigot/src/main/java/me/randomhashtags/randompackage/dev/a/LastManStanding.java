@@ -60,11 +60,11 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         playerStartTimes = new HashMap<>();
 
         final long interval = 40;
-        task = scheduler.scheduleSyncRepeatingTask(randompackage, this::check, interval, interval);
+        task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, this::check, interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        scheduler.cancelTask(task);
+        SCHEDULER.cancelTask(task);
     }
 
     public void setBoundary(PolyBoundary boundary) {

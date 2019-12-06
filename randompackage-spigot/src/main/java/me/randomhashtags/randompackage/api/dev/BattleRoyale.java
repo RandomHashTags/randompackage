@@ -81,7 +81,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
         maxTeamSize = config.getInt("settings.team sizes");
         maxTeams = maxPlayers/maxTeamSize;
 
-        scoreboard = scoreboardManager.getNewScoreboard();
+        scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
         final Objective obj = scoreboard.registerNewObjective("dummy", "dummy");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         obj.setDisplayName(colorize(config.getString("scoreboard.title")));
@@ -95,8 +95,8 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         end(null);
-        if(activeTask != -1) scheduler.cancelTask(activeTask);
-        if(startTask != -1) scheduler.cancelTask(startTask);
+        if(activeTask != -1) SCHEDULER.cancelTask(activeTask);
+        if(startTask != -1) SCHEDULER.cancelTask(startTask);
     }
 
 
@@ -153,7 +153,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             final String dn = obj.getDisplayName();
             final DisplaySlot ds = obj.getDisplaySlot();
             final Set<Score> scores = null;
-            activeTask = scheduler.scheduleSyncRepeatingTask(randompackage, () -> {
+            activeTask = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
                 for(Player player : Bukkit.getWorld(world).getPlayers()) {
                     updateScoreboard(player, dn, ds, getRuntime(), scores);
                 }
@@ -171,11 +171,11 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
         if(active) {
             active = false;
             hasStarted = false;
-            scheduler.cancelTask(activeTask);
+            SCHEDULER.cancelTask(activeTask);
             activeTask = -1;
 
             final long delay = (long) (20*evaluate(config.getString("settings.game interval")));
-            startTask = scheduler.scheduleSyncDelayedTask(randompackage, this::start, delay);
+            startTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::start, delay);
             nextStartTime = System.currentTimeMillis()+(delay*1000);
 
             final List<String> receivedLootbag = colorizeListString(config.getStringList("messages.won.received lootbag"));
@@ -199,7 +199,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                     Bukkit.broadcastMessage(s);
                 }
             }
-            final Scoreboard main = scoreboardManager.getMainScoreboard();
+            final Scoreboard main = SCOREBOARD_MANAGER.getMainScoreboard();
             for(Player player : Bukkit.getWorld(world).getPlayers()) {
                 player.setScoreboard(main);
             }
@@ -235,7 +235,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     private void updateScoreboard(Player player, String dn, DisplaySlot ds, String runtime, Set<Score> scores) {
         final BattleRoyaleTeam team = getTeam(player);
         if(team != null) {
-            final Scoreboard sb = scoreboardManager.getNewScoreboard();
+            final Scoreboard sb = SCOREBOARD_MANAGER.getNewScoreboard();
             final Objective obj = sb.registerNewObjective("dummy", "dummy");
             obj.setDisplayName(dn);
             obj.setDisplaySlot(ds);

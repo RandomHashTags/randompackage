@@ -31,7 +31,7 @@ public class IncreasePQuest extends AbstractEventAttribute {
                             } else if(quest.getProgress() >= Double.parseDouble(q.getCompletion())) {
                                 quest.setCompleted(true);
                                 final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, quest);
-                                pluginmanager.callEvent(e);
+                                PLUGIN_MANAGER.callEvent(e);
                                 final HashMap<String, String> replacements = new HashMap<>();
                                 replacements.put("{NAME}", q.getName());
                                 sendStringListMessage(player, msg, replacements);

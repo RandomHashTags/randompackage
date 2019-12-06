@@ -61,14 +61,14 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             givedp = new UInventory(null, 27, "Givedp Categories");
             givedpCategories = new ArrayList<>();
 
-            mcmmoIsEnabled = pluginmanager.isPluginEnabled("mcMMO");
+            mcmmoIsEnabled = PLUGIN_MANAGER.isPluginEnabled("mcMMO");
         }
         if(isEnabled) return;
         try {
             isEnabled = true;
             load();
             if(isEnabled) {
-                pluginmanager.registerEvents(this, randompackage);
+                PLUGIN_MANAGER.registerEvents(this, RANDOM_PACKAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,7 +152,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) return true;
         else if(sendNoPermMessage) {
-            sendStringListMessage(sender, randompackage.getConfig().getStringList("no permission"), null);
+            sendStringListMessage(sender, RANDOM_PACKAGE.getConfig().getStringList("no permission"), null);
         }
         return false;
     }
@@ -172,12 +172,12 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 final String A = P.split("=")[1];
                 final boolean B = P.contains("-");
                 final int min = B ? Integer.parseInt(A.split("-")[0]) : 0;
-                amount = B ? min+random.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
+                amount = B ? min+ RANDOM.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
                 path = path.split(";amount=")[0];
                 P = P.split(";")[0];
             }
             final boolean hasChance = P.contains("chance=");
-            if(hasChance && random.nextInt(100) > Integer.parseInt(P.split("chance=")[1].split(";")[0])) {
+            if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(P.split("chance=")[1].split(";")[0])) {
                 return null;
             }
             if(P.contains("spawner") && !P.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
@@ -191,7 +191,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                         final String[] ints = values[2].split("-");
                         final boolean isRandom = ints[0].equalsIgnoreCase("random");
                         final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
-                        level = isRandom ? 1+random.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+random.nextInt(Integer.parseInt(ints[1])) : min;
+                        level = isRandom ? 1+ RANDOM.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
                     }
                     item = new ItemStack(Material.ENCHANTED_BOOK, amount);
                     final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
@@ -276,7 +276,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                                 final EnchantRarity r = valueOfCustomEnchantRarity(e);
                                 if(r != null) {
                                     int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
-                                    l = l != -1 ? l : x+random.nextInt(e.getMaxLevel()-x+1);
+                                    l = l != -1 ? l : x+ RANDOM.nextInt(e.getMaxLevel()-x+1);
                                     if(l != 0 || !levelzeroremoval)
                                         lore.add(r.getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
                                 } else {
@@ -287,8 +287,8 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                     } else if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
                         final CustomEnchant en = valueOfCustomEnchant(string.split("\\{")[1].split("}")[0], true);
                         final boolean c = string.contains("chance=");
-                        if(en != null && en.isEnabled() && (!c || random.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
-                            final int lvl = random.nextInt(en.getMaxLevel()+1);
+                        if(en != null && en.isEnabled() && (!c || RANDOM.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
+                            final int lvl = RANDOM.nextInt(en.getMaxLevel()+1);
                             if(lvl != 0 || !levelzeroremoval) {
                                 lore.add(valueOfCustomEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
                             }

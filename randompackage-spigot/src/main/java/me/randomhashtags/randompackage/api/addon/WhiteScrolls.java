@@ -86,8 +86,8 @@ public class WhiteScrolls extends RPFeature {
     }
 
     public WhiteScroll valueOf(String apply) {
-        if(whitescrolls != null && apply != null && !apply.isEmpty()) {
-            for(WhiteScroll w : whitescrolls.values()) {
+        if(apply != null && !apply.isEmpty()) {
+            for(WhiteScroll w : getAllWhiteScrolls().values()) {
                 if(w.getApplied().equals(apply)) {
                     return w;
                 }
@@ -96,8 +96,8 @@ public class WhiteScrolls extends RPFeature {
         return null;
     }
     public WhiteScroll valueOf(ItemStack is) {
-        if(whitescrolls != null && is != null) {
-            for(WhiteScroll w : whitescrolls.values()) {
+        if(is != null) {
+            for(WhiteScroll w : getAllWhiteScrolls().values()) {
                 if(is.isSimilar(w.getItem())) {
                     return w;
                 }
@@ -106,7 +106,7 @@ public class WhiteScrolls extends RPFeature {
         return null;
     }
     public List<WhiteScroll> valueOfApplied(ItemStack is) {
-        if(whitescrolls != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<WhiteScroll> l = new ArrayList<>();
             for(String s : is.getItemMeta().getLore()) {
                 final WhiteScroll w = valueOf(s);
