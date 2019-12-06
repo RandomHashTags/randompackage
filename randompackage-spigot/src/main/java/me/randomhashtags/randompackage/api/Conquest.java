@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.addon.file.FileConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -71,7 +71,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
 
     public void load() {
         final long started = System.currentTimeMillis();
-        final String folder = dataFolder + separator + "conquests";
+        final String folder = DATA_FOLDER + SEPARATOR + "conquests";
         save("conquests", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 

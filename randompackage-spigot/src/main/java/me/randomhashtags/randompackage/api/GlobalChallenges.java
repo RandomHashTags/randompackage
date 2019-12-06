@@ -8,10 +8,10 @@ import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -98,8 +98,8 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		registerEventAttributeListener(this);
 		save("global challenges", "_settings.yml");
 		save("_Data", "global challenges.yml");
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "global challenges", "_settings.yml"));
-		dataF = new File(dataFolder + separator + "_Data", "global challenges.yml");
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "global challenges", "_settings.yml"));
+		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "global challenges.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 
 		if(!otherdata.getBoolean("saved default global challenges")) {
@@ -125,7 +125,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}
-		for(File f : new File(dataFolder + separator + "global challenges").listFiles()) {
+		for(File f : new File(DATA_FOLDER + SEPARATOR + "global challenges").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				new FileGlobalChallenge(f);
 			}
@@ -163,7 +163,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 		try {
 			data.save(dataF);
-			dataF = new File(dataFolder + separator + "_Data", "global challenges.yml");
+			dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "global challenges.yml");
 			data = YamlConfiguration.loadConfiguration(dataF);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -45,7 +45,7 @@ public class MobStacker extends RPFeature {
     public String getIdentifier() { return "MOB_STACKER"; }
     public void load() {
         save(null, "mob stacker.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "mob stacker.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "mob stacker.yml"));
 
         new DepleteStackSize().load();
         stackable = new ArrayList<>();

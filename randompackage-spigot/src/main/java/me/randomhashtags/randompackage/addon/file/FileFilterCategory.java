@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.FilterCategory;
-import me.randomhashtags.randompackage.dev.Feature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;

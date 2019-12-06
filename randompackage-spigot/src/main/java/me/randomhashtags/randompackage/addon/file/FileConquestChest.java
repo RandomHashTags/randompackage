@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.ConquestChest;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
-import me.randomhashtags.randompackage.dev.Feature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 

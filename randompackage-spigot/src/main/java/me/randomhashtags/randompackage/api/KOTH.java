@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.event.KothCaptureEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -100,7 +100,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "koth.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "koth.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "koth.yml"));
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
 		lootbag = d(config, "items.lootbag");

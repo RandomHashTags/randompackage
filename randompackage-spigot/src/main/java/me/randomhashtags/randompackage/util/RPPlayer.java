@@ -5,18 +5,17 @@ import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.addon.obj.Home;
+import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.addon.stats.DuelStats;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
-import me.randomhashtags.randompackage.addon.PlayerRank;
+import me.randomhashtags.randompackage.api.Titles;
 import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.event.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.event.PlayerQuestStartEvent;
-import me.randomhashtags.randompackage.supported.RegionalAPI;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,8 +38,8 @@ import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 import static me.randomhashtags.randompackage.supported.economy.Vault.permissions;
 
-public class RPPlayer extends RegionalAPI implements RPStorage {
-    private static final String folder = dataFolder + separator + "_Data" + separator + "players";
+public class RPPlayer implements RPStorage {
+    private static final String folder = DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "players";
     public static final HashMap<UUID, RPPlayer> players = new HashMap<>();
     private static final HashMap<UUID, List<Integer>> questTasks = new HashMap<>();
 
@@ -124,7 +123,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
 
         if(homes != null) {
             final List<String> homez = new ArrayList<>();
-            for(Home h : getHomes()) {
+            for(Home h : homes) {
                 homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
             }
             yml.set("homes", homez);
@@ -134,7 +133,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
 
         if(ownedTitles != null) {
             final List<String> titles = new ArrayList<>();
-            for(Title t : getTitles()) {
+            for(Title t : ownedTitles) {
                 titles.add(t.getIdentifier());
             }
             yml.set("owned titles", titles);
@@ -153,9 +152,8 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
 
         if(unclaimedPurchases != null) {
-            final List<ItemStack> ucp = getUnclaimedPurchases();
             yml.set("unclaimed purchases", null);
-            for(ItemStack is : ucp) {
+            for(ItemStack is : unclaimedPurchases) {
                 if(is != null && !is.getType().equals(Material.AIR)) {
                     final String s = "unclaimed purchases." + UUID.randomUUID() + ".";
                     yml.set(s + "item", UMaterial.match(is).name());
@@ -171,9 +169,8 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
 
         if(customEnchantEntities != null) {
-            final List<UUID> cee = getCustomEnchantEntities();
             yml.set("custom enchant entities", null);
-            for(UUID u : cee) {
+            for(UUID u : customEnchantEntities) {
                 final HashMap<UUID, LivingCustomEnchantEntity> e = LivingCustomEnchantEntity.living;
                 if(e != null) {
                     final LivingCustomEnchantEntity l = e.get(u);
@@ -188,24 +185,20 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
 
         if(raritygems != null) {
-            final HashMap<RarityGem, Boolean> r = getRarityGems();
             yml.set("rarity gems", null);
-            for(RarityGem g : r.keySet()) {
-                yml.set("rarity gems." + g.getIdentifier(), r.get(g));
+            for(RarityGem g : raritygems.keySet()) {
+                yml.set("rarity gems." + g.getIdentifier(), raritygems.get(g));
             }
         }
 
-        if(globalchallengeprizes != null) {
-            final HashMap<GlobalChallengePrize, Integer> prizes = getGlobalChallengePrizes();
+        if(challengeprizes != null) {
             yml.set("global challenge prizes", null);
-            for(GlobalChallengePrize p : prizes.keySet()) {
-                yml.set("global challenge prizes." + p.getPlacement(), prizes.get(p));
+            for(GlobalChallengePrize p : challengeprizes.keySet()) {
+                yml.set("global challenge prizes." + p.getPlacement(), challengeprizes.get(p));
             }
         }
 
         if(kitLevels != null && kitCooldowns != null) {
-            final HashMap<CustomKit, Integer> kitLevels = getKitLevels();
-            final HashMap<CustomKit, Long> kitCooldowns = getKitCooldowns();
             yml.set("kits", null);
             for(CustomKit k : kitCooldowns.keySet()) {
                 final String i = k.getIdentifier();
@@ -215,7 +208,6 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
 
         if(quests != null) {
-            final HashMap<PlayerQuest, ActivePlayerQuest> quests = getQuests();
             yml.set("quests", null);
             if(quests != null) {
                 for(PlayerQuest q : quests.keySet()) {
@@ -226,12 +218,11 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
 
         if(showcases != null) {
-            final HashMap<Integer, ItemStack[]> showcase = getShowcases();
-            for(int p : showcase.keySet()) {
+            for(int p : showcases.keySet()) {
                 yml.set("showcases." + p, null);
                 yml.set("showcases." + p + ".size", getShowcaseSize(p));
                 int s = 0;
-                for(ItemStack i : showcase.get(p)) {
+                for(ItemStack i : showcases.get(p)) {
                     if(i != null && !i.getType().equals(Material.AIR)) {
                         yml.set("showcases." + p + "." + s, i.toString());
                     }
@@ -551,7 +542,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
     public Title getActiveTitle() {
         if(!activeTitleIsLoaded && activeTitle == null) {
             activeTitleIsLoaded = true;
-            if(titles != null) {
+            if(Titles.getTitles().isEnabled()) {
                 final String strings = yml.getString("strings");
                 if(strings != null && !strings.isEmpty()) {
                     final String s = strings.split(";")[0];
@@ -715,7 +706,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
                 if(quests.size() != max) {
                     final long time = System.currentTimeMillis();
                     final Random random = new Random();
-                    final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
+                    final HashMap<String, PlayerQuest> pq = new HashMap<>(getAllPlayerQuests());
                     for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getName());
                     for(int i = 1; i <= permfor && quests.size() <= permfor-1; i++) {
                         loadNewQuest(time, random);
@@ -725,7 +716,7 @@ public class RPPlayer extends RegionalAPI implements RPStorage {
         }
     }
     private void loadNewQuest(long time, Random random) {
-        final HashMap<String, PlayerQuest> pq = new HashMap<>(playerquests);
+        final HashMap<String, PlayerQuest> pq = new HashMap<>(getAllPlayerQuests());
         for(ActivePlayerQuest R : quests.values()) pq.remove(R.getQuest().getIdentifier());
         final int pqs = pq.size();
         final BukkitScheduler s = api.SCHEDULER;

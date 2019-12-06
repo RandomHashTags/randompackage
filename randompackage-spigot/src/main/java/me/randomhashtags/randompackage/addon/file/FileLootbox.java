@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.Lootbox;
-import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

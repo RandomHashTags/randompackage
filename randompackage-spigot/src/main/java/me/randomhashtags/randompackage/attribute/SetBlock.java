@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

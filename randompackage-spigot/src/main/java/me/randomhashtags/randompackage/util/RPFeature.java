@@ -9,8 +9,8 @@ import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,7 +52,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public void enable() {
         if(otherdataF == null) {
             save("_Data", "other.yml");
-            otherdataF = new File(dataFolder + separator + "_Data", "other.yml");
+            otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
 
             treemap.put(1000, "M"); treemap.put(900, "CM"); treemap.put(500, "D"); treemap.put(400, "CD"); treemap.put(100, "C"); treemap.put(90, "XC");
@@ -102,7 +102,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public void saveOtherData() {
         try {
             otherdata.save(otherdataF);
-            otherdataF = new File(dataFolder + separator + "_Data", "other.yml");;
+            otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");;
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
         } catch (Exception e) {
             e.printStackTrace();

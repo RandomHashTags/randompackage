@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.obj.CollectionChest;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -93,7 +93,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "collection filter.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "collection filter.yml"));
 
         picksup = new HashMap<>();
         editingfilter = new HashMap<>();

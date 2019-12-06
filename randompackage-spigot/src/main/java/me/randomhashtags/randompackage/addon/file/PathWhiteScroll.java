@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.WhiteScroll;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

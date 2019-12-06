@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
-import me.randomhashtags.randompackage.util.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;

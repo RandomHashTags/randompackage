@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileKitMastery;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -57,7 +57,7 @@ public class KitsMastery extends Kits {
 
         final List<ItemStack> gems = new ArrayList<>();
         final Inventory mi = gui.getInventory();
-        final File folder = new File(dataFolder + separator + "kits");
+        final File folder = new File(DATA_FOLDER + SEPARATOR + "kits");
         int loaded = 0;
         if(folder.exists()) {
             for(File f : folder.listFiles()) {

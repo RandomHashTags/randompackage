@@ -5,8 +5,8 @@ import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -52,7 +52,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "homes.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
 		maxHomeIncreaser = d(config, "items.max home increaser");
 		givedpitem.items.put("maxhomeincrease", maxHomeIncreaser);

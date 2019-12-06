@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev.factions;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -77,7 +78,7 @@ public class Factions extends RPFeature implements CommandExecutor {
     public void backup() {
     }
 
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
     }
 
     private boolean isInFaction(Player player) {

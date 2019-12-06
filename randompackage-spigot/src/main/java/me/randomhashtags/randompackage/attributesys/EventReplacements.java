@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.event.lootbag.LootbagClaimEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;

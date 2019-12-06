@@ -2,9 +2,10 @@ package me.randomhashtags.randompackage.dev.dungeons;
 
 import me.randomhashtags.randompackage.addon.Dungeon;
 import me.randomhashtags.randompackage.attribute.SetOpenDuration;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -48,7 +49,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         new SetOpenDuration().load();
         save(null, "dungeons.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "dungeons.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "dungeons.yml"));
 
         dimensionweb = d(config, "items.dimension web");
         enchantedobsidian = d(config, "items.enchanted obsidian");
@@ -72,10 +73,10 @@ public class Dungeons extends RPFeature implements CommandExecutor {
             if(di.getItem(i) == null)
                 di.setItem(i, background);
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (dungeons != null ? dungeons.size() : 0) + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUNGEON).size() + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        dungeons = null;
+        unregister(Feature.DUNGEON);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

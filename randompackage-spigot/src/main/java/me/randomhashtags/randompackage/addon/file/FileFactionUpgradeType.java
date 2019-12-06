@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -13,7 +13,7 @@ public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeTyp
 	private String path;
 	private List<String> unlock, upgrade, maxed, format;
 	public FileFactionUpgradeType(String path) {
-		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "faction upgrades", "_settings.yml"));
+		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
 		this.path = path;
 		register(Feature.FACTION_UPGRADE_TYPE, this);
 	}

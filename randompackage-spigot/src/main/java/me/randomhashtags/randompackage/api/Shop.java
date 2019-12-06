@@ -2,13 +2,13 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.event.ShopSellEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.FileShopCategory;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,7 +42,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
-	    final String folder = dataFolder + separator + "shops";
+	    final String folder = DATA_FOLDER + SEPARATOR + "shops";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         back = d(config, "items.back to categories");

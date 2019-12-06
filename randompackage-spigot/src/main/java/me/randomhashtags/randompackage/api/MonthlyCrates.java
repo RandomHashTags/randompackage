@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -62,7 +62,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("monthly crates", "_settings.yml");
-        final String folder = dataFolder + separator + "monthly crates";
+        final String folder = DATA_FOLDER + SEPARATOR + "monthly crates";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));

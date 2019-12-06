@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Trinket;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.addon.file.FileTrinket;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -55,7 +55,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
 
         final List<ItemStack> t = new ArrayList<>();
-        for(File f : new File(dataFolder + separator + "trinkets").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "trinkets").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final Trinket trinket = new FileTrinket(f);
                 if(trinket.isEnabled()) {
@@ -65,7 +65,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
         addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "trinkets.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trinkets.yml"));
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TRINKET).size() + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

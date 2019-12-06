@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
-import me.randomhashtags.randompackage.addon.enums.OutpostStatus;
+import me.randomhashtags.randompackage.enums.OutpostStatus;
 import me.randomhashtags.randompackage.addon.util.Captureable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Scoreboardable;

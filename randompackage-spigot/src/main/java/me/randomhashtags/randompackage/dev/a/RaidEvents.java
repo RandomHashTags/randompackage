@@ -41,7 +41,7 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "raid events.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "raid events.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "raid events.yml"));
 
         rewardSize = config.getString("reward size");
         canRepeatRewards = config.getBoolean("can repeat rewards");

@@ -1,13 +1,16 @@
 package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.*;
+import me.randomhashtags.randompackage.addon.file.FileCustomEnchant;
+import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
@@ -19,11 +22,9 @@ import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileCustomEnchant;
-import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,6 +44,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
@@ -103,7 +105,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public void load() {
         final long started = System.currentTimeMillis();
         save("custom enchants", "_settings.yml");
-        final String folderString = dataFolder + separator + "custom enchants";
+        final String folderString = DATA_FOLDER + SEPARATOR + "custom enchants";
         config = YamlConfiguration.loadConfiguration(new File(folderString, "_settings.yml"));
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
         alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
@@ -263,30 +265,30 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     "OBLITERATE",
                     "TARGET_TRACKING", "THUNDERING_BLOW",
             };
-            for(String s : mas) save("custom enchants" + separator + "MASTERY", s + ".yml");
-            for(String s : her) save("custom enchants" + separator + "HEROIC", s + ".yml");
-            for(String s : sou) save("custom enchants" + separator + "SOUL", s + ".yml");
-            for(String s : leg) save("custom enchants" + separator + "LEGENDARY", s + ".yml");
-            for(String s : ult) save("custom enchants" + separator + "ULTIMATE", s + ".yml");
-            for(String s : eli) save("custom enchants" + separator + "ELITE", s + ".yml");
-            for(String s : uni) save("custom enchants" + separator + "UNIQUE", s + ".yml");
-            for(String s : sim) save("custom enchants" + separator + "SIMPLE", s + ".yml");
+            for(String s : mas) save("custom enchants" + SEPARATOR + "MASTERY", s + ".yml");
+            for(String s : her) save("custom enchants" + SEPARATOR + "HEROIC", s + ".yml");
+            for(String s : sou) save("custom enchants" + SEPARATOR + "SOUL", s + ".yml");
+            for(String s : leg) save("custom enchants" + SEPARATOR + "LEGENDARY", s + ".yml");
+            for(String s : ult) save("custom enchants" + SEPARATOR + "ULTIMATE", s + ".yml");
+            for(String s : eli) save("custom enchants" + SEPARATOR + "ELITE", s + ".yml");
+            for(String s : uni) save("custom enchants" + SEPARATOR + "UNIQUE", s + ".yml");
+            for(String s : sim) save("custom enchants" + SEPARATOR + "SIMPLE", s + ".yml");
 
-            save("custom enchants" + separator + "RANDOM", "_settings.yml");
+            save("custom enchants" + SEPARATOR + "RANDOM", "_settings.yml");
 
             otherdata.set("saved default custom enchants", true);
             saveOtherData();
         }
 
         timedEnchants = new HashMap<>();
-        final String p = dataFolder + separator + "custom enchants";
+        final String p = DATA_FOLDER + SEPARATOR + "custom enchants";
         final List<ItemStack> raritybooks = new ArrayList<>();
         final HashMap<String, Integer> enchantTicks = new HashMap<>();
         final File folder = new File(p);
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 if(f.isDirectory()) {
-                    final File[] files = new File(p + separator + f.getName()).listFiles();
+                    final File[] files = new File(p + SEPARATOR + f.getName()).listFiles();
                     if(files != null) {
                         FileEnchantRarity rarity = null;
                         final List<File> F = Arrays.asList(files);
@@ -385,6 +387,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final ChatEvents cea = ChatEvents.getChatEvents();
         final String format = RANDOM_PACKAGE.getConfig().getString("enchants.format");
         final List<String> L = colorizeListString(RANDOM_PACKAGE.getConfig().getStringList("enchants.hover"));
+        final HashMap<String, CustomEnchant> enabled = getAllCustomEnchants(true);
+        final Object[] enchants = enabled.values().toArray();
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
         final int starting = page*10;
@@ -393,7 +397,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
-                        final CustomEnchant ce = (CustomEnchant) enabled.values().toArray()[i];
+                        final CustomEnchant ce = (CustomEnchant) enchants[i];
                         final EnchantRarity rarity = valueOfCustomEnchantRarity(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getIdentifier()));
@@ -407,7 +411,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                         } else {
                             sender.sendMessage(msg);
                         }
-
                     }
                 }
             } else {
@@ -443,28 +446,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public boolean canProcOn(Entity e) {
         return config.getStringList("settings.can proc on").contains(e.getType().name());
-    }
-
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void armorEquipEvent(ArmorEquipEvent event) {
-        didArmorEvent(event);
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void armorUnequipEvent(ArmorUnequipEvent event) {
-        didArmorEvent(event);
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void armorPieceBreakEvent(ArmorPieceBreakEvent event) {
-        didArmorEvent(event);
-    }
-    private void didArmorEvent(ArmorEvent event) {
-        final Player player = event.getPlayer();
-        final ItemStack is = event.getItem();
-        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
-        enchants.put(is, getEnchantsOnItem(is));
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
-        tryProcing(event, player, null, enchants);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -640,11 +621,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getEnchants(@NotNull Player player) {
         final UUID uuid = player.getUniqueId();
-        if(!playerEnchants.containsKey(uuid)) {
-            return recheckEnchants(player);
-        } else {
-            return playerEnchants.get(uuid);
-        }
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = !playerEnchants.containsKey(uuid) ? recheckEnchants(player) : playerEnchants.get(uuid);
+        Bukkit.broadcastMessage("CustomEnchants;getEnchants;enchants=" + enchants.toString());
+        return enchants;
     }
     public LinkedHashMap<CustomEnchant, Integer> getEnchantsOnItem(@NotNull ItemStack is) {
         final LinkedHashMap<CustomEnchant, Integer> enchants = new LinkedHashMap<>();
@@ -1272,5 +1251,42 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         }
+    }
+
+    private void removeFromEquipment(@NotNull Player player, @Nullable ItemStack is) {
+        final UUID uuid = player.getUniqueId();
+        if(playerEnchants.containsKey(uuid)) {
+            playerEnchants.get(uuid).remove(is);
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void playerItemBreakEvent(PlayerItemBreakEvent event) {
+        removeFromEquipment(event.getPlayer(), event.getBrokenItem());
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void armorEquipEvent(ArmorEquipEvent event) {
+        didArmorEvent(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void armorUnequipEvent(ArmorUnequipEvent event) {
+        didArmorEvent(event);
+        if(!event.isCancelled()) {
+            removeFromEquipment(event.getPlayer(), event.getItem());
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void armorPieceBreakEvent(ArmorPieceBreakEvent event) {
+        didArmorEvent(event);
+        if(!event.isCancelled()) {
+            removeFromEquipment(event.getPlayer(), event.getItem());
+        }
+    }
+    private void didArmorEvent(ArmorEvent event) {
+        final Player player = event.getPlayer();
+        final ItemStack is = event.getItem();
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
+        enchants.put(is, getEnchantsOnItem(is));
+        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        tryProcing(event, player, null, enchants);
     }
 }

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.duels;
 
 import me.randomhashtags.randompackage.addon.DuelArena;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

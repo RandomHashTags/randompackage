@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.CustomExplosion;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;

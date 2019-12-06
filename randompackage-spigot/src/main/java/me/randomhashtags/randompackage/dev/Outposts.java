@@ -1,8 +1,9 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Outpost;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,7 +65,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "outposts", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "outposts", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
@@ -72,7 +73,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
             statuses.put(s.toUpperCase().replace(" ", "_"), colorize(config.getString("status." + s)));
         }
-        for(File f : new File(dataFolder + separator + "outposts").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "outposts").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 //final FileOutpost o = new FileOutpost(f);
                 //o.setOutpostStatus(OutpostStatus.UNCONTESTED);
@@ -85,18 +86,18 @@ public class Outposts extends RPFeature implements CommandExecutor {
             if(is == null) gi.setItem(i, background);
             i++;
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (outposts != null ? outposts.size() : 0) + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.OUTPOST).size() + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        outposts = null;
+        unregister(Feature.OUTPOST);
     }
 
     public void viewStatus(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost", true)) {
-            final List<String> msg = colorizeListString(config.getStringList("messages.view current"));
+            final List<String> msg = colorizeListString(getMessage(config, "messages.view current"));
             for(String s : msg) {
                 if(s.contains("{OUTPOST}")) {
-                    for(Outpost o : outposts.values()) {
+                    for(Outpost o : getAllOutposts().values()) {
                         sender.sendMessage(s.replace("{OUTPOST}", o.getName()).replace("{STATUS}", o.getStatus()));
                     }
                 } else {
@@ -107,7 +108,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
     }
     public void viewHelp(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost.help", true)) {
-            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
         }
     }
     public void view(Player player) {

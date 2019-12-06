@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -94,7 +94,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "jackpot.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "jackpot.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "jackpot.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();

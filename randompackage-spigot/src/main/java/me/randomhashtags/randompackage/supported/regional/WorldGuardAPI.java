@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.supported.regional;
 
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

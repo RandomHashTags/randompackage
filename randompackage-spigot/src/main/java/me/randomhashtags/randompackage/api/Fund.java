@@ -52,7 +52,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "fund.yml");
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "fund.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "fund.yml"));
 
 		unlockstring = new HashMap<>();
 		needed_unlocks = new HashMap<>();

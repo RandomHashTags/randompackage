@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FilterCategory;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileFilterCategory;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -69,7 +69,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     public void load() {
         final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "filter categories", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "filter categories", "_settings.yml"));
 
         categorySlots = new HashMap<>();
         categories = new HashMap<>();
@@ -102,7 +102,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             otherdata.set("saved default filter categories", true);
             saveOtherData();
         }
-        for(File f : new File(dataFolder + separator + "filter categories").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "filter categories").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);

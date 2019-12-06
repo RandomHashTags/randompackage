@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
-import me.randomhashtags.randompackage.dev.Feature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Firework;

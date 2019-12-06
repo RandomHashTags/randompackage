@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.util.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

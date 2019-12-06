@@ -18,8 +18,8 @@ import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Chunk;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import static me.randomhashtags.randompackage.util.RPStorage.*;
 
 public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionable, RPStorage {
     List<UUID> SPAWNED_FROM_SPAWNER = new ArrayList<>();

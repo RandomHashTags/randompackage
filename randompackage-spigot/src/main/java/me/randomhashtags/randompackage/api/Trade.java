@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.living.ActiveTrade;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -47,7 +47,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 
 		requests = new HashMap<>();
 
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "trade.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trade.yml"));
 		divider = d(config, "gui.divider");
 		accept = d(config, "gui.accept");
 		accepting = d(config, "gui.accepting");

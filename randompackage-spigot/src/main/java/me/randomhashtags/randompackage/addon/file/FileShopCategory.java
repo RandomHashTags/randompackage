@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
-import me.randomhashtags.randompackage.dev.Feature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 

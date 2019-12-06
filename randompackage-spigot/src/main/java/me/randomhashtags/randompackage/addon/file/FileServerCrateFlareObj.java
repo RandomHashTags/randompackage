@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.ServerCrateFlare;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
-import me.randomhashtags.randompackage.util.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;

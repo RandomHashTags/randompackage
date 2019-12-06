@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
@@ -73,7 +73,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     }
     public void load() {
         save(null, "items.yml");
-        itemsConfig = YamlConfiguration.loadConfiguration(new File(dataFolder, "items.yml"));
+        itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
         customitems = new HashMap<>();
         final ConfigurationSection cs = itemsConfig.getConfigurationSection("custom items");
         if(cs != null) {

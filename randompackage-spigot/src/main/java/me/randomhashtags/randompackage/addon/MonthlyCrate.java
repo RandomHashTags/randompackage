@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

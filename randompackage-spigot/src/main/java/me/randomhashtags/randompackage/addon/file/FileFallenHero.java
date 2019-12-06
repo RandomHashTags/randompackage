@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.FallenHero;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;

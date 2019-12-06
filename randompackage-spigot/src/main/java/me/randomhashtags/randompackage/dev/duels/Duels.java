@@ -3,10 +3,11 @@ package me.randomhashtags.randompackage.dev.duels;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -75,7 +76,7 @@ public class Duels extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("duel arenas", "_settings.yml");
-        final String folder = dataFolder + separator + "duel arenas";
+        final String folder = DATA_FOLDER + SEPARATOR + "duel arenas";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
         if(!otherdata.getBoolean("saved default duel arenas")) {
             final String[] a = new String[] {"DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID"};
@@ -97,10 +98,10 @@ public class Duels extends RPFeature implements CommandExecutor {
 
         activeDuels = new ArrayList<>();
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + duelArenas.size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUEL_ARENA).size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        duelArenas = null;
+        unregister(Feature.DUEL_ARENA);
     }
 
     public ActiveDuel valueOf(Player player) {
@@ -149,7 +150,7 @@ public class Duels extends RPFeature implements CommandExecutor {
 
     public void viewHelp(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.duel.help", true)) {
-            sendStringListMessage(player, config.getStringList("messages.help"), null);
+            sendStringListMessage(player, getMessage(config, "messages.help"), null);
         }
     }
     public void viewTop(CommandSender sender, int page) {

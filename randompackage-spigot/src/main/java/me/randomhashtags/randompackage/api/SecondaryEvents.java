@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -141,7 +141,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "secondary.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "secondary.yml"));
         xpbottle = givedpitem.items.get("xpbottle");
         int i = 0;
         for(String s : xpbottle.getItemMeta().getLore()) {

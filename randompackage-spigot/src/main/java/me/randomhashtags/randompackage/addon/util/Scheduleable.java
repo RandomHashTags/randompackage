@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.util;
 
-import me.randomhashtags.randompackage.addon.enums.ScheduleableType;
+import me.randomhashtags.randompackage.enums.ScheduleableType;
 
 import java.util.Date;
 import java.util.List;

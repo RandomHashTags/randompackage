@@ -4,9 +4,9 @@ import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.addon.file.FileCustomCreeper;
 import me.randomhashtags.randompackage.addon.file.FileCustomTNT;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,7 +45,7 @@ public class CustomExplosions extends RPFeature {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "custom explosions.yml");
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "custom explosions.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "custom explosions.yml"));
 		cannotBreakTNT = new ArrayList<>();
 		cannotBreakCreepers = new ArrayList<>();
 		for(String s : config.getStringList("tnt.cannot break")) {
@@ -72,7 +72,7 @@ public class CustomExplosions extends RPFeature {
 			saveOtherData();
 		}
 
-		final File cf = new File(dataFolder + separator + "custom creepers"), tf = new File(dataFolder + separator + "custom tnt");
+		final File cf = new File(DATA_FOLDER + SEPARATOR + "custom creepers"), tf = new File(DATA_FOLDER + SEPARATOR + "custom tnt");
 		if(cf.exists()) {
 			for(File f : cf.listFiles()) {
 				new FileCustomCreeper(f);

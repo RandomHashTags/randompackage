@@ -1,11 +1,10 @@
-package me.randomhashtags.randompackage.util.universal;
+package me.randomhashtags.randompackage.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import me.randomhashtags.randompackage.util.Versionable;
 import me.randomhashtags.randompackage.util.YamlUpdater;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -18,9 +17,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -39,10 +35,10 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
 
     public final void save(String folder, String file) {
         final boolean hasFolder = folder != null && !folder.equals("");
-        final File f = new File(dataFolder + separator + (hasFolder ? folder + separator : ""), file);
+        final File f = new File(DATA_FOLDER + SEPARATOR + (hasFolder ? folder + SEPARATOR : ""), file);
         if(!f.exists()) {
             f.getParentFile().mkdirs();
-            RANDOM_PACKAGE.saveResource(hasFolder ? folder + separator + file : file, false);
+            RANDOM_PACKAGE.saveResource(hasFolder ? folder + SEPARATOR + file : file, false);
         }
         if(folder == null || !folder.equals("_Data")) {
             updateYaml(folder, f);
@@ -59,29 +55,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         player.updateInventory();
     }
 
-    public final long getDelay(String input) {
-        input = input.toLowerCase();
-        long l = 0;
-        if(input.contains("d")) {
-            final String[] s = input.split("d");
-            l += getRemainingDouble(s[0])*1000*60*60*24;
-            input = s.length > 1 ? s[1] : input;
-        }
-        if(input.contains("h")) {
-            final String[] s = input.split("h");
-            l += getRemainingDouble(s[0])*1000*60*60;
-            input = s.length > 1 ? s[1] : input;
-        }
-        if(input.contains("m")) {
-            final String[] s = input.split("m");
-            l += getRemainingDouble(s[0])*1000*60;
-            input = s.length > 1 ? s[1] : input;
-        }
-        if(input.contains("s")) {
-            l += getRemainingDouble(input.split("s")[0])*1000;
-        }
-        return l;
-    }
     public final void spawnFirework(Firework firework, Location loc) {
         if(firework != null) {
             final Firework fw = loc.getWorld().spawn(new Location(loc.getWorld(), loc.getX()+0.5, loc.getY(), loc.getZ()+0.5), Firework.class);
@@ -97,37 +70,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         fw.setFireworkMeta(fwm);
         return fw;
     }
-    public final Color getColor(final String path) {
-        if(path == null) {
-            return null;
-        } else {
-            switch (path.toLowerCase()) {
-                case "aqua": return Color.AQUA;
-                case "black": return Color.BLACK;
-                case "blue": return Color.BLUE;
-                case "fuchsia": return Color.FUCHSIA;
-                case "gray": return Color.GRAY;
-                case "green": return Color.GREEN;
-                case "lime": return Color.LIME;
-                case "maroon": return Color.MAROON;
-                case "navy": return Color.NAVY;
-                case "olive": return Color.OLIVE;
-                case "orange": return Color.ORANGE;
-                case "purple": return Color.PURPLE;
-                case "red": return Color.RED;
-                case "silver": return Color.SILVER;
-                case "teal": return Color.TEAL;
-                case "white": return Color.WHITE;
-                case "yellow": return Color.YELLOW;
-                default: return null;
-            }
-        }
-    }
 
-    public final Double getRemainingDouble(String string) {
-        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
-        return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
-    }
     public final String toMaterial(String input, boolean realitem) {
         if(input.contains(":")) input = input.split(":")[0];
         if(input.contains(" ")) input = input.replace(" ", "");
@@ -219,17 +162,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
         return null;
     }
-    public final double round(double input, int decimals) {
-        // From http://www.baeldung.com/java-round-decimal-number
-        if(decimals < 0) throw new IllegalArgumentException();
-        BigDecimal bd = new BigDecimal(Double.toString(input));
-        bd = bd.setScale(decimals, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-    public final String roundDoubleString(double input, int decimals) {
-        final double d = round(input, decimals);
-        return Double.toString(d);
-    }
 
     public final int indexOf(Set<? extends Object> collection, Object value) {
         int i = 0;
@@ -240,19 +172,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         return -1;
     }
 
-    public final String center(String s, int size) {
-        // Credit to "Sahil Mathoo" from StackOverFlow at https://stackoverflow.com/questions/8154366
-        return center(s, size, ' ');
-    }
-    private String center(String s, int size, char pad) {
-        if(s == null || size <= s.length())
-            return s;
-        StringBuilder sb = new StringBuilder(size);
-        for(int i = 0; i < (size - s.length()) / 2; i++)  sb.append(pad);
-        sb.append(s);
-        while(sb.length() < size) sb.append(pad);
-        return sb.toString();
-    }
     public final void giveItem(Player player, ItemStack is) {
         if(is == null || is.getType().equals(Material.AIR)) return;
         final UMaterial m = UMaterial.match(is);
@@ -345,9 +264,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         return amount;
     }
 
-    public final String toReadableDate(Date d, String format) {
-        return new SimpleDateFormat(format).format(d);
-    }
     public final ItemStack getSpawner(String input) {
         String pi = input.toLowerCase(), type = null;
         if(pi.equals("mysterymobspawner")) {
@@ -374,20 +290,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
         return null;
     }
-    public final void sendStringListMessage(CommandSender sender, List<String> message, HashMap<String, String> replacements) {
-        if(message != null && message.size() > 0 && !message.get(0).equals("")) {
-            for(String s : message) {
-                if(replacements != null) {
-                    for(String r : replacements.keySet()) {
-                        s = s.replace(r, replacements.get(r));
-                    }
-                }
-                if(s != null) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-                }
-            }
-        }
-    }
+
     public final void playParticle(FileConfiguration config, String path, Location location, int count) {
         if(config != null && config.get(path) != null) {
             final String target = config.getString(path);
@@ -455,57 +358,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         }
         return null;
     }
-    public final LivingEntity getEntity(String type, Location l) {
-        final World w = l.getWorld();
-        final LivingEntity le;
-        switch (type.toUpperCase()) {
-            case "BAT": return w.spawn(l, Bat.class);
-            case "BLAZE": return w.spawn(l, Blaze.class);
-            case "CAVE_SPIDER": return w.spawn(l, CaveSpider.class);
-            case "CHICKEN": return w.spawn(l, Chicken.class);
-            case "COW": return w.spawn(l, Cow.class);
-            case "CREEPER": return w.spawn(l, Creeper.class);
-            case "ENDER_DRAGON": return w.spawn(l, EnderDragon.class);
-            case "ENDERMAN": return w.spawn(l, Enderman.class);
-            case "GHAST": return w.spawn(l, Ghast.class);
-            case "GIANT": return w.spawn(l, Giant.class);
-            case "GUARDIAN": return w.spawn(l, Guardian.class);
-            case "HORSE": return w.spawn(l, Horse.class);
-            case "IRON_GOLEM": return w.spawn(l, IronGolem.class);
-            case "LLAMA": return EIGHT || NINE || TEN ? null : w.spawn(l, Llama.class);
-            case "MAGMA_CUBE": return w.spawn(l, MagmaCube.class);
-            case "MUSHROOM_COW": return w.spawn(l, MushroomCow.class);
-            case "OCELOT": return w.spawn(l, Ocelot.class);
-            case "PARROT": return EIGHT || NINE || TEN || ELEVEN ? null : w.spawn(l, Parrot.class);
-            case "PIG": return w.spawn(l, Pig.class);
-            case "PIG_ZOMBIE": return w.spawn(l, PigZombie.class);
-            case "RABBIT": return w.spawn(l, Rabbit.class);
-            case "SHEEP": return w.spawn(l, Sheep.class);
-            case "SHULKER": return EIGHT ? null : w.spawn(l, Shulker.class);
-            case "SILVERFISH": return w.spawn(l, Silverfish.class);
-            case "SKELETON": return w.spawn(l, Skeleton.class);
-            case "SLIME": return w.spawn(l, Slime.class);
-            case "SNOWMAN": return w.spawn(l, Snowman.class);
-            case "SQUID": return w.spawn(l, Squid.class);
-            case "SPIDER": return w.spawn(l, Spider.class);
-            case "STRAY": return EIGHT || NINE ? null : w.spawn(l, Stray.class);
-            case "VEX": return EIGHT || NINE || TEN ? null : w.spawn(l, Vex.class);
-            case "VILLAGER": return w.spawn(l, Villager.class);
-            case "VINDICATOR": return EIGHT || NINE || TEN ? null : w.spawn(l, Vindicator.class);
-            case "WITHER_SKELETON":
-                if(EIGHT || NINE || TEN) {
-                    le = w.spawn(l, Skeleton.class);
-                    ((Skeleton) le).setSkeletonType(Skeleton.SkeletonType.WITHER);
-                    return le;
-                } else {
-                    return w.spawn(l, WitherSkeleton.class);
-                }
-            case "ZOMBIE": return w.spawn(l, Zombie.class);
-            case "ZOMBIE_HORSE": return EIGHT ? null : w.spawn(l, ZombieHorse.class);
-            case "ZOMBIE_VILLAGER": return EIGHT ? null : w.spawn(l, ZombieVillager.class);
-            default: return null;
-        }
-    }
+
     public final LivingEntity getEntity(String type, Location l, boolean spawn) {
         final boolean baby = type.contains(":") && type.toLowerCase().endsWith(":true");
         type = type.toUpperCase().split(":")[0];

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.EventAttribute;
 import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.dev.RPStorage;
 
 import java.util.Arrays;

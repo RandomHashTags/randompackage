@@ -45,7 +45,7 @@ public class Wild extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "wild.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "wild.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild.yml"));
         expirations = new HashMap<>();
 
         cooldown = config.getLong("settings.cooldown");

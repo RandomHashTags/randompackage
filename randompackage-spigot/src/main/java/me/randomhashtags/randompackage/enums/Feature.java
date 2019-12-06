@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.enums;
 
 public enum Feature {
     ARMOR_SET,

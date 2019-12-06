@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +30,7 @@ public class RandomizedLoot extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "randomized loot.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "randomized loot.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "randomized loot.yml"));
 
         final List<ItemStack> values = new ArrayList<>();
         items = new HashMap<>();

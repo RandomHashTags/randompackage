@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;

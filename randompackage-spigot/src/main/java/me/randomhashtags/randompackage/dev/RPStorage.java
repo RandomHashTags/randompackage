@@ -6,8 +6,9 @@ import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,7 +28,7 @@ public interface RPStorage extends UVersionable {
 
     default YamlConfiguration getYaml(String folder, String fileName) {
         if(CACHED_YAMLS.containsKey(folder + fileName)) return CACHED_YAMLS.get(folder + fileName);
-        final File f = new File(dataFolder + separator + (folder != null ? folder : ""), fileName);
+        final File f = new File(DATA_FOLDER + SEPARATOR + (folder != null ? folder : ""), fileName);
         final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
         CACHED_YAMLS.put(folder+fileName, c);
         return c;
@@ -50,7 +51,9 @@ public interface RPStorage extends UVersionable {
     default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() { return new LinkedHashMap<>((Map<String, ? extends BlackScroll>) getAll(Feature.BLACK_SCROLL)); }
     default LinkedHashMap<String, Booster> getAllBoosters() { return new LinkedHashMap<>((Map<String, ? extends Booster>) getAll(Feature.BOOSTER)); }
     default LinkedHashMap<String, ConquestChest> getAllConquestChests() { return new LinkedHashMap<>((Map<String, ? extends ConquestChest>) getAll(Feature.CONQUEST_CHEST)); }
+    default LinkedHashMap<String, CustomEnchant> getAllCustomEnchants(boolean enabled) { return new LinkedHashMap<>((Map<String, ? extends CustomEnchant>) getAll(enabled ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED)); }
     default LinkedHashMap<String, CustomKit> getAllCustomKits() { return new LinkedHashMap<>((Map<String, ? extends CustomKit>) getAll(Feature.CUSTOM_KIT)); }
+    default LinkedHashMap<String, Dungeon> getAllDungeons() { return new LinkedHashMap<>((Map<String, ? extends Dungeon>) getAll(Feature.DUNGEON)); }
     default LinkedHashMap<String, EnchantmentOrb> getAllEnchantmentOrbs() { return new LinkedHashMap<>((Map<String, ? extends EnchantmentOrb>) getAll(Feature.ENCHANTMENT_ORB)); }
     default LinkedHashMap<String, EnvoyCrate> getAllEnvoyCrates() { return new LinkedHashMap<>((Map<String, ? extends EnvoyCrate>) getAll(Feature.ENVOY_CRATE)); }
     default LinkedHashMap<String, GlobalChallenge> getAllGlobalChallenges() { return new LinkedHashMap<>((Map<String, ? extends GlobalChallenge>) getAll(Feature.GLOBAL_CHALLENGE)); }
@@ -59,11 +62,14 @@ public interface RPStorage extends UVersionable {
     default LinkedHashMap<String, MagicDust> getAllMagicDust() { return new LinkedHashMap<>((Map<String, ? extends MagicDust>) getAll(Feature.MAGIC_DUST)); }
     default LinkedHashMap<String, Mask> getAllMasks() { return new LinkedHashMap<>((Map<String, ? extends Mask>) getAll(Feature.MASK)); }
     default LinkedHashMap<String, MonthlyCrate> getAllMonthlyCrates() { return new LinkedHashMap<>((Map<String, ? extends MonthlyCrate>) getAll(Feature.MONTHLY_CRATE)); }
+    default LinkedHashMap<String, Outpost> getAllOutposts() { return new LinkedHashMap<>((Map<String, ? extends Outpost>) getAll(Feature.OUTPOST)); }
+    default LinkedHashMap<String, PlayerQuest> getAllPlayerQuests() { return new LinkedHashMap<>((Map<String, ? extends PlayerQuest>) getAll(Feature.PLAYER_QUEST)); }
     default LinkedHashMap<String, RandomizationScroll> getAllRandomizationScrolls() { return new LinkedHashMap<>((Map<String, ? extends RandomizationScroll>) getAll(Feature.RANDOMIZATION_SCROLL)); }
     default LinkedHashMap<String, RarityFireball> getAllRarityFireballs() { return new LinkedHashMap<>((Map<String, ? extends RarityFireball>) getAll(Feature.RARITY_FIREBALL)); }
     default LinkedHashMap<String, RarityGem> getAllRarityGems() { return new LinkedHashMap<>((Map<String, ? extends RarityGem>) getAll(Feature.RARITY_GEM)); }
     default LinkedHashMap<String, ServerCrate> getAllServerCrates() { return new LinkedHashMap<>((Map<String, ? extends ServerCrate>) getAll(Feature.SERVER_CRATE)); }
     default LinkedHashMap<String, SoulTracker> getAllSoulTrackers() { return new LinkedHashMap<>((Map<String, ? extends SoulTracker>) getAll(Feature.SOUL_TRACKER)); }
+    default LinkedHashMap<String, Stronghold> getAllStrongholds() { return new LinkedHashMap<>((Map<String, ? extends Stronghold>) getAll(Feature.STRONGHOLD)); }
     default LinkedHashMap<String, Title> getAllTitles() { return new LinkedHashMap<>((Map<String, ? extends Title>) getAll(Feature.TITLE)); }
     default LinkedHashMap<String, TransmogScroll> getAllTransmogScrolls() { return new LinkedHashMap<>((Map<String, ? extends TransmogScroll>) getAll(Feature.TRANSMOG_SCROLL)); }
     default LinkedHashMap<String, WhiteScroll> getAllWhiteScrolls() { return new LinkedHashMap<>((Map<String, ? extends WhiteScroll>) getAll(Feature.WHITE_SCROLL)); }
@@ -445,6 +451,26 @@ public interface RPStorage extends UVersionable {
         }
         return null;
     }
+    default Dungeon valueOfDungeonFromKey(ItemStack is) {
+        if(is != null) {
+            for(Dungeon d : getAllDungeons().values()) {
+                if(d.getKey().isSimilar(is)) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
+    default Dungeon valueOfDungeonFromPortal(ItemStack is) {
+        if(is != null) {
+            for(Dungeon d : getAllDungeons().values()) {
+                if(d.getPortal().isSimilar(is)) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
 
     default FactionUpgrade valueOfFactionUpgrade(int slot) {
         final HashMap<String, Identifiable> upgrades = getAll(Feature.FACTION_UPGRADE);
@@ -555,6 +581,14 @@ public interface RPStorage extends UVersionable {
         for(MonthlyCrate c : getAllMonthlyCrates().values()) {
             if(category == c.getCategory() && slot == c.getCategorySlot()) {
                 return c;
+            }
+        }
+        return null;
+    }
+    default Outpost valueOfOutpost(int slot) {
+        for(Outpost o : getAllOutposts().values()) {
+            if(o.getSlot() == slot) {
+                return o;
             }
         }
         return null;

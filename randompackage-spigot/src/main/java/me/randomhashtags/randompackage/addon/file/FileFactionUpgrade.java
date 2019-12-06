@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
 import me.randomhashtags.randompackage.addon.obj.FactionUpgradeLevelObj;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

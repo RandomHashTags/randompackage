@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.obj.PvPCountdownMatch;
 import me.randomhashtags.randompackage.addon.obj.PvPMatch;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -74,7 +74,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         save(null, "wild pvp.yml");
 
         legacy = EIGHT || NINE || TEN || ELEVEN;
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "wild pvp.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild pvp.yml"));
         blockedCommands = new ArrayList<>();
         for(String s : config.getStringList("settings.blocked commands")) {
             blockedCommands.add(s.toLowerCase());

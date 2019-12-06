@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileRarityGem;
@@ -54,7 +54,7 @@ public class RarityGems extends RPFeature {
             saveOtherData();
         }
 
-        for(File f : new File(dataFolder + separator + "rarity gems").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "rarity gems").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
                 new FileRarityGem(f);
             }

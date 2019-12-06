@@ -1,6 +1,7 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Disguise;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,11 +31,11 @@ public class Disguises extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "disguises.yml"));
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (disguises != null ? disguises.size() : 0) + " Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "disguises.yml"));
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DISGUISE).size() + " Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        disguises = null;
+        unregister(Feature.DISGUISE);
     }
 
     public void viewOwned(Player player) {

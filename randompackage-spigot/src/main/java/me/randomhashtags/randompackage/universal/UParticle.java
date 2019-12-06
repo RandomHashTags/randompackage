@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.util.universal;
+package me.randomhashtags.randompackage.universal;
 
 import com.sun.istack.internal.NotNull;
 import org.bukkit.*;

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addon;
+package me.randomhashtags.randompackage.enums;
 
 public enum KOTHStatus {
     NOT_SETUP,

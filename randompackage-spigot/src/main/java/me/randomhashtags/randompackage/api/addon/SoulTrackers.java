@@ -2,10 +2,10 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;

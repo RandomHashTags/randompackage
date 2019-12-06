@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.supported;
+package me.randomhashtags.randompackage.enums;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;

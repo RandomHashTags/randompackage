@@ -7,14 +7,14 @@ import me.randomhashtags.randompackage.addon.file.FileFactionUpgrade;
 import me.randomhashtags.randompackage.addon.file.FileFactionUpgradeType;
 import me.randomhashtags.randompackage.addon.obj.FactionUpgradeInfo;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.FactionUpgradeLevelupEvent;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -91,13 +91,13 @@ public class FactionUpgrades extends EventAttributes {
                 for(String s : a) save("faction upgrades", s + ".yml");
                 otherdata.set("saved default faction upgrades", true);
             }
-            config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "faction upgrades", "_settings.yml"));
+            config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
             for(String s : config.getConfigurationSection("types").getKeys(false)) {
                 new FileFactionUpgradeType(s);
             }
             gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
-            for(File f : new File(dataFolder + separator + "faction upgrades").listFiles()) {
+            for(File f : new File(DATA_FOLDER + SEPARATOR + "faction upgrades").listFiles()) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());
@@ -105,7 +105,7 @@ public class FactionUpgrades extends EventAttributes {
             }
 
             cropGrowthRate = new HashMap<>();
-            fupgradesF = new File(dataFolder + separator + "_Data", "faction upgrades.yml");
+            fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
             aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");
             heroicFactionCrystal = d(config, "items.heroic faction crystal");

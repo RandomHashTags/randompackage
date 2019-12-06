@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.CustomBoss;
 import me.randomhashtags.randompackage.addon.obj.CustomBossAttack;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;

@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.WhiteScroll;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

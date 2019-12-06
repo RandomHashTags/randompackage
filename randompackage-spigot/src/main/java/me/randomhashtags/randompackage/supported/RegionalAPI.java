@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.supported.regional.ASky;
 import me.randomhashtags.randompackage.supported.regional.EpicSky;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.supported.regional.SuperiorSky;
-import me.randomhashtags.randompackage.util.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

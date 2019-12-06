@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.StackedSpawner;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,11 +49,11 @@ public class SpawnerStacking extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "spawner stacking.yml");
-        dataF = new File(dataFolder + separator + "_Data", "spawner stacking.yml");
+        dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "spawner stacking.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
 
         save(null, "spawner stacking.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "spawner stacking.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "spawner stacking.yml"));
 
         addedSpawner = colorizeListString(config.getStringList("messages.added spawner"));
         viewAmount = colorizeListString(config.getStringList("messages.view amount"));
@@ -110,7 +110,7 @@ public class SpawnerStacking extends RPFeature {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        dataF = new File(dataFolder + separator + "_Data", "spawner stacking.yml");
+        dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "spawner stacking.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
     }
 

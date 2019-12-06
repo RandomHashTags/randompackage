@@ -1,10 +1,10 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.dev.ActiveStronghold;
 import me.randomhashtags.randompackage.addon.Stronghold;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -70,11 +70,11 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             saveOtherData();
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "strongholds", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "strongholds", "_settings.yml"));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
 
-        for(File f : new File(dataFolder + separator + "strongholds").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "strongholds").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
                 /*final FileStronghold s = new FileStronghold(f);
                 gi.setItem(s.getSlot(), s.getItem());*/
@@ -82,7 +82,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         }
 
         captureTask = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
-            for(Stronghold s : strongholds.values()) {
+            for(Stronghold s : getAllStrongholds().values()) {
                 final ActiveStronghold a = s.getActiveStronghold();
                 if(a != null) {
                     final Collection<Entity> entities = s.getSquareCaptureZone().getEntities();
@@ -90,11 +90,11 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             }
         }, 20, 20);
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (strongholds != null ? strongholds.size() : 0) + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.STRONGHOLD).size() + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         SCHEDULER.cancelTask(captureTask);
-        strongholds = null;
+        unregister(Feature.STRONGHOLD);
     }
 
     public void viewStrongholds(Player player) {
@@ -127,7 +127,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         final Player player = event.getPlayer();
         final Block b = event.getBlock();
         final Location l = b.getLocation();
-        for(Stronghold s : strongholds.values()) {
+        for(Stronghold s : getAllStrongholds().values()) {
             final ActiveStronghold a = s.getActiveStronghold();
             if(a != null && s.getZone().contains(l)) {
                 final List<PolyBoundary> walls = a.getRepairableWalls();
@@ -146,7 +146,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         final Player player = event.getPlayer();
         final Block b = event.getBlock();
         final Location l = b.getLocation();
-        for(Stronghold s : strongholds.values()) {
+        for(Stronghold s : getAllStrongholds().values()) {
             final ActiveStronghold a = s.getActiveStronghold();
             if(a != null && s.getZone().contains(l)) {
                 event.setCancelled(true);

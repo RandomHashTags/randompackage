@@ -1,5 +1,6 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.command.Command;
@@ -48,7 +49,7 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
             final String[] a = otherdata.getString("last man standing.boundary").split("\\|");
             boundary = new PolyBoundary(toLocation(a[0]), Integer.parseInt(a[1]));
         }
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "last man standing.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "last man standing.yml"));
         rewards = new HashMap<>();
         final ConfigurationSection c = config.getConfigurationSection("rewards");
         if(c != null) {
@@ -58,7 +59,6 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         }
 
         playerStartTimes = new HashMap<>();
-
         final long interval = 40;
         task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, this::check, interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -73,16 +73,15 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         saveOtherData();
     }
 
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.lastmanstanding.help", true)) {
-            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
         }
     }
-    public void viewTop(CommandSender sender, int page) {
+    public void viewTop(@NotNull CommandSender sender, int page) {
         if(hasPermission(sender, "RandomPackage.lastmanstanding.top", true)) {
-            final List<String> msg = colorizeListString(config.getStringList("messages.top survivors"));
             final String p = Integer.toString(page);
-            for(String s : msg) {
+            for(String s : getMessage(config, "messages.top survivors")) {
                 s = s.replace("{PAGE}", p);
                 if(s.contains("{SURVIVOR}")) {
                 } else {

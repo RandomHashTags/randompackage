@@ -2,14 +2,14 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.addon.file.FileArmorSet;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,7 +51,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		save("custom armor", "_settings.yml");
 
 		inEquipmentLootbox = new ArrayList<>();
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "custom armor", "_settings.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "custom armor", "_settings.yml"));
 		equipmentLootbox = d(config, "items.equipment lootbox");
 		crystal = d(config, "items.crystal");
 		heroicUpgrade = d(config, "items.heroic upgrade");
@@ -68,7 +68,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
-		for(File f : new File(dataFolder + separator + "custom armor").listFiles()) {
+		for(File f : new File(DATA_FOLDER + SEPARATOR + "custom armor").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {

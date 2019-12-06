@@ -51,7 +51,7 @@ public class ActiveGlobalChallenge implements RPStorage {
                 final double v = ((BigDecimal) a.values().toArray()[0]).doubleValue();
                 if(before.doubleValue() <= v && after.doubleValue() > v) {
                     final HashMap<String, String> replacements = new HashMap<>();
-                    final String time = getRemainingTime(getRemainingTime());
+                    final String time = gc.getRemainingTime(getRemainingTime());
                     replacements.put("{TIME}", time);
                     replacements.put("{PLAYER}", Bukkit.getOfflinePlayer(player).getName());
                     replacements.put("{CHALLENGE}", type.getItem().getItemMeta().getDisplayName());

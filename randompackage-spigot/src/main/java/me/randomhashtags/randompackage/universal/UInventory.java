@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.util.universal;
+package me.randomhashtags.randompackage.universal;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;

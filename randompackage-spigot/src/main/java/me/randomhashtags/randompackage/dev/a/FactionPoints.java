@@ -25,7 +25,7 @@ public class FactionPoints extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "faction points.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "faction points.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "faction points.yml"));
         points = new HashMap<>();
         loadBackup();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Points &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -36,7 +36,7 @@ public class FactionPoints extends RPFeature {
 
     public void loadBackup() {
         points.clear();
-        dataF = new File(dataFolder + separator + "_Data", "faction points.yml");
+        dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction points.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
         final ConfigurationSection c = data.getConfigurationSection("points");
         if(c != null) {
@@ -54,7 +54,7 @@ public class FactionPoints extends RPFeature {
     private void save() {
         try {
             data.save(dataF);
-            dataF = new File(dataFolder + separator + "_Data", "faction points.yml");
+            dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction points.yml");
             data = YamlConfiguration.loadConfiguration(dataF);
         } catch (Exception e) {
             e.printStackTrace();

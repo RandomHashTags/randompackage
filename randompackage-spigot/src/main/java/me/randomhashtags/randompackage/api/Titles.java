@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Title;
 import me.randomhashtags.randompackage.addon.file.FileTitle;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
@@ -58,7 +58,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 
 		pages = new HashMap<>();
 
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "titles.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "titles.yml"));
 		interactableItem = d(config, "interactable item");
 		FileTitle.i = interactableItem;
 		nextpage = d(config, "gui.next page");

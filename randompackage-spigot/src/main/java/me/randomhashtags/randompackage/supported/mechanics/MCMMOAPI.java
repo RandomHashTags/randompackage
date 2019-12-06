@@ -37,7 +37,7 @@ public final class MCMMOAPI extends Reflect {
 	public void load() {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();
-		itemsConfig = YamlConfiguration.loadConfiguration(new File(dataFolder, "items.yml"));
+		itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
 		creditVoucher = givedpitem.items.get("mcmmocreditvoucher");
 		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");

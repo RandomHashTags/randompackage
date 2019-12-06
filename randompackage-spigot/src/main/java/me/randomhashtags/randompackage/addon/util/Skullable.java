@@ -2,9 +2,7 @@ package me.randomhashtags.randompackage.addon.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import me.randomhashtags.randompackage.RandomPackage;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
-import org.bukkit.Bukkit;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 

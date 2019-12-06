@@ -5,14 +5,14 @@ import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.util.obj.TObject;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,7 +52,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		final long started = System.currentTimeMillis();
 		registerEventAttributeListener(this);
 		save("_Data", "boosters.yml");
-		dataF = new File(dataFolder + separator + "_Data", "boosters.yml");
+		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 		if(!otherdata.getBoolean("saved default boosters")) {
 			final String[] a = new String[] {"FACTION_MCMMO", "FACTION_XP"};
@@ -70,7 +70,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
-		final File folder = new File(dataFolder + separator + "boosters");
+		final File folder = new File(DATA_FOLDER + SEPARATOR + "boosters");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileBooster bo = new FileBooster(f);

@@ -1,16 +1,13 @@
-package me.randomhashtags.randompackage.util.universal;
+package me.randomhashtags.randompackage.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.util.Versionable;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -20,17 +17,16 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public interface UVersionable extends Versionable {
-    File dataFolder = getPlugin.getDataFolder();
-    String separator = File.separator;
+    File DATA_FOLDER = getPlugin.getDataFolder();
+    String SEPARATOR = File.separator;
 
     RandomPackage RANDOM_PACKAGE = RandomPackage.getPlugin;
     PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
@@ -78,7 +74,7 @@ public interface UVersionable extends Versionable {
     }
 
     default void sendConsoleMessage(String msg) {
-        CONSOLE.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        CONSOLE.sendMessage(colorize(msg));
     }
     default String formatBigDecimal(BigDecimal b) {
         return formatBigDecimal(b, false);
@@ -107,19 +103,94 @@ public interface UVersionable extends Versionable {
     }
     default String formatInt(int integer) { return String.format("%,d", integer); }
     default int getRemainingInt(String string) {
-        string = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
+        string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
         return string.isEmpty() ? -1 : Integer.parseInt(string);
     }
+    default Double getRemainingDouble(String string) {
+        string = ChatColor.stripColor(colorize(string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
+        return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
+    }
+    default long getDelay(String input) {
+        input = input.toLowerCase();
+        long l = 0;
+        if(input.contains("d")) {
+            final String[] s = input.split("d");
+            l += getRemainingDouble(s[0])*1000*60*60*24;
+            input = s.length > 1 ? s[1] : input;
+        }
+        if(input.contains("h")) {
+            final String[] s = input.split("h");
+            l += getRemainingDouble(s[0])*1000*60*60;
+            input = s.length > 1 ? s[1] : input;
+        }
+        if(input.contains("m")) {
+            final String[] s = input.split("m");
+            l += getRemainingDouble(s[0])*1000*60;
+            input = s.length > 1 ? s[1] : input;
+        }
+        if(input.contains("s")) {
+            l += getRemainingDouble(input.split("s")[0])*1000;
+        }
+        return l;
+    }
+
+    default double round(double input, int decimals) {
+        // From http://www.baeldung.com/java-round-decimal-number
+        if(decimals < 0) throw new IllegalArgumentException();
+        BigDecimal bd = new BigDecimal(Double.toString(input));
+        bd = bd.setScale(decimals, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+    default String roundDoubleString(double input, int decimals) {
+        final double d = round(input, decimals);
+        return Double.toString(d);
+    }
+
+    default String center(String s, int size) {
+        // Credit to "Sahil Mathoo" from StackOverFlow at https://stackoverflow.com/questions/8154366
+        return center(s, size, ' ');
+    }
+    default String center(String s, int size, char pad) {
+        if(s == null || size <= s.length()) {
+            return s;
+        }
+        final StringBuilder sb = new StringBuilder(size);
+        for(int i = 0; i < (size - s.length()) / 2; i++) {
+            sb.append(pad);
+        }
+        sb.append(s);
+        while(sb.length() < size) {
+            sb.append(pad);
+        }
+        return sb.toString();
+    }
+
     default List<String> colorizeListString(List<String> input) {
         final List<String> i = new ArrayList<>();
         if(input != null) {
             for(String s : input) {
-                i.add(ChatColor.translateAlternateColorCodes('&', s));
+                i.add(colorize(s));
             }
         }
         return i;
     }
-    default String colorize(String input) { return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL"; }
+    default String colorize(String input) {
+        return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL";
+    }
+    default void sendStringListMessage(CommandSender sender, List<String> message, HashMap<String, String> replacements) {
+        if(message != null && message.size() > 0 && !message.get(0).equals("")) {
+            for(String s : message) {
+                if(replacements != null) {
+                    for(String r : replacements.keySet()) {
+                        s = s.replace(r, replacements.get(r));
+                    }
+                }
+                if(s != null) {
+                    sender.sendMessage(colorize(s));
+                }
+            }
+        }
+    }
 
     default Entity getHitEntity(ProjectileHitEvent event) {
         if(EIGHT || NINE || TEN) {
@@ -218,5 +289,85 @@ public interface UVersionable extends Versionable {
 
     default BlockFace getFacing(Entity entity) {
         return LEGACY || THIRTEEN ? BLOCK_FACES[Math.round(entity.getLocation().getYaw() / 45f) & 0x7] : entity.getFacing();
+    }
+    default String toReadableDate(Date d, String format) {
+        return new SimpleDateFormat(format).format(d);
+    }
+
+    default Color getColor(String path) {
+        if(path == null) {
+            return null;
+        }
+        switch (path.toLowerCase()) {
+            case "aqua": return Color.AQUA;
+            case "black": return Color.BLACK;
+            case "blue": return Color.BLUE;
+            case "fuchsia": return Color.FUCHSIA;
+            case "gray": return Color.GRAY;
+            case "green": return Color.GREEN;
+            case "lime": return Color.LIME;
+            case "maroon": return Color.MAROON;
+            case "navy": return Color.NAVY;
+            case "olive": return Color.OLIVE;
+            case "orange": return Color.ORANGE;
+            case "purple": return Color.PURPLE;
+            case "red": return Color.RED;
+            case "silver": return Color.SILVER;
+            case "teal": return Color.TEAL;
+            case "white": return Color.WHITE;
+            case "yellow": return Color.YELLOW;
+            default: return null;
+        }
+    }
+    default LivingEntity getEntity(String type, Location l) {
+        final World w = l.getWorld();
+        final LivingEntity le;
+        switch (type.toUpperCase()) {
+            case "BAT": return w.spawn(l, Bat.class);
+            case "BLAZE": return w.spawn(l, Blaze.class);
+            case "CAVE_SPIDER": return w.spawn(l, CaveSpider.class);
+            case "CHICKEN": return w.spawn(l, Chicken.class);
+            case "COW": return w.spawn(l, Cow.class);
+            case "CREEPER": return w.spawn(l, Creeper.class);
+            case "ENDER_DRAGON": return w.spawn(l, EnderDragon.class);
+            case "ENDERMAN": return w.spawn(l, Enderman.class);
+            case "GHAST": return w.spawn(l, Ghast.class);
+            case "GIANT": return w.spawn(l, Giant.class);
+            case "GUARDIAN": return w.spawn(l, Guardian.class);
+            case "HORSE": return w.spawn(l, Horse.class);
+            case "IRON_GOLEM": return w.spawn(l, IronGolem.class);
+            case "LLAMA": return EIGHT || NINE || TEN ? null : w.spawn(l, Llama.class);
+            case "MAGMA_CUBE": return w.spawn(l, MagmaCube.class);
+            case "MUSHROOM_COW": return w.spawn(l, MushroomCow.class);
+            case "OCELOT": return w.spawn(l, Ocelot.class);
+            case "PARROT": return EIGHT || NINE || TEN || ELEVEN ? null : w.spawn(l, Parrot.class);
+            case "PIG": return w.spawn(l, Pig.class);
+            case "PIG_ZOMBIE": return w.spawn(l, PigZombie.class);
+            case "RABBIT": return w.spawn(l, Rabbit.class);
+            case "SHEEP": return w.spawn(l, Sheep.class);
+            case "SHULKER": return EIGHT ? null : w.spawn(l, Shulker.class);
+            case "SILVERFISH": return w.spawn(l, Silverfish.class);
+            case "SKELETON": return w.spawn(l, Skeleton.class);
+            case "SLIME": return w.spawn(l, Slime.class);
+            case "SNOWMAN": return w.spawn(l, Snowman.class);
+            case "SQUID": return w.spawn(l, Squid.class);
+            case "SPIDER": return w.spawn(l, Spider.class);
+            case "STRAY": return EIGHT || NINE ? null : w.spawn(l, Stray.class);
+            case "VEX": return EIGHT || NINE || TEN ? null : w.spawn(l, Vex.class);
+            case "VILLAGER": return w.spawn(l, Villager.class);
+            case "VINDICATOR": return EIGHT || NINE || TEN ? null : w.spawn(l, Vindicator.class);
+            case "WITHER_SKELETON":
+                if(EIGHT || NINE || TEN) {
+                    le = w.spawn(l, Skeleton.class);
+                    ((Skeleton) le).setSkeletonType(Skeleton.SkeletonType.WITHER);
+                    return le;
+                } else {
+                    return w.spawn(l, WitherSkeleton.class);
+                }
+            case "ZOMBIE": return w.spawn(l, Zombie.class);
+            case "ZOMBIE_HORSE": return EIGHT ? null : w.spawn(l, ZombieHorse.class);
+            case "ZOMBIE_VILLAGER": return EIGHT ? null : w.spawn(l, ZombieVillager.class);
+            default: return null;
+        }
     }
 }

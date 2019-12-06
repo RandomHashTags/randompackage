@@ -4,10 +4,10 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
 import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -74,7 +74,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			for(String s : c)
 				preset.add(toLocation(s));
 		}
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "envoy tiers", "_settings.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "envoy tiers", "_settings.yml"));
 		type = config.getString("settings.type");
 		envoySummon = d(config, "items.envoy summon");
 
@@ -94,7 +94,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 
 		final List<ItemStack> tiers = new ArrayList<>();
-		for(File f : new File(dataFolder + separator + "envoy tiers").listFiles()) {
+		for(File f : new File(DATA_FOLDER + SEPARATOR + "envoy tiers").listFiles()) {
 			if(!f.getAbsoluteFile().getName().equals("_settings")) {
 				final FileEnvoyCrate e = new FileEnvoyCrate(f);
 				tiers.add(e.getItem());

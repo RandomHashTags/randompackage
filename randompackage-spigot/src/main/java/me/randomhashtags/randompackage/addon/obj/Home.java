@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.obj;
 
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 
 public class Home {

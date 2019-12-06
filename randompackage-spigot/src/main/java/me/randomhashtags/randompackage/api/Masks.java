@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.Mask;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.addon.file.FileMask;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -51,7 +51,7 @@ public class Masks extends CustomEnchants {
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "masks", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "masks", "_settings.yml"));
 
         equippedMasks = new HashMap<>();
         maskgenerator = d(config, "items.generator");
@@ -71,7 +71,7 @@ public class Masks extends CustomEnchants {
             otherdata.set("saved default masks", true);
             saveOtherData();
         }
-        for(File f : new File(dataFolder + separator + "masks").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "masks").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
                 ms.add(m.getItem());

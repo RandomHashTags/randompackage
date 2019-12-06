@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addon.file.PathBlackScroll;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

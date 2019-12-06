@@ -42,10 +42,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     private boolean active, hasStarted;
     private Scoreboard scoreboard;
     private String world;
-    private int activeTask, startTask;
-
-    private int maxTeamSize, maxPlayers, maxTeams;
-    private List<String> cannotHurtTeamMembers;
+    private int activeTask, startTask, maxTeamSize, maxPlayers, maxTeams;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -73,10 +70,9 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "battle royale.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "battle royale.yml"));
         teams = new LinkedHashMap<>();
         world = config.getString("settings.world");
-        cannotHurtTeamMembers = colorizeListString(config.getStringList("messages.cannot hurt team members"));
         maxPlayers = config.getInt("settings.max players");
         maxTeamSize = config.getInt("settings.team sizes");
         maxTeams = maxPlayers/maxTeamSize;
@@ -106,7 +102,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     }
     public final void viewHelp(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.battleroyale.help", true)) {
-            sendStringListMessage(sender, config.getStringList("messages.help"), null);
+            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
         }
     }
     public final void tryJoining(Player player) {
@@ -118,7 +114,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                 } else {
                 }
             } else {
-                sendStringListMessage(player, config.getStringList("messages.not joinable"), null);
+                sendStringListMessage(player, getMessage(config, "messages.not joinable"), null);
             }
         }
     }
@@ -146,7 +142,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             active = true;
             startTime = System.currentTimeMillis();
             startTask = -1;
-            for(String s : colorizeListString(config.getStringList("messages.now joinable"))) {
+            for(String s : colorizeListString(getMessage(config, "messages.now joinable"))) {
                 Bukkit.broadcastMessage(s);
             }
             final Objective obj = scoreboard.getObjective("dummy");
@@ -178,7 +174,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             startTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::start, delay);
             nextStartTime = System.currentTimeMillis()+(delay*1000);
 
-            final List<String> receivedLootbag = colorizeListString(config.getStringList("messages.won.received lootbag"));
+            final List<String> receivedLootbag = colorizeListString(getMessage(config, "messages.won.received lootbag"));
             if(winningTeam != null) {
                 final HashMap<Player, Boolean> status = winningTeam.getPlayers();
                 final List<String> winners = new ArrayList<>();
@@ -194,7 +190,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                     }
                 }
                 final String string = winners.toString(), players = string.substring(0, string.length()-1);
-                for(String s : colorizeListString(config.getStringList("messages.ended"))) {
+                for(String s : colorizeListString(getMessage(config, "messages.ended"))) {
                     s = s.replace("{TEAM}", players);
                     Bukkit.broadcastMessage(s);
                 }
@@ -293,7 +289,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                         event.setCancelled(true);
                         d.updateInventory();
                         v.updateInventory();
-                        sendStringListMessage(d, cannotHurtTeamMembers, null);
+                        sendStringListMessage(d, getMessage(config, "messages.cannot hurt team members"), null);
                     }
                 }
             }

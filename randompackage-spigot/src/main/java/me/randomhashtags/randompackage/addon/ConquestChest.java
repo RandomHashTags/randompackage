@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.living.LivingConquestChest;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.addon.util.Rewardable;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 
 import java.util.HashMap;

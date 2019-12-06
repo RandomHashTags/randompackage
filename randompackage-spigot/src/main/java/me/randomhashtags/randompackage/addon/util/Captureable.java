@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.util;
 
-import me.randomhashtags.randompackage.addon.enums.CaptureType;
+import me.randomhashtags.randompackage.enums.CaptureType;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

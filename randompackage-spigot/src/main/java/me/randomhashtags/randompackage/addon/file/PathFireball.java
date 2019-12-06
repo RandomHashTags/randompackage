@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;

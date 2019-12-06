@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

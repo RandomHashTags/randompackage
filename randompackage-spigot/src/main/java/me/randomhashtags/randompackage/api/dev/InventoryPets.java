@@ -1,14 +1,15 @@
 package me.randomhashtags.randompackage.api.dev;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
+import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.Packeter;
 import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -70,8 +71,9 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             otherdata.set("saved default inventory pets", true);
             saveOtherData();
         }
+        final String folder = DATA_FOLDER + SEPARATOR + "inventory pets";
         final List<ItemStack> pets = new ArrayList<>();
-        for(File f : new File(dataFolder + separator + "inventory pets").listFiles()) {
+        for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
                 if(p.isEnabled()) {
@@ -80,7 +82,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             }
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "inventory pets.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(folder, "inventory pets.yml"));
         leash = d(config, "items.leash");
         leashedLore = colorize(config.getString("items.leash.applied lore"));
         rarecandy = d(config, "items.rare candy");
@@ -90,12 +92,12 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         pets.add(rarecandy);
         addGivedpCategory(pets, UMaterial.PLAYER_HEAD_ITEM, "Inventory Pets", "Givedp: Inventory Pets");
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + (inventorypets != null ? inventorypets.size() : 0) + " Inventory Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.INVENTORY_PET).size() + " Inventory Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         for(UUID u : leashedUponDeath.keySet()) {
         }
-        inventorypets = null;
+        unregister(Feature.INVENTORY_PET);
     }
 
     public HashMap<InventoryPet, String> isInventoryPet(ItemStack is) {
@@ -144,7 +146,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         return is != null && is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().contains(leashedLore);
     }
     public boolean tryLeashing(ItemStack is) {
-        if(inventorypets != null && !isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
+        if(!isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
             itemMeta = is.getItemMeta();
             final List<String> l = new ArrayList<>(itemMeta.getLore());
             l.add(leashedLore);
@@ -155,7 +157,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         return false;
     }
     public boolean tryUsingRareCandy(ItemStack is) {
-        if(inventorypets != null && is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final String i = getRPItemStackValue(is, "InventoryPetInfo");
             if(i != null) {
                 final String[] info = i.split(":");
@@ -190,7 +192,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             } else {
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TIME}", getRemainingTime(remainingtime));
-                sendStringListMessage(player, config.getStringList("messages.on cooldown"), replacements);
+                sendStringListMessage(player, getMessage(config, "messages.on cooldown"), replacements);
                 return 0;
             }
         }

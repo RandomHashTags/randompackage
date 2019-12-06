@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

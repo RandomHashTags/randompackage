@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.FatBucket;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.addon.file.FileFatBucket;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -43,7 +43,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             saveOtherData();
         }
         final List<ItemStack> buckets = new ArrayList<>();
-        for(File f : new File(dataFolder + separator + "fat buckets").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "fat buckets").listFiles()) {
             final FileFatBucket ffb = new FileFatBucket(f);
             buckets.add(ffb.getItem(ffb.getUses()));
         }

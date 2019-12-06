@@ -3,14 +3,14 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.attribute.SetLevelupChance;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileFallenHero;
 import me.randomhashtags.randompackage.util.listener.KitEvents;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -76,7 +76,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             new SetLevelupChance().load();
             isEnabled = true;
             save("kits", "_settings.yml");
-            config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "kits", "_settings.yml"));
+            config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "kits", "_settings.yml"));
             PLUGIN_MANAGER.registerEvents(KitEvents.getKitEvents(), RANDOM_PACKAGE);
 
             if(!otherdata.getBoolean("saved default fallen heroes")) {
@@ -85,7 +85,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 otherdata.set("saved default fallen heroes", true);
                 saveOtherData();
             }
-            final File folder = new File(dataFolder + separator + "fallen heroes");
+            final File folder = new File(DATA_FOLDER + SEPARATOR + "fallen heroes");
             if(folder.exists()) {
                 for(File f : folder.listFiles()) {
                     new FileFallenHero(f);

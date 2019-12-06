@@ -7,8 +7,8 @@ import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -94,7 +94,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "coinflip.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "coinflip.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "coinflip.yml"));
 
         isLegacy = EIGHT || NINE || TEN || ELEVEN;
 

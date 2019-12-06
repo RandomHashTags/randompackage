@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.async.*;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;

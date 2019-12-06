@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,10 +27,9 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
     }
 
     public String getIdentifier() { return "TITAN_ATTRIBUTES"; }
-
     public void load() {
         final long started = System.currentTimeMillis();
-        final String folder = dataFolder + separator + "titan attributes";
+        final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";
         save("titan attributes", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
@@ -44,7 +44,7 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
 
         for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
-                new FileTitanAttribute(f);
+                //new FileTitanAttribute(f);
             }
         }
 

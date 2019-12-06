@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.obj.AuctionedItem;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -99,9 +99,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
     public void load() {
         save(null, "auction house.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "auction house.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "auction house.yml"));
         save("_Data", "auctions.yml");
-        dataF = new File(dataFolder + separator + "_Data", "auctions.yml");
+        dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "auctions.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
 
         purchasing = new HashMap<>();
@@ -276,7 +276,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     private void save() {
         try {
             data.save(dataF);
-            dataF = new File(dataFolder + separator + "_Data", "auctions.yml");
+            dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "auctions.yml");
             data = YamlConfiguration.loadConfiguration(dataF);
         } catch(IOException e) {
             e.printStackTrace();

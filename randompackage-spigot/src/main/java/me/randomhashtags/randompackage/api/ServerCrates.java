@@ -5,12 +5,12 @@ import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.addon.ServerCrateFlare;
 import me.randomhashtags.randompackage.addon.file.FileServerCrate;
 import me.randomhashtags.randompackage.addon.living.LivingServerCrate;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.universal.UInventory;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,7 +63,7 @@ public class ServerCrates extends RPFeature {
 			saveOtherData();
 		}
 		final List<ItemStack> flares = new ArrayList<>(), crates = new ArrayList<>();
-		final File folder = new File(dataFolder + separator + "server crates");
+		final File folder = new File(DATA_FOLDER + SEPARATOR + "server crates");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileServerCrate sc = new FileServerCrate(f);

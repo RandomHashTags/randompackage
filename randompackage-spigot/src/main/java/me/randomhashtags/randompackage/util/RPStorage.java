@@ -110,37 +110,9 @@ public abstract class RPStorage extends RegionalAPI {
         return null;
     }
 
-    public Dungeon valueOfDungeonFromKey(ItemStack is) {
-        if(dungeons != null && is != null) {
-            for(Dungeon d : dungeons.values()) {
-                if(d.getKey().isSimilar(is)) {
-                    return d;
-                }
-            }
-        }
-        return null;
-    }
-    public Dungeon valueOfDungeonFromPortal(ItemStack is) {
-        if(dungeons != null && is != null) {
-            for(Dungeon d : dungeons.values()) {
-                if(d.getPortal().isSimilar(is)) {
-                    return d;
-                }
-            }
-        }
-        return null;
-    }
 
-    public Outpost valueOfOutpost(int slot) {
-        if(outposts != null) {
-            for(Outpost o : outposts.values()) {
-                if(o.getSlot() == slot) {
-                    return o;
-                }
-            }
-        }
-        return null;
-    }
+
+
     public InventoryPet valueOfInventoryPet(ItemStack is) {
         if(inventorypets != null && is != null) {
             for(InventoryPet p : inventorypets.values()) {

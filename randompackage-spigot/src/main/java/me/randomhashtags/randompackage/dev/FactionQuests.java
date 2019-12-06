@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import org.bukkit.command.Command;
@@ -29,7 +29,7 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save("faction quests", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "faction quests", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction quests", "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default faction quests")) {
             final String[] q = new String[]{
@@ -58,7 +58,7 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
             otherdata.set("saved default faction quests", true);
             saveOtherData();
         }
-        for(File f : new File(dataFolder + separator + "faction quests").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "faction quests").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
             }
         }

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Stronghold;
-import me.randomhashtags.randompackage.addon.enums.CaptureType;
+import me.randomhashtags.randompackage.enums.CaptureType;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Location;

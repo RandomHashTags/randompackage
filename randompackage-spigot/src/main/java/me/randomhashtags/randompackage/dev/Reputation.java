@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -26,7 +26,7 @@ public class Reputation extends RPFeature {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "reputation.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder, "reputation.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "reputation.yml"));
         sendConsoleMessage("&6[RandomPackage] &aLoaded Reputation &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

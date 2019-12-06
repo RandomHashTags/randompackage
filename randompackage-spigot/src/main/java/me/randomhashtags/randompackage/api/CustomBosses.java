@@ -5,8 +5,8 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.addon.file.FileCustomBoss;
-import me.randomhashtags.randompackage.dev.Feature;
-import me.randomhashtags.randompackage.util.universal.UMaterial;
+import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -50,7 +50,7 @@ public class CustomBosses extends EventAttributes {
 			saveOtherData();
 		}
 		final List<ItemStack> j = new ArrayList<>();
-		final File folder = new File(dataFolder + separator + "custom bosses");
+		final File folder = new File(DATA_FOLDER + SEPARATOR + "custom bosses");
 		if(folder.exists()) {
 			for(File f : folder.listFiles()) {
 				final FileCustomBoss b = new FileCustomBoss(f);

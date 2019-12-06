@@ -27,7 +27,7 @@ public class FileFaction extends RPAddon implements Faction {
     }
     public FileFaction(@NotNull String tag) {
         this.uuid = UUID.randomUUID();
-        final File folder = new File(dataFolder + separator + "_Data" + separator + "factions");
+        final File folder = new File(DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "factions");
         final File f = new File(folder, uuid.toString() + ".yml");
         try {
             if(!folder.exists()) {

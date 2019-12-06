@@ -5,11 +5,11 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -74,7 +74,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
 
         new IncreasePQuest().load();
         registerEventAttributeListener(this);
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "player quests", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "player quests", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         shop = new UInventory(null, config.getInt("shop.size"), colorize(config.getString("shop.title")));
@@ -187,7 +187,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             otherdata.set("saved default player quests", true);
             saveOtherData();
         }
-        for(File f : new File(dataFolder + separator + "player quests").listFiles()) {
+        for(File f : new File(DATA_FOLDER + SEPARATOR + "player quests").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FilePlayerQuest(f);
             }

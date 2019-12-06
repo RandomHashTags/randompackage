@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
-import me.randomhashtags.randompackage.util.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

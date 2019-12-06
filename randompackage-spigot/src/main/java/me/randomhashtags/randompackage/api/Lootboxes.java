@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
-import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addon.file.FileLootbox;
-import me.randomhashtags.randompackage.dev.Feature;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -61,7 +61,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     public void load() {
         final long sc = System.currentTimeMillis();
         save("lootboxes", "_settings.yml");
-        config = YamlConfiguration.loadConfiguration(new File(dataFolder + separator + "lootboxes", "_settings.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "lootboxes", "_settings.yml"));
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
@@ -89,7 +89,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             otherdata.set("saved default lootboxes", true);
             saveOtherData();
         }
-        final File folder = new File(dataFolder + separator + "lootboxes");
+        final File folder = new File(DATA_FOLDER + SEPARATOR + "lootboxes");
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {

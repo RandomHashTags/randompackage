@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.universal.UInventory;
+import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -78,7 +78,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		final long started = System.currentTimeMillis();
 		save(null, "showcase.yml");
 
-		config = YamlConfiguration.loadConfiguration(new File(dataFolder, "showcase.yml"));
+		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "showcase.yml"));
 		expansion = d(config, "items.expansion");
 		givedpitem.items.put("showcaseexpansion", expansion);
 		givedpitem.items.put("showcaseexpander", expansion);
