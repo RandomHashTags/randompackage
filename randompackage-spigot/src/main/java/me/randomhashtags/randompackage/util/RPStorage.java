@@ -69,49 +69,6 @@ public abstract class RPStorage extends RegionalAPI {
         }
         return null;
     }
-    public CustomKit valueOfCustomKit(int slot, Class<?> type) {
-        if(kits != null && type != null) {
-            for(CustomKit k : kits.values()) {
-                if(k.getSlot() == slot && type.isAssignableFrom(k.getClass())) {
-                    return k;
-                }
-            }
-        }
-        return null;
-    }
-    public CustomKitEvolution valueOfCustomKitUpgradeGem(ItemStack is) {
-        if(is != null && kits != null) {
-            final Class clazz = CustomKitEvolution.class;
-            for(CustomKit k : kits.values()) {
-                if(k.getClass().isAssignableFrom(clazz)) {
-                    final CustomKitEvolution e = (CustomKitEvolution) k;
-                    final ItemStack i = e.getUpgradeGem();
-                    if(i != null && i.isSimilar(is)) {
-                        return e;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    public CustomKitMastery valueOfCustomKitRedeem(ItemStack is) {
-        if(kits != null && is != null) {
-            for(CustomKit k : kits.values()) {
-                final boolean istype = k instanceof CustomKitMastery;
-                if(istype) {
-                    final CustomKitMastery m = (CustomKitMastery) k;
-                    final ItemStack r = m.getRedeem();
-                    if(r != null && r.isSimilar(is)) {
-                        return m;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-
-
 
     public InventoryPet valueOfInventoryPet(ItemStack is) {
         if(inventorypets != null && is != null) {

@@ -3,11 +3,12 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.addon.Kits;
-import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileKitGlobal;
+import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -109,9 +110,9 @@ public class KitsGlobal extends Kits {
                 }
             }
         }
-        if(kits != null) {
-            for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof CustomKitGlobal) kits.remove(k.getIdentifier());
+        for(CustomKit k : new ArrayList<>(getAllCustomKits().values())) {
+            if(k instanceof CustomKitGlobal) {
+                FEATURES.get(Feature.CUSTOM_KIT).remove(k.getIdentifier());
             }
         }
         FileKitGlobal.heroicprefix = null;

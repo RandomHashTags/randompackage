@@ -6,9 +6,9 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
-import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -30,6 +30,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -224,7 +225,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("fallenherogem")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
             CustomKit k = type != null ? getCustomKit(type) : null;
-            final List<CustomKit> kits = new ArrayList<>(getAllCustomKits().values());
+            final Collection<CustomKit> kits = getAllCustomKits().values();
             if(type != null && k == null) {
                 final List<CustomKit> list = new ArrayList<>();
                 for(CustomKit kk : kits) {
@@ -241,9 +242,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("fallenhero")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
             CustomKit k = type != null ? getCustomKit(type) : null;
+            final Collection<CustomKit> kits = getAllCustomKits().values();
             if(type != null && k == null) {
                 final List<CustomKit> list = new ArrayList<>();
-                for(CustomKit kk : kits.values()) {
+                for(CustomKit kk : kits) {
                     if(kk.getIdentifier().startsWith(type)) {
                         list.add(kk);
                     }
@@ -251,7 +253,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 final int s = list.size();
                 if(s > 0) k = list.get(RANDOM.nextInt(s));
             }
-            if(k == null) k = (CustomKit) kits.values().toArray()[RANDOM.nextInt(kits.size())];
+            if(k == null) k = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
             return f != null ? k.getFallenHeroItem(k, true) : air;
         } else if(input.startsWith("fatbucket:")) {

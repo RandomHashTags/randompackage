@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.*;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileKitMastery;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -77,11 +78,9 @@ public class KitsMastery extends Kits {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Mastery Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        if(kits != null) {
-            for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof CustomKitMastery) {
-                    kits.remove(k.getIdentifier());
-                }
+        for(CustomKit k : new ArrayList<>(getAllCustomKits().values())) {
+            if(k instanceof CustomKitMastery) {
+                FEATURES.get(Feature.CUSTOM_KIT).remove(k.getIdentifier());
             }
         }
         unloadKitUtils();
@@ -116,7 +115,7 @@ public class KitsMastery extends Kits {
                     for(String s : itemMeta.getLore()) {
                         if(s.contains("{") && s.contains("}")) {
                             final String t = s.split("\\{")[1].split("}")[0];
-                            final CustomKit k = getKit(t);
+                            final CustomKit k = getCustomKit(t);
                             if(k != null) {
                                 s = s.replace("{" + k.getIdentifier() + "}", k.getFallenHeroName());
                             }

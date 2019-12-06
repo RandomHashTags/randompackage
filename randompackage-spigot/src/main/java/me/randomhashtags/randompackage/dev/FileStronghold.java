@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.dev;
 import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.enums.CaptureType;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public abstract class FileStronghold extends RPAddon implements Stronghold {
     private List<String> noLongerControllingMsg, tokenControlMsg;
     public FileStronghold(File f) {
         load(f);
-        addStronghold(this);
+        register(Feature.STRONGHOLD, this);
     }
     public String getIdentifier() { return getYamlName(); }
 

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.StackedSpawner;
@@ -43,7 +43,6 @@ public class SpawnerStacking extends RPFeature {
     private int defaultMaxStackSize;
     private HashMap<String, HashMap<String, Integer>> maxStackSizes;
     private HashMap<Location, StackedSpawner> stacks;
-    private List<String> addedSpawner, viewAmount, onlyStackUpToMax;
 
     public String getIdentifier() { return "SPAWNER_STACKING"; }
     public void load() {
@@ -54,10 +53,6 @@ public class SpawnerStacking extends RPFeature {
 
         save(null, "spawner stacking.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "spawner stacking.yml"));
-
-        addedSpawner = colorizeListString(config.getStringList("messages.added spawner"));
-        viewAmount = colorizeListString(config.getStringList("messages.view amount"));
-        onlyStackUpToMax = colorizeListString(config.getStringList("messages.only stack up to max"));
 
         spawnerMaterial = UMaterial.SPAWNER.getVersionName();
         onlyStackableInClaimFactionLand = config.getBoolean("only stackable in.claimed faction land");
@@ -138,7 +133,7 @@ public class SpawnerStacking extends RPFeature {
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{TYPE}", c.getSpawnedType().name());
             replacements.put("{AMOUNT}", formatInt(stacks.get(spawnerLocation).getStack()));
-            sendStringListMessage(player, viewAmount, replacements);
+            sendStringListMessage(player, getMessage(config, "messages.view amount"), replacements);
         }
     }
 
@@ -179,10 +174,10 @@ public class SpawnerStacking extends RPFeature {
                                 final HashMap<String, String> replacements = new HashMap<>();
                                 replacements.put("{TYPE}", first.name());
                                 replacements.put("{TOTAL}", Integer.toString(newSize));
-                                sendStringListMessage(player, addedSpawner, replacements);
+                                sendStringListMessage(player, getMessage(config, "messages.added spawner"), replacements);
                             } else {
                                 final HashMap<String, String> replacements = new HashMap<String, String>(){{ put("{MAX}", Integer.toString(max)); }};
-                                sendStringListMessage(player, onlyStackUpToMax, replacements);
+                                sendStringListMessage(player, getMessage(config, "messages.only stack up to max"), replacements);
                             }
                         }
                     } else {

@@ -17,8 +17,6 @@ public class isDamagedEvent extends DamageEvent {
         this.victim = victim;
         this.damager = null;
     }
-    @Override
-    public Player getEntity() { return victim; }
-    @Override
-    public LivingEntity getDamager() { return damager; }
+    @Override public Player getEntity() { return victim; }
+    @Override public LivingEntity getDamager() { return damager; }
 }

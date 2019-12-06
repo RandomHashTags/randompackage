@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.dev.LastManStanding;
 import me.randomhashtags.randompackage.dev.Outposts;
-import me.randomhashtags.randompackage.dev.a.SpawnerStacking;
+import me.randomhashtags.randompackage.dev.SpawnerStacking;
 import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
 import me.randomhashtags.randompackage.event.FoodLevelLostEvent;

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Outpost;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.enums.OutpostStatus;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
 import org.bukkit.ChatColor;
@@ -24,7 +25,7 @@ public abstract class FileOutpost extends RPAddon implements Outpost {
     private double controlPercent;
     public FileOutpost(File f) {
         load(f);
-        addOutpost(this);
+        register(Feature.OUTPOST, this);
     }
     public String getIdentifier() { return getYamlName(); }
 

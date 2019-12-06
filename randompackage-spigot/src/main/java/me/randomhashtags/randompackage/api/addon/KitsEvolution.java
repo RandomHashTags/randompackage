@@ -4,14 +4,15 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;
 import me.randomhashtags.randompackage.addon.Kits;
+import me.randomhashtags.randompackage.addon.file.FileKitEvolution;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
-import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileKitEvolution;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -101,9 +102,9 @@ public class KitsEvolution extends Kits {
                 }
             }
         }
-        if(kits != null) {
-            for(CustomKit k : new ArrayList<>(kits.values())) {
-                if(k instanceof CustomKitEvolution) kits.remove(k.getIdentifier());
+        for(CustomKit k : new ArrayList<>(getAllCustomKits().values())) {
+            if(k instanceof CustomKitEvolution) {
+                FEATURES.get(Feature.CUSTOM_KIT).remove(k.getIdentifier());
             }
         }
         unloadKitUtils();

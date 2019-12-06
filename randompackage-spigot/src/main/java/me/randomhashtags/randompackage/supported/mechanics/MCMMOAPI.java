@@ -5,7 +5,6 @@ import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
 import me.randomhashtags.randompackage.util.Reflect;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -71,7 +70,7 @@ public final class MCMMOAPI extends Reflect {
 	public String getSkillName(String skill) {
 		if(skill.equalsIgnoreCase("random")) skill = getRandomSkill();
 		final String a = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase().replace("_skills", ""));
-		return a != null ? ChatColor.translateAlternateColorCodes('&', a) : null;
+		return a != null ? colorize(a) : null;
 	}
 	public String getRandomSkill() {
 		if(isClassic) {
@@ -138,7 +137,7 @@ public final class MCMMOAPI extends Reflect {
 				}
 				if(numberslot == -1 || skillslot == -1) return;
 				final List<String> L = m.getLore();
-				final String input = L.get(numberslot), o = ChatColor.translateAlternateColorCodes('&', itemsConfig.getStringList("mcmmo vouchers." + itemtype + ".lore").get(skillslot));
+				final String input = L.get(numberslot), o = colorize(itemsConfig.getStringList("mcmmo vouchers." + itemtype + ".lore").get(skillslot));
 				final String type = getSkillName(L.get(skillslot), o);
 				int xp = getRemainingInt(input);
 				event.setCancelled(true);

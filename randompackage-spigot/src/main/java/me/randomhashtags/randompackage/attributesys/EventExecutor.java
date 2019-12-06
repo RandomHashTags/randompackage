@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.obj.TObject;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -90,7 +91,9 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     passed = cancelled == Boolean.parseBoolean(value);
                     hasCancelled = true;
                 } else if(condition.startsWith("chance=")) {
-                    final boolean check = RANDOM.nextInt(100) < evaluate(value);
+                    final double chance = evaluate(value);
+                    Bukkit.broadcastMessage("EventExecutor;value=" + value + ";chance=" + chance);
+                    final boolean check = RANDOM.nextInt(100) < chance;
                     passed = check;
                     didProc = check;
                 } else if(condition.startsWith("didproc")) {
@@ -364,25 +367,29 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         //final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
         for(ItemStack is : enchants.keySet()) {
             final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
-            for(CustomEnchant enchant : e.keySet()) {
-                final boolean onCorrectItem = enchant.isOnCorrectItem(is);
-                //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
-                //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getName() + ";onCorrectItem=" + onCorrectItem);
-                if(onCorrectItem) {
-                    final int lvl = e.get(enchant);
-                    final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
-                    try {
-                        trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
-                    } catch (Exception error) {
-                        sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error!");
-                        error.printStackTrace();
-                    }
+            if(e != null) {
+                for(CustomEnchant enchant : e.keySet()) {
+                    final boolean onCorrectItem = enchant.isOnCorrectItem(is);
+                    //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
+                    //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getName() + ";onCorrectItem=" + onCorrectItem);
+                    if(onCorrectItem) {
+                        final int lvl = e.get(enchant);
+                        Bukkit.broadcastMessage("EventExecutor;executing enchant " + enchant.getIdentifier() + " " + lvl);
+                        Bukkit.broadcastMessage("EventExecutor;event=" + event.getEventName() + ";entities=" + entities);
+                        final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
+                        try {
+                            trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
+                        } catch (Exception error) {
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error!");
+                            error.printStackTrace();
+                        }
 
-                    try {
-                        trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
-                    } catch (Exception error) {
-                        sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error!");
-                        error.printStackTrace();
+                        try {
+                            trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
+                        } catch (Exception error) {
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error!");
+                            error.printStackTrace();
+                        }
                     }
                 }
             }

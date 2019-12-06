@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.dev.dungeons;
 
 import me.randomhashtags.randompackage.addon.Dungeon;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +15,7 @@ public abstract class FileDungeon extends RPAddon implements Dungeon {
 
     public FileDungeon(File f) {
         load(f);
-        addDungeon(this);
+        register(Feature.DUNGEON, this);
     }
     public String getIdentifier() { return getYamlName(); }
 

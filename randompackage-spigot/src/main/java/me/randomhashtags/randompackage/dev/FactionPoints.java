@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev.a;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.ConfigurationSection;
