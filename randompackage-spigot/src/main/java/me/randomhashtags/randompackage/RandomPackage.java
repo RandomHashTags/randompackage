@@ -9,37 +9,20 @@ import me.randomhashtags.randompackage.dev.Outposts;
 import me.randomhashtags.randompackage.dev.SpawnerStacking;
 import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
-import me.randomhashtags.randompackage.event.FoodLevelLostEvent;
-import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
-import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
+import me.randomhashtags.randompackage.universal.UVersion;
 import me.randomhashtags.randompackage.util.CommandManager;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
-import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,7 +38,7 @@ import java.util.HashMap;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public final class RandomPackage extends JavaPlugin implements Listener {
+public final class RandomPackage extends JavaPlugin {
     public static RandomPackage getPlugin;
 
     public FileConfiguration config;
@@ -81,7 +64,6 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     private void enable() {
         scheduler = Bukkit.getScheduler();
         pluginmanager = Bukkit.getPluginManager();
-        pluginmanager.registerEvents(this, this);
         checkForUpdate();
         checkFiles();
         loadSoftDepends();
@@ -251,154 +233,5 @@ public final class RandomPackage extends JavaPlugin implements Listener {
     public void reload() {
         disable();
         enable();
-    }
-
-    /*
-     *
-     * Listeners
-     *
-     */
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && event.getCurrentItem() != null && event.getCursor() != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
-            final Player player = (Player) event.getWhoClicked();
-            final InventoryType.SlotType st = event.getSlotType();
-            final ClickType ct = event.getClick();
-            final ItemStack cursoritem = event.getCursor(), currentitem = event.getCurrentItem();
-            final PlayerInventory inv = player.getInventory();
-            final String cursor = cursoritem.getType().name(), current = currentitem.getType().name();
-            if((st.equals(InventoryType.SlotType.QUICKBAR) || st.equals(InventoryType.SlotType.CONTAINER)) && ct.equals(ClickType.CONTROL_DROP)) return;
-            ArmorUnequipEvent unequip = null;
-            ArmorEquipEvent equip = null;
-            if(st.equals(InventoryType.SlotType.ARMOR) && ct.equals(ClickType.NUMBER_KEY)) {
-                final int rawslot = event.getRawSlot();
-                final ItemStack prev = inv.getItem(event.getSlot()), hb = inv.getItem(event.getHotbarButton());
-                final String t = hb != null ? hb.getType().name() : "AIR";
-                if(prev != null && !prev.getType().name().equals("AIR")) {
-                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.NUMBER_KEY_UNEQUIP, prev);
-                }
-                if(canBeUsed(rawslot, t)) {
-                    equip = new ArmorEquipEvent(player, ArmorEventReason.NUMBER_KEY_EQUIP, hb);
-                }
-            } else if(event.isShiftClick()) {
-                if(st.equals(InventoryType.SlotType.ARMOR)) {
-                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.SHIFT_UNEQUIP, currentitem);
-                } else {
-                    final int t = getTargetSlot(current);
-                    if(t == -1) return;
-                    final ItemStack prevArmor = inv.getArmorContents()[t == 5 ? 3 : t == 6 ? 2 : t == 7 ? 1 : 0];
-                    if((prevArmor == null || prevArmor.getType().equals(Material.AIR)) && canBeUsed(t, current)) {
-                        equip = new ArmorEquipEvent(player, ArmorEventReason.SHIFT_EQUIP, currentitem);
-                    }
-                }
-            } else if(st.equals(InventoryType.SlotType.ARMOR)) {
-                if(ct.name().contains("DROP") && !current.equals("AIR")) {
-                    unequip = new ArmorUnequipEvent(player, ArmorEventReason.DROP, currentitem);
-                } else if(ct.equals(ClickType.LEFT) || ct.equals(ClickType.RIGHT)) {
-                    final int rawslot = event.getRawSlot();
-                    if(!current.equals("AIR")) {
-                        final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
-                        if(c1 == c2 || rawslot == c1) {
-                            unequip = new ArmorUnequipEvent(player, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
-                        }
-                    }
-                    if(!cursor.equals("AIR")) {
-                        final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
-                        if(c1 == c2 || rawslot == c2)
-                            equip = new ArmorEquipEvent(player, ArmorEventReason.INVENTORY_EQUIP, cursoritem);
-                    }
-                }
-            }
-            boolean update = false;
-            if(unequip != null) {
-                pluginmanager.callEvent(unequip);
-                if(!unequip.isCancelled()) {
-                    update = true;
-                    final ItemStack x = unequip.getCurrentItem(), y = unequip.getCursor();
-                    if(x != null) event.setCurrentItem(x);
-                    if(y != null) event.setCursor(y);
-                }
-            }
-            if(equip != null) {
-                pluginmanager.callEvent(equip);
-                if(!equip.isCancelled()) {
-                    update = true;
-                    final ItemStack x = equip.getCurrentItem(), y = equip.getCursor();
-                    if(x != null) event.setCurrentItem(x);
-                    if(y != null) event.setCursor(y);
-                }
-            }
-            if(update) {
-                scheduler.scheduleSyncDelayedTask(this, () -> {
-                    player.updateInventory();
-                });
-            }
-        }
-    }
-    private int getTargetSlot(String target) {
-        return target.contains("HELMET") || target.contains("SKULL") || target.contains("HEAD") ? 5
-                : target.contains("CHESTPLATE") || target.contains("ELYTRA") ? 6
-                : target.contains("LEGGINGS") ? 7
-                : target.contains("BOOTS") ? 8
-                : -1;
-    }
-    private boolean canBeUsed(int rawslot, String target) {
-        return rawslot == 5 && (target.contains("HELMET") || target.contains("SKULL") || target.contains("HEAD"))
-                || rawslot == 6 && (target.contains("CHESTPLATE") || target.contains("ELYTRA"))
-                || rawslot == 7 && target.contains("LEGGINGS")
-                || rawslot == 8 && target.contains("BOOTS");
-    }
-    @EventHandler
-    private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack is = event.getItem();
-        if(is != null && event.getAction().name().contains("RIGHT")) {
-            final String item = is.getType().name();
-            final boolean helmet = item.endsWith("HELMET"), chestplate = item.endsWith("CHESTPLATE"), leggings = item.endsWith("LEGGINGS"), boots = item.endsWith("BOOTS");
-            if(!helmet && !chestplate && !leggings && !boots) return;
-            final Player player = event.getPlayer();
-            final PlayerInventory PI = player.getInventory();
-            final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
-            if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
-                final Block block = event.getClickedBlock();
-                if(block == null || !block.getType().isInteractable()) {
-                    final ArmorEquipEvent e = new ArmorEquipEvent(player, ArmorEventReason.HOTBAR_EQUIP, is);
-                    pluginmanager.callEvent(e);
-                }
-            } else {
-                final ArmorEvent e = new ArmorSwapEvent(player, ArmorEventReason.HOTBAR_SWAP, is, helmet ? h : chestplate ? c : leggings ? l : b);
-                pluginmanager.callEvent(e);
-            }
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerItemBreakEvent(PlayerItemBreakEvent event) {
-        final ItemStack is = event.getBrokenItem();
-        final String i = is.getType().name();
-        if(i.endsWith("HELMET") || i.endsWith("CHESTPLATE") || i.endsWith("LEGGINGS") || i.endsWith("BOOTS")) {
-            final ArmorPieceBreakEvent e = new ArmorPieceBreakEvent(event.getPlayer(), is);
-            pluginmanager.callEvent(e);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerExpChangeEvent(PlayerExpChangeEvent event) {
-        final int amount = event.getAmount();
-        if(amount > 0) {
-            final PlayerExpGainEvent e = new PlayerExpGainEvent(event.getPlayer(), amount);
-            pluginmanager.callEvent(e);
-            if(!e.isCancelled()) {
-                event.setAmount(e.getAmount());
-            }
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
-        final Player player = (Player) event.getEntity();
-        final int l = player.getFoodLevel(), lvl = event.getFoodLevel();
-        if(l > lvl) {
-            final FoodLevelLostEvent e = new FoodLevelLostEvent(player, player.getFoodLevel(), lvl);
-            e.setCancelled(event.isCancelled());
-            pluginmanager.callEvent(e);
-        }
     }
 }

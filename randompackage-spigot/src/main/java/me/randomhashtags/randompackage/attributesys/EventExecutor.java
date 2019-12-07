@@ -64,7 +64,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 if(involved != null) {
                                     final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getCustomEnchants().getEnchants(involved);
                                     for(LinkedHashMap<CustomEnchant, Integer> enchantLevels : enchants.values()) {
-                                        if(enchantLevels.containsKey(enchant)) {
+                                        if(enchantLevels != null && enchantLevels.containsKey(enchant)) {
                                             levels += enchantLevels.get(enchant);
                                         }
                                     }

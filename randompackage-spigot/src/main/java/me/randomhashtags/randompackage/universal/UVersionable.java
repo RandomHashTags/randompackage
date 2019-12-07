@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
+import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -9,6 +11,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
@@ -25,6 +28,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
 public interface UVersionable extends Versionable {
+    HashMap<Feature, LinkedHashMap<String, Identifiable>> FEATURES = new HashMap<>();
     File DATA_FOLDER = getPlugin.getDataFolder();
     String SEPARATOR = File.separator;
 
@@ -134,6 +138,13 @@ public interface UVersionable extends Versionable {
         return l;
     }
 
+    default EquipmentSlot getRespectiveSlot(String material) {
+        return material.contains("HELMET") || material.contains("SKULL") || material.contains("HEAD") ? EquipmentSlot.HEAD
+                : material.contains("CHESTPLATE") || material.contains("ELYTRA") ? EquipmentSlot.CHEST
+                : material.contains("LEGGINGS") ? EquipmentSlot.LEGS
+                : material.contains("BOOTS") ? EquipmentSlot.FEET
+                : null;
+    }
     default double round(double input, int decimals) {
         // From http://www.baeldung.com/java-round-decimal-number
         if(decimals < 0) throw new IllegalArgumentException();
