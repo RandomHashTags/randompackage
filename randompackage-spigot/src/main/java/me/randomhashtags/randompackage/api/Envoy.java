@@ -277,7 +277,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		totalEnvoys += 1;
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
-		for(String s : getMessage(config, "messages.broadcast")) {
+		for(String s : getStringList(config, "messages.broadcast")) {
 			Bukkit.broadcastMessage(colorize(s.replace("{SUMMON_TYPE}", summonType)));
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
@@ -307,7 +307,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.envoy.help", true)) {
-			sendStringListMessage(sender, getMessage(config, "messages.envoy help"), null);
+			sendStringListMessage(sender, getStringList(config, "messages.envoy help"), null);
 		}
 	}
 

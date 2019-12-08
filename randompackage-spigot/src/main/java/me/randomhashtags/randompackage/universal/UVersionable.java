@@ -45,7 +45,7 @@ public interface UVersionable extends Versionable {
 
     HashMap<YamlConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
 
-    default List<String> getMessage(YamlConfiguration yml, String identifier) {
+    default List<String> getStringList(YamlConfiguration yml, String identifier) {
         if(!FEATURE_MESSAGES.containsKey(yml)) {
             FEATURE_MESSAGES.put(yml, new HashMap<>());
         }
@@ -304,6 +304,38 @@ public interface UVersionable extends Versionable {
     }
     default String toReadableDate(Date d, String format) {
         return new SimpleDateFormat(format).format(d);
+    }
+    default Entity getEntity(UUID uuid) {
+        if(uuid != null) {
+            if(EIGHT || NINE) {
+                for(World w : Bukkit.getWorlds()) {
+                    for(LivingEntity le : w.getLivingEntities()) {
+                        if(uuid.equals(le.getUniqueId())) {
+                            return le;
+                        }
+                    }
+                }
+            } else {
+                return Bukkit.getEntity(uuid);
+            }
+        }
+        return null;
+    }
+    default LivingEntity getEntity(String type, Location l, boolean spawn) {
+        final boolean baby = type.contains(":") && type.toLowerCase().endsWith(":true");
+        type = type.toUpperCase().split(":")[0];
+        final LivingEntity mob = getEntity(type, l);
+        if(mob instanceof Zombie) {
+            ((Zombie) mob).setBaby(baby);
+        }
+        if(!spawn) {
+            mob.remove();
+        } else if(mob instanceof Ageable && baby) {
+            final Ageable a = (Ageable) mob;
+            a.setBaby();
+            a.setAgeLock(true);
+        }
+        return mob;
     }
 
     default Color getColor(String path) {

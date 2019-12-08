@@ -253,7 +253,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			if(showcases.containsKey(i)) maxpage = i;
 		}
 		if(!hasPermission(opener, "RandomPackage.showcase" + (self ? "" : ".other"), false)) {
-			sendStringListMessage(opener, getMessage(config, "messages.no access"), null);
+			sendStringListMessage(opener, getStringList(config, "messages.no access"), null);
 		} else {
 			int size = pdata.getShowcaseSize(page);
 			size = size == 0 ? 9 : size;

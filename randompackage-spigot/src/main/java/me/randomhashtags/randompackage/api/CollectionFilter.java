@@ -73,15 +73,15 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                                 if(f != null) {
                                     setFilter(player, q, itemType.replace("{ITEM}", toMaterial(a, false)));
                                 } else {
-                                    sendStringListMessage(player, getMessage(config, "messages.invalid filter type"), null);
+                                    sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
                                     editFilter(player, null);
                                 }
                             }
                             break;
                     }
                 } else {
-                    if(args.length == 1) sendStringListMessage(player, getMessage(config, "messages.invalid filter type"), null);
-                    sendStringListMessage(sender, getMessage(config, "messages.need to be holding cc"), null);
+                    if(args.length == 1) sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
+                    sendStringListMessage(sender, getStringList(config, "messages.need to be holding cc"), null);
                 }
             } else if(args.length == 2 && args[1].equals("all") || args.length == 3 && args[2].equals("all")) {
 
@@ -154,7 +154,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final HashMap<String, String> replacements = new HashMap<>();
         final UMaterial f = cc.getFilter();
         replacements.put("{ITEM}", f != null ? f.name() : "All");
-        sendStringListMessage(player, getMessage(config, "messages.view filter"), replacements);
+        sendStringListMessage(player, getStringList(config, "messages.view filter"), replacements);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -210,9 +210,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             item = is.clone(); item.setAmount(1);
             final UMaterial u = getFiltered(item);
             new CollectionChest(player.getUniqueId().toString(), event.getBlockPlaced().getLocation(), u);
-            sendStringListMessage(player, getMessage(config, "messages.placed"), null);
+            sendStringListMessage(player, getStringList(config, "messages.placed"), null);
             final String f = u == null ? defaultType : toMaterial(u.getMaterial().name(), false);
-            for(String s : getMessage(config, "messages.set")) {
+            for(String s : getStringList(config, "messages.set")) {
                 if(s.contains("{ITEM}")) s = s.replace("{ITEM}", f);
                 player.sendMessage(colorize(s));
             }
@@ -258,7 +258,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             final Material mat = filter != null ? filter.getMaterial() : null;
             final byte data = filter != null ? filter.getData() : -1;
             if(mat != null && mat.equals(c.getType()) && data == c.getData().getData())
-                sendStringListMessage(player, getMessage(config, "messages.item already being filtered"), null);
+                sendStringListMessage(player, getStringList(config, "messages.item already being filtered"), null);
             else {
                 if(cc != null && editingfilter.containsKey(u)) {
                     cc.setFilter(picksup.get(r));
@@ -332,7 +332,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
         lore.clear();
-        for(String string : getMessage(config, "messages.updated cc")) {
+        for(String string : getStringList(config, "messages.updated cc")) {
             if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", m);
             player.sendMessage(colorize(string));
@@ -345,7 +345,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
         lore.clear();
-        for(String string : getMessage(config, "messages.set")) {
+        for(String string : getStringList(config, "messages.set")) {
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", filter);
             player.sendMessage(colorize(string));
         }

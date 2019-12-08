@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
-import org.bukkit.Bukkit;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,21 +16,19 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
-public class LivingConquestMob {
+public class LivingConquestMob implements UVersionable {
     public static HashMap<UUID, LivingConquestMob> living;
-    private static boolean isLegacy;
 
-    public LivingEntity entity;
-    public ConquestMob type;
+    private LivingEntity entity;
+    private ConquestMob type;
     public LivingConquestMob(LivingEntity entity, ConquestMob type) {
         if(living == null) {
             living = new HashMap<>();
-            isLegacy = Bukkit.getVersion().contains("1.8");
         }
 
         this.entity = entity;
         this.type = type;
-        entity.setCustomName(type.name);
+        entity.setCustomName(type.getName());
         final ItemStack air = new ItemStack(Material.AIR);
         final EntityEquipment e = entity.getEquipment();
         e.setHelmet(air);
@@ -38,16 +36,16 @@ public class LivingConquestMob {
         e.setLeggings(air);
         e.setBoots(air);
 
-        if(isLegacy) {
+        if(EIGHT) {
             e.setItemInHand(air);
         } else {
             e.setItemInMainHand(air);
             e.setItemInOffHand(air);
         }
-        for(String a : type.equipment) {
+        for(String a : type.getEquipment()) {
             final String A = a;
             a = a.toLowerCase().split("=")[0];
-            switch (a.toLowerCase().split("=")[0]) {
+            switch (a) {
                 case "helmet":
                     e.setHelmet(api.d(null, A.substring(7)));
                     break;
@@ -65,7 +63,7 @@ public class LivingConquestMob {
                     break;
             }
         }
-        for(String a : type.attributes) {
+        for(String a : type.getAttributes()) {
             switch (a.toLowerCase().split("=")[0]) {
                 case "health":
                     entity.setMaxHealth(Double.parseDouble(a.split("=")[1]));
@@ -73,12 +71,16 @@ public class LivingConquestMob {
                     break;
                 case "pe":
                     final String[] b = a.split("=")[1].split(":");
-                    entity.addPotionEffect(new PotionEffect(api.getPotionEffectType(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
+                    entity.addPotionEffect(new PotionEffect(getPotionEffectType(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
                     break;
             }
         }
         living.put(entity.getUniqueId(), this);
     }
+    public LivingEntity getEntity() { return entity; }
+    public UUID getUniqueId() { return entity.getUniqueId(); }
+    public ConquestMob getType() { return type; }
+
     public void kill(EntityDeathEvent event) {
         if(event != null) {
             event.setDroppedExp(0);
@@ -87,12 +89,14 @@ public class LivingConquestMob {
             final Entity e = event.getEntity();
             final Location l = e.getLocation();
             final World w = e.getWorld();
-            for(String s : type.drops) {
-                final int chance = s.contains(";chance=") ? api.getRemainingInt(s.split(";chance=")[1].split(";")[0]) : 100;
+            for(String s : type.getDrops()) {
+                final int chance = s.contains(";chance=") ? getRemainingInt(s.split(";chance=")[1].split(";")[0]) : 100;
                 if(chance == 100 || chance <= r.nextInt(100)) {
                     s = s.split(";chance")[0];
                     final ItemStack i = api.d(null, s);
-                    if(i != null) w.dropItem(l, i);
+                    if(i != null) {
+                        w.dropItem(l, i);
+                    }
                 }
             }
         }
@@ -101,6 +105,5 @@ public class LivingConquestMob {
 
     public static void deleteAll() {
         living = null;
-        isLegacy = false;
     }
 }

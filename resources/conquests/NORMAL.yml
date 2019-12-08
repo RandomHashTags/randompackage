@@ -51,6 +51,10 @@ settings:
   spawn type: WILD
   # <world name>;<min x>:<max x>;<min z>:<max z>
   spawn region: "world;-10000:10000;-10000:10000"
+  #
+  bosses:
+    max distance from conquest: 50
+    distance check interval: 60 # Measured in ticks
 #
 rewards:
   - "whitescroll:REGULAR;amount=1-3"

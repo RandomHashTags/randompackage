@@ -89,9 +89,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public void deposit(@NotNull Player player, @NotNull String arg) {
 		if(hasPermission(player, "RandomPackage.fund.deposit", true)) {
 			if(total.doubleValue() >= maxfund.doubleValue()) {
-				sendStringListMessage(player, getMessage(config, "messages.already complete"), null);
+				sendStringListMessage(player, getStringList(config, "messages.already complete"), null);
 			} else if(arg.contains(".") && !config.getBoolean("allows decimals")) {
-				sendStringListMessage(player, getMessage(config, "messages.cannot include decimals"), null);
+				sendStringListMessage(player, getStringList(config, "messages.cannot include decimals"), null);
 			} else {
 				final double q = getRemainingDouble(arg), min = config.getDouble("min deposit");
 				if(q == -1) return;
@@ -160,7 +160,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 		replacements.put("{PLAYER}", sender.getName());
 		replacements.put("{AMOUNT}", formatDouble(q).split("\\.")[0]);
 
-		for(String ss : getMessage(config, "messages." + path)) {
+		for(String ss : getStringList(config, "messages." + path)) {
 			for(String r : replacements.keySet()) {
 				final String R = replacements.get(r);
 				if(r != null && R != null) {
@@ -184,7 +184,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 		if(hasPermission(sender, "RandomPackage.fund", true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
 			final String symbol = config.getString("messages.progress bar.symbol"), achieved = colorize(config.getString("messages.progress bar.achieved")), notachieved = colorize(config.getString("messages.progress bar.not achieved"));
-			for(String s : getMessage(config, "messages.view")) {
+			for(String s : getStringList(config, "messages.view")) {
 				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
 					for(String i : config.getStringList("unlock")) {
@@ -192,7 +192,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 						final double d = req.doubleValue(), t = total.doubleValue();
 						final int q = req.intValue();
 						final String percent = roundDoubleString((t/d) * 100 > 100.000 ? 100 : (t/d) * 100, pdigits), abb = getAbbreviation(d), qq = formatInt(q);
-						for(String k : getMessage(config, "messages.content")) {
+						for(String k : getStringList(config, "messages.content")) {
 							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", t >= d ? colorize(config.getString("messages.completed")) : "");
 							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
 							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
@@ -213,7 +213,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.help", true)) {
-			sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+			sendStringListMessage(sender, getStringList(config, "messages.help"), null);
 		}
 	}
 	private String getAbbreviation(double input) {

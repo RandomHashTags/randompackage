@@ -43,8 +43,9 @@ public class LivingCustomEnchantEntity extends CustomEnchants implements Mathabl
             for(String attr : s.split(";")) {
                 b += 1;
                 //ce.w(null, event, null, Arrays.asList(entity), attr, s, b, summoner instanceof Player ? (Player) summoner : null);
-                if(attr.toLowerCase().startsWith("despawn{"))
+                if(attr.toLowerCase().startsWith("despawn{")) {
                     SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> entity.remove(), (int) evaluate(attr.split("\\{")[1].split("}")[0]));
+                }
             }
         }
         living.put(uuid, this);

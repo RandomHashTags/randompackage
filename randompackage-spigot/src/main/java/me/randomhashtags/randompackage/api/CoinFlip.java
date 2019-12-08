@@ -81,7 +81,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                     final long m = a.endsWith("k") ? 1000 : a.endsWith("m") ? 1000000 : a.endsWith("b") ? 1000000000 : 1;
                     final BigDecimal w = BigDecimal.valueOf(getRemainingDouble(a)*m);
                     if(w.doubleValue() <= 0) {
-                        sendStringListMessage(player, getMessage(config, "messages.must enter valid amount"), null);
+                        sendStringListMessage(player, getStringList(config, "messages.must enter valid amount"), null);
                     } else {
                         tryCreating(player, w);
                     }
@@ -225,7 +225,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             replacements.put("{WON$}", formatBigDecimal(s.wonCash));
             replacements.put("{LOST$}", formatBigDecimal(s.lostCash));
             replacements.put("{TAXES}", formatBigDecimal(s.taxesPaid));
-            sendStringListMessage(player, getMessage(config, "messages.stats"), replacements);
+            sendStringListMessage(player, getStringList(config, "messages.stats"), replacements);
         }
     }
     public void tryToggleNotifications(@NotNull Player player) {
@@ -233,28 +233,28 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final boolean status = !pdata.doesReceiveCoinFlipNotifications();
             pdata.setReceivesCoinFlipNotifications(status);
-            sendStringListMessage(player, getMessage(config, "messages.toggle notifications." + (status ? "on" : "off")), null);
+            sendStringListMessage(player, getStringList(config, "messages.toggle notifications." + (status ? "on" : "off")), null);
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.coinflip.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void tryCreating(@NotNull Player player, @NotNull  BigDecimal w) {
         if(hasPermission(player, "RandomPackage.coinflip.create", true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOf(player);
             if(m != null) {
-                sendStringListMessage(player, getMessage(config, "messages.already in a match"), null);
+                sendStringListMessage(player, getStringList(config, "messages.already in a match"), null);
             } else {
                 final double b = eco.getBalance(player), wager = w.doubleValue();
                 final HashMap<String, String> replacements = new HashMap<>();
                 if(b < wager) {
                     replacements.put("{BAL}", formatDouble(b));
-                    sendStringListMessage(player, getMessage(config, "messages.cannot afford"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.cannot afford"), replacements);
                 } else if(wager < minWager) {
                     replacements.put("{MIN}", formatLong(minWager));
-                    sendStringListMessage(player, getMessage(config, "messages.wager needs to be more"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.wager needs to be more"), replacements);
                 } else {
                     final String ww = formatBigDecimal(w);
                     player.closeInventory();
@@ -286,12 +286,12 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         if(hasPermission(player, "RandomPackage.coinflip.cancel", true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOf(player);
             if(m == null) {
-                sendStringListMessage(player, getMessage(config, "messages.cancel dont have one"), null);
+                sendStringListMessage(player, getStringList(config, "messages.cancel dont have one"), null);
             } else {
                 final BigDecimal a = m.wager();
                 eco.depositPlayer(player, a.doubleValue());
                 delete(m);
-                sendStringListMessage(player, getMessage(config, "messages.cancelled"), null);
+                sendStringListMessage(player, getStringList(config, "messages.cancelled"), null);
             }
         }
     }
@@ -300,11 +300,11 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             player.closeInventory();
             final CoinFlipMatch f = CoinFlipMatch.valueOf(player);
             if(f != null) {
-                sendStringListMessage(player, getMessage(config, "messages.already in a match"), null);
+                sendStringListMessage(player, getStringList(config, "messages.already in a match"), null);
             } else if(match != null) {
                 if(match.isActive) {
                     player.closeInventory();
-                    sendStringListMessage(player, getMessage(config, "messages.no longer available"), null);
+                    sendStringListMessage(player, getStringList(config, "messages.no longer available"), null);
                     viewCoinFlips(player);
                 } else {
                     final String w = formatBigDecimal(match.wager());
@@ -511,7 +511,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         stopTasks(m);
         m.delete();
 
-        final List<String> w = colorizeListString(getMessage(config, "messages.winner"));
+        final List<String> w = colorizeListString(getStringList(config, "messages.winner"));
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{WINNING_COLOR}", color);
         replacements.put("{LOSING_COLOR}", Lcolor);
@@ -545,7 +545,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         final BigDecimal wager = picking.get(player);
         picking.remove(player);
         if(withdraw) eco.withdrawPlayer(player, wager.doubleValue());
-        if(sendMsg && player.isOnline()) sendStringListMessage(player.getPlayer(), getMessage(config, "messages.created"), null);
+        if(sendMsg && player.isOnline()) sendStringListMessage(player.getPlayer(), getStringList(config, "messages.created"), null);
         final CoinFlipMatch m = new CoinFlipMatch(System.currentTimeMillis(), player, picked, wager);
         available.add(m);
     }
@@ -588,11 +588,11 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                 if(b < w.doubleValue()) {
                     final HashMap<String, String> replacements = new HashMap<>();
                     replacements.put("{BAL}", formatDouble(b));
-                    sendStringListMessage(player, getMessage(config, "messages.cannot afford"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.cannot afford"), replacements);
                 } else {
                     player.closeInventory();
                     if(!available.contains(f) || f.isActive) {
-                        sendStringListMessage(player, getMessage(config, "messages.no longer available"), null);
+                        sendStringListMessage(player, getStringList(config, "messages.no longer available"), null);
                         viewCoinFlips(player);
                     } else if(optionz.containsKey(r)) {
                         eco.withdrawPlayer(player, w.doubleValue());

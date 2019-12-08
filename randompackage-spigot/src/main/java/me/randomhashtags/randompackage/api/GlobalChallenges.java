@@ -264,18 +264,25 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 		}
 	}
-	public void givePrize(UUID player, GlobalChallengePrize prize, boolean sendMessage) {
-		final OfflinePlayer op = Bukkit.getOfflinePlayer(player);
-		if(op != null && op.isOnline()) {
-			final Player p = op.getPlayer();
+	public void claimPrize(Player player, GlobalChallengePrize prize, boolean sendMessage) {
+		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+		final HashMap<GlobalChallengePrize, Integer> prizes = pdata.getGlobalChallengePrizes();
+		if(prizes.containsKey(prize)) {
+			final int amount = prizes.get(prize)-1;
+			if(amount <= 0) {
+				prizes.remove(prize);
+			} else {
+				prizes.put(prize, amount);
+			}
 			final HashMap<String, ItemStack> rewards = prize.getRandomRewards();
 			for(String s : rewards.keySet()) {
-				giveItem(p, d(null, s));
+				giveItem(player, d(null, s));
 			}
 			if(sendMessage) {
 				final String placing = prize.getPlacement() + "";
-				for(String s : getMessage(config, "messages.claimed prize"))
-					p.sendMessage(colorize(s.replace("{PLACING}", placing)));
+				for(String s : getStringList(config, "messages.claimed prize")) {
+					player.sendMessage(colorize(s.replace("{PLACING}", placing)));
+				}
 			}
 		}
 	}
@@ -415,10 +422,13 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 					}
 				} else if(t.equals(claimPrizes.getTitle())) {
 					final GlobalChallengePrize prize = valueOfGlobalChallengePrize(c);
-					givePrize(player.getUniqueId(), prize, true);
-					item = c.clone();
-					item = item.getAmount() == 1 ? new ItemStack(Material.AIR) : item;
-					top.setItem(r, item);
+					claimPrize(player, prize, true);
+					final int amount = c.getAmount();
+					if(amount == 1) {
+						top.setItem(r, new ItemStack(Material.AIR));
+					} else {
+						c.setAmount(amount-1);
+					}
 				}
 				player.updateInventory();
 			}

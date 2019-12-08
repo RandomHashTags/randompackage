@@ -317,13 +317,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     }
     public void reset(Player sender, OfflinePlayer target) {
         if(target == null || !target.isOnline()) {
-            sendStringListMessage(sender, getMessage(config, "messages.reset.target doesnt exist"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.reset.target doesnt exist"), null);
         } else {
             final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
             pdata.getClaimedMonthlyCrates().clear();
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{TARGET}", target.getName());
-            sendStringListMessage(sender, getMessage(config, "messages.reset.success"), replacements);
+            sendStringListMessage(sender, getStringList(config, "messages.reset.success"), replacements);
         }
     }
     public void give(RPPlayer pdata, Player player, MonthlyCrate crate, boolean claimed) {
@@ -396,7 +396,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                     final boolean hasPerm = pdata.getMonthlyCrates().contains(n) || player.hasPermission("RandomPackage.monthlycrates." + n);
                     if(!hasPerm) {
-                        sendStringListMessage(player, getMessage(config, "messages.no access"), null);
+                        sendStringListMessage(player, getStringList(config, "messages.no access"), null);
                     } else if(!pdata.getClaimedMonthlyCrates().contains(n)) {
                         give(pdata, player, mc, true);
                     }

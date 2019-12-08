@@ -64,7 +64,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     viewTop(sender, l == 1 ? 1 : getRemainingInt(args[1]));
                     break;
                 case "buy":
-                    final List<String> b = getMessage(config, "messages.enter valid ticket amount");
+                    final List<String> b = getStringList(config, "messages.enter valid ticket amount");
                     if(l == 1) {
                         sendStringListMessage(player, b, null);
                     } else {
@@ -182,7 +182,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             replacements.put("{$}", formatBigDecimal(total));
 
             final Collection<? extends Player> o = Bukkit.getOnlinePlayers();
-            for(String s : getMessage(config, "messages.won")) {
+            for(String s : getStringList(config, "messages.won")) {
                 for(String r : replacements.keySet()) s = s.replace(r, replacements.get(r));
                 s = colorize(s);
                 for(Player p : o) {
@@ -209,7 +209,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         return round(tickets.divide(BigDecimal.valueOf((double) (size == 0 ? 1 : size))).multiply(BigDecimal.valueOf(100)).doubleValue(), 2);
     }
     private void broadcastCountdown(long timeleft) {
-        final List<String> c = getMessage(config, "messages.countdown");
+        final List<String> c = getStringList(config, "messages.countdown");
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{TIME}", getRemainingTime(timeleft));
         replacements.put("{$}", formatBigDecimal(value));
@@ -228,7 +228,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         }
         task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::pickWinner, pick);
         countdownTasks = new ArrayList<>();
-        for(String s : getMessage(config, "messages.countdowns")) {
+        for(String s : getStringList(config, "messages.countdowns")) {
             final long delay = (getDelay(s)/1000)*20;
             countdownTasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                 broadcastCountdown((delay/20)*1000);
@@ -274,10 +274,10 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                 pdata.jackpotTickets = pdata.jackpotTickets.add(tickets);
                 ticketsSold.put(u, ticketsSold.getOrDefault(u, BigDecimal.ZERO).add(tickets));
                 value = value.add(cost);
-                sendStringListMessage(player, getMessage(config, "messages.purchased"), replacements);
+                sendStringListMessage(player, getStringList(config, "messages.purchased"), replacements);
             }
         } else {
-            sendStringListMessage(player, getMessage(config, "messages.cannot afford"), replacements);
+            sendStringListMessage(player, getStringList(config, "messages.cannot afford"), replacements);
         }
     }
 
@@ -292,7 +292,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             replacements.put("{YOUR_TICKETS}", formatBigDecimal(t));
             replacements.put("{YOUR_TICKETS%}", formatDouble(getPercent(t, s)));
             replacements.put("{TIME}", time);
-            sendStringListMessage(sender, getMessage(config, "messages.view"), replacements);
+            sendStringListMessage(sender, getStringList(config, "messages.view"), replacements);
         }
     }
     public void viewStats(@NotNull Player player) {
@@ -302,12 +302,12 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             replacements.put("{$}", formatBigDecimal(pdata.jackpotWonCash));
             replacements.put("{TICKETS}", formatBigDecimal(pdata.jackpotTickets));
             replacements.put("{WINS}", formatInt(pdata.jackpotWins));
-            sendStringListMessage(player, getMessage(config, "messages.stats"), replacements);
+            sendStringListMessage(player, getStringList(config, "messages.stats"), replacements);
         }
     }
     public void viewTop(@NotNull CommandSender sender, int page) {
         if(hasPermission(sender, "RandomPackage.jackpot.top", true)) {
-            final List<String> list = colorizeListString(getMessage(config, "messages.top"));
+            final List<String> list = colorizeListString(getStringList(config, "messages.top"));
             final String p = Integer.toString(page);
             final int perPage = config.getInt("messages.players per page");
             for(String s : list) {
@@ -322,7 +322,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     }
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.jackpot.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void tryToggleNotifications(@NotNull Player player) {
@@ -330,7 +330,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final boolean status = !pdata.doesReceiveJackpotNotifications();
             pdata.setReceivesJackpotNotifications(status);
-            sendStringListMessage(player, getMessage(config, "messages.toggle notifications." + (status ? "on" : "off")), null);
+            sendStringListMessage(player, getStringList(config, "messages.toggle notifications." + (status ? "on" : "off")), null);
         }
     }
 

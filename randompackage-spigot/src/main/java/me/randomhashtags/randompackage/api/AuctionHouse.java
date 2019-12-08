@@ -75,9 +75,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                         final BigDecimal price = BigDecimal.valueOf(getRemainingDouble(arg1));
                         final ItemStack is = player.getItemInHand();
                         if(is.getType().equals(Material.AIR)) {
-                            sendStringListMessage(player, getMessage(config, "messages.need to be holding item"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.need to be holding item"), null);
                         } else if(price.doubleValue() <= 0.00) {
-                            sendStringListMessage(player, getMessage(config, "messages.must enter valid price"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.must enter valid price"), null);
                         } else {
                             confirmAuction(player, is, price);
                         }
@@ -315,7 +315,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
     public void viewHelp(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.ah.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
 
@@ -591,7 +591,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{PRICE}", p);
             replacements.put("{ITEM}", i);
-            sendStringListMessage(player, getMessage(config, "messages.listed"), replacements);
+            sendStringListMessage(player, getStringList(config, "messages.listed"), replacements);
         }
     }
     private void addToCategoryView(AuctionedItem ai, UMaterial um) {
@@ -605,7 +605,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     public void cancelAuction(Player player, AuctionedItem a) {
         auctionHouse.remove(a.auctionTime);
         a.claimable = true;
-        sendStringListMessage(player, getMessage(config, "messages.cancelled listing"), null);
+        sendStringListMessage(player, getStringList(config, "messages.cancelled listing"), null);
     }
     public void tryPurchasing(Player player, AuctionedItem a) {
         if(a != null && hasPermission(player, "RandomPackage.ah.buy", true)) {
@@ -726,23 +726,23 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 if(confirmPurchaseSlots.contains(r)) {
                     purchasing.remove(player);
                     if(ai == null) {
-                        sendStringListMessage(player, getMessage(config, "messages.item no longer exists"), replacements);
+                        sendStringListMessage(player, getStringList(config, "messages.item no longer exists"), replacements);
                     } else if(OPU.equals(u)) {
                         player.closeInventory();
-                        sendStringListMessage(player, getMessage(config, "messages.cannot purchase own item"), replacements);
+                        sendStringListMessage(player, getStringList(config, "messages.cannot purchase own item"), replacements);
                         view(player, 1);
                         return;
                     } else if(eco.withdrawPlayer(player, priceDouble).transactionSuccess()) {
-                        sendStringListMessage(player, getMessage(config, "messages.purchased auction"), replacements);
+                        sendStringListMessage(player, getStringList(config, "messages.purchased auction"), replacements);
                         giveItem(player, z);
                         auctionHouse.remove(ai.auctionTime);
                         auctions.get(OPU).remove(ai);
                         if(OP.isOnline()) {
-                            sendStringListMessage(OP.getPlayer(), getMessage(config, "messages.sold auction"), replacements);
+                            sendStringListMessage(OP.getPlayer(), getStringList(config, "messages.sold auction"), replacements);
                         }
                         eco.depositPlayer(OP, priceDouble);
                     } else {
-                        sendStringListMessage(player, getMessage(config, "messages.cannot afford"), replacements);
+                        sendStringListMessage(player, getStringList(config, "messages.cannot afford"), replacements);
                     }
                 } else if(cancelPurchaseSlots.contains(r)) {
                 } else return;
@@ -802,11 +802,11 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         if(auctioning != null && auctioning.containsKey(player)) {
             giveItem(player, (ItemStack) auctioning.get(player).keySet().toArray()[0]);
             auctioning.remove(player);
-            sendStringListMessage(player, getMessage(config, "messages.auction sell cancelled"), null);
+            sendStringListMessage(player, getStringList(config, "messages.auction sell cancelled"), null);
             player.updateInventory();
         } else if(purchasing != null && purchasing.containsKey(player)) {
             purchasing.remove(player);
-            sendStringListMessage(player, getMessage(config, "messages.auction purchase cancelled"), null);
+            sendStringListMessage(player, getStringList(config, "messages.auction purchase cancelled"), null);
         }
     }
 }

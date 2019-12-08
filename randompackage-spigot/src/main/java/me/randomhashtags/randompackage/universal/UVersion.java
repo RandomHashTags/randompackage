@@ -7,7 +7,10 @@ import me.randomhashtags.randompackage.util.YamlUpdater;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -17,7 +20,10 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
@@ -341,38 +347,5 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
             final EntityEquipment e = entity.getEquipment();
             return EIGHT ? e.getItemInHand() : e.getItemInMainHand();
         }
-    }
-    public final Entity getEntity(UUID uuid) {
-        if(uuid != null) {
-            if(EIGHT || NINE) {
-                for(World w : Bukkit.getWorlds()) {
-                    for(LivingEntity le : w.getLivingEntities()) {
-                        if(uuid.equals(le.getUniqueId())) {
-                            return le;
-                        }
-                    }
-                }
-            } else {
-                return Bukkit.getEntity(uuid);
-            }
-        }
-        return null;
-    }
-
-    public final LivingEntity getEntity(String type, Location l, boolean spawn) {
-        final boolean baby = type.contains(":") && type.toLowerCase().endsWith(":true");
-        type = type.toUpperCase().split(":")[0];
-        final LivingEntity mob = getEntity(type, l);
-        if(mob instanceof Zombie) {
-            ((Zombie) mob).setBaby(baby);
-        }
-        if(!spawn) {
-            mob.remove();
-        } else if(mob instanceof Ageable && baby) {
-            final Ageable a = (Ageable) mob;
-            a.setBaby();
-            a.setAgeLock(true);
-        }
-        return mob;
     }
 }

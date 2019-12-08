@@ -372,10 +372,10 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                                     event.setCurrentItem(getStatus(System.currentTimeMillis(), a, null, null, colorizeListString(config.getStringList("status.claimed"))));
                                 }
                             } else {
-                                sendStringListMessage(player, getMessage(config, "messages.already claimed"), null);
+                                sendStringListMessage(player, getStringList(config, "messages.already claimed"), null);
                             }
                         } else {
-                            sendStringListMessage(player, getMessage(config, "messages.not completed"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.not completed"), null);
                         }
                     }
                 } else if(r == questMasterShopSlot) {
@@ -392,9 +392,9 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                     giveItem(player, shopitems.get(r));
                     updateReturnToQuests(player);
                     replacements.put("{TOKENS}", Integer.toString(pdata.questTokens));
-                    sendStringListMessage(player, getMessage(config, "messages.purchase"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.purchase"), replacements);
                 } else {
-                    sendStringListMessage(player, getMessage(config, "messages.not enough tokens"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.not enough tokens"), replacements);
                 }
             } else if(r == returnToQuestsSlot) {
                 view(player);

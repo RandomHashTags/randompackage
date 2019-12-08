@@ -141,7 +141,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                                     replacements.put("{TOTAL}", formatBigDecimal(cost));
                                     replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
                                     replacements.put("{ITEM}", item.getType().name());
-                                    sendStringListMessage(player, getMessage(config, "messages.purchase" + (purchased ? "" : " incomplete")), replacements);
+                                    sendStringListMessage(player, getStringList(config, "messages.purchase" + (purchased ? "" : " incomplete")), replacements);
                                 } else {
                                     playSound(config, "sounds.not buyable", player, player.getLocation(), false);
                                 }

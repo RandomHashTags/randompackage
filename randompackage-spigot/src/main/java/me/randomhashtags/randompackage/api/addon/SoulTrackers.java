@@ -115,14 +115,14 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             msg = g.getSplitMsg();
             collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
             if(collectedsouls <= 0 || amount > collectedsouls) {
-                sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                sendStringListMessage(player, getStringList(config, "messages.need to collect souls"), null);
                 return;
             } else {
                 gems = amount;
                 item.setItemMeta(g.getItem(collectedsouls-gems).getItemMeta());
             }
         } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
-            sendStringListMessage(player, getMessage(config, "messages.need item with soul tracker"), null);
+            sendStringListMessage(player, getStringList(config, "messages.need item with soul tracker"), null);
         } else {
             itemMeta = item.getItemMeta();
             lore.clear();
@@ -145,13 +145,13 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
                         if(amount == -1) {
                             amount = collectedsouls;
                         } else if(collectedsouls <= 0) {
-                            sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.need to collect souls"), null);
                             return;
                         } else {
                             collectedsouls = amount;
                         }
                         if(amount == 0)  {
-                            sendStringListMessage(player, getMessage(config, "messages.need to collect souls"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.need to collect souls"), null);
                             return;
                         }
                         gems = (int) (collectedsouls * st.getSoulsCollected());
@@ -162,7 +162,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             }
             if(did) {
                 if(totalsouls-amount < 0) {
-                    sendStringListMessage(player, getMessage(config, "messages.need to collect more souls"), null);
+                    sendStringListMessage(player, getStringList(config, "messages.need to collect more souls"), null);
                     return;
                 } else {
                     lore.set(appliedSlot, appliedTracker.getApplied().replace("{SOULS}", Integer.toString(totalsouls-amount)));

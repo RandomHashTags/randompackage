@@ -19,6 +19,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -26,6 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
@@ -196,8 +199,13 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private void entityDeathEvent(EntityDeathEvent event) {
         final HashMap<UUID, LivingConquestMob> L = LivingConquestMob.living;
         if(L != null) {
-            final LivingConquestMob l = L.getOrDefault(event.getEntity().getUniqueId(), null);
+            final UUID uuid = event.getEntity().getUniqueId();
+            final LivingConquestMob l = L.getOrDefault(uuid, null);
             if(l != null) {
+                final LivingConquestChest c = LivingConquestChest.valueOf(uuid);
+                if(c != null) {
+                    c.getMobs().remove(uuid);
+                }
                 l.kill(event);
             }
         }
@@ -214,6 +222,15 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
     }
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
+        final Entity entity = event.getEntity();
+        final LivingEntity target = event.getTarget();
+        final LivingConquestMob mob = target != null ? LivingConquestMob.living.getOrDefault(entity.getUniqueId(), null) : null;
+        if(mob != null && LivingConquestMob.living.containsKey(target.getUniqueId())) {
+            event.setCancelled(true);
+        }
+    }
 
     public void viewLast(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest", true)) {
@@ -221,12 +238,12 @@ public class Conquest extends RPFeature implements CommandExecutor {
             replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
             replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
             replacements.put("{CONQUERER}", lastConquerer != null ? lastConquerer : "N/A");
-            sendStringListMessage(sender, getMessage(config, "messages.command"), replacements);
+            sendStringListMessage(sender, getStringList(config, "messages.command"), replacements);
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void spawn(@NotNull Player player) {

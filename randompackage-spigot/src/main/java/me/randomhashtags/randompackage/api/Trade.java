@@ -74,7 +74,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && hasPermission(player, "RandomPackage.trade", true)) {
-			sendStringListMessage(player, getMessage(config, "messages.commands"), null);
+			sendStringListMessage(player, getStringList(config, "messages.commands"), null);
 		} else if(args.length == 1) {
 			sendRequest(player, args[0]);
 		}
@@ -89,9 +89,9 @@ public class Trade extends RPFeature implements CommandExecutor {
 					|| radius != -1 && (sender.getWorld() != Bukkit.getPlayer(receiver).getWorld() || radius != -2 && sender.getLocation().distance(Bukkit.getPlayer(receiver).getLocation()) > radius)
 			) {
 				r.put("{TARGET}", receiver);
-				sendStringListMessage(sender, getMessage(config, "messages.not within range"), r);
+				sendStringListMessage(sender, getStringList(config, "messages.not within range"), r);
 			} else if(sender == Bukkit.getPlayer(receiver)) {
-				sendStringListMessage(sender, getMessage(config, "messages.send self"), null);
+				sendStringListMessage(sender, getStringList(config, "messages.send self"), null);
 			} else {
 				final UUID s = sender.getUniqueId();
 				final Player target = Bukkit.getPlayer(receiver);
@@ -100,8 +100,8 @@ public class Trade extends RPFeature implements CommandExecutor {
 				} else {
 					r.put("{TARGET}", target.getName());
 					r.put("{SENDER}", sender.getName());
-					sendStringListMessage(sender, getMessage(config, "messages.send request"), r);
-					sendStringListMessage(target, getMessage(config, "messages.receive request"), r);
+					sendStringListMessage(sender, getStringList(config, "messages.send request"), r);
+					sendStringListMessage(target, getStringList(config, "messages.receive request"), r);
 					requests.put(s, target.getUniqueId());
 					SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
 						if(requests.containsKey(s) && requests.get(s).equals(target.getUniqueId()))
@@ -132,7 +132,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 		if(a != null) {
 			final Player s = a.getSender();
 			other = s == player ? a.getReceiver() : s;
-			final List<String> msg = getMessage(config, "messages.cancelled");
+			final List<String> msg = getStringList(config, "messages.cancelled");
 			sendStringListMessage(player, msg, null);
 			sendStringListMessage(other, msg, null);
 			a.cancel();
@@ -161,7 +161,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 					final int slot = a.getNextEmptySlot(player);
 					if(slot != -1) {
 						if(blacklistedMaterials.contains(UMaterial.match(c).name())) {
-							sendStringListMessage(player, getMessage(config, "messages.cannot trade blacklisted material"), null);
+							sendStringListMessage(player, getStringList(config, "messages.cannot trade blacklisted material"), null);
 							player.updateInventory();
 							return;
 						}

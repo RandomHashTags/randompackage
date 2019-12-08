@@ -150,7 +150,7 @@ public class Duels extends RPFeature implements CommandExecutor {
 
     public void viewHelp(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.duel.help", true)) {
-            sendStringListMessage(player, getMessage(config, "messages.help"), null);
+            sendStringListMessage(player, getStringList(config, "messages.help"), null);
         }
     }
     public void viewTop(CommandSender sender, int page) {

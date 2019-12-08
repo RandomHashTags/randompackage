@@ -31,4 +31,7 @@ public interface ConquestChest extends Identifiable, Rewardable {
     List<String> getHealthMsg();
     List<String> getUnlockedMsg();
     LivingConquestChest spawn(Location l);
+
+    double getBossMaxDistanceFromConquest();
+    int getBossDistanceCheckInterval();
 }

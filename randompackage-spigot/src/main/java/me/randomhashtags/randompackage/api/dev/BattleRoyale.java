@@ -102,7 +102,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     }
     public final void viewHelp(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.battleroyale.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public final void tryJoining(Player player) {
@@ -114,7 +114,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                 } else {
                 }
             } else {
-                sendStringListMessage(player, getMessage(config, "messages.not joinable"), null);
+                sendStringListMessage(player, getStringList(config, "messages.not joinable"), null);
             }
         }
     }
@@ -142,7 +142,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             active = true;
             startTime = System.currentTimeMillis();
             startTask = -1;
-            for(String s : colorizeListString(getMessage(config, "messages.now joinable"))) {
+            for(String s : colorizeListString(getStringList(config, "messages.now joinable"))) {
                 Bukkit.broadcastMessage(s);
             }
             final Objective obj = scoreboard.getObjective("dummy");
@@ -174,7 +174,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             startTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::start, delay);
             nextStartTime = System.currentTimeMillis()+(delay*1000);
 
-            final List<String> receivedLootbag = colorizeListString(getMessage(config, "messages.won.received lootbag"));
+            final List<String> receivedLootbag = colorizeListString(getStringList(config, "messages.won.received lootbag"));
             if(winningTeam != null) {
                 final HashMap<Player, Boolean> status = winningTeam.getPlayers();
                 final List<String> winners = new ArrayList<>();
@@ -190,7 +190,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                     }
                 }
                 final String string = winners.toString(), players = string.substring(0, string.length()-1);
-                for(String s : colorizeListString(getMessage(config, "messages.ended"))) {
+                for(String s : colorizeListString(getStringList(config, "messages.ended"))) {
                     s = s.replace("{TEAM}", players);
                     Bukkit.broadcastMessage(s);
                 }
@@ -289,7 +289,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                         event.setCancelled(true);
                         d.updateInventory();
                         v.updateInventory();
-                        sendStringListMessage(d, getMessage(config, "messages.cannot hurt team members"), null);
+                        sendStringListMessage(d, getStringList(config, "messages.cannot hurt team members"), null);
                     }
                 }
             }

@@ -75,13 +75,13 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
 
     public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.lastmanstanding.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void viewTop(@NotNull CommandSender sender, int page) {
         if(hasPermission(sender, "RandomPackage.lastmanstanding.top", true)) {
             final String p = Integer.toString(page);
-            for(String s : getMessage(config, "messages.top survivors")) {
+            for(String s : getStringList(config, "messages.top survivors")) {
                 s = s.replace("{PAGE}", p);
                 if(s.contains("{SURVIVOR}")) {
                 } else {

@@ -107,7 +107,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 				pdata.addHome(player.getLocation(), z, UMaterial.GRASS_BLOCK);
 				final HashMap<String, String> replacements = new HashMap<>();
 				replacements.put("{HOME}", z);
-				sendStringListMessage(player, getMessage(config, "messages.set home"), replacements);
+				sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
 			}
 		}
 		return true;
@@ -181,7 +181,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 				} else if(click.equals("MIDDLE")) {
 					final HashMap<String, String> replacements = new HashMap<>();
 					replacements.put("{HOME}", h.name);
-					sendStringListMessage(player, getMessage(config, "messages.delete"), replacements);
+					sendStringListMessage(player, getStringList(config, "messages.delete"), replacements);
 					pdata.deleteHome(h);
 				} else if(click.contains("RIGHT")) {
 					editIcon(player, h);
@@ -195,7 +195,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 				final HashMap<String, String> replacements = new HashMap<>();
 				replacements.put("{HOME}", n);
 				replacements.put("{ICON}", umn);
-				sendStringListMessage(player, getMessage(config, "messages.save icon"), replacements);
+				sendStringListMessage(player, getStringList(config, "messages.save icon"), replacements);
 			}
 			player.updateInventory();
 		}
@@ -209,7 +209,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 			removeItem(player, is, 1);
 			player.updateInventory();
 			RPPlayer.get(player.getUniqueId()).addedMaxHomes += 1;
-			sendStringListMessage(player, getMessage(config, "messages.unlocked new home slot"), null);
+			sendStringListMessage(player, getStringList(config, "messages.unlocked new home slot"), null);
 		}
 	}
 	@EventHandler
@@ -218,7 +218,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 		final List<Home> homes = pdata.getHomes();
 		if(homes != null && !homes.isEmpty()) {
-			final List<String> msg = getMessage(config, "messages.deleted due to inside a faction claim");
+			final List<String> msg = getStringList(config, "messages.deleted due to inside a faction claim");
 			final HashMap<String, String> replacements = new HashMap<>();
 			final List<Chunk> c = factions.getRegionalChunks(event.faction);
 			for(Home h : new ArrayList<>(homes)) {

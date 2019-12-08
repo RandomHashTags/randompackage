@@ -203,7 +203,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 					giveItem(player, is);
 
 					final String p = player.getName(), it = is.getItemMeta().getDisplayName();
-					for(String s : getMessage(config, "messages.receive loot from Equipment Lootbox")) {
+					for(String s : getStringList(config, "messages.receive loot from Equipment Lootbox")) {
 						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", p).replace("{ITEM}", it)));
 					}
 				}
@@ -238,10 +238,10 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
 		if(mat != null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
 			if(set != null) {
-				sendStringListMessage(player, getMessage(config, "messages.cannot apply.armor set piece"), null);
+				sendStringListMessage(player, getStringList(config, "messages.cannot apply.armor set piece"), null);
 				return -1;
 			} else if(crystal != null) {
-				sendStringListMessage(player, getMessage(config, "messages.cannot apply.already has crystal"), null);
+				sendStringListMessage(player, getStringList(config, "messages.cannot apply.already has crystal"), null);
 				return -2;
 			}
 			if(RANDOM.nextInt(100) < percent) {

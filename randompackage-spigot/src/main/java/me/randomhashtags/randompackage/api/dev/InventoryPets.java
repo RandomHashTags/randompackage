@@ -192,7 +192,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             } else {
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TIME}", getRemainingTime(remainingtime));
-                sendStringListMessage(player, getMessage(config, "messages.on cooldown"), replacements);
+                sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
                 return 0;
             }
         }

@@ -94,7 +94,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
 
     public void viewStatus(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost", true)) {
-            final List<String> msg = colorizeListString(getMessage(config, "messages.view current"));
+            final List<String> msg = getStringList(config, "messages.view current");
             for(String s : msg) {
                 if(s.contains("{OUTPOST}")) {
                     for(Outpost o : getAllOutposts().values()) {
@@ -108,7 +108,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
     }
     public void viewHelp(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost.help", true)) {
-            sendStringListMessage(sender, getMessage(config, "messages.help"), null);
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void view(Player player) {

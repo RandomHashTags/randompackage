@@ -133,7 +133,7 @@ public class SpawnerStacking extends RPFeature {
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{TYPE}", c.getSpawnedType().name());
             replacements.put("{AMOUNT}", formatInt(stacks.get(spawnerLocation).getStack()));
-            sendStringListMessage(player, getMessage(config, "messages.view amount"), replacements);
+            sendStringListMessage(player, getStringList(config, "messages.view amount"), replacements);
         }
     }
 
@@ -174,10 +174,10 @@ public class SpawnerStacking extends RPFeature {
                                 final HashMap<String, String> replacements = new HashMap<>();
                                 replacements.put("{TYPE}", first.name());
                                 replacements.put("{TOTAL}", Integer.toString(newSize));
-                                sendStringListMessage(player, getMessage(config, "messages.added spawner"), replacements);
+                                sendStringListMessage(player, getStringList(config, "messages.added spawner"), replacements);
                             } else {
                                 final HashMap<String, String> replacements = new HashMap<String, String>(){{ put("{MAX}", Integer.toString(max)); }};
-                                sendStringListMessage(player, getMessage(config, "messages.only stack up to max"), replacements);
+                                sendStringListMessage(player, getStringList(config, "messages.only stack up to max"), replacements);
                             }
                         }
                     } else {

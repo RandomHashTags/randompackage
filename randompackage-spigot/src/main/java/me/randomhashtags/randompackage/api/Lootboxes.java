@@ -65,8 +65,8 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
 
         started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
-        opened = colorizeListString(getMessage(config, "messages.opened"));
-        rewardFormat = colorizeListString(getMessage(config, "messages.reward format"));
+        opened = colorizeListString(getStringList(config, "messages.opened"));
+        rewardFormat = colorizeListString(getStringList(config, "messages.reward format"));
 
         guiLootboxes = new HashMap<>();
         redeeming = new HashMap<>();
@@ -184,7 +184,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 giveItem(player, lootbox.getItem());
             }
         } else {
-            sendStringListMessage(player, getMessage(config, "messages.unlock"), null);
+            sendStringListMessage(player, getStringList(config, "messages.unlock"), null);
         }
         player.closeInventory();
     }
@@ -316,7 +316,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 }
             } else if(L != null) {
                 player.closeInventory();
-                sendStringListMessage(player, getMessage(config, "messages.unlock"), null);
+                sendStringListMessage(player, getStringList(config, "messages.unlock"), null);
             } else {
             }
         }

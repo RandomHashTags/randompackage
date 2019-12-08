@@ -116,7 +116,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		captureTime = config.getInt("settings.time to cap");
 		startCapCountdown = config.getInt("settings.start cap countdown");
 		captureRadius = config.getInt("settings.capture radius");
-		captured = getMessage(config, "messages.captured");
+		captured = getStringList(config, "messages.captured");
 		rewardformat = colorize(config.getString("messages.reward format"));
 		capturedscoreboard = config.getStringList("settings.scoreboards.captured");
 		cappingscoreboard = config.getStringList("settings.scoreboards.capping");
@@ -210,7 +210,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			final String join = config.getString("messages.join event"), timeleft = getRemainingTime(getTimeLeft()), runtime = getRemainingTime(getRuntime());
 			final String players = center != null ? formatInt(center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius).size()) : "0";
 
-			for(String string : getMessage(config, "messages.command")) {
+			for(String string : getStringList(config, "messages.command")) {
 				String i = string;
 				if(i.contains("{STATUS}"))
 					i = i.replace("{STATUS}", center != null ? status : "&c&lNOT SETUP");
@@ -251,14 +251,14 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			center = l;
 			final HashMap<String, String> replacements = new HashMap<>();
 			replacements.put("{LOCATION}", l.getBlockX() + "x, " + l.getBlockY() + "y, " + l.getBlockZ());
-			sendStringListMessage(sender, getMessage(config, "messages.set center"), null);
+			sendStringListMessage(sender, getStringList(config, "messages.set center"), null);
 		}
 	}
 
 	@EventHandler
 	private void playerJoinEvent(PlayerJoinEvent event) {
 		if(status.equals("ACTIVE")) {
-			sendStringListMessage(event.getPlayer(), getMessage(config, "messages.event running"), null);
+			sendStringListMessage(event.getPlayer(), getStringList(config, "messages.event running"), null);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -269,7 +269,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			final boolean stopped = status.equals("STOPPED");
 			if(event.getTo().getWorld().equals(w) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (stopped || status.equals("CAPTURED"))) {
 				event.setCancelled(true);
-				sendStringListMessage(player, null, getMessage(config, "messages." + (stopped ? "no event running" : "already capped")), -1, null);
+				sendStringListMessage(player, null, getStringList(config, "messages." + (stopped ? "no event running" : "already capped")), -1, null);
 			} else if(event.getFrom().getWorld().equals(w)) {
 				player.setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
 			}
@@ -300,7 +300,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 
 	public void broadcastStartCapping() {
 		final String time = getRemainingTime(getTimeLeft()), c = currentPlayerCapturing.getName();
-		final List<String> m = colorizeListString(getMessage(config, "messages.start capping"));
+		final List<String> m = colorizeListString(getStringList(config, "messages.start capping"));
 		final HashMap<String, String> replacements = new HashMap<>();
 		replacements.put("{PLAYER}", c);
 		replacements.put("{TIME}", time);
@@ -310,7 +310,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	}
 	public void broadcastCapping() {
 		final String t = getRemainingTime(getTimeLeft());
-		final List<String> m = getMessage(config, "messages.capping");
+		final List<String> m = getStringList(config, "messages.capping");
 		for(Player player : center.getWorld().getPlayers()) {
 			for(String string : m) {
 				if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
@@ -320,7 +320,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void broadcastNoLongerCapping() {
-		final List<String> m = colorizeListString(getMessage(config, "messages.no longer capping"));
+		final List<String> m = colorizeListString(getStringList(config, "messages.no longer capping"));
 		final String p = previouscapturer.getName();
 		for(Player player : center.getWorld().getPlayers()) {
 			for(String string : m) {
@@ -436,7 +436,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				}
 			}
 			if(!did) {
-				sendStringListMessage(player, null, getMessage(config, "messages.blocked command"), -1, null);
+				sendStringListMessage(player, null, getStringList(config, "messages.blocked command"), -1, null);
 				if(!player.isOp()) {
 					event.setCancelled(true);
 				} else {
@@ -491,7 +491,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				}
 
 				final List<Player> online = player.getWorld().getPlayers();
-				for(String string : getMessage(config, "messages.open loot bag")) {
+				for(String string : getStringList(config, "messages.open loot bag")) {
 					if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", player.getName());
 					if(string.equals("{REWARDS}")) {
 						for(Player p : online) {
@@ -509,7 +509,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	public void teleportToKOTH(Player player) {
 		if(hasPermission(player, "RandomPackage.koth.teleport", true) && teleportLocation != null) {
 			final boolean captured = status.equals("CAPTURED");
-			sendStringListMessage(player, null, getMessage(config, "messages." + (captured ? "already capped" : "teleport")), 0, null);
+			sendStringListMessage(player, null, getStringList(config, "messages." + (captured ? "already capped" : "teleport")), 0, null);
 			if(!captured) {
 				player.teleport(teleportLocation);
 			}

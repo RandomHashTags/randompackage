@@ -15,7 +15,6 @@ import java.util.List;
 public class FileConquestChest extends RPAddon implements ConquestChest {
     private HashMap<ConquestMob, String> spawnedBosses;
     private UMaterial placedBlock;
-    private List<String> spawnMsg, willSpawnMsg, stillAliveMsg, healthMsg, unlockedMsg;
 
     public FileConquestChest(File f) {
         load(f);
@@ -48,32 +47,24 @@ public class FileConquestChest extends RPAddon implements ConquestChest {
         if(placedBlock == null) placedBlock = UMaterial.match(yml.getString("settings.placed block").toUpperCase());
         return placedBlock;
     }
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
-    public List<String> getHitAttributes() { return yml.getStringList("hit attributes"); }
-    public List<String> getSpawnMsg() {
-        if(spawnMsg == null) spawnMsg = colorizeListString(yml.getStringList("messages.spawn"));
-        return spawnMsg;
-    }
-    public List<String> getWillSpawnMsg() {
-        if(willSpawnMsg == null) willSpawnMsg = colorizeListString(yml.getStringList("messages.will spawn"));
-        return willSpawnMsg;
-    }
-    public List<String> getStillAliveMsg() {
-        if(stillAliveMsg == null) stillAliveMsg = colorizeListString(yml.getStringList("messages.still alive"));
-        return stillAliveMsg;
-    }
-    public List<String> getHealthMsg() {
-        if(healthMsg == null) healthMsg = colorizeListString(yml.getStringList("messages.health"));
-        return healthMsg;
-    }
-    public List<String> getUnlockedMsg() {
-        if(unlockedMsg == null) unlockedMsg = colorizeListString(yml.getStringList("messages.unlocked"));
-        return unlockedMsg;
-    }
+    public List<String> getRewards() { return getStringList(yml, "rewards"); }
+    public List<String> getHitAttributes() { return getStringList(yml, "hit attributes"); }
+    public List<String> getSpawnMsg() { return getStringList(yml, "messages.spawn"); }
+    public List<String> getWillSpawnMsg() { return getStringList(yml, "messages.will spawn"); }
+    public List<String> getStillAliveMsg() { return getStringList(yml, "messages.still alive"); }
+    public List<String> getHealthMsg() { return getStringList(yml, "messages.health"); }
+    public List<String> getUnlockedMsg() { return getStringList(yml, "messages.unlocked"); }
 
     public LivingConquestChest spawn(Location l) {
         final Chunk c = l.getChunk();
         if(!c.isLoaded()) c.load();
         return new LivingConquestChest(l, this, System.currentTimeMillis(), true, true);
+    }
+
+    public double getBossMaxDistanceFromConquest() {
+        return yml.getDouble("settings.bosses.max distance from conquest", 50);
+    }
+    public int getBossDistanceCheckInterval() {
+        return yml.getInt("settings.bosses.distance check interval", 60);
     }
 }

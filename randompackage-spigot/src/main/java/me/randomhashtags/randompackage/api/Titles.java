@@ -94,7 +94,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 				player.updateInventory();
 				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 				final boolean has = pdata.getTitles().contains(T);
-				final List<String> m = getMessage(config, "messages." + (has ? "already own" : "redeem"));
+				final List<String> m = getStringList(config, "messages." + (has ? "already own" : "redeem"));
 				for(String s : m) {
 					s = s.replace("{TITLE}", colorize(T.getIdentifier()));
 					player.sendMessage(colorize(s));
@@ -126,7 +126,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 				viewTitles(player, pdata, page+2);
 			} else if(titles.size() > Z) {
 				final String q = (a != null && a.equals(titles.get(Z).getIdentifier()) ? "un" : "") + "equip";
-				final List<String> s = getMessage(config, "messages." + q);
+				final List<String> s = getStringList(config, "messages." + q);
 				for(String h : s) player.sendMessage(colorize(h.replace("{TITLE}", titles.get(Z).getIdentifier())));
 				pdata.setActiveTitle(q.equals("unequip") ? null : titles.get(Z));
 				update(player, pdata);
@@ -144,7 +144,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 			page = page-1;
 			int size = owned.size()-(53*page);
 			if(size <= 0) {
-				sendStringListMessage(player, getMessage(config, "messages.no unlocked titles"), null);
+				sendStringListMessage(player, getStringList(config, "messages.no unlocked titles"), null);
 			} else {
 				final Title A = pdata.getActiveTitle();
 				final String activetitle = A != null ? A.getIdentifier() : null;
