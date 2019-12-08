@@ -45,7 +45,6 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     private double tax;
     private long minWager;
     private String wagerName, yourSelection, opponentSelection;
-    private List<String> addedlore, wagerLore, wagerAvailable, wagerUnavailable, winnerLore, rollingLore;
     private List<CoinFlipMatch> available;
 
     private LinkedHashMap<Integer, CoinFlipOption> optionz;
@@ -100,25 +99,20 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
 
         minWager = config.getLong("min wager");
         tax = config.getDouble("wager.tax");
-        wagerAvailable = colorizeListString(config.getStringList("wager.status.can afford"));
-        wagerUnavailable = colorizeListString(config.getStringList("wager.status.cannot afford"));
         wagerName = colorize(config.getString("wager.name"));
-        wagerLore = colorizeListString(config.getStringList("wager.lore"));
 
         yourSelection = colorize(config.getString("challenge.your selection"));
         opponentSelection = colorize(config.getString("challenge.opponent selection"));
-        winnerLore = colorizeListString(config.getStringList("challenge.winner.lore"));
         countdown = d(config, "challenge.countdown");
-        rollingLore = colorizeListString(config.getStringList("challenge.rolling.lore"));
 
         gui = new UInventory(null, 54, colorize(config.getString("gui.title")));
         options = new UInventory(null, config.getInt("gui.options.size"), colorize(config.getString("gui.options.title")));
         challenge = new UInventory(null, config.getInt("challenge.size"), colorize(config.getString("challenge.title")));
         countdownStart = config.getInt("gui.options.countdown");
-        addedlore = colorizeListString(config.getStringList("gui.options.added lore"));
         optionz = new LinkedHashMap<>();
 
         final Inventory oi = options.getInventory();
+        final List<String> addedlore = getStringList(config, "gui.options.added lore");
         for(String s : config.getConfigurationSection("gui.options").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("countdown") && !s.equals("added lore")) {
                 final String p = "gui.options." + s + ".";
@@ -146,18 +140,17 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         active = new HashMap<>();
         available = new ArrayList<>();
 
-        final YamlConfiguration a = otherdata;
-        final ConfigurationSection c = a.getConfigurationSection("coinflips");
+        final ConfigurationSection c = otherdata.getConfigurationSection("coinflips");
         if(c != null) {
             for(String s : c.getKeys(false)) {
-                final CoinFlipMatch m = new CoinFlipMatch(a.getLong("coinflips." + s + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(s)), CoinFlipOption.paths.get(a.getString("coinflips." + s + ".option")), getBigDecimal(a.getString("coinflips." + s + ".wager")));
+                final CoinFlipMatch m = new CoinFlipMatch(otherdata.getLong("coinflips." + s + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(s)), CoinFlipOption.paths.get(otherdata.getString("coinflips." + s + ".option")), getBigDecimal(otherdata.getString("coinflips." + s + ".wager")));
                 available.add(m);
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded Coin Flip &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(OfflinePlayer p : picking.keySet()) {
+        for(OfflinePlayer p : new ArrayList<>(picking.keySet())) {
             if(p.isOnline()) {
                 p.getPlayer().closeInventory();
             }
@@ -169,14 +162,14 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         }
         otherdata.set("coinflips", null);
         for(CoinFlipMatch m : available) {
-            final String u = m.creator().getUniqueId().toString();
-            otherdata.set("coinflips." + u + ".created", m.created());
-            otherdata.set("coinflips." + u + ".wager", m.wager());
-            otherdata.set("coinflips." + u + ".option", m.option().path);
+            final String u = m.creator().getUniqueId().toString(), path = "coinflips." + u + ".";
+            otherdata.set(path + "created", m.created());
+            otherdata.set(path + "wager", m.wager());
+            otherdata.set(path + "option", m.option().path);
             m.delete();
         }
         saveOtherData();
-        for(Player p : active.keySet()) {
+        for(Player p : new ArrayList<>(active.keySet())) {
             p.closeInventory();
         }
         CoinFlipOption.paths = null;
@@ -201,9 +194,9 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                 final double wd = wager.doubleValue();
                 final String w = formatBigDecimal(wager), tax = formatBigDecimal(BigDecimal.valueOf(wd*this.tax)), ch = m.option().chosen;
                 lore.clear();
-                for(String l : wagerLore) {
+                for(String l : getStringList(config, "wager.lore")) {
                     if(l.equals("{STATUS}")) {
-                        lore.addAll(bal >= wd ? wagerAvailable : wagerUnavailable);
+                        lore.addAll(getStringList(config, "wager.status.can" + (bal >= wd ? "" : "not") + " afford"));
                     } else {
                         lore.add(l.replace("{WAGER}", w).replace("{TAX}", tax).replace("{CHOSEN}", ch));
                     }
@@ -437,7 +430,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                         } else {
                             item = option.clone(); itemMeta = item.getItemMeta();
                             itemMeta.setDisplayName(rollingName.replace("{SELECTION_COLOR}", selectionColor));
-                            itemMeta.setLore(rollingLore);
+                            itemMeta.setLore(getStringList(config, "challenge.rolling.lore"));
                             item.setItemMeta(itemMeta);
                             t.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                                 if(a.isOnline() && active.containsKey(A)) {
@@ -467,9 +460,6 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         final CoinFlipOption winningOption = zero ? l : r, losingOption = zero ? r : l;
         final OfflinePlayer winner = zero ? a : b, loser = winner == a ? b : a;
         final RPPlayer W = RPPlayer.get(winner.getUniqueId()), ll = RPPlayer.get(loser.getUniqueId());
-        final boolean wL = W.isLoaded, lL = ll.isLoaded;
-        if(!wL) W.load();
-        if(!lL) ll.load();
 
         final CoinFlipStats s1 = W.getCoinFlipStats(), s2 = ll.getCoinFlipStats();
         s1.wonCash = s1.wonCash.add(t);
@@ -479,8 +469,6 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         s2.losses = s2.losses.add(BigDecimal.ONE);
         s2.taxesPaid = s2.taxesPaid.add(taxed);
 
-        if(!wL) W.unload();
-        if(!lL) ll.unload();
         final Player ap = a.getPlayer(), bp = b.getPlayer();
         if(active.containsKey(ap)) {
             active.put(ap, null);
@@ -492,18 +480,18 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         eco.depositPlayer(winner, total.doubleValue()-taxed.doubleValue());
         item = winningOption.appear(); itemMeta = item.getItemMeta(); lore.clear();
         itemMeta.setDisplayName(colorize(config.getString("challenge.winner.name")).replace("{COLOR}", color).replace("{PLAYER}", winnerName));
-        for(String s : winnerLore) {
+        for(String s : getStringList(config, "challenge.winner.lore")) {
             lore.add(s.replace("{PLAYER}", winnerName).replace("{COLOR}", color));
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);
         final int slot = challengeSlots.get("winner");
-        if(a.isOnline() && active.containsKey(ap)) {
+        if(active.containsKey(ap)) {
             final Player p = a.getPlayer();
             p.getOpenInventory().getTopInventory().setItem(slot, item);
             p.updateInventory();
         }
-        if(b.isOnline() && active.containsKey(bp)) {
+        if(active.containsKey(bp)) {
             final Player p = b.getPlayer();
             p.getOpenInventory().getTopInventory().setItem(slot, item);
             p.updateInventory();
@@ -527,7 +515,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                 sendStringListMessage(p, w, replacements);
             }
         }
-        final CoinFlipEndEvent e = new CoinFlipEndEvent(winner.getUniqueId(), loser.getUniqueId(), wager, BigDecimal.valueOf(tax));
+        final CoinFlipEndEvent e = new CoinFlipEndEvent(winner, loser, wager, BigDecimal.valueOf(tax));
         PLUGIN_MANAGER.callEvent(e);
     }
     private void stopTasks(CoinFlipMatch m) {

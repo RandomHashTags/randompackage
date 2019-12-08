@@ -1,11 +1,13 @@
 package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.event.*;
-import me.randomhashtags.randompackage.event.async.*;
+import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
+import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.universal.UVersionable;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -179,7 +181,17 @@ public interface EventEntities extends EventConditions, UVersionable {
         return getEntities("Projectile", p, "Shooter", p.getShooter());
     }
     // RandomPackage event entities
-    default HashMap<String, Entity> getEntities(CoinFlipEndEvent event) { return getEntities("Winner", event.winner, "Loser", event.loser); }
+    default HashMap<String, Entity> getEntities(CoinFlipEndEvent event) {
+        final HashMap<String, Entity> entities = new HashMap<>();
+        final OfflinePlayer winner = event.winner, loser = event.loser;
+        if(winner.isOnline()) {
+            entities.put("Winner", winner.getPlayer());
+        }
+        if(loser.isOnline()) {
+            entities.put("Loser", loser.getPlayer());
+        }
+        return entities;
+    }
     default HashMap<String, Entity> getEntities(DamageEvent event) { return getEntities("Victim", event.getEntity(), "Damager", event.getDamager()); }
     default HashMap<String, Entity> getEntities(FallenHeroSlainEvent event) { return getEntities("Victim", event.hero.getEntity(), "Killer", event.killer); }
     default HashMap<String, Entity> getEntities(MobStackDepleteEvent event) { return getEntities("Killer", event.killer, "Victim", event.stack.entity); }

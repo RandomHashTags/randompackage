@@ -71,7 +71,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private HashMap<Integer, Long> enchantercost;
     private HashMap<Integer, ItemStack> enchanterpurchase;
     private List<Player> invAccepting;
-    private List<String> noMoreEnchantsAllowed;
     public static List<String> globalattributes;
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
@@ -91,9 +90,13 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 viewEnchants(sender, page > 0 ? page : 1);
             }
         } else if(player != null) {
-            if(n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true))viewAlchemist(player);
-            else if(n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true))viewEnchanter(player);
-            else if(n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true))  viewTinkerer(player);
+            if(n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true)) {
+                viewAlchemist(player);
+            } else if(n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true)){
+                viewEnchanter(player);
+            } else if(n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true)) {
+                viewTinkerer(player);
+            }
         }
         return true;
     }
@@ -109,7 +112,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         alchemistexchange = d(config, "alchemist.exchange");
         alchemistaccept = d(config, "alchemist.accept");
         tinkereraccept = d(config, "tinkerer.accept");
-        noMoreEnchantsAllowed = colorizeListString(config.getStringList("settings.no more enchants"));
 
         save("custom enchants", "global attributes.yml");
         globalattributes = YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")).getStringList("attributes");
@@ -581,8 +583,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         return item;
     }
     public int getEnchantmentLevel(String string) {
-        string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
-        return fromRoman(string);
+        if(string != null) {
+            string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
+            return fromRoman(string);
+        } else {
+            return 0;
+        }
     }
     public boolean isOnCorrectItem(CustomEnchant enchant, ItemStack is) {
         final String i = is != null ? is.getType().name() : null;
@@ -1056,7 +1062,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     boolean apply = false;
                     item = current.clone(); itemMeta = item.getItemMeta(); lore.clear();
                     if(item.hasItemMeta() && itemMeta.hasLore()) {
-                        if(itemMeta.getLore().containsAll(noMoreEnchantsAllowed)) {
+                        if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
                             ev.setCancelled(true);
                             return;
                         }
