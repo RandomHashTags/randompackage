@@ -42,6 +42,37 @@ public interface UVersionable extends Versionable {
 
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
     EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND, EIGHT ? null : EquipmentSlot.OFF_HAND };
+    Set<String> INTERACTABLE_MATERIALS = new HashSet<String>() {{
+        addAll(Arrays.asList(
+            "BELL",
+            "BREWING_STAND",
+            "BLAST_FURNACE",
+            "CAULDRON",
+            "CHEST",
+            "COMPOSTER",
+            "CRAFTING_TABLE", "WORKBENCH",
+            "DISPENSER",
+            "DROPPER",
+            "ENDER_CHEST",
+            "ENCHANTMENT_TABLE", "ENCHANTING_TABLE",
+            "FENCE_GATE",
+            "FURNACE",
+            "GRINDSTONE",
+            "HOPPER",
+            "JUKEBOX",
+            "LECTERN",
+            "LOOM",
+            "LEVER",
+            "NOTE_BLOCK",
+            "SMOKER",
+            "STONECUTTER",
+            "TNT",
+            "TRAPDOOR",
+            "TRAPPED_CHEST",
+            //
+            "BED"
+        ));
+    }};
 
     HashMap<YamlConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
 
@@ -412,6 +443,16 @@ public interface UVersionable extends Versionable {
             case "ZOMBIE_HORSE": return EIGHT ? null : w.spawn(l, ZombieHorse.class);
             case "ZOMBIE_VILLAGER": return EIGHT ? null : w.spawn(l, ZombieVillager.class);
             default: return null;
+        }
+    }
+    default boolean isInteractable(Material material) {
+        final String m = material.name();
+        if(!LEGACY) {
+            return material.isInteractable();
+        } else {
+            return INTERACTABLE_MATERIALS.contains(m) || m.contains("ANVIL") || m.endsWith("_BED")
+                    || m.endsWith("DOOR") && !m.equals("IRON_DOOR")
+                    ;
         }
     }
 }

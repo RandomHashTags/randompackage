@@ -152,7 +152,7 @@ public final class RPEvents extends RPFeature {
             final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
             if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
                 final Block block = event.getClickedBlock();
-                if(block == null || !block.getType().isInteractable()) {
+                if(block == null || !isInteractable(block.getType())) {
                     final ArmorEquipEvent e = new ArmorEquipEvent(player, slot, ArmorEventReason.HOTBAR_EQUIP, is);
                     PLUGIN_MANAGER.callEvent(e);
                 }

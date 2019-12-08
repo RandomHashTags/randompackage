@@ -107,7 +107,18 @@ public interface EventReplacements extends EventEntities {
     default String[] getReplacements(BlockBreakEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Block", toString(event.getBlock().getLocation())}); }
     default String[] getReplacements(BlockGrowEvent event) { return new String[] {"@Block", toString(event.getBlock().getLocation())}; }
     default String[] getReplacements(BlockPlaceEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), (String[]) null); }
-    default String[] getReplacements(PlayerFishEvent event) { return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"xp", Integer.toString(event.getExpToDrop()), "@Caught", toString(event.getCaught().getLocation())}); }
+    default String[] getReplacements(PlayerFishEvent event) {
+        final Entity entity = event.getCaught();
+        final String[] replacements = getLocationReplacements(event.getPlayer(), "Player");
+        final List<String> added = new ArrayList<>();
+        added.add("xp");
+        added.add(Integer.toString(event.getExpToDrop()));
+        if(entity != null) {
+            added.add("@Caught");
+            added.add(toString(entity.getLocation()));
+        }
+        return getReplacements(replacements, added);
+    }
     default String[] getReplacements(EntityDamageEvent event) { return getReplacements(getLocationReplacements(event.getEntity(), "Victim"), new String[] {"dmg", Double.toString(event.getDamage())}); }
     default String[] getReplacements(EntityDamageByEntityEvent event) { return new String[] {"dmg", Double.toString(event.getDamage()), "@Damager", toString(event.getDamager().getLocation()), "@Victim", toString(event.getEntity().getLocation())}; }
     default String[] getReplacements(EntityShootBowEvent event) { return new String[] {"@Shooter", toString(event.getEntity().getLocation()), "@Projectile", toString(event.getProjectile().getLocation())}; }
