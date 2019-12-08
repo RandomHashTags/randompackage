@@ -59,6 +59,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             switch (a) {
                 case "stop":
                     destroyConquests(sender);
+                    break;
                 case "spawn":
                     if(sender instanceof Player) {
                         spawn((Player) sender);

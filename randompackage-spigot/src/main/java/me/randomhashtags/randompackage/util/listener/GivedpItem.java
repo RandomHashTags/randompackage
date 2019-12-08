@@ -273,7 +273,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
                 if(m.isEnabled()) {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
-                    final ItemStack i = lvl ? items.get("mcmmolevelvoucher").clone() : xp ? items.get("mcmmoxpvoucher").clone() : items.get("mcmmocreditvoucher").clone();
+                    final ItemStack i = (lvl ? items.get("mcmmolevelvoucher") : xp ? items.get("mcmmoxpvoucher") : items.get("mcmmocreditvoucher")).clone();
                     final String[] a = input.split(":");
                     final String sk = a[1];
                     final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(sk);

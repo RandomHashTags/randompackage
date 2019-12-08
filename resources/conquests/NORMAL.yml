@@ -53,7 +53,7 @@ settings:
   spawn region: "world;-10000:10000;-10000:10000"
   #
   bosses:
-    max distance from conquest: 50
+    max distance from conquest: 25
     distance check interval: 60 # Measured in ticks
 #
 rewards:
