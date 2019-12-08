@@ -7,8 +7,8 @@ import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import me.randomhashtags.randompackage.util.obj.TObject;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,6 +18,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -62,8 +63,8 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 final String procValue = enchant.getEnchantProcValue();
                                 int levels = 0;
                                 if(involved != null) {
-                                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = getCustomEnchants().getEnchants(involved);
-                                    for(LinkedHashMap<CustomEnchant, Integer> enchantLevels : enchants.values()) {
+                                    final EquippedCustomEnchants equipped = getCustomEnchants().getEnchants(involved);
+                                    for(LinkedHashMap<CustomEnchant, Integer> enchantLevels : equipped.getInfo().values()) {
                                         if(enchantLevels != null && enchantLevels.containsKey(enchant)) {
                                             levels += enchantLevels.get(enchant);
                                         }
@@ -92,7 +93,6 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     hasCancelled = true;
                 } else if(condition.startsWith("chance=")) {
                     final double chance = evaluate(value);
-                    Bukkit.broadcastMessage("EventExecutor;value=" + value + ";chance=" + chance);
                     final boolean check = RANDOM.nextInt(100) < chance;
                     passed = check;
                     didProc = check;
@@ -360,22 +360,29 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
             default: return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
         }
     }
-    public void triggerCustomEnchants(Event event, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants, List<String> globalattributes) {
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+    public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes) {
+        triggerCustomEnchants(event, equipped, globalattributes, EQUIPMENT_SLOTS);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants, List<String> globalattributes) {
+    public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
+        triggerCustomEnchants(event, getEntities(event), equipped, globalattributes, slots);
+    }
+    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
+        triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
+    }
+    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) { // TODO: fix this to only proc on 1 equipment slot
         //final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
-        for(ItemStack is : enchants.keySet()) {
-            final LinkedHashMap<CustomEnchant, Integer> e = enchants.get(is);
-            if(e != null) {
-                for(CustomEnchant enchant : e.keySet()) {
+        final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
+        for(EquipmentSlot slot : slots) {
+            final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
+            final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> info = equipped.getInfo();
+            final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
+            if(enchants != null) {
+                for(CustomEnchant enchant : enchants.keySet()) {
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
                     //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getName() + ";onCorrectItem=" + onCorrectItem);
                     if(onCorrectItem) {
-                        final int lvl = e.get(enchant);
-                        Bukkit.broadcastMessage("EventExecutor;executing enchant " + enchant.getIdentifier() + " " + lvl);
-                        Bukkit.broadcastMessage("EventExecutor;event=" + event.getEventName() + ";entities=" + entities);
+                        final int lvl = enchants.get(enchant);
                         final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
                         try {
                             trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);

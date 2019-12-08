@@ -41,6 +41,7 @@ public interface UVersionable extends Versionable {
     ConsoleCommandSender CONSOLE = Bukkit.getConsoleSender();
 
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
+    EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND, EIGHT ? null : EquipmentSlot.OFF_HAND };
 
     HashMap<YamlConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
 

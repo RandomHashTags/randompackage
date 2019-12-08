@@ -53,19 +53,20 @@ public final class RPEvents extends RPFeature {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && event.getCurrentItem() != null && event.getCursor() != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
+        final ItemStack cursoritem = event.getCursor(), currentitem = event.getCurrentItem();
+        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && currentitem != null && cursoritem != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
             final Player player = (Player) event.getWhoClicked();
-            final InventoryType.SlotType st = event.getSlotType();
-            final ClickType ct = event.getClick();
-            final ItemStack cursoritem = event.getCursor(), currentitem = event.getCurrentItem();
+            final InventoryType.SlotType slotType = event.getSlotType();
+            final ClickType clickType = event.getClick();
             final PlayerInventory inv = player.getInventory();
             final String cursor = cursoritem.getType().name(), current = currentitem.getType().name();
-            if((st.equals(InventoryType.SlotType.QUICKBAR) || st.equals(InventoryType.SlotType.CONTAINER)) && ct.equals(ClickType.CONTROL_DROP)) return;
+            if((slotType.equals(InventoryType.SlotType.QUICKBAR) || slotType.equals(InventoryType.SlotType.CONTAINER)) && clickType.equals(ClickType.CONTROL_DROP)) return;
             ArmorUnequipEvent unequip = null;
             ArmorEquipEvent equip = null;
             final EquipmentSlot equipmentSlot = getRespectiveSlot(current);
-            if(st.equals(InventoryType.SlotType.ARMOR) && ct.equals(ClickType.NUMBER_KEY)) {
-                final int rawslot = event.getRawSlot();
+            final int rawslot = event.getRawSlot(), targetSlot = getTargetSlot(current);
+            final boolean slotTypeIsArmor = slotType.equals(InventoryType.SlotType.ARMOR);
+            if(slotTypeIsArmor && clickType == ClickType.NUMBER_KEY) {
                 final ItemStack prev = inv.getItem(event.getSlot()), hotbarItem = inv.getItem(event.getHotbarButton());
                 final String t = hotbarItem != null ? hotbarItem.getType().name() : "AIR";
                 if(prev != null && !prev.getType().name().equals("AIR")) {
@@ -75,34 +76,29 @@ public final class RPEvents extends RPFeature {
                     equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.NUMBER_KEY_EQUIP, hotbarItem);
                 }
             } else if(event.isShiftClick()) {
-                if(st.equals(InventoryType.SlotType.ARMOR)) {
+                if(slotTypeIsArmor) {
                     unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_UNEQUIP, currentitem);
                 } else {
-                    final int targetSlot = getTargetSlot(current);
                     if(targetSlot == -1) return;
                     final ItemStack prevArmor = inv.getArmorContents()[targetSlot == 5 ? 3 : targetSlot == 6 ? 2 : targetSlot == 7 ? 1 : 0];
                     if((prevArmor == null || prevArmor.getType().equals(Material.AIR)) && canBeUsed(targetSlot, current)) {
                         equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_EQUIP, currentitem);
                     }
                 }
-            } else if(st.equals(InventoryType.SlotType.ARMOR)) {
-                if(ct.name().contains("DROP") && !current.equals("AIR")) {
+            } else if(slotTypeIsArmor) {
+                if(clickType.name().contains("DROP") && !current.equals("AIR")) {
                     unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.DROP, currentitem);
-                } else if(ct.equals(ClickType.LEFT) || ct.equals(ClickType.RIGHT)) {
-                    final int rawslot = event.getRawSlot();
-                    if(!current.equals("AIR")) {
-                        final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
-                        if(c1 == c2 || rawslot == c1) {
-                            unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
-                        }
+                } else if(clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
+                    final int cursorTargetSlot = getTargetSlot(cursor);
+                    if(!current.equals("AIR") && (targetSlot == cursorTargetSlot || rawslot == targetSlot)) {
+                        unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
                     }
-                    if(!cursor.equals("AIR")) {
-                        final int c1 = getTargetSlot(current), c2 = getTargetSlot(cursor);
-                        if(c1 == c2 || rawslot == c2) {
-                            equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_EQUIP, cursoritem);
-                        }
+                    if(!cursor.equals("AIR") && (targetSlot == cursorTargetSlot || rawslot == cursorTargetSlot)) {
+                        equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_EQUIP, cursoritem);
                     }
                 }
+            } else {
+                return;
             }
             boolean update = false;
             if(unequip != null) {

@@ -3,50 +3,60 @@ package me.randomhashtags.randompackage.util.obj;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
+import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class EquippedCustomEnchants {
+public class EquippedCustomEnchants implements Versionable {
+    public static HashMap<Player, ArmorEquipEvent> EVENTS = new HashMap<>();
     private Player player;
-    private LinkedHashMap<EquipmentSlot, ItemStack> items;
     private LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> enchants;
 
     public EquippedCustomEnchants(@NotNull Player player) {
         this.player = player;
-        items = new LinkedHashMap<>();
         enchants = new LinkedHashMap<>();
     }
 
     public void clear() {
-        items.clear();
         enchants.clear();
     }
-    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getEnchants() {
-        return getEnchants(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
+    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getInfo() {
+        return getInfo(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
     }
-    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getEnchants(EquipmentSlot...slots) {
+    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getInfo(EquipmentSlot...slots) {
         final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> map = new LinkedHashMap<>();
         for(EquipmentSlot slot : slots) {
-            map.put(items.get(slot), enchants.get(slot));
+            final ItemStack target = getItemInSlot(slot);
+            if(target != null && enchants.containsKey(slot)) {
+                map.put(target, enchants.get(slot));
+            }
         }
         return map;
     }
+
+    public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> getEnchants() { return enchants; }
+
     public ItemStack getItem(EquipmentSlot slot) {
-        return items.getOrDefault(slot, null);
+        return getItem(slot, false);
+    }
+    public ItemStack getItem(EquipmentSlot slot, boolean getEventItem) {
+        return getItemInSlot(slot, getEventItem);
+    }
+    public ItemStack getEventItem() {
+        final ArmorEquipEvent event = EVENTS.getOrDefault(player, null);
+        return event != null ? event.getItem() : null;
     }
     public LinkedHashMap<CustomEnchant, Integer> getEnchantsOn(EquipmentSlot slot) {
         return enchants.getOrDefault(slot, new LinkedHashMap<>());
     }
-    public void setEnchantsOn(EquipmentSlot slot, LinkedHashMap<CustomEnchant, Integer> enchants) {
-        this.enchants.put(slot, enchants);
-    }
 
     public void update(EquipmentSlot slot, ItemStack withItem) {
-        items.put(slot, withItem);
         enchants.remove(slot);
         if(withItem != null) {
             enchants.put(slot, CustomEnchants.getCustomEnchants().getEnchantsOnItem(withItem));
@@ -54,34 +64,29 @@ public class EquippedCustomEnchants {
     }
     public void update(EquipmentSlot...slots) {
         for(EquipmentSlot slot : slots) {
-            update(slot);
+            if(slot != null) {
+                update(slot);
+            }
         }
     }
     private void update(EquipmentSlot slot) {
-        final PlayerInventory inv = player.getInventory();
-        final ItemStack is;
-        switch (slot) {
-            case HEAD:
-                is = inv.getHelmet();
-                break;
-            case CHEST:
-                is = inv.getChestplate();
-                break;
-            case LEGS:
-                is = inv.getLeggings();
-                break;
-            case FEET:
-                is = inv.getBoots();
-                break;
-            case HAND:
-                is = inv.getItemInMainHand();
-                break;
-            case OFF_HAND:
-                is = inv.getItemInOffHand();
-                break;
-            default:
-                return;
-        }
+        final ItemStack is = getItemInSlot(slot);
         update(slot, is);
+    }
+
+    private ItemStack getItemInSlot(EquipmentSlot slot) { return getItemInSlot(slot, false); }
+    private ItemStack getItemInSlot(EquipmentSlot slot, boolean getEventItem) {
+        if(getEventItem && EVENTS.containsKey(player)) {
+            return EVENTS.get(player).getItem();
+        }
+        final PlayerInventory inv = player.getInventory();
+        switch (slot) {
+            case HEAD: return inv.getHelmet();
+            case CHEST: return inv.getChestplate();
+            case LEGS: return inv.getLeggings();
+            case FEET: return inv.getBoots();
+            case HAND: return EIGHT ? inv.getItemInHand() : inv.getItemInMainHand();
+            default: return EIGHT ? null : inv.getItemInOffHand();
+        }
     }
 }

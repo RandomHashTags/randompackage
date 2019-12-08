@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.addon.file.FileMask;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -247,8 +248,7 @@ public class Masks extends CustomEnchants {
                     final ItemStack h = e.helmet;
                     event.setCurrentItem(h);
                     equippedMasks.remove(player);
-                    final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = new LinkedHashMap<>();
-                    enchants.put(h, getEnchantsOnItem(h));
+                    final EquippedCustomEnchants enchants = getEnchants(player);
                     triggerCustomEnchants(event, enchants, CustomEnchants.globalattributes);
                     tryProcing(event, player, null, enchants);
                 }
