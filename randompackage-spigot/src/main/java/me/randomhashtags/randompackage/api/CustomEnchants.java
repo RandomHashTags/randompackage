@@ -10,24 +10,23 @@ import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
-import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -38,18 +37,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.*;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
@@ -63,14 +59,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     public YamlConfiguration config;
     public boolean levelZeroRemoval;
-
-    private String alchemistcurrency, enchantercurrency;
-    private int alchemistCostSlot;
-    private UInventory alchemist, enchanter, tinkerer;
-    private ItemStack tinkereraccept, alchemistpreview, alchemistexchange, alchemistaccept;
-    private HashMap<Integer, Long> enchantercost;
-    private HashMap<Integer, ItemStack> enchanterpurchase;
-    private List<Player> invAccepting;
     public static List<String> globalattributes;
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
@@ -89,14 +77,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 final int page = getRemainingInt(args[0]);
                 viewEnchants(sender, page > 0 ? page : 1);
             }
-        } else if(player != null) {
-            if(n.equals("alchemist") && hasPermission(player, "RandomPackage.alchemist", true)) {
-                viewAlchemist(player);
-            } else if(n.equals("enchanter") && hasPermission(player, "RandomPackage.enchanter", true)){
-                viewEnchanter(player);
-            } else if(n.equals("tinkerer") && hasPermission(player, "RandomPackage.tinkerer", true)) {
-                viewTinkerer(player);
-            }
         }
         return true;
     }
@@ -106,32 +86,11 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final String folderString = DATA_FOLDER + SEPARATOR + "custom enchants";
         config = YamlConfiguration.loadConfiguration(new File(folderString, "_settings.yml"));
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
-        alchemistcurrency = config.getString("alchemist.currency").toUpperCase();
-        enchantercurrency = config.getString("enchanter.currency").toUpperCase();
-        alchemistpreview = d(config, "alchemist.preview");
-        alchemistexchange = d(config, "alchemist.exchange");
-        alchemistaccept = d(config, "alchemist.accept");
-        tinkereraccept = d(config, "tinkerer.accept");
 
         save("custom enchants", "global attributes.yml");
-        globalattributes = YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")).getStringList("attributes");
+        globalattributes = getStringList(YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")), "attributes");
 
         new StopEnchant().load();
-        int X = 0;
-        for(String s : alchemistaccept.getItemMeta().getLore()) {
-            if(s.contains("{COST}")) alchemistCostSlot = X;
-            X++;
-        }
-
-        enchantercost = new HashMap<>();
-        enchanterpurchase = new HashMap<>();
-        invAccepting = new ArrayList<>();
-
-        alchemist = new UInventory(null, 27, colorize(config.getString("alchemist.title")));
-        enchanter = new UInventory(null, config.getInt("enchanter.size"), colorize(config.getString("enchanter.title")));
-        tinkerer = new UInventory(null, config.getInt("tinkerer.size"), colorize(config.getString("tinkerer.title")));
-        setupInventory(alchemist);
-        setupInventory(tinkerer);
 
         if(!otherdata.getBoolean("saved default custom enchants")) {
             final String[] mas = new String[] {
@@ -331,38 +290,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         playerEnchants = new HashMap<>();
         sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
+        createCustomEnchantEntities();
 
-        boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
-        final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
-        for(String s : config.getConfigurationSection("entities").getKeys(false)) {
-            if(!s.startsWith("settings")) {
-                final String path = s.split("\\.")[0];
-                if(entities == null || !entities.containsKey(path)) {
-                    canTargetSummoner = config.get("entities." + path + ".can target summoner") != null ? config.getBoolean("entities." + path + ".can target summoner") : canTargetSummoner;
-                    dropsItemsUponDeath = config.get("entities." + path + ".drops items upon death") != null ? config.getBoolean("entities." + path + ".drops items upon death") : dropsItemsUponDeath;
-                    new CustomEnchantEntity(EntityType.valueOf(config.getString("entities." + path + ".type").toUpperCase()), path, config.getString("entities." + path + ".name"), config.getStringList("entities." + path + ".attributes"), canTargetSummoner, dropsItemsUponDeath);
-                }
-            }
-        }
-
-        final Inventory ei = enchanter.getInventory();
-        for(int i = 0; i < enchanter.getSize(); i++) {
-            if(config.get("enchanter." + i) != null) {
-                final long cost = config.getLong("enchanter." + i + ".cost");
-                enchantercost.put(i, cost);
-                enchanterpurchase.put(i, d(null, config.getString("enchanter." + i + ".purchase")));
-                item = d(config, "enchanter." + i); itemMeta = item.getItemMeta(); lore.clear();
-                if(itemMeta.hasLore()) {
-                    for(String string : itemMeta.getLore()) {
-                        if(string.contains("{COST}")) string = string.replace("{COST}", formatLong(cost));
-                        lore.add(string);
-                    }
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                }
-                ei.setItem(i, item);
-            }
-        }
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + getAll(Feature.CUSTOM_ENCHANT_ENABLED).size() + "e, &c" + getAll(Feature.CUSTOM_ENCHANT_DISABLED).size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -375,17 +304,38 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }
 
+    private void createCustomEnchantEntities() {
+        boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
+        final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
+        for(String s : config.getConfigurationSection("entities").getKeys(false)) {
+            if(!s.startsWith("settings")) {
+                final String identifier = s.split("\\.")[0];
+                if(entities == null || !entities.containsKey(identifier)) {
+                    final String path = "entities." + identifier + ".";
+                    canTargetSummoner = config.getBoolean(path + "can target summoner", canTargetSummoner);
+                    dropsItemsUponDeath = config.getBoolean(path + "drops items upon death", dropsItemsUponDeath);
+
+                    final EntityType type = EntityType.valueOf(config.getString(path + "type", "ZOMBIE").toUpperCase());
+                    final String name = config.getString(path + "name");
+                    final List<String> attributes = config.getStringList(path + "attributes");
+                    new CustomEnchantEntity(type, identifier, name, attributes, canTargetSummoner, dropsItemsUponDeath);
+                }
+            }
+        }
+    }
+
     public void viewEnchants(CommandSender sender, int page) {
         final ChatEvents cea = ChatEvents.getChatEvents();
-        final String format = RANDOM_PACKAGE.getConfig().getString("enchants.format");
-        final List<String> L = colorizeListString(RANDOM_PACKAGE.getConfig().getStringList("enchants.hover"));
+        final FileConfiguration config = RANDOM_PACKAGE.getConfig();
+        final String format = config.getString("enchants.format");
+        final List<String> L = colorizeListString(config.getStringList("enchants.hover"));
         final HashMap<String, CustomEnchant> enabled = getAllCustomEnchants(true);
         final Object[] enchants = enabled.values().toArray();
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
         final int starting = page*10;
         final String max = Integer.toString(maxpage), p = Integer.toString(page);
-        for(String s : RANDOM_PACKAGE.getConfig().getStringList("enchants.msg")) {
+        for(String s : getStringList(config, "enchants.msg")) {
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
@@ -410,34 +360,17 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             }
         }
     }
-    public void viewAlchemist(Player player) { openInventory(player, alchemist); }
-    public void viewEnchanter(Player player) { openInventory(player, enchanter); }
-    public void viewTinkerer(Player player) { openInventory(player, tinkerer); }
-    private void openInventory(Player player, UInventory inv) {
-        player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
-        player.getOpenInventory().getTopInventory().setContents(inv.getInventory().getContents());
-        player.updateInventory();
+    public boolean canProcOn(Entity e) {
+        return getStringList(config, "settings.can proc on").contains(e.getType().name());
     }
-    private void setupInventory(UInventory inv) {
-        final Inventory in = inv.getInventory();
-        ItemStack i1 = inv.equals(tinkerer) ? d(config, "tinkerer.divider") : d(config, "alchemist.exchange"),
-                i2 = inv.equals(alchemist) ? d(config, "alchemist.preview") : null,
-                i3 = inv.equals(alchemist) ? d(config, "alchemist.other") : null;
-        for(int i = 0; i < inv.getSize(); i++) {
-            if(inv.equals(alchemist)) {
-                if(i == 3 || i == 5) {}
-                else if(i == 13) in.setItem(i, i2);
-                else if(i == 22) in.setItem(i, i1);
-                else in.setItem(i, i3);
-            } else if(inv.equals(tinkerer)) {
-                if(i == 4 || i == 13 || i == 22 || i == 31 || i == 40 || i == 49) in.setItem(i, i1);
-                else if(i == 0) in.setItem(i, d(config, "tinkerer.accept"));
-                else if(i == 8) in.setItem(i, d(config, "tinkerer.accept dupe"));
+    public int getLevelCap(@NotNull Player player) {
+        int cap = 0;
+        for(int i = 0; i <= 100; i++) {
+            if(player.hasPermission("RandomPackage.levelcap." + i)) {
+                cap = i;
             }
         }
-    }
-    public boolean canProcOn(Entity e) {
-        return config.getStringList("settings.can proc on").contains(e.getType().name());
+        return cap;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -783,387 +716,140 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void tinkererClickEvent(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        final Inventory top = player.getOpenInventory().getTopInventory();
-        if(top.getHolder() == player && event.getView().getTitle().equals(tinkerer.getTitle())) {
-            event.setCancelled(true);
-            player.updateInventory();
-            final int r = event.getRawSlot(), size = top.getSize();
-            int SLOT = top.firstEmpty();
-            final ItemStack cur = event.getCurrentItem();
-            final String c = event.getClick().name(), cu = cur != null ? cur.getType().name() : null;
-            if(r < 0 || !c.contains("LEFT") && !c.contains("RIGHT") || cu == null || cu.equals("AIR")) return;
-
-            final CustomEnchant e = cur.hasItemMeta() && cur.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(cur.getItemMeta().getDisplayName()) : null;
-            if(r >= 4 && r <= 8
-                    || r >= 13 && r <= 17
-                    || r >= 22 && r <= 26
-                    || r >= 31 && r <= 35
-                    || r >= 40 && r <= 44
-                    || r >= 49 && r <= 53) {
-                return;
-            } else if(cur.equals(tinkereraccept)) {
-                invAccepting.add(player);
-                player.closeInventory();
-                return;
-            } else if(r < size) {
-                giveItem(player, cur);
-                item = new ItemStack(Material.AIR);
-                SLOT = r;
-            } else if(top.firstEmpty() < 0) {
-                return;
-            } else if(e != null) {
-                final EnchantRarity R = valueOfCustomEnchantRarity(e);
-                final RarityFireball f = valueOfRarityFireball(Arrays.asList(R));
-                if(f != null) {
-                    final ItemStack itemstack = f.getItem();
-                    if(itemstack == null) return;
-                    item = itemstack.clone();
-                } else {
-                    return;
-                }
-            } else if(cur.getItemMeta().hasEnchants() && (cu.endsWith("HELMET") || cu.endsWith("CHESTPLATE") || cu.endsWith("LEGGINGS") || cu.endsWith("BOOTS") || cu.endsWith("SWORD") || cu.endsWith("AXE") || cu.endsWith("SPADE") || cu.endsWith("SHOVEL") || cu.endsWith("HOE") || cu.endsWith("BOW"))) {
-                final BigDecimal zero = BigDecimal.ZERO;
-                BigDecimal xp = BigDecimal.ZERO;
-                for(Enchantment enchant : cur.getEnchantments().keySet())
-                    xp = xp.add(BigDecimal.valueOf(Integer.parseInt(config.getString("tinkerer.enchant values." + enchant.getName().toLowerCase()))));
-                if(cur.hasItemMeta() && cur.getItemMeta().hasLore()) {
-                    final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(cur);
-                    for(CustomEnchant enchant : enchants.keySet()) {
-                        xp = xp.add(enchant.getTinkererValue(enchants.get(enchant)));
-                    }
-                }
-                if(!xp.equals(zero)) item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
-            } else {
-                sendStringListMessage(player, config.getStringList("tinkerer.messages.doesnt want item"), null);
-                return;
-            }
-            final int first = top.firstEmpty();
-            int slot = first <= 3 || r <= 3 ? 4 : 5;
-            top.setItem(SLOT+slot, item);
-            if(r >= size) top.setItem(first, cur);
-            event.setCurrentItem(new ItemStack(Material.AIR));
-            player.updateInventory();
-        }
-    }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
-        final Inventory top = player.getOpenInventory().getTopInventory();
-        final String title = event.getView().getTitle();
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
-        if(cursor != null && current != null
-                && cursor.hasItemMeta()
-                && cursor.getItemMeta().hasDisplayName()
-                && cursor.getItemMeta().hasLore()
-                || title.equals(alchemist.getTitle())
-                || title.equals(enchanter.getTitle())
-        ) {
-            final int r = event.getRawSlot(), size = top.getSize();
-            if(title.equals(tinkerer.getTitle())) {
-                event.setCancelled(true);
-                player.updateInventory();
-                if(event.getClick().equals(ClickType.NUMBER_KEY)) return;
-            } else if(title.equals(alchemist.getTitle())) {
-                event.setCancelled(true);
-                player.updateInventory();
-                if(r < size) {
-                    if(r == 3 || r == 5) {
-                        giveItem(player, current);
-                        top.setItem(r, new ItemStack(Material.AIR));
+        if(event.getRawSlot() >= 0 && cursor != null && current != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
+            final ItemMeta cursorMeta = cursor.getItemMeta();
+            final String cursorName = cursorMeta.getDisplayName();
 
-                        item = alchemistpreview.clone();
-                        if(!top.getItem(13).equals(item)) top.setItem(13, item);
-                        item = alchemistexchange.clone();
-                        if(!top.getItem(22).equals(item)) top.setItem(22, item);
-
-                    } else if(r == 22 && top.getItem(3) != null && top.getItem(5) != null && !top.getItem(13).equals(alchemistpreview)) {
-                        final int cost = getRemainingInt(top.getItem(22).getItemMeta().getLore().get(alchemistCostSlot));
-                        final AlchemistExchangeEvent e = new AlchemistExchangeEvent(player, top.getItem(3), top.getItem(5), alchemistcurrency, cost,top.getItem(13));
-                        PLUGIN_MANAGER.callEvent(e);
-                        if(!e.isCancelled()) {
-                            final Location l = player.getLocation();
-                            if(!player.getGameMode().equals(GameMode.CREATIVE)) {
-                                boolean notenough = false;
-                                if(alchemistcurrency.equals("EXP")) {
-                                    final int totalxp = getTotalExperience(player);
-                                    if(totalxp < cost) {
-                                        notenough = true;
-                                        sendStringListMessage(player, config.getStringList("alchemist.messages.not enough xp"), null);
-                                    } else {
-                                        setTotalExperience(player, totalxp - cost);
-                                    }
-                                    playSound(config, "alchemist." + (notenough ? "need more xp" : "upgrade via xp"), player, l, false);
-                                } else if(eco != null) {
-                                    if(!eco.withdrawPlayer(player, cost).transactionSuccess()) {
-                                        notenough = true;
-                                        sendStringListMessage(player, config.getStringList("alchemist.messages.not enough cash"), null);
-                                    }
-                                    playSound(config, "alchemist." + (notenough ? "need more cash" : "upgrade via cash"), player, l, false);
-                                }
-                                else return;
-                                if(notenough) {
-                                    player.closeInventory();
-                                    player.updateInventory();
+            final CustomEnchant enchant = valueOfCustomEnchant(cursorName);
+            final int level = getEnchantmentLevel(cursorName);
+            int enchantsize = 0;
+            final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(cursorName), current);
+            PLUGIN_MANAGER.callEvent(ev);
+            if(!ev.isCancelled() && isOnCorrectItem(enchant, current)) {
+                boolean apply = false;
+                item = current.clone();
+                itemMeta = item.getItemMeta();
+                lore.clear();
+                if(item.hasItemMeta() && itemMeta.hasLore()) {
+                    if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
+                        ev.setCancelled(true);
+                        return;
+                    }
+                    lore.addAll(itemMeta.getLore());
+                }
+                String result = null;
+                if(enchant != null) {
+                    final EnchantRarity rar = valueOfCustomEnchantRarity(enchant);
+                    final List<String> cml = cursorMeta.getLore();
+                    final int success = getRemainingInt(cml.get(rar.getSuccessSlot())), destroy = getRemainingInt(cml.get(rar.getDestroySlot()));
+                    final int levelcap = getLevelCap(player);
+                    int prevlevel = -1, prevslot = -1, enchantOrbIncrement = 0;
+                    for(int z = 0; z < lore.size(); z++) {
+                        final String target = lore.get(z);
+                        final CustomEnchant e = valueOfCustomEnchant(target);
+                        if(e != null) {
+                            enchantsize += 1;
+                            if(e.equals(enchant)) {
+                                prevslot = z;
+                                prevlevel = getEnchantmentLevel(target);
+                                if(prevlevel == e.getMaxLevel()) {
                                     return;
                                 }
-                            } else playSound(config, "alchemist.upgrade creative", player, l, false);
-                            item = top.getItem(13).clone(); itemMeta = item.getItemMeta();
-                            itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE); itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            item.setItemMeta(itemMeta);
-                            giveItem(player, item);
-                            invAccepting.add(player);
-                            player.closeInventory();
+                            }
+                        } else {
+                            final EnchantmentOrb eo = valueOfEnchantmentOrb(target);
+                            if(eo != null) {
+                                enchantOrbIncrement = eo.getIncrement();
+                            }
                         }
                     }
-                } else if(current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore()) {
-                    final ItemMeta cm = current.getItemMeta();
-                    final CustomEnchant enchant = valueOfCustomEnchant(cm.getDisplayName());
-                    final MagicDust dust = enchant == null ? valueOfMagicDust(event.getCurrentItem()) : null;
-                    final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, d = cm.getDisplayName();
-                    final int F = top.firstEmpty();
-                    if(suCCess != null) {
-                        boolean upgrade = false;
-                        final BigDecimal zero = BigDecimal.ZERO;
-                        BigDecimal cost = zero;
-                        if(F == 5 && !top.getItem(3).getItemMeta().getDisplayName().equals(d)
-                                || F == 3 && top.getItem(5) != null && !top.getItem(5).getItemMeta().getDisplayName().equals(d)
-                                || F < 0
-                        ) {
+                    if(levelcap+enchantOrbIncrement <= enchantsize) {
+                        ev.setCancelled(true);
+                        return;
+                    } else {
+                        final String requires = enchant.getRequiredEnchant();
+                        final CustomEnchant replaces = requires != null ? valueOfCustomEnchant(requires.split(";")[0]) : null;
+                        final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
+                        final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
+                        if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) {
                             return;
-                        } else if(F == 3 && top.getItem(5) == null
-                                || F == 5 && top.getItem(3) == null) {
-                            // This is meant to be here :)
-                            if(dust != null && dust.getUpgradeCost().equals(zero)) return;
-                        } else {
-                            final int slot = F == 3 ? 5 : 3;
-                            if(suCCess.equals("dust")) {
-                                final MagicDust u = dust.getUpgradesTo();
-                                if(u != null) {
-                                    item = top.getItem(slot).clone(); itemMeta = item.getItemMeta(); lore.clear();
-                                    cost = dust.getUpgradeCost();
-                                    boolean did = false;
-                                    if(cost.equals(zero)) return;
-                                    for(int i = 0; i < itemMeta.getLore().size(); i++) {
-                                        if(getRemainingInt(itemMeta.getLore().get(i)) != -1 && !did) {
-                                            did = true;
-                                            int percent = ((getRemainingInt(itemMeta.getLore().get(i)) + getRemainingInt(cm.getLore().get(i))) / 2);
-                                            item = u.getItem();
-                                            if(item == null) {
-                                                return;
-                                            }
-                                            item = item.clone(); itemMeta = item.getItemMeta();
-                                            for(String s : itemMeta.getLore()) {
-                                                if(s.contains("{PERCENT}")) s = s.replace("{PERCENT}", "" + percent);
-                                                lore.add(s);
-                                            }
-                                            itemMeta.setLore(lore); lore.clear();
-                                            item.setItemMeta(itemMeta);
+                        }
+                        //
+                        if(RANDOM.nextInt(100) <= success) {
+                            final String a = rar.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
+                            if(lore.isEmpty()) {
+                                lore.add(e);
+                            } else if(prevlevel == -1 && prevslot == -1) {
+                                String replacedEnchant = null;
+                                final ArrayList<String> newlore = new ArrayList<>();
+                                for(String s : lore) {
+                                    final CustomEnchant ce = valueOfCustomEnchant(s);
+                                    if(ce != null) {
+                                        if(ce.equals(replaces)) {
+                                            newlore.add(e);
+                                            replacedEnchant = s;
+                                        } else {
+                                            newlore.add(s);
                                         }
                                     }
                                 }
-                            } else {
-                                final EnchantRarity rar = valueOfCustomEnchantRarity(enchant);
-                                final String SUCCESS = rar.getSuccess(), DESTROY = rar.getDestroy();
-                                final int level = getEnchantmentLevel(cm.getDisplayName());
-                                if(level >= enchant.getMaxLevel()) return;
-                                else                               cost = enchant.getAlchemistUpgradeCost(level);
-                                final ItemStack is = top.getItem(slot);
-                                item = UMaterial.match(is).getItemStack();
-                                itemMeta = item.getItemMeta();
-                                itemMeta.setDisplayName("randomhashtags was here");
-                                int success = 0, destroy = 0, higherDestroy = -1;
-                                final List<String> l = is.getItemMeta().getLore(), cml = cm.getLore();
-                                for(int i = 0; i <= 100; i++) {
-                                    if(l.contains(SUCCESS.replace("{PERCENT}", "" + i))
-                                            || cml.contains(SUCCESS.replace("{PERCENT}", "" + i)))
-                                        success = success + (i/4);
-                                    if(l.contains(DESTROY.replace("{PERCENT}", "" + i))
-                                            || cml.contains(DESTROY.replace("{PERCENT}", "" + i))) {
-                                        if(i > higherDestroy) higherDestroy = i;
-                                        destroy = destroy + i;
+                                if(!newlore.contains(e)) {
+                                    newlore.add(e);
+                                }
+                                for(String s : lore) {
+                                    if(!newlore.contains(s) && (replacedEnchant == null || !s.equals(replacedEnchant))) {
+                                        newlore.add(s);
                                     }
                                 }
-                                destroy = higherDestroy + (destroy / 4);
-                                if(destroy > 100) destroy = 100;
-                                item = getRevealedItem(enchant, level + 1, success, destroy, true, true).clone(); itemMeta = item.getItemMeta();
+                                lore = newlore;
+                            } else {
+                                lore.set(prevslot, a + en + " " + toRoman(level > prevlevel ? level : prevlevel+1));
                             }
-                            upgrade = true;
-                        }
-                        if(upgrade) {
-                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            item.setItemMeta(itemMeta); item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
-                            top.setItem(13, item);
-                            item = alchemistaccept.clone(); itemMeta = item.getItemMeta(); lore.clear();
-                            for(String string : itemMeta.getLore()) {
-                                if(string.contains("{COST}")) string = string.replace("{COST}", formatBigDecimal(cost));
-                                lore.add(string);
+                            result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
+                        } else if(RANDOM.nextInt(100) <= destroy) {
+                            final WhiteScroll w = getWhiteScroll("REGULAR");
+                            final String applied = w != null ? w.getApplied() : null;
+                            result = applied != null && lore.contains(applied) ? "DESTROY_WHITE_SCROLL" : "DESTROY";
+                            if(lore.contains(applied)) {
+                                lore.remove(applied);
+                            } else {
+                                item = new ItemStack(Material.AIR);
                             }
-                            itemMeta.setLore(lore); lore.clear();
-                            item.setItemMeta(itemMeta);
-                            top.setItem(22, item);
                         }
-                        top.setItem(top.firstEmpty(), event.getCurrentItem());
-                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        apply = true;
+                        final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, success, destroy, result);
+                        PLUGIN_MANAGER.callEvent(ce);
                     }
                 }
-            } else if(title.equals(enchanter.getTitle())) {
-                event.setCancelled(true);
-                player.updateInventory();
-                if(enchantercost.containsKey(r)) {
-                    long cost = enchantercost.get(r);
-                    item = enchanterpurchase.get(r).clone();
-                    List<String> me = null;
-                    final int totalxp = getTotalExperience(player);
-                    final double bal = eco != null ? eco.getBalance(player) : 0.00;
-                    final boolean give, isCreative = player.getGameMode().equals(GameMode.CREATIVE), exp = enchantercurrency.equals("EXP");
-                    give = isCreative || exp && totalxp >= cost || bal >= cost;
-
-                    if(give) {
-                        final EnchanterPurchaseEvent e = new EnchanterPurchaseEvent(player, item, enchantercurrency, cost);
-                        PLUGIN_MANAGER.callEvent(e);
-                        if(e.isCancelled()) return;
-                        boolean bought = true;
-                        cost = e.cost;
-                        if(!isCreative) {
-                            if(exp) {
-                                if(totalxp >= cost) setTotalExperience(player, (int) (totalxp-cost));
-                                else bought = false;
-                                me = config.getStringList("enchanter.messages." + (bought ? "xp purchase" : "need more xp"));
-                            } else {
-                                if(bal >= cost) eco.withdrawPlayer(player, cost);
-                                else bought = false;
-                                me = config.getStringList("enchanter.messages." + (bought ? "cash purchase" : "need more cash"));
+                if(apply) {
+                    if(!item.getType().equals(Material.AIR)) {
+                        if(itemMeta.hasDisplayName()) {
+                            final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
+                            if(t.isEnabled()) {
+                                final TransmogScroll ts = t.getApplied(item);
+                                if(ts != null) {
+                                    t.update(item, enchantsize, enchantsize+1);
+                                }
                             }
                         }
-                        if(bought) giveItem(player, item);
-                    } else {
-                        me = config.getStringList("enchanter.messages.need more " + (exp ? "xp" : "cash"));
+                        itemMeta.setLore(lore); lore.clear();
+                        item.setItemMeta(itemMeta);
                     }
-                    final HashMap<String, String> replacements = new HashMap<>();
-                    replacements.put("{AMOUNT}", formatLong(cost));
-                    sendStringListMessage(player, me, replacements);
+                    event.setCancelled(true);
+                    event.setCurrentItem(item);
+                    final int amount = cursor.getAmount();
+                    if(amount == 1) {
+                        event.setCursor(new ItemStack(Material.AIR));
+                    } else {
+                        cursor.setAmount(amount-1);
+                    }
                     player.updateInventory();
                 }
-            } else if(r >= 0) {
-                /*
-                 * Apply enchants
-                 */
-                final ItemMeta cm = cursor.getItemMeta();
-                final String d = cm.getDisplayName();
-
-                final CustomEnchant enchant = valueOfCustomEnchant(d);
-                final int level = getEnchantmentLevel(d);
-                int enchantsize = 0;
-                final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(d), current);
-                PLUGIN_MANAGER.callEvent(ev);
-                if(!ev.isCancelled() && isOnCorrectItem(enchant, current)) {
-                    boolean apply = false;
-                    item = current.clone(); itemMeta = item.getItemMeta(); lore.clear();
-                    if(item.hasItemMeta() && itemMeta.hasLore()) {
-                        if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
-                            ev.setCancelled(true);
-                            return;
-                        }
-                        lore.addAll(itemMeta.getLore());
-                    }
-                    String result = null;
-                    if(enchant != null) {
-                        final EnchantRarity rar = valueOfCustomEnchantRarity(enchant);
-                        final List<String> cml = cm.getLore();
-                        final int success = getRemainingInt(cml.get(rar.getSuccessSlot())), destroy = getRemainingInt(cml.get(rar.getDestroySlot()));
-                        int prevlevel = -1, prevslot = -1, haspermfor = 0, eoIncrement = 0;
-                        for(int i = 0; i <= 100; i++) {
-                            if(player.hasPermission("RandomPackage.levelcap." + i)) {
-                                haspermfor = i;
-                            }
-                        }
-                        for(int z = 0; z < lore.size(); z++) {
-                            final CustomEnchant e = valueOfCustomEnchant(lore.get(z));
-                            if(e != null) {
-                                enchantsize += 1;
-                                if(e.equals(enchant)) {
-                                    prevslot = z;
-                                    prevlevel = getEnchantmentLevel(lore.get(z));
-                                    if(prevlevel == e.getMaxLevel()) return;
-                                }
-                            } else {
-                                final EnchantmentOrb eo = valueOfEnchantmentOrb(lore.get(z));
-                                if(eo != null) eoIncrement = eo.getIncrement();
-                            }
-                        }
-                        if(haspermfor+eoIncrement <= enchantsize) {
-                            ev.setCancelled(true);
-                            return;
-                        } else {
-                            final String requires = enchant.getRequiredEnchant();
-                            final CustomEnchant replaces = requires != null ? valueOfCustomEnchant(requires.split(";")[0]) : null;
-                            final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
-                            final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
-                            if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) return;
-                            //
-                            if(RANDOM.nextInt(100) <= success) {
-                                final String a = rar.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
-                                if(lore.isEmpty()) {
-                                    lore.add(e);
-                                } else if(prevlevel == -1 && prevslot == -1) {
-                                    String replacedEnchant = null;
-                                    final ArrayList<String> newlore = new ArrayList<>();
-                                    for(String s : lore) {
-                                        final CustomEnchant ce = valueOfCustomEnchant(s);
-                                        if(ce != null) {
-                                            if(ce.equals(replaces)) {
-                                                newlore.add(e);
-                                                replacedEnchant = s;
-                                            } else {
-                                                newlore.add(s);
-                                            }
-                                        }
-                                    }
-                                    if(!newlore.contains(e)) newlore.add(e);
-                                    for(String s : lore) if(!newlore.contains(s) && (replacedEnchant == null || !s.equals(replacedEnchant))) newlore.add(s);
-                                    lore = newlore;
-                                } else {
-                                    lore.set(prevslot, a + en + " " + toRoman(level > prevlevel ? level : prevlevel + 1));
-                                }
-                                result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
-                            } else if(RANDOM.nextInt(100) <= destroy) {
-                                final WhiteScroll w = getWhiteScroll("REGULAR");
-                                final String applied = w != null ? w.getApplied() : null;
-                                result = applied != null && lore.contains(applied) ? "DESTROY_WHITE_SCROLL" : "DESTROY";
-                                if(lore.contains(applied)) lore.remove(applied);
-                                else                       item = new ItemStack(Material.AIR);
-                            }
-                            apply = true;
-                            final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, success, destroy, result);
-                            PLUGIN_MANAGER.callEvent(ce);
-                        }
-                    }
-                    if(apply) {
-                        if(!item.getType().equals(Material.AIR)) {
-                            if(itemMeta.hasDisplayName()) {
-                                final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                                if(t.isEnabled()) {
-                                    final TransmogScroll ts = t.getApplied(item);
-                                    if(ts != null) {
-                                        t.update(item, enchantsize, enchantsize+1);
-                                    }
-                                }
-                            }
-                            itemMeta.setLore(lore); lore.clear();
-                            item.setItemMeta(itemMeta);
-                        }
-                        event.setCancelled(true);
-                        event.setCurrentItem(item);
-                        final int a = cursor.getAmount();
-                        if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                        else cursor.setAmount(a-1);
-                        player.updateInventory();
-                    }
-                } else {
-                    ev.setCancelled(true);
-                }
+            } else {
+                ev.setCancelled(true);
             }
         }
     }
@@ -1183,37 +869,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
                 if(enchant != null) {
                     event.setCancelled(true);
-                    player.updateInventory();
                     player.closeInventory();
+                    player.updateInventory();
                 }
             }
-        }
-    }
-    @EventHandler
-    private void inventoryCloseEvent(InventoryCloseEvent event) {
-        final Player player = (Player) event.getPlayer();
-        final Inventory inv = event.getInventory();
-        if(inv.getHolder() == player) {
-            final String title = event.getView().getTitle();
-            final boolean contains = invAccepting.contains(player);
-            invAccepting.remove(player);
-            if(title.equals(alchemist.getTitle())) {
-                if(contains) {
-                    sendStringListMessage(player, config.getStringList("alchemist.messages.exchange"), null);
-                } else {
-                    giveItem(player, inv.getItem(3));
-                    giveItem(player, inv.getItem(5));
-                }
-            } else if(title.equals(tinkerer.getTitle())) {
-                sendStringListMessage(player, config.getStringList("tinkerer.messages." + (contains ? "accept" : "cancel") + " trade"), null);
-                for(int i = 0; i < inv.getSize(); i++) {
-                    item = inv.getItem(i);
-                    if(item != null && (contains && (i >= 5 && i <= 7 || i >= 14 && i <= 17 || i >= 23 && i <= 26 || i >= 32 && i <= 35 || i >= 41 && i <= 44 || i >= 50 && i <= 53) || !contains && (i >= 1 && i <= 3 || i >= 9 && i <= 12 || i >= 18 && i <= 21 || i >= 27 && i <= 30 || i >= 36 && i <= 39 || i >= 45 && i <= 48))) {
-                        giveItem(player, item);
-                    }
-                }
-            } else { return; }
-            if(player.isOnline()) player.updateInventory();
         }
     }
 

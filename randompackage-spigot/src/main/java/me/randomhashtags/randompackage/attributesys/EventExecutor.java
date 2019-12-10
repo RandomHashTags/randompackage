@@ -374,7 +374,6 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
-            final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> info = equipped.getInfo();
             final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
             if(enchants != null) {
                 for(CustomEnchant enchant : enchants.keySet()) {
@@ -387,14 +386,14 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                         try {
                             trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
                         } catch (Exception error) {
-                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error!");
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error! &e(" + RP_VERSION + ")");
                             error.printStackTrace();
                         }
 
                         try {
                             trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
                         } catch (Exception error) {
-                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error!");
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
                             error.printStackTrace();
                         }
                     }

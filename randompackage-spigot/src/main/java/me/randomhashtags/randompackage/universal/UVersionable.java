@@ -8,7 +8,7 @@ import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -33,6 +33,7 @@ public interface UVersionable extends Versionable {
     String SEPARATOR = File.separator;
 
     RandomPackage RANDOM_PACKAGE = RandomPackage.getPlugin;
+    String RP_VERSION = RANDOM_PACKAGE.getDescription().getVersion();
     PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
     Random RANDOM = new Random();
 
@@ -74,9 +75,9 @@ public interface UVersionable extends Versionable {
         ));
     }};
 
-    HashMap<YamlConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
+    HashMap<FileConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
 
-    default List<String> getStringList(YamlConfiguration yml, String identifier) {
+    default List<String> getStringList(FileConfiguration yml, String identifier) {
         if(!FEATURE_MESSAGES.containsKey(yml)) {
             FEATURE_MESSAGES.put(yml, new HashMap<>());
         }

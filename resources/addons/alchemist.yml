@@ -1,0 +1,62 @@
+# Made by RandomHashTags
+messages:
+  doesnt want item:
+    - "&c&l(!)&r &cThe Server Alchemist does not want that item."
+    - "&7This NPC will only accept Enchantment Books and Magic Dust."
+  exchange:
+    - ""
+  not enough cash:
+    - "&c&l(!)&r &cYou need more CASH to do this!"
+  not enough xp:
+    - "&c&l(!)&r &cYou need more XP to do this!"
+#
+sounds:
+  need more cash: "ENTITY_VILLAGER_NO:1:1"
+  need more xp: "ENTITY_VILLAGER_NO:1:1"
+  upgrade creative: "BLOCK_PORTAL_TRAVEL:1:1"
+  upgrade via cash: "BLOCK_PORTAL_TRAVEL:1:1"
+  upgrade via xp: "BLOCK_PORTAL_TRAVEL:1:1"
+#
+settings:
+  # currency can equal "CASH" or "EXP"
+  currency: "EXP"
+#
+gui:
+  title: "Alchemist"
+#
+items:
+  accept:
+    item: "white_stained_glass_pane"
+    name: "&b&lCLICK TO EXCHANGE"
+    lore:
+      - "&c&lCOST: &c{COST}&lXP"
+      - " "
+      - "&7Click here to confirm this"
+      - "&7item exchange and receive your"
+      - "&7epic new item shown above!"
+  exchange:
+    item: "red_stained_glass_pane"
+    name: "&b&lTHE SERVER ALCHEMIST"
+    lore:
+      - "&d&lThis NPC will exchange..."
+      - " "
+      - "&b&l* &f2X Enchantment Books"
+      - "&7(of the same type and level)"
+      - "&d= &f1X Enchantment Book"
+      - "&7(of higher level)"
+      - " "
+      - "&b&l* &f2X Magic Dust"
+      - "&7(of the same rarity)"
+      - "&d= &f1X Magic Dust"
+      - "&7(of higher rarity)"
+  preview:
+    item: "white_stained_glass_pane"
+    name: "&e&lITEM PREVIEW"
+    lore:
+      - "&7A preview of the item you will"
+      - "&7receive from the Server Alchemist"
+      - "&7will be displayed here."
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+#

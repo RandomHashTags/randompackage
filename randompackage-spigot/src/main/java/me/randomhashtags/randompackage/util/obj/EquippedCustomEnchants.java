@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.util.obj;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
@@ -48,12 +49,14 @@ public class EquippedCustomEnchants implements Versionable {
     public ItemStack getItem(EquipmentSlot slot, boolean getEventItem) {
         return getItemInSlot(slot, getEventItem);
     }
+    @Nullable
     public ItemStack getEventItem() {
         final ArmorEquipEvent event = EVENTS.getOrDefault(player, null);
         return event != null ? event.getItem() : null;
     }
+    @Nullable
     public LinkedHashMap<CustomEnchant, Integer> getEnchantsOn(EquipmentSlot slot) {
-        return enchants.getOrDefault(slot, new LinkedHashMap<>());
+        return enchants.getOrDefault(slot, null);
     }
 
     public void update(EquipmentSlot slot, ItemStack withItem) {

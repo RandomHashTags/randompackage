@@ -1,0 +1,58 @@
+# Made by RandomHashTags
+messages:
+  open:
+    - "&eTrading with &lServer Tinkerer&r&e..."
+  accept trade:
+    - "&a&lTrade accepted."
+  cancel trade:
+    - "&e&lTrade cancelled."
+  doesnt want item:
+    - "&cThe Server Tinkerer doesn't want that item."
+    - "&7He will only accept enchanted equipment and non-soul enchantment books."
+#
+sounds:
+  accepted: "ENTITY_VILLAGER_YES:1:1"
+  cancelled: "ENTITY_VILLAGER_NO:1:1"
+#
+gui:
+  title: "Tinkerer"
+  size: 54
+  accept:
+    item: "red_stained_glass_pane"
+    name: "&a&lCLICK TO ACCEPT"
+  accept dupe:
+    item: "red_stained_glass_pane"
+    name: " "
+  divider:
+    item: "thin_glass"
+    name: " "
+#
+enchant values: # How much are these enchants worth when tinkering armor?
+  protection_environmental: 26
+  protection_fire: 26
+  protection_fall: 26
+  protection_explosions: 26
+  protection_projectile: 26
+  oxygen: 26
+  water_worker: 26
+  mending: 26
+  thorns: 26
+  depth_strider: 26
+  frost_walker: 26
+  damage_all: 26
+  damage_undead: 26
+  damage_arthropods: 26
+  knockback: 26
+  fire_aspect: 26
+  loot_bonus_mobs: 26
+  dig_speed: 26
+  silk_touch: 26
+  durability: 26
+  loot_bonus_blocks: 26
+  arrow_damage: 26
+  arrow_knockback: 26
+  arrow_fire: 26
+  arrow_infinite: 26
+  luck: 26
+  lure: 26
+#

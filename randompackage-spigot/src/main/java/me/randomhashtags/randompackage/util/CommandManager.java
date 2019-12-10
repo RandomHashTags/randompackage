@@ -67,16 +67,16 @@ public final class CommandManager extends Reflect {
     public void load() {}
     public void unload() {}
 
-    public void tryLoadingg(RPFeature f, List<String> baseCmds, boolean enabled) {
+    public void load(RPFeature f, List<String> baseCmds, boolean enabled) {
         final HashMap<String, String> cmds = new HashMap<>();
         if(baseCmds != null) {
             for(String s : baseCmds) {
                 cmds.put(s, s);
             }
         }
-        tryLoading(f, cmds, enabled);
+        loadCustom(f, cmds, enabled);
     }
-    public void tryLoading(RPFeature f, HashMap<String, String> baseCmds, boolean enabled) {
+    public void loadCustom(RPFeature f, HashMap<String, String> baseCmds, boolean enabled) {
         try {
             if(baseCmds != null && !baseCmds.isEmpty()) {
                 for(String base : baseCmds.keySet()) {
