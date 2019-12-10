@@ -224,6 +224,37 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         return passed;
     }
 
+    private LinkedHashMap<String, Entity> getEntitiesIn(String attributeKey, HashMap<String, Entity> entityList, List<String> entityKeys) {
+        attributeKey = attributeKey.toUpperCase();
+        final LinkedHashMap<String, Entity> entities = new LinkedHashMap<>();
+        for(String entity : entityKeys) {
+            final String E = entity.toUpperCase();
+            if(attributeKey.contains("NEARBY" + E)) {
+                final String nearbyString = "NEARBY" + E + attributeKey.split("NEARBY" + E)[1].split("\\)")[0], radius = nearbyString.split("\\(")[1];
+                final boolean ally = attributeKey.contains(E + "ALLIES"), enemy = attributeKey.contains(E + "ENEMIES"), truce = attributeKey.contains(E + "TRUCES"), member = attributeKey.contains(E + "MEMBERS");
+                if(ally || enemy || truce || member) {
+                    final String type = ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS";
+                    final boolean isSize = attributeKey.contains("SIZE");
+                    final Entity en = entities.get(entity);
+                    entities.remove(entity);
+                    HashMap<String, Entity> nearby = null;
+                    if(en instanceof Player) {
+                        final Player player = (Player) en;
+                        final String[] a = radius.split(":");
+                        final int length = a.length;
+                        final double x = evaluate(a[0]), y = length >= 2 ? evaluate(a[1]) : x, z = length >= 3 ? evaluate(a[2]) : x;
+                        nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : member ? "MEMBER" : "ENTITIES");
+                        entities.putAll(nearby);
+                    }
+                    attributeKey = attributeKey.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
+                }
+            } else if(attributeKey.contains(E)) {
+                attributeKey = attributeKey.replace(E, "");
+                entities.put(entity, entityList.get(entity));
+            }
+        }
+        return entities;
+    }
     private TObject replaceAllNearbyUsages(String string, List<String> entityKeys, HashMap<String, Entity> entities, String value1, boolean useStringAsVault) {
         final String og = string;
         string = string.toUpperCase();
@@ -279,31 +310,31 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     final List<String> conditions = new ArrayList<>();
                     final HashMap<String, String> entityValues = new HashMap<>();
                     final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> execute = new ArrayList<>();
-                    final String[] attributez = s.split(semi[0] + ";");
+                    final String[] attributeList = s.split(semi[0] + ";");
 
-                    if(attributez.length > 1) {
-                        for(String c : attributez[1].split(";")) {
-                            if(c.contains("=")) {
-                                final String[] values = c.split("=");
-                                final String v1 = values[1];
-                                final TObject keyObj = replaceAllNearbyUsages(values[0], entityKeys, entities, v1, false), valueObj = replaceAllNearbyUsages(v1, entityKeys, entities, v1, true);
+                    if(attributeList.length > 1) {
+                        for(String string : attributeList[1].split(";")) {
+                            if(string.contains("=")) {
+                                final String[] values = string.split("=");
+                                final String attributeKey = values[0], targetValue = values[1];
+                                final TObject keyObj = replaceAllNearbyUsages(attributeKey, entityKeys, entities, targetValue, false), valueObj = replaceAllNearbyUsages(targetValue, entityKeys, entities, targetValue, true);
                                 final String key = (String) keyObj.getFirst(), value = (String) valueObj.getFirst();
                                 final HashMap<String, String> map = (HashMap<String, String>) keyObj.getSecond();
-                                final HashMap<String, Entity> entitiesMap = (HashMap<String, Entity>) keyObj.getThird();
+
                                 entityValues.putAll(map);
-                                entities.putAll(entitiesMap);
-                                final EventAttribute a = getEventAttribute(key);
-                                if(a == null) {
-                                    conditions.add(c);
+                                final EventAttribute attribute = getEventAttribute(key);
+                                if(attribute == null) {
+                                    conditions.add(string);
                                 } else {
-                                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attribute = new LinkedHashMap<>();
-                                    attribute.put(a, new LinkedHashMap<>());
-                                    final HashMap<Entity, String> attributeEntities = attribute.get(a);
-                                    for(Entity entity : entities.values()) {
+                                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attributeMap = new LinkedHashMap<>();
+                                    attributeMap.put(attribute, new LinkedHashMap<>());
+                                    final HashMap<Entity, String> attributeEntities = attributeMap.get(attribute);
+                                    final HashMap<String, Entity> entitiesIn = getEntitiesIn(attributeKey, entities, entityKeys);
+                                    for(Entity entity : entitiesIn.values()) {
                                         attributeEntities.put(entity, value);
                                     }
                                     attributeEntities.put(null, value);
-                                    execute.add(attribute);
+                                    execute.add(attributeMap);
                                 }
                             }
                         }
@@ -365,6 +396,9 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     }
     public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
         triggerCustomEnchants(event, getEntities(event), equipped, globalattributes, slots);
+    }
+    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes) {
+        triggerCustomEnchants(event, entities, equipped, globalattributes, false, EQUIPMENT_SLOTS);
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);

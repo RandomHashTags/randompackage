@@ -91,13 +91,17 @@ public final class FactionsUUID extends Reflect implements Regional {
             final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
             for(FPlayer fp : fi.getAllFPlayers()) {
-                if(m && isRelation(fp, f, "MEMBER")
+                if(fp != null && (
+                        m && isRelation(fp, f, "MEMBER")
                         || e && isRelation(fp, f, "ENEMY")
                         || a && isRelation(fp, f, "ALLY")
                         || t && isRelation(fp, f, "TRUCE")
-                        || n && isRelation(fp, f, "NEUTRAL")
-                )
-                    members.add(fp.getPlayer().getUniqueId());
+                        || n && isRelation(fp, f, "NEUTRAL"))) {
+                    final Player target = fp.getPlayer();
+                    if(target != null) {
+                        members.add(target.getUniqueId());
+                    }
+                }
             }
             list.put(TYPE, members);
             return members;

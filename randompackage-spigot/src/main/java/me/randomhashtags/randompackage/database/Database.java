@@ -17,7 +17,7 @@ public final class Database {
         switch (type) {
             case YAML: return getYaml(folder, file);
             case JSON: return getJson(folder, file);
-            case MYSQL: return getMySQL(folder, file, host, port, database, username, password);
+            //case MYSQL: return getMySQL(folder, file, host, port, database, username, password);
             default: return null;
         }
     }

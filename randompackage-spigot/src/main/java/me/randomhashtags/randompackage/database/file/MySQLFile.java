@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
-public class MySQLFile implements DatabaseFile {
+public class MySQLFile /*implements DatabaseFile*/ { // TODO: fix dis
     private String host, database;
     private int port;
     private Connection connection;
@@ -15,66 +15,107 @@ public class MySQLFile implements DatabaseFile {
         this.host = host;
         this.port = port;
         this.database = database;
+
         try {
-            final String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
-            connection = DriverManager.getConnection(url, username, password);
-        } catch(Exception e) {
+            connect(username, password);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
     public String getHost() { return host; }
     public int getPort() { return port; }
     public String getDatabase() { return database; }
+
+    public boolean isOpen() throws Exception {
+        return connection != null && !connection.isClosed();
+    }
+    public void connect(String username, String password) throws Exception {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (Exception e) {
+            System.out.println("[RandomPackage] MySQL jdbc Driver not installed!");
+            return;
+        }
+        if(isOpen()) {
+            synchronized (this) {
+                if(isOpen()) {
+                    try {
+                        final String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
+                        connection = DriverManager.getConnection(url, username, password);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
     public void disconnect() {
         try {
-            connection.close();
-        } catch(Exception e) {
+            if(isOpen()) {
+                connection.close();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Object g(String query) {
+    private ResultSet g(String query) {
         try {
             final PreparedStatement p = connection.prepareStatement(query);
-            final ResultSet r = p.executeQuery();
-        } catch(Exception e) {
+            return p.executeQuery();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    public Object get(String query) { return g(query); }
-    public String getString(String query) {
-        final Object o = g(query);
+    public Object get(String query, String path) {
+        try {
+            final ResultSet result = g(query);
+            return result != null ? result.getObject(path) : null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public String getString(String query, String path) {
+        final Object o = get(query, path);
         return o != null ? (String) o : null;
     }
-    public boolean getBoolean(String query) {
-        final Object o = g(query);
+    public boolean getBoolean(String query, String path) {
+        final Object o = get(query, path);
         return o != null && (boolean) o;
     }
-    public int getInt(String query) {
-        final Object o = g(query);
-        return o != null ? (int) o : -1;
+    public int getInt(String query, String path) {
+        final Object o = get(query, path);
+        return o != null ? (int) o : 0;
     }
-    public double getDouble(String query) {
-        final Object o = g(query);
-        return o != null ? (double) o : -1;
+    public double getDouble(String query, String path) {
+        final Object o = get(query, path);
+        return o != null ? (double) o : 0;
     }
-    public long getLong(String query) {
-        final Object o = g(query);
-        return o != null ? (long) o : -1;
+    public long getLong(String query, String path) {
+        final Object o = get(query, path);
+        return o != null ? (long) o : 0;
     }
-    public List<String> getStringList(String query) {
-        final Object o = g(query);
+    public List<String> getStringList(String query, String path) {
+        final Object o = get(query, path);
         return o != null ? (List<String>) o : null;
     }
-    public BigDecimal getBigDecimal(String query) {
-        final Object o = g(query);
+    public BigDecimal getBigDecimal(String query, String path) {
+        final Object o = get(query, path);
         return o != null ? BigDecimal.valueOf((double) o) : BigDecimal.ZERO;
     }
 
     public void save() {}
 
-    public void set(String query, Object value) { }
+    public void set(String query, String path, String values) {
+        try {
+            final PreparedStatement p = connection.prepareStatement(query);
+            p.executeUpdate("INSERT INTO " + path + " VALUES " + values + ";");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void convertTo(Class<? extends DatabaseFile> file) {
         if(file.isInstance(YamlFile.class)) {

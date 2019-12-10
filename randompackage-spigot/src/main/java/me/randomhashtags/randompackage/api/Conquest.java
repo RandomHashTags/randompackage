@@ -223,13 +223,16 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
     }
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
         final Entity entity = event.getEntity();
         final LivingEntity target = event.getTarget();
-        final LivingConquestMob mob = target != null ? LivingConquestMob.living.getOrDefault(entity.getUniqueId(), null) : null;
-        if(mob != null && LivingConquestMob.living.containsKey(target.getUniqueId())) {
-            event.setCancelled(true);
+        final HashMap<UUID, LivingConquestMob> mobs = LivingConquestMob.living;
+        if(mobs != null) {
+            final LivingConquestMob mob = target != null ? mobs.getOrDefault(entity.getUniqueId(), null) : null;
+            if(mob != null && mobs.containsKey(target.getUniqueId())) {
+                event.setCancelled(true);
+            }
         }
     }
 
