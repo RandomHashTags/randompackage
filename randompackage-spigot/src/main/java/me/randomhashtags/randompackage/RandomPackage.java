@@ -85,7 +85,7 @@ public final class RandomPackage extends JavaPlugin {
 
         EventAttributes.loadEventAttributes();
 
-        final CommandManager cmd = CommandManager.getCommandManager(this);
+        final CommandManager cmd = CommandManager.getCommandManager();
 
         cmd.load(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
         cmd.loadCustom(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
@@ -207,7 +207,7 @@ public final class RandomPackage extends JavaPlugin {
         api.disable();
         EventAttributes.unloadEventAttributes();
 
-        CommandManager.getCommandManager(null).disable();
+        CommandManager.getCommandManager().disable();
         RPFeature.d();
         HandlerList.unregisterAll((Plugin) this);
         scheduler.cancelTasks(this);

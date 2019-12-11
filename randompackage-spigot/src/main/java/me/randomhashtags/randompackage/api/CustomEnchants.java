@@ -25,7 +25,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -241,6 +240,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final List<ItemStack> raritybooks = new ArrayList<>();
         final HashMap<String, Integer> enchantTicks = new HashMap<>();
         final File folder = new File(p);
+
+        playerEnchants = new HashMap<>();
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            getEnchants(player);
+        }
+
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
                 if(f.isDirectory()) {
@@ -287,7 +292,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         }
-        playerEnchants = new HashMap<>();
         sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
         createCustomEnchantEntities();
@@ -324,18 +328,17 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
     }
 
-    public void viewEnchants(CommandSender sender, int page) {
+    public void viewEnchants(@NotNull CommandSender sender, int page) {
         final ChatEvents cea = ChatEvents.getChatEvents();
-        final FileConfiguration config = RANDOM_PACKAGE.getConfig();
-        final String format = config.getString("enchants.format");
-        final List<String> L = colorizeListString(config.getStringList("enchants.hover"));
+        final String format = RP_CONFIG.getString("enchants.format");
+        final List<String> L = getStringList(RP_CONFIG, "enchants.hover");
         final HashMap<String, CustomEnchant> enabled = getAllCustomEnchants(true);
         final Object[] enchants = enabled.values().toArray();
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
         final int starting = page*10;
         final String max = Integer.toString(maxpage), p = Integer.toString(page);
-        for(String s : getStringList(config, "enchants.msg")) {
+        for(String s : getStringList(RP_CONFIG, "enchants.msg")) {
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {

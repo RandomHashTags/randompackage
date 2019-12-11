@@ -13,19 +13,29 @@ import java.util.HashMap;
 
     This software is created and owned by RandomHashTags, and is licensed under the GNU Affero General Public License v3.0 (https://choosealicense.com/licenses/agpl-3.0/)
     You can only find this software at https://gitlab.com/RandomHashTags/usound
-    You can find RandomHashTags (me) at
+    You can find RandomHashTags on
         Discord - RandomHashTags#1948
+        Discord Server - https://discord.gg/CPTsc5X
+        Dlive - https://dlive.tv/RandomHashTags
         Email - imrandomhashtags@gmail.com
         GitHub - https://github.com/RandomHashTags
         GitLab - https://gitlab.com/RandomHashTags
         MCMarket - https://www.mc-market.org/members/20858/
+        Minecraft - RandomHashTags
+        Mixer - https://mixer.com/randomhashtags
         PayPal - imrandomhashtags@gmail.com
-        SpigotMC - https://www.spigotmc.org/members/randomhashtags.76364/
+        Reddit - https://www.reddit.com/user/randomhashtags/
+        SpigotMC - https://www.spigotmc.org/members/76364/
+        Spotify - https://open.spotify.com/user/randomhashtags
+        Stackoverflow - https://stackoverflow.com/users/12508938/
+        Subnautica Mods - https://www.nexusmods.com/users/77115308
+        Twitch - https://www.twitch.tv/randomhashtags/
         Twitter - https://twitter.com/irandomhashtags
+        YouTube - https://www.youtube.com/channel/UC3L6Egnt0xuMoz8Ss5k51jw
  */
 public enum USound implements Versionable {
     /*
-        <sound>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
+        <sound>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.0)
     */
     AMBIENT_CAVE("AMBIENCE_CAVE", "AMBIENT_CAVE"),
     AMBIENT_UNDERWATER_ENTER("AMBIENCE_CAVE", "AMBIENT_CAVE", null, null, null, "AMBIENT_UNDERWATER_ENTER"),
@@ -88,15 +98,9 @@ public enum USound implements Versionable {
     public Sound getSound() { return sound; }
     public void playSound(Player player, float volume, float pitch) { player.playSound(player.getLocation(), sound, volume, pitch); }
     public void playSound(Location l, float volume, float pitch) { l.getWorld().playSound(l, sound, volume, pitch); }
-    // 0 = 1.8.8
-    // 1 = 1.9.4
-    // 2 = 1.10.2
-    // 3 = 1.11.2
-    // 4 = 1.12.2
-    // 5 = 1.13.2
-    // 6 = 1.14.4
+
     private Sound getVersionSound() {
-        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : names.length-1;
+        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;
         if(names[realver] == null) {
             boolean did = false;

@@ -22,21 +22,33 @@ import java.util.*;
 
     This software is created and owned by RandomHashTags, and is licensed under the GNU Affero General Public License v3.0 (https://choosealicense.com/licenses/agpl-3.0/)
     You can only find this software at https://gitlab.com/RandomHashTags/umaterial
-    You can find RandomHashTags (me) at
+    You can find RandomHashTags on
         Discord - RandomHashTags#1948
+        Discord Server - https://discord.gg/CPTsc5X
+        Dlive - https://dlive.tv/RandomHashTags
         Email - imrandomhashtags@gmail.com
         GitHub - https://github.com/RandomHashTags
         GitLab - https://gitlab.com/RandomHashTags
         MCMarket - https://www.mc-market.org/members/20858/
+        Minecraft - RandomHashTags
+        Mixer - https://mixer.com/randomhashtags
+        PayPal - imrandomhashtags@gmail.com
+        Reddit - https://www.reddit.com/user/randomhashtags/
         SpigotMC - https://www.spigotmc.org/members/76364/
-        Twitch - https://www.twitch.tv/randomhashtags
+        Spotify - https://open.spotify.com/user/randomhashtags
+        Stackoverflow - https://stackoverflow.com/users/12508938/
+        Subnautica Mods - https://www.nexusmods.com/users/77115308
+        Twitch - https://www.twitch.tv/randomhashtags/
+        Twitter - https://twitter.com/irandomhashtags
+        YouTube - https://www.youtube.com/channel/UC3L6Egnt0xuMoz8Ss5k51jw
  */
 public enum UMaterial implements Versionable {
     /*
-        <item>(1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
+        <item>(1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.0)
         1.8.9 = http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Material.html
         1.13.2 = ?
-        1.14.4 = https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+        1.14.4 = ?
+        latest = https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
         visual = https://www.digminecraft.com/lists/item_id_list_pc.php
         Special blocks = https://www.planetminecraft.com/blog/secret-blocks-vanilla/
     */
@@ -77,7 +89,10 @@ public enum UMaterial implements Versionable {
     BAT_SPAWN_EGG(65, "MONSTER_EGG", null, null, null, null, "BAT_SPAWN_EGG"),
     BEACON("BEACON"),
     BEDROCK("BEDROCK"),
+    BEE_NEST(null, null, null, null, null, null, null, "BEE_NEST"),
+    BEE_SPAWN_EGG(null, null, null, null, null, null, null, "BEE_SPAWN_EGG"),
     BEEF("RAW_BEEF", null, null, null, null, "BEEF"),
+    BEEHIVE(null, null, null, null, null, null, null, "BEEHIVE"),
     BEETROOT(null, null, null, null, "BEETROOT"),
     BEETROOT_SEEDS(null, null, null, null, "BEETROOT_SEEDS"),
     BEETROOT_SOUP(null, null, null, null, "BEETROOT_SOUP"),
@@ -581,6 +596,10 @@ public enum UMaterial implements Versionable {
     HAY_BLOCK("HAY_BLOCK"),
     HEART_OF_THE_SEA(null, null, null, null, null, "HEART_OF_THE_SEA"),
     HEAVY_WEIGHTED_PRESSURE_PLATE("IRON_PLATE", null, null, null, null, "HEAVY_WEIGHTED_PRESSURE_PLATE"),
+    HONEY_BLOCK(null, null, null, null, null, null, null, "HONEY_BLOCK"),
+    HONEY_BOTTLE(null, null, null, null, null, null, null, "HONEY_BOTTLE"),
+    HONEYCOMB(null, null, null, null, null, null, null, "HONEYCOMB"),
+    HONEYCOMB_BLOCK(null, null, null, null, null, null, null, "HONEYCOMB_BLOCK"),
     HOPPER("HOPPER"),
     HOPPER_MINECART("HOPPER_MINECART"),
     HORN_CORAL(null, null, null, null, null, "HORN_CORAL"),
@@ -1421,15 +1440,9 @@ public enum UMaterial implements Versionable {
         return is;
     }
     public byte getData() { return data; }
-    // 0 = 1.8.8
-    // 1 = 1.9.4
-    // 2 = 1.10.2
-    // 3 = 1.11.2
-    // 4 = 1.12.2
-    // 5 = 1.13.2
-    // 6 = 1.14.4
+
     private String setupVersionName() {
-        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : names.length-1;
+        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;
         if(names[realver] == null) {
             boolean did = false;
@@ -1486,13 +1499,13 @@ public enum UMaterial implements Versionable {
     @Deprecated
     public static ItemStack valueOf(String name, byte data) {
         name = name.toUpperCase();
-        if(inMemory.keySet().contains(name + data)) return inMemory.get(name + data).clone();
+        if(inMemory.containsKey(name+data)) return inMemory.get(name+data).clone();
         for(UMaterial u : values()) {
             if(u.getData() == data) {
                 for(String n : u.names) {
                     if(n != null && n.equals(name)) {
                         final ItemStack i = u.getItemStack();
-                        inMemory.put(name + data, i);
+                        inMemory.put(name+data, i);
                         return i;
                     }
                 }

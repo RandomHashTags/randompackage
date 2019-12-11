@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.obj.AuctionedItem;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -313,13 +315,13 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
 
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.ah.help", true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
 
-    public void updatePage(Player player) {
+    public void updatePage(@NotNull Player player) {
         if(viewing.containsKey(player)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
             final ItemStack air = new ItemStack(Material.AIR);
@@ -428,14 +430,14 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public void updatePage(Player player, Inventory top, UMaterial material, String name) {
+    public void updatePage(@NotNull Player player, @NotNull Inventory top, @NotNull UMaterial material, @Nullable String name) {
         viewingCategory.put(player, material);
         final UUID u = player.getUniqueId();
         int slot = (int) slots.toArray()[0];
-        for(AuctionedItem a : category.get(material).get(name)) {
-            final UUID auctioner = a.auctioner;
-            final String price = formatBigDecimal(a.price), seller = Bukkit.getOfflinePlayer(a.auctioner).getName();
-            item = a.item(); itemMeta = item.getItemMeta(); lore.clear();
+        for(AuctionedItem auction : category.get(material).get(name)) {
+            final UUID auctioner = auction.auctioner;
+            final String price = formatBigDecimal(auction.price), seller = Bukkit.getOfflinePlayer(auction.auctioner).getName();
+            item = auction.item(); itemMeta = item.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
             for(String s : format) {
                 if(s.equals("{STATUS}")) {
@@ -447,7 +449,9 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
             top.setItem(slot, item);
-            if(slot+1 < slots.size()) slot = (int) slots.toArray()[slot+1];
+            if(slot+1 < slots.size()) {
+                slot = (int) slots.toArray()[slot+1];
+            }
         }
         player.updateInventory();
     }
@@ -476,7 +480,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         top.setItem(nextPageSlot, next);
     }
 
-    public void view(Player player, int page) {
+    public void view(@NotNull Player player, int page) {
         if(hasPermission(player, "RandomPackage.ah.view", true)) {
             player.closeInventory();
             this.page.put(player, page);
@@ -488,7 +492,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             updatePage(player);
         }
     }
-    public void viewCategories(Player player) {
+    public void viewCategories(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.ah.view.categories", true)) {
             player.closeInventory();
             page.put(player, 1);
@@ -500,7 +504,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             updatePage(player);
         }
     }
-    public void viewCategory(Player player, UMaterial material, String name) {
+    public void viewCategory(@NotNull Player player, @NotNull UMaterial material, @Nullable String name) {
         if(hasPermission(player, "RandomPackage.ah.view.category", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, categoryItems.getSize(), categoryItems.getTitle()));
@@ -509,7 +513,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             updatePage(player, top, material, name);
         }
     }
-    public void viewCollectionBin(Player player) {
+    public void viewCollectionBin(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.ah.view.collectionbin", true)) {
             player.closeInventory();
             page.put(player, 1);
@@ -520,28 +524,36 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             updatePage(player);
         }
     }
-    public void nextPage(Player player) {
+    public void nextPage(@NotNull Player player) {
         if(viewing.containsKey(player)) {
             page.put(player, page.get(player)+1);
             updatePage(player);
         }
     }
-    public void previousPage(Player player) {
+    public void previousPage(@NotNull Player player) {
         if(viewing.containsKey(player)) {
             page.put(player, page.get(player)-1);
             updatePage(player);
         }
     }
-    public void expire(Player player, AuctionedItem a) {
-        final ItemStack i = a.item();
-        if(a.claimable) {
+    public void tryCancelling(@NotNull Player player, @NotNull AuctionedItem auction) {
+        final ItemStack i = auction.item();
+        if(auction.claimable) {
             giveItem(player, i);
-            auctions.get(player.getUniqueId()).remove(a);
+            auctions.get(player.getUniqueId()).remove(auction);
         } else {
-            a.claimable = true;
-            auctionHouse.remove(a.auctionTime);
-            category.get(UMaterial.match(i)).get(i.getItemMeta().getDisplayName()).remove(a);
-            a.auctionTime = System.currentTimeMillis();
+            final UMaterial u = UMaterial.match(i);
+            final String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : null;
+            auction.claimable = true;
+            final HashMap<String, List<AuctionedItem>> category = this.category.get(u);
+            final List<AuctionedItem> auctioned = category.get(name);
+            auctioned.remove(auction);
+            if(auctioned.size() == 0) {
+                category.remove(name);
+            }
+            auctionHouse.remove(auction.auctionTime);
+            auction.auctionTime = System.currentTimeMillis();
+            sendStringListMessage(player, getStringList(config, "messages.cancelled listing"), null);
         }
         updatePage(player);
     }
@@ -602,11 +614,6 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         if(!m.containsKey(dn)) m.put(dn, new ArrayList<>());
         m.get(dn).add(ai);
     }
-    public void cancelAuction(Player player, AuctionedItem a) {
-        auctionHouse.remove(a.auctionTime);
-        a.claimable = true;
-        sendStringListMessage(player, getStringList(config, "messages.cancelled listing"), null);
-    }
     public void tryPurchasing(Player player, AuctionedItem a) {
         if(a != null && hasPermission(player, "RandomPackage.ah.buy", true)) {
             player.closeInventory();
@@ -636,10 +643,10 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
 
-    public List<AuctionedItem> getCollectionBin(Player player) {
+    public List<AuctionedItem> getCollectionBin(@NotNull Player player) {
         return auctions.getOrDefault(player.getUniqueId(), new ArrayList<>());
     }
-    public ItemStack getPlayerCollectionBin(Player player) {
+    public ItemStack getPlayerCollectionBin(@NotNull Player player) {
         final String size = Integer.toString(getCollectionBin(player).size());
         item = collectionBin.clone(); itemMeta = item.getItemMeta();
         for(String s : itemMeta.getLore()) {
@@ -752,7 +759,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                     final AuctionedItem target = valueOf(player, r, "AUCTION_HOUSE");
                     if(target != null) {
                         if(target.auctioner.equals(u) && click.equals("SHIFT_RIGHT")) {
-                            cancelAuction(player, target);
+                            tryCancelling(player, target);
                             updatePage(player);
                         } else {
                             tryPurchasing(player, target);
@@ -787,7 +794,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
                 }
             } else { // Collection Bin
                 if(slots.contains(r)) {
-                    expire(player, valueOf(player, r, "COLLECTION_BIN"));
+                    tryCancelling(player, valueOf(player, r, "COLLECTION_BIN"));
                 }
             }
         }

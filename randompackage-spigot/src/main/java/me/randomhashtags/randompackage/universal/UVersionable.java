@@ -33,6 +33,7 @@ public interface UVersionable extends Versionable {
     String SEPARATOR = File.separator;
 
     RandomPackage RANDOM_PACKAGE = RandomPackage.getPlugin;
+    FileConfiguration RP_CONFIG = RANDOM_PACKAGE.getConfig();
     String RP_VERSION = RANDOM_PACKAGE.getDescription().getVersion();
     PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
     Random RANDOM = new Random();

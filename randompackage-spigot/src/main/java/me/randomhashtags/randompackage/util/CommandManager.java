@@ -1,10 +1,6 @@
 package me.randomhashtags.randompackage.util;
 
-import me.randomhashtags.randompackage.RandomPackage;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.*;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,10 +10,9 @@ import java.util.Set;
 
 public final class CommandManager extends Reflect {
     private static CommandManager instance;
-    public static CommandManager getCommandManager(RandomPackage randompackage) {
+    public static CommandManager getCommandManager() {
         if(instance == null) {
             instance = new CommandManager();
-            instance.config = randompackage.config;
         }
         return instance;
     }
@@ -28,9 +23,6 @@ public final class CommandManager extends Reflect {
     private HashMap<String, RPFeature> features;
     private static HashMap<String, PluginCommand> actualCmds;
     private Object dispatcher, nodes;
-
-    private FileConfiguration config;
-    private ConsoleCommandSender console;
 
     public String getIdentifier() { return "COMMAND_MANAGER"; }
     private CommandManager() {
@@ -43,8 +35,12 @@ public final class CommandManager extends Reflect {
                     final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
                     dispatcher = d;
                     nodes = o.get(d.getRoot());
-                } else {
+                } else if(FOURTEEN) {
                     final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_14_R1.MinecraftServer.getServer().commandDispatcher.a();
+                    dispatcher = d;
+                    nodes = o.get(d.getRoot());
+                } else if(FIFTEEN) {
+                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_15_R1.MinecraftServer.getServer().commandDispatcher.a();
                     dispatcher = d;
                     nodes = o.get(d.getRoot());
                 }
@@ -54,10 +50,9 @@ public final class CommandManager extends Reflect {
             e.printStackTrace();
         }
 
-        console = Bukkit.getConsoleSender();
         features = new HashMap<>();
         try {
-            commandMap = (SimpleCommandMap) getPrivateField(Bukkit.getServer().getPluginManager(), "commandMap");
+            commandMap = (SimpleCommandMap) getPrivateField(PLUGIN_MANAGER, "commandMap");
             knownCommands = (HashMap<String, Command>) getPrivateField(commandMap, "knownCommands", !LEGACY);
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +76,7 @@ public final class CommandManager extends Reflect {
             if(baseCmds != null && !baseCmds.isEmpty()) {
                 for(String base : baseCmds.keySet()) {
                     final String path = baseCmds.get(base);
-                    enabled = config.getBoolean(path + ".enabled");
+                    enabled = RP_CONFIG.getBoolean(path + ".enabled");
                     if(!knownCommands.containsKey(base)) {
                         final PluginCommand cmd = actualCmds.get(base);
                         commandMap.register(base, cmd);
@@ -92,7 +87,7 @@ public final class CommandManager extends Reflect {
                     baseCmd.setExecutor((CommandExecutor) f);
                     if(!actualCmds.containsKey(base)) actualCmds.put(base, baseCmd);
                     if(enabled) {
-                        final List<String> cmds = config.getStringList(path + ".cmds");
+                        final List<String> cmds = RP_CONFIG.getStringList(path + ".cmds");
                         if(!cmds.isEmpty()) {
                             final String first = cmds.get(0);
                             baseCmd.unregister(commandMap);
@@ -119,7 +114,7 @@ public final class CommandManager extends Reflect {
                 features.put(f.getIdentifier(), f);
             }
         } catch (Exception e) {
-            console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier()));
+            sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier());
             e.printStackTrace();
         }
     }
