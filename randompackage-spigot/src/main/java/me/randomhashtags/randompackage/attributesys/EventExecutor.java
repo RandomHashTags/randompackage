@@ -313,7 +313,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 final String[] values = string.split("=");
                                 final String attributeKey = values[0], targetValue = values[1];
                                 final TObject keyObj = replaceAllNearbyUsages(attributeKey, entityKeys, entities, targetValue, false), valueObj = replaceAllNearbyUsages(targetValue, entityKeys, entities, targetValue, true);
-                                final String key = (String) keyObj.getFirst(), value = (String) valueObj.getFirst();
+                                final String key = ((String) keyObj.getFirst()).toUpperCase(), value = (String) valueObj.getFirst();
                                 final HashMap<String, String> map = (HashMap<String, String>) keyObj.getSecond();
 
                                 entityValues.putAll(map);
@@ -321,13 +321,13 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 if(attribute == null) {
                                     conditions.add(string);
                                 } else {
-                                    final HashMap<Entity, String> attributeEntities = new HashMap<>();
+                                    final HashMap<Entity, String> recipientValues = new HashMap<>();
                                     final HashMap<String, Entity> entitiesIn = getEntitiesIn(attributeKey, entities, entityKeys);
                                     for(Entity entity : entitiesIn.values()) {
-                                        attributeEntities.put(entity, value);
+                                        recipientValues.put(entity, value);
                                     }
-                                    attributeEntities.put(null, value);
-                                    final PendingEventAttribute pending = new PendingEventAttribute(event, attribute, entities, entitiesIn, (HashMap<String, Entity>) valueObj.getThird(), attributeEntities, string);
+                                    recipientValues.put(null, value);
+                                    final PendingEventAttribute pending = new PendingEventAttribute(event, attribute, entities, entitiesIn, (HashMap<String, Entity>) valueObj.getThird(), recipientValues, string);
                                     execute.add(pending);
                                 }
                             }
@@ -397,7 +397,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) { // TODO: fix this to only proc on 1 equipment slot
+    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
         //final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
@@ -407,7 +407,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 for(CustomEnchant enchant : enchants.keySet()) {
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
-                    //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getName() + ";onCorrectItem=" + onCorrectItem);
+                    //Bukkit.broadcastMessage("EventExecutor;event=" + event.getEventName());
                     if(onCorrectItem) {
                         final int lvl = enchants.get(enchant);
                         final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);

@@ -545,7 +545,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             return playerEnchants.get(uuid);
         } else {
             final EquippedCustomEnchants equipped = new EquippedCustomEnchants(player);
-            equipped.update(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
+            equipped.update(EQUIPMENT_SLOTS);
             playerEnchants.put(uuid, equipped);
             return equipped;
         }
@@ -689,12 +689,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         final LivingEntity e = event.getEntity();
-        final Player k = e.getKiller();
+        final Player killer = e.getKiller();
         final UUID u = e.getUniqueId();
-        if(!(e instanceof Player) && k != null) {
+        if(!(e instanceof Player) && killer != null) {
             final HashMap<String, Entity> entities = getEntities(event);
-            final EquippedCustomEnchants enchants = getEnchants(k);
-            tryProcing(event, k, null, enchants);
+            final EquippedCustomEnchants enchants = getEnchants(killer);
+            tryProcing(event, killer, null, enchants);
             triggerCustomEnchants(event, entities, enchants, globalattributes);
         }
         final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
