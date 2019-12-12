@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attributesys;
 
-import me.randomhashtags.randompackage.addon.EventAttributeListener;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +13,10 @@ import java.util.HashMap;
 
 public class GivePetExp extends AbstractEventAttribute implements RPItemStack {
     @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+        final Event event = pending.getEvent();
+        final HashMap<String, Entity> entities = pending.getEntities();
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         final ItemStack is = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getItem() : null;
         if(is != null) {
             for(Entity e : recipientValues.keySet()) {

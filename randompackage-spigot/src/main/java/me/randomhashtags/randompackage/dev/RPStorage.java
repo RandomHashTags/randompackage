@@ -4,6 +4,8 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.attribute.EventAttribute;
+import me.randomhashtags.randompackage.attribute.EventCondition;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.attributesys.EventEntities;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.event.DamageEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -9,7 +10,8 @@ import java.util.HashMap;
 
 public class SetDamage extends AbstractEventAttribute implements EventEntities {
     @Override
-    public void execute(Event event, String value, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
+        final Event event = pending.getEvent();
         if(event instanceof EntityDamageEvent) {
             final EntityDamageEvent e = (EntityDamageEvent) event;
             e.setDamage(evaluate(replaceValue(getEntities(e), value, valueReplacements)));

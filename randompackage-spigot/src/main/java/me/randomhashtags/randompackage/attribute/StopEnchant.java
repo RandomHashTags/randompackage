@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.entity.Entity;
@@ -24,7 +25,8 @@ public class StopEnchant extends AbstractEventAttribute {
         stoppedEnchants = null;
     }
     @Override
-    public void execute(Event event) {
+    public void execute(PendingEventAttribute pending) {
+        final Event event = pending.getEvent();
         if(event instanceof CustomEnchantProcEvent) {
             final CustomEnchantProcEvent c = (CustomEnchantProcEvent) event;
             final UUID u = c.getEntities().get("Player").getUniqueId();
@@ -38,20 +40,19 @@ public class StopEnchant extends AbstractEventAttribute {
                     }
                 }
             }
-        }
-    }
-    @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
-        for(Entity e : recipientValues.keySet()) {
-            final CustomEnchant enchant = valueOfCustomEnchant(recipientValues.get(e));
-            if(enchant != null && enchant.isEnabled()) {
-                final String[] v = recipientValues.get(e).split(":");
-                final int level = (int) evaluate(v[0].replace("max", Integer.toString(enchant.getMaxLevel())));
-                final UUID u = e.getUniqueId();
-                if(!stoppedEnchants.containsKey(u)) stoppedEnchants.put(u, new HashMap<>());
-                final HashMap<CustomEnchant, TObject> a = stoppedEnchants.get(u);
-                final int task = resumeEnchant(u, enchant, (int) evaluate(v[1]));
-                a.put(enchant, new TObject(level, task, null));
+        } else {
+            final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
+            for(Entity e : recipientValues.keySet()) {
+                final CustomEnchant enchant = valueOfCustomEnchant(recipientValues.get(e));
+                if(enchant != null && enchant.isEnabled()) {
+                    final String[] v = recipientValues.get(e).split(":");
+                    final int level = (int) evaluate(v[0].replace("max", Integer.toString(enchant.getMaxLevel())));
+                    final UUID u = e.getUniqueId();
+                    if(!stoppedEnchants.containsKey(u)) stoppedEnchants.put(u, new HashMap<>());
+                    final HashMap<CustomEnchant, TObject> a = stoppedEnchants.get(u);
+                    final int task = resumeEnchant(u, enchant, (int) evaluate(v[1]));
+                    a.put(enchant, new TObject(level, task, null));
+                }
             }
         }
     }

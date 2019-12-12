@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import org.bukkit.entity.Entity;

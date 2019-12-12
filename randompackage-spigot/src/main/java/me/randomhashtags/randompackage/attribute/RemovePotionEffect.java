@@ -1,15 +1,17 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 
 public class RemovePotionEffect extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+        final HashMap<String, Entity> entities = pending.getEntities();
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             removePotionEffect(entities, e, recipientValues.get(e), valueReplacements);
         }

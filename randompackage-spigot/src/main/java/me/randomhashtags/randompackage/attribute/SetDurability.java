@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -13,7 +14,8 @@ import java.util.HashMap;
 
 public class SetDurability extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, String value) {
+    public void execute(PendingEventAttribute pending, String value) {
+        final Event event = pending.getEvent();
         if(event instanceof PlayerItemDamageEvent) {
             final PlayerItemDamageEvent e = (PlayerItemDamageEvent) event;
             setDurability(e.getPlayer(), value, e.getItem());
@@ -23,7 +25,8 @@ public class SetDurability extends AbstractEventAttribute {
         }
     }
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(PendingEventAttribute pending) {
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             setDurability(e, recipientValues.get(e));
         }

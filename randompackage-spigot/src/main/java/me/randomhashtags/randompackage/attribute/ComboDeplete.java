@@ -1,14 +1,15 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class ComboDeplete extends AbstractEventAttribute implements Combo {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(PendingEventAttribute pending) {
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             final UUID u = e.getUniqueId();
             if(combos.containsKey(u)) {

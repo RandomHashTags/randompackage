@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -12,7 +13,10 @@ import java.util.HashMap;
 
 public class LaunchProj extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+        final Event event = pending.getEvent();
+        final HashMap<String, Entity> entities = pending.getEntities();
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         Vector v = null;
         if(event instanceof ProjectileLaunchEvent) {
             v = ((ProjectileLaunchEvent) event).getEntity().getVelocity();

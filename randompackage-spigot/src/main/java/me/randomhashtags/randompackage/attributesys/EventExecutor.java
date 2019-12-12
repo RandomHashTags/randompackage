@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
-import me.randomhashtags.randompackage.addon.EventAttribute;
+import me.randomhashtags.randompackage.attribute.EventAttribute;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
@@ -147,13 +147,13 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         return a;
     }
 
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values) {
+    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values) {
         return executeAll(event, entities, conditions, cancelled, entityValues, values, new HashMap<>());
     }
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<String, String> valueReplacements) {
+    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements) {
         return executeAll(event, entities, conditions, cancelled, entityValues, values, valueReplacements, 0);
     }
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> values, HashMap<String, String> valueReplacements, int repeatID) {
+    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements, int repeatID) {
         boolean passed = didPassConditions(event, entities, conditions, valueReplacements, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
@@ -161,62 +161,58 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
             final HashMap<RPPlayer, String> data = getData(entities, entityValues);
             final boolean dadda = !data.isEmpty(), entity1NN = entity1 != null, entity2NN = entity2 != null;
             final String repeatid = Integer.toString(repeatID);
-            final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> previousHashMaps = new ArrayList<>();
-            attributeLooper: for(LinkedHashMap<EventAttribute, HashMap<Entity, String>> hashmap : values) {
-                for(EventAttribute a : hashmap.keySet()) {
-                    if(!a.isCancelled()) {
-                        final HashMap<Entity, String> valuez = hashmap.get(a);
-                        String defaultValue = valuez.getOrDefault(null, null);
-                        if(defaultValue != null) {
-                            defaultValue = defaultValue.replace("RepeatID", repeatid);
-                        }
-                        switch (a.getIdentifier()) {
-                            case "WAIT":
-                                final int ticks = (int) evaluate(replaceValue(entities, defaultValue, valueReplacements));
-                                List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> attributes = new ArrayList<>(values);
-                                attributes.removeAll(previousHashMaps);
-                                attributes.remove(hashmap);
-                                SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
+            final List<PendingEventAttribute> previousHashMaps = new ArrayList<>();
+            attributeLooper: for(PendingEventAttribute pending : values) {
+                final EventAttribute attribute = pending.getEventAttribute();
+                if(!attribute.isCancelled()) {
+                    final HashMap<Entity, String> valuez = pending.getRecipientValues();
+                    String defaultValue = valuez.getOrDefault(null, null);
+                    if(defaultValue != null) {
+                        defaultValue = defaultValue.replace("RepeatID", repeatid);
+                    }
+                    switch (attribute.getIdentifier()) {
+                        case "WAIT":
+                            final int ticks = (int) evaluate(replaceValue(entities, defaultValue, valueReplacements));
+                            List<PendingEventAttribute> attributes = new ArrayList<>(values);
+                            attributes.removeAll(previousHashMaps);
+                            attributes.remove(pending);
+                            SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements), ticks);
+                            break attributeLooper;
+                        case "REPEAT":
+                            attributes = new ArrayList<>(values);
+                            attributes.removeAll(previousHashMaps);
+                            attributes.remove(pending);
+                            for(int i = 1; i <= evaluate(defaultValue); i++) {
+                                executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
+                            }
+                            break attributeLooper;
+                        case "RETURN":
+                            passed = Boolean.parseBoolean(defaultValue);
+                            if(!passed) {
                                 break attributeLooper;
-                            case "REPEAT":
-                                attributes = new ArrayList<>(values);
-                                attributes.removeAll(previousHashMaps);
-                                attributes.remove(hashmap);
-                                for(int i = 1; i <= evaluate(defaultValue); i++) {
-                                    executeAll(event, entities, conditions, cancelled, entityValues, attributes, valueReplacements, i);
+                            }
+                        default:
+                            previousHashMaps.add(pending);
+                            attribute.execute(pending);
+                            if(dadda) {
+                                attribute.executeData(entities, data, valueReplacements);
+                                attribute.executeData(data, valueReplacements);
+                            }
+                            valuez.remove(null);
+                            for(Entity e : valuez.keySet()) {
+                                final String og = valuez.get(e);
+                                if(og != null) {
+                                    valuez.put(e, replaceValue(entities, og, valueReplacements));
                                 }
-                                break attributeLooper;
-                            case "RETURN":
-                                passed = Boolean.parseBoolean(defaultValue);
-                                if(!passed) {
-                                    break attributeLooper;
+                            }
+                            attribute.execute(pending, valueReplacements);
+                            if(defaultValue != null) {
+                                attribute.execute(pending, defaultValue);
+                                attribute.execute(pending, defaultValue, valueReplacements);
+                                if(entity1NN && entity2NN) {
+                                    attribute.execute(entity1, entity2, defaultValue);
                                 }
-                            default:
-                                previousHashMaps.add(hashmap);
-                                a.execute(event);
-                                if(dadda) {
-                                    a.executeData(entities, data, valueReplacements);
-                                    a.executeData(data, valueReplacements);
-                                }
-                                valuez.remove(null);
-                                for(Entity e : valuez.keySet()) {
-                                    final String og = valuez.get(e);
-                                    if(og != null) {
-                                        valuez.put(e, replaceValue(entities, og, valueReplacements));
-                                    }
-                                }
-                                a.execute(event, valuez);
-                                a.execute(event, entities, valuez);
-                                a.execute(event, entities, valuez, valueReplacements);
-                                if(defaultValue != null) {
-                                    a.execute(event, defaultValue);
-                                    a.execute(event, entities, defaultValue, valueReplacements);
-                                    a.execute(event, defaultValue, valueReplacements);
-                                    if(entity1NN && entity2NN) {
-                                        a.execute(entity1, entity2, defaultValue);
-                                    }
-                                }
-                        }
+                            }
                     }
                 }
             }
@@ -248,14 +244,14 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     }
                     attributeKey = attributeKey.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
                 }
-            } else if(attributeKey.contains(E)) {
+            } else if(attributeKey.contains(E) && !attributeKey.contains(":" + E)) {
                 attributeKey = attributeKey.replace(E, "");
                 entities.put(entity, entityList.get(entity));
             }
         }
         return entities;
     }
-    private TObject replaceAllNearbyUsages(String string, List<String> entityKeys, HashMap<String, Entity> entities, String value1, boolean useStringAsVault) {
+    private TObject replaceAllNearbyUsages(String string, List<String> entityKeys, HashMap<String, Entity> entities, String value1, boolean useStringAsValue) {
         final String og = string;
         string = string.toUpperCase();
         final HashMap<String, String> entityValues = new HashMap<>();
@@ -279,13 +275,13 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                         nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : member ? "MEMBER" : "ENTITIES");
                         entities.putAll(nearby);
                         for(String n : nearby.keySet()) {
-                            entityValues.put(n, useStringAsVault ? string : value1);
+                            entityValues.put(n, useStringAsValue ? string : value1);
                         }
                     }
                     string = string.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
                 }
                 did = true;
-            } else if(string.contains(E)) {
+            } else if(string.contains(E) && !string.contains(":" + E)) {
                 string = string.replace(E, "");
                 entityValues.put(entity, value1);
                 did = true;
@@ -300,17 +296,16 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     private boolean tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes, HashMap<String, String> valueReplacements) {
         if(event != null && attributes != null && !attributes.isEmpty()) {
             final List<Boolean> checks = new ArrayList<>();
-            final String e = event.getEventName().split("Event")[0].toLowerCase();
-            final boolean cancellable = event instanceof Cancellable, cancelled = cancellable && ((Cancellable) event).isCancelled();
+            final String targetEvent = event.getEventName().split("Event")[0].toLowerCase();
+            final boolean cancelled = event instanceof Cancellable && ((Cancellable) event).isCancelled();
             final List<String> entityKeys = new ArrayList<>(entities.keySet());
             for(String s : attributes) {
-                final String[] semi = s.split(";");
-                final String first = semi[0].toLowerCase();
-                if(first.equals(e)) {
+                final String first = s.split(";")[0];
+                if(first.toLowerCase().equals(targetEvent)) {
                     final List<String> conditions = new ArrayList<>();
                     final HashMap<String, String> entityValues = new HashMap<>();
-                    final List<LinkedHashMap<EventAttribute, HashMap<Entity, String>>> execute = new ArrayList<>();
-                    final String[] attributeList = s.split(semi[0] + ";");
+                    final List<PendingEventAttribute> execute = new ArrayList<>();
+                    final String[] attributeList = s.split(first + ";");
 
                     if(attributeList.length > 1) {
                         for(String string : attributeList[1].split(";")) {
@@ -326,15 +321,14 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                 if(attribute == null) {
                                     conditions.add(string);
                                 } else {
-                                    final LinkedHashMap<EventAttribute, HashMap<Entity, String>> attributeMap = new LinkedHashMap<>();
-                                    attributeMap.put(attribute, new LinkedHashMap<>());
-                                    final HashMap<Entity, String> attributeEntities = attributeMap.get(attribute);
+                                    final HashMap<Entity, String> attributeEntities = new HashMap<>();
                                     final HashMap<String, Entity> entitiesIn = getEntitiesIn(attributeKey, entities, entityKeys);
                                     for(Entity entity : entitiesIn.values()) {
                                         attributeEntities.put(entity, value);
                                     }
                                     attributeEntities.put(null, value);
-                                    execute.add(attributeMap);
+                                    final PendingEventAttribute pending = new PendingEventAttribute(event, attribute, entities, entitiesIn, (HashMap<String, Entity>) valueObj.getThird(), attributeEntities, string);
+                                    execute.add(pending);
                                 }
                             }
                         }

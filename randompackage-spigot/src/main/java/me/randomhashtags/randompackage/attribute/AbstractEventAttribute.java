@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.addon.EventAttribute;
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.attributesys.EventReplacer;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
@@ -24,15 +24,13 @@ public abstract class AbstractEventAttribute extends RegionalAPI implements Even
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
 
-    public void execute(Event event) {}
-    public void execute(Event event, String value) {}
-    public void execute(Event event, String value, HashMap<String, String> valueReplacements) {}
-    public void execute(Event event, HashMap<String, Entity> entities, String value, HashMap<String, String> valueReplacements) {}
+    public void execute(@NotNull PendingEventAttribute pending) {}
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {}
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value) {}
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value, @NotNull HashMap<String, String> valueReplacements) {}
+
     public void execute(String value) {}
     public void execute(Entity entity1, Entity entity2, String value) {}
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {}
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues) {}
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {}
     public void executeAt(HashMap<Location, String> locations) {}
     public void executeData(HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {}
     public void executeData(HashMap<String, Entity> entities, HashMap<RPPlayer, String> recipientValues, HashMap<String, String> valueReplacements) {}

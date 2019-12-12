@@ -1,15 +1,16 @@
 package me.randomhashtags.randompackage.attribute.todo;
 
 import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
 public class ChangeVelocity extends AbstractEventAttribute {
     // TODO: finish this attribute
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(PendingEventAttribute pending) {
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
         }
     }

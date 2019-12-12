@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addon;
+package me.randomhashtags.randompackage.attribute;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;

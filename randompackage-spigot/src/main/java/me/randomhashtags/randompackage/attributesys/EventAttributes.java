@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.attributesys;
 
-import me.randomhashtags.randompackage.addon.EventAttribute;
-import me.randomhashtags.randompackage.addon.EventCondition;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
 import me.randomhashtags.randompackage.enums.Feature;

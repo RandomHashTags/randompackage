@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
+import me.randomhashtags.randompackage.attribute.SpawnEntity;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -89,6 +90,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         save("custom enchants", "global attributes.yml");
         globalattributes = getStringList(YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")), "attributes");
 
+        new SpawnEntity().load();
         new StopEnchant().load();
 
         if(!otherdata.getBoolean("saved default custom enchants")) {

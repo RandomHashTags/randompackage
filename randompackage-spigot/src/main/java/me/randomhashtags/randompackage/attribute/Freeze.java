@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -25,7 +26,8 @@ public class Freeze extends AbstractEventAttribute {
         tasks = null;
     }
     @Override
-    public void execute(Event event, String value) {
+    public void execute(PendingEventAttribute pending) {
+        final Event event = pending.getEvent();
         final PlayerQuitEvent q = event instanceof PlayerQuitEvent ? (PlayerQuitEvent) event : null;
         if(q != null) {
             final Player player = q.getPlayer();
@@ -36,9 +38,8 @@ public class Freeze extends AbstractEventAttribute {
                 tasks.remove(player);
             }
         }
-    }
-    @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues) {
+
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             final Player player = e instanceof Player ? (Player) e : null;
             if(player != null) {

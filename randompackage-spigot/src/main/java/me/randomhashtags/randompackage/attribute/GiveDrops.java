@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,7 +12,8 @@ import java.util.Collection;
 
 public class GiveDrops extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, String value) {
+    public void execute(PendingEventAttribute pending, String value) {
+        final Event event = pending.getEvent();
         final String[] values = value.split(":");
         final int l = values.length;
         if(Boolean.parseBoolean(values[0])) {

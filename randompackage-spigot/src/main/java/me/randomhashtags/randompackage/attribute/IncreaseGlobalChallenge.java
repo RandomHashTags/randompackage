@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.attribute;
 
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.event.GlobalChallengeParticipateEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +13,10 @@ import java.util.HashMap;
 
 public class IncreaseGlobalChallenge extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+        final Event event = pending.getEvent();
+        final HashMap<String, Entity> entities = pending.getEntities();
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {

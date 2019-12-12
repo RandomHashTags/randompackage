@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -11,7 +11,9 @@ import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpite
 
 public class RemoveItem extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<String, Entity> entities, HashMap<Entity, String> recipientValues, HashMap<String, String> valueReplacements) {
+    public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
+        final HashMap<String, Entity> entities = pending.getEntities();
+        final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
                 final String value = replaceValue(entities, recipientValues.get(e), valueReplacements);

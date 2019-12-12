@@ -1,14 +1,11 @@
 package me.randomhashtags.randompackage.attribute.todo;
 
 import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
-
-import java.util.HashMap;
+import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 
 public class GiveEco extends AbstractEventAttribute {
     @Override
-    public void execute(Event event, HashMap<Entity, String> recipientValues) {
+    public void execute(PendingEventAttribute pending) {
         // TODO: Support more than 1 economy plugin & finish this attribute
     }
 }
