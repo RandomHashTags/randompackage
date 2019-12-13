@@ -60,9 +60,11 @@ public class EquippedCustomEnchants implements Versionable {
     }
 
     public void update(EquipmentSlot slot, ItemStack withItem) {
-        enchants.remove(slot);
-        if(withItem != null) {
-            enchants.put(slot, CustomEnchants.getCustomEnchants().getEnchantsOnItem(withItem));
+        if(slot != null) {
+            enchants.remove(slot);
+            if(withItem != null) {
+                enchants.put(slot, CustomEnchants.getCustomEnchants().getEnchantsOnItem(withItem));
+            }
         }
     }
     public void update(EquipmentSlot...slots) {
@@ -79,6 +81,7 @@ public class EquippedCustomEnchants implements Versionable {
 
     private ItemStack getItemInSlot(EquipmentSlot slot) { return getItemInSlot(slot, false); }
     private ItemStack getItemInSlot(EquipmentSlot slot, boolean getEventItem) {
+        if(slot == null) { return null; }
         if(getEventItem && EVENTS.containsKey(player)) {
             return EVENTS.get(player).getItem();
         }
