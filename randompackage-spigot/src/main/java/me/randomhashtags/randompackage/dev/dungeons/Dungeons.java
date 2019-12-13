@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
-import me.randomhashtags.randompackage.addon.Dungeon;
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.attribute.SetOpenDuration;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -112,7 +113,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         }
     }
 
-    public void viewDungeons(Player player) {
+    public void viewDungeons(@NotNull Player player) {
         player.closeInventory();
         player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
         player.getOpenInventory().getTopInventory().setContents(gui.getInventory().getContents());
@@ -125,7 +126,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         }*/
         player.updateInventory();
     }
-    public void viewMaster(Player player) {
+    public void viewMaster(@NotNull Player player) {
         player.closeInventory();
         player.openInventory(Bukkit.createInventory(player, master.getSize(), master.getTitle()));
         player.updateInventory();

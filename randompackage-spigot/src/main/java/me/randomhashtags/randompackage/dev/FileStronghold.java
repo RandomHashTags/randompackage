@@ -18,7 +18,6 @@ public abstract class FileStronghold extends RPAddon implements Stronghold {
     private Location center;
     private CaptureType captureType;
     private PolyBoundary squareZone;
-    private List<String> noLongerControllingMsg, tokenControlMsg;
     public FileStronghold(File f) {
         load(f);
         register(Feature.STRONGHOLD, this);
@@ -57,14 +56,8 @@ public abstract class FileStronghold extends RPAddon implements Stronghold {
     public List<String> getCapturedMsg() {
         return null;
     }
-    public List<String> getNoLongerControllingMsg() {
-        if(noLongerControllingMsg == null) noLongerControllingMsg = colorizeListString(yml.getStringList("messages.no longer controlling"));
-        return noLongerControllingMsg;
-    }
-    public List<String> getTakenControlMsg() {
-        if(tokenControlMsg == null) tokenControlMsg = colorizeListString(yml.getStringList("messages.taken control"));
-        return tokenControlMsg;
-    }
+    public List<String> getNoLongerControllingMsg() { return getStringList(yml, "messages.no longer controlling"); }
+    public List<String> getTakenControlMsg() { return getStringList(yml, "messages.taken control"); }
 
     public List<String> getRewards() { return yml.getStringList("rewards"); }
 }

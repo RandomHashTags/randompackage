@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
-import me.randomhashtags.randompackage.addon.Dungeon;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.addon.file.RPAddon;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;

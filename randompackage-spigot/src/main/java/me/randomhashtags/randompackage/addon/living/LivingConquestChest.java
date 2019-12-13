@@ -137,6 +137,9 @@ public class LivingConquestChest implements UVersionable {
         }
     }
     public void delete(boolean dropsRewards) {
+        delete(dropsRewards, false);
+    }
+    public void delete(boolean dropsRewards, boolean despawnMobs) {
         SCHEDULER.cancelTask(announceTask);
         SCHEDULER.cancelTask(despawnTask);
         SCHEDULER.cancelTask(distanceCheckTask);
@@ -145,6 +148,11 @@ public class LivingConquestChest implements UVersionable {
         if(dropsRewards) {
             for(ItemStack is : getRandomRewards()) {
                 w.dropItem(location, is);
+            }
+        }
+        if(despawnMobs) {
+            for(LivingConquestMob mob : mobs.values()) {
+                mob.getEntity().remove();
             }
         }
         living.remove(this);

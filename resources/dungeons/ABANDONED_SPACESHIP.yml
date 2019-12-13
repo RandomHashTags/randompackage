@@ -13,6 +13,10 @@ messages:
     - "&5&l&nAbandoned Spaceship&r &6/dungeon!"
     - " "
   #
+  new objective:
+    - "&6&l(DUNGEON)&r &6NEW OBJETIVE: &e&n{NAME}"
+    - "&6&l(DUNGEON)&r &7Time Limit: &a{TIME_LIMIT}"
+  #
   completed:
     - " "
     - "&6&l*-*-* DUNGEON COMPLETE! *-*-*"
@@ -22,6 +26,53 @@ messages:
     - "&6&l*&r &a{CHALLENGE}"
     - "&7Loot the challenge chests for bonus dungeon items!"
     - " "
+#
+objectives:
+  ENTER_SHIP_HANGER:
+    name: "Enter Ship Hanger"
+    time limit: 300
+  DEFEAT_YIJKI_PHASE_1:
+    name: "Defeat Yijki Phase #1"
+    time limit: 601
+  COMPLETE_VENTILATION_SHAFT:
+    name: "Complete Ventilation Shaft"
+    time limit: 540
+  COMPLETE_MAZE:
+    name: "Complete Maze"
+    time limit: 241
+    messages:
+      info:
+        - "&6&l(DUNGEON)&r &fThis is the ship's generator room. The exit seems to have been sealed in the chaos, you will need to locate the correct lever to switch the power back on and continue. Be careful! The floor seems extremely unstable."
+  DEFEAT_YIJKI_PHASE_2:
+    name: "Defeat Yijki Phase #2"
+    time limit: 720
+    messages:
+      info:
+        - "&6&l(DUNGEON)&r &fYou have discovered the ship's bridge, perhaps now you can finally find some answers..."
+        - "&6&l(DUNGEON)&r &cNo! Yijki has destroyed the ship's main computer - defeat it!"
+  COMPLETE_CARGO_BAY:
+    name: "Complete Cargo Bay"
+    time limit: 481
+  SOLVE_TELEPORTATION_ROOM_PUZZLE:
+    name: "Solve Teleportation Room Puzzle"
+    time limit: 301
+    messages:
+      info:
+        - "&6&l(DUNGEON)&r &fYijki is not here! He must have beamed down to the planet. Operate the teleportation device and escape the ship before it falls apart!"
+      post info:
+        - "&6&l(DUNGEON)&r &fTo use the teleportor, you must operate all 10 buttons in the correct oder, then pull the lever in the center of the room."
+      pressed button:
+        - "&6&l(DUNGEON)&r {COLOR}{PLAYER} pressed the button at {X}x, {Z}z (#{NUMBER})"
+        - "&6&l(DUNGEON)&r &fLoading teleportation matrix..."
+      correct button:
+        - "&6&l(DUNGEON)&r &f#{NUMBER} - &aCORRECT"
+      invalid button:
+        - "&6&l(DUNGEON)&r &f#{NUMBER} - &cINVALID, reset!"
+      not enough data:
+        - "&6&l(DUNGEON)&r &cERROR: Not enough input data!"
+  LEAVE_DUNGEON:
+    name: "Leave the Dungeon"
+    time limit: 121
 #
 challenges:
   guardian:
@@ -60,7 +111,7 @@ gui:
       - "&7at /spawn, or at &cbuy.yourserver.com"
 #
 portal:
-  anyone can join: true
+  join type: ANYONE
   craftable: true
   # Measured in seconds.
   stable for: 100

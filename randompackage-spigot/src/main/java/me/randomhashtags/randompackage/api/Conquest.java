@@ -137,7 +137,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             final List<LivingConquestChest> C = LivingConquestChest.living;
             if(C != null) {
                 for(LivingConquestChest l : new ArrayList<>(C)) {
-                    l.delete(false);
+                    l.delete(false, true);
                     C.remove(l);
                 }
             }

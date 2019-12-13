@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
-import me.randomhashtags.randompackage.addon.Dungeon;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 

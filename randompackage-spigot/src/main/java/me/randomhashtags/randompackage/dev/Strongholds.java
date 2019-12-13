@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -51,7 +52,9 @@ public class Strongholds extends RPFeature implements CommandExecutor {
                 }
                 break;
             default:
-                if(player != null) viewStrongholds(player);
+                if(player != null) {
+                    viewStrongholds(player);
+                }
                 break;
         }
         if(sender instanceof Player) {
@@ -97,7 +100,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         unregister(Feature.STRONGHOLD);
     }
 
-    public void viewStrongholds(Player player) {
+    public void viewStrongholds(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.stronghold", true)) {
             player.closeInventory();
             final int size = gui.getSize();
@@ -124,7 +127,6 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-        final Player player = event.getPlayer();
         final Block b = event.getBlock();
         final Location l = b.getLocation();
         for(Stronghold s : getAllStrongholds().values()) {

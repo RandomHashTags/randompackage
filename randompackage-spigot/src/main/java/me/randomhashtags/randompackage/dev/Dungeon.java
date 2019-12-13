@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.addon;
+package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
@@ -23,5 +23,5 @@ public interface Dungeon extends Attributable, Itemable, Scheduleable, Slotable 
     ItemStack getLootbag();
     List<String> getLootbagRewards();
 
-    long getFastestCompletion();
+    DungeonStats getStats();
 }
