@@ -3,10 +3,7 @@ package me.randomhashtags.randompackage.util;
 import org.bukkit.command.*;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class CommandManager extends Reflect {
     private static CommandManager instance;
@@ -71,51 +68,59 @@ public final class CommandManager extends Reflect {
         }
         loadCustom(f, cmds, enabled);
     }
-    public void loadCustom(RPFeature f, HashMap<String, String> baseCmds, boolean enabled) {
-        try {
-            if(baseCmds != null && !baseCmds.isEmpty()) {
-                for(String base : baseCmds.keySet()) {
-                    final String path = baseCmds.get(base);
-                    enabled = RP_CONFIG.getBoolean(path + ".enabled");
-                    if(!knownCommands.containsKey(base)) {
-                        final PluginCommand cmd = actualCmds.get(base);
-                        commandMap.register(base, cmd);
-                        knownCommands.put(base, cmd);
-                        knownCommands.put("randompackage:" + base, cmd);
-                    }
-                    final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
-                    baseCmd.setExecutor((CommandExecutor) f);
-                    if(!actualCmds.containsKey(base)) actualCmds.put(base, baseCmd);
-                    if(enabled) {
-                        final List<String> cmds = RP_CONFIG.getStringList(path + ".cmds");
-                        if(!cmds.isEmpty()) {
-                            final String first = cmds.get(0);
-                            baseCmd.unregister(commandMap);
-                            if(!first.equalsIgnoreCase(base)) {
-                                baseCmd.setName(first);
-                            }
-                            cmds.remove(first);
-                            baseCmd.setAliases(cmds);
-                            for(String s : cmds) {
-                                commandMap.register(s, baseCmd);
-                                knownCommands.put(s, baseCmd);
-                                knownCommands.put("randompackage:" + s, baseCmd);
-                            }
-                            baseCmd.register(commandMap);
-                            updateBrigadierCmd(baseCmd, false);
+    public void loadCustom(RPFeature f, HashMap<String, String> baseCmds, boolean isEnabled) {
+        if(isEnabled) {
+            try {
+                final List<Boolean> enabledList = new ArrayList<>();
+                if(baseCmds != null && !baseCmds.isEmpty()) {
+                    for(String base : baseCmds.keySet()) {
+                        final String path = baseCmds.get(base);
+                        final boolean enabled = RP_CONFIG.getBoolean(path + ".enabled");
+                        enabledList.add(enabled);
+                        if(!knownCommands.containsKey(base)) {
+                            final PluginCommand cmd = actualCmds.get(base);
+                            commandMap.register(base, cmd);
+                            knownCommands.put(base, cmd);
+                            knownCommands.put("randompackage:" + base, cmd);
                         }
-                    } else {
-                        unregisterPluginCommand(baseCmd);
+                        final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
+                        baseCmd.setExecutor((CommandExecutor) f);
+                        if(!actualCmds.containsKey(base)) {
+                            actualCmds.put(base, baseCmd);
+                        }
+                        if(enabled) {
+                            final List<String> cmds = RP_CONFIG.getStringList(path + ".cmds");
+                            if(!cmds.isEmpty()) {
+                                final String first = cmds.get(0);
+                                baseCmd.unregister(commandMap);
+                                if(!first.equalsIgnoreCase(base)) {
+                                    baseCmd.setName(first);
+                                }
+                                cmds.remove(first);
+                                baseCmd.setAliases(cmds);
+                                for(String s : cmds) {
+                                    commandMap.register(s, baseCmd);
+                                    knownCommands.put(s, baseCmd);
+                                    knownCommands.put("randompackage:" + s, baseCmd);
+                                }
+                                baseCmd.register(commandMap);
+                                updateBrigadierCmd(baseCmd, false);
+                            }
+                        } else {
+                            unregisterPluginCommand(baseCmd);
+                        }
                     }
+                } else {
+                    enabledList.add(true);
                 }
+                if(enabledList.contains(true)) {
+                    f.enable();
+                    features.put(f.getIdentifier(), f);
+                }
+            } catch (Exception e) {
+                sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier());
+                e.printStackTrace();
             }
-            if(enabled) {
-                f.enable();
-                features.put(f.getIdentifier(), f);
-            }
-        } catch (Exception e) {
-            sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier());
-            e.printStackTrace();
         }
     }
     public void disable() {

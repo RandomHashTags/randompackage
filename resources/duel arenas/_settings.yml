@@ -41,7 +41,7 @@ messages:
     target currenly creating one:
       - "&c&l(!)&r &c{PLAYER} is currently creating a duel."
     nonexistent player:
-    -   "&cThe player '{INPUT}' does not exist."
+      - "&cThe player '{INPUT}' does not exist."
   #
   top:
     - " "

@@ -71,8 +71,9 @@ public class Dungeons extends RPFeature implements CommandExecutor {
             }
         }
         for(int i = 0; i < gui.getSize(); i++) {
-            if(di.getItem(i) == null)
+            if(di.getItem(i) == null) {
                 di.setItem(i, background);
+            }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUNGEON).size() + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }

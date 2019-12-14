@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.dev.duels;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
+import me.randomhashtags.randompackage.addon.stats.DuelStats;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -57,6 +58,7 @@ public class Duels extends RPFeature implements CommandExecutor {
                     viewTop(sender, 1);
                     break;
                 case "toggle":
+                    toggleRequests(player);
                     break;
                 case "collect":
                     break;
@@ -133,19 +135,23 @@ public class Duels extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public void editGodset(Player player) {
+    public void editGodset(@NotNull Player player) {
     }
 
-    public void tryJoiningnUnranked(Player player) {
+    public void tryJoiningnUnranked(@NotNull Player player) {
     }
-    public void tryJoiningRanked(Player player) {
+    public void tryJoiningRanked(@NotNull Player player) {
     }
-    public void trySpectating(Player player, DuelArena arena) {
+    public void trySpectating(@NotNull Player player, @NotNull DuelArena arena) {
     }
 
-    public void sendRequest(Player player, String target) {
+    public void sendRequest(@NotNull Player player, @NotNull String target) {
+        if(hasPermission(player, "RandomPackage.duel.request.send", true)) {
+            if(player.getName().equalsIgnoreCase(target)) {
+            }
+        }
     }
-    public void acceptRequest(Player player) {
+    public void acceptRequest(@NotNull Player player) {
     }
 
     public void viewHelp(@NotNull Player player) {
@@ -153,13 +159,20 @@ public class Duels extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, getStringList(config, "messages.help"), null);
         }
     }
-    public void viewTop(CommandSender sender, int page) {
+    public void viewTop(@NotNull CommandSender sender, int page) {
         if(hasPermission(sender, "RandomPackage.duel.top", true)) {
+            final List<String> top = getStringList(config, "messages.top");
+            for(String s : top) {
+            }
         }
     }
-    public void tryTogglingRequests(@NotNull Player player) {
+    public void toggleRequests(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.duel.toggle", true)) {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+            final DuelStats stats = pdata.getDuelStats();
+            final boolean toggled = !stats.receivesRequests();
+            stats.setReceivesRequests(toggled);
+            sendStringListMessage(player, getStringList(config, "messages.toggle " + (toggled ? "on" : "off")), null);
         }
     }
 

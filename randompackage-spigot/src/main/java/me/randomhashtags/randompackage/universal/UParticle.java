@@ -11,19 +11,29 @@ import java.util.HashMap;
 
     This software is created and owned by RandomHashTags, and is licensed under the GNU Affero General Public License v3.0 (https://choosealicense.com/licenses/agpl-3.0/)
     You can only find this software at https://gitlab.com/RandomHashTags/uparticle
-    You can find RandomHashTags (me) at
+    You can find RandomHashTags on
         Discord - RandomHashTags#1948
+        Discord Server - https://discord.gg/CPTsc5X
+        Dlive - https://dlive.tv/RandomHashTags
         Email - imrandomhashtags@gmail.com
         GitHub - https://github.com/RandomHashTags
         GitLab - https://gitlab.com/RandomHashTags
         MCMarket - https://www.mc-market.org/members/20858/
+        Minecraft - RandomHashTags
+        Mixer - https://mixer.com/randomhashtags
+        PayPal - imrandomhashtags@gmail.com
+        Reddit - https://www.reddit.com/user/randomhashtags/
         SpigotMC - https://www.spigotmc.org/members/76364/
-        Twitch - https://www.twitch.tv/randomhashtags
+        Spotify - https://open.spotify.com/user/randomhashtags
+        Stackoverflow - https://stackoverflow.com/users/12508938/
+        Subnautica Mods - https://www.nexusmods.com/users/77115308
+        Twitch - https://www.twitch.tv/randomhashtags/
         Twitter - https://twitter.com/irandomhashtags
+        YouTube - https://www.youtube.com/channel/UC3L6Egnt0xuMoz8Ss5k51jw
  */
-public enum UParticle {
+public enum UParticle implements UVersionable {
     /*
-        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4)
+        <particle>(1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15)
     */
     BARRIER(null, "BARRIER"),
     BLOCK_CRACK("TILE_BREAK", "BLOCK_CRACK"),
@@ -50,7 +60,7 @@ public enum UParticle {
     FOOTSTEP("FOOTSTEP", null, null, null, null, "STEP_SOUND"),
     HEART("HEART"),
     ITEM_CRACK("ITEM_BREAK", "ITEM_CRACK"),
-    ITEM_TAKE(null, "ITEM_TAKE"),
+    @Deprecated ITEM_TAKE(null, "ITEM_TAKE"), // Removed in 1.13
     LAVA("LAVA_POP", "LAVA"),
     MOB_APPEARANCE(null, "MOB_APPEARANCE"),
     NAUTILUS(null, null, null, null, null, "NAUTILUS"),
@@ -82,7 +92,6 @@ public enum UParticle {
     WATER_WAKE(null, "WATER_WAKE"),
     ;
     private static final HashMap<String, UParticle> CACHE = new HashMap<>();
-    private final String v = Bukkit.getVersion();
     private final String[] names;
     private final String versionName;
     private Object particle;
@@ -90,7 +99,7 @@ public enum UParticle {
         this.names = names;
         this.versionName = getName();
         if(versionName != null) {
-            if(v.contains("1.8")) {
+            if(EIGHT) {
                 this.particle = Effect.valueOf(versionName);
             } else {
                 try {
@@ -99,8 +108,9 @@ public enum UParticle {
                     try {
                         this.particle = Effect.valueOf(versionName);
                     } catch (Exception ee) {
-                        if(!versionName.equals("ITEM_TAKE") || versionName.equals("ITEM_TAKE") && !v.contains("1.13"))
-                            Bukkit.broadcastMessage("[UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + v + "!");
+                        if(!versionName.equals("ITEM_TAKE")) {
+                            sendConsoleMessage("[RandomPackage.UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + VERSION + "!");
+                        }
                     }
                 }
             }
@@ -111,38 +121,48 @@ public enum UParticle {
     public Object getParticle() { return particle; }
 
     public void play(Player player, Location l, int count) {
-        if(v.contains("1.8")) {
-            for(int i = 1; i <= count; i++) player.playEffect(l, (Effect) particle, 0);
+        if(EIGHT) {
+            final Effect e = (Effect) particle;
+            for(int i = 1; i <= count; i++) {
+                player.playEffect(l, e, 0);
+            }
         } else {
             player.spawnParticle((Particle) particle, l, count);
         }
     }
     public void play(Player player, Location l, int count, Material material) {
-        if(v.contains("1.8")) {
-            for(int i = 1; i <= count; i++) player.playEffect(l, (Effect) particle, material);
+        if(EIGHT) {
+            final Effect e = (Effect) particle;
+            for(int i = 1; i <= count; i++) {
+                player.playEffect(l, e, material);
+            }
         } else {
             player.spawnParticle((Particle) particle, l, count, material);
         }
     }
     public void play(Location l, int count) {
         final World w = l.getWorld();
-        if(v.contains("1.8")) {
-            for(int i = 1; i <= count; i++) w.playEffect(l, (Effect) particle, 0);
+        if(EIGHT) {
+            final Effect e = (Effect) particle;
+            for(int i = 1; i <= count; i++) {
+                w.playEffect(l, e, 0);
+            }
         } else {
             w.spawnParticle((Particle) particle, l, count);
         }
     }
     public void play(Location l, int count, Material material) {
         final World w = l.getWorld();
-        if(v.contains("1.8")) {
-            w.playEffect(l, (Effect) particle, count);
+        if(EIGHT) {
+            final Effect e = (Effect) particle;
+            w.playEffect(l, e, count);
         } else {
             w.spawnParticle((Particle) particle, l, count, material);
         }
     }
 
     private String getName() {
-        final int ver = v.contains("1.8") ? 0 : v.contains("1.9") ? 1 : v.contains("1.10") ? 2 : v.contains("1.11") ? 3 : v.contains("1.12") ? 4 : v.contains("1.13") ? 5 : v.contains("1.14") ? 6 : names.length-1;
+        final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;
         int realver = names.length <= ver ? names.length-1 : ver;
         if(names[realver] == null) {
             boolean did = false;

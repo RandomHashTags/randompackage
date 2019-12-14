@@ -335,6 +335,20 @@ public class RPPlayer implements RPStorage {
     public boolean doesReceiveCoinFlipNotifications() { return coinflipNotifications; }
     public void setReceivesCoinFlipNotifications(boolean bool) { coinflipNotifications = bool; }
 
+    public DuelStats getDuelStats() { // TODO: update dis bruv
+        if(duelStats == null) {
+            if(yml.get("duel stats") == null) {
+                duelStats = new DuelStats(true, BigDecimal.valueOf(500));
+            } else {
+                final String path = "duel stats.";
+                final boolean requests = yml.getBoolean(path + "receives requests");
+                final BigDecimal rankedElo = BigDecimal.valueOf(yml.getDouble(path + "ranked.elo"));
+                duelStats = new DuelStats(requests, rankedElo);
+            }
+        }
+        return duelStats;
+    }
+
     public boolean doesReceiveJackpotNotifications() { return jackpotNotifications; }
     public void setReceivesJackpotNotifications(boolean bool) { jackpotNotifications = bool; }
 

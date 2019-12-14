@@ -40,7 +40,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
 
     public YamlConfiguration config;
 
-    private List<String> combineores;
+    private List<String> combineores, teleportCauses;
     private List<PotionEffectType> removedPotionEffects;
     private String confirm;
     private HashMap<Player, String> delayed;
@@ -68,7 +68,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     bal = formatBigDecimal(BigDecimal.valueOf(eco.getBalance(op)));
                 }
             } else return true;
-            for(String s : config.getStringList("balance.view " + q)) {
+            for(String s : getStringList(config, "balance.view " + q)) {
                 if(s.contains("{INT}")) s = s.replace("{INT}", bal.contains(".") ? bal.split("\\.")[0] : bal);
                 if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
                 if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
@@ -88,7 +88,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
 
                 } else {
                     if(pdata.getUnclaimedPurchases().isEmpty()) {
-                        sendStringListMessage(player, config.getStringList("confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
+                        sendStringListMessage(player, getStringList(config, "confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
                     } else {
                         confirm(player, pdata);
                     }
@@ -97,7 +97,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 roll(player, args.toString());
             } else if(n.equals("withdraw") && hasPermission(player, "RandomPackage.withdraw", true)) {
                 if(args.length == 0) {
-                    sendStringListMessage(player, config.getStringList("withdraw.argument 0"), null);
+                    sendStringListMessage(player, getStringList(config, "withdraw.argument 0"), null);
                 } else {
                     BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[0]));
                     final double a = amount.doubleValue();
@@ -111,7 +111,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                         giveItem(player, item);
                         m = "withdraw.success";
                     } else return true;
-                    for(String string : config.getStringList(m)) {
+                    for(String string : getStringList(config, m)) {
                         if(string.contains("{VALUE}")) string = string.replace("{VALUE}", formattedAmount);
                         if(string.contains("{BALANCE}")) string = string.replace("{BALANCE}", formatDouble(eco.getBalance(player)));
                         player.sendMessage(colorize(string));
@@ -119,15 +119,15 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 }
             } else if(n.equals("xpbottle") && hasPermission(sender, "RandomPackage.xpbottle", true)) {
                 if(args.length == 0) {
-                    sendStringListMessage(player, config.getStringList("xpbottle.argument zero"), null);
+                    sendStringListMessage(player, getStringList(config, "xpbottle.argument zero"), null);
                 } else {
                     final String a = args[0];
                     final BigDecimal amount = BigDecimal.valueOf(getRemainingInt(a));
                     final int i = amount.intValue();
                     if(i <= 0) {
-                        sendStringListMessage(sender, config.getStringList("xpbottle.withdraw at least"), null);
+                        sendStringListMessage(sender, getStringList(config, "xpbottle.withdraw at least"), null);
                     } else if(i > getTotalExperience(player)) {
-                        sendStringListMessage(player, config.getStringList("xpbottle.not enough to bottle"), null);
+                        sendStringListMessage(player, getStringList(config, "xpbottle.not enough to bottle"), null);
                     } else {
                         xpbottle(player, amount);
                     }
@@ -183,13 +183,16 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
 
         confirm = colorize(config.getString("confirm.title"));
         combineores = new ArrayList<>();
-        for(String string : config.getStringList("combine.combine ores")) combineores.add(string.toUpperCase());
+        for(String string : config.getStringList("combine.combine ores")) {
+            combineores.add(string.toUpperCase());
+        }
+        teleportCauses = config.getStringList("xpbottle.teleport causes");
+
         delayed = new HashMap<>();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Secondary Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
     }
-
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -224,8 +227,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 return;
             } else {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
-                for(String s : config.getStringList("xpbottle.teleport cancelled"))
-                    player.sendMessage(colorize(s));
+                sendStringListMessage(player, getStringList(config, "xpbottle.teleport cancelled"), null);
                 tel.setCancelled(true);
                 SCHEDULER.cancelTask(events.get(player).getTask());
                 events.remove(player);
@@ -235,13 +237,15 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {
         final PlayerTeleportDelayEvent tel = PlayerTeleportDelayEvent.teleporting.getOrDefault(event.getPlayer(), null);
-        if(tel != null) tel.setCancelled(true);
+        if(tel != null) {
+            tel.setCancelled(true);
+        }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
         final String m = event.getMessage().toLowerCase();
-        for(String s : config.getStringList("xpbottle.delayed commands")) {
+        for(String s : getStringList(config, "xpbottle.delayed commands")) {
             if(m.startsWith(s.toLowerCase())) {
                 delayed.put(player, s);
                 SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> delayed.remove(player), 1);
@@ -252,7 +256,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerTeleportEvent(PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
-        if(config.getStringList("xpbottle.teleport causes").contains(event.getCause().name()) && delayed.containsKey(player)) {
+        if(teleportCauses.contains(event.getCause().name()) && delayed.containsKey(player)) {
             delayed.remove(player);
             final World w = player.getWorld();
             double delay = getTeleportationDelay(w);
@@ -261,7 +265,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             final RPPlayer pdata = RPPlayer.get(u);
             if(pdata.isXPExhausted()) {
                 final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
-                for(String s : config.getStringList("xpbottle.cannot teleport")) {
+                for(String s : getStringList(config, "xpbottle.cannot teleport")) {
                     if(s.contains("{TIME}")) s = s.replace("{TIME}", remaining);
                     player.sendMessage(colorize(s));
                 }
@@ -288,10 +292,8 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     }, de);
                     e.setTask(t);
                     events.put(player, e);
-                    for(String s : config.getStringList("xpbottle.pending teleport")) {
-                        if(s.contains("{SECS}")) s = s.replace("{SECS}", roundDoubleString(e.getDelay(), 3));
-                        player.sendMessage(colorize(s));
-                    }
+                    final HashMap<String, String> replacements = new HashMap<String, String>() {{ put("{SECS", roundDoubleString(e.getDelay(), 3)); }};
+                    sendStringListMessage(player, getStringList(config, "xpbottle.pending teleport"), replacements);
                 } else {
                     SCHEDULER.cancelTask(e.getTask());
                     events.remove(player);
@@ -315,7 +317,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 replacements.put("{VALUE}", formatInt(amount));
                 replacements.put("{ENCHANTER}", "Server");
                 replacements.put("{PLAYER}", "Server");
-                sendStringListMessage(player, config.getStringList("xpbottle.deposit"), replacements);
+                sendStringListMessage(player, getStringList(config, "xpbottle.deposit"), replacements);
                 playSound(config, "xpbottle.sounds.redeem", player, player.getLocation(), false);
             } else if(d.equals(b)) {
                 event.setCancelled(true);
@@ -324,7 +326,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 eco.depositPlayer(player, amount);
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{VALUE}", formatDouble(amount));
-                sendStringListMessage(player, config.getStringList("withdraw.deposit"), replacements);
+                sendStringListMessage(player, getStringList(config, "withdraw.deposit"), replacements);
                 player.updateInventory();
             }
         }
@@ -347,7 +349,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     }
 
     public void bless(Player player) {
-        final List<String> pe = config.getStringList("bless.removed potion effects");
+        final List<String> pe = getStringList(config, "bless.removed potion effects");
         if(removedPotionEffects == null) {
             final List<PotionEffectType> t = new ArrayList<>();
             for(String s : pe) {
@@ -361,7 +363,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         for(PotionEffectType T : removedPotionEffects) {
             player.removePotionEffect(T);
         }
-        sendStringListMessage(player, config.getStringList("bless.msg"), null);
+        sendStringListMessage(player, getStringList(config, "bless.msg"), null);
     }
     public void combine(Player player) {
         final Block tblock = player.getTargetBlock(null, 5);
@@ -372,7 +374,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             inventory = chest.getBlockInventory();
         }
         final String f = config.getString("combine.format");
-        for(String string : config.getStringList("combine.success")) {
+        for(String string : getStringList(config, "combine.success")) {
             if(string.equals("{SUCCESS}")) {
                 for(int i = 0; i < combineores.size(); i++) {
                     int amount = 0, amountb = 0;
@@ -415,11 +417,13 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             replacements.put("{MAX}", formatInt(maxroll));
             replacements.put("{PLAYER}", player.getName());
             replacements.put("{ROLLED}", formatInt(roll));
-            final List<String> msg = config.getStringList("roll.message");
-            for(Player P : p) sendStringListMessage(P, msg, replacements);
+            final List<String> msg = getStringList(config, "roll.message");
+            for(Player P : p) {
+                sendStringListMessage(P, msg, replacements);
+            }
             sendStringListMessage(player, msg, replacements);
         } else {
-            sendStringListMessage(player, config.getStringList("roll.nobody heard roll"), null);
+            sendStringListMessage(player, getStringList(config, "roll.nobody heard roll"), null);
         }
     }
     public void xpbottle(Player player, BigDecimal amount) {
@@ -429,15 +433,15 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         replacements.put("{VALUE}", formatBigDecimal(amount));
         final int d = amount.intValue();
         if(d < minbottle) {
-            sendStringListMessage(player, config.getStringList("xpbottle.withdraw at least"), replacements);
+            sendStringListMessage(player, getStringList(config, "xpbottle.withdraw at least"), replacements);
         } else {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             if(pdata.isXPExhausted() && !hasPermission(player, "RandomPackage.xpbottle.bypass-exhaustion", false)) {
                 final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
                 replacements.put("{TIME}", remaining);
-                sendStringListMessage(player, config.getStringList("xpbottle.cannot xpbottle"), replacements);
+                sendStringListMessage(player, getStringList(config, "xpbottle.cannot xpbottle"), replacements);
             } else {
-                sendStringListMessage(player, config.getStringList("xpbottle.withdraw"), replacements);
+                sendStringListMessage(player, getStringList(config, "xpbottle.withdraw"), replacements);
                 giveItem(player, givedpitem.getXPBottle(amount, player.getName()));
 
                 int xp = Math.round(getTotalExperience(player));
@@ -447,7 +451,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 if(exh != -1) {
                     pdata.xpExhaustionExpiration = System.currentTimeMillis() + (exh * 1000 * 60);
                     replacements.put("{MIN}", Integer.toString(exh));
-                    sendStringListMessage(player, config.getStringList("xpbottle.afflict"), replacements);
+                    sendStringListMessage(player, getStringList(config, "xpbottle.afflict"), replacements);
                 }
             }
         }
