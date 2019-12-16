@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.supported.regional;
 
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.supported.WGFlag;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -25,11 +27,26 @@ public class WorldGuardAPI implements UVersionable {
         return instance;
     }
 
-    public boolean allows(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
-        return version == -1 || version == 6 ? allows_wg6(player, l, flags) : allows_wg7(player, l, flags);
+    public boolean allowsPvP(@NotNull Player player, @NotNull Location l) {
+        return allows(player, l, WGFlag.PVP);
+    }
+    public boolean allowsBlockBreak(@NotNull Player player, @NotNull Location l) {
+        return allows(player, l, WGFlag.BLOCK_BREAK);
+    }
+    public boolean allowsBlockPlace(@NotNull Player player, @NotNull Location l) {
+        return allows(player, l, WGFlag.BLOCK_PLACE);
+    }
+    public boolean allows(@NotNull Player player, @NotNull Location l, @NotNull WGFlag...flags) {
+        if(version == 1 || hasBypass(player, l)) {
+            return true;
+        } else if(version == 6) {
+            return allows_wg6(player, l, flags);
+        } else {
+            return allows_wg7(player, l, flags);
+        }
     }
 
-    public boolean hasBypass(Player player, Location l) {
+    public boolean hasBypass(@NotNull Player player, @NotNull Location l) {
         final World w = l.getWorld();
         if(version == 6) {
             return com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().getSessionManager().hasBypass(player, w);
@@ -39,7 +56,7 @@ public class WorldGuardAPI implements UVersionable {
             try {
                 final Method method = m.getClass().getDeclaredMethod("hasBypass", com.sk89q.worldguard.LocalPlayer.class, com.sk89q.worldedit.world.World.class);
                 return (Boolean) method.invoke(m, getLocalPlayer(player), wew);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return false;
@@ -49,24 +66,28 @@ public class WorldGuardAPI implements UVersionable {
         return player != null ? com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().wrapPlayer(player) : null;
     }
 
-    private boolean allows_wg6(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
-        if(hasBypass(player, l)) return true;
+    private boolean allows_wg6(Player player, Location l, WGFlag...flags) {
         final com.sk89q.worldguard.LocalPlayer p = getLocalPlayer(player);
         final com.sk89q.worldguard.protection.ApplicableRegionSet s = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin().getRegionManager(l.getWorld()).getApplicableRegions(l);
         final com.sk89q.worldguard.protection.flags.StateFlag.State deny = com.sk89q.worldguard.protection.flags.StateFlag.State.DENY;
-        for(com.sk89q.worldguard.protection.flags.StateFlag flag : flags) {
-            if(s.queryState(p, flag) == deny) {
+        for(WGFlag flag : flags) {
+            final com.sk89q.worldguard.protection.flags.StateFlag state = flag.getFlag();
+            if(s.queryState(p, state) == deny) {
                 return false;
             }
         }
         return true;
     }
-    private boolean allows_wg7(Player player, Location l, com.sk89q.worldguard.protection.flags.StateFlag...flags) {
-        if(hasBypass(player, l)) return true;
+    private boolean allows_wg7(Player player, Location l, WGFlag...flags) {
         final com.sk89q.worldguard.protection.regions.RegionContainer c = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
         final com.sk89q.worldguard.protection.regions.RegionQuery q = c.createQuery();
         final com.sk89q.worldguard.protection.ApplicableRegionSet s = q.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(l));
-        return s.testState(getLocalPlayer(player), flags);
+        final List<com.sk89q.worldguard.protection.flags.StateFlag> states = new ArrayList<>();
+        for(WGFlag f : flags) {
+            states.add(f.getFlag());
+        }
+        final com.sk89q.worldguard.protection.flags.StateFlag[] stateFlags = states.toArray(new com.sk89q.worldguard.protection.flags.StateFlag[states.size()]);
+        return s.testState(getLocalPlayer(player), stateFlags);
     }
 
     // unfinished

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -82,7 +83,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public void unload() {
 		unregister(Feature.ARMOR_SET);
 	}
-	public ItemStack getCrystal(ArmorSet set, int percent) {
+	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
 		final String p = Integer.toString(percent), n = set.getName();
 		item = null;
 		if(n != null) {

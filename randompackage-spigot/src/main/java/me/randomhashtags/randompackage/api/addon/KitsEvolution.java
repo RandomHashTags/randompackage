@@ -40,7 +40,6 @@ public class KitsEvolution extends Kits {
     private UInventory vkit, preview;
     private ItemStack cooldown, previewBackground, locked, omniGem;
     public ItemStack vkitFallenHeroBundle;
-    private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_EVOLUTION"; }
@@ -66,9 +65,6 @@ public class KitsEvolution extends Kits {
         omniGem = d(config, "vkits.items.omni gem");
         previewBackground = d(config, "vkits.items.preview");
         locked = d(config, "vkits.permissions.locked");
-        permissionsUnlocked = colorizeListString(config.getStringList("vkits.permissions.unlocked"));
-        permissionsLocked = colorizeListString(config.getStringList("vkits.permissions.locked"));
-        permissionsPreview = colorizeListString(config.getStringList("vkits.permissions.preview"));
         tiermultipliers = new TreeMap<>();
         for(String s : config.getConfigurationSection("vkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("vkits.gui.settings.tier custom enchant multiplier." + s));
@@ -112,19 +108,18 @@ public class KitsEvolution extends Kits {
     public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
-    public ItemStack getOmniGem() { return omniGem != null ? omniGem.clone() : null; }
-    public List<String> getNotInWarzoneMsg() { return config.getStringList("vkits.messages.not in warzone"); }
-    public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("vkits.messages.already have max"); }
-    public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("vkits.messages.redeem"); }
-    public List<String> getUpgradeMsg() { return config.getStringList("vkits.messages.upgrade"); }
-    public List<String> getResetTargetDoesntExist() { return config.getStringList("vkits.messages.target doesnt exist"); }
-    public List<String> getResetSuccess() { return config.getStringList("vkits.messages.success"); }
-    public ItemStack getPreviewBackground() { return previewBackground.clone(); }
-    public ItemStack getCooldown() { return cooldown.clone(); }
-    public List<String> getPermissionsUnlocked() { return permissionsUnlocked; }
-    public List<String> getPermissionsLocked() { return permissionsLocked; }
-    public List<String> getPermissionsPreview() { return permissionsPreview; }
-
+    public ItemStack getOmniGem() { return getClone(omniGem); }
+    public List<String> getNotInWarzoneMsg() { return getStringList(config, "vkits.messages.not in warzone"); }
+    public List<String> getAlreadyHaveMaxTierMsg() { return getStringList(config, "vkits.messages.already have max"); }
+    public List<String> getRedeemFallenHeroGemMsg() { return getStringList(config, "vkits.messages.redeem"); }
+    public List<String> getUpgradeMsg() { return getStringList(config, "vkits.messages.upgrade"); }
+    public List<String> getResetTargetDoesntExist() { return getStringList(config, "vkits.messages.target doesnt exist"); }
+    public List<String> getResetSuccess() { return getStringList(config, "vkits.messages.success"); }
+    public ItemStack getPreviewBackground() { return getClone(previewBackground); }
+    public ItemStack getCooldown() { return getClone(cooldown); }
+    public List<String> getPermissionsUnlocked() { return getStringList(config, "vkits.permissions.unlocked"); }
+    public List<String> getPermissionsLocked() { return getStringList(config, "vkits.permissions.locked"); }
+    public List<String> getPermissionsPreview() { return getStringList(config, "vkits.permissions.preview"); }
 
     public void view(Player player) {
         player.closeInventory();
@@ -261,7 +256,7 @@ public class KitsEvolution extends Kits {
                     pdata.getKitLevels().put(vkit, newlvl);
                     for(String s : getUpgradeMsg())
                         player.sendMessage(colorize(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
-                    for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
+                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast"))
                         Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
                 }
             }
@@ -283,7 +278,7 @@ public class KitsEvolution extends Kits {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 if(inPreview) {
                     player.closeInventory();
-                    sendStringListMessage(player, config.getStringList("vkits.messages.cannot withdraw"), null);
+                    sendStringListMessage(player, getStringList(config, "vkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {
                     player.closeInventory();
                     final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(r, CustomKitEvolution.class);
@@ -296,7 +291,7 @@ public class KitsEvolution extends Kits {
                     final boolean hasPerm = hasPermissionToObtain(player, vkit);
                     final long time = System.currentTimeMillis();
                     if(!hasPerm) {
-                        sendStringListMessage(player, config.getStringList("vkits.messages.not unlocked kit"), null);
+                        sendStringListMessage(player, getStringList(config, "vkits.messages.not unlocked kit"), null);
                     } else if(!cooldowns.containsKey(vkit) && (levels.containsKey(vkit) || !levels.containsKey(vkit) && player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()))
                             || cooldowns.containsKey(vkit) && cooldowns.get(vkit) <= time) {
                         give(player, vkit, false);
@@ -319,7 +314,7 @@ public class KitsEvolution extends Kits {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final HashMap<CustomKit, Integer> kits = pdata.getKitLevels();
                 if(!kits.containsKey(e)) {
-                    sendStringListMessage(player, config.getStringList("vkits.messages.not unlocked kit"), null);
+                    sendStringListMessage(player, getStringList(config, "vkits.messages.not unlocked kit"), null);
                 } else {
                     final int lvl = kits.get(e);
                     final String name = e.getItem().getItemMeta().getDisplayName(), newl = Integer.toString(lvl+1);
@@ -329,14 +324,14 @@ public class KitsEvolution extends Kits {
                     removeItem(player, is, 1);
                     for(String s : getUpgradeMsg())
                         player.sendMessage(colorize(s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
-                    for(String s : config.getStringList("vkits.messages.upgrade broadcast"))
+                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast"))
                         Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
                 }
                 player.updateInventory();
             } else if(is.isSimilar(vkitFallenHeroBundle)) {
                 event.setCancelled(true);
                 removeItem(player, is, 1);
-                final List<String> s = config.getStringList("vkits.items.fallen hero bundle.reveals");
+                final List<String> s = getStringList(config, "vkits.items.fallen hero bundle.reveals");
                 final int size = s.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
                 for(int i = 1; i <= amount; i++) {
                     final CustomKit k = getCustomKit(s.get(RANDOM.nextInt(size)));

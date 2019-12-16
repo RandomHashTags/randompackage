@@ -154,6 +154,8 @@ public interface EventEntities extends EventConditions, UVersionable {
             case "itemnametaguse": return getEntities("Player", ((ItemNameTagUseEvent) event).getPlayer());
             case "itemlorecrystaluse": return getEntities("Player", ((ItemLoreCrystalUseEvent) event).getPlayer());
 
+            case "mcmmoplayerxpgain": return getEntities("Player", ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getPlayer());
+
             default:
                 sendConsoleMessage("&6[RandomPackage] &cMissing Event Entities for event &f" + name);
                 return new HashMap<>();

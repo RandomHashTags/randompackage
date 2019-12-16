@@ -20,6 +20,7 @@ supported plugins:
     ASkyblock: true
     SuperiorSkyblock: true
     EpicSkyblock: true
+    WorldGuard: true
 #
 chat cmds:
   # {F_TAG}

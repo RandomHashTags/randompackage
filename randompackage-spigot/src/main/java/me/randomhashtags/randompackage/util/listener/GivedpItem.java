@@ -170,8 +170,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(ca.isEnabled()) {
                 final String[] values = Q.split(":");
                 final ArmorSet a = getArmorSet(values[1]);
-                final int percent = values.length >= 3 && !values[2].equals("random") ? Integer.parseInt(values[2]) : RANDOM.nextInt(101);
-                return ca.getCrystal(a, percent);
+                if(a != null) {
+                    final int percent = values.length >= 3 && !values[2].equals("random") ? Integer.parseInt(values[2]) : RANDOM.nextInt(101);
+                    return ca.getCrystal(a, percent);
+                }
             }
             return air;
         } else if(input.startsWith("customboss:")) {

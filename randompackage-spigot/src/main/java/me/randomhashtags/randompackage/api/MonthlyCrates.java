@@ -151,13 +151,15 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             if(categories.containsKey(i)) {
                 final HashMap<Integer, MonthlyCrate> A = categorySlots.get(categories.get(i));
                 itemMeta = item.getItemMeta(); lore.clear();
-                for(String s : itemMeta.getLore()) {
-                    if(s.contains("{CRATE}")) {
-                        for(int S : A.keySet()) {
-                            lore.add(s.replace("{CRATE}", A.get(S).getItem().getItemMeta().getDisplayName()));
+                if(itemMeta.hasLore()) {
+                    for(String s : itemMeta.getLore()) {
+                        if(s.contains("{CRATE}")) {
+                            for(int S : A.keySet()) {
+                                lore.add(s.replace("{CRATE}", A.get(S).getItem().getItemMeta().getDisplayName()));
+                            }
+                        } else {
+                            lore.add(s);
                         }
-                    } else {
-                        lore.add(s);
                     }
                 }
                 itemMeta.setLore(lore); lore.clear();

@@ -24,6 +24,8 @@ public class EquippedCustomEnchants implements Versionable {
         enchants = new LinkedHashMap<>();
     }
 
+    public Player getPlayer() { return player; }
+
     public void clear() {
         enchants.clear();
     }

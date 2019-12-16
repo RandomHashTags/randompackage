@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.supported;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.attribute.faction.AddFactionPower;
-import me.randomhashtags.randompackage.supported.regional.ASky;
-import me.randomhashtags.randompackage.supported.regional.EpicSky;
-import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
-import me.randomhashtags.randompackage.supported.regional.SuperiorSky;
+import me.randomhashtags.randompackage.supported.regional.*;
 import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,7 +26,7 @@ public class RegionalAPI extends UVersion {
     }
 
     private FileConfiguration config;
-    private static boolean factionsUUID, askyblock, superiorskyblock, epicskyblock;
+    private static boolean worldguard, factionsUUID, askyblock, superiorskyblock, epicskyblock;
 
     protected static FactionsUUID factions;
     protected static ASky asky;
@@ -37,10 +36,18 @@ public class RegionalAPI extends UVersion {
     private boolean isTrue(String path) { return config.getBoolean(path); }
     public void setup(RandomPackage randompackage) {
         this.config = randompackage.config;
+        trySupportingWorldGuard();
         trySupportingFactions();
         trySupportingASkyblock();
         trySupportingSuperiorSkyblock();
         trySupportingEpicSkyblock();
+    }
+
+    public void trySupportingWorldGuard() {
+        worldguard = isTrue("supported plugins.regional.WorldGuard") && PLUGIN_MANAGER.isPluginEnabled("WorldGuard");
+        if(worldguard) {
+            hooked("WorldGuard");
+        }
     }
     public void trySupportingFactions() {
         factionsUUID = isTrue("supported plugins.regional.FactionsUUID") && PLUGIN_MANAGER.isPluginEnabled("Factions");
@@ -98,10 +105,20 @@ public class RegionalAPI extends UVersion {
         }
         return a;
     }
-    public boolean isPvPZone(Location l) {
+    public boolean allowsPvP(@NotNull Player player, @NotNull Location l) {
+        final List<Boolean> booleans = new ArrayList<>();
+        if(worldguard) {
+            booleans.add(WorldGuardAPI.getWorldGuardAPI().allowsPvP(player, l));
+        }
+        if(factionsUUID || askyblock || superiorskyblock || epicskyblock) {
+            booleans.add(isPvPZone(l));
+        }
+        return !booleans.contains(false);
+    }
+    public boolean isPvPZone(@NotNull Location l) {
         return isPvPZone(l, null);
     }
-    public boolean isPvPZone(Location l, List<String> exceptions) {
+    public boolean isPvPZone(@NotNull Location l, @Nullable List<String> exceptions) {
         final HashMap<Regional, String> ids = getRegionalIdentifiersAt(l);
         final boolean e = exceptions != null;
         for(Regional r : ids.keySet()) {

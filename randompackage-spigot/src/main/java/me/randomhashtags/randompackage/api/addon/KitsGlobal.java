@@ -39,7 +39,6 @@ public class KitsGlobal extends Kits {
     private ItemStack previewBackground, cooldown, omniGem;
     public ItemStack gkitFallenHeroBundle;
     public boolean heroicEnchantedEffect, tierZeroEnchantEffect;
-    private List<String> permissionsUnlocked, permissionsLocked, permissionsPreview;
     private TreeMap<Integer, Float> tiermultipliers;
 
     public String getIdentifier() { return "KITS_GLOBAL"; }
@@ -71,9 +70,6 @@ public class KitsGlobal extends Kits {
         preview = new UInventory(null, 54, colorize(config.getString("gkits.items.preview.title")));
         omniGem = d(config, "gkits.items.omni gem");
         cooldown = d(config, "gkits.items.cooldown");
-        permissionsUnlocked = colorizeListString(config.getStringList("gkits.permissions.unlocked"));
-        permissionsLocked = colorizeListString(config.getStringList("gkits.permissions.locked"));
-        permissionsPreview = colorizeListString(config.getStringList("gkits.permissions.preview"));
         tiermultipliers = new TreeMap<>();
         for(String s : config.getConfigurationSection("gkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));
@@ -121,18 +117,18 @@ public class KitsGlobal extends Kits {
     public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
     public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
     public UInventory getPreview() { return preview; }
-    public ItemStack getOmniGem() { return omniGem != null ? omniGem.clone() : null; }
-    public List<String> getNotInWarzoneMsg() { return config.getStringList("gkits.messages.not in warzone"); }
-    public List<String> getAlreadyHaveMaxTierMsg() { return config.getStringList("gkits.messages.already have max"); }
-    public List<String> getRedeemFallenHeroGemMsg() { return config.getStringList("gkits.messages.redeem"); }
-    public List<String> getUpgradeMsg() { return config.getStringList("gkits.messages.upgrade"); }
-    public List<String> getResetTargetDoesntExist() { return config.getStringList("gkits.messages.target doesnt exist"); }
-    public List<String> getResetSuccess() { return config.getStringList("gkits.messages.success"); }
-    public ItemStack getPreviewBackground() { return previewBackground.clone(); }
-    public ItemStack getCooldown() { return cooldown.clone(); }
-    public List<String> getPermissionsUnlocked() { return permissionsUnlocked; }
-    public List<String> getPermissionsLocked() { return permissionsLocked; }
-    public List<String> getPermissionsPreview() { return permissionsPreview; }
+    public ItemStack getOmniGem() { return getClone(omniGem); }
+    public List<String> getNotInWarzoneMsg() { return getStringList(config, "gkits.messages.not in warzone"); }
+    public List<String> getAlreadyHaveMaxTierMsg() { return getStringList(config, "gkits.messages.already have max"); }
+    public List<String> getRedeemFallenHeroGemMsg() { return getStringList(config, "gkits.messages.redeem"); }
+    public List<String> getUpgradeMsg() { return getStringList(config, "gkits.messages.upgrade"); }
+    public List<String> getResetTargetDoesntExist() { return getStringList(config, "gkits.messages.target doesnt exist"); }
+    public List<String> getResetSuccess() { return getStringList(config, "gkits.messages.success"); }
+    public ItemStack getPreviewBackground() { return getClone(previewBackground); }
+    public ItemStack getCooldown() { return getClone(cooldown); }
+    public List<String> getPermissionsUnlocked() { return getStringList(config, "gkits.permissions.unlocked"); }
+    public List<String> getPermissionsLocked() { return getStringList(config, "gkits.permissions.locked"); }
+    public List<String> getPermissionsPreview() { return getStringList(config, "gkits.permissions.preview"); }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -153,7 +149,7 @@ public class KitsGlobal extends Kits {
                 final int level = pdata.getKitLevel(gkit), tier = level <= 0 ? 1 : level;
                 if(inPreview) {
                     player.closeInventory();
-                    sendStringListMessage(player, config.getStringList("gkits.messages.cannot withdraw"), null);
+                    sendStringListMessage(player, getStringList(config, "gkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {
                     preview(player, gkit, gkit.getMaxLevel());
                 } else {
@@ -162,7 +158,7 @@ public class KitsGlobal extends Kits {
                     final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
                     final boolean hasPerm = hasPermissionToObtain(player, gkit);
                     if(!hasPerm) {
-                        sendStringListMessage(player, config.getStringList("gkits.messages.not unlocked kit"), null);
+                        sendStringListMessage(player, getStringList(config, "gkits.messages.not unlocked kit"), null);
                     } else if(tiers.containsKey(gkit) && !cooldowns.containsKey(gkit)
                             || !tiers.containsKey(gkit) && player.hasPermission("RandomPackage.kit." + n) && !cooldowns.containsKey(gkit)
                             || cooldowns.containsKey(gkit) && cooldowns.get(gkit) <= System.currentTimeMillis()) {
@@ -180,7 +176,7 @@ public class KitsGlobal extends Kits {
         if(is != null && is.hasItemMeta() && is.isSimilar(gkitFallenHeroBundle)) {
             event.setCancelled(true);
             removeItem(player, is, 1);
-            final List<String> s = config.getStringList("gkits.items.fallen hero bundle.reveals");
+            final List<String> s = getStringList(config, "gkits.items.fallen hero bundle.reveals");
             final int size = s.size(), amount = config.getInt("gkits.items.fallen hero bundle.reveal amount");
             for(int i = 1; i <= amount; i++) {
                 final CustomKit k = getCustomKit(s.get(RANDOM.nextInt(size)));
@@ -212,12 +208,12 @@ public class KitsGlobal extends Kits {
                     final int tier = tiers.containsKey(k) ? tiers.get(k) : has ? 1 : 0;
                     final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(k) && !(tier < 1));
                     if(usesTiers) {
-                        for(String s : config.getStringList("gkits.gui.settings.pre lore"))
+                        for(String s : getStringList(config, "gkits.gui.settings.pre lore"))
                             lore.add(colorize(s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxLevel()))));
                     }
                     if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    for(String s : config.getStringList("gkits.gui.settings." + (has ? "un" : "") + "locked")) lore.add(colorize(s));
-                    for(String s : config.getStringList("gkits.items.preview.added gui lore")) lore.add(colorize(s));
+                    for(String s : getStringList(config, "gkits.gui.settings." + (has ? "un" : "") + "locked")) lore.add(colorize(s));
+                    for(String s : getStringList(config, "gkits.items.preview.added gui lore")) lore.add(colorize(s));
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                     if(q) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     itemMeta.setLore(lore); lore.clear();

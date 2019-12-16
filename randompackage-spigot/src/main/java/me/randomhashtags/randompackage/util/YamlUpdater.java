@@ -193,6 +193,8 @@ public abstract class YamlUpdater {
                 "inventory pets.enabled", false,
                 "sethome.enabled", true,
                 "sethome.cmds", Arrays.asList("sethome"),
+                // 16.5.8
+                "supported plugins.regional.WorldGuard", true,
         };
         return putAll(values);
     }

@@ -153,12 +153,15 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	}
 	public void unload() {
 		data.set("active global challenges", null);
-		for(ActiveGlobalChallenge c : ActiveGlobalChallenge.active.values()) {
-			final String p = c.getType().getIdentifier();
-			data.set("active global challenges." + p + ".started", c.getStartedTime());
-			final HashMap<UUID, BigDecimal> participants = c.getParticipants();
-			for(UUID u : participants.keySet())
-				data.set("active global challenges." + p + ".participants." + u, participants.get(u));
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+		if(active != null) {
+			for(ActiveGlobalChallenge c : active.values()) {
+				final String p = c.getType().getIdentifier();
+				data.set("active global challenges." + p + ".started", c.getStartedTime());
+				final HashMap<UUID, BigDecimal> participants = c.getParticipants();
+				for(UUID u : participants.keySet())
+					data.set("active global challenges." + p + ".participants." + u, participants.get(u));
+			}
 		}
 
 		try {
@@ -221,11 +224,12 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	public void reloadInventory() {
 		final Inventory inv = this.inv.getInventory();
 		int f = 0;
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
 		for(int i = 0; i < inv.getSize(); i++) {
 			if(config.get("gui." + i) != null) {
 				final String p = config.getString("gui." + i + ".item");
 				if(p.toUpperCase().equals("{CHALLENGE}")) {
-					ActiveGlobalChallenge z = f < ActiveGlobalChallenge.active.size() ? (ActiveGlobalChallenge) ActiveGlobalChallenge.active.values().toArray()[f] : null;
+					ActiveGlobalChallenge z = f < active.size() ? (ActiveGlobalChallenge) active.values().toArray()[f] : null;
 					if(z == null && f < max) {
 						z = getRandomChallenge().start();
 					}
@@ -439,8 +443,11 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		Bukkit Events
 	 */
 	public void called(Event event) {
-		for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-			trigger(event, g.getAttributes());
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+		if(active != null) {
+			for(GlobalChallenge g : active.keySet()) {
+				trigger(event, g.getAttributes());
+			}
 		}
 	}
 

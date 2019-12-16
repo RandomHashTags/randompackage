@@ -43,9 +43,12 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             saveOtherData();
         }
         final List<ItemStack> buckets = new ArrayList<>();
-        for(File f : new File(DATA_FOLDER + SEPARATOR + "fat buckets").listFiles()) {
-            final FileFatBucket ffb = new FileFatBucket(f);
-            buckets.add(ffb.getItem(ffb.getUses()));
+        final File folder = new File(DATA_FOLDER + SEPARATOR + "fat buckets");
+        if(folder.exists()) {
+            for(File f : folder.listFiles()) {
+                final FileFatBucket ffb = new FileFatBucket(f);
+                buckets.add(ffb.getItem(ffb.getUses()));
+            }
         }
         addGivedpCategory(buckets, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FAT_BUCKET).size() + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");

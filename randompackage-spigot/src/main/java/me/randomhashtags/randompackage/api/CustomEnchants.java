@@ -311,15 +311,15 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
 
     private void createCustomEnchantEntities() {
-        boolean dropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), canTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
+        final boolean defaultDropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), defaultCanTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
         final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
         for(String s : config.getConfigurationSection("entities").getKeys(false)) {
             if(!s.startsWith("settings")) {
                 final String identifier = s.split("\\.")[0];
                 if(entities == null || !entities.containsKey(identifier)) {
                     final String path = "entities." + identifier + ".";
-                    canTargetSummoner = config.getBoolean(path + "can target summoner", canTargetSummoner);
-                    dropsItemsUponDeath = config.getBoolean(path + "drops items upon death", dropsItemsUponDeath);
+                    boolean canTargetSummoner = config.getBoolean(path + "can target summoner", defaultCanTargetSummoner);
+                    boolean dropsItemsUponDeath = config.getBoolean(path + "drops items upon death", defaultDropsItemsUponDeath);
 
                     final EntityType type = EntityType.valueOf(config.getString(path + "type", "ZOMBIE").toUpperCase());
                     final String name = config.getString(path + "name");
@@ -388,7 +388,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(p != null) {
                 final ProjectileSource shooter = e.getShooter();
                 if(shooter instanceof Player) {
-                    triggerCustomEnchants(event, getEntities(event), getEnchants((Player) shooter), globalattributes);
+                    final Player player = (Player) shooter;
+                    if(allowsPvP(player, damager.getLocation())) {
+                        triggerEnchants(event, getEnchants(player));
+                    }
                 }
             }
         }
@@ -396,9 +399,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     @EventHandler(priority = EventPriority.HIGH)
     private void projectileHitEvent(ProjectileHitEvent event) {
         final Projectile p = event.getEntity();
-        final ProjectileSource s = p.getShooter();
-        if(s instanceof Player) {
-            triggerCustomEnchants(event, getEnchants((Player) s), globalattributes);
+        final ProjectileSource shooter = p.getShooter();
+        if(shooter instanceof Player) {
+            final Player player = (Player) shooter;
+            if(allowsPvP(player, p.getLocation())) {
+                triggerEnchants(event, getEnchants(player));
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -407,40 +413,34 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         if(entity instanceof LivingEntity && canProcOn(entity)) {
             final Entity damagerr = event.getDamager();
             Player damager = damagerr instanceof Player ? (Player) damagerr : null;
-            if(damager != null) {
+            if(damager != null && allowsPvP(damager, entity.getLocation())) {
                 final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
                 PLUGIN_MANAGER.callEvent(e);
-                final EquippedCustomEnchants enchants = getEnchants(damager);
-                tryProcing(e, damager, entity, enchants);
-                triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
+                triggerEnchants(e, getEnchants(damager));
                 event.setDamage(e.getDamage());
             }
             if(entity instanceof Player && damagerr instanceof LivingEntity && !(damagerr instanceof TNTPrimed) && !(damagerr instanceof Creeper)) {
                 final Player victim = (Player) entity;
-                final LivingEntity d = (LivingEntity) event.getDamager();
-                final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
-                PLUGIN_MANAGER.callEvent(e);
-                final EquippedCustomEnchants enchants = getEnchants(victim);
-                tryProcing(e, victim, null, enchants);
-                triggerCustomEnchants(e, getEntities(event), enchants, globalattributes);
-                event.setDamage(e.getDamage());
+                if(allowsPvP(victim, damagerr.getLocation())) {
+                    final LivingEntity d = (LivingEntity) damagerr;
+                    final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
+                    PLUGIN_MANAGER.callEvent(e);
+                    triggerEnchants(e, getEnchants(victim));
+                    event.setDamage(e.getDamage());
+                }
             }
-            if(canProcOn(entity)) {
-                final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
-                if(L != null) {
-                    final LivingCustomEnchantEntity cee = L.getOrDefault(entity.getUniqueId(), null);
-                    if(cee != null) {
-                        final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, damagerr, event.getFinalDamage(), event.getDamage());
-                        PLUGIN_MANAGER.callEvent(e);
-                        if(!e.isCancelled()) {
-                            event.setDamage(e.initialdamage);
-                            final LivingEntity le = cee.getSummoner();
-                            final Player player = le instanceof Player ? (Player) le : null;
-                            if(player != null) {
-                                final EquippedCustomEnchants enchants = getEnchants(player);
-                                tryProcing(event, player, cee.getEntity(), enchants);
-                                triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
-                            }
+            final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
+            if(L != null) {
+                final LivingCustomEnchantEntity cee = L.getOrDefault(entity.getUniqueId(), null);
+                if(cee != null) {
+                    final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, damagerr, event.getFinalDamage(), event.getDamage());
+                    PLUGIN_MANAGER.callEvent(e);
+                    if(!e.isCancelled()) {
+                        event.setDamage(e.initialdamage);
+                        final LivingEntity le = cee.getSummoner();
+                        final Player player = le instanceof Player ? (Player) le : null;
+                        if(player != null) {
+                            triggerEnchants(event, getEnchants(player));
                         }
                     }
                 }
@@ -449,21 +449,16 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
-        final Entity d = event.getDamager();
-        if(d instanceof Player) {
-            final Player damager = (Player) d;
-            final EquippedCustomEnchants enchants = getEnchants(damager);
-            tryProcing(event, damager, event.getEntity(), enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        final Entity damager = event.getDamager();
+        if(damager instanceof Player) {
+            triggerEnchants(event, getEnchants((Player) damager));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void mobStackDepleteEvent(MobStackDepleteEvent event) {
         final Player killer = event.killer instanceof Player ? (Player) event.killer : null;
         if(killer != null) {
-            final EquippedCustomEnchants enchants = getEnchants(killer);
-            tryProcing(event, killer, event.stack.entity, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+            triggerEnchants(event, getEnchants(killer));
         }
     }
 
@@ -475,9 +470,13 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final List<String> l = enchant.getLore();
         for(String r : rarity.getLoreFormat()) {
             if(r.equals("{SUCCESS}")) {
-                if(success != -1) lore.add(colorize(S.replace("{PERCENT}", Integer.toString(success))));
+                if(success != -1) {
+                    lore.add(colorize(S.replace("{PERCENT}", Integer.toString(success))));
+                }
             } else if(r.equals("{DESTROY}")) {
-                if(destroy != -1) lore.add(colorize(D.replace("{PERCENT}", Integer.toString(destroy))));
+                if(destroy != -1) {
+                    lore.add(colorize(D.replace("{PERCENT}", Integer.toString(destroy))));
+                }
             } else if(r.equals("{ENCHANT_LORE}")) {
                 lore.addAll(l);
             } else if(r.equals("{ENCHANT_TYPE}") && showEnchantType) {
@@ -563,30 +562,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         return enchants;
     }
 
-    public void tryProcing(Event event, Player player, Entity entity) {
-        tryProcing(event, player, entity, getEnchants(player));
-    }
-    public void tryProcing(Event event, Player player, Entity entity, EquippedCustomEnchants equipped) {
-        if(event != null && player != null && equipped != null) {
-            final HashMap<String, Entity> entities = getEntities("Player", player);
-            if(entity != null) {
-                entities.put("Victim", entity);
-            }
-            final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchants = equipped.getInfo();
-            for(ItemStack is : enchants.keySet()) {
-                final LinkedHashMap<CustomEnchant, Integer> en = enchants.get(is);
-                if(en != null) {
-                    for(CustomEnchant enchant : en.keySet()) {
-                        final CustomEnchantProcEvent e = new CustomEnchantProcEvent(event, entities, enchant, en.get(enchant), is);
-                        if(trigger(e, enchant.getAttributes())) {
-                            PLUGIN_MANAGER.callEvent(e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
         final EntityDamageEvent.DamageCause c = event.getCause();
@@ -596,44 +571,31 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(!c.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
                 final isDamagedEvent e = new isDamagedEvent(victim, c, event.getDamage());
                 PLUGIN_MANAGER.callEvent(e);
-                final EquippedCustomEnchants enchants = getEnchants(victim);
-                tryProcing(event, victim, null, enchants);
-                triggerCustomEnchants(event, getEntities(e), enchants, globalattributes);
+                triggerEnchants(event, getEnchants(victim));
             }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityTameEvent(EntityTameEvent event) {
-        final AnimalTamer a = event.getOwner();
-        if(a instanceof Player) {
-            final Player player = (Player) a;
-            final EquippedCustomEnchants enchants = getEnchants(player);
-            tryProcing(event, player, event.getEntity(), enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        final AnimalTamer player = event.getOwner();
+        if(player instanceof Player) {
+            triggerEnchants(event, getEnchants((Player) player));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
-        final Player player = event.getPlayer();
-        final EquippedCustomEnchants enchants = getEnchants(player);
-        tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        triggerEnchants(event, getEnchants(event.getPlayer()));
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-        final Player player = event.getPlayer();
-        final EquippedCustomEnchants enchants = getEnchants(player);
-        tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        triggerEnchants(event, getEnchants(event.getPlayer()));
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack I = event.getItem();
         final Player player = event.getPlayer();
         if(!event.isCancelled()) {
-            final EquippedCustomEnchants enchants = getEnchants(player);
-            tryProcing(event, player, null, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+            triggerEnchants(event, getEnchants(player));
         }
         EnchantRarity rarity = valueOfCustomEnchantRarity(I);
         if(rarity != null) {
@@ -661,30 +623,24 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityShootBowEvent(EntityShootBowEvent event) {
-        final Entity e = event.getEntity();
-        if(e instanceof Player) {
-            final Player player = (Player) e;
-            final EquippedCustomEnchants enchants = getEnchants(player);
-            tryProcing(event, player, null, enchants);
-            triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        final Entity shooter = event.getEntity();
+        if(shooter instanceof Player) {
+            triggerEnchants(event, getEnchants((Player) shooter));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerDeathEvent(PlayerDeathEvent event) {
         final HashMap<String, Entity> entities = getEntities(event);
         final Player victim = event.getEntity(), killer = victim.getKiller();
-        final EquippedCustomEnchants victimEnchants = getEnchants(victim), killerEnchants = getEnchants(killer);
-        tryProcing(event, victim, null, victimEnchants);
-        triggerCustomEnchants(event, entities, victimEnchants, globalattributes);
-        tryProcing(event, killer, null, killerEnchants);
-        triggerCustomEnchants(event, entities, killerEnchants, globalattributes);
+        triggerEnchants(event, entities, getEnchants(victim));
+        if(killer != null) {
+            triggerEnchants(event, entities, getEnchants(killer));
+        }
+        playerEnchants.remove(victim.getUniqueId());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerItemDamageEvent(PlayerItemDamageEvent event) {
-        final Player player = event.getPlayer();
-        final EquippedCustomEnchants enchants = getEnchants(player);
-        tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        triggerEnchants(event, getEnchants(event.getPlayer()));
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
@@ -692,10 +648,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final Player killer = e.getKiller();
         final UUID u = e.getUniqueId();
         if(!(e instanceof Player) && killer != null) {
-            final HashMap<String, Entity> entities = getEntities(event);
-            final EquippedCustomEnchants enchants = getEnchants(killer);
-            tryProcing(event, killer, null, enchants);
-            triggerCustomEnchants(event, entities, enchants, globalattributes);
+            triggerEnchants(event, getEnchants(killer));
         }
         final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
         if(L != null) {
@@ -715,10 +668,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
-        final Player player = (Player) event.getEntity();
-        final EquippedCustomEnchants enchants = getEnchants(player);
-        tryProcing(event, player, null, enchants);
-        triggerCustomEnchants(event, getEntities(event), enchants, globalattributes);
+        triggerEnchants(event, getEnchants((Player) event.getEntity()));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -927,7 +877,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final EquipmentSlot slot = event.getSlot();
         if(!isEquip) {
             equipped.update(slot, is);
-            triggerEnchants(event, player, equipped, false, slot);
+            triggerEnchants(event, equipped, false, slot);
         }
         equipped.update(slot, isEquip ? is : null);
         if(isEquip) {
@@ -935,15 +885,14 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(reason == ArmorEventReason.HOTBAR_EQUIP) {
                 equipped.update(EquipmentSlot.HAND, null);
             }
-            triggerEnchants(event, player, equipped, false, true, slot);
+            triggerEnchants(event, equipped, false, true, slot);
             EquippedCustomEnchants.EVENTS.remove(player);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerJoinEvent(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final EquippedCustomEnchants equipped = new EquippedCustomEnchants(player);
-        triggerEnchants(event, player, equipped, true, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
+        triggerEnchants(event, getEnchants(player), true);
     }
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {
@@ -955,16 +904,33 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final EquippedCustomEnchants equipped = playerEnchants.get(player.getUniqueId());
         equipped.update(EquipmentSlot.HAND, player.getInventory().getItem(event.getNewSlot()));
     }
-    private void triggerEnchants(Event event, Player player, EquippedCustomEnchants equipped, boolean recheck, EquipmentSlot...slots) {
-        triggerEnchants(event, player, equipped, recheck, false, slots);
+    public void triggerEnchants(Event event, EquippedCustomEnchants equipped) {
+        triggerEnchants(event, equipped, false);
     }
-    private void triggerEnchants(Event event, Player player, EquippedCustomEnchants equipped, boolean recheck, boolean getEventItem, EquipmentSlot...slots) {
+    public void triggerEnchants(Event event, EquippedCustomEnchants equipped, boolean recheck) {
+        triggerEnchants(event, equipped, recheck, EQUIPMENT_SLOTS);
+    }
+    public void triggerEnchants(Event event, EquippedCustomEnchants equipped, boolean recheck, EquipmentSlot...slots) {
+        triggerEnchants(event, equipped, recheck, false, slots);
+    }
+    public void triggerEnchants(Event event, EquippedCustomEnchants equipped, boolean recheck, boolean getEventItem, EquipmentSlot...slots) {
+        triggerEnchants(event, getEntities(event), equipped, recheck, getEventItem, slots);
+    }
+
+    public void triggerEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped) {
+        triggerEnchants(event, entities, equipped, false);
+    }
+    public void triggerEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, boolean recheck) {
+        triggerEnchants(event, entities, equipped, recheck, false);
+    }
+    public void triggerEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, boolean recheck, boolean getEventItem) {
+        triggerEnchants(event, entities, equipped, recheck, getEventItem, EQUIPMENT_SLOTS);
+    }
+    public void triggerEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, boolean recheck, boolean getEventItem, EquipmentSlot...slots) {
         if(recheck) {
             equipped.update(slots);
-            playerEnchants.put(player.getUniqueId(), equipped);
+            playerEnchants.put(equipped.getPlayer().getUniqueId(), equipped);
         }
-        final HashMap<String, Entity> entities = getEntities(event);
-        tryProcing(event, player, null, equipped);
         triggerCustomEnchants(event, entities, equipped, globalattributes, getEventItem, slots);
     }
 }

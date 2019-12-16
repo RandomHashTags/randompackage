@@ -41,8 +41,9 @@ public final class MCMMOAPI extends Reflect {
 		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
 		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");
 
-		isClassic = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion().startsWith("1.");
-		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		final String version = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion();
+		isClassic = version.startsWith("1.");
+		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " (" + version + ") &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		itemsConfig = null;
@@ -109,11 +110,10 @@ public final class MCMMOAPI extends Reflect {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void mcmmoPlayerXpGainEvent(McMMOPlayerXpGainEvent event) {
 		final Player player = event.getPlayer();
-		final float xp = event.getRawXpGained();
 		final String skill = getSkillName(event);
 		if(skill != null) {
 			final CustomEnchants e = CustomEnchants.getCustomEnchants();
-			e.tryProcing(event, player, null);
+			e.triggerEnchants(event, e.getEnchants(player));
 		}
 	}
 	

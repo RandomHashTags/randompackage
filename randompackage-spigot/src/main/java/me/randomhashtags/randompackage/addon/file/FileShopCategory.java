@@ -38,11 +38,15 @@ public class FileShopCategory extends ShopCategory {
                 final String custom = yml.getString("gui." + s + ".custom.item"), i = yml.getString("gui." + s + ".item"), d = i.toUpperCase();
                 final boolean isBack = d.equals("BACK");
                 final ItemStack display = isBack ? back : shop.d(yml, "gui." + s);
-                final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : shop.d(null, i) : null;
-                if(!isBack && custom == null) purchased.setAmount(display.getAmount());
-                final int slot = yml.getInt("gui." + s + ".slot");
-                items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? BigDecimal.valueOf(Double.parseDouble(o[0])) : zero, o != null ? BigDecimal.valueOf(Double.parseDouble(o[1])): zero));
-                ii.setItem(slot, display);
+                if(display != null) {
+                    final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : shop.d(null, i) : null;
+                    if(!isBack && custom == null) {
+                        purchased.setAmount(display.getAmount());
+                    }
+                    final int slot = yml.getInt("gui." + s + ".slot");
+                    items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? BigDecimal.valueOf(Double.parseDouble(o[0])) : zero, o != null ? BigDecimal.valueOf(Double.parseDouble(o[1])): zero));
+                    ii.setItem(slot, display);
+                }
             }
         }
         return inventory;

@@ -22,7 +22,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public interface EventReplacements extends EventEntities {
     default LinkedHashMap<String, String> getReplacements(String...replacements) { return getReplacements((List<String>) null, replacements); }
@@ -142,8 +145,7 @@ public interface EventReplacements extends EventEntities {
         return new String[] {"woncash", total.toPlainString(), "wager", wager.toPlainString()};
     }
     default String[] getReplacements(CustomEnchantProcEvent event) {
-        final HashMap<String, Entity> e = event.getEntities();
-        final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(e.get("Player").getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
+        final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(event.getHolder().getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
         return getReplacements(a, b);
     }
     default String[] getReplacements(DamageEvent event) {

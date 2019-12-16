@@ -250,7 +250,6 @@ public class Masks extends CustomEnchants {
                     equippedMasks.remove(player);
                     final EquippedCustomEnchants enchants = getEnchants(player);
                     triggerCustomEnchants(event, enchants, CustomEnchants.globalattributes);
-                    tryProcing(event, player, null, enchants);
                 }
             }
         }

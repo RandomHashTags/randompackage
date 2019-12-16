@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.attribute.EventAttribute;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.RPEvent;
+import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -281,7 +282,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     string = string.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
                 }
                 did = true;
-            } else if(string.contains(E) && !string.contains(":" + E)) {
+            } else if(string.contains(E) && !string.contains(":" + E) && !string.startsWith(E + ":") && !string.startsWith("@" + E + ":")) {
                 string = string.replace(E, "");
                 entityValues.put(entity, value1);
                 did = true;
@@ -398,7 +399,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
-        //final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : getSource(event);
+        final Player player = equipped.getPlayer();
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
@@ -412,14 +413,20 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                         final int lvl = enchants.get(enchant);
                         final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
                         try {
-                            trigger(event, entities, replaceCE(lvl, globalattributes), replacementz);
+                            if(trigger(event, entities, replaceCE(lvl, globalattributes), replacementz)) {
+                                final CustomEnchantProcEvent proc = new CustomEnchantProcEvent(player, event, entities, enchant, lvl, is);
+                                PLUGIN_MANAGER.callEvent(proc);
+                            }
                         } catch (Exception error) {
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error! &e(" + RP_VERSION + ")");
                             error.printStackTrace();
                         }
 
                         try {
-                            trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz);
+                            if(trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz)) {
+                                final CustomEnchantProcEvent proc = new CustomEnchantProcEvent(player, event, entities, enchant, lvl, is);
+                                PLUGIN_MANAGER.callEvent(proc);
+                            }
                         } catch (Exception error) {
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
                             error.printStackTrace();
