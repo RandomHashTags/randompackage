@@ -85,8 +85,9 @@ public class Dungeons extends RPFeature implements CommandExecutor {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(top.getHolder() == player) {
-            if(event.getView().getTitle().equals(gui.getTitle())) {
+        if(player.equals(top.getHolder())) {
+            final String title = event.getView().getTitle();
+            if(title.equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();

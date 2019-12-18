@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,15 +61,17 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
         }
         for(File f : new File(DATA_FOLDER + SEPARATOR + "faction quests").listFiles()) {
             if(!f.getName().equals("_settings.yml")) {
+                new FileFactionQuest(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FACTION_QUEST).size() + " Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+        unregister(Feature.FACTION_QUEST);
     }
 
     public void view(Player player) {
-        if(hasPermission(player, "RandomPackage.factionquests.view", true)) {
+        if(hasPermission(player, "RandomPackage.factionquests", true)) {
         }
     }
 

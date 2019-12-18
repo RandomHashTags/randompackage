@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.dev;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
@@ -22,6 +23,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -104,12 +106,14 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         final boolean isPet = info != null;
         final HashMap<InventoryPet, String> pet = new HashMap<>();
-        if(isPet) pet.put(getInventoryPet(info.split(":")[0]), info);
+        if(isPet) {
+            pet.put(getInventoryPet(info.split(":")[0]), info);
+        }
         return isPet ? pet : null;
     }
 
-    public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(Player player) {
-        final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> a = new ArrayList<>();
+    public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(@NotNull Player player) {
+        final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> pets = new ArrayList<>();
         final List<ItemStack> skull = new ArrayList<>();
         if(player != null) {
             for(ItemStack is : player.getInventory()) {
@@ -125,11 +129,11 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
                 if(i != null) {
                     final HashMap<ItemStack, HashMap<InventoryPet, String>> p = new HashMap<>();
                     p.put(is, i);
-                    a.add(p);
+                    pets.add(p);
                 }
             }
         }
-        return a;
+        return pets;
     }
     public List<ItemStack> getLeashed(Player player) {
         final List<ItemStack> l = new ArrayList<>();
@@ -186,7 +190,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             if(remainingtime <= 0) {
                 if(trigger(event, pet.getAttributes(), "level", lvl)) {
                     pet.didUse(is, identifier, level, exp);
-                    //sendItemCooldownPacket(player, is.getType(), 20*20);
+                    sendItemCooldownPacket(player, is.getType(), 20*20);
                     return 1;
                 }
             } else {
@@ -206,7 +210,9 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         if(!leashed.isEmpty()) {
             final List<ItemStack> drops = event.getDrops();
             final UUID u = player.getUniqueId();
-            if(!leashedUponDeath.containsKey(u)) leashedUponDeath.put(u, new ArrayList<>());
+            if(!leashedUponDeath.containsKey(u)) {
+                leashedUponDeath.put(u, new ArrayList<>());
+            }
             for(ItemStack is : leashed) {
                 drops.remove(is);
                 leashedUponDeath.get(u).add(is);

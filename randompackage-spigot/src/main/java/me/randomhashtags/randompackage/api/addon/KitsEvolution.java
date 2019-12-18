@@ -224,19 +224,23 @@ public class KitsEvolution extends Kits {
                     }
                     item.setItemMeta(itemMeta);
                 }
-                if(preview) top.addItem(item);
-                else {
+                if(preview) {
+                    top.addItem(item);
+                } else {
                     rewards.remove(is);
                     rewards.add(item);
                 }
             }
         }
         final int fe = top.firstEmpty();
-        if(preview && fe > -1)
-            for(int i = fe; i < top.getSize(); i++)
+        if(preview && fe > -1) {
+            for(int i = fe; i < top.getSize(); i++) {
                 top.setItem(i, previewBackground.clone());
-        if(!preview)
-            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis()+(vkit.getCooldown()*1000));
+            }
+        }
+        if(!preview) {
+            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis() + (vkit.getCooldown() * 1000));
+        }
         player.updateInventory();
         int upgradechance = vkit.getUpgradeChance();
         final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
@@ -254,10 +258,12 @@ public class KitsEvolution extends Kits {
                     if(newlvl > vkit.getMaxLevel()) return;
                     final String name = vkit.getItem().getItemMeta().getDisplayName();
                     pdata.getKitLevels().put(vkit, newlvl);
-                    for(String s : getUpgradeMsg())
-                        player.sendMessage(colorize(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name)));
-                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast"))
+                    for(String s : getUpgradeMsg()) {
+                        player.sendMessage(colorize(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name).replace("{NAME}", name)));
+                    }
+                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast")) {
                         Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+                    }
                 }
             }
         }

@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
@@ -32,11 +34,14 @@ public class Reputation extends RPFeature {
     public void unload() {
     }
 
-    public int getReputationPoints(UUID player) {
+    public int getReputationPoints(@NotNull Player player) {
+        return getReputationPoints(player.getUniqueId());
+    }
+    public int getReputationPoints(@NotNull UUID player) {
         return RPPlayer.get(player).getReputationPoints();
     }
 
-    public void view(CommandSender sender, String target) {
+    public void view(@NotNull CommandSender sender, @Nullable String target) {
         final boolean isSelf = target == null;
         if(hasPermission(sender, "RandomPackage.reputation.view" + (isSelf ? "" : ".other"), true)) {
             final List<String> msg;
@@ -44,10 +49,10 @@ public class Reputation extends RPFeature {
             final HashMap<String, String> replacements = new HashMap<>();
             if(isSelf || target.equals(sender.getName())) {
                 if(!(sender instanceof Player)) return;
-                msg = config.getStringList("messages.view");
+                msg = getStringList(config, "messages.view");
                 level = getReputationPoints(((Player) sender).getUniqueId());
             } else {
-                msg = config.getStringList("messages.view player");
+                msg = getStringList(config, "messages.view player");
                 replacements.put("{TARGET}", target);
                 final OfflinePlayer op = Bukkit.getOfflinePlayer(target);
                 level = getReputationPoints(op.getUniqueId());

@@ -7,11 +7,13 @@ import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
+import me.randomhashtags.randompackage.addon.stats.DisguiseStats;
 import me.randomhashtags.randompackage.addon.stats.DuelStats;
 import me.randomhashtags.randompackage.api.Homes;
 import me.randomhashtags.randompackage.api.PlayerQuests;
 import me.randomhashtags.randompackage.api.Showcase;
 import me.randomhashtags.randompackage.api.Titles;
+import me.randomhashtags.randompackage.dev.Disguise;
 import me.randomhashtags.randompackage.dev.RPStorage;
 import me.randomhashtags.randompackage.event.PlayerQuestExpireEvent;
 import me.randomhashtags.randompackage.event.PlayerQuestStartEvent;
@@ -22,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +52,7 @@ public class RPPlayer implements RPStorage {
 
     private PlayerRank rank;
     private CoinFlipStats coinflipStats;
+    private DisguiseStats disguiseStats;
     private DuelStats duelStats;
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
@@ -117,8 +121,16 @@ public class RPPlayer implements RPStorage {
         yml.set("longs", longs);
 
         if(coinflipStats != null) {
-            final CoinFlipStats coinflipStats = getCoinFlipStats();
             yml.set("coinflip stats", coinflipStats.wins + ";" + coinflipStats.losses + ";" + coinflipStats.wonCash + ";" + coinflipStats.lostCash + ";" + coinflipStats.taxesPaid);
+        }
+
+        if(disguiseStats != null) {
+            final EntityType disguise = disguiseStats.getDisguise();
+            yml.set("disguises.disguise", disguise != null ? disguise.name() : null);
+            final HashMap<Disguise, String> settings = disguiseStats.getSettings();
+            for(Disguise d : settings.keySet()) {
+                yml.set("disguises." + d.getIdentifier(), settings.get(d));
+            }
         }
 
         if(homes != null) {
@@ -334,6 +346,24 @@ public class RPPlayer implements RPStorage {
     }
     public boolean doesReceiveCoinFlipNotifications() { return coinflipNotifications; }
     public void setReceivesCoinFlipNotifications(boolean bool) { coinflipNotifications = bool; }
+
+    public DisguiseStats getDisguiseStats() {
+        if(disguiseStats == null) {
+            if(yml.get("disguises") == null) {
+                disguiseStats = new DisguiseStats(null, new HashMap<>());
+            } else {
+                final HashMap<Disguise, String> settings = new HashMap<>();
+                for(String s : yml.getConfigurationSection("disguises").getKeys(false)) {
+                    if(!s.equals("disguise")) {
+                        settings.put(getDisguise(s), yml.getString("disguises." + s));
+                    }
+                }
+                final String disguise = yml.getString("disguises.disguise");
+                disguiseStats = new DisguiseStats(disguise != null ? EntityType.valueOf(disguise) : null, settings);
+            }
+        }
+        return disguiseStats;
+    }
 
     public DuelStats getDuelStats() { // TODO: update dis bruv
         if(duelStats == null) {

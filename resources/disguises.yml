@@ -1,9 +1,14 @@
 # Made by RandomHashTags
 messages:
+  dont have unlocked:
+    - "&c&l(!)&r &cYou do not have the &n{NAME}&r &/disguise unlocked!"
+    - "&7Unlock access to disguises at &fbuy.yourserver.com"
   unlock access:
     - "&cUnlock access to disguises at &nbuy.yourserver.com&r&c!"
-  activated disguise:
+  activated:
     - "&a&l(!)&r &aYou have activated the &n{DISGUISE}&r &adisguise!"
+  deactivated:
+    - "&c&l(!)&r &cYou deactivated your current disguise!"
   removed due to:
     dealing damage:
       - "&c&l(!)&r &cYour disguise has been removed due to dealing damage!"
@@ -15,53 +20,140 @@ item:
   - " "
   - "&7Click to unlock this cosmetic /disguise!"
 #
-allowed types:
-  - BAT
-  - BLAZE
-  - CAVE_SPIDER
-  - CHICKEN
-  - COW
-  - CREEPER
-  - DONKEY
-  - ENDER_DRAGON
-  - ENDERMAN
-  - GHAST
-  - GIANT
-  - HORSE
-  - IRON_GOLEM
-  - MAGMA_CUBE
-  - MULE
-  - MUSHROOM_COW
-  - OCELOT
-  - PIG
-  - ZOMBIE_PIGMAN
-  - PRIMED_TNT
-  - SHEEP
-  - SILVERFISH
-  - SKELETON
-  - SKELETON_HORSE
-  - SLIME
-  - SNOWMAN
-  - SPIDER
-  - SQUID
-  - UNDEAD_HORSE
-  - VILLAGER
-  - WITCH
-  - WITHER
-  - WITHER_SKELETON
-  - WOLF
-  - ZOMBIE
-  - ZOMBIE_VILLAGER
+strings:
+  baby prefix: "Baby "
+  unlocked: ""
+  locked: ""
 #
-locked:
-  prefix: "&c&l"
-  added lore:
-    - " "
-    - "&c&lLOCKED"
-    - " "
-    - "&7Unlock disguises at &nbuy.yourserver.com&r&7!"
-unlocked:
-  prefix: "&a&l"
-  added lore:
-    - " "
-    - "&a&lUNLOCKED"
+gui:
+  title: "Disguises"
+  size: 36
+  locked:
+    name: "&c&l{NAME}"
+    added lore:
+      - " "
+      - "&c&lLOCKED"
+      - " "
+      - "&7Unlock disguises at &nbuy.yourserver.com&r&7!"
+  unlocked:
+    prefix: "&a&l"
+    added lore:
+      - " "
+      - "&a&lUNLOCKED"
+#
+sub disguises:
+  title: "Sub Disguises: {TYPE}"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: "&f&l???"
+#
+entity types:
+  BLAZE:
+    slot: 0
+    name: "Blaze"
+  CAVE_SPIDER:
+    slot: 1
+    name: "Cave Spider"
+  CHICKEN:
+    slot: 2
+    baby: true
+    name: "Chicken"
+  COW:
+    slot: 3
+    baby: true
+    name: "Cow"
+  CREEPER:
+    slot: 4
+    name: "Creeper"
+  DONKEY:
+    slot: 5
+    baby: true
+    name: "Donkey"
+  ENDERMAN:
+    slot: 6
+    name: "Enderman"
+  GHAST:
+    slot: 7
+    name: "Ghast"
+  HORSE:
+    slot: 8
+    name: "Horse"
+  IRON_GOLEM:
+    slot: 9
+    name: "Iron Golem"
+  MAGMA_CUBE:
+    slot: 10
+    name: "Magma Cube"
+  MULE:
+    slot: 11
+    baby: true
+    name: "Mule"
+  MUSHROOM_COW:
+    slot: 12
+    baby: true
+    name: "Mushroom Cow"
+  OCELOT:
+    slot: 13
+    baby: true
+    name: "Ocelot"
+  PIG:
+    slot: 14
+    baby: true
+    name: "Pig"
+  PIG_ZOMBIE:
+    slot: 15
+    baby: true
+    name: "Zombie Pigman"
+  SHEEP:
+    slot: 16
+    baby: true
+    name: "Sheep"
+  SILVERFISH:
+    slot: 17
+    name: "Silverfish"
+  SKELETON:
+    slot: 18
+    name: "Skeleton"
+  SKELETON_HORSE:
+    slot: 19
+    name: "Skeleton Horse"
+  SLIME:
+    slot: 20
+    name: "Slime"
+  SNOWMAN:
+    slot: 21
+    name: "Snowman"
+  SPIDER:
+    slot: 22
+    name: "Spider"
+  SQUID:
+    slot: 23
+    name: "Squid"
+  UNDEAD_HORSE:
+    slot: 24
+    baby: true
+    name: "Undead Horse"
+  VILLAGER:
+    slot: 25
+    baby: true
+    name: "Villager"
+  WITCH:
+    slot: 26
+    name: "Witch"
+  WITHER_SKELETON:
+    slot: 27
+    name: "Wither Skeleton"
+  WOLF:
+    slot: 28
+    baby: true
+    name: "Wolf"
+  ZOMBIE:
+    slot: 29
+    baby: true
+    name: "Zombie"
+  ZOMBIE_VILLAGER:
+    slot: 30
+    baby: true
+    name: "Zombie Villager"
+#

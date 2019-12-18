@@ -9,14 +9,8 @@ public interface Packeter extends Versionable {
         } else if(NINE) {
         } else if(TEN) {
         } else if(ELEVEN) {
-        } else if(TWELVE) {
-            ((org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer) player).getHandle().getCooldownTracker().a(org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers.getItem(material), ticks);
-        } else if(THIRTEEN) {
-            ((org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer) player).getHandle().getCooldownTracker().a(org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers.getItem(material), ticks);
-        } else if(FOURTEEN) {
-            ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer) player).getHandle().getCooldownTracker().setCooldown(org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers.getItem(material), ticks);
-        } else if(FIFTEEN) {
-            ((org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer) player).getHandle().getCooldownTracker().setCooldown(org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers.getItem(material), ticks);
+        } else {
+            player.setCooldown(material, ticks);
         }
     }
 }
