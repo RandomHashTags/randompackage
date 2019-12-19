@@ -13,6 +13,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -329,6 +331,38 @@ public interface UVersionable extends Versionable {
             return new Location(Bukkit.getWorld(a[0]), Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), Float.parseFloat(a[4]), Float.parseFloat(a[5]));
         } else {
             return null;
+        }
+    }
+
+    default void giveItem(Player player, ItemStack is) {
+        if(is == null || is.getType().equals(Material.AIR)) return;
+        final UMaterial m = UMaterial.match(is);
+        final ItemMeta meta = is.getItemMeta();
+        final PlayerInventory i = player.getInventory();
+        final int f = i.first(is.getType()), e = i.firstEmpty(), max = is.getMaxStackSize();
+        int amountLeft = is.getAmount();
+
+        if(f != -1) {
+            for(int s = 0; s < i.getSize(); s++) {
+                final ItemStack t = i.getItem(s);
+                if(amountLeft > 0 && t != null && t.getItemMeta().equals(meta) && UMaterial.match(t) == m) {
+                    final int a = t.getAmount(), toMax = max-a, given = Math.min(amountLeft, toMax);
+                    if(given > 0) {
+                        t.setAmount(a+given);
+                        amountLeft -= given;
+                    }
+                }
+            }
+            player.updateInventory();
+        }
+        if(amountLeft > 0) {
+            is.setAmount(amountLeft);
+            if(e >= 0) {
+                i.addItem(is);
+                player.updateInventory();
+            } else {
+                player.getWorld().dropItem(player.getLocation(), is);
+            }
         }
     }
 

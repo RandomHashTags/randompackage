@@ -178,37 +178,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
         return -1;
     }
 
-    public final void giveItem(Player player, ItemStack is) {
-        if(is == null || is.getType().equals(Material.AIR)) return;
-        final UMaterial m = UMaterial.match(is);
-        final ItemMeta meta = is.getItemMeta();
-        final PlayerInventory i = player.getInventory();
-        final int f = i.first(is.getType()), e = i.firstEmpty(), max = is.getMaxStackSize();
-        int amountLeft = is.getAmount();
-
-        if(f != -1) {
-            for(int s = 0; s < i.getSize(); s++) {
-                final ItemStack t = i.getItem(s);
-                if(amountLeft > 0 && t != null && t.getItemMeta().equals(meta) && UMaterial.match(t) == m) {
-                    final int a = t.getAmount(), toMax = max-a, given = Math.min(amountLeft, toMax);
-                    if(given > 0) {
-                        t.setAmount(a+given);
-                        amountLeft -= given;
-                    }
-                }
-            }
-            player.updateInventory();
-        }
-        if(amountLeft > 0) {
-            is.setAmount(amountLeft);
-            if(e >= 0) {
-                i.addItem(is);
-                player.updateInventory();
-            } else {
-                player.getWorld().dropItem(player.getLocation(), is);
-            }
-        }
-    }
     public final void removeItem(Player player, ItemStack itemstack, int amount) {
         final PlayerInventory inv = player.getInventory();
         int nextslot = getNextSlot(player, itemstack);

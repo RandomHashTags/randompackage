@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.universal.UVersion;
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.api.Trade;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -10,26 +11,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ActiveTrade {
+public class ActiveTrade extends Trade {
     public static List<ActiveTrade> trades;
-    private static UVersion uv;
 
     private List<Integer> tasks;
-    private boolean successful, senderReady, receiverReady;
+    private boolean successful, senderReady, receiverReady, countingDown;
     private Player sender, receiver;
     private HashMap<Integer, ItemStack> sendingTrade, receivingTrade;
 
     public ActiveTrade(Player sender, Player receiver) {
         if(trades == null) {
             trades = new ArrayList<>();
-            uv = UVersion.getUVersion();
         }
-        tasks = new ArrayList<>();
-        successful = false;
-        senderReady = false;
-        receiverReady = false;
         this.sender = sender;
         this.receiver = receiver;
+        tasks = new ArrayList<>();
         sendingTrade = new HashMap<>();
         receivingTrade = new HashMap<>();
         trades.add(this);
@@ -43,30 +39,37 @@ public class ActiveTrade {
     public boolean receiverIsReady() { return receiverReady; }
     public void setSenderReady(boolean ready) {
         senderReady = ready;
-        if(senderReady && receiverReady) close(true);
+        tryAccepting();
     }
     public void setReceiverReady(boolean ready) {
         receiverReady = ready;
-        if(senderReady && receiverReady) close(true);
+        tryAccepting();
     }
+    private void tryAccepting() {
+        if(senderReady && receiverReady) {
+            close(true);
+        }
+    }
+
     public void updateTrades() {
+        cancelCountdown();
         final ItemStack air = new ItemStack(Material.AIR);
-        final Inventory s = sender.getOpenInventory().getTopInventory(), r = receiver.getOpenInventory().getTopInventory();
+        final Inventory senderInv = sender.getOpenInventory().getTopInventory(), receiverInv = receiver.getOpenInventory().getTopInventory();
         for(int i = 0; i < 54; i++) {
             if(isOnSelfSide(i) || isOnOtherSide(i)) {
-                s.setItem(i, air);
-                r.setItem(i, air);
+                senderInv.setItem(i, air);
+                receiverInv.setItem(i, air);
             }
         }
         for(int i : sendingTrade.keySet()) {
             final ItemStack is = sendingTrade.get(i);
-            s.setItem(i, is);
-            r.setItem(getOpposite(i), is);
+            senderInv.setItem(i, is);
+            receiverInv.setItem(getOpposite(i), is);
         }
         for(int i : receivingTrade.keySet()) {
             final ItemStack is = receivingTrade.get(i);
-            r.setItem(i, is);
-            s.setItem(getOpposite(i), is);
+            receiverInv.setItem(i, is);
+            senderInv.setItem(getOpposite(i), is);
         }
         sender.updateInventory();
         receiver.updateInventory();
@@ -74,7 +77,7 @@ public class ActiveTrade {
     private int getOpposite(int slot) {
         return slot <= 3 ? slot+4 : slot >= 5 && slot <= 8 ? slot-4 : isOnSelfSide(slot) ? slot+5 : slot-5;
     }
-    public int getNextEmptySlot(Player player) {
+    public int getNextEmptySlot(@NotNull Player player) {
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(int i = 0; i <= 48; i++) {
             if(isOnSelfSide(i) && (top.getItem(i) == null || top.getItem(i).getType().equals(Material.AIR))) {
@@ -84,8 +87,12 @@ public class ActiveTrade {
         return -1;
     }
 
-    public boolean isOnSelfSide(int slot) { return slot >= 1 && slot <= 3 || slot >= 9 && slot <= 12 || slot >= 18 && slot <= 21 || slot >= 27 && slot <= 30 || slot >= 36 && slot <= 39 || slot >= 45 && slot <= 48; }
-    public boolean isOnOtherSide(int slot) { return slot >= 5 && slot <= 7 || slot >= 14 && slot <= 17 || slot >= 23 && slot <= 26 || slot >= 32 && slot <= 35 || slot >= 41 && slot <= 44 || slot >= 50 && slot <= 53; }
+    public boolean isOnSelfSide(int slot) {
+        return slot >= 1 && slot <= 3 || slot >= 9 && slot <= 12 || slot >= 18 && slot <= 21 || slot >= 27 && slot <= 30 || slot >= 36 && slot <= 39 || slot >= 45 && slot <= 48;
+    }
+    public boolean isOnOtherSide(int slot) {
+        return slot >= 5 && slot <= 7 || slot >= 14 && slot <= 17 || slot >= 23 && slot <= 26 || slot >= 32 && slot <= 35 || slot >= 41 && slot <= 44 || slot >= 50 && slot <= 53;
+    }
 
     public void cancel() {
         close(false);
@@ -93,35 +100,85 @@ public class ActiveTrade {
     public void accept() {
         close(true);
     }
+
     private void close(boolean accepted) {
         successful = accepted;
-        for(ItemStack is : (accepted ? receivingTrade : sendingTrade).values()) {
-            uv.giveItem(sender, is);
+        if(accepted) {
+            countingDown = true;
+            setCountdown(true, countdown);
+            for(int i = 1; i <= countdown; i++) {
+                final int integer = i;
+                tasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+                    setCountdown(true, countdown-integer);
+                    if(integer == countdown) {
+                        giveTradedItems();
+                        stopTrade();
+                    }
+                }, i*20));
+            }
+        } else {
+            giveBackItems();
+            stopTrade();
         }
-        for(ItemStack is : (accepted ? sendingTrade : receivingTrade).values()) {
-            uv.giveItem(receiver, is);
+    }
+
+    private void setCountdown(boolean setAccepting, int integer) {
+        final Inventory top = sender.getOpenInventory().getTopInventory(), t = receiver.getOpenInventory().getTopInventory();
+        final ItemStack i = (setAccepting ? accepting : accept).clone();
+        i.setAmount(integer);
+        top.setItem(0, i);
+        top.setItem(8, i);
+        sender.updateInventory();
+        t.setItem(0, i);
+        t.setItem(8, i);
+        receiver.updateInventory();
+    }
+    public void cancelCountdown() {
+        if(countingDown) {
+            countingDown = false;
+            for(int task : tasks) {
+                SCHEDULER.cancelTask(task);
+            }
+            tasks.clear();
+            senderReady = false;
+            receiverReady = false;
+
+            setCountdown(false, 1);
         }
+    }
+
+    private void giveBackItems() {
+        for(ItemStack is : sendingTrade.values()) {
+            giveItem(sender, is);
+        }
+        for(ItemStack is : receivingTrade.values()) {
+            giveItem(receiver, is);
+        }
+    }
+    private void giveTradedItems() {
+        for(ItemStack is : receivingTrade.values()) {
+            giveItem(sender, is);
+        }
+        for(ItemStack is : sendingTrade.values()) {
+            giveItem(receiver, is);
+        }
+    }
+
+    private void stopTrade() {
         trades.remove(this);
         sender.closeInventory();
         receiver.closeInventory();
 
-        tasks = null;
-        sender = null;
-        receiver = null;
-        sendingTrade = null;
-        receivingTrade = null;
         if(trades.isEmpty()) {
             trades = null;
-            uv = null;
         }
     }
 
-
     public static ActiveTrade valueOf(Player player) {
         if(trades != null) {
-            for(ActiveTrade a  : trades) {
-                if(a.sender == player || a.receiver == player) {
-                    return a;
+            for(ActiveTrade trade : trades) {
+                if(trade.sender == player || trade.receiver == player) {
+                    return trade;
                 }
             }
         }

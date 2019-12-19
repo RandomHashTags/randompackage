@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class EACoreListener extends EventExecutor implements Listener {
     private static EACoreListener instance;
-    public static EACoreListener getEventAttributeListener() {
+    public static EACoreListener getEACoreListener() {
         if(instance == null) instance = new EACoreListener();
         return instance;
     }

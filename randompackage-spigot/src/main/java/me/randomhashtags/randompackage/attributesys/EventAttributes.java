@@ -92,12 +92,12 @@ public abstract class EventAttributes extends EventExecutor {
         for(EventCondition c : conditions) {
             c.load();
         }
-        EACoreListener.getEventAttributeListener().enable();
+        EACoreListener.getEACoreListener().enable();
     }
     public static void unloadEventAttributes() {
         RPStorage.unregisterAll(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
         Combo.combos.clear();
         Listable.list.clear();
-        EACoreListener.getEventAttributeListener().disable();
+        EACoreListener.getEACoreListener().disable();
     }
 }
