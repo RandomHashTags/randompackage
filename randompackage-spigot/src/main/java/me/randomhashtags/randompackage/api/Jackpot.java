@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
+import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -159,24 +159,20 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         final List<UUID> tic = getTickets();
         final int size = tic.size();
         if(size > 0) {
-            final UUID w = tic.get(RANDOM.nextInt(size));
-            final OfflinePlayer op = Bukkit.getOfflinePlayer(w);
+            final UUID winner = tic.get(RANDOM.nextInt(size));
+            final OfflinePlayer op = Bukkit.getOfflinePlayer(winner);
             final HashMap<String, String> replacements = new HashMap<>();
-            final BigDecimal t = ticketsSold.get(w);
-            final BigDecimal taxed = value.multiply(tax), total = value.subtract(taxed);
+            final BigDecimal winnerTickets = ticketsSold.get(winner), taxed = value.multiply(tax), total = value.subtract(taxed);
             eco.depositPlayer(op, total.doubleValue());
 
-            final RPPlayer pdata = RPPlayer.get(w);
-            final boolean loaded = pdata.isLoaded;
-            if(!loaded) pdata.load();
+            final RPPlayer pdata = RPPlayer.get(winner);
             pdata.jackpotWins += 1;
             pdata.jackpotWonCash = pdata.jackpotWonCash.add(total);
-            if(!loaded) pdata.unload();
 
-            final String percent = formatDouble(getPercent(t, size)), tt = formatInt(size);
+            final String percent = formatDouble(getPercent(winnerTickets, size)), tt = formatInt(size);
 
             replacements.put("{PLAYER}", op.getName());
-            replacements.put("{TICKETS}", formatBigDecimal(t));
+            replacements.put("{TICKETS}", formatBigDecimal(winnerTickets));
             replacements.put("{TICKETS%}", percent);
             replacements.put("{TOTAL_TICKETS}", tt);
             replacements.put("{$}", formatBigDecimal(total));
@@ -206,7 +202,8 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         return a;
     }
     public double getPercent(BigDecimal tickets, int size) {
-        return round(tickets.divide(BigDecimal.valueOf((double) (size == 0 ? 1 : size))).multiply(BigDecimal.valueOf(100)).doubleValue(), 2);
+        final BigDecimal big = BigDecimal.valueOf((double) (size == 0 ? 1 : size)), hundred = BigDecimal.valueOf(100);
+        return round(BigDecimal.valueOf(tickets.doubleValue()/big.doubleValue()).multiply(hundred).doubleValue(), 2);
     }
     private void broadcastCountdown(long timeleft) {
         final List<String> c = getStringList(config, "messages.countdown");

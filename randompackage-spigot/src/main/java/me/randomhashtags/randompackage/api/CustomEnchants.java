@@ -540,6 +540,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public EquippedCustomEnchants getEnchants(@NotNull Player player) {
         final UUID uuid = player.getUniqueId();
+        if(playerEnchants == null) {
+            playerEnchants = new HashMap<>();
+        }
         if(playerEnchants.containsKey(uuid)) {
             return playerEnchants.get(uuid);
         } else {
