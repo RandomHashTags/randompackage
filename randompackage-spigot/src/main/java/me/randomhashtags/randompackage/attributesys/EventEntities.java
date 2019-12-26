@@ -45,6 +45,7 @@ public interface EventEntities extends EventConditions, UVersionable {
             case "playerfish": return getEntities((PlayerFishEvent) event);
 
             case "blockbreak": return getEntities("Player", ((BlockBreakEvent) event).getPlayer());
+            case "blockmultiplace":
             case "blockplace": return getEntities("Player", ((BlockPlaceEvent) event).getPlayer());
             case "foodlevelchange": return getEntities("Player", ((FoodLevelChangeEvent) event).getEntity());
 
