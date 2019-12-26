@@ -1,5 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.util.Spawnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,7 +13,7 @@ import java.util.List;
 public abstract class RPSpawnable extends RPAddon implements Spawnable {
     public static RegionPlugin spawnType = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
-    public boolean canSpawnAtFactionClaim(Player summoner, Location l) {
+    public boolean canSpawnAtFactionClaim(@Nullable Player summoner, @NotNull Location l) {
         if(l != null && hookedFactionsUUID()) {
             final String own = summoner != null ? factions.getFactionTag(summoner.getUniqueId()) : null, w = l.getWorld().getName(), f = factions.getRegionalIdentifierAt(l);
             for(String s : getSpawnableFactionClaims()) {
@@ -50,8 +52,8 @@ public abstract class RPSpawnable extends RPAddon implements Spawnable {
         return false;
     }
 
-    public boolean canSpawnAt(Location l) { return canSpawnAt(null, l); }
-    public boolean canSpawnAt(Player summoner, Location l) {
+    public boolean canSpawnAt(@NotNull Location l) { return canSpawnAt(null, l); }
+    public boolean canSpawnAt(@Nullable Player summoner, @NotNull Location l) {
         final RegionPlugin a = getSpawnType();
         if(a == null) return true;
         switch(a) {

@@ -7,12 +7,12 @@ import java.util.HashMap;
 
 public class CoinFlipMatch {
     public static HashMap<Long, CoinFlipMatch> matches;
-    public boolean isActive;
+    private boolean active;
     private long created;
     private OfflinePlayer creator;
-    public OfflinePlayer challenger;
+    private OfflinePlayer challenger;
     private CoinFlipOption option;
-    public CoinFlipOption challengerOption;
+    private CoinFlipOption challengerOption;
     private BigDecimal wager;
     public CoinFlipMatch(long created, OfflinePlayer creator, CoinFlipOption option, BigDecimal wager) {
         if(matches == null) {
@@ -22,39 +22,40 @@ public class CoinFlipMatch {
         this.creator = creator;
         this.option = option;
         this.wager = wager;
-        isActive = false;
+        active = false;
         matches.put(created, this);
     }
-    public long created() { return created; }
-    public OfflinePlayer creator() { return creator; }
-    public CoinFlipOption option() { return option; }
-    public BigDecimal wager() { return wager; }
+    public long getCreationTime() { return created; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public OfflinePlayer getCreator() { return creator; }
+    public OfflinePlayer getChallenger() { return challenger; }
+    public void setChallenger(OfflinePlayer player) { challenger = player; }
+
+    public CoinFlipOption getCreatorOption() { return option; }
+    public CoinFlipOption getChallengerOption() { return challengerOption; }
+    public void setChallengerOption(CoinFlipOption option) { challengerOption = option; }
+    public BigDecimal getWager() { return wager; }
 
     public void delete() {
         matches.remove(created);
-        this.created = 0;
-        this.creator = null;
-        this.option = null;
-        this.challenger = null;
-        this.challengerOption = null;
     }
-    public static CoinFlipMatch valueOf(OfflinePlayer creator) {
+    public static CoinFlipMatch valueOfCreator(OfflinePlayer creator) {
         if(matches != null) {
-            for(long l : matches.keySet()) {
-                final CoinFlipMatch m = matches.get(l);
-                if(m.creator.equals(creator)) {
-                    return m;
+            for(CoinFlipMatch match : matches.values()) {
+                if(match.creator.equals(creator)) {
+                    return match;
                 }
             }
         }
         return null;
     }
-    public static CoinFlipMatch valueOF(OfflinePlayer challenger) {
+    public static CoinFlipMatch valueOfChallenger(OfflinePlayer challenger) {
         if(matches != null) {
-            for(long l : matches.keySet()) {
-                final CoinFlipMatch m = matches.get(l);
-                if(m.challenger.equals(challenger)) {
-                    return m;
+            for(CoinFlipMatch match : matches.values()) {
+                if(match.challenger.equals(challenger)) {
+                    return match;
                 }
             }
         }

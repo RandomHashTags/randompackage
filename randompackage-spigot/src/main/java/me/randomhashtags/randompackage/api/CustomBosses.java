@@ -1,15 +1,14 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.CustomBoss;
+import me.randomhashtags.randompackage.addon.file.FileCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.living.LivingCustomMinion;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.addon.file.FileCustomBoss;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -69,21 +68,20 @@ public class CustomBosses extends EventAttributes {
 	}
 
 	public void backup() {
-		final YamlConfiguration a = otherdata;
-		a.set("custom bosses", null);
+		otherdata.set("custom bosses", null);
 		final HashMap<UUID, LivingCustomBoss> j = LivingCustomBoss.living;
 		if(j != null) {
 			for(LivingCustomBoss b : j.values()) {
 				final String p = "custom bosses." + b.entity.getUniqueId().toString() + ".";
 				final LivingEntity s = b.summoner;
-				a.set(p + "summoner", s != null ? s.getUniqueId().toString() : "null");
-				a.set(p + "type", b.type.getIdentifier());
+				otherdata.set(p + "summoner", s != null ? s.getUniqueId().toString() : "null");
+				otherdata.set(p + "type", b.type.getIdentifier());
 				final List<String> m = new ArrayList<>();
 				for(LivingCustomMinion lcm : b.minions) m.add(lcm.entity.getUniqueId().toString());
-				a.set(p + "minions", m);
+				otherdata.set(p + "minions", m);
 				final HashMap<UUID, Double> D = b.damagers;
 				for(UUID u : D.keySet()) {
-                    a.set(p + "damager." + u.toString(), D.get(u));
+                    otherdata.set(p + "damager." + u.toString(), D.get(u));
                 }
 			}
 		}
@@ -114,15 +112,15 @@ public class CustomBosses extends EventAttributes {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack I = event.getItem();
 		if(I != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			final CustomBoss c = valueOfCustomBoss(I);
-			if(c != null) {
+			final CustomBoss boss = valueOfCustomBoss(I);
+			if(boss != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);
 				player.updateInventory();
 				final Location l = event.getClickedBlock().getLocation();
-				if(c.canSpawnAt(l)) {
+				if(boss.canSpawnAt(l)) {
 					removeItem(player, I, 1);
-					c.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
+					boss.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()));
 				}
 			}
 		}

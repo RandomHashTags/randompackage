@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.universal.UVersionable;
@@ -92,6 +93,7 @@ public interface EventEntities extends EventConditions, UVersionable {
 
             case "isdamaged": return getEntities((isDamagedEvent) event);
             case "pvany": return getEntities((PvAnyEvent) event);
+            case "custombossdamagebyentityevent": return getEntities((CustomBossDamageByEntityEvent) event);
 
             case "armorequip":
             case "armorpiecebreak":
