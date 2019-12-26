@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.dev.LastManStanding;
 import me.randomhashtags.randompackage.dev.Outposts;
+import me.randomhashtags.randompackage.dev.SlotBot;
 import me.randomhashtags.randompackage.dev.SpawnerStacking;
 import me.randomhashtags.randompackage.api.addon.Alchemist;
 import me.randomhashtags.randompackage.api.addon.Enchanter;
@@ -146,6 +147,7 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
 
         RandomizedLoot.getRandomizedLoot().enable();
+        cmd.loadCustom(SlotBot.getSlotBot(), getHash("slotbot", "slot bot"), isTrue("slot bot"));
         cmd.load(Enchanter.getEnchanter(), Arrays.asList("enchanter"), isTrue("enchanter"));
 
         final int interval = config.getInt("backup interval")*20*60;

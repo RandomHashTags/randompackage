@@ -1,0 +1,128 @@
+# Made by RandomHashTags
+messages:
+  missing ticket:
+    - "&c&l(!)&r &cYou must insert a Slot Bot Ticket to spin the bot!"
+    - "&7Purchase Slot Bot Tickets at &fbuy.yourserver.com"
+  slot requires ticket:
+    - "&c&l(!)&r &cThis slot requires {AMOUNT} more ticket(s) in the bot to roll!"
+    - "&7Purchase Slot Bot Tickets at &fbuy.yourserver.com"
+  #
+  loot:
+    centered: true
+    msg:
+      - " "
+      - "&d&lSlot Bot"
+      - "&7{PLAYER} rolled the slot /bot with &f{AMOUNT} ticket(s)&r &7and won:"
+      - "&b&l*&r &f&l{AMOUNT}x&r {ITEM}"
+      - " "
+
+#
+items:
+  ticket:
+    item: "paper"
+    name: "&d&lSlot Bot&r &f&lTicket"
+    lore:
+      - "&7Right-CLick the Slot Bot located"
+      - "&7at &f/spawn &7or use &f/bot &7then"
+      - "&7insert (Left-Click) this ticket"
+      - "&7into the bot."
+  visual placeholder:
+    item: "black_stained_glass_pane"
+    name: " "
+  randomized loot placeholder:
+    item: "light_gray_stained_glass_pane"
+    name: " "
+  reward slot:
+    item: "lime_stained_glass_pane"
+    name: "&a&lReward Slot"
+    lore:
+      - "&7The item which lands on this slot"
+      - "&7will be the item you receive."
+  withdraw tickets:
+    item: "nether_star"
+    name: "&c&lReturn"
+    lore:
+      - "&7Click to withdraw your tickets."
+  spinner:
+    slot: 26
+    item: "magma_cream"
+    name: "&c&lSpin (&r&7Missing Ticket&c&l)"
+    lore:
+      - "&7Insert a Slot Bot Ticket"
+      - "&7to spin the bot."
+      - "&7Purchase Slot Bot Tickets"
+      - "&7at &fbuy.yourserver.com"
+  spin:
+    item: "slime_ball"
+    name: "&a&lSpin"
+    lore:
+      - "&7Click to spin the bot."
+#
+gui:
+  title: "Slot Bot"
+  size: 54
+  background:
+    item: "gray_stained_glass_pane"
+    name: " "
+  reward slots:
+    20:
+      - 2
+      - 11
+      - 29
+      - 38
+    22:
+      - 4
+      - 13
+      - 31
+      - 40
+    24:
+      - 6
+      - 15
+      - 33
+      - 42
+  visual placeholder slots:
+    - 1
+    - 10
+    - 19
+    - 28
+    - 37
+    - 3
+    - 12
+    - 21
+    - 30
+    - 39
+    - 5
+    - 14
+    - 23
+    - 32
+    - 41
+    - 7
+    - 16
+    - 25
+    - 34
+    - 43
+  #
+  withdraw tickets:
+    slot: 45
+    item: WITHDRAW_TICKETS
+  how to play:
+    slot: 53
+    item: "book"
+    name: "&b&lHow to Player"
+    lore:
+      - "&d&l1.&r &7Insert up to 3 Slot Bot Tickets"
+      - "&7into the boy from your inventory."
+      - " "
+      - "&d&l2.&r &7Click \"Spin\" (on the right) to roll"
+      - "&7the bot or, click \"Return\" (on the left)"
+      - "&7to withdraw all inserted tickets."
+      - " "
+      - "&d&l3.&r &7When the bot finishes spinning"
+      - "&7the item which lands on the Reward Slot"
+      - "&7will be the item you receive."
+      - " "
+      - "&f&lTIP:&r &7Closing the bot while spinning will"
+      - "&7give the rewards you would have"
+      - "&7received, otherwise your inserted"
+      - "&7tickets will be refunded."
+#

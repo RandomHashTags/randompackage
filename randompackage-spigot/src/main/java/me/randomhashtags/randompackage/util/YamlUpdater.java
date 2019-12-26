@@ -195,6 +195,9 @@ public abstract class YamlUpdater {
                 "sethome.cmds", Arrays.asList("sethome"),
                 // 16.5.8
                 "supported plugins.regional.WorldGuard", true,
+                // 16.5.9
+                "slot bot.enabled", true,
+                "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot")
         };
         return putAll(values);
     }

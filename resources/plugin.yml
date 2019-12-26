@@ -74,6 +74,8 @@ commands:
     description: Admin command.
   roll:
     description: Roll a die with some friends.
+  slotbot:
+    description: Open the Slot Bot and receive rewards by inserting tickets.
   sethome:
     description: Set a home at your current location.
   shop:

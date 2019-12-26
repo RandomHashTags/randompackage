@@ -303,6 +303,15 @@ showcase:
   cmds:
     - showcase
 #
+slot bot:
+  enabled: true
+  cmds:
+    - slotbot
+    - slotbots
+    - bot
+    - bots
+    - slot
+#
 spawner stacking:
   enabled: true
 #
