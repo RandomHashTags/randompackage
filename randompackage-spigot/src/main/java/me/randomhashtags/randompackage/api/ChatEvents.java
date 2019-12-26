@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.universal.UMaterial;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -67,7 +66,10 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 			final List<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
 
 			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-			final String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			if(RANDOM_PACKAGE.placeholderapi) {
+				format = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+			}
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", message.split("\\[").length > 0 ? message.split("\\[")[0] : "")), suffix = new TextComponent(message.split("]").length > 1 ? message.split("]")[1] : "");
 			event.setCancelled(true);
 			if(brag) {
@@ -132,11 +134,12 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 	private void send(Player sender, Player recipient, TextComponent prefix, TextComponent m, TextComponent suffix) {
 		final UUID u = sender.getUniqueId();
 		final String tag = regions.getFactionTag(u);
-		TextComponent ftag = new TextComponent(prefix.toPlainText().contains("{F_TAG}") ?
-				prefix.toLegacyText().replace("{F_TAG}", tag != null && !ChatColor.stripColor(tag).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + tag + " " : "")
-			: "");
-		TextComponent p = ftag.toPlainText().equals("") ? prefix : ftag;
-		recipient.spigot().sendMessage(p, m, suffix);
+		String text = prefix.toPlainText();
+		if(text.contains("{F_TAG}")) {
+			text = prefix.toLegacyText().replace("{F_TAG}", tag != null && !ChatColor.stripColor(tag).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + tag + " " : "");
+		}
+		final TextComponent base = text.isEmpty() ? prefix : new TextComponent(text);
+		recipient.spigot().sendMessage(base, m, suffix);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {

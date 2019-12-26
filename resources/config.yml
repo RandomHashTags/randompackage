@@ -23,13 +23,8 @@ supported plugins:
     WorldGuard: true
 #
 chat cmds:
-  # {F_TAG}
-  ## = If the player is in a faction --> The player's relation color to recipient + The player's faction role + The player's faction tag + a space
-  ## = Player isn't in a faction --> nothing
-  # {DISPLAYNAME} = The player's display name
-  # {MESSAGE} = The sent message
-  # {TITLE} = The player's formatted active title. If one is active, a space is added before it.
-  format: "{F_TAG}{DISPLAYNAME}{TITLE}&r: {MESSAGE}"
+  # Supports PlaceholderAPI!
+  format: "%factionsuuid_faction_name% {DISPLAYNAME}%randompackage_title_chat%&r: {MESSAGE}"
   brag:
     enabled: true
     hover message: "&7Click to view &n{PLAYER}&r&7's inventory!"

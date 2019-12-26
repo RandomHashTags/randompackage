@@ -24,6 +24,6 @@ public class FileFatBucket extends RPAddon implements FatBucket {
     public String getUsesLeftStatus() { return colorize(yml.getString("settings.status.uses left")); }
     public String getPercentFullStatus() { return colorize(yml.getString("settings.status.percent full")); }
     public List<String> getEnabledWorlds() { return yml.getStringList("settings.enabled worlds"); }
-    public List<String> getFillableInWorlds() { return yml.getStringList("settings.fillable in worlds"); }
-    public List<String> getOnlyFillableInWorldsMsg() { return colorizeListString(yml.getStringList("messages.only fillable in worlds")); }
+    public List<String> getFillableInWorlds() { return getStringList(yml, "settings.fillable in worlds"); }
+    public List<String> getOnlyFillableInWorldsMsg() { return getStringList(yml, "messages.only fillable in worlds"); }
 }

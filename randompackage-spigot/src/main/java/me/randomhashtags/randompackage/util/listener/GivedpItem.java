@@ -12,6 +12,7 @@ import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -149,20 +150,22 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(CustomArmor.getCustomArmor().isEnabled()) {
                 final String[] b = Q.split(":");
                 final ArmorSet s = getArmorSet(b[1]);
-                String type = b.length == 2 ? "random" : b[2];
                 if(s != null) {
+                    String type = b.length == 2 ? "random" : b[2];
                     final int R = RANDOM.nextInt(4);
                     type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
+                    final ArmorSetWeaponInfo weapon = s.getWeapon(type);
+                    item = type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : type.equals("boots") ? s.getBoots() : weapon != null ? weapon.getItem() : air : air;
+                    if(item != air) {
+                        itemMeta = item.getItemMeta(); lore.clear();
+                        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                        lore.addAll(s.getArmorLore());
+                        itemMeta.setLore(lore); lore.clear();
+                        item.setItemMeta(itemMeta);
+                    }
+                    return item;
                 }
-                item = s != null && type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : s.getBoots() : air;
-                if(item != air) {
-                    itemMeta = item.getItemMeta(); lore.clear();
-                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    lore.addAll(s.getArmorLore());
-                    itemMeta.setLore(lore); lore.clear();
-                    item.setItemMeta(itemMeta);
-                }
-                return item;
+                return air;
             }
             return air;
         } else if(input.startsWith("customarmorcrystal:")) {
@@ -259,8 +262,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final FallenHero f = k != null ? k.getFallenHero() : null;
             return f != null ? k.getFallenHeroItem(k, true) : air;
         } else if(input.startsWith("fatbucket:")) {
-            final FatBucket fb = getFatBucket(Q.split(":")[1]);
-            return fb != null ? fb.getItem() : air;
+            final String[] values = Q.split(":");
+            final FatBucket fb = getFatBucket(values[1]);
+            return fb != null ? values.length > 2 ? fb.getItem(Integer.parseInt(values[1])) : fb.getItem(0) : air;
         } else if(input.startsWith("inventorypet:") || input.startsWith("pet:")) {
             final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
             return pet != null ? pet.getItem(1) : air;

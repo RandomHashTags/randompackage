@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
@@ -13,6 +14,17 @@ public interface ArmorSet extends Identifiable, Nameable {
     ItemStack getLeggings();
     ItemStack getBoots();
     List<ArmorSetWeaponInfo> getWeapons();
+    default ArmorSetWeaponInfo getWeapon(@NotNull String identifier) {
+        final List<ArmorSetWeaponInfo> weapons = getWeapons();
+        if(weapons != null) {
+            for(ArmorSetWeaponInfo weapon : weapons) {
+                if(weapon.getIdentifier().equals(identifier)) {
+                    return weapon;
+                }
+            }
+        }
+        return null;
+    }
     List<String> getArmorLore();
     List<String> getCrystalPerks();
     List<String> getArmorAttributes();
