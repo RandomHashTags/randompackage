@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.universal;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -121,6 +122,10 @@ public interface UVersionable extends Versionable {
     }
     default String formatBigDecimal(BigDecimal b, boolean currency) {
         return (currency ? NumberFormat.getCurrencyInstance() : NumberFormat.getInstance()).format(b);
+    }
+    default BigDecimal valueOfBigDecimal(@NotNull String input) {
+        final long m = input.endsWith("k") ? 1000 : input.endsWith("m") ? 1000000 : input.endsWith("b") ? 1000000000 : 1;
+        return BigDecimal.valueOf(getRemainingDouble(input)*m);
     }
     default BigDecimal getBigDecimal(String value) {
         return BigDecimal.valueOf(Double.parseDouble(value));

@@ -15,7 +15,6 @@ import java.util.List;
 
 public class FileFallenHero extends RPFallenHero implements FallenHero {
     private ItemStack spawnitem, gem;
-    private List<String> summonMsg, receiveKitMsg;
 
     public FileFallenHero(File f) {
         load(f);
@@ -24,14 +23,8 @@ public class FileFallenHero extends RPFallenHero implements FallenHero {
     public String getIdentifier() { return getYamlName(); }
 
     public int getGemDropChance() { return yml.getInt("gem.chance"); }
-    public List<String> getSummonMsg() {
-        if(summonMsg == null) summonMsg = colorizeListString(yml.getStringList("messages.summon"));
-        return summonMsg;
-    }
-    public List<String> getReceiveKitMsg() {
-        if(receiveKitMsg == null) receiveKitMsg = colorizeListString(yml.getStringList("messages.receive kit"));
-        return receiveKitMsg;
-    }
+    public List<String> getSummonMsg() { return getStringList(yml, "messages.summon"); }
+    public List<String> getReceiveKitMsg() { return getStringList(yml, "messages.receive kit"); }
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() { return new ArrayList<>(); }
     public ItemStack getSpawnItem() {

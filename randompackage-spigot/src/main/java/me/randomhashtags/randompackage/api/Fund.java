@@ -42,9 +42,19 @@ public class Fund extends RPFeature implements CommandExecutor {
 			view(sender);
 		} else {
 			final String a = args[0];
-			if(a.equals("help")) viewHelp(sender);
-			else if(a.equals("reset")) reset(sender);
-			else if(sender instanceof Player && args.length >= 2 && a.equals("deposit")) deposit((Player) sender, args[1]);
+			switch (a) {
+				case "reset":
+					reset(sender);
+					break;
+				case "deposit":
+					if(args.length >= 2 && sender instanceof Player) {
+						deposit((Player) sender, args[1]);
+					}
+					break;
+				default:
+					viewHelp(sender);
+					break;
+			}
 		}
 		return true;
 	}
@@ -93,23 +103,22 @@ public class Fund extends RPFeature implements CommandExecutor {
 			} else if(arg.contains(".") && !config.getBoolean("allows decimals")) {
 				sendStringListMessage(player, getStringList(config, "messages.cannot include decimals"), null);
 			} else {
-				final double q = getRemainingDouble(arg), min = config.getDouble("min deposit");
-				if(q == -1) return;
-				BigDecimal Q = BigDecimal.valueOf(q);
-				final double d = Q.doubleValue();
+				BigDecimal amount = valueOfBigDecimal(arg);
+				final double min = config.getDouble("min deposit");
+				final double d = amount.doubleValue();
 				final String a = d < config.getDouble("min deposit") ? "less than min" : d > eco.getBalance(player) ? "need more money" : null;
 				if(a != null) {
 					sendMessage(player, a, null, a.equals("less than min") ? min : d, false);
 					return;
 				}
-				final FundDepositEvent e = new FundDepositEvent(player, Q);
+				final FundDepositEvent e = new FundDepositEvent(player, amount);
 				PLUGIN_MANAGER.callEvent(e);
 				if(!e.isCancelled()) {
-					Q = e.amount;
+					amount = e.amount;
 					final UUID u = player.getUniqueId();
-					deposits.put(u, deposits.getOrDefault(u, BigDecimal.ZERO).add(Q));
+					deposits.put(u, deposits.getOrDefault(u, BigDecimal.ZERO).add(amount));
 					eco.withdrawPlayer(player, d);
-					total = total.add(Q);
+					total = total.add(amount);
 					sendMessage(player, "deposited", null, d, true);
 				}
 			}

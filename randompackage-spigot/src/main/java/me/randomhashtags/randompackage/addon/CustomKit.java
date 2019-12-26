@@ -25,9 +25,15 @@ public interface CustomKit extends Itemable, MaxLevelable, Slotable {
         if(is != null) {
             final String n = kit.getItem().getItemMeta().getDisplayName();
             final ItemMeta m = is.getItemMeta();
-            m.setDisplayName(m.getDisplayName().replace("{NAME}", n));
+            if(m.hasDisplayName()) {
+                m.setDisplayName(m.getDisplayName().replace("{NAME}", n));
+            }
             final List<String> l = new ArrayList<>();
-            for(String s : m.getLore()) l.add(s.replace("{NAME}", n));
+            if(m.hasLore()) {
+                for(String s : m.getLore()) {
+                    l.add(s.replace("{NAME}", n));
+                }
+            }
             m.setLore(l);
             is.setItemMeta(m);
         }

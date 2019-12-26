@@ -299,6 +299,28 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
+    default CustomKit valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
+        if(is != null) {
+            for(CustomKit k : getAllCustomKits().values()) {
+                final ItemStack f = k.getFallenHeroItem(k, true);
+                if(f != null && (type == null || k.getClass().isInstance(type)) && f.isSimilar(is)) {
+                    return k;
+                }
+            }
+        }
+        return null;
+    }
+    default CustomKit valueOfFallenHeroGem(ItemStack is, Class type) {
+        if(is != null) {
+            for(CustomKit k : getAllCustomKits().values()) {
+                final ItemStack f = k.getFallenHeroItem(k, false);
+                if(f != null && (type == null || k.getClass().isInstance(type)) && f.isSimilar(is)) {
+                    return k;
+                }
+            }
+        }
+        return null;
+    }
 
     default GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
         for(GlobalChallengePrize p : getAllGlobalChallengePrizes().values()) {

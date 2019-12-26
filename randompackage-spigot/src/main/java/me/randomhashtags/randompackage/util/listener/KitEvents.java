@@ -2,7 +2,8 @@ package me.randomhashtags.randompackage.util.listener;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.util.RPStorage;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +15,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 import static me.randomhashtags.randompackage.addon.Kits.previewing;
 
-public final class KitEvents extends RPStorage implements Listener {
+public final class KitEvents extends RegionalAPI implements Listener, me.randomhashtags.randompackage.dev.RPStorage {
     private static KitEvents instance;
     public static KitEvents getKitEvents() {
         if(instance == null) instance = new KitEvents();
@@ -27,6 +29,9 @@ public final class KitEvents extends RPStorage implements Listener {
     }
 
     public void unload() {
+        for(HumanEntity player : new ArrayList<>(previewing)) {
+            player.closeInventory();
+        }
         HandlerList.unregisterAll(this);
     }
 

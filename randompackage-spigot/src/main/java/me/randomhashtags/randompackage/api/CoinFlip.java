@@ -77,12 +77,11 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                     viewHelp(player);
                     break;
                 default:
-                    final long m = a.endsWith("k") ? 1000 : a.endsWith("m") ? 1000000 : a.endsWith("b") ? 1000000000 : 1;
-                    final BigDecimal w = BigDecimal.valueOf(getRemainingDouble(a)*m);
-                    if(w.doubleValue() <= 0) {
+                    final BigDecimal amount = valueOfBigDecimal(a);
+                    if(amount.doubleValue() <= 0) {
                         sendStringListMessage(player, getStringList(config, "messages.must enter valid amount"), null);
                     } else {
-                        tryCreating(player, w);
+                        tryCreating(player, amount);
                     }
                     break;
             }
