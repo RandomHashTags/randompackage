@@ -39,6 +39,7 @@ public interface UVersionable extends Versionable {
     FileConfiguration RP_CONFIG = RANDOM_PACKAGE.getConfig();
     String RP_VERSION = RANDOM_PACKAGE.getDescription().getVersion();
     PluginManager PLUGIN_MANAGER = Bukkit.getPluginManager();
+    Server SERVER = Bukkit.getServer();
     Random RANDOM = new Random();
 
     BukkitScheduler SCHEDULER = Bukkit.getScheduler();

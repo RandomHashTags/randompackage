@@ -1,14 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.addon.file.FileShopCategory;
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.event.ShopSellEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.addon.file.FileShopCategory;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -95,9 +96,9 @@ public class Shop extends RPFeature implements CommandExecutor {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int r = event.getRawSlot();
-                final String cl = event.getClick().name();
+                final String clickType = event.getClick().name();
                 final ItemStack c = event.getCurrentItem();
-                if(r < 0 || r >= top.getSize() || !cl.contains("LEFT") && !cl.contains("RIGHT") || c == null) return;
+                if(r < 0 || r >= top.getSize() || !clickType.contains("LEFT") && !clickType.contains("RIGHT") || c == null) return;
 
                 if(c.equals(back)) {
                     view(player);
@@ -105,92 +106,24 @@ public class Shop extends RPFeature implements CommandExecutor {
                     Bukkit.broadcastMessage("[RandomPackage] An Economy plugin is required to use /shop!");
                     player.closeInventory();
                 } else {
-                    final ShopItem si = s.getItem(r);
-                    if(si != null) {
-                        final String o = si.opensCategory;
+                    final ShopItem shopItem = s.getItem(r);
+                    if(shopItem != null) {
+                        final String o = shopItem.opensCategory;
                         if(o != null) {
                             player.closeInventory();
                             viewCategory(player, o);
-                        } else {
-                            final BigDecimal discount = getDiscount(player), buy = si.buyPrice, sell = si.sellPrice;
-                            if(cl.endsWith("LEFT")) {
-                                if(buy.doubleValue() > 0.00) {
-                                    BigDecimal cost = buy, dis = discount.multiply(buy);
-                                    cost = cost.subtract(dis);
-                                    final ItemStack is = si.getPurchased().clone();
-                                    int amountPurchased = cl.equals("LEFT") ? 1 : is.getMaxStackSize();
-                                    cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
-                                    item = is;
-                                    item.setAmount(is.getAmount()*amountPurchased);
-                                    final ShopPurchaseEvent e = new ShopPurchaseEvent(player, si, item, amountPurchased, cost);
-                                    PLUGIN_MANAGER.callEvent(e);
-                                    if(e.isCancelled()) return;
-                                    cost = e.getTotal();
-                                    amountPurchased = e.getAmount();
-                                    item = is;
-                                    item.setAmount(is.getAmount());
-                                    boolean purchased = false;
-                                    if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
-                                        purchased = true;
-                                        giveItem(player, item);
-
-                                    }
-                                    playSound(config, "sounds." + (purchased ? "buy" : "not enough balance"), player, player.getLocation(), false);
-                                    final HashMap<String, String> replacements = new HashMap<>();
-                                    replacements.put("{PRICE}", formatBigDecimal(buy));
-                                    replacements.put("{TOTAL}", formatBigDecimal(cost));
-                                    replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
-                                    replacements.put("{ITEM}", item.getType().name());
-                                    sendStringListMessage(player, getStringList(config, "messages.purchase" + (purchased ? "" : " incomplete")), replacements);
-                                } else {
-                                    playSound(config, "sounds.not buyable", player, player.getLocation(), false);
-                                }
-                            } else if(cl.endsWith("RIGHT")) {
-                                if(sell.doubleValue() > 0.00) {
-                                    ItemStack A = si.getPurchased().clone();
-                                    final Inventory inv = player.getInventory();
-                                    String p = "messages.sell" + (!inv.containsAtLeast(A, 1) ? " incomplete" : "");
-                                    final BigDecimal price = si.sellPrice;
-                                    int amountSold = cl.equals("RIGHT") ? A.getAmount() : A.getMaxStackSize();
-
-                                    if(!inv.containsAtLeast(A, 1)) {
-                                        playSound(config, "sounds.not enough to sell", player, player.getLocation(), false);
-                                    } else {
-                                        final int has = getTotalAmount(inv, UMaterial.match(A));
-                                        amountSold = Math.min(has, amountSold);
-                                        if(inv.containsAtLeast(A, amountSold)) {
-                                            BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
-                                            final ShopSellEvent e = new ShopSellEvent(player, si, A, amountSold, profit);
-                                            PLUGIN_MANAGER.callEvent(e);
-                                            if(e.isCancelled()) return;
-                                            A = e.getItem();
-                                            profit = e.getTotal();
-                                            amountSold = e.getAmount();
-                                            eco.depositPlayer(player, profit.doubleValue());
-                                            removeItem(player, A, amountSold);
-                                        } else {
-                                            p = "messages.sell incomplete";
-                                        }
-                                    }
-                                    final String n = UMaterial.match(A).name(), pr = formatBigDecimal(price), amts = formatInt(amountSold), ttl = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
-                                    for(String string : config.getStringList(p)) {
-                                        if(string.contains("{TOTAL}")) string = string.replace("{TOTAL}", ttl);
-                                        if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", amts);
-                                        if(string.contains("{PRICE}")) string = string.replace("{PRICE}", pr);
-                                        if(string.contains("{ITEM}")) string = string.replace("{ITEM}", n);
-                                        player.sendMessage(colorize(string));
-                                    }
-                                } else {
-                                    playSound(config, "sounds.not sellable", player, player.getLocation(), false);
-                                }
-                            }
+                        } else if(clickType.endsWith("LEFT")) {
+                            tryPurchasing(player, shopItem, clickType);
+                        } else if(clickType.endsWith("RIGHT")) {
+                            trySelling(player, shopItem, clickType);
                         }
                     }
                 }
             }
         }
 	}
-	public void view(Player player) {
+
+	public void view(@NotNull Player player) {
 	    if(hasPermission(player, "RandomPackage.shop", true)) {
             player.closeInventory();
             final UInventory inv = getShopCategory(defaultShop).getInventory();
@@ -199,7 +132,7 @@ public class Shop extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
 	}
-	public void viewCategory(Player player, String identifier) {
+	public void viewCategory(@NotNull Player player, @NotNull String identifier) {
 	    final ShopCategory s = getShopCategory(identifier);
 	    if(player != null && s != null) {
 	        player.closeInventory();
@@ -210,7 +143,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 
             final BigDecimal discount = getDiscount(player), one = BigDecimal.ONE;
 
-            final List<String> buylore = config.getStringList("lores.purchase"), selllore = config.getStringList("lores.sell");
+            final List<String> buylore = getStringList(config, "lores.purchase"), selllore = getStringList(config, "lores.sell");
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null && !item.equals(back)) {
@@ -225,7 +158,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                         buy = true;
                         for(String string : buylore) {
                             if(string.contains("{BUY}")) string = string.replace("{BUY}", b);
-                            lore.add(colorize(string));
+                            lore.add(string);
                         }
                     }
                     if(sellPrice.doubleValue() > 0.00) {
@@ -233,15 +166,15 @@ public class Shop extends RPFeature implements CommandExecutor {
                         sell = true;
                         for(String string : selllore) {
                             if(string.contains("{SELL}")) string = string.replace("{SELL}", ss);
-                            lore.add(colorize(string));
+                            lore.add(string);
                         }
                     }
                     final String single = Integer.toString(item.getAmount()), shift = Integer.toString(item.getMaxStackSize());
-                    for(String q : new String[]{"LEFT", "RIGHT"}) {
-                        if(q.equals("LEFT") && buy || q.equals("RIGHT") && sell) {
-                            for(String string : config.getStringList("lores." + q.toLowerCase() + " clicks")) {
-                                string = string.replace("{" + q + "_CLICK}", single).replace("{SHIFT_" + q + "_CLICK}", shift);
-                                lore.add(colorize(string));
+                    for(String type : new String[]{"LEFT", "RIGHT"}) {
+                        if(type.equals("LEFT") && buy || type.equals("RIGHT") && sell) {
+                            for(String string : getStringList(config, "lores." + type.toLowerCase() + " clicks")) {
+                                string = string.replace("{" + type + "_CLICK}", single).replace("{SHIFT_" + type + "_CLICK}", shift);
+                                lore.add(string);
                             }
                         }
                     }
@@ -251,6 +184,87 @@ public class Shop extends RPFeature implements CommandExecutor {
                 }
             }
             player.updateInventory();
+        }
+    }
+
+    public void tryPurchasing(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
+        final BigDecimal buy = shopItem.buyPrice, discount = getDiscount(player);
+        if(buy.doubleValue() > 0.00) {
+            BigDecimal cost = buy, dis = discount.multiply(buy);
+            cost = cost.subtract(dis);
+            final ItemStack is = shopItem.getPurchased();
+            int amountPurchased = clickType.equals("LEFT") ? 1 : is.getMaxStackSize();
+            cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
+            item = is;
+            item.setAmount(is.getAmount()*amountPurchased);
+            final ShopPurchaseEvent e = new ShopPurchaseEvent(player, shopItem, item, amountPurchased, cost);
+            PLUGIN_MANAGER.callEvent(e);
+            if(e.isCancelled()) return;
+            cost = e.getTotal();
+            amountPurchased = e.getAmount();
+            item = is;
+            item.setAmount(is.getAmount());
+            boolean purchased = false;
+            if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
+                purchased = true;
+                giveItem(player, item);
+                final List<String> commands = shopItem.getExecutedCommands();
+                if(commands != null) {
+                    final String name = player.getName();
+                    for(String s : commands) {
+                        SERVER.dispatchCommand(CONSOLE, s.replace("%player%", name));
+                    }
+                }
+            }
+            playSound(config, "sounds." + (purchased ? "buy" : "not enough balance"), player, player.getLocation(), false);
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{PRICE}", formatBigDecimal(buy));
+            replacements.put("{TOTAL}", formatBigDecimal(cost));
+            replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
+            replacements.put("{ITEM}", item.getType().name());
+            sendStringListMessage(player, getStringList(config, "messages.purchase" + (purchased ? "" : " incomplete")), replacements);
+        } else {
+            playSound(config, "sounds.not buyable", player, player.getLocation(), false);
+        }
+    }
+    public void trySelling(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
+        final BigDecimal sell = shopItem.sellPrice;
+        if(sell.doubleValue() > 0.00) {
+            ItemStack A = shopItem.getPurchased();
+            final Inventory inv = player.getInventory();
+            String msg = "messages.sell" + (!inv.containsAtLeast(A, 1) ? " incomplete" : "");
+            final BigDecimal price = shopItem.sellPrice;
+            int amountSold = clickType.equals("RIGHT") ? A.getAmount() : A.getMaxStackSize();
+
+            if(!inv.containsAtLeast(A, 1)) {
+                playSound(config, "sounds.not enough to sell", player, player.getLocation(), false);
+            } else {
+                final int has = getTotalAmount(inv, UMaterial.match(A));
+                amountSold = Math.min(has, amountSold);
+                if(inv.containsAtLeast(A, amountSold)) {
+                    BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
+                    final ShopSellEvent e = new ShopSellEvent(player, shopItem, A, amountSold, profit);
+                    PLUGIN_MANAGER.callEvent(e);
+                    if(e.isCancelled()) return;
+                    A = e.getItem();
+                    profit = e.getTotal();
+                    amountSold = e.getAmount();
+                    eco.depositPlayer(player, profit.doubleValue());
+                    removeItem(player, A, amountSold);
+                } else {
+                    msg = "messages.sell incomplete";
+                }
+            }
+            final String item = UMaterial.match(A).name(), priceString = formatBigDecimal(price), amount = formatInt(amountSold), total = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
+            final HashMap<String, String> replacements = new HashMap<String, String>() {{
+                put("{TOTAL", total);
+                put("{AMOUNT}", amount);
+                put("{PRICE}", priceString);
+                put("{ITEM}", item);
+            }};
+            sendStringListMessage(player, config.getStringList(msg), replacements);
+        } else {
+            playSound(config, "sounds.not sellable", player, player.getLocation(), false);
         }
     }
 }

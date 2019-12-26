@@ -44,7 +44,7 @@ public class FileShopCategory extends ShopCategory {
                         purchased.setAmount(display.getAmount());
                     }
                     final int slot = yml.getInt("gui." + s + ".slot");
-                    items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? BigDecimal.valueOf(Double.parseDouble(o[0])) : zero, o != null ? BigDecimal.valueOf(Double.parseDouble(o[1])): zero));
+                    items.add(new ShopItem(s, slot, yml.getString("gui." + s + ".opens"), display, purchased, o != null ? BigDecimal.valueOf(Double.parseDouble(o[0])) : zero, o != null ? BigDecimal.valueOf(Double.parseDouble(o[1])): zero, yml.getStringList("gui." + s + ".commands")));
                     ii.setItem(slot, display);
                 }
             }
