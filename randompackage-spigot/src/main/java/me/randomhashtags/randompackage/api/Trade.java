@@ -36,7 +36,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 	protected int radius, countdown;
 	private String title;
 	private UInventory tradeInventory;
-	protected ItemStack divider, accept, accepting;
+	public ItemStack divider, accept, accepting;
 
 	private HashMap<UUID, UUID> requests;
 	private List<String> blacklistedMaterials;
@@ -86,6 +86,8 @@ public class Trade extends RPFeature implements CommandExecutor {
 	public void unload() {
 		ActiveTrade.trades = null;
 	}
+
+	public int getCountdown() { return countdown; }
 
 	public void sendRequest(@NotNull Player sender, String receiver) {
 		final HashMap<String, String> r = new HashMap<>();

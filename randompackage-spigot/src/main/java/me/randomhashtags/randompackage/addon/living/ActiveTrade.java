@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import com.sun.istack.internal.NotNull;
-import me.randomhashtags.randompackage.api.Trade;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ActiveTrade extends Trade {
+import static me.randomhashtags.randompackage.api.Trade.getTrade;
+
+public class ActiveTrade implements UVersionable {
     public static List<ActiveTrade> trades;
 
     private List<Integer> tasks;
@@ -105,6 +107,7 @@ public class ActiveTrade extends Trade {
         successful = accepted;
         if(accepted) {
             countingDown = true;
+            final int countdown = getTrade().getCountdown();
             setCountdown(true, countdown);
             for(int i = 1; i <= countdown; i++) {
                 final int integer = i;
@@ -124,7 +127,7 @@ public class ActiveTrade extends Trade {
 
     private void setCountdown(boolean setAccepting, int integer) {
         final Inventory top = sender.getOpenInventory().getTopInventory(), t = receiver.getOpenInventory().getTopInventory();
-        final ItemStack i = (setAccepting ? accepting : accept).clone();
+        final ItemStack i = (setAccepting ? getTrade().accepting : getTrade().accept).clone();
         i.setAmount(integer);
         top.setItem(0, i);
         top.setItem(8, i);
@@ -143,7 +146,7 @@ public class ActiveTrade extends Trade {
             senderReady = false;
             receiverReady = false;
 
-            setCountdown(false, 1);
+            setCountdown(false, getTrade().getCountdown());
         }
     }
 
