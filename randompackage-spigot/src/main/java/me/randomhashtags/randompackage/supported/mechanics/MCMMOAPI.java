@@ -5,6 +5,7 @@ import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
 import me.randomhashtags.randompackage.util.Reflect;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -69,7 +70,9 @@ public final class MCMMOAPI extends Reflect {
 		return null;
 	}
 	public String getSkillName(String skill) {
-		if(skill.equalsIgnoreCase("random")) skill = getRandomSkill();
+		if(skill.equalsIgnoreCase("random")) {
+			skill = getRandomSkill();
+		}
 		final String a = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase().replace("_skills", ""));
 		return a != null ? colorize(a) : null;
 	}
@@ -101,10 +104,14 @@ public final class MCMMOAPI extends Reflect {
 	}
 
 	public void addRawXP(Player player, String skill, int xp) {
-		ExperienceAPI.addRawXP(player, skill, xp);
+		if(skill != null) {
+			ExperienceAPI.addRawXP(player, skill, xp);
+		}
 	}
 	public void addLevels(Player player, String skill, int levels) {
-		ExperienceAPI.addLevel(player, skill, levels);
+		if(skill != null) {
+			ExperienceAPI.addLevel(player, skill, levels);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -130,16 +137,17 @@ public final class MCMMOAPI extends Reflect {
 				final Player player = event.getPlayer();
 				int numberslot = -1, skillslot = -1;
 				final String itemtype = credit ? "credit" : level ? "level" : "xp";
-				final List<String> a = itemsConfig.getStringList("mcmmo vouchers." + itemtype + ".lore"), msg = itemsConfig.getStringList("mcmmo vouchers.messages.redeem " + itemtype);
-				for(int i = 0; i < a.size(); i++) {
-					if(a.get(i).contains("{AMOUNT}")) numberslot = i;
-					if(a.get(i).contains("{SKILL}")) skillslot = i;
+				final List<String> voucherLore = getStringList(itemsConfig, "mcmmo vouchers." + itemtype + ".lore"), msg = getStringList(itemsConfig, "mcmmo vouchers.messages.redeem " + itemtype);
+				for(int i = 0; i < voucherLore.size(); i++) {
+					final String target = voucherLore.get(i);
+					if(target.contains("{AMOUNT}")) numberslot = i;
+					if(target.contains("{SKILL}")) skillslot = i;
 				}
 				if(numberslot == -1 || skillslot == -1) return;
-				final List<String> L = m.getLore();
-				final String input = L.get(numberslot), o = colorize(itemsConfig.getStringList("mcmmo vouchers." + itemtype + ".lore").get(skillslot));
-				final String type = getSkillName(L.get(skillslot), o);
-				int xp = getRemainingInt(input);
+				final List<String> lore = m.getLore();
+				final String input = ChatColor.stripColor(lore.get(numberslot)), o = colorize(voucherLore.get(skillslot));
+				final String type = getSkillName(lore.get(skillslot), o);
+				final int xp = getRemainingInt(input);
 				event.setCancelled(true);
 				player.updateInventory();
 
@@ -149,9 +157,11 @@ public final class MCMMOAPI extends Reflect {
 				replacements.put("{SKILL}", type);
 				sendStringListMessage(player, msg, replacements);
 
-				if(xpv)        addRawXP(player, type, xp);
-				else if(level) addLevels(player, type, xp);
-				else return;
+				if(xpv) {
+					addRawXP(player, type, xp);
+				} else if(level) {
+					addLevels(player, type, xp);
+				} else return;
 				removeItem(player, it, 1);
 				playSound(itemsConfig, "mcmmo vouchers.sounds.redeem " + itemtype, player, player.getLocation(), false);
 			}

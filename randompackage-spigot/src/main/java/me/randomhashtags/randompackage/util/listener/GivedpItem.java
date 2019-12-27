@@ -276,21 +276,20 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return m != null ? m.getItem() : air;
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
             if(mcmmoIsEnabled()) {
-                final MCMMOAPI m = MCMMOAPI.getMCMMOAPI();
-                if(m.isEnabled()) {
+                final MCMMOAPI mcmmo = MCMMOAPI.getMCMMOAPI();
+                if(mcmmo.isEnabled()) {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
-                    final ItemStack i = (lvl ? items.get("mcmmolevelvoucher") : xp ? items.get("mcmmoxpvoucher") : items.get("mcmmocreditvoucher")).clone();
+                    final ItemStack i = items.get(lvl ? "mcmmolevelvoucher" : xp ? "mcmmoxpvoucher" : "mcmmocreditvoucher").clone();
                     final String[] a = input.split(":");
-                    final String sk = a[1];
-                    final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(sk);
+                    final String skill = a[1];
                     final boolean r = a[2].contains("-");
-                    final int min = r ? Integer.parseInt(a[2].split("-")[0]) : Integer.parseInt(a[2]), amt = r ? min+ RANDOM.nextInt(Integer.parseInt(a[2].split("-")[1])-min+1) : min;
+                    final int min = r ? Integer.parseInt(a[2].split("-")[0]) : Integer.parseInt(a[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(a[2].split("-")[1])-min+1) : min;
                     final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
-                    final String n = name != null ? ChatColor.translateAlternateColorCodes('&', name) : "UNKNOWN";
+                    final String n = name != null ? colorize(name) : "UNKNOWN";
                     itemMeta = i.getItemMeta();
                     lore.clear();
                     for(String s : itemMeta.getLore()) {
-                        lore.add(s.replace("{AMOUNT}", Integer.toString(amt)).replace("{SKILL}", n));
+                        lore.add(s.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", n));
                     }
                     itemMeta.setLore(lore); lore.clear();
                     i.setItemMeta(itemMeta);

@@ -24,6 +24,8 @@ supported plugins:
 #
 chat cmds:
   # Supports PlaceholderAPI!
+  # {DISPLAYNAME} = the player's display name
+  # {MESSAGE} = the player's sent message
   format: "%factionsuuid_faction_name% {DISPLAYNAME}%randompackage_title_chat%&r: {MESSAGE}"
   brag:
     enabled: true

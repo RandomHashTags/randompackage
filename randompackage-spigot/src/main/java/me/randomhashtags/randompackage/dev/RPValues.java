@@ -359,8 +359,9 @@ public interface RPValues extends UVersionable {
         if(is != null && is.hasItemMeta()) {
             for(Mask m : getAllMasks().values()) {
                 final ItemStack i = m.getItem();
-                if(i.isSimilar(is))
+                if(is.isSimilar(i)) {
                     return m;
+                }
             }
         }
         return null;

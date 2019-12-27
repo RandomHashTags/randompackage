@@ -10,12 +10,6 @@ armor lore:
   - "&4&l*&r &4Enemy arrows deal 10% more damage to you."
   - "&4&l*&r &4+200% Clout"
   - "&7&o(Requires all 4 supreme items.)"
-weapon lore:
-  - " "
-  - "&4&lSUPREME WEAPON BONUS"
-  - "&4Deal +20% damage to all enemies"
-  - "&4Enemies deal 10% less damage to you"
-  - "&7&o(Requires all 4 supreme items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -54,16 +48,23 @@ boots:
   - "&c&oSupreme boots capable of"
   - "&c&oconverting clout into flight."
 #
-weapon:
-  item: "diamond_sword"
-  name: "&4&lSupreme Fanny Pack"
-  lore:
-    - "VEnchants{Sharpness5;Unbreaking3}"
-    - "RPEnchants{Reflective Block}"
-    - "&7They laughed at you, they"
-    - "&7told you a fanny pack is not"
-    - "&7a practical piece of clothing..."
-    - "&7now they will pay for their ignorance!"
+weapons:
+  sword:
+    item: "diamond_sword"
+    name: "&4&lSupreme Fanny Pack"
+    lore:
+      - "VEnchants{Sharpness5;Unbreaking3}"
+      - "RPEnchants{Reflective Block}"
+      - "&7They laughed at you, they"
+      - "&7told you a fanny pack is not"
+      - "&7a practical piece of clothing..."
+      - "&7now they will pay for their ignorance!"
+    set lore:
+      - " "
+      - "&4&lSUPREME WEAPON BONUS"
+      - "&4Deal +20% damage to all enemies"
+      - "&4Enemies deal 10% less damage to you"
+      - "&7&o(Requires all 4 supreme items.)"
 #
 crystal perks:
   - "  &4&l*&r &4+3% DMG"
@@ -77,7 +78,7 @@ attributes:
     - "FoodLevelLost;cancel"
     - "PvAny;SetDamage=dmg*1.15"
     - "HitByArrow;setDamage{dmg*1.10}"
-  weapon:
+  sword:
     - "PvAny;SetDamage=dmg*1.20"
     - "isDamaged=SetDamage=dmg*0.90"
   crystal:

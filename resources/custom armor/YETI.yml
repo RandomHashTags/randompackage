@@ -7,13 +7,6 @@ armor lore:
   - "&b&l*&r &bDeal +10% damage to all enemies."
   - "&b&l*&r &bEnemies deal 10% less damage to you."
   - "&7&o(Requires all 4 yeti items.)"
-weapon lore:
-  - " "
-  - "&b&lYETI WEAPON BONUS"
-  - "&bDeal +75% Durability Damage"
-  - "&bDeal +7.5% DMG to enemies"
-  - "&bBypass 50% of Heroic Armor"
-  - "&7&o(Requires all 4 yeti items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -47,19 +40,27 @@ boots:
   - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape;Ender Walker;Repair Guard;Hardened;Valor;Angelic}"
   - "&bBigfoot has nothing on these boots."
 #
-weapon:
-  item: "diamond_axe"
-  name: "&b&lYeti Maul"
-  lore:
-    - "VEnchants{Sharpness5;Unbreaking3}"
-    - "RPEnchants{Lifesteal;Silence}"
-    - "&7A penetrating axe used by a Yeti."
+weapons:
+  axe:
+    item: "diamond_axe"
+    name: "&b&lYeti Maul"
+    lore:
+      - "VEnchants{Sharpness5;Unbreaking3}"
+      - "RPEnchants{Lifesteal;Silence}"
+      - "&7A penetrating axe used by a Yeti."
+    set lore:
+      - " "
+      - "&b&lYETI WEAPON BONUS"
+      - "&bDeal +75% Durability Damage"
+      - "&bDeal +7.5% DMG to enemies"
+      - "&bBypass 50% of Heroic Armor"
+      - "&7&o(Requires all 4 yeti items.)"
 #
 attributes:
   armor:
     - "PvAny;SetDamage=dmg*1.10"
     - "isDamaged;SetDamage=dmg*0.90"
-  weapon:
+  axe:
     - "PvAny;SetDamage=dmg*1.075"
   crystal:
     - "PvAny;SetDamage=dmg*1.025"

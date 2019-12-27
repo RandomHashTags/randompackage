@@ -232,13 +232,19 @@ public interface UVersionable extends Versionable {
     }
     default void sendStringListMessage(CommandSender sender, List<String> message, HashMap<String, String> replacements) {
         if(message != null && message.size() > 0 && !message.get(0).equals("")) {
+            final boolean papi = RANDOM_PACKAGE.placeholderapi, isPlayer = sender instanceof Player;
+            final Player player = isPlayer ? (Player) sender : null;
             for(String s : message) {
                 if(replacements != null) {
                     for(String r : replacements.keySet()) {
-                        s = s.replace(r, replacements.get(r));
+                        final String replacement = replacements.get(r);
+                        s = s.replace(r, replacement != null ? replacement : "null");
                     }
                 }
                 if(s != null) {
+                    if(papi && isPlayer) {
+                        s = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, s);
+                    }
                     sender.sendMessage(colorize(s));
                 }
             }

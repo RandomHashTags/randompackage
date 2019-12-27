@@ -46,16 +46,16 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 			final ConfigurationSection c = yml.getConfigurationSection("weapons");
 			if(c != null) {
 				for(String s : c.getKeys(false)) {
-					weapons.add(new ArmorSetWeaponInfo(s, api.d(yml, "weapons." + s), colorizeListString(yml.getStringList("weapons." + s + ".set lore")), yml.getStringList("weapons." + s + ".attributes")));
+					weapons.add(new ArmorSetWeaponInfo(s, api.d(yml, "weapons." + s), colorizeListString(yml.getStringList("weapons." + s + ".set lore")), yml.getStringList("attributes." + s)));
 				}
 			}
 		}
 		return weapons;
 	}
-	public List<String> getArmorLore() { return colorizeListString(yml.getStringList("armor lore")); }
-	public List<String> getCrystalPerks() { return colorizeListString(yml.getStringList("crystal perks")); }
-	public List<String> getArmorAttributes() { return yml.getStringList("attributes.armor"); }
-	public List<String> getCrystalAttributes() { return yml.getStringList("attributes.crystal"); }
-	public List<String> getActivateMessage() { return colorizeListString(yml.getStringList("activate message")); }
-	public List<String> getCrystalAppliedMsg() { return colorizeListString(yml.getStringList("crystal applied msg")); }
+	public List<String> getArmorLore() { return getStringList(yml, "armor lore"); }
+	public List<String> getCrystalPerks() { return getStringList(yml, "crystal perks"); }
+	public List<String> getArmorAttributes() { return getStringList(yml, "attributes.armor"); }
+	public List<String> getCrystalAttributes() { return getStringList(yml, "attributes.crystal"); }
+	public List<String> getActivateMessage() { return getStringList(yml, "activate message"); }
+	public List<String> getCrystalAppliedMsg() { return getStringList(yml, "crystal applied msg"); }
 }

@@ -6,11 +6,6 @@ armor lore:
   - "&c&lPHANTOM SET BONUS"
   - "&cDeal +25% damage to all enemies."
   - "&7&o(Requires all 4 phantom items.)"
-weapon lore:
-  - " "
-  - "&c&lPHANTOM WEAPON BONUS"
-  - "&cDeal +10% damage to all enemies."
-  - "&7&o(Requires all 4 phantom items.)"
 #
 helmet:
   item: "diamond_helmet"
@@ -44,18 +39,24 @@ boots:
   - "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape}"
   - "&cThe silent sandals of the Phantom."
 #
-weapon:
-  item: "diamond_sword"
-  name: "&c&lPhantom Scythe"
-  lore:
-    - "VEnchants{Sharpness5;Unbreaking3}"
-    - "&7An eerie blade designed to"
-    - "&7cut through the enemies."
+weapons:
+  sword:
+    item: "diamond_sword"
+    name: "&c&lPhantom Scythe"
+    lore:
+      - "VEnchants{Sharpness5;Unbreaking3}"
+      - "&7An eerie blade designed to"
+      - "&7cut through the enemies."
+    set lore:
+      - " "
+      - "&c&lPHANTOM WEAPON BONUS"
+      - "&cDeal +10% damage to all enemies."
+      - "&7&o(Requires all 4 phantom items.)"
 #
 attributes:
   armor:
     - "PvAny;SetDamage=dmg*1.25"
-  weapon:
+  sword:
     - "PvAny;SetDamage=dmg*1.10"
   crystal:
     - "PvAny;SetDamage=dmg*1.05"
