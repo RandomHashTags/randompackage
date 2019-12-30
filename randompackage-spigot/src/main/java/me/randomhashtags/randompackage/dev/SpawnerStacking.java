@@ -92,7 +92,7 @@ public class SpawnerStacking extends RPFeature {
                 stacks.put(toLocation(s), new StackedSpawner(EntityType.valueOf(values[0]), Integer.parseInt(values[1])));
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners &e(took " + (System.currentTimeMillis()-started) +"ms)" + (async ? " [async]" : ""));
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void backup() {
         data.set("locations", null);

@@ -27,6 +27,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 
@@ -115,6 +116,17 @@ public interface UVersionable extends Versionable {
         return level <= 16 ? (level * level) + (level * 6) : level <= 31 ? (2.5 * level * level) - (40.5 * level) + 360 : (4.5 * level * level) - (162.5 * level) + 2220;
     }
 
+    default String getRemainingTime(long time) {
+        int sec = (int) TimeUnit.MILLISECONDS.toSeconds(time), min = sec/60, hr = min/60, d = hr/24;
+        hr -= d*24;
+        min -= (hr*60)+(d*60*24);
+        sec -= (min*60)+(hr*60*60)+(d*60*60*24);
+        final String dys = d > 0 ? d + "d" + (hr != 0 ? " " : "") : "";
+        final String hrs = hr > 0 ? hr + "h" + (min != 0 ? " " : "") : "";
+        final String mins = min != 0 ? min + "m" + (sec != 0 ? " " : "") : "";
+        final String secs = sec != 0 ? sec + "s" : "";
+        return dys + hrs + mins + secs;
+    }
     default void sendConsoleMessage(String msg) {
         CONSOLE.sendMessage(colorize(msg));
     }

@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
+import me.randomhashtags.randompackage.dev.SlotBot;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
@@ -321,6 +322,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("servercrateflare:") || input.startsWith("serverflare:") || input.startsWith("spaceflare:")) {
             final ServerCrate c = getServerCrate(Q.split(":")[1]);
             return c != null ? c.getFlare().getItem() : air;
+        } else if(input.equals("slotbotticket")) {
+            final SlotBot bot = SlotBot.getSlotBot();
+            return bot.isEnabled() ? bot.ticket.clone() : air;
         } else if(input.startsWith("soultracker:")) {
             final SoulTracker s = getSoulTracker(Q.split(":")[1]);
             return s != null ? s.getItem() : air;
@@ -409,7 +413,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final Player player = event.getPlayer();
             if(i.isSimilar(items.get("mysterymobspawner"))) {
                 event.setCancelled(true);
-                final List<String> s = itemsConfig.getStringList("mystery mob spawner.reward"), receivemsg = colorizeListString(itemsConfig.getStringList("mystery mob spawner.receive message"));
+                final List<String> s = getStringList(itemsConfig, "mystery mob spawner.reward"), receivemsg = colorizeListString(getStringList(itemsConfig, "mystery mob spawner.receive message"));
                 final String spawner = s.get(RANDOM.nextInt(s.size()));
                 final MysteryMobSpawnerOpenEvent e = new MysteryMobSpawnerOpenEvent(player, spawner);
                 PLUGIN_MANAGER.callEvent(e);
@@ -420,23 +424,25 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     player.updateInventory();
                     if(!receivemsg.isEmpty()) {
                         final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner"), n = player.getName();
-                        for(String a : receivemsg) Bukkit.broadcastMessage(a.replace("{PLAYER}", n).replace("{TYPE}", type));
+                        for(String a : receivemsg) {
+                            Bukkit.broadcastMessage(a.replace("{PLAYER}", n).replace("{TYPE}", type));
+                        }
                     }
                 }
             } else if(i.isSimilar(items.get("itemnametag"))) {
                 if(itemnametag.contains(player)) {
-                    sendStringListMessage(player, itemsConfig.getStringList("item name tag.already in rename process"), null);
+                    sendStringListMessage(player, getStringList(itemsConfig, "item name tag.already in rename process"), null);
                 } else {
                     itemnametag.add(player);
-                    sendStringListMessage(player, itemsConfig.getStringList("item name tag.enter rename"), null);
+                    sendStringListMessage(player, getStringList(itemsConfig, "item name tag.enter rename"), null);
                     removeItem(player, i, 1);
                 }
             } else if(i.isSimilar(items.get("itemlorecrystal"))) {
                 if(itemlorecrystal.contains(player)) {
-                    sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.already in process"), null);
+                    sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.already in process"), null);
                 } else {
                     itemlorecrystal.add(player);
-                    sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.enter addlore"), null);
+                    sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.enter addlore"), null);
                     removeItem(player, i, 1);
                 }
             } else if(i.isSimilar(items.get("explosivesnowball"))) {
@@ -475,10 +481,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         if(itemnametag.contains(player)) {
             itemnametag.remove(player);
             event.setCancelled(true);
-            final String message = ChatColor.translateAlternateColorCodes('&', msg);
+            final String message = colorize(msg);
             item = getItemInHand(player);
             if(item == null || item.getType().equals(Material.AIR)) {
-                sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename air"), null);
+                sendStringListMessage(player, getStringList(itemsConfig, "item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
             } else if(isEquipment(item)) {
                 final ItemNameTagUseEvent e = new ItemNameTagUseEvent(player, item, message);
@@ -490,22 +496,22 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     item.setItemMeta(itemMeta);
                     player.updateInventory();
                     playSound(itemsConfig, "item name tag.sounds.rename item", player, player.getLocation(), false);
-                    for(String string : itemsConfig.getStringList("item name tag.rename item")) {
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', string.replace("{NAME}", name)));
+                    for(String string : getStringList(itemsConfig, "item name tag.rename item")) {
+                        player.sendMessage(colorize(string.replace("{NAME}", name)));
                     }
                 }
             } else {
-                sendStringListMessage(player, itemsConfig.getStringList("item name tag.cannot rename item"), null);
+                sendStringListMessage(player, getStringList(itemsConfig, "item name tag.cannot rename item"), null);
                 playSound(itemsConfig, "item name tag.sounds.cannot rename item", player, player.getLocation(), false);
                 giveItem(player, items.get("itemnametag").clone());
             }
         } else if(itemlorecrystal.contains(player)) {
-            String apply = ChatColor.translateAlternateColorCodes('&', itemsConfig.getString("item lore crystal.apply"));
+            String apply = colorize(itemsConfig.getString("item lore crystal.apply"));
             item = getItemInHand(player);
             event.setCancelled(true);
             itemlorecrystal.remove(player);
             if(item == null || item.getType().equals(Material.AIR)) {
-                sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.cannot addlore air"), null);
+                sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.cannot addlore air"), null);
                 giveItem(player, items.get("itemlorecrystal").clone());
             } else if(isEquipment(item)) {
                 final String message = ChatColor.stripColor(msg);
@@ -530,10 +536,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     itemMeta.setLore(lore); lore.clear();
                     item.setItemMeta(itemMeta);
                     player.updateInventory();
-                    sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.add lore"), new HashMap<String, String>(){{ put("{LORE}", message); }});
+                    sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.add lore"), new HashMap<String, String>(){{ put("{LORE}", message); }});
                 }
             } else {
-                sendStringListMessage(player, itemsConfig.getStringList("item lore crystal.cannot addlore item"), null);
+                sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.cannot addlore item"), null);
                 giveItem(player, items.get("itemlorecrystal").clone());
             }
         }

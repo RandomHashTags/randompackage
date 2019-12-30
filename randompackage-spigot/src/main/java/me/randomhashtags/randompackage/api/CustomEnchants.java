@@ -63,6 +63,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
+    private HashMap<Player, List<CustomEnchant>> equippedTimedEnchants;
 
     public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -244,9 +245,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final File folder = new File(p);
 
         playerEnchants = new HashMap<>();
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            getEnchants(player);
-        }
+        equippedTimedEnchants = new HashMap<>();
 
         if(folder.exists()) {
             for(File f : folder.listFiles()) {
@@ -272,8 +271,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                         if(l.equals("customenchanttimer")) {
                                             final int ticks = (int) evaluate(split[1].split("=")[1]);
                                             final int id = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
-                                                final Collection<? extends Player> online = Bukkit.getOnlinePlayers();
-                                                for(Player player : online) {
+                                                for(Player player : equippedTimedEnchants.keySet()) {
                                                     final EquippedCustomEnchants enchants = getEnchants(player);
                                                     final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchant = enchants.getInfo();
                                                     if(!enchant.isEmpty()) {
@@ -294,6 +292,27 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         }
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            final EquippedCustomEnchants equipped = getEnchants(player);
+            for(EquipmentSlot slot : EQUIPMENT_SLOTS) {
+                if(slot != null) {
+                    final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
+                    final List<CustomEnchant> timedEnchantments = new ArrayList<>();
+                    if(enchants != null) {
+                        for(CustomEnchant enchant : enchants.keySet()) {
+                            if(timedEnchants.containsKey(enchant)) {
+                                timedEnchantments.add(enchant);
+                            }
+                        }
+                        if(!timedEnchantments.isEmpty()) {
+                            equippedTimedEnchants.put(player, timedEnchantments);
+                        }
+                    }
+                }
+            }
+        }
+
         sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
         createCustomEnchantEntities();

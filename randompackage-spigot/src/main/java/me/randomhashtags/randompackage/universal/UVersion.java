@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
@@ -90,17 +89,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
             }
         } else e = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
         return e;
-    }
-    public final String getRemainingTime(long time) {
-        int sec = (int) TimeUnit.MILLISECONDS.toSeconds(time), min = sec/60, hr = min/60, d = hr/24;
-        hr -= d*24;
-        min -= (hr*60)+(d*60*24);
-        sec -= (min*60)+(hr*60*60)+(d*60*60*24);
-        final String dys = d > 0 ? d + "d" + (hr != 0 ? " " : "") : "";
-        final String hrs = hr > 0 ? hr + "h" + (min != 0 ? " " : "") : "";
-        final String mins = min != 0 ? min + "m" + (sec != 0 ? " " : "") : "";
-        final String secs = sec != 0 ? sec + "s" : "";
-        return dys + hrs + mins + secs;
     }
     public final long getTime(String fromString) {
         long time = 0;

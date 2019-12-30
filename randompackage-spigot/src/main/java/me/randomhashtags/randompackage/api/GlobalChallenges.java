@@ -439,9 +439,6 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 	}
 
-	/*
-		Bukkit Events
-	 */
 	public void called(Event event) {
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
 		if(active != null) {
@@ -469,8 +466,11 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
 			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
 			final String[] replacements = new String[] {"xp", Float.toString(event.getRawXpGained())};
-			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-                trigger(event, entities, g.getAttributes(), replacements);
+			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+			if(active != null) {
+				for(GlobalChallenge g : active.keySet()) {
+					trigger(event, entities, g.getAttributes(), replacements);
+				}
 			}
 		}
 	}

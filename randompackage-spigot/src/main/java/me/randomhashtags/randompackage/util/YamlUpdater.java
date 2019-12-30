@@ -196,7 +196,7 @@ public abstract class YamlUpdater {
                 // 16.5.8
                 "supported plugins.regional.WorldGuard", true,
                 // 16.5.9
-                "slot bot.enabled", true,
+                "slot bot.enabled", true, // changed to "true" in 16.5.10
                 "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot")
         };
         return putAll(values);
