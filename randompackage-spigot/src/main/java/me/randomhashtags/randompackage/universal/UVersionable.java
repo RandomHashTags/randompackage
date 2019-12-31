@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.Versionable;
+import me.randomhashtags.randompackage.util.YamlUpdater;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -92,6 +93,18 @@ public interface UVersionable extends Versionable {
             messages.put(identifier, colorizeListString(yml.getStringList(identifier)));
         }
         return messages.get(identifier);
+    }
+
+    default void save(String folder, String file) {
+        final boolean hasFolder = folder != null && !folder.equals("");
+        final File f = new File(DATA_FOLDER + SEPARATOR + (hasFolder ? folder + SEPARATOR : ""), file);
+        if(!f.exists()) {
+            f.getParentFile().mkdirs();
+            RANDOM_PACKAGE.saveResource(hasFolder ? folder + SEPARATOR + file : file, false);
+        }
+        if(folder == null || !folder.equals("_Data")) {
+            YamlUpdater.INSTANCE.updateYaml(folder, f);
+        }
     }
 
     default ItemStack getClone(ItemStack is) {

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.attributesys;
 import me.randomhashtags.randompackage.attribute.*;
 import me.randomhashtags.randompackage.attribute.condition.*;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 
 import java.util.Arrays;
 import java.util.List;

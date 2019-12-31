@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 

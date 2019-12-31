@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Trinket;
+import me.randomhashtags.randompackage.addon.file.FileTrinket;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
-import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.addon.file.FileTrinket;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -40,16 +40,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         final long started = System.currentTimeMillis();
         save("trinkets", "_settings.yml");
         if(!otherdata.getBoolean("saved default trinkets")) {
-            final String[] a = new String[] {
-                    "BATTLESTAFF_OF_YIJKI",
-                    "EMP_PULSE",
-                    "FACTION_BANNER",
-                    "PHOENIX_FEATHER",
-                    "SOUL_ANVIL",
-                    "SOUL_PEARL",
-                    "SPEED"
-            };
-            for(String s : a) save("trinkets", s + ".yml");
+            generateDefaultTrinkets();
             otherdata.set("saved default trinkets", true);
             saveOtherData();
         }

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
+import me.randomhashtags.randompackage.util.DefaultConfiguration;
 import me.randomhashtags.randompackage.util.Versionable;
 import me.randomhashtags.randompackage.util.YamlUpdater;
 import org.bukkit.*;
@@ -27,7 +28,7 @@ import java.util.Set;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
 
-public class UVersion extends YamlUpdater implements Versionable, UVersionable {
+public class UVersion extends YamlUpdater implements Versionable, UVersionable, DefaultConfiguration {
     private static UVersion instance;
     public static UVersion getUVersion() {
         if(instance == null) instance = new UVersion();
@@ -38,17 +39,6 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable {
     public ItemMeta itemMeta = item.getItemMeta();
     public List<String> lore = new ArrayList<>();
 
-    public final void save(String folder, String file) {
-        final boolean hasFolder = folder != null && !folder.equals("");
-        final File f = new File(DATA_FOLDER + SEPARATOR + (hasFolder ? folder + SEPARATOR : ""), file);
-        if(!f.exists()) {
-            f.getParentFile().mkdirs();
-            RANDOM_PACKAGE.saveResource(hasFolder ? folder + SEPARATOR + file : file, false);
-        }
-        if(folder == null || !folder.equals("_Data")) {
-            updateYaml(folder, f);
-        }
-    }
     public final void didApply(InventoryClickEvent event, Player player, ItemStack current, ItemStack cursor) {
         event.setCancelled(true);
         final int a = cursor.getAmount();

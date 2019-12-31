@@ -61,10 +61,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		givedpitem.items.put("equipmentlootbox", equipmentLootbox);
 
 		if(!otherdata.getBoolean("saved default custom armor")) {
-			final String[] c = new String[] {"DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"};
-			for(String s : c) {
-				save("custom armor", s + ".yml");
-			}
+			generateDefaultCustomArmor();
 			otherdata.set("saved default custom armor", true);
 			saveOtherData();
 		}

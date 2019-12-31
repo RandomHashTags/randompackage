@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
 import me.randomhashtags.randompackage.attribute.EventCondition;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;

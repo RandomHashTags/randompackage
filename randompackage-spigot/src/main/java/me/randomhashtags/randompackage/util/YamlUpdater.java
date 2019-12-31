@@ -1,13 +1,15 @@
 package me.randomhashtags.randompackage.util;
 
+import com.sun.istack.internal.NotNull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
 
-public abstract class YamlUpdater {
-    protected boolean updateYaml(String folder, File file) {
+public class YamlUpdater {
+    public static YamlUpdater INSTANCE = new YamlUpdater();
+    public boolean updateYaml(@NotNull String folder, @NotNull File file) {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(folder, file);
             if(changes != null && !changes.isEmpty()) {
@@ -40,24 +42,24 @@ public abstract class YamlUpdater {
         switch (n) {
             case "_settings":
                 switch (folder) {
-                    case "conquests": return getConquests();
-                    case "custom armor": return getCustomArmor();
-                    case "custom enchants": return getCustomEnchants();
-                    case "duel arenas": return getDuels();
-                    case "dungeons": return getDungeons();
-                    case "envoy tiers": return getEnvoy();
-                    case "faction quests": return getFactionQuests();
-                    case "faction upgrades": return getFactionUpgrades();
-                    case "filter categories": return getItemFilter();
-                    case "global challenges": return getGlobalChallenges();
-                    case "kits": return getKits();
-                    case "masks": return getMasks();
-                    case "monthly crates": return getMonthlyCrates();
-                    case "outposts": return getOutposts();
-                    case "player quests": return getPlayerQuests();
-                    case "shops": return getShop();
-                    case "strongholds": return getStrongholds();
-                    case "trinkets": return getTrinkets();
+                    case "conquests": return getConquestSettings();
+                    case "custom armor": return getCustomArmorSettings();
+                    case "custom enchants": return getCustomEnchantSettings();
+                    case "duel arenas": return getDuelSettings();
+                    case "dungeons": return getDungeonSettings();
+                    case "envoy tiers": return getEnvoySettings();
+                    case "faction quests": return getFactionQuestSettings();
+                    case "faction upgrades": return getFactionUpgradeSettings();
+                    case "filter categories": return getItemFilterSettings();
+                    case "global challenges": return getGlobalChallengeSettings();
+                    case "kits": return getKitSettings();
+                    case "masks": return getMaskSettings();
+                    case "monthly crates": return getMonthlyCrateSettings();
+                    case "outposts": return getOutpostSettings();
+                    case "player quests": return getPlayerQuestSettings();
+                    case "shops": return getShopSettings();
+                    case "strongholds": return getStrongholdSettings();
+                    case "trinkets": return getTrinketSettings();
                     default: return null;
                 }
             case "auction house": return getAH();
@@ -74,7 +76,7 @@ public abstract class YamlUpdater {
             case "jackpot": return getJackpot();
             case "koth": return getKOTH();
             case "last man standing": return getLastManStanding();
-            case "lootboxes": return getLootboxes();
+            case "lootboxes": return getLootboxSettings();
             case "mob stacker": return getMobStacker();
             case "reputation": return getReputation();
             case "secondary": return getSecondary();
@@ -208,6 +210,9 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getBattleRoyale() {
         return null;
     }
+    private LinkedHashMap<String, Object> getCaptcha() {
+        return null;
+    }
     private LinkedHashMap<String, Object> getCoinFlip() {
         final Object[] values = new Object[] {
                 // 16.5.0
@@ -232,10 +237,13 @@ public abstract class YamlUpdater {
         };
         return putAll(values);
     }
-    private LinkedHashMap<String, Object> getConquests() {
+    private LinkedHashMap<String, Object> getCombine() {
         return null;
     }
-    private LinkedHashMap<String, Object> getCustomArmor() {
+    private LinkedHashMap<String, Object> getConquestSettings() {
+        return null;
+    }
+    private LinkedHashMap<String, Object> getCustomArmorSettings() {
         final Object[] values = new Object[] {
                 // 16.5.0
                 newItemStack("items.crystal", "nether_star", "&6&lArmor Crystal (&r{NAME}&r&6&l)", newStringList("&a{PERCENT}% Success Rate", "&7Can be applied to any non", "&7armor set that is not", "&7already equipped with a", "&7bonus crystal to gain", "&7a passive advantage!", " ", "&6&lCrystal Bonus:", " {NAME}", "{PERKS}")),
@@ -246,7 +254,7 @@ public abstract class YamlUpdater {
         };
         return putAll(values);
     }
-    private LinkedHashMap<String, Object> getCustomEnchants() {
+    private LinkedHashMap<String, Object> getCustomEnchantSettings() {
         final Object[] values = new Object[] {
                 "settings.enabled worlds", newStringList("world", "world_nether", "world_the_end")
         };
@@ -258,28 +266,28 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getDisguises() {
         return null;
     }
-    private LinkedHashMap<String, Object> getDuels() {
+    private LinkedHashMap<String, Object> getDuelSettings() {
         return null;
     }
-    private LinkedHashMap<String, Object> getDungeons() {
+    private LinkedHashMap<String, Object> getDungeonSettings() {
         return null;
     }
-    private LinkedHashMap<String, Object> getEnvoy() {
+    private LinkedHashMap<String, Object> getEnvoySettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getFactionPoints() {
         return null;
     }
-    private LinkedHashMap<String, Object> getFactionQuests() {
+    private LinkedHashMap<String, Object> getFactionQuestSettings() {
         return null;
     }
-    private LinkedHashMap<String, Object> getFactionUpgrades() {
+    private LinkedHashMap<String, Object> getFactionUpgradeSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getFund() {
         return null;
     }
-    private LinkedHashMap<String, Object> getGlobalChallenges() {
+    private LinkedHashMap<String, Object> getGlobalChallengeSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getHomes() {
@@ -290,7 +298,7 @@ public abstract class YamlUpdater {
         };
         return putAll(values);
     }
-    private LinkedHashMap<String, Object> getItemFilter() {
+    private LinkedHashMap<String, Object> getItemFilterSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getItems() {
@@ -310,7 +318,7 @@ public abstract class YamlUpdater {
         };
         return putAll(values);
     }
-    private LinkedHashMap<String, Object> getKits() {
+    private LinkedHashMap<String, Object> getKitSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getKOTH() {
@@ -319,7 +327,7 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getLastManStanding() {
         return null;
     }
-    private LinkedHashMap<String, Object> getLootboxes() {
+    private LinkedHashMap<String, Object> getLootboxSettings() {
         final Object[] values = new Object[] {
                 // 16.5.0
                 newItemStack("items.mystery lootbox", "chest", "&6&lMystery Lootbox&r &7(Right Click)", newStringList(
@@ -353,19 +361,19 @@ public abstract class YamlUpdater {
         };
         return putAll(values);
     }
-    private LinkedHashMap<String, Object> getMasks() {
+    private LinkedHashMap<String, Object> getMaskSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getMobStacker() {
         return null;
     }
-    private LinkedHashMap<String, Object> getMonthlyCrates() {
+    private LinkedHashMap<String, Object> getMonthlyCrateSettings() {
         return null;
     }
-    private LinkedHashMap<String, Object> getOutposts() {
+    private LinkedHashMap<String, Object> getOutpostSettings() {
         return null;
     }
-    private LinkedHashMap<String, Object> getPlayerQuests() {
+    private LinkedHashMap<String, Object> getPlayerQuestSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getReputation() {
@@ -374,16 +382,19 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getSecondary() {
         return null;
     }
-    private LinkedHashMap<String, Object> getShop() {
+    private LinkedHashMap<String, Object> getShopSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getShowcase() {
         return null;
     }
+    private LinkedHashMap<String, Object> getSlotBot() {
+        return null;
+    }
     private LinkedHashMap<String, Object> getSpawnerStacking() {
         return null;
     }
-    private LinkedHashMap<String, Object> getStrongholds() {
+    private LinkedHashMap<String, Object> getStrongholdSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getTitles() {
@@ -392,7 +403,7 @@ public abstract class YamlUpdater {
     private LinkedHashMap<String, Object> getTrade() {
         return null;
     }
-    private LinkedHashMap<String, Object> getTrinkets() {
+    private LinkedHashMap<String, Object> getTrinketSettings() {
         return null;
     }
     private LinkedHashMap<String, Object> getWild() {

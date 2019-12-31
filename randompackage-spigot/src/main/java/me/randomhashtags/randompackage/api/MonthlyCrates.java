@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
+import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
-import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -105,28 +106,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         givedpitem.items.put("superiorcrate", superiormysterycrate);
 
         if(!otherdata.getBoolean("saved default monthly crates")) {
-            final String[] c = new String[] {
-                    "APRIL_2016", "APRIL_2017", "APRIL_2018",
-                    "AUGUST_2016", "AUGUST_2017", "AUGUST_2018",
-                    "BLACK_FRIDAY_2016",
-                    "DECEMBER_2015", "DECEMBER_2016", "DECEMBER_2017", "DECEMBER_2018",
-                    "FEBRUARY_2016", "FEBRUARY_2018",
-                    "HALLOWEEN_2016", "HALLOWEEN_2017", "HALLOWEEN_2018",
-                    "HOLIDAY_2016", "HOLIDAY_2017",
-                    "JANUARY_2016", "JANUARY_2017", "JANUARY_2018",
-                    "JULY_2016", "JULY_2017", "JULY_2018",
-                    "JUNE_2017", "JUNE_2018",
-                    "MARCH_2016", "MARCH_2017", "MARCH_2018",
-                    "MAY_2017", "MAY_2018",
-                    "NOVEMBER_2016", "NOVEMBER_2017", "NOVEMBER_2018",
-                    "OCTOBER_2016", "OCTOBER_2017", "OCTOBER_2018",
-                    "SCHOOL_2016", "SCHOOL_2017",
-                    "SEPTEMBER_2017", "SEPTEMBER_2018",
-                    "THANKSGIVING_2017",
-                    "VALENTINES_2017", "VALENTINES_2018",
-            };
-            for(String s : c) save("monthly crates", s + ".yml");
-
+            generateDefaultMonthlyCrates();
             otherdata.set("saved default monthly crates", true);
             saveOtherData();
         }
@@ -178,13 +158,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MONTHLY_CRATE).size() + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(Player p : playertimers.keySet()) {
+        for(Player p : new ArrayList<>(playertimers.keySet())) {
             p.closeInventory();
         }
         unregister(Feature.MONTHLY_CRATE);
     }
 
-    public void viewCrates(Player player) {
+    public void viewCrates(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.monthlycrates", true)) {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final List<String> owned = pdata.getMonthlyCrates(), claimed = pdata.getClaimedMonthlyCrates();
@@ -245,10 +225,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             if(rewardSlots.contains(i) || bonusRewardSlots.contains(i)) {
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 if(item.hasItemMeta()) {
-                    if(itemMeta.hasDisplayName()) itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", p));
-                    if(itemMeta.hasLore())
+                    if(itemMeta.hasDisplayName()) {
+                        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", p));
+                    }
+                    if(itemMeta.hasLore()) {
                         for(String s : itemMeta.getLore())
                             lore.add(s.replace("{PATH}", p));
+                    }
                 }
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
@@ -313,7 +296,9 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     }
     private void stopTimers(Player player) {
         if(playertimers.containsKey(player)) {
-            for(int i : playertimers.get(player)) SCHEDULER.cancelTask(i);
+            for(int i : playertimers.get(player)) {
+                SCHEDULER.cancelTask(i);
+            }
             playertimers.remove(player);
         }
     }
@@ -331,7 +316,11 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     public void give(RPPlayer pdata, Player player, MonthlyCrate crate, boolean claimed) {
         item = crate.getItem(); itemMeta = item.getItemMeta(); lore.clear();
         if(item.hasItemMeta()) {
-            if(itemMeta.hasLore()) for(String s : itemMeta.getLore()) lore.add(s.replace("{UNLOCKED_BY}", player.getName()));
+            if(itemMeta.hasLore()) {
+                for(String s : itemMeta.getLore()) {
+                    lore.add(s.replace("{UNLOCKED_BY}", player.getName()));
+                }
+            }
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
         }

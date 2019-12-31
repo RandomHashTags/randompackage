@@ -3,9 +3,9 @@ package me.randomhashtags.randompackage.dev;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
-import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,8 +67,6 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save("strongholds", "_settings.yml");
         if(!otherdata.getBoolean("saved default strongholds")) {
-            final String[] a = new String[] {"FROZEN", "INFERNAL"};
-            for(String s : a) save("strongholds", s + ".yml");
             otherdata.set("saved default strongholds", true);
             saveOtherData();
         }

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.attribute;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 

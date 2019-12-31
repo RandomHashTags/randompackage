@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.dev.LastManStanding;
 import me.randomhashtags.randompackage.dev.Outposts;
-import me.randomhashtags.randompackage.dev.SlotBot;
 import me.randomhashtags.randompackage.dev.SpawnerStacking;
 import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
@@ -85,7 +84,9 @@ public final class RandomPackage extends JavaPlugin {
 
         final CommandManager cmd = CommandManager.getCommandManager();
 
-        cmd.load(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "combine", "confirm", "roll", "withdraw", "xpbottle"), isTrue("balance", "bless", "combine", "roll", "withdraw", "xpbottle"));
+        cmd.load(Combine.getCombine(), Arrays.asList("combine"), isTrue("combine"));
+        cmd.load(Xpbottle.getXpbottle(), Arrays.asList("xpbottle"), isTrue("xpbottle"));
+        cmd.load(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
         cmd.loadCustom(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
         cmd.loadCustom(Boosters.getBoosters(), null, isTrue("boosters"));
         cmd.loadCustom(ChatEvents.getChatEvents(), getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));

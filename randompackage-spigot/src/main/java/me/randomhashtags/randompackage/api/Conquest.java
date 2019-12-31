@@ -80,7 +80,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default conquests")) {
-            save("conquests", "NORMAL.yml");
+            generateDefaultConquests();
             otherdata.set("saved default conquests", true);
             saveOtherData();
         }

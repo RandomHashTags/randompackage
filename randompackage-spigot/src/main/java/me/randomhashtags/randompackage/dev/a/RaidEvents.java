@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev.a;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.living.ActiveRaidEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Chunk;
@@ -52,13 +53,13 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
     public void unload() {
     }
 
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.raidevents.help", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             sendStringListMessage(sender, config.getStringList("messages.help"), replacements);
         }
     }
-    public void viewActive(CommandSender sender) {
+    public void viewActive(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.raidevents.active", true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             if(active != null) {

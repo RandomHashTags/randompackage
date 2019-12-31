@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.attributesys.EventReplacer;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Location;

@@ -1,0 +1,68 @@
+# Made by RandomHashTags
+messages:
+  withdraw at least:
+    - "&cYou must withdraw at least {MIN}XP points per bottle."
+  pending teleport:
+    - "&e&l(!)&r &eYou will be teleported in &n{SECS}s&r&e... DON'T MOVE!"
+    - "&7Decrease this wait time by increasing your enchanting level."
+  teleport cancelled:
+    - "&4&l(!)&r &4Pending teleport request cancelled due to movement."
+  cannot teleport:
+    - "&c&l(!)&r &cYou cannot teleport for &c{TIME} due to EXP exhaustion."
+    - "&7Upgrade your rank at &nbuy.yourserver.com&r &7to decrease this delay."
+  cannot xpbottle:
+    - "&c&l(!)&r &cYou cannot create another XP Bottle for {TIME}"
+    - "&7Complete a Rank Quest from buy.yourserver.com to decrease this delay."
+  afflict:
+    - "&eYou are now afflicted with &nEXP Exhaustion&r &efor {MIN} minute(s)."
+    - "&eYou &ncannot&r &euse /xpbottle or teleport while EXP Exhausted."
+  invalid amount:
+    - '&c&l(!)&r &cInvalid xpbottle amount: "{VALUE}"'
+  not enough to bottle:
+    - "&c&l(!)&r &cYou do not have enough experience to bottle this much!"
+  withdraw:
+    - "&c&l-{VALUE} xp"
+  deposit:
+    - "&a&l+ {VALUE} xp"
+  ## Taken directly from the | Beast-XpWithdraw |  plugin ##
+  argument zero:
+    - "&e/xpbottle <amount>"
+    - "&7Convert <amount> xp into bottle form."
+    - "&7Use &e/xp &7to view your current exp points."
+#
+sounds:
+  redeem: "BLOCK_GLASS_BREAK:1:1"
+  withdraw: "ENTITY_EXPERIENCE_ORB_PICKUP:1:0"
+#
+delayed commands:
+  - "/spawn"
+  - "/warp"
+  - "/tpaccept"
+  - "/home"
+#
+min bottle:
+  - "world=25"
+  - "world_nether=25"
+  - "world_the_nether=25"
+# Measured in minutes. Set to -1 to disable.
+exp exhaustion:
+  - "world=17"
+  - "world_nether=17"
+  - "world_the_end=17"
+# Measured in seconds. Set teleport-delay to -1 to disable.
+teleportation delay:
+  - "world=7.000"
+  - "world_nether=7.000"
+  - "world_the_end=7.000"
+teleport min delay:
+  - "world=3.000"
+  - "world_nether=3.000"
+  - "world_the_end=3.000"
+teleportation variable: ## Teleport delay = (default delay - (player xp / teleportation variable))
+  - "world=25000"
+  - "world_nether=25000"
+  - "world_the_end=25000"
+# EXP Exhaustion works when the player is teleported from these causes. Causes: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/player/PlayerTeleportEvent.TeleportCause.html
+teleport causes:
+  - "COMMAND"
+  - "PLUGIN"

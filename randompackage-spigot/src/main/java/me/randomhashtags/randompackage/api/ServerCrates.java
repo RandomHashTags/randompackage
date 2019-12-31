@@ -8,15 +8,14 @@ import me.randomhashtags.randompackage.addon.living.LivingServerCrate;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,11 +54,9 @@ public class ServerCrates extends RPFeature {
 		tasks = new HashMap<>();
 		revealedslots = new HashMap<>();
 
-		final YamlConfiguration a = otherdata;
-		if(!a.getBoolean("saved default server crates")) {
-			final String[] s = new String[] {"ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"};
-			for(String c : s) save("server crates", c + ".yml");
-			a.set("saved default server crates", true);
+		if(!otherdata.getBoolean("saved default server crates")) {
+			generateDefaultServerCrates();
+			otherdata.set("saved default server crates", true);
 			saveOtherData();
 		}
 		final List<ItemStack> flares = new ArrayList<>(), crates = new ArrayList<>();

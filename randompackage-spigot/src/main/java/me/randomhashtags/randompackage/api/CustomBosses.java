@@ -43,8 +43,7 @@ public class CustomBosses extends EventAttributes {
 		deadBosses = new HashMap<>();
 
 		if(!otherdata.getBoolean("saved default custom bosses")) {
-			final String[] s = new String[] { "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER" };
-			for(String o : s) save("custom bosses", o + ".yml");
+			generateDefaultCustomBosses();
 			otherdata.set("saved default custom bosses", true);
 			saveOtherData();
 		}

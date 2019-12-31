@@ -6,9 +6,9 @@ import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.addon.stats.DuelStats;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
+import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -81,10 +81,7 @@ public class Duels extends RPFeature implements CommandExecutor {
         final String folder = DATA_FOLDER + SEPARATOR + "duel arenas";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
         if(!otherdata.getBoolean("saved default duel arenas")) {
-            final String[] a = new String[] {"DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID"};
-            for(String s : a) {
-                save(folder, s + ".yml");
-            }
+            generateDefaultDuelArenas();
             otherdata.set("saved default duel arenas", true);
             saveOtherData();
         }
@@ -97,7 +94,6 @@ public class Duels extends RPFeature implements CommandExecutor {
 
         type = new UInventory(null, config.getInt("type.size"), colorize(config.getString("type.title")));
         godset = new UInventory(null, config.getInt("godset.size"), colorize(config.getString("godset.title")));
-
         activeDuels = new ArrayList<>();
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUEL_ARENA).size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");

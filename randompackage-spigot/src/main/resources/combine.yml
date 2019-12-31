@@ -1,0 +1,15 @@
+# Made by RandomHashTags
+messages:
+  format: "&e&l*&r &c{AMOUNT_ITEM}x {ITEM_ORE} &e&l>&r&e=&l<&r &a{AMOUNT_BLOCK}x {ITEM_BLOCK}"
+  success:
+    - "{SUCCESS}"
+    - "&e&l(!)&r &eSuccessfully combined and organized inventory."
+#
+combine ores:
+  - "COAL"
+  - "DIAMOND"
+  - "EMERALD"
+  - "GOLD_INGOT"
+  - "IRON_INGOT"
+  - "QUARTZ"
+  - "REDSTONE"

@@ -34,10 +34,7 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default titan attributes")) {
-            final String[] a = new String[] {"ATLAS", "KRONOS", "OURANOS"};
-            for(String s : a) {
-                save(folder, s + ".yml");
-            }
+            generateDefaultTitanAttributes();
             otherdata.set("saved default titan attributes", true);
             saveOtherData();
         }

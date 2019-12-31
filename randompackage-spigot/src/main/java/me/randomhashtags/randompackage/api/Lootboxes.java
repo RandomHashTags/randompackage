@@ -84,8 +84,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         background = d(config, "gui.background");
 
         if(!otherdata.getBoolean("saved default lootboxes")) {
-            final String[] l = new String[] {"SNOW_DAY", "ICY_ADVENTURES", "SURVIVAL_KIT", "BOX_OF_CHOCOLATES", "BAKED", "LUCKY"};
-            for(String s : l) save("lootboxes", s + ".yml");
+            generateDefaultLootboxes();
             otherdata.set("saved default lootboxes", true);
             saveOtherData();
         }

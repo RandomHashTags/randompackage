@@ -103,25 +103,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		data = YamlConfiguration.loadConfiguration(dataF);
 
 		if(!otherdata.getBoolean("saved default global challenges")) {
-			final String[] c = new String[]{
-					"AGGRESSIVE_MOBS_KILLED", "ALCHEMIST_EXCHANGES", "ALL_ORES_MINED",
-					"BIRCH_LOGS_CUT", "BLOCKS_MINED_BY_PICKAXE", "BLOCKS_PLACED",
-					"COINFLIPS_WON", "CUSTOM_ENCHANTS_REVEALED",
-					"DIAMOND_ORE_MINED",
-					"EMERALD_ORE_MINED", "END_MOBS_KILLED", "ENVOY_CHESTS_LOOTED", "EXP_GAINED",
-					"FISH_CAUGHT",
-					"GOLD_ORE_MINED",
-					"JACKPOT_MONEY_SPENT", "JACKPOT_TICKETS_BOUGHT",
-					"LAPIS_ORE_MINED",
-					"MCMMO_XP_GAINED_IN_ACROBATICS", "MCMMO_XP_GAINED_IN_SWORDS", "MCMMO_XP_GAINED_IN_UNARMED",
-                    "MOBS_KILLED",
-                    "MONEY_LOST_IN_COINFLIPS", "MONEY_WON_IN_COINFLIPS",
-					"PASSIVE_MOBS_KILLED", "PVP_DAMAGE",
-					"RANKED_DUEL_WINS", "REDSTONE_ORE_MINED",
-					"TIME_SPENT_IN_END", "TIME_SPENT_IN_MAIN_WARZONE",
-					"UNIQUE_PLAYER_HEADS_COLLECTED", "UNIQUE_PLAYER_KILLS"
-			};
-			for(String s : c) save("global challenges", s + ".yml");
+			generateDefaultGlobalChallenges();
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}

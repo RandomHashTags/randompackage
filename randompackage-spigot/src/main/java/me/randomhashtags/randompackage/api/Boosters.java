@@ -55,8 +55,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 		if(!otherdata.getBoolean("saved default boosters")) {
-			final String[] a = new String[] {"FACTION_MCMMO", "FACTION_XP"};
-			for(String s : a) save("boosters", s + ".yml");
+			generateDefaultBoosters();
 			otherdata.set("saved default boosters", true);
 			saveOtherData();
 		}

@@ -1,8 +1,9 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.util;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.CustomArmor;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionable;

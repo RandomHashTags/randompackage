@@ -37,8 +37,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
     public void load() {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default fat buckets")) {
-            final String[] a = new String[]{"LAVA"};
-            for(String s : a) save("fat buckets", s + ".yml");
+            generateDefaultFatBuckets();
             otherdata.set("saved default fat buckets", true);
             saveOtherData();
         }

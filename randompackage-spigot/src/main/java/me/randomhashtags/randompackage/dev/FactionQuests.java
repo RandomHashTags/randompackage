@@ -33,29 +33,7 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction quests", "_settings.yml"));
 
         if(!otherdata.getBoolean("saved default faction quests")) {
-            final String[] q = new String[]{
-                    "CONQUEST_BREAKER_I",
-                    "DAILY_CHALLENGE_MASTER_I",
-                    "DUNGEON_MASTER_I",
-                    "DUNGEON_PORTALS_I",
-                    "DUNGEON_RUNNER_I", "DUNGEON_RUNNER_II",
-                    "HOLD_COSMONAUT_OUTPOST_I",
-                    "HOLD_HERO_OUTPOST_I",
-                    "HOLD_TRAINEE_OUTPOST_I",
-                    "IRON_KOTH_MERCHANT_I",
-                    "KILL_BLAZE_I",
-                    "KILL_BOSS_BROOD_MOTHER",
-                    "KILL_BOSS_KING_SLIME",
-                    "KILL_BOSS_PLAGUE_BLOATER",
-                    "KILL_BOSS_UNDEAD_ASSASSIN",
-                    "KILL_CONQUEST_BOSSES_I",
-                    "KOTH_CAPTURER_I",
-                    "LEGENDARY_ENCHANTER_I",
-                    "LMS_DEFENDER_I",
-                    "TOP_DOG",
-                    "ULTIMATE_ENCHANTER_I",
-            };
-            for(String s : q) save("faction quests", s + ".yml");
+            generateDefaultFactionQuests();
             otherdata.set("saved default faction quests", true);
             saveOtherData();
         }

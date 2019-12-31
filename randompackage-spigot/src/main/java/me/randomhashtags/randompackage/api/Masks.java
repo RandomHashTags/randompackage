@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.Mask;
+import me.randomhashtags.randompackage.addon.file.FileMask;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.addon.file.FileMask;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
@@ -31,7 +30,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
@@ -61,14 +59,7 @@ public class Masks extends CustomEnchants {
 
         final ArrayList<ItemStack> ms = new ArrayList<>();
         if(!otherdata.getBoolean("saved default masks")) {
-            final String[] m = new String[] {
-                    "BUNNY", "DEATH_KNIGHT", "DRAGON", "DUNGEON", "GHOST", "GLITCH", "HEADLESS", "JOKER",
-                    "LOVER", "MONOPOLY", "NECROMANCER", "PARTY_HAT", "PILGRIM", "PUMPKIN_MONSTER",
-                    "PURGE", "REINDEER", "RIFT", "SANTA", "SCARECROW", "SPECTRAL", "TURKEY", "ZEUS"
-            };
-            for(String s : m) {
-                save("masks", s + ".yml");
-            }
+            generateDefaultMasks();
             otherdata.set("saved default masks", true);
             saveOtherData();
         }

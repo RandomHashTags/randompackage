@@ -97,8 +97,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         }
 
         if(!otherdata.getBoolean("saved default filter categories")) {
-            final String[] f = new String[] {"EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY"};
-            for(String s : f) save("filter categories", s + ".yml");
+            generateDefaultFilterCategories();
             otherdata.set("saved default filter categories", true);
             saveOtherData();
         }

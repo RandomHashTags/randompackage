@@ -95,145 +95,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         new StopEnchant().load();
 
         if(!otherdata.getBoolean("saved default custom enchants")) {
-            final String[] mas = new String[] {
-                    "_settings",
-                    "AUTO_SELL",
-                    "CHAIN_LIFESTEAL",
-                    "DEATH_PACT",
-                    "EXPLOSIVES_EXPERT",
-                    "FEIGN_DEATH",
-                    "HORRIFY",
-                    "LAVA_STRIDER",
-                    "MARK_OF_THE_BEAST",
-                    "PERMAFROST", "POLTERGEIST",
-                    "TOMBSTONE",
-                    "WEB_WALKER"
-            };
-            final String[] her = new String[] {
-                    "_settings",
-                    "ALIEN_IMPLANTS", "ATOMIC_DETONATE",
-                    "BIDIRECTIONAL_TELEPORTATION",
-                    "DEEP_BLEED", "DEMONIC_LIFESTEAL", "DIVINE_ENLIGHTED",
-                    "ETHEREAL_DODGE",
-                    "GHOSTLY_GHOST", "GODLY_OVERLOAD", "GUIDED_ROCKET_ESCAPE",
-                    "HEROIC_ENCHANT_REFLECT",
-                    "INFINITE_LUCK",
-                    "LETHAL_SNIPER",
-                    "MASTER_BLACKSMITH", "MASTER_INQUISITIVE", "MIGHTY_CACTUS", "MIGHTY_CLEAVE",
-                    "PLANETARY_DEATHBRINGER", "POLYMORPHIC_METAPHYSICAL",
-                    "REFLECTIVE_BLOCK",
-                    "SHADOW_ASSASSIN",
-                    "TITAN_TRAP",
-                    "VENGEFUL_DIMINISH",
-            };
-            final String[] sou = new String[] {
-                    "_settings",
-                    "DIVINE_IMMOLATION",
-                    "HERO_KILLER",
-                    "IMMORTAL",
-                    "NATURES_WRATH",
-                    "PARADOX", "PHOENIX",
-                    "SABOTAGE", "SOUL_TRAP",
-                    "TELEBLOCK",
-            };
-            final String[] leg = new String[] {
-                    "_settings",
-                    "AEGIS", "ANTI_GANK", "ARMORED",
-                    "BARBARIAN", "BLACKSMITH", "BLOOD_LINK", "BLOOD_LUST", "BOSS_SLAYER",
-                    "CLARITY",
-                    "DEATH_GOD", "DEATHBRINGER", "DESTRUCTION", "DEVOUR", "DIMINISH", "DISARMOR", "DOUBLE_STRIKE", "DRUNK",
-                    "ENCHANT_REFLECT", "ENLIGHTED",
-                    "GEARS",
-                    "HEX",
-                    "INQUISITIVE", "INSANITY", "INVERSION",
-                    "KILL_AURA",
-                    "LEADERSHIP", "LIFESTEAL",
-                    "OVERLOAD",
-                    "PROTECTION",
-                    "RAGE",
-                    "SILENCE", "SNIPER",
-            };
-            final String[] ult = new String[] {
-                    "_settings",
-                    "ANGELIC", "ARROW_BREAK", "ARROW_DEFLECT", "ARROW_LIFESTEAL", "ASSASSIN", "AVENGING_ANGEL",
-                    "BLEED", "BLESSED", "BLOCK",
-                    "CLEAVE", "CORRUPT", "CREEPER_ARMOR",
-                    "DETONATE", "DIMENSION_RIFT", "DISINTEGRATE", "DODGE", "DOMINATE",
-                    "EAGLE_EYE", "ENDER_WALKER", "ENRAGE",
-                    "FUSE",
-                    "GHOST", "GUARDIANS",
-                    "HEAVY", "HELLFIRE",
-                    "ICEASPECT", "IMPLANTS",
-                    "OBSIDIANSHIELD",
-                    "LONGBOW", "LUCKY",
-                    "MARKSMAN", "METAPHYSICAL",
-                    "PACIFY", "PIERCING",
-                    "SPIRITS", "STICKY",
-                    "TANK",
-                    "UNFOCUS",
-                    "VALOR",
-            };
-            final String[] eli = new String[] {
-                    "_settings",
-                    "ANTI_GRAVITY",
-                    "BLIND",
-                    "CACTUS",
-                    "DEMONFORGED",
-                    "EXECUTE",
-                    "FARCAST", "FROZEN",
-                    "GREATSWORD",
-                    "HARDENED", "HIJACK",
-                    "ICE_FREEZE", "INFERNAL",
-                    "PARALYZE", "POISON", "POISONED", "PUMMEL",
-                    "REFORGED", "REPAIR_GUARD", "RESILIENCE", "ROCKET_ESCAPE",
-                    "SHACKLE", "SHOCKWAVE", "SMOKE_BOMB", "SNARE", "SOLITUDE", "SPIRIT_LINK", "SPRINGS", "STORMCALLER",
-                    "TELEPORTATION", "TRAP", "TRICKSTER",
-                    "UNDEAD_RUSE",
-                    "VAMPIRE", "VENOM", "VOODOO",
-                    "WITHER",
-            };
-            final String[] uni = new String[] {
-                    "_settings",
-                    "BERSERK",
-                    "COMMANDER", "COWIFICATION", "CURSE",
-                    "DEEP_WOUNDS",
-                    "ENDER_SHIFT", "EXPLOSIVE",
-                    "FEATHERWEIGHT",
-                    "LIFEBLOOM",
-                    "MOLTEN",
-                    "NIMBLE", "NUTRITION",
-                    "OBSIDIAN_DESTROYER",
-                    "PLAGUE_CARRIER",
-                    "RAGDOLL", "RAVENOUS",
-                    "SELF_DESTRUCT", "SKILL_SWIPE", "SKILLING",
-                    "TELEPATHY", "TRAINING",
-                    "VIRUS",
-            };
-            final String[] sim = new String[] {
-                    "_settings",
-                    "AQUATIC", "AUTO_SMELT",
-                    "CONFUSION",
-                    "DECAPITATION",
-                    "EPICNESS", "EXPERIENCE",
-                    "OXYGENATE",
-                    "GLOWING",
-                    "HASTE", "HEADLESS", "HEALING",
-                    "INSOMNIA",
-                    "LIGHTNING",
-                    "OBLITERATE",
-                    "TARGET_TRACKING", "THUNDERING_BLOW",
-            };
-            for(String s : mas) save("custom enchants" + SEPARATOR + "MASTERY", s + ".yml");
-            for(String s : her) save("custom enchants" + SEPARATOR + "HEROIC", s + ".yml");
-            for(String s : sou) save("custom enchants" + SEPARATOR + "SOUL", s + ".yml");
-            for(String s : leg) save("custom enchants" + SEPARATOR + "LEGENDARY", s + ".yml");
-            for(String s : ult) save("custom enchants" + SEPARATOR + "ULTIMATE", s + ".yml");
-            for(String s : eli) save("custom enchants" + SEPARATOR + "ELITE", s + ".yml");
-            for(String s : uni) save("custom enchants" + SEPARATOR + "UNIQUE", s + ".yml");
-            for(String s : sim) save("custom enchants" + SEPARATOR + "SIMPLE", s + ".yml");
-
-            save("custom enchants" + SEPARATOR + "RANDOM", "_settings.yml");
-
+            generateDefaultCustomEnchants();
             otherdata.set("saved default custom enchants", true);
             saveOtherData();
         }
@@ -294,23 +156,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            final EquippedCustomEnchants equipped = getEnchants(player);
-            for(EquipmentSlot slot : EQUIPMENT_SLOTS) {
-                if(slot != null) {
-                    final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
-                    final List<CustomEnchant> timedEnchantments = new ArrayList<>();
-                    if(enchants != null) {
-                        for(CustomEnchant enchant : enchants.keySet()) {
-                            if(timedEnchants.containsKey(enchant)) {
-                                timedEnchantments.add(enchant);
-                            }
-                        }
-                        if(!timedEnchantments.isEmpty()) {
-                            equippedTimedEnchants.put(player, timedEnchantments);
-                        }
-                    }
-                }
-            }
+            updateEquippedTimedEnchants(player);
         }
 
         sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
@@ -874,6 +720,27 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
     }
 
+    public void updateEquippedTimedEnchants(@NotNull Player player) {
+        final EquippedCustomEnchants equipped = getEnchants(player);
+        equippedTimedEnchants.remove(player);
+        for(EquipmentSlot slot : EQUIPMENT_SLOTS) {
+            if(slot != null) {
+                final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
+                final List<CustomEnchant> timedEnchantments = new ArrayList<>();
+                if(enchants != null) {
+                    for(CustomEnchant enchant : enchants.keySet()) {
+                        if(timedEnchants.containsKey(enchant)) {
+                            timedEnchantments.add(enchant);
+                        }
+                    }
+                    if(!timedEnchantments.isEmpty()) {
+                        equippedTimedEnchants.put(player, timedEnchantments);
+                    }
+                }
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     private void armorEquipEvent(ArmorEquipEvent event) {
         didArmorEvent(event, true);
@@ -902,6 +769,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             triggerEnchants(event, equipped, false, slot);
         }
         equipped.update(slot, isEquip ? is : null);
+        updateEquippedTimedEnchants(player);
         if(isEquip) {
             final ArmorEventReason reason = event.getReason();
             if(reason == ArmorEventReason.HOTBAR_EQUIP) {

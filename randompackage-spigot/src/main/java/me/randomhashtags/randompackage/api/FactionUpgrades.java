@@ -71,24 +71,7 @@ public class FactionUpgrades extends EventAttributes {
             save("_Data", "faction upgrades.yml");
 
             if(!otherdata.getBoolean("saved default faction upgrades")) {
-                final String[] a = new String[] {
-                        "BOSS_MASTERY",
-                        "CONQUEST_MASTERY",
-                        "DUNGEON_LOOTER", "DUNGEON_MASTER", "DUNGEON_RUNNER",
-                        "ENDER_FARMING", "ENHANCED_FLIGHT", "ESCAPE_ARTIST", "EXPLOSIVES_EXPERT",
-                        "FACTION_POWER_BOOST", "FAST_ENDERPEARL",
-                        "HEROIC_BOSS_MASTERY", "HEROIC_SOUL_MASTERY", "HEROIC_WELL_FED",
-                        "HOME_ADVANTAGE",
-                        "KIT_EVOLUTION",
-                        "MAVERICK", "MAX_FACTION_SIZE", "MCMMO_MASTERY", "MONSTER_FARM",
-                        "NATURAL_GROWTH",
-                        "OUTPOST_CONTROL",
-                        "SOUL_MASTERY",
-                        "TP_MASTERY",
-                        "WARP_MASTER", "WARZONE_CONTROL", "WELL_FED",
-                        "XP_HARVEST",
-                };
-                for(String s : a) save("faction upgrades", s + ".yml");
+                generateDefaultFactionUpgrades();
                 otherdata.set("saved default faction upgrades", true);
             }
             config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));

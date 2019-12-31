@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.living;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.dev.RPStorage;
+import me.randomhashtags.randompackage.util.RPStorage;
 import me.randomhashtags.randompackage.event.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;

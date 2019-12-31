@@ -8,9 +8,9 @@ import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
+import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.Packeter;
 import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -23,7 +23,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,25 +50,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         new GivePetExp().load();
         save("inventory pets", "_settings.yml");
         if(!otherdata.getBoolean("saved default inventory pets")) {
-            final String[] p = new String[] {
-                    "ALCHEMIST",
-                    "ANTI_TELEBLOCK",
-                    "BANNER",
-                    "BLACKSCROLL",
-                    "BLESS",
-                    "ENCHANTER",
-                    "FEIGN_DEATH",
-                    "GAIA",
-                    "LAVA_ELEMENTAL",
-                    "RAID_CREEPER",
-                    "SMITE",
-                    "STRONGHOLD_SELL",
-                    "TESLA",
-                    "VILE_CREEPER",
-                    "WATER_ELEMENTAL",
-                    "XP_BOOSTER",
-            };
-            for(String s : p) save("inventory pets", s + ".yml");
+            generateDefaultInventoryPets();
             otherdata.set("saved default inventory pets", true);
             saveOtherData();
         }

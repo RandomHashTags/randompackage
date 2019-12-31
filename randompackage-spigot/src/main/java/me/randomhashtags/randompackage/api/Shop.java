@@ -50,8 +50,7 @@ public class Shop extends RPFeature implements CommandExecutor {
         defaultShop = config.getString("settings./shop opens");
 
         if(!otherdata.getBoolean("saved default shops")) {
-            final String[] h = new String[] {"BASE_GRIND", "BREWING", "BUILDING_BLOCKS", "CLAY", "FLOWERS", "FOOD_AND_FARMING", "GLASS", "MENU", "MOB_DROPS", "ORES_AND_GEMS", "POTIONS", "RAID", "SPAWNERS", "SPECIALTY", "WOOL"};
-            for(String s : h) save("shops", s + ".yml");
+            generateDefaultShopCategories();
             otherdata.set("saved default shops", true);
             saveOtherData();
         }

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Outpost;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -59,8 +60,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         save("outposts", "_settings.yml");
 
         if(!otherdata.getBoolean("saved default outposts")) {
-            final String[] o = new String[]{"HERO", "SERVONAUT", "TRAINEE", "VANILLA"};
-            for(String s : o) save("outposts", s + ".yml");
+            generateDefaultOutposts();
             otherdata.set("saved default outposts", true);
             saveOtherData();
         }
@@ -92,7 +92,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         unregister(Feature.OUTPOST);
     }
 
-    public void viewStatus(CommandSender sender) {
+    public void viewStatus(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost", true)) {
             final List<String> msg = getStringList(config, "messages.view current");
             for(String s : msg) {
@@ -106,12 +106,12 @@ public class Outposts extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void viewHelp(CommandSender sender) {
+    public void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.outpost.help", true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
-    public void view(Player player) {
+    public void view(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.outpost.view", true)) {
             player.closeInventory();
 

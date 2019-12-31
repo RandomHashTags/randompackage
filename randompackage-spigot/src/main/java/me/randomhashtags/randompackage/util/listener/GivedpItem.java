@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.dev.SlotBot;
+import me.randomhashtags.randompackage.api.SlotBot;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;

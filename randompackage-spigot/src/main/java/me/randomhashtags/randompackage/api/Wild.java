@@ -55,12 +55,11 @@ public class Wild extends RPFeature implements CommandExecutor {
         teleportExceptions = new ArrayList<>();
         teleportExceptions.add("Wilderness");
 
-        final List<String> X = config.getStringList("settings.x coords"), Z = config.getStringList("settings.z coords");
-        for(String s : X) {
+        for(String s : config.getStringList("settings.x coords")) {
             final String[] a = s.split(";");
             xcoords.put(a[0], new TObject(BigDecimal.valueOf(Double.parseDouble(a[1])), BigDecimal.valueOf(Double.parseDouble(a[2])), null));
         }
-        for(String s : Z) {
+        for(String s : config.getStringList("settings.z coords")) {
             final String[] a = s.split(";");
             zcoords.put(a[0], new TObject(BigDecimal.valueOf(Double.parseDouble(a[1])), BigDecimal.valueOf(Double.parseDouble(a[2])), null));
         }

@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.universal.UInventory;

@@ -1,15 +1,15 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.PlayerQuest;
+import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
-import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -135,55 +135,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         }
 
         if(!otherdata.getBoolean("saved default player quests")) {
-            final String[] q = new String[] {
-                    "A_LITTLE_GRIND", "A_MEDIUM_GRIND", "A_BIG_GRIND",
-                    "BEGINNERS_LUCK",
-                    "BIGGER_SPENDER", "BIGGEST_SPENDER",
-                    "DEFINITELY_AFK",
-                    "DISGUISED",
-                    "DUNGEON_NOOB",
-                    "DUNGEON_RUNNER",
-                    "ELITE_ENCHANTER",
-                    "ENDER_LORD",
-                    "ENVOY_LOOTER_II",
-                    "ENVOY_SUMMONER_III",
-                    "EQUIPMENT_LOOTER",
-                    "GAMBLER_I", "GAMBLER_II", "GAMBLER_III",
-                    "HANGING_ON",
-                    "HERO_DOMINATOR",
-                    "HEROIC_ENCHANTER",
-                    "HEROIC_ENVOY_LOOTER_II",
-                    "ITEM_CUSTOMIZATION",
-                    "KOTH_KILLER_II",
-                    "LAST_NOOB_STANDING", "LAST_MASTER_STANDING",
-                    "LEGENDARY_LOOTER",
-                    "MASTER_KIT_LEVELING",
-                    "MASTER_MINER",
-                    "MOB_EXAMINER_II",
-                    "NOVICE_ALCHEMIST",
-                    "NOVICE_EXCAVATOR",
-                    "NOVICE_MERCHANT", "SKILLED_MERCHANT",
-                    "NOVICE_MINER",
-                    "NOVICE_TINKERER",
-                    "OUTPOST_DEFENDER",
-                    "QUEST_MASTER",
-                    "RANDOMIZER_II", "RANDOMIZER_III",
-                    "RIGGED",
-                    "SIMPLE_ENCHANTER",
-                    "SIMPLE_LOOTER",
-                    "SKILL_BOOSTER_I", "SKILL_BOOSTER_III",
-                    "SLAUGHTER_HOUSE_I", "SLAUGHTER_HOUSE_II", "SLAUGHTER_HOUSE_III",
-                    "SOUL_COLLECTOR_I", "SOUL_ENCHANTER",
-                    "SPIDER_SLAYER",
-                    "STRONGHOLD_LOOTER_I",
-                    "THIRSTY",
-                    "ULTIMATE_ENCHANTER",
-                    "ULTIMATE_LOOTER",
-                    "UNIQUE_ENCHANTER",
-                    "VERY_UNLUCKY",
-                    "XP_BOOSTED_I",
-            };
-            for(String s : q) save("player quests", s + ".yml");
+            generateDefaultPlayerQuests();
             otherdata.set("saved default player quests", true);
             saveOtherData();
         }

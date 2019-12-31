@@ -87,8 +87,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		presetLocationPlacer.setItemMeta(itemMeta);
 
 		if(!otherdata.getBoolean("saved default envoy tiers")) {
-			final String[] e = new String[]{"ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"};
-			for(String s : e) save("envoy tiers", s + ".yml");
+			generateDefaultEnvoyTiers();
 			otherdata.set("saved default envoy tiers", true);
 			saveOtherData();
 		}
@@ -107,7 +106,6 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		final long next = getRandomTime();
 		nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
 		spawnTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(defaul, true, type), next);
-
 
 		task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
 			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
