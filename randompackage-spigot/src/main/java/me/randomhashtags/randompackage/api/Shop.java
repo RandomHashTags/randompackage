@@ -63,7 +63,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                 titles.put(c.getTitle(), c);
             }
         }
-        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + getAll(Feature.SHOP_CATEGORY).size() + " shop categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + getAll(Feature.SHOP_CATEGORY).size() + " Shop Categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void unload() {
 	    unregister(Feature.SHOP_CATEGORY);

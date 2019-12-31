@@ -4,7 +4,6 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,8 +37,8 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     private List<Integer> ticketSlots;
     private List<String> rewards;
 
-    private HashMap<Player, HashSet<Integer>> rollingTasks;
-    private HashSet<Player> pending;
+    private HashMap<Player, HashMap<Integer, List<Integer>>> rollingTasks;
+    private HashMap<Player, List<Integer>> pending;
 
     private HashMap<Integer, HashSet<Integer>> slots;
 
@@ -85,13 +84,13 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         }
 
         for(String key : config.getConfigurationSection("gui.reward slots").getKeys(false)) {
-            int slot = Integer.parseInt(key);
+            final int slot = Integer.parseInt(key);
             inv.setItem(slot, rewardSlot);
             final HashSet<Integer> rewardSlots = new HashSet<>();
             for(String s : config.getStringList("gui.reward slots." + key)) {
-                slot = Integer.parseInt(s);
-                inv.setItem(slot, randomizedLootPlaceholder);
-                rewardSlots.add(slot);
+                final int rewardSlot = Integer.parseInt(s);
+                inv.setItem(rewardSlot, randomizedLootPlaceholder);
+                rewardSlots.add(rewardSlot);
             }
             slots.put(slot, rewardSlots);
         }
@@ -117,13 +116,14 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         }
 
         rollingTasks = new HashMap<>();
-        pending = new HashSet<>();
+        pending = new HashMap<>();
         rewards = new ArrayList<>();
+        rewards.addAll(Arrays.asList("collectionchest", "xpbottle:25-10000", "raritygem:SOUL:500", "raritygem:SOUL:1000", "customarmor:PHANTOM", "customarmor:YIJKI", "customarmor:ENGINEER", "customarmor:YETI"));
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Slot Bot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(Player player : new HashSet<>(pending)) {
+        for(Player player : new ArrayList<>(pending.keySet())) {
             player.closeInventory();
         }
     }
@@ -151,16 +151,18 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(withdrawTickets.isSimilar(top.getItem(withdrawTicketsSlot))) {
             int ticketAmount = 0;
+            final boolean isPending = pending.containsKey(player);
+            final List<Integer> pendingSlots = isPending ? pending.get(player) : null;
+            final List<Integer> keySet = new ArrayList<>(slots.keySet());
             for(int i : ticketSlots) {
-                if(ticketUnlocked.isSimilar(top.getItem(i))) {
-                    ticketAmount++;
+                final int rewardSlot = keySet.get(ticketAmount);
+                ticketAmount++;
+                if(ticketUnlocked.isSimilar(top.getItem(i)) && (!isPending || !pendingSlots.contains(rewardSlot))) {
                     giveItem(player, ticket);
-                    top.setItem(i, getTicketLocked(ticketAmount));
-                }
-            }
-            for(int i = 0; i < ticketAmount; i++) {
-                for(int slot : slots.get(slots.keySet().toArray()[i])) {
-                    top.setItem(slot, randomizedLootPlaceholder);
+                    top.setItem(i, getTicketLocked(keySet.indexOf(rewardSlot)+1));
+                    for(int slot : slots.get(rewardSlot)) {
+                        top.setItem(slot, randomizedLootPlaceholder);
+                    }
                 }
             }
             top.setItem(withdrawTicketsSlot, background);
@@ -206,39 +208,38 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         return trySpinning(player, slot, player.getOpenInventory().getTopInventory().getItem(slot));
     }
     public boolean trySpinning(@NotNull Player player, int slot, @NotNull ItemStack targetItem) {
-        if(targetItem != null && !targetItem.getType().equals(Material.AIR)) {
-            if(targetItem.isSimilar(spinnerReadyToSpin)) {
-                final Inventory top = player.getOpenInventory().getTopInventory();
-                List<Integer> insertedTickets = new ArrayList<>();
-                for(int i : ticketSlots) {
-                    if(ticketUnlocked.isSimilar(top.getItem(i))) {
-                        insertedTickets.add((int) slots.keySet().toArray()[insertedTickets.size()]);
+        if(spinnerReadyToSpin.isSimilar(targetItem)) {
+            final Inventory top = player.getOpenInventory().getTopInventory();
+            top.setItem(withdrawTicketsSlot, background);
+            List<Integer> insertedTickets = new ArrayList<>();
+            final boolean isPending = pending.containsKey(player);
+            final List<Integer> pendingSlots = isPending ? pending.get(player) : null;
+            int ticket = 0;
+            for(int i : ticketSlots) {
+                if(ticketUnlocked.isSimilar(top.getItem(i))) {
+                    final int rewardSlot = (int) slots.keySet().toArray()[ticket];
+                    if(!isPending || !pendingSlots.contains(rewardSlot)) {
+                        insertedTickets.add(rewardSlot);
                     }
+                    ticket++;
                 }
-                if(!insertedTickets.isEmpty()) {
-                    for(int rewardSlot : insertedTickets) {
-                        startRolling(player, top, rewardSlot);
-                    }
+            }
+            if(!insertedTickets.isEmpty()) {
+                for(int rewardSlot : insertedTickets) {
+                    startRolling(player, top, rewardSlot);
                 }
                 return true;
-            } else if(ticketSlots.contains(slot)) {
-                final HashMap<String, String> replacements = new HashMap<>();
-                final int index = ticketSlots.indexOf(slot);
-                replacements.put("{AMOUNT}", Integer.toString(index+1));
-                sendStringListMessage(player, getStringList(config, "messages.slot requires ticket"), replacements);
             }
+            return false;
+        } else if(ticketSlots.contains(slot)) {
+            final HashMap<String, String> replacements = new HashMap<>();
+            final int index = ticketSlots.indexOf(slot);
+            replacements.put("{AMOUNT}", Integer.toString(index+1));
+            sendStringListMessage(player, getStringList(config, "messages.slot requires ticket"), replacements);
         }
         return false;
     }
 
-    private void updateRandomLoot(Player player, Inventory top, boolean isRandom) {
-        for(int key : slots.keySet()) {
-            updateRandomLoot(player, top, key, isRandom);
-        }
-    }
-    private void updateRandomLoot(Player player, Inventory top, int rewardSlot) {
-        updateRandomLoot(player, top, rewardSlot, true);
-    }
     private void updateRandomLoot(Player player, Inventory top, int rewardSlot, boolean isRandom) {
         final int size = rewards.size();
         top.setItem(rewardSlot, isRandom ? d(null, rewards.get(RANDOM.nextInt(size))) : null);
@@ -247,65 +248,70 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         }
         player.updateInventory();
     }
-    private void startRolling(Player player, Inventory top) {
-        for(int rewardSlot : slots.keySet()) {
-            startRolling(player, top, rewardSlot);
-        }
-    }
     private void startRolling(Player player, Inventory top, int rewardSlot) {
         if(!rollingTasks.containsKey(player)) {
-            rollingTasks.put(player, new HashSet<>());
+            rollingTasks.put(player, new HashMap<>());
+        }
+        if(!pending.containsKey(player)) {
+            pending.put(player, new ArrayList<>());
+        }
+        final HashMap<Integer, List<Integer>> slotTasks = rollingTasks.get(player);
+        if(!slotTasks.containsKey(rewardSlot)) {
+            slotTasks.put(rewardSlot, new ArrayList<>());
         }
 
-        final HashSet<Integer> tasks = rollingTasks.get(player);
-        pending.add(player);
+        final List<Integer> tasks = slotTasks.get(rewardSlot);
+        pending.get(player).add(rewardSlot);
 
         updateRandomLoot(player, top, rewardSlot, true);
-        for(int i = 0; i <= 10; i++) {
+        for(int i = 1; i <= 10; i++) {
             tasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                for(int slot : slots.get(rewardSlot)) {
-                    updateRandomLoot(player, top, slot, true);
-                }
+                updateRandomLoot(player, top, rewardSlot, true);
             }, i*5));
         }
-        for(int i = 0; i <= 10; i++) {
+        for(int i = 1; i <= 10; i++) {
             final int I = i;
             tasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                for(int slot : slots.get(rewardSlot)) {
-                    updateRandomLoot(player, top, slot, true);
-                }
+                updateRandomLoot(player, top, rewardSlot, true);
                 if(I == 10) {
-                    stopRolling(player);
+                    stopRolling(player, rewardSlot);
                 }
             }, 50+(i*10)));
         }
     }
     public void stopRolling(@NotNull Player player) {
-        if(pending.contains(player) && rollingTasks.containsKey(player)) {
-            for(int task : rollingTasks.get(player)) {
-                SCHEDULER.cancelTask(task);
-            }
-            rollingTasks.remove(player);
-            final ItemStack air = new ItemStack(Material.AIR);
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            for(int key : slots.keySet()) {
-                for(int i : slots.get(key)) {
-                    top.setItem(i, air);
+        for(int rewardSlot : slots.keySet()) {
+            stopRolling(player, rewardSlot);
+        }
+    }
+    public void stopRolling(@NotNull Player player, int rewardSlot) {
+        if(pending.containsKey(player) && pending.get(player).contains(rewardSlot) && rollingTasks.containsKey(player)) {
+            final HashMap<Integer, List<Integer>> tasks = rollingTasks.get(player);
+            if(tasks.containsKey(rewardSlot)) {
+                for(int task : tasks.get(rewardSlot)) {
+                    SCHEDULER.cancelTask(task);
                 }
+                final Inventory top = player.getOpenInventory().getTopInventory();
+                for(int slot : slots.get(rewardSlot)) {
+                    top.setItem(slot, randomizedLootPlaceholder);
+                }
+                tasks.remove(rewardSlot);
+                player.updateInventory();
             }
-            player.updateInventory();
         }
     }
     private void giveLoot(Player player) {
-        if(pending.contains(player)) {
+        if(pending.containsKey(player)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
             final LinkedHashMap<String, Integer> items = new LinkedHashMap<>();
             final String tickets = Integer.toString(getInsertedTickets(player));
             for(int i : slots.keySet()) {
                 item = top.getItem(i);
-                itemMeta = item.getItemMeta();
-                items.put(itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : "UNKNOWN", item.getAmount());
-                giveItem(player, item);
+                if(!rewardSlot.isSimilar(item)) {
+                    itemMeta = item.getItemMeta();
+                    items.put(itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : "UNKNOWN", item.getAmount());
+                    giveItem(player, item);
+                }
             }
             for(String s : getStringList(config, "messages.loot")) {
                 s = s.replace("{PLAYER}", player.getName()).replace("{TICKETS}", tickets);
@@ -326,6 +332,9 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         final Player player = (Player) event.getPlayer();
         if(rollingTasks.containsKey(player)) {
             stopRolling(player);
+            rollingTasks.remove(player);
+        }
+        if(pending.containsKey(player)) {
             giveLoot(player);
         }
     }
@@ -355,17 +364,11 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             } else if(current.isSimilar(spinnerMissingTickets)) {
                 sendStringListMessage(player, getStringList(config, "messages.missing tickets"), null);
             } else if(current.isSimilar(spinnerReadyToSpin)) {
-                final int tickets = getInsertedTickets(player);
-                for(int i = 0; i < tickets; i++) {
-                    final ItemStack target = top.getItem(ticketSlots.get(i));
-                    trySpinning(player, -1, target);
+                for(int i : ticketSlots) {
+                    trySpinning(player, i, spinnerReadyToSpin);
                 }
             } else if(current.isSimilar(withdrawTickets)) {
                 tryWithdrawingTickets(player);
-            } else if(current.isSimilar(spinnerReadyToSpin)) {
-                for(int i : ticketSlots) {
-                    trySpinning(player, i, top.getItem(i));
-                }
             } else if(ticketSlots.contains(slot)) {
                 trySpinning(player, slot, current);
             }

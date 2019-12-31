@@ -91,7 +91,7 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(Boosters.getBoosters(), null, isTrue("boosters"));
         cmd.loadCustom(ChatEvents.getChatEvents(), getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
         cmd.load(CoinFlip.getCoinFlip(), Arrays.asList("coinflip"), isTrue("coinflip"));
-        cmd.loadCustom(CollectionFilter.getCollectionFilter(), getHash("collectionfilter", "collection filter"), isTrue("collection filter.enabled"));
+        cmd.loadCustom(CollectionFilter.getCollectionFilter(), getHash("collectionfilter", "collection filter"), isTrue("collection filter"));
         cmd.load(Conquest.getConquest(), Arrays.asList("conquest"), isTrue("conquest"));
         cmd.load(CustomArmor.getCustomArmor(), null, isTrue("custom armor"));
         cmd.loadCustom(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
