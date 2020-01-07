@@ -1,9 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CollectionChest;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public YamlConfiguration config;
     private ItemStack collectionchest;
     public String defaultType, allType, itemType, filtertypeString;
+    private String selectedPrefix, notSelectedPrefix;
     public int filtertypeSlot = -1;
 
     private UInventory collectionchestgui;
@@ -54,11 +54,12 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.collectionfilter", true)) {
-            if(args.length == 0 || args.length == 1 || args.length == 2 && !args[1].equals("all")) {
-                final String a = args.length >= 1 ? args.length == 1 ? args[0] : args[0] + "_" + args[1] : "";
+            final int length = args.length;
+            if(length == 0 || length == 1 || length == 2 && !args[1].equals("all")) {
+                final String arg = length >= 1 ? length == 1 ? args[0] : args[0] + "_" + args[1] : "";
                 final ItemStack q = getItemInHand(player);
                 if(q.getType().equals(collectionchest.getType()) && q.hasItemMeta() && q.getItemMeta().getDisplayName() != null && q.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
-                    switch(a) {
+                    switch (arg) {
                         case "default":
                             setFilter(player, q, defaultType);
                             break;
@@ -66,12 +67,12 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                             setFilter(player, q, colorize(config.getString("collection chests.chest.filter types.all")));
                             break;
                         default:
-                            if(args.length == 0) {
+                            if(length == 0) {
                                 editFilter(player, null);
                             } else {
-                                Material f = Material.getMaterial(a.toUpperCase());
+                                Material f = Material.getMaterial(arg.toUpperCase());
                                 if(f != null) {
-                                    setFilter(player, q, itemType.replace("{ITEM}", toMaterial(a, false)));
+                                    setFilter(player, q, itemType.replace("{ITEM}", toMaterial(arg, false)));
                                 } else {
                                     sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
                                     editFilter(player, null);
@@ -80,10 +81,12 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                             break;
                     }
                 } else {
-                    if(args.length == 1) sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
+                    if(length == 1) {
+                        sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
+                    }
                     sendStringListMessage(sender, getStringList(config, "messages.need to be holding cc"), null);
                 }
-            } else if(args.length == 2 && args[1].equals("all") || args.length == 3 && args[2].equals("all")) {
+            } else if(length == 2 && args[1].equals("all") || length == 3 && args[2].equals("all")) {
 
             }
         }
@@ -95,36 +98,46 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         save(null, "collection filter.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "collection filter.yml"));
 
-        picksup = new HashMap<>();
-        editingfilter = new HashMap<>();
-
         collectionchest = d(config, "collection chests.chest");
         allType = colorize(config.getString("collection chests.chest.filter types.all"));
         defaultType = colorize(config.getString("collection chests.chest.filter types.default"));
         itemType = colorize(config.getString("collection chests.chest.filter types.item"));
+        selectedPrefix = colorize(config.getString("gui.selected.prefix"));
+        notSelectedPrefix = colorize(config.getString("gui.not selected.prefix"));
+
+        picksup = new HashMap<>();
+        editingfilter = new HashMap<>();
 
         collectionchestgui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        final Inventory cci = collectionchestgui.getInventory();
+        final Inventory inv = collectionchestgui.getInventory();
         final ItemStack background = d(config, "gui.background");
         for(int i = 0; i < collectionchestgui.getSize(); i++) {
             if(config.get("gui." + i) != null) {
                 final ItemStack itemstack = d(config, "gui." + i);
-                cci.setItem(i, itemstack);
+                inv.setItem(i, itemstack);
                 final String[] j = config.getString("gui." + i + ".picks up").toUpperCase().split(":");
                 final UMaterial um = UMaterial.match(j[0], j.length > 1 ? Byte.parseByte(j[1]) : 0);
-                if(um == null && j[0].equalsIgnoreCase("all")) allMaterial = itemstack.getType();
+                if(um == null && j[0].equalsIgnoreCase("all")) {
+                    allMaterial = itemstack.getType();
+                }
                 picksup.put(i, um);
-            } else cci.setItem(i, background.clone());
+            } else {
+                inv.setItem(i, background);
+            }
         }
-        for(int i = 0; i < collectionchest.getItemMeta().getLore().size(); i++) if(collectionchest.getItemMeta().getLore().get(i).contains("{FILTER_TYPE}")) {
-            filtertypeSlot = i;
-            filtertypeString = collectionchest.getItemMeta().getLore().get(i);
+        final List<String> lore = collectionchest.getItemMeta().getLore();
+        for(int i = 0; i < lore.size(); i++) {
+            if(lore.get(i).contains("{FILTER_TYPE}")) {
+                filtertypeSlot = i;
+                filtertypeString = lore.get(i);
+            }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded CollectionFilter &e(took " + (System.currentTimeMillis()-started) + "ms)");
+
         SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
-            final ConfigurationSection cf = otherdata.getConfigurationSection("collection chests");
-            if(cf != null) {
-                for(String s : cf.getKeys(false)) {
+            final ConfigurationSection section = otherdata.getConfigurationSection("collection chests");
+            if(section != null) {
+                for(String s : section.getKeys(false)) {
                     final String[] info = otherdata.getString("collection chests." + s + ".info").split(":");
                     new CollectionChest(UUID.fromString(s), info[0], toLocation(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
                 }
@@ -150,9 +163,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         CollectionChest.deleteAll();
     }
 
-    private void viewFilter(Player player, CollectionChest cc) {
+    private void viewFilter(Player player, CollectionChest chest) {
         final HashMap<String, String> replacements = new HashMap<>();
-        final UMaterial f = cc.getFilter();
+        final UMaterial f = chest.getFilter();
         replacements.put("{ITEM}", f != null ? f.name() : "All");
         sendStringListMessage(player, getStringList(config, "messages.view filter"), replacements);
     }
@@ -160,18 +173,18 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
         final Entity e = event.getEntity();
-        final HashMap<UUID, CollectionChest> a = CollectionChest.chests;
-        if(a != null && config.getStringList("enabled worlds").contains(e.getWorld().getName())) {
-            final Chunk c = e.getLocation().getChunk();
+        final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
+        if(chests != null && getStringList(config, "enabled worlds").contains(e.getWorld().getName())) {
+            final Chunk chunk = e.getLocation().getChunk();
             final List<ItemStack> drops = event.getDrops();
-            for(CollectionChest cc : a.values()) {
-                if(cc.getLocation().getChunk().equals(c)) {
-                    final UMaterial f = cc.getFilter();
-                    final Inventory i = cc.getInventory();
+            for(CollectionChest chest : chests.values()) {
+                if(chest.getLocation().getChunk().equals(chunk)) {
+                    final UMaterial filter = chest.getFilter();
+                    final Inventory inv = chest.getInventory();
                     final List<ItemStack> added = new ArrayList<>();
                     for(ItemStack is : drops) {
-                        if(f == null || f.equals(UMaterial.match(is))) {
-                            i.addItem(is);
+                        if(filter == null || filter.equals(UMaterial.match(is))) {
+                            inv.addItem(is);
                             added.add(is);
                         }
                     }
@@ -180,24 +193,27 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
     }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Block b = event.getClickedBlock();
         if(b != null && !b.getType().equals(Material.AIR) && b.getType().name().contains("CHEST")) {
             final Player player = event.getPlayer();
-            final CollectionChest cc = CollectionChest.valueOf(b);
-            if(cc != null) {
-                final Action a = event.getAction();
-                if(a.equals(Action.RIGHT_CLICK_BLOCK)) {
-                    if(player.isSneaking()) {
-                        event.setCancelled(true);
-                        editFilter(player, b);
-                    } else {
-                        cc.getInventory();
-                    }
-                } else if(a.equals(Action.LEFT_CLICK_BLOCK)) {
-                    viewFilter(player, cc);
+            final CollectionChest chest = CollectionChest.valueOf(b);
+            if(chest != null) {
+                switch (event.getAction()) {
+                    case RIGHT_CLICK_BLOCK:
+                        if(player.isSneaking()) {
+                            event.setCancelled(true);
+                            editFilter(player, b);
+                        } else {
+                            chest.getInventory();
+                        }
+                        break;
+                    case LEFT_CLICK_BLOCK:
+                        viewFilter(player, chest);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -220,23 +236,23 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
-        final Block b = event.getBlock();
-        if(b.getType().equals(collectionchest.getType())) {
-            final CollectionChest cc = CollectionChest.valueOf(b);
-            if(cc != null) {
+        final Block block = event.getBlock();
+        if(block.getType().equals(collectionchest.getType())) {
+            final CollectionChest chest = CollectionChest.valueOf(block);
+            if(chest != null) {
                 event.setCancelled(true);
-                b.setType(Material.AIR);
+                block.setType(Material.AIR);
                 if(config.getBoolean("collection chests.chest.keeps meta")) {
-                    final UMaterial u = cc.getFilter();
-                    final ItemStack is = collectionchest.clone();
-                    ItemMeta itemMeta = is.getItemMeta();
-                    List<String> lore = itemMeta.getLore();
+                    final UMaterial u = chest.getFilter();
+                    item = collectionchest.clone();
+                    itemMeta = item.getItemMeta();
+                    lore = itemMeta.getLore();
                     lore.set(filtertypeSlot, filtertypeString.replace("{FILTER_TYPE}", u == null ? allType : itemType.replace("{ITEM}", toMaterial(u.name(), false))));
                     itemMeta.setLore(lore);
-                    is.setItemMeta(itemMeta);
-                    b.getWorld().dropItemNaturally(b.getLocation(), is);
+                    item.setItemMeta(itemMeta);
+                    block.getWorld().dropItemNaturally(block.getLocation(), item);
                 }
-                cc.destroy();
+                chest.destroy();
             }
         }
     }
@@ -249,62 +265,63 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             event.setCancelled(true);
             player.updateInventory();
 
-            final int r = event.getRawSlot();
-            final ItemStack c = event.getCurrentItem();
-            if(c == null || c.getType().equals(Material.AIR) || r >= top.getSize()) return;
-            final UUID u = player.getUniqueId();
-            final CollectionChest cc = editingfilter.containsKey(u) ? CollectionChest.valueOf(player.getWorld().getBlockAt(editingfilter.get(u))) : null;
-            final UMaterial filter = cc != null ? cc.getFilter() : null;
-            final Material mat = filter != null ? filter.getMaterial() : null;
-            final byte data = filter != null ? filter.getData() : -1;
-            if(mat != null && mat.equals(c.getType()) && data == c.getData().getData())
+            final int slot = event.getRawSlot();
+            final ItemStack current = event.getCurrentItem();
+            if(current == null || current.getType().equals(Material.AIR) || slot >= top.getSize()) return;
+            final UUID uuid = player.getUniqueId();
+            final CollectionChest chest = editingfilter.containsKey(uuid) ? CollectionChest.valueOf(player.getWorld().getBlockAt(editingfilter.get(uuid))) : null;
+            final UMaterial filter = chest != null ? chest.getFilter() : null;
+            if(filter != null && filter.equals(UMaterial.match(current))) {
                 sendStringListMessage(player, getStringList(config, "messages.item already being filtered"), null);
-            else {
-                if(cc != null && editingfilter.containsKey(u)) {
-                    cc.setFilter(picksup.get(r));
-                    editingfilter.remove(u);
-                    viewFilter(player, cc);
+            } else {
+                if(chest != null && editingfilter.containsKey(uuid)) {
+                    chest.setFilter(picksup.get(slot));
+                    editingfilter.remove(uuid);
+                    viewFilter(player, chest);
                 } else {
-                    setFilter(player, getItemInHand(player), r);
+                    setFilter(player, getItemInHand(player), slot);
                 }
                 player.closeInventory();;
             }
         }
     }
-    public void editFilter(Player player, Block clickedblock) {
+    public void editFilter(@NotNull Player player, Block clickedblock) {
         if(clickedblock != null) editingfilter.put(player.getUniqueId(), clickedblock.getLocation());
         player.openInventory(Bukkit.createInventory(player, collectionchestgui.getSize(), collectionchestgui.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(collectionchestgui.getInventory().getContents());
         player.updateInventory();
-        final String selected = colorize(config.getString("gui.selected.prefix")), notselected = colorize(config.getString("gui.not selected.prefix"));
         final boolean selectedEnchanted = config.getBoolean("gui.selected.enchanted"), notselectedEnchanted = config.getBoolean("gui.not selected.enchanted");
-        final CollectionChest cc = CollectionChest.valueOf(clickedblock);
-        final UMaterial filter = cc != null ? cc.getFilter() : getFiltered(player.getItemInHand());
-        final Material mat = filter != null ? filter.getMaterial() : null;
-        final byte data = filter != null ? filter.getData() : -1;
+        final CollectionChest chest = CollectionChest.valueOf(clickedblock);
+        final UMaterial filter = chest != null ? chest.getFilter() : getFiltered(player.getItemInHand());
+        final Material filterMaterial = filter != null ? filter.getMaterial() : null;
         for(int i = 0; i < top.getSize(); i++) {
-            if(top.getItem(i) != null && !top.getItem(i).getType().equals(Material.AIR)) {
-                final UMaterial u = picksup.get(i);
-                final String a = toMaterial(u != null ? u.name() : allMaterial.name(), false);
-                item = top.getItem(i); itemMeta = item.getItemMeta();
-                final String q = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : itemMeta.hasEnchants() ? ChatColor.AQUA + a : a;
-                boolean sel = filter == null && item.getType().equals(allMaterial) || filter != null && mat.equals(item.getType()) && data == item.getData().getData();
-                itemMeta.setDisplayName(sel ? selected : notselected);
-                itemMeta.setDisplayName(itemMeta.getDisplayName() + q);
-                lore.clear();
-                if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                for(String r : config.getStringList("gui." + (sel ? "selected" : "not selected") + ".added lore")) lore.add(colorize(r));
-                if(sel && selectedEnchanted || !sel && notselectedEnchanted) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            item = top.getItem(i);
+            if(item != null && !item.getType().equals(Material.AIR)) {
+                final UMaterial target = picksup.get(i);
+                final String umaterial = toMaterial(target != null ? target.name() : allMaterial.name(), false);
+                itemMeta = item.getItemMeta(); lore.clear();
+                final boolean isSelected = filter == null && item.getType().equals(allMaterial) || filter != null && target.equals(filterMaterial), isEnchanted = isSelected && selectedEnchanted || !isSelected && notselectedEnchanted;
+                final String name = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : itemMeta.hasEnchants() ? ChatColor.AQUA + umaterial : umaterial;
+                itemMeta.setDisplayName((isSelected ? selectedPrefix : notSelectedPrefix) + name);
+                if(itemMeta.hasLore()) {
+                    lore.addAll(itemMeta.getLore());
+                }
+                lore.addAll(getStringList(config, "gui." + (isSelected ? "selected" : "not selected") + ".added lore"));
+                if(isEnchanted) {
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                }
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
-                if(sel && selectedEnchanted || !sel && notselectedEnchanted) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                if(isEnchanted) {
+                    item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                }
             }
         }
         player.updateInventory();
     }
 
-    public ItemStack getCollectionChest(String filter) {
+    public ItemStack getCollectionChest(@NotNull String filter) {
         filter = filter.toLowerCase();
         filter = filter.equals("all") ? allType : filter.equals("default") ? defaultType : toMaterial(filter, false);
         item = collectionchest.clone(); itemMeta = item.getItemMeta(); lore.clear();
@@ -318,15 +335,16 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         item.setItemMeta(itemMeta);
         return item;
     }
-    public void setFilter(Player player, ItemStack is, int rawslot) {
+    public void setFilter(@NotNull Player player, @NotNull ItemStack is, int slot) {
         itemMeta = is.getItemMeta(); lore.clear();
         final List<String> l = collectionchest.getItemMeta().getLore();
-        final String m = toMaterial(picksup.get(rawslot).name(), false);
+        final String m = toMaterial(picksup.get(slot).name(), false);
         for(int i = 0; i < l.size(); i++) {
+            final String target = l.get(i);
             if(i == filtertypeSlot) {
-                lore.add(colorize(l.get(i).replace("{FILTER_TYPE}", m)));
+                lore.add(colorize(target.replace("{FILTER_TYPE}", m)));
             } else {
-                lore.add(l.get(i));
+                lore.add(target);
             }
         }
         itemMeta.setLore(lore);
@@ -337,10 +355,13 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             if(string.contains("{ITEM}")) string = string.replace("{ITEM}", m);
             player.sendMessage(colorize(string));
         }
-        if(player != null) player.updateInventory();
+        player.updateInventory();
     }
-    public void setFilter(Player player, ItemStack is, String filter) {
-        itemMeta = is.getItemMeta(); lore.clear(); lore.addAll(itemMeta.getLore());
+    public void setFilter(@NotNull Player player, @NotNull ItemStack is, @NotNull String filter) {
+        itemMeta = is.getItemMeta(); lore.clear();
+        if(itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
+        }
         lore.set(filtertypeSlot, collectionchest.getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", filter));
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
@@ -350,11 +371,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             player.sendMessage(colorize(string));
         }
     }
-
-    public UMaterial getFiltered(ItemStack is) {
-        final String u = collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), a = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
+    public UMaterial getFiltered(@NotNull ItemStack is) {
+        final String filter = collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), filterString = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
         for(UMaterial s : picksup.values()) {
-            if(s != null && a.equals(ChatColor.stripColor(u.replace("{ITEM}", s.name().replace("_", " "))))) {
+            if(s != null && filterString.equals(ChatColor.stripColor(filter.replace("{ITEM}", s.name().replace("_", " "))))) {
                 return s;
             }
         }

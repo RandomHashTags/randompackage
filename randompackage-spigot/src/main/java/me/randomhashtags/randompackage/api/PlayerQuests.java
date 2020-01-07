@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
@@ -103,17 +104,23 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         final int defaultCost = config.getInt("shop.default settings.cost");
         for(String s : config.getConfigurationSection("shop").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("background") && !s.equals("added lore") && !s.equals("default settings")) {
-                final boolean rtq = s.equals("return to quests");
-                final boolean d = !rtq && config.get("shop." + s + ".slot") == null;
+                final boolean returnToQuests = s.equals("return to quests");
+                final boolean d = !returnToQuests && config.get("shop." + s + ".slot") == null;
                 final int slot = d ? SLOT : config.getInt("shop." + s + ".slot"), cost = config.getInt("shop." + s + ".cost", defaultCost);
-                if(d) SLOT++;
+                if(d) {
+                    SLOT++;
+                }
                 final ItemStack r = d(config, "shop." + s);
                 if(r != null && !r.getType().equals(Material.AIR)) {
                     item = r.clone();
-                    if(!rtq) {
+                    if(!returnToQuests) {
                         itemMeta = item.getItemMeta(); lore.clear();
-                        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                        for(String a : addedlore) lore.add(a.replace("{COST}", Integer.toString(cost)));
+                        if(itemMeta.hasLore()) {
+                            lore.addAll(itemMeta.getLore());
+                        }
+                        for(String a : addedlore) {
+                            lore.add(a.replace("{COST}", Integer.toString(cost)));
+                        }
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
                         shopitems.put(slot, r);
@@ -205,7 +212,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         return completion;
     }
 
-    public void view(Player player) {
+    public void view(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.playerquests.view", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, gui.getSize(), gui.getTitle()));
@@ -215,20 +222,22 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             final long time = System.currentTimeMillis();
             final HashMap<PlayerQuest, ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests();
             final int size = a != null ? a.size() : 0;
-            final List<String> available = colorizeListString(config.getStringList("status.available")), completed = colorizeListString(config.getStringList("status.completed")), claimed = colorizeListString(config.getStringList("status.claimed"));
+            final List<String> available = getStringList(config, "status.available"), completed = getStringList(config, "status.completed"), claimed = getStringList(config, "status.claimed");
             final String tokens = Integer.toString(RPPlayer.get(player.getUniqueId()).questTokens);
             int q = 0;
             for(int i = 0; i < gui.getSize(); i++) {
                 item = top.getItem(i);
                 if(questSlots.contains(i)) {
-                    final boolean ac = q < size;
-                    item = (ac ? active : locked).clone();
+                    final boolean isActive = q < size;
+                    item = (isActive ? active : locked).clone();
                     itemMeta = item.getItemMeta();
                     if(itemMeta.hasDisplayName()) {
                         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOT}", Integer.toString(i+1)));
                     }
-                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    if(ac) {
+                    if(itemMeta.hasLore()) {
+                        lore.addAll(itemMeta.getLore());
+                    }
+                    if(isActive) {
                         item = getStatus(time, (ActivePlayerQuest) a.values().toArray()[q], available, completed, claimed);
                         itemMeta = item.getItemMeta();
                         q++;
@@ -255,20 +264,20 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             player.updateInventory();
         }
     }
-    public void viewShop(Player player) {
+    public void viewShop(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.playerquests.view.shop", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, shop.getSize(), shop.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(shop.getInventory().getContents());
 
-            final String t = formatLong(RPPlayer.get(player.getUniqueId()).questTokens);
+            final String tokens = formatLong(RPPlayer.get(player.getUniqueId()).questTokens);
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
                     itemMeta = item.getItemMeta(); lore.clear();
                     for(String s : itemMeta.getLore()) {
-                        lore.add(s.replace("{TOKENS}", t));
+                        lore.add(s.replace("{TOKENS}", tokens));
                     }
                     itemMeta.setLore(lore); lore.clear();
                     item.setItemMeta(itemMeta);
@@ -296,7 +305,6 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         player.updateInventory();
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final String t = event.getView().getTitle(), s = shop.getTitle();
@@ -304,51 +312,50 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             final Player player = (Player) event.getWhoClicked();
             event.setCancelled(true);
             final boolean inShop = t.equals(s);
-            final int r = event.getRawSlot();
+            final int slot = event.getRawSlot();
             final ItemStack c = event.getCurrentItem();
             if(!inShop) {
-                if(questSlots.contains(r)) {
-                    final ActivePlayerQuest a = valueOf(player, c);
-                    if(a != null) {
-                        final PlayerQuest q = a.getQuest();
-                        if(a.isCompleted()) {
-                            if(!a.hasClaimedRewards()) {
-                                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                                a.setHasClaimedRewards(true);
-                                for(String b : q.getRewards()) {
-                                    if(b.startsWith("questtokens=")) {
-                                        pdata.questTokens += Integer.parseInt(b.split("=")[1].split(":")[0]);
-                                    } else {
-                                        giveItem(player, d(null, b.split(":")[0]));
-                                    }
-                                    event.setCurrentItem(getStatus(System.currentTimeMillis(), a, null, null, colorizeListString(config.getStringList("status.claimed"))));
+                if(questSlots.contains(slot)) {
+                    final ActivePlayerQuest active = valueOf(player, c);
+                    if(active != null) {
+                        if(!active.isCompleted()) {
+                            sendStringListMessage(player, getStringList(config, "messages.not completed"), null);
+                        } else if(!active.hasClaimedRewards()) {
+                            final PlayerQuest quest = active.getQuest();
+                            final List<String> claimed = getStringList(config, "status.claimed");
+                            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                            active.setHasClaimedRewards(true);
+                            for(String b : quest.getRewards()) {
+                                if(b.startsWith("questtokens=")) {
+                                    pdata.questTokens += Integer.parseInt(b.split("=")[1].split(":")[0]);
+                                } else {
+                                    giveItem(player, d(null, b.split(":")[0]));
                                 }
-                            } else {
-                                sendStringListMessage(player, getStringList(config, "messages.already claimed"), null);
+                                event.setCurrentItem(getStatus(System.currentTimeMillis(), active, null, null, claimed));
                             }
                         } else {
-                            sendStringListMessage(player, getStringList(config, "messages.not completed"), null);
+                            sendStringListMessage(player, getStringList(config, "messages.already claimed"), null);
                         }
                     }
-                } else if(r == questMasterShopSlot) {
+                } else if(slot == questMasterShopSlot) {
                     viewShop(player);
                 }
-            } else if(shopitems.containsKey(r)) {
+            } else if(shopitems.containsKey(slot)) {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final int cost = tokencost.get(r), current = pdata.questTokens;
+                final int cost = tokencost.get(slot), current = pdata.questTokens;
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TOKENS}", Integer.toString(current));
                 replacements.put("{COST}", Integer.toString(cost));
                 if(current >= cost) {
                     pdata.questTokens -= cost;
-                    giveItem(player, shopitems.get(r));
+                    giveItem(player, shopitems.get(slot));
                     updateReturnToQuests(player);
                     replacements.put("{TOKENS}", Integer.toString(pdata.questTokens));
                     sendStringListMessage(player, getStringList(config, "messages.purchase"), replacements);
                 } else {
                     sendStringListMessage(player, getStringList(config, "messages.not enough tokens"), replacements);
                 }
-            } else if(r == returnToQuestsSlot) {
+            } else if(slot == returnToQuestsSlot) {
                 view(player);
             }
             player.updateInventory();
@@ -358,9 +365,9 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     private void triggerPQuests(Event event, Player player) {
         if(player != null) {
             final HashMap<String, Entity> entities = getEntities(event);
-            final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
+            final Collection<ActivePlayerQuest> quests = RPPlayer.get(player.getUniqueId()).getQuests().values();
             final String[] replacements = getReplacements(event);
-            for(ActivePlayerQuest quest : a) {
+            for(ActivePlayerQuest quest : quests) {
                 trigger(event, entities, quest.getQuest().getTrigger(), replacements);
             }
         }

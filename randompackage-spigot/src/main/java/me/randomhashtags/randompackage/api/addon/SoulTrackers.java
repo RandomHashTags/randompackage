@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -63,49 +64,45 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         unregister(Feature.SOUL_TRACKER);
     }
 
-    public void applySoulTracker(Player player, ItemStack is, SoulTracker soultracker) {
+    public void applySoulTracker(@NotNull Player player, @NotNull ItemStack is, @NotNull SoulTracker soultracker) {
         if(is != null && !is.getType().equals(Material.AIR)) {
             itemMeta = is.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) {
                 lore.addAll(itemMeta.getLore());
             }
             boolean did = false;
-            final String a = soultracker.getApplied(), ist = is.getType().name(), istl = ist.toLowerCase();
+            final String applied = soultracker.getApplied(), material = is.getType().name();
             final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
-            for(String s : soultracker.getAppliesTo()) {
-                if(istl.endsWith(s.toLowerCase())) {
+            for(String targetMaterial : soultracker.getAppliesTo()) {
+                if(material.endsWith(targetMaterial)) {
                     if(!lore.isEmpty()) {
                         for(int i = 0; i < lore.size(); i++) {
                             final String targetLore = lore.get(i);
                             for(SoulTracker st : trackers) {
-                                if(!did && targetLore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
-                                    did = true;
-                                    lore.set(i, a.replace("{SOULS}", "0"));
-                                    break;
+                                if(targetLore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
+                                    lore.set(i, applied.replace("{SOULS}", "0"));
+                                    itemMeta.setLore(lore);
+                                    is.setItemMeta(itemMeta);
+                                    return;
                                 }
                             }
                         }
-                        if(!did) {
-                            did = true;
-                            lore.add(a.replace("{SOULS}", "0"));
-                        }
-                    } else {
-                        lore.add(a.replace("{SOULS}", "0"));
-                        did = true;
                     }
+                    did = true;
+                    lore.add(applied.replace("{SOULS}", "0"));
                     break;
                 }
             }
             if(did) {
                 final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{ITEM}", ist);
+                replacements.put("{ITEM}", material);
                 sendStringListMessage(player, soultracker.getApplyMsg(), replacements);
                 itemMeta.setLore(lore); lore.clear();
                 is.setItemMeta(itemMeta);
             }
         }
     }
-    public void splitsouls(Player player, int amount) {
+    public void splitsouls(@NotNull Player player, int amount) {
         item = getItemInHand(player);
         RarityGem g = valueOfRarityGem(item);
         int collectedsouls = 0, gems = 0;
@@ -230,7 +227,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void addSouls(Player player, ItemStack is, int loreSlot, SoulTracker tracker) {
+    public void addSouls(@NotNull Player player, @NotNull ItemStack is, int loreSlot, @NotNull SoulTracker tracker) {
         itemMeta = is.getItemMeta(); lore.clear();
         lore.addAll(itemMeta.getLore());
         lore.set(loreSlot, tracker.getApplied().replace("{SOULS}", Integer.toString(getRemainingInt(ChatColor.stripColor(lore.get(loreSlot)))+1)));

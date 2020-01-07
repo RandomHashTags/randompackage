@@ -1,8 +1,10 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -66,9 +68,9 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			}
 		}
 		if(l >= 2) {
-			final String a = args[0], t = args[1];
+			final String a = args[0];
 			if(a.equals("reset")) {
-				resetShowcases(Bukkit.getOfflinePlayer(t));
+				resetShowcases(Bukkit.getOfflinePlayer(args[1]));
 			}
 		}
 		return true;
@@ -131,42 +133,40 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	public void resetShowcases(OfflinePlayer player) {
 		if(player != null) {
 			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final boolean loaded = pdata.isLoaded;
-			if(!loaded) pdata.load();
 			pdata.resetShowcases();
-			if(!loaded) pdata.unload();
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
-		final ItemStack c = event.getCurrentItem();
-		if(c != null && !c.getType().equals(Material.AIR)) {
+		final ItemStack current = event.getCurrentItem();
+		if(current != null && !current.getType().equals(Material.AIR)) {
 			final Player player = (Player) event.getWhoClicked();
 			final Inventory top = player.getOpenInventory().getTopInventory();
-			final String t = event.getView().getTitle();
-			final boolean edit = t.equals(additems.getTitle()) || t.equals(removeitems.getTitle());
+			final String title = event.getView().getTitle();
+			final boolean isAdding = title.equals(additems.getTitle());
+			final boolean edit = isAdding || title.equals(removeitems.getTitle());
 			
 			if(edit) {
 				final ItemStack item = top.getItem(itemslots.get(0));
-				if(t.equals(additems.getTitle()) && c.equals(addItemConfirm)) {
+				if(isAdding && current.equals(addItemConfirm)) {
 					add(player.getUniqueId(), item, 1);
-				} else if(c.equals(removeItemConfirm)) {
+				} else if(current.equals(removeItemConfirm)) {
 					delete(player.getUniqueId(), 1, top.getItem(deleteSlot.get(player)));
 					deleteSlot.remove(player);
 				}
 			} else if(inSelf.contains(player)) {
 				if(event.getRawSlot() >= top.getSize()) {
-					confirmAddition(player, c);
+					confirmAddition(player, current);
 				} else {
-					confirmDeletion(player, c);
+					confirmDeletion(player, current);
 					deleteSlot.put(player, itemslots.get(1));
 				}
 			} else return;
 			
 			event.setCancelled(true);
 			player.updateInventory();
-			if(edit && (c.equals(addItemConfirm) || c.equals(addItemCancel) || c.equals(removeItemConfirm) || c.equals(removeItemCancel))) {
+			if(edit && (current.equals(addItemConfirm) || current.equals(addItemCancel) || current.equals(removeItemConfirm) || current.equals(removeItemCancel))) {
 				open(player, player, 1);
 				inSelf.add(player);
 			}
@@ -201,12 +201,12 @@ public class Showcase extends RPFeature implements CommandExecutor {
         }
     }
 
-	public void confirmAddition(Player player, ItemStack item) {
+	public void confirmAddition(@NotNull Player player, @NotNull ItemStack item) {
 		if(hasPermission(player, "RandomPackage.showcase.add", true)) {
 			confirm(player, item, additems);
 		}
 	}
-	public void confirmDeletion(Player player, ItemStack item) {
+	public void confirmDeletion(@NotNull Player player, @NotNull ItemStack item) {
 		if(hasPermission(player, "RandomPackage.showcase.remove", true)) {
 			confirm(player, item, removeitems);
 		}
@@ -243,14 +243,16 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		final RPPlayer pdata = RPPlayer.get(player);
 		pdata.removeFromShowcase(page, is);
 	}
-	public void open(Player opener, OfflinePlayer target, int page) {
+	public void open(@NotNull Player opener, @Nullable OfflinePlayer target, int page) {
 		if(target == null || target == opener) target = opener;
 		final boolean self = target == opener;
 		final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
 		final HashMap<Integer, ItemStack[]> showcases = pdata.getShowcases();
 		int maxpage = 0;
 		for(int i = 1; i <= 100; i++) {
-			if(showcases.containsKey(i)) maxpage = i;
+			if(showcases.containsKey(i)) {
+				maxpage = i;
+			}
 		}
 		if(!hasPermission(opener, "RandomPackage.showcase" + (self ? "" : ".other"), false)) {
 			sendStringListMessage(opener, getStringList(config, "messages.no access"), null);
@@ -262,7 +264,11 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			opener.openInventory(inv);
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			final HashMap<Integer, ItemStack> showcase = pdata.getShowcaseItems(page);
-			for(int i : showcase.keySet()) if(i < size) top.setItem(i, showcase.get(i));
+			for(int i : showcase.keySet()) {
+				if(i < size) {
+					top.setItem(i, showcase.get(i));
+				}
+			}
 			opener.updateInventory();
 		}
 	}

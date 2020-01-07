@@ -1,8 +1,9 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.event.KothCaptureEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +25,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	public DisplaySlot displaySlot;
 	public String kothtitle, kothname, status;
 	public Location teleportLocation, center;
-	private List<String> cappingscoreboard, capturedscoreboard, captured, limitedcommands, lootbagrewards;
+	private List<String> captured, limitedcommands, lootbagrewards;
 	
 	public int captureTime = 0, captureRadius = 0;
 	
@@ -118,8 +120,6 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		captureRadius = config.getInt("settings.capture radius");
 		captured = getStringList(config, "messages.captured");
 		rewardformat = colorize(config.getString("messages.reward format"));
-		capturedscoreboard = config.getStringList("settings.scoreboards.captured");
-		cappingscoreboard = config.getStringList("settings.scoreboards.capping");
 		scorestart = config.getInt("settings.scoreboards.score start");
 
 		limitedcommands = config.getStringList("limited commands");
@@ -254,27 +254,6 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			sendStringListMessage(sender, getStringList(config, "messages.set center"), null);
 		}
 	}
-
-	@EventHandler
-	private void playerJoinEvent(PlayerJoinEvent event) {
-		if(status.equals("ACTIVE")) {
-			sendStringListMessage(event.getPlayer(), getStringList(config, "messages.event running"), null);
-		}
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void playerTeleportEvent(PlayerTeleportEvent event) {
-		final World w = center != null ? center.getWorld() : null;
-		if(w != null) {
-			final Player player = event.getPlayer();
-			final boolean stopped = status.equals("STOPPED");
-			if(event.getTo().getWorld().equals(w) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (stopped || status.equals("CAPTURED"))) {
-				event.setCancelled(true);
-				sendStringListMessage(player, null, getStringList(config, "messages." + (stopped ? "no event running" : "already capped")), -1, null);
-			} else if(event.getFrom().getWorld().equals(w)) {
-				player.setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
-			}
-		}
-	}
 	
 	public void startKOTH() {
 		started = System.currentTimeMillis();
@@ -331,91 +310,133 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	}
 
 	private void setScoreboard(boolean captured) {
-		final long current = System.currentTimeMillis();
-		final long T = cappingStartedTime > 0 && currentPlayerCapturing != null ? cappingStartedTime+captureTime*1000-current : captureTime*1000;
-		final String time = getRemainingTime(T);
-		if(status.equals("STOPPED")) {
-			cappingStartedTime = current;
+		if(center == null) return;
+		final long currentTime = System.currentTimeMillis();
+		final boolean isCapturing = currentPlayerCapturing != null;
+		final long captureTimeLeft = cappingStartedTime > 0 && isCapturing ? cappingStartedTime+captureTime*1000-currentTime : captureTime*1000;
+		final String timeLeft = getRemainingTime(captureTimeLeft);
+		final boolean isStopped = status.equals("STOPPED"), isCaptured = status.equals("CAPTURED");
+		if(isStopped) {
+			cappingStartedTime = currentTime;
 			currentPlayerCapturing = null;
 			previouscapturer = null;
 		} else {
 			previouscapturer = currentPlayerCapturing;
 		}
-		
-		List<String> liststring = captured ? capturedscoreboard : cappingscoreboard;
-		if(center == null) return;
+
+		final Collection<Player> kothPlayers = center.getWorld().getPlayers();
 		String closestPlayerToKOTH = null;
 		int distance = captureRadius;
-		//
-		if(!status.equals("STOPPED")) {
-			if(T <= 0 && currentPlayerCapturing != null && !status.equals("CAPTURED")) {
-				final KothCaptureEvent e = new KothCaptureEvent(currentPlayerCapturing);
-				PLUGIN_MANAGER.callEvent(e);
-				if(!e.isCancelled()) {
-					status = "CAPTURED";
-					for(Player player : center.getWorld().getPlayers()) {
-						for(String string : this.captured) {
-							if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-							player.sendMessage(colorize(string));
+
+		if(!isStopped) {
+			if(!isCaptured && isCapturing) {
+				if(captureTimeLeft <= 0) {
+					final KothCaptureEvent e = new KothCaptureEvent(currentPlayerCapturing);
+					PLUGIN_MANAGER.callEvent(e);
+					if(!e.isCancelled()) {
+						final String currentCapturer = currentPlayerCapturing.getName();
+						status = "CAPTURED";
+						for(Player player : kothPlayers) {
+							for(String string : this.captured) {
+								player.sendMessage(string.replace("{PLAYER}", currentCapturer));
+							}
 						}
+						item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
+						for(String string : itemMeta.getLore()) {
+							lore.add(string.replace("{PLAYER}", currentCapturer));
+						}
+						itemMeta.setLore(lore); lore.clear();
+						item.setItemMeta(itemMeta);
+						giveItem(currentPlayerCapturing, item.clone());
+						return;
 					}
-					item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
-					for(String string : itemMeta.getLore()) {
-						if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
-						lore.add(string);
-					}
-					itemMeta.setLore(lore); lore.clear();
-					item.setItemMeta(itemMeta);
-					giveItem(currentPlayerCapturing, item.clone());
-					return;
+				} else if(captureTimeLeft/1000 <= startCapCountdown) {
+					broadcastCapping();
 				}
-			} else {
-				if(!status.equals("CAPTURED") && T/1000 <= startCapCountdown && currentPlayerCapturing != null) broadcastCapping();
 			}
-			if(currentPlayerCapturing != null && center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius).contains(currentPlayerCapturing) && (int) currentPlayerCapturing.getLocation().distance(center) <= captureRadius) {
+
+			final Collection<Entity> nearby = center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius);
+			if(isCapturing && nearby.contains(currentPlayerCapturing) && (int) currentPlayerCapturing.getLocation().distance(center) <= captureRadius) {
 				closestPlayerToKOTH = currentPlayerCapturing.getName();
-			} else
-				for(Entity entity : center.getWorld().getNearbyEntities(center, captureRadius, captureRadius, captureRadius)) {
+			} else {
+				for(Entity entity : nearby) {
 					if(entity instanceof Player && (int) entity.getLocation().distance(center) <= distance) {
 						currentPlayerCapturing = (Player) entity;
-						cappingStartedTime = System.currentTimeMillis();
+						cappingStartedTime = currentTime;
 						closestPlayerToKOTH = entity.getName();
 						distance = (int) entity.getLocation().distance(center);
-						if(previouscapturer != null) broadcastNoLongerCapping();
+						if(previouscapturer != null) {
+							broadcastNoLongerCapping();
+						}
 						broadcastStartCapping();
 					}
 				}
+			}
 			if(closestPlayerToKOTH == null) {
 				closestPlayerToKOTH = "N/A";
 				cappingStartedTime = -1;
-				if(currentPlayerCapturing != null) {
+				if(isCapturing) {
 					broadcastNoLongerCapping();
 				}
 				currentPlayerCapturing = null;
-			} else {
-				
 			}
-		} else
+		} else {
 			closestPlayerToKOTH = "N/A";
-		//
-		for(Player player : center.getWorld().getPlayers()) {
+		}
+
+		final List<String> scoreboardStatus = getStringList(config, "settings.scoreboards." + (captured ? "captured" : "capping"));
+		for(Player player : kothPlayers) {
 			final Scoreboard scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
 			final Objective obj = scoreboard.registerNewObjective("config", "dummy");
 			obj.setDisplayName(kothtitle);
 			obj.setDisplaySlot(displaySlot);
 			final String dis = Double.toString(player.getLocation().distance(center)).split("\\.")[0];
-			for(int i = 0; i < liststring.size(); i++) {
-				String score = colorize(liststring.get(i));
-				if(score.contains("{DISTANCE}")) score = score.replace("{DISTANCE}", dis);
-				if(score.contains("{TIME}")) score = score.replace("{TIME}", time);
-				if(score.contains("{PLAYER}")) score = score.replace("{PLAYER}", closestPlayerToKOTH);
+			for(int i = 0; i < scoreboardStatus.size(); i++) {
+				final String score = scoreboardStatus.get(i).replace("{DISTANCE}", dis).replace("{TIME}", timeLeft).replace("{PLAYER}", closestPlayerToKOTH);
 				obj.getScore(score).setScore(scorestart-i);
 			}
 			player.setScoreboard(scoreboard);
 		}
 	}
+	public void teleportToKOTH(@NotNull Player player) {
+		if(hasPermission(player, "RandomPackage.koth.teleport", true) && teleportLocation != null) {
+			final boolean captured = status.equals("CAPTURED");
+			sendStringListMessage(player, null, getStringList(config, "messages." + (captured ? "already capped" : "teleport")), 0, null);
+			if(!captured) {
+				player.teleport(teleportLocation, TeleportCause.PLUGIN);
+			}
+		}
+	}
+	private void sendStringListMessage(Player sender, Player target, List<String> message, int number, Location location) {
+		final HashMap<String, String> replacements = new HashMap<>();
+		replacements.put("{AMOUNT}", formatInt(number));
+		replacements.put("{SENDER}", sender.getName());
+		replacements.put("{TARGET}", target != null ? target.getName() : "null");
+		replacements.put("{LOCATION}", location.getBlockX() + "x " + location.getBlockY() + "y " + location.getBlockZ() + "z");
+		replacements.put("{KOTH}", kothname);
+		sendStringListMessage(sender, message, replacements);
+	}
 
-
+	@EventHandler
+	private void playerJoinEvent(PlayerJoinEvent event) {
+		if(status.equals("ACTIVE")) {
+			sendStringListMessage(event.getPlayer(), getStringList(config, "messages.event running"), null);
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	private void playerTeleportEvent(PlayerTeleportEvent event) {
+		final World w = center != null ? center.getWorld() : null;
+		if(w != null) {
+			final Player player = event.getPlayer();
+			final boolean stopped = status.equals("STOPPED");
+			if(event.getTo().getWorld().equals(w) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (stopped || status.equals("CAPTURED"))) {
+				event.setCancelled(true);
+				sendStringListMessage(player, null, getStringList(config, "messages." + (stopped ? "no event running" : "already capped")), -1, null);
+			} else if(event.getFrom().getWorld().equals(w)) {
+				player.setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
+			}
+		}
+	}
 	@EventHandler
 	private void playerQuitEvent(PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
@@ -426,22 +447,16 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		if(center != null && center.getWorld().getPlayers().contains(player) && !status.equals("STOPPED") && !limitedcommands.contains("*")) {
-			final String m = event.getMessage().toLowerCase();
-			boolean did = false;
+		if(!status.equals("STOPPED") && !limitedcommands.contains("*") && center != null && center.getWorld().getPlayers().contains(player)) {
+			final String msg = event.getMessage().toLowerCase();
 			for(String string : limitedcommands) {
-				if(m.startsWith(string.toLowerCase())) {
-					did = true;
-					break;
+				if(msg.startsWith(string.toLowerCase())) {
+					return;
 				}
 			}
-			if(!did) {
+			if(!player.isOp()) {
+				event.setCancelled(true);
 				sendStringListMessage(player, null, getStringList(config, "messages.blocked command"), -1, null);
-				if(!player.isOp()) {
-					event.setCancelled(true);
-				} else {
-					player.sendMessage(colorize("&e&l(!)&r &eSince you're OP, the command has been executed."));
-				}
 			}
 		}
 	}
@@ -460,6 +475,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().hasLore()) {
 			final Player player = event.getPlayer();
+			final String playerName = player.getName();
 			final ItemMeta m = i.getItemMeta();
 			if(m.getDisplayName().equals(lootbag.getItemMeta().getDisplayName())) {
 				event.setCancelled(true);
@@ -492,37 +508,18 @@ public class KOTH extends RPFeature implements CommandExecutor {
 
 				final List<Player> online = player.getWorld().getPlayers();
 				for(String string : getStringList(config, "messages.open loot bag")) {
-					if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", player.getName());
+					string = string.replace("{PLAYER}", playerName);
 					if(string.equals("{REWARDS}")) {
 						for(Player p : online) {
 							sendStringListMessage(p, a, null);
 						}
-					} else  {
-						string = colorize(string);
-						for(Player p : online) p.sendMessage(string);
+					} else {
+						for(Player p : online) {
+							p.sendMessage(string);
+						}
 					}
 				}
 			}
 		}
-	}
-	
-	public void teleportToKOTH(Player player) {
-		if(hasPermission(player, "RandomPackage.koth.teleport", true) && teleportLocation != null) {
-			final boolean captured = status.equals("CAPTURED");
-			sendStringListMessage(player, null, getStringList(config, "messages." + (captured ? "already capped" : "teleport")), 0, null);
-			if(!captured) {
-				player.teleport(teleportLocation);
-			}
-		}
-	}
-
-	private void sendStringListMessage(Player sender, Player target, List<String> message, int number, Location location) {
-		final HashMap<String, String> replacements = new HashMap<>();
-		replacements.put("{AMOUNT}", formatInt(number));
-		replacements.put("{SENDER}", sender.getName());
-		replacements.put("{TARGET}", target != null ? target.getName() : "null");
-		replacements.put("{LOCATION}", location.getBlockX() + "x " + location.getBlockY() + "y " + location.getBlockZ() + "z");
-		replacements.put("{KOTH}", kothname);
-		sendStringListMessage(sender, message, replacements);
 	}
 }

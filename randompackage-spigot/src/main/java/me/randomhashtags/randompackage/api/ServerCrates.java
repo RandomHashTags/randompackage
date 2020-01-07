@@ -117,47 +117,48 @@ public class ServerCrates extends RPFeature {
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		if(event.getCurrentItem() != null && player.getOpenInventory().getTopInventory().getHolder() == player) {
+			final ItemStack current = event.getCurrentItem();
 			final UUID uuid = player.getUniqueId();
 			if(revealingLoot.containsKey(uuid))  {
-				final int r = event.getRawSlot();
-				final ServerCrate c = revealingLoot.get(uuid);
+				final int slot = event.getRawSlot();
+				final ServerCrate crate = revealingLoot.get(uuid);
 				event.setCancelled(true);
 				player.updateInventory();
 				final Inventory top = player.getOpenInventory().getTopInventory();
-				if(!event.getClick().isLeftClick() && !event.getClick().isRightClick() || event.getCurrentItem().getType().equals(Material.AIR) || r >= top.getSize()) return;
-				if(c != null && c.getSelectableSlots().contains(r)) {
-					if(selectedSlots.get(uuid).keySet().size() != c.getRedeemableItems()) {
-						if(!selectedSlots.get(uuid).containsKey(r)) {
-							selectedSlots.get(uuid).put(r, null);
-							item = c.getSelected().clone(); itemMeta = item.getItemMeta(); lore.clear();
-							if(item.hasItemMeta()) {
-								if(itemMeta.hasDisplayName()) {
-									if(itemMeta.getDisplayName().contains("{SLOT}")) itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOT}", Integer.toString(getRemainingInt(event.getCurrentItem().getItemMeta().getDisplayName()))));
-								}
-								if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-								itemMeta.setLore(lore); lore.clear();
-								item.setItemMeta(itemMeta);
-							}
-							top.setItem(r, item);
+				if(!event.getClick().isLeftClick() && !event.getClick().isRightClick() || current.getType().equals(Material.AIR) || slot >= top.getSize()) return;
+				if(crate != null && crate.getSelectableSlots().contains(slot)) {
+					final HashMap<Integer, ServerCrate> selectedSlots = this.selectedSlots.get(uuid);
+					if(selectedSlots.size() != crate.getRedeemableItems()) {
+						if(!selectedSlots.containsKey(slot)) {
+							selectedSlots.put(slot, null);
+							item = crate.getSelected().clone();
 						} else {
-							item = c.getOpenGui().clone(); itemMeta = item.getItemMeta();
-							if(itemMeta.hasDisplayName() && itemMeta.getDisplayName().contains("{SLOT}")) itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOT}", Integer.toString(getRemainingInt(event.getCurrentItem().getItemMeta().getDisplayName()))));
-							item.setItemMeta(itemMeta);
-							selectedSlots.get(uuid).remove(r);
-							top.setItem(r, item);
+							item = crate.getOpenGui().clone();
+							selectedSlots.remove(slot);
 						}
+						if(item.hasItemMeta()) {
+							itemMeta = item.getItemMeta();
+							if(itemMeta.hasDisplayName()) {
+								final String name = itemMeta.getDisplayName();
+								if(name.contains("{SLOT}")) {
+									itemMeta.setDisplayName(name.replace("{SLOT}", Integer.toString(getRemainingInt(current.getItemMeta().getDisplayName()))));
+								}
+							}
+							item.setItemMeta(itemMeta);
+						}
+						top.setItem(slot, item);
 						player.updateInventory();
-						if(!tasks.containsKey(uuid) && selectedSlots.get(uuid).keySet().size() == c.getRedeemableItems()) {
+						if(!tasks.containsKey(uuid) && selectedSlots.size() == crate.getRedeemableItems()) {
 							revealBackgroundLoot(player);
 						}
-					} else if(canRevealRarities.contains(uuid) && selectedSlots.get(uuid).containsKey(r) && selectedSlots.get(uuid).get(r) == null) {
-						final ServerCrate sc = c.getRandomRarity(true);
-						selectedSlots.get(uuid).put(r, sc);
+					} else if(canRevealRarities.contains(uuid) && selectedSlots.containsKey(slot) && selectedSlots.get(slot) == null) {
+						final ServerCrate sc = crate.getRandomRarity(true);
+						selectedSlots.put(slot, sc);
 						item = sc.getDisplay().clone(); itemMeta = item.getItemMeta(); lore.clear();
 						if(item.hasItemMeta()) {
 							if(itemMeta.hasLore()) {
 								for(String s : itemMeta.getLore()) {
-									if(s.contains("{SC_RARITY}")) s = s.replace("{SC_RARITY}", c.getDisplayRarity());
+									if(s.contains("{SC_RARITY}")) s = s.replace("{SC_RARITY}", crate.getDisplayRarity());
 									if(s.contains("{LOOT_RARITY}")) s = s.replace("{LOOT_RARITY}", sc.getDisplayRarity());
 									lore.add(s);
 								}
@@ -165,17 +166,17 @@ public class ServerCrates extends RPFeature {
 							}
 							item.setItemMeta(itemMeta);
 						}
-						top.setItem(event.getRawSlot(), item);
+						top.setItem(slot, item);
 						player.updateInventory();
-					} else if(selectedSlots.get(uuid).containsKey(r) && selectedSlots.get(uuid).get(r) != null) {
-						if(!revealedslots.containsKey(uuid) || !revealedslots.get(uuid).contains(r)) {
-							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(uuid).get(r).getIdentifier());
-							top.setItem(r, reward);
+					} else if(selectedSlots.containsKey(slot) && selectedSlots.get(slot) != null) {
+						if(!revealedslots.containsKey(uuid) || !revealedslots.get(uuid).contains(slot)) {
+							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(slot).getIdentifier());
+							top.setItem(slot, reward);
 							player.updateInventory();
 							if(!revealingloot.containsKey(uuid)) revealingloot.put(uuid, new ArrayList<>());
 							revealingloot.get(uuid).add(reward);
 							if(!revealedslots.containsKey(uuid)) revealedslots.put(uuid, new ArrayList<>());
-							revealedslots.get(uuid).add(r);
+							revealedslots.get(uuid).add(slot);
 						}
 					}
 				}
@@ -205,52 +206,59 @@ public class ServerCrates extends RPFeature {
 	}
 	private void revealBackgroundLoot(Player player) {
 		final UUID uuid = player.getUniqueId();
-		final ServerCrate c = revealingLoot.get(uuid);
-		tasks.put(player.getUniqueId(), new ArrayList<>());
-		List<Integer> background = new ArrayList<>();
+		final ServerCrate crate = revealingLoot.get(uuid);
+		tasks.put(uuid, new ArrayList<>());
+		final List<Integer> tasks = this.tasks.get(uuid);
+		final List<Integer> background = new ArrayList<>();
 		final Inventory top = player.getOpenInventory().getTopInventory();
+		final HashMap<Integer, ServerCrate> selectedSlots = this.selectedSlots.get(uuid);
+		final ItemStack background1 = crate.getBackground(), background2 = crate.getBackground2(), revealSlotRarity = crate.getRevealSlotRarity();
 		for(int i = 0; i < top.getSize(); i++) {
-			item = top.getItem(i);
-			if(item != null && !item.equals(c.getBackground()) && !selectedSlots.get(uuid).keySet().contains(i)) background.add(i);
+			if(!selectedSlots.containsKey(i)) {
+				if(!background1.equals(top.getItem(i))) {
+					background.add(i);
+				}
+			}
 		}
-		final int bgSize = background.size();
+		final int backgroundSize = background.size();
 		final List<Integer> bg = new ArrayList<>(background);
-		for(int i = 1; i <= bgSize; i++) {
+		for(int i = 1; i <= backgroundSize; i++) {
 			final int I = i;
 			int k = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
 				final int randomSlot = (int) background.toArray()[RANDOM.nextInt(background.size())];
-				ItemStack reward = c.getRandomReward(c.getRandomRarity(true).getIdentifier());
+				final ItemStack reward = crate.getRandomReward(crate.getRandomRarity(true).getIdentifier());
 				top.setItem(randomSlot, reward);
 				player.updateInventory();
 				background.remove((Object) randomSlot);
-				if(I == bgSize) {
-					for(int n = 1; n <= bgSize; n++) {
-						int K = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-							final int R = (int) bg.toArray()[RANDOM.nextInt(bg.size())];
-							top.setItem(R, c.getBackground2());
-							player.updateInventory();
-							bg.remove((Object) R);
+				if(I == backgroundSize) {
+					for(int n = 1; n <= backgroundSize; n++) {
+						final int K = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+							final int targetSlot = (int) bg.toArray()[RANDOM.nextInt(bg.size())];
+							top.setItem(targetSlot, background2);
+							bg.remove((Object) targetSlot);
 							if(bg.isEmpty()) {
-								for(int P : selectedSlots.get(uuid).keySet()) {
-									item = c.getRevealSlotRarity().clone(); itemMeta = item.getItemMeta(); lore.clear();
+								for(int selectedSlot : selectedSlots.keySet()) {
+									item = revealSlotRarity; itemMeta = item.getItemMeta();
 									if(item.hasItemMeta()) {
-										if(itemMeta.hasDisplayName())
-											if(itemMeta.getDisplayName().contains("{SLOT}")) itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOT}", Integer.toString(getRemainingInt(top.getItem(P).getItemMeta().getDisplayName()))));
-										if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+										if(itemMeta.hasDisplayName()) {
+											final String name = itemMeta.getDisplayName();
+											if(name.contains("{SLOT}")) {
+												itemMeta.setDisplayName(name.replace("{SLOT}", Integer.toString(getRemainingInt(top.getItem(selectedSlot).getItemMeta().getDisplayName()))));
+											}
+										}
 									}
-									itemMeta.setLore(lore); lore.clear();
 									item.setItemMeta(itemMeta);
-									top.setItem(P, item);
+									top.setItem(selectedSlot, item);
 								}
-								player.updateInventory();
 								canRevealRarities.add(uuid);
 							}
+							player.updateInventory();
 						}, n*5);
-						tasks.get(player.getUniqueId()).add(K);
+						tasks.add(K);
 					}
 				}
 			}, i*5);
-			tasks.get(player.getUniqueId()).add(k);
+			tasks.add(k);
 		}
 	}
 	
@@ -261,18 +269,18 @@ public class ServerCrates extends RPFeature {
 		if(revealingLoot.containsKey(uuid)) {
 			canRevealRarities.remove(uuid);
 			stopTasks(uuid);
-			final ServerCrate c = revealingLoot.get(uuid);
+			final ServerCrate crate = revealingLoot.get(uuid);
 			revealingLoot.remove(uuid);
 			if(!revealingloot.containsKey(uuid)) revealingloot.put(uuid, new ArrayList<>());
-			final HashMap<String, List<String>> cr = c.getRewards();
+			final HashMap<String, List<String>> cr = crate.getRewards();
 			final List<ItemStack> l = revealingloot.get(uuid);
-			final int ri = c.getRedeemableItems(), s = revealingloot.get(uuid).size();
+			final int ri = crate.getRedeemableItems(), s = revealingloot.get(uuid).size();
 			for(int i = 1; i <= ri-s; i++) {
-				l.add(c.getRandomReward((String) cr.keySet().toArray()[RANDOM.nextInt(cr.size())]));
+				l.add(crate.getRandomReward((String) cr.keySet().toArray()[RANDOM.nextInt(cr.size())]));
 			}
 			selectedSlots.remove(uuid);
 			if(player.isOnline()) {
-				final ServerCrateCloseEvent e = new ServerCrateCloseEvent(player, c, l);
+				final ServerCrateCloseEvent e = new ServerCrateCloseEvent(player, crate, l);
 				PLUGIN_MANAGER.callEvent(e);
 				for(ItemStack is : l) {
 					giveItem(player, is);

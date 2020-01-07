@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
@@ -155,7 +156,9 @@ public class FactionUpgrades extends EventAttributes {
         }
     }
 
-    public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction) { return getFactionUpgradeInfo(upgrade, faction, getDefaultUpgradeInfo(upgrade)); }
+    public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction) {
+        return getFactionUpgradeInfo(upgrade, faction, getDefaultUpgradeInfo(upgrade));
+    }
     public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction, FactionUpgradeInfo def) {
         if(upgrade != null && faction != null && factionUpgrades.containsKey(faction)) {
             for(FactionUpgradeInfo info : factionUpgrades.get(faction)) {
@@ -169,7 +172,7 @@ public class FactionUpgrades extends EventAttributes {
     public FactionUpgradeInfo getDefaultUpgradeInfo(FactionUpgrade upgrade) {
         return new FactionUpgradeInfo(upgrade, upgrade.getLevels().get(0));
     }
-    public void tryToUpgrade(Player player, FactionUpgrade upgrade) {
+    public void tryToUpgrade(@NotNull Player player, @NotNull FactionUpgrade upgrade) {
         final String faction = regions.getFactionTag(player.getUniqueId());
         final FactionUpgradeInfo info = getFactionUpgradeInfo(upgrade, faction);
         if(info != null) {
@@ -192,9 +195,10 @@ public class FactionUpgrades extends EventAttributes {
                         return;
                     }
                 } else if(s.startsWith("item{")) {
-                    final ItemStack a = givedpitem.valueOf(s.split("\\{")[1].split(";")[0]);
+                    final String value = s.split("\\{")[1];
+                    final ItemStack a = givedpitem.valueOf(value.split(";")[0]);
                     requiredItem = a;
-                    a.setAmount(Integer.parseInt(s.split("\\{")[1].split("amount=")[1].split("}")[0]));
+                    a.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
                     if(!player.getInventory().containsAtLeast(a, a.getAmount())) {
                         replacements.put("{ITEM}", s.split("};")[1]);
                         sendStringListMessage(player, getStringList(config, "messages.dont have item"), replacements);
@@ -205,12 +209,12 @@ public class FactionUpgrades extends EventAttributes {
                     sendStringListMessage(player, getStringList(config, "messages.dont have enough spawner value"), replacements);
                     return;
                 } else if(s.startsWith("factionupgrade{")) {
-                    final String p = s.split("\\{")[1].split("}")[0];
-                    final FactionUpgrade target = getFactionUpgrade(p.split(":")[0]);
-                    final int lvl = Integer.parseInt(p.split(":")[1].split("=")[1]);
+                    final String[] values = s.split("\\{")[1].split("}")[0].split(":");
+                    final FactionUpgrade target = getFactionUpgrade(values[0]);
+                    final int lvl = Integer.parseInt(values[1].split("=")[1]);
                     if(!upgrades.contains(getFactionUpgradeInfo(target, faction))) {
-                        final String di = ChatColor.stripColor(target.getItem().getItemMeta().getDisplayName());
-                        replacements.put("{UPGRADE}", di + " " + toRoman(lvl));
+                        final String name = ChatColor.stripColor(target.getItem().getItemMeta().getDisplayName());
+                        replacements.put("{UPGRADE}", name + " " + toRoman(lvl));
                         sendStringListMessage(player, getStringList(config, "messages.dont have f upgrade"), replacements);
                         return;
                     }
@@ -218,9 +222,15 @@ public class FactionUpgrades extends EventAttributes {
             }
             final FactionUpgradeLevelupEvent e = new FactionUpgradeLevelupEvent(player, upgrade, tier);
             PLUGIN_MANAGER.callEvent(e);
-            if(e.isCancelled()) return;
-            if(!requiredCash.equals(BigDecimal.ZERO)) eco.withdrawPlayer(player, requiredCash.doubleValue());
-            if(requiredItem != null) removeItem(player, requiredItem, requiredItem.getAmount());
+            if(e.isCancelled()) {
+                return;
+            }
+            if(!requiredCash.equals(BigDecimal.ZERO)) {
+                eco.withdrawPlayer(player, requiredCash.doubleValue());
+            }
+            if(requiredItem != null) {
+                removeItem(player, requiredItem, requiredItem.getAmount());
+            }
             info.setLevel(nextLevel);
             final int slot = upgrade.getSlot();
             player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, colorize(config.getString("gui.tier")), colorize(config.getString("gui.locked.tier"))));
@@ -353,13 +363,13 @@ public class FactionUpgrades extends EventAttributes {
     }*/
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        final Player player = event.getPlayer();
-        final String a = event.getMessage().toLowerCase().substring(1);
         if(aliases != null) {
-            for(String s : aliases) {
-                if(a.startsWith(s)) {
+            final Player player = event.getPlayer();
+            final String msg = event.getMessage().toLowerCase().substring(1);
+            for(String alias : aliases) {
+                if(msg.startsWith(alias)) {
                     event.setCancelled(true);
-                    if(a.contains("reset")) {
+                    if(msg.contains("reset")) {
                         if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
                             factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
                         }
@@ -375,16 +385,15 @@ public class FactionUpgrades extends EventAttributes {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        if(top.getHolder() == player) {
-            final String t = event.getView().getTitle();
-            if(t.equals(gui.getTitle())) {
-                final int r = event.getRawSlot();
-                event.setCancelled(true);
-                player.updateInventory();
-                final String c = event.getClick().name();
-                if(r < 0 || r >= top.getSize() || !c.contains("LEFT") && !c.contains("RIGHT") || event.getCurrentItem() == null) return;
-                final FactionUpgrade f = valueOfFactionUpgrade(r);
-                if(f != null) tryToUpgrade(player, f);
+        if(top.getHolder() == player && event.getView().getTitle().equals(gui.getTitle())) {
+            final int slot = event.getRawSlot();
+            event.setCancelled(true);
+            player.updateInventory();
+            final String c = event.getClick().name();
+            if(slot < 0 || slot >= top.getSize() || !c.contains("LEFT") && !c.contains("RIGHT") || event.getCurrentItem() == null) return;
+            final FactionUpgrade f = valueOfFactionUpgrade(slot);
+            if(f != null) {
+                tryToUpgrade(player, f);
             }
         }
     }

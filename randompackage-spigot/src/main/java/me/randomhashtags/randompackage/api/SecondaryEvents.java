@@ -126,9 +126,59 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             if(s.contains("{VALUE}")) banknoteValueSlot = i;
             i++;
         }
+
+        final List<String> pe = getStringList(config, "bless.removed potion effects");
+        removedPotionEffects = new ArrayList<>();
+        for(String s : pe) {
+            final PotionEffectType a = getPotionEffectType(s);
+            if(a != null) {
+                removedPotionEffects.add(a);
+            }
+        }
+
         sendConsoleMessage("&6[RandomPackage] &aLoaded Secondary Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
+    }
+
+    public void bless(@NotNull Player player) {
+        for(PotionEffectType type : removedPotionEffects) {
+            player.removePotionEffect(type);
+        }
+        sendStringListMessage(player, getStringList(config, "bless.msg"), null);
+    }
+    public void confirm(@NotNull Player opener, @NotNull RPPlayer target) {
+        final List<ItemStack> u = target.getUnclaimedPurchases();
+        final int size = ((u.size()+9)/9)*9;
+        opener.openInventory(Bukkit.createInventory(opener, size, confirm));
+        final Inventory top = opener.getOpenInventory().getTopInventory();
+        for(ItemStack is : target.getUnclaimedPurchases()) {
+            top.setItem(top.firstEmpty(), is);
+        }
+        opener.updateInventory();
+    }
+    public void roll(@NotNull Player player, @NotNull String arg0) {
+        final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = RANDOM.nextInt(maxroll);
+        final List<Entity> nearby = player.getNearbyEntities(radius, radius, radius);
+        final List<Player> players = new ArrayList<>();
+        for(Entity entity : nearby) {
+            if(entity instanceof Player) {
+                players.add((Player) entity);
+            }
+        }
+        if(!players.isEmpty()) {
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{MAX}", formatInt(maxroll));
+            replacements.put("{PLAYER}", player.getName());
+            replacements.put("{ROLLED}", formatInt(roll));
+            final List<String> msg = getStringList(config, "roll.message");
+            for(Player target : players) {
+                sendStringListMessage(target, msg, replacements);
+            }
+            sendStringListMessage(player, msg, replacements);
+        } else {
+            sendStringListMessage(player, getStringList(config, "roll.nobody heard roll"), null);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -168,58 +218,6 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 sendStringListMessage(player, getStringList(config, "withdraw.deposit"), replacements);
                 player.updateInventory();
             }
-        }
-    }
-
-    public void bless(@NotNull Player player) {
-        final List<String> pe = getStringList(config, "bless.removed potion effects");
-        if(removedPotionEffects == null) {
-            final List<PotionEffectType> t = new ArrayList<>();
-            for(String s : pe) {
-                final PotionEffectType a = getPotionEffectType(s);
-                if(a != null) {
-                    t.add(a);
-                }
-            }
-            removedPotionEffects = t;
-        }
-        for(PotionEffectType type : removedPotionEffects) {
-            player.removePotionEffect(type);
-        }
-        sendStringListMessage(player, getStringList(config, "bless.msg"), null);
-    }
-
-    public void confirm(@NotNull Player opener, @NotNull RPPlayer target) {
-        final List<ItemStack> u = target.getUnclaimedPurchases();
-        final int size = ((u.size()+9)/9)*9;
-        opener.openInventory(Bukkit.createInventory(opener, size, confirm));
-        final Inventory top = opener.getOpenInventory().getTopInventory();
-        for(ItemStack is : target.getUnclaimedPurchases()) {
-            top.setItem(top.firstEmpty(), is);
-        }
-        opener.updateInventory();
-    }
-    public void roll(@NotNull Player player, @NotNull String arg0) {
-        final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = RANDOM.nextInt(maxroll);
-        final List<Entity> nearby = player.getNearbyEntities(radius, radius, radius);
-        final List<Player> p = new ArrayList<>();
-        for(Entity entity : nearby) {
-            if(entity instanceof Player) {
-                p.add((Player) entity);
-            }
-        }
-        if(!p.isEmpty()) {
-            final HashMap<String, String> replacements = new HashMap<>();
-            replacements.put("{MAX}", formatInt(maxroll));
-            replacements.put("{PLAYER}", player.getName());
-            replacements.put("{ROLLED}", formatInt(roll));
-            final List<String> msg = getStringList(config, "roll.message");
-            for(Player P : p) {
-                sendStringListMessage(P, msg, replacements);
-            }
-            sendStringListMessage(player, msg, replacements);
-        } else {
-            sendStringListMessage(player, getStringList(config, "roll.nobody heard roll"), null);
         }
     }
 }

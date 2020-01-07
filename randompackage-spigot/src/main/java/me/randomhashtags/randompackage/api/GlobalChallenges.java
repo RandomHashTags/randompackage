@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
@@ -8,10 +8,11 @@ import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -141,8 +142,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 				final String p = c.getType().getIdentifier();
 				data.set("active global challenges." + p + ".started", c.getStartedTime());
 				final HashMap<UUID, BigDecimal> participants = c.getParticipants();
-				for(UUID u : participants.keySet())
+				for(UUID u : participants.keySet()) {
 					data.set("active global challenges." + p + ".participants." + u, participants.get(u));
+				}
 			}
 		}
 
@@ -235,22 +237,22 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 	}
 
-
-	public void viewPrizes(Player player) {
+	public void viewPrizes(@NotNull Player player) {
 		if(hasPermission(player, "RandomPackage.globalchallenges.claim", true)) {
 			final HashMap<GlobalChallengePrize, Integer> prizes = RPPlayer.get(player.getUniqueId()).getGlobalChallengePrizes();
 			int size = (prizes.size()/9)*9;
-			size = size == 0 ? 9 : size > 54 ? 54 : size;
+			size = size == 0 ? 9 : Math.min(size, 54);
 			player.openInventory(Bukkit.createInventory(player, size, claimPrizes.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			player.updateInventory();
 			for(GlobalChallengePrize prize : prizes.keySet()) {
-				item = prize.getItem(); item.setAmount(prizes.get(prize));
+				item = prize.getItem();
+				item.setAmount(prizes.get(prize));
 				top.addItem(item);
 			}
 		}
 	}
-	public void claimPrize(Player player, GlobalChallengePrize prize, boolean sendMessage) {
+	public void claimPrize(@NotNull Player player, @NotNull GlobalChallengePrize prize, boolean sendMessage) {
 		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 		final HashMap<GlobalChallengePrize, Integer> prizes = pdata.getGlobalChallengePrizes();
 		if(prizes.containsKey(prize)) {
@@ -272,10 +274,10 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 		}
 	}
-	public Map<UUID, BigDecimal> getPlacing(HashMap<UUID, BigDecimal> participants) {
+	public Map<UUID, BigDecimal> getPlacing(@NotNull HashMap<UUID, BigDecimal> participants) {
 		return participants.entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
-	public Map<UUID, BigDecimal> getPlacing(HashMap<UUID, BigDecimal> participants, int returnFirst) {
+	public Map<UUID, BigDecimal> getPlacing(@NotNull HashMap<UUID, BigDecimal> participants, int returnFirst) {
 		final HashMap<UUID, BigDecimal> a = new HashMap<>();
 		final HashMap<UUID, BigDecimal> d = participants.entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		for(int i = 1; i <= returnFirst && i-1 < d.size(); i++) {
@@ -283,8 +285,8 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 		return a;
 	}
-	public int getRanking(UUID player, ActiveGlobalChallenge g) {
-		final Map<UUID, BigDecimal> byValue = g.getParticipants().entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+	public int getRanking(@NotNull UUID player, @NotNull ActiveGlobalChallenge challenge) {
+		final Map<UUID, BigDecimal> byValue = challenge.getParticipants().entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		int placement = indexOf(byValue.keySet(), player);
 		placement = placement == -1 ? byValue.keySet().size() : placement+1;
 		return placement;
@@ -294,36 +296,38 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		ranking = ranking + (ranking.endsWith("1") ? "st" : ranking.endsWith("2") ? "nd" : ranking.endsWith("3") ? "rd" : ranking.equals("0") ? "" : "th");
 		return ranking;
 	}
-	public HashMap<Integer, UUID> getRankings(ActiveGlobalChallenge g) {
-		final List<UUID> participants = new ArrayList<>(g.getParticipants().keySet());
+	public HashMap<Integer, UUID> getRankings(@NotNull ActiveGlobalChallenge challenge) {
+		final List<UUID> participants = new ArrayList<>(challenge.getParticipants().keySet());
 		final HashMap<Integer, UUID> rankings = new HashMap<>();
-		for(UUID u : participants)
-			rankings.put(getRanking(u, g), u);
+		for(UUID u : participants) {
+			rankings.put(getRanking(u, challenge), u);
+		}
 		return rankings;
 	}
-	public void viewCurrent(Player player) {
+	public void viewCurrent(@NotNull Player player) {
 		if(hasPermission(player, "RandomPackage.globalchallenges", true)) {
 			final UUID u = player.getUniqueId();
 			player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			top.setContents(inv.getInventory().getContents());
 			player.updateInventory();
+			final String dateFormat = config.getString("challenge settings.date format");
 			for(int i = 0; i < top.getSize(); i++) {
 				item = top.getItem(i);
 				if(item != null) {
-					final ActiveGlobalChallenge g = ActiveGlobalChallenge.valueOf(item);
-					if(g != null) {
-						final HashMap<UUID, BigDecimal> participants = g.getParticipants();
+					final ActiveGlobalChallenge challenge = ActiveGlobalChallenge.valueOf(item);
+					if(challenge != null) {
+						final HashMap<UUID, BigDecimal> participants = challenge.getParticipants();
 						final Map<UUID, BigDecimal> placings = getPlacing(participants);
 						int topp = 0;
 						UUID ranked = topp < placings.size() ? (UUID) placings.keySet().toArray()[topp] : null;
-						final String remainingtime = getRemainingTime(g.getRemainingTime());
+						final String remainingtime = getRemainingTime(challenge.getRemainingTime());
 						itemMeta = item.getItemMeta(); lore.clear();
 						if(item.hasItemMeta()) {
 							if(itemMeta.hasLore()) {
-								final String ranking = getRanking(getRanking(u, g)), date = toReadableDate(new Date(g.getStartedTime()), config.getString("challenge settings.date format")), v = formatBigDecimal(g.getValue(u));
+								final String ranking = getRanking(getRanking(u, challenge)), date = toReadableDate(new Date(challenge.getStartedTime()), dateFormat), value = formatBigDecimal(challenge.getValue(u));
 								for(String s : itemMeta.getLore()) {
-									s = s.replace("{DATE}", date).replace("{YOUR_VALUE}", v).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
+									s = s.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
 									if(s.contains("{TOP}")) {
 										if(ranked == null) {
 											s = s.replace("{TOP}", "None").replace("{VALUE}", "0");
@@ -349,30 +353,30 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			player.updateInventory();
 		}
 	}
-	public void stopChallenge(GlobalChallenge chall, boolean giveRewards) {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
-		if(a != null && a.containsKey(chall)) {
-			a.get(chall).end(giveRewards, 3);
+	public void stopChallenge(@NotNull GlobalChallenge chall, boolean giveRewards) {
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> challenges = ActiveGlobalChallenge.active;
+		if(challenges != null && challenges.containsKey(chall)) {
+			challenges.get(chall).end(giveRewards, 3);
 		}
 	}
-	public void viewTopPlayers(Player player, ActiveGlobalChallenge active) {
+	public void viewTopPlayers(@NotNull Player player, @NotNull ActiveGlobalChallenge active) {
 		player.closeInventory();
 		player.openInventory(Bukkit.createInventory(player, leaderboard.getSize(), leaderboard.getTitle()));
 		final Inventory top = player.getOpenInventory().getTopInventory();
-		final String n = colorize(config.getString("challenge leaderboard.name")), N = active.getType().getType();
+		final String n = colorize(config.getString("challenge leaderboard.name")), challengeName = active.getType().getType();
 		final HashMap<Integer, UUID> rankings = getRankings(active);
-		final List<String> a = config.getStringList("challenge leaderboard.lore");
+		final List<String> leaderboardLore = getStringList(config, "challenge leaderboard.lore");
 		item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
 		for(int i = 0; i < topPlayersSize && i < rankings.size(); i++) {
 			final UUID u = rankings.get(i+1);
 			final OfflinePlayer OP = Bukkit.getOfflinePlayer(u);
-			final String ranking = getRanking(i+1), name = OP.getName(), value = formatBigDecimal(active.getValue(u));
+			final String ranking = getRanking(i+1), playerName = OP.getName(), value = formatBigDecimal(active.getValue(u));
 			item.setAmount(i+1);
 			final SkullMeta skm = (SkullMeta) item.getItemMeta();
-			skm.setDisplayName(n.replace("{PLAYER}", name));
-			skm.setOwner(name); lore.clear();
-			for(String s : a) {
-				lore.add(colorize(s.replace("{RANKING}", ranking).replace("{CHALLENGE}", N).replace("{VALUE}", value)));
+			skm.setDisplayName(n.replace("{PLAYER}", playerName));
+			skm.setOwner(playerName); lore.clear();
+			for(String s : leaderboardLore) {
+				lore.add(colorize(s.replace("{RANKING}", ranking).replace("{CHALLENGE}", challengeName).replace("{VALUE}", value)));
 			}
 			skm.setLore(lore); lore.clear();
 			item.setItemMeta(skm);
@@ -391,29 +395,30 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		if(player == top.getHolder()) {
-			final String t = event.getView().getTitle();
-			if(t.equals(inv.getTitle()) || t.equals(leaderboard.getTitle()) || t.equals(claimPrizes.getTitle())) {
+			final String title = event.getView().getTitle();
+			final boolean isInventory = title.equals(inv.getTitle()), isClaimPrizes = title.equals(claimPrizes.getTitle());
+			if(isInventory || title.equals(leaderboard.getTitle()) || isClaimPrizes) {
 				event.setCancelled(true);
 				player.updateInventory();
 
-				final int r = event.getRawSlot();
-				final ItemStack c = event.getCurrentItem();
+				final int slot = event.getRawSlot();
+				final ItemStack current = event.getCurrentItem();
 				
-				if(r >= top.getSize() || r < 0 || !event.getClick().equals(ClickType.LEFT) && !event.getClick().equals(ClickType.RIGHT) || c == null) return;
-				if(t.equals(inv.getTitle())) {
-					final ActiveGlobalChallenge g = ActiveGlobalChallenge.valueOf(c);
-					if(g != null) {
+				if(slot >= top.getSize() || slot < 0 || !event.getClick().equals(ClickType.LEFT) && !event.getClick().equals(ClickType.RIGHT) || current == null) return;
+				if(isInventory) {
+					final ActiveGlobalChallenge challenge = ActiveGlobalChallenge.valueOf(current);
+					if(challenge != null) {
 						player.closeInventory();
-						viewTopPlayers(player, g);
+						viewTopPlayers(player, challenge);
 					}
-				} else if(t.equals(claimPrizes.getTitle())) {
-					final GlobalChallengePrize prize = valueOfGlobalChallengePrize(c);
+				} else if(isClaimPrizes) {
+					final GlobalChallengePrize prize = valueOfGlobalChallengePrize(current);
 					claimPrize(player, prize, true);
-					final int amount = c.getAmount();
+					final int amount = current.getAmount();
 					if(amount == 1) {
-						top.setItem(r, new ItemStack(Material.AIR));
+						top.setItem(slot, new ItemStack(Material.AIR));
 					} else {
-						c.setAmount(amount-1);
+						current.setAmount(amount-1);
 					}
 				}
 				player.updateInventory();
@@ -439,10 +444,14 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		private void mcmmoPlayerXpGainEvent(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
 			tryIncreasing(event);
 		}
+
 		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
 			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
-			for(GlobalChallenge g : ActiveGlobalChallenge.active.keySet()) {
-                trigger(event, entities, g.getAttributes());
+			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+			if(active != null) {
+				for(GlobalChallenge g : active.keySet()) {
+					trigger(event, entities, g.getAttributes());
+				}
 			}
 		}
 		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {

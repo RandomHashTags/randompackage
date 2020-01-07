@@ -87,20 +87,19 @@ public class Titles extends RPFeature implements CommandExecutor {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getType().equals(interactableItem.getType())) {
-			final Title T = valueOf(i);
-			if(T != null) {
+			final Title title = valueOf(i);
+			if(title != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);
 				player.updateInventory();
 				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-				final boolean has = pdata.getTitles().contains(T);
-				final List<String> m = getStringList(config, "messages." + (has ? "already own" : "redeem"));
-				for(String s : m) {
-					s = s.replace("{TITLE}", colorize(T.getIdentifier()));
-					player.sendMessage(colorize(s));
+				final boolean has = pdata.getTitles().contains(title);
+				for(String s : getStringList(config, "messages." + (has ? "already own" : "redeem"))) {
+					s = s.replace("{TITLE}", colorize(title.getIdentifier()));
+					player.sendMessage(s);
 				}
 				if(!has) {
-					pdata.addTitle(T);
+					pdata.addTitle(title);
 					removeItem(player, i, 1);
 				}
 			}
@@ -112,23 +111,26 @@ public class Titles extends RPFeature implements CommandExecutor {
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		final ItemStack c = event.getCurrentItem();
 		if(top.getHolder() == player && c != null && event.getView().getTitle().equals(selftitle)) {
-			final int r = event.getRawSlot();
+			final int slot = event.getRawSlot();
 			event.setCancelled(true);
 			player.updateInventory();
-			if(r >= top.getSize()) return;
+			if(slot >= top.getSize()) return;
 			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final Title T = pdata.getActiveTitle();
-			final String a = T != null ? T.getIdentifier() : null;
+			final Title title = pdata.getActiveTitle();
+			final String activeTitle = title != null ? title.getIdentifier() : null;
 			final List<Title> titles = pdata.getTitles();
-			final int page = pages.getOrDefault(player, 0), Z = (page*53)+r;
+			final int page = pages.getOrDefault(player, 0), Z = (page*53)+slot;
 			if(c.equals(nextpage)) {
 				player.closeInventory();
 				viewTitles(player, pdata, page+2);
 			} else if(titles.size() > Z) {
-				final String q = (a != null && a.equals(titles.get(Z).getIdentifier()) ? "un" : "") + "equip";
-				final List<String> s = getStringList(config, "messages." + q);
-				for(String h : s) player.sendMessage(colorize(h.replace("{TITLE}", titles.get(Z).getIdentifier())));
-				pdata.setActiveTitle(q.equals("unequip") ? null : titles.get(Z));
+				final Title target = titles.get(Z);
+				final String id = target.getIdentifier();
+				final String type = (activeTitle != null && activeTitle.equals(id) ? "un" : "") + "equip";
+				for(String h : getStringList(config, "messages." + type)) {
+					player.sendMessage(h.replace("{TITLE}", colorize(id)));
+				}
+				pdata.setActiveTitle(type.equals("unequip") ? null : target);
 				update(player, pdata);
 			}
 		}
@@ -146,8 +148,8 @@ public class Titles extends RPFeature implements CommandExecutor {
 			if(size <= 0) {
 				sendStringListMessage(player, getStringList(config, "messages.no unlocked titles"), null);
 			} else {
-				final Title A = pdata.getActiveTitle();
-				final String activetitle = A != null ? A.getIdentifier() : null;
+				final Title activeTitle = pdata.getActiveTitle();
+				final String activetitle = activeTitle != null ? activeTitle.getIdentifier() : null;
 				pages.put(player, page);
 				size = Math.min(size%9 == 0 ? size : ((size+9)/9)*9, 54);
 				player.openInventory(Bukkit.createInventory(player, size, selftitle));
@@ -184,7 +186,6 @@ public class Titles extends RPFeature implements CommandExecutor {
 		}
 		player.updateInventory();
 	}
-
 	private ItemStack getTitle(String activetitle, Title input) {
 		final String title = input.getIdentifier();
 		item = (title.equals(activetitle) ? active : inactive).clone();

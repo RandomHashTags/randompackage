@@ -46,22 +46,20 @@ public class Wild extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "wild.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild.yml"));
-        expirations = new HashMap<>();
-
         cooldown = config.getLong("settings.cooldown");
-
+        expirations = new HashMap<>();
         xcoords = new HashMap<>();
         zcoords = new HashMap<>();
         teleportExceptions = new ArrayList<>();
         teleportExceptions.add("Wilderness");
 
         for(String s : config.getStringList("settings.x coords")) {
-            final String[] a = s.split(";");
-            xcoords.put(a[0], new TObject(BigDecimal.valueOf(Double.parseDouble(a[1])), BigDecimal.valueOf(Double.parseDouble(a[2])), null));
+            final String[] values = s.split(";");
+            xcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
         for(String s : config.getStringList("settings.z coords")) {
-            final String[] a = s.split(";");
-            zcoords.put(a[0], new TObject(BigDecimal.valueOf(Double.parseDouble(a[1])), BigDecimal.valueOf(Double.parseDouble(a[2])), null));
+            final String[] values = s.split(";");
+            zcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded Wild &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -73,20 +71,34 @@ public class Wild extends RPFeature implements CommandExecutor {
         return o != null ? (BigDecimal) (max ? o.getFirst() : o.getSecond()) : null;
     }
 
-    public BigDecimal getMaxX(World w) { return get(w, xcoords, true); }
-    public BigDecimal getMinX(World w) { return get(w, xcoords, false); }
-    public BigDecimal getMaxZ(World w) { return get(w, zcoords, true); }
-    public BigDecimal getMinZ(World w) { return get(w, zcoords, false); }
+    public BigDecimal getMaxX(@NotNull World w) {
+        return get(w, xcoords, true);
+    }
+    public BigDecimal getMinX(@NotNull World w) {
+        return get(w, xcoords, false);
+    }
+    public BigDecimal getMaxZ(@NotNull World w) {
+        return get(w, zcoords, true);
+    }
+    public BigDecimal getMinZ(@NotNull World w) {
+        return get(w, zcoords, false);
+    }
 
-    public long getCooldownExpireTime(UUID player) { return expirations.get(player); }
+    public long getCooldownExpireTime(UUID player) {
+        return expirations.get(player);
+    }
     public boolean isCooldowned(UUID player) {
         if(expirations.containsKey(player) && getCooldownTimeLeft(player) <= 0) {
             expirations.remove(player);
         }
         return expirations.containsKey(player);
     }
-    public long getCooldownTimeLeft(UUID player) { return expirations.get(player); }
-    public String getCooldownLeft(UUID player) { return !expirations.containsKey(player) ? "" : getRemainingTime(getCooldownExpireTime(player)-System.currentTimeMillis()); }
+    public long getCooldownTimeLeft(UUID player) {
+        return expirations.get(player);
+    }
+    public String getCooldownLeft(UUID player) {
+        return !expirations.containsKey(player) ? "" : getRemainingTime(getCooldownExpireTime(player)-System.currentTimeMillis());
+    }
 
     private Location getRandomLocation(World w, BigDecimal minx, BigDecimal maxx, BigDecimal minz, BigDecimal maxz) {
         final int x = getRandomBigDecimal(minx, maxx).intValue(), z = getRandomBigDecimal(minz, maxz).intValue();
@@ -110,17 +122,17 @@ public class Wild extends RPFeature implements CommandExecutor {
 
     public void tryTeleporting(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.wild", true)) {
-            final UUID u = player.getUniqueId();
-            if(isCooldowned(u)) {
+            final UUID uuid = player.getUniqueId();
+            if(isCooldowned(uuid)) {
                 final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{TIME}", getCooldownLeft(u));
+                replacements.put("{TIME}", getCooldownLeft(uuid));
                 sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
             } else {
                 if(regions.isPvPZone(player.getLocation())) {
                     sendStringListMessage(player, getStringList(config, "messages.cannot be used in area"), null);
                 } else {
                     if(!hasPermission(player, "RandomPackage.wild.bypass", false)) {
-                        expirations.put(u, System.currentTimeMillis()+cooldown*1000);
+                        expirations.put(uuid, System.currentTimeMillis()+cooldown*1000);
                     }
                     final Location l = getRandomLocation(player.getWorld(), teleportExceptions);
                     if(l != null) {

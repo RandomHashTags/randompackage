@@ -77,33 +77,32 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
 
         minbottles = new HashMap<>();
         for(String s : config.getStringList("xpbottle.min bottle")) {
-            final String[] a = s.split("=");
-            minbottles.put(a[0], Integer.parseInt(a[1]));
+            final String[] values = s.split("=");
+            minbottles.put(values[0], Integer.parseInt(values[1]));
         }
         expexhaustion = new HashMap<>();
         for(String s : config.getStringList("xpbottle.exp exhaustion")) {
-            final String[] a = s.split("=");
-            expexhaustion.put(a[0], Integer.parseInt(a[1]));
+            final String[] values = s.split("=");
+            expexhaustion.put(values[0], Integer.parseInt(values[1]));
         }
         teleportationDelay = new HashMap<>();
         for(String s : config.getStringList("xpbottle.teleportation delay")) {
-            final String[] a = s.split("=");
-            teleportationDelay.put(a[0], Double.parseDouble(a[1]));
+            final String[] values = s.split("=");
+            teleportationDelay.put(values[0], Double.parseDouble(values[1]));
         }
         teleportMinDelay = new HashMap<>();
         for(String s : config.getStringList("xpbottle.teleport min delay")) {
-            final String[] a = s.split("=");
-            teleportMinDelay.put(a[0], Double.parseDouble(a[1]));
+            final String[] values = s.split("=");
+            teleportMinDelay.put(values[0], Double.parseDouble(values[1]));
         }
         teleportationVariable = new HashMap<>();
         for(String s : config.getStringList("xpbottle.teleportation variable")) {
-            final String[] a = s.split("=");
-            teleportationVariable.put(a[0], Double.parseDouble(a[1]));
+            final String[] values = s.split("=");
+            teleportationVariable.put(values[0], Double.parseDouble(values[1]));
         }
 
         teleportCauses = config.getStringList("xpbottle.teleport causes");
         delayed = new HashMap<>();
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded Xpbottle &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -130,27 +129,27 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{MIN}", Integer.toString(minbottle));
         replacements.put("{VALUE}", formatBigDecimal(amount));
-        final int d = amount.intValue();
-        if(d < minbottle) {
+        final int amountInt = amount.intValue();
+        if(amountInt < minbottle) {
             sendStringListMessage(player, getStringList(config, "messages.withdraw at least"), replacements);
         } else {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+            final long time = System.currentTimeMillis();
             if(pdata.isXPExhausted() && !hasPermission(player, "RandomPackage.xpbottle.bypass-exhaustion", false)) {
-                final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
-                replacements.put("{TIME}", remaining);
+                replacements.put("{TIME}", getRemainingTime(pdata.xpExhaustionExpiration-time));
                 sendStringListMessage(player, getStringList(config, "messages.cannot xpbottle"), replacements);
             } else {
                 sendStringListMessage(player, getStringList(config, "messages.withdraw"), replacements);
                 giveItem(player, givedpitem.getXPBottle(amount, player.getName()));
 
-                int xp = Math.round(getTotalExperience(player));
-                setTotalExperience(player, xp-d);
+                final int xp = Math.round(getTotalExperience(player));
+                setTotalExperience(player, xp-amountInt);
                 playSound(config, "xpbottle.sounds.withdraw", player, player.getLocation(), false);
                 final int exh = getExpExhaustion(player.getWorld());
                 if(exh != -1) {
-                    pdata.xpExhaustionExpiration = System.currentTimeMillis() + (exh * 1000 * 60);
+                    pdata.xpExhaustionExpiration = time+(exh*1000*60);
                     replacements.put("{MIN}", Integer.toString(exh));
-                    sendStringListMessage(player, getStringList(config, "messages.afflect"), replacements);
+                    sendStringListMessage(player, getStringList(config, "messages.afflict"), replacements);
                 }
             }
         }
@@ -218,13 +217,13 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         final Player player = event.getPlayer();
         if(teleportCauses.contains(event.getCause().name()) && delayed.containsKey(player)) {
             delayed.remove(player);
-            final World w = player.getWorld();
-            double delay = getTeleportationDelay(w);
+            final World world = player.getWorld();
+            double delay = getTeleportationDelay(world);
             if(hasPermission(player, "RandomPackage.xpbottle.bypass-delay", false) || delay <= 0) return;
-            final UUID u = player.getUniqueId();
-            final RPPlayer pdata = RPPlayer.get(u);
+            final UUID uuid = player.getUniqueId();
+            final RPPlayer pdata = RPPlayer.get(uuid);
             if(pdata.isXPExhausted()) {
-                final String remaining = getRemainingTime(pdata.xpExhaustionExpiration - System.currentTimeMillis());
+                final String remaining = getRemainingTime(pdata.xpExhaustionExpiration-System.currentTimeMillis());
                 for(String s : getStringList(config, "messages.cannot teleport")) {
                     if(s.contains("{TIME}")) s = s.replace("{TIME}", remaining);
                     player.sendMessage(colorize(s));
@@ -233,8 +232,8 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.teleporting;
                 final PlayerTeleportDelayEvent previous = events.getOrDefault(player, null);
                 final boolean hasPrevious = previous != null;
-                final double mindelay = getTeleportMinDelay(w);
-                delay -= getTotalExperience(player) / getTeleportationVariable(w);
+                final double mindelay = getTeleportMinDelay(world);
+                delay -= getTotalExperience(player) / getTeleportationVariable(world);
                 delay = round(delay, 3);
                 if(delay < mindelay) delay = mindelay;
                 if(hasPrevious) {

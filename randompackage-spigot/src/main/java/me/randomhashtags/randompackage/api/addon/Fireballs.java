@@ -97,9 +97,11 @@ public class Fireballs extends CustomEnchants {
                     final String SUCCESS = ra.getSuccess();
                     int percent = -1;
                     final List<String> l = dust.getItem().getItemMeta().getLore();
-                    for(int z = 0; z < l.size(); z++)
-                        if(l.get(z).contains("{PERCENT}"))
+                    for(int z = 0; z < l.size(); z++) {
+                        if(l.get(z).contains("{PERCENT}")) {
                             percent = getRemainingInt(cursor.getItemMeta().getLore().get(z));
+                        }
+                    }
                     if(percent == -1) return;
                     for(String string : itemMeta.getLore()) {
                         int r = getRemainingInt(string);

@@ -81,17 +81,16 @@ public class CustomExplosions extends RPFeature {
 		final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + explosions.size() + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
 
-		final ArrayList<ItemStack> E = new ArrayList<>();
+		final ArrayList<ItemStack> explosionsList = new ArrayList<>();
 		for(Identifiable id : explosions.values()) {
 			final CustomExplosion explosion = (CustomExplosion) id;
-			E.add(explosion.getItem());
+			explosionsList.add(explosion.getItem());
 		}
-
-		addGivedpCategory(E, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
+		addGivedpCategory(explosionsList, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 
 		int loadedPlaced = 0, loadedPrimed = 0, loadedLiving = 0;
 		final List<String> placedtnt = otherdata.getStringList("tnt.placed"), primedtnt = otherdata.getStringList("tnt.primed"), livingcreepers = otherdata.getStringList("creepers");
-		if(placedtnt != null && !placedtnt.isEmpty()) {
+		if(!placedtnt.isEmpty()) {
 			for(String s : placedtnt) {
 				final Location l = toLocation(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
@@ -101,23 +100,25 @@ public class CustomExplosions extends RPFeature {
 			}
 			if(loadedPlaced != 0) sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedPlaced + " existing placed tnt");
 		}
-		if(primedtnt != null && !primedtnt.isEmpty()) {
+		if(!primedtnt.isEmpty()) {
 			for(String s : primedtnt) {
-				final UUID u = UUID.fromString(s.split(":")[0]);
-				final Entity en = getEntity(u);
+				final String[] values = s.split(":");
+				final UUID uuid = UUID.fromString(values[0]);
+				final Entity en = getEntity(uuid);
 				if(en != null && !en.isDead()) {
-					FileCustomTNT.primed.put(u, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
+					FileCustomTNT.primed.put(uuid, (FileCustomTNT) getCustomExplosion("TNT_" + values[1]));
 					loadedPrimed += 1;
 				}
 			}
 			if(loadedPrimed != 0) sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedPrimed + " existing primed tnt");
 		}
-		if(livingcreepers != null && !livingcreepers.isEmpty()) {
+		if(!livingcreepers.isEmpty()) {
 			for(String s : livingcreepers) {
-				final UUID u = UUID.fromString(s.split(":")[0]);
-				final Entity en = getEntity(u);
+				final String[] values = s.split(":");
+				final UUID uuid = UUID.fromString(values[0]);
+				final Entity en = getEntity(uuid);
 				if(en != null && !en.isDead()) {
-					FileCustomCreeper.living.put(u, (FileCustomCreeper) getCustomExplosion("CREEPER_" + s.split(":")[1]));
+					FileCustomCreeper.living.put(uuid, (FileCustomCreeper) getCustomExplosion("CREEPER_" + values[1]));
 					loadedLiving += 1;
 				}
 			}
@@ -128,22 +129,27 @@ public class CustomExplosions extends RPFeature {
 		final HashMap<Location, FileCustomTNT> tnt = FileCustomTNT.placed;
 		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
 		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.primed;
-		final YamlConfiguration a = otherdata;
-		a.set("tnt", null);
-		a.set("creepers", null);
+		otherdata.set("tnt", null);
+		otherdata.set("creepers", null);
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
 		if(tnt != null) {
-			for(Location l : tnt.keySet()) placedtnt.add(toString(l) + ":" + tnt.get(l).getIdentifier());
+			for(Location l : tnt.keySet()) {
+				placedtnt.add(toString(l) + ":" + tnt.get(l).getIdentifier());
+			}
 		}
-		a.set("tnt.placed", placedtnt);
+		otherdata.set("tnt.placed", placedtnt);
 		if(primed != null) {
-			for(UUID u : primed.keySet()) primedtnt.add(u.toString() + ":" + primed.get(u).getIdentifier());
+			for(UUID u : primed.keySet()) {
+				primedtnt.add(u.toString() + ":" + primed.get(u).getIdentifier());
+			}
 		}
-		a.set("tnt.primed", primedtnt);
+		otherdata.set("tnt.primed", primedtnt);
 		if(creepers != null) {
-			for(UUID u : creepers.keySet()) cree.add(u.toString() + ":" + creepers.get(u).getIdentifier());
+			for(UUID u : creepers.keySet()) {
+				cree.add(u.toString() + ":" + creepers.get(u).getIdentifier());
+			}
 		}
-		a.set("creepers", cree);
+		otherdata.set("creepers", cree);
 		saveOtherData();
 
 		unregister(Feature.CUSTOM_EXPLOSION);

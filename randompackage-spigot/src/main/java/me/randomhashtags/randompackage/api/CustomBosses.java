@@ -71,16 +71,18 @@ public class CustomBosses extends EventAttributes {
 		final HashMap<UUID, LivingCustomBoss> j = LivingCustomBoss.living;
 		if(j != null) {
 			for(LivingCustomBoss b : j.values()) {
-				final String p = "custom bosses." + b.entity.getUniqueId().toString() + ".";
+				final String path = "custom bosses." + b.entity.getUniqueId().toString() + ".";
 				final LivingEntity s = b.summoner;
-				otherdata.set(p + "summoner", s != null ? s.getUniqueId().toString() : "null");
-				otherdata.set(p + "type", b.type.getIdentifier());
+				otherdata.set(path + "summoner", s != null ? s.getUniqueId().toString() : "null");
+				otherdata.set(path + "type", b.type.getIdentifier());
 				final List<String> m = new ArrayList<>();
-				for(LivingCustomMinion lcm : b.minions) m.add(lcm.entity.getUniqueId().toString());
-				otherdata.set(p + "minions", m);
-				final HashMap<UUID, Double> D = b.damagers;
-				for(UUID u : D.keySet()) {
-                    otherdata.set(p + "damager." + u.toString(), D.get(u));
+				for(LivingCustomMinion lcm : b.minions) {
+					m.add(lcm.entity.getUniqueId().toString());
+				}
+				otherdata.set(path + "minions", m);
+				final HashMap<UUID, Double> damagers = b.damagers;
+				for(UUID u : damagers.keySet()) {
+                    otherdata.set(path + "damager." + u.toString(), damagers.get(u));
                 }
 			}
 		}

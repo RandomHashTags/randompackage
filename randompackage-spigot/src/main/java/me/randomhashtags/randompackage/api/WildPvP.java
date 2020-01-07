@@ -1,10 +1,12 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.obj.PvPCountdownMatch;
 import me.randomhashtags.randompackage.addon.obj.PvPMatch;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,8 +40,8 @@ public class WildPvP extends RPFeature implements CommandExecutor {
     private UInventory gui, viewInventory;
     private ItemStack enterQueue, request;
     private List<String> blockedCommands;
-    private boolean legacy = false;
-    private HashMap<Player, ArrayList<Integer>> tasks;
+    private boolean isLegacy = false;
+    private HashMap<Player, List<Integer>> tasks;
     private List<Player> viewing;
     private HashMap<Player, Location> countdown;
 
@@ -73,7 +75,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "wild pvp.yml");
 
-        legacy = EIGHT || NINE || TEN || ELEVEN;
+        isLegacy = EIGHT || NINE || TEN || ELEVEN;
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild pvp.yml"));
         blockedCommands = new ArrayList<>();
         for(String s : config.getStringList("settings.blocked commands")) {
@@ -90,7 +92,6 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         tasks = new HashMap<>();
         countdown = new HashMap<>();
         viewing = new ArrayList<>();
-
         viewInventory = new UInventory(null, 54, colorize(config.getString("view inventory.title")));
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Wild PvP &e(took " + (System.currentTimeMillis()-started) + "ms)");
@@ -120,13 +121,13 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         PvPCountdownMatch.countdowns = null;
     }
 
-    public void viewQueue(Player player) {
+    public void viewQueue(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.wildpvp.view", true)) {
             player.closeInventory();
             player.openInventory(gui.getInventory());
         }
     }
-    public void joinQueue(Player player) {
+    public void joinQueue(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.wildpvp.create", true)) {
             player.closeInventory();
             final PvPMatch m = PvPMatch.valueOf(player);
@@ -150,7 +151,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
                     final String n = player.getName(), fac = regions.getFactionTag(player.getUniqueId()), HP = roundDoubleString(hp, 0), N = Integer.toString(nearby);
                     final ItemStack skull = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
                     final SkullMeta sm = (SkullMeta) skull.getItemMeta();
-                    if(legacy) {
+                    if(isLegacy) {
                         sm.setOwner(player.getName());
                     } else {
                         sm.setOwningPlayer(player);
@@ -175,79 +176,79 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             }
         }
     }
-    public void leaveQueue(PvPMatch match, List<String> reason) {
+    public void leaveQueue(@NotNull PvPMatch match, @Nullable List<String> reason) {
         if(hasPermission(match.getCreator(), "RandomPackage.wildpvp.leave", true)) {
             sendStringListMessage(match.getCreator(), reason, null);
             delete(match);
         }
     }
-    public void leaveCountdown(Player player) {
+    public void leaveCountdown(@NotNull Player player) {
         if(countdown.containsKey(player) && hasPermission(player, "RandomPackage.wildpvp.leave.countdown", true)) {
             player.teleport(countdown.get(player), PlayerTeleportEvent.TeleportCause.UNKNOWN);
             countdown.remove(player);
-            final PvPCountdownMatch c = PvPCountdownMatch.valueOf(player);
-            if(c != null) {
+            final PvPCountdownMatch match = PvPCountdownMatch.valueOf(player);
+            if(match != null) {
                 sendStringListMessage(player, getStringList(config, "messages.leave"), null);
-                for(int i : tasks.get(c.getCreator())) {
+                for(int i : tasks.get(match.getCreator())) {
                     SCHEDULER.cancelTask(i);
                 }
-                c.delete();
+                match.delete();
             }
         }
     }
-    public void viewInventoryOfQueue(Player player, PvPMatch match) {
+    public void viewInventoryOfQueue(@NotNull Player player, @NotNull PvPMatch match) {
         if(hasPermission(player, "RandomPackage.wildpvp.viewinventory", true)) {
             player.closeInventory();
-            final Inventory i = match.getInventory();
+            final Inventory inv = match.getInventory();
             player.openInventory(Bukkit.createInventory(player, 54, viewInventory.getTitle().replace("{PLAYER}", match.getCreator().getName())));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(viewInventory.getInventory().getContents());
             viewing.add(player);
-            final ItemStack[] c = i.getContents();
-            for(int s = 0; s < c.length; s++) {
-                top.setItem(s, c[s]);
+            final ItemStack[] contents = inv.getContents();
+            for(int s = 0; s < contents.length; s++) {
+                top.setItem(s, contents[s]);
             }
             player.updateInventory();
         }
     }
-    public void challenge(Player player, PvPMatch match) {
+    public void challenge(@NotNull Player player, @NotNull PvPMatch match) {
         if(hasPermission(player, "RandomPackage.wildpvp.challenge", true)) {
-            final Player c = match.getCreator();
+            final Player creator = match.getCreator();
             player.closeInventory();
-            c.closeInventory();
+            creator.closeInventory();
 
             countdown.put(player, player.getLocation());
 
-            player.teleport(c.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            player.teleport(creator.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
 
             final List<String> e = getStringList(config, "messages.invincibility enabled"), expire = getStringList(config, "messages.invincibility expired"), cd = getStringList(config, "messages.invincibility expiring");
-            final HashMap<String, String> r = new HashMap<>();
-            r.put("{SEC}", Integer.toString(invincibilityDuration));
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{SEC}", Integer.toString(invincibilityDuration));
 
-            sendStringListMessage(player, e, r);
-            sendStringListMessage(c, e, r);
+            sendStringListMessage(player, e, replacements);
+            sendStringListMessage(creator, e, replacements);
 
-            tasks.put(c, new ArrayList<>());
+            tasks.put(creator, new ArrayList<>());
 
-            final PvPCountdownMatch cdm = new PvPCountdownMatch(c, player);
+            final PvPCountdownMatch cdm = new PvPCountdownMatch(creator, player);
 
             for(int i = 0; i <= invincibilityDuration; i++) {
                 final int a = i;
-                tasks.get(c).add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+                tasks.get(creator).add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                     if(cdm.getCreator() != null && cdm.getChallenger() != null) {
-                        r.put("{SEC}", Integer.toString(invincibilityDuration-a));
+                        replacements.put("{SEC}", Integer.toString(invincibilityDuration-a));
                         if(a == invincibilityDuration) {
                             cdm.delete();
                             countdown.remove(player);
                             sendStringListMessage(player, expire, null);
-                            sendStringListMessage(c, expire, null);
+                            sendStringListMessage(creator, expire, null);
                         } else {
-                            sendStringListMessage(player, cd, r);
-                            sendStringListMessage(c, cd, r);
+                            sendStringListMessage(player, cd, replacements);
+                            sendStringListMessage(creator, cd, replacements);
                         }
                     } else {
                         countdown.remove(player);
-                        for(int t : tasks.get(c)) {
+                        for(int t : tasks.get(creator)) {
                             SCHEDULER.cancelTask(t);
                         }
                     }
@@ -313,19 +314,19 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, getStringList(config, "messages.cannot modify inventory"), null);
         } else {
             final Inventory top = player.getOpenInventory().getTopInventory();
-            final boolean v = viewing.contains(player);
-            if(v || event.getView().getTitle().equals(gui.getTitle())) {
+            final boolean isViewing = viewing.contains(player);
+            if(isViewing || event.getView().getTitle().equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
 
-                final int r = event.getRawSlot();
-                final ItemStack c = event.getCurrentItem();
-                if(v || r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
-                if(c.equals(enterQueue)) {
+                final int slot = event.getRawSlot();
+                final ItemStack current = event.getCurrentItem();
+                if(isViewing || slot < 0 || slot >= top.getSize() || current == null || current.getType().equals(Material.AIR)) return;
+                if(current.equals(enterQueue)) {
                     joinQueue(player);
-                } else if(c.getItemMeta() instanceof SkullMeta) {
-                    final SkullMeta me = (SkullMeta) c.getItemMeta();
-                    final Player o = legacy ? Bukkit.getPlayer(me.getOwner()) : me.getOwningPlayer().getPlayer();
+                } else if(current.getItemMeta() instanceof SkullMeta) {
+                    final SkullMeta me = (SkullMeta) current.getItemMeta();
+                    final Player o = isLegacy ? Bukkit.getPlayer(me.getOwner()) : me.getOwningPlayer().getPlayer();
                     m = PvPMatch.valueOf(o);
                     if(m != null) {
                         final String cl = event.getClick().name();

@@ -59,14 +59,14 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     }
 
     public void load() {
-        final long sc = System.currentTimeMillis();
+        final long started = System.currentTimeMillis();
         save("lootboxes", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "lootboxes", "_settings.yml"));
 
-        started = new HashMap<>();
+        this.started = new HashMap<>();
         countdownStart = config.getInt("settings.countdown start");
-        opened = colorizeListString(getStringList(config, "messages.opened"));
-        rewardFormat = colorizeListString(getStringList(config, "messages.reward format"));
+        opened = getStringList(config, "messages.opened");
+        rewardFormat = getStringList(config, "messages.reward format");
 
         guiLootboxes = new HashMap<>();
         redeeming = new HashMap<>();
@@ -103,7 +103,9 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 final ItemStack is = d(config, "gui." + s);
                 final int slot = config.getInt("gui." + s + ".slot");
                 final Lootbox l = valueOf(is);
-                if(l != null) guiLootboxes.put(slot, l);
+                if(l != null) {
+                    guiLootboxes.put(slot, l);
+                }
                 gi.setItem(slot, is);
             }
         }
@@ -114,31 +116,33 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
 
         final ConfigurationSection c = otherdata.getConfigurationSection("lootboxes.started");
         if(c == null) {
-            for(int i : guiLootboxes.keySet()) {
-                started.put(guiLootboxes.get(i), System.currentTimeMillis());
+            for(Lootbox l : guiLootboxes.values()) {
+                this.started.put(l, started);
             }
         } else {
             for(String s : c.getKeys(false)) {
                 final ConfigurationSection K = otherdata.getConfigurationSection("lootboxes.started." + s);
                 if(K != null) {
                     for(String k : K.getKeys(false)) {
-                        started.put(getLootbox(k), otherdata.getLong("lootboxes.started." + s));
+                        this.started.put(getLootbox(k), otherdata.getLong("lootboxes.started." + s));
                     }
                 }
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.LOOTBOX).size() + " lootboxes &e(took " + (System.currentTimeMillis()-sc) + "ms)");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.LOOTBOX).size() + " lootboxes &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         for(Lootbox l : started.keySet()) {
             otherdata.set("lootboxes.started." + l.getIdentifier(), started.get(l));
         }
         saveOtherData();
-        for(Player p : new ArrayList<>(viewing)) p.closeInventory();
+        for(Player p : new ArrayList<>(viewing)) {
+            p.closeInventory();
+        }
         unregister(Feature.LOOTBOX);
     }
 
-    public void viewLootbox(Player player) {
+    public void viewLootbox(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.lootbox", true)) {
             player.closeInventory();
             final int size = gui.getSize();
@@ -149,17 +153,17 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             for(int i = 0; i < size; i++) {
                 item = top.getItem(i);
             }
-            final List<String> a = colorizeListString(config.getStringList("lores.available")), e = colorizeListString(config.getStringList("lores.expired")), p = colorizeListString(config.getStringList("lores.preview"));
+            final List<String> available = getStringList(config, "lores.available"), expired = getStringList(config, "lores.expired"), preview = getStringList(config, "lores.preview");
             for(int i : guiLootboxes.keySet()) {
-                final Lootbox l = guiLootboxes.get(i);
-                final long L = started.get(l), ex = L+l.getAvailableFor()*1000;
-                final String n = l.getName();
+                final Lootbox lootbox = guiLootboxes.get(i);
+                final long startTime = started.get(lootbox), expirationTime = startTime+lootbox.getAvailableFor()*1000;
+                final String n = lootbox.getName();
                 item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
                 lore.addAll(itemMeta.getLore());
-                for(String s : time < ex ? a : e) {
-                    lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(ex-time)));
+                for(String s : time < expirationTime ? available : expired) {
+                    lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(expirationTime-time)));
                 }
-                lore.addAll(p);
+                lore.addAll(preview);
                 itemMeta.setLore(lore); lore.clear();
                 item.setItemMeta(itemMeta);
             }
@@ -167,18 +171,18 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-    public boolean isAvailable(Lootbox lootbox) {
+    public boolean isAvailable(@NotNull Lootbox lootbox) {
         return started.containsKey(lootbox) && started.get(lootbox)+(lootbox.getAvailableFor()*1000)-System.currentTimeMillis() > 0;
     }
-    public void tryClaiming(Player player, Lootbox lootbox) {
+    public void tryClaiming(@NotNull Player player, @NotNull Lootbox lootbox) {
         final String y = lootbox.getIdentifier();
-        final HashMap<String, Integer> L = RPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
-        if(L.getOrDefault(y, 0) > 0) {
+        final HashMap<String, Integer> lootboxes = RPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
+        if(lootboxes.getOrDefault(y, 0) > 0) {
             if(isAvailable(lootbox)) {
-                if(L.get(y) == 1) {
-                    L.remove(y);
+                if(lootboxes.get(y) == 1) {
+                    lootboxes.remove(y);
                 } else {
-                    L.put(y, L.get(y)-1);
+                    lootboxes.put(y, lootboxes.get(y)-1);
                 }
                 giveItem(player, lootbox.getItem());
             }
@@ -187,7 +191,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
         player.closeInventory();
     }
-    public void openLootbox(Player player, Lootbox lootbox) {
+    public void openLootbox(@NotNull Player player, @NotNull Lootbox lootbox) {
         player.closeInventory();
         final int size = lootbox.getGuiSize();
         player.openInventory(Bukkit.createInventory(player, size, lootbox.getGuiTitle()));
@@ -279,14 +283,16 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }, 20*i));
         }
     }
-    public void previewLootbox(Player player, Lootbox lootbox) {
+    public void previewLootbox(@NotNull Player player, @NotNull Lootbox lootbox) {
         if(hasPermission(player, "RandomPackage.lootbox.preview", true)) {
             player.closeInventory();
             final List<ItemStack> items = lootbox.getAllRewards();
             final int s = ((items.size()+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, s, lootbox.getPreviewTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
-            for(ItemStack is : items) top.setItem(top.firstEmpty(), is);
+            for(ItemStack is : items) {
+                top.setItem(top.firstEmpty(), is);
+            }
             player.updateInventory();
         }
     }

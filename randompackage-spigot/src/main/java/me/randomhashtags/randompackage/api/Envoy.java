@@ -6,8 +6,8 @@ import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -71,8 +71,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 		final List<String> c = otherdata.getStringList("envoy.preset");
 		if(!c.isEmpty()) {
-			for(String s : c)
+			for(String s : c) {
 				preset.add(toLocation(s));
+			}
 		}
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "envoy tiers", "_settings.yml"));
 		type = config.getString("settings.type");
@@ -139,8 +140,12 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		unregister(Feature.ENVOY_CRATE);
 	}
 
-	public long getNextNaturalEnvoy() { return nextNaturalEnvoy; }
-	public String getUntilNextNaturalEnvoy() { return getRemainingTime(nextNaturalEnvoy-System.currentTimeMillis()); }
+	public long getNextNaturalEnvoy() {
+		return nextNaturalEnvoy;
+	}
+	public String getUntilNextNaturalEnvoy() {
+		return getRemainingTime(nextNaturalEnvoy-System.currentTimeMillis());
+	}
 
 	public void stopAllEnvoys() {
 		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
@@ -151,11 +156,11 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void stopEnvoy(int envoyID, boolean dropItems) {
-		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
-		if(L != null) {
-			final HashMap<Location, LivingEnvoyCrate> a = new HashMap<>(L.get(envoyID));
-			for(Location loc : a.keySet()) {
-				a.get(loc).delete(dropItems);
+		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> envoys = LivingEnvoyCrate.living;
+		if(envoys != null) {
+			final HashMap<Location, LivingEnvoyCrate> chests = new HashMap<>(envoys.get(envoyID));
+			for(Location loc : chests.keySet()) {
+				chests.get(loc).delete(dropItems);
 			}
 		}
 	}
@@ -169,7 +174,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			player.updateInventory();
 			removeItem(player, i, 1);
 			final List<String> rewards = ec.getRandomRewards();
-			for(String s : rewards) giveItem(player, d(null, s));
+			for(String s : rewards) {
+				giveItem(player, d(null, s));
+			}
 		} else if(i != null && i.hasItemMeta() && i.getItemMeta().equals(envoySummon.getItemMeta())) {
 			event.setCancelled(true);
 			player.updateInventory();
@@ -205,15 +212,15 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
     public void enterEditMode(@NotNull Player player) {
 		if(hasPermission(player, "RandomPackage.envoy.preset", true)) {
-			final PlayerInventory i = player.getInventory();
+			final PlayerInventory inv = player.getInventory();
 			final boolean viewing = settingPreset.contains(player);
 			final Material mat = viewing ? Material.AIR : Material.BEDROCK;
 			if(!viewing) {
 				settingPreset.add(player);
-				i.addItem(presetLocationPlacer);
+				inv.addItem(presetLocationPlacer);
 			} else {
 				settingPreset.remove(player);
-				i.remove(presetLocationPlacer);
+				inv.remove(presetLocationPlacer);
 			}
 			if(settingPreset.isEmpty()) {
 				for(Location l : preset) {
@@ -223,7 +230,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
     }
 
-	public void spawnEnvoy(String type, int amount) {
+	public void spawnEnvoy(@NotNull String type, int amount) {
 		type = type.toUpperCase();
 		final Random random = new Random();
 		final int despawn = config.getInt("settings.availability");
@@ -268,7 +275,8 @@ public class Envoy extends RPFeature implements CommandExecutor {
 					preset.remove(r);
 				}
 				break;
-			default: break;
+			default:
+				break;
 		}
 		final int t = totalEnvoys;
 		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stopEnvoy(t, false), 20*despawn);

@@ -3,10 +3,10 @@ package me.randomhashtags.randompackage.api;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -96,10 +96,11 @@ public class Homes extends RPFeature implements CommandExecutor {
 				viewHomes(player, pdata);
 			} else {
 				final Home home = pdata.getHome(getArguments(args));
-				if(home != null)
+				if(home != null) {
 					teleportToHome(player, home);
-				else
+				} else {
 					viewHomes(player, pdata);
+				}
 			}
 		} else if(c.equals("sethome")) {
 			if(hasPermission(player, "RandomPackage.sethome", true) && pdata.getHomes().size()+1 <= pdata.getMaxHomes()) {
@@ -119,21 +120,22 @@ public class Homes extends RPFeature implements CommandExecutor {
 		for(int i = 0; i < l; i++) s.append(args[i]).append(i == l-1 ? "" : " ");
 		return s.toString();
 	}
-	public void viewHomes(@NotNull Player opener, RPPlayer target) {
+	public void viewHomes(@NotNull Player opener, @NotNull RPPlayer target) {
 		if(hasPermission(opener, "RandomPackage.home", true)) {
 			viewingHomes.add(opener);
 			final List<Home> homes = target.getHomes();
 			final String name = colorize(config.getString("menu.name"));
-			final List<String> l = config.getStringList("menu.lore");
+			final List<String> menuLore = getStringList(config, "menu.lore");
 			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(target.getMaxHomes())))));
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			for(Home h : homes) {
 				final Location lo = h.location;
-				final String w = lo.getWorld().getName();
-				final double x = round(lo.getX(), 1), y = round(lo.getY(), 1), z = round(lo.getZ(), 1);
+				final String world = lo.getWorld().getName(), x = Double.toString(round(lo.getX(), 1)), y = Double.toString(round(lo.getY(), 1)), z = Double.toString(round(lo.getZ(), 1));
 				item = h.icon.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
 				itemMeta.setDisplayName(name.replace("{HOME}", h.name));
-				for(String s : l) lore.add(colorize(s.replace("{WORLD}", w).replace("{X}", Double.toString(x)).replace("{Y}", Double.toString(y)).replace("{Z}", Double.toString(z))));
+				for(String s : menuLore) {
+					lore.add(s.replace("{WORLD}", world).replace("{X}", x).replace("{Y}", y).replace("{Z}", z));
+				}
 				itemMeta.setLore(lore); lore.clear();
 				item.setItemMeta(itemMeta);
 				top.setItem(top.firstEmpty(), item);
@@ -162,8 +164,8 @@ public class Homes extends RPFeature implements CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
-		final boolean v = viewingHomes.contains(player);
-		if(v || editingIcons.containsKey(player)) {
+		final boolean isViewingHomes = viewingHomes.contains(player);
+		if(isViewingHomes || editingIcons.containsKey(player)) {
 			event.setCancelled(true);
 			player.updateInventory();
 			final int r = event.getRawSlot();
@@ -171,7 +173,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 			final String click = event.getClick().name();
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			if(r < 0 || r >= top.getSize() || !click.contains("RIGHT") && !click.contains("LEFT") && !click.contains("MIDDLE") || c == null || c.getType().equals(Material.AIR)) return;
-			if(v) {
+			if(isViewingHomes) {
 				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 				final List<Home> homes = pdata.getHomes();
 				player.closeInventory();

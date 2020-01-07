@@ -156,10 +156,10 @@ public class Jackpot extends RPFeature implements CommandExecutor {
     }
 
     public void pickWinner() {
-        final List<UUID> tic = getTickets();
-        final int size = tic.size();
+        final List<UUID> tickets = getTickets();
+        final int size = tickets.size();
         if(size > 0) {
-            final UUID winner = tic.get(RANDOM.nextInt(size));
+            final UUID winner = tickets.get(RANDOM.nextInt(size));
             final OfflinePlayer op = Bukkit.getOfflinePlayer(winner);
             final HashMap<String, String> replacements = new HashMap<>();
             final BigDecimal winnerTickets = ticketsSold.get(winner), taxed = value.multiply(tax), total = value.subtract(taxed);
@@ -170,7 +170,6 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             pdata.jackpotWonCash = pdata.jackpotWonCash.add(total);
 
             final String percent = formatDouble(getPercent(winnerTickets, size)), tt = formatInt(size);
-
             replacements.put("{PLAYER}", op.getName());
             replacements.put("{TICKETS}", formatBigDecimal(winnerTickets));
             replacements.put("{TICKETS%}", percent);
@@ -179,8 +178,9 @@ public class Jackpot extends RPFeature implements CommandExecutor {
 
             final Collection<? extends Player> o = Bukkit.getOnlinePlayers();
             for(String s : getStringList(config, "messages.won")) {
-                for(String r : replacements.keySet()) s = s.replace(r, replacements.get(r));
-                s = colorize(s);
+                for(String r : replacements.keySet()) {
+                    s = s.replace(r, replacements.get(r));
+                }
                 for(Player p : o) {
                     p.sendMessage(s);
                 }
@@ -201,7 +201,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         }
         return a;
     }
-    public double getPercent(BigDecimal tickets, int size) {
+    public double getPercent(@NotNull BigDecimal tickets, int size) {
         final BigDecimal big = BigDecimal.valueOf((double) (size == 0 ? 1 : size)), hundred = BigDecimal.valueOf(100);
         return round(BigDecimal.valueOf(tickets.doubleValue()/big.doubleValue()).multiply(hundred).doubleValue(), 2);
     }
@@ -236,9 +236,9 @@ public class Jackpot extends RPFeature implements CommandExecutor {
         if(hasPermission(player, "RandomPackage.jackpot.buy", true)) {
             player.closeInventory();
             purchasing.put(player.getUniqueId(), tickets);
-            final String a = formatBigDecimal(tickets), p = formatBigDecimal(ticketCost.multiply(tickets));
+            final String amount = formatBigDecimal(tickets), cost = formatBigDecimal(ticketCost.multiply(tickets));
             final int s = gui.getSize();
-            player.openInventory(Bukkit.createInventory(player, s, gui.getTitle().replace("{AMOUNT}", a)));
+            player.openInventory(Bukkit.createInventory(player, s, gui.getTitle().replace("{AMOUNT}", amount)));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
             for(int i = 0; i < s; i++) {
@@ -247,7 +247,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                     itemMeta = item.getItemMeta(); lore.clear();
                     if(itemMeta.hasLore()) {
                         for(String l : itemMeta.getLore()) {
-                            lore.add(l.replace("{AMOUNT}", a).replace("{$}", p));
+                            lore.add(l.replace("{AMOUNT}", amount).replace("{$}", cost));
                         }
                     }
                     itemMeta.setLore(lore); lore.clear();

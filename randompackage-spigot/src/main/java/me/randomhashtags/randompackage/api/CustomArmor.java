@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -143,7 +144,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			trigger(event, W.getArmorAttributes());
 		}
 	}
-
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void pvAnyEvent(PvAnyEvent event) {
 		final Player d = event.getDamager();
@@ -186,7 +186,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 		}
 	}
-
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
@@ -260,14 +259,16 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	}
 
 	public ItemStack getRandomEquipmentLootboxLoot() {
-		final List<String> r = config.getStringList("items.equipment lootbox.rewards");
-		String l = r.get(RANDOM.nextInt(r.size()));
+		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
+		String l = rewards.get(RANDOM.nextInt(rewards.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[RANDOM.nextInt(l.split("\\|\\|").length)];
 		return givedpitem.valueOf(l);
 	}
 
-	public ItemStack getHeroicUpgrade(ArmorSet set) { return getHeroicUpgrade(set, RANDOM.nextInt(101)); }
-	public ItemStack getHeroicUpgrade(ArmorSet set, int percent) {
+	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {
+		return getHeroicUpgrade(set, RANDOM.nextInt(101));
+	}
+	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set, int percent) {
 		final String name = set.getName(), persent = Integer.toBinaryString(percent);
 		item = heroicUpgrade.clone(); itemMeta = item.getItemMeta(); lore.clear();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
@@ -278,13 +279,13 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		item.setItemMeta(itemMeta);
 		return item;
 	}
-	public boolean isHeroic(ItemStack is) {
+	public boolean isHeroic(@Nullable ItemStack is) {
 		return Boolean.parseBoolean(getRPItemStackValue(is, "RPCustomArmorIsHeroic"));
 	}
-	public void setHeroicVariant(ItemStack is) {
+	public void setHeroicVariant(@NotNull ItemStack is) {
 		if(getRPItemStackValue(is, "RPCustomArmorIsHeroic") == null) {
-			final ArmorSet a = valueOfArmorSet(is);
-			if(a != null) {
+			final ArmorSet set = valueOfArmorSet(is);
+			if(set != null) {
 				setRPItemStackValues(is, new HashMap<String, String>(){{ put("RPCustomArmorIsHeroic", "true"); }});
 			}
 		}
@@ -299,7 +300,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 		return i;
 	}
-
 	private void tryCrystal(Player player, Event event) {
 		for(ItemStack is : getItems(player)) {
 			final ArmorSet crystal = getArmorCrystalOnItem(is);

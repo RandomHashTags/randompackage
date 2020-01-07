@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileLootbox extends RPAddon implements Lootbox {
-    private List<String> regularLootFormat, jackpotLootFormat, bonusLootFormat;
     private ItemStack item, background;
 
     public FileLootbox(File f) {
@@ -28,22 +27,13 @@ public class FileLootbox extends RPAddon implements Lootbox {
     public String getPreviewTitle() { return colorize(yml.getString("preview title")); }
     public String getRegularLootSize() { return yml.getString("regular loot size"); }
     public String getBonusLootSize() { return yml.getString("bonus loot size"); }
-    public List<String> getGuiFormat() { return yml.getStringList("gui.format"); }
-    public List<String> getRegularLootFormat() {
-        if(regularLootFormat == null) regularLootFormat = colorizeListString(yml.getStringList("lore formats.regular loot"));
-        return regularLootFormat;
-    }
-    public List<String> getJackpotLootFormat() {
-        if(jackpotLootFormat == null) jackpotLootFormat = colorizeListString(yml.getStringList("lore formats.jackpot loot"));
-        return jackpotLootFormat;
-    }
-    public List<String> getBonusLootFormat() {
-        if(bonusLootFormat == null) bonusLootFormat = colorizeListString(yml.getStringList("lore formats.bonus loot"));
-        return bonusLootFormat;
-    }
-    public List<String> getRegularLoot() { return yml.getStringList("regular loot"); }
-    public List<String> getJackpotLoot() { return yml.getStringList("jackpot loot"); }
-    public List<String> getBonusLoot() { return yml.getStringList("bonus loot"); }
+    public List<String> getGuiFormat() { return getStringList(yml, "gui.format"); }
+    public List<String> getRegularLootFormat() { return getStringList(yml, "lore formats.regular loot"); }
+    public List<String> getJackpotLootFormat() { return getStringList(yml, "lore formats.jackpot loot"); }
+    public List<String> getBonusLootFormat() { return getStringList(yml, "lore formats.bonus loot"); }
+    public List<String> getRegularLoot() { return getStringList(yml, "regular loot"); }
+    public List<String> getJackpotLoot() { return getStringList(yml, "jackpot loot"); }
+    public List<String> getBonusLoot() { return getStringList(yml, "bonus loot"); }
 
     public ItemStack getItem() {
         if(item == null) {
@@ -91,7 +81,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
             i.setItemMeta(itemMeta);
             this.item = i;
         }
-        return item.clone();
+        return getClone(item);
     }
     public ItemStack getBackground() {
         if(background == null) background = api.d(yml, "gui.background");

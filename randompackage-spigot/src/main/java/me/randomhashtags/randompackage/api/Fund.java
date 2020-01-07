@@ -70,10 +70,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 		maxfund = BigDecimal.ZERO;
 
 		for(String s : config.getStringList("unlock")) {
-			final String[] a = s.split(";");
-			final BigDecimal v = BigDecimal.valueOf(Double.parseDouble(a[1]));
-			unlockstring.put(a[0], s);
-			needed_unlocks.put(a[2], v);
+			final String[] values = s.split(";");
+			final BigDecimal v = BigDecimal.valueOf(Double.parseDouble(values[1]));
+			unlockstring.put(values[0], s);
+			needed_unlocks.put(values[2], v);
 			if(v.doubleValue() > maxfund.doubleValue()) {
 				maxfund = v;
 			}
@@ -136,10 +136,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 		} else {
 			cmd = msg.substring(1).split(" ")[0].toLowerCase();
 		}
-		final PluginCommand p = Bukkit.getPluginCommand(cmd);
-		if(p != null) {
-			final String pl = p.getName(), m = msg.toLowerCase();
-			final List<String> a = p.getAliases();
+		final PluginCommand pCmd = Bukkit.getPluginCommand(cmd);
+		if(pCmd != null) {
+			final String pl = pCmd.getName(), m = msg.toLowerCase();
+			final List<String> a = pCmd.getAliases();
 			for(String s : unlockstring.keySet()) {
 				final String us = unlockstring.get(s);
 				if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
@@ -196,29 +196,34 @@ public class Fund extends RPFeature implements CommandExecutor {
 			for(String s : getStringList(config, "messages.view")) {
 				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
-					for(String i : config.getStringList("unlock")) {
-						final BigDecimal req = needed_unlocks.get(i.split(";")[2]);
-						final double d = req.doubleValue(), t = total.doubleValue();
-						final int q = req.intValue();
-						final String percent = roundDoubleString((t/d) * 100 > 100.000 ? 100 : (t/d) * 100, pdigits), abb = getAbbreviation(d), qq = formatInt(q);
-						for(String k : getStringList(config, "messages.content")) {
-							if(k.contains("{COMPLETED}")) k = k.replace("{COMPLETED}", t >= d ? colorize(config.getString("messages.completed")) : "");
-							if(k.contains("{UNLOCK}")) k = k.replace("{UNLOCK}", i.split(";")[2]);
-							if(k.contains("{UNLOCK%}")) k = k.replace("{UNLOCK%}", percent);
-							if(k.contains("{PROGRESS_BAR}")) {
-								StringBuilder u = new StringBuilder();
-								for(int a = 1; a <= length; a++) u.append(Double.parseDouble(percent) >= a ? achieved : notachieved).append(symbol);
-								k = k.replace("{PROGRESS_BAR}", u.toString());
-							}
-							if(k.contains("{REQ}")) k = k.replace("{REQ}", abb);
-							if(k.contains("{REQ$}")) k = k.replace("{REQ$}", qq);
-							sender.sendMessage(colorize(k));
-						}
+					for(String i : getStringList(config, "unlock")) {
+						final String[] values = i.split(";");
+						final BigDecimal req = needed_unlocks.get(values[2]);
+						final double required = req.doubleValue(), total = this.total.doubleValue();
+						final int requiredInt = req.intValue();
+						final String percent = roundDoubleString((total/required) * 100 > 100.000 ? 100 : (total/required) * 100, pdigits);
+
+						final HashMap<String, String> replacements = new HashMap<>();
+						replacements.put("{COMPLETED}", total >= required ? colorize(config.getString("messages.completed")) : "");
+						replacements.put("{UNLOCK}", values[2]);
+						replacements.put("{UNLOCK%}", percent);
+						replacements.put("{PROGRESS_BAR}", getProgressBar(length, percent, achieved, notachieved, symbol));
+						replacements.put("{REQ}", getAbbreviation(required));
+						replacements.put("{REQ$}", formatInt(requiredInt));
+						sendStringListMessage(sender, getStringList(config, "messages.content"), replacements);
 					}
+				} else {
+					sender.sendMessage(colorize(s));
 				}
-				if(!s.equals("{CONTENT}")) sender.sendMessage(colorize(s));
 			}
 		}
+	}
+	private String getProgressBar(int length, String percent, String achieved, String notachieved, String symbol) {
+		final StringBuilder builder = new StringBuilder();
+		for(int a = 1; a <= length; a++) {
+			builder.append(Double.parseDouble(percent) >= a ? achieved : notachieved).append(symbol);
+		}
+		return builder.toString();
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund.help", true)) {

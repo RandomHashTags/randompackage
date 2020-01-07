@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
 import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -13,7 +14,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -213,7 +213,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             is.setItemMeta(itemMeta);
         }
     }
-    public void openMonthlyCrate(Player player, MonthlyCrate crate) {
+    public void openMonthlyCrate(@NotNull Player player, @NotNull MonthlyCrate crate) {
         final String p = crate.getIdentifier();
         final UInventory inv = crate.getRegular();
         final List<Integer> rewardSlots = crate.getRewardSlots(), bonusRewardSlots = crate.getBonusRewardSlots();
@@ -241,14 +241,16 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     }
     private void doAnimation(Player player, MonthlyCrate m) {
         final String p = m.getIdentifier();
-        final Inventory b = m.getBonus().getInventory();
-        final List<Integer> r = m.getRewardSlots(), rb = m.getBonusRewardSlots();
+        final Inventory inv = m.getBonus().getInventory();
+        final List<Integer> rewardSlots = m.getRewardSlots(), bonusSlots = m.getBonusRewardSlots();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        for(int i = 0; i < top.getSize(); i++)
-            if(!r.contains(i) && !rb.contains(i))
-                top.setItem(i, b.getItem(i));
-        for(int i : rb) {
-            item = b.getItem(i).clone(); itemMeta = item.getItemMeta(); lore.clear();
+        for(int i = 0; i < top.getSize(); i++) {
+            if(!rewardSlots.contains(i) && !bonusSlots.contains(i)) {
+                top.setItem(i, inv.getItem(i));
+            }
+        }
+        for(int i : bonusSlots) {
+            item = inv.getItem(i).clone(); itemMeta = item.getItemMeta(); lore.clear();
             if(itemMeta.hasLore()) {
                 for(String s : itemMeta.getLore()) {
                     if(s.contains("{PATH}")) s = s.replace("{PATH}", p);
@@ -265,25 +267,24 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         stopTimers(player);
         final String p = player.getName();
         final ItemStack cmd = givedpitem.items.get("commandreward").clone();
-        final ConsoleCommandSender sender = Bukkit.getConsoleSender();
-        final boolean rrl = regularRewardsLeft.containsKey(player), brl = bonusRewardsLeft.containsKey(player);
-        if(rrl) {
+        final List<Integer> regular = regularRewardsLeft.getOrDefault(player, null), bonus = bonusRewardsLeft.getOrDefault(player, null);
+        if(regular != null) {
             final List<String> r = MonthlyCrate.revealedRegular.getOrDefault(player, null);
             for(int i : m.getRewardSlots()) {
-                final ItemStack is = regularRewardsLeft.get(player).contains(i) ? m.getRandomReward(player, r, false) : inv.getItem(i);
+                final ItemStack is = regular.contains(i) ? m.getRandomReward(player, r, false) : inv.getItem(i);
                 if(is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
-                    Bukkit.dispatchCommand(sender, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", p));
+                    Bukkit.dispatchCommand(CONSOLE, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", p));
                 } else {
                     giveItem(player, is);
                 }
             }
         }
-        if(brl || rrl) {
+        if(bonus != null || regular != null) {
             final List<String> r = MonthlyCrate.revealedBonus.getOrDefault(player, null);
             for(int i : m.getBonusRewardSlots()) {
-                final ItemStack is = !brl || bonusRewardsLeft.get(player).contains(i) ? m.getRandomBonusReward(player, r, false) : inv.getItem(i);
+                final ItemStack is = bonus == null || bonus.contains(i) ? m.getRandomBonusReward(player, r, false) : inv.getItem(i);
                 if(is.hasItemMeta() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
-                    Bukkit.dispatchCommand(sender, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", p));
+                    Bukkit.dispatchCommand(CONSOLE, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", p));
                 } else {
                     giveItem(player, is);
                 }
@@ -302,7 +303,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             playertimers.remove(player);
         }
     }
-    public void reset(Player sender, OfflinePlayer target) {
+    public void reset(@NotNull Player sender, @Nullable OfflinePlayer target) {
         if(target == null || !target.isOnline()) {
             sendStringListMessage(sender, getStringList(config, "messages.reset.target doesnt exist"), null);
         } else {
@@ -374,26 +375,26 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        final ItemStack c = event.getCurrentItem();
-        if(c != null && !c.getType().equals(Material.AIR) && top.getHolder() == player) {
-            final int r = event.getRawSlot();
+        final ItemStack current = event.getCurrentItem();
+        if(current != null && !current.getType().equals(Material.AIR) && top.getHolder() == player) {
+            final int slot = event.getRawSlot();
             final String title = event.getView().getTitle();
             if(title.equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final MonthlyCrate mc = valueOfMonthlyCrate(player, c);
-                if(mc != null) {
-                    final String n = mc.getIdentifier();
+                final MonthlyCrate crate = valueOfMonthlyCrate(player, current);
+                if(crate != null) {
+                    final String n = crate.getIdentifier();
                     final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                     final boolean hasPerm = pdata.getMonthlyCrates().contains(n) || player.hasPermission("RandomPackage.monthlycrates." + n);
                     if(!hasPerm) {
                         sendStringListMessage(player, getStringList(config, "messages.no access"), null);
                     } else if(!pdata.getClaimedMonthlyCrates().contains(n)) {
-                        give(pdata, player, mc, true);
+                        give(pdata, player, crate, true);
                     }
                     player.closeInventory();
-                } else if(categories.containsKey(r)) {
-                    viewCategory(player, categories.get(r));
+                } else if(categories.containsKey(slot)) {
+                    viewCategory(player, categories.get(slot));
                 }
             } else {
                 final int category = valueOfCategory(title);
@@ -401,39 +402,34 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 if(category != -1) {
                     event.setCancelled(true);
                     player.updateInventory();
-                    final MonthlyCrate v = valueOfMonthlyCrate(category, r);
+                    final MonthlyCrate v = valueOfMonthlyCrate(category, slot);
                     if(v != null) {
                         final String N = v.getIdentifier();
                         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                         if(!pdata.getClaimedMonthlyCrates().contains(N) && (pdata.getMonthlyCrates().contains(N) || hasPermission(player, "RandomPackage.monthlycrate." + N, false))) {
-                            give(RPPlayer.get(player.getUniqueId()), player, v, true);
+                            give(pdata, player, v, true);
                         }
                     }
                 } else if(m != null) {
                     event.setCancelled(true);
                     player.updateInventory();
-                    if(r >= top.getSize()) return;
-                    final Object rr = event.getRawSlot();
-                    final int b = bonusRewardsLeft.containsKey(player) ? bonusRewardsLeft.get(player).size() : -1;
-                    if(regularRewardsLeft.containsKey(player) && regularRewardsLeft.get(player).contains(r)) {
-                        if(!regularRewardsLeft.get(player).isEmpty()) {
-                            final List<String> R = MonthlyCrate.revealedRegular.get(player);
-                            top.setItem(r, m.getRandomReward(player, R, false));
-                            regularRewardsLeft.get(player).remove(rr);
-                            if(regularRewardsLeft.get(player).size() == 0 && !bonusRewardsLeft.containsKey(player)) {
-                                bonusRewardsLeft.put(player, new ArrayList<>(m.getBonusRewardSlots()));
-                                doAnimation(player, m);
-                            }
+                    if(slot >= top.getSize()) return;
+                    final List<Integer> regular = regularRewardsLeft.getOrDefault(player, null), bonus = bonusRewardsLeft.getOrDefault(player, null);
+                    if(regular != null && regular.contains(slot)) {
+                        top.setItem(slot, m.getRandomReward(player, MonthlyCrate.revealedRegular.get(player), false));
+                        regular.remove(slot);
+                        if(regular.size() == 0 && bonus != null) {
+                            bonusRewardsLeft.put(player, new ArrayList<>(m.getBonusRewardSlots()));
+                            doAnimation(player, m);
                         }
-                    } else if(bonusRewardsLeft.containsKey(player) && regularRewardsLeft.get(player).isEmpty() && bonusRewardsLeft.get(player).contains(r)) {
-                        if(!bonusRewardsLeft.isEmpty()) {
-                            final List<String> R = MonthlyCrate.revealedBonus.get(player);
-                            top.setItem(event.getRawSlot(), m.getRandomReward(player, R, false));
-                            bonusRewardsLeft.get(player).remove(rr);
-                        }
+                    } else if(bonus != null && (regular == null || regular.isEmpty()) && bonus.contains(slot)) {
+                        top.setItem(slot, m.getRandomReward(player, MonthlyCrate.revealedBonus.get(player), false));
+                        bonus.remove(slot);
                     }
                     player.updateInventory();
-                    if(regularRewardsLeft.containsKey(player) && regularRewardsLeft.get(player).isEmpty() && bonusRewardsLeft.containsKey(player) && b == 0) player.closeInventory();
+                    if(regular != null && regular.isEmpty() && bonus != null && bonus.isEmpty()) {
+                        player.closeInventory();
+                    }
                 }
             }
         }
@@ -452,9 +448,9 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 openMonthlyCrate(player, c);
                 removeItem(player, i, 1);
             } else if(i.hasItemMeta() && (m.equals(heroicmysterycrate.getItemMeta()) || m.equals(mysterycrate.getItemMeta()) || m.equals(superiormysterycrate.getItemMeta()))) {
-                final String p = m.equals(superiormysterycrate.getItemMeta()) ? "superior mystery crate" : m.equals(heroicmysterycrate.getItemMeta()) ? "heroic mystery crate" : "mystery crate";
-                final List<String> kk = config.getStringList("items." + p + ".can obtain");
-                final String r = kk.get(RANDOM.nextInt(kk.size()));
+                final String p = (m.equals(superiormysterycrate.getItemMeta()) ? "superior " : m.equals(heroicmysterycrate.getItemMeta()) ? "heroic " : "") + "mystery crate";
+                final List<String> obtainable = getStringList(config, "items." + p + ".can obtain");
+                final String r = obtainable.get(RANDOM.nextInt(obtainable.size()));
                 final ItemStack I = givedpitem.valueOf("monthlycrate:" + r);
                 itemMeta = I.getItemMeta(); lore.clear();
                 if(itemMeta != null && itemMeta.hasLore()) {
@@ -488,7 +484,8 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         final Player player = event.getPlayer();
         final InventoryView open = player.getOpenInventory();
         final MonthlyCrate m = valueOfMonthlyCrate(open.getTitle());
-        if(m != null)
+        if(m != null) {
             exit(player, open.getTopInventory(), m);
+        }
     }
 }

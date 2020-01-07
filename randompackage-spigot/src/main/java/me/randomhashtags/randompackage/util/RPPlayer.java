@@ -814,53 +814,6 @@ public class RPPlayer implements RPStorage {
             e.printStackTrace();
         }
     }
-    public static void resetAllPlayerDataToDefault(boolean filter, boolean homes, boolean lootboxes, boolean monthlycrates, boolean playerquests, boolean showcase, boolean titles, boolean unclaimedPurchases) {
-        try {
-            for(File f : new File(folder).listFiles()) {
-                final UUID uuid = UUID.fromString(f.getName().split("\\.yml")[0]);
-                final boolean online = players.containsKey(uuid);
-                final RPPlayer pdata = RPPlayer.get(uuid);
-
-                pdata.xpExhaustionExpiration = 0l;
-
-                if(filter) {
-                    pdata.filter = false;
-                    pdata.filteredItems = new ArrayList<>();
-                }
-                if(homes) {
-                    pdata.homes = new ArrayList<>();
-                }
-                if(lootboxes) {
-                    pdata.claimedLootboxesExpiration = new HashMap<>();
-                    pdata.unclaimedLootboxes = new HashMap<>();
-                }
-                if(monthlycrates) {
-                    pdata.claimedMonthlyCrates = new ArrayList<>();
-                    pdata.ownedMonthlyCrates = new ArrayList<>();
-                }
-                if(playerquests) {
-                    pdata.questTokens = 0;
-                    pdata.quests = new LinkedHashMap<>();
-                }
-                if(showcase) {
-                    pdata.showcases = new HashMap<>();
-                    pdata.showcaseSizes = new HashMap<>();
-                }
-                if(titles) {
-                    pdata.activeTitle = null;
-                    pdata.ownedTitles = new ArrayList<>();
-                }
-                if(unclaimedPurchases) {
-                    pdata.unclaimedPurchases = new ArrayList<>();
-                }
-                if(!online) {
-                    pdata.unload();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public static void unloadAllPlayerData() {
         try {
             for(RPPlayer pdata : new ArrayList<>(players.values())) {

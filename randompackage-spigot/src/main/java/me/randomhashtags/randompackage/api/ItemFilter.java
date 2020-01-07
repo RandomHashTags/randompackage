@@ -2,12 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FilterCategory;
-import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileFilterCategory;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -136,8 +136,11 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         itemMeta.setDisplayName((isFiltered ? enablePrefix : disabledPrefix) + ChatColor.stripColor(itemMeta.getDisplayName()));
         itemMeta.setLore(isFiltered ? enable : disable);
         is.setItemMeta(itemMeta);
-        if(isFiltered) is.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
-        else is.removeEnchantment(Enchantment.ARROW_DAMAGE);
+        if(isFiltered) {
+            is.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+        } else {
+            is.removeEnchantment(Enchantment.ARROW_DAMAGE);
+        }
         return is;
     }
     public void toggleFilter(@NotNull Player player) {
@@ -166,7 +169,6 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             player.updateInventory();
         }
     }
-
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -200,7 +202,6 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             }
         }
     }
-
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
