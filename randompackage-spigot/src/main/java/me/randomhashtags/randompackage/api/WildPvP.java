@@ -218,33 +218,29 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             creator.closeInventory();
 
             countdown.put(player, player.getLocation());
-
             player.teleport(creator.getLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
 
-            final List<String> e = getStringList(config, "messages.invincibility enabled"), expire = getStringList(config, "messages.invincibility expired"), cd = getStringList(config, "messages.invincibility expiring");
+            final List<String> enabled = getStringList(config, "messages.invincibility enabled"), expire = getStringList(config, "messages.invincibility expired"), invincibilityExpiring = getStringList(config, "messages.invincibility expiring");
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{SEC}", Integer.toString(invincibilityDuration));
-
-            sendStringListMessage(player, e, replacements);
-            sendStringListMessage(creator, e, replacements);
+            sendStringListMessage(player, enabled, replacements);
+            sendStringListMessage(creator, enabled, replacements);
 
             tasks.put(creator, new ArrayList<>());
-
             final PvPCountdownMatch cdm = new PvPCountdownMatch(creator, player);
-
             for(int i = 0; i <= invincibilityDuration; i++) {
-                final int a = i;
+                final int interval = i;
                 tasks.get(creator).add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                     if(cdm.getCreator() != null && cdm.getChallenger() != null) {
-                        replacements.put("{SEC}", Integer.toString(invincibilityDuration-a));
-                        if(a == invincibilityDuration) {
+                        replacements.put("{SEC}", Integer.toString(invincibilityDuration-interval));
+                        if(interval == invincibilityDuration) {
                             cdm.delete();
                             countdown.remove(player);
                             sendStringListMessage(player, expire, null);
                             sendStringListMessage(creator, expire, null);
                         } else {
-                            sendStringListMessage(player, cd, replacements);
-                            sendStringListMessage(creator, cd, replacements);
+                            sendStringListMessage(player, invincibilityExpiring, replacements);
+                            sendStringListMessage(creator, invincibilityExpiring, replacements);
                         }
                     } else {
                         countdown.remove(player);

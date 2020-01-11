@@ -71,7 +71,7 @@ public interface Mathable {
                     else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
                     else throw new RuntimeException("Unknown function: " + func);
                 } else {
-                    throw new RuntimeException("Unexpected: " + (char)ch);
+                    throw new RuntimeException("Unexpected: Character \"" + (char) ch + "\" in string \"" + str + "\"");
                 }
 
                 if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation

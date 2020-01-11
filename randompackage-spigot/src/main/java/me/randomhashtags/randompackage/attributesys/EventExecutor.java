@@ -383,7 +383,8 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                 final ProjectileSource shooter = proj.getShooter();
                 return shooter instanceof Player ? (Player) shooter : null;
             // TODO: fix dis bruh
-            default: return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
+            default:
+                return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
         }
     }
     public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes) {
@@ -400,6 +401,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
         final Player player = equipped.getPlayer();
+        final String world = player.getWorld().getName();
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
@@ -409,7 +411,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
                     //Bukkit.broadcastMessage("EventExecutor;event=" + event.getEventName());
-                    if(onCorrectItem) {
+                    if(onCorrectItem && enchant.canProcInWorld(world)) {
                         final int lvl = enchants.get(enchant);
                         final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
                         try {

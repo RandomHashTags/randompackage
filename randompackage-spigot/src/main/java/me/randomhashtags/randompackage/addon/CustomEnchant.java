@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Toggleable;
-import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
-import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.util.Versionable;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +17,14 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Toggleable, Versionable {
+    List<String> getEnabledInWorlds();
+    default boolean canProcInWorld(@NotNull World world) {
+        return canProcInWorld(world.getName());
+    }
+    default boolean canProcInWorld(@NotNull String world) {
+        final List<String> worlds = getEnabledInWorlds();
+        return worlds != null && worlds.contains(world);
+    }
     List<String> getLore();
     List<String> getAppliesTo();
     String getRequiredEnchant();

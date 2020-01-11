@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.Booster;
+import me.randomhashtags.randompackage.addon.BoosterRecipients;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,13 +10,20 @@ import java.util.List;
 
 public class FileBooster extends RPAddon implements Booster {
     private ItemStack item;
+    private BoosterRecipients recipients;
     public FileBooster(File f) {
         load(f);
         register(Feature.BOOSTER, this);
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public String getRecipients() { return yml.getString("settings.recipients"); }
+    public BoosterRecipients getRecipients() {
+        if(recipients == null) {
+            final String target = yml.getString("settings.recipients");
+            recipients = target != null && !target.isEmpty() ? BoosterRecipients.valueOf(target.toUpperCase()) : BoosterRecipients.SELF;
+        }
+        return recipients;
+    }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return getClone(item);
@@ -32,8 +40,16 @@ public class FileBooster extends RPAddon implements Booster {
         }
         return -1;
     }
-    public List<String> getActivateMsg() { return yml.getStringList("messages.activate"); }
-    public List<String> getExpireMsg() { return yml.getStringList("messages.expire"); }
-    public List<String> getNotifyMsg() { return yml.getStringList("messages.notify"); }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public List<String> getActivateMsg() {
+        return getStringList(yml, "messages.activate");
+    }
+    public List<String> getExpireMsg() {
+        return getStringList(yml, "messages.expire");
+    }
+    public List<String> getNotifyMsg() {
+        return getStringList(yml, "messages.notify");
+    }
+    public List<String> getAttributes() {
+        return getStringList(yml, "attributes");
+    }
 }

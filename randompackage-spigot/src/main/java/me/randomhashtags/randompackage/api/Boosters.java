@@ -1,18 +1,19 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Booster;
-import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
-import me.randomhashtags.randompackage.util.obj.TObject;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -182,8 +183,8 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			replacements.put("{PLAYER}", player.getName());
 			replacements.put("{MULTIPLIER}", Double.toString(multiplier));
 
-			switch(b.getRecipients()) {
-				case "FACTION_MEMBERS":
+			switch (b.getRecipients()) {
+				case FACTION_MEMBERS:
 					if(hookedFactionsUUID()) {
 						final String faction = getFactionTag(u);
 						if(faction != null) {
@@ -202,7 +203,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 						return false;
 					}
 					return true;
-				case "SELF":
+				case SELF:
 					final ActiveBooster booster = new ActiveBooster(event, System.currentTimeMillis()+duration);
 					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
 					if(player.isOnline()) {
@@ -227,8 +228,8 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		final HashMap<String, String> replacements = new HashMap<>();
 		replacements.put("{PLAYER}", a.getName());
 		replacements.put("{MULTIPLIER}", Double.toString(b.getMultiplier()));
-		switch(booster.getRecipients()) {
-			case "FACTION_MEMBERS":
+		switch (booster.getRecipients()) {
+			case FACTION_MEMBERS:
 				boolean did = false;
 				final String faction = b.getFaction();
 				if(faction != null && activeRegionalBoosters.containsKey(faction)) {
@@ -245,7 +246,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}
 				break;
-			case "SELF":
+			case SELF:
 			default:
 				if(activePlayerBoosters.containsKey(u) && a.isOnline()) {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
@@ -264,9 +265,15 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		}
 	}
 
-	private List<ActiveBooster> getRegionalBoosters(String identifier) { return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>(); }
-	private List<ActiveBooster> getSelfBoosters(UUID player) { return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>(); }
-	private List<ActiveBooster> getFactionBoosters(UUID player) { return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>(); }
+	private List<ActiveBooster> getRegionalBoosters(String identifier) {
+		return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>();
+	}
+	private List<ActiveBooster> getSelfBoosters(UUID player) {
+		return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
+	}
+	private List<ActiveBooster> getFactionBoosters(UUID player) {
+		return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>();
+	}
 
 	private void sendNotify(Player player, ActiveBooster b, HashMap<String, String> replacements) {
 		if(player != null && b != null) {
@@ -281,23 +288,23 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			final List<ActiveBooster> boosters = new ArrayList<>();
 			boosters.addAll(getFactionBoosters(u));
 			boosters.addAll(getSelfBoosters(u));
-			for(ActiveBooster ab : boosters) {
-				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, ab);
+			for(ActiveBooster booster : boosters) {
+				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, booster);
 				PLUGIN_MANAGER.callEvent(e);
-				final String M = Double.toString(ab.getMultiplier()), D = Long.toString(ab.getDuration());
-				if(trigger(event, ab.getBooster().getAttributes(), "multiplier", M, "duration", D)) {
-					replacements.put("multiplier", M);
-					replacements.put("duration", D);
-					replacements.put("{MULTIPLIER}", M);
-					replacements.put("{PLAYER}", ab.getActivator().getName());
-					replacements.put("{TIME}", getRemainingTime(ab.getRemainingTime()));
-					sendNotify(player, ab, replacements);
+				final String multiplier = Double.toString(booster.getMultiplier()), duration = Long.toString(booster.getDuration());
+				if(trigger(event, booster.getBooster().getAttributes(), "multiplier", multiplier, "duration", duration)) {
+					replacements.put("multiplier", multiplier);
+					replacements.put("duration", duration);
+					replacements.put("{MULTIPLIER}", multiplier);
+					replacements.put("{PLAYER}", booster.getActivator().getName());
+					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
+					sendNotify(player, booster, replacements);
 				}
 			}
 		}
 	}
 
-	public TObject valueOf(ItemStack is) {
+	public TObject valueOf(@NotNull ItemStack is) {
 		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
 			final ItemMeta m = is.getItemMeta();
 			final String d = m.getDisplayName();

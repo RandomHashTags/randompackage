@@ -11,7 +11,7 @@ import java.util.List;
 import static me.randomhashtags.randompackage.RandomPackageAPI.api;
 
 public interface Booster extends Attributable, Itemable {
-    String getRecipients();
+    BoosterRecipients getRecipients();
     int getTimeLoreSlot();
     int getMultiplierLoreSlot();
     List<String> getActivateMsg();

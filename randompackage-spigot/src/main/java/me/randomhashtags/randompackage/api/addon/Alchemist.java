@@ -40,7 +40,9 @@ public class Alchemist extends RPFeature implements CommandExecutor {
         return instance;
     }
 
-    public String getIdentifier() { return "ALCHEMIST"; }
+    public String getIdentifier() {
+        return "ALCHEMIST";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
@@ -85,7 +87,9 @@ public class Alchemist extends RPFeature implements CommandExecutor {
         }
         int X = 0;
         for(String s : accept.getItemMeta().getLore()) {
-            if(s.contains("{COST}")) costSlot = X;
+            if(s.contains("{COST}")) {
+                costSlot = X;
+            }
             X++;
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded Alchemist &e(took " + (System.currentTimeMillis()-started) + "ms)");

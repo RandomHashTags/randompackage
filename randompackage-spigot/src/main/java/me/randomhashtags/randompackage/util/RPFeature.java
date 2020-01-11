@@ -163,26 +163,26 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public ItemStack d(FileConfiguration config, String path, int tier, float enchantMultiplier) {
         item = null;
         if(config == null && path != null || config != null && config.get(path + ".item") != null) {
-            final String PP = config == null ? path : config.getString(path + ".item");
-            String P = PP.toLowerCase();
+            final String itemPath = config == null ? path : config.getString(path + ".item");
+            String itemPathLC = itemPath.toLowerCase();
 
             int amount = config != null && config.get(path + ".amount") != null ? config.getInt(path + ".amount") : 1;
-            if(P.contains(";amount=")) {
-                final String A = P.split("=")[1];
-                final boolean B = P.contains("-");
-                final int min = B ? Integer.parseInt(A.split("-")[0]) : 0;
-                amount = B ? min+ RANDOM.nextInt(Integer.parseInt(A.split("-")[1])-min+1) : Integer.parseInt(A);
+            if(itemPathLC.contains(";amount=")) {
+                final String amountString = itemPathLC.split("=")[1];
+                final boolean isRange = itemPathLC.contains("-");
+                final int min = isRange ? Integer.parseInt(amountString.split("-")[0]) : 0;
+                amount = isRange ? min+RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : Integer.parseInt(amountString);
                 path = path.split(";amount=")[0];
-                P = P.split(";")[0];
+                itemPathLC = itemPathLC.split(";")[0];
             }
-            final boolean hasChance = P.contains("chance=");
-            if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(P.split("chance=")[1].split(";")[0])) {
+            final boolean hasChance = itemPathLC.contains("chance=");
+            if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(itemPathLC.split("chance=")[1].split(";")[0])) {
                 return null;
             }
-            if(P.contains("spawner") && !P.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
-                return getSpawner(P);
-            } else if(P.startsWith("enchantedbook:")) {
-                final String[] values = P.split(":");
+            if(itemPathLC.contains("spawner") && !itemPathLC.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
+                return getSpawner(itemPathLC);
+            } else if(itemPathLC.startsWith("enchantedbook:")) {
+                final String[] values = itemPathLC.split(":");
                 final Enchantment e = getEnchantment(values[1]);
                 if(e != null) {
                     int level = 1;
@@ -190,7 +190,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                         final String[] ints = values[2].split("-");
                         final boolean isRandom = ints[0].equalsIgnoreCase("random");
                         final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
-                        level = isRandom ? 1+ RANDOM.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
+                        level = isRandom ? 1+RANDOM.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
                     }
                     item = new ItemStack(Material.ENCHANTED_BOOK, amount);
                     final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
@@ -200,8 +200,8 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 }
                 return null;
             }
-            ItemStack B = givedpitem.valueOf(PP);
-            if(B == null) B = givedpitem.valueOf(P);
+            ItemStack B = givedpitem.valueOf(itemPath);
+            if(B == null) B = givedpitem.valueOf(itemPathLC);
             if(B != null) {
                 item = B.clone();
                 item.setAmount(amount);
@@ -209,14 +209,14 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             }
             lore.clear();
             String name = config != null ? config.getString(path + ".name") : null;
-            final String[] material = P.toUpperCase().split(":");
+            final String[] material = itemPathLC.toUpperCase().split(":");
             final String mat = material[0];
             final byte data = material.length == 2 ? Byte.parseByte(material[1]) : 0;
-            final UMaterial U = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
+            final UMaterial umaterial = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
             try {
-                item = U.getItemStack();
+                item = umaterial.getItemStack();
             } catch (Exception e) {
-                System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (U != null ? U.getVersionName() : null) + ";getMaterial()=" + (U != null ? U.getMaterial() : null));
+                System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getVersionName() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
                 return null;
             }
             final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
@@ -224,7 +224,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 item.setAmount(amount);
                 itemMeta = item.getItemMeta();
                 if(i.equals(skullitem)) {
-                    final String owner = P.contains(";owner=") ? P.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
+                    final String owner = itemPathLC.contains(";owner=") ? itemPathLC.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
                     final SkullMeta m = (SkullMeta) itemMeta;
                     m.setOwner(owner);
                     itemMeta = m;
@@ -250,17 +250,17 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
         lore.clear();
         if(is != null && toLore != null && !toLore.isEmpty()) {
-            final ItemMeta m = is.getItemMeta();
-            if(m != null) {
+            final ItemMeta meta = is.getItemMeta();
+            if(meta != null) {
                 final LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
                 final List<ItemFlag> flags = new ArrayList<>();
                 for(String string : toLore) {
-                    final String sl = string.toLowerCase();
-                    if(sl.startsWith("venchants{")) {
+                    final String stringLC = string.toLowerCase();
+                    if(stringLC.startsWith("venchants{")) {
                         for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                             enchants.put(getEnchantment(s), getRemainingInt(s));
                         }
-                    } else if(sl.startsWith("vmeta{")) {
+                    } else if(stringLC.startsWith("vmeta{")) {
                         for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
                             try {
                                 flags.add(ItemFlag.valueOf(s.toUpperCase()));
@@ -268,45 +268,45 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                                 System.out.println("[RandomPackage] WARNING: No ItemFlag found for string \"" + s + "\"");
                             }
                         }
-                    } else if(sl.startsWith("rpenchants{")) {
+                    } else if(stringLC.startsWith("rpenchants{")) {
                         for(String s : string.split("\\{")[1].split("}")[0].split(";")) {
-                            final CustomEnchant e = valueOfCustomEnchant(s);
-                            if(e != null && e.isEnabled()) {
-                                final EnchantRarity r = valueOfCustomEnchantRarity(e);
-                                if(r != null) {
-                                    int l = getRemainingInt(s), x = (int) (e.getMaxLevel()*enchantMultiplier);
-                                    l = l != -1 ? l : x+ RANDOM.nextInt(e.getMaxLevel()-x+1);
+                            final CustomEnchant enchant = valueOfCustomEnchant(s);
+                            if(enchant != null && enchant.isEnabled()) {
+                                final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
+                                if(rarity != null) {
+                                    int l = getRemainingInt(s), x = (int) (enchant.getMaxLevel()*enchantMultiplier);
+                                    l = l != -1 ? l : x+ RANDOM.nextInt(enchant.getMaxLevel()-x+1);
                                     if(l != 0 || !levelzeroremoval)
-                                        lore.add(r.getApplyColors() + e.getName() + " " + toRoman(l != 0 ? l : 1));
+                                        lore.add(rarity.getApplyColors() + enchant.getName() + " " + toRoman(l != 0 ? l : 1));
                                 } else {
-                                    System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + e.getName() + "\"!");
+                                    System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + enchant.getName() + "\"!");
                                 }
                             }
                         }
-                    } else if(string.startsWith("{") && (!sl.contains("reqlevel=") && sl.contains("chance=") || sl.contains("reqlevel=") && tier >= Integer.parseInt(sl.split("reqlevel=")[1].split(":")[0]))) {
-                        final CustomEnchant en = valueOfCustomEnchant(string.split("\\{")[1].split("}")[0], true);
-                        final boolean c = string.contains("chance=");
-                        if(en != null && en.isEnabled() && (!c || RANDOM.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
-                            final int lvl = RANDOM.nextInt(en.getMaxLevel()+1);
+                    } else if(string.startsWith("{") && (!stringLC.contains("reqlevel=") && stringLC.contains("chance=") || stringLC.contains("reqlevel=") && tier >= Integer.parseInt(stringLC.split("reqlevel=")[1].split(":")[0]))) {
+                        final CustomEnchant enchant = valueOfCustomEnchant(string.split("\\{")[1].split("}")[0], true);
+                        final boolean isChance = string.contains("chance=");
+                        if(enchant != null && enchant.isEnabled() && (!isChance || RANDOM.nextInt(100) <= Integer.parseInt(string.split("chance=")[1]))) {
+                            final int lvl = RANDOM.nextInt(enchant.getMaxLevel()+1);
                             if(lvl != 0 || !levelzeroremoval) {
-                                lore.add(valueOfCustomEnchantRarity(en).getApplyColors() + en.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
+                                lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(lvl == 0 ? 1 : lvl));
                             }
                         }
                     } else {
                         lore.add(string.isEmpty() ? string : colorize(string.replace("{MAX_TIER}", max)));
                     }
                 }
-                m.setLore(lore);
+                meta.setLore(lore);
                 for(ItemFlag f : flags) {
-                    m.addItemFlags(f);
+                    meta.addItemFlags(f);
                 }
-                is.setItemMeta(m);
+                is.setItemMeta(meta);
                 for(Enchantment enchantment : enchants.keySet()) {
                     if(enchantment != null) {
                         is.addUnsafeEnchantment(enchantment, enchants.get(enchantment));
                     }
                 }
-                final String name = m.hasDisplayName() ? m.getDisplayName() : null;
+                final String name = meta.hasDisplayName() ? meta.getDisplayName() : null;
                 if(name != null && name.contains("{ENCHANT_SIZE}")) {
                     final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
                     if(t.isEnabled()) {

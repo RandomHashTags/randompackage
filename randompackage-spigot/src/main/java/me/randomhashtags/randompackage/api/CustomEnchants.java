@@ -460,21 +460,21 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack I = event.getItem();
+        final ItemStack item = event.getItem();
         final Player player = event.getPlayer();
         if(!event.isCancelled()) {
             triggerEnchants(event, getEnchants(player));
         }
-        EnchantRarity rarity = valueOfCustomEnchantRarity(I);
+        EnchantRarity rarity = valueOfCustomEnchantRarity(item);
         if(rarity != null) {
             final ItemStack r = getRandomEnabledEnchant(rarity);
             final String displayname = r.getItemMeta().getDisplayName();
             final CustomEnchant enchant = valueOfCustomEnchant(r);
-            final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, I, enchant, getEnchantmentLevel(displayname));
+            final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, item, enchant, getEnchantmentLevel(displayname));
             PLUGIN_MANAGER.callEvent(e);
             if(!e.isCancelled()) {
                 event.setCancelled(true);
-                removeItem(player, I, 1);
+                removeItem(player, item, 1);
                 giveItem(player, r);
                 spawnFirework(rarity.getFirework(), player.getLocation());
                 player.updateInventory();
@@ -482,8 +482,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     player.sendMessage(colorize(s.replace("{ENCHANT}", displayname)));
                 }
             }
-        } else if(I != null && I.hasItemMeta() && I.getItemMeta().hasDisplayName() && I.getItemMeta().hasLore()) {
-            final CustomEnchant enchant = valueOfCustomEnchant(I);
+        } else if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().hasLore()) {
+            final CustomEnchant enchant = valueOfCustomEnchant(item);
             if(enchant != null) {
                 sendStringListMessage(player, getStringList(config, "messages.apply info"), null);
             }

@@ -1,15 +1,13 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.Booster;
+import me.randomhashtags.randompackage.addon.BoosterRecipients;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
-import org.bukkit.Bukkit;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scheduler.BukkitScheduler;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-
-public class ActiveBooster {
+public class ActiveBooster implements UVersionable {
     private int task;
     private OfflinePlayer activator;
     private String faction;
@@ -35,43 +33,57 @@ public class ActiveBooster {
         task = -1;
         updateTask();
     }
-    public OfflinePlayer getActivator() { return activator; }
-    public String getFaction() { return faction; }
-    public boolean isFactionBooster() { return faction != null && booster.getRecipients().equalsIgnoreCase("faction_members"); }
-    public boolean isSelfBooster() { return faction == null && booster.getRecipients().equalsIgnoreCase("self"); }
-    public Booster getBooster() { return booster; }
-    public double getMultiplier() { return multiplier; }
-    public void setMultiplier(double multiplier) { this.multiplier = multiplier; }
-    public long getDuration() { return duration; }
-    public long getExpiration() { return expiration; }
+    public OfflinePlayer getActivator() {
+        return activator;
+    }
+    public String getFaction() {
+        return faction;
+    }
+    public BoosterRecipients getRecipients() {
+        return booster.getRecipients();
+    }
+    public Booster getBooster() {
+        return booster;
+    }
+    public double getMultiplier() {
+        return multiplier;
+    }
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
+    }
+    public long getDuration() {
+        return duration;
+    }
+    public long getExpiration() {
+        return expiration;
+    }
     public void setExpiration(long expiration) {
         this.expiration = expiration;
         updateTask();
     }
-    public long getRemainingTime() { return expiration-System.currentTimeMillis(); }
+    public long getRemainingTime() {
+        return expiration-System.currentTimeMillis();
+    }
     private void updateTask() {
-        final BukkitScheduler s = Bukkit.getScheduler();
-        if(task != -1) s.cancelTask(task);
-        s.scheduleSyncDelayedTask(getPlugin, () -> {
+        if(task != -1) {
+            SCHEDULER.cancelTask(task);
+        }
+        SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
             final BoosterExpireEvent e = new BoosterExpireEvent(this);
-            Bukkit.getPluginManager().callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
         }, (getRemainingTime()/1000)*20);
     }
-    public void expire(boolean callEvent) { nullify(callEvent); }
+    public void expire(boolean callEvent) {
+        nullify(callEvent);
+    }
     private void nullify(boolean callEvent) {
         if(callEvent) {
             final BoosterExpireEvent e = new BoosterExpireEvent(this);
-            Bukkit.getPluginManager().callEvent(e);
+            PLUGIN_MANAGER.callEvent(e);
         }
         if(task != -1) {
-            Bukkit.getScheduler().cancelTask(task);
+            SCHEDULER.cancelTask(task);
             task = -1;
         }
-        activator = null;
-        faction = null;
-        booster = null;
-        multiplier = 0;
-        duration = 0;
-        expiration = 0;
     }
 }

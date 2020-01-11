@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileCustomEnchant extends RPAddon implements CustomEnchant {
-    private List<String> lore, appliesto, attributes;
+    private List<String> worlds, lore, appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 
     public FileCustomEnchant(File f) {
@@ -18,18 +18,31 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public boolean isEnabled() { return yml.getBoolean("enabled"); }
-    public String getName() { return yml.getString("name"); }
+    public boolean isEnabled() {
+        return yml.getBoolean("enabled");
+    }
+    public List<String> getEnabledInWorlds() {
+        if(worlds == null) worlds = yml.getStringList("enabled in worlds");
+        return worlds.isEmpty() ? null : worlds;
+    }
+
+    public String getName() {
+        return yml.getString("name");
+    }
     public List<String> getLore() {
         if(lore == null) lore = colorizeListString(yml.getStringList("lore"));
         return lore;
     }
-    public int getMaxLevel() { return yml.getInt("max level"); }
+    public int getMaxLevel() {
+        return yml.getInt("max level");
+    }
     public List<String> getAppliesTo() {
         if(appliesto == null) appliesto = Arrays.asList(yml.getString("applies to").split(";"));
         return appliesto;
     }
-    public String getRequiredEnchant() { return yml.getString("requires"); }
+    public String getRequiredEnchant() {
+        return yml.getString("requires");
+    }
     public BigDecimal[] getAlchemist() {
         if(alchemist == null) {
             final String[] a = yml.getString("alchemist").split(":");
