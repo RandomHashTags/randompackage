@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class MonthlyCrates extends RPFeature implements CommandExecutor {
     private static MonthlyCrates instance;
@@ -100,10 +100,10 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             }
         }
 
-        givedpitem.items.put("mysterycrate", mysterycrate);
-        givedpitem.items.put("heroicmysterycrate", heroicmysterycrate);
-        givedpitem.items.put("superiormysterycrate", superiormysterycrate);
-        givedpitem.items.put("superiorcrate", superiormysterycrate);
+        GIVEDP_ITEM.items.put("mysterycrate", mysterycrate);
+        GIVEDP_ITEM.items.put("heroicmysterycrate", heroicmysterycrate);
+        GIVEDP_ITEM.items.put("superiormysterycrate", superiormysterycrate);
+        GIVEDP_ITEM.items.put("superiorcrate", superiormysterycrate);
 
         if(!otherdata.getBoolean("saved default monthly crates")) {
             generateDefaultMonthlyCrates();
@@ -266,7 +266,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     private void exit(Player player, Inventory inv, MonthlyCrate m) {
         stopTimers(player);
         final String p = player.getName();
-        final ItemStack cmd = givedpitem.items.get("commandreward").clone();
+        final ItemStack cmd = GIVEDP_ITEM.items.get("commandreward").clone();
         final List<Integer> regular = regularRewardsLeft.getOrDefault(player, null), bonus = bonusRewardsLeft.getOrDefault(player, null);
         if(regular != null) {
             final List<String> r = MonthlyCrate.revealedRegular.getOrDefault(player, null);
@@ -451,7 +451,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 final String p = (m.equals(superiormysterycrate.getItemMeta()) ? "superior " : m.equals(heroicmysterycrate.getItemMeta()) ? "heroic " : "") + "mystery crate";
                 final List<String> obtainable = getStringList(config, "items." + p + ".can obtain");
                 final String r = obtainable.get(RANDOM.nextInt(obtainable.size()));
-                final ItemStack I = givedpitem.valueOf("monthlycrate:" + r);
+                final ItemStack I = GIVEDP_ITEM.valueOf("monthlycrate:" + r);
                 itemMeta = I.getItemMeta(); lore.clear();
                 if(itemMeta != null && itemMeta.hasLore()) {
                     for(String string : itemMeta.getLore()) {

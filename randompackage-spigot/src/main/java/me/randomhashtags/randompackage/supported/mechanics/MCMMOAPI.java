@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public final class MCMMOAPI extends Reflect {
 	private static MCMMOAPI instance;
@@ -38,9 +38,9 @@ public final class MCMMOAPI extends Reflect {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
-		creditVoucher = givedpitem.items.get("mcmmocreditvoucher");
-		levelVoucher = givedpitem.items.get("mcmmolevelvoucher");
-		xpVoucher = givedpitem.items.get("mcmmoxpvoucher");
+		creditVoucher = GIVEDP_ITEM.items.get("mcmmocreditvoucher");
+		levelVoucher = GIVEDP_ITEM.items.get("mcmmolevelvoucher");
+		xpVoucher = GIVEDP_ITEM.items.get("mcmmoxpvoucher");
 
 		final String version = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion();
 		isClassic = version.startsWith("1.");

@@ -198,3 +198,31 @@ swagbag:
     - "maxhomeincrease;amount=3"
     - "itemlorecrystal;amount=3"
     - "showcaseexpansion;amount=2"
+#
+slotbottickets:
+  item: "chest"
+  name: "&f&l12x&r &d&lSlot Bot&r &f&lTickets"
+  lore:
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} items&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward size: 1
+  rewards:
+    - "slotbotticket;amount=12"
+#
+randomemotelootbox:
+  item: "end_portal_frame"
+  name: "&f&lRandom Emote Lootbox"
+  lore:
+    - "VEnchants{Unbreaking10}"
+    - " "
+    - "&7&nRight-click&r &7to reveal which emote will be yours!"
+    - " "
+    - "&f&lRandom Loot (&r&7{REWARD_SIZE} item&f&l)"
+    - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  reward:
+    - "playeremote:THINKING"
+    - "playeremote:SHRUG"
+    - "playeremote:HYPE"
+    - "playeremote:STUFFED"
+    - "playeremote:GANGNAM_STYLE"
+    - "playeremote:TWERK"

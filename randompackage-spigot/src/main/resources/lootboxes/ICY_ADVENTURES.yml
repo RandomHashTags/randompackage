@@ -1,5 +1,5 @@
 # Made by RandomHashTags
-priority: 2
+priority: 3
 name: "&f&lLootbox:&r &3&lIcy Adventures"
 # Measured in seconds. Default is 259200 (3 days)
 available for: 259200
@@ -51,15 +51,15 @@ regular loot:
   - "customexplosion:CREEPER_STUN;amount=8"
   #- "Holiday Spirit"
   #- "fuelcell"
-  #- "holywhitescroll"
+  - "whitescroll:HEROIC"
   #- "heroicequipmentlootbox"
   - "fallenhero:VKIT_LUCKY;amount=2"
   - "heroicmysterycrate"
   #- "kitbundle:NECROMANCER"
 #
 jackpot loot:
-  #- "Speed Trinket"
-  #- "Fat Bucket"
+  - "trinket:SPEED"
+  - "fatbucket:LAVA"
 #
 bonus loot size: 2
 bonus loot:

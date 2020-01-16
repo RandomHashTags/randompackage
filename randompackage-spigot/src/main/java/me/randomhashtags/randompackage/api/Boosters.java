@@ -148,7 +148,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		final ItemStack is = event.getItem();
 		if(is != null && !is.getType().equals(Material.AIR)) {
 			final Player player = event.getPlayer();
-			final TObject m = valueOf(is);
+			final TObject m = valueOfBooster(is);
 			if(m != null) {
 				event.setCancelled(true);
 				player.updateInventory();
@@ -304,7 +304,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		}
 	}
 
-	public TObject valueOf(@NotNull ItemStack is) {
+	public TObject valueOfBooster(@NotNull ItemStack is) {
 		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
 			final ItemMeta m = is.getItemMeta();
 			final String d = m.getDisplayName();

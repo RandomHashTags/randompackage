@@ -97,7 +97,7 @@ public class ServerCrates extends RPFeature {
 		if(l != null) {
 			l.delete(true);
 		} else if(is != null && is.hasItemMeta() && event.getAction().name().contains("RIGHT")) {
-			final ServerCrate c = valueOf(is);
+			final ServerCrate c = valueOfServerCrate(is);
 			if(c != null) {
 				event.setCancelled(true);
 				removeItem(player, is, 1);
@@ -291,7 +291,7 @@ public class ServerCrates extends RPFeature {
 		}
 	}
 
-	public ServerCrate valueOf(ItemStack item) {
+	public ServerCrate valueOfServerCrate(ItemStack item) {
 		for(ServerCrate crate : getAllServerCrates().values()) {
 			if(crate.getItem().isSimilar(item)) {
 				return crate;

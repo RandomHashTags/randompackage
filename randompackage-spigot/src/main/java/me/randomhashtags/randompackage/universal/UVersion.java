@@ -20,13 +20,12 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class UVersion extends YamlUpdater implements Versionable, UVersionable, DefaultConfiguration {
     private static UVersion instance;
@@ -220,7 +219,7 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable, 
     public final ItemStack getSpawner(String input) {
         String pi = input.toLowerCase(), type = null;
         if(pi.equals("mysterymobspawner")) {
-            return givedpitem.valueOf("mysterymobspawner").clone();
+            return GIVEDP_ITEM.valueOf("mysterymobspawner").clone();
         } else {
             if(RandomPackage.spawnerPlugin != null) {
                 for(EntityType entitytype : EntityType.values()) {

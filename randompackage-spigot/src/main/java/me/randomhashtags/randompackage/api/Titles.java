@@ -87,7 +87,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
 		if(i != null && i.hasItemMeta() && i.getType().equals(interactableItem.getType())) {
-			final Title title = valueOf(i);
+			final Title title = valueOfTitle(i);
 			if(title != null) {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);
@@ -193,16 +193,5 @@ public class Titles extends RPFeature implements CommandExecutor {
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", title));
 		item.setItemMeta(itemMeta);
 		return item;
-	}
-
-	public Title valueOf(ItemStack is) {
-		if(is != null) {
-			for(Title T : getAllTitles().values()) {
-				if(T.getItem().isSimilar(is)) {
-					return T;
-				}
-			}
-		}
-		return null;
 	}
 }

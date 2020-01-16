@@ -1,5 +1,5 @@
 # Made by RandomHashTags
-priority: 5
+priority: 6
 name: "&f&lLootbox:&r &c&lBAKED"
 # Measured in seconds. Default is 259200 (3 days)
 available for: 259200
@@ -46,7 +46,7 @@ lootbox:
 #
 regular loot size: 3
 regular loot:
-  #- "Fat Bucket;amount=2"
+  - "fatbucket:LAVA;amount=2"
   #- "resettoolkit"
   - "gkitfallenherobundle"
   - "fallenhero:VKIT_SLAYER;amount=3"

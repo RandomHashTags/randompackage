@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.WhiteScroll;
-import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -47,7 +47,7 @@ public class WhiteScrolls extends RPFeature {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore() && current != null) {
-            final WhiteScroll w = valueOf(cursor);
+            final WhiteScroll w = valueOfWhiteScroll(cursor);
             final Player player = (Player) event.getWhoClicked();
             if(applyWhiteScroll(player, current, w)) {
                 event.setCancelled(true);
@@ -61,7 +61,7 @@ public class WhiteScrolls extends RPFeature {
     }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final WhiteScroll w = valueOf(event.getItem());
+        final WhiteScroll w = valueOfWhiteScroll(event.getItem());
         if(w != null) {
             event.setCancelled(true);
             event.getPlayer().updateInventory();
@@ -95,7 +95,7 @@ public class WhiteScrolls extends RPFeature {
         }
         return null;
     }
-    public WhiteScroll valueOf(ItemStack is) {
+    public WhiteScroll valueOfWhiteScroll(ItemStack is) {
         if(is != null) {
             for(WhiteScroll w : getAllWhiteScrolls().values()) {
                 if(is.isSimilar(w.getItem())) {

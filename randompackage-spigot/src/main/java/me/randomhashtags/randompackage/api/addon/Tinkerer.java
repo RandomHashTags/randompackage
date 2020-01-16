@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Tinkerer extends RPFeature implements CommandExecutor {
     private static Tinkerer instance;
@@ -150,7 +150,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
                     }
                 }
                 if(!xp.equals(zero)) {
-                    item = givedpitem.getXPBottle(xp, "Tinkerer").clone();
+                    item = GIVEDP_ITEM.getXPBottle(xp, "Tinkerer").clone();
                 }
             } else {
                 sendStringListMessage(player, getStringList(config, "messages.doesnt want item"), null);

@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class KitsEvolution extends Kits {
     private static KitsEvolution instance;
@@ -58,7 +58,7 @@ public class KitsEvolution extends Kits {
         }
 
         vkitFallenHeroBundle = d(config, "vkits.items.fallen hero bundle");
-        givedpitem.items.put("vkitfallenherobundle", vkitFallenHeroBundle);
+        GIVEDP_ITEM.items.put("vkitfallenherobundle", vkitFallenHeroBundle);
         cooldown = d(config, "vkits.items.cooldown");
         vkit = new UInventory(null, config.getInt("vkits.gui.size"), colorize(config.getString("vkits.gui.title")));
         preview = new UInventory(null, 54, colorize(config.getString("vkits.items.preview.title")));

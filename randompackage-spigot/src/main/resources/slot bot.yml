@@ -77,6 +77,24 @@ items:
     name: "&a&lSpin"
     lore:
       - "&7Click to spin the bot."
+  #
+  preview rewards:
+    slot: 0
+    item: "beacon"
+    name: "&f&lLoot Table"
+    lore:
+      - "&7The Slot Bot contains the items"
+      - "&7from the following Lootboxes,"
+      - "&7which will randomized every week:"
+      - " "
+      - "&f&l*&r &f&l{AMOUNT}x&r {ITEM}"
+      - " "
+      - "&7Click to view items."
+#
+preview rewards:
+  title: "Slot Bot Loot"
+  size: 27
+  show reward source item: true
 #
 gui:
   title: "Slot Bot"
@@ -146,3 +164,11 @@ gui:
       - "&7received, otherwise your inserted"
       - "&7tickets will be refunded."
 #
+rewards:
+  - "slotbottickets"
+  - "randomemotelootbox"
+  #- "itemskin:FLAMING_HALO"
+  - "lootbox:PET_COLLECTOR"
+  - "lootbox:DETENTION"
+  - "lootbox:SUGAR_DADDY"
+  - "lootbox:RAINBOW"

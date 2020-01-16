@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private static SecondaryEvents instance;
@@ -46,22 +46,25 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     public String getIdentifier() { return "SECONDARY_EVENTS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        final String n = cmd.getName();
-        if(n.equals("balance")) {
-            String q, qq = "", bal = player != null ? formatBigDecimal(BigDecimal.valueOf(eco.getBalance(player))) : "0.00";
-            if(player != null && args.length == 0 && hasPermission(sender, "RandomPackage.balance", true)) {
-                q = "self";
-            } else if(args.length >= 1 && hasPermission(sender, "RandomPackage.balance-other", true) && Bukkit.getOfflinePlayer(args[0]) != null) {
+        final String cmdName = cmd.getName();
+        final int length = args.length;
+        if(cmdName.equals("balance")) {
+            String type, qq = "", bal = player != null ? formatBigDecimal(BigDecimal.valueOf(eco.getBalance(player)), true) : "0.00";
+            if(player != null && length == 0 && hasPermission(sender, "RandomPackage.balance", true)) {
+                type = "self";
+            } else if(length >= 1 && hasPermission(sender, "RandomPackage.balance-other", true) && Bukkit.getOfflinePlayer(args[0]) != null) {
                 final OfflinePlayer op = Bukkit.getOfflinePlayer(args[0]);
                 if(op.equals(player)) {
-                    q = "self";
+                    type = "self";
                 } else {
-                    q = "other";
+                    type = "other";
                     qq = eco.getBalance(player) >= eco.getBalance(op) ? "other" : "self";
                     bal = formatBigDecimal(BigDecimal.valueOf(eco.getBalance(op)));
                 }
-            } else return true;
-            for(String s : getStringList(config, "balance.view " + q)) {
+            } else {
+                return true;
+            }
+            for(String s : getStringList(config, "balance.view " + type)) {
                 if(s.contains("{INT}")) s = s.replace("{INT}", bal.contains(".") ? bal.split("\\.")[0] : bal);
                 if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
                 if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
@@ -69,44 +72,47 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 if(!s.equals("{RICHER}")) sender.sendMessage(colorize(s));
             }
         } else if(player != null) {
-            if(n.equals("bless") && hasPermission(player, "RandomPackage.bless", true)) {
+            if(cmdName.equals("bless") && hasPermission(player, "RandomPackage.bless", true)) {
                 bless(player);
-            } else if(n.equals("bump") && hasPermission(sender, "RandomPackage.bump", true)) {
+            } else if(cmdName.equals("bump") && hasPermission(sender, "RandomPackage.bump", true)) {
                 player.damage(1.0);
-            } else if(n.equals("confirm") && hasPermission(sender, "RandomPackage.confirm", true)) {
-                final RPPlayer pdata = RPPlayer.get(args.length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
-                if(pdata == null) {
-
-                } else {
+            } else if(cmdName.equals("confirm") && hasPermission(sender, "RandomPackage.confirm", true)) {
+                final RPPlayer pdata = RPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
+                if(pdata != null) {
                     if(pdata.getUnclaimedPurchases().isEmpty()) {
                         sendStringListMessage(player, getStringList(config, "confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
                     } else {
                         confirm(player, pdata);
                     }
                 }
-            } else if(n.equals("roll") && hasPermission(sender, "RandomPackage.roll", true)) {
+            } else if(cmdName.equals("roll") && hasPermission(sender, "RandomPackage.roll", true)) {
                 roll(player, args.toString());
-            } else if(n.equals("withdraw") && hasPermission(player, "RandomPackage.withdraw", true)) {
-                if(args.length == 0) {
+            } else if(cmdName.equals("withdraw") && hasPermission(player, "RandomPackage.withdraw", true)) {
+                if(length == 0) {
                     sendStringListMessage(player, getStringList(config, "withdraw.argument 0"), null);
                 } else {
                     BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[0]));
-                    final double a = amount.doubleValue();
-                    String m = null, formattedAmount = formatBigDecimal(amount);
+                    final double amountDouble = amount.doubleValue();
+                    String msg = null, formattedAmount = formatBigDecimal(amount, true);
                     formattedAmount = formattedAmount.contains("E") ? formattedAmount.split("E")[0] : formattedAmount;
-                    if(eco == null) { player.sendMessage("[RandomPackage] You need an Economy plugin installed and enabled to use this feature!"); return true; }
-                    else if(a <= 0.00)                  m = "withdraw.cannot withdraw zero";
-                    else if(eco.getBalance(player) < a) m = "withdraw.cannot withdraw more than balance";
-                    else if(eco.withdrawPlayer(player, a).transactionSuccess()) {
-                        item = givedpitem.getBanknote(amount, player.getName());
+                    if(eco == null) {
+                        player.sendMessage("[RandomPackage] You need an Economy plugin installed and enabled to use this feature!");
+                        return true;
+                    } else if(amountDouble <= 0.00) {
+                        msg = "withdraw.cannot withdraw zero";
+                    } else if(eco.getBalance(player) < amountDouble) {
+                        msg = "withdraw.cannot withdraw more than balance";
+                    } else if(eco.withdrawPlayer(player, amountDouble).transactionSuccess()) {
+                        item = GIVEDP_ITEM.getBanknote(amount, player.getName());
                         giveItem(player, item);
-                        m = "withdraw.success";
-                    } else return true;
-                    for(String string : getStringList(config, m)) {
-                        if(string.contains("{VALUE}")) string = string.replace("{VALUE}", formattedAmount);
-                        if(string.contains("{BALANCE}")) string = string.replace("{BALANCE}", formatDouble(eco.getBalance(player)));
-                        player.sendMessage(colorize(string));
+                        msg = "withdraw.success";
+                    } else {
+                        return true;
                     }
+                    final HashMap<String, String> replacements = new HashMap<>();
+                    replacements.put("{VALUE}", formattedAmount);
+                    replacements.put("{BALANCE}", formatDouble(eco.getBalance(player)));
+                    sendStringListMessage(player, getStringList(config, msg), replacements);
                 }
             }
         }
@@ -121,7 +127,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         confirm = colorize(config.getString("confirm.title"));
 
         int i = 0;
-        banknote = givedpitem.items.get("banknote");
+        banknote = GIVEDP_ITEM.items.get("banknote");
         for(String s : banknote.getItemMeta().getLore()) {
             if(s.contains("{VALUE}")) banknoteValueSlot = i;
             i++;

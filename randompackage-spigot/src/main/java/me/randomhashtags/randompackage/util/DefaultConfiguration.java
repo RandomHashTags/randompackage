@@ -262,7 +262,18 @@ public interface DefaultConfiguration extends UVersionable {
         });
     }
     default void generateDefaultLootboxes() {
-        generateAllDefault("lootboxes", new String[] {"SNOW_DAY", "ICY_ADVENTURES", "SURVIVAL_KIT", "BOX_OF_CHOCOLATES", "BAKED", "LUCKY"});
+        generateAllDefault("lootboxes", new String[] {
+                "BAKED",
+                "BOX_OF_CHOCOLATES",
+                "DETENTION",
+                "ICY_ADVENTURES",
+                "LUCKY",
+                "PET_COLLECTOR",
+                "RAINBOW",
+                "SNOW_DAY",
+                "SUGAR_DADDY",
+                "SURVIVAL_KIT",
+        });
     }
     default void generateDefaultMasks() {
         generateAllDefault("masks", new String[] {

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileCustomEnchant extends RPAddon implements CustomEnchant {
-    private List<String> worlds, lore, appliesto, attributes;
+    private List<String> worlds, appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 
     public FileCustomEnchant(File f) {
@@ -27,11 +27,10 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
     }
 
     public String getName() {
-        return yml.getString("name");
+        return getString(yml, "name");
     }
     public List<String> getLore() {
-        if(lore == null) lore = colorizeListString(yml.getStringList("lore"));
-        return lore;
+        return getStringList(yml, "lore");
     }
     public int getMaxLevel() {
         return yml.getInt("max level");
@@ -41,7 +40,7 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
         return appliesto;
     }
     public String getRequiredEnchant() {
-        return yml.getString("requires");
+        return getString(yml, "requires");
     }
     public BigDecimal[] getAlchemist() {
         if(alchemist == null) {

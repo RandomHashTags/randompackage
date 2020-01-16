@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.util;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
@@ -29,9 +30,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.TreeMap;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public abstract class RPFeature extends RegionalAPI implements Listener, Identifiable, Mathable, RPStorage {
     private boolean isEnabled = false;
@@ -54,8 +58,19 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
 
-            treemap.put(1000, "M"); treemap.put(900, "CM"); treemap.put(500, "D"); treemap.put(400, "CD"); treemap.put(100, "C"); treemap.put(90, "XC");
-            treemap.put(50, "L"); treemap.put(40, "XL"); treemap.put(10, "X"); treemap.put(9, "IX"); treemap.put(5, "V"); treemap.put(4, "IV"); treemap.put(1, "I");
+            treemap.put(1000, "M");
+            treemap.put(900, "CM");
+            treemap.put(500, "D");
+            treemap.put(400, "CD");
+            treemap.put(100, "C");
+            treemap.put(90, "XC");
+            treemap.put(50, "L");
+            treemap.put(40, "XL");
+            treemap.put(10, "X");
+            treemap.put(9, "IX");
+            treemap.put(5, "V");
+            treemap.put(4, "IV");
+            treemap.put(1, "I");
 
             givedp = new UInventory(null, 27, "Givedp Categories");
             givedpCategories = new ArrayList<>();
@@ -66,11 +81,12 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
         try {
             isEnabled = true;
             load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             if(isEnabled) {
                 PLUGIN_MANAGER.registerEvents(this, RANDOM_PACKAGE);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     public void disable() {
@@ -78,12 +94,13 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
         try {
             isEnabled = false;
             unload();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             if(!isEnabled) {
                 HandlerList.unregisterAll(this);
                 sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     public static void d() {
@@ -107,7 +124,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             e.printStackTrace();
         }
     }
-    public void viewGivedp(Player player) {
+    public void viewGivedp(@NotNull Player player) {
         player.openInventory(Bukkit.createInventory(player, givedp.getSize(), givedp.getTitle()));
         player.getOpenInventory().getTopInventory().setContents(givedp.getInventory().getContents());
         player.updateInventory();
@@ -151,7 +168,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) return true;
         else if(sendNoPermMessage) {
-            sendStringListMessage(sender, RANDOM_PACKAGE.getConfig().getStringList("no permission"), null);
+            sendStringListMessage(sender, getStringList(RP_CONFIG, "no permission"), null);
         }
         return false;
     }
@@ -200,8 +217,8 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 }
                 return null;
             }
-            ItemStack B = givedpitem.valueOf(itemPath);
-            if(B == null) B = givedpitem.valueOf(itemPathLC);
+            ItemStack B = GIVEDP_ITEM.valueOf(itemPath);
+            if(B == null) B = GIVEDP_ITEM.valueOf(itemPathLC);
             if(B != null) {
                 item = B.clone();
                 item.setAmount(amount);

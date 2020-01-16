@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -71,7 +71,7 @@ public class RandomizedLoot extends RPFeature {
     public void unload() {
     }
 
-    public RandomizedLootItem valueOf(ItemStack is) {
+    public RandomizedLootItem valueOfRandomizedLootItem(ItemStack is) {
         if(!items.isEmpty() && is != null) {
             for(RandomizedLootItem i : items.values()) {
                 if(i.getItem().isSimilar(is)) {
@@ -85,7 +85,7 @@ public class RandomizedLoot extends RPFeature {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
-        final RandomizedLootItem i = valueOf(is);
+        final RandomizedLootItem i = valueOfRandomizedLootItem(is);
         if(i != null) {
             final Player player = event.getPlayer();
             event.setCancelled(true);

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Masks extends CustomEnchants {
     private static Masks instance;
@@ -54,7 +54,7 @@ public class Masks extends CustomEnchants {
 
         equippedMasks = new HashMap<>();
         maskgenerator = d(config, "items.generator");
-        givedpitem.items.put("maskgenerator", maskgenerator);
+        GIVEDP_ITEM.items.put("maskgenerator", maskgenerator);
         maskCanObtain = config.getStringList("items.generator.can obtain");
 
         final ArrayList<ItemStack> ms = new ArrayList<>();

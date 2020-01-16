@@ -1,5 +1,5 @@
 # Made by RandomHashTags
-priority: 3
+priority: 4
 name: "&f&lLootbox:&r &c&lS&f&lu&c&lr&f&lv&c&li&f&lv&c&la&f&ll&r &f&lKit"
 # Measured in seconds. Default is 259200 (3 days)
 available for: 259200
@@ -62,7 +62,7 @@ regular loot:
 #
 jackpot loot:
   - "soultracker:MONSTER"
-  #- "ce:Disconmbobulate1"
+  #- "ce:Discombobulate1"
 #
 bonus loot size: 1
 bonus loot:

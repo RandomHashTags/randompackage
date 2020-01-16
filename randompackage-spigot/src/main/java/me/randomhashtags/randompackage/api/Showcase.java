@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Showcase extends RPFeature implements CommandExecutor {
 	private static Showcase instance;
@@ -82,8 +82,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "showcase.yml"));
 		expansion = d(config, "items.expansion");
-		givedpitem.items.put("showcaseexpansion", expansion);
-		givedpitem.items.put("showcaseexpander", expansion);
+		GIVEDP_ITEM.items.put("showcaseexpansion", expansion);
+		GIVEDP_ITEM.items.put("showcaseexpander", expansion);
 		addedRows = config.getInt("items.expansion.added rows");
 
 		itemslots = new ArrayList<>();

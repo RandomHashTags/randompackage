@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class KOTH extends RPFeature implements CommandExecutor {
 	private static KOTH instance;
@@ -106,7 +106,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
 		lootbag = d(config, "items.lootbag");
-		givedpitem.items.put("kothlootbag", lootbag);
+		GIVEDP_ITEM.items.put("kothlootbag", lootbag);
 
 		displaySlot = DisplaySlot.valueOf(config.getString("settings.scoreboards.display slot").toUpperCase());
 		kothtitle = colorize(config.getString("settings.scoreboards.title"));

@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class KitsGlobal extends Kits {
     private static KitsGlobal instance;
@@ -62,7 +62,7 @@ public class KitsGlobal extends Kits {
         }
 
         gkitFallenHeroBundle = d(config, "gkits.items.fallen hero bundle");
-        givedpitem.items.put("gkitfallenherobundle", gkitFallenHeroBundle);
+        GIVEDP_ITEM.items.put("gkitfallenherobundle", gkitFallenHeroBundle);
         heroicEnchantedEffect = config.getBoolean("gkits.items.heroic.enchanted effect");
         tierZeroEnchantEffect = config.getBoolean("gkits.gui.settings.tier zero enchant effect");
         previewBackground = d(config, "gkits.items.preview");

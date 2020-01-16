@@ -102,7 +102,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             if(!s.equals("title") && !s.equals("type") && !s.equals("size") && !s.equals("background")) {
                 final ItemStack is = d(config, "gui." + s);
                 final int slot = config.getInt("gui." + s + ".slot");
-                final Lootbox l = valueOf(is);
+                final Lootbox l = valueOfLootbox(is);
                 if(l != null) {
                     guiLootboxes.put(slot, l);
                 }
@@ -330,7 +330,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     private void playerInteractEvent(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack i = event.getItem();
-        final Lootbox l = valueOf(i);
+        final Lootbox l = valueOfLootbox(i);
         if(l != null && event.getAction().name().contains("RIGHT")) {
             event.setCancelled(true);
             player.updateInventory();
@@ -387,16 +387,6 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         for(Lootbox l : getAllLootboxes().values()) {
             if(ChatColor.stripColor(l.getPreviewTitle()).equals(previewTitle)) {
                 return l;
-            }
-        }
-        return null;
-    }
-    public Lootbox valueOf(@NotNull ItemStack is) {
-        if(is != null && is.hasItemMeta()) {
-            for(Lootbox l : getAllLootboxes().values()) {
-                if(l.getItem().isSimilar(is)) {
-                    return l;
-                }
             }
         }
         return null;

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class RemoveItem extends AbstractEventAttribute {
     @Override
@@ -17,7 +17,7 @@ public class RemoveItem extends AbstractEventAttribute {
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
                 final String value = replaceValue(entities, recipientValues.get(e), valueReplacements);
-                final ItemStack g = givedpitem.valueOf(value);
+                final ItemStack g = GIVEDP_ITEM.valueOf(value);
                 if(g != null) {
                     removeItem((Player) e, g, g.getAmount());
                 }

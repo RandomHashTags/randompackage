@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.*;
@@ -29,13 +31,14 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     }
 
     public YamlConfiguration config;
-    private UInventory gui;
+    private UInventory gui, preview;
     public ItemStack ticket;
     private ItemStack ticketLocked, ticketUnlocked, spinnerMissingTickets, spinnerReadyToSpin, rewardSlot, withdrawTickets;
-    private ItemStack randomizedLootPlaceholder, randomizedLootReadyToRoll, visualPlaceholder, background;
-    private int withdrawTicketsSlot, spinnerSlot;
+    private ItemStack randomizedLootPlaceholder, randomizedLootReadyToRoll, previewRewards, background;
+    private int withdrawTicketsSlot, spinnerSlot, previewRewardsSlot;
     private List<Integer> ticketSlots;
     private List<String> rewards;
+    private List<ItemStack> previewRewardList;
 
     private HashMap<Player, HashMap<Integer, List<Integer>>> rollingTasks;
     private HashMap<Player, List<Integer>> pending;
@@ -64,8 +67,8 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         spinnerReadyToSpin = d(config, "items.spinner ready to spin");
         spinnerSlot = config.getInt("items.spinner missing ticket.slot");
 
+        preview = new UInventory(null, config.getInt("preview rewards.size"), colorize(config.getString("preview rewards.title")));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        visualPlaceholder = d(config, "items.visual placeholder");
         randomizedLootPlaceholder = d(config, "items.randomized loot placeholder");
         randomizedLootReadyToRoll = d(config, "items.randomized loot ready to roll");
         background = d(config, "gui.background");
@@ -105,6 +108,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             }
         }
 
+        final ItemStack visualPlaceholder = d(config, "items.visual placeholder");
         for(String s : config.getStringList("gui.visual placeholder slots")) {
             inv.setItem(Integer.parseInt(s), visualPlaceholder);
         }
@@ -117,8 +121,43 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
 
         rollingTasks = new HashMap<>();
         pending = new HashMap<>();
-        rewards = new ArrayList<>();
-        rewards.addAll(Arrays.asList("collectionchest", "xpbottle:25-10000", "raritygem:SOUL:500", "raritygem:SOUL:1000", "customarmor:PHANTOM", "customarmor:YIJKI", "customarmor:ENGINEER", "customarmor:YETI"));
+        rewards = config.getStringList("rewards");
+
+        previewRewardsSlot = config.getInt("items.preview rewards.slot");
+        previewRewards = d(config, "items.preview rewards");
+        itemMeta = previewRewards.getItemMeta(); lore.clear();
+        previewRewardList = new ArrayList<>();
+
+        final boolean isSource = config.getBoolean("preview rewards.show reward source item");
+        for(String s : itemMeta.getLore()) {
+            if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
+                for(String reward : rewards) {
+                    final ItemStack is = d(null, reward);
+                    if(is != null) {
+                        ItemMeta meta = is.getItemMeta();
+                        if(isSource) {
+                            lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : reward));
+                            previewRewardList.add(is);
+                        } else {
+                            final Lootbox lootbox = valueOfLootbox(is);
+                            if(lootbox != null) {
+                                final List<ItemStack> items = lootbox.getAllRewards();
+                                for(ItemStack item : items) {
+                                    meta = item.getItemMeta();
+                                    lore.add(s.replace("{AMOUNT}", Integer.toString(item.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : item.getType().name()));
+                                }
+                                previewRewardList.addAll(items);
+                            }
+                        }
+                    }
+                }
+            } else {
+                lore.add(s);
+            }
+        }
+        itemMeta.setLore(lore); lore.clear();
+        previewRewards.setItemMeta(itemMeta);
+        inv.setItem(previewRewardsSlot, previewRewards);
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Slot Bot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -140,10 +179,18 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     }
 
     public void view(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.slotbot.view", true)) {
+        if(hasPermission(player, "RandomPackage.slotbot", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             player.getOpenInventory().getTopInventory().setContents(gui.getInventory().getContents());
+            player.updateInventory();
+        }
+    }
+    public void viewPreview(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.slotbot.preview", true)) {
+            player.closeInventory();
+            player.openInventory(Bukkit.createInventory(player, preview.getSize(), preview.getTitle()));
+            player.getOpenInventory().getTopInventory().setContents(preview.getInventory().getContents());
             player.updateInventory();
         }
     }
@@ -203,9 +250,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             top.setItem(slot, item);
             player.updateInventory();
         }
-    }
-    public boolean trySpinning(@NotNull Player player, int slot) {
-        return trySpinning(player, slot, player.getOpenInventory().getTopInventory().getItem(slot));
     }
     public boolean trySpinning(@NotNull Player player, int slot, @NotNull ItemStack targetItem) {
         if(spinnerReadyToSpin.isSimilar(targetItem)) {
@@ -348,29 +392,37 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        if(event.getView().getTitle().equals(gui.getTitle())) {
-            final Player player = (Player) event.getWhoClicked();
-            event.setCancelled(true);
-            player.updateInventory();
-            final ItemStack current = event.getCurrentItem();
-            if(current == null) return;
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            final int slot = event.getRawSlot();
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        if(player.equals(top.getHolder())) {
+            final String title = event.getView().getTitle();
+            final boolean isGUI = title.equals(gui.getTitle());
+            if(isGUI || title.equals(preview.getTitle())) {
+                event.setCancelled(true);
+                player.updateInventory();
+                final ItemStack current = event.getCurrentItem();
+                if(current == null || !isGUI) {
+                    return;
+                }
+                final int slot = event.getRawSlot();
 
-            if(slot >= top.getSize()) {
-                if(current.isSimilar(ticket)) {
-                    tryInsertingTicket(player);
+                if(slot >= top.getSize()) {
+                    if(current.isSimilar(ticket)) {
+                        tryInsertingTicket(player);
+                    }
+                } else if(slot == previewRewardsSlot) {
+                    viewPreview(player);
+                } else if(current.isSimilar(spinnerMissingTickets)) {
+                    sendStringListMessage(player, getStringList(config, "messages.missing tickets"), null);
+                } else if(current.isSimilar(spinnerReadyToSpin)) {
+                    for(int i : ticketSlots) {
+                        trySpinning(player, i, spinnerReadyToSpin);
+                    }
+                } else if(current.isSimilar(withdrawTickets)) {
+                    tryWithdrawingTickets(player);
+                } else if(ticketSlots.contains(slot)) {
+                    trySpinning(player, slot, current);
                 }
-            } else if(current.isSimilar(spinnerMissingTickets)) {
-                sendStringListMessage(player, getStringList(config, "messages.missing tickets"), null);
-            } else if(current.isSimilar(spinnerReadyToSpin)) {
-                for(int i : ticketSlots) {
-                    trySpinning(player, i, spinnerReadyToSpin);
-                }
-            } else if(current.isSimilar(withdrawTickets)) {
-                tryWithdrawingTickets(player);
-            } else if(ticketSlots.contains(slot)) {
-                trySpinning(player, slot, current);
             }
         }
     }

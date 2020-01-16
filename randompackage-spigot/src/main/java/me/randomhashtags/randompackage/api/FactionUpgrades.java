@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class FactionUpgrades extends EventAttributes {
     private static FactionUpgrades instance;
@@ -98,8 +98,8 @@ public class FactionUpgrades extends EventAttributes {
             locked = d(config, "gui.locked");
             addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
 
-            givedpitem.items.put("heroicfactioncrystal", heroicFactionCrystal);
-            givedpitem.items.put("factioncrystal", factionCrystal);
+            GIVEDP_ITEM.items.put("heroicfactioncrystal", heroicFactionCrystal);
+            GIVEDP_ITEM.items.put("factioncrystal", factionCrystal);
 
             for(int i = 0; i < gui.getSize(); i++) {
                 if(fi.getItem(i) == null) {
@@ -196,7 +196,7 @@ public class FactionUpgrades extends EventAttributes {
                     }
                 } else if(s.startsWith("item{")) {
                     final String value = s.split("\\{")[1];
-                    final ItemStack a = givedpitem.valueOf(value.split(";")[0]);
+                    final ItemStack a = GIVEDP_ITEM.valueOf(value.split(";")[0]);
                     requiredItem = a;
                     a.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
                     if(!player.getInventory().containsAtLeast(a, a.getAmount())) {

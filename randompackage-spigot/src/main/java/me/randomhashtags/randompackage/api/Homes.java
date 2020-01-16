@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Homes extends RPFeature implements CommandExecutor {
 	private static Homes instance;
@@ -55,7 +55,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
 		maxHomeIncreaser = d(config, "items.max home increaser");
-		givedpitem.items.put("maxhomeincrease", maxHomeIncreaser);
+		GIVEDP_ITEM.items.put("maxhomeincrease", maxHomeIncreaser);
 
 		viewingHomes = new ArrayList<>();
 		editingIcons = new HashMap<>();
@@ -76,7 +76,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Homes &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		givedpitem.items.remove("maxhomeincreaser");
+		GIVEDP_ITEM.items.remove("maxhomeincreaser");
 		for(Player p : new ArrayList<>(viewingHomes)) {
 			p.closeInventory();
 		}

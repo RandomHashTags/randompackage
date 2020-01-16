@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.util.listener;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.api.*;
+import me.randomhashtags.randompackage.api.RandomizedLoot;
 import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
 import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
 import me.randomhashtags.randompackage.api.SlotBot;
@@ -39,7 +40,7 @@ import java.util.List;
 import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 
 public class GivedpItem extends RPFeature implements CommandExecutor {
-    public static final GivedpItem givedpitem = new GivedpItem();
+    public static final GivedpItem GIVEDP_ITEM = new GivedpItem();
 
     public YamlConfiguration itemsConfig;
     public HashMap<String, ItemStack> customitems;
@@ -114,20 +115,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public void unload() {
     }
 
-    private int getInt(String input, int max) {
-        input = input.toLowerCase();
-        return input.equals("random") ? 1+ RANDOM.nextInt(max) : Integer.parseInt(input);
-    }
-    private int getInt(String input) {
-        input = input.toLowerCase();
-        return input.equals("random") ? RANDOM.nextInt(101) : Integer.parseInt(input);
-    }
-
     private int getInteger(String input, int minimum) {
         final boolean m = input.contains("-");
         final String[] a = input.split("-");
         final int min = m ? Integer.parseInt(a[0]) : minimum;
-        return m ? min+ RANDOM.nextInt(Integer.parseInt(a[1])-min+1) : Integer.parseInt(input);
+        return m ? min+RANDOM.nextInt(Integer.parseInt(a[1])-min+1) : Integer.parseInt(input);
     }
 
     public final ItemStack valueOf(String input) {
@@ -187,19 +179,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final CustomExplosion e = getCustomExplosion(Q.split(":")[1]);
             return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
-            // ce:<enchant>:<level>:<success>:<destroy>
-            final String[] k = Q.split(":");
-            final int l = k.length;
-            CustomEnchant e = getCustomEnchant(k[1]);
-            final EnchantRarity r = e == null ? getCustomEnchantRarity(k[1]) : null;
-            if(r != null) {
-                final List<CustomEnchant> a = r.getEnchants();
-                e = a.get(RANDOM.nextInt(a.size()));
-            }
-            final int level = e != null ? l == 5 ? getInt(k[2], e.getMaxLevel()) : getInt(k[1]) : 0;
-            final int success = level != 0 ? l == 5 ? getInt(k[3]) : getInt(k[2]) : 0;
-            final int destroy = level != 0 ? l == 5 ? getInt(k[4]) : getInt(k[3]) : 0;
-            return e != null ? CustomEnchants.getCustomEnchants().getRevealedItem(e, level, success, destroy, true, true) : air;
+            final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
+            return enchants.isEnabled() ? enchants.getRevealedItemFromString(Q) : air;
         } else if(input.startsWith("dust:")) {
             final String[] a = Q.split(":");
             final MagicDust d = getMagicDust(a[1]);
@@ -219,11 +200,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 o = !e.isEmpty() ? e.get(RANDOM.nextInt(e.size())) : null;
             }
             final boolean h = percent.contains("-");
-            final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+ RANDOM.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
+            final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+RANDOM.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
             return o != null ? o.getItem(P) : air;
         } else if(input.startsWith("booster:")) {
-            final Boosters f = Boosters.getBoosters();
-            if(f.isEnabled()) {
+            final Boosters boosters = Boosters.getBoosters();
+            if(boosters.isEnabled()) {
                 final String[] a = Q.split(":");
                 return getBooster(a[1]).getItem(Long.parseLong(a[3])*1000, Double.parseDouble(a[2]));
             }
@@ -322,9 +303,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("servercrateflare:") || input.startsWith("serverflare:") || input.startsWith("spaceflare:")) {
             final ServerCrate c = getServerCrate(Q.split(":")[1]);
             return c != null ? c.getFlare().getItem() : air;
-        } else if(input.equals("slotbotticket")) {
+        } else if(input.startsWith("slotbotticket")) {
             final SlotBot bot = SlotBot.getSlotBot();
-            return bot.isEnabled() ? bot.ticket.clone() : air;
+            return bot.isEnabled() ? getClone(bot.ticket) : air;
         } else if(input.startsWith("soultracker:")) {
             final SoulTracker s = getSoulTracker(Q.split(":")[1]);
             return s != null ? s.getItem() : air;
@@ -374,9 +355,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final CustomKit kit = getCustomKit("MKIT_" + Q.split(":")[1]);
             return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : air;
         } else if(customitems != null && customitems.containsKey(Q)) {
-            return customitems.get(Q).clone();
+            return getClone(customitems.get(Q));
         } else if(items != null && items.containsKey(input)) {
-            return items.get(input).clone();
+            return getClone(items.get(input));
         } else {
             final RandomizedLoot r = RandomizedLoot.getRandomizedLoot();
             final HashMap<String, RandomizedLootItem> items = r.isEnabled() ? r.items : null;

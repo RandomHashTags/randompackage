@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
     private static Xpbottle instance;
@@ -68,7 +68,7 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         save(null, "xpbottle.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "xpbottle.yml"));
 
-        bottle = givedpitem.items.get("xpbottle");
+        bottle = GIVEDP_ITEM.items.get("xpbottle");
         int i = 0;
         for(String s : bottle.getItemMeta().getLore()) {
             if(s.contains("{VALUE}")) xpbottleValueSlot = i;
@@ -140,7 +140,7 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
                 sendStringListMessage(player, getStringList(config, "messages.cannot xpbottle"), replacements);
             } else {
                 sendStringListMessage(player, getStringList(config, "messages.withdraw"), replacements);
-                giveItem(player, givedpitem.getXPBottle(amount, player.getName()));
+                giveItem(player, GIVEDP_ITEM.getXPBottle(amount, player.getName()));
 
                 final int xp = Math.round(getTotalExperience(player));
                 setTotalExperience(player, xp-amountInt);

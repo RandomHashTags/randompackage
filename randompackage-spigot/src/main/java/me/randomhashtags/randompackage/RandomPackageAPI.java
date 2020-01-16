@@ -21,7 +21,7 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
 import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class RandomPackageAPI extends RPFeature implements CommandExecutor {
     public static final RandomPackageAPI api = new RandomPackageAPI();
@@ -77,8 +77,8 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save("_Data", "other.yml");
 
-        givedpitem.enable();
-        RANDOM_PACKAGE.getCommand("givedp").setExecutor(givedpitem);
+        GIVEDP_ITEM.enable();
+        RANDOM_PACKAGE.getCommand("givedp").setExecutor(GIVEDP_ITEM);
 
         if(mcmmo != null) {
             MCMMOAPI.getMCMMOAPI().enable();

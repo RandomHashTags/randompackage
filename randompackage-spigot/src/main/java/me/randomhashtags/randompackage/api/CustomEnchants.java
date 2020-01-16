@@ -48,7 +48,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class CustomEnchants extends EventAttributes implements CommandExecutor, Listener {
     private static CustomEnchants instance;
@@ -169,8 +169,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         for(CustomEnchant e : timedEnchants.keySet()) {
             SCHEDULER.cancelTask(timedEnchants.get(e));
         }
-        givedpitem.items.remove("transmogscroll");
-        givedpitem.items.remove("whitescroll");
+        GIVEDP_ITEM.items.remove("transmogscroll");
+        GIVEDP_ITEM.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
         unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }
@@ -327,6 +327,43 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
     }
 
+    public ItemStack getRevealedItemFromString(String input) {
+        // ce:<enchant>:<level>:<success>:<destroy>
+        final String[] values = input.split(":");
+        final int length = values.length;
+        CustomEnchant enchant = getCustomEnchant(values[1]);
+        final EnchantRarity rarity = enchant == null ? getCustomEnchantRarity(values[1]) : null;
+        if(rarity != null) {
+            final List<CustomEnchant> list = rarity.getEnchants();
+            enchant = list.get(RANDOM.nextInt(list.size()));
+        }
+        int level = 1, success = 0, destroy = 0;
+        if(enchant != null) {
+            switch (length) {
+                case 3:
+                    level = parseInt(values[2]);
+                    success = RANDOM.nextInt(101);
+                    destroy = RANDOM.nextInt(101);
+                    break;
+                case 4:
+                    level = parseInt(values[2]);
+                    success = parseInt(values[3]);
+                    destroy = RANDOM.nextInt(101);
+                    break;
+                case 5:
+                    level = parseInt(values[2]);
+                    success = parseInt(values[3]);
+                    destroy = parseInt(values[4]);
+                    break;
+                default:
+                    level = 1+RANDOM.nextInt(enchant.getMaxLevel());
+                    success = 0;
+                    destroy = 0;
+                    break;
+            }
+        }
+        return enchant != null ? getRevealedItem(enchant, level, success, destroy, true, true) : null;
+    }
     public ItemStack getRevealedItem(CustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
         final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
         item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
@@ -356,8 +393,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         return item;
     }
     public ItemStack getRandomEnabledEnchant(EnchantRarity rarity) {
-        final String[] r = rarity.getRevealedEnchantRarities();
-        final int l = r.length;
+        final String[] rarities = rarity.getRevealedEnchantRarities();
+        final int l = rarities.length;
         final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[RANDOM.nextInt(l)]);
         final List<CustomEnchant> enchants = rar.getEnchants();
         item = new ItemStack(Material.BOOK);

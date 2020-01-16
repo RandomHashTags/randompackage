@@ -81,6 +81,7 @@ public class YamlUpdater {
             case "reputation": return getReputation();
             case "secondary": return getSecondary();
             case "showcase": return getShowcase();
+            case "slot bot": return getSlotBot();
             case "spawner stacking": return getSpawnerStacking();
             case "titles": return getTitles();
             case "trade": return getTrade();

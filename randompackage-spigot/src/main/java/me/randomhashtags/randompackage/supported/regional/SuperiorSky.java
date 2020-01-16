@@ -40,8 +40,9 @@ public final class SuperiorSky extends RPFeature implements Regional {
         return i == null || i.getAllMembers().contains(player);
     }
 
-
-    public boolean areEnemies(UUID player1, UUID player2) { return false; }
+    public boolean areEnemies(UUID player1, UUID player2) {
+        return false;
+    }
     public List<UUID> getAssociates(UUID player) {
         final Island i = getIsland(player);
         return i != null ? i.getAllMembers() : null;

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class CustomArmor extends EventAttributes implements RPItemStack {
 	private static CustomArmor instance;
@@ -59,7 +59,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		heroicUpgrade = d(config, "items.heroic upgrade");
 		crystalAddedLore = colorize(config.getString("items.crystal.applied lore"));
 
-		givedpitem.items.put("equipmentlootbox", equipmentLootbox);
+		GIVEDP_ITEM.items.put("equipmentlootbox", equipmentLootbox);
 
 		if(!otherdata.getBoolean("saved default custom armor")) {
 			generateDefaultCustomArmor();
@@ -262,7 +262,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
 		String l = rewards.get(RANDOM.nextInt(rewards.size()));
 		if(l.contains("||")) l = l.split("\\|\\|")[RANDOM.nextInt(l.split("\\|\\|").length)];
-		return givedpitem.valueOf(l);
+		return GIVEDP_ITEM.valueOf(l);
 	}
 
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {

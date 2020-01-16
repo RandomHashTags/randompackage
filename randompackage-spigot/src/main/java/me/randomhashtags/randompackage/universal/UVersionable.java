@@ -83,6 +83,7 @@ public interface UVersionable extends Versionable {
     }};
 
     HashMap<FileConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
+    HashMap<FileConfiguration, HashMap<String, String>> FEATURE_STRINGS = new HashMap<>();
 
     default List<String> getStringList(FileConfiguration yml, String identifier) {
         if(!FEATURE_MESSAGES.containsKey(yml)) {
@@ -93,6 +94,16 @@ public interface UVersionable extends Versionable {
             messages.put(identifier, colorizeListString(yml.getStringList(identifier)));
         }
         return messages.get(identifier);
+    }
+    default String getString(FileConfiguration yml, String identifier) {
+        if(!FEATURE_STRINGS.containsKey(yml)) {
+            FEATURE_STRINGS.put(yml, new HashMap<>());
+        }
+        final HashMap<String, String> strings = FEATURE_STRINGS.get(yml);
+        if(!strings.containsKey(identifier)) {
+            strings.put(identifier, colorize(yml.getString(identifier)));
+        }
+        return strings.get(identifier);
     }
 
     default void save(String folder, String file) {
@@ -172,7 +183,13 @@ public interface UVersionable extends Versionable {
         decimals = c ? decimals.equals("0") ? "" : "." + decimals : "";
         return formatInt((int) l) + decimals;
     }
-    default String formatInt(int integer) { return String.format("%,d", integer); }
+    default String formatInt(int integer) {
+        return String.format("%,d", integer);
+    }
+    default int parseInt(String input) {
+        input = input.toLowerCase();
+        return input.equals("random") ? RANDOM.nextInt(101) : Integer.parseInt(input);
+    }
     default int getRemainingInt(String string) {
         string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
         return string.isEmpty() ? -1 : Integer.parseInt(string);

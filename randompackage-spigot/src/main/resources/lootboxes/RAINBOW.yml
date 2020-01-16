@@ -1,0 +1,80 @@
+# Made by RandomHashTags
+priority: 22
+name: "&f&lLootbox:&r &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw"
+# Measured in seconds. Default is 259200 (3 days)
+available for: 259200
+#
+gui:
+  title: "Lootbox: &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+  ## C = Background item with the countdown amount
+  ## X = Background item
+  ## L = Random Jackpot or Regular loot
+  ## B = Bonus item
+  format:
+  - "CXLLLBBXC"
+#
+preview title: "Lootbox: &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw"
+#
+lore formats:
+  regular loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  jackpot loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+  bonus loot:
+  - " &f&l*&r &f{AMOUNT}x {ITEM}"
+#
+lootbox:
+  item: "beacon"
+  name: "&f&lLootbox:&r &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw"
+  lore:
+  - "&7Yes we realize this &c&lL&6&lo&e&lo&a&lt&b&lb&d&lo&5&lx&r &7should have"
+  - "&7Been release last month"
+  - "&7But this way our &c&lR&6&la&e&li&a&ln&b&lb&d&lo&5&lw&r&7's stand out"
+  - "&7&n&oEVEN MORE!"
+  - " "
+  - "&f&lRandom Loot (&r&74 items&f&l)"
+  - "{REGULAR_LOOT}"
+  - " "
+  - "&f&lJackpot Loot"
+  - "{JACKPOT_LOOT}"
+  - " "
+  - "&f&lBonus Loot (&r&71 item&f&l)"
+  - "{BONUS_LOOT}"
+#
+regular loot size: 4
+regular loot:
+  - "inventorypet:SMITE"
+  - "servercrate:GODLY;amount=4"
+  - "raritybook:HEROIC;amount=2"
+  #- "enchantedobsidian;amount=9"
+  - "customexplosion:CREEPER_STUN;amount=8"
+  #- "fallenhero:???;amount=2"
+  #- "heroicequipmentlootbox;amount=2"
+  - "omnigem:VKIT"
+  - "soultracker:MONSTER"
+  - "rarecandy;amount=2"
+  - "whitescroll:HOLY"
+  - "enchantmentorb:weapon14"
+  #- "mysterylootbox"
+  #- "dungeonportal:DESTROYED_OUTPOST"
+  #- "dungeonlootbag:ABANDONED_SPACESHIP"
+  - "blackscroll:HEROIC"
+  - "mask:STRONGHOLD"
+  - "mask:DEATH_KNIGHT"
+  - "inventorypet:RAID_CREEPER"
+#
+jackpot loot:
+  #- "multimask:RIFT,NECROMANCER,LOVER"
+  - "inventorypet:VILE_CREEPER"
+  - "ce:SABOTAGE:5"
+  - "ce:LAVA_STRIDER:1"
+  - "ce:REINFORCED_TANK:4"
+#
+bonus loot size: 1
+bonus loot:
+  #- "Its a Rainbow Pinwheel Lolli"
+#

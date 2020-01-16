@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Fireballs extends CustomEnchants {
     private static Fireballs instance;
@@ -39,7 +39,7 @@ public class Fireballs extends CustomEnchants {
         save("addons", "fireballs.yml");
         config = getAddonConfig("fireballs.yml");
         mysterydust = d(config, "items.mystery dust");
-        givedpitem.items.put("mysterydust", mysterydust);
+        GIVEDP_ITEM.items.put("mysterydust", mysterydust);
 
         ConfigurationSection cs = config.getConfigurationSection("fireballs");
         final List<ItemStack> z = new ArrayList<>();

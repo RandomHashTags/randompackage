@@ -3,10 +3,10 @@ package me.randomhashtags.randompackage.api.addon;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
-import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -189,7 +189,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
-        final SoulTracker soultracker = valueOf(cursor);
+        final SoulTracker soultracker = valueOfSoulTracker(cursor);
         if(soultracker != null && current != null && !current.getType().equals(Material.AIR)) {
             final String n = current.getType().name();
             for(String s : soultracker.getAppliesTo()) {
@@ -244,7 +244,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         }
         return null;
     }
-    public SoulTracker valueOf(ItemStack is) {
+    public SoulTracker valueOfSoulTracker(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemMeta m = is.getItemMeta();
             for(SoulTracker s : getAllSoulTrackers().values()) {

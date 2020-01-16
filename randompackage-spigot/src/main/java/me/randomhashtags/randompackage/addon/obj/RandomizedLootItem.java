@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addon.obj;
 
-import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.RandomizedLoot;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomizedLootItem implements Itemable, UVersionable {
+public class RandomizedLootItem implements RandomizedLoot, UVersionable {
     private String key, rewardSize;
     private ItemStack item;
     private List<String> rewards;
@@ -17,12 +17,22 @@ public class RandomizedLootItem implements Itemable, UVersionable {
         this.rewardSize = rewardSize;
         this.rewards = rewards;
     }
-    public String getIdentifier() { return key; }
-    public ItemStack getItem() { return getClone(item); }
-    public String getRewardSize() { return rewardSize; }
-    public List<String> getRewards() { return rewards; }
+    public String getIdentifier() {
+        return key;
+    }
+    public ItemStack getItem() {
+        return getClone(item);
+    }
+    public String getRewardSize() {
+        return rewardSize;
+    }
+    public List<String> getRewards() {
+        return rewards;
+    }
 
-    public String getRandomReward() { return getRandomReward(null); }
+    public String getRandomReward() {
+        return getRandomReward(null);
+    }
     public String getRandomReward(List<String> excluding) {
         final List<String> a = new ArrayList<>(rewards);
         if(excluding != null && !excluding.isEmpty()) {

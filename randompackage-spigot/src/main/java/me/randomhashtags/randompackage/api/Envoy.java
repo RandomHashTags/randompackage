@@ -25,7 +25,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.givedpitem;
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Envoy extends RPFeature implements CommandExecutor {
 	private static Envoy instance;
@@ -79,7 +79,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		type = config.getString("settings.type");
 		envoySummon = d(config, "items.envoy summon");
 
-		givedpitem.items.put("envoysummon", envoySummon);
+		GIVEDP_ITEM.items.put("envoysummon", envoySummon);
 
 		presetLocationPlacer = new ItemStack(Material.BEDROCK);
 		itemMeta = presetLocationPlacer.getItemMeta();
@@ -136,7 +136,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		SCHEDULER.cancelTask(spawnTask);
 		SCHEDULER.cancelTask(task);
 		stopAllEnvoys();
-		givedpitem.items.remove("envoysummon");
+		GIVEDP_ITEM.items.remove("envoysummon");
 		unregister(Feature.ENVOY_CRATE);
 	}
 
@@ -167,7 +167,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack i = event.getItem();
-		final EnvoyCrate ec = valueOf(i);
+		final EnvoyCrate ec = valueOfEnvoyCrate(i);
 		final Player player = event.getPlayer();
 		if(ec != null) {
 			event.setCancelled(true);
@@ -317,7 +317,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 	}
 
-	public EnvoyCrate valueOf(ItemStack is) {
+	public EnvoyCrate valueOfEnvoyCrate(ItemStack is) {
 		if(is != null && is.hasItemMeta()) {
 			for(EnvoyCrate c : getAllEnvoyCrates().values()) {
 				if(is.isSimilar(c.getItem())) {
