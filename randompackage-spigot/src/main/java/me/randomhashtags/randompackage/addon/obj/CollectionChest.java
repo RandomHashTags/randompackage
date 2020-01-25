@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 import static me.randomhashtags.randompackage.util.RPFeature.otherdata;
 
 public class CollectionChest {
@@ -55,7 +55,7 @@ public class CollectionChest {
 					try {
 						is = otherdata.getItemStack("collection chests." + s + ".storage." + i);
 					} catch (Exception e) {
-						is = api.d(otherdata, "collection chests." + s + ".storage." + i);
+						is = API.d(otherdata, "collection chests." + s + ".storage." + i);
 					}
 					inv.setItem(Integer.parseInt(i), is);
 				}
@@ -68,12 +68,12 @@ public class CollectionChest {
 		final String u = uuid.toString();
 		for(ItemStack is : getInventory().getContents()) {
 			if(is != null) {
-				otherdata.set("collection chests." + u + ".info", placer + ":" + api.toString(location) + ":" + (filter != null ? filter.name() : "null"));
+				otherdata.set("collection chests." + u + ".info", placer + ":" + API.toString(location) + ":" + (filter != null ? filter.name() : "null"));
 				otherdata.set("collection chests." + u + ".storage." + i, is.toString());
 			}
 			i++;
 		}
-		api.saveOtherData();
+		API.saveOtherData();
 	}
 
 	public void setFilter(UMaterial newfilter) {

@@ -70,7 +70,7 @@ public final class RandomPackage extends JavaPlugin {
         checkFiles();
         loadSoftDepends();
 
-        api = RandomPackageAPI.api;
+        api = RandomPackageAPI.API;
         rpevents = RPEvents.getRPEvents();
 
         final Vault vault = Vault.getVault();

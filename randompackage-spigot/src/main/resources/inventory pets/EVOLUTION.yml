@@ -5,7 +5,7 @@ settings:
   cooldown:
     all: 3600 # 48 hours
   exp to level:
-    11: 1000
+    all: 1000
 #
 item:
   texture: "https://textures.minecraft.net/texture/a6cc486c2be1cb9dfcb2e53dd9a3e9a883bfadb27cb956f1896d602b4067"

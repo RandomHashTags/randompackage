@@ -1,6 +1,9 @@
 package me.randomhashtags.randompackage.util;
 
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -135,43 +138,46 @@ public final class CommandManager extends Reflect {
     }
 
     private void updateBrigadierCmd(PluginCommand cmd, boolean unregister) {
-        if(LEGACY) return;
-        final String s = cmd.getName();
-        final Map<String, com.mojang.brigadier.tree.CommandNode<?>> o = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) nodes;
+        if(LEGACY) {
+            return;
+        }
+        final String name = cmd.getName();
+        final Map<String, com.mojang.brigadier.tree.CommandNode<?>> nodes = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) this.nodes;
         if(unregister) {
-            o.remove("randompackage:" + s);
-            o.remove(s);
+            nodes.remove("randompackage:" + name);
+            nodes.remove(name);
         } else {
-            final com.mojang.brigadier.tree.CommandNode<?> c = o.get(s);
-            final com.mojang.brigadier.CommandDispatcher w = (com.mojang.brigadier.CommandDispatcher) dispatcher;
+            //final com.mojang.brigadier.tree.CommandNode<?> c = nodes.get(name);
+            final com.mojang.brigadier.CommandDispatcher dispatcher = (com.mojang.brigadier.CommandDispatcher) this.dispatcher;
             for(String a : cmd.getAliases()) {
-                w.register(com.mojang.brigadier.builder.LiteralArgumentBuilder.literal(a));
+                dispatcher.register(com.mojang.brigadier.builder.LiteralArgumentBuilder.literal(a));
             }
         }
     }
 
     private void unregisterPluginCommand(PluginCommand cmd) {
-        final String c = cmd.getName();
-        knownCommands.remove("randompackage:" + c);
+        final String cmdName = cmd.getName();
+        knownCommands.remove("randompackage:" + cmdName);
         cmd.unregister(commandMap);
         boolean hasOtherCmd = false;
-        final Set<String> keys = knownCommands.keySet();
-        for(int i = 0; i < keys.size(); i++) {
-            final String otherCmd = (String) keys.toArray()[i];
-            if(!otherCmd.startsWith("RandomPackage:") && otherCmd.split(":")[otherCmd.split(":").length-1].equals(c)) { // gives the last plugin that has the cmd.getName() the command priority
-                final Object obj = knownCommands.values().toArray()[i];
-                if(obj instanceof PluginCommand) {
-                    final PluginCommand pc = (PluginCommand) obj;
-                    if(!pc.getPlugin().equals(RANDOM_PACKAGE)) {
+        final Object[] keys = knownCommands.keySet().toArray(), values = knownCommands.values().toArray();
+        for(int i = 0; i < keys.length; i++) {
+            final String otherCmd = (String) keys[i];
+            // gives the last plugin that has the cmd.getName() the command priority
+            if(!otherCmd.startsWith("RandomPackage:") && otherCmd.split(":")[otherCmd.split(":").length-1].equals(cmdName)) {
+                final Object target = values[i];
+                if(target instanceof PluginCommand) {
+                    final PluginCommand targetCmd = (PluginCommand) target;
+                    if(!targetCmd.getPlugin().equals(RANDOM_PACKAGE)) {
                         hasOtherCmd = true;
-                        knownCommands.replace(c, cmd, pc);
+                        knownCommands.replace(cmdName, cmd, targetCmd);
                         break;
                     }
                 }
             }
         }
         if(!hasOtherCmd) { // removes the command completely
-            knownCommands.remove(c);
+            knownCommands.remove(cmdName);
             updateBrigadierCmd(cmd, true);
         }
     }

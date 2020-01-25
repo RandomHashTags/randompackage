@@ -23,7 +23,7 @@ public class PathBlackScroll extends RPAddon implements BlackScroll {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(getAddonConfig("scrolls.yml"), "black scrolls." + path);
+		if(is == null) is = API.d(getAddonConfig("scrolls.yml"), "black scrolls." + path);
 		return getClone(is);
 	}
 

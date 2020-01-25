@@ -8,7 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class AddPotionEffect extends AbstractEventAttribute {
     @Override
@@ -34,7 +34,7 @@ public class AddPotionEffect extends AbstractEventAttribute {
                         if(valueReplacements != null) {
                             replacements.putAll(valueReplacements);
                         }
-                        replacements.put("{POTION_EFFECT}", type.getName() + " " + api.toRoman(amplifier+1));
+                        replacements.put("{POTION_EFFECT}", type.getName() + " " + API.toRoman(amplifier+1));
                         replacements.put("{DURATION_TICKS}", Integer.toString(duration));
                         replacements.put("{DURATION_SECONDS}", Integer.toString(duration/20));
                         replacements.put("{AMPLIFIER}", Integer.toString(amplifier));

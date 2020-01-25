@@ -16,7 +16,7 @@ public class FileFatBucket extends RPAddon implements FatBucket {
 
     public String getIdentifier() { return getYamlName(); }
     public ItemStack getItem() {
-        if(bucket == null) bucket = api.d(yml, "item");
+        if(bucket == null) bucket = API.d(yml, "item");
         return getClone(bucket);
     }
     public int getUses() { return yml.getInt("settings.uses"); }

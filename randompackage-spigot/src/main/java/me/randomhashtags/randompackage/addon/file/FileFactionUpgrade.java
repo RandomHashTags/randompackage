@@ -26,7 +26,7 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
 
     public ItemStack getItem() {
         if(item == null) {
-            item = api.d(yml, "item");
+            item = API.d(yml, "item");
             if(item != null) {
                 final List<String> lore = item.getItemMeta().getLore(), format = getType().getFormat(), l = new ArrayList<>();
                 final ItemMeta m = item.getItemMeta();

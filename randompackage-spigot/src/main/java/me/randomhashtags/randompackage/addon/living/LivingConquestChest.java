@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class LivingConquestChest implements UVersionable {
     public static List<LivingConquestChest> living;
@@ -168,7 +168,7 @@ public class LivingConquestChest implements UVersionable {
         final int min = rs.contains("-") ? Integer.parseInt(split[0]) : 0, amount = !rs.contains("-") ? Integer.parseInt(rs) : min + RANDOM.nextInt(Integer.parseInt(split[1])-min+1);
         for(int i = 1; i <= amount; i++) {
             final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
-            final ItemStack is = api.d(null, reward);
+            final ItemStack is = API.d(null, reward);
             if(is != null && !is.getType().equals(Material.AIR)) {
                 r.add(is);
             }

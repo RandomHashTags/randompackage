@@ -28,7 +28,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
     public int getCategorySlot() { return yml.getInt("category slot"); }
     public String getGuiTitle() { return colorize(yml.getString("title")); }
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
     public List<String> getRewards() { return yml.getStringList("rewards"); }
@@ -36,19 +36,19 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
     public List<String> getRedeemFormat() { return yml.getStringList("inventory.redeem format"); }
     public List<String> getBonusFormat() { return yml.getStringList("inventory.bonus format"); }
     public ItemStack getBackground() {
-        if(background == null) background = api.d(yml, "inventory.background");
+        if(background == null) background = API.d(yml, "inventory.background");
         return getClone(background);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = api.d(yml, "inventory.redeem");
+        if(redeem == null) redeem = API.d(yml, "inventory.redeem");
         return getClone(redeem);
     }
     public ItemStack getBonus1() {
-        if(bonus1 == null) bonus1 = api.d(yml, "inventory.bonus 1");
+        if(bonus1 == null) bonus1 = API.d(yml, "inventory.bonus 1");
         return getClone(bonus1);
     }
     public ItemStack getBonus2() {
-        if(bonus2 == null) bonus2 = api.d(yml, "inventory.bonus 2");
+        if(bonus2 == null) bonus2 = API.d(yml, "inventory.bonus 2");
         return getClone(bonus2);
     }
     public UInventory getRegular() {
@@ -131,7 +131,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         }
         final String r = rewardType.get(random.nextInt(rewardType.size())), R = r.contains("||") ? r.split("\\|\\|")[random.nextInt(r.split("\\|\\|").length)] : r;
         if(!canRepeatRewards) type.get(player).add(r);
-        final ItemStack is = api.d(null, R);
+        final ItemStack is = API.d(null, R);
         if(is != null) {
         }
         return is;

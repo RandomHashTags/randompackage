@@ -24,7 +24,7 @@ public class FileMask extends RPAddon implements Mask, Skullable {
     }
     public ItemStack getItem() {
         if(item == null) {
-            item = api.d(yml, "item");
+            item = API.d(yml, "item");
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);

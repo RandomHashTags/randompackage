@@ -24,7 +24,7 @@ public class FileKitGlobal extends RPKit implements CustomKitGlobal {
     public boolean isHeroic() { return yml.getBoolean("settings.heroic"); }
     public ItemStack getItem() {
         if(item == null) {
-            item = api.d(yml, "gui settings");
+            item = API.d(yml, "gui settings");
             if(isHeroic()) {
                 final ItemMeta m = item.getItemMeta();
                 m.setDisplayName(heroicprefix.replace("{NAME}", m.hasDisplayName() ? ChatColor.stripColor(m.getDisplayName()) : item.getType().name()));

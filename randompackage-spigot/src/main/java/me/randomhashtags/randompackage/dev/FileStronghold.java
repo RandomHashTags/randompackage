@@ -25,7 +25,7 @@ public abstract class FileStronghold extends RPAddon implements Stronghold {
     public String getIdentifier() { return getYamlName(); }
 
     public ItemStack getItem() {
-        if(is == null) is = api.d(yml, "gui");
+        if(is == null) is = API.d(yml, "gui");
         return getClone(is);
     }
     public int getSlot() { return yml.getInt("gui.slot"); }

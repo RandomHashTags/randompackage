@@ -21,16 +21,16 @@ public class PathFireball extends RPAddon implements RarityFireball {
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
+		if(is == null) is = API.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
 		return getClone(is);
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
 		getReveals();
 		String reward = usesChances ? null : reveals.get(random.nextInt(reveals.size())).split(";")[1];
-		if(reward != null) return api.d(null, reward);
+		if(reward != null) return API.d(null, reward);
 		for(String s : reveals) {
 			final String[] a = s.split(";");
-			final int chance = api.getRemainingInt(a[0]);
+			final int chance = API.getRemainingInt(a[0]);
 			if(random.nextInt(100) <= chance) {
 				final int R = ("chance=" + chance + ";").length();
 				final String r = s.substring(R);

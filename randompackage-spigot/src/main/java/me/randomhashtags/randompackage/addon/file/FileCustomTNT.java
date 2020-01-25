@@ -30,7 +30,7 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
     public String getIdentifier() { return "TNT_" + getYamlName(); }
 
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
     public List<String> getAttributes() {

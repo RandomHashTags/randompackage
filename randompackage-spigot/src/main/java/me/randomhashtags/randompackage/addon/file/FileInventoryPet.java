@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.enums.Feature;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,22 +17,25 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         load(f);
         register(Feature.INVENTORY_PET, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
-    public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
-    public int getMaxLevel() { return yml.getInt("settings.max level"); }
+    public boolean isEnabled() {
+        return yml.getBoolean("settings.enabled");
+    }
+    public int getMaxLevel() {
+        return yml.getInt("settings.max level");
+    }
     public HashMap<Integer, Integer> getCooldowns() {
         if(cooldowns == null) {
             cooldowns = new HashMap<>();
-            final ConfigurationSection c = yml.getConfigurationSection("settings.cooldown");
-            if(c != null) {
-                for(String s : c.getKeys(false)) {
-                    final int cooldown = yml.getInt("settings.cooldown." + s)*1000;
-                    if(s.equals("all")) {
-                        cooldowns.put(-1, cooldown);
-                    } else {
-                        cooldowns.put(Integer.parseInt(s), cooldown);
-                    }
+            for(String s : getConfigurationSectionKeys(yml, "settings.cooldown", false)) {
+                final int cooldown = yml.getInt("settings.cooldown." + s)*1000;
+                if(s.equals("all")) {
+                    cooldowns.put(-1, cooldown);
+                } else {
+                    cooldowns.put(Integer.parseInt(s), cooldown);
                 }
             }
         }
@@ -42,15 +44,12 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     public HashMap<Integer, Integer> getRequiredXp() {
         if(requiredxp == null) {
             requiredxp = new HashMap<>();
-            final ConfigurationSection c = yml.getConfigurationSection("settings.exp to level");
-            if(c != null) {
-                for(String s : c.getKeys(false)) {
-                    final int amount = yml.getInt("settings.exp to level." + s);
-                    if(s.equals("all")) {
-                        requiredxp.put(-1, amount);
-                    } else {
-                        requiredxp.put(Integer.parseInt(s), amount);
-                    }
+            for(String s : getConfigurationSectionKeys(yml, "settings.exp to level", false)) {
+                final int amount = yml.getInt("settings.exp to level." + s);
+                if(s.equals("all")) {
+                    requiredxp.put(-1, amount);
+                } else {
+                    requiredxp.put(Integer.parseInt(s), amount);
                 }
             }
         }
@@ -62,7 +61,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
     public ItemStack getItem() {
         if(item == null) {
-            item = api.d(yml, "item");
+            item = API.d(yml, "item");
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);
@@ -72,7 +71,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
 
     public ItemStack getEgg() {
-        if(egg == null) egg = api.d(yml, "egg");
+        if(egg == null) egg = API.d(yml, "egg");
         return getClone(egg);
     }
     public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() {

@@ -28,11 +28,11 @@ public class FileFallenHero extends RPFallenHero implements FallenHero {
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() { return new ArrayList<>(); }
     public ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = api.d(yml, "spawn item");
+        if(spawnitem == null) spawnitem = API.d(yml, "spawn item");
         return getClone(spawnitem);
     }
     public ItemStack getGem() {
-        if(gem == null) gem = api.d(yml, "gem");
+        if(gem == null) gem = API.d(yml, "gem");
         return getClone(gem);
     }
     public void spawn(LivingEntity summoner, Location loc, CustomKit kit) {

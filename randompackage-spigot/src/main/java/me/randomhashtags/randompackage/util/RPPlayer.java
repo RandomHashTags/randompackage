@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 import static me.randomhashtags.randompackage.supported.economy.Vault.permissions;
 
 public class RPPlayer implements RPStorage {
@@ -132,7 +132,7 @@ public class RPPlayer implements RPStorage {
         if(homes != null) {
             final List<String> homez = new ArrayList<>();
             for(Home h : homes) {
-                homez.add(h.name + ";" + h.icon.name() + ";" + api.toString(h.location));
+                homez.add(h.name + ";" + h.icon.name() + ";" + API.toString(h.location));
             }
             yml.set("homes", homez);
         }
@@ -332,7 +332,7 @@ public class RPPlayer implements RPStorage {
             final String c = yml.getString("coinflip stats");
             if(c != null && !c.isEmpty()) {
                 final String[] s = c.split(";");
-                coinflipStats = new CoinFlipStats(api.getBigDecimal(s[0]), api.getBigDecimal(s[1]), api.getBigDecimal(s[2]), api.getBigDecimal(s[3]), api.getBigDecimal(s[4]));
+                coinflipStats = new CoinFlipStats(API.getBigDecimal(s[0]), API.getBigDecimal(s[1]), API.getBigDecimal(s[2]), API.getBigDecimal(s[3]), API.getBigDecimal(s[4]));
             } else {
                 final BigDecimal z = BigDecimal.ZERO;
                coinflipStats = new CoinFlipStats(z, z, z ,z, z);
@@ -385,7 +385,7 @@ public class RPPlayer implements RPStorage {
                 final String[] A = s.split(";");
                 final String name = A[0];
                 final UMaterial mat = UMaterial.match(A[1]);
-                homes.add(new Home(name, api.toLocation(s.substring(name.length()+A[1].length()+2)), mat));
+                homes.add(new Home(name, API.toLocation(s.substring(name.length()+A[1].length()+2)), mat));
             }
         }
         return homes;
@@ -480,7 +480,7 @@ public class RPPlayer implements RPStorage {
                             try {
                                 is = yml.getItemStack("showcases." + s + "." + sl);
                             } catch (Exception e) {
-                                is = api.d(yml, "showcases." + s + "." + sl);
+                                is = API.d(yml, "showcases." + s + "." + sl);
                             }
                             items[slot] = is;
                         }
@@ -622,7 +622,7 @@ public class RPPlayer implements RPStorage {
             final ConfigurationSection cs = yml.getConfigurationSection("unclaimed purchases");
             if(cs != null) {
                 for(String s : cs.getKeys(false)) {
-                    unclaimedPurchases.add(api.d(yml, "unclaimed purchases." + s));
+                    unclaimedPurchases.add(API.d(yml, "unclaimed purchases." + s));
                 }
             }
         }

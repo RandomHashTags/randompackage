@@ -37,7 +37,7 @@ public class PathWhiteScroll extends RPAddon implements WhiteScroll {
         return getAddonConfig("scrolls.yml").getBoolean("white scrolls." + path + ".removes required after application");
     }
     public ItemStack getItem() {
-        if(item == null) item = api.d(getAddonConfig("scrolls.yml"), "white scrolls." + path);
+        if(item == null) item = API.d(getAddonConfig("scrolls.yml"), "white scrolls." + path);
         return getClone(item);
     }
     public String getApplied() {

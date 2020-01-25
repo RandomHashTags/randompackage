@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class LivingConquestMob implements UVersionable {
     public static HashMap<UUID, LivingConquestMob> living;
@@ -47,19 +47,19 @@ public class LivingConquestMob implements UVersionable {
             a = a.toLowerCase().split("=")[0];
             switch (a) {
                 case "helmet":
-                    e.setHelmet(api.d(null, A.substring(7)));
+                    e.setHelmet(API.d(null, A.substring(7)));
                     break;
                 case "chestplate":
-                    e.setChestplate(api.d(null, A.substring(11)));
+                    e.setChestplate(API.d(null, A.substring(11)));
                     break;
                 case "leggings":
-                    e.setLeggings(api.d(null, A.substring(9)));
+                    e.setLeggings(API.d(null, A.substring(9)));
                     break;
                 case "boots":
-                    e.setBoots(api.d(null, A.substring(6)));
+                    e.setBoots(API.d(null, A.substring(6)));
                     break;
                 case "weapon":
-                    e.setItemInHand(api.d(null, A.substring(7)));
+                    e.setItemInHand(API.d(null, A.substring(7)));
                     break;
             }
         }
@@ -93,7 +93,7 @@ public class LivingConquestMob implements UVersionable {
                 final int chance = s.contains(";chance=") ? getRemainingInt(s.split(";chance=")[1].split(";")[0]) : 100;
                 if(chance == 100 || chance <= r.nextInt(100)) {
                     s = s.split(";chance")[0];
-                    final ItemStack i = api.d(null, s);
+                    final ItemStack i = API.d(null, s);
                     if(i != null) {
                         w.dropItem(l, i);
                     }

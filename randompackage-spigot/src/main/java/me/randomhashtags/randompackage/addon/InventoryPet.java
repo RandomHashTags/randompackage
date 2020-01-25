@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.*;
+import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -32,19 +33,21 @@ public interface InventoryPet extends UVersionable, Itemable, Attributable, Skul
         return getItem(level, exp, System.currentTimeMillis()+getCooldown(level));
     }
     default ItemStack getItem(int level, int exp, long cooldownExpiration) {
-        final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = formatInt(exp), cooldown = getRemainingTime(getCooldown(level));
+        final int required = getRequiredXp(level+1);
+        final String lvl = Integer.toString(level), xp = Integer.toString(exp), requiredString = formatInt(required), cooldown = getRemainingTime(getCooldown(level));
         final ItemStack is = getItem();
         if(is != null) {
-            final ItemMeta m = is.getItemMeta();
-            m.setDisplayName(m.getDisplayName().replace("{LEVEL}", lvl));
-            final List<String> l = new ArrayList<>();
-            if(m.hasLore()) {
-                for(String s : m.getLore()) {
-                    l.add(s.replace("{LEVEL}", lvl).replace("{XP}", XP).replace("{COMPLETION}", xp).replace("{COOLDOWN}", cooldown));
+            final ItemMeta meta = is.getItemMeta();
+            meta.setDisplayName(meta.getDisplayName().replace("{LEVEL}", lvl));
+            final List<String> lore = new ArrayList<>();
+            final String expRegex = InventoryPets.getInventoryPets().getExpRegex(exp, required);
+            if(meta.hasLore()) {
+                for(String s : meta.getLore()) {
+                    lore.add(s.replace("{EXP}", expRegex).replace("{LEVEL}", lvl).replace("{XP}", xp).replace("{COMPLETION}", requiredString).replace("{COOLDOWN}", cooldown));
                 }
             }
-            m.setLore(l);
-            is.setItemMeta(m);
+            meta.setLore(lore);
+            is.setItemMeta(meta);
             setItem(is, getIdentifier(), level, exp, cooldownExpiration);
         }
         return is;

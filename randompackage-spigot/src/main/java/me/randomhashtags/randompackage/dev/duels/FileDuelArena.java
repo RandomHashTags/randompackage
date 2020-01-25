@@ -20,7 +20,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
     public String getIdentifier() { return getYamlName(); }
 
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
     public String getName() { return colorize(yml.getString("name")); }
@@ -28,7 +28,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
         if(locations == null) {
             locations = new ArrayList<>();
             for(String s : yml.getStringList("locations")) {
-                locations.add(api.toLocation(s));
+                locations.add(API.toLocation(s));
             }
         }
         return locations;

@@ -32,7 +32,7 @@ public class FileCustomCreeper extends RPAddon implements CustomExplosion {
         return getStringList(yml, "attributes");
     }
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
 

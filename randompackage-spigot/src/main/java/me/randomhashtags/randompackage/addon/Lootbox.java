@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface Lootbox extends Itemable, Nameable {
     int getPriority();
@@ -41,7 +41,7 @@ public interface Lootbox extends Itemable, Nameable {
         final List<ItemStack> items = new ArrayList<>();
         final List<String> l = getRewards(type);
         for(String s : l) {
-            items.add(api.d(null, s));
+            items.add(API.d(null, s));
         }
         return items;
     }
@@ -55,9 +55,9 @@ public interface Lootbox extends Itemable, Nameable {
 
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRegularLoot()) items.add(api.d(null, s));
-        for(String s : getJackpotLoot()) items.add(api.d(null, s));
-        for(String s : getBonusLoot()) items.add(api.d(null, s));
+        for(String s : getRegularLoot()) items.add(API.d(null, s));
+        for(String s : getJackpotLoot()) items.add(API.d(null, s));
+        for(String s : getBonusLoot()) items.add(API.d(null, s));
         return items;
     }
 }

@@ -24,7 +24,7 @@ import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class RandomPackageAPI extends RPFeature implements CommandExecutor {
-    public static final RandomPackageAPI api = new RandomPackageAPI();
+    public static final RandomPackageAPI API = new RandomPackageAPI();
 
     public static int spawnerchance = 0;
 

@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Random;
 
 public abstract class RPAddon extends RegionalAPI implements RPStorage {
-    protected static RandomPackageAPI api = RandomPackageAPI.api;
+    protected static RandomPackageAPI API = RandomPackageAPI.API;
     protected Random random = new Random();
 
     protected File file;
@@ -20,9 +20,15 @@ public abstract class RPAddon extends RegionalAPI implements RPStorage {
             yml = YamlConfiguration.loadConfiguration(file);
         }
     }
-    public File getFile() { return file; }
-    public YamlConfiguration getYaml() { return yml; }
-    public String getYamlName() { return file.getName().split("\\.yml")[0]; }
+    public File getFile() {
+        return file;
+    }
+    public YamlConfiguration getYaml() {
+        return yml;
+    }
+    public String getYamlName() {
+        return file.getName().split("\\.yml")[0];
+    }
 
     public void save() {
         try {

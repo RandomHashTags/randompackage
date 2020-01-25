@@ -65,7 +65,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         return cannotLandIn;
     }
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "item");
+        if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
     public List<String> getRewards() {
@@ -88,7 +88,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
                 final String reward = rewards.get(random.nextInt(rewards.size()));
                 final boolean hasChance = reward.toLowerCase().contains(";chance=");
                 final String[] a = reward.split(";chance=");
-                if(!hasChance || random.nextInt(100) <= api.getRemainingInt(a[1])) {
+                if(!hasChance || random.nextInt(100) <= API.getRemainingInt(a[1])) {
                     actualrewards.add(a[0]);
                     if(!canRepeatRewards) {
                         rewards.remove(reward);
@@ -104,7 +104,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         final List<String> r = getRandomRewards();
         final List<ItemStack> a = new ArrayList<>();
         for(String s : r) {
-            final ItemStack i = api.d(null, s);
+            final ItemStack i = API.d(null, s);
             if(i != null && !i.getType().equals(Material.AIR)) {
                 a.add(i);
             }

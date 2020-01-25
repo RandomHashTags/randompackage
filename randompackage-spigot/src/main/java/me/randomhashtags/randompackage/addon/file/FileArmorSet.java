@@ -25,19 +25,19 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 		return s != null ? colorize(s) : getIdentifier() + " name doesn't exist!";
 	}
 	public ItemStack getHelmet() {
-		if(helmet == null) helmet = api.d(yml, "helmet");
+		if(helmet == null) helmet = API.d(yml, "helmet");
 		return getClone(helmet);
 	}
 	public ItemStack getChestplate() {
-		if(chestplate == null) chestplate = api.d(yml, "chestplate");
+		if(chestplate == null) chestplate = API.d(yml, "chestplate");
 		return getClone(chestplate);
 	}
 	public ItemStack getLeggings() {
-		if(leggings == null) leggings = api.d(yml, "leggings");
+		if(leggings == null) leggings = API.d(yml, "leggings");
 		return getClone(leggings);
 	}
 	public ItemStack getBoots() {
-		if(boots == null) boots = api.d(yml, "boots");
+		if(boots == null) boots = API.d(yml, "boots");
 		return getClone(boots);
 	}
 	public List<ArmorSetWeaponInfo> getWeapons() {
@@ -46,7 +46,7 @@ public class FileArmorSet extends RPAddon implements ArmorSet {
 			final ConfigurationSection c = yml.getConfigurationSection("weapons");
 			if(c != null) {
 				for(String s : c.getKeys(false)) {
-					weapons.add(new ArmorSetWeaponInfo(s, api.d(yml, "weapons." + s), colorizeListString(yml.getStringList("weapons." + s + ".set lore")), yml.getStringList("attributes." + s)));
+					weapons.add(new ArmorSetWeaponInfo(s, API.d(yml, "weapons." + s), colorizeListString(yml.getStringList("weapons." + s + ".set lore")), yml.getStringList("attributes." + s)));
 				}
 			}
 		}

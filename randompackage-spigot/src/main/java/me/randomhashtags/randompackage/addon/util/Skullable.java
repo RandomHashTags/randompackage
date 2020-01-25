@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface Skullable {
-    HashMap<String, ItemStack> cached = new HashMap<>();
+    HashMap<String, ItemStack> CACHED_SKULLS = new HashMap<>();
     String getOwner();
     // https://www.spigotmc.org/threads/143323/ , edited by RandomHashTags
     default ItemStack getSkull(String name, List<String> lore, boolean isLegacy) {
         final String skinURL = getOwner();
-        if(cached.containsKey(skinURL)) return cached.get(skinURL);
+        if(CACHED_SKULLS.containsKey(skinURL)) {
+            return CACHED_SKULLS.get(skinURL);
+        }
         final ItemStack head = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
         final SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         if(headMeta != null) {
@@ -46,11 +48,12 @@ public interface Skullable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            head.setItemMeta(headMeta);
         } else {
             headMeta.setOwner(skinURL);
             head.setItemMeta(headMeta);
         }
-        cached.put(skinURL, head);
+        CACHED_SKULLS.put(skinURL, head);
         return head;
     }
 }

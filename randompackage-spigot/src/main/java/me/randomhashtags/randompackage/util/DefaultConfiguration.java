@@ -243,12 +243,15 @@ public interface DefaultConfiguration extends UVersionable {
     }
     default void generateDefaultInventoryPets() {
         generateAllDefault("inventory pets", new String[] {
+                "ABOMINABLE_SNOWMAN",
                 "ALCHEMIST",
                 "ANTI_TELEBLOCK",
                 "BANNER",
                 "BLACKSCROLL",
                 "BLESS",
                 "ENCHANTER",
+                "EVOLUTION",
+                "EXPLODING_TURKEY",
                 "FEIGN_DEATH",
                 "GAIA",
                 "LAVA_ELEMENTAL",

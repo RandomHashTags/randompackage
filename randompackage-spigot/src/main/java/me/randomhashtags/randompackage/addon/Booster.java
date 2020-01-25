@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface Booster extends Attributable, Itemable {
     BoosterRecipients getRecipients();
@@ -18,7 +18,7 @@ public interface Booster extends Attributable, Itemable {
     List<String> getExpireMsg();
     List<String> getNotifyMsg();
     default ItemStack getItem(long duration, double multiplier) {
-        final String d = api.getRemainingTime(duration), mu = Double.toString(api.round(multiplier, 4));
+        final String d = API.getRemainingTime(duration), mu = Double.toString(API.round(multiplier, 4));
         final ItemStack i = getItem();
         final ItemMeta m = i.getItemMeta();
         final List<String> l = new ArrayList<>();

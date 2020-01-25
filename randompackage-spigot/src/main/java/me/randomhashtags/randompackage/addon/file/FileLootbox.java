@@ -67,7 +67,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
 
     public ItemStack getItem() {
         if(item == null) {
-            final ItemStack i = api.d(yml, "lootbox");
+            final ItemStack i = API.d(yml, "lootbox");
             final ItemMeta itemMeta = i.getItemMeta();
             final List<String> lore = new ArrayList<>(), regularLootFormat = getRegularLootFormat(), jackpotLootFormat = getJackpotLootFormat(), bonusLootFormat = getBonusLootFormat();
             final List<ItemStack> regular = getAllRewards(LootboxRewardType.REGULAR);
@@ -118,7 +118,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
         return getClone(item);
     }
     public ItemStack getBackground() {
-        if(background == null) background = api.d(yml, "gui.background");
+        if(background == null) background = API.d(yml, "gui.background");
         return getClone(background);
     }
 }

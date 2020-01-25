@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable {
     ItemStack getSpawnItem();
@@ -21,6 +21,6 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable {
     int getMaxMinions();
     CustomMinion getMinion();
     default LivingCustomBoss spawn(LivingEntity summoner, Location location) {
-        return new LivingCustomBoss(summoner, api.getEntity(getType(), location, true), this);
+        return new LivingCustomBoss(summoner, API.getEntity(getType(), location, true), this);
     }
 }

@@ -25,7 +25,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class LivingCustomBoss extends UVersion {
     public static HashMap<UUID, LivingCustomBoss> living;
@@ -205,7 +205,7 @@ public class LivingCustomBoss extends UVersion {
                     rewards.put(target, new ArrayList<>());
                     rewardNames.put(target, new ArrayList<>());
                 }
-                final ItemStack reward = api.d(null, s.split("\\{")[1].split("}")[0]);
+                final ItemStack reward = API.d(null, s.split("\\{")[1].split("}")[0]);
                 reward.setAmount(amount);
                 rewards.get(target).add(reward);
                 rewardNames.get(target).add(ChatColor.translateAlternateColorCodes('&', s.split(";")[3]));
@@ -215,7 +215,7 @@ public class LivingCustomBoss extends UVersion {
                     final OfflinePlayer p = Bukkit.getOfflinePlayer((UUID) top.keySet().toArray()[i-1]);
                     if(p.isOnline())
                         for(ItemStack re : rewards.get(i))
-                            api.giveItem(p.getPlayer(), re);
+                            API.giveItem(p.getPlayer(), re);
                 }
             }
             living.remove(entity.getUniqueId());

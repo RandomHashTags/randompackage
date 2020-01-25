@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
+import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlare {
 	private FileServerCrate crate;
@@ -51,7 +51,7 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 	}
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(getYaml(), "flare");
+		if(is == null) is = API.d(getYaml(), "flare");
 		return getClone(is);
 	}
 	public List<String> getRewards() { return null; }

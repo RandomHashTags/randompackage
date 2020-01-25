@@ -65,23 +65,23 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		return revealChances;
 	}
 	public ItemStack getItem() {
-		if(physicalItem == null) physicalItem = api.d(yml, "item");
+		if(physicalItem == null) physicalItem = API.d(yml, "item");
 		return getClone(physicalItem);
 	}
 	public ItemStack getDisplay() {
-		if(display == null) display = api.d(yml, "display");;
+		if(display == null) display = API.d(yml, "display");;
 		return getClone(display);
 	}
 	public ItemStack getOpenGui() {
-		if(opengui == null) opengui = api.d(yml, "open gui");
+		if(opengui == null) opengui = API.d(yml, "open gui");
 		return getClone(opengui);
 	}
 	public ItemStack getSelected() {
-		if(selected == null) selected = api.d(yml, "selected");
+		if(selected == null) selected = API.d(yml, "selected");
 		return getClone(selected);
 	}
 	public ItemStack getRevealSlotRarity() {
-		if(revealSlotRarity == null) revealSlotRarity = api.d(yml, "reveal slot rarity");
+		if(revealSlotRarity == null) revealSlotRarity = API.d(yml, "reveal slot rarity");
 		return getClone(revealSlotRarity);
 	}
 	public HashMap<String, List<String>> getRewards() {
@@ -94,11 +94,11 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		return rewards;
 	}
 	public ItemStack getBackground() {
-		if(background == null) background = api.d(yml, "settings.background");
+		if(background == null) background = API.d(yml, "settings.background");
 		return getClone(background);
 	}
 	public ItemStack getBackground2() {
-		if(background2 == null) background2 = api.d(yml, "settings.background 2");
+		if(background2 == null) background2 = API.d(yml, "settings.background 2");
 		return getClone(background2);
 	}
 	public FileServerCrateFlareObj getFlare() {
@@ -120,6 +120,6 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	public ItemStack getRandomReward(String rarity) {
 		final List<String> r = getRewards().get(rarity);
 		final String reward = r.get(random.nextInt(r.size()));
-		return api.d(null, reward);
+		return API.d(null, reward);
 	}
 }

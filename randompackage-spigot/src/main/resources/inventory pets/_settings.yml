@@ -5,6 +5,11 @@ messages:
 #
 settings:
   show graphic overlay cooldown: true
+  exp:
+    character: ":"
+    character length: 100
+    achieved color: "&a"
+    unachieved color: "&c"
 #
 items:
   leash:

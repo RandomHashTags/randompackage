@@ -19,7 +19,7 @@ public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
 
     public boolean isEnabled() { return yml.getBoolean("settings.enabled", false); }
     public ItemStack getItem() {
-        if(display == null) display = api.d(yml, "item");
+        if(display == null) display = API.d(yml, "item");
         return getClone(display);
     }
     public long getDuration() { return yml.getLong("settings.duration"); }

@@ -43,7 +43,7 @@ public class PathSoulTracker extends RPAddon implements SoulTracker {
         return getRarityGem(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".converts to gem"));
     }
     public ItemStack getItem() {
-        if(is == null) is = api.d(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
+        if(is == null) is = API.d(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
         return getClone(is);
     }
     public String getApplied() { return colorize(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }

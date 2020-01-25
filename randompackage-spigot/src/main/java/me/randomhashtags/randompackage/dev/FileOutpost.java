@@ -32,7 +32,7 @@ public abstract class FileOutpost extends RPAddon implements Outpost {
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {
-        if(item == null) item = api.d(yml, "gui");
+        if(item == null) item = API.d(yml, "gui");
         return getClone(item);
     }
     public List<String> getLostControlMsg() {

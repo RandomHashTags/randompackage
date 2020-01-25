@@ -27,7 +27,7 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
         return false;
     }
     public ItemStack getItem() {
-        if(item == null) item = api.d(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
+        if(item == null) item = API.d(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }
     public String getApplied() {
