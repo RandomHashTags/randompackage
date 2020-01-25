@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
+import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -128,19 +129,31 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         itemMeta = previewRewards.getItemMeta(); lore.clear();
         previewRewardList = new ArrayList<>();
 
-        final boolean isSource = config.getBoolean("preview rewards.show reward source item");
+        final boolean previewIsSource = config.getBoolean("preview rewards.show reward source item");
+        final List<String> actualRewards = new ArrayList<>();
+        final LootboxRewardType[] types = LootboxRewardType.values();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
                 for(String reward : rewards) {
                     final ItemStack is = d(null, reward);
                     if(is != null) {
+                        final Lootbox lootbox = valueOfLootbox(is);
+                        final boolean isLootbox = lootbox != null;
+
+                        if(isLootbox) {
+                            for(LootboxRewardType type : types) {
+                                actualRewards.addAll(lootbox.getRewards(type));
+                            }
+                        } else {
+                            actualRewards.add(reward);
+                        }
+
                         ItemMeta meta = is.getItemMeta();
-                        if(isSource) {
+                        if(previewIsSource) {
                             lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : reward));
                             previewRewardList.add(is);
                         } else {
-                            final Lootbox lootbox = valueOfLootbox(is);
-                            if(lootbox != null) {
+                            if(isLootbox) {
                                 final List<ItemStack> items = lootbox.getAllRewards();
                                 for(ItemStack item : items) {
                                     meta = item.getItemMeta();
@@ -158,6 +171,13 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         itemMeta.setLore(lore); lore.clear();
         previewRewards.setItemMeta(itemMeta);
         inv.setItem(previewRewardsSlot, previewRewards);
+
+        rewards = actualRewards;
+
+        final Inventory previewInv = preview.getInventory();
+        for(ItemStack is : previewRewardList) {
+            previewInv.setItem(previewInv.firstEmpty(), is);
+        }
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Slot Bot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -351,7 +371,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             final String tickets = Integer.toString(getInsertedTickets(player));
             for(int i : slots.keySet()) {
                 item = top.getItem(i);
-                if(!rewardSlot.isSimilar(item)) {
+                if(item != null && !rewardSlot.isSimilar(item)) {
                     itemMeta = item.getItemMeta();
                     items.put(itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : "UNKNOWN", item.getAmount());
                     giveItem(player, item);

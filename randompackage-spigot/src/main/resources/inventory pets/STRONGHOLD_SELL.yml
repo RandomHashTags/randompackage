@@ -8,7 +8,7 @@ settings:
     2: 500
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/d04719b3b97d195a205718b6ee21f5c95cafa167e7abca88a2103d52b37d722"
   item: "player_head_item"
   name: "&e&lStronghold Sell Pet&r &7[LVL {LEVEL}]"
   lore:

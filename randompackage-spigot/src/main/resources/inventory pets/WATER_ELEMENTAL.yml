@@ -8,7 +8,7 @@ settings:
     2: 1000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/bd37285793131ed755f1b0098f29dd413d67656b6208728935492b49b1d0d4ba"
   item: "player_head_item"
   name: "&e&lWater Elemental Pet&r &7[LVL {LEVEL}]"
   lore:

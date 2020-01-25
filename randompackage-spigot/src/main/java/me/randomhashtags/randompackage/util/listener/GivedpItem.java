@@ -2,11 +2,10 @@ package me.randomhashtags.randompackage.util.listener;
 
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
-import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.RandomizedLoot;
-import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
-import me.randomhashtags.randompackage.api.addon.WhiteScrolls;
-import me.randomhashtags.randompackage.api.SlotBot;
+import me.randomhashtags.randompackage.api.*;
+import me.randomhashtags.randompackage.api.addon.Scrolls;
+import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
@@ -172,23 +171,34 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 }
             }
             return air;
+        } else if(input.startsWith("multicustomarmorcrystal:")) {
+            return air;
+
         } else if(input.startsWith("customboss:")) {
-            final CustomBoss b = getCustomBoss(Q.split(":")[1]);
-            return b != null ? b.getSpawnItem() : air;
+            final CustomBosses bosses = CustomBosses.getCustomBosses();
+            if(bosses.isEnabled()) {
+                final CustomBoss b = getCustomBoss(Q.split(":")[1]);
+                return b != null ? b.getSpawnItem() : air;
+            }
+            return air;
         } else if(input.startsWith("customexplosion:")) {
             final CustomExplosion e = getCustomExplosion(Q.split(":")[1]);
             return e != null ? e.getItem() : air;
         } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
             final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
-            return enchants.isEnabled() ? enchants.getRevealedItemFromString(Q) : air;
+            if(enchants.isEnabled()) {
+                final ItemStack target = enchants.getRevealedItemFromString(Q);
+                return target == null ? air : target;
+            }
+            return air;
         } else if(input.startsWith("dust:")) {
             final String[] a = Q.split(":");
             final MagicDust d = getMagicDust(a[1]);
             final int percent = a.length >= 3 ? Integer.parseInt(a[2]) : -1;
             return d != null ? percent == -1 ? d.getRandomPercentItem(RANDOM) : d.getItem(percent) : air;
         } else if(input.startsWith("enchantmentorb:")) {
-            final String[] a = Q.split(":");
-            String p = a[1], percent = a.length == 3 ? a[2] : Integer.toString(RANDOM.nextInt(101));
+            final String[] values = Q.split(":");
+            String p = values[1], percent = values.length == 3 ? values[2] : Integer.toString(RANDOM.nextInt(101));
             EnchantmentOrb o = getEnchantmentOrb(p);
             if(o == null) {
                 final List<EnchantmentOrb> e = new ArrayList<>();
@@ -202,12 +212,19 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             final boolean h = percent.contains("-");
             final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+RANDOM.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
             return o != null ? o.getItem(P) : air;
+
+        } else if(input.startsWith("equipmentlootbox:")) {
+            return air;
+
         } else if(input.startsWith("booster:")) {
             final Boosters boosters = Boosters.getBoosters();
             if(boosters.isEnabled()) {
                 final String[] a = Q.split(":");
                 return getBooster(a[1]).getItem(Long.parseLong(a[3])*1000, Double.parseDouble(a[2]));
             }
+            return air;
+
+        } else if(input.startsWith("omnigem:")) {
             return air;
         } else if(input.startsWith("fallenherogem")) {
             final String type = Q.contains(":") ? Q.split(":")[1] : null;
@@ -243,19 +260,36 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             if(k == null) k = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
             final FallenHero f = k != null ? k.getFallenHero() : null;
             return f != null ? k.getFallenHeroItem(k, true) : air;
+
         } else if(input.startsWith("fatbucket:")) {
             final String[] values = Q.split(":");
             final FatBucket fb = getFatBucket(values[1]);
             return fb != null ? values.length > 2 ? fb.getItem(Integer.parseInt(values[1])) : fb.getItem(0) : air;
         } else if(input.startsWith("inventorypet:") || input.startsWith("pet:")) {
-            final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
-            return pet != null ? pet.getItem(1) : air;
+            final InventoryPets pets = InventoryPets.getInventoryPets();
+            if(pets.isEnabled()) {
+                final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
+                return pet != null ? pet.getItem(1) : air;
+            }
+            return air;
+        } else if(input.startsWith("inventorypetegg:") || input.startsWith("petegg:")) {
+            final InventoryPets pets = InventoryPets.getInventoryPets();
+            if(pets.isEnabled()) {
+                final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
+                return pet != null ? pet.getEgg() : air;
+            }
+            return air;
+        } else if(input.startsWith("inventorypetegghatchingkit:")) {
+            return air;
+
         } else if(input.startsWith("lootbox:")) {
             final Lootbox l = getLootbox(Q.split(":")[1]);
             return l != null ? l.getItem() : air;
         } else if(input.startsWith("mask:") && !input.equals("maskgenerator")) {
             final Mask m = getMask(Q.split(":")[1]);
             return m != null ? m.getItem() : air;
+        } else if(input.startsWith("multimask:")) {
+            return air;
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
             if(mcmmoIsEnabled()) {
                 final MCMMOAPI mcmmo = MCMMOAPI.getMCMMOAPI();
@@ -323,7 +357,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             return air;
         } else if(input.startsWith("transmogscroll")) {
-            if(TransmogScrolls.getTransmogScrolls().isEnabled()) {
+            final Scrolls scrolls = Scrolls.getScrolls();
+            if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
                 TransmogScroll t = getTransmogScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
                 if(t == null) {
                 }
@@ -339,7 +374,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             return air;
         } else if(input.startsWith("whitescroll")) {
-            if(WhiteScrolls.getWhiteScrolls().isEnabled()) {
+            final Scrolls scrolls = Scrolls.getScrolls();
+            if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_WHITE)) {
                 WhiteScroll w = getWhiteScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
                 if(w == null) {
                 }

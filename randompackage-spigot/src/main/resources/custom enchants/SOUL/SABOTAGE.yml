@@ -6,7 +6,7 @@ lore:
   - "&eActive Soul Enchantment. A chance to"
   - "&eblock enemy player Rocket Escape and"
   - "&eGuided Rocket Escape from activating."
-  - "&eCosts 8 souls per second."
+  - "&eCosts 4 souls per second."
 #
 max level: 5
 applies to: "sword"

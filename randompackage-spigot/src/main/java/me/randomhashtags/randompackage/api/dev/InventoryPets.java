@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
+
 public class InventoryPets extends EventAttributes implements RPItemStack, Packeter {
     // TODO: fix the inventory pet ymls
     private static InventoryPets instance;
@@ -59,17 +61,18 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         for(File f : new File(folder).listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
-                if(p.isEnabled()) {
-                    pets.add(p.getItem(1, 0));
-                }
+                pets.add(p.getItem(1, 0));
             }
         }
 
-        config = YamlConfiguration.loadConfiguration(new File(folder, "inventory pets.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
         leash = d(config, "items.leash");
         leashedLore = colorize(config.getString("items.leash.applied lore"));
         rarecandy = d(config, "items.rare candy");
         leashedUponDeath = new HashMap<>();
+
+        GIVEDP_ITEM.items.put("rarecandy", rarecandy);
+        GIVEDP_ITEM.items.put("petleash", leash);
 
         pets.add(leash);
         pets.add(rarecandy);

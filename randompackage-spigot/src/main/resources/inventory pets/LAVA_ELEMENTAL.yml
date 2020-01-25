@@ -11,7 +11,7 @@ settings:
     2: 2000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/a6747f0f5a7a27c5f10e99b158d7311d283372e1b7e6bfec51c8629ee97f8d"
   item: "player_head_item"
   name: "&e&lLava Elemental Pet&r &7[LVL {LEVEL}]"
   lore:

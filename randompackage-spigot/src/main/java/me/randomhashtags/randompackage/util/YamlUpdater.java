@@ -200,7 +200,9 @@ public class YamlUpdater {
                 "supported plugins.regional.WorldGuard", true,
                 // 16.5.9
                 "slot bot.enabled", true, // changed to "true" in 16.5.10
-                "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot")
+                "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot"),
+                // 16.5.10
+                "custom enchants.holy scrolls", true,
         };
         return putAll(values);
     }

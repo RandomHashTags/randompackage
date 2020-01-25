@@ -1,0 +1,8 @@
+# Made by RandomHashTags
+name: "&e&lFlaming&r &6&lHalo"
+#
+lore:
+  - "&c+4% Outgoing Damage"
+#
+attributes:
+  - "PvAny;SetDamage=dmg*1.04"

@@ -8,7 +8,7 @@ settings:
     2: 5000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/92575bc947648b7fe68f1b623feb7f77286f96a179895d72d2718f94b89c63"
   item: "player_head_item"
   name: "&e&lVile Creeper Pet&r &7[LVL {LEVEL}]"
   lore:

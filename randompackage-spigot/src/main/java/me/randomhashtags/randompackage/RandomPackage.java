@@ -35,6 +35,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
@@ -100,14 +102,19 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(Tinkerer.getTinkerer(), Arrays.asList("tinkerer"), isTrue("tinkerer"));
 
         cmd.loadCustom(CustomEnchants.getCustomEnchants(), getHash("disabledenchants", "disabled enchants", "enchants", "enchants"), isTrue("disabled enchants", "enchants"));
-        cmd.load(BlackScrolls.getBlackScrolls(), null, isTrue("custom enchants.black scrolls", true));
         cmd.load(EnchantmentOrbs.getEnchantmentOrbs(), null, isTrue("custom enchants.enchantment orbs", true));
         cmd.load(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
-        cmd.load(RandomizationScrolls.getRandomizationScrolls(), null, isTrue("custom enchants.randomization scrolls", true));
         cmd.load(RarityGems.getRarityGems(), null, isTrue("custom enchants.rarity gems", true));
         cmd.load(SoulTrackers.getSoulTrackers(), Arrays.asList("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
-        cmd.load(TransmogScrolls.getTransmogScrolls(), null, isTrue("custom enchants.transmog scrolls", true));
-        cmd.load(WhiteScrolls.getWhiteScrolls(), null, isTrue("custom enchants.white scrolls", true));
+
+        final Set<Boolean> scrolls = new HashSet<Boolean>() {{
+            add(config.getBoolean("custom enchants.black scrolls"));
+            add(config.getBoolean("custom enchants.randomization scrolls"));
+            add(config.getBoolean("custom enchants.transmog scrolls"));
+            add(config.getBoolean("custom enchants.white scrolls"));
+            add(config.getBoolean("custom enchants.holy scrolls"));
+        }};
+        cmd.load(Scrolls.getScrolls(), null, scrolls.contains(true));
 
         cmd.loadCustom(CustomExplosions.getCustomExplosions(), null, isTrue("custom creepers", "custom tnt"));
         cmd.loadCustom(Duels.getDuels(), getHash("duel", "duels"), isTrue("duels"));

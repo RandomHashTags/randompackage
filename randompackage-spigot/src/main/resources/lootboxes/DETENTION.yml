@@ -33,7 +33,7 @@ lootbox:
   lore:
   - "&7If they don't catch you is it"
   - "&7actually breaking the rules?"
-  - "&What if you have your"
+  - "&7What if you have your"
   - "&6Handy Dandy Hall Pass?!?"
   - " "
   - "&f&lRandom Loot (&r&74 items&f&l)"
@@ -50,7 +50,7 @@ regular loot:
   - "enchantmentorb:armor14"
   - "inventorypet:YIJKI_CONTROLLER"
   - "raritybook:HEROIC;amount=2"
-  - "customexplosion:STUN_CREEPER;amount=8"
+  - "customexplosion:CREEPER_STUN;amount=8"
   #- "heroicequipmentlootbox"
   #- "heroicequipmentlootbox:MOTHER_OF_YIJKI"
   #- "fallenhero:???;amount=2"

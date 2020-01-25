@@ -7,7 +7,7 @@ settings:
     2: 2000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/f9a384c572bc1be0774a943935fddc6ae537eca866daddb636dea0bcfc4f"
   item: "player_head_item"
   name: "&e&lBless Pet&r &7[LVL {LEVEL}]"
   lore:

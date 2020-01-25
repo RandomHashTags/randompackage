@@ -45,7 +45,7 @@ lootbox:
 #
 regular loot size: 4
 regular loot:
-  - "teleportationcrystal;amount=2"
+  #- "teleportationcrystal;amount=2"
   - "omnigem:GKIT"
   - "maskgenerator"
   - "raritygem:SOUL:6000"
@@ -65,7 +65,7 @@ jackpot loot:
   - "monthlycrate:JULY_2019"
   - "inventorypet:STRONGHOLD_SELL"
   - "mask:STRONGHOLD"
-  #- "multimask:DEATH_KNIGHT,MONOPOLY"
+  - "multimask:DEATH_KNIGHT,MONOPOLY"
   - "mask:BOSS"
   - "inventorypet:GAIA"
 #

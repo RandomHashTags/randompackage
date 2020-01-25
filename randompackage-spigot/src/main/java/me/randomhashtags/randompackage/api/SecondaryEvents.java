@@ -103,7 +103,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     } else if(eco.getBalance(player) < amountDouble) {
                         msg = "withdraw.cannot withdraw more than balance";
                     } else if(eco.withdrawPlayer(player, amountDouble).transactionSuccess()) {
-                        item = GIVEDP_ITEM.getBanknote(amount, player.getName());
+                        item = getBanknote(amount, player.getName());
                         giveItem(player, item);
                         msg = "withdraw.success";
                     } else {
@@ -122,7 +122,6 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
-
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "secondary.yml"));
         confirm = colorize(config.getString("confirm.title"));
 
@@ -146,6 +145,18 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     }
     public void unload() {
     }
+
+    public ItemStack getBanknote(BigDecimal value, String signer) {
+        item = GIVEDP_ITEM.items.get("banknote").clone(); itemMeta = item.getItemMeta(); lore.clear();
+        for(String s : itemMeta.getLore()) {
+            if(s.contains("{SIGNER}")) s = signer != null ? s.replace("{SIGNER}", signer) : null;
+            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+        }
+        itemMeta.setLore(lore); lore.clear();
+        item.setItemMeta(itemMeta);
+        return item;
+    }
+
 
     public void bless(@NotNull Player player) {
         for(PotionEffectType type : removedPotionEffects) {

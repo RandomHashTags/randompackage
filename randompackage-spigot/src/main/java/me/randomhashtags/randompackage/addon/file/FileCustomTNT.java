@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
@@ -32,7 +33,9 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
         if(item == null) item = api.d(yml, "item");
         return getClone(item);
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public List<String> getAttributes() {
+        return getStringList(yml, "attributes");
+    }
     public void didExplode(UUID uuid, List<Block> blockList) {
         primed.remove(uuid);
         final HashMap<Location, FileCustomTNT> p = FileCustomTNT.placed;
@@ -47,18 +50,18 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
         }
     }
 
-    public void place(Location l) {
+    public void place(@NotNull Location l) {
         final Block b = l.getWorld().getBlockAt(l);
         b.setType(Material.TNT);
         b.getState().update();
         placed.put(l, this);
     }
-    public TNTPrimed spawn(Location l) {
+    public TNTPrimed spawn(@NotNull Location l) {
         final TNTPrimed t = l.getWorld().spawn(l, TNTPrimed.class);
         primed.put(t.getUniqueId(), this);
         return t;
     }
-    public TNTPrimed ignite(Location l) {
+    public TNTPrimed ignite(@NotNull Location l) {
         placed.remove(l);
         return spawn(l);
     }

@@ -19,21 +19,51 @@ public class FileLootbox extends RPAddon implements Lootbox {
     }
     public String getIdentifier() { return getYamlName(); }
 
-    public int getPriority() { return yml.getInt("priority"); }
-    public long getAvailableFor() { return yml.getLong("available for"); }
-    public int getGuiSize() { return yml.getInt("gui.size"); }
-    public String getName() { return colorize(yml.getString("name")); }
-    public String getGuiTitle() { return colorize(yml.getString("gui.title")); }
-    public String getPreviewTitle() { return colorize(yml.getString("preview title")); }
-    public String getRegularLootSize() { return yml.getString("regular loot size"); }
-    public String getBonusLootSize() { return yml.getString("bonus loot size"); }
-    public List<String> getGuiFormat() { return getStringList(yml, "gui.format"); }
-    public List<String> getRegularLootFormat() { return getStringList(yml, "lore formats.regular loot"); }
-    public List<String> getJackpotLootFormat() { return getStringList(yml, "lore formats.jackpot loot"); }
-    public List<String> getBonusLootFormat() { return getStringList(yml, "lore formats.bonus loot"); }
-    public List<String> getRegularLoot() { return getStringList(yml, "regular loot"); }
-    public List<String> getJackpotLoot() { return getStringList(yml, "jackpot loot"); }
-    public List<String> getBonusLoot() { return getStringList(yml, "bonus loot"); }
+    public int getPriority() {
+        return yml.getInt("priority");
+    }
+    public long getAvailableFor() {
+        return yml.getLong("available for");
+    }
+    public int getGuiSize() {
+        return yml.getInt("gui.size");
+    }
+    public String getName() {
+        return getString(yml, "name");
+    }
+    public String getGuiTitle() {
+        return getString(yml, "gui.title");
+    }
+    public String getPreviewTitle() {
+        return getString(yml, "preview title");
+    }
+    public String getRegularLootSize() {
+        return getString(yml, "regular loot size");
+    }
+    public String getBonusLootSize() {
+        return getString(yml, "bonus loot size");
+    }
+    public List<String> getGuiFormat() {
+        return getStringList(yml, "gui.format");
+    }
+    public List<String> getRegularLootFormat() {
+        return getStringList(yml, "lore formats.regular loot");
+    }
+    public List<String> getJackpotLootFormat() {
+        return getStringList(yml, "lore formats.jackpot loot");
+    }
+    public List<String> getBonusLootFormat() {
+        return getStringList(yml, "lore formats.bonus loot");
+    }
+    public List<String> getRegularLoot() {
+        return getStringList(yml, "regular loot");
+    }
+    public List<String> getJackpotLoot() {
+        return getStringList(yml, "jackpot loot");
+    }
+    public List<String> getBonusLoot() {
+        return getStringList(yml, "bonus loot");
+    }
 
     public ItemStack getItem() {
         if(item == null) {
@@ -57,20 +87,24 @@ public class FileLootbox extends RPAddon implements Lootbox {
                     }
                 } else if(s.equals("{JACKPOT_LOOT}")) {
                     for(ItemStack is : jackpot) {
-                        final ItemMeta m = is.getItemMeta();
-                        final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
-                        for(String z : jackpotLootFormat) {
-                            final String it = d != null ? d : toMaterial(t, false);
-                            lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                        if(is != null) {
+                            final ItemMeta m = is.getItemMeta();
+                            final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
+                            for(String z : jackpotLootFormat) {
+                                final String it = d != null ? d : toMaterial(t, false);
+                                lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                            }
                         }
                     }
                 } else if(s.equals("{BONUS_LOOT}")) {
                     for(ItemStack is : bonus) {
-                        final ItemMeta m = is.getItemMeta();
-                        final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
-                        for(String z : bonusLootFormat) {
-                            final String it = d != null ? d : toMaterial(t, false);
-                            lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                        if(is != null) {
+                            final ItemMeta m = is.getItemMeta();
+                            final String d = m != null ? m.getDisplayName() : null, t = is.getType().name();
+                            for(String z : bonusLootFormat) {
+                                final String it = d != null ? d : toMaterial(t, false);
+                                lore.add(z.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", it));
+                            }
                         }
                     }
                 } else {

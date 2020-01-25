@@ -8,7 +8,7 @@ settings:
     2: 2000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/2abbe3dfccebab2495994df835abfb296be0418d2f622850bde14c9e82422f1c"
   item: "player_head_item"
   name: "&e&lSmite Pet&r &7[LVL {LEVEL}]"
   lore:

@@ -1,15 +1,14 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.*;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.api;
-
-public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack {
+public interface InventoryPet extends UVersionable, Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack {
     HashMap<Integer, Integer> getCooldowns();
     default long getCooldown(int level) {
         final HashMap<Integer, Integer> cooldowns = getCooldowns();
@@ -26,10 +25,14 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         return r.getOrDefault(-1, r.getOrDefault(level, 1000));
     }
 
-    default ItemStack getItem(int level) { return getItem(level, getRequiredXp(level)); }
-    default ItemStack getItem(int level, int exp) { return getItem(level, exp, System.currentTimeMillis()+getCooldown(level)); }
+    default ItemStack getItem(int level) {
+        return getItem(level, getRequiredXp(level));
+    }
+    default ItemStack getItem(int level, int exp) {
+        return getItem(level, exp, System.currentTimeMillis()+getCooldown(level));
+    }
     default ItemStack getItem(int level, int exp, long cooldownExpiration) {
-        final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = api.formatInt(exp), cooldown = api.getRemainingTime(getCooldown(level));
+        final String lvl = Integer.toString(level), XP = Integer.toString(exp), xp = formatInt(exp), cooldown = getRemainingTime(getCooldown(level));
         final ItemStack is = getItem();
         if(is != null) {
             final ItemMeta m = is.getItemMeta();

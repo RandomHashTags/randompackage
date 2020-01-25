@@ -9,7 +9,7 @@ settings:
     11: 11250
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/449088861fc1e14b605a5154d79fa7dd65e041a5c635d24744b3e152535"
   item: "player_head_item"
   name: "&e&lBlackscroll Pet&r &7[LVL {LEVEL}]"
   lore:

@@ -5,7 +5,7 @@ item:
   item: "player_head_item"
   name: "&d&lBunny Mask"
   lore:
-  - "&c1.5x Mobs from Spawners in Chunk"
+  - "&c1.65x Mobs from Spawners in Chunk"
   - "&7And so the gods declared to all"
   - "&7the easter bunnies: be fruitful"
   - "&7and multiply."
@@ -14,4 +14,4 @@ item:
 attributes:
   - ""
 #
-added lore: "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.5x Mobs from Spawners in Chunk&f)"
+added lore: "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.65x Mobs from Spawners in Chunk&f)"

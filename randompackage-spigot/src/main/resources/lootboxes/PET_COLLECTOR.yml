@@ -59,13 +59,13 @@ regular loot:
   - "trinket:EMP_PULSE"
   - "blackscroll:REGULAR;amount=3"
   - "mysterypetbox"
-  #- "multimask:ZEUS,DUNGEON"
+  - "multimask:ZEUS,DUNGEON"
   #- "equipmentlootbox:DIMENSIONAL_TRAVELER"
   #- "equipmentlootbox:YETI"
   - "transmogscroll:GODLY;amount=2"
 #
 jackpot loot:
-  - "multiarmorsetcrystal:DRAGON,YETI"
+  - "multicustomarmorcrystal:DRAGON,YETI"
   - "multimask:ZEUS,REINDEER,ANONYMOUS"
   - "petleash"
   - "inventorypetegghatchingkit:SKRRT"

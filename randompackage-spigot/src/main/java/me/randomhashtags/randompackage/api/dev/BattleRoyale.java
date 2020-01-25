@@ -97,7 +97,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
 
 
     public final void viewCurrent(CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.battleroyale.view", true)) {
+        if(hasPermission(sender, "RandomPackage.battleroyale", true)) {
         }
     }
     public final void viewHelp(CommandSender sender) {
@@ -161,8 +161,12 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             hasStarted = true;
         }
     }
-    public final String getRuntime() { return getRemainingTime(System.currentTimeMillis()-startTime); }
-    public final String getNextGame() { return getRemainingTime(nextStartTime-System.currentTimeMillis()); }
+    public final String getRuntime() {
+        return getRemainingTime(System.currentTimeMillis()-startTime);
+    }
+    public final String getNextGame() {
+        return getRemainingTime(nextStartTime-System.currentTimeMillis());
+    }
     public final void end(BattleRoyaleTeam winningTeam) {
         if(active) {
             active = false;
@@ -205,11 +209,13 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             teams.clear();
         }
     }
-    public Collection<BattleRoyaleTeam> getTeams() { return teams.values(); }
+    public Collection<BattleRoyaleTeam> getTeams() {
+        return teams.values();
+    }
 
     public final void restoreTeam(@NotNull BattleRoyaleTeam team) {
-        final HashMap<Player, Location> locs = team.getPreLocations();
-        final HashMap<Player, ItemStack[]> invs = team.getPreInventories();
+        final HashMap<Player, Location> locs = team.getPreviousLocations();
+        final HashMap<Player, ItemStack[]> invs = team.getPreviousInventories();
         for(Player player : team.getPlayers().keySet()) {
             if(player.isOnline()) {
                 final PlayerInventory inv = player.getInventory();
@@ -254,7 +260,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                     if(hasStarted) {
                         if(players.get(player)) {
                             players.put(player, false);
-                            player.teleport(team.getPreLocations().get(player));
+                            player.teleport(team.getPreviousLocations().get(player));
                         }
                     } else {
                         team.quit(player);

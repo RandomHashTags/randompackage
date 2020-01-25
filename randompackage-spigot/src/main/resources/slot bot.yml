@@ -166,7 +166,7 @@ gui:
 #
 rewards:
   - "slotbottickets"
-  - "randomemotelootbox"
+  #- "randomemotelootbox"
   #- "itemskin:FLAMING_HALO"
   - "lootbox:PET_COLLECTOR"
   - "lootbox:DETENTION"

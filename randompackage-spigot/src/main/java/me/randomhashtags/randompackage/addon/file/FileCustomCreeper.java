@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
@@ -24,14 +25,18 @@ public class FileCustomCreeper extends RPAddon implements CustomExplosion {
     }
     public String getIdentifier() { return "CREEPER_" + getYamlName(); }
 
-    public String getCreeperName() { return colorize(yml.getString("creeper name")); }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public String getCreeperName() {
+        return getString(yml, "creeper name");
+    }
+    public List<String> getAttributes() {
+        return getStringList(yml, "attributes");
+    }
     public ItemStack getItem() {
         if(item == null) item = api.d(yml, "item");
         return getClone(item);
     }
 
-    public void spawn(Location l) {
+    public void spawn(@NotNull Location l) {
         final Creeper c = l.getWorld().spawn(l, Creeper.class);
         c.setCustomName(getCreeperName());
         living.put(c.getUniqueId(), this);

@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.util;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.CustomArmor;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
@@ -30,7 +31,7 @@ public interface RPValues extends UVersionable {
         return (LinkedHashMap<String, ArmorSet>) getAllObj(Feature.ARMOR_SET);
     }
     default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() {
-        return (LinkedHashMap<String, BlackScroll>) getAllObj(Feature.BLACK_SCROLL);
+        return (LinkedHashMap<String, BlackScroll>) getAllObj(Feature.SCROLL_BLACK);
     }
     default LinkedHashMap<String, Booster> getAllBoosters() {
         return (LinkedHashMap<String, Booster>) getAllObj(Feature.BOOSTER);
@@ -90,7 +91,7 @@ public interface RPValues extends UVersionable {
         return (LinkedHashMap<String, PlayerQuest>) getAllObj(Feature.PLAYER_QUEST);
     }
     default LinkedHashMap<String, RandomizationScroll> getAllRandomizationScrolls() {
-        return (LinkedHashMap<String, RandomizationScroll>) getAllObj(Feature.RANDOMIZATION_SCROLL);
+        return (LinkedHashMap<String, RandomizationScroll>) getAllObj(Feature.SCROLL_RANDOMIZATION);
     }
     default LinkedHashMap<String, RarityFireball> getAllRarityFireballs() {
         return (LinkedHashMap<String, RarityFireball>) getAllObj(Feature.RARITY_FIREBALL);
@@ -111,10 +112,10 @@ public interface RPValues extends UVersionable {
         return (LinkedHashMap<String, Title>) getAllObj(Feature.TITLE);
     }
     default LinkedHashMap<String, TransmogScroll> getAllTransmogScrolls() {
-        return (LinkedHashMap<String, TransmogScroll>) getAllObj(Feature.TRANSMOG_SCROLL);
+        return (LinkedHashMap<String, TransmogScroll>) getAllObj(Feature.SCROLL_TRANSMOG);
     }
     default LinkedHashMap<String, WhiteScroll> getAllWhiteScrolls() {
-        return (LinkedHashMap<String, WhiteScroll>) getAllObj(Feature.WHITE_SCROLL);
+        return (LinkedHashMap<String, WhiteScroll>) getAllObj(Feature.SCROLL_WHITE);
     }
 
 
@@ -577,6 +578,51 @@ public interface RPValues extends UVersionable {
                     return t;
                 }
             }
+        }
+        return null;
+    }
+    default TransmogScroll valueOfTransmogScrollApplied(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
+            final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
+            if(enchants.isEnabled()) {
+                final String size = Integer.toString(enchants.getEnchantsOnItem(is).size()), d = is.getItemMeta().getDisplayName();
+                for(TransmogScroll t : getAllTransmogScrolls().values()) {
+                    if(d.endsWith(t.getApplied().replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size))) {
+                        return t;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    default WhiteScroll valueOfWhiteScroll(@NotNull ItemStack is) {
+        if(is != null) {
+            for(WhiteScroll w : getAllWhiteScrolls().values()) {
+                if(is.isSimilar(w.getItem())) {
+                    return w;
+                }
+            }
+        }
+        return null;
+    }
+    default WhiteScroll valueOfWhiteScroll(@NotNull String apply) {
+        if(apply != null && !apply.isEmpty()) {
+            for(WhiteScroll w : getAllWhiteScrolls().values()) {
+                if(w.getApplied().equals(apply)) {
+                    return w;
+                }
+            }
+        }
+        return null;
+    }
+    default List<WhiteScroll> valueOfWhiteScrollApplied(ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<WhiteScroll> l = new ArrayList<>();
+            for(String s : is.getItemMeta().getLore()) {
+                final WhiteScroll w = valueOfWhiteScroll(s);
+                if(w != null) l.add(w);
+            }
+            return l;
         }
         return null;
     }

@@ -3,10 +3,12 @@ package me.randomhashtags.randompackage.util;
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
+import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
-import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
+import me.randomhashtags.randompackage.api.addon.Scrolls;
+import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -255,10 +257,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 }
                 item.setItemMeta(itemMeta);
                 if(name != null && name.contains("{ENCHANT_SIZE}")) {
-                    final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                    if(t.isEnabled()) {
-                        t.applyTransmogScroll(item, getTransmogScroll("REGULAR"));
-                    }
+                    applyTransmogScroll(item, getTransmogScroll("REGULAR"));
                 }
             }
         }
@@ -325,14 +324,18 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 }
                 final String name = meta.hasDisplayName() ? meta.getDisplayName() : null;
                 if(name != null && name.contains("{ENCHANT_SIZE}")) {
-                    final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                    if(t.isEnabled()) {
-                        t.applyTransmogScroll(is, getTransmogScroll("REGULAR"));
-                    }
+                    applyTransmogScroll(is, getTransmogScroll("REGULAR"));
                 }
             }
         }
         lore.clear();
         return is;
+    }
+
+    private void applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
+        final Scrolls scrolls = Scrolls.getScrolls();
+        if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
+            scrolls.applyTransmogScroll(is, scroll);
+        }
     }
 }

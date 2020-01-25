@@ -68,7 +68,7 @@ public final class CommandManager extends Reflect {
         }
         loadCustom(f, cmds, enabled);
     }
-    public void loadCustom(RPFeature f, HashMap<String, String> baseCmds, boolean isEnabled) {
+    public void loadCustom(RPFeature feature, HashMap<String, String> baseCmds, boolean isEnabled) {
         if(isEnabled) {
             try {
                 final List<Boolean> enabledList = new ArrayList<>();
@@ -84,7 +84,7 @@ public final class CommandManager extends Reflect {
                             knownCommands.put("randompackage:" + base, cmd);
                         }
                         final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
-                        baseCmd.setExecutor((CommandExecutor) f);
+                        baseCmd.setExecutor((CommandExecutor) feature);
                         if(!actualCmds.containsKey(base)) {
                             actualCmds.put(base, baseCmd);
                         }
@@ -114,11 +114,11 @@ public final class CommandManager extends Reflect {
                     enabledList.add(true);
                 }
                 if(enabledList.contains(true)) {
-                    f.enable();
-                    features.put(f.getIdentifier(), f);
+                    feature.enable();
+                    features.put(feature.getIdentifier(), feature);
                 }
             } catch (Exception e) {
-                sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + f.getIdentifier());
+                sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + feature.getIdentifier());
                 e.printStackTrace();
             }
         }

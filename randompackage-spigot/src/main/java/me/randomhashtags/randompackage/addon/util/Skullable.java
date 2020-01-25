@@ -20,11 +20,15 @@ public interface Skullable {
         if(cached.containsKey(skinURL)) return cached.get(skinURL);
         final ItemStack head = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
         final SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        if(headMeta != null) {
+            headMeta.setDisplayName(name);
+            headMeta.setLore(lore);
+            head.setItemMeta(headMeta);
+        }
+
         if(skinURL.isEmpty()) {
             return head;
         } else if(skinURL.startsWith("http")) {
-            headMeta.setDisplayName(name);
-            headMeta.setLore(lore);
             final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
             final byte[] encoded;
             if(isLegacy) {
@@ -42,7 +46,6 @@ public interface Skullable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            head.setItemMeta(headMeta);
         } else {
             headMeta.setOwner(skinURL);
             head.setItemMeta(headMeta);

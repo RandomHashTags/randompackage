@@ -76,7 +76,9 @@ public class UVersion extends YamlUpdater implements Versionable, UVersionable, 
             for(int i = 0; i < l; i++) {
                 e = e + spaces[i].substring(0, 1).toUpperCase() + spaces[i].substring(1).toLowerCase() + (i != l-1 ? (realitem ? "_" : " ") : "");
             }
-        } else e = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        } else {
+            e = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        }
         return e;
     }
     public final long getTime(String fromString) {

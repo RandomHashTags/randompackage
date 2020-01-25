@@ -8,7 +8,7 @@ settings:
     2: 1000
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/7a59bb0a7a32965b3d90d8eafa899d1835f424509eadd4e6b709ada50b9cf"
   item: "player_head_item"
   name: "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]"
   lore:

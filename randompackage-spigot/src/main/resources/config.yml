@@ -111,14 +111,16 @@ custom bosses:
 custom enchants:
   enabled: true
   #
-  black scrolls: true
   enchantment orbs: true
   fireballs: true
-  randomization scrolls: true
   rarity gems: true
   soul trackers: true
+  #
+  black scrolls: true
+  randomization scrolls: true
   transmog scrolls: true
   white scrolls: true
+  holy scrolls: true
 #
 custom creepers:
   enabled: true
@@ -209,7 +211,7 @@ home:
     - homes
 #
 inventory pets:
-  enabled: false
+  enabled: true
 #
 item filter:
   enabled: true

@@ -8,7 +8,7 @@ settings:
     2: 1500
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/98901f71434d53920747694f682f5e53b8f74483f269c384c6936b7d86582"
   item: "player_head_item"
   name: "&e&lAlchemist Pet&r &7[LVL {LEVEL}]"
   lore:

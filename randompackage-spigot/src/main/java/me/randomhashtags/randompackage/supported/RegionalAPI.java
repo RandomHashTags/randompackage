@@ -55,8 +55,10 @@ public class RegionalAPI extends UVersion {
             factions = FactionsUUID.getFactionsUUID();
             factions.enable();
             hooked("FactionsUUID");
-            FactionUpgrades.getFactionUpgrades().enable();
-            new AddFactionPower().load();
+            if(RP_CONFIG.getBoolean("faction upgrades.enabled")) {
+                FactionUpgrades.getFactionUpgrades().enable();
+                new AddFactionPower().load();
+            }
         }
     }
     public void trySupportingASkyblock() {

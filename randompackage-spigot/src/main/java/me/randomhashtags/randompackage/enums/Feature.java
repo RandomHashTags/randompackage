@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.enums;
 public enum Feature {
     ARMOR_SET,
 
-    BLACK_SCROLL,
     BOOSTER,
 
     CONQUEST_CHEST,
@@ -50,7 +49,6 @@ public enum Feature {
 
     PLAYER_QUEST,
 
-    RANDOMIZATION_SCROLL,
     RARITY_FIREBALL,
     RARITY_GEM,
 
@@ -61,8 +59,12 @@ public enum Feature {
 
     TITAN_ATTRIBUTE,
     TITLE,
-    TRANSMOG_SCROLL,
+
     TRINKET,
 
-    WHITE_SCROLL,
+    SCROLL_BLACK,
+    SCROLL_HOLY,
+    SCROLL_RANDOMIZATION,
+    SCROLL_TRANSMOG,
+    SCROLL_WHITE,
 }

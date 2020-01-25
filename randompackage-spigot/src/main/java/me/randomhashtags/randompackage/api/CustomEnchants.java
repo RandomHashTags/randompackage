@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.file.FileCustomEnchant;
 import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
-import me.randomhashtags.randompackage.api.addon.TransmogScrolls;
+import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.attribute.SpawnEntity;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
@@ -687,11 +687,11 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 if(apply) {
                     if(!item.getType().equals(Material.AIR)) {
                         if(itemMeta.hasDisplayName()) {
-                            final TransmogScrolls t = TransmogScrolls.getTransmogScrolls();
-                            if(t.isEnabled()) {
-                                final TransmogScroll ts = t.getApplied(item);
-                                if(ts != null) {
-                                    t.update(item, enchantsize, enchantsize+1);
+                            final Scrolls scrolls = Scrolls.getScrolls();
+                            if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
+                                final TransmogScroll transmog = scrolls.valueOfTransmogScrollApplied(item);
+                                if(transmog != null) {
+                                    scrolls.updateTransmogScroll(item, enchantsize, enchantsize+1);
                                 }
                             }
                         }

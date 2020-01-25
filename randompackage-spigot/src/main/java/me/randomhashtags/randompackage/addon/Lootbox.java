@@ -30,7 +30,12 @@ public interface Lootbox extends Itemable, Nameable {
     ItemStack getBackground();
 
     default List<String> getRewards(final LootboxRewardType type) {
-        return type.equals(LootboxRewardType.REGULAR) ? getRegularLoot() : type.equals(LootboxRewardType.JACKPOT) ? getJackpotLoot() : getBonusLoot();
+        switch (type) {
+            case REGULAR: return getRegularLoot();
+            case JACKPOT: return getJackpotLoot();
+            case BONUS: return getBonusLoot();
+            default: return new ArrayList<>();
+        }
     }
     default List<ItemStack> getAllRewards(final LootboxRewardType type) {
         final List<ItemStack> items = new ArrayList<>();

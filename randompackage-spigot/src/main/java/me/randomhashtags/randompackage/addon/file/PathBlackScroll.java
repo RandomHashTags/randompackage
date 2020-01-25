@@ -15,24 +15,28 @@ public class PathBlackScroll extends RPAddon implements BlackScroll {
 	private List<EnchantRarity> appliesto;
 	public PathBlackScroll(String path) {
 		this.path = path;
-		final String[] p = getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".percents").split(";");
+		final String[] p = getAddonConfig("scrolls.yml").getString("black scrolls." + path + ".percents").split(";");
 		min = Integer.parseInt(p[0]);
 		max = Integer.parseInt(p[1]);
-		register(Feature.BLACK_SCROLL, this);
+		register(Feature.SCROLL_BLACK, this);
 	}
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = api.d(getAddonConfig("black scrolls.yml"), "black scrolls." + path);
+		if(is == null) is = api.d(getAddonConfig("scrolls.yml"), "black scrolls." + path);
 		return getClone(is);
 	}
 
-	public int getMinPercent() { return min; }
-	public int getMaxPercent() { return max; }
+	public int getMinPercent() {
+		return min;
+	}
+	public int getMaxPercent() {
+		return max;
+	}
 	public List<EnchantRarity> getAppliesToRarities() {
 		if(appliesto == null) {
 			appliesto = new ArrayList<>();
-			for(String s : getAddonConfig("black scrolls.yml").getString("black scrolls." + path + ".applies to").split(";")) {
+			for(String s : getAddonConfig("scrolls.yml").getString("black scrolls." + path + ".applies to").split(";")) {
 				appliesto.add(getCustomEnchantRarity(s));
 			}
 		}

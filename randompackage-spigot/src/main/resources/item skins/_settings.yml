@@ -1,0 +1,32 @@
+# Made by RandomHashTags
+materials:
+  default: HELMET
+  #
+  SWORD: "SWORD"
+  AXE: "AXE"
+  HELMET: "HELMET"
+#
+item:
+  item: "ender_eye"
+  name: "&f&lItem Skin (&r{NAME}&f&l)"
+  lore:
+    - " "
+    - "&7&oAttach this skin to any&r &f&n{MATERIAL}"
+    - "&7&oto override its visual appearance."
+    - " "
+    - "&c&lNOTE:&r &cRequires the X resource pack"
+    - "&cto render custom item skins."
+    - "&7* Download at &nyourserver.com"
+    - " "
+    - "&7Drag n' Drop onto item to attach."
+    - "&7Right-Click item to detach skin."
+    - " "
+  applied lore: "&f&lITEM SKIN:&r {NAME}"
+#
+gui:
+  title: "Item Skins"
+  size: 9
+  background:
+    item: "black_stained_glass_pane"
+    name: " "
+#

@@ -1,0 +1,34 @@
+# Made by RandomHashTags
+settings:
+  enabled: false
+  max level: 10
+  cooldown:
+    all: 3000 # 5 minutes
+  exp to level:
+    4: 2000
+#
+item:
+  texture: "https://textures.minecraft.net/texture/80b4eb4a71e5ec74d7d3c5688dfc6ce65e534cc0d4d17c0ec429f2f6bb5ac"
+  item: "player_head_item"
+  name: "&e&lAbominable Snowman Pet&r &7[LVL {LEVEL}]"
+  lore:
+  - "&7An enormous, monstrous spirit"
+  - "&7well trained in illusionist magic."
+  - " "
+  - "&f&lAbility"
+  - "&7[&4Polymorph&7] target player, transforming"
+  - "&7them inot a harmless, immobile snowman for: &f20s"
+  - "&7Any damage dealt to them will break the spell."
+  - " "
+  - "&f&lCooldown"
+  - " &7{COOLDOWN}"
+  - " "
+  - "&f&lLevel"
+  - " &7{LEVEL}"
+  - " "
+  - "&f&lEXP"
+  - "{EXP}"
+  - " &7({XP}/{COMPLETION})"
+#
+attributes:
+  - ""

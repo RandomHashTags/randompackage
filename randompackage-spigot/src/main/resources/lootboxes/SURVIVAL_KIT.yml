@@ -62,7 +62,7 @@ regular loot:
 #
 jackpot loot:
   - "soultracker:MONSTER"
-  #- "ce:Discombobulate1"
+  - "ce:DISCOMBOBULATE:1"
 #
 bonus loot size: 1
 bonus loot:

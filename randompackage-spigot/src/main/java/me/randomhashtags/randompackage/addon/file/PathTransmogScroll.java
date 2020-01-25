@@ -11,15 +11,15 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
     private ItemStack item;
     public PathTransmogScroll(String path) {
         this.path = path;
-        register(Feature.TRANSMOG_SCROLL, this);
+        register(Feature.SCROLL_TRANSMOG, this);
     }
     public String getIdentifier() { return path; }
 
     public boolean canBeApplied(ItemStack is) {
         if(is != null) {
-            final String m = is.getType().name();
+            final String material = is.getType().name();
             for(String s : getAppliesTo()) {
-                if(m.endsWith(s.toUpperCase())) {
+                if(material.endsWith(s.toUpperCase())) {
                     return true;
                 }
             }
@@ -27,10 +27,16 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
         return false;
     }
     public ItemStack getItem() {
-        if(item == null) item = api.d(getAddonConfig("transmog scrolls.yml"), "transmog scrolls." + path);
+        if(item == null) item = api.d(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }
-    public String getApplied() { return colorize(getAddonConfig("transmog scrolls.yml").getString("transmog scrolls." + path + ".apply")); }
-    public List<String> getRarityOrganization() { return getAddonConfig("transmog scrolls.yml").getStringList("transmog scrolls." + path + ".rarity organization"); }
-    public List<String> getAppliesTo() { return getAddonConfig("transmog scrolls.yml").getStringList("transmog scrolls." + path + ".applies to"); }
+    public String getApplied() {
+        return getString(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".apply");
+    }
+    public List<String> getRarityOrganization() {
+        return getStringList(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".rarity organization");
+    }
+    public List<String> getAppliesTo() {
+        return getStringList(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".applies to");
+    }
 }

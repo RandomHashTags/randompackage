@@ -1,0 +1,188 @@
+# Made by RandomHashTags
+black scrolls:
+  REGULAR:
+    applies to: "SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "ink_sack"
+    name: "&f&lBlack Scroll"
+    lore:
+      - "&7Removes a random enchantment"
+      - "&7from an item and converts"
+      - "&7it into a &f{PERCENT}% success book."
+      - "&fPlace scroll on item to extract."
+    percents: "30;100"
+  HEROIC:
+    applies to: "HEROIC;SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "ink_sack"
+    name: "&d&lHeroic Black Scroll"
+    lore:
+      - "&7Removes a random enchantment"
+      - "&7from an item and converts"
+      - "&7it into a &d{MIN}%-{MAX}% &7success book."
+      - "&d&l(!)&r &dChance to extract Heroic Enchantments"
+    percents: "10;45"
+#
+transmog scrolls:
+  REGULAR:
+    item: "paper"
+    name: "&e&lTransmog Scroll"
+    lore:
+      - "&7Organizes enchants by &e&nrarity&r &7on item"
+      - "&7and adds the &blore &acount &7to name"
+      - " "
+      - "&e&oPlace scroll on item to apply"
+    apply: "&9&l[&b&n{LORE_COUNT}&9&l]"
+    rarity organization:
+      - MASTERY
+      - HEROIC
+      - SOUL
+      - LEGENDARY
+      - ULTIMATE
+      - ELITE
+      - UNIQUE
+      - SIMPLE
+    applies to:
+      - SWORD
+      - AXE
+      - SHOVEL
+      - SPADE
+      - BOW
+      - FISHING_ROD
+      - HELMET
+      - CHESTPLATE
+      - LEGGINGS
+      - BOOTS
+  GODLY:
+    item: "paper"
+    name: "&6&lGodly Transmog Scroll"
+    lore:
+      - "&7Apply to equipment to &6&ncustomize"
+      - "&7the order of &dcustom &benchantments"
+      - "&7displayed on the item."
+      - " "
+      - "&6&oPlace scroll on item to apply"
+#
+white scrolls:
+  REGULAR:
+    item: "empty_map"
+    name: "&eWhite Scroll"
+    lore:
+      - "&fPrevents an item from being destroyed"
+      - "&fdue to a failed Enchantment Book."
+      - "&ePlace scroll on item to apply."
+    apply: "&f&lPROTECTED"
+    applies to:
+      - SWORD
+      - AXE
+      - SHOVEL
+      - SPADE
+      - BOW
+      - FISHING_ROD
+      - HELMET
+      - CHESTPLATE
+      - LEGGINGS
+      - BOOTS
+#
+holy scrolls:
+  WHITE:
+    required scroll: "whitescroll:REGULAR"
+    removes required after application: true
+    # When a player dies with this on an item, this is the chance that the item isn't lost
+    chance of not losing: 100
+    item: "paper"
+    name: "&6&lHoly White Scroll"
+    lore:
+      - "&eA legendary /dungeon reward that"
+      - "&ecan be applied to armor/weapons,"
+      - "&egives a 100% chance of not losing"
+      - "&ethe blessed item on death."
+      - " "
+      - "&6&nREQ:&r &eWhite Scroll"
+    apply: "&f&lPROTECTED (&r&6&l*HOLY*&r&f&l)"
+    applies to:
+      - SWORD
+      - AXE
+      - SHOVEL
+      - SPADE
+      - BOW
+      - FISHING_ROD
+      - HELMET
+      - CHESTPLATE
+      - LEGGINGS
+      - BOOTS
+  WATER:
+    required scroll: "holyscroll:WHITE"
+#
+randomization scrolls:
+  sounds:
+  particles:
+  #
+  GODLY:
+    applies to: "HEROIC;SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE"
+    item: "paper"
+    name: "&c&lGodly Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to &cANY &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  SOUL:
+    applies to: "SOUL"
+    item: "paper"
+    name: "&c&lSoul Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &cSoul &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  LEGENDARY:
+    applies to: "LEGENDARY"
+    item: "paper"
+    name: "&6&lLegendary Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &6Legendary &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  ULTIMATE:
+    applies to: "ULTIMATE"
+    item: "paper"
+    name: "&e&lUltimate Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &eUltimate &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  ELITE:
+    applies to: "ELITE"
+    item: "paper"
+    name: "&b&lElite Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &bElite &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  UNIQUE:
+    applies to: "UNIQUE"
+    item: "paper"
+    name: "&a&lUnique Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &aUnique &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."
+  SIMPLE:
+    applies to: "SIMPLE"
+    item: "paper"
+    name: "&f&lSimple Randomization Scroll"
+    lore:
+      - " "
+      - "&7Apply to a(n) &fSimple &7enchantment book"
+      - "&7to reroll the success and destroy rates."
+      - " "
+      - "&7Drag n' Drop onto &nenchantment book&r &7to apply."

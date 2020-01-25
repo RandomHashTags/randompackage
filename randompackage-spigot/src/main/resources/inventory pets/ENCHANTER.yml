@@ -9,7 +9,7 @@ settings:
     11: 11250
 #
 item:
-  texture: ""
+  texture: "https://textures.minecraft.net/texture/ac92e5111ea7d7eb3f055833e1f35d651c0da55643c9383e0bce6c23696d58b9"
   item: "player_head_item"
   name: "&e&lEnchanter Pet&r &7[LVL {LEVEL}]"
   lore:

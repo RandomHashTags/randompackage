@@ -10,7 +10,9 @@ import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -123,6 +125,21 @@ public interface UVersionable extends Versionable {
     }
     default ItemStack getClone(ItemStack is, ItemStack def) {
         return is != null ? is.clone() : def;
+    }
+
+    default File[] getFilesIn(@NotNull String folder) {
+        final File f = new File(folder);
+        return f.exists() ? f.listFiles() : new File[]{};
+    }
+    default HashSet<String> getConfigurationSectionKeys(YamlConfiguration yml, String key, boolean includeKeys, String...excluding) {
+        final ConfigurationSection section = yml.getConfigurationSection(key);
+        if(section != null) {
+            final HashSet<String> set = new HashSet<>(section.getKeys(includeKeys));
+            set.removeAll(Arrays.asList(excluding));
+            return set;
+        } else {
+            return new HashSet<>();
+        }
     }
 
     default int getTotalExperience(Player player) {

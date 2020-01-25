@@ -25,8 +25,12 @@ public interface RPStorage extends RPValues {
         CACHED_YAMLS.put(folder+fileName, c);
         return c;
     }
-    default YamlConfiguration getAddonConfig(String fileName) { return getYaml("addons", fileName); }
-    default YamlConfiguration getRPConfig(String folder, String fileName) { return getYaml(folder, fileName); }
+    default YamlConfiguration getAddonConfig(String fileName) {
+        return getYaml("addons", fileName);
+    }
+    default YamlConfiguration getRPConfig(String folder, String fileName) {
+        return getYaml(folder, fileName);
+    }
 
     default void register(Feature f, Identifiable obj) {
         if(!FEATURES.containsKey(f)) {
@@ -56,7 +60,7 @@ public interface RPStorage extends RPValues {
         return o != null ? (ArmorSet) o : null;
     }
     default BlackScroll getBlackScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.BLACK_SCROLL, identifier);
+        final Identifiable o = get(Feature.SCROLL_BLACK, identifier);
         return o != null ? (BlackScroll) o : null;
     }
     default Booster getBooster(@NotNull String identifier) {
@@ -176,7 +180,7 @@ public interface RPStorage extends RPValues {
         return o != null ? (PlayerQuest) o : null;
     }
     default RandomizationScroll getRandomizationScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.RANDOMIZATION_SCROLL, identifier);
+        final Identifiable o = get(Feature.SCROLL_RANDOMIZATION, identifier);
         return o != null ? (RandomizationScroll) o : null;
     }
     default RarityFireball getRarityFireball(@NotNull String identifier) {
@@ -208,7 +212,7 @@ public interface RPStorage extends RPValues {
         return o != null ? (Title) o : null;
     }
     default TransmogScroll getTransmogScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.TRANSMOG_SCROLL, identifier);
+        final Identifiable o = get(Feature.SCROLL_TRANSMOG, identifier);
         return o != null ? (TransmogScroll) o : null;
     }
     default Trinket getTrinket(@NotNull String identifier) {
@@ -216,7 +220,7 @@ public interface RPStorage extends RPValues {
         return o != null ? (Trinket) o : null;
     }
     default WhiteScroll getWhiteScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.WHITE_SCROLL, identifier);
+        final Identifiable o = get(Feature.SCROLL_WHITE, identifier);
         return o != null ? (WhiteScroll) o : null;
     }
 }

@@ -16,9 +16,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     private HashMap<Integer, Integer> cooldowns, requiredxp;
     public FileInventoryPet(File f) {
         load(f);
-        if(isEnabled()) {
-            register(Feature.INVENTORY_PET, this);
-        }
+        register(Feature.INVENTORY_PET, this);
     }
     public String getIdentifier() { return getYamlName(); }
 
@@ -77,6 +75,10 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
         if(egg == null) egg = api.d(yml, "egg");
         return getClone(egg);
     }
-    public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() { return null; }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() {
+        return null;
+    }
+    public List<String> getAttributes() {
+        return getStringList(yml, "attributes");
+    }
 }

@@ -23,8 +23,8 @@ public class BattleRoyaleTeam {
     }
     public int getID() { return id; }
     public LinkedHashMap<Player, Boolean> getPlayers() { return players; }
-    public HashMap<Player, Location> getPreLocations() { return locations; }
-    public HashMap<Player, ItemStack[]> getPreInventories() { return inventory; }
+    public HashMap<Player, Location> getPreviousLocations() { return locations; }
+    public HashMap<Player, ItemStack[]> getPreviousInventories() { return inventory; }
     public void join(Player player) {
         players.put(player, true);
         locations.put(player, player.getLocation());
