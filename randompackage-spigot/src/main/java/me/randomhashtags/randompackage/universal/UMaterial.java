@@ -1239,7 +1239,7 @@ public enum UMaterial implements Versionable {
     STRIPPED_SPRUCE_LOG(null, null, null, null, null, "STRIPPED_SPRUCE_LOG"),
     STRIPPED_SPRUCE_WOOD(null, null, null, null, null, "STRIPPED_SPRUCE_WOOD"),
     STRUCTURE_BLOCK(null, "STRUCTURE_BLOCK"),
-    STRUCTURE_VOID(null, null, null, null, null, null, "STRUCTURE_VOID"),
+    STRUCTURE_VOID(null, null, "STRUCTURE_VOID"),
     SUGAR("SUGAR"),
     SUGAR_CANE("SUGAR_CANE"),
     SUNFLOWER("DOUBLE_PLANT", null, null, null, null, "SUNFLOWER"),

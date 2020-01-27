@@ -218,6 +218,9 @@ item filter:
   cmds:
     - filter
 #
+item skins:
+  enabled: true
+#
 jackpot:
   enabled: true
   cmds:

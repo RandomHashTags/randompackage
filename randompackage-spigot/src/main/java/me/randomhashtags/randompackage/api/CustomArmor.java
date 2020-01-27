@@ -42,7 +42,8 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	}
 	
 	public YamlConfiguration config;
-	public ItemStack equipmentLootbox, crystal, heroicUpgrade;
+	public ItemStack equipmentLootbox, crystal, heroicUpgrade, omniCrystal;
+	public List<String> omniAppliedLore;
 	public int percentSlot;
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
@@ -58,6 +59,8 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		crystal = d(config, "items.crystal");
 		heroicUpgrade = d(config, "items.heroic upgrade");
 		crystalAddedLore = colorize(config.getString("items.crystal.applied lore"));
+		omniCrystal = d(config, "items.omni crystal");
+		omniAppliedLore = colorizeListString(config.getStringList("items.omni crystal.applied lore"));
 
 		GIVEDP_ITEM.items.put("equipmentlootbox", equipmentLootbox);
 
@@ -81,6 +84,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public void unload() {
 		unregister(Feature.ARMOR_SET);
 	}
+
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
 		final String p = Integer.toString(percent), n = set.getName();
 		item = null;
@@ -102,134 +106,30 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 		return item;
 	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void armorEquipEvent(ArmorEquipEvent event) {
-		final ItemStack i = event.getItem();
-		final Player player = event.getPlayer();
-		final ArmorSet crystal = getArmorCrystalOnItem(i);
-		if(crystal != null) {
-			trigger(event, crystal.getCrystalAttributes());
-		}
-		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-			final ArmorSet W = valueOfArmorSet(player);
-			if(W != null) {
-				sendStringListMessage(player, W.getActivateMessage(), null);
-				final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, W);
-				PLUGIN_MANAGER.callEvent(e);
-				trigger(e, W.getArmorAttributes());
-			}
-		}, 0);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void armorUnequipEvent(ArmorUnequipEvent event) {
-		final Player player = event.getPlayer();
+	private void tryTriggeringCustomArmor(Player player, Event event) {
 		tryCrystal(player, event);
-		final ArmorSet W = valueOfArmorSet(player);
-		if(W != null) {
-			final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, W);
-			PLUGIN_MANAGER.callEvent(e);
-			trigger(e, W.getArmorAttributes());
+		final ArmorSet set = valueOfArmorSet(player, true);
+		if(set != null) {
+			trigger(event, set.getArmorAttributes());
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void armorPieceBreakEvent(ArmorPieceBreakEvent event) {
-		final Player player = event.getPlayer();
-		final ArmorSet crystal = getArmorCrystalOnItem(event.getItem());
-		if(crystal != null) {
-			trigger(event, crystal.getCrystalAttributes());
+	private List<ItemStack> getArmor(Player player) {
+		final List<ItemStack> i = new ArrayList<>();
+		for(ItemStack is : player.getInventory().getArmorContents()) {
+			if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+				i.add(is);
+			}
 		}
-		final ArmorSet W = valueOfArmorSet(player);
-		if(W != null) {
-			trigger(event, W.getArmorAttributes());
-		}
+		return i;
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void pvAnyEvent(PvAnyEvent event) {
-		final Player d = event.getDamager();
-		tryCrystal(d, event);
-		final ArmorSet a = valueOfArmorSet(d);
-		if(a != null) {
-			trigger(event, a.getArmorAttributes());
-		}
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void isDamagedEvent(isDamagedEvent event) {
-		final Player player = event.getEntity();
-		tryCrystal(player, event);
-		final ArmorSet a = valueOfArmorSet(player);
-		if(a != null) {
-			trigger(event, a.getArmorAttributes());
-		}
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void entityDamageEvent(EntityDamageEvent event) {
-		final Entity e = event.getEntity();
-		if(e instanceof Player) {
-			final Player player = (Player) e;
-			tryCrystal(player, event);
-			final ArmorSet a = valueOfArmorSet(player);
-			if(a != null) {
-				trigger(event, a.getArmorAttributes());
+	private void tryCrystal(Player player, Event event) {
+		for(ItemStack is : getArmor(player)) {
+			final ArmorSet crystal = getArmorCrystalOnItem(is);
+			if(crystal != null) {
+				trigger(event, crystal.getCrystalAttributes());
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
-		final HumanEntity e = event.getEntity();
-		if(e instanceof Player) {
-			final Player player = (Player) e;
-			tryCrystal(player, event);
-			final ArmorSet a = valueOfArmorSet(player);
-			if(a != null) {
-				trigger(event, a.getArmorAttributes());
-			}
-		}
-	}
-	@EventHandler
-	private void playerInteractEvent(PlayerInteractEvent event) {
-		final ItemStack i = event.getItem();
-		if(i != null) {
-			final Player player = event.getPlayer();
-			if(i.isSimilar(equipmentLootbox)) {
-				final ItemStack is = getRandomEquipmentLootboxLoot();
-				final EquipmentLootboxOpenEvent e = new EquipmentLootboxOpenEvent(player, is);
-				PLUGIN_MANAGER.callEvent(e);
-				if(!e.isCancelled()) {
-					removeItem(player, i, 1);
-					giveItem(player, is);
-
-					final String p = player.getName(), it = is.getItemMeta().getDisplayName();
-					for(String s : getStringList(config, "messages.receive loot from Equipment Lootbox")) {
-						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", p).replace("{ITEM}", it)));
-					}
-				}
-			} else if(valueOfArmorCrystal(i) != null) {
-			} else return;
-			event.setCancelled(true);
-			player.updateInventory();
-		}
-
-	}
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void inventoryClickEvent(InventoryClickEvent event) {
-		final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
-		final Player player = (Player) event.getWhoClicked();
-		final ArmorSet crystal = valueOfArmorCrystal(curs);
-		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(player, crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
-			event.setCancelled(true);
-			player.updateInventory();
-			final int a = curs.getAmount();
-			if(a == 1) item = new ItemStack(Material.AIR);
-			else {
-				curs.setAmount(a-1);
-				item = curs;
-			}
-			event.setCursor(item);
-			player.updateInventory();
-		}
-	}
-
 	public byte tryApplyingCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
 		final String mat = is != null ? is.getType().name() : null;
 		final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
@@ -257,11 +157,12 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public byte tryApplyingUpgrade(Player player, ArmorSet type, int percent, ItemStack is) {
 		return 0;
 	}
-
 	public ItemStack getRandomEquipmentLootboxLoot() {
 		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
 		String l = rewards.get(RANDOM.nextInt(rewards.size()));
-		if(l.contains("||")) l = l.split("\\|\\|")[RANDOM.nextInt(l.split("\\|\\|").length)];
+		if(l.contains("||")) {
+			l = l.split("\\|\\|")[RANDOM.nextInt(l.split("\\|\\|").length)];
+		}
 		return GIVEDP_ITEM.valueOf(l);
 	}
 
@@ -280,10 +181,10 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		return item;
 	}
 	public boolean isHeroic(@Nullable ItemStack is) {
-		return Boolean.parseBoolean(getRPItemStackValue(is, "RPCustomArmorIsHeroic"));
+		return getRPItemStackValue(is, "RPCustomArmorIsHeroic") != null;
 	}
 	public void setHeroicVariant(@NotNull ItemStack is) {
-		if(getRPItemStackValue(is, "RPCustomArmorIsHeroic") == null) {
+		if(!isHeroic(is)) {
 			final ArmorSet set = valueOfArmorSet(is);
 			if(set != null) {
 				setRPItemStackValues(is, new HashMap<String, String>(){{ put("RPCustomArmorIsHeroic", "true"); }});
@@ -291,21 +192,109 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 	}
 
-	private List<ItemStack> getItems(Player player) {
-		final List<ItemStack> i = new ArrayList<>();
-		for(ItemStack is : player.getInventory().getArmorContents()) {
-			if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				i.add(is);
-			}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void armorEquipEvent(ArmorEquipEvent event) {
+		final ItemStack i = event.getItem();
+		final Player player = event.getPlayer();
+		final ArmorSet crystal = getArmorCrystalOnItem(i);
+		if(crystal != null) {
+			trigger(event, crystal.getCrystalAttributes());
 		}
-		return i;
-	}
-	private void tryCrystal(Player player, Event event) {
-		for(ItemStack is : getItems(player)) {
-			final ArmorSet crystal = getArmorCrystalOnItem(is);
-			if(crystal != null) {
-				trigger(event, crystal.getCrystalAttributes());
+		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+			final ArmorSet set = valueOfArmorSet(player, true);
+			if(set != null) {
+				sendStringListMessage(player, set.getActivateMessage(), null);
+				final ArmorSetEquipEvent e = new ArmorSetEquipEvent(player, set);
+				PLUGIN_MANAGER.callEvent(e);
+				trigger(e, set.getArmorAttributes());
 			}
+		}, 0);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void armorUnequipEvent(ArmorUnequipEvent event) {
+		final Player player = event.getPlayer();
+		tryCrystal(player, event);
+		final ArmorSet set = valueOfArmorSet(player, true);
+		if(set != null) {
+			final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, set);
+			PLUGIN_MANAGER.callEvent(e);
+			trigger(e, set.getArmorAttributes());
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void armorPieceBreakEvent(ArmorPieceBreakEvent event) {
+		final Player player = event.getPlayer();
+		final ArmorSet crystal = getArmorCrystalOnItem(event.getItem());
+		if(crystal != null) {
+			trigger(event, crystal.getCrystalAttributes());
+		}
+		final ArmorSet set = valueOfArmorSet(player, true);
+		if(set != null) {
+			trigger(event, set.getArmorAttributes());
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void pvAnyEvent(PvAnyEvent event) {
+		tryTriggeringCustomArmor(event.getDamager(), event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void isDamagedEvent(isDamagedEvent event) {
+		tryTriggeringCustomArmor(event.getEntity(), event);
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void entityDamageEvent(EntityDamageEvent event) {
+		final Entity entity = event.getEntity();
+		if(entity instanceof Player) {
+			tryTriggeringCustomArmor((Player) entity, event);
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
+		final HumanEntity entity = event.getEntity();
+		if(entity instanceof Player) {
+			tryTriggeringCustomArmor((Player) entity, event);
+		}
+	}
+	@EventHandler
+	private void playerInteractEvent(PlayerInteractEvent event) {
+		final ItemStack is = event.getItem();
+		if(is != null) {
+			final Player player = event.getPlayer();
+			if(is.isSimilar(equipmentLootbox)) {
+				final ItemStack reward = getRandomEquipmentLootboxLoot();
+				final EquipmentLootboxOpenEvent e = new EquipmentLootboxOpenEvent(player, reward);
+				PLUGIN_MANAGER.callEvent(e);
+				if(!e.isCancelled()) {
+					removeItem(player, is, 1);
+					giveItem(player, reward);
+
+					final String p = player.getName(), it = reward.getItemMeta().getDisplayName();
+					for(String s : getStringList(config, "messages.receive loot from Equipment Lootbox")) {
+						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+					}
+				}
+			} else if(valueOfArmorCrystal(is) != null) {
+			} else return;
+			event.setCancelled(true);
+			player.updateInventory();
+		}
+	}
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	private void inventoryClickEvent(InventoryClickEvent event) {
+		final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
+		final Player player = (Player) event.getWhoClicked();
+		final ArmorSet crystal = valueOfArmorCrystal(curs);
+		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(player, crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
+			event.setCancelled(true);
+			player.updateInventory();
+			final int a = curs.getAmount();
+			if(a == 1) item = new ItemStack(Material.AIR);
+			else {
+				curs.setAmount(a-1);
+				item = curs;
+			}
+			event.setCursor(item);
+			player.updateInventory();
 		}
 	}
 }

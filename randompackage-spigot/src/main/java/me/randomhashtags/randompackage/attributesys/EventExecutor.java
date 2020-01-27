@@ -343,11 +343,11 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     }
 
     public boolean trigger(Event event, List<String> attributes, String...replacements) {
-        final List<String> c = new ArrayList<>();
-        final String[] a = getReplacements(event);
-        c.addAll(Arrays.asList(replacements));
-        c.addAll(Arrays.asList(a));
-        final String[] d = c.toArray(new String[replacements.length+a.length]);
+        final List<String> list = new ArrayList<>();
+        final String[] array = getReplacements(event);
+        list.addAll(Arrays.asList(replacements));
+        list.addAll(Arrays.asList(array));
+        final String[] d = list.toArray(new String[replacements.length+array.length]);
         return trigger(event, getEntities(event), attributes, d);
     }
     public boolean trigger(Event event, HashMap<String, Entity> entities, List<String> attributes, String...replacements) {

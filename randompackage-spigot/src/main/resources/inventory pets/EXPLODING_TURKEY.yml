@@ -2,8 +2,8 @@
 settings:
   enabled: false
   max level: 10
-  cooldown:
-    all: 600 # 1 minute
+  cooldown: # Measured in seconds!
+    all: 60
   exp to level:
     6: 3000
 #

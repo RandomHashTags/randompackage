@@ -70,9 +70,23 @@ items:
     - " {NAME}"
     - "{PERKS}"
     applied lore: "&6&lArmor Crystal (&r{NAME}&r&6&l)"
-#
-# Lightning feature
-### chance=<chance of causing the lightning effect>;{lightning;<radius of strikes>;<how many strikes per 10 ticks>;<how many times lightning strikes>}
+  omni crystal:
+    item: "snowball"
+    name: "&3&lOmni Crystal (&r&7{PERCENT}&3&l)"
+    lore:
+      - "&7Apply to any non-specialty"
+      - "&7weapon or armor piece to"
+      - "&7transform it into an &3&nOmni Item:"
+      - "&7An item that acts as any"
+      - "&7unique /help armorset piece."
+      - " "
+      - "&3EX: &71 Omni item, 3 Phantom items equipped"
+      - "&7would apply the Phantom Set Bonus to player."
+    applied lore:
+      - " "
+      - "&3&lOMNI SET BONUS"
+      - "&3&l*&r &3Acts as ANY Armor Set type/piece."
+      - " "
 #
 armor:
   heroic:

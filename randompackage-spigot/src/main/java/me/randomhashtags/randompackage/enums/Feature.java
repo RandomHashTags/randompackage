@@ -36,6 +36,8 @@ public enum Feature {
 
     INVENTORY_PET,
 
+    ITEM_SKIN,
+
     KING_OF_THE_HILL,
 
     LOOTBAG,

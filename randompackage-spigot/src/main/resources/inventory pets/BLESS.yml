@@ -1,12 +1,20 @@
 # Made by RandomHashTags
 settings:
   enabled: false
-  cooldown:
-    all: 540
+  max level: 10
+  cooldown: # Measured in seconds!
+    1: 540
+    10: 300
   exp to level:
     2: 2000
     3: 3000
     4: 4000
+    5: 5000
+    6: 6000
+    7: 7000
+    8: 8000
+    9: 9000
+    10: 10000
 #
 item:
   texture: "https://textures.minecraft.net/texture/f9a384c572bc1be0774a943935fddc6ae537eca866daddb636dea0bcfc4f"
@@ -30,4 +38,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerRemovePotionEffect=Blindness,Slowness,Wither,Poison,Weakness,Slow_Falling,Mining_Fatigue;PlayerSendMessage=&e&l*** BLESSED ***"

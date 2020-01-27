@@ -1,9 +1,7 @@
 # Made by RandomHashTags
-materials:
-  default: HELMET
-  #
+materials: # <material>: <{MATERIAL}>
   SWORD: "SWORD"
-  AXE: "AXE"
+  _AXE: "AXE"
   HELMET: "HELMET"
 #
 item:
@@ -20,7 +18,6 @@ item:
     - " "
     - "&7Drag n' Drop onto item to attach."
     - "&7Right-Click item to detach skin."
-    - " "
   applied lore: "&f&lITEM SKIN:&r {NAME}"
 #
 gui:

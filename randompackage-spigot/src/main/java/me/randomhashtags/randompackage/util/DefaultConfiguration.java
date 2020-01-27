@@ -264,6 +264,17 @@ public interface DefaultConfiguration extends UVersionable {
                 "XP_BOOSTER",
         });
     }
+    default void generateDefaultItemSkins() {
+        generateAllDefault("item skins", new String[] {
+                "DEATH_KNIGHT_SKULL_BLADE",
+                "FLAMING_HALO",
+                "JOLLY_CANDY_SWORD",
+                "KOALA",
+                "MEAT_CLEAVER_AXE",
+                "REINDEER_ANTLERS",
+                "SANTA_HAT",
+        });
+    }
     default void generateDefaultLootboxes() {
         generateAllDefault("lootboxes", new String[] {
                 "BAKED",

@@ -48,11 +48,10 @@ public interface Skullable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            head.setItemMeta(headMeta);
         } else {
             headMeta.setOwner(skinURL);
-            head.setItemMeta(headMeta);
         }
+        head.setItemMeta(headMeta);
         CACHED_SKULLS.put(skinURL, head);
         return head;
     }

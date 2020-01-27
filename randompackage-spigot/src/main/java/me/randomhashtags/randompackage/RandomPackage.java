@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.dev.ItemSkins;
 import me.randomhashtags.randompackage.dev.LastManStanding;
 import me.randomhashtags.randompackage.dev.Outposts;
 import me.randomhashtags.randompackage.dev.SpawnerStacking;
@@ -126,6 +127,7 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
         cmd.load(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
         cmd.loadCustom(ItemFilter.getItemFilter(), getHash("filter", "item filter"), isTrue("item filter"));
+        cmd.loadCustom(ItemSkins.getItemSkins(), null, isTrue("item skins"));
         cmd.load(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
 
         cmd.loadCustom(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));

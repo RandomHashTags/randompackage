@@ -2,7 +2,7 @@
 settings:
   enabled: false
   max level: 10
-  cooldown:
+  cooldown: # Measured in seconds!
     all: 3600 # 48 hours
   exp to level:
     all: 1000
@@ -19,7 +19,7 @@ item:
   - " "
   - "&f&lAbility"
   - "&7Increases level of lowest /vkit by 1,"
-  - "&7and a 10% chance to double level up."
+  - "&7and a {LEVEL}% chance to double level up."
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

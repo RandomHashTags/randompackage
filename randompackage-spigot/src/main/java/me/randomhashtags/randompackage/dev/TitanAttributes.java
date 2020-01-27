@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
@@ -21,17 +22,21 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
     }
 
     public YamlConfiguration config;
+    private ItemStack extractor;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return true;
     }
 
-    public String getIdentifier() { return "TITAN_ATTRIBUTES"; }
+    public String getIdentifier() {
+        return "TITAN_ATTRIBUTES";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";
         save("titan attributes", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
+        extractor = d(config, "items.extractor");
 
         if(!otherdata.getBoolean("saved default titan attributes")) {
             generateDefaultTitanAttributes();

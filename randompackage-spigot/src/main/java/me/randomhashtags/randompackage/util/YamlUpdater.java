@@ -203,6 +203,7 @@ public class YamlUpdater {
                 "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot"),
                 // 16.5.10
                 "custom enchants.holy scrolls", true,
+                "item skins.enabled", true,
         };
         return putAll(values);
     }
@@ -253,7 +254,10 @@ public class YamlUpdater {
                 "items.crystal.applied lore", "&6&lArmor Crystal (&r{NAME}}&r&6&l)",
                 // 16.5.3
                 "messages.cannot apply.armor set piece", newStringList("&c&l(!)&r &cYou cannot apply an Armor Set Crystal to an existing Armor Set piece!"),
-                "messages.cannot apply.already has crystal", newStringList("&c&l(!)&r &cYou cannot apply multiple Armor Set crystals to a single piece of gear!")
+                "messages.cannot apply.already has crystal", newStringList("&c&l(!)&r &cYou cannot apply multiple Armor Set crystals to a single piece of gear!"),
+                // 16.5.10
+                newItemStack("items.omni crystal", "snowball", "&3&lOmni Crystal (&r&7{PERCENT}&3&l)", newStringList("&7Apply to any non-specialty", "&7weapon or armor piece to", "&7transform it into an &3&nOmni Item:", "&7An item that acts as any", "&7unique /help armorset piece.", " ", "&3EX: &71 Omni item, 3 Phantom items equipped", "&7would apply the Phantom Set Bonus to player.")),
+                "items.omni crystal.applied lore", newStringList(" ", "&3&lOMNI SET BONUS", "&3&l*&r &3Acts as ANY Armor Set type/piece.", " ")
         };
         return putAll(values);
     }

@@ -13,6 +13,17 @@ messages:
 settings:
   max allowed on an item: 1
 #
+items:
+  extractor:
+    resets to level: 1
+    sets apply rate: 100
+    item: "ghast_tear"
+    name: "&6&lTitan Attribute Extractor"
+    lore:
+      - "&7Extracts the Titan Attribute Orb from"
+      - "&7a weapon, resetting its &6Level to 1"
+      - "&7The orb will have a &6100% re-apply rate"
+#
 gui:
   title: "Titan Attributes"
   size: 18

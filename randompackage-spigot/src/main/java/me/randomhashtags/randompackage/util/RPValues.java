@@ -72,6 +72,9 @@ public interface RPValues extends UVersionable {
     default LinkedHashMap<String, GlobalChallengePrize> getAllGlobalChallengePrizes() {
         return (LinkedHashMap<String, GlobalChallengePrize>) getAllObj(Feature.GLOBAL_CHALLENGE_PRIZE);
     }
+    default LinkedHashMap<String, ItemSkin> getAllItemSkins() {
+        return (LinkedHashMap<String, ItemSkin>) getAllObj(Feature.ITEM_SKIN);
+    }
     default LinkedHashMap<String, Lootbox> getAllLootboxes() {
         return (LinkedHashMap<String, Lootbox>) getAllObj(Feature.LOOTBOX);
     }
@@ -120,16 +123,27 @@ public interface RPValues extends UVersionable {
 
 
     default ArmorSet valueOfArmorSet(@NotNull Player player) {
+        return valueOfArmorSet(player, false);
+    }
+    default ArmorSet valueOfArmorSet(@NotNull Player player, boolean checkOmni) {
         if(player != null) {
-            final PlayerInventory pi = player.getInventory();
-            final ItemStack h = pi.getHelmet(), c = pi.getChestplate(), l = pi.getLeggings(), b = pi.getBoots();
+            final PlayerInventory inv = player.getInventory();
+            final ItemStack helmet = inv.getHelmet(), chest = inv.getChestplate(), legs = inv.getLeggings(), boots = inv.getBoots();
+            final List<String> helmetLore = helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasLore() ? helmet.getItemMeta().getLore() : null;
+            final List<String> chestLore = chest != null && chest.hasItemMeta() && chest.getItemMeta().hasLore() ? chest.getItemMeta().getLore() : null;
+            final List<String> legLore = legs != null && legs.hasItemMeta() && legs.getItemMeta().hasLore() ? legs.getItemMeta().getLore() : null;
+            final List<String> bootsLore = boots != null && helmet.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
+            final List<String> omniLore = getCustomArmor().omniAppliedLore;
             for(ArmorSet set : getAllArmorSets().values()) {
                 final List<String> lore = set.getArmorLore();
-                if(lore != null &&
-                        (h != null && h.hasItemMeta() && h.getItemMeta().hasLore() && h.getItemMeta().getLore().containsAll(lore)
-                                && c != null && c.hasItemMeta() && c.getItemMeta().hasLore() && c.getItemMeta().getLore().containsAll(lore)
-                                && l != null && l.hasItemMeta() && l.getItemMeta().hasLore() && l.getItemMeta().getLore().containsAll(lore)
-                                && b != null && b.hasItemMeta() && b.getItemMeta().hasLore() && b.getItemMeta().getLore().containsAll(lore))) {
+                if(lore != null
+                        && (
+                                helmetLore != null && (helmetLore.containsAll(lore) || checkOmni && helmetLore.containsAll(omniLore))
+                                && chestLore != null && (chestLore.containsAll(lore) || checkOmni && chestLore.containsAll(omniLore))
+                                && legLore != null && (legLore.containsAll(lore) || checkOmni && legLore.containsAll(omniLore))
+                                && bootsLore != null && (bootsLore.containsAll(lore) || checkOmni && bootsLore.containsAll(omniLore))
+                        )
+                ) {
                     return set;
                 }
             }

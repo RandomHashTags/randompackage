@@ -65,7 +65,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
     private HashMap<Player, List<CustomEnchant>> equippedTimedEnchants;
 
-    public String getIdentifier() { return "CUSTOM_ENCHANTS"; }
+    public String getIdentifier() {
+        return "CUSTOM_ENCHANTS";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();

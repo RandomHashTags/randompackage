@@ -33,14 +33,13 @@ import java.util.UUID;
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class InventoryPets extends EventAttributes implements RPItemStack, Packeter {
-    // TODO: fix the inventory pet ymls
     private static InventoryPets instance;
     public static InventoryPets getInventoryPets() {
         if(instance == null) instance = new InventoryPets();
         return instance;
     }
-    public YamlConfiguration config;
 
+    public YamlConfiguration config;
     public ItemStack leash, rarecandy;
     private String leashedLore, expCharacter, expAchievedColor, expUnachievedColor;
     private int expCharacterLength;
@@ -152,9 +151,9 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
     public boolean tryLeashing(@NotNull ItemStack is) {
         if(!isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
             itemMeta = is.getItemMeta();
-            final List<String> l = new ArrayList<>(itemMeta.getLore());
-            l.add(leashedLore);
-            itemMeta.setLore(l);
+            final List<String> lore = new ArrayList<>(itemMeta.getLore());
+            lore.add(leashedLore);
+            itemMeta.setLore(lore);
             is.setItemMeta(itemMeta);
             return true;
         }
@@ -238,9 +237,9 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
-        if(cur != null && curs != null && (curs.isSimilar(leash) && tryLeashing(cur) || curs.isSimilar(rarecandy) && tryUsingRareCandy(cur))) {
-            didApply(event, (Player) event.getWhoClicked(), cur, curs);
+        final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
+        if(current != null && cursor != null && (cursor.isSimilar(leash) && tryLeashing(current) || cursor.isSimilar(rarecandy) && tryUsingRareCandy(current))) {
+            didApply(event, (Player) event.getWhoClicked(), current, cursor);
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -248,9 +247,10 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         final ItemStack is = event.getItem();
         if(is != null) {
             final Player player = event.getPlayer();
-            if(didTriggerPet(event, is, player) >= 0) {
-            } else if(is.isSimilar(leash) || is.isSimilar(rarecandy)) {
-            } else return;
+            if(didTriggerPet(event, is, player) >= 0 || is.isSimilar(leash) || is.isSimilar(rarecandy)) {
+            } else {
+                return;
+            }
             event.setCancelled(true);
             player.updateInventory();
         }
@@ -266,7 +266,10 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
-        triggerInventoryPets(event, event.getEntity().getKiller());
+        final Player killer = event.getEntity().getKiller();
+        if(killer != null) {
+            triggerInventoryPets(event, event.getEntity().getKiller());
+        }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
