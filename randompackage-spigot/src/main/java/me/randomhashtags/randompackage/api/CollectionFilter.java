@@ -50,7 +50,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     private HashMap<Integer, UMaterial> picksup;
     private HashMap<UUID, Location> editingfilter;
 
-    public String getIdentifier() { return "COLLECTION_FILTER"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.collectionfilter", true)) {
@@ -93,6 +92,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    public String getIdentifier() {
+        return "COLLECTION_FILTER";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");
@@ -224,10 +226,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         if(UMaterial.match(is).equals(UMaterial.match(collectionchest)) && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
             final Player player = event.getPlayer();
             item = is.clone(); item.setAmount(1);
-            final UMaterial u = getFiltered(item);
-            new CollectionChest(player.getUniqueId().toString(), event.getBlockPlaced().getLocation(), u);
+            final UMaterial material = getFiltered(item);
+            new CollectionChest(player.getUniqueId().toString(), event.getBlockPlaced().getLocation(), material);
             sendStringListMessage(player, getStringList(config, "messages.placed"), null);
-            final String f = u == null ? defaultType : toMaterial(u.getMaterial().name(), false);
+            final String f = material == null ? defaultType : toMaterial(material.getMaterial().name(), false);
             for(String s : getStringList(config, "messages.set")) {
                 if(s.contains("{ITEM}")) s = s.replace("{ITEM}", f);
                 player.sendMessage(colorize(s));
@@ -286,7 +288,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
     }
     public void editFilter(@NotNull Player player, Block clickedblock) {
-        if(clickedblock != null) editingfilter.put(player.getUniqueId(), clickedblock.getLocation());
+        if(clickedblock != null) {
+            editingfilter.put(player.getUniqueId(), clickedblock.getLocation());
+        }
         player.openInventory(Bukkit.createInventory(player, collectionchestgui.getSize(), collectionchestgui.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(collectionchestgui.getInventory().getContents());
@@ -320,7 +324,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
         player.updateInventory();
     }
-
     public ItemStack getCollectionChest(@NotNull String filter) {
         filter = filter.toLowerCase();
         filter = filter.equals("all") ? allType : filter.equals("default") ? defaultType : toMaterial(filter, false);

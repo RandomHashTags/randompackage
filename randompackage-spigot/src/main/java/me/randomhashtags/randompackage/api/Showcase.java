@@ -22,10 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
@@ -37,18 +34,14 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	}
 
 	public YamlConfiguration config;
-	
 	private ItemStack addItemConfirm, addItemCancel, removeItemConfirm, removeItemCancel, expansion;
 	private int addedRows = 0;
-	
 	private UInventory additems, removeitems;
 	private String othertitle, selftitle, TCOLOR;
-	private ArrayList<Integer> itemslots;
-	
-	private ArrayList<Player> inSelf, inOther;
+	private List<Integer> itemslots;
+	private List<Player> inSelf, inOther;
 	private HashMap<Player, Integer> deleteSlot;
 
-	public String getIdentifier() { return "SHOWCASE"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -60,10 +53,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 				if(a.startsWith("add")) {
 					confirmAddition(player, player.getItemInHand());
 				} else if(hasPermission(player, "RandomPackage.showcase.other", true)) {
-					final OfflinePlayer t = Bukkit.getOfflinePlayer(a);
-					if(t != null) {
-						open(player, t, 1);
-					}
+					final OfflinePlayer target = Bukkit.getOfflinePlayer(a);
+					open(player, target, 1);
 				}
 			}
 		}
@@ -76,6 +67,9 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	public String getIdentifier() {
+		return "SHOWCASE";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "showcase.yml");
@@ -120,13 +114,14 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Showcase &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		for(Player p : new ArrayList<>(inSelf)) {
-			p.sendMessage(colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
-			p.closeInventory();
+		final String msg = colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server.");
+		for(Player player : new ArrayList<>(inSelf)) {
+			player.sendMessage(msg);
+			player.closeInventory();
 		}
-		for(Player p : new ArrayList<>(inOther)) {
-			p.sendMessage(colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server."));
-			p.closeInventory();
+		for(Player player : new ArrayList<>(inOther)) {
+			player.sendMessage(msg);
+			player.closeInventory();
 		}
 	}
 
@@ -136,71 +131,6 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			pdata.resetShowcases();
 		}
 	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void inventoryClickEvent(InventoryClickEvent event) {
-		final ItemStack current = event.getCurrentItem();
-		if(current != null && !current.getType().equals(Material.AIR)) {
-			final Player player = (Player) event.getWhoClicked();
-			final Inventory top = player.getOpenInventory().getTopInventory();
-			final String title = event.getView().getTitle();
-			final boolean isAdding = title.equals(additems.getTitle());
-			final boolean edit = isAdding || title.equals(removeitems.getTitle());
-			
-			if(edit) {
-				final ItemStack item = top.getItem(itemslots.get(0));
-				if(isAdding && current.equals(addItemConfirm)) {
-					add(player.getUniqueId(), item, 1);
-				} else if(current.equals(removeItemConfirm)) {
-					delete(player.getUniqueId(), 1, top.getItem(deleteSlot.get(player)));
-					deleteSlot.remove(player);
-				}
-			} else if(inSelf.contains(player)) {
-				if(event.getRawSlot() >= top.getSize()) {
-					confirmAddition(player, current);
-				} else {
-					confirmDeletion(player, current);
-					deleteSlot.put(player, itemslots.get(1));
-				}
-			} else return;
-			
-			event.setCancelled(true);
-			player.updateInventory();
-			if(edit && (current.equals(addItemConfirm) || current.equals(addItemCancel) || current.equals(removeItemConfirm) || current.equals(removeItemCancel))) {
-				open(player, player, 1);
-				inSelf.add(player);
-			}
-		}
-	}
-	@EventHandler
-	private void inventoryCloseEvent(InventoryCloseEvent event) {
-		final Player player = (Player) event.getPlayer();
-		inSelf.remove(player);
-		inOther.remove(player);
-		deleteSlot.remove(player);
-	}
-	@EventHandler
-    private void playerInteractEvent(PlayerInteractEvent event) {
-	    final ItemStack i = event.getItem();
-	    if(i != null && i.isSimilar(expansion)) {
-			final Player player = event.getPlayer();
-			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
-			event.setCancelled(true);
-			player.updateInventory();
-			for(int o = 1; o <= 10; o++) {
-				if(sizes.containsKey(o)) {
-					final int size = sizes.get(o);
-					if(size != 54) {
-						sizes.put(o, size + (addedRows * 9));
-						removeItem(player, i, 1);
-						return;
-					}
-				}
-			}
-        }
-    }
-
 	public void confirmAddition(@NotNull Player player, @NotNull ItemStack item) {
 		if(hasPermission(player, "RandomPackage.showcase.add", true)) {
 			confirm(player, item, additems);
@@ -216,13 +146,14 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			player.openInventory(Bukkit.createInventory(player, type.getSize(), type.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			top.setContents(type.getInventory().getContents());
-			for(int i : itemslots) top.setItem(i, item);
+			for(int i : itemslots) {
+				top.setItem(i, item);
+			}
 		}
 		player.updateInventory();
 	}
 	private void add(UUID player, ItemStack item, int page) {
 		if(item == null || item.getType().equals(Material.AIR)) {
-			
 		} else {
 		    final OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 			if(op.isOnline()) {
@@ -270,6 +201,71 @@ public class Showcase extends RPFeature implements CommandExecutor {
 				}
 			}
 			opener.updateInventory();
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	private void inventoryClickEvent(InventoryClickEvent event) {
+		final ItemStack current = event.getCurrentItem();
+		if(current != null && !current.getType().equals(Material.AIR)) {
+			final Player player = (Player) event.getWhoClicked();
+			final Inventory top = player.getOpenInventory().getTopInventory();
+			final String title = event.getView().getTitle();
+			final boolean isAdding = title.equals(additems.getTitle()), edit = isAdding || title.equals(removeitems.getTitle());
+
+			if(edit) {
+				final ItemStack item = top.getItem(itemslots.get(0));
+				if(isAdding && current.equals(addItemConfirm)) {
+					add(player.getUniqueId(), item, 1);
+				} else if(current.equals(removeItemConfirm)) {
+					delete(player.getUniqueId(), 1, top.getItem(deleteSlot.get(player)));
+					deleteSlot.remove(player);
+				}
+			} else if(inSelf.contains(player)) {
+				if(event.getRawSlot() >= top.getSize()) {
+					confirmAddition(player, current);
+				} else {
+					confirmDeletion(player, current);
+					deleteSlot.put(player, itemslots.get(1));
+				}
+			} else {
+				return;
+			}
+
+			event.setCancelled(true);
+			player.updateInventory();
+			if(edit && (current.equals(addItemConfirm) || current.equals(addItemCancel) || current.equals(removeItemConfirm) || current.equals(removeItemCancel))) {
+				open(player, player, 1);
+				inSelf.add(player);
+			}
+		}
+	}
+	@EventHandler
+	private void inventoryCloseEvent(InventoryCloseEvent event) {
+		final Player player = (Player) event.getPlayer();
+		inSelf.remove(player);
+		inOther.remove(player);
+		deleteSlot.remove(player);
+	}
+	@EventHandler
+	private void playerInteractEvent(PlayerInteractEvent event) {
+		final ItemStack i = event.getItem();
+		if(i != null && i.isSimilar(expansion)) {
+			final Player player = event.getPlayer();
+			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
+			event.setCancelled(true);
+			player.updateInventory();
+			for(int o = 1; o <= 10; o++) {
+				if(sizes.containsKey(o)) {
+					final int size = sizes.get(o);
+					if(size != 54) {
+						sizes.put(o, size + (addedRows * 9));
+						removeItem(player, i, 1);
+						return;
+					}
+				}
+			}
 		}
 	}
 }

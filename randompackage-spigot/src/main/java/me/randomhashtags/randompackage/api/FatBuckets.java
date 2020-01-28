@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.FatBucket;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -41,22 +42,19 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             otherdata.set("saved default fat buckets", true);
             saveOtherData();
         }
-        final List<ItemStack> buckets = new ArrayList<>();
-        final File folder = new File(DATA_FOLDER + SEPARATOR + "fat buckets");
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
-                final FileFatBucket ffb = new FileFatBucket(f);
-                buckets.add(ffb.getItem(ffb.getUses()));
-            }
+        final List<ItemStack> list = new ArrayList<>();
+        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "fat buckets")) {
+            final FileFatBucket ffb = new FileFatBucket(f);
+            list.add(ffb.getItem(ffb.getUses()));
         }
-        addGivedpCategory(buckets, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
+        addGivedpCategory(list, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FAT_BUCKET).size() + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         unregister(Feature.FAT_BUCKET);
     }
 
-    public HashMap<FatBucket, String> isFatBucket(ItemStack is) {
+    public HashMap<FatBucket, String> isFatBucket(@NotNull ItemStack is) {
         final String info = getRPItemStackValue(is, "FatBucketInfo");
         if(info != null) {
             final HashMap<FatBucket, String> bucket = new HashMap<>();

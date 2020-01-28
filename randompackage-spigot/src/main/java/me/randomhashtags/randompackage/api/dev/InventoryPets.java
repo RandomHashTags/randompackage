@@ -76,7 +76,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         final List<ItemStack> pets = new ArrayList<>();
         pets.add(leash);
         pets.add(rarecandy);
-        for(File f : new File(folder).listFiles()) {
+        for(File f : getFilesIn(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
                 pets.add(p.getItem(1, 0));
@@ -100,7 +100,6 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         }
         return builder.toString();
     }
-
     public HashMap<InventoryPet, String> isInventoryPet(ItemStack is) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         final boolean isPet = info != null;
@@ -110,7 +109,6 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         }
         return isPet ? pet : null;
     }
-
     public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(@NotNull Player player) {
         final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> pets = new ArrayList<>();
         final List<ItemStack> skull = new ArrayList<>();
@@ -175,7 +173,6 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         }
         return false;
     }
-
     private byte didTriggerPet(Event event, ItemStack is, Player player) {
         final String id = getRPItemStackValue(is, "InventoryPetInfo");
         if(id != null) {

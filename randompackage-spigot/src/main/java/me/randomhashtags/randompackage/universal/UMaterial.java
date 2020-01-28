@@ -1439,7 +1439,9 @@ public enum UMaterial implements Versionable {
         }
         return is;
     }
-    public byte getData() { return data; }
+    public byte getData() {
+        return data;
+    }
 
     private String setupVersionName() {
         final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;

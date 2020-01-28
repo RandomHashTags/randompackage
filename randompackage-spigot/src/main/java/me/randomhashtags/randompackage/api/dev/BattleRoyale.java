@@ -66,7 +66,9 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public final String getIdentifier() { return "BATTLE_ROYALE"; }
+    public final String getIdentifier() {
+        return "BATTLE_ROYALE";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");
@@ -91,10 +93,13 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         end(null);
-        if(activeTask != -1) SCHEDULER.cancelTask(activeTask);
-        if(startTask != -1) SCHEDULER.cancelTask(startTask);
+        if(activeTask != -1) {
+            SCHEDULER.cancelTask(activeTask);
+        }
+        if(startTask != -1) {
+            SCHEDULER.cancelTask(startTask);
+        }
     }
-
 
     public final void viewCurrent(CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.battleroyale", true)) {

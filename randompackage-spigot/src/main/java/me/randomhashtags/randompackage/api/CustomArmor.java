@@ -48,7 +48,9 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
 
-	public String getIdentifier() { return "CUSTOM_ARMOR"; }
+	public String getIdentifier() {
+		return "CUSTOM_ARMOR";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save("custom armor", "_settings.yml");
@@ -70,7 +72,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
-		for(File f : new File(DATA_FOLDER + SEPARATOR + "custom armor").listFiles()) {
+		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "custom armor")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {
@@ -165,7 +167,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 		return GIVEDP_ITEM.valueOf(l);
 	}
-
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {
 		return getHeroicUpgrade(set, RANDOM.nextInt(101));
 	}

@@ -47,7 +47,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private HashMap<Player, Home> editingIcons;
 	private UInventory editicon;
 
-	public String getIdentifier() { return "HOMES"; }
+	public String getIdentifier() {
+		return "HOMES";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
@@ -62,12 +64,15 @@ public class Homes extends RPFeature implements CommandExecutor {
 
 		editicon = new UInventory(null, config.getInt("edit icon.size"), colorize(config.getString("edit icon.title")));
 		final Inventory eii = editicon.getInventory();
-		final List<String> addedlore = colorizeListString(config.getStringList("edit icon.added lore"));
-		for(String s : config.getConfigurationSection("edit icon").getKeys(false)) {
+		final List<String> addedLore = colorizeListString(config.getStringList("edit icon.added lore"));
+		for(String s : getConfigurationSectionKeys(config, "edit icon", false)) {
 			if(!s.equals("title") && !s.equals("size") && !s.equals("added lore")) {
-				item = d(config, "edit icon." + s); itemMeta = item.getItemMeta(); lore.clear();
-				if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-				lore.addAll(addedlore);
+				item = d(config, "edit icon." + s);
+				itemMeta = item.getItemMeta(); lore.clear();
+				if(itemMeta.hasLore()) {
+					lore.addAll(itemMeta.getLore());
+				}
+				lore.addAll(addedLore);
 				itemMeta.setLore(lore); lore.clear();
 				item.setItemMeta(itemMeta);
 				eii.setItem(config.getInt("edit icon." + s + ".slot"), item);
@@ -77,8 +82,8 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	public void unload() {
 		GIVEDP_ITEM.items.remove("maxhomeincreaser");
-		for(Player p : new ArrayList<>(viewingHomes)) {
-			p.closeInventory();
+		for(Player player : new ArrayList<>(viewingHomes)) {
+			player.closeInventory();
 		}
 		for(Player player : new ArrayList<>(editingIcons.keySet())) {
 			player.closeInventory();
@@ -86,7 +91,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if(!(sender instanceof Player)) return true;
+		if(!(sender instanceof Player)) {
+			return true;
+		}
 		final Player player = (Player) sender;
 		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 		final String c = cmd.getName();
@@ -117,22 +124,25 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private String getArguments(String[] args) {
 		final StringBuilder s = new StringBuilder();
 		final int l = args.length;
-		for(int i = 0; i < l; i++) s.append(args[i]).append(i == l-1 ? "" : " ");
+		for(int i = 0; i < l; i++) {
+			s.append(args[i]).append(i == l-1 ? "" : " ");
+		}
 		return s.toString();
 	}
 	public void viewHomes(@NotNull Player opener, @NotNull RPPlayer target) {
 		if(hasPermission(opener, "RandomPackage.home", true)) {
 			viewingHomes.add(opener);
 			final List<Home> homes = target.getHomes();
-			final String name = colorize(config.getString("menu.name"));
+			final String name = getString(config, "menu.name");
 			final List<String> menuLore = getStringList(config, "menu.lore");
 			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(target.getMaxHomes())))));
 			final Inventory top = opener.getOpenInventory().getTopInventory();
-			for(Home h : homes) {
-				final Location lo = h.location;
-				final String world = lo.getWorld().getName(), x = Double.toString(round(lo.getX(), 1)), y = Double.toString(round(lo.getY(), 1)), z = Double.toString(round(lo.getZ(), 1));
-				item = h.icon.getItemStack(); itemMeta = item.getItemMeta(); lore.clear();
-				itemMeta.setDisplayName(name.replace("{HOME}", h.name));
+			for(Home home : homes) {
+				final Location loc = home.getLocation();
+				final String world = loc.getWorld().getName(), x = Double.toString(round(loc.getX(), 1)), y = Double.toString(round(loc.getY(), 1)), z = Double.toString(round(loc.getZ(), 1));
+				item = home.getIcon().getItemStack();
+				itemMeta = item.getItemMeta(); lore.clear();
+				itemMeta.setDisplayName(name.replace("{HOME}", home.getName()));
 				for(String s : menuLore) {
 					lore.add(s.replace("{WORLD}", world).replace("{X}", x).replace("{Y}", y).replace("{Z}", z));
 				}
@@ -145,7 +155,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	public void teleportToHome(@NotNull Player player, @NotNull Home home) {
 		if(hasPermission(player, "RandomPackage.home.teleport", true)) {
-			player.teleport(home.location, TeleportCause.PLUGIN);
+			player.teleport(home.getLocation(), TeleportCause.PLUGIN);
 		}
 	}
 	public void editIcon(@NotNull Player player, @NotNull Home home) {
@@ -157,9 +167,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 	}
 	@EventHandler
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
-		final Player p = (Player) event.getPlayer();
-		viewingHomes.remove(p);
-		editingIcons.remove(p);
+		final Player player = (Player) event.getPlayer();
+		viewingHomes.remove(player);
+		editingIcons.remove(player);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
@@ -168,35 +178,37 @@ public class Homes extends RPFeature implements CommandExecutor {
 		if(isViewingHomes || editingIcons.containsKey(player)) {
 			event.setCancelled(true);
 			player.updateInventory();
-			final int r = event.getRawSlot();
-			final ItemStack c = event.getCurrentItem();
+			final int slot = event.getRawSlot();
+			final ItemStack current = event.getCurrentItem();
 			final String click = event.getClick().name();
 			final Inventory top = player.getOpenInventory().getTopInventory();
-			if(r < 0 || r >= top.getSize() || !click.contains("RIGHT") && !click.contains("LEFT") && !click.contains("MIDDLE") || c == null || c.getType().equals(Material.AIR)) return;
+			if(slot < 0 || slot >= top.getSize() || !click.contains("RIGHT") && !click.contains("LEFT") && !click.contains("MIDDLE") || current == null || current.getType().equals(Material.AIR)) {
+				return;
+			}
 			if(isViewingHomes) {
 				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 				final List<Home> homes = pdata.getHomes();
 				player.closeInventory();
-				final Home h = homes.get(r);
+				final Home home = homes.get(slot);
 				if(click.contains("LEFT")) {
-					teleportToHome(player, h);
+					teleportToHome(player, home);
 				} else if(click.equals("MIDDLE")) {
 					final HashMap<String, String> replacements = new HashMap<>();
-					replacements.put("{HOME}", h.name);
+					replacements.put("{HOME}", home.getName());
 					sendStringListMessage(player, getStringList(config, "messages.delete"), replacements);
-					pdata.deleteHome(h);
+					pdata.deleteHome(home);
 				} else if(click.contains("RIGHT")) {
-					editIcon(player, h);
+					editIcon(player, home);
 				}
 			} else {
-				final Home h = editingIcons.get(player);
-				final UMaterial um = UMaterial.match(c);
-				final String n = h.name, umn = um.name();
-				h.icon = um;
+				final Home home = editingIcons.get(player);
+				final UMaterial um = UMaterial.match(current);
+				final String name = home.getName(), material = um.name();
+				home.setIcon(um);
 				player.closeInventory();
 				final HashMap<String, String> replacements = new HashMap<>();
-				replacements.put("{HOME}", n);
-				replacements.put("{ICON}", umn);
+				replacements.put("{HOME}", name);
+				replacements.put("{ICON}", material);
 				sendStringListMessage(player, getStringList(config, "messages.save icon"), replacements);
 			}
 			player.updateInventory();
@@ -222,11 +234,11 @@ public class Homes extends RPFeature implements CommandExecutor {
 		if(homes != null && !homes.isEmpty()) {
 			final List<String> msg = getStringList(config, "messages.deleted due to inside a faction claim");
 			final HashMap<String, String> replacements = new HashMap<>();
-			final List<Chunk> c = factions.getRegionalChunks(event.faction);
+			final List<Chunk> chunks = factions.getRegionalChunks(event.faction);
 			for(Home h : new ArrayList<>(homes)) {
-				final Location l = h.location;
-				if(c.contains(l.getChunk())) {
-					replacements.put("{HOME}", h.name);
+				final Location l = h.getLocation();
+				if(chunks.contains(l.getChunk())) {
+					replacements.put("{HOME}", h.getName());
 					replacements.put("{X}", formatInt(l.getBlockX()));
 					replacements.put("{Y}", formatInt(l.getBlockY()));
 					replacements.put("{Z}", formatInt(l.getBlockZ()));

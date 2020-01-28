@@ -9,6 +9,8 @@ import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantApplyEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.enchant.PlayerRevealCustomEnchantEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -33,7 +36,9 @@ public class EACoreListener extends EventExecutor implements Listener {
 
     private static List<EventAttributeListener> eventListeners;
 
-    public String getIdentifier() { return "EVENT_ATTRIBUTE_CORE_LISTENER"; }
+    public String getIdentifier() {
+        return "EVENT_ATTRIBUTE_CORE_LISTENER";
+    }
 
     public void load() {
         eventListeners = new ArrayList<>();
@@ -52,8 +57,8 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     public final void callEventAttributeListeners(Event event) {
         if(eventListeners != null) {
-            for(EventAttributeListener f : eventListeners) {
-                f.called(event);
+            for(EventAttributeListener listener : eventListeners) {
+                listener.called(event);
             }
         }
     }
@@ -81,7 +86,14 @@ public class EACoreListener extends EventExecutor implements Listener {
         PROJECTILE_EVENTS.remove(event.getEntity().getUniqueId());
     }
 
-
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void blockPlaceEvent(BlockPlaceEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void blockBreakEvent(BlockBreakEvent event) {
+        callEventAttributeListeners(event);
+    }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
         callEventAttributeListeners(event);
@@ -96,15 +108,23 @@ public class EACoreListener extends EventExecutor implements Listener {
         SPAWNED_FROM_SPAWNER.remove(event.getEntity().getUniqueId());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void blockPlaceEvent(BlockPlaceEvent event) {
+    private void entityShootBowEventListener(EntityShootBowEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void blockBreakEvent(BlockBreakEvent event) {
+    private void entityTameEvent(EntityTameEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerFishEvent(PlayerFishEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerItemDamageEvent(PlayerItemDamageEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -135,6 +155,10 @@ public class EACoreListener extends EventExecutor implements Listener {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
+    private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void fundDepositEvent(FundDepositEvent event) {
         callEventAttributeListeners(event);
     }
@@ -160,6 +184,10 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void jackpotPurchaseTicketsEvent(JackpotPurchaseTicketsEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void mobStackDepleteEvent(MobStackDepleteEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)

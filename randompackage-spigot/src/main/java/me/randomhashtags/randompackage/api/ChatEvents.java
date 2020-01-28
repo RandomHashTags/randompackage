@@ -42,7 +42,9 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 	private HashMap<UUID, PlayerInventory> bragInventories;
 	private List<UUID> viewingBrag;
 
-	public String getIdentifier() { return "CHAT_EVENTS"; }
+	public String getIdentifier() {
+		return "CHAT_EVENTS";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		bragDisplay = colorize(RP_CONFIG.getString("chat cmds.brag.display"));

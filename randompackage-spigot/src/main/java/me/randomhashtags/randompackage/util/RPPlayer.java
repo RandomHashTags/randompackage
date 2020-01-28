@@ -132,7 +132,7 @@ public class RPPlayer implements RPStorage {
         if(homes != null) {
             final List<String> homez = new ArrayList<>();
             for(Home h : homes) {
-                homez.add(h.name + ";" + h.icon.name() + ";" + API.toString(h.location));
+                homez.add(h.getName() + ";" + h.getIcon().name() + ";" + API.toString(h.getLocation()));
             }
             yml.set("homes", homez);
         }
@@ -392,7 +392,7 @@ public class RPPlayer implements RPStorage {
     }
     public Home getHome(String name) {
         for(Home h : getHomes()) {
-            if(h.name.equals(name)) {
+            if(h.getName().equals(name)) {
                 return h;
             }
         }
@@ -401,8 +401,8 @@ public class RPPlayer implements RPStorage {
     public void addHome(Location location, String name, UMaterial icon) {
         final Home h = getHome(name);
         if(h != null) {
-            h.location = location;
-            h.icon = icon;
+            h.setLocation(location);
+            h.setIcon(icon);
         } else {
             homes.add(new Home(name, location, icon));
         }

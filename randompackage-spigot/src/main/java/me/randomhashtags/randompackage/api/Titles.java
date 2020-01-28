@@ -33,14 +33,11 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 
 	public YamlConfiguration config;
-	
 	public ItemStack interactableItem;
 	private ItemStack nextpage, background, active, inactive;
 	private String selftitle, chatformat, tabformat;
-
 	private HashMap<Player, Integer> pages;
 
-	public String getIdentifier() { return "TITLES"; }
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {
@@ -52,6 +49,9 @@ public class Titles extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	public String getIdentifier() {
+		return "TITLES";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "titles.yml");
@@ -77,8 +77,8 @@ public class Titles extends RPFeature implements CommandExecutor {
  		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TITLE).size() + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
-		for(Player p : new ArrayList<>(pages.keySet())) {
-			p.closeInventory();
+		for(Player player : new ArrayList<>(pages.keySet())) {
+			player.closeInventory();
 		}
 		unregister(Feature.TITLE);
 	}
@@ -109,26 +109,28 @@ public class Titles extends RPFeature implements CommandExecutor {
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
 		final Inventory top = player.getOpenInventory().getTopInventory();
-		final ItemStack c = event.getCurrentItem();
-		if(top.getHolder() == player && c != null && event.getView().getTitle().equals(selftitle)) {
+		final ItemStack current = event.getCurrentItem();
+		if(top.getHolder() == player && current != null && event.getView().getTitle().equals(selftitle)) {
 			final int slot = event.getRawSlot();
 			event.setCancelled(true);
 			player.updateInventory();
-			if(slot >= top.getSize()) return;
+			if(slot >= top.getSize()) {
+				return;
+			}
 			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
 			final Title title = pdata.getActiveTitle();
 			final String activeTitle = title != null ? title.getIdentifier() : null;
 			final List<Title> titles = pdata.getTitles();
 			final int page = pages.getOrDefault(player, 0), Z = (page*53)+slot;
-			if(c.equals(nextpage)) {
+			if(current.equals(nextpage)) {
 				player.closeInventory();
 				viewTitles(player, pdata, page+2);
 			} else if(titles.size() > Z) {
 				final Title target = titles.get(Z);
-				final String id = target.getIdentifier();
+				final String id = target.getIdentifier(), coloredId = colorize(id);
 				final String type = (activeTitle != null && activeTitle.equals(id) ? "un" : "") + "equip";
-				for(String h : getStringList(config, "messages." + type)) {
-					player.sendMessage(h.replace("{TITLE}", colorize(id)));
+				for(String s : getStringList(config, "messages." + type)) {
+					player.sendMessage(s.replace("{TITLE}", coloredId));
 				}
 				pdata.setActiveTitle(type.equals("unequip") ? null : target);
 				update(player, pdata);

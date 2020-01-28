@@ -39,7 +39,17 @@ public class Shop extends RPFeature implements CommandExecutor {
 	private String defaultShop;
 	private HashMap<String, FileShopCategory> titles;
 
-	public String getIdentifier() { return "SHOP"; }
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        final Player player = sender instanceof Player ? (Player) sender : null;
+        if(player != null) {
+            view(player);
+        }
+        return true;
+    }
+
+	public String getIdentifier() {
+	    return "SHOP";
+	}
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
@@ -57,7 +67,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 
         ShopCategory.shop = this;
         titles = new HashMap<>();
-        for(File f : new File(folder).listFiles()) {
+        for(File f : getFilesIn(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileShopCategory c = new FileShopCategory(f);
                 titles.put(c.getTitle(), c);
@@ -69,11 +79,6 @@ public class Shop extends RPFeature implements CommandExecutor {
 	    unregister(Feature.SHOP_CATEGORY);
     }
 
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		final Player player = sender instanceof Player ? (Player) sender : null;
-		if(player != null) view(player);
-		return true;
-	}
 	public BigDecimal getDiscount(Player player) {
 	    final BigDecimal zero = BigDecimal.ZERO;
 	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) return zero;
@@ -85,43 +90,6 @@ public class Shop extends RPFeature implements CommandExecutor {
         }
         return BigDecimal.valueOf(d.doubleValue()/100);
     }
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	private void inventoryClickEvent(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        final Inventory top = player.getOpenInventory().getTopInventory();
-		if(top.getHolder() == player) {
-			final FileShopCategory s = titles.getOrDefault(event.getView().getTitle(), null);
-			if(s != null) {
-                event.setCancelled(true);
-                player.updateInventory();
-                final int r = event.getRawSlot();
-                final String clickType = event.getClick().name();
-                final ItemStack c = event.getCurrentItem();
-                if(r < 0 || r >= top.getSize() || !clickType.contains("LEFT") && !clickType.contains("RIGHT") || c == null) return;
-
-                if(c.equals(back)) {
-                    view(player);
-                } else if(eco == null) {
-                    Bukkit.broadcastMessage("[RandomPackage] An Economy plugin is required to use /shop!");
-                    player.closeInventory();
-                } else {
-                    final ShopItem shopItem = s.getItem(r);
-                    if(shopItem != null) {
-                        final String o = shopItem.opensCategory;
-                        if(o != null) {
-                            player.closeInventory();
-                            viewCategory(player, o);
-                        } else if(clickType.endsWith("LEFT")) {
-                            tryPurchasing(player, shopItem, clickType);
-                        } else if(clickType.endsWith("RIGHT")) {
-                            trySelling(player, shopItem, clickType);
-                        }
-                    }
-                }
-            }
-        }
-	}
-
 	public void view(@NotNull Player player) {
 	    if(hasPermission(player, "RandomPackage.shop", true)) {
             player.closeInventory();
@@ -141,31 +109,30 @@ public class Shop extends RPFeature implements CommandExecutor {
 	        top.setContents(inv.getInventory().getContents());
 
             final BigDecimal discount = getDiscount(player), one = BigDecimal.ONE;
-
-            final List<String> buylore = getStringList(config, "lores.purchase"), selllore = getStringList(config, "lores.sell");
+            final List<String> buyLore = getStringList(config, "lores.purchase"), sellLore = getStringList(config, "lores.sell");
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null && !item.equals(back)) {
                     final ShopItem si = s.getItem(i);
                     item = item.clone();
                     itemMeta = item.getItemMeta(); lore.clear();
-                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+                    if(itemMeta.hasLore()) {
+                        lore.addAll(itemMeta.getLore());
+                    }
                     boolean buy = false, sell = false;
                     BigDecimal buyPrice = si.buyPrice, sellPrice = si.sellPrice;
                     if(buyPrice.doubleValue() > 0.00) {
-                        final String b = formatBigDecimal(buyPrice.multiply(discount.doubleValue() > 0 ? discount : one));
+                        final String price = formatBigDecimal(buyPrice.multiply(discount.doubleValue() > 0 ? discount : one));
                         buy = true;
-                        for(String string : buylore) {
-                            if(string.contains("{BUY}")) string = string.replace("{BUY}", b);
-                            lore.add(string);
+                        for(String string : buyLore) {
+                            lore.add(string.replace("{BUY}", price));
                         }
                     }
                     if(sellPrice.doubleValue() > 0.00) {
-                        final String ss = formatBigDecimal(sellPrice);
+                        final String price = formatBigDecimal(sellPrice);
                         sell = true;
-                        for(String string : selllore) {
-                            if(string.contains("{SELL}")) string = string.replace("{SELL}", ss);
-                            lore.add(string);
+                        for(String string : sellLore) {
+                            lore.add(string.replace("{SELL}", price));
                         }
                     }
                     final String single = Integer.toString(item.getAmount()), shift = Integer.toString(item.getMaxStackSize());
@@ -185,7 +152,6 @@ public class Shop extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
-
     public void tryPurchasing(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
         final BigDecimal buy = shopItem.buyPrice, discount = getDiscount(player);
         if(buy.doubleValue() > 0.00) {
@@ -264,6 +230,45 @@ public class Shop extends RPFeature implements CommandExecutor {
             sendStringListMessage(player, config.getStringList(msg), replacements);
         } else {
             playSound(config, "sounds.not sellable", player, player.getLocation(), false);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void inventoryClickEvent(InventoryClickEvent event) {
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        if(top.getHolder() == player) {
+            final FileShopCategory category = titles.getOrDefault(event.getView().getTitle(), null);
+            if(category != null) {
+                event.setCancelled(true);
+                player.updateInventory();
+                final int slot = event.getRawSlot();
+                final String click = event.getClick().name();
+                final ItemStack current = event.getCurrentItem();
+                if(slot < 0 || slot >= top.getSize() || !click.contains("LEFT") && !click.contains("RIGHT") || current == null) {
+                    return;
+                }
+
+                if(current.equals(back)) {
+                    view(player);
+                } else if(eco == null) {
+                    Bukkit.broadcastMessage("[RandomPackage] An Economy plugin is required to use /shop!");
+                    player.closeInventory();
+                } else {
+                    final ShopItem shopItem = category.getItem(slot);
+                    if(shopItem != null) {
+                        final String o = shopItem.opensCategory;
+                        if(o != null) {
+                            player.closeInventory();
+                            viewCategory(player, o);
+                        } else if(click.endsWith("LEFT")) {
+                            tryPurchasing(player, shopItem, click);
+                        } else if(click.endsWith("RIGHT")) {
+                            trySelling(player, shopItem, click);
+                        }
+                    }
+                }
+            }
         }
     }
 }

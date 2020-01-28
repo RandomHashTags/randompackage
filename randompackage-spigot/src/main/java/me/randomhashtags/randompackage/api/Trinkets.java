@@ -35,7 +35,9 @@ public class Trinkets extends EventAttributes implements RPItemStack {
 
     public YamlConfiguration config;
 
-    public String getIdentifier() { return "TRINKETS"; }
+    public String getIdentifier() {
+        return "TRINKETS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("trinkets", "_settings.yml");
@@ -46,7 +48,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
 
         final List<ItemStack> t = new ArrayList<>();
-        for(File f : new File(DATA_FOLDER + SEPARATOR + "trinkets").listFiles()) {
+        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "trinkets")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final Trinket trinket = new FileTrinket(f);
                 if(trinket.isEnabled()) {
@@ -72,15 +74,14 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
         return info;
     }
-
     private void triggerPassive(Event event, Player player) {
         for(ItemStack is : player.getInventory().getContents()) {
             if(is != null) {
-                final HashMap<Trinket, String> trinket = isTrinket(is);
-                for(Trinket t : trinket.keySet()) {
-                    final String s = t.getSetting("passive");
-                    if(s != null && s.equalsIgnoreCase("true") && trigger(event, t.getAttributes())) {
-                        t.didUse(is, t.getIdentifier());
+                final HashMap<Trinket, String> trinkets = isTrinket(is);
+                for(Trinket trinket : trinkets.keySet()) {
+                    final String s = trinket.getSetting("passive");
+                    if(s != null && s.equalsIgnoreCase("true") && trigger(event, trinket.getAttributes())) {
+                        trinket.didUse(is, trinket.getIdentifier());
                     }
                 }
             }

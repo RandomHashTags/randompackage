@@ -45,10 +45,11 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	public YamlConfiguration data;
 	public static HashMap<String, List<ActiveBooster>> activeRegionalBoosters;
 	public static HashMap<UUID, List<ActiveBooster>> activePlayerBoosters;
-
 	private MCMMOBoosterEvents mcmmoboosters;
 
-	public String getIdentifier() { return "BOOSTERS"; }
+	public String getIdentifier() {
+		return "BOOSTERS";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		registerEventAttributeListener(this);
@@ -70,14 +71,11 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
-		final File folder = new File(DATA_FOLDER + SEPARATOR + "boosters");
-		if(folder.exists()) {
-			for(File f : folder.listFiles()) {
-				final FileBooster bo = new FileBooster(f);
-				b.add(bo.getItem(60*10000, 5.0));
-			}
-			addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
+		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "boosters")) {
+			final FileBooster bo = new FileBooster(f);
+			b.add(bo.getItem(60*10000, 5.0));
 		}
+		addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.BOOSTER).size() + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
 		loadBackup();
 	}
@@ -113,20 +111,21 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			int loaded = 0, expired = 0;
 			final ConfigurationSection c = data.getConfigurationSection("factions");
 			if(c != null) {
-				if(activeRegionalBoosters == null) activeRegionalBoosters = new HashMap<>();
+				if(activeRegionalBoosters == null) {
+					activeRegionalBoosters = new HashMap<>();
+				}
 				for(String s : c.getKeys(false)) {
-					if(!activeRegionalBoosters.containsKey(s)) activeRegionalBoosters.put(s, new ArrayList<>());
-					final ConfigurationSection boosters = data.getConfigurationSection("factions." + s);
-					if(boosters != null) {
-						for(String b : boosters.getKeys(false)) {
-							final String p = "factions." + s + "." + b + ".";
-							final ActiveBooster a = new ActiveBooster(Bukkit.getOfflinePlayer(UUID.fromString(data.getString(p + "activator"))), getBooster(b), data.getDouble(p + "multiplier"), data.getLong(p + "duration"), data.getLong(p + "expiration"));
-							if(a.getRemainingTime() > 0) {
-								activeRegionalBoosters.get(s).add(a);
-								loaded++;
-							} else {
-								expired++;
-							}
+					if(!activeRegionalBoosters.containsKey(s)) {
+						activeRegionalBoosters.put(s, new ArrayList<>());
+					}
+					for(String key : getConfigurationSectionKeys(data, "factions." + s, false)) {
+						final String path = "factions." + s + "." + key + ".";
+						final ActiveBooster booster = new ActiveBooster(Bukkit.getOfflinePlayer(UUID.fromString(data.getString(path + "activator"))), getBooster(key), data.getDouble(path + "multiplier"), data.getLong(path + "duration"), data.getLong(path + "expiration"));
+						if(booster.getRemainingTime() > 0) {
+							activeRegionalBoosters.get(s).add(booster);
+							loaded++;
+						} else {
+							expired++;
 						}
 					}
 				}
@@ -142,23 +141,6 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			e.printStackTrace();
 		}
 	}
-
-	@EventHandler
-	private void playerInteractEvent(PlayerInteractEvent event) {
-		final ItemStack is = event.getItem();
-		if(is != null && !is.getType().equals(Material.AIR)) {
-			final Player player = event.getPlayer();
-			final TObject m = valueOfBooster(is);
-			if(m != null) {
-				event.setCancelled(true);
-				player.updateInventory();
-				if(activateBooster(player, (Booster) m.getFirst(), (double) m.getSecond(), (long) m.getThird())) {
-					removeItem(player, is, 1);
-				}
-			}
-		}
-	}
-
 	private boolean activateBooster(Player player, Booster booster, double multiplier, long duration) {
 		final BoosterPreActivateEvent e = new BoosterPreActivateEvent(player, booster, multiplier, duration);
 		PLUGIN_MANAGER.callEvent(e);
@@ -218,6 +200,91 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		}
 		return false;
 	}
+	private List<ActiveBooster> getRegionalBoosters(String identifier) {
+		return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>();
+	}
+	private List<ActiveBooster> getSelfBoosters(UUID player) {
+		return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
+	}
+	private List<ActiveBooster> getFactionBoosters(UUID player) {
+		return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>();
+	}
+	private void sendNotify(Player player, ActiveBooster b, HashMap<String, String> replacements) {
+		if(player != null && b != null) {
+			sendStringListMessage(player, b.getBooster().getNotifyMsg(), replacements);
+		}
+	}
+	private void triggerBoosters(Player player, Event event) {
+		if(player != null) {
+			final UUID u = player.getUniqueId();
+			final HashMap<String, String> replacements = new HashMap<>();
+			final List<ActiveBooster> boosters = new ArrayList<>();
+			boosters.addAll(getFactionBoosters(u));
+			boosters.addAll(getSelfBoosters(u));
+			for(ActiveBooster booster : boosters) {
+				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, booster);
+				PLUGIN_MANAGER.callEvent(e);
+				final String multiplier = Double.toString(booster.getMultiplier()), duration = Long.toString(booster.getDuration());
+				if(trigger(event, booster.getBooster().getAttributes(), "multiplier", multiplier, "duration", duration)) {
+					replacements.put("multiplier", multiplier);
+					replacements.put("duration", duration);
+					replacements.put("{MULTIPLIER}", multiplier);
+					replacements.put("{PLAYER}", booster.getActivator().getName());
+					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
+					sendNotify(player, booster, replacements);
+				}
+			}
+		}
+	}
+	public TObject valueOfBooster(@NotNull ItemStack is) {
+		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+			final ItemMeta m = is.getItemMeta();
+			final String d = m.getDisplayName();
+			final List<String> l = m.getLore();
+			for(Booster b : getAllBoosters().values()) {
+				final ItemStack i = b.getItem();
+				if(d.equals(i.getItemMeta().getDisplayName())) {
+					double multiplier = getRemainingDouble(ChatColor.stripColor(l.get(b.getMultiplierLoreSlot())));
+					long duration = getTime(ChatColor.stripColor(l.get(b.getTimeLoreSlot())));
+					return new TObject(b, multiplier, duration);
+				}
+			}
+		}
+		return null;
+	}
+	public void called(Event event) {
+		if(event instanceof PlayerEvent) {
+			triggerBoosters(((PlayerEvent) event).getPlayer(), event);
+		} else {
+			switch (event.getEventName().toLowerCase().split("event")[0]) {
+				case "entitydeath":
+					final EntityDeathEvent e = (EntityDeathEvent) event;
+					final Player k = e.getEntity().getKiller();
+					if(k != null) {
+						triggerBoosters(k, e);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	@EventHandler
+	private void playerInteractEvent(PlayerInteractEvent event) {
+		final ItemStack is = event.getItem();
+		if(is != null && !is.getType().equals(Material.AIR)) {
+			final Player player = event.getPlayer();
+			final TObject m = valueOfBooster(is);
+			if(m != null) {
+				event.setCancelled(true);
+				player.updateInventory();
+				if(activateBooster(player, (Booster) m.getFirst(), (double) m.getSecond(), (long) m.getThird())) {
+					removeItem(player, is, 1);
+				}
+			}
+		}
+	}
 	@EventHandler
 	private void boosterExpireEvent(BoosterExpireEvent event) {
 		final ActiveBooster b = event.booster;
@@ -262,80 +329,6 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 				b.expire(false);
 			}
 			activeRegionalBoosters.remove(s);
-		}
-	}
-
-	private List<ActiveBooster> getRegionalBoosters(String identifier) {
-		return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>();
-	}
-	private List<ActiveBooster> getSelfBoosters(UUID player) {
-		return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
-	}
-	private List<ActiveBooster> getFactionBoosters(UUID player) {
-		return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>();
-	}
-
-	private void sendNotify(Player player, ActiveBooster b, HashMap<String, String> replacements) {
-		if(player != null && b != null) {
-			sendStringListMessage(player, b.getBooster().getNotifyMsg(), replacements);
-		}
-	}
-
-	private void triggerBoosters(Player player, Event event) {
-		if(player != null) {
-			final UUID u = player.getUniqueId();
-			final HashMap<String, String> replacements = new HashMap<>();
-			final List<ActiveBooster> boosters = new ArrayList<>();
-			boosters.addAll(getFactionBoosters(u));
-			boosters.addAll(getSelfBoosters(u));
-			for(ActiveBooster booster : boosters) {
-				final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, booster);
-				PLUGIN_MANAGER.callEvent(e);
-				final String multiplier = Double.toString(booster.getMultiplier()), duration = Long.toString(booster.getDuration());
-				if(trigger(event, booster.getBooster().getAttributes(), "multiplier", multiplier, "duration", duration)) {
-					replacements.put("multiplier", multiplier);
-					replacements.put("duration", duration);
-					replacements.put("{MULTIPLIER}", multiplier);
-					replacements.put("{PLAYER}", booster.getActivator().getName());
-					replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
-					sendNotify(player, booster, replacements);
-				}
-			}
-		}
-	}
-
-	public TObject valueOfBooster(@NotNull ItemStack is) {
-		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-			final ItemMeta m = is.getItemMeta();
-			final String d = m.getDisplayName();
-			final List<String> l = m.getLore();
-			for(Booster b : getAllBoosters().values()) {
-				final ItemStack i = b.getItem();
-				if(d.equals(i.getItemMeta().getDisplayName())) {
-					double multiplier = getRemainingDouble(ChatColor.stripColor(l.get(b.getMultiplierLoreSlot())));
-					long duration = getTime(ChatColor.stripColor(l.get(b.getTimeLoreSlot())));
-					return new TObject(b, multiplier, duration);
-				}
-			}
-		}
-		return null;
-	}
-
-	public void called(Event event) {
-		if(event instanceof PlayerEvent) {
-			triggerBoosters(((PlayerEvent) event).getPlayer(), event);
-		} else {
-			switch (event.getEventName().toLowerCase().split("event")[0]) {
-				case "entitydeath":
-					final EntityDeathEvent e = (EntityDeathEvent) event;
-					final Player k = e.getEntity().getKiller();
-					if(k != null) {
-						triggerBoosters(k, e);
-					}
-					break;
-				default:
-					break;
-			}
 		}
 	}
 

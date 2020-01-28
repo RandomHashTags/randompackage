@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -24,10 +25,18 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	}
 	public String getIdentifier() { return getYamlName(); }
 
-	public String getBossReward() { return colorize(yml.getString("boss reward")); }
-	public int getRedeemableItems() { return yml.getInt("settings.redeemable items"); }
-	public String getDisplayRarity() { return colorize(yml.getString("display.rarity")); }
-	public List<Integer> getSelectableSlots() { return selectableslots; }
+	public String getBossReward() {
+		return colorize(yml.getString("boss reward"));
+	}
+	public int getRedeemableItems() {
+		return yml.getInt("settings.redeemable items");
+	}
+	public String getDisplayRarity() {
+		return getString(yml, "display.rarity");
+	}
+	public List<Integer> getSelectableSlots() {
+		return selectableslots;
+	}
 	public UInventory getInventory() {
 		if(inv == null) {
 			inv = new UInventory(null, yml.getInt("settings.size"), colorize(yml.getString("settings.title")));
@@ -54,7 +63,9 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		}
 		return inv;
 	}
-	public List<String> getFormat() { return yml.getStringList("settings.format"); }
+	public List<String> getFormat() {
+		return getStringList(yml, "settings.format");
+	}
 	public LinkedHashMap<String, Integer> getRevealChances() {
 		if(revealChances == null) {
 			revealChances = new LinkedHashMap<>();
@@ -109,17 +120,23 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		String rarity = null;
 		final Collection<String> key = getRewards().keySet();
 		if(!useChances) {
-			rarity = (String) key.toArray()[random.nextInt(key.size())];
+			rarity = (String) key.toArray()[RANDOM.nextInt(key.size())];
 		} else {
 			final LinkedHashMap<String, Integer> r = getRevealChances();
-			for(String s : key) if(random.nextInt(100) <= r.get(s)) rarity = s;
-			if(rarity == null) rarity = (String) r.keySet().toArray()[r.keySet().size()-1];
+			for(String s : key) {
+				if(RANDOM.nextInt(100) <= r.get(s)) {
+					rarity = s;
+				}
+			}
+			if(rarity == null) {
+				rarity = (String) r.keySet().toArray()[r.keySet().size()-1];
+			}
 		}
 		return getServerCrate(rarity);
 	}
-	public ItemStack getRandomReward(String rarity) {
-		final List<String> r = getRewards().get(rarity);
-		final String reward = r.get(random.nextInt(r.size()));
+	public ItemStack getRandomReward(@NotNull String rarity) {
+		final List<String> rewards = getRewards().get(rarity);
+		final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
 		return API.d(null, reward);
 	}
 }

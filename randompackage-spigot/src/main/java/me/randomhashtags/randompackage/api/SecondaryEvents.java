@@ -37,13 +37,11 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     }
 
     public YamlConfiguration config;
-
     private List<PotionEffectType> removedPotionEffects;
     private String confirm;
     private ItemStack banknote;
     private int banknoteValueSlot;
 
-    public String getIdentifier() { return "SECONDARY_EVENTS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String cmdName = cmd.getName();
@@ -119,6 +117,9 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    public String getIdentifier() {
+        return "SECONDARY_EVENTS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
@@ -149,8 +150,12 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     public ItemStack getBanknote(BigDecimal value, String signer) {
         item = GIVEDP_ITEM.items.get("banknote").clone(); itemMeta = item.getItemMeta(); lore.clear();
         for(String s : itemMeta.getLore()) {
-            if(s.contains("{SIGNER}")) s = signer != null ? s.replace("{SIGNER}", signer) : null;
-            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+            if(s.contains("{SIGNER}")) {
+                s = signer != null ? s.replace("{SIGNER}", signer) : null;
+            }
+            if(s != null) {
+                lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+            }
         }
         itemMeta.setLore(lore); lore.clear();
         item.setItemMeta(itemMeta);
@@ -200,32 +205,35 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final ItemStack c = event.getCurrentItem();
-        if(c != null && !c.getType().equals(Material.AIR)) {
+        final ItemStack current = event.getCurrentItem();
+        if(current != null && !current.getType().equals(Material.AIR)) {
+            final String title = event.getView().getTitle();
             final Player player = (Player) event.getWhoClicked();
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            final String t = event.getView().getTitle();
-            final int r = event.getRawSlot();
-            if(t.equals(confirm)) {
+            if(title.equals(confirm)) {
+                final Inventory top = player.getOpenInventory().getTopInventory();
                 event.setCancelled(true);
                 player.updateInventory();
-                if(r >= top.getSize()) return;
-                giveItem(player, c);
-                RPPlayer.get(player.getUniqueId()).removeUnclaimedPurchase(c);
-                top.setItem(r, new ItemStack(Material.AIR));
-            } else return;
+                final int slot = event.getRawSlot();
+                if(slot >= top.getSize()) {
+                    return;
+                }
+                giveItem(player, current);
+                RPPlayer.get(player.getUniqueId()).removeUnclaimedPurchase(current);
+                top.setItem(slot, new ItemStack(Material.AIR));
+            } else {
+                return;
+            }
             event.setCancelled(true);
             player.updateInventory();
         }
     }
-
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final Player player = event.getPlayer();
-            final String d = is.getItemMeta().getDisplayName(), b = banknote.getItemMeta().getDisplayName();
-            if(d.equals(b)) {
+            final String name = is.getItemMeta().getDisplayName();
+            if(name.equals(banknote.getItemMeta().getDisplayName())) {
                 event.setCancelled(true);
                 removeItem(player, is, 1);
                 final double amount = getRemainingDouble(ChatColor.stripColor(is.getItemMeta().getLore().get(banknoteValueSlot)));

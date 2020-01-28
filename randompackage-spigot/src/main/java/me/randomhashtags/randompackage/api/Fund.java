@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,7 +35,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 	
 	public BigDecimal maxfund, total;
 
-	public String getIdentifier() { return "FUND"; }
+	public String getIdentifier() {
+		return "FUND";
+	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(args.length == 0) {
 			view(sender);
@@ -80,11 +81,8 @@ public class Fund extends RPFeature implements CommandExecutor {
 		}
 
 		total = BigDecimal.valueOf(otherdata.getDouble("fund.total"));
-		final ConfigurationSection cs = otherdata.getConfigurationSection("fund.depositors");
-		if(cs != null) {
-			for(String s : cs.getKeys(false)) {
-				deposits.put(UUID.fromString(s), BigDecimal.valueOf(otherdata.getDouble("fund.depositors." + s)));
-			}
+		for(String uuid : getConfigurationSectionKeys(otherdata, "fund.depositors", false)) {
+			deposits.put(UUID.fromString(uuid), BigDecimal.valueOf(otherdata.getDouble("fund.depositors." + uuid)));
 		}
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Server Fund &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
@@ -146,7 +144,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 					if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
 							|| m.equals(s.toLowerCase())
 							|| m.equals(s.replace(pl, cmd).toLowerCase())) {
-						if(hasPermission(player, "RandomPackage.fund.bypass", false)) return;
+						if(hasPermission(player, "RandomPackage.fund.bypass", false)) {
+							return;
+						}
 						event.setCancelled(true);
 						sendMessage(player, "needs to reach", us, 0, false);
 						return;
@@ -158,8 +158,9 @@ public class Fund extends RPFeature implements CommandExecutor {
 	private void sendMessage(CommandSender sender, String path, String unlockstring, double q, boolean broadcasted) {
 		final HashMap<String, String> replacements = new HashMap<>();
 		if(unlockstring != null) {
-			final String[] b = unlockstring.split(";");
-			final String arg1 = b[3], arg2 = b[0], req = getAbbreviation(Double.parseDouble(unlockstring.split(";")[1])), req$ = formatInt(Integer.parseInt(unlockstring.split(";")[1]));
+			final String[] values = unlockstring.split(";");
+			final String value = values[1];
+			final String arg1 = values[3], arg2 = values[0], req = getAbbreviation(Double.parseDouble(value)), req$ = formatInt(Integer.parseInt(value));
 			replacements.put("{ARG1}", arg1);
 			replacements.put("{ARG2}", arg2);
 			replacements.put("{REQ}", req);
@@ -171,13 +172,16 @@ public class Fund extends RPFeature implements CommandExecutor {
 
 		for(String ss : getStringList(config, "messages." + path)) {
 			for(String r : replacements.keySet()) {
-				final String R = replacements.get(r);
-				if(r != null && R != null) {
-					ss = ss.replace(r, R);
+				final String replacement = replacements.get(r);
+				if(r != null && replacement != null) {
+					ss = ss.replace(r, replacement);
 				}
 			}
-			if(broadcasted) Bukkit.broadcastMessage(colorize(ss));
-			else            sender.sendMessage(colorize(ss));
+			if(broadcasted) {
+				Bukkit.broadcastMessage(ss);
+			} else {
+				sender.sendMessage(ss);
+			}
 			return;
 		}
 	}
@@ -192,10 +196,12 @@ public class Fund extends RPFeature implements CommandExecutor {
 	public void view(@NotNull CommandSender sender) {
 		if(hasPermission(sender, "RandomPackage.fund", true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
-			final String symbol = config.getString("messages.progress bar.symbol"), achieved = colorize(config.getString("messages.progress bar.achieved")), notachieved = colorize(config.getString("messages.progress bar.not achieved"));
+			final String symbol = getString(config, "messages.progress bar.symbol"), achieved = getString(config, "messages.progress bar.achieved"), notachieved = getString(config, "messages.progress bar.not achieved");
+			final String completed = getString(config, "messages.completed");
 			for(String s : getStringList(config, "messages.view")) {
 				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				if(s.equals("{CONTENT}")) {
+					final List<String> content = getStringList(config, "messages.content");
 					for(String i : getStringList(config, "unlock")) {
 						final String[] values = i.split(";");
 						final BigDecimal req = needed_unlocks.get(values[2]);
@@ -204,24 +210,25 @@ public class Fund extends RPFeature implements CommandExecutor {
 						final String percent = roundDoubleString((total/required) * 100 > 100.000 ? 100 : (total/required) * 100, pdigits);
 
 						final HashMap<String, String> replacements = new HashMap<>();
-						replacements.put("{COMPLETED}", total >= required ? colorize(config.getString("messages.completed")) : "");
+						replacements.put("{COMPLETED}", total >= required ? completed : "");
 						replacements.put("{UNLOCK}", values[2]);
 						replacements.put("{UNLOCK%}", percent);
 						replacements.put("{PROGRESS_BAR}", getProgressBar(length, percent, achieved, notachieved, symbol));
 						replacements.put("{REQ}", getAbbreviation(required));
 						replacements.put("{REQ$}", formatInt(requiredInt));
-						sendStringListMessage(sender, getStringList(config, "messages.content"), replacements);
+						sendStringListMessage(sender, content, replacements);
 					}
 				} else {
-					sender.sendMessage(colorize(s));
+					sender.sendMessage(s);
 				}
 			}
 		}
 	}
 	private String getProgressBar(int length, String percent, String achieved, String notachieved, String symbol) {
 		final StringBuilder builder = new StringBuilder();
-		for(int a = 1; a <= length; a++) {
-			builder.append(Double.parseDouble(percent) >= a ? achieved : notachieved).append(symbol);
+		final double percentDouble = Double.parseDouble(percent);
+		for(int i = 1; i <= length; i++) {
+			builder.append(percentDouble >= i ? achieved : notachieved).append(symbol);
 		}
 		return builder.toString();
 	}
@@ -233,9 +240,13 @@ public class Fund extends RPFeature implements CommandExecutor {
 	private String getAbbreviation(double input) {
 		final int l = Integer.toString((int) input).length();
 		String ll = formatDouble(input);
-		if(ll.contains(",")) ll = ll.split(",")[0] + "." + ll.split(",")[1];
+		if(ll.contains(",")) {
+			ll = ll.split(",")[0] + "." + ll.split(",")[1];
+		}
 		String d = Double.toString(Double.parseDouble(ll));
-		if(d.endsWith(".0") && d.split("\\.")[1].length() == 1) d = d.split("\\.")[0];
+		if(d.endsWith(".0") && d.split("\\.")[1].length() == 1) {
+			d = d.split("\\.")[0];
+		}
 		return d + colorize(config.getString("messages." + (l >= 13 && l <= 15 ? "trillion" : l >= 10 && l <= 12 ? "billion" : l >= 7 && l <= 9 ? "million" : l >= 4 && l <= 6 ? "thousand" : "")));
 	}
 }

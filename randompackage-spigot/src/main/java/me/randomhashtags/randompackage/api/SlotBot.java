@@ -43,7 +43,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
 
     private HashMap<Player, HashMap<Integer, List<Integer>>> rollingTasks;
     private HashMap<Player, List<Integer>> pending;
-
     private HashMap<Integer, HashSet<Integer>> slots;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -53,7 +52,9 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "SLOT_BOT"; }
+    public String getIdentifier() {
+        return "SLOT_BOT";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "slot bot.yml");
@@ -139,7 +140,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                     if(is != null) {
                         final Lootbox lootbox = valueOfLootbox(is);
                         final boolean isLootbox = lootbox != null;
-
                         if(isLootbox) {
                             for(LootboxRewardType type : types) {
                                 actualRewards.addAll(lootbox.getRewards(type));
@@ -147,7 +147,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                         } else {
                             actualRewards.add(reward);
                         }
-
                         ItemMeta meta = is.getItemMeta();
                         if(previewIsSource) {
                             lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : reward));
@@ -171,14 +170,12 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         itemMeta.setLore(lore); lore.clear();
         previewRewards.setItemMeta(itemMeta);
         inv.setItem(previewRewardsSlot, previewRewards);
-
         rewards = actualRewards;
 
         final Inventory previewInv = preview.getInventory();
         for(ItemStack is : previewRewardList) {
             previewInv.setItem(previewInv.firstEmpty(), is);
         }
-
         sendConsoleMessage("&6[RandomPackage] &aLoaded Slot Bot &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -188,7 +185,8 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     }
 
     private ItemStack getTicketLocked(int ticketAmount) {
-        item = ticketLocked.clone(); itemMeta = item.getItemMeta(); lore.clear();
+        item = ticketLocked.clone();
+        itemMeta = item.getItemMeta(); lore.clear();
         for(String string : itemMeta.getLore()) {
             lore.add(string.replace("{AMOUNT}", Integer.toString(ticketAmount)));
         }
@@ -247,7 +245,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         }
         return total;
     }
-
     public void tryInsertingTicket(@NotNull Player player) {
         final Inventory top = player.getOpenInventory().getTopInventory();
         final int inserted = getInsertedTickets(player), maxAllowed = ticketSlots.size();
@@ -262,7 +259,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             for(int slot : slots.get(slots.keySet().toArray()[inserted])) {
                 top.setItem(slot, randomizedLootReadyToRoll);
             }
-
             removeItem(player, ticket, 1);
             final int slot = ticketSlots.get(inserted);
             item = ticketUnlocked.clone();
@@ -303,7 +299,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         }
         return false;
     }
-
     private void updateRandomLoot(Player player, Inventory top, int rewardSlot, boolean isRandom) {
         final int size = rewards.size();
         top.setItem(rewardSlot, isRandom ? d(null, rewards.get(RANDOM.nextInt(size))) : null);

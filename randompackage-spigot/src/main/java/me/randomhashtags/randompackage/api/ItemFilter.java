@@ -45,7 +45,6 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     private HashMap<Integer, String> categorySlots;
     private HashMap<String, FileFilterCategory> categories, categoryTitles;
 
-    public String getIdentifier() { return "ITEM_FILTER"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -66,6 +65,9 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         }
         return true;
     }
+    public String getIdentifier() {
+        return "ITEM_FILTER";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");
@@ -83,7 +85,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
 
         gui = new UInventory(null, config.getInt("categories.size"), colorize(config.getString("categories.title")));
         final Inventory gi = gui.getInventory();
-        for(String s : config.getConfigurationSection("categories").getKeys(false)) {
+        for(String s : getConfigurationSectionKeys(config, "categories", false)) {
             if(!s.equals("title") && !s.equals("size")) {
                 final String p = "categories." + s + ".", opens = config.getString(p + "opens");
                 final int slot = config.getInt(p + "slot");
@@ -101,7 +103,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             otherdata.set("saved default filter categories", true);
             saveOtherData();
         }
-        for(File f : new File(DATA_FOLDER + SEPARATOR + "filter categories").listFiles()) {
+        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "filter categories")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);
@@ -123,8 +125,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         if(hasPermission(player, "RandomPackage.filter.view", true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            top.setContents(gui.getInventory().getContents());
+            player.getOpenInventory().getTopInventory().setContents(gui.getInventory().getContents());
             player.updateInventory();
         }
     }
@@ -179,22 +180,24 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         if(t.equals(gui.getTitle()) || category != null) {
             event.setCancelled(true);
             player.updateInventory();
-            final ItemStack c = event.getCurrentItem();
-            final int r = event.getRawSlot();
-            if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
+            final ItemStack current = event.getCurrentItem();
+            final int slot = event.getRawSlot();
+            if(slot < 0 || slot >= top.getSize() || current == null || current.getType().equals(Material.AIR)) {
+                return;
+            }
 
             if(category != null) {
                 final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
-                final UMaterial target = UMaterial.match(c);
+                final UMaterial target = UMaterial.match(current);
                 if(filtered.contains(target)) {
                     filtered.remove(target);
                 } else {
                     filtered.add(target);
                 }
-                top.setItem(r, getStatus(filtered, c));
+                top.setItem(slot, getStatus(filtered, current));
                 player.updateInventory();
-            } else if(categorySlots.containsKey(r)) {
-                final FilterCategory fc = getFilterCategory(categorySlots.get(r));
+            } else if(categorySlots.containsKey(slot)) {
+                final FilterCategory fc = getFilterCategory(categorySlots.get(slot));
                 if(fc != null) {
                     player.closeInventory();
                     viewCategory(player, fc);

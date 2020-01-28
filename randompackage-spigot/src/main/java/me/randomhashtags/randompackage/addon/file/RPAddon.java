@@ -6,11 +6,9 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.Random;
 
 public abstract class RPAddon extends RegionalAPI implements RPStorage {
     protected static RandomPackageAPI API = RandomPackageAPI.API;
-    protected Random random = new Random();
 
     protected File file;
     protected YamlConfiguration yml;

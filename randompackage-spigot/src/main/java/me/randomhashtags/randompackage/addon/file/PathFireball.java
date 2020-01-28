@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -18,7 +17,9 @@ public class PathFireball extends RPAddon implements RarityFireball {
 		this.path = path;
 		register(Feature.RARITY_FIREBALL, this);
 	}
-	public String getIdentifier() { return path; }
+	public String getIdentifier() {
+		return path;
+	}
 
 	public ItemStack getItem() {
 		if(is == null) is = API.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
@@ -26,16 +27,17 @@ public class PathFireball extends RPAddon implements RarityFireball {
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
 		getReveals();
-		String reward = usesChances ? null : reveals.get(random.nextInt(reveals.size())).split(";")[1];
-		if(reward != null) return API.d(null, reward);
+		String reward = usesChances ? null : reveals.get(RANDOM.nextInt(reveals.size())).split(";")[1];
+		if(reward != null) {
+			return API.d(null, reward);
+		}
 		for(String s : reveals) {
 			final String[] a = s.split(";");
 			final int chance = API.getRemainingInt(a[0]);
-			if(random.nextInt(100) <= chance) {
+			if(RANDOM.nextInt(100) <= chance) {
 				final int R = ("chance=" + chance + ";").length();
 				final String r = s.substring(R);
-				final MagicDust d = getMagicDust(r);
-				return d.getRandomPercentItem(random);
+				return getMagicDust(r).getRandomPercentItem(RANDOM);
 			}
 		}
 		return null;

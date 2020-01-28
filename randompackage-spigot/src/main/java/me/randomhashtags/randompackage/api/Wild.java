@@ -28,12 +28,10 @@ public class Wild extends RPFeature implements CommandExecutor {
 
     private YamlConfiguration config;
     private HashMap<UUID, Long> expirations;
-
     private long cooldown;
     private HashMap<String, TObject> xcoords, zcoords;
     private List<String> teleportExceptions;
 
-    public String getIdentifier() { return "WILD"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && cmd.getName().equals("wild")) {
@@ -42,6 +40,9 @@ public class Wild extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    public String getIdentifier() {
+        return "WILD";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "wild.yml");
@@ -119,7 +120,6 @@ public class Wild extends RPFeature implements CommandExecutor {
         }
         return null;
     }
-
     public void tryTeleporting(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.wild", true)) {
             final UUID uuid = player.getUniqueId();

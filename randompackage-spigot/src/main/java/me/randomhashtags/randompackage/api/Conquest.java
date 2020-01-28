@@ -11,7 +11,6 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -50,7 +49,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private Location lastLocation;
     public String lastConquerer;
 
-    public String getIdentifier() { return "CONQUEST"; }
+    public String getIdentifier() {
+        return "CONQUEST";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);
@@ -91,7 +92,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             final String p = "bosses." + s + ".";
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), colorize(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
-        for(File f : new File(folder).listFiles()) {
+        for(File f : getFilesIn(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;
@@ -132,13 +133,35 @@ public class Conquest extends RPFeature implements CommandExecutor {
         ConquestMob.deleteAll();
         unregister(Feature.CONQUEST_CHEST);
     }
+
+    public void viewLast(@NotNull CommandSender sender) {
+        if(hasPermission(sender, "RandomPackage.conquest", true)) {
+            final HashMap<String, String> replacements = new HashMap<>();
+            replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
+            replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
+            replacements.put("{CONQUERER}", lastConquerer != null ? lastConquerer : "N/A");
+            sendStringListMessage(sender, getStringList(config, "messages.command"), replacements);
+        }
+    }
+    public void viewHelp(@NotNull CommandSender sender) {
+        if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
+            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
+        }
+    }
+    public void spawn(@NotNull Player player) {
+        if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
+            final List<ConquestChest> chests = new ArrayList<>(getAllConquestChests().values());
+            final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
+            spawn(chests.get(RANDOM.nextInt(chests.size())), l);
+        }
+    }
     public void destroyConquests(@Nullable CommandSender sender) {
         if(sender == null || hasPermission(sender, "RandomPackage.conquest.stop", true)) {
-            final List<LivingConquestChest> C = LivingConquestChest.living;
-            if(C != null) {
-                for(LivingConquestChest l : new ArrayList<>(C)) {
+            final List<LivingConquestChest> living = LivingConquestChest.living;
+            if(living != null) {
+                for(LivingConquestChest l : new ArrayList<>(living)) {
                     l.delete(false, true);
-                    C.remove(l);
+                    living.remove(l);
                 }
             }
         }
@@ -195,13 +218,12 @@ public class Conquest extends RPFeature implements CommandExecutor {
             event.getPlayer().updateInventory();
         }
     }
-
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
-        final HashMap<UUID, LivingConquestMob> L = LivingConquestMob.living;
-        if(L != null) {
+        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.living;
+        if(living != null) {
             final UUID uuid = event.getEntity().getUniqueId();
-            final LivingConquestMob l = L.getOrDefault(uuid, null);
+            final LivingConquestMob l = living.getOrDefault(uuid, null);
             if(l != null) {
                 final LivingConquestChest c = LivingConquestChest.valueOf(uuid);
                 if(c != null) {
@@ -211,11 +233,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
     }
-
     @EventHandler
     private void chunkUnloadEvent(ChunkUnloadEvent event) {
-        final Chunk c = event.getChunk();
-        final LivingConquestChest l = LivingConquestChest.valueOf(c);
+        final LivingConquestChest l = LivingConquestChest.valueOf(event.getChunk());
         if(l != null && event instanceof Cancellable) {
             final Cancellable ca = (Cancellable) event;
             if(!ca.isCancelled()) {
@@ -227,34 +247,12 @@ public class Conquest extends RPFeature implements CommandExecutor {
     private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
         final Entity entity = event.getEntity();
         final LivingEntity target = event.getTarget();
-        final HashMap<UUID, LivingConquestMob> mobs = LivingConquestMob.living;
-        if(mobs != null) {
-            final LivingConquestMob mob = target != null ? mobs.getOrDefault(entity.getUniqueId(), null) : null;
-            if(mob != null && mobs.containsKey(target.getUniqueId())) {
+        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.living;
+        if(living != null) {
+            final LivingConquestMob mob = target != null ? living.getOrDefault(entity.getUniqueId(), null) : null;
+            if(mob != null && living.containsKey(target.getUniqueId())) {
                 event.setCancelled(true);
             }
-        }
-    }
-
-    public void viewLast(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.conquest", true)) {
-            final HashMap<String, String> replacements = new HashMap<>();
-            replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
-            replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
-            replacements.put("{CONQUERER}", lastConquerer != null ? lastConquerer : "N/A");
-            sendStringListMessage(sender, getStringList(config, "messages.command"), replacements);
-        }
-    }
-    public void viewHelp(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
-            sendStringListMessage(sender, getStringList(config, "messages.help"), null);
-        }
-    }
-    public void spawn(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
-            final List<ConquestChest> chests = new ArrayList<>(getAllConquestChests().values());
-            final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
-            spawn(chests.get(RANDOM.nextInt(chests.size())), l);
         }
     }
 }

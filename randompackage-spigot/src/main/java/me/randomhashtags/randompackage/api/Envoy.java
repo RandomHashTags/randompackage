@@ -42,22 +42,38 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	private List<Player> settingPreset;
 	private long nextNaturalEnvoy;
 
-	public String getIdentifier() { return "ENVOY"; }
+	public String getIdentifier() {
+		return "ENVOY";
+	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
 		if(l == 0) {
 		} else {
-		    final String a = args[0];
-			if(a.equals("help")) viewHelp(sender);
-			else if(a.equals("spawn") || a.equals("summon") || a.equals("begin") || a.equals("start")) {
-				if(hasPermission(sender, "RandomPackage.envoy.start", true))
-					spawnEnvoy(colorize(config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
-			} else if(a.equals("stop") || a.equals("end")) {
-				if(hasPermission(sender, "RandomPackage.envoy.stop", true)) stopAllEnvoys();
-            } else if(player != null && a.equals("preset")) {
-			    enterEditMode(player);
-            }
+		    switch (args[0]) {
+				case "spawn":
+				case "summon":
+				case "begin":
+				case "start":
+					if(hasPermission(sender, "RandomPackage.envoy.start", true)) {
+						spawnEnvoy(colorize(config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
+					}
+					break;
+				case "stop":
+				case "end":
+					if(hasPermission(sender, "RandomPackage.envoy.stop", true)) {
+						stopAllEnvoys();
+					}
+					break;
+				case "preset":
+					if(player != null) {
+						enterEditMode(player);
+					}
+					break;
+				default:
+					viewHelp(sender);
+					break;
+			}
 		}
 		return true;
 	}
@@ -94,7 +110,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 
 		final List<ItemStack> tiers = new ArrayList<>();
-		for(File f : new File(DATA_FOLDER + SEPARATOR + "envoy tiers").listFiles()) {
+		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "envoy tiers")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings")) {
 				final FileEnvoyCrate e = new FileEnvoyCrate(f);
 				tiers.add(e.getItem());
@@ -130,8 +146,12 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		otherdata.set("envoy.preset", p);
 		saveOtherData();
 		if(!settingPreset.isEmpty()) {
-			for(Player player : settingPreset) player.getInventory().remove(presetLocationPlacer);
-			for(Location l : preset) l.getWorld().getBlockAt(l).setType(Material.AIR);
+			for(Player player : settingPreset) {
+				player.getInventory().remove(presetLocationPlacer);
+			}
+			for(Location l : preset) {
+				l.getWorld().getBlockAt(l).setType(Material.AIR);
+			}
 		}
 		SCHEDULER.cancelTask(spawnTask);
 		SCHEDULER.cancelTask(task);
@@ -148,9 +168,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 
 	public void stopAllEnvoys() {
-		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> L = LivingEnvoyCrate.living;
-		if(L != null) {
-			for(int i : L.keySet()) {
+		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
+		if(living != null) {
+			for(int i : living.keySet()) {
 				stopEnvoy(i, false);
 			}
 		}
@@ -166,32 +186,32 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
-		final ItemStack i = event.getItem();
-		final EnvoyCrate ec = valueOfEnvoyCrate(i);
+		final ItemStack is = event.getItem();
+		final EnvoyCrate crate = valueOfEnvoyCrate(is);
 		final Player player = event.getPlayer();
-		if(ec != null) {
+		if(crate != null) {
 			event.setCancelled(true);
 			player.updateInventory();
-			removeItem(player, i, 1);
-			final List<String> rewards = ec.getRandomRewards();
+			removeItem(player, is, 1);
+			final List<String> rewards = crate.getRandomRewards();
 			for(String s : rewards) {
 				giveItem(player, d(null, s));
 			}
-		} else if(i != null && i.hasItemMeta() && i.getItemMeta().equals(envoySummon.getItemMeta())) {
+		} else if(is != null && is.hasItemMeta() && is.getItemMeta().equals(envoySummon.getItemMeta())) {
 			event.setCancelled(true);
 			player.updateInventory();
-			removeItem(player, i, 1);
-			spawnEnvoy(colorize(config.getString("messages.item summon type").replace("{PLAYER}", player.getName())), false, type);
+			removeItem(player, is, 1);
+			spawnEnvoy(getString(config, "messages.item summon type").replace("{PLAYER}", player.getName()), false, type);
 		} else if(event.getClickedBlock() != null) {
 			final Location l = event.getClickedBlock().getLocation();
-			final LivingEnvoyCrate c = LivingEnvoyCrate.valueOf(l);
-			if(c != null) {
-				final PlayerClaimEnvoyCrateEvent e = new PlayerClaimEnvoyCrateEvent(player, l, c);
+			final LivingEnvoyCrate livingCrate = LivingEnvoyCrate.valueOf(l);
+			if(livingCrate != null) {
+				final PlayerClaimEnvoyCrateEvent e = new PlayerClaimEnvoyCrateEvent(player, l, livingCrate);
 				PLUGIN_MANAGER.callEvent(e);
 				if(!e.isCancelled()) {
 					event.setCancelled(true);
 					player.updateInventory();
-					c.delete(true);
+					livingCrate.delete(true);
 				}
 			}
 		}
@@ -237,10 +257,10 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		switch (type) {
 			case "WARZONE":
 				if(hookedFactionsUUID()) {
-					final List<Chunk> c = factions.getRegionalChunks("WarZone");
-					if(!c.isEmpty()) {
+					final List<Chunk> chunks = factions.getRegionalChunks("WarZone");
+					if(!chunks.isEmpty()) {
 						for(int i = 1; i <= amount; i++) {
-							final List<Location> cl = getChunkLocations(c.get(random.nextInt(c.size())));
+							final List<Location> cl = getChunkLocations(chunks.get(random.nextInt(chunks.size())));
 							final EnvoyCrate crate = getRandomCrate(true, defaultTier);
 							final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 							loc.getChunk().load();
@@ -260,19 +280,19 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			case "PRESET":
 				final List<Location> preset = new ArrayList<>(this.preset);
 				for(int i = 1; i <= amount; i++) {
-					final Location r = preset.get(random.nextInt(preset.size()));
-					r.getChunk().load();
-					final World w = r.getWorld();
-					final Location newl = new Location(w, r.getBlockX(), r.getBlockY()-1, r.getBlockZ());
+					final Location loc = preset.get(random.nextInt(preset.size()));
+					loc.getChunk().load();
+					final World world = loc.getWorld();
+					final Location newl = new Location(world, loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 					final EnvoyCrate crate = getRandomCrate(true, defaultTier);
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
-					if(lec == null && crate.canLand(r)) {
-						lec = new LivingEnvoyCrate(totalEnvoys, crate, r);
+					if(lec == null && crate.canLand(loc)) {
+						lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);
 						lec.shootFirework();
 					} else {
 						i -= 1;
 					}
-					preset.remove(r);
+					preset.remove(loc);
 				}
 				break;
 			default:
@@ -284,17 +304,17 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
 		for(String s : getStringList(config, "messages.broadcast")) {
-			Bukkit.broadcastMessage(colorize(s.replace("{SUMMON_TYPE}", summonType)));
+			Bukkit.broadcastMessage(s.replace("{SUMMON_TYPE}", summonType));
 		}
 		spawnEnvoy(where, getRandomAmountSpawned());
 		if(natural) {
 			final long next = getRandomTime();
 			nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
-			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(colorize(config.getString("messages.default summon type")), true, where), next);
+			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(getString(config, "messages.default summon type"), true, where), next);
 		}
 	}
 	private int getRandomTime() {
-		final String r = config.getString("settings.repeats");
+		final String r = getString(config, "settings.repeats");
 		final int min = r.contains("-") ? Integer.parseInt(r.split("-")[0]) : 0, t = r.contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(r.split("-")[1])-min+1) : Integer.parseInt(r);
 		return t*20;
 	}
@@ -305,7 +325,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		return new Location(w, x, w.getHighestBlockYAt(x, z), z);
 	}
 	private int getRandomAmountSpawned() {
-		final String as = config.getString("settings.amount spawned");
+		final String as = getString(config, "settings.amount spawned");
 		final String[] s = as.split("-");
 		final boolean hyphen = as.contains("-");
 		final int min = Integer.parseInt(hyphen ? s[0] : as);

@@ -575,6 +575,23 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
+    default ServerCrate valueOfServerCrate(@NotNull ItemStack item) {
+        for(ServerCrate crate : getAllServerCrates().values()) {
+            if(crate.getItem().isSimilar(item)) {
+                return crate;
+            }
+        }
+        return null;
+    }
+    default ServerCrate valueOfServerCrateFlare(@NotNull ItemStack flare) {
+        for(ServerCrate crate : getAllServerCrates().values()) {
+            final ServerCrateFlare f = crate.getFlare();
+            if(f != null && flare.isSimilar(f.getItem())) {
+                return crate;
+            }
+        }
+        return null;
+    }
     default Title valueOfTitle(ItemStack is) {
         if(is != null) {
             for(Title title : getAllTitles().values()) {

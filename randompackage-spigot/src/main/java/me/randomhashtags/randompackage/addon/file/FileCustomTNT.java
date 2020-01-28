@@ -27,7 +27,9 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
         load(f);
         register(Feature.CUSTOM_EXPLOSION, this);
     }
-    public String getIdentifier() { return "TNT_" + getYamlName(); }
+    public String getIdentifier() {
+        return "TNT_" + getYamlName();
+    }
 
     public ItemStack getItem() {
         if(item == null) item = API.d(yml, "item");
@@ -44,7 +46,7 @@ public class FileCustomTNT extends RPAddon implements CustomExplosion {
                 final Location lo = b.getLocation();
                 if(p.containsKey(lo)) {
                     lo.getWorld().getBlockAt(lo).setType(Material.AIR);
-                    p.get(lo).ignite(lo).setFuseTicks(10+random.nextInt(21));
+                    p.get(lo).ignite(lo).setFuseTicks(10+RANDOM.nextInt(21));
                 }
             }
         }

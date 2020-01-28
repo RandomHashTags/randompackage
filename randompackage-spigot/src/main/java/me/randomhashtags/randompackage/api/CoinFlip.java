@@ -15,7 +15,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,8 +35,8 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         if(instance == null) instance = new CoinFlip();
         return instance;
     }
-    public YamlConfiguration config;
 
+    public YamlConfiguration config;
     private boolean isLegacy;
     private UInventory gui, options, challenge;
     private int countdownStart;
@@ -111,14 +110,14 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         optionz = new LinkedHashMap<>();
 
         final Inventory oi = options.getInventory();
-        final List<String> addedlore = getStringList(config, "gui.options.added lore");
+        final List<String> addedLore = getStringList(config, "gui.options.added lore");
         for(String s : config.getConfigurationSection("gui.options").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("countdown") && !s.equals("added lore")) {
                 final String p = "gui.options." + s + ".";
                 final int slot = config.getInt(p + "slot");
                 final ItemStack dis = d(config, "gui.options." + s);
                 itemMeta = dis.getItemMeta();
-                itemMeta.setLore(addedlore);
+                itemMeta.setLore(addedLore);
                 dis.setItemMeta(itemMeta);
                 final CoinFlipOption o = new CoinFlipOption(s, slot, colorize(config.getString(p + "chosen")), dis, d(config, p + "selection"), colorize(config.getString(p + "selection.color")));
                 optionz.put(slot, o);
@@ -139,12 +138,9 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         active = new HashMap<>();
         available = new ArrayList<>();
 
-        final ConfigurationSection c = otherdata.getConfigurationSection("coinflips");
-        if(c != null) {
-            for(String s : c.getKeys(false)) {
-                final CoinFlipMatch m = new CoinFlipMatch(otherdata.getLong("coinflips." + s + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(s)), CoinFlipOption.paths.get(otherdata.getString("coinflips." + s + ".option")), getBigDecimal(otherdata.getString("coinflips." + s + ".wager")));
-                available.add(m);
-            }
+        for(String key : getConfigurationSectionKeys(otherdata, "coinflips", false)) {
+            final CoinFlipMatch m = new CoinFlipMatch(otherdata.getLong("coinflips." + key + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(key)), CoinFlipOption.paths.get(otherdata.getString("coinflips." + key + ".option")), getBigDecimal(otherdata.getString("coinflips." + key + ".wager")));
+            available.add(m);
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded Coin Flip &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -168,8 +164,8 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             m.delete();
         }
         saveOtherData();
-        for(Player p : new ArrayList<>(active.keySet())) {
-            p.closeInventory();
+        for(Player player : new ArrayList<>(active.keySet())) {
+            player.closeInventory();
         }
         CoinFlipOption.paths = null;
         CoinFlipMatch.matches = null;
@@ -183,16 +179,19 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             final Inventory top = player.getOpenInventory().getTopInventory();
             final double bal = eco.getBalance(player);
             final List<String> canAfford = getStringList(config, "wager.status.can afford"), cannotAfford = getStringList(config, "wager.status.cannot afford");
-            for(CoinFlipMatch m : available) {
+            for(CoinFlipMatch match : available) {
                 item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
-                final SkullMeta s = (SkullMeta) item.getItemMeta();
-                final OfflinePlayer c = m.getCreator();
-                if(isLegacy) s.setOwner(c.getName());
-                else s.setOwningPlayer(c);
-                s.setDisplayName(wagerName.replace("{PLAYER}", c.getName()));
-                final BigDecimal wager = m.getWager();
+                final SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
+                final OfflinePlayer c = match.getCreator();
+                if(isLegacy) {
+                    skullMeta.setOwner(c.getName());
+                } else {
+                    skullMeta.setOwningPlayer(c);
+                }
+                skullMeta.setDisplayName(wagerName.replace("{PLAYER}", c.getName()));
+                final BigDecimal wager = match.getWager();
                 final double wd = wager.doubleValue();
-                final String w = formatBigDecimal(wager), tax = formatBigDecimal(BigDecimal.valueOf(wd*this.tax)), ch = m.getCreatorOption().chosen;
+                final String w = formatBigDecimal(wager), tax = formatBigDecimal(BigDecimal.valueOf(wd*this.tax)), ch = match.getCreatorOption().chosen;
                 lore.clear();
                 for(String l : getStringList(config, "wager.lore")) {
                     if(l.equals("{STATUS}")) {
@@ -201,8 +200,8 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
                         lore.add(l.replace("{WAGER}", w).replace("{TAX}", tax).replace("{CHOSEN}", ch));
                     }
                 }
-                s.setLore(lore); lore.clear();
-                item.setItemMeta(s);
+                skullMeta.setLore(lore); lore.clear();
+                item.setItemMeta(skullMeta);
                 top.setItem(top.firstEmpty(), item);
             }
             player.updateInventory();
@@ -482,7 +481,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         final String winnerName = winner.getName(), color = winningOption.selectionColor, Lcolor = losingOption.selectionColor;
         eco.depositPlayer(winner, total.doubleValue()-taxed.doubleValue());
         item = winningOption.appear(); itemMeta = item.getItemMeta(); lore.clear();
-        itemMeta.setDisplayName(colorize(config.getString("challenge.winner.name")).replace("{COLOR}", color).replace("{PLAYER}", winnerName));
+        itemMeta.setDisplayName(getString(config, "challenge.winner.name").replace("{COLOR}", color).replace("{PLAYER}", winnerName));
         for(String s : getStringList(config, "challenge.winner.lore")) {
             lore.add(s.replace("{PLAYER}", winnerName).replace("{COLOR}", color));
         }

@@ -46,7 +46,10 @@ public class Masks extends CustomEnchants {
     public ItemStack maskgenerator;
     private List<String> maskCanObtain;
 
-    public String getIdentifier() { return "MASKS"; }
+    @Override
+    public String getIdentifier() {
+        return "MASKS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");
@@ -57,19 +60,19 @@ public class Masks extends CustomEnchants {
         GIVEDP_ITEM.items.put("maskgenerator", maskgenerator);
         maskCanObtain = config.getStringList("items.generator.can obtain");
 
-        final ArrayList<ItemStack> ms = new ArrayList<>();
         if(!otherdata.getBoolean("saved default masks")) {
             generateDefaultMasks();
             otherdata.set("saved default masks", true);
             saveOtherData();
         }
-        for(File f : new File(DATA_FOLDER + SEPARATOR + "masks").listFiles()) {
+        final List<ItemStack> list = new ArrayList<>();
+        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "masks")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
-                ms.add(m.getItem());
+                list.add(m.getItem());
             }
         }
-        addGivedpCategory(ms, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
+        addGivedpCategory(list, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MASK).size() + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -96,11 +99,15 @@ public class Masks extends CustomEnchants {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final int r = event.getRawSlot();
+        final int slot = event.getRawSlot();
         final String click = event.getClick().name();
-        if(r < 0 || !click.equals("RIGHT") && !event.getAction().equals(InventoryAction.SWAP_WITH_CURSOR)) return;
+        if(slot < 0 || !click.equals("RIGHT") && !event.getAction().equals(InventoryAction.SWAP_WITH_CURSOR)) {
+            return;
+        }
         final ItemStack current = event.getCurrentItem();
-        if(current == null || !current.getType().name().endsWith("HELMET")) return;
+        if(current == null || !current.getType().name().endsWith("HELMET")) {
+            return;
+        }
         final ItemStack mask = event.getCursor();
         final Mask m = valueOfMask(mask), onitem = getMaskOnItem(current);
         final Player player = (Player) event.getWhoClicked();
@@ -115,7 +122,8 @@ public class Masks extends CustomEnchants {
             else       item.setAmount(a);
             event.setCursor(item);
         } else if(click.equals("RIGHT") && onitem != null) {
-            item = current; itemMeta = item.getItemMeta(); lore.clear();
+            item = current;
+            itemMeta = item.getItemMeta(); lore.clear();
             lore.addAll(itemMeta.getLore());
             lore.remove(onitem.getApplied());
             itemMeta.setLore(lore); lore.clear();
@@ -123,7 +131,9 @@ public class Masks extends CustomEnchants {
             event.setCancelled(true);
             event.setCurrentItem(item);
             event.setCursor(onitem.getItem());
-        } else return;
+        } else {
+            return;
+        }
         player.updateInventory();
     }
 

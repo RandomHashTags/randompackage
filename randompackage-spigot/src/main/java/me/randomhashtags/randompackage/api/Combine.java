@@ -35,7 +35,9 @@ public class Combine extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "COMBINE"; }
+    public String getIdentifier() {
+        return "COMBINE";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "combine.yml");
@@ -55,7 +57,7 @@ public class Combine extends RPFeature implements CommandExecutor {
         final boolean isChest = targetType.equals(Material.CHEST) || targetType.equals(Material.TRAPPED_CHEST);
         final Chest chest = isChest ? (Chest) target.getState() : null;
         final Inventory inventory = isChest ? chest.getBlockInventory() : player.getInventory();
-        final String f = config.getString("messages.format");
+        final String format = getString(config, "messages.format");
         for(String string : getStringList(config, "messages.success")) {
             if(string.equals("{SUCCESS}")) {
                 for(int i = 0; i < combineores.size(); i++) {
@@ -67,7 +69,7 @@ public class Combine extends RPFeature implements CommandExecutor {
                     final int amount = (getTotalAmount(inventory, umaterial) / 9) * 9;
                     if(amount != 0) {
                         final int blockAmount = amount/9;
-                        player.sendMessage(colorize(f.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", name).replace("{AMOUNT_BLOCK}", "" + blockAmount).replace("{ITEM_BLOCK}", blockName)));
+                        player.sendMessage(colorize(format.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", name).replace("{AMOUNT_BLOCK}", "" + blockAmount).replace("{ITEM_BLOCK}", blockName)));
                         for(int z = 1; z <= amount; z++) {
                             inventory.removeItem(new ItemStack(material, 1, (byte) 0));
                         }

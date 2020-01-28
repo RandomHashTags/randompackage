@@ -5,7 +5,6 @@ import me.randomhashtags.randompackage.attribute.DepleteStackSize;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -31,8 +30,6 @@ public class MobStacker extends RPFeature {
     }
 
     public YamlConfiguration config;
-
-    private String defaultName;
     public List<EntityType> stackable;
     public HashMap<EntityType, String> customNames;
     private HashMap<UUID, LivingEntity> lastDamager;
@@ -42,7 +39,9 @@ public class MobStacker extends RPFeature {
     private HashMap<String, Double> stackRadius;
     private HashMap<String, Boolean> slaysStack;
 
-    public String getIdentifier() { return "MOB_STACKER"; }
+    public String getIdentifier() {
+        return "MOB_STACKER";
+    }
     public void load() {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "mob stacker.yml"));
@@ -52,7 +51,7 @@ public class MobStacker extends RPFeature {
         customNames = new HashMap<>();
         lastDamager = new HashMap<>();
 
-        defaultName = colorize(config.getString("names.default"));
+        final String defaultName = colorize(config.getString("names.default"));
         for(String s : config.getStringList("settings.stackable")) {
             stackable.add(EntityType.valueOf(s.toUpperCase()));
         }
@@ -109,14 +108,11 @@ public class MobStacker extends RPFeature {
     public void loadBackup() {
         final long started = System.currentTimeMillis();
         int loaded = 0;
-        final ConfigurationSection o = otherdata.getConfigurationSection("stacked mobs");
-        if(o != null) {
-            for(String s : o.getKeys(false)) {
-                final Entity e = getEntity(UUID.fromString(s));
-                if(e != null && !e.isDead() && e instanceof LivingEntity) {
-                    new StackedEntity(otherdata.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), otherdata.getInt("stacked mobs." + s + ".size"));
-                    loaded += 1;
-                }
+        for(String s : getConfigurationSectionKeys(otherdata, "stacked mobs", false)) {
+            final Entity e = getEntity(UUID.fromString(s));
+            if(e != null && !e.isDead() && e instanceof LivingEntity) {
+                new StackedEntity(otherdata.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), otherdata.getInt("stacked mobs." + s + ".size"));
+                loaded += 1;
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " stacked mobs &e(took " + (System.currentTimeMillis()-started) + "ms)");

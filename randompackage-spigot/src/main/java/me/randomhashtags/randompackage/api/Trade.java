@@ -37,7 +37,6 @@ public class Trade extends RPFeature implements CommandExecutor {
 	private String title;
 	private UInventory tradeInventory;
 	public ItemStack divider, accept, accepting;
-
 	private HashMap<UUID, UUID> requests;
 	private List<String> blacklistedMaterials;
 
@@ -51,7 +50,9 @@ public class Trade extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
-	public String getIdentifier() { return "TRADE"; }
+	public String getIdentifier() {
+		return "TRADE";
+	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");
@@ -80,17 +81,18 @@ public class Trade extends RPFeature implements CommandExecutor {
 		lore.clear();
 
 		requests = new HashMap<>();
-
 		sendConsoleMessage("&6[RandomPackage] &aLoaded Trade &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	public void unload() {
 		ActiveTrade.trades = null;
 	}
 
-	public int getCountdown() { return countdown; }
+	public int getCountdown() {
+		return countdown;
+	}
 
 	public void sendRequest(@NotNull Player sender, String receiver) {
-		final HashMap<String, String> r = new HashMap<>();
+		final HashMap<String, String> replacements = new HashMap<>();
 		if(hasPermission(sender, "RandomPackage.trade.request", true)) {
 			if(receiver == null
 					|| Bukkit.getPlayer(receiver) == null
@@ -98,24 +100,24 @@ public class Trade extends RPFeature implements CommandExecutor {
 					|| radius != -1 && (sender.getWorld() != Bukkit.getPlayer(receiver).getWorld()
 					|| radius != -2 && sender.getLocation().distance(Bukkit.getPlayer(receiver).getLocation()) > radius)
 			) {
-				r.put("{TARGET}", receiver);
-				sendStringListMessage(sender, getStringList(config, "messages.not within range"), r);
+				replacements.put("{TARGET}", receiver);
+				sendStringListMessage(sender, getStringList(config, "messages.not within range"), replacements);
 			} else if(sender == Bukkit.getPlayer(receiver)) {
 				sendStringListMessage(sender, getStringList(config, "messages.send self"), null);
 			} else {
-				final UUID s = sender.getUniqueId();
+				final UUID uuid = sender.getUniqueId();
 				final Player target = Bukkit.getPlayer(receiver);
-				if(requests.containsKey(target.getUniqueId()) && requests.get(target.getUniqueId()).equals(s)) {
+				if(requests.containsKey(target.getUniqueId()) && requests.get(target.getUniqueId()).equals(uuid)) {
 					acceptRequest(target, sender);
 				} else {
-					r.put("{TARGET}", target.getName());
-					r.put("{SENDER}", sender.getName());
-					sendStringListMessage(sender, getStringList(config, "messages.send request"), r);
-					sendStringListMessage(target, getStringList(config, "messages.receive request"), r);
-					requests.put(s, target.getUniqueId());
+					replacements.put("{TARGET}", target.getName());
+					replacements.put("{SENDER}", sender.getName());
+					sendStringListMessage(sender, getStringList(config, "messages.send request"), replacements);
+					sendStringListMessage(target, getStringList(config, "messages.receive request"), replacements);
+					requests.put(uuid, target.getUniqueId());
 					SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-						if(requests.containsKey(s) && requests.get(s).equals(target.getUniqueId())) {
-							requests.remove(s);
+						if(requests.containsKey(uuid) && requests.get(uuid).equals(target.getUniqueId())) {
+							requests.remove(uuid);
 						}
 					}, 20*10);
 				}
@@ -135,6 +137,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 			new ActiveTrade(requester, accepter);
 		}
 	}
+
 	@EventHandler
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
 		Player player = (Player) event.getPlayer(), other;

@@ -47,7 +47,6 @@ public class WildPvP extends RPFeature implements CommandExecutor {
 
     private int invincibilityDuration, nearbyRadius;
 
-    public String getIdentifier() { return "WILD_PVP"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -70,6 +69,10 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public String getIdentifier() {
+        return "WILD_PVP";
     }
     public void load() {
         final long started = System.currentTimeMillis();
@@ -253,7 +256,6 @@ public class WildPvP extends RPFeature implements CommandExecutor {
             delete(match);
         }
     }
-
     private void delete(PvPMatch m) {
         final int s = m.slot;
         final Inventory gi = gui.getInventory();
@@ -267,6 +269,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
         m.delete();
     }
+
     @EventHandler
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         viewing.remove(event.getPlayer());
@@ -289,9 +292,9 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         final Player player = event.getPlayer();
         final PvPMatch match = PvPMatch.valueOf(player);
         if(match != null) {
-            final String m = event.getMessage();
+            final String msg = event.getMessage();
             for(String s : blockedCommands) {
-                if(m.toLowerCase().startsWith(s)) {
+                if(msg.toLowerCase().startsWith(s)) {
                     event.setCancelled(true);
                     sendStringListMessage(player, getStringList(config, "messages.cannot use blocked command"), null);
                     return;

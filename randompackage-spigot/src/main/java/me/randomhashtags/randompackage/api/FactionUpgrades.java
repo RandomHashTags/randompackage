@@ -81,7 +81,7 @@ public class FactionUpgrades extends EventAttributes {
             }
             gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
-            for(File f : new File(DATA_FOLDER + SEPARATOR + "faction upgrades").listFiles()) {
+            for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "faction upgrades")) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());
@@ -123,11 +123,11 @@ public class FactionUpgrades extends EventAttributes {
 
     private void backup() {
         if(isEnabled()) {
-            for(String F : factionUpgrades.keySet()) {
-                final List<FactionUpgradeInfo> f = factionUpgrades.get(F);
-                fupgrades.set("factions." + F, null);
+            for(String faction : factionUpgrades.keySet()) {
+                final List<FactionUpgradeInfo> f = factionUpgrades.get(faction);
+                fupgrades.set("factions." + faction, null);
                 for(FactionUpgradeInfo info : f) {
-                    fupgrades.set("factions." + F + "." + info.getType().getIdentifier(), info.getLevel().asInt());
+                    fupgrades.set("factions." + faction + "." + info.getType().getIdentifier(), info.getLevel().asInt());
                 }
             }
             try {
@@ -143,15 +143,14 @@ public class FactionUpgrades extends EventAttributes {
         factionUpgrades = new HashMap<>();
         if(c != null) {
             for(String s : c.getKeys(false)) {
-                final ConfigurationSection f = fupgrades.getConfigurationSection("factions." + s);
-                final List<FactionUpgradeInfo> b = new ArrayList<>();
-                for(String a : f.getKeys(false)) {
-                    final FactionUpgrade u = getFactionUpgrade(a);
+                final List<FactionUpgradeInfo> upgrades = new ArrayList<>();
+                for(String upgrade : getConfigurationSectionKeys(fupgrades, "factions." + s, false)) {
+                    final FactionUpgrade u = getFactionUpgrade(upgrade);
                     if(u != null) {
-                        b.add(new FactionUpgradeInfo(u, u.getLevels().get(fupgrades.getInt("factions." + s + "." + a))));
+                        upgrades.add(new FactionUpgradeInfo(u, u.getLevels().get(fupgrades.getInt("factions." + s + "." + upgrade))));
                     }
                 }
-                factionUpgrades.put(s, b);
+                factionUpgrades.put(s, upgrades);
             }
         }
     }
@@ -233,7 +232,7 @@ public class FactionUpgrades extends EventAttributes {
             }
             info.setLevel(nextLevel);
             final int slot = upgrade.getSlot();
-            player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, colorize(config.getString("gui.tier")), colorize(config.getString("gui.locked.tier"))));
+            player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, getString(config, "gui.tier"), getString(config, "gui.locked.tier")));
             player.updateInventory();
         }
     }
@@ -303,7 +302,9 @@ public class FactionUpgrades extends EventAttributes {
         final String faction = regions.getFactionTag(player.getUniqueId());
         if(faction != null) {
             player.closeInventory();
-            if(!factionUpgrades.containsKey(faction)) factionUpgrades.put(faction, new ArrayList<>());
+            if(!factionUpgrades.containsKey(faction)) {
+                factionUpgrades.put(faction, new ArrayList<>());
+            }
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
@@ -389,8 +390,8 @@ public class FactionUpgrades extends EventAttributes {
             final int slot = event.getRawSlot();
             event.setCancelled(true);
             player.updateInventory();
-            final String c = event.getClick().name();
-            if(slot < 0 || slot >= top.getSize() || !c.contains("LEFT") && !c.contains("RIGHT") || event.getCurrentItem() == null) return;
+            final String click = event.getClick().name();
+            if(slot < 0 || slot >= top.getSize() || !click.contains("LEFT") && !click.contains("RIGHT") || event.getCurrentItem() == null) return;
             final FactionUpgrade f = valueOfFactionUpgrade(slot);
             if(f != null) {
                 tryToUpgrade(player, f);

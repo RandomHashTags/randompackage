@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Random;
 
 public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallengePrize {
     private final ItemStack display;
@@ -21,14 +20,23 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         this.rewards = rewards;
         register(Feature.GLOBAL_CHALLENGE_PRIZE, this);
     }
-    public String getIdentifier() { return "GLOBAL_CHALLENGE_PRIZE_" + placement; }
+    public String getIdentifier() {
+        return "GLOBAL_CHALLENGE_PRIZE_" + placement;
+    }
 
-    public ItemStack getItem() { return display; }
-    public int getAmount() { return amount; }
-    public int getPlacement() { return placement; }
-    public List<String> getRewards() { return rewards; }
+    public ItemStack getItem() {
+        return display;
+    }
+    public int getAmount() {
+        return amount;
+    }
+    public int getPlacement() {
+        return placement;
+    }
+    public List<String> getRewards() {
+        return rewards;
+    }
     public LinkedHashMap<String, ItemStack> getRandomRewards() {
-        final Random random = new Random();
         final LinkedHashMap<String, ItemStack> rewards = new LinkedHashMap<>();
         final List<String> availableRewards = new ArrayList<>(this.rewards);
         int amount = 0;
@@ -42,14 +50,16 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
             }
         }
         for(int i = amount; i < this.amount; i++) {
-            if(availableRewards.isEmpty()) return rewards;
-            final String randomReward = availableRewards.get(random.nextInt(availableRewards.size()));
-            final int chance = API.getRemainingInt(randomReward.split(";")[0]);
-            if(randomReward.toLowerCase().startsWith("chance=") && random.nextInt(100) <= chance) {
+            if(availableRewards.isEmpty()) {
+                return rewards;
+            }
+            final String randomReward = availableRewards.get(RANDOM.nextInt(availableRewards.size()));
+            final int chance = getRemainingInt(randomReward.split(";")[0]);
+            if(randomReward.toLowerCase().startsWith("chance=") && RANDOM.nextInt(100) <= chance) {
                 final String target = randomReward.split("chance=" + chance + ";")[1];
                 if(target.contains("||")) {
                     final String[] t = target.split("\\|\\|");
-                    final String ta = t[random.nextInt(t.length)];
+                    final String ta = t[RANDOM.nextInt(t.length)];
                     rewards.put(ta, API.d(null, ta));
                 } else {
                     rewards.put(target, API.d(null, target));

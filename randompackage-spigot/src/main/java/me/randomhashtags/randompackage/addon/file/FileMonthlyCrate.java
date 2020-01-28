@@ -22,19 +22,35 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         load(f);
         register(Feature.MONTHLY_CRATE, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
-    public int getCategory() { return yml.getInt("category"); }
-    public int getCategorySlot() { return yml.getInt("category slot"); }
-    public String getGuiTitle() { return colorize(yml.getString("title")); }
+    public int getCategory() {
+        return yml.getInt("category");
+    }
+    public int getCategorySlot() {
+        return yml.getInt("category slot");
+    }
+    public String getGuiTitle() {
+        return getString(yml, "title");
+    }
     public ItemStack getItem() {
         if(item == null) item = API.d(yml, "item");
         return getClone(item);
     }
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
-    public List<String> getBonusRewards() { return yml.getStringList("bonus"); }
-    public List<String> getRedeemFormat() { return yml.getStringList("inventory.redeem format"); }
-    public List<String> getBonusFormat() { return yml.getStringList("inventory.bonus format"); }
+    public List<String> getRewards() {
+        return getStringList(yml, "rewards");
+    }
+    public List<String> getBonusRewards() {
+        return getStringList(yml, "bonus");
+    }
+    public List<String> getRedeemFormat() {
+        return getStringList(yml, "inventory.redeem format");
+    }
+    public List<String> getBonusFormat() {
+        return getStringList(yml, "inventory.bonus format");
+    }
     public ItemStack getBackground() {
         if(background == null) background = API.d(yml, "inventory.background");
         return getClone(background);
@@ -122,15 +138,19 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return getReward(player, revealedBonus, excluding, canRepeatRewards, new ArrayList<>(getBonusRewards()));
     }
     private ItemStack getReward(Player player, HashMap<Player, List<String>> type, List<String> excluding, boolean canRepeatRewards, List<String> rewardType) {
-        if(!type.containsKey(player)) type.put(player, new ArrayList<>());
+        if(!type.containsKey(player)) {
+            type.put(player, new ArrayList<>());
+        }
         if(excluding != null) {
             rewardType.removeAll(excluding);
         }
         if(!canRepeatRewards) {
             rewardType.removeAll(type.get(player));
         }
-        final String r = rewardType.get(random.nextInt(rewardType.size())), R = r.contains("||") ? r.split("\\|\\|")[random.nextInt(r.split("\\|\\|").length)] : r;
-        if(!canRepeatRewards) type.get(player).add(r);
+        final String r = rewardType.get(RANDOM.nextInt(rewardType.size())), R = r.contains("||") ? r.split("\\|\\|")[RANDOM.nextInt(r.split("\\|\\|").length)] : r;
+        if(!canRepeatRewards) {
+            type.get(player).add(r);
+        }
         final ItemStack is = API.d(null, R);
         if(is != null) {
         }
