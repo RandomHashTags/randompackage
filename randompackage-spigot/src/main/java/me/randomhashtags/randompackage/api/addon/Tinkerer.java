@@ -38,6 +38,11 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         return instance;
     }
 
+    public YamlConfiguration config;
+    private UInventory tinkerer;
+    private ItemStack accept, acceptDupe, divider;
+    private List<Player> accepting;
+
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
@@ -45,12 +50,9 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public YamlConfiguration config;
-    private UInventory tinkerer;
-    private ItemStack accept, acceptDupe, divider;
-    private List<Player> accepting;
-
-    public String getIdentifier() { return "TINKERER"; }
+    public String getIdentifier() {
+        return "TINKERER";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "tinkerer.yml");
@@ -95,6 +97,12 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
             player.updateInventory();
         }
     }
+    public boolean isOnTradingSide(int slot) {
+        return slot >= 5 && slot <= 7 || slot >= 14 && slot <= 17 || slot >= 23 && slot <= 26 || slot >= 32 && slot <= 35 || slot >= 41 && slot <= 44 || slot >= 50 && slot <= 53;
+    }
+    public boolean isOnReceivingSide(int slot) {
+        return slot >= 1 && slot <= 3 || slot >= 9 && slot <= 12 || slot >= 18 && slot <= 21 || slot >= 27 && slot <= 30 || slot >= 36 && slot <= 39 || slot >= 45 && slot <= 48;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -103,13 +111,13 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         if(top.getHolder() == player && event.getView().getTitle().equals(tinkerer.getTitle())) {
             event.setCancelled(true);
             player.updateInventory();
-            final int rawslot = event.getRawSlot(), size = top.getSize();
-            int SLOT = top.firstEmpty();
+            final int rawslot = event.getRawSlot(), invSize = top.getSize();
+            int firstEmpty = top.firstEmpty();
             final ItemStack current = event.getCurrentItem();
-            final String clickType = event.getClick().name(), material = current != null ? current.getType().name() : null;
-            if(rawslot < 0 || !clickType.contains("LEFT") && !clickType.contains("RIGHT") || material == null || material.equals("AIR")) return;
+            final String click = event.getClick().name(), material = current != null ? current.getType().name() : null;
+            if(rawslot < 0 || !click.contains("LEFT") && !click.contains("RIGHT") || material == null || material.equals("AIR")) return;
 
-            final CustomEnchant e = current.hasItemMeta() && current.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(current.getItemMeta().getDisplayName()) : null;
+            final CustomEnchant customEnchant = current.hasItemMeta() && current.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(current.getItemMeta().getDisplayName()) : null;
             if(rawslot >= 4 && rawslot <= 8
                     || rawslot >= 13 && rawslot <= 17
                     || rawslot >= 22 && rawslot <= 26
@@ -121,27 +129,30 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
                 accepting.add(player);
                 player.closeInventory();
                 return;
-            } else if(rawslot < size) {
+            } else if(rawslot < invSize) {
                 giveItem(player, current);
                 item = new ItemStack(Material.AIR);
-                SLOT = rawslot;
+                firstEmpty = rawslot;
             } else if(top.firstEmpty() < 0) {
                 return;
-            } else if(e != null) {
-                final EnchantRarity R = valueOfCustomEnchantRarity(e);
-                final RarityFireball f = valueOfRarityFireball(Arrays.asList(R));
-                if(f != null) {
-                    final ItemStack itemstack = f.getItem();
-                    if(itemstack == null) return;
+            } else if(customEnchant != null) {
+                final EnchantRarity rarity = valueOfCustomEnchantRarity(customEnchant);
+                final RarityFireball fireball = valueOfRarityFireball(Arrays.asList(rarity));
+                if(fireball != null) {
+                    final ItemStack itemstack = fireball.getItem();
+                    if(itemstack == null) {
+                        return;
+                    }
                     item = itemstack.clone();
                 } else {
                     return;
                 }
             } else if(current.getItemMeta().hasEnchants() && (material.endsWith("HELMET") || material.endsWith("CHESTPLATE") || material.endsWith("LEGGINGS") || material.endsWith("BOOTS") || material.endsWith("SWORD") || material.endsWith("AXE") || material.endsWith("SPADE") || material.endsWith("SHOVEL") || material.endsWith("HOE") || material.endsWith("BOW"))) {
                 final BigDecimal zero = BigDecimal.ZERO;
-                BigDecimal xp = BigDecimal.ZERO;
+                BigDecimal xp = zero;
                 for(Enchantment enchant : current.getEnchantments().keySet()) {
-                    xp = xp.add(BigDecimal.valueOf(Integer.parseInt(config.getString("enchant values." + enchant.getName().toLowerCase()))));
+                    final String target = getString(config, "enchant values." + enchant.getName().toLowerCase());
+                    xp = xp.add(BigDecimal.valueOf(Integer.parseInt(target)));
                 }
                 if(current.hasItemMeta() && current.getItemMeta().hasLore()) {
                     final HashMap<CustomEnchant, Integer> enchants = CustomEnchants.getCustomEnchants().getEnchantsOnItem(current);
@@ -158,8 +169,10 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
             }
             final int first = top.firstEmpty();
             int slot = first <= 3 || rawslot <= 3 ? 4 : 5;
-            top.setItem(SLOT+slot, item);
-            if(rawslot >= size) top.setItem(first, current);
+            top.setItem(firstEmpty+slot, item);
+            if(rawslot >= invSize) {
+                top.setItem(first, current);
+            }
             event.setCurrentItem(new ItemStack(Material.AIR));
             player.updateInventory();
         }
@@ -170,18 +183,22 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         final Inventory inv = event.getInventory();
         if(inv.getHolder() == player) {
             final String title = event.getView().getTitle();
-            final boolean contains = accepting.contains(player);
+            final boolean isTinkerering = accepting.contains(player);
             accepting.remove(player);
             if(title.equals(tinkerer.getTitle())) {
-                sendStringListMessage(player, getStringList(config, "messages." + (contains ? "accept" : "cancel") + " trade"), null);
+                sendStringListMessage(player, getStringList(config, "messages." + (isTinkerering ? "accept" : "cancel") + " trade"), null);
                 for(int i = 0; i < inv.getSize(); i++) {
                     item = inv.getItem(i);
-                    if(item != null && (contains && (i >= 5 && i <= 7 || i >= 14 && i <= 17 || i >= 23 && i <= 26 || i >= 32 && i <= 35 || i >= 41 && i <= 44 || i >= 50 && i <= 53) || !contains && (i >= 1 && i <= 3 || i >= 9 && i <= 12 || i >= 18 && i <= 21 || i >= 27 && i <= 30 || i >= 36 && i <= 39 || i >= 45 && i <= 48))) {
+                    if(item != null && (isTinkerering && isOnTradingSide(i) || !isTinkerering && isOnReceivingSide(i))) {
                         giveItem(player, item);
                     }
                 }
-            } else { return; }
-            if(player.isOnline()) player.updateInventory();
+            } else {
+                return;
+            }
+            if(player.isOnline()) {
+                player.updateInventory();
+            }
         }
     }
 }

@@ -110,7 +110,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 
 		final List<ItemStack> tiers = new ArrayList<>();
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "envoy tiers")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "envoy tiers")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings")) {
 				final FileEnvoyCrate e = new FileEnvoyCrate(f);
 				tiers.add(e.getItem());

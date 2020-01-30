@@ -147,7 +147,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             otherdata.set("saved default player quests", true);
             saveOtherData();
         }
-        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "player quests")) {
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "player quests")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FilePlayerQuest(f);
             }

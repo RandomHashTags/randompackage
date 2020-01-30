@@ -72,7 +72,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "custom armor")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "custom armor")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
 				if(is != null) {

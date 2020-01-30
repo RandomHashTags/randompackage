@@ -81,7 +81,7 @@ public class FactionUpgrades extends EventAttributes {
             }
             gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
             final Inventory fi = gui.getInventory();
-            for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "faction upgrades")) {
+            for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "faction upgrades")) {
                 if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                     final FileFactionUpgrade fu = new FileFactionUpgrade(f);
                     fi.setItem(fu.getSlot(), fu.getItem());

@@ -69,10 +69,10 @@ public class CustomExplosions extends RPFeature {
 			saveOtherData();
 		}
 
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "custom creepers")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "custom creepers")) {
 			new FileCustomCreeper(f);
 		}
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "custom tnt")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "custom tnt")) {
 			new FileCustomTNT(f);
 		}
 

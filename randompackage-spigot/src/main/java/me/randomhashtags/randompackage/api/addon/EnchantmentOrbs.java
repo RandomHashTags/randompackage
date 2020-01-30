@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.EnchantmentOrb;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -30,17 +31,20 @@ public class EnchantmentOrbs extends RPFeature {
         final List<ItemStack > orbs = new ArrayList<>();
         save("addons", "enchantment orbs.yml");
         final YamlConfiguration config = getAddonConfig("enchantment orbs.yml");
-        for(String A : config.getConfigurationSection("enchantment orbs").getKeys(false)) {
-            item = d(config, "enchantment orbs." + A);
+        for(String key : config.getConfigurationSection("enchantment orbs").getKeys(false)) {
+            final String path = "enchantment orbs." + key;
+            item = d(config, path);
             final List<String> appliesto = new ArrayList<>();
-            for(String s : config.getString("enchantment orbs." + A + ".applies to").split(";")) appliesto.add(s.toUpperCase());
-            final int starting = config.getInt("enchantment orbs." + A + ".starting max slots"), increment = config.getInt("enchantment orbs." + A + ".upgrade increment");
+            for(String s : config.getString(path + ".applies to").split(";")) {
+                appliesto.add(s.toUpperCase());
+            }
+            final int starting = config.getInt(path + ".starting max slots"), increment = config.getInt(path + ".upgrade increment");
             int increm = increment;
-            for(int k = starting; k <= config.getInt("enchantment orbs." + A + ".final max slots"); k += increment) {
+            for(int k = starting; k <= config.getInt(path + ".final max slots"); k += increment) {
                 if(k != starting) {
                     increm += increment;
                 }
-                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = colorize(config.getString("enchantment orbs." + A + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
+                final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = colorize(config.getString(path + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
                 final ItemStack i = item.clone(); itemMeta = i.getItemMeta(); lore.clear();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
                 if(itemMeta.hasLore()) {
@@ -50,7 +54,7 @@ public class EnchantmentOrbs extends RPFeature {
                 }
                 itemMeta.setLore(lore); lore.clear();
                 i.setItemMeta(itemMeta);
-                new PathEnchantmentOrb(A, i, appliedlore, appliesto, k, increm);
+                new PathEnchantmentOrb(key, i, appliedlore, appliesto, k, increm);
                 orbs.add(i);
             }
         }
@@ -61,29 +65,37 @@ public class EnchantmentOrbs extends RPFeature {
         unregister(Feature.ENCHANTMENT_ORB);
     }
 
-    public void applyEnchantmentOrb(Player player, ItemStack is, ItemStack enchantmentorb, EnchantmentOrb orb) {
-        EnchantmentOrb prevOrb = null;
+    public void applyEnchantmentOrb(@NotNull Player player, @NotNull ItemStack is, @NotNull ItemStack enchantmentorb, @NotNull EnchantmentOrb orb) {
+        EnchantmentOrb appliedOrb = null;
         final int percent = getRemainingInt(enchantmentorb.getItemMeta().getLore().get(orb.getPercentLoreSlot()));
-        item = is; itemMeta = item.getItemMeta(); lore.clear();
-        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+        itemMeta = is.getItemMeta();
+        lore.clear();
+        if(itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
+        }
         for(String s : lore) {
-            EnchantmentOrb q = valueOfEnchantmentOrb(s);
-            if(q != null) prevOrb = q;
+            EnchantmentOrb eo = valueOfEnchantmentOrb(s);
+            if(eo != null) {
+                appliedOrb = eo;
+            }
         }
         if(RANDOM.nextInt(100) < percent) {
-            final String a = orb.getApplied();
-            if(prevOrb == null) {
-                lore.add(a);
+            final String applied = orb.getApplied();
+            if(appliedOrb == null) {
+                lore.add(applied);
             } else {
-                final String prev = prevOrb.getApplied();
+                final String prev = appliedOrb.getApplied();
                 boolean did = false;
                 for(int i = 0; i < lore.size(); i++) {
-                    if(!did && lore.get(i).equals(prev)) {
+                    if(lore.get(i).equals(prev)) {
                         did = true;
-                        lore.set(i, a);
+                        lore.set(i, applied);
+                        break;
                     }
                 }
-                if(!did) return;
+                if(!did) {
+                    return;
+                }
             }
             //playSuccess(player);
         } else {
@@ -91,7 +103,7 @@ public class EnchantmentOrbs extends RPFeature {
             return;
         }
         itemMeta.setLore(lore); lore.clear();
-        item.setItemMeta(itemMeta);
+        is.setItemMeta(itemMeta);
         player.updateInventory();
     }
 
@@ -115,12 +127,14 @@ public class EnchantmentOrbs extends RPFeature {
             if(orb != null && orb.canBeApplied(current)) {
                 applyEnchantmentOrb(player, current, cursor, orb);
                 //playSuccess((Player) event.getWhoClicked());
-                item.setItemMeta(itemMeta);
                 event.setCancelled(true);
-                event.setCurrentItem(item);
-                final int a = cursor.getAmount();
-                if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                else       cursor.setAmount(a-1);
+                event.setCurrentItem(current);
+                final int amount = cursor.getAmount();
+                if(amount == 1) {
+                    event.setCursor(new ItemStack(Material.AIR));
+                } else {
+                    cursor.setAmount(amount-1);
+                }
                 player.updateInventory();
             }
         }

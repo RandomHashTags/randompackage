@@ -110,7 +110,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         playerEnchants = new HashMap<>();
         equippedTimedEnchants = new HashMap<>();
 
-        for(File f : getFilesIn(folderString)) {
+        for(File f : getFilesInFolder(folderString)) {
             if(f.isDirectory()) {
                 final File[] files = new File(folderString + SEPARATOR + f.getName()).listFiles();
                 if(files != null) {

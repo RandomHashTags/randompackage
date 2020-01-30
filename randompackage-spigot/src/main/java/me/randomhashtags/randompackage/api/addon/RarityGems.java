@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.file.FileRarityGem;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,20 +27,21 @@ public class RarityGems extends RPFeature {
         return instance;
     }
 
-    public String getIdentifier() { return "RARITY_GEMS"; }
+    public String getIdentifier() {
+        return "RARITY_GEMS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("rarity gems", "_settings.yml");
         final YamlConfiguration config = getRPConfig("rarity gems", "_settings.yml");
 
         FileRarityGem.defaultColors = new HashMap<>();
-        final HashMap<Integer, String> d = FileRarityGem.defaultColors;
-        final ConfigurationSection C = config.getConfigurationSection("default colors");
-        d.put(-1, colorize(config.getString("default colors.else")));
-        d.put(0, colorize(config.getString("default colors.less than 100")));
-        for(String s : C.getKeys(false)) {
+        final HashMap<Integer, String> defaultColors = FileRarityGem.defaultColors;
+        defaultColors.put(-1, colorize(config.getString("default colors.else")));
+        defaultColors.put(0, colorize(config.getString("default colors.less than 100")));
+        for(String s : getConfigurationSectionKeys(config, "default colors", false)) {
             if(!s.equals("less than 100") && !s.equals("else") && s.endsWith("s")) {
-                d.put(Integer.parseInt(s.split("s")[0]), colorize(config.getString("default colors." + s)));
+                defaultColors.put(Integer.parseInt(s.split("s")[0]), colorize(config.getString("default colors." + s)));
             }
         }
 
@@ -54,7 +54,7 @@ public class RarityGems extends RPFeature {
             saveOtherData();
         }
 
-        for(File f : new File(DATA_FOLDER + SEPARATOR + "rarity gems").listFiles()) {
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "rarity gems")) {
             if(!f.getName().equals("_settings.yml")) {
                 new FileRarityGem(f);
             }
@@ -78,24 +78,27 @@ public class RarityGems extends RPFeature {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final ItemStack curs = event.getCursor(), curr = event.getCurrentItem();
-        if(curr != null && curs != null && curr.hasItemMeta() && curs.hasItemMeta()) {
-            final int cursorAmount = curs.getAmount();
-            final RarityGem cursor = valueOfRarityGem(curs), current = cursor != null ? valueOfRarityGem(curr) : null;
-            if(cursor == null || current == null) return;
-            if(cursor.equals(current)) {
+        final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
+        if(current != null && cursor != null && current.hasItemMeta() && cursor.hasItemMeta()) {
+            final RarityGem cursorGem = valueOfRarityGem(cursor), currentGem = cursorGem != null ? valueOfRarityGem(current) : null;
+            if(cursorGem == null || currentGem == null) {
+                return;
+            }
+            if(cursorGem.equals(currentGem)) {
                 final Player player = (Player) event.getWhoClicked();
-                final int combinedTotal = getRemainingInt(curs.getItemMeta().getDisplayName()) + getRemainingInt(curr.getItemMeta().getDisplayName());
+                final int combinedTotal = getRemainingInt(cursor.getItemMeta().getDisplayName()) + getRemainingInt(current.getItemMeta().getDisplayName());
                 event.setCancelled(true);
-                item = cursor.getItem();
+                item = cursorGem.getItem();
                 itemMeta = item.getItemMeta();
-                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", colorize(cursor.getColors(combinedTotal)) + combinedTotal));
+                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", colorize(cursorGem.getColors(combinedTotal)) + combinedTotal));
                 item.setItemMeta(itemMeta);
                 event.setCurrentItem(item);
-                if(cursorAmount == 1) event.setCursor(new ItemStack(Material.AIR));
-                else {
-                    curs.setAmount(cursorAmount-1);
-                    event.setCursor(curs);
+                final int amount = cursor.getAmount();
+                if(amount == 1) {
+                    event.setCursor(new ItemStack(Material.AIR));
+                } else {
+                    cursor.setAmount(amount-1);
+                    event.setCursor(cursor);
                 }
                 player.updateInventory();
             }
@@ -103,13 +106,13 @@ public class RarityGems extends RPFeature {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack I = event.getItem();
+        final ItemStack is = event.getItem();
         final Player player = event.getPlayer();
-        final RarityGem gem = valueOfRarityGem(I);
+        final RarityGem gem = valueOfRarityGem(is);
         if(gem != null) {
             event.setCancelled(true);
             player.updateInventory();
-            final int souls = getRemainingInt(I.getItemMeta().getDisplayName());
+            final int souls = getRemainingInt(is.getItemMeta().getDisplayName());
             if(souls > 0) {
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 pdata.toggleRarityGem(gem, pdata.hasActiveRarityGem(gem) ? gem.getToggleOffInteractMsg() : gem.getToggleOnMsg());
@@ -118,11 +121,11 @@ public class RarityGems extends RPFeature {
     }
     @EventHandler
     private void playerDeathEvent(PlayerDeathEvent event) {
-        final UUID u = event.getEntity().getUniqueId();
-        final RPPlayer pdata = RPPlayer.get(u);
-        for(RarityGem g : pdata.getRarityGems().keySet()) {
-            if(pdata.hasActiveRarityGem(g)) {
-                pdata.toggleRarityGem(g, g.getToggleOffDroppedMsg());
+        final UUID uuid = event.getEntity().getUniqueId();
+        final RPPlayer pdata = RPPlayer.get(uuid);
+        for(RarityGem gem : pdata.getRarityGems().keySet()) {
+            if(pdata.hasActiveRarityGem(gem)) {
+                pdata.toggleRarityGem(gem, gem.getToggleOffDroppedMsg());
             }
         }
     }

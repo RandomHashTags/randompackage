@@ -15,9 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
 
@@ -588,6 +586,52 @@ public interface RPValues extends UVersionable {
             final ServerCrateFlare f = crate.getFlare();
             if(f != null && flare.isSimilar(f.getItem())) {
                 return crate;
+            }
+        }
+        return null;
+    }
+    default SoulTracker valueOfSoulTracker(@NotNull RarityGem gem) {
+        for(SoulTracker st : getAllSoulTrackers().values()) {
+            if(st.getConvertsTo().equals(gem)) {
+                return st;
+            }
+        }
+        return null;
+    }
+    default SoulTracker valueOfSoulTracker(@NotNull ItemStack is) {
+        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+            final ItemMeta m = is.getItemMeta();
+            for(SoulTracker s : getAllSoulTrackers().values()) {
+                if(s.getItem().getItemMeta().equals(m)) {
+                    return s;
+                }
+            }
+        }
+        return null;
+    }
+    default HashMap<Integer, SoulTracker> valueOfSoulTrackerApplied(ItemStack is) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            final List<String> itemLore = is.getItemMeta().getLore();
+            final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
+            int slot = 0;
+            for(String s : itemLore) {
+                for(SoulTracker tracker : trackers) {
+                    final String applied = tracker.getApplied().replace("{SOULS}", "");
+                    if(s.startsWith(applied)) {
+                        final HashMap<Integer, SoulTracker> map = new HashMap<>();
+                        map.put(slot, tracker);
+                        return map;
+                    }
+                }
+                slot++;
+            }
+        }
+        return null;
+    }
+    default SoulTracker valueOfSoulTrackerApplied(@NotNull String trackerAppliedString) {
+        for(SoulTracker tracker : getAllSoulTrackers().values()) {
+            if(trackerAppliedString.startsWith(tracker.getApplied().replace("{SOULS}", ""))) {
+                return tracker;
             }
         }
         return null;

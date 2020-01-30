@@ -116,7 +116,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         }
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> categoryItemStacks = new HashMap<>();
-        for(File f : new File(folder).listFiles()) {
+        for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMonthlyCrate crate = new FileMonthlyCrate(f);
                 final int category = crate.getCategory();

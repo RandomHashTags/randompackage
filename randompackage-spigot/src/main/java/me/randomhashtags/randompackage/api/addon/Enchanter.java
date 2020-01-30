@@ -41,7 +41,9 @@ public class Enchanter extends RPFeature implements CommandExecutor {
     private HashMap<Integer, Long> costs;
     private HashMap<Integer, ItemStack> purchased;
     
-    public String getIdentifier() { return "ENCHANTER"; }
+    public String getIdentifier() {
+        return "ENCHANTER";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "enchanter.yml");
@@ -105,13 +107,18 @@ public class Enchanter extends RPFeature implements CommandExecutor {
                 if(give) {
                     final EnchanterPurchaseEvent e = new EnchanterPurchaseEvent(player, item, currency, cost);
                     PLUGIN_MANAGER.callEvent(e);
-                    if(e.isCancelled()) return;
+                    if(e.isCancelled()) {
+                        return;
+                    }
                     boolean bought = true;
                     cost = e.cost;
                     if(!isCreative) {
                         if(exp) {
-                            if(totalxp >= cost) setTotalExperience(player, (int) (totalxp-cost));
-                            else bought = false;
+                            if(totalxp >= cost) {
+                                setTotalExperience(player, (int) (totalxp-cost));
+                            } else {
+                                bought = false;
+                            }
                             message = getStringList(config, "messages." + (bought ? "xp purchase" : "need more xp"));
                         } else {
                             if(bal >= cost) {

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitGlobal;
 import me.randomhashtags.randompackage.addon.Kits;
@@ -41,10 +42,19 @@ public class KitsGlobal extends Kits {
     public boolean heroicEnchantedEffect, tierZeroEnchantEffect;
     private TreeMap<Integer, Float> tiermultipliers;
 
-    public String getIdentifier() { return "KITS_GLOBAL"; }
-    public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
-    public Class<? extends CustomKit> getCustomKit() { return CustomKitGlobal.class; }
-    public String getPath() { return "gkits"; }
+    public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        return false;
+    }
+    public String getIdentifier() {
+        return "KITS_GLOBAL";
+    }
+    public Class<? extends CustomKit> getCustomKit() {
+        return CustomKitGlobal.class;
+    }
+    public String getPath() {
+        return "gkits";
+    }
+
     public void load() {
         loadKitUtils();
         final long started = System.currentTimeMillis();
@@ -56,7 +66,9 @@ public class KitsGlobal extends Kits {
                     "HYPERDRIVE", "INDEPENDENCE", "LOKI", "MASTER_BUILDER", "PALADIN", "PARTY_ANIMAL", "SPOOKY",
                     "TEMPLAR", "TINKERMASTER", "TRICKSTER", "VALENTINES", "VIKING", "VOIDWALKER", "WARLOCK",
             };
-            for(String s : g) save("kits", "GKIT_" + s + ".yml");
+            for(String s : g) {
+                save("kits", "GKIT_" + s + ".yml");
+            }
             otherdata.set("saved default gkits", true);
             saveOtherData();
         }
@@ -71,25 +83,22 @@ public class KitsGlobal extends Kits {
         omniGem = d(config, "gkits.items.omni gem");
         cooldown = d(config, "gkits.items.cooldown");
         tiermultipliers = new TreeMap<>();
-        for(String s : config.getConfigurationSection("gkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
+        for(String s : getConfigurationSectionKeys(config, "gkits.gui.settings.tier custom enchant multiplier", false)) {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));
         }
 
         FileKitGlobal.heroicprefix = colorize(config.getString("gkits.items.heroic.prefix"));
 
-        final Inventory gi = gkit.getInventory();
+        final Inventory inv = gkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
-        final File folder = new File(DATA_FOLDER + SEPARATOR + "kits");
         int loaded = 0;
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
-                if(f.getName().startsWith("GKIT_")) {
-                    final FileKitGlobal g = new FileKitGlobal(f);
-                    gi.setItem(g.getSlot(), g.getItem());
-                    gems.add(g.getFallenHeroItem(g, false));
-                    fallenheroes.add(g.getFallenHeroItem(g, true));
-                    loaded++;
-                }
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "kits")) {
+            if(f.getName().startsWith("GKIT_")) {
+                final FileKitGlobal kit = new FileKitGlobal(f);
+                inv.setItem(kit.getSlot(), kit.getItem());
+                gems.add(kit.getFallenHeroItem(kit, false));
+                fallenheroes.add(kit.getFallenHeroItem(kit, true));
+                loaded++;
             }
         }
         addGivedpCategory(gems, UMaterial.DIAMOND, "Gkit Gems", "Givedp: Gkit Gems");
@@ -114,21 +123,51 @@ public class KitsGlobal extends Kits {
         FileKitGlobal.heroicprefix = null;
         unloadKitUtils();
     }
-    public boolean usesTiers() { return config.getBoolean("gkits.gui.settings.use tiers"); }
-    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
-    public UInventory getPreview() { return preview; }
-    public ItemStack getOmniGem() { return getClone(omniGem); }
-    public List<String> getNotInWarzoneMsg() { return getStringList(config, "gkits.messages.not in warzone"); }
-    public List<String> getAlreadyHaveMaxTierMsg() { return getStringList(config, "gkits.messages.already have max"); }
-    public List<String> getRedeemFallenHeroGemMsg() { return getStringList(config, "gkits.messages.redeem"); }
-    public List<String> getUpgradeMsg() { return getStringList(config, "gkits.messages.upgrade"); }
-    public List<String> getResetTargetDoesntExist() { return getStringList(config, "gkits.messages.target doesnt exist"); }
-    public List<String> getResetSuccess() { return getStringList(config, "gkits.messages.success"); }
-    public ItemStack getPreviewBackground() { return getClone(previewBackground); }
-    public ItemStack getCooldown() { return getClone(cooldown); }
-    public List<String> getPermissionsUnlocked() { return getStringList(config, "gkits.permissions.unlocked"); }
-    public List<String> getPermissionsLocked() { return getStringList(config, "gkits.permissions.locked"); }
-    public List<String> getPermissionsPreview() { return getStringList(config, "gkits.permissions.preview"); }
+    public boolean usesTiers() {
+        return config.getBoolean("gkits.gui.settings.use tiers");
+    }
+    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() {
+        return tiermultipliers;
+    }
+    public UInventory getPreview() {
+        return preview;
+    }
+    public ItemStack getOmniGem() {
+        return getClone(omniGem);
+    }
+    public List<String> getNotInWarzoneMsg() {
+        return getStringList(config, "gkits.messages.not in warzone");
+    }
+    public List<String> getAlreadyHaveMaxTierMsg() {
+        return getStringList(config, "gkits.messages.already have max");
+    }
+    public List<String> getRedeemFallenHeroGemMsg() {
+        return getStringList(config, "gkits.messages.redeem");
+    }
+    public List<String> getUpgradeMsg() {
+        return getStringList(config, "gkits.messages.upgrade");
+    }
+    public List<String> getResetTargetDoesntExist() {
+        return getStringList(config, "gkits.messages.target doesnt exist");
+    }
+    public List<String> getResetSuccess() {
+        return getStringList(config, "gkits.messages.success");
+    }
+    public ItemStack getPreviewBackground() {
+        return getClone(previewBackground);
+    }
+    public ItemStack getCooldown() {
+        return getClone(cooldown);
+    }
+    public List<String> getPermissionsUnlocked() {
+        return getStringList(config, "gkits.permissions.unlocked");
+    }
+    public List<String> getPermissionsLocked() {
+        return getStringList(config, "gkits.permissions.locked");
+    }
+    public List<String> getPermissionsPreview() {
+        return getStringList(config, "gkits.permissions.preview");
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
@@ -140,11 +179,13 @@ public class KitsGlobal extends Kits {
             if(t.equals(gkit.getTitle()) || inPreview) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final int r = event.getRawSlot();
-                final CustomKit k = valueOfCustomKit(r, CustomKitGlobal.class);
-                if(gkit == null || r < 0 || r >= top.getSize() || k == null) return;
+                final int slot = event.getRawSlot();
+                final CustomKit kit = valueOfCustomKit(slot, CustomKitGlobal.class);
+                if(gkit == null || slot < 0 || slot >= top.getSize() || kit == null) {
+                    return;
+                }
 
-                final CustomKitGlobal gkit = (CustomKitGlobal) k;
+                final CustomKitGlobal gkit = (CustomKitGlobal) kit;
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final int level = pdata.getKitLevel(gkit), tier = level <= 0 ? 1 : level;
                 if(inPreview) {
@@ -153,14 +194,13 @@ public class KitsGlobal extends Kits {
                 } else if(event.getClick().name().contains("RIGHT")) {
                     preview(player, gkit, gkit.getMaxLevel());
                 } else {
-                    final String n = gkit.getIdentifier();
                     final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
                     final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
                     final boolean hasPerm = hasPermissionToObtain(player, gkit);
                     if(!hasPerm) {
                         sendStringListMessage(player, getStringList(config, "gkits.messages.not unlocked kit"), null);
                     } else if(tiers.containsKey(gkit) && !cooldowns.containsKey(gkit)
-                            || !tiers.containsKey(gkit) && player.hasPermission("RandomPackage.kit." + n) && !cooldowns.containsKey(gkit)
+                            || !tiers.containsKey(gkit) && player.hasPermission("RandomPackage.kit." + gkit.getIdentifier()) && !cooldowns.containsKey(gkit)
                             || cooldowns.containsKey(gkit) && cooldowns.get(gkit) <= System.currentTimeMillis()) {
                         tryGiving(pdata, player, gkit, tier, 100, true);
                         setCooldown(player, gkit);
@@ -185,40 +225,51 @@ public class KitsGlobal extends Kits {
         }
     }
 
-    public void view(Player player) {
+    public void view(@NotNull Player player) {
         player.closeInventory();
         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
         player.openInventory(Bukkit.createInventory(player, gkit.getSize(), gkit.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(gkit.getInventory().getContents());
         player.updateInventory();
+
         final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
         final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
         final boolean usesTiers = usesTiers();
+        final List<String> preLore = getStringList(config, "gkits.gui.settings.pre lore"), addedLore = getStringList(config, "gkits.items.preview.added gui lore");
+        final List<String> locked = getStringList(config, "gkits.gui.settings.locked"), unlocked = getStringList(config, "gkits.gui.settings.unlocked");
         for(int i = 0; i < top.getSize(); i++) {
-            final CustomKit k = valueOfCustomKit(i, CustomKitGlobal.class);
-            if(k != null) {
-                item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
-                final String identifier = k.getIdentifier();
-                final boolean has = tiers.containsKey(k) || player.hasPermission("RandomPackage.kit." + identifier);
-                if(cooldowns.containsKey(k) && cooldowns.get(k) > System.currentTimeMillis()) {
-                    setCooldown(player, k);
+            final CustomKit kit = valueOfCustomKit(i, CustomKitGlobal.class);
+            if(kit != null) {
+                item = top.getItem(i);
+                itemMeta = item.getItemMeta(); lore.clear();
+                final boolean has = hasPermissionToObtain(pdata, player, kit);
+                if(cooldowns.containsKey(kit) && cooldowns.get(kit) > System.currentTimeMillis()) {
+                    setCooldown(player, kit);
                 } else {
-                    final CustomKitGlobal gkit = (CustomKitGlobal) k;
-                    final int tier = tiers.containsKey(k) ? tiers.get(k) : has ? 1 : 0;
-                    final boolean isheroic = gkit.isHeroic(), q = isheroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(k) && !(tier < 1));
+                    final CustomKitGlobal gkit = (CustomKitGlobal) kit;
+                    final int tier = tiers.containsKey(kit) ? tiers.get(kit) : has ? 1 : 0;
+                    final boolean isHeroic = gkit.isHeroic(), isEnchanted = isHeroic && heroicEnchantedEffect && (has || tierZeroEnchantEffect && tiers.containsKey(kit) && !(tier < 1));
                     if(usesTiers) {
-                        for(String s : getStringList(config, "gkits.gui.settings.pre lore"))
-                            lore.add(colorize(s.replace("{TIER}", tier != 0 ? toRoman(tier) : "0").replace("{MAX_TIER}", toRoman(k.getMaxLevel()))));
+                        final String romanTier = tier != 0 ? toRoman(tier) : "0", romanMax = toRoman(kit.getMaxLevel());
+                        for(String s : preLore) {
+                            lore.add(s.replace("{TIER}", romanTier).replace("{MAX_TIER}", romanMax));
+                        }
                     }
-                    if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                    for(String s : getStringList(config, "gkits.gui.settings." + (has ? "un" : "") + "locked")) lore.add(colorize(s));
-                    for(String s : getStringList(config, "gkits.items.preview.added gui lore")) lore.add(colorize(s));
+                    if(itemMeta.hasLore()) {
+                        lore.addAll(itemMeta.getLore());
+                    }
+                    lore.addAll(has ? unlocked : locked);
+                    lore.addAll(addedLore);
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                    if(q) itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    if(isEnchanted) {
+                        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    }
                     itemMeta.setLore(lore); lore.clear();
                     item.setItemMeta(itemMeta);
-                    if(q) item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    if(isEnchanted) {
+                        item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                    }
                 }
             }
         }

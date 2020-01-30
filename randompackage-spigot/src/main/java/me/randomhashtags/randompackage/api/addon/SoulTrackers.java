@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +35,6 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
 
     public YamlConfiguration config;
 
-    public String getIdentifier() { return "SOUL_TRACKERS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, "RandomPackage.splitsouls", true)) {
@@ -46,18 +43,18 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    public String getIdentifier() {
+        return "SOUL_TRACKERS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "soul trackers.yml");
         config = getAddonConfig("soul trackers.yml");
-        final ConfigurationSection cs = config.getConfigurationSection("soul trackers");
-        if(cs != null) {
-            final List<ItemStack> z = new ArrayList<>();
-            for(String s : cs.getKeys(false)) {
-                z.add(new PathSoulTracker(s).getItem());
-            }
-            addGivedpCategory(z, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
+        final List<ItemStack> list = new ArrayList<>();
+        for(String s : getConfigurationSectionKeys(config, "soul trackers", false)) {
+            list.add(new PathSoulTracker(s).getItem());
         }
+        addGivedpCategory(list, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " +  getAll(Feature.SOUL_TRACKER).size() + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
@@ -78,8 +75,8 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
                     if(!lore.isEmpty()) {
                         for(int i = 0; i < lore.size(); i++) {
                             final String targetLore = lore.get(i);
-                            for(SoulTracker st : trackers) {
-                                if(targetLore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
+                            for(SoulTracker tracker : trackers) {
+                                if(targetLore.startsWith(tracker.getApplied().replace("{SOULS}", ""))) {
                                     lore.set(i, applied.replace("{SOULS}", "0"));
                                     itemMeta.setLore(lore);
                                     is.setItemMeta(itemMeta);
@@ -104,19 +101,19 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
     }
     public void splitsouls(@NotNull Player player, int amount) {
         item = getItemInHand(player);
-        RarityGem g = valueOfRarityGem(item);
+        RarityGem gem = valueOfRarityGem(item);
         int collectedsouls = 0, gems = 0;
         List<String> msg = null;
         SoulTracker appliedTracker = null;
-        if(g != null) {
-            msg = g.getSplitMsg();
+        if(gem != null) {
+            msg = gem.getSplitMsg();
             collectedsouls = getRemainingInt(item.getItemMeta().getDisplayName());
             if(collectedsouls <= 0 || amount > collectedsouls) {
                 sendStringListMessage(player, getStringList(config, "messages.need to collect souls"), null);
                 return;
             } else {
                 gems = amount;
-                item.setItemMeta(g.getItem(collectedsouls-gems).getItemMeta());
+                item.setItemMeta(gem.getItem(collectedsouls-gems).getItemMeta());
             }
         } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
             sendStringListMessage(player, getStringList(config, "messages.need item with soul tracker"), null);
@@ -170,10 +167,15 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             }
         }
         if(msg != null) {
-            if(g == null) g = appliedTracker.getConvertsTo();
-            item = g.getItem(); itemMeta = item.getItemMeta();
-            itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", colorize(g.getColors(gems)) + gems));
-            if(gems != 0) item.setAmount(1);
+            if(gem == null) {
+                gem = appliedTracker.getConvertsTo();
+            }
+            item = gem.getItem();
+            itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(item.getItemMeta().getDisplayName().replace("{SOULS}", colorize(gem.getColors(gems)) + gems));
+            if(gems != 0) {
+                item.setAmount(1);
+            }
             item.setItemMeta(itemMeta);
             giveItem(player, item);
             final HashMap<String, String> replacements = new HashMap<>();
@@ -185,24 +187,25 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         }
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
         final SoulTracker soultracker = valueOfSoulTracker(cursor);
         if(soultracker != null && current != null && !current.getType().equals(Material.AIR)) {
-            final String n = current.getType().name();
-            for(String s : soultracker.getAppliesTo()) {
-                if(n.endsWith(s.toUpperCase())) {
-                    item = current;
+            final String material = current.getType().name();
+            for(String allowedMaterial : soultracker.getAppliesTo()) {
+                if(material.endsWith(allowedMaterial.toUpperCase())) {
                     final Player player = (Player) event.getWhoClicked();
                     applySoulTracker(player, current, soultracker);
                     //playSuccess((Player) event.getWhoClicked());
                     event.setCancelled(true);
-                    event.setCurrentItem(item);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
+                    event.setCurrentItem(current);
+                    final int amount = cursor.getAmount();
+                    if(amount == 1) {
+                        event.setCursor(new ItemStack(Material.AIR));
+                    } else {
+                        cursor.setAmount(amount-1);
+                    }
                     player.updateInventory();
                     break;
                 }
@@ -216,12 +219,13 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         if(killer != null) {
             final ItemStack is = killer.getItemInHand();
             if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-                final HashMap<Integer, SoulTracker> s = valueOfApplied(is);
-                if(s != null) {
-                    final SoulTracker tracker = (SoulTracker) s.values().toArray()[0];
-                    final String t = tracker.getTracks();
-                    if(t.equals("PLAYERS") && victim instanceof Player || t.equals("MOBS") && !(victim instanceof Player)) {
-                        addSouls(killer, is, (int) s.keySet().toArray()[0], tracker);
+                final HashMap<Integer, SoulTracker> appliedTracker = valueOfSoulTrackerApplied(is);
+                if(appliedTracker != null) {
+                    final SoulTracker tracker = (SoulTracker) appliedTracker.values().toArray()[0];
+                    final String tracks = tracker.getTracks();
+                    if(tracks.equals("PLAYERS") && victim instanceof Player
+                            || tracks.equals("MOBS") && !(victim instanceof Player)) {
+                        addSouls(killer, is, (int) appliedTracker.keySet().toArray()[0], tracker);
                     }
                 }
             }
@@ -234,52 +238,5 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
         itemMeta.setLore(lore); lore.clear();
         is.setItemMeta(itemMeta);
         player.updateInventory();
-    }
-
-    public SoulTracker valueOf(RarityGem gem) {
-        for(SoulTracker st : getAllSoulTrackers().values()) {
-            if(st.getConvertsTo().equals(gem)) {
-                return st;
-            }
-        }
-        return null;
-    }
-    public SoulTracker valueOfSoulTracker(ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final ItemMeta m = is.getItemMeta();
-            for(SoulTracker s : getAllSoulTrackers().values()) {
-                if(s.getItem().getItemMeta().equals(m)) {
-                    return s;
-                }
-            }
-        }
-        return null;
-    }
-    public HashMap<Integer, SoulTracker> valueOfApplied(ItemStack is) {
-        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            final List<String> l = is.getItemMeta().getLore();
-            final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
-            int slot = 0;
-            for(String s : l) {
-                for(SoulTracker t : trackers) {
-                    final String a = t.getApplied().replace("{SOULS}", "");
-                    if(s.startsWith(a)) {
-                        final HashMap<Integer, SoulTracker> h = new HashMap<>();
-                        h.put(slot, t);
-                        return h;
-                    }
-                }
-                slot++;
-            }
-        }
-        return null;
-    }
-    public SoulTracker valueOf(String appliedlore) {
-        for(SoulTracker st : getAllSoulTrackers().values()) {
-            if(appliedlore.startsWith(st.getApplied().replace("{SOULS}", ""))) {
-                return st;
-            }
-        }
-        return null;
     }
 }

@@ -4,13 +4,12 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.addon.RarityFireball;
-import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.addon.file.PathFireball;
 import me.randomhashtags.randompackage.addon.file.PathMagicDust;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,33 +31,28 @@ public class Fireballs extends CustomEnchants {
 
     public ItemStack mysterydust;
 
-    @Override public String getIdentifier() { return "FIREBALLS"; }
+    @Override
+    public String getIdentifier() {
+        return "FIREBALLS";
+    }
     @Override
     public void load() {
-        long started = System.currentTimeMillis();
+        final long started = System.currentTimeMillis();
         save("addons", "fireballs.yml");
         config = getAddonConfig("fireballs.yml");
         mysterydust = d(config, "items.mystery dust");
         GIVEDP_ITEM.items.put("mysterydust", mysterydust);
 
-        ConfigurationSection cs = config.getConfigurationSection("fireballs");
-        final List<ItemStack> z = new ArrayList<>();
-        if(cs != null) {
-            for(String s : cs.getKeys(false)) {
-                z.add(new PathFireball(s).getItem());
-            }
+        final List<ItemStack> list = new ArrayList<>();
+        for(String s : getConfigurationSectionKeys(config, "fireballs", false)) {
+            list.add(new PathFireball(s).getItem());
         }
-        addGivedpCategory(z, UMaterial.FIRE_CHARGE, "Rarity Fireballs", "Givedp: Rarity Fireballs");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_FIREBALL).size() + " Fireballs &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        for(String s : getConfigurationSectionKeys(config, "dusts", false)) {
+            new PathMagicDust(s);
+        }
 
-        started = System.currentTimeMillis();
-        cs = config.getConfigurationSection("dusts");
-        if(cs != null) {
-            for(String s : cs.getKeys(false)) {
-                new PathMagicDust(s);
-            }
-        }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MAGIC_DUST).size() + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        addGivedpCategory(list, UMaterial.FIRE_CHARGE, "Rarity Fireballs", "Givedp: Rarity Fireballs");
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_FIREBALL).size() + " Fireballs & " + getAll(Feature.MAGIC_DUST).size() + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
@@ -67,12 +61,12 @@ public class Fireballs extends CustomEnchants {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack I = event.getItem();
+        final ItemStack is = event.getItem();
         final Player player = event.getPlayer();
-        final RarityFireball fireball = valueOfRarityFireball(I);
+        final RarityFireball fireball = valueOfRarityFireball(is);
         if(fireball != null) {
             event.setCancelled(true);
-            removeItem(player, I, 1);
+            removeItem(player, is, 1);
             ItemStack reward = fireball.getRevealedItem(true);
             if(reward == null) {
                 reward = mysterydust.clone();
@@ -82,19 +76,19 @@ public class Fireballs extends CustomEnchants {
             giveItem(player, reward);
         }
     }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(current != null && !current.getType().equals(Material.AIR) && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
-            item = current; itemMeta = current.getItemMeta(); lore.clear();
+            item = current;
+            itemMeta = current.getItemMeta(); lore.clear();
             final CustomEnchant enchant = valueOfCustomEnchant(current);
             final MagicDust dust = valueOfMagicDust(cursor);
             if(dust != null && enchant != null) {
-                final EnchantRarity ra = valueOfCustomEnchantRarity(enchant);
-                if(dust.getAppliesToRarities().contains(ra)) {
-                    final String SUCCESS = ra.getSuccess();
+                final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
+                if(dust.getAppliesToRarities().contains(rarity)) {
+                    final String SUCCESS = rarity.getSuccess();
                     int percent = -1;
                     final List<String> l = dust.getItem().getItemMeta().getLore(), cursorLore = cursor.getItemMeta().getLore();
                     for(int z = 0; z < l.size(); z++) {
@@ -102,13 +96,19 @@ public class Fireballs extends CustomEnchants {
                             percent = getRemainingInt(cursorLore.get(z));
                         }
                     }
-                    if(percent == -1) return;
+                    if(percent == -1) {
+                        return;
+                    }
                     for(String string : itemMeta.getLore()) {
-                        int r = getRemainingInt(string);
-                        if(string.equals(SUCCESS.replace("{PERCENT}", "" + r))) {
-                            if(r >= 100) return;
-                            else if(r + percent > 100) { r = 50; percent = 50; }
-                            string = SUCCESS.replace("{PERCENT}", "" + (r + percent));
+                        int remaining = getRemainingInt(string);
+                        if(string.equals(SUCCESS.replace("{PERCENT}", "" + remaining))) {
+                            if(remaining >= 100) {
+                                return;
+                            } else if(remaining+percent > 100) {
+                                remaining = 50;
+                                percent = 50;
+                            }
+                            string = SUCCESS.replace("{PERCENT}", "" + (remaining + percent));
                         }
                         lore.add(colorize(string));
                     }
@@ -117,9 +117,12 @@ public class Fireballs extends CustomEnchants {
                     item.setItemMeta(itemMeta);
                     event.setCancelled(true);
                     event.setCurrentItem(item);
-                    final int a = cursor.getAmount();
-                    if(a == 1) event.setCursor(new ItemStack(Material.AIR));
-                    else       cursor.setAmount(a-1);
+                    final int amount = cursor.getAmount();
+                    if(amount == 1) {
+                        event.setCursor(new ItemStack(Material.AIR));
+                    } else {
+                        cursor.setAmount(amount-1);
+                    }
                     player.updateInventory();
                 }
             }

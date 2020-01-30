@@ -76,7 +76,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         final List<ItemStack> pets = new ArrayList<>();
         pets.add(leash);
         pets.add(rarecandy);
-        for(File f : getFilesIn(folder)) {
+        for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
                 pets.add(p.getItem(1, 0));

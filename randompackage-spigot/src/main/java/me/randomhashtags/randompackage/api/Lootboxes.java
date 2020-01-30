@@ -89,7 +89,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             otherdata.set("saved default lootboxes", true);
             saveOtherData();
         }
-        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "lootboxes")) {
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "lootboxes")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FileLootbox(f);
             }

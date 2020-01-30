@@ -111,7 +111,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			otherdata.set("saved default global challenges", true);
 			saveOtherData();
 		}
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "global challenges")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "global challenges")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				new FileGlobalChallenge(f);
 			}

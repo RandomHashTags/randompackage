@@ -40,16 +40,6 @@ public class Alchemist extends RPFeature implements CommandExecutor {
         return instance;
     }
 
-    public String getIdentifier() {
-        return "ALCHEMIST";
-    }
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player) {
-            view((Player) sender);
-        }
-        return true;
-    }
-
     public YamlConfiguration config;
     private UInventory alchemist;
     private String currency;
@@ -57,6 +47,16 @@ public class Alchemist extends RPFeature implements CommandExecutor {
     private ItemStack accept, exchange, preview, background;
     private List<Player> accepting;
 
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if(sender instanceof Player) {
+            view((Player) sender);
+        }
+        return true;
+    }
+
+    public String getIdentifier() {
+        return "ALCHEMIST";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "alchemist.yml");
@@ -120,11 +120,14 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                 if(r == 3 || r == 5) {
                     giveItem(player, current);
                     top.setItem(r, new ItemStack(Material.AIR));
-
                     item = preview.clone();
-                    if(!top.getItem(13).equals(item)) top.setItem(13, item);
+                    if(!top.getItem(13).equals(item)) {
+                        top.setItem(13, item);
+                    }
                     item = exchange.clone();
-                    if(!top.getItem(22).equals(item)) top.setItem(22, item);
+                    if(!top.getItem(22).equals(item)) {
+                        top.setItem(22, item);
+                    }
 
                 } else if(r == 22 && top.getItem(3) != null && top.getItem(5) != null && !top.getItem(13).equals(preview)) {
                     final int cost = getRemainingInt(top.getItem(22).getItemMeta().getLore().get(costSlot));
@@ -160,7 +163,8 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                         } else {
                             playSound(config, "sounds.upgrade creative", player, l, false);
                         }
-                        item = top.getItem(13).clone(); itemMeta = item.getItemMeta();
+                        item = top.getItem(13).clone();
+                        itemMeta = item.getItemMeta();
                         itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
                         itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
                         item.setItemMeta(itemMeta);
@@ -170,44 +174,52 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                     }
                 }
             } else if(current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore()) {
-                final ItemMeta cm = current.getItemMeta();
-                final CustomEnchant enchant = valueOfCustomEnchant(cm.getDisplayName());
+                final ItemMeta currentMeta = current.getItemMeta();
+                final CustomEnchant enchant = valueOfCustomEnchant(currentMeta.getDisplayName());
                 final MagicDust dust = enchant == null ? valueOfMagicDust(event.getCurrentItem()) : null;
-                final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, d = cm.getDisplayName();
-                final int F = top.firstEmpty();
+                final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, currentName = currentMeta.getDisplayName();
+                final int firstEmpty = top.firstEmpty();
                 if(suCCess != null) {
                     boolean upgrade = false;
                     final BigDecimal zero = BigDecimal.ZERO;
                     BigDecimal cost = zero;
-                    if(F == 5 && !top.getItem(3).getItemMeta().getDisplayName().equals(d)
-                            || F == 3 && top.getItem(5) != null && !top.getItem(5).getItemMeta().getDisplayName().equals(d)
-                            || F < 0
+                    if(firstEmpty == 5 && !top.getItem(3).getItemMeta().getDisplayName().equals(currentName)
+                            || firstEmpty == 3 && top.getItem(5) != null && !top.getItem(5).getItemMeta().getDisplayName().equals(currentName)
+                            || firstEmpty < 0
                     ) {
                         return;
-                    } else if(F == 3 && top.getItem(5) == null
-                            || F == 5 && top.getItem(3) == null) {
+                    } else if(firstEmpty == 3 && top.getItem(5) == null || firstEmpty == 5 && top.getItem(3) == null) {
                         // This is meant to be here :)
-                        if(dust != null && dust.getUpgradeCost().equals(zero)) return;
+                        if(dust != null && dust.getUpgradeCost().equals(zero)) {
+                            return;
+                        }
                     } else {
-                        final int slot = F == 3 ? 5 : 3;
+                        final int slot = firstEmpty == 3 ? 5 : 3;
                         if(suCCess.equals("dust")) {
-                            final MagicDust u = dust.getUpgradesTo();
-                            if(u != null) {
-                                item = top.getItem(slot).clone(); itemMeta = item.getItemMeta(); lore.clear();
+                            final MagicDust upgradedDust = dust.getUpgradesTo();
+                            if(upgradedDust != null) {
+                                item = top.getItem(slot).clone();
+                                itemMeta = item.getItemMeta(); lore.clear();
                                 cost = dust.getUpgradeCost();
                                 boolean did = false;
-                                if(cost.equals(zero)) return;
-                                for(int i = 0; i < itemMeta.getLore().size(); i++) {
-                                    if(getRemainingInt(itemMeta.getLore().get(i)) != -1 && !did) {
+                                if(cost.equals(zero)) {
+                                    return;
+                                }
+                                final List<String> targetLore = itemMeta.getLore(), currentLore = currentMeta.getLore();
+                                for(int i = 0; i < targetLore.size(); i++) {
+                                    final String target = targetLore.get(i);
+                                    if(getRemainingInt(target) != -1 && !did) {
                                         did = true;
-                                        int percent = ((getRemainingInt(itemMeta.getLore().get(i)) + getRemainingInt(cm.getLore().get(i))) / 2);
-                                        item = u.getItem();
+                                        int percent = ((getRemainingInt(target) + getRemainingInt(currentLore.get(i))) / 2);
+                                        item = upgradedDust.getItem();
                                         if(item == null) {
                                             return;
                                         }
                                         item = item.clone(); itemMeta = item.getItemMeta();
                                         for(String s : itemMeta.getLore()) {
-                                            if(s.contains("{PERCENT}")) s = s.replace("{PERCENT}", "" + percent);
+                                            if(s.contains("{PERCENT}")) {
+                                                s = s.replace("{PERCENT}", "" + percent);
+                                            }
                                             lore.add(s);
                                         }
                                         itemMeta.setLore(lore); lore.clear();
@@ -217,9 +229,9 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                             }
                         } else {
                             final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
-                            final EnchantRarity rar = valueOfCustomEnchantRarity(enchant);
-                            final String SUCCESS = rar.getSuccess(), DESTROY = rar.getDestroy();
-                            final int level = enchants.getEnchantmentLevel(cm.getDisplayName());
+                            final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
+                            final String successString = rarity.getSuccess(), destroyString = rarity.getDestroy();
+                            final int level = enchants.getEnchantmentLevel(currentMeta.getDisplayName());
                             if(level >= enchant.getMaxLevel()) {
                                 return;
                             } else {
@@ -230,18 +242,24 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                             itemMeta = item.getItemMeta();
                             itemMeta.setDisplayName("randomhashtags was here");
                             int success = 0, destroy = 0, higherDestroy = -1;
-                            final List<String> l = is.getItemMeta().getLore(), cml = cm.getLore();
+                            final List<String> l = is.getItemMeta().getLore(), currentLore = currentMeta.getLore();
                             for(int i = 0; i <= 100; i++) {
-                                if(l.contains(SUCCESS.replace("{PERCENT}", "" + i)) || cml.contains(SUCCESS.replace("{PERCENT}", "" + i))) {
+                                final String targetSuccess = successString.replace("{PERCENT}", "" + i);
+                                final String targetDestroy = destroyString.replace("{PERCENT}", "" + i);
+                                if(l.contains(targetSuccess) || currentLore.contains(targetSuccess)) {
                                     success = success + (i/4);
                                 }
-                                if(l.contains(DESTROY.replace("{PERCENT}", "" + i)) || cml.contains(DESTROY.replace("{PERCENT}", "" + i))) {
-                                    if(i > higherDestroy) higherDestroy = i;
+                                if(l.contains(targetDestroy) || currentLore.contains(targetDestroy)) {
+                                    if(i > higherDestroy) {
+                                        higherDestroy = i;
+                                    }
                                     destroy = destroy + i;
                                 }
                             }
                             destroy = higherDestroy + (destroy/4);
-                            if(destroy > 100) destroy = 100;
+                            if(destroy > 100) {
+                                destroy = 100;
+                            }
                             item = enchants.getRevealedItem(enchant, level+1, success, destroy, true, true).clone();
                             itemMeta = item.getItemMeta();
                         }
@@ -284,7 +302,9 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                     giveItem(player, inv.getItem(3));
                     giveItem(player, inv.getItem(5));
                 }
-            } else { return; }
+            } else {
+                return;
+            }
             if(player.isOnline()) {
                 player.updateInventory();
             }

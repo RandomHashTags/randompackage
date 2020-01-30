@@ -66,7 +66,7 @@ public class Masks extends CustomEnchants {
             saveOtherData();
         }
         final List<ItemStack> list = new ArrayList<>();
-        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "masks")) {
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "masks")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileMask m = new FileMask(f);
                 list.add(m.getItem());

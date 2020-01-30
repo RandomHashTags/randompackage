@@ -92,7 +92,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
             final String p = "bosses." + s + ".";
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), colorize(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
-        for(File f : getFilesIn(folder)) {
+        for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
                 final int spawninterval = c.getSpawnInterval()*20;

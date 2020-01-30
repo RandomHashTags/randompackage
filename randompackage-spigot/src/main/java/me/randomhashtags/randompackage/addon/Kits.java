@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.attribute.SetLevelupChance;
@@ -33,8 +34,10 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     public static List<HumanEntity> previewing;
 
     public final boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        final boolean b = executeCommand(sender, cmd, commandLabel, args);
-        if(b) return true;
+        final boolean preCommand = executeCommand(sender, cmd, commandLabel, args);
+        if(preCommand) {
+            return true;
+        }
         final Class<? extends CustomKit> type = getCustomKit();
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String c = cmd.getName();
@@ -85,18 +88,17 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 otherdata.set("saved default fallen heroes", true);
                 saveOtherData();
             }
-            final File folder = new File(DATA_FOLDER + SEPARATOR + "fallen heroes");
-            if(folder.exists()) {
-                for(File f : folder.listFiles()) {
-                    new FileFallenHero(f);
-                }
+            for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "fallen heroes")) {
+                new FileFallenHero(f);
             }
             previewing = new ArrayList<>();
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
     protected final void unloadKitUtils() {
-        if(loadedInstances > 0) loadedInstances--;
+        if(loadedInstances > 0) {
+            loadedInstances--;
+        }
         if(isEnabled && loadedInstances == 0) {
             isEnabled = false;
             config = null;
@@ -106,8 +108,11 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         }
     }
 
-    public final boolean hasPermissionToObtain(Player player, CustomKit kit) {
-        return player != null && kit != null && (RPPlayer.get(player.getUniqueId()).getKitLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
+    public final boolean hasPermissionToObtain(@NotNull Player player, @NotNull CustomKit kit) {
+        return player != null && hasPermissionToObtain(RPPlayer.get(player.getUniqueId()), player, kit);
+    }
+    public final boolean hasPermissionToObtain(@NotNull RPPlayer pdata, @NotNull Player player, @NotNull CustomKit kit) {
+        return pdata != null && player != null && kit != null && (pdata.getKitLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
     }
     public final void trySpawningFallenHero(Player player, ItemStack is, CustomKit kit, Location l) {
         final FallenHero h = kit.getFallenHero();

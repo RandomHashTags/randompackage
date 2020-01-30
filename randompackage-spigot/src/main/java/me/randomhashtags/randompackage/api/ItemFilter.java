@@ -103,7 +103,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             otherdata.set("saved default filter categories", true);
             saveOtherData();
         }
-        for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "filter categories")) {
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "filter categories")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);

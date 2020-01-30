@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;
@@ -42,10 +43,18 @@ public class KitsEvolution extends Kits {
     public ItemStack vkitFallenHeroBundle;
     private TreeMap<Integer, Float> tiermultipliers;
 
-    public String getIdentifier() { return "KITS_EVOLUTION"; }
-    public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { return false; }
-    public Class<? extends CustomKit> getCustomKit() { return CustomKitEvolution.class; }
-    public String getPath() { return "vkits"; }
+    public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        return false;
+    }
+    public String getIdentifier() {
+        return "KITS_EVOLUTION";
+    }
+    public Class<? extends CustomKit> getCustomKit() {
+        return CustomKitEvolution.class;
+    }
+    public String getPath() {
+        return "vkits";
+    }
 
     public void load() {
         loadKitUtils();
@@ -70,19 +79,16 @@ public class KitsEvolution extends Kits {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("vkits.gui.settings.tier custom enchant multiplier." + s));
         }
 
-        final Inventory vi = vkit.getInventory();
+        final Inventory inv = vkit.getInventory();
         final List<ItemStack> gems = new ArrayList<>(), fallenheroes = new ArrayList<>();
-        final File folder = new File(DATA_FOLDER + SEPARATOR + "kits");
         int loaded = 0;
-        if(folder.exists()) {
-            for(File f : folder.listFiles()) {
-                if(f.getName().startsWith("VKIT_")) {
-                    final FileKitEvolution e = new FileKitEvolution(f);
-                    vi.setItem(e.getSlot(), e.getItem());
-                    gems.add(e.getFallenHeroItem(e, false));
-                    fallenheroes.add(e.getFallenHeroItem(e, true));
-                    loaded++;
-                }
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "kits")) {
+            if(f.getName().startsWith("VKIT_")) {
+                final FileKitEvolution kit = new FileKitEvolution(f);
+                inv.setItem(kit.getSlot(), kit.getItem());
+                gems.add(kit.getFallenHeroItem(kit, false));
+                fallenheroes.add(kit.getFallenHeroItem(kit, true));
+                loaded++;
             }
         }
         addGivedpCategory(gems, UMaterial.DIAMOND, "Vkit Gems", "Givedp: Vkit Gems");
@@ -105,23 +111,53 @@ public class KitsEvolution extends Kits {
         }
         unloadKitUtils();
     }
-    public boolean usesTiers() { return config.getBoolean("vkits.gui.settings.use tiers"); }
-    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() { return tiermultipliers; }
-    public UInventory getPreview() { return preview; }
-    public ItemStack getOmniGem() { return getClone(omniGem); }
-    public List<String> getNotInWarzoneMsg() { return getStringList(config, "vkits.messages.not in warzone"); }
-    public List<String> getAlreadyHaveMaxTierMsg() { return getStringList(config, "vkits.messages.already have max"); }
-    public List<String> getRedeemFallenHeroGemMsg() { return getStringList(config, "vkits.messages.redeem"); }
-    public List<String> getUpgradeMsg() { return getStringList(config, "vkits.messages.upgrade"); }
-    public List<String> getResetTargetDoesntExist() { return getStringList(config, "vkits.messages.target doesnt exist"); }
-    public List<String> getResetSuccess() { return getStringList(config, "vkits.messages.success"); }
-    public ItemStack getPreviewBackground() { return getClone(previewBackground); }
-    public ItemStack getCooldown() { return getClone(cooldown); }
-    public List<String> getPermissionsUnlocked() { return getStringList(config, "vkits.permissions.unlocked"); }
-    public List<String> getPermissionsLocked() { return getStringList(config, "vkits.permissions.locked"); }
-    public List<String> getPermissionsPreview() { return getStringList(config, "vkits.permissions.preview"); }
+    public boolean usesTiers() {
+        return config.getBoolean("vkits.gui.settings.use tiers");
+    }
+    public TreeMap<Integer, Float> getCustomEnchantLevelMultipliers() {
+        return tiermultipliers;
+    }
+    public UInventory getPreview() {
+        return preview;
+    }
+    public ItemStack getOmniGem() {
+        return getClone(omniGem);
+    }
+    public List<String> getNotInWarzoneMsg() {
+        return getStringList(config, "vkits.messages.not in warzone");
+    }
+    public List<String> getAlreadyHaveMaxTierMsg() {
+        return getStringList(config, "vkits.messages.already have max");
+    }
+    public List<String> getRedeemFallenHeroGemMsg() {
+        return getStringList(config, "vkits.messages.redeem");
+    }
+    public List<String> getUpgradeMsg() {
+        return getStringList(config, "vkits.messages.upgrade");
+    }
+    public List<String> getResetTargetDoesntExist() {
+        return getStringList(config, "vkits.messages.target doesnt exist");
+    }
+    public List<String> getResetSuccess() {
+        return getStringList(config, "vkits.messages.success");
+    }
+    public ItemStack getPreviewBackground() {
+        return getClone(previewBackground);
+    }
+    public ItemStack getCooldown() {
+        return getClone(cooldown);
+    }
+    public List<String> getPermissionsUnlocked() {
+        return getStringList(config, "vkits.permissions.unlocked");
+    }
+    public List<String> getPermissionsLocked() {
+        return getStringList(config, "vkits.permissions.locked");
+    }
+    public List<String> getPermissionsPreview() {
+        return getStringList(config, "vkits.permissions.preview");
+    }
 
-    public void view(Player player) {
+    public void view(@NotNull Player player) {
         player.closeInventory();
         player.openInventory(Bukkit.createInventory(player, vkit.getSize(), vkit.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
@@ -134,13 +170,15 @@ public class KitsEvolution extends Kits {
             item = top.getItem(i);
             if(item != null) {
                 item = item.clone();
-                final CustomKit v = valueOfCustomKit(i, CustomKitEvolution.class);
-                if(v != null) {
-                    final String identifier = v.getIdentifier();
-                    final int lvl = tiers.getOrDefault(v, player.hasPermission("RandomPackage.kit." + identifier) ? 1 : 0);
-                    final boolean hasPerm = hasPermissionToObtain(player, v), cooldown = cooldowns.containsKey(v) && cooldowns.get(v) > System.currentTimeMillis();
-                    if(!hasPerm) item = locked.clone();
-                    else if(cooldown) setCooldown(player, v);
+                final CustomKit kit = valueOfCustomKit(i, CustomKitEvolution.class);
+                if(kit != null) {
+                    final boolean hasPerm = hasPermissionToObtain(player, kit), cooldown = cooldowns.containsKey(kit) && cooldowns.get(kit) > System.currentTimeMillis();
+                    final int lvl = hasPerm ? tiers.getOrDefault(kit, 1) : 0;
+                    if(!hasPerm) {
+                        item = locked.clone();
+                    } else if(cooldown) {
+                        setCooldown(player, kit);
+                    }
                     if(!cooldown) {
                         itemMeta = item.getItemMeta(); lore.clear();
                         if(!hasPerm) {
@@ -153,33 +191,36 @@ public class KitsEvolution extends Kits {
                                 lore.add(s.replace("{LEVEL}", Integer.toString(lvl)));
                             }
                         if(hasPerm) {
-                            if(!cooldown)
+                            if(!cooldown) {
                                 lore.addAll(getPermissionsUnlocked());
+                            }
                             lore.addAll(getPermissionsPreview());
                         } else {
-                            for(String s : locked.getItemMeta().getLore())
+                            for(String s : locked.getItemMeta().getLore()) {
                                 lore.add(colorize(s));
+                            }
                         }
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
                         top.setItem(i, item);
                     }
-
                 }
             }
         }
     }
-    public void give(Player player, CustomKitEvolution vkit, boolean preview) {
-        if(vkit == null) return;
-        final UUID u = player.getUniqueId();
-        final RPPlayer pdata = RPPlayer.get(u);
-        final HashMap<CustomKit, Integer> lvls = pdata.getKitLevels();
-        final int vkitlvl = preview ? vkit.getMaxLevel() : lvls.containsKey(vkit) ? lvls.get(vkit) : player.hasPermission("RandomPackage.kit." + vkit.getIdentifier()) ? 1 : 0;
+    public void give(@NotNull Player player, @NotNull CustomKitEvolution vkit, boolean preview) {
+        if(player == null || vkit == null) {
+            return;
+        }
+        final UUID uuid = player.getUniqueId();
+        final RPPlayer pdata = RPPlayer.get(uuid);
+        final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
+        final int vkitlvl = preview ? vkit.getMaxLevel() : hasPermissionToObtain(pdata, player, vkit) ? levels.getOrDefault(vkit, 1) : 0;
         final List<ItemStack> rewards = new ArrayList<>();
-        final String p = player.getName();
+        final String playerName = player.getName();
         final float multiplier = vkit.getKitClass().getCustomEnchantLevelMultipliers().get(vkitlvl);
         for(KitItem ki : vkit.getItems()) {
-            final ItemStack is = ki.getItemStack(p, vkitlvl, multiplier);
+            final ItemStack is = ki.getItemStack(playerName, vkitlvl, multiplier);
             if(is != null) {
                 rewards.add(is);
             }
@@ -193,31 +234,33 @@ public class KitsEvolution extends Kits {
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(ItemStack is : new ArrayList<>(rewards)) {
             if(is != null) {
-                item = is.clone(); itemMeta = item.getItemMeta(); lore.clear();
+                item = is.clone();
+                itemMeta = item.getItemMeta(); lore.clear();
                 if(item.hasItemMeta()) {
                     if(itemMeta.hasDisplayName()) {
-                        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PLAYER}", player.getName()).replace("{LEVEL}", Integer.toString(vkitlvl)));
+                        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PLAYER}", playerName).replace("{LEVEL}", Integer.toString(vkitlvl)));
                     }
                     if(itemMeta.hasLore()) {
-                        for(String s : itemMeta.getLore()) {
-                            if(s.startsWith("{") && s.contains("reqlevel=")) {
-                                final String[] a = s.split(":");
-                                final int level = getRemainingInt(a[0]), reqlevel = getRemainingInt(s.split("reqlevel=")[1].split(":")[0]), chance = a.length == 3 ? getRemainingInt(a[2]) : 100;
-                                final CustomEnchant enchant = valueOfCustomEnchant(s.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                        for(String itemLoreString : itemMeta.getLore()) {
+                            if(itemLoreString.startsWith("{") && itemLoreString.contains("reqlevel=")) {
+                                final String[] values = itemLoreString.split(":");
+                                final int level = getRemainingInt(values[0]), reqlevel = getRemainingInt(itemLoreString.split("reqlevel=")[1].split(":")[0]), chance = values.length == 3 ? getRemainingInt(values[2]) : 100;
+                                final CustomEnchant enchant = valueOfCustomEnchant(itemLoreString.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(RANDOM.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
                                     lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+ RANDOM.nextInt(enchant.getMaxLevel())));
                                 }
-                            } else if(s.startsWith("{") && s.contains(":") && s.endsWith("}")) {
-                                final String r = s.split(":")[RANDOM.nextInt(s.split(":").length)];
-                                int level = getRemainingInt(s.split("\\{")[1].split("}")[0]);
-                                final CustomEnchant enchant = valueOfCustomEnchant(r.split("\\{")[1].split("}")[0].replace("" + level, ""));
-
+                            } else if(itemLoreString.startsWith("{") && itemLoreString.contains(":") && itemLoreString.endsWith("}")) {
+                                final String randomAmount = itemLoreString.split(":")[RANDOM.nextInt(itemLoreString.split(":").length)];
+                                int level = getRemainingInt(itemLoreString.split("\\{")[1].split("}")[0]);
+                                final CustomEnchant enchant = valueOfCustomEnchant(randomAmount.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(enchant != null) {
-                                    if(level == -1) level = RANDOM.nextInt(enchant.getMaxLevel());
+                                    if(level == -1) {
+                                        level = RANDOM.nextInt(enchant.getMaxLevel());
+                                    }
                                     lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != 0 ? level : 1));
                                 }
                             } else {
-                                lore.add(s.replace("{LEVEL}", Integer.toString(vkitlvl)));
+                                lore.add(itemLoreString.replace("{LEVEL}", Integer.toString(vkitlvl)));
                             }
                         }
                         itemMeta.setLore(lore); lore.clear();
@@ -232,37 +275,39 @@ public class KitsEvolution extends Kits {
                 }
             }
         }
-        final int fe = top.firstEmpty();
-        if(preview && fe > -1) {
-            for(int i = fe; i < top.getSize(); i++) {
+        final int firstEmpty = top.firstEmpty();
+        if(preview && firstEmpty > -1) {
+            for(int i = firstEmpty; i < top.getSize(); i++) {
                 top.setItem(i, previewBackground.clone());
             }
         }
-        if(!preview) {
-            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis() + (vkit.getCooldown() * 1000));
-        }
         player.updateInventory();
-        int upgradechance = vkit.getUpgradeChance();
-        final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
-        event.setLevelupChance(upgradechance);
-        PLUGIN_MANAGER.callEvent(event);
-        if(!event.isCancelled()) {
-            final KitClaimEvent e = new KitClaimEvent(pdata, player, vkit, vkitlvl, rewards);
-            PLUGIN_MANAGER.callEvent(e);
-            if(!e.isCancelled() && !preview) {
-                for(ItemStack is : rewards) {
-                    giveItem(player, is);
-                }
-                if(RANDOM.nextInt(100) < event.getLevelupChance()) {
-                    final int newlvl = vkitlvl+1;
-                    if(newlvl > vkit.getMaxLevel()) return;
-                    final String name = vkit.getItem().getItemMeta().getDisplayName();
-                    pdata.getKitLevels().put(vkit, newlvl);
-                    for(String s : getUpgradeMsg()) {
-                        player.sendMessage(colorize(s.replace("{LEVEL}", Integer.toString(newlvl)).replace("{VKIT}", name).replace("{NAME}", name)));
+
+        if(!preview) {
+            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis() + (vkit.getCooldown()*1000));
+            final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
+            event.setLevelupChance(vkit.getUpgradeChance());
+            PLUGIN_MANAGER.callEvent(event);
+            if(!event.isCancelled()) {
+                final KitClaimEvent claimEvent = new KitClaimEvent(pdata, player, vkit, vkitlvl, rewards);
+                PLUGIN_MANAGER.callEvent(claimEvent);
+                if(!claimEvent.isCancelled()) {
+                    for(ItemStack is : rewards) {
+                        giveItem(player, is);
                     }
-                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast")) {
-                        Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", Integer.toString(newlvl))));
+                    if(RANDOM.nextInt(100) < event.getLevelupChance()) {
+                        final int newlvl = vkitlvl+1;
+                        if(newlvl > vkit.getMaxLevel()) {
+                            return;
+                        }
+                        final String name = vkit.getItem().getItemMeta().getDisplayName(), level = Integer.toBinaryString(newlvl);
+                        pdata.getKitLevels().put(vkit, newlvl);
+                        for(String s : getUpgradeMsg()) {
+                            player.sendMessage(s.replace("{LEVEL}", level).replace("{VKIT}", name).replace("{NAME}", name));
+                        }
+                        for(String s : getStringList(config, "vkits.messages.upgrade broadcast")) {
+                            Bukkit.broadcastMessage(s.replace("{PLAYER}", playerName).replace("{VKIT}", name).replace("{LEVEL}", level));
+                        }
                     }
                 }
             }
@@ -272,14 +317,17 @@ public class KitsEvolution extends Kits {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
-        if(player.getOpenInventory().getTopInventory().getHolder() == player) {
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        if(top.getHolder() == player) {
             final boolean inPreview = previewing.contains(player);
-            final String t = event.getView().getTitle();
-            if(t.equals(vkit.getTitle()) || inPreview) {
+            final String title = event.getView().getTitle();
+            if(title.equals(vkit.getTitle()) || inPreview) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final int r = event.getRawSlot();
-                if(r >= player.getOpenInventory().getTopInventory().getSize()) return;
+                final int slot = event.getRawSlot();
+                if(slot >= top.getSize()) {
+                    return;
+                }
 
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 if(inPreview) {
@@ -287,11 +335,13 @@ public class KitsEvolution extends Kits {
                     sendStringListMessage(player, getStringList(config, "vkits.messages.cannot withdraw"), null);
                 } else if(event.getClick().name().contains("RIGHT")) {
                     player.closeInventory();
-                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(r, CustomKitEvolution.class);
+                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(slot, CustomKitEvolution.class);
                     give(player, vkit, true);
                 } else {
-                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(r, CustomKitEvolution.class);
-                    if(vkit == null) return;
+                    final CustomKitEvolution vkit = (CustomKitEvolution) valueOfCustomKit(slot, CustomKitEvolution.class);
+                    if(vkit == null) {
+                        return;
+                    }
                     final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
                     final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
                     final boolean hasPerm = hasPermissionToObtain(player, vkit);
@@ -313,35 +363,38 @@ public class KitsEvolution extends Kits {
         final Player player = event.getPlayer();
         final ItemStack is = event.getItem();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomKitEvolution e = valueOfCustomKitUpgradeGem(is);
-            if(e != null) {
+            final CustomKitEvolution vkit = valueOfCustomKitUpgradeGem(is);
+            if(vkit != null) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
                 final HashMap<CustomKit, Integer> kits = pdata.getKitLevels();
-                if(!kits.containsKey(e)) {
+                if(!kits.containsKey(vkit)) {
                     sendStringListMessage(player, getStringList(config, "vkits.messages.not unlocked kit"), null);
                 } else {
-                    final int lvl = kits.get(e);
-                    final String name = e.getItem().getItemMeta().getDisplayName(), newl = Integer.toString(lvl+1);
-                    if(lvl < e.getMaxLevel()) {
-                        kits.put(e, lvl+1);
+                    final int lvl = kits.get(vkit);
+                    final String name = vkit.getItem().getItemMeta().getDisplayName(), newLevel = Integer.toString(lvl+1);
+                    if(lvl < vkit.getMaxLevel()) {
+                        kits.put(vkit, lvl+1);
                     }
                     removeItem(player, is, 1);
-                    for(String s : getUpgradeMsg())
-                        player.sendMessage(colorize(s.replace("{LEVEL}", newl).replace("{VKIT}", name)));
-                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast"))
-                        Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", player.getName()).replace("{VKIT}", name).replace("{LEVEL}", newl)));
+                    for(String s : getUpgradeMsg()) {
+                        player.sendMessage(s.replace("{LEVEL}", newLevel).replace("{VKIT}", name));
+                    }
+                    final String playerName = player.getName();
+                    for(String s : getStringList(config, "vkits.messages.upgrade broadcast")) {
+                        Bukkit.broadcastMessage(s.replace("{PLAYER}", playerName).replace("{VKIT}", name).replace("{LEVEL}", newLevel));
+                    }
                 }
                 player.updateInventory();
             } else if(is.isSimilar(vkitFallenHeroBundle)) {
                 event.setCancelled(true);
                 removeItem(player, is, 1);
-                final List<String> s = getStringList(config, "vkits.items.fallen hero bundle.reveals");
-                final int size = s.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
+                final List<String> rewards = getStringList(config, "vkits.items.fallen hero bundle.reveals");
+                final int size = rewards.size(), amount = config.getInt("vkits.items.fallen hero bundle.reveal amount");
                 for(int i = 1; i <= amount; i++) {
-                    final CustomKit k = getCustomKit(s.get(RANDOM.nextInt(size)));
-                    giveItem(player, k.getFallenHeroItem(k, true));
+                    final CustomKit kit = getCustomKit(rewards.get(RANDOM.nextInt(size)));
+                    giveItem(player, kit.getFallenHeroItem(kit, true));
                 }
             }
         }

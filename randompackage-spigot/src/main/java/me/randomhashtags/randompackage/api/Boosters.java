@@ -71,7 +71,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		activePlayerBoosters = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
-		for(File f : getFilesIn(DATA_FOLDER + SEPARATOR + "boosters")) {
+		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "boosters")) {
 			final FileBooster bo = new FileBooster(f);
 			b.add(bo.getItem(60*10000, 5.0));
 		}

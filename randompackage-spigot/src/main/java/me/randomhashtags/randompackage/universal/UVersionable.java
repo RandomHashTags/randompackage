@@ -127,7 +127,7 @@ public interface UVersionable extends Versionable {
         return is != null ? is.clone() : def;
     }
 
-    default File[] getFilesIn(@NotNull String folder) {
+    default File[] getFilesInFolder(@NotNull String folder) {
         final File f = new File(folder);
         return f.exists() ? f.listFiles() : new File[]{};
     }
