@@ -147,6 +147,10 @@ public interface RPStorage extends RPValues {
         final Identifiable o = get(Feature.INVENTORY_PET, identifier);
         return o != null ? (InventoryPet) o : null;
     }
+    default ItemSkin getItemSkin(@NotNull String identifier) {
+        final Identifiable o = get(Feature.ITEM_SKIN, identifier);
+        return o != null ? (ItemSkin) o : null;
+    }
     default KOTH getKingOfTheHill(@NotNull String identifier) {
         final Identifiable o = get(Feature.KING_OF_THE_HILL, identifier);
         return o != null ? (KOTH) o : null;

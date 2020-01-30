@@ -211,7 +211,7 @@ home:
     - homes
 #
 inventory pets:
-  enabled: true
+  enabled: false
 #
 item filter:
   enabled: true

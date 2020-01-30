@@ -146,7 +146,7 @@ gui:
   how to play:
     slot: 53
     item: "book"
-    name: "&b&lHow to Player"
+    name: "&b&lHow to Play"
     lore:
       - "&d&l1.&r &7Insert up to 3 Slot Bot Tickets"
       - "&7into the boy from your inventory."
@@ -165,9 +165,9 @@ gui:
       - "&7tickets will be refunded."
 #
 rewards:
+  - "itemskin:FLAMING_HALO"
   - "slotbottickets"
   #- "randomemotelootbox"
-  #- "itemskin:FLAMING_HALO"
   - "lootbox:PET_COLLECTOR"
   - "lootbox:DETENTION"
   - "lootbox:SUGAR_DADDY"

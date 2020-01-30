@@ -218,18 +218,18 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                         countdownSlots.add(slot);
                         break;
                     case "B":
-                        int a = RANDOM.nextInt(bonus.size());
-                        if(a >= 0) {
-                            final ItemStack b = bonus.get(a);
+                        int rewardIndex = RANDOM.nextInt(bonus.size());
+                        if(rewardIndex >= 0) {
+                            final ItemStack b = bonus.get(rewardIndex);
                             top.setItem(slot, b);
                             bonus.remove(b);
                             bonusSlots.add(slot);
                         }
                         break;
                     case "L":
-                        a = RANDOM.nextInt(regular.size());
-                        if(a >= 0) {
-                            final ItemStack r = regular.get(a);
+                        rewardIndex = RANDOM.nextInt(regular.size());
+                        if(rewardIndex >= 0) {
+                            final ItemStack r = regular.get(rewardIndex);
                             top.setItem(slot, r);
                             regular.remove(r);
                             lootSlots.add(slot);
@@ -365,10 +365,12 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 }
             }
             redeeming.remove(player);
-            for(int task : tasks.get(player)) {
-                SCHEDULER.cancelTask(task);
+            if(tasks.containsKey(player)) {
+                for(int task : tasks.get(player)) {
+                    SCHEDULER.cancelTask(task);
+                }
+                tasks.remove(player);
             }
-            tasks.remove(player);
         }
     }
 

@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.api.RandomizedLoot;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
+import me.randomhashtags.randompackage.dev.ItemSkins;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
@@ -23,6 +24,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -48,7 +50,6 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     private ItemStack air;
     private List<Player> itemnametag, itemlorecrystal, explosivesnowball;
 
-    public String getIdentifier() { return "GIVEDP_ITEM"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(hasPermission(sender, "RandomPackage.givedp", true)) {
@@ -73,6 +74,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public String getIdentifier() {
+        return "GIVEDP_ITEM";
     }
     public void load() {
         save(null, "items.yml");
@@ -116,9 +121,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
 
     private int getInteger(String input, int minimum) {
         final boolean m = input.contains("-");
-        final String[] a = input.split("-");
-        final int min = m ? Integer.parseInt(a[0]) : minimum;
-        return m ? min+RANDOM.nextInt(Integer.parseInt(a[1])-min+1) : Integer.parseInt(input);
+        final String[] values = input.split("-");
+        final int min = m ? Integer.parseInt(values[0]) : minimum;
+        return m ? min+RANDOM.nextInt(Integer.parseInt(values[1])-min+1) : Integer.parseInt(input);
     }
 
     public final ItemStack valueOf(String input) {
@@ -282,6 +287,13 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("inventorypetegghatchingkit:")) {
             return air;
 
+        } else if(input.startsWith("itemskin:")) {
+            final ItemSkins skins = ItemSkins.getItemSkins();
+            if(skins.isEnabled()) {
+                final ItemSkin skin = getItemSkin(Q.split(":")[1]);
+                return skin != null ? skins.getItemSkinItem(skin, true) : air;
+            }
+            return air;
         } else if(input.startsWith("lootbox:")) {
             final Lootbox l = getLootbox(Q.split(":")[1]);
             return l != null ? l.getItem() : air;
@@ -425,50 +437,50 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
 
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack i = event.getItem();
-        if(i != null) {
+        final ItemStack is = event.getItem();
+        if(is != null && !event.getAction().equals(Action.LEFT_CLICK_AIR)) {
             final Player player = event.getPlayer();
-            if(i.isSimilar(items.get("mysterymobspawner"))) {
+            if(is.isSimilar(items.get("mysterymobspawner"))) {
                 event.setCancelled(true);
-                final List<String> s = getStringList(itemsConfig, "mystery mob spawner.reward"), receivemsg = colorizeListString(getStringList(itemsConfig, "mystery mob spawner.receive message"));
-                final String spawner = s.get(RANDOM.nextInt(s.size()));
+                final List<String> rewards = getStringList(itemsConfig, "mystery mob spawner.reward"), receivemsg = getStringList(itemsConfig, "mystery mob spawner.receive message");
+                final String spawner = rewards.get(RANDOM.nextInt(rewards.size()));
                 final MysteryMobSpawnerOpenEvent e = new MysteryMobSpawnerOpenEvent(player, spawner);
                 PLUGIN_MANAGER.callEvent(e);
                 if(!e.isCancelled()) {
-                    removeItem(player, i, 1);
+                    removeItem(player, is, 1);
                     final ItemStack r = d(null, spawner);
                     giveItem(player, r);
                     player.updateInventory();
                     if(!receivemsg.isEmpty()) {
-                        final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner"), n = player.getName();
+                        final String type = ChatColor.stripColor(r != null && r.hasItemMeta() && r.getItemMeta().hasDisplayName() ? r.getItemMeta().getDisplayName() : "Random Spawner"), playerName = player.getName();
                         for(String a : receivemsg) {
-                            Bukkit.broadcastMessage(a.replace("{PLAYER}", n).replace("{TYPE}", type));
+                            Bukkit.broadcastMessage(a.replace("{PLAYER}", playerName).replace("{TYPE}", type));
                         }
                     }
                 }
-            } else if(i.isSimilar(items.get("itemnametag"))) {
+            } else if(is.isSimilar(items.get("itemnametag"))) {
                 if(itemnametag.contains(player)) {
                     sendStringListMessage(player, getStringList(itemsConfig, "item name tag.already in rename process"), null);
                 } else {
                     itemnametag.add(player);
                     sendStringListMessage(player, getStringList(itemsConfig, "item name tag.enter rename"), null);
-                    removeItem(player, i, 1);
+                    removeItem(player, is, 1);
                 }
-            } else if(i.isSimilar(items.get("itemlorecrystal"))) {
+            } else if(is.isSimilar(items.get("itemlorecrystal"))) {
                 if(itemlorecrystal.contains(player)) {
                     sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.already in process"), null);
                 } else {
                     itemlorecrystal.add(player);
                     sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.enter addlore"), null);
-                    removeItem(player, i, 1);
+                    removeItem(player, is, 1);
                 }
-            } else if(i.isSimilar(items.get("explosivesnowball"))) {
+            } else if(is.isSimilar(items.get("explosivesnowball"))) {
                 explosivesnowball.add(player);
-            } else if(i.isSimilar(items.get("explosivecake"))) {
+            } else if(is.isSimilar(items.get("explosivecake"))) {
                 event.setCancelled(true);
                 final Location l = event.getAction().name().endsWith("_CLICK_BLOCK") ? event.getClickedBlock().getLocation() : player.getLocation();
                 final int x = l.getBlockX(), y = l.getBlockY(), z = l.getBlockZ();
-                removeItem(player, i, 1);
+                removeItem(player, is, 1);
                 if(EIGHT || NINE || TEN || ELEVEN || TWELVE) {
                     Bukkit.dispatchCommand(CONSOLE, "execute " + player.getName() + " " + x + " " + y + " " + z + " particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
                 } else {

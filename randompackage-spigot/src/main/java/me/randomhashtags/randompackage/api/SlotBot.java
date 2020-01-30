@@ -2,6 +2,8 @@ package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
+import me.randomhashtags.randompackage.addon.MonthlyCrate;
+import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -132,18 +134,28 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
 
         final boolean previewIsSource = config.getBoolean("preview rewards.show reward source item");
         final List<String> actualRewards = new ArrayList<>();
-        final LootboxRewardType[] types = LootboxRewardType.values();
+        final LootboxRewardType[] lootboxTypes = LootboxRewardType.values();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
                 for(String reward : rewards) {
                     final ItemStack is = d(null, reward);
                     if(is != null) {
                         final Lootbox lootbox = valueOfLootbox(is);
-                        final boolean isLootbox = lootbox != null;
+                        final ServerCrate serverCrate = lootbox == null ? valueOfServerCrate(is) : null;
+                        final MonthlyCrate monthlyCrate = serverCrate == null ? valueOfMonthlyCrate(is) : null;
+                        final boolean isLootbox = lootbox != null, isServerCrate = serverCrate != null, isMonthlyCrate = monthlyCrate != null;
                         if(isLootbox) {
-                            for(LootboxRewardType type : types) {
+                            for(LootboxRewardType type : lootboxTypes) {
                                 actualRewards.addAll(lootbox.getRewards(type));
                             }
+                        } else if(isServerCrate) {
+                            final HashMap<String, List<String>> rarityRewards = serverCrate.getRewards();
+                            for(String rarity : rarityRewards.keySet()) {
+                                actualRewards.addAll(rarityRewards.get(rarity));
+                            }
+                        } else if(isMonthlyCrate) {
+                            actualRewards.addAll(monthlyCrate.getRewards());
+                            actualRewards.addAll(monthlyCrate.getBonusRewards());
                         } else {
                             actualRewards.add(reward);
                         }
@@ -152,8 +164,8 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                             lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : reward));
                             previewRewardList.add(is);
                         } else {
-                            if(isLootbox) {
-                                final List<ItemStack> items = lootbox.getAllRewards();
+                            final List<ItemStack> items = isLootbox ? lootbox.getAllRewards() : isServerCrate ? serverCrate.getAllRewards() : isMonthlyCrate ? monthlyCrate.getAllRewards() : null;
+                            if(items != null) {
                                 for(ItemStack item : items) {
                                     meta = item.getItemMeta();
                                     lore.add(s.replace("{AMOUNT}", Integer.toString(item.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : item.getType().name()));

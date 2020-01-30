@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -73,7 +74,7 @@ public class RandomizedLoot extends RPFeature {
     public void unload() {
     }
 
-    public RandomizedLootItem valueOfRandomizedLootItem(ItemStack is) {
+    public RandomizedLootItem valueOfRandomizedLootItem(@NotNull ItemStack is) {
         if(!items.isEmpty() && is != null) {
             for(RandomizedLootItem i : items.values()) {
                 if(i.getItem().isSimilar(is)) {

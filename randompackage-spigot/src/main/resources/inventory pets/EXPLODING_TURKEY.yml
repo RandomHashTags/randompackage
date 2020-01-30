@@ -2,9 +2,13 @@
 settings:
   enabled: false
   max level: 10
+  values:
+    2: 4
   cooldown: # Measured in seconds!
     all: 60
+    2: 240
   exp to level:
+    3: 1500
     6: 3000
 #
 item:
@@ -19,7 +23,7 @@ item:
   - "&7Shoots an &eExplosive Turkey"
   - "&7that will detonate upon contact,"
   - "&7applying &eKnockback I &7and a &eFreeze (2s) &7to enemies"
-  - "&7within a &e5x5 &7radius of the explosion."
+  - "&7within a &e{VALUE}}x{VALUE} &7radius of the explosion."
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

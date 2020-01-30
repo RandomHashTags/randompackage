@@ -60,7 +60,7 @@ regular loot:
   - "enchantmentorb:armor13"
 #
 jackpot loot:
-  - "ce:Auto Sell1"
+  - "ce:AUTO_SELL:1"
   - "mask:SPECTRAL"
   #- "dungeonportal:abandoned spaceship"
 #
