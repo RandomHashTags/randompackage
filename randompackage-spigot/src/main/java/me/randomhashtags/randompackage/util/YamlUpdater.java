@@ -202,6 +202,7 @@ public class YamlUpdater {
                 "slot bot.enabled", true, // changed to "true" in 16.5.10
                 "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot"),
                 // 16.5.10
+                "armor sockets.enabled", true,
                 "custom enchants.holy scrolls", true,
                 "item skins.enabled", true,
         };

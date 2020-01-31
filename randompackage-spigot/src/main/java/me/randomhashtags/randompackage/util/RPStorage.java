@@ -19,9 +19,11 @@ public interface RPStorage extends RPValues {
     HashMap<String, YamlConfiguration> CACHED_YAMLS = new HashMap<>();
 
     default YamlConfiguration getYaml(String folder, String fileName) {
-        if(CACHED_YAMLS.containsKey(folder + fileName)) return CACHED_YAMLS.get(folder + fileName);
-        final File f = new File(DATA_FOLDER + SEPARATOR + (folder != null ? folder : ""), fileName);
-        final YamlConfiguration c = f.exists() ? YamlConfiguration.loadConfiguration(f) : null;
+        if(CACHED_YAMLS.containsKey(folder + fileName)) {
+            return CACHED_YAMLS.get(folder + fileName);
+        }
+        final File file = new File(DATA_FOLDER + SEPARATOR + (folder != null ? folder : ""), fileName);
+        final YamlConfiguration c = file.exists() ? YamlConfiguration.loadConfiguration(file) : null;
         CACHED_YAMLS.put(folder+fileName, c);
         return c;
     }
@@ -58,6 +60,10 @@ public interface RPStorage extends RPValues {
     default ArmorSet getArmorSet(@NotNull String identifier) {
         final Identifiable o = get(Feature.ARMOR_SET, identifier);
         return o != null ? (ArmorSet) o : null;
+    }
+    default ArmorSocket getArmorSocket(@NotNull String identifier) {
+        final Identifiable o = get(Feature.ARMOR_SOCKET, identifier);
+        return o != null ? (ArmorSocket) o : null;
     }
     default BlackScroll getBlackScroll(@NotNull String identifier) {
         final Identifiable o = get(Feature.SCROLL_BLACK, identifier);

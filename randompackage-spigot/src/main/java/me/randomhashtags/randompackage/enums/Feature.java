@@ -3,6 +3,8 @@ package me.randomhashtags.randompackage.enums;
 public enum Feature {
     ARMOR_SET,
 
+    ARMOR_SOCKET,
+
     BOOSTER,
 
     CONQUEST_CHEST,

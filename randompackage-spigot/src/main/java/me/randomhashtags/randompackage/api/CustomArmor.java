@@ -3,15 +3,15 @@ package me.randomhashtags.randompackage.api;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import me.randomhashtags.randompackage.addon.ArmorSet;
+import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
-import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -275,27 +275,31 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 					}
 				}
 			} else if(valueOfArmorCrystal(is) != null) {
-			} else return;
+			} else {
+				return;
+			}
 			event.setCancelled(true);
 			player.updateInventory();
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
-		final ItemStack cur = event.getCurrentItem(), curs = event.getCursor();
-		final Player player = (Player) event.getWhoClicked();
-		final ArmorSet crystal = valueOfArmorCrystal(curs);
-		if(crystal != null && cur != null && curs != null && tryApplyingCrystal(player, crystal, getRemainingInt(curs.getItemMeta().getLore().get(percentSlot)), cur) >= 1) {
-			event.setCancelled(true);
-			player.updateInventory();
-			final int a = curs.getAmount();
-			if(a == 1) item = new ItemStack(Material.AIR);
-			else {
-				curs.setAmount(a-1);
-				item = curs;
+		final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
+		final ArmorSet crystal = valueOfArmorCrystal(cursor);
+		if(crystal != null && current != null && cursor != null) {
+			final Player player = (Player) event.getWhoClicked();
+			if(tryApplyingCrystal(player, crystal, getRemainingInt(cursor.getItemMeta().getLore().get(percentSlot)), current) >= 1) {
+				event.setCancelled(true);
+				final int amount = cursor.getAmount();
+				if(amount == 1) {
+					item = new ItemStack(Material.AIR);
+				} else {
+					cursor.setAmount(amount-1);
+					item = cursor;
+				}
+				event.setCursor(item);
+				player.updateInventory();
 			}
-			event.setCursor(item);
-			player.updateInventory();
 		}
 	}
 }

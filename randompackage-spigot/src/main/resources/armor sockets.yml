@@ -1,0 +1,30 @@
+# Made by RandomHashTags
+messages:
+#
+item:
+  item: "tripwire_hook"
+  name: "&3&lArmor Socket:&r &b&n{NAME}"
+  lore:
+    - "&3&lArmor Type:&r &b{ITEM_TYPE}"
+    - "&3&lLimit:&r &b{LIMIT} {NAME_LC}(s)"
+    - "&3&lChance:&r &b{CHANCE}%"
+    - " "
+    - "&7Armor Sockets add specialty slots to"
+    - "&7your items, allowing you to equip powerful"
+    - "&7accessories with game altering powers."
+    - " "
+    - "&7To learn more about Armor Sockets, use &3/help socket"
+#
+item types: # <allowed materials separated by semi-colons>: <appears on item that replaces {ITEM_TYPE}>
+  chestplate: CHESTPLATE
+  leggings: LEGGINGS
+#
+types:
+  AMULET:
+    name: "Amulet"
+    item type: chestplate
+    limit: 1
+  BELT:
+    name: "Belt"
+    item type: leggings
+    limit: 1

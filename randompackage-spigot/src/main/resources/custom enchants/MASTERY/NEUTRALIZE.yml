@@ -1,0 +1,18 @@
+# Made by RandomHashTags | TODO: fix this
+enabled: false
+#
+name: "Neutralize"
+lore:
+  - "&eNegate all enemy defensive"
+  - "&eenchantments for on the damage event"
+  - "&ethat Neutralize activates for. This"
+  - "&eeffect can stack with Silence."
+#
+max level: 5
+applies to: "sword;_axe;bow"
+#
+alchemist: ""
+tinkerer: ""
+#
+attributes:
+  - "PvAny;"

@@ -122,11 +122,11 @@ enchant types:
   sword: "&7Sword Enchant"
   _axe: "&7Axe Enchant"
   sword;_axe: "&7Weapon Enchant"
+  sword;_axe;bow: "&7Weapon Enchant"
   bow: "&7Bow Enchant"
   pickaxe: "&7Pickaxe Enchant"
   tool: "&7Tool Enchant"
   axe;spade;shears: "&7Tool Enchant"
-  sword;_axe;bow: "&7Weapon Enchant"
 #
 entities:
   settings:

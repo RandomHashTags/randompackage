@@ -22,7 +22,7 @@ public interface DefaultConfiguration extends UVersionable {
         generateAllDefault("custom bosses", new String[] {"BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER"});
     }
     default void generateDefaultCustomEnchants() {
-        final String[] mas = new String[] {
+        final String[] mastery = new String[] {
                 "_settings",
                 "AUTO_SELL",
                 "CHAIN_LIFESTEAL",
@@ -32,11 +32,12 @@ public interface DefaultConfiguration extends UVersionable {
                 "HORRIFY",
                 "LAVA_STRIDER",
                 "MARK_OF_THE_BEAST",
+                "NEUTRALIZE",
                 "PERMAFROST", "POLTERGEIST",
                 "TOMBSTONE",
                 "WEB_WALKER"
         };
-        final String[] her = new String[] {
+        final String[] heroic = new String[] {
                 "_settings",
                 "ALIEN_IMPLANTS", "ATOMIC_DETONATE",
                 "BIDIRECTIONAL_TELEPORTATION",
@@ -53,7 +54,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "TITAN_TRAP",
                 "VENGEFUL_DIMINISH",
         };
-        final String[] sou = new String[] {
+        final String[] soul = new String[] {
                 "_settings",
                 "DIVINE_IMMOLATION",
                 "HERO_KILLER",
@@ -63,7 +64,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "SABOTAGE", "SOUL_TRAP",
                 "TELEBLOCK",
         };
-        final String[] leg = new String[] {
+        final String[] legendary = new String[] {
                 "_settings",
                 "AEGIS", "ANTI_GANK", "ARMORED",
                 "BARBARIAN", "BLACKSMITH", "BLOOD_LINK", "BLOOD_LUST", "BOSS_SLAYER",
@@ -80,7 +81,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "RAGE",
                 "SILENCE", "SNIPER",
         };
-        final String[] ult = new String[] {
+        final String[] ultimate = new String[] {
                 "_settings",
                 "ANGELIC", "ARROW_BREAK", "ARROW_DEFLECT", "ARROW_LIFESTEAL", "ASSASSIN", "AVENGING_ANGEL",
                 "BLEED", "BLESSED", "BLOCK",
@@ -100,7 +101,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "UNFOCUS",
                 "VALOR",
         };
-        final String[] eli = new String[] {
+        final String[] elite = new String[] {
                 "_settings",
                 "ANTI_GRAVITY",
                 "BLIND",
@@ -119,7 +120,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "VAMPIRE", "VENOM", "VOODOO",
                 "WITHER",
         };
-        final String[] uni = new String[] {
+        final String[] unique = new String[] {
                 "_settings",
                 "BERSERK",
                 "COMMANDER", "COWIFICATION", "CURSE",
@@ -136,7 +137,7 @@ public interface DefaultConfiguration extends UVersionable {
                 "TELEPATHY", "TRAINING",
                 "VIRUS",
         };
-        final String[] sim = new String[] {
+        final String[] simple = new String[] {
                 "_settings",
                 "AQUATIC", "AUTO_SMELT",
                 "CONFUSION",
@@ -150,14 +151,14 @@ public interface DefaultConfiguration extends UVersionable {
                 "OBLITERATE",
                 "TARGET_TRACKING", "THUNDERING_BLOW",
         };
-        generateAllDefault("custom enchants" + SEPARATOR + "MASTERY", mas);
-        generateAllDefault("custom enchants" + SEPARATOR + "HEROIC", her);
-        generateAllDefault("custom enchants" + SEPARATOR + "SOUL", sou);
-        generateAllDefault("custom enchants" + SEPARATOR + "LEGENDARY", leg);
-        generateAllDefault("custom enchants" + SEPARATOR + "ULTIMATE", ult);
-        generateAllDefault("custom enchants" + SEPARATOR + "ELITE", eli);
-        generateAllDefault("custom enchants" + SEPARATOR + "UNIQUE", uni);
-        generateAllDefault("custom enchants" + SEPARATOR + "SIMPLE", sim);
+        generateAllDefault("custom enchants" + SEPARATOR + "MASTERY", mastery);
+        generateAllDefault("custom enchants" + SEPARATOR + "HEROIC", heroic);
+        generateAllDefault("custom enchants" + SEPARATOR + "SOUL", soul);
+        generateAllDefault("custom enchants" + SEPARATOR + "LEGENDARY", legendary);
+        generateAllDefault("custom enchants" + SEPARATOR + "ULTIMATE", ultimate);
+        generateAllDefault("custom enchants" + SEPARATOR + "ELITE", elite);
+        generateAllDefault("custom enchants" + SEPARATOR + "UNIQUE", unique);
+        generateAllDefault("custom enchants" + SEPARATOR + "SIMPLE", simple);
         generateAllDefault("custom enchants" + SEPARATOR + "RANDOM", new String[] {"_settings"});
     }
     default void generateDefaultCustomCreepers() {

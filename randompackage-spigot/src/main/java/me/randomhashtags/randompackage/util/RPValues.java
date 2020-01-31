@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.util;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.*;
+import me.randomhashtags.randompackage.api.ArmorSockets;
 import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.dev.Dungeon;
@@ -27,6 +28,9 @@ public interface RPValues extends UVersionable {
 
     default LinkedHashMap<String, ArmorSet> getAllArmorSets() {
         return (LinkedHashMap<String, ArmorSet>) getAllObj(Feature.ARMOR_SET);
+    }
+    default LinkedHashMap<String, ArmorSocket> getAllArmorSockets() {
+        return (LinkedHashMap<String, ArmorSocket>) getAllObj(Feature.ARMOR_SOCKET);
     }
     default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() {
         return (LinkedHashMap<String, BlackScroll>) getAllObj(Feature.SCROLL_BLACK);
@@ -188,6 +192,26 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
+
+    default ArmorSocket valueOfArmorSocket(@NotNull ItemStack item) {
+        final ArmorSockets sockets = ArmorSockets.getArmorSockets();
+        if(sockets.isEnabled()) {
+            if(item != null && !item.getType().equals(Material.AIR)) {
+                final ItemMeta meta = item.getItemMeta();
+                if(meta.hasLore()) {
+                    final List<String> lore = meta.getLore();
+                    final int chance = getRemainingInt(lore.get(sockets.getChanceSlot()));
+                    for(ArmorSocket socket : getAllArmorSockets().values()) {
+                        if(item.isSimilar(sockets.getArmorSocketItem(socket, chance))) {
+                            return socket;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     default BlackScroll valueOfBlackScroll(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();

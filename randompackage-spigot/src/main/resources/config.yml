@@ -50,6 +50,9 @@ alchemist:
   cmds:
     - alchemist
 #
+armor sockets:
+  enabled: true
+#
 auction house:
   enabled: true
   cmds:

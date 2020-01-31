@@ -87,6 +87,7 @@ public final class RandomPackage extends JavaPlugin {
 
         final CommandManager cmd = CommandManager.getCommandManager();
 
+        cmd.load(ArmorSockets.getArmorSockets(), null, isTrue("armor sockets"));
         cmd.load(Combine.getCombine(), Arrays.asList("combine"), isTrue("combine"));
         cmd.load(Xpbottle.getXpbottle(), Arrays.asList("xpbottle"), isTrue("xpbottle"));
         cmd.load(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
@@ -127,7 +128,7 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
         cmd.load(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
         cmd.loadCustom(ItemFilter.getItemFilter(), getHash("filter", "item filter"), isTrue("item filter"));
-        cmd.loadCustom(ItemSkins.getItemSkins(), null, isTrue("item skins"));
+        cmd.load(ItemSkins.getItemSkins(), null, isTrue("item skins"));
         cmd.load(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
 
         cmd.loadCustom(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));
