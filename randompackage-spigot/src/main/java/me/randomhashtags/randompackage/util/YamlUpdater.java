@@ -193,13 +193,13 @@ public class YamlUpdater {
                 "xpbottle.cmds", Arrays.asList("xpbottle"),
                 // 16.5.0
                 "fat buckets.enabled", true,
-                "inventory pets.enabled", false,
+                "inventory pets.enabled", true, // changed from "false" to "true" in 16.5.10
                 "sethome.enabled", true,
                 "sethome.cmds", Arrays.asList("sethome"),
                 // 16.5.8
                 "supported plugins.regional.WorldGuard", true,
                 // 16.5.9
-                "slot bot.enabled", true, // changed to "true" in 16.5.10
+                "slot bot.enabled", true, // changed from "false" to "true" in 16.5.10
                 "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot"),
                 // 16.5.10
                 "armor sockets.enabled", true,

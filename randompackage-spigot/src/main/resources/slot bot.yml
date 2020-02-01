@@ -15,7 +15,6 @@ messages:
       - "&7{PLAYER} rolled the slot /bot with &f{TICKETS} ticket(s)&r &7and won:"
       - "&b&l*&r &f&l{AMOUNT}x&r {ITEM}"
       - " "
-
 #
 items:
   ticket:

@@ -302,8 +302,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                 }
                 return true;
             }
-            return false;
-        } else if(ticketSlots.contains(slot)) {
+        } else if(ticketSlots.contains(slot) && !ticketUnlocked.isSimilar(targetItem)) {
             final HashMap<String, String> replacements = new HashMap<>();
             final int index = ticketSlots.indexOf(slot);
             replacements.put("{AMOUNT}", Integer.toString(index+1));
@@ -375,7 +374,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         if(pending.containsKey(player)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
             final LinkedHashMap<String, Integer> items = new LinkedHashMap<>();
-            final String tickets = Integer.toString(getInsertedTickets(player));
+            final String tickets = Integer.toString(getInsertedTickets(player)), playerName = player.getName();
             for(int i : slots.keySet()) {
                 item = top.getItem(i);
                 if(item != null && !rewardSlot.isSimilar(item)) {
@@ -384,14 +383,16 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                     giveItem(player, item);
                 }
             }
-            for(String s : getStringList(config, "messages.loot")) {
-                s = s.replace("{PLAYER}", player.getName()).replace("{TICKETS}", tickets);
+            final boolean isCentered = config.getBoolean("messages.loot.centered");
+            for(String s : getStringList(config, "messages.loot.msg")) {
+                s = s.replace("{PLAYER}", playerName).replace("{TICKETS}", tickets);
                 if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
                     for(String string : items.keySet()) {
-                        Bukkit.broadcastMessage(s.replace("{AMOUNT}", Integer.toString(items.get(string)).replace("{ITEM}", string)));
+                        final String target = s.replace("{AMOUNT}", Integer.toString(items.get(string))).replace("{ITEM}", string);
+                        Bukkit.broadcastMessage(isCentered ? center(target, 70) : target);
                     }
                 } else {
-                    Bukkit.broadcastMessage(s);
+                    Bukkit.broadcastMessage(isCentered ? center(s, 70) : s);
                 }
             }
             pending.remove(player);
@@ -405,9 +406,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             stopRolling(player);
             rollingTasks.remove(player);
         }
-        if(pending.containsKey(player)) {
-            giveLoot(player);
-        }
+        giveLoot(player);
     }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {

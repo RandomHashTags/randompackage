@@ -7,7 +7,7 @@ settings:
   show graphic overlay cooldown: true
   exp:
     character: ":"
-    character length: 100
+    character length: 50
     achieved color: "&a"
     unachieved color: "&c"
 #

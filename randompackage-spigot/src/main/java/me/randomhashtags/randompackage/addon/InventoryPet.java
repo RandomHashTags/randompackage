@@ -27,7 +27,7 @@ public interface InventoryPet extends UVersionable, Itemable, Attributable, Skul
     }
 
     default ItemStack getItem(int level) {
-        return getItem(level, getRequiredXp(level));
+        return getItem(level, 0);
     }
     default ItemStack getItem(int level, int exp) {
         return getItem(level, exp, System.currentTimeMillis()+getCooldown(level));
