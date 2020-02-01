@@ -85,9 +85,9 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		preset = new ArrayList<>();
 		settingPreset = new ArrayList<>();
 
-		final List<String> c = otherdata.getStringList("envoy.preset");
-		if(!c.isEmpty()) {
-			for(String s : c) {
+		final List<String> presetLocations = otherdata.getStringList("envoy.preset");
+		if(!presetLocations.isEmpty()) {
+			for(String s : presetLocations) {
 				preset.add(toLocation(s));
 			}
 		}
@@ -111,18 +111,17 @@ public class Envoy extends RPFeature implements CommandExecutor {
 
 		final List<ItemStack> tiers = new ArrayList<>();
 		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "envoy tiers")) {
-			if(!f.getAbsoluteFile().getName().equals("_settings")) {
-				final FileEnvoyCrate e = new FileEnvoyCrate(f);
-				tiers.add(e.getItem());
+			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
+				tiers.add(new FileEnvoyCrate(f).getItem());
 			}
 		}
 		defaultTier = config.getString("settings.default tier");
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
-		final String defaul = colorize(config.getString("messages.default summon type"));
+		final String defaultSummonType = colorize(config.getString("messages.default summon type"));
 
 		final long next = getRandomTime();
 		nextNaturalEnvoy = System.currentTimeMillis()+next*1000;
-		spawnTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(defaul, true, type), next);
+		spawnTask = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> spawnEnvoy(defaultSummonType, true, type), next);
 
 		task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
 			final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.living;
@@ -136,7 +135,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			}
 		}, 0, 20*config.getInt("settings.firework delay"));
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ENVOY_CRATE).size() + " Envoy Tiers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.ENVOY_CRATE).size() + " Envoy Tiers", started);
 	}
 	public void unload() {
 		final List<String> p = new ArrayList<>();

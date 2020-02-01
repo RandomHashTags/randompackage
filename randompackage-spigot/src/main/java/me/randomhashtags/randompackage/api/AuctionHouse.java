@@ -233,6 +233,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
     private void loadAH(boolean async) {
+        final long started = System.currentTimeMillis();
         if(!isEnabled()) {
             return;
         }
@@ -273,7 +274,12 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             }
         }
         organizeAH();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + ah + " Auctioned Items, " + cb + " Collection Bin items, and deleted " + d + " expired items " + (async ? "&e[async]" : ""));
+        final String msg = ah + " Auctioned Items, " + cb + " Collection Bin items, and deleted " + d + " expired items";
+        if(async) {
+            sendConsoleDidLoadAsyncFeature(msg);
+        } else {
+            sendConsoleDidLoadFeature(msg, started);
+        }
     }
     private void organizeAH() {
         auctionHouse = auctionHouse.entrySet().stream().sorted(organization.equals("OLDEST") ? comparingByKey() : Collections.reverseOrder(comparingByKey())).collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));

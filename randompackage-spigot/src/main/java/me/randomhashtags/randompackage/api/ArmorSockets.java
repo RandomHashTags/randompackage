@@ -58,7 +58,7 @@ public class ArmorSockets extends RPFeature {
             list.add(getArmorSocketItem(socket, 100));
         }
         addGivedpCategory(list, UMaterial.TRIPWIRE_HOOK, "Armor Sockets", "Givedp: Armor Sockets");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ARMOR_SOCKET).size() + " Armor Sockets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SOCKET).size() + " Armor Sockets", started);
     }
     public void unload() {
         unregister(Feature.ARMOR_SOCKET);

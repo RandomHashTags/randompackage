@@ -137,7 +137,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		    PLUGIN_MANAGER.registerEvents(mcmmoChallenges, RANDOM_PACKAGE);
         }
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes", started);
 		reloadChallenges();
 	}
 	public void unload() {
@@ -154,13 +154,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 		}
 
-		try {
-			data.save(dataF);
-			dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "global challenges.yml");
-			data = YamlConfiguration.loadConfiguration(dataF);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		save();
 
 		if(mcmmoChallenges != null) {
             HandlerList.unregisterAll(mcmmoChallenges);
@@ -169,6 +163,16 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.active = null;
 		unregisterEventAttributeListener(this);
+	}
+
+	public void save() {
+		try {
+			data.save(dataF);
+			dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "global challenges.yml");
+			data = YamlConfiguration.loadConfiguration(dataF);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public void reloadChallenges() {
 		int maxAtOnce = max;

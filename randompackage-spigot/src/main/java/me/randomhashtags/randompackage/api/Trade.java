@@ -81,7 +81,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 		lore.clear();
 
 		requests = new HashMap<>();
-		sendConsoleMessage("&6[RandomPackage] &aLoaded Trade &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("Trade", started);
 	}
 	public void unload() {
 		ActiveTrade.trades = null;
@@ -90,7 +90,6 @@ public class Trade extends RPFeature implements CommandExecutor {
 	public int getCountdown() {
 		return countdown;
 	}
-
 	public void sendRequest(@NotNull Player sender, String receiver) {
 		final HashMap<String, String> replacements = new HashMap<>();
 		if(hasPermission(sender, "RandomPackage.trade.request", true)) {

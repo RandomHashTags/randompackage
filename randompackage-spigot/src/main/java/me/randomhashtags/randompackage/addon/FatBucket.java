@@ -42,7 +42,7 @@ public interface FatBucket extends Itemable, RPItemStack {
         }
         final ItemMeta meta = i.getItemMeta();
         is.setItemMeta(meta);
-        setRPItemStackValues(is, new HashMap<String, String>() {{
+        addRPItemStackValues(is, new HashMap<String, String>() {{
             put("FatBucketInfo", getIdentifier() + ":" + usesLeft + ":" + sourcesRequired);
         }});
     }

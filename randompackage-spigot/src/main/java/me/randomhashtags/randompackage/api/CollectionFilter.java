@@ -10,7 +10,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -134,18 +133,15 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 filtertypeString = lore.get(i);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded CollectionFilter &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Collection Filter", started);
 
         SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
-            final ConfigurationSection section = otherdata.getConfigurationSection("collection chests");
-            if(section != null) {
-                for(String s : section.getKeys(false)) {
-                    final String[] info = otherdata.getString("collection chests." + s + ".info").split(":");
-                    new CollectionChest(UUID.fromString(s), info[0], toLocation(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
-                }
+            for(String s : getConfigurationSectionKeys(otherdata, "collection chests", false)) {
+                final String[] info = otherdata.getString("collection chests." + s + ".info").split(":");
+                new CollectionChest(UUID.fromString(s), info[0], toLocation(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
             }
-            final HashMap<UUID, CollectionChest> c = CollectionChest.chests;
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + (c != null ? c.size() : 0) + " collection chests &e[async]");
+            final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
+            sendConsoleDidLoadAsyncFeature((chests != null ? chests.size() : 0) + " collection chests");
         });
     }
     public void unload() {
@@ -258,7 +254,6 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
             }
         }
     }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
@@ -299,6 +294,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final CollectionChest chest = CollectionChest.valueOf(clickedblock);
         final UMaterial filter = chest != null ? chest.getFilter() : getFiltered(player.getItemInHand());
         final Material filterMaterial = filter != null ? filter.getMaterial() : null;
+        final List<String> selectedLore = getStringList(config, "gui.selected.added lore"), notSelectedLore = getStringList(config, "gui.not selected.added lore");
         for(int i = 0; i < top.getSize(); i++) {
             item = top.getItem(i);
             if(item != null && !item.getType().equals(Material.AIR)) {
@@ -311,7 +307,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 if(itemMeta.hasLore()) {
                     lore.addAll(itemMeta.getLore());
                 }
-                lore.addAll(getStringList(config, "gui." + (isSelected ? "selected" : "not selected") + ".added lore"));
+                lore.addAll(isSelected ? selectedLore : notSelectedLore);
                 if(isEnchanted) {
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 }
@@ -375,9 +371,9 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         }
     }
     public UMaterial getFiltered(@NotNull ItemStack is) {
-        final String filter = collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType), filterString = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
+        final String filter = ChatColor.stripColor(collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType)), filterString = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
         for(UMaterial s : picksup.values()) {
-            if(s != null && filterString.equals(ChatColor.stripColor(filter.replace("{ITEM}", s.name().replace("_", " "))))) {
+            if(s != null && filterString.equals(filter.replace("{ITEM}", s.name().replace("_", " ")))) {
                 return s;
             }
         }

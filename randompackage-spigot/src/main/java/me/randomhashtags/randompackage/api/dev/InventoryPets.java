@@ -83,7 +83,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             }
         }
         addGivedpCategory(pets, UMaterial.PLAYER_HEAD_ITEM, "Inventory Pets", "Givedp: Inventory Pets");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.INVENTORY_PET).size() + " Inventory Pets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.INVENTORY_PET).size() + " Inventory Pets", started);
     }
     public void unload() {
         for(UUID u : leashedUponDeath.keySet()) {

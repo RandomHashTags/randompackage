@@ -54,7 +54,7 @@ public interface InventoryPet extends UVersionable, Itemable, Attributable, Skul
     }
 
     default void setItem(ItemStack is, String identifier, int level, int exp, long cooldownExpiration) {
-        setRPItemStackValues(is, new HashMap<String, String>() {{
+        addRPItemStackValues(is, new HashMap<String, String>() {{
             put("InventoryPetInfo", identifier + ":" + level + ":" + exp + ":" + cooldownExpiration);
         }});
     }

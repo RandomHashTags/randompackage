@@ -80,7 +80,7 @@ public class KitsMastery extends Kits {
                 inv.setItem(i, background);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Mastery Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(loaded + " Mastery Kits", started);
     }
     public void unload() {
         for(CustomKit k : new ArrayList<>(getAllCustomKits().values())) {

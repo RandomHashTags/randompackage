@@ -12,6 +12,18 @@ messages:
 #
 settings:
   max allowed on an item: 1
+  only allowed on heroic weapons: true
+  added lore:
+    - " "
+    - "&7Titan Attributes can &nONLY&r &7be applied"
+    - "&7to &cHeroic Weapons &7and only"
+    - "&7&n1 attributes&r &7can be imbued per weapon."
+    - " "
+    - "&7To learn more about Titan Attributes, use &c/titan"
+  #
+  applied lore:
+    - "&c&lTITAN ATTRIVUTE:&r &8&l{NAME}&r &c&l(&r&8Level {LEVEL}&c&l)"
+    - "&c&lTITAN XP:&r &8&l{CURRENT_XP} /&r &c{NEXT_LEVEL_XP}"
 #
 items:
   extractor:
@@ -30,4 +42,58 @@ gui:
   background:
     item: "black_stained_glass_pane"
     name: " "
+  undiscovered yet:
+    item: "red_stained_glass_pane"
+    name: "&c&l???"
+    lore:
+      - "&7This titan attribute has"
+      - "&7not been discovered yet."
+  #
+  info:
+    slot: 3
+    item: "book"
+    name: "&c&lTitan Attributes"
+    lore:
+      - "&c&l*&r &7Titan Attributes are special meta-shifting"
+      - "&7abilities that can be attached to"
+      - "&7heroic weapons, and then leveled up"
+      - "&7at the Titan Altar in the /end."
+      - " "
+      - "&c&l*&r &7Titan Attributes have 10 levels each."
+      - "&7In order to level-up your Titan Attribute"
+      - "&7you must apply &nUltimate / Legendary Dust"
+      - "&7to the weapon it is attached to, until the XP"
+      - "&7meter on the item is completely full."
+      - " "
+      - "&7Next, you need to wait for the Titan Altar"
+      - "&7world /event to spawn in the /end dimension."
+      - " "
+      - "&7You much then venture to the Altar with your"
+      - "&7Titan Weapons, and survive for an increasing"
+      - "&7period of time nearby the &cPvP-enabled &7Altar."
+      - " "
+      - "&c&l*&r &7Weapons can only have 1 Titan Attribute"
+      - "&7Additionally, Titan Attributes &ncannot&r &7be applied"
+      - "&7to non-heroic(gold) weapons."
+  altar:
+    slot: 5
+    item: "ender_eye"
+    name: "&d&lTitan Altar"
+    lore:
+      - "&d&l*&r &7The Titan Altar is an /event in the /end"
+      - "&7The Altar spawns for &n20 minutes every 8 hours."
+      - "&7If the Timeless Dragon is alive, the Altar will"
+      - "&7be unable to spawn for another 8 hours."
+      - " "
+      - "&d&l*&r &7The Titan Altar is the only location in the"
+      - "&7game where Titan Attributes can be leveled up."
+      - "&7Additionally, a Titan imbued weapon can only"
+      - "&7be leveled up &nonce per 24 hours."
+      - " "
+      - "&d&l*&r &7The Titan Altar requires Faction Points."
+      - "&7Your faction needs a minimum of:"
+      - "&d(currentAttributeLevel x 3,000) Faction Points"
+      - "&7in order for your level-up to be successful."
+      - " "
+      - "&7The next Titan Altar spawns in: &d{TIME_UNTIL_NEXT_SPAWN}"
 #

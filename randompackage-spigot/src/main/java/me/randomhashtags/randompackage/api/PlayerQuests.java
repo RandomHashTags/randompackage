@@ -152,7 +152,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                 new FilePlayerQuest(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.PLAYER_QUEST).size() + " Player Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.PLAYER_QUEST).size() + " Player Quests", started);
     }
     public void unload() {
         unregister(Feature.PLAYER_QUEST);

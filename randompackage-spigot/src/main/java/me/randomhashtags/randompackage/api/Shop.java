@@ -73,7 +73,7 @@ public class Shop extends RPFeature implements CommandExecutor {
                 titles.put(c.getTitle(), c);
             }
         }
-        sendConsoleMessage(colorize("&6[RandomPackage] &aLoaded " + getAll(Feature.SHOP_CATEGORY).size() + " Shop Categories &e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleDidLoadFeature(getAll(Feature.SHOP_CATEGORY).size() + " Shop Categories", started);
     }
     public void unload() {
 	    unregister(Feature.SHOP_CATEGORY);
@@ -81,7 +81,9 @@ public class Shop extends RPFeature implements CommandExecutor {
 
 	public BigDecimal getDiscount(Player player) {
 	    final BigDecimal zero = BigDecimal.ZERO;
-	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) return zero;
+	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) {
+	        return zero;
+        }
 	    BigDecimal d = zero;
         for(int k = 1; k <= 100; k++) {
             if(player.hasPermission("RandomPackage.shop.discount." + k)) {

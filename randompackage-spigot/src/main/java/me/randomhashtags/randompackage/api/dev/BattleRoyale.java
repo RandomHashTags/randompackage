@@ -89,7 +89,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
             score--;
         }
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Battle Royale &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Battle Royale", started);
     }
     public void unload() {
         end(null);

@@ -103,7 +103,7 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
 
         teleportCauses = config.getStringList("xpbottle.teleport causes");
         delayed = new HashMap<>();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Xpbottle &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Xpbottle", started);
     }
     public void unload() {
     }

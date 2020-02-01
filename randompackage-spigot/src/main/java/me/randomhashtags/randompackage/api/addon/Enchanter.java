@@ -73,7 +73,7 @@ public class Enchanter extends RPFeature implements CommandExecutor {
                 ei.setItem(i, item);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Enchanter &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Enchanter", started);
     }
     public void unload() {
     }

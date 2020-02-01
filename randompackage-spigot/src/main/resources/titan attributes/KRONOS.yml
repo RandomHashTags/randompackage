@@ -2,7 +2,7 @@
 settings:
   name: "Kronos"
   max level: 10
-  slot: 13
+  slot: 12
 #
 item:
   item: "spider_eye"

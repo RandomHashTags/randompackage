@@ -142,7 +142,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             }
         }
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Secondary Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Secondary Events", started);
     }
     public void unload() {
     }
@@ -161,8 +161,6 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         item.setItemMeta(itemMeta);
         return item;
     }
-
-
     public void bless(@NotNull Player player) {
         for(PotionEffectType type : removedPotionEffects) {
             player.removePotionEffect(type);

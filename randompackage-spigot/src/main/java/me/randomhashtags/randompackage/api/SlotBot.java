@@ -188,7 +188,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
         for(ItemStack is : previewRewardList) {
             previewInv.setItem(previewInv.firstEmpty(), is);
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Slot Bot &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Slot Bot", started);
     }
     public void unload() {
         for(Player player : new ArrayList<>(pending.keySet())) {

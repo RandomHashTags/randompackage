@@ -27,7 +27,7 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
         return i;
     }
     default void setItem(ItemStack is, String identifier, long cooldownExpiration) {
-        setRPItemStackValues(is, new HashMap<String, String>() {{
+        addRPItemStackValues(is, new HashMap<String, String>() {{
             put("TrinketInfo", identifier + ":" + cooldownExpiration);
         }});
     }

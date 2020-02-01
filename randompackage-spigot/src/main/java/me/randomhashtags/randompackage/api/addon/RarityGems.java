@@ -59,7 +59,7 @@ public class RarityGems extends RPFeature {
                 new FileRarityGem(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_GEM).size() + " Rarity Gems &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.RARITY_GEM).size() + " Rarity Gems", started);
     }
     public void unload() {
         unregister(Feature.RARITY_GEM);

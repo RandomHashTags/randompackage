@@ -131,7 +131,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			startKOTH();
 		}
 
-		sendConsoleMessage("&6[RandomPackage] &aLoaded King of the Hill &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("Koth of the Hill", started);
 	}
 	public void unload() {
 		otherdata.set("koth.center", center != null ? toString(center) : "");

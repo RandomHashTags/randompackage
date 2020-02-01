@@ -55,7 +55,7 @@ public class CustomBosses extends EventAttributes {
 		}
 		addGivedpCategory(list, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
 		loadBackup();
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.CUSTOM_BOSS).size() + " Custom Bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.CUSTOM_BOSS).size() + " Custom Bosses", started);
 	}
 	public void unload() {
 		backup();

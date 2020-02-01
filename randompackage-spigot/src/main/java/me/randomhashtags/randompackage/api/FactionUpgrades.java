@@ -108,7 +108,7 @@ public class FactionUpgrades extends EventAttributes {
             }
 
             loadBackup();
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades &e(took " + (System.currentTimeMillis()-started) + "ms)");
+            sendConsoleDidLoadFeature(getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades", started);
         } else {
             sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
             HandlerList.unregisterAll(instance);

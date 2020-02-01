@@ -62,7 +62,7 @@ public class Wild extends RPFeature implements CommandExecutor {
             final String[] values = s.split(";");
             zcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Wild &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Wild", started);
     }
     public void unload() {
     }

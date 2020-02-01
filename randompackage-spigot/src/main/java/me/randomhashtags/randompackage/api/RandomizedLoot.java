@@ -69,7 +69,7 @@ public class RandomizedLoot extends RPFeature {
             }
         }
         addGivedpCategory(values, UMaterial.GLISTERING_MELON_SLICE, "Randomized Loot", "Givedp Item: Randomized Loot");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + items.size() + " Randomized Loot &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(items.size() + " Randomized Loot", started);
     }
     public void unload() {
     }

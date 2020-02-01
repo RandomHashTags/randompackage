@@ -76,7 +76,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			b.add(bo.getItem(60*10000, 5.0));
 		}
 		addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.BOOSTER).size() + " Boosters &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.BOOSTER).size() + " Boosters", started);
 		loadBackup();
 	}
 	public void unload() {

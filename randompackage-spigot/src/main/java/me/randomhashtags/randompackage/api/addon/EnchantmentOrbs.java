@@ -59,7 +59,7 @@ public class EnchantmentOrbs extends RPFeature {
             }
         }
         addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ENCHANTMENT_ORB).size()+ " Enchantment Orbs &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.ENCHANTMENT_ORB).size() + " Enchantment Orbs", started);
     }
     public void unload() {
         unregister(Feature.ENCHANTMENT_ORB);

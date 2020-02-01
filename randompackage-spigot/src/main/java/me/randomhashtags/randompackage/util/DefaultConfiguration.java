@@ -376,13 +376,28 @@ public interface DefaultConfiguration extends UVersionable {
         generateAllDefault("server crates", new String[] {"ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"});
     }
     default void generateDefaultShopCategories() {
-        generateAllDefault("shops", new String[] {"BASE_GRIND", "BREWING", "BUILDING_BLOCKS", "CLAY", "FLOWERS", "FOOD_AND_FARMING", "GLASS", "MENU", "MOB_DROPS", "ORES_AND_GEMS", "POTIONS", "RAID", "SPAWNERS", "SPECIALTY", "WOOL"});
+        generateAllDefault("shops", new String[] {
+                "BASE_GRIND", "BREWING", "BUILDING_BLOCKS",
+                "CLAY",
+                "FLOWERS", "FOOD_AND_FARMING",
+                "GLASS",
+                "MENU", "MOB_DROPS",
+                "ORES_AND_GEMS",
+                "POTIONS",
+                "RAID",
+                "SPAWNERS", "SPECIALTY",
+                "WOOL"
+        });
     }
     default void generateDefaultStrongholds() {
         generateAllDefault("strongholds", new String[] {"FROZEN", "INFERNAL"});
     }
     default void generateDefaultTitanAttributes() {
-        generateAllDefault("titan attributes", new String[] {"ATLAS", "KRONOS", "OURANOS"});
+        generateAllDefault("titan attributes", new String[] {
+                "ATLAS",
+                "KRONOS",
+                "OURANOS"
+        });
     }
     default void generateDefaultTrinkets() {
         generateAllDefault("trinkets", new String[] {

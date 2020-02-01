@@ -118,7 +118,7 @@ public class Scrolls extends CustomEnchants {
         for(String key : getConfigurationSectionKeys(config, "black scrolls", false, "sounds", "particles")) {
             new PathBlackScroll(key);
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SCROLL_BLACK).size() + " Black Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_BLACK).size() + " Black Scrolls", started);
     }
     private void unloadBlackScrolls() {
         enabled.remove(Feature.SCROLL_BLACK);
@@ -133,7 +133,7 @@ public class Scrolls extends CustomEnchants {
             list.add(new PathTransmogScroll(s).getItem());
         }
         addGivedpCategory(list, UMaterial.PAPER, "Transmog Scrolls", "Givedp: Transmog Scrolls");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SCROLL_TRANSMOG).size() + " Transmog Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_TRANSMOG).size() + " Transmog Scrolls", started);
     }
     private void unloadTransmogScrolls() {
         enabled.remove(Feature.SCROLL_TRANSMOG);
@@ -148,7 +148,7 @@ public class Scrolls extends CustomEnchants {
             list.add(new PathWhiteScroll(s).getItem());
         }
         addGivedpCategory(list, UMaterial.MAP, "White Scrolls", "Givedp: White Scrolls");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SCROLL_WHITE) .size()+ " White Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_WHITE) .size()+ " White Scrolls", started);
     }
     private void unloadWhiteScrolls() {
         enabled.remove(Feature.SCROLL_WHITE);
@@ -160,7 +160,7 @@ public class Scrolls extends CustomEnchants {
         enabled.add(Feature.SCROLL_HOLY);
         for(String s : getConfigurationSectionKeys(config, "holy scrolls", false, "sounds", "particles")) {
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SCROLL_HOLY).size() + " Holy Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_HOLY).size() + " Holy Scrolls", started);
     }
     private void unloadHolyScrolls() {
         enabled.remove(Feature.SCROLL_HOLY);
@@ -175,13 +175,12 @@ public class Scrolls extends CustomEnchants {
             list.add(new PathRandomizationScroll(s).getItem());
         }
         addGivedpCategory(list, UMaterial.PAPER, "Randomization Scrolls", "Givedp: Randomization Scrolls");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SCROLL_RANDOMIZATION).size() + " Randomization Scrolls &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_RANDOMIZATION).size() + " Randomization Scrolls", started);
     }
     private void unloadRandomizationScrolls() {
         enabled.remove(Feature.SCROLL_RANDOMIZATION);
         unregister(Feature.SCROLL_RANDOMIZATION);
     }
-
 
     public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
         final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);

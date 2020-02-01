@@ -78,7 +78,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 				eii.setItem(config.getInt("edit icon." + s + ".slot"), item);
 			}
 		}
-		sendConsoleMessage("&6[RandomPackage] &aLoaded Homes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("Homes", started);
 	}
 	public void unload() {
 		GIVEDP_ITEM.items.remove("maxhomeincreaser");

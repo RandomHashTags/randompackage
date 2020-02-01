@@ -34,7 +34,9 @@ public class FatBuckets extends RPFeature implements RPItemStack {
 
     public YamlConfiguration config;
 
-    public String getIdentifier() { return "FAT_BUCKETS"; }
+    public String getIdentifier() {
+        return "FAT_BUCKETS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default fat buckets")) {
@@ -48,7 +50,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
             list.add(ffb.getItem(ffb.getUses()));
         }
         addGivedpCategory(list, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FAT_BUCKET).size() + " Fat Buckets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.FAT_BUCKET).size() + " Fat Buckets", started);
     }
     public void unload() {
         unregister(Feature.FAT_BUCKET);

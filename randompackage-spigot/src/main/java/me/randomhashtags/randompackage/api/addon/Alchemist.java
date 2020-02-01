@@ -92,7 +92,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
             }
             X++;
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Alchemist &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Alchemist", started);
     }
     public void unload() {
     }

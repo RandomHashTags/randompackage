@@ -84,7 +84,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
                     break;
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Tinkerer &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Tinkerer", started);
     }
     public void unload() {
     }

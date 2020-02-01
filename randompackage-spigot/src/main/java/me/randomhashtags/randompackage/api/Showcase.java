@@ -111,7 +111,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 				}
 			}
 		}
-		sendConsoleMessage("&6[RandomPackage] &aLoaded Showcase &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("Showcase", started);
 	}
 	public void unload() {
 		final String msg = colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server.");

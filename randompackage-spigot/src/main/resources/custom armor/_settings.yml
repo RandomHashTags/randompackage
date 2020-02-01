@@ -88,38 +88,47 @@ items:
       - "&3&l*&r &3Acts as ANY Armor Set type/piece."
       - " "
 #
-armor:
-  heroic:
-    armor lore:
+heroic:
+  added lore:
     - " "
-    - "&7+{ADDED_ARMOR_VALUE} Armor Value"
+    - "&7+{ARMOR_VALUE} Armor Value"
     - "&7{DURABILITY} Durability"
+    - "&4+{BONUS_ATTACK_DMG} Bonus Attack Damage"
     - "&4This armor is stronger than diamond."
-    helmet:
-      item: "leather_helmet"
-      name: "&3&lGhostly Hood&r {ENCHANT_SIZE}"
-      lore:
-      - "VEnchants{Protection4;Unbreaking3}"
-      - "RPEnchants{Valor;Angelic;Tank;Armored;Drunk;Implants;Arrow Deflect;Death God;Resilience;Protection;Frozen}"
-      - "{Immortal}:chance=40"
-      - "SetArmorValue{3}"
-      - "SetDurability{810}"
-    chestplate:
-      item: "leather_chestplate"
-      name: "&3&lGhostly Shroud&r {ENCHANT_SIZE}"
-      lore:
-      - "SetArmorValue{8}"
-      - "SetDurability{1000}"
-    leggings:
-      item: "leather_leggings"
-      name: "&3&lGhostly Robes&r {ENCHANT_SIZE}"
-      lore:
-      - "SetArmorValue{6}"
-      - "SetDurability{935}"
-    boots:
-      item: "leather_boots"
-      name: "&3&lGhostly Whisp"
-      lore:
-      - "SetArmorValue{3}"
-      - "SetDurability{686}"
+  default armor value:
+    helmet: 3
+    chestplate: 8
+    leggings: 6
+    boots: 3
+  default durability:
+    helmet: 810
+    chestplate: 1000
+    leggings: 935
+    boots: 686
+    sword: 1952
+    axe: 1952
+  default bonus attack damage:
+    sword: 4
+  #
+  helmet:
+    item: "leather_helmet"
+    name: "&3&lGhostly Hood&r {ENCHANT_SIZE}"
+    lore:
+    - "VEnchants{Protection4;Unbreaking3}"
+    - "RPEnchants{Valor;Angelic;Tank;Armored;Drunk;Implants;Arrow Deflect;Death God;Resilience;Protection;Frozen}"
+    - "{Immortal}:chance=40"
+  chestplate:
+    item: "leather_chestplate"
+    name: "&3&lGhostly Shroud&r {ENCHANT_SIZE}"
+    lore:
+    - "SetArmorValue{8}"
+    - "SetDurability{1000}"
+  leggings:
+    item: "leather_leggings"
+    name: "&3&lGhostly Robes&r {ENCHANT_SIZE}"
+  boots:
+    item: "leather_boots"
+    name: "&3&lGhostly Whisp"
+  sword:
+    item: "golden_sword"
 #

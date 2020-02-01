@@ -97,7 +97,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         viewing = new ArrayList<>();
         viewInventory = new UInventory(null, 54, colorize(config.getString("view inventory.title")));
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Wild PvP &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Wild PvP", started);
     }
     public void unload() {
         for(Player p : tasks.keySet()) {

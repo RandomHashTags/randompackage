@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,13 +18,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemSkins extends RPFeature implements CommandExecutor {
+public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack {
     private static ItemSkins instance;
     public static ItemSkins getItemSkins() {
         if(instance == null) instance = new ItemSkins();
@@ -124,6 +126,34 @@ public class ItemSkins extends RPFeature implements CommandExecutor {
         return null;
     }
 
+    public boolean isItemSkin(@NotNull ItemStack is) {
+        return getRPItemStackValue(is, "isItemSkin") != null;
+    }
+
+    public boolean applyItemSkin(@NotNull ItemStack is, @NotNull ItemSkin skin) {
+        if(isItemSkin(is) && is.getType().name().endsWith(skin.getMaterial())) {
+            final ItemMeta meta = is.getItemMeta();
+            final List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+            lore.add(appliedLore.replace("{NAME}", skin.getName()));
+            meta.setLore(lore); lore.clear();
+            is.setItemMeta(meta);
+            addRPItemStackValue(is, "isItemSkin", "true");
+            return true;
+        }
+        return false;
+    }
+    public boolean removeItemSkin(@NotNull ItemStack is, @NotNull ItemSkin appliedSkin) {
+        if(!isItemSkin(is)) {
+            final ItemMeta meta = is.getItemMeta();
+            final List<String> lore = meta.getLore();
+            lore.remove(appliedLore.replace("{NAME}", appliedSkin.getName()));
+            meta.setLore(lore);
+            removeRPItemStackValue(is, "isItemSkin");
+            return true;
+        }
+        return false;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
@@ -133,29 +163,21 @@ public class ItemSkins extends RPFeature implements CommandExecutor {
         }
         final Player player = (Player) event.getWhoClicked();
         final ItemSkin skin = valueOfItemSkin(cursor), applied = valueOfItemSkinApplied(current);
-        itemMeta = current.getItemMeta();
         if(skin != null && applied == null) {
-            if(!current.getType().name().endsWith(skin.getMaterial())) {
-                return;
-            }
-            lore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
-            lore.add(appliedLore.replace("{NAME}", skin.getName()));
-            itemMeta.setLore(lore); lore.clear();
-            current.setItemMeta(itemMeta);
-            event.setCurrentItem(current);
-            final int amount = cursor.getAmount();
-            if(amount == 1) {
-                event.setCursor(new ItemStack(Material.AIR));
+            if(applyItemSkin(current, skin)) {
+                event.setCurrentItem(current);
+                final int amount = cursor.getAmount();
+                if(amount == 1) {
+                    event.setCursor(new ItemStack(Material.AIR));
+                } else {
+                    cursor.setAmount(amount-1);
+                }
             } else {
-                cursor.setAmount(amount-1);
+                return;
             }
         } else if(applied != null) {
             if(click.contains("RIGHT")) {
-                itemMeta = current.getItemMeta();
-                lore = itemMeta.getLore();
-                lore.remove(appliedLore.replace("{NAME}", applied.getName()));
-                itemMeta.setLore(lore); lore.clear();
-                current.setItemMeta(itemMeta);
+                removeItemSkin(current, applied);
                 event.setCurrentItem(current);
                 event.setCursor(getItemSkinItem(applied, true));
             } else {

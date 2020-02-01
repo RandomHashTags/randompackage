@@ -30,12 +30,23 @@ public class CustomEnchantEntity {
 		this.dropsItemsUponDeath = dropsItemsUponDeath;
 		paths.put(path, this);
 	}
-	public EntityType getEntityType() { return type; }
-	public String getPath() { return path; }
-	public String getCustomName() { return customname; }
-	public List<String> getAttributes() { return attributes; }
-	public boolean canTargetSummoner() { return canTargetSummoner; }
-	public boolean dropsItemsUponDeath() { return dropsItemsUponDeath; }
+	public EntityType getEntityType() {
+		return type;
+	}
+	public String getPath() {
+		return path;
+	}
+	public String getCustomName() {
+		return customname;
+	}
+	public List<String> getAttributes() {
+		return attributes;
+	}
+	public boolean canTargetSummoner() {
+		return canTargetSummoner; }
+	public boolean dropsItemsUponDeath() {
+		return dropsItemsUponDeath;
+	}
 	public void spawn(LivingEntity summoner, LivingEntity target, Event event) {
 		final LivingEntity le = uv.getEntity(type.name(), summoner.getLocation(), true);
 		new LivingCustomEnchantEntity(this, event, summoner, le, target);

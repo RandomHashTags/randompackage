@@ -175,6 +175,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
 
     private void createCustomEnchantEntities() {
+        final long started = System.currentTimeMillis();
         final boolean defaultDropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), defaultCanTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
         final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
         for(String s : getConfigurationSectionKeys(config, "entities", false)) {
@@ -192,6 +193,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         }
+        sendConsoleDidLoadFeature((entities != null ? entities.size() : 0) + "Custom Enchant Entities", started);
     }
     public void viewEnchants(@NotNull CommandSender sender, int page) {
         final ChatEvents chatEvents = ChatEvents.getChatEvents();

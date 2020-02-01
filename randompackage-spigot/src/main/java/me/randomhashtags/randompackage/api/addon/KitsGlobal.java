@@ -104,7 +104,7 @@ public class KitsGlobal extends Kits {
         addGivedpCategory(gems, UMaterial.DIAMOND, "Gkit Gems", "Givedp: Gkit Gems");
         addGivedpCategory(fallenheroes, UMaterial.BONE, "Gkit Fallen Heroes", "Givedp: Gkit Fallen Heroes");
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Global Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(loaded + " Global Kits", started);
     }
     public void unload() {
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;

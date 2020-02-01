@@ -163,7 +163,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 inv.setItem(S, O.get(S));
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MONTHLY_CRATE).size() + " Monthly Crates &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.MONTHLY_CRATE).size() + " Monthly Crates", started);
     }
     public void unload() {
         for(Player p : new ArrayList<>(playerTimers.keySet())) {

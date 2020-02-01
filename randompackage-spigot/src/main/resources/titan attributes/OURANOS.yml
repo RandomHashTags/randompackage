@@ -2,7 +2,7 @@
 settings:
   name: "Ouranos"
   max level: 10
-  slot: 14
+  slot: 13
 #
 item:
   item: "spider_eye"

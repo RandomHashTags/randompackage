@@ -47,19 +47,19 @@ public class Trinkets extends EventAttributes implements RPItemStack {
             saveOtherData();
         }
 
-        final List<ItemStack> t = new ArrayList<>();
+        final List<ItemStack> list = new ArrayList<>();
         for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "trinkets")) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final Trinket trinket = new FileTrinket(f);
                 if(trinket.isEnabled()) {
-                    t.add(trinket.getItem(0));
+                    list.add(trinket.getItem(0));
                 }
             }
         }
-        addGivedpCategory(t, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
+        addGivedpCategory(list, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
 
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trinkets.yml"));
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TRINKET).size() + " Trinkets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.TRINKET).size() + " Trinkets", started);
     }
     public void unload() {
         unregister(Feature.TRINKET);

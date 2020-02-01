@@ -2,7 +2,9 @@
 settings:
   name: "Atlas"
   max level: 10
-  slot: 12
+  slot: 11
+  exp to level:
+    2: 2000
 #
 item:
   item: "spider_eye"

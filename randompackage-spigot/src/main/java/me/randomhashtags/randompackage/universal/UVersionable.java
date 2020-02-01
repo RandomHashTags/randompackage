@@ -171,6 +171,12 @@ public interface UVersionable extends Versionable {
     default void sendConsoleMessage(String msg) {
         CONSOLE.sendMessage(colorize(msg));
     }
+    default void sendConsoleDidLoadFeature(String what, long started) {
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
+    }
+    default void sendConsoleDidLoadAsyncFeature(String what) {
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e[async]");
+    }
     default String formatBigDecimal(BigDecimal b) {
         return formatBigDecimal(b, false);
     }
@@ -317,6 +323,11 @@ public interface UVersionable extends Versionable {
         } else {
             return event.getHitEntity();
         }
+    }
+
+    default boolean isArmorPiece(@NotNull Material material) {
+        final String type = material.name();
+        return type.endsWith("_HELMET") || type.endsWith("_CHESTPLATE") || type.endsWith("_LEGGINGS") || type.endsWith("_BOOTS");
     }
 
     default boolean isPassive(EntityType type) {

@@ -88,7 +88,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
 
         tasks = new ArrayList<>();
 
-        for(String s : config.getConfigurationSection("bosses").getKeys(false)) {
+        for(String s : getConfigurationSectionKeys(config, "bosses", false)) {
             final String p = "bosses." + s + ".";
             new ConquestMob(s, config.getString(p + "type").toUpperCase(), colorize(config.getString(p + "name")), config.getStringList(p + "attributes"), config.getStringList(p + "equipment"), config.getStringList(p + "drops"));
         }
@@ -109,8 +109,8 @@ public class Conquest extends RPFeature implements CommandExecutor {
                 new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
             }
         }
-        final HashMap<String, ConquestMob> CM = ConquestMob.bosses;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (CM != null ? CM.size() : 0) + " bosses &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        final HashMap<String, ConquestMob> bosses = ConquestMob.bosses;
+        sendConsoleDidLoadFeature(getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (bosses != null ? bosses.size() : 0) + " bosses", started);
     }
     public void unload() {
         for(int i : tasks) {
@@ -194,18 +194,20 @@ public class Conquest extends RPFeature implements CommandExecutor {
 
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final Block c = event.getClickedBlock();
-        if(c != null) {
-            final LivingConquestChest cc = LivingConquestChest.valueOf(c.getLocation());
-            if(cc != null) {
+        final Block block = event.getClickedBlock();
+        if(block != null) {
+            final LivingConquestChest chest = LivingConquestChest.valueOf(block.getLocation());
+            if(chest != null) {
                 final Player player = event.getPlayer();
                 event.setCancelled(true);
                 player.updateInventory();
-                if(!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) return;
-                final ConquestBlockDamageEvent cde = new ConquestBlockDamageEvent(player, cc, cc.type.getDamagePerHit());
+                if(!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                    return;
+                }
+                final ConquestBlockDamageEvent cde = new ConquestBlockDamageEvent(player, chest, chest.type.getDamagePerHit());
                 PLUGIN_MANAGER.callEvent(cde);
                 if(!cde.isCancelled()) {
-                    cc.damage(player, cde.getDamage(), false);
+                    chest.damage(player, cde.getDamage(), false);
                 }
             }
         }

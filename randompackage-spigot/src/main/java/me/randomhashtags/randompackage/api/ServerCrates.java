@@ -68,7 +68,7 @@ public class ServerCrates extends RPFeature {
 		}
 		addGivedpCategory(crates, UMaterial.CHEST, "Server Crates", "Givedp: Server Crates");
 		addGivedpCategory(flares, UMaterial.TORCH, "Server Crate Flares", "Givedp: Server Crate Flares");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.SERVER_CRATE).size() + " Server Crates and flares &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.SERVER_CRATE).size() + " Server Crates and flares", started);
 	}
 	public void unload() {
 		for(UUID uuid : new ArrayList<>(revealingLoot.keySet())) {

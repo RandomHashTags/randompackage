@@ -52,7 +52,7 @@ public class Fireballs extends CustomEnchants {
         }
 
         addGivedpCategory(list, UMaterial.FIRE_CHARGE, "Rarity Fireballs", "Givedp: Rarity Fireballs");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.RARITY_FIREBALL).size() + " Fireballs & " + getAll(Feature.MAGIC_DUST).size() + " Magic Dust &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.RARITY_FIREBALL).size() + " Fireballs & " + getAll(Feature.MAGIC_DUST).size() + " Magic Dust", started);
     }
     @Override
     public void unload() {

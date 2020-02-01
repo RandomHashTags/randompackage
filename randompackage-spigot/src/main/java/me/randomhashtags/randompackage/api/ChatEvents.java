@@ -52,7 +52,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
 		chatformat = RP_CONFIG.getString("chat cmds.format");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded ChatEvents &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("ChatEvents", started);
 	}
 	public void unload() {
 		for(UUID id : new ArrayList<>(viewingBrag)) {

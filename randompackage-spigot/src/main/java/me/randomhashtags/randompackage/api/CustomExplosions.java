@@ -77,7 +77,7 @@ public class CustomExplosions extends RPFeature {
 		}
 
 		final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + explosions.size() + " Custom Explosions &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(explosions.size() + "Custom Explosions", started);
 
 		final List<ItemStack> explosionsList = new ArrayList<>();
 		for(Identifiable id : explosions.values()) {
@@ -223,33 +223,46 @@ public class CustomExplosions extends RPFeature {
 				final Location bl = block.getLocation();
 				double x = bl.getBlockX(), y = bl.getBlockY(), z = bl.getBlockZ();
 				final Dispenser disp = (Dispenser) block.getState().getData();
-				final BlockFace bf = disp.getFacing();
-				final boolean down = bf.equals(BlockFace.DOWN), up = bf.equals(BlockFace.UP), north = bf.equals(BlockFace.NORTH), east = bf.equals(BlockFace.EAST), west = bf.equals(BlockFace.WEST), south = bf.equals(BlockFace.SOUTH);
-				if(down) y -= 1.0;
-				else if(up) y += 1.0;
-				else if(north) z -= 0.5;
-				else if(south) z += 1.5;
-				else if(west) x -= 0.5;
-				else if(east) x += 1.5;
-				else {
-					Bukkit.broadcastMessage("[RandomPackage.CustomExplosions] Different direction! \"" + disp.getFacing().name() + "\"");
+				final BlockFace face = disp.getFacing();
+				final boolean down = face.equals(BlockFace.DOWN), up = face.equals(BlockFace.UP), north = face.equals(BlockFace.NORTH), east = face.equals(BlockFace.EAST), west = face.equals(BlockFace.WEST), south = face.equals(BlockFace.SOUTH);
+				if(down) {
+					y -= 1.0;
+				} else if(up) {
+					y += 1.0;
+				} else if(north) {
+					z -= 0.5;
+				} else if(south) {
+					z += 1.5;
+				} else if(west) {
+					x -= 0.5;
+				} else if(east) {
+					x += 1.5;
+				} else {
+					Bukkit.broadcastMessage("[RandomPackage] CustomExplosions -> Different direction! \"" + disp.getFacing().name() + "\"");
 					return;
 				}
-				if(!east && !west) x += 0.5;
-				if(!bf.name().endsWith("TH")) z += 0.5;
+				if(!east && !west) {
+					x += 0.5;
+				}
+				if(!face.name().endsWith("TH")) {
+					z += 0.5;
+				}
 				final Location l = new Location(block.getWorld(), x, y, z);
 				((FileCustomTNT) explosion).spawn(l);
 
 				org.bukkit.block.Dispenser dis = (org.bukkit.block.Dispenser) block.getState();
-				final Inventory i = dis.getInventory();
-				for(int d = 0; d < i.getSize(); d++) {
-					final ItemStack target = i.getItem(d);
+				final Inventory inv = dis.getInventory();
+				for(int d = 0; d < inv.getSize(); d++) {
+					final ItemStack target = inv.getItem(d);
 					if(target != null && target.isSimilar(is)) {
 						final int e = d;
 						SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-							final ItemStack a = i.getItem(e);
-							if(a.getAmount() == 1) i.setItem(e, new ItemStack(Material.AIR));
-							else                   target.setAmount(a.getAmount() - 1);
+							final ItemStack amount = inv.getItem(e);
+							if(amount.getAmount() == 1) {
+								inv.setItem(e, new ItemStack(Material.AIR));
+							} else {
+								target.setAmount(amount.getAmount() - 1);
+							}
 							dis.update();
 						}, 0);
 						return;
@@ -266,9 +279,14 @@ public class CustomExplosions extends RPFeature {
 		final HashMap<UUID, FileCustomTNT> CT = FileCustomTNT.primed;
 		final FileCustomCreeper creeper = CC != null ? CC.getOrDefault(uuid, null) : null;
 		final FileCustomTNT tnt = creeper == null && CT != null ? CT.getOrDefault(uuid, null) : null;
-		if(creeper == null && tnt == null) return;
+		if(creeper == null && tnt == null) {
+			return;
+		}
 		final Location l = e.getLocation();
-		if(creeper != null) creeper.explode(event, l, RANDOM);
-		else tnt.explode(event, l, RANDOM);
+		if(creeper != null) {
+			creeper.explode(event, l, RANDOM);
+		} else {
+			tnt.explode(event, l, RANDOM);
+		}
 	}
 }

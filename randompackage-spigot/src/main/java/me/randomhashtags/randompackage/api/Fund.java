@@ -84,7 +84,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 		for(String uuid : getConfigurationSectionKeys(otherdata, "fund.depositors", false)) {
 			deposits.put(UUID.fromString(uuid), BigDecimal.valueOf(otherdata.getDouble("fund.depositors." + uuid)));
 		}
-		sendConsoleMessage("&6[RandomPackage] &aLoaded Server Fund &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature("Server Fund", started);
 	}
 	public void unload() {
 		otherdata.set("fund.total", total);

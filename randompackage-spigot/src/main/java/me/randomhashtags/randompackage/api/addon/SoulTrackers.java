@@ -55,7 +55,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
             list.add(new PathSoulTracker(s).getItem());
         }
         addGivedpCategory(list, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " +  getAll(Feature.SOUL_TRACKER).size() + " Soul Trackers &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.SOUL_TRACKER).size() + " Soul Trackers", started);
     }
     public void unload() {
         unregister(Feature.SOUL_TRACKER);

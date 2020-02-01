@@ -61,7 +61,9 @@ public class KitsEvolution extends Kits {
         final long started = System.currentTimeMillis();
         if(!otherdata.getBoolean("saved default vkits")) {
             final String[] v = new String[] {"ALCHEMIST", "JUDGEMENT", "LUCKY", "MIMIC", "OGRE", "PHOENIX", "SLAYER", "TROLL"};
-            for(String s : v) save("kits", "VKIT_" + s + ".yml");
+            for(String s : v) {
+                save("kits", "VKIT_" + s + ".yml");
+            }
             otherdata.set("saved default vkits", true);
             saveOtherData();
         }
@@ -93,7 +95,7 @@ public class KitsEvolution extends Kits {
         }
         addGivedpCategory(gems, UMaterial.DIAMOND, "Vkit Gems", "Givedp: Vkit Gems");
         addGivedpCategory(fallenheroes, UMaterial.BONE, "Vkit Fallen Heroes", "Givedp: Vkit Fallen Heroes");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Evolution Kits &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(loaded + " Evolution Kits", started);
     }
     public void unload() {
         final HashMap<UUID, LivingFallenHero> f = LivingFallenHero.living;

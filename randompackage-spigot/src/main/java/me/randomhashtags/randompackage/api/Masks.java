@@ -73,7 +73,7 @@ public class Masks extends CustomEnchants {
             }
         }
         addGivedpCategory(list, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.MASK).size() + " Masks &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.MASK).size() + " Masks", started);
     }
     public void unload() {
         for(Player p : equippedMasks.keySet()) {

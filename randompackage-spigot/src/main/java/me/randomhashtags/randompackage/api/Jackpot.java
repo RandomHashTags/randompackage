@@ -139,7 +139,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
             }
         }
         startTask(started);
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Jackpot &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Jackpot", started);
     }
     public void unload() {
         otherdata.set("jackpot", null);

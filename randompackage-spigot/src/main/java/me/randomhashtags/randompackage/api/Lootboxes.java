@@ -126,7 +126,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                 }
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.LOOTBOX).size() + " lootboxes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.LOOTBOX).size() + " Lootboxes", started);
     }
     public void unload() {
         for(Lootbox l : started.keySet()) {

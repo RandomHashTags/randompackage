@@ -74,7 +74,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 		tabformat = colorize(config.getString("tab.format"));
 		FileTitle.titleChatFormat = chatformat;
 		FileTitle.titleTabFormat = tabformat;
- 		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TITLE).size() + " titles &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.TITLE).size() + " Titles", started);
 	}
 	public void unload() {
 		for(Player player : new ArrayList<>(pages.keySet())) {

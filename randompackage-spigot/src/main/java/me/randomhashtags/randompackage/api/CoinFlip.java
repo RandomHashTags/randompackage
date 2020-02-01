@@ -142,7 +142,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             final CoinFlipMatch m = new CoinFlipMatch(otherdata.getLong("coinflips." + key + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(key)), CoinFlipOption.paths.get(otherdata.getString("coinflips." + key + ".option")), getBigDecimal(otherdata.getString("coinflips." + key + ".wager")));
             available.add(m);
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Coin Flip &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature("Coin Flip", started);
     }
     public void unload() {
         for(OfflinePlayer p : new ArrayList<>(picking.keySet())) {

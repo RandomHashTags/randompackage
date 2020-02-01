@@ -43,7 +43,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	
 	public YamlConfiguration config;
 	public ItemStack equipmentLootbox, crystal, heroicUpgrade, omniCrystal;
-	public List<String> omniAppliedLore;
+	public List<String> omniAppliedLore, heroicAddedLore;
 	public int percentSlot;
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
@@ -64,6 +64,8 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		omniCrystal = d(config, "items.omni crystal");
 		omniAppliedLore = colorizeListString(config.getStringList("items.omni crystal.applied lore"));
 
+		heroicAddedLore = colorizeListString(config.getStringList("heroic.added lore"));
+
 		GIVEDP_ITEM.items.put("equipmentlootbox", equipmentLootbox);
 
 		if(!otherdata.getBoolean("saved default custom armor")) {
@@ -81,7 +83,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 		}
 		addGivedpCategory(crystals, UMaterial.NETHER_STAR, "Armor Set Crystals", "Givedp: ArmorSet Crystals");
-		sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ARMOR_SET).size() + " Armor Sets &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SET).size() + " Armor Sets", started);
 	}
 	public void unload() {
 		unregister(Feature.ARMOR_SET);
@@ -109,22 +111,22 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		return item;
 	}
 	private void tryTriggeringCustomArmor(Player player, Event event) {
-		tryCrystal(player, event);
+		tryArmorCrystal(player, event);
 		final ArmorSet set = valueOfArmorSet(player, true);
 		if(set != null) {
 			trigger(event, set.getArmorAttributes());
 		}
 	}
 	private List<ItemStack> getArmor(Player player) {
-		final List<ItemStack> i = new ArrayList<>();
+		final List<ItemStack> list = new ArrayList<>();
 		for(ItemStack is : player.getInventory().getArmorContents()) {
 			if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-				i.add(is);
+				list.add(is);
 			}
 		}
-		return i;
+		return list;
 	}
-	private void tryCrystal(Player player, Event event) {
+	private void tryArmorCrystal(Player player, Event event) {
 		for(ItemStack is : getArmor(player)) {
 			final ArmorSet crystal = getArmorCrystalOnItem(is);
 			if(crystal != null) {
@@ -132,7 +134,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 		}
 	}
-	public byte tryApplyingCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
+	public byte tryApplyingArmorCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
 		final String mat = is != null ? is.getType().name() : null;
 		final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
 		if(mat != null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
@@ -145,7 +147,9 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 			if(RANDOM.nextInt(100) < percent) {
 				itemMeta = is.getItemMeta(); lore.clear();
-				if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+				if(itemMeta.hasLore()) {
+					lore.addAll(itemMeta.getLore());
+				}
 				lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
 				itemMeta.setLore(lore); lore.clear();
 				is.setItemMeta(itemMeta);
@@ -159,6 +163,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public byte tryApplyingUpgrade(Player player, ArmorSet type, int percent, ItemStack is) {
 		return 0;
 	}
+
 	public ItemStack getRandomEquipmentLootboxLoot() {
 		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
 		String l = rewards.get(RANDOM.nextInt(rewards.size()));
@@ -167,29 +172,87 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 		return GIVEDP_ITEM.valueOf(l);
 	}
+
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {
 		return getHeroicUpgrade(set, RANDOM.nextInt(101));
 	}
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set, int percent) {
-		final String name = set.getName(), persent = Integer.toBinaryString(percent);
-		item = heroicUpgrade.clone(); itemMeta = item.getItemMeta(); lore.clear();
+		final String name = set.getName(), percentString = Integer.toString(percent);
+		item = heroicUpgrade.clone();
+		itemMeta = item.getItemMeta(); lore.clear();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
 		for(String s : itemMeta.getLore()) {
-			lore.add(s.replace("{NAME}", name).replace("{PERCENT}", persent));
+			lore.add(s.replace("{NAME}", name).replace("{PERCENT}", percentString));
 		}
 		itemMeta.setLore(lore); lore.clear();
 		item.setItemMeta(itemMeta);
 		return item;
 	}
 	public boolean isHeroic(@Nullable ItemStack is) {
-		return getRPItemStackValue(is, "RPCustomArmorIsHeroic") != null;
+		return getRPItemStackValue(is, "isHeroic") != null;
 	}
-	public void setHeroicVariant(@NotNull ItemStack is) {
+	public void setHeroic(@NotNull Player player, @NotNull ItemStack is, int durability, int maxDurability) {
 		if(!isHeroic(is)) {
 			final ArmorSet set = valueOfArmorSet(is);
 			if(set != null) {
-				setRPItemStackValues(is, new HashMap<String, String>(){{ put("RPCustomArmorIsHeroic", "true"); }});
+				addRPItemStackValues(is, new HashMap<String, String>() {{
+					put("isHeroic", "true");
+					put("CustomDurability", Integer.toString(durability));
+					put("CustomMaxDurability", Integer.toString(maxDurability));
+				}});
+				updateCustomDurability(player, is);
 			}
+		}
+	}
+
+	public boolean hasCustomDurability(@Nullable ItemStack is) {
+		return getRPItemStackValue(is, "CustomDurability") != null;
+	}
+	public ItemStack setCustomDurability(@NotNull ItemStack is, int maxDurability, int armorValueORbonusAttackDmg) {
+		if(!hasCustomDurability(is)) {
+			final String max = Integer.toString(maxDurability), value = Integer.toString(armorValueORbonusAttackDmg);
+			final boolean isArmor = isArmorPiece(is.getType());
+			itemMeta = is.getItemMeta(); lore.clear();
+			if(itemMeta.hasLore()) {
+				lore.addAll(itemMeta.getLore());
+			}
+			for(String s : heroicAddedLore) {
+				final boolean containsArmorValue = s.contains("{ARMOR_VALUE}"), containsBonusAttackDmg = s.contains("{BONUS_ATTACK_DMG}");
+				if(containsArmorValue && isArmor || containsBonusAttackDmg && !isArmor || !containsArmorValue && !containsBonusAttackDmg) {
+					lore.add(s.replace("{ARMOR_VALUE}", value).replace("{BONUS_ATTACK_DMG}", value).replace("{DURABILITY}", max));
+				}
+			}
+			itemMeta.setLore(lore); lore.clear();
+			is.setItemMeta(itemMeta);
+			addRPItemStackValues(is, new HashMap<String, String>() {{
+				put("CustomDurability", Integer.toString(getCustomDurability(is, maxDurability)));
+				put("CustomMaxDurability", max);
+			}});
+		}
+		return is;
+	}
+	public int getCustomDurability(@NotNull ItemStack is) {
+		return hasCustomDurability(is) ? Integer.parseInt(getRPItemStackValue(is, "CustomDurability")) : -1;
+	}
+	public int getCustomMaxDurability(@NotNull ItemStack is) {
+		return hasCustomDurability(is) ? Integer.parseInt(getRPItemStackValue(is, "CustomMaxDurability")) : -1;
+	}
+	public int getCustomDurability(@NotNull ItemStack is, float max) {
+		if(hasCustomDurability(is)) {
+			final float current = is.getDurability();
+			final float percent = 100-((current/max)*100), maxDurability = is.getType().getMaxDurability();
+			return (int) (maxDurability*percent);
+		}
+		return -1;
+	}
+	public void updateCustomDurability(@NotNull Player player, @NotNull ItemStack is) {
+		if(hasCustomDurability(is)) {
+			final float current = getCustomDurability(is), max = getCustomMaxDurability(is);
+			final float percent = 100-((current/max)*100), maxDurability = is.getType().getMaxDurability();
+			final float durability = maxDurability*percent;
+			final short itemDurability = (short) (durability > 0.00 && ((short) durability) == 0 ? maxDurability-1 : durability);
+			is.setDurability(itemDurability);
+			player.updateInventory();
 		}
 	}
 
@@ -214,7 +277,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void armorUnequipEvent(ArmorUnequipEvent event) {
 		final Player player = event.getPlayer();
-		tryCrystal(player, event);
+		tryArmorCrystal(player, event);
 		final ArmorSet set = valueOfArmorSet(player, true);
 		if(set != null) {
 			final ArmorSetUnequipEvent e = new ArmorSetUnequipEvent(player, set);
@@ -288,7 +351,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		final ArmorSet crystal = valueOfArmorCrystal(cursor);
 		if(crystal != null && current != null && cursor != null) {
 			final Player player = (Player) event.getWhoClicked();
-			if(tryApplyingCrystal(player, crystal, getRemainingInt(cursor.getItemMeta().getLore().get(percentSlot)), current) >= 1) {
+			if(tryApplyingArmorCrystal(player, crystal, getRemainingInt(cursor.getItemMeta().getLore().get(percentSlot)), current) >= 1) {
 				event.setCancelled(true);
 				final int amount = cursor.getAmount();
 				if(amount == 1) {
