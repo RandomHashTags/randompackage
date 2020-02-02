@@ -27,7 +27,6 @@ items:
     - " &6&l*&r &7Outpost Mask"
     - " &6&l*&r &7Stronghold Mask"
     - " &6&l*&r &7Boss Mask"
-    -
     can obtain:
       - "PURGE"
       - "SCARECROW"
@@ -47,7 +46,7 @@ items:
       - "JOKER"
     #
     received msg:
-      - "&e&l(!)&r &e{PLAYER} has receive a &l{MASK}&r &efrom their Mask Generator!"
+      - "&e&l(!)&r &e{PLAYER} has receive a &r{MASK}&r &efrom their Mask Generator!"
 #
 added lore:
   - " "

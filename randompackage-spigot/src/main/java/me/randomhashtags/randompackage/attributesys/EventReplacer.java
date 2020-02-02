@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.attributesys;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
 import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.util.RPValues;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EventReplacer extends Combo, Mathable, UVersionable {
+public interface EventReplacer extends Combo, Mathable, UVersionable, RPValues {
     default String replaceValue(HashMap<String, Entity> entities, String value, HashMap<String, String> valueReplacements) {
         String string = value;
 
@@ -34,13 +35,16 @@ public interface EventReplacer extends Combo, Mathable, UVersionable {
                 string = string.replace("get" + entityString + "MaxHP", isLiving ? Double.toString(le.getMaxHealth()) : "0");
                 string = string.replace("get" + entityString + "HP", isLiving ? Double.toString(le.getHealth()) : "0");
                 string = string.replace("get" + entityString + "Saturation", isPlayer ? Float.toString(player.getSaturation()) : "0");
-                if(string.contains("loc")) {
+                if(string.contains("get" + entityString + "EmptyFatBuckets")) {
+                    string = string.replace("get" + entityString + "EmptyFatBuckets", Integer.toString(getFatBuckets(player).size()));
+                }
+                if(string.contains("get" + entityString + "Loc")) {
                     final Location l = entity.getLocation();
                     string = string.replace("get" + entityString + "LocX", Double.toString(l.getX()));
                     string = string.replace("get" + entityString + "LocY", Double.toString(l.getY()));
                     string = string.replace("get" + entityString + "LocZ", Double.toString(l.getZ()));
                 }
-                if(string.contains("exp")) {
+                if(string.contains("get" + entityString + "Exp")) {
                     string = string.replace("get" + entityString + "Exp", isPlayer ? Integer.toString(getTotalExperience(player)) : "0");
                     string = string.replace("get" + entityString + "ExpLevel", isPlayer ? Integer.toString(player.getLevel()) : "0");
                 }

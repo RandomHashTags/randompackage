@@ -1,9 +1,9 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
+  enabled: true
   max level: 10
   cooldown: # Measured in seconds!
-    all: 3600 # 48 hours
+    all: 172800
   exp to level:
     all: 1000
 #

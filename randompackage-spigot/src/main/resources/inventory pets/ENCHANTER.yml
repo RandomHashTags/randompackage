@@ -2,6 +2,7 @@
 settings:
   enabled: true
   max level: 10
+  exp gained per use: 50
   cooldown: # Measured in seconds!
     all: 3600
   exp to level:

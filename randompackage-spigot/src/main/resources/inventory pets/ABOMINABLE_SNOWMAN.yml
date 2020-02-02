@@ -1,10 +1,17 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
-  max level: 10
+  enabled: true
+  max level: 3
+  exp gained per use: 100
+  values:
+    1: 14
+    2: 17
+    3: 20
   cooldown: # Measured in seconds!
     all: 300
   exp to level:
+    2: 1000
+    3: 1500
     4: 2000
 #
 item:
@@ -17,7 +24,7 @@ item:
   - " "
   - "&f&lAbility"
   - "&7[&4Polymorph&7] target player, transforming"
-  - "&7them into a harmless, immobile snowman for: &f20s"
+  - "&7them into a harmless, immobile snowman for: &f{VALUE}s"
   - "&7Any damage dealt to them will break the spell."
   - " "
   - "&f&lCooldown"

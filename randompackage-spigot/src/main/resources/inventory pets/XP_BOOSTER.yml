@@ -2,10 +2,30 @@
 settings:
   enabled: true
   max level: 10
+  values:
+    1: 1.25;300
+    2: 1.40;360
+    3: 1.55;480
+    4: 1.70;600
+    5: 1.85;660
+    6: 2.00;720
+    7: 2.15;840
+    8: 2.30;900
+    9: 2.45;960
+    10: 3.00;1080
   cooldown: # Measured in seconds!
     all: 3600
   exp to level:
     2: 200
+    3: 300
+    4: 400
+    5: 500
+    6: 600
+    7: 700
+    8: 800
+    9: 900
+    10: 1000
+    11: 1100
 #
 item:
   texture: "http://textures.minecraft.net/texture/b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"
@@ -18,8 +38,8 @@ item:
   - "&7experience and knowledge from combat."
   - " "
   - "&f&lAbility"
-  - "&7Gain a 1.25x Vanilla XP"
-  - "&7increase for 5m!"
+  - "&7Gain a {VALUE_1}x Vanilla XP"
+  - "&7increase for {VALUE_2}!"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"
@@ -32,5 +52,5 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;InventoryPetOnCooldown=false;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*5+(level-1)*1.4444444444;PlayerRemoveFromList=PET_XP_BOOSTER"
+  - "PlayerInteract;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*{VALUE_2};PlayerRemoveFromList=PET_XP_BOOSTER"
   - "EntityDeath;KillerIsInList=PET_XP_BOOSTER;SetDroppedExp=xp*1.25+(level-1)*0.194444444444"

@@ -1,14 +1,18 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
-  max level: 10
-  values:
-    2: 4
+  enabled: true
+  max level: 5
   cooldown: # Measured in seconds!
-    all: 60
+    1: 300
     2: 240
+    3: 180
+    4: 120
+    5: 60
   exp to level:
+    2: 1000
     3: 1500
+    4: 2000
+    5: 2500
     6: 3000
 #
 item:
@@ -23,7 +27,7 @@ item:
   - "&7Shoots an &eExplosive Turkey"
   - "&7that will detonate upon contact,"
   - "&7applying &eKnockback I &7and a &eFreeze (2s) &7to enemies"
-  - "&7within a &e{VALUE}}x{VALUE} &7radius of the explosion."
+  - "&7within a &e{LEVEL}x{LEVEL} &7radius of the explosion."
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

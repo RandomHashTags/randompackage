@@ -1,7 +1,13 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
-  max level: 10
+  enabled: true
+  max level: 5
+  values:
+    1: 1.25
+    2: 1.50
+    3: 1.75
+    4: 2.00
+    5: 2.25
   cooldown: # Measured in seconds!
     all: 120
   exp to level:
@@ -19,7 +25,7 @@ item:
   - "&f&lAbility"
   - "&7Casts a powerful &f/smite"
   - "&7at the target entity. If affecting a player,"
-  - "&7they will also be &nfrozen in place for 1.25s"
+  - "&7they will also be &nfrozen in place for {VALUE}s"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"

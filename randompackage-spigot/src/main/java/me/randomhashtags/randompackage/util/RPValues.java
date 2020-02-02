@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.ArmorSockets;
 import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.api.FatBuckets;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
@@ -121,6 +122,20 @@ public interface RPValues extends UVersionable {
     }
     default LinkedHashMap<String, WhiteScroll> getAllWhiteScrolls() {
         return (LinkedHashMap<String, WhiteScroll>) getAllObj(Feature.SCROLL_WHITE);
+    }
+
+
+    default List<ItemStack> getFatBuckets(@NotNull Player player) {
+        final FatBuckets buckets = FatBuckets.getFatBuckets();
+        final List<ItemStack> list = new ArrayList<>();
+        if(buckets.isEnabled()) {
+            for(ItemStack is : player.getInventory().getContents()) {
+                if(buckets.isFatBucket(is)) {
+                    list.add(is);
+                }
+            }
+        }
+        return list;
     }
 
 

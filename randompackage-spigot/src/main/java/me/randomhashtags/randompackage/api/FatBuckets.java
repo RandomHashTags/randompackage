@@ -56,7 +56,10 @@ public class FatBuckets extends RPFeature implements RPItemStack {
         unregister(Feature.FAT_BUCKET);
     }
 
-    public HashMap<FatBucket, String> isFatBucket(@NotNull ItemStack is) {
+    public boolean isFatBucket(@NotNull ItemStack is) {
+        return getRPItemStackValue(is, "FatBucketInfo") != null;
+    }
+    public HashMap<FatBucket, String> getFatBucketInfo(@NotNull ItemStack is) {
         final String info = getRPItemStackValue(is, "FatBucketInfo");
         if(info != null) {
             final HashMap<FatBucket, String> bucket = new HashMap<>();
@@ -70,7 +73,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
     private void playerBucketFillEvent(PlayerBucketFillEvent event) {
         final Player player = event.getPlayer();
         final ItemStack is = player.getItemInHand();
-        final HashMap<FatBucket, String> fb = isFatBucket(is);
+        final HashMap<FatBucket, String> fb = getFatBucketInfo(is);
         if(fb != null) {
             event.setCancelled(true);
             final FatBucket target = (FatBucket) fb.keySet().toArray()[0];
@@ -91,7 +94,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
     private void playerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
         final Player player = event.getPlayer();
         final ItemStack is = player.getItemInHand();
-        final HashMap<FatBucket, String> fb = isFatBucket(is);
+        final HashMap<FatBucket, String> fb = getFatBucketInfo(is);
         if(fb != null) {
             event.setCancelled(true);
             final Location l = event.getBlockClicked().getLocation();

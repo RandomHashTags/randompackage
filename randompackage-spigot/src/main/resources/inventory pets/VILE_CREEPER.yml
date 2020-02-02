@@ -1,11 +1,19 @@
 # Made by RandomHashTags
 settings:
-  enabled: false
-  max level: 10
+  enabled: true
+  max level: 5
   cooldown: # Measured in seconds!
-    all: 600
+    1: 600
+    2: 570
+    3: 540
+    4: 510
+    5: 360
   exp to level:
     2: 5000
+    3: 7500
+    4: 10000
+    5: 12500
+    6: 15000
 #
 item:
   texture: "https://textures.minecraft.net/texture/92575bc947648b7fe68f1b623feb7f77286f96a179895d72d2718f94b89c63"

@@ -93,7 +93,7 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
 
     public String getExpRegex(int currentXp, int maxXp) {
         final StringBuilder builder = new StringBuilder();
-        final int percent = (int) ((((double) currentXp)/((double) maxXp))*100);
+        final int percent = currentXp >= maxXp ? 100 : (int) ((((double) currentXp)/((double) maxXp))*100);
         for(int i = 1; i <= expCharacterLength; i++) {
             final String color = percent >= i ? expAchievedColor : expUnachievedColor;
             builder.append(color).append(expCharacter);

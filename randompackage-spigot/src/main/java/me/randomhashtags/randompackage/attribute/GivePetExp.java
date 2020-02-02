@@ -28,15 +28,17 @@ public class GivePetExp extends AbstractEventAttribute implements RPItemStack {
         }
     }
     private void givePetExp(Player player, ItemStack is, int amount, boolean addCooldown) {
-        final String id = getRPItemStackValue(is, "InventoryPetInfo");
-        if(id != null) {
-            final String[] info = id.split(":");
-            final String identifier = info[0];
-            final int level = Integer.parseInt(info[1]), exp = Integer.parseInt(info[2]);
-            final long expiration = Long.parseLong(info[3]);
-            final InventoryPet pet = getInventoryPet(identifier);
-            pet.setItem(is, identifier, level, exp+amount, addCooldown ? System.currentTimeMillis()+pet.getCooldown(level) : expiration);
-            player.updateInventory();
+        final String info = getRPItemStackValue(is, "InventoryPetInfo");
+        if(info != null) {
+            final String[] values = info.split(":");
+            final String identifier = values[0];
+            final int level = Integer.parseInt(values[1]), exp = Integer.parseInt(values[2]);
+            final long expiration = Long.parseLong(values[3]);
+            final InventoryPet targetPet = getInventoryPet(identifier);
+            if(targetPet != null) {
+                targetPet.setItem(is, identifier, level, exp+amount, addCooldown ? System.currentTimeMillis()+targetPet.getCooldown(level) : expiration);
+                player.updateInventory();
+            }
         }
     }
 }

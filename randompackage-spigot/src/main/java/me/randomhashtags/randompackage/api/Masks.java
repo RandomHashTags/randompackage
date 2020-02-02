@@ -201,7 +201,7 @@ public class Masks extends CustomEnchants {
             event.setCancelled(true);
             removeItem(player, is, 1);
             final ItemStack mask = getMask(maskCanObtain.get(RANDOM.nextInt(maskCanObtain.size()))).getItem();
-            final String playerName = player.getName(), maskName = ChatColor.stripColor(mask.getItemMeta().getDisplayName());
+            final String playerName = player.getName(), maskName = mask.getItemMeta().getDisplayName();
             for(String s : getStringList(config, "items.generator.received msg")) {
                 Bukkit.broadcastMessage(s.replace("{PLAYER}", playerName).replace("{MASK}", maskName));
             }
