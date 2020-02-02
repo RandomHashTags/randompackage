@@ -12,6 +12,7 @@ import java.util.List;
 
 public class FileInventoryPet extends RPAddon implements InventoryPet {
     private ItemStack item, egg;
+    private HashMap<Integer, String> values;
     private HashMap<Integer, Integer> cooldowns, requiredxp;
     public FileInventoryPet(File f) {
         load(f);
@@ -26,6 +27,15 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
     public int getMaxLevel() {
         return yml.getInt("settings.max level");
+    }
+    public HashMap<Integer, String> getValues() {
+        if(values == null) {
+            values = new HashMap<>();
+            for(String level : getConfigurationSectionKeys(yml, "settings.values", false)) {
+                values.put(Integer.parseInt(level), yml.getString("settings.values." + level));
+            }
+        }
+        return values;
     }
     public HashMap<Integer, Integer> getCooldowns() {
         if(cooldowns == null) {

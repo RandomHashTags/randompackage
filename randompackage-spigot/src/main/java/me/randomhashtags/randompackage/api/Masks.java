@@ -9,7 +9,6 @@ import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
@@ -251,7 +250,7 @@ public class Masks extends CustomEnchants {
                     event.setCurrentItem(h);
                     equippedMasks.remove(player);
                     final EquippedCustomEnchants enchants = getEnchants(player);
-                    triggerCustomEnchants(event, enchants, CustomEnchants.globalattributes);
+                    triggerCustomEnchants(event, enchants, CustomEnchants.CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES);
                 }
             }
         }

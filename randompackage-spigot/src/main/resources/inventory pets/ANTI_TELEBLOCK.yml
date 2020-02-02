@@ -40,4 +40,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerInteract;PlayerRemoveFromList=TELEBLOCKED"

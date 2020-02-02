@@ -25,7 +25,7 @@ item:
   - "&7modern warfare deployments."
   - " "
   - "&f&lAbility"
-  - "&7ASpawn a &5Vile Creeper"
+  - "&7Spawn a &5Vile Creeper"
   - "&7Corrupts the area it explodes"
   - "&7in, applying [&cRot and Decay V&7]"
   - "&7for a 5 second duration."
@@ -41,4 +41,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerInteract;"

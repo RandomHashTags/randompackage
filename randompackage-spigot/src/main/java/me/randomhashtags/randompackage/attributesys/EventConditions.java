@@ -96,66 +96,66 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
         ;
     }
 
-    default boolean passedBasic(Entity e, String condition, String value) {
+    default boolean passedBasic(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isfromspawner": return SPAWNED_FROM_SPAWNER.contains(e.getUniqueId()) == Boolean.parseBoolean(value);
-            case "isplayer": return e instanceof Player == Boolean.parseBoolean(value);
-            case "ismob": return LEGACY ? e instanceof Creature : e instanceof Mob == Boolean.parseBoolean(value);
-            case "ismonster": return e instanceof Monster == Boolean.parseBoolean(value);
-            case "iscreature": return e instanceof Creature == Boolean.parseBoolean(value);
-            case "isanimal": return e instanceof Animals == Boolean.parseBoolean(value);
-            case "isflying": return e instanceof Flying || e instanceof Player && ((Player) e).isFlying() == Boolean.parseBoolean(value);
-            case "istype": return e.getType().name().equalsIgnoreCase(value);
-            case "isfacing": return getFacing(e).name().toLowerCase().startsWith(value);
-            case "isop": return e.isOp() == Boolean.parseBoolean(value);
-            case "isinsidevehicle": return e.isInsideVehicle() == Boolean.parseBoolean(value);
-            case "isriding": return e.isInsideVehicle() && e.getVehicle().getType().name().equalsIgnoreCase(value);
-            case "iscustomnamevisible": return e.isCustomNameVisible() == Boolean.parseBoolean(value);
-            case "isaggressive": return isAggressive(e.getType()) == Boolean.parseBoolean(value);
-            case "isneutral": return isNeutral(e.getType()) == Boolean.parseBoolean(value);
-            case "ispassive": return isPassive(e.getType()) == Boolean.parseBoolean(value);
-            case "isonground": return e.isOnGround() == Boolean.parseBoolean(value);
+            case "isfromspawner": return SPAWNED_FROM_SPAWNER.contains(entity.getUniqueId()) == Boolean.parseBoolean(value);
+            case "isplayer": return entity instanceof Player == Boolean.parseBoolean(value);
+            case "ismob": return LEGACY ? entity instanceof Creature : entity instanceof Mob == Boolean.parseBoolean(value);
+            case "ismonster": return entity instanceof Monster == Boolean.parseBoolean(value);
+            case "iscreature": return entity instanceof Creature == Boolean.parseBoolean(value);
+            case "isanimal": return entity instanceof Animals == Boolean.parseBoolean(value);
+            case "isflying": return entity instanceof Flying || entity instanceof Player && ((Player) entity).isFlying() == Boolean.parseBoolean(value);
+            case "istype": return entity.getType().name().equalsIgnoreCase(value);
+            case "isfacing": return getFacing(entity).name().toLowerCase().startsWith(value);
+            case "isop": return entity.isOp() == Boolean.parseBoolean(value);
+            case "isinsidevehicle": return entity.isInsideVehicle() == Boolean.parseBoolean(value);
+            case "isriding": return entity.isInsideVehicle() && entity.getVehicle().getType().name().equalsIgnoreCase(value);
+            case "iscustomnamevisible": return entity.isCustomNameVisible() == Boolean.parseBoolean(value);
+            case "isaggressive": return isAggressive(entity.getType()) == Boolean.parseBoolean(value);
+            case "isneutral": return isNeutral(entity.getType()) == Boolean.parseBoolean(value);
+            case "ispassive": return isPassive(entity.getType()) == Boolean.parseBoolean(value);
+            case "isonground": return entity.isOnGround() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedAgeable(Entity e, String condition, String value) {
+    default boolean passedAgeable(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isadult": return e instanceof Ageable && ((Ageable) e).isAdult() == Boolean.parseBoolean(value);
-            case "isbaby": return e instanceof Zombie && ((Zombie) e).isBaby() || e instanceof Ageable && ((Ageable) e).isAdult() != Boolean.parseBoolean(value);
-            case "canbreed": return e instanceof Ageable && ((Ageable) e).canBreed() == Boolean.parseBoolean(value);
+            case "isadult": return entity instanceof Ageable && ((Ageable) entity).isAdult() == Boolean.parseBoolean(value);
+            case "isbaby": return entity instanceof Zombie && ((Zombie) entity).isBaby() || entity instanceof Ageable && ((Ageable) entity).isAdult() != Boolean.parseBoolean(value);
+            case "canbreed": return entity instanceof Ageable && ((Ageable) entity).canBreed() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedAnimals(Entity e, String condition, String value) {
+    default boolean passedAnimals(Entity entity, String condition, String value) {
         switch (condition) {
-            case "inlovemode": return !LEGACY && !THIRTEEN && e instanceof Animals && ((Animals) e).isLoveMode() == Boolean.parseBoolean(value);
+            case "inlovemode": return !LEGACY && !THIRTEEN && entity instanceof Animals && ((Animals) entity).isLoveMode() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedArmorStand(Entity e, String condition, String value) {
+    default boolean passedArmorStand(Entity entity, String condition, String value) {
         switch (condition) {
-            case "hasbaseplate": return e instanceof ArmorStand && ((ArmorStand) e).hasBasePlate() == Boolean.parseBoolean(value);
-            case "hasarms": return e instanceof ArmorStand && ((ArmorStand) e).hasArms() == Boolean.parseBoolean(value);
-            case "ismarker": return e instanceof ArmorStand && ((ArmorStand) e).isMarker() == Boolean.parseBoolean(value);
-            case "issmall": return e instanceof ArmorStand && ((ArmorStand) e).isSmall() == Boolean.parseBoolean(value);
-            case "isvisible": return e instanceof ArmorStand && ((ArmorStand) e).isVisible() == Boolean.parseBoolean(value);
+            case "hasbaseplate": return entity instanceof ArmorStand && ((ArmorStand) entity).hasBasePlate() == Boolean.parseBoolean(value);
+            case "hasarms": return entity instanceof ArmorStand && ((ArmorStand) entity).hasArms() == Boolean.parseBoolean(value);
+            case "ismarker": return entity instanceof ArmorStand && ((ArmorStand) entity).isMarker() == Boolean.parseBoolean(value);
+            case "issmall": return entity instanceof ArmorStand && ((ArmorStand) entity).isSmall() == Boolean.parseBoolean(value);
+            case "isvisible": return entity instanceof ArmorStand && ((ArmorStand) entity).isVisible() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedBat(Entity e, String condition, String value) {
+    default boolean passedBat(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isawake": return e instanceof Bat && ((Bat) e).isAwake() == Boolean.parseBoolean(value);
+            case "isawake": return entity instanceof Bat && ((Bat) entity).isAwake() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedCat(Entity e, String condition, String value) {
+    default boolean passedCat(Entity entity, String condition, String value) {
         switch (condition) {
-            case "cattype": return LEGACY ? e instanceof Ocelot && ((Ocelot) e).getCatType().name().equalsIgnoreCase(value) : e instanceof Cat && ((Cat) e).getCatType().name().equalsIgnoreCase(value);
+            case "cattype": return LEGACY ? entity instanceof Ocelot && ((Ocelot) entity).getCatType().name().equalsIgnoreCase(value) : entity instanceof Cat && ((Cat) entity).getCatType().name().equalsIgnoreCase(value);
             case "collarcolor":
-                if(e instanceof Wolf) {
-                    return ((Wolf) e).getCollarColor().name().equalsIgnoreCase(value);
+                if(entity instanceof Wolf) {
+                    return ((Wolf) entity).getCollarColor().name().equalsIgnoreCase(value);
                 } else if(!LEGACY && !THIRTEEN) {
-                    return e instanceof Cat && ((Cat) e).getCollarColor().name().equalsIgnoreCase(value);
+                    return entity instanceof Cat && ((Cat) entity).getCollarColor().name().equalsIgnoreCase(value);
                 } else {
                     return false;
                 }
@@ -163,194 +163,194 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 return true;
         }
     }
-    default boolean passedChestedHorse(Entity e, String condition, String value) {
+    default boolean passedChestedHorse(Entity entity, String condition, String value) {
         switch (condition) {
             case "iscarryingchest":
                 if(EIGHT || NINE || TEN) {
-                    return e instanceof Horse && ((Horse) e).isCarryingChest() == Boolean.parseBoolean(value);
+                    return entity instanceof Horse && ((Horse) entity).isCarryingChest() == Boolean.parseBoolean(value);
                 } else {
-                    return e instanceof ChestedHorse && ((ChestedHorse) e).isCarryingChest() == Boolean.parseBoolean(value);
+                    return entity instanceof ChestedHorse && ((ChestedHorse) entity).isCarryingChest() == Boolean.parseBoolean(value);
                 }
             default: return true;
         }
     }
-    default boolean passedCreeper(Entity e, String condition, String value) {
+    default boolean passedCreeper(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ispowered": return e instanceof Creeper && ((Creeper) e).isPowered() == Boolean.parseBoolean(value);
+            case "ispowered": return entity instanceof Creeper && ((Creeper) entity).isPowered() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedEnderCrystal(Entity e, String condition, String value) {
+    default boolean passedEnderCrystal(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isshowingbottom": return EIGHT ? true : e instanceof EnderCrystal && ((EnderCrystal) e).isShowingBottom() == Boolean.parseBoolean(value);
+            case "isshowingbottom": return EIGHT ? true : entity instanceof EnderCrystal && ((EnderCrystal) entity).isShowingBottom() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedEnderDragon(Entity e, String condition, String value) {
+    default boolean passedEnderDragon(Entity entity, String condition, String value) {
         switch (condition) {
-            case "phase": return EIGHT ? true : e instanceof EnderDragon && ((EnderDragon) e).getPhase().name().equalsIgnoreCase(value);
+            case "phase": return EIGHT ? true : entity instanceof EnderDragon && ((EnderDragon) entity).getPhase().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedEnderman(Entity e, String condition, String value) {
+    default boolean passedEnderman(Entity entity, String condition, String value) {
         switch (condition) {
-            case "iscarrying": return e instanceof Enderman && UMaterial.match(((Enderman) e).getCarriedMaterial().getItemType().name()).name().equalsIgnoreCase(value);
+            case "iscarrying": return entity instanceof Enderman && UMaterial.match(((Enderman) entity).getCarriedMaterial().getItemType().name()).name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedEndermite(Entity e, String condition, String value) {
+    default boolean passedEndermite(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isplayerspawned": return LEGACY || THIRTEEN ? false : e instanceof Endermite && ((Endermite) e).isPlayerSpawned() == Boolean.parseBoolean(value);
+            case "isplayerspawned": return LEGACY || THIRTEEN ? false : entity instanceof Endermite && ((Endermite) entity).isPlayerSpawned() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedEntity(Entity e, String condition, String value) {
+    default boolean passedEntity(Entity entity, String condition, String value) {
         switch (condition) {
             case "inbiome":
-                final Chunk chunk = e.getLocation().getChunk();
-                return e.getWorld().getBiome(chunk.getX(), chunk.getZ()).name().equalsIgnoreCase(value);
-            case "inworld": return e.getWorld().getName().equals(value);
-            case "isglowing": return !EIGHT && e.isGlowing() == Boolean.parseBoolean(value);
-            case "isinvulnerable": return !EIGHT && e.isInvulnerable() == Boolean.parseBoolean(value);
-            case "issilent": return !EIGHT && !NINE && e.isSilent() == Boolean.parseBoolean(value);
-            case "isitem": return e instanceof Item == Boolean.parseBoolean(value);
-            case "hasgravity": return e instanceof ArmorStand && ((ArmorStand) e).hasGravity() || !EIGHT && !NINE && !TEN && e.hasGravity() == Boolean.parseBoolean(value);
-            case "worlddifficulty": return e.getWorld().getDifficulty().name().equalsIgnoreCase(value);
+                final Chunk chunk = entity.getLocation().getChunk();
+                return entity.getWorld().getBiome(chunk.getX(), chunk.getZ()).name().equalsIgnoreCase(value);
+            case "inworld": return entity.getWorld().getName().equals(value);
+            case "isglowing": return !EIGHT && entity.isGlowing() == Boolean.parseBoolean(value);
+            case "isinvulnerable": return !EIGHT && entity.isInvulnerable() == Boolean.parseBoolean(value);
+            case "issilent": return !EIGHT && !NINE && entity.isSilent() == Boolean.parseBoolean(value);
+            case "isitem": return entity instanceof Item == Boolean.parseBoolean(value);
+            case "hasgravity": return entity instanceof ArmorStand && ((ArmorStand) entity).hasGravity() || !EIGHT && !NINE && !TEN && entity.hasGravity() == Boolean.parseBoolean(value);
+            case "worlddifficulty": return entity.getWorld().getDifficulty().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedEvoker(Entity e, String condition, String value) {
+    default boolean passedEvoker(Entity entity, String condition, String value) {
         switch (condition) {
-            case "currentspell": return EIGHT || NINE | TEN ? false : e instanceof Evoker && ((Evoker) e).getCurrentSpell().name().equalsIgnoreCase(value);
+            case "currentspell": return EIGHT || NINE | TEN ? false : entity instanceof Evoker && ((Evoker) entity).getCurrentSpell().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedExplosive(Entity e, String condition, String value) {
+    default boolean passedExplosive(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isincendiary": return e instanceof Explosive && ((Explosive) e).isIncendiary() == Boolean.parseBoolean(value);
+            case "isincendiary": return entity instanceof Explosive && ((Explosive) entity).isIncendiary() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedFallenBlock(Event event, Entity e, String condition, String value) {
+    default boolean passedFallenBlock(Event event, Entity entity, String condition, String value) {
         switch (condition) {
             case "material":
-                return e instanceof FallingBlock && value.equalsIgnoreCase(UMaterial.match(((FallingBlock) e).getMaterial().name()).name())
+                return entity instanceof FallingBlock && value.equalsIgnoreCase(UMaterial.match(((FallingBlock) entity).getMaterial().name()).name())
                     || event instanceof BlockPlaceEvent && value.equalsIgnoreCase(UMaterial.match(((BlockPlaceEvent) event).getBlock().getType().name()).name())
                     || event instanceof BlockBreakEvent && value.equalsIgnoreCase(UMaterial.match(((BlockBreakEvent) event).getBlock().getType().name()).name());
-            case "canhurtentities": return e instanceof FallingBlock && ((FallingBlock) e).canHurtEntities() == Boolean.parseBoolean(value);
+            case "canhurtentities": return entity instanceof FallingBlock && ((FallingBlock) entity).canHurtEntities() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedFirework(Entity e, String condition, String value) {
+    default boolean passedFirework(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isshotatangle": return LEGACY || THIRTEEN ? false : e instanceof Firework && ((Firework) e).isShotAtAngle() == Boolean.parseBoolean(value);
+            case "isshotatangle": return LEGACY || THIRTEEN ? false : entity instanceof Firework && ((Firework) entity).isShotAtAngle() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedFox(Entity e, String condition, String value) {
+    default boolean passedFox(Entity entity, String condition, String value) {
         switch (condition) {
-            case "foxtype": return LEGACY || THIRTEEN ? false : e instanceof Fox && ((Fox) e).getFoxType().name().equalsIgnoreCase(value);
-            case "iscrouching": return LEGACY || THIRTEEN ? false : e instanceof Fox && ((Fox) e).isCrouching() == Boolean.parseBoolean(value);
+            case "foxtype": return LEGACY || THIRTEEN ? false : entity instanceof Fox && ((Fox) entity).getFoxType().name().equalsIgnoreCase(value);
+            case "iscrouching": return LEGACY || THIRTEEN ? false : entity instanceof Fox && ((Fox) entity).isCrouching() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedGuardian(Entity e, String condition, String value) {
+    default boolean passedGuardian(Entity entity, String condition, String value) {
         switch (condition) {
-            case "iselder": return e instanceof Guardian && ((Guardian) e).isElder() == Boolean.parseBoolean(value);
+            case "iselder": return entity instanceof Guardian && ((Guardian) entity).isElder() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedHorse(Entity e, String condition, String value) {
+    default boolean passedHorse(Entity entity, String condition, String value) {
         switch (condition) {
             case "isvariant":
-                if(e instanceof Horse) {
-                    return ((Horse) e).getVariant().name().equalsIgnoreCase(value);
-                } else if(e instanceof MushroomCow && (!LEGACY || THIRTEEN)) {
-                    return ((MushroomCow) e).getVariant().name().equalsIgnoreCase(value);
+                if(entity instanceof Horse) {
+                    return ((Horse) entity).getVariant().name().equalsIgnoreCase(value);
+                } else if(entity instanceof MushroomCow && (!LEGACY || THIRTEEN)) {
+                    return ((MushroomCow) entity).getVariant().name().equalsIgnoreCase(value);
                 } else if(!(EIGHT || NINE || TEN || ELEVEN)) {
-                    return e instanceof Parrot && ((Parrot) e).getVariant().name().equalsIgnoreCase(value);
+                    return entity instanceof Parrot && ((Parrot) entity).getVariant().name().equalsIgnoreCase(value);
                 } else {
                     return false;
                 }
             case "color":
-                if(e instanceof Horse) {
-                    return ((Horse) e).getColor().name().equalsIgnoreCase(value);
+                if(entity instanceof Horse) {
+                    return ((Horse) entity).getColor().name().equalsIgnoreCase(value);
                 } else if(!(EIGHT || NINE || TEN)) {
-                    return e instanceof Llama && ((Llama) e).getColor().name().equalsIgnoreCase(value);
-                } else if(e instanceof Colorable) {
-                    return ((Colorable) e).getColor().name().equalsIgnoreCase(value);
+                    return entity instanceof Llama && ((Llama) entity).getColor().name().equalsIgnoreCase(value);
+                } else if(entity instanceof Colorable) {
+                    return ((Colorable) entity).getColor().name().equalsIgnoreCase(value);
                 } else {
                     return false;
                 }
-            case "style": return e instanceof Horse && ((Horse) e).getStyle().name().equalsIgnoreCase(value);
+            case "style": return entity instanceof Horse && ((Horse) entity).getStyle().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedHusk(Entity e, String condition, String value) {
+    default boolean passedHusk(Entity entity, String condition, String value) {
         switch (condition) {
             case "isconverting":
                 if(LEGACY || THIRTEEN) {
                     return false;
                 } else {
                     final boolean b = Boolean.parseBoolean(value);
-                    return b && (e instanceof Husk && ((Husk) e).isConverting() || e instanceof PigZombie && ((PigZombie) e).isConverting() || e instanceof Zombie && ((Zombie) e).isConverting());
+                    return b && (entity instanceof Husk && ((Husk) entity).isConverting() || entity instanceof PigZombie && ((PigZombie) entity).isConverting() || entity instanceof Zombie && ((Zombie) entity).isConverting());
                 }
             default:
                 return true;
         }
     }
-    default boolean passedIronGolem(Entity e, String condition, String value) {
+    default boolean passedIronGolem(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isplayercreated": return e instanceof IronGolem && ((IronGolem) e).isPlayerCreated() == Boolean.parseBoolean(value);
+            case "isplayercreated": return entity instanceof IronGolem && ((IronGolem) entity).isPlayerCreated() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedLightingStrike(Entity e, String condition, String value) {
+    default boolean passedLightingStrike(Entity entity, String condition, String value) {
         switch (condition) {
-            case "iseffect": return e instanceof LightningStrike && ((LightningStrike) e).isEffect() == Boolean.parseBoolean(value);
+            case "iseffect": return entity instanceof LightningStrike && ((LightningStrike) entity).isEffect() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedLivingEntity(Entity e, String condition, String value) {
+    default boolean passedLivingEntity(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isleashed": return e instanceof LivingEntity && ((LivingEntity) e).isLeashed() == Boolean.parseBoolean(value);
-            case "isswimming": return LEGACY ? false : e instanceof LivingEntity && ((LivingEntity) e).isSwimming() == Boolean.parseBoolean(value);
-            case "isgliding": return EIGHT ? false : e instanceof LivingEntity && ((LivingEntity) e).isGliding() == Boolean.parseBoolean(value);
-            case "isholding": return e instanceof LivingEntity && ((LivingEntity) e).getEquipment().getItemInHand().getType().name().toLowerCase().endsWith(value);
-            case "issleeping": return LEGACY || THIRTEEN ? false : e instanceof LivingEntity && ((LivingEntity) e).isSleeping() == Boolean.parseBoolean(value);
-            case "hasai": return EIGHT || e instanceof LivingEntity && ((LivingEntity) e).hasAI() == Boolean.parseBoolean(value);
-            case "iscollideable": return EIGHT || e instanceof LivingEntity && ((LivingEntity) e).isCollidable() == Boolean.parseBoolean(value);
+            case "isleashed": return entity instanceof LivingEntity && ((LivingEntity) entity).isLeashed() == Boolean.parseBoolean(value);
+            case "isswimming": return LEGACY ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isSwimming() == Boolean.parseBoolean(value);
+            case "isgliding": return EIGHT ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isGliding() == Boolean.parseBoolean(value);
+            case "isholding": return entity instanceof LivingEntity && ((LivingEntity) entity).getEquipment().getItemInHand().getType().name().toLowerCase().endsWith(value);
+            case "issleeping": return LEGACY || THIRTEEN ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isSleeping() == Boolean.parseBoolean(value);
+            case "hasai": return EIGHT || entity instanceof LivingEntity && ((LivingEntity) entity).hasAI() == Boolean.parseBoolean(value);
+            case "iscollideable": return EIGHT || entity instanceof LivingEntity && ((LivingEntity) entity).isCollidable() == Boolean.parseBoolean(value);
             case "health<": // health<=
-                return e instanceof LivingEntity && ((LivingEntity) e).getHealth() <= evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= evaluate(value);
             case "health>": // health>=
-                return e instanceof LivingEntity && ((LivingEntity) e).getHealth() >= evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() >= evaluate(value);
             case "haspotioneffect":
                 final PotionEffectType t = getPotionEffectType(value);
-                return t != null && e instanceof LivingEntity && ((LivingEntity) e).hasPotionEffect(t);
+                return t != null && entity instanceof LivingEntity && ((LivingEntity) entity).hasPotionEffect(t);
             case "nodamageticks<": // nodamageticks<=
-                return e instanceof LivingEntity && ((LivingEntity) e).getNoDamageTicks() <= evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getNoDamageTicks() <= evaluate(value);
             case "nodamageticks>": // nodamageticks>=
-                return e instanceof LivingEntity && ((LivingEntity) e).getNoDamageTicks() >= evaluate(value);
-            case "remainingair": return e instanceof LivingEntity && ((LivingEntity) e).getRemainingAir() == evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getNoDamageTicks() >= evaluate(value);
+            case "remainingair": return entity instanceof LivingEntity && ((LivingEntity) entity).getRemainingAir() == evaluate(value);
             case "remainingair<": // remainingair<=
-                return e instanceof LivingEntity && ((LivingEntity) e).getRemainingAir() <= evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getRemainingAir() <= evaluate(value);
             case "remainingair>": // remainingair>=
-                return e instanceof LivingEntity && ((LivingEntity) e).getRemainingAir() >= evaluate(value);
+                return entity instanceof LivingEntity && ((LivingEntity) entity).getRemainingAir() >= evaluate(value);
             default: return true;
         }
     }
-    default boolean passedMinecart(Entity e, String condition, String value) {
+    default boolean passedMinecart(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isslowwhenempty": return e instanceof Minecart && ((Minecart) e).isSlowWhenEmpty() == Boolean.parseBoolean(value);
-            case "displayedblock": return e instanceof Minecart && UMaterial.match(((Minecart) e).getDisplayBlock().getItemType().name()).name().equalsIgnoreCase(value);
+            case "isslowwhenempty": return entity instanceof Minecart && ((Minecart) entity).isSlowWhenEmpty() == Boolean.parseBoolean(value);
+            case "displayedblock": return entity instanceof Minecart && UMaterial.match(((Minecart) entity).getDisplayBlock().getItemType().name()).name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedMob(Entity e, String condition, String value) {
+    default boolean passedMob(Entity entity, String condition, String value) {
         switch (condition) {
             case "hastarget":
                 if(!LEGACY) {
-                    return e instanceof Mob && ((Mob) e).getTarget() != null == Boolean.parseBoolean(value);
+                    return entity instanceof Mob && ((Mob) entity).getTarget() != null == Boolean.parseBoolean(value);
                 } else {
                     return false;
                 }
@@ -358,34 +358,34 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 return true;
         }
     }
-    default boolean passedPainting(Entity e, String condition, String value) {
+    default boolean passedPainting(Entity entity, String condition, String value) {
         switch (condition) {
-            case "art": return e instanceof Painting && ((Painting) e).getArt().name().equalsIgnoreCase(value);
+            case "art": return entity instanceof Painting && ((Painting) entity).getArt().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedPanda(Entity e, String condition, String value) {
+    default boolean passedPanda(Entity entity, String condition, String value) {
         switch (condition) {
-            case "maingene": return LEGACY || THIRTEEN ? false : e instanceof Panda && ((Panda) e).getMainGene().name().equalsIgnoreCase(value);
-            case "maingeneisrecessive": return LEGACY || THIRTEEN ? false : e instanceof Panda && ((Panda) e).getMainGene().isRecessive() == Boolean.parseBoolean(value);
-            case "hiddengene": return LEGACY || THIRTEEN ? false : e instanceof Panda && ((Panda) e).getHiddenGene().name().equalsIgnoreCase(value);
-            case "hiddengeneisrecessive": return LEGACY || THIRTEEN ? false : e instanceof Panda && ((Panda) e).getHiddenGene().isRecessive() == Boolean.parseBoolean(value);
+            case "maingene": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getMainGene().name().equalsIgnoreCase(value);
+            case "maingeneisrecessive": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getMainGene().isRecessive() == Boolean.parseBoolean(value);
+            case "hiddengene": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getHiddenGene().name().equalsIgnoreCase(value);
+            case "hiddengeneisrecessive": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getHiddenGene().isRecessive() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedPig(Entity e, String condition, String value) {
+    default boolean passedPig(Entity entity, String condition, String value) {
         switch (condition) {
-            case "hassaddle": return e instanceof Pig && ((Pig) e).hasSaddle() == Boolean.parseBoolean(value);
+            case "hassaddle": return entity instanceof Pig && ((Pig) entity).hasSaddle() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedPigZombie(Entity e, String condition, String value) {
+    default boolean passedPigZombie(Entity entity, String condition, String value) {
         switch (condition) {
             case "isangry":
-                if(e instanceof PigZombie) {
-                    return ((PigZombie) e).isAngry() == Boolean.parseBoolean(value);
-                } else if(e instanceof Wolf) {
-                    return ((Wolf) e).isAngry() == Boolean.parseBoolean(value);
+                if(entity instanceof PigZombie) {
+                    return ((PigZombie) entity).isAngry() == Boolean.parseBoolean(value);
+                } else if(entity instanceof Wolf) {
+                    return ((Wolf) entity).isAngry() == Boolean.parseBoolean(value);
                 } else {
                     return false;
                 }
@@ -393,165 +393,165 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 return true;
         }
     }
-    default boolean passedPlayer(Entity e, String condition, String value) {
+    default boolean passedPlayer(Entity entity, String condition, String value) {
         switch (condition) {
-            case "issneaking": return e instanceof Player && ((Player) e).isSneaking() == Boolean.parseBoolean(value);
-            case "isblocking": return e instanceof Player && ((Player) e).isBlocking() == Boolean.parseBoolean(value);
-            case "isflying": return e instanceof Player && ((Player) e).isFlying() == Boolean.parseBoolean(value);
-            case "issprinting": return e instanceof Player && ((Player) e).isSprinting() == Boolean.parseBoolean(value);
-            case "isriptiding": return !LEGACY && e instanceof Player && ((Player) e).isRiptiding() == Boolean.parseBoolean(value);
-            case "issleepignored": return e instanceof Player && ((Player) e).isSleepingIgnored() == Boolean.parseBoolean(value);
-            case "allowsflight": return e instanceof Player && ((Player) e).getAllowFlight() == Boolean.parseBoolean(value);
-            case "ishealthscaled": return e instanceof Player && ((Player) e).isHealthScaled() == Boolean.parseBoolean(value);
-            case "weather": return e instanceof Player && ((Player) e).getPlayerWeather().name().equalsIgnoreCase(value);
-            case "totalexp": return e instanceof Player && getTotalExperience((Player) e) == (int) evaluate(value);
+            case "issneaking": return entity instanceof Player && ((Player) entity).isSneaking() == Boolean.parseBoolean(value);
+            case "isblocking": return entity instanceof Player && ((Player) entity).isBlocking() == Boolean.parseBoolean(value);
+            case "isflying": return entity instanceof Player && ((Player) entity).isFlying() == Boolean.parseBoolean(value);
+            case "issprinting": return entity instanceof Player && ((Player) entity).isSprinting() == Boolean.parseBoolean(value);
+            case "isriptiding": return !LEGACY && entity instanceof Player && ((Player) entity).isRiptiding() == Boolean.parseBoolean(value);
+            case "issleepignored": return entity instanceof Player && ((Player) entity).isSleepingIgnored() == Boolean.parseBoolean(value);
+            case "allowsflight": return entity instanceof Player && ((Player) entity).getAllowFlight() == Boolean.parseBoolean(value);
+            case "ishealthscaled": return entity instanceof Player && ((Player) entity).isHealthScaled() == Boolean.parseBoolean(value);
+            case "weather": return entity instanceof Player && ((Player) entity).getPlayerWeather().name().equalsIgnoreCase(value);
+            case "totalexp": return entity instanceof Player && getTotalExperience((Player) entity) == (int) evaluate(value);
             case "totalexp<": // totalexp<=
-                return e instanceof Player && getTotalExperience((Player) e) <= (int) evaluate(value);
+                return entity instanceof Player && getTotalExperience((Player) entity) <= (int) evaluate(value);
             case "totalexp>": // totalexp>=
-                return e instanceof Player && getTotalExperience((Player) e) >= (int) evaluate(value);
-            case "explevel": return e instanceof Player && ((Player) e).getLevel() == (int) evaluate(value);
+                return entity instanceof Player && getTotalExperience((Player) entity) >= (int) evaluate(value);
+            case "explevel": return entity instanceof Player && ((Player) entity).getLevel() == (int) evaluate(value);
             case "explevel<": // explevel<=
-                return e instanceof Player && ((Player) e).getLevel() <= (int) evaluate(value);
+                return entity instanceof Player && ((Player) entity).getLevel() <= (int) evaluate(value);
             case "explevel>": // explevel>=
-                return e instanceof Player && ((Player) e).getLevel() >= (int) evaluate(value);
-            case "foodlevel": return e instanceof Player && ((Player) e).getFoodLevel() == (int) evaluate(value);
+                return entity instanceof Player && ((Player) entity).getLevel() >= (int) evaluate(value);
+            case "foodlevel": return entity instanceof Player && ((Player) entity).getFoodLevel() == (int) evaluate(value);
             case "foodlevel<": // foodlevel<=
-                return e instanceof Player && ((Player) e).getFoodLevel() <= (int) evaluate(value);
+                return entity instanceof Player && ((Player) entity).getFoodLevel() <= (int) evaluate(value);
             case "foodlevel>": // foodlevel>=
-                return e instanceof Player && ((Player) e).getFoodLevel() >= (int) evaluate(value);
-            case "saturation": return e instanceof Player && ((Player) e).getSaturation() == Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getFoodLevel() >= (int) evaluate(value);
+            case "saturation": return entity instanceof Player && ((Player) entity).getSaturation() == Float.parseFloat(value);
             case "saturation<": // saturation<=
-                return e instanceof Player && ((Player) e).getSaturation() <= Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getSaturation() <= Float.parseFloat(value);
             case "saturation>": // saturation>=
-                return e instanceof Player && ((Player) e).getSaturation() >= Float.parseFloat(value);
-            case "viewdistance": return LEGACY || e instanceof Player && ((Player) e).getClientViewDistance() == (int) evaluate(value);
+                return entity instanceof Player && ((Player) entity).getSaturation() >= Float.parseFloat(value);
+            case "viewdistance": return LEGACY || entity instanceof Player && ((Player) entity).getClientViewDistance() == (int) evaluate(value);
             case "viewdistance<": // viewdistance<=
-                return LEGACY || e instanceof Player && ((Player) e).getClientViewDistance() <= (int) evaluate(value);
+                return LEGACY || entity instanceof Player && ((Player) entity).getClientViewDistance() <= (int) evaluate(value);
             case "viewdistance>": // viewdistance>=
-                return LEGACY || e instanceof Player && ((Player) e).getClientViewDistance() >= (int) evaluate(value);
-            case "language": return EIGHT || NINE || TEN || ELEVEN || e instanceof Player && ((Player) e).getLocale().equalsIgnoreCase(value);
-            case "walkspeed": return e instanceof Player && ((Player) e).getWalkSpeed() == Float.parseFloat(value);
+                return LEGACY || entity instanceof Player && ((Player) entity).getClientViewDistance() >= (int) evaluate(value);
+            case "language": return EIGHT || NINE || TEN || ELEVEN || entity instanceof Player && ((Player) entity).getLocale().equalsIgnoreCase(value);
+            case "walkspeed": return entity instanceof Player && ((Player) entity).getWalkSpeed() == Float.parseFloat(value);
             case "walkspeed<": // walkspeed<=
-                return e instanceof Player && ((Player) e).getWalkSpeed() <= Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getWalkSpeed() <= Float.parseFloat(value);
             case "walkspeed>": // walkspeed>=
-                return e instanceof Player && ((Player) e).getWalkSpeed() >= Float.parseFloat(value);
-            case "flyspeed": return e instanceof Player && ((Player) e).getFlySpeed() == Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getWalkSpeed() >= Float.parseFloat(value);
+            case "flyspeed": return entity instanceof Player && ((Player) entity).getFlySpeed() == Float.parseFloat(value);
             case "flyspeed<": // flyspeed<=
-                return e instanceof Player && ((Player) e).getFlySpeed() <= Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getFlySpeed() <= Float.parseFloat(value);
             case "flyspeed>": // flyspeed>=
-                return e instanceof Player && ((Player) e).getFlySpeed() >= Float.parseFloat(value);
+                return entity instanceof Player && ((Player) entity).getFlySpeed() >= Float.parseFloat(value);
             default:
                 return true;
         }
     }
-    default boolean passedProjectile(Entity e, String condition, String value) {
+    default boolean passedProjectile(Entity entity, String condition, String value) {
         switch (condition) {
-            case "doesbounce": return e instanceof Projectile && ((Projectile) e).doesBounce() == Boolean.parseBoolean(value);
+            case "doesbounce": return entity instanceof Projectile && ((Projectile) entity).doesBounce() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedRabbit(Entity e, String condition, String value) {
+    default boolean passedRabbit(Entity entity, String condition, String value) {
         switch (condition) {
-            case "rabbittype": return e instanceof Rabbit && ((Rabbit) e).getRabbitType().name().equalsIgnoreCase(value);
+            case "rabbittype": return entity instanceof Rabbit && ((Rabbit) entity).getRabbitType().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedRaider(Entity e, String condition, String value) {
+    default boolean passedRaider(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ispatrolleader": return LEGACY || THIRTEEN ? false : e instanceof Raider && ((Raider) e).isPatrolLeader() == Boolean.parseBoolean(value);
-            case "patroltargetblock": return LEGACY ? false : e instanceof Raider && UMaterial.match(((Raider) e).getPatrolTarget().getType().name()).name().toLowerCase().endsWith(value);
+            case "ispatrolleader": return LEGACY || THIRTEEN ? false : entity instanceof Raider && ((Raider) entity).isPatrolLeader() == Boolean.parseBoolean(value);
+            case "patroltargetblock": return LEGACY ? false : entity instanceof Raider && UMaterial.match(((Raider) entity).getPatrolTarget().getType().name()).name().toLowerCase().endsWith(value);
             default: return true;
         }
     }
-    default boolean passedSheep(Entity e, String condition, String value) {
+    default boolean passedSheep(Entity entity, String condition, String value) {
         switch (condition) {
-            case "issheared": return e instanceof Sheep && ((Sheep) e).isSheared() == Boolean.parseBoolean(value);
+            case "issheared": return entity instanceof Sheep && ((Sheep) entity).isSheared() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedSittable(Entity e, String condition, String value) {
+    default boolean passedSittable(Entity entity, String condition, String value) {
         switch (condition) {
             case "issitting":
                 final boolean first = Boolean.parseBoolean(value);
                 if(EIGHT || NINE || TEN || ELEVEN) {
-                    return first == e instanceof Wolf && ((Wolf) e).isSitting()/* || e instanceof Ocelot && ((Ocelot) e).isSitting()*/;
+                    return first == entity instanceof Wolf && ((Wolf) entity).isSitting()/* || e instanceof Ocelot && ((Ocelot) e).isSitting()*/;
                 } else {
-                    return first == e instanceof Sittable && ((Sittable) e).isSitting();
+                    return first == entity instanceof Sittable && ((Sittable) entity).isSitting();
                 }
             default:
                 return true;
         }
     }
-    default boolean passedSkeleton(Entity e, String condition, String value) {
+    default boolean passedSkeleton(Entity entity, String condition, String value) {
         switch (condition) {
-            case "skeletontype": return e instanceof Skeleton && ((Skeleton) e).getSkeletonType().name().equalsIgnoreCase(value);
+            case "skeletontype": return entity instanceof Skeleton && ((Skeleton) entity).getSkeletonType().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedSlime(Entity e, String condition, String value) {
+    default boolean passedSlime(Entity entity, String condition, String value) {
         switch (condition) {
             case "size":
                 int v = (int) evaluate(value);
-                return e instanceof Slime && ((Slime) e).getSize() == v || !LEGACY && e instanceof Phantom && ((Phantom) e).getSize() == v;
+                return entity instanceof Slime && ((Slime) entity).getSize() == v || !LEGACY && entity instanceof Phantom && ((Phantom) entity).getSize() == v;
             case "size<": // size<=
                 v = (int) evaluate(value);
-                return e instanceof Slime && ((Slime) e).getSize() <= v || !LEGACY && e instanceof Phantom && ((Phantom) e).getSize() <= v;
+                return entity instanceof Slime && ((Slime) entity).getSize() <= v || !LEGACY && entity instanceof Phantom && ((Phantom) entity).getSize() <= v;
             case "size>": // size>=
                 v = (int) evaluate(value);
-                return e instanceof Slime && ((Slime) e).getSize() >= v || !LEGACY && e instanceof Phantom && ((Phantom) e).getSize() >= v;
+                return entity instanceof Slime && ((Slime) entity).getSize() >= v || !LEGACY && entity instanceof Phantom && ((Phantom) entity).getSize() >= v;
             default:
                 return true;
         }
     }
-    default boolean passedSnowman(Entity e, String condition, String value) {
+    default boolean passedSnowman(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isderp": return EIGHT || NINE ? false : e instanceof Snowman && ((Snowman) e).isDerp() == Boolean.parseBoolean(value);
+            case "isderp": return EIGHT || NINE ? false : entity instanceof Snowman && ((Snowman) entity).isDerp() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedTameable(Entity e, String condition, String value) {
+    default boolean passedTameable(Entity entity, String condition, String value) {
         switch (condition) {
-            case "istamed": return e instanceof Tameable && ((Tameable) e).isTamed() == Boolean.parseBoolean(value);
+            case "istamed": return entity instanceof Tameable && ((Tameable) entity).isTamed() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedTropicalFish(Entity e, String condition, String value) {
+    default boolean passedTropicalFish(Entity entity, String condition, String value) {
         switch (condition) {
-            case "patterncolor": return LEGACY ? false : e instanceof TropicalFish && ((TropicalFish) e).getPatternColor().name().equalsIgnoreCase(value);
-            case "bodycolor": return LEGACY ? false : e instanceof TropicalFish && ((TropicalFish) e).getBodyColor().name().equalsIgnoreCase(value);
-            case "pattern": return LEGACY ? false : e instanceof TropicalFish && ((TropicalFish) e).getPattern().name().equalsIgnoreCase(value);
+            case "patterncolor": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getPatternColor().name().equalsIgnoreCase(value);
+            case "bodycolor": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getBodyColor().name().equalsIgnoreCase(value);
+            case "pattern": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getPattern().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedVex(Entity e, String condition, String value) {
+    default boolean passedVex(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ischarging": return EIGHT || NINE || TEN ? false : e instanceof Vex && ((Vex) e).isCharging() == Boolean.valueOf(value);
+            case "ischarging": return EIGHT || NINE || TEN ? false : entity instanceof Vex && ((Vex) entity).isCharging() == Boolean.valueOf(value);
             default: return true;
         }
     }
-    default boolean passedVillager(Entity e, String condition, String value) {
+    default boolean passedVillager(Entity entity, String condition, String value) {
         switch (condition) {
-            case "profession": return e instanceof Zombie && ((Zombie) e).isVillager() ? ((Zombie) e).getVillagerProfession().name().equalsIgnoreCase(value) : e instanceof Villager && ((Villager) e).getProfession().name().equalsIgnoreCase(value);
-            case "villagertype": return e instanceof Villager && !(LEGACY || THIRTEEN) && ((Villager) e).getVillagerType().name().equalsIgnoreCase(value);
+            case "profession": return entity instanceof Zombie && ((Zombie) entity).isVillager() ? ((Zombie) entity).getVillagerProfession().name().equalsIgnoreCase(value) : entity instanceof Villager && ((Villager) entity).getProfession().name().equalsIgnoreCase(value);
+            case "villagertype": return entity instanceof Villager && !(LEGACY || THIRTEEN) && ((Villager) entity).getVillagerType().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
-    default boolean passedWitherSkull(Entity e, String condition, String value) {
+    default boolean passedWitherSkull(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ischarged": return e instanceof WitherSkull && ((WitherSkull) e).isCharged() == Boolean.parseBoolean(value);
+            case "ischarged": return entity instanceof WitherSkull && ((WitherSkull) entity).isCharged() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
-    default boolean passedZombie(Entity e, String condition, String value) {
+    default boolean passedZombie(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isvillager": return e instanceof Zombie && ((Zombie) e).isVillager() == Boolean.parseBoolean(value);
+            case "isvillager": return entity instanceof Zombie && ((Zombie) entity).isVillager() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
 
 
 
-    default boolean passedEvent(Event event, Entity e, String condition, String value) {
+    default boolean passedEvent(Event event, Entity entity, String condition, String value) {
         switch (condition) {
             case "action":
                 final String action = event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getAction().name() : null;
@@ -618,7 +618,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 info = is != null ? getRPItemStackValue(is, "TrinketInfo") : null;
                 return info != null && System.currentTimeMillis() >= Long.parseLong(info.split(":")[1]) == Boolean.parseBoolean(value);
             case "kittype":
-                final CustomKit kit = e instanceof KitPreClaimEvent ? ((KitPreClaimEvent) e).getKit() : e instanceof KitClaimEvent ? ((KitClaimEvent) e).getKit() : null;
+                final CustomKit kit = entity instanceof KitPreClaimEvent ? ((KitPreClaimEvent) entity).getKit() : entity instanceof KitClaimEvent ? ((KitClaimEvent) entity).getKit() : null;
                 return kit != null && kit.getIdentifier().startsWith(value);
 
             case "skill":
@@ -629,51 +629,51 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 return true;
         }
     }
-    default boolean passedCustomCondition(Event event, HashMap<String, Entity> entities, String entityKey, Entity e, String condition, String key, String value) {
+    default boolean passedCustomCondition(Event event, HashMap<String, Entity> entities, String entityKey, Entity entity, String condition, String key, String value) {
         String target = condition.startsWith(key) ? condition.split(key)[1] : condition;
         if(target.contains("=")) target = target.split("=")[0];
         final EventCondition con = getEventCondition(target.toUpperCase());
-        return con == null || con.check(value) && con.check(event) && con.check(event, value) && con.check(event, e) && con.check(e, value) && con.check(entityKey, entities, value);
+        return con == null || con.check(value) && con.check(event) && con.check(event, value) && con.check(event, entity) && con.check(entity, value) && con.check(entityKey, entities, value);
     }
-    default boolean passedRandomPackage(Entity e, String condition, String value) {
+    default boolean passedRandomPackage(Entity entity, String condition, String value) {
         switch (condition) {
             case "equippedarmorset":
-                final ArmorSet armorset = e instanceof Player ? valueOfArmorSet((Player) e) : null;
+                final ArmorSet armorset = entity instanceof Player ? valueOfArmorSet((Player) entity) : null;
                 return armorset != null && armorset.getIdentifier().equals(value);
             case "equippedmask":
-                final EntityEquipment ee = e instanceof Player ? ((Player) e).getEquipment() : null;
+                final EntityEquipment ee = entity instanceof Player ? ((Player) entity).getEquipment() : null;
                 final Mask mask = ee != null ? valueOfMask(ee.getHelmet()) : null;
                 return mask != null && mask.getIdentifier().equals(value);
             case "equippedtitle":
-                Title t = RPPlayer.get(e.getUniqueId()).getActiveTitle();
-                return t != null &&  e instanceof Player && t.getIdentifier().equals(value);
+                Title t = RPPlayer.get(entity.getUniqueId()).getActiveTitle();
+                return t != null &&  entity instanceof Player && t.getIdentifier().equals(value);
             case "ownstitle":
-                t = e instanceof Player ? getTitle(value) : null;
-                return t != null && RPPlayer.get(e.getUniqueId()).getTitles().contains(t);
+                t = entity instanceof Player ? getTitle(value) : null;
+                return t != null && RPPlayer.get(entity.getUniqueId()).getTitles().contains(t);
             case "hasactivefilter":
-                return e instanceof Player && RPPlayer.get(e.getUniqueId()).hasActiveFilter() == Boolean.parseBoolean(value);
+                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).hasActiveFilter() == Boolean.parseBoolean(value);
             case "hasactiveplayerquest":
-                final PlayerQuest q = e instanceof Player ? getPlayerQuest(value) : null;
-                final HashMap<PlayerQuest, ActivePlayerQuest> pquests = q != null ? RPPlayer.get(e.getUniqueId()).getQuests() : null;
+                final PlayerQuest q = entity instanceof Player ? getPlayerQuest(value) : null;
+                final HashMap<PlayerQuest, ActivePlayerQuest> pquests = q != null ? RPPlayer.get(entity.getUniqueId()).getQuests() : null;
                 return pquests != null && pquests.containsKey(q) && !pquests.get(q).isExpired();
             case "hasactiveraritygem":
                 final String[] values = value.split(":");
                 final int l = values.length;
-                return e instanceof Player && RPPlayer.get(e.getUniqueId()).hasActiveRarityGem(getRarityGem(values[0])) == (l < 2 || Boolean.parseBoolean(values[1]));
+                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).hasActiveRarityGem(getRarityGem(values[0])) == (l < 2 || Boolean.parseBoolean(values[1]));
             case "hasactivetitle":
-                return e instanceof Player && RPPlayer.get(e.getUniqueId()).getActiveTitle() != null == Boolean.parseBoolean(value);
+                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).getActiveTitle() != null == Boolean.parseBoolean(value);
             case "hascustomentities":
-                return e instanceof Player && !RPPlayer.get(e.getUniqueId()).getCustomEnchantEntities().isEmpty() == Boolean.parseBoolean(value);
+                return entity instanceof Player && !RPPlayer.get(entity.getUniqueId()).getCustomEnchantEntities().isEmpty() == Boolean.parseBoolean(value);
             case "hasequippedarmorset":
-                return e instanceof Player && valueOfArmorSet((Player) e) != null == Boolean.parseBoolean(value);
+                return entity instanceof Player && valueOfArmorSet((Player) entity) != null == Boolean.parseBoolean(value);
             case "hasequippedmask":
-                final EntityEquipment eq = e instanceof Player ? ((Player) e).getEquipment() : null;
+                final EntityEquipment eq = entity instanceof Player ? ((Player) entity).getEquipment() : null;
                 return eq != null && valueOfMask(eq.getHelmet()) != null == Boolean.parseBoolean(value);
             case "hasfiltereditem":
-                final List<UMaterial> m = e instanceof Player ? RPPlayer.get(e.getUniqueId()).getFilteredItems() : null;
+                final List<UMaterial> m = entity instanceof Player ? RPPlayer.get(entity.getUniqueId()).getFilteredItems() : null;
                 return m != null && m.contains(UMaterial.match(value));
             case "iscustomboss":
-                return LivingCustomBoss.living != null && LivingCustomBoss.living.containsKey(e.getUniqueId()) == Boolean.parseBoolean(value);
+                return LivingCustomBoss.living != null && LivingCustomBoss.living.containsKey(entity.getUniqueId()) == Boolean.parseBoolean(value);
             default:
                 return true;
         }

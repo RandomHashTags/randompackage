@@ -101,6 +101,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         return "AUCTION_HOUSE";
     }
     public void load() {
+        final long started = System.currentTimeMillis();
         save(null, "auction house.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "auction house.yml"));
         save("_Data", "auctions.yml");
@@ -196,21 +197,23 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
         categories = new UInventory(null, config.getInt("categories.size"), colorize(config.getString("categories.title")));
         setupInventory("categories", categories.getInventory(), Arrays.asList("title", "size", "format", "groups"), new HashMap<String, ItemStack>() {{
-            put("{refresh}", refresh);
-            put("{collection_bin}", collectionBin);
-            put("{return_to_ah}", returnToAH);
+            put("{REFRESH}", refresh);
+            put("{COLLECTION_BIN}", collectionBin);
+            put("{RETURN_TO_AH}", returnToAH);
         }});
 
         categoryItems = new UInventory(null, config.getInt("category items.size"), colorize(config.getString("category items.title")));
         setupInventory("category items", categoryItems.getInventory(), Arrays.asList("title", "size"), new HashMap<String, ItemStack>() {{
-            put("{collection_bin}", collectionBin);
+            put("{COLLECTION_BIN}", collectionBin);
         }});
 
         collectionbin = new UInventory(null, config.getInt("collection bin.size"), colorize(config.getString("collection bin.title")));
         setupInventory("collection bin", collectionbin.getInventory(), Arrays.asList("title", "size", "not enough inventory space", "in auction", "claim"), new HashMap<String, ItemStack>() {{
-            put("{refresh}", refresh);
-            put("{return_to_ah}", returnToAH);
+            put("{REFRESH}", refresh);
+            put("{RETURN_TO_AH}", returnToAH);
         }});
+
+        sendConsoleDidLoadFeature("Auction House", started);
 
         loadAuctions(true);
     }
@@ -218,7 +221,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         for(String key : getConfigurationSectionKeys(config, identifier, false)) {
             if(!excludedKeys.contains(key)) {
                 final int slot = config.getInt(identifier + "." + key + ".slot");
-                final String targetItem = config.getString(identifier + "." + key + ".item").toLowerCase();
+                final String targetItem = config.getString(identifier + "." + key + ".item");
                 item = specialItems.containsKey(targetItem) ? specialItems.get(targetItem): d(config, identifier + "." + key);
                 inventory.setItem(slot, item);
             }

@@ -23,7 +23,7 @@ public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Tog
     }
     default boolean canProcInWorld(@NotNull String world) {
         final List<String> worlds = getEnabledInWorlds();
-        return worlds != null && worlds.contains(world);
+        return worlds == null || worlds.contains(world);
     }
     List<String> getLore();
     List<String> getAppliesTo();

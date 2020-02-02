@@ -10,19 +10,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class DepleteRarityGem extends AbstractEventCondition {
     @Override
-    public boolean check(Entity e, String value) {
-        if(e instanceof Player) {
-            final String[] s = value.split(":");
-            final RarityGem gem = getRarityGem(s[0]);
+    public boolean check(Entity entity, String value) {
+        if(entity instanceof Player) {
+            final String[] values = value.split(":");
+            final RarityGem gem = getRarityGem(values[0]);
             if(gem != null) {
-                final RPPlayer pdata = RPPlayer.get(e.getUniqueId());
+                final RPPlayer pdata = RPPlayer.get(entity.getUniqueId());
                 if(pdata.hasActiveRarityGem(gem)) {
-                    final Player player = (Player) e;
-                    final ItemStack g = getRarityGem(gem, player);
-                    if(g != null) {
-                        ItemMeta itemMeta = g.getItemMeta();
+                    final Player player = (Player) entity;
+                    final ItemStack rarityGem = getRarityGem(gem, player);
+                    if(rarityGem != null) {
+                        ItemMeta itemMeta = rarityGem.getItemMeta();
                         final int amount = getRemainingInt(itemMeta.getDisplayName());
-                        int depleteAmount = Integer.parseInt(s[1]);
+                        int depleteAmount = (int) evaluate(values[1]);
 
                         /*
                         final FactionUpgrades fu = FactionUpgrades.getFactionUpgrades();
@@ -34,9 +34,9 @@ public class DepleteRarityGem extends AbstractEventCondition {
                             depleteAmount = amount;
                             pdata.toggleRarityGem(gem, gem.getToggleOffRanOutMsg());
                         }
-                        itemMeta = g.getItemMeta();
+                        itemMeta = rarityGem.getItemMeta();
                         itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(amount - depleteAmount)));
-                        g.setItemMeta(itemMeta);
+                        rarityGem.setItemMeta(itemMeta);
                         return true;
                     }
                 }

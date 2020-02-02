@@ -26,7 +26,7 @@ item:
   - "&7Lucky and Tactical species."
   - " "
   - "&f&lAbility"
-  - "&7ASpawn a &4Raid Creeper"
+  - "&7Spawn a &4Raid Creeper"
   - "&7(Lucky + Tactical)"
   - "&7(100% Spawn Drop Rate)"
   - " "
@@ -41,4 +41,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - ""
+  - "PlayerInteract;"

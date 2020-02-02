@@ -35,7 +35,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
@@ -47,7 +46,6 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
 
     public static final RegionalAPI regions = RegionalAPI.getRegionalAPI();
     protected static final Economy eco = Vault.getVault().getEconomy();
-    private static final TreeMap<Integer, String> treemap = new TreeMap<>();
 
     public static YamlConfiguration otherdata;
     protected static File otherdataF;
@@ -59,20 +57,6 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             save("_Data", "other.yml");
             otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
             otherdata = YamlConfiguration.loadConfiguration(otherdataF);
-
-            treemap.put(1000, "M");
-            treemap.put(900, "CM");
-            treemap.put(500, "D");
-            treemap.put(400, "CD");
-            treemap.put(100, "C");
-            treemap.put(90, "XC");
-            treemap.put(50, "L");
-            treemap.put(40, "XL");
-            treemap.put(10, "X");
-            treemap.put(9, "IX");
-            treemap.put(5, "V");
-            treemap.put(4, "IV");
-            treemap.put(1, "I");
 
             givedp = new UInventory(null, 27, "Givedp Categories");
             givedpCategories = new ArrayList<>();
@@ -108,7 +92,6 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     public static void d() {
         otherdata = null;
         otherdataF = null;
-        treemap.clear();
         givedp = null;
         givedpCategories = null;
         mcmmoIsEnabled = false;
@@ -141,32 +124,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
         for(ItemStack is : items) if(is != null) inv.addItem(is);
         givedpCategories.add(inv);
     }
-    public String toRoman(int number) {
-        /* This code is from "bhlangonijr" at https://stackoverflow.com/questions/12967896 */
-        if(number <= 0) return "";
-        int l = treemap.floorKey(number);
-        if(number == l) return treemap.get(number);
-        return treemap.get(l) + toRoman(number - l);
-    }
-    private enum RomanNumeralValues {
-        I(1), X(10), C(100), M(1000), V(5), L(50), D(500);
-        private int val;
-        RomanNumeralValues(int val) { this.val = val; }
-        public int asInt() { return val; }
-    }
-    protected int fromRoman(String num) {
-        /* This code is from "batman" at https://stackoverflow.com/questions/9073150 */
-        num = ChatColor.stripColor(num.toUpperCase());
-        int intNum = 0, prev = 0;
-        for(int i = num.length()-1; i >= 0; i--) {
-            final String character = num.substring(i, i+1);
-            int temp = RomanNumeralValues.valueOf(character).asInt();
-            if(temp < prev) intNum -= temp;
-            else            intNum += temp;
-            prev = temp;
-        }
-        return intNum;
-    }
+
     public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) return true;
         else if(sendNoPermMessage) {

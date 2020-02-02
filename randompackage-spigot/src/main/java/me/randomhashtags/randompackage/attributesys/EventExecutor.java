@@ -110,7 +110,9 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         return passed;
     }
 
-    public HashMap<String, Entity> getNearbyEntities(Location center, double radius) { return getNearbyEntities(center, radius, radius, radius); }
+    public HashMap<String, Entity> getNearbyEntities(Location center, double radius) {
+        return getNearbyEntities(center, radius, radius, radius);
+    }
     public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
         final HashMap<String, Entity> e = new HashMap<>();
         final List<Entity> nearby = new ArrayList<>(center.getWorld().getNearbyEntities(center, radiusX, radiusY, radiusZ));
@@ -173,7 +175,8 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     }
                     switch (attribute.getIdentifier()) {
                         case "WAIT":
-                            final int ticks = (int) evaluate(replaceValue(entities, defaultValue, valueReplacements));
+                            final String target = replaceValue(entities, defaultValue, valueReplacements);
+                            final int ticks = (int) evaluate(target);
                             List<PendingEventAttribute> attributes = new ArrayList<>(values);
                             attributes.removeAll(previousHashMaps);
                             attributes.remove(pending);
@@ -400,29 +403,32 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
+        try {
+            if(trigger(event, entities, globalattributes)) {
+            }
+        } catch (Exception error) {
+            sendConsoleMessage("&6[RandomPackage] &cERROR &eGenerated a global attribute error! &e(" + RP_VERSION + ")");
+            sendConsoleMessage("&6[RandomPackage] &cEquipped Custom Enchants=" + equipped.getEnchants().toString());
+            sendConsoleMessage("&6[RandomPackage] &cEntities=" + entities.toString());
+            sendConsoleMessage("&6[RandomPackage] &cGlobal Attributes=" + globalattributes.toString());
+            error.printStackTrace();
+        }
+
         final Player player = equipped.getPlayer();
         final String world = player.getWorld().getName();
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
             final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
+
             if(enchants != null) {
                 for(CustomEnchant enchant : enchants.keySet()) {
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
-                    //Bukkit.broadcastMessage("EventExecutor;event=" + event.getEventName());
+                    //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getIdentifier() + ";event=" + event.getEventName() + ";onCorrectItem=" + onCorrectItem);
                     if(onCorrectItem && enchant.canProcInWorld(world)) {
                         final int lvl = enchants.get(enchant);
                         final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
-                        try {
-                            if(trigger(event, entities, replaceCE(lvl, globalattributes), replacementz)) {
-                                final CustomEnchantProcEvent proc = new CustomEnchantProcEvent(player, event, entities, enchant, lvl, is);
-                                PLUGIN_MANAGER.callEvent(proc);
-                            }
-                        } catch (Exception error) {
-                            sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated a global attribute error! &e(" + RP_VERSION + ")");
-                            error.printStackTrace();
-                        }
 
                         try {
                             if(trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz)) {

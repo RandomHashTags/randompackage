@@ -7,9 +7,18 @@ import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public interface InventoryPet extends UVersionable, Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack {
+    HashMap<Integer, String> getValues();
+    default String getValue(int level) {
+        final HashMap<Integer, String> values = getValues();
+        return values != null ? values.getOrDefault(level, "null") : "null";
+    }
+
     HashMap<Integer, Integer> getCooldowns();
     default long getCooldown(int level) {
         final HashMap<Integer, Integer> cooldowns = getCooldowns();
@@ -42,8 +51,15 @@ public interface InventoryPet extends UVersionable, Itemable, Attributable, Skul
             final List<String> lore = new ArrayList<>();
             final String expRegex = InventoryPets.getInventoryPets().getExpRegex(exp, required);
             if(meta.hasLore()) {
+                final String value = getValue(level), romanLevel = toRoman(level);
+                final String[] values = value.split(";");
                 for(String s : meta.getLore()) {
-                    lore.add(s.replace("{EXP}", expRegex).replace("{LEVEL}", lvl).replace("{XP}", xp).replace("{COMPLETION}", requiredString).replace("{COOLDOWN}", cooldown));
+                    int target = 1;
+                    for(String realValue : values) {
+                        s = s.replace("{VALUE_" + target + "}", realValue);
+                        target++;
+                    }
+                    lore.add(s.replace("{EXP}", expRegex).replace("{LEVEL}", lvl).replace("{ROMAN_LEVEL}", romanLevel).replace("{XP}", xp).replace("{COMPLETION}", requiredString).replace("{COOLDOWN}", cooldown).replace("{VALUE}", value));
                 }
             }
             meta.setLore(lore);

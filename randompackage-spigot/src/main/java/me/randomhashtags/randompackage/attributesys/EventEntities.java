@@ -173,12 +173,24 @@ public interface EventEntities extends EventConditions, UVersionable {
         }
         return e;
     }
-    default HashMap<String, Entity> getEntities(EntityDamageEvent event) { return getEntities("Victim", event.getEntity()); }
-    default HashMap<String, Entity> getEntities(EntityDamageByEntityEvent event) { return getEntities("Damager", event.getDamager(), "Victim", event.getEntity()); }
-    default HashMap<String, Entity> getEntities(EntityShootBowEvent event) { return getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity()); }
-    default HashMap<String, Entity> getEntities(EntityTameEvent event) { return getEntities("Entity", event.getEntity(), "Owner", event.getOwner()); }
-    default HashMap<String, Entity> getEntities(PlayerEvent event) { return getEntities("Player", event.getPlayer()); }
-    default HashMap<String, Entity> getEntities(PlayerFishEvent event) { return getEntities("Player", event.getPlayer(), "Caught", event.getCaught()); }
+    default HashMap<String, Entity> getEntities(EntityDamageEvent event) {
+        return getEntities("Victim", event.getEntity());
+    }
+    default HashMap<String, Entity> getEntities(EntityDamageByEntityEvent event) {
+        return getEntities("Damager", event.getDamager(), "Victim", event.getEntity());
+    }
+    default HashMap<String, Entity> getEntities(EntityShootBowEvent event) {
+        return getEntities("Projectile", event.getProjectile(), "Shooter", event.getEntity());
+    }
+    default HashMap<String, Entity> getEntities(EntityTameEvent event) {
+        return getEntities("Entity", event.getEntity(), "Owner", event.getOwner());
+    }
+    default HashMap<String, Entity> getEntities(PlayerEvent event) {
+        return getEntities("Player", event.getPlayer());
+    }
+    default HashMap<String, Entity> getEntities(PlayerFishEvent event) {
+        return getEntities("Player", event.getPlayer(), "Caught", event.getCaught());
+    }
     default HashMap<String, Entity> getEntities(ProjectileHitEvent event) {
         final Projectile p = event.getEntity();
         return getEntities("Projectile", p, "Shooter", p.getShooter(), "Victim", getHitEntity(event));
@@ -199,8 +211,16 @@ public interface EventEntities extends EventConditions, UVersionable {
         }
         return entities;
     }
-    default HashMap<String, Entity> getEntities(DamageEvent event) { return getEntities("Victim", event.getEntity(), "Damager", event.getDamager()); }
-    default HashMap<String, Entity> getEntities(FallenHeroSlainEvent event) { return getEntities("Victim", event.hero.getEntity(), "Killer", event.killer); }
-    default HashMap<String, Entity> getEntities(MobStackDepleteEvent event) { return getEntities("Killer", event.killer, "Victim", event.stack.entity); }
-    default HashMap<String, Entity> getEntities(RPEvent event) { return getEntities("Player", event.getPlayer()); }
+    default HashMap<String, Entity> getEntities(DamageEvent event) {
+        return getEntities("Victim", event.getEntity(), "Damager", event.getDamager());
+    }
+    default HashMap<String, Entity> getEntities(FallenHeroSlainEvent event) {
+        return getEntities("Victim", event.hero.getEntity(), "Killer", event.killer);
+    }
+    default HashMap<String, Entity> getEntities(MobStackDepleteEvent event) {
+        return getEntities("Killer", event.killer, "Victim", event.stack.entity);
+    }
+    default HashMap<String, Entity> getEntities(RPEvent event) {
+        return getEntities("Player", event.getPlayer());
+    }
 }

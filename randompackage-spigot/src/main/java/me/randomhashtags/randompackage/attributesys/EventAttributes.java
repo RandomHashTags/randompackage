@@ -97,7 +97,7 @@ public abstract class EventAttributes extends EventExecutor {
     public static void unloadEventAttributes() {
         RPStorage.unregisterAll(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
         Combo.combos.clear();
-        Listable.list.clear();
+        Listable.LIST.clear();
         EACoreListener.getEACoreListener().disable();
     }
 }

@@ -11,7 +11,7 @@ public class IsInList extends AbstractEventCondition implements Listable {
     public boolean check(Entity entity, String value) {
         final UUID u = entity.getUniqueId();
         final String[] values = value.split(":");
-        final boolean bool = values.length == 1, contains = list.containsKey(u) && list.get(u).contains(values[0]);
+        final boolean bool = values.length == 1, contains = LIST.containsKey(u) && LIST.get(u).contains(values[0]);
         return contains == (bool || Boolean.parseBoolean(values[1]));
     }
 }

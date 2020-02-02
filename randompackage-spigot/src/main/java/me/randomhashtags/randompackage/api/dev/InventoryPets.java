@@ -174,26 +174,28 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         return false;
     }
     private byte didTriggerPet(Event event, ItemStack is, Player player) {
-        final String id = getRPItemStackValue(is, "InventoryPetInfo");
-        if(id != null) {
-            final String[] info = id.split(":");
-            final String identifier = info[0];
+        final String info = getRPItemStackValue(is, "InventoryPetInfo");
+        if(info != null) {
+            final String[] values = info.split(":");
+            final String identifier = values[0];
             final InventoryPet pet = getInventoryPet(identifier);
-            final String lvl = info[1];
-            final int level = Integer.parseInt(lvl), exp = Integer.parseInt(info[2]);
-            final long expiration = Long.parseLong(info[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+            if(pet != null) {
+                final String lvl = values[1];
+                final int level = Integer.parseInt(lvl), exp = Integer.parseInt(values[2]);
+                final long expiration = Long.parseLong(values[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
 
-            if(remainingtime <= 0) {
-                if(trigger(event, pet.getAttributes(), "level", lvl)) {
-                    pet.didUse(is, identifier, level, exp);
-                    sendItemCooldownPacket(player, is.getType(), 20*20);
-                    return 1;
+                if(remainingtime <= 0) {
+                    if(trigger(event, pet.getAttributes(), "level", lvl)) {
+                        pet.didUse(is, identifier, level, exp);
+                        sendItemCooldownPacket(player, is.getType(), 20*20);
+                        return 1;
+                    }
+                } else {
+                    final HashMap<String, String> replacements = new HashMap<>();
+                    replacements.put("{TIME}", getRemainingTime(remainingtime));
+                    sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
+                    return 0;
                 }
-            } else {
-                final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{TIME}", getRemainingTime(remainingtime));
-                sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
-                return 0;
             }
         }
         return -1;

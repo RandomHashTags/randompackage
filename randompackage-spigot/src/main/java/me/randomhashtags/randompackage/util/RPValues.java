@@ -215,10 +215,13 @@ public interface RPValues extends UVersionable {
                 final ItemMeta meta = item.getItemMeta();
                 if(meta.hasLore()) {
                     final List<String> lore = meta.getLore();
-                    final int chance = getRemainingInt(lore.get(sockets.getChanceSlot()));
-                    for(ArmorSocket socket : getAllArmorSockets().values()) {
-                        if(item.isSimilar(sockets.getArmorSocketItem(socket, chance))) {
-                            return socket;
+                    final int slot = sockets.getChanceSlot();
+                    if(lore.size() > slot) {
+                        final int chance = getRemainingInt(lore.get(slot));
+                        for(ArmorSocket socket : getAllArmorSockets().values()) {
+                            if(item.isSimilar(sockets.getArmorSocketItem(socket, chance))) {
+                                return socket;
+                            }
                         }
                     }
                 }

@@ -11,10 +11,14 @@ public class AddToList extends AbstractEventAttribute implements Listable {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
-        for(Entity e : recipientValues.keySet()) {
-            final UUID u = e.getUniqueId();
-            if(!list.containsKey(u)) list.put(u, new ArrayList<>());
-            list.get(u).add(recipientValues.get(e));
+        for(Entity entity : recipientValues.keySet()) {
+            if(entity != null) {
+                final UUID u = entity.getUniqueId();
+                if(!LIST.containsKey(u)) {
+                    LIST.put(u, new ArrayList<>());
+                }
+                LIST.get(u).add(recipientValues.get(entity));
+            }
         }
     }
 }

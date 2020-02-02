@@ -59,7 +59,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     public YamlConfiguration config;
     public boolean levelZeroRemoval;
-    public static List<String> globalattributes;
+    public static List<String> CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES;
 
     private HashMap<CustomEnchant, Integer> timedEnchants;
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
@@ -92,7 +92,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         levelZeroRemoval = config.getBoolean("settings.level zero removal");
 
         save("custom enchants", "global attributes.yml");
-        globalattributes = getStringList(YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")), "attributes");
+        CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES = getStringList(YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")), "attributes");
 
         new SpawnEntity().load();
         new StopEnchant().load();
@@ -139,7 +139,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                                 if(!enchant.isEmpty()) {
                                                     final CustomEnchantTimerEvent event = new CustomEnchantTimerEvent(player, enchant);
                                                     PLUGIN_MANAGER.callEvent(event);
-                                                    triggerCustomEnchants(event, getEntities("Player", player), enchants, globalattributes);
+                                                    triggerCustomEnchants(event, getEntities("Player", player), enchants, CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES);
                                                 }
                                             }
                                         }, ticks, ticks);
@@ -268,6 +268,17 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         if(shooter instanceof Player) {
             final Player player = (Player) shooter;
             if(allowsPvP(player, p.getLocation())) {
+                triggerEnchants(event, getEnchants(player));
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void projectileLaunchEvent(ProjectileLaunchEvent event) {
+        final Projectile projectile = event.getEntity();
+        final ProjectileSource shooter = projectile.getShooter();
+        if(shooter instanceof Player) {
+            final Player player = (Player) shooter;
+            if(allowsPvP(player, projectile.getLocation())) {
                 triggerEnchants(event, getEnchants(player));
             }
         }
@@ -857,6 +868,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             equipped.update(slots);
             playerEnchants.put(equipped.getPlayer().getUniqueId(), equipped);
         }
-        triggerCustomEnchants(event, entities, equipped, globalattributes, getEventItem, slots);
+        triggerCustomEnchants(event, entities, equipped, CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES, getEventItem, slots);
     }
 }

@@ -1,5 +1,5 @@
-# Made by RandomHashTags | TODO: fix this
-enabled: false
+# Made by RandomHashTags
+enabled: true
 #
 name: "Teleblock"
 lore:
@@ -18,6 +18,6 @@ alchemist: "7000:9000:11000:13000"
 tinkerer: "160:175:190:205:220"
 #
 attributes:
-  - "EntityShootBow;ShooterIsInList=SOUL_TRAPPED;Return=false"
+  - "EntityShootBow;ShooterIsInList=SOUL_TRAPPED:true;Return=false"
   - "EntityShootBow;ShooterHasActiveRarityGem=SOUL:true;ShooterDepleteRarityGem=SOUL:level*6;ShooterAddToList=TELEBLOCK"
-  - "ProjectileHit;ShooterIsInList=TELEBLOCK;VictimIsType=PLAYER;VictimRemoveItem=ENDER_PEARL"
+  - "ProjectileHit;ShooterIsInList=TELEBLOCK:true;ShooterRemoveFromList=TELEBLOCK;VictimIsType=PLAYER;VictimRemoveItem=ENDER_PEARL:getRandom(0:15);VictimAddToList=TELEBLOCKED;Wait=20*4*getRandom(1:level-1);VictimRemoveFromList=TELEBLOCKED"

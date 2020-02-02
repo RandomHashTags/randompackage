@@ -84,6 +84,7 @@ public class EACoreListener extends EventExecutor implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void projectileHitEvent(ProjectileHitEvent event) {
         PROJECTILE_EVENTS.remove(event.getEntity().getUniqueId());
+        callEventAttributeListeners(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -137,6 +138,10 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerExpChangeEvent(PlayerExpGainEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void projectileLaunchEvent(ProjectileLaunchEvent event) {
         callEventAttributeListeners(event);
     }
     /*

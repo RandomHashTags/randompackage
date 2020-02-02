@@ -22,7 +22,9 @@ public class FileCustomEnchant extends RPAddon implements CustomEnchant {
         return yml.getBoolean("enabled");
     }
     public List<String> getEnabledInWorlds() {
-        if(worlds == null) worlds = yml.getStringList("enabled in worlds");
+        if(worlds == null) {
+            worlds = yml.getStringList("enabled in worlds");
+        }
         return worlds.isEmpty() ? null : worlds;
     }
 
