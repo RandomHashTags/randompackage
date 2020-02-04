@@ -55,7 +55,7 @@ public class RarityGems extends RPFeature {
         }
 
         for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "rarity gems")) {
-            if(!f.getName().equals("_settings.yml")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 new FileRarityGem(f);
             }
         }

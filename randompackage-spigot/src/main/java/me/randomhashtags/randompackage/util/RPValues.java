@@ -597,9 +597,9 @@ public interface RPValues extends UVersionable {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
         for(int i = 0; i < pi.getSize(); i++) {
-            final ItemStack a = pi.getItem(i);
-            if(a != null && a.hasItemMeta() && a.getItemMeta().hasLore() && a.getItemMeta().getLore().equals(l)) {
-                return a;
+            final ItemStack is = pi.getItem(i);
+            if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().equals(l)) {
+                return is;
             }
         }
         return null;

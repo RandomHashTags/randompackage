@@ -411,6 +411,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
             sendConsoleMessage("&6[RandomPackage] &cERROR &eGenerated a global attribute error! &e(" + RP_VERSION + ")");
             sendConsoleMessage("&6[RandomPackage] &cEquipped Custom Enchants=" + equipped.getEnchants().toString());
             sendConsoleMessage("&6[RandomPackage] &cEntities=" + entities.toString());
+            sendConsoleMessage("&6[RandomPackage] &cReplacements=" + Arrays.toString(eventReplacements));
             sendConsoleMessage("&6[RandomPackage] &cGlobal Attributes=" + globalattributes.toString());
             error.printStackTrace();
         }
@@ -438,6 +439,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                             }
                         } catch (Exception error) {
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eEntities=&f" + entities.toString());
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eReplacements=&f" + Arrays.toString(replacements));
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eAttributes=&f" + attributes);
                             error.printStackTrace();

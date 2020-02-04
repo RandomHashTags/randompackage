@@ -10,30 +10,23 @@ import java.util.HashMap;
 
 public class SetSuccessRate extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending) {
+    public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
-        final HashMap<Entity, String> values = pending.getRecipientValues();
         final HashMap<String, Entity> entities = pending.getKeyEntities();
-        final String value = values.getOrDefault(entities.get("Player"), null);
         if(value != null) {
+            final int percent = (int) evaluate(replaceValue(entities, value, valueReplacements));
             switch (event.getEventName().toLowerCase().split("scrolluseevent")[0]) {
                 case "black":
                     final BlackScrollUseEvent bEvent = (BlackScrollUseEvent) event;
-                    bEvent.setSuccessRate(getPercent(entities, value, bEvent.getSuccessRate()));
+                    bEvent.setSuccessRate(percent);
                     break;
                 case "randomization":
                     final RandomizationScrollUseEvent rEvent = (RandomizationScrollUseEvent) event;
-                    rEvent.setNewSuccess(getPercent(entities, value, rEvent.getNewSuccess()));
+                    rEvent.setNewSuccess(percent);
                     break;
                 default:
                     break;
             }
         }
-    }
-    private int getPercent(HashMap<String, Entity> entities, String value, int rate) {
-        final String replacedValue = replaceValue(entities, value, new HashMap<String, String>() {{
-            put("rate", Integer.toString(rate));
-        }});
-        return (int) evaluate(replacedValue);
     }
 }

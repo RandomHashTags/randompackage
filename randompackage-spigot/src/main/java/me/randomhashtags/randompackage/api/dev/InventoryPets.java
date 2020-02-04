@@ -201,6 +201,9 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
                         if(petValues != null) {
                             int number = 1;
                             for(String value : petValues) {
+                                if(number == 1) {
+                                    s = s.replace("{VALUE}", value);
+                                }
                                 s = s.replace("{VALUE_" + number + "}", value);
                                 number++;
                             }

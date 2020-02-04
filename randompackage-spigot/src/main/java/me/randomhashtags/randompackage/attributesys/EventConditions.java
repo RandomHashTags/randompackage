@@ -47,7 +47,8 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
         final boolean pre = passedCustomCondition(event, entities, entityKey, entity, condition, key, value) && passedEvent(event, entity, condition, value), isEntity = condition.startsWith(key);
         condition = condition.substring(key.length()).split("=")[0];
         return pre && (!isEntity
-                || passedBasic(entity, condition, value)
+                || entity != null
+                && passedBasic(entity, condition, value)
                 && passedAgeable(entity, condition, value)
                 && passedAnimals(entity, condition, value)
                 && passedArmorStand(entity, condition, value)

@@ -74,6 +74,7 @@ public interface EventReplacements extends EventEntities {
             case "boostertrigger": return getReplacements((BoosterTriggerEvent) event);
             case "coinflipend": return getReplacements((CoinFlipEndEvent) event);
             case "customenchantproc": return getReplacements((CustomEnchantProcEvent) event);
+            case "depleteraritygem": return getReplacements((DepleteRarityGemEvent) event);
             case "funddeposit": return getReplacements((FundDepositEvent) event);
             case "jackpotpurchasetickets": return getReplacements((JackpotPurchaseTicketsEvent) event);
             case "kitclaim": return getReplacements((KitClaimEvent) event);
@@ -187,6 +188,9 @@ public interface EventReplacements extends EventEntities {
     default String[] getReplacements(CustomEnchantProcEvent event) {
         final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", toString(event.getHolder().getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
         return getReplacements(a, b);
+    }
+    default String[] getReplacements(DepleteRarityGemEvent event) {
+        return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"gemAmount", Integer.toString(event.getGemAmount()), "depleteAmount", Integer.toString(event.getDepleteAmount())});
     }
 
     default String[] getReplacements(DamageEvent event) {

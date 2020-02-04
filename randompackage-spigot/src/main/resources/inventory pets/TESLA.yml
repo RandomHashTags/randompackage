@@ -61,4 +61,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;"
+  - "PlayerInteract;PlayerAddToList=INVENTORY_PET_TESLA;Wait=20*{VALUE};PlayerRemoveFromList=INVENTORY_PET_TESLA"

@@ -38,4 +38,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;PlayerGivePetExp=FEIGN_DEATH:1-50;PlayerAddPotionEffect=Invisibility:1:20*60*{VALUE}"
+  - "PlayerInteract;PlayerGivePetExp=FEIGN_DEATH:1-50;PlayerAddPotionEffect=Invisibility:1:20*{VALUE}"
