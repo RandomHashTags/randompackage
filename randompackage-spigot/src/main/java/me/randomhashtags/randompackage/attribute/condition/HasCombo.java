@@ -13,6 +13,6 @@ public class HasCombo extends AbstractEventCondition implements Combo {
         final String key = values[0];
         final boolean status = values.length == 1 || Boolean.parseBoolean(values[1]);
         final UUID u = entity.getUniqueId();
-        return combos.containsKey(u) && combos.get(u).containsKey(key) == status;
+        return COMBOS.containsKey(u) && COMBOS.get(u).containsKey(key) == status;
     }
 }

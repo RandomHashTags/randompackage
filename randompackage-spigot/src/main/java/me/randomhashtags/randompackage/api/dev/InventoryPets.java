@@ -4,7 +4,8 @@ import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
@@ -32,7 +33,7 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
-public class InventoryPets extends EventAttributes implements RPItemStack, Packeter {
+public class InventoryPets extends EACoreListener implements EventAttributeListener, RPItemStack, Packeter {
     private static InventoryPets instance;
     public static InventoryPets getInventoryPets() {
         if(instance == null) instance = new InventoryPets();
@@ -41,16 +42,20 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
 
     public YamlConfiguration config;
     public ItemStack leash, rarecandy;
+    public static List<String> INVENTORY_PET_GLOBAL_ATTRIBUTES;
     private String leashedLore, expCharacter, expAchievedColor, expUnachievedColor;
     private int expCharacterLength;
 
     private HashMap<UUID, List<ItemStack>> leashedUponDeath;
 
+    @Override
     public String getIdentifier() {
         return "INVENTORY_PETS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
+        registerEventAttributeListener(this);
         new GivePetExp().load();
         save("inventory pets", "_settings.yml");
         if(!otherdata.getBoolean("saved default inventory pets")) {
@@ -73,22 +78,26 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
         expAchievedColor = colorize(config.getString("settings.exp.achieved color"));
         expUnachievedColor = colorize(config.getString("settings.exp.unachieved color"));
 
+        INVENTORY_PET_GLOBAL_ATTRIBUTES = config.getStringList("global attributes");
+
         final List<ItemStack> pets = new ArrayList<>();
         pets.add(leash);
         pets.add(rarecandy);
         for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final InventoryPet p = new FileInventoryPet(f);
-                pets.add(p.getItem(1, 0));
+                pets.add(p.getItem(1, 0, 0));
             }
         }
         addGivedpCategory(pets, UMaterial.PLAYER_HEAD_ITEM, "Inventory Pets", "Givedp: Inventory Pets");
         sendConsoleDidLoadFeature(getAll(Feature.INVENTORY_PET).size() + " Inventory Pets", started);
     }
+    @Override
     public void unload() {
         for(UUID u : leashedUponDeath.keySet()) {
         }
         unregister(Feature.INVENTORY_PET);
+        unregisterEventAttributeListener(this);
     }
 
     public String getExpRegex(int currentXp, int maxXp) {
@@ -176,16 +185,30 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
     private byte didTriggerPet(Event event, ItemStack is, Player player) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         if(info != null) {
-            final String[] values = info.split(":");
-            final String identifier = values[0];
+            final String[] infoValues = info.split(":");
+            final String identifier = infoValues[0];
             final InventoryPet pet = getInventoryPet(identifier);
             if(pet != null) {
-                final String lvl = values[1];
-                final int level = Integer.parseInt(lvl), exp = Integer.parseInt(values[2]);
-                final long expiration = Long.parseLong(values[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+                final String lvl = infoValues[1];
+                final int level = Integer.parseInt(lvl), exp = Integer.parseInt(infoValues[2]);
+                final long expiration = Long.parseLong(infoValues[3]), time = System.currentTimeMillis(), remainingtime = expiration-time;
 
                 if(remainingtime <= 0) {
-                    if(trigger(event, pet.getAttributes(), "level", lvl)) {
+                    final String targetValue = pet.getValue(level);
+                    final String[] petValues = targetValue != null ?  targetValue.split(";") : null;
+                    final List<String> replacedAttributes = new ArrayList<>();
+                    for(String s : pet.getAttributes()) {
+                        if(petValues != null) {
+                            int number = 1;
+                            for(String value : petValues) {
+                                s = s.replace("{VALUE_" + number + "}", value);
+                                number++;
+                            }
+                        }
+                        replacedAttributes.add(s.replace("{LEVEL}", lvl));
+                    }
+
+                    if(trigger(event, replacedAttributes)) {
                         pet.didUse(is, identifier, level, exp);
                         sendItemCooldownPacket(player, is.getType(), 20*20);
                         return 1;
@@ -199,6 +222,10 @@ public class InventoryPets extends EventAttributes implements RPItemStack, Packe
             }
         }
         return -1;
+    }
+
+    public void called(Event event) {
+        trigger(event, INVENTORY_PET_GLOBAL_ATTRIBUTES, getReplacements(event));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

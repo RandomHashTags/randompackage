@@ -12,8 +12,8 @@ public class ComboDeplete extends AbstractEventAttribute implements Combo {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             final UUID u = e.getUniqueId();
-            if(combos.containsKey(u)) {
-                final HashMap<String, Double> combo = combos.get(u);
+            if(COMBOS.containsKey(u)) {
+                final HashMap<String, Double> combo = COMBOS.get(u);
                 final String[] values = recipientValues.get(e).split(":");
                 final String identifier = values[0];
                 if(combo.containsKey(identifier)) {

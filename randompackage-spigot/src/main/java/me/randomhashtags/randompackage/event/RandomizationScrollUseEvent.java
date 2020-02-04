@@ -2,23 +2,42 @@ package me.randomhashtags.randompackage.event;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
+import me.randomhashtags.randompackage.addon.Scroll;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-public class RandomizationScrollUseEvent extends RPEventCancellable {
-    public final CustomEnchant customenchant;
-    public final int enchantlevel;
-    public final RandomizationScroll scroll;
+public class RandomizationScrollUseEvent extends ScrollUseEvent {
+    private CustomEnchant enchant;
+    private int enchantlevel;
     private int newSuccess, newDestroy;
-    public RandomizationScrollUseEvent(Player player, CustomEnchant customenchant, int enchantlevel, RandomizationScroll scroll, int newSuccess, int newDestroy) {
-        super(player);
-        this.customenchant = customenchant;
+    public RandomizationScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem, CustomEnchant enchant, int enchantlevel, int newSuccess, int newDestroy) {
+        super(player, scroll, usedOnItem);
+        this.enchant = enchant;
         this.enchantlevel = enchantlevel;
-        this.scroll = scroll;
         this.newSuccess = newSuccess;
         this.newDestroy = newDestroy;
     }
-    public int getNewSuccess() { return newSuccess; }
-    public void setNewSuccess(int success) { newSuccess = success; }
-    public int getNewDestroy() { return newDestroy; }
-    public void setNewDestroy(int destroy) { newDestroy = destroy; }
+    @Override
+    public RandomizationScroll getScroll() {
+        return (RandomizationScroll) scroll;
+    }
+    public CustomEnchant getEnchant() {
+        return enchant;
+    }
+    public int getEnchantLevel() {
+        return enchantlevel;
+    }
+
+    public int getNewSuccess() {
+        return newSuccess;
+    }
+    public void setNewSuccess(int success) {
+        newSuccess = success;
+    }
+    public int getNewDestroy() {
+        return newDestroy;
+    }
+    public void setNewDestroy(int destroy) {
+        newDestroy = destroy;
+    }
 }

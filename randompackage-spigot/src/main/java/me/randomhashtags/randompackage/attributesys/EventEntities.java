@@ -37,6 +37,7 @@ public interface EventEntities extends EventConditions, UVersionable {
         switch (name.toLowerCase().split("event")[0]) {
             case "entitydeath":
             case "playerdeath": return getEntities((EntityDeathEvent) event);
+
             case "entitydamage": return getEntities((EntityDamageEvent) event);
             case "entitydamagebyblock": return getEntities("Entity", ((EntityDamageByBlockEvent) event).getEntity());
             case "entitydamagebyentity": return getEntities((EntityDamageByEntityEvent) event);
@@ -45,123 +46,36 @@ public interface EventEntities extends EventConditions, UVersionable {
             case "playerfish": return getEntities((PlayerFishEvent) event);
 
             case "blockbreak": return getEntities("Player", ((BlockBreakEvent) event).getPlayer());
+
             case "blockmultiplace":
             case "blockplace": return getEntities("Player", ((BlockPlaceEvent) event).getPlayer());
+
             case "foodlevelchange": return getEntities("Player", ((FoodLevelChangeEvent) event).getEntity());
-
-            case "playeradvancementdone":
-            case "playeranimation":
-            case "playerbedenter":
-            case "playerbedleave":
-            case "playerbucketempty":
-            case "playerbucketfill":
-            case "playerchangedmainhand":
-            case "playerchangedworld":
-            case "playercommandpreprocess":
-            case "playercommandsend":
-            case "playerdropitem":
-            case "playereditbook":
-            case "playerexpchange":
-            case "playergamemodechange":
-            case "playerinteract":
-            case "playeritembreak":
-            case "playeritemconsume":
-            case "playeritemdamage":
-            case "playeritemheld":
-            case "playeritemmend":
-            case "playerjoin":
-            case "playerkick":
-            case "playerlevelchange":
-            case "playerlocalechange":
-            case "playerlogin":
-            case "playermove":
-            case "playerportal":
-            case "playerquit":
-            case "playerrecipediscover":
-            case "playerresourcepackstatus":
-            case "playerrespawn":
-            case "playerriptide":
-            case "playerstatisticincrement":
-            case "playerswaphanditems":
-            case "playertakelecternbook":
-            case "playerteleport":
-            case "playertogglesneak":
-            case "playertogglesprint":
-            case "playervelocity": return getEntities((PlayerEvent) event);
-
             case "projectilehit": return getEntities((ProjectileHitEvent) event);
             case "projectilelaunch": return getEntities((ProjectileLaunchEvent) event);
 
+            // RandomPackage Events
             case "isdamaged": return getEntities((isDamagedEvent) event);
             case "pvany": return getEntities((PvAnyEvent) event);
             case "custombossdamagebyentityevent": return getEntities((CustomBossDamageByEntityEvent) event);
-
-            case "armorequip":
-            case "armorpiecebreak":
-            case "armorswap":
-            case "armorunequip":
-
-            case "boosteractivate":
-            case "boosterexpire":
-            case "boosterpreactivate":
-            case "boostertrigger":
-
-            case "alchemistexchange":
-            case "customenchantapply":
-            case "enchanterpurchase":
-            case "playerpreapplycustomenchant":
-            case "playerrevealcustomenchant":
-            case "trinkerertrade":
-
-            case "kitclaim":
-            case "kitpreclaim":
-
-            case "dungeonlootbagclaim":
-            case "kothlootbagclaim":
-
-            case "customenchanttimer":
-
-            case "armorsetequip":
-            case "armorsetunequip":
-            case "conquestblockdamage":
-            case "factionupgradelevelup":
-            case "foodlevellost":
-            case "funddeposit":
-            case "globalchallengebegin":
-            case "globalchallengeend":
-            case "globalchallengeparticipate":
-            case "jackpotpurchasetickets":
-            case "kothcapture":
-            case "maskapply":
-            case "maskequip":
-            case "maskunequip":
-            case "mysterymobspawneropen":
-            case "playerclaimenvoycrate":
-            case "playerexpgain":
-            case "playerquestcomplete":
-            case "playerquestexpire":
-            case "playerqueststart":
-            case "playerteleportdelay":
-            case "randomizationscrolluse":
-            case "servercrateclose":
-            case "servercrateopen":
-            case "shoppurchase":
-            case "shopsell": return getEntities((RPEvent) event);
-
             case "coinflipend": return getEntities((CoinFlipEndEvent) event);
-
             case "customenchantproc": return ((CustomEnchantProcEvent) event).getEntities();
             case "fallenheroslain": return getEntities((FallenHeroSlainEvent) event);
             case "mobstackdeplete": return getEntities((MobStackDepleteEvent) event);
-
             case "itemnametaguse": return getEntities("Player", ((ItemNameTagUseEvent) event).getPlayer());
             case "itemlorecrystaluse": return getEntities("Player", ((ItemLoreCrystalUseEvent) event).getPlayer());
 
             case "mcmmoplayerxpgain": return getEntities("Player", ((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getPlayer());
 
             default:
-                sendConsoleMessage("&6[RandomPackage] &cMissing Event Entities for event &f" + name);
-                return new HashMap<>();
+                if(event instanceof RPEvent) {
+                    return getEntities((RPEvent) event);
+                } else if(event instanceof PlayerEvent) {
+                    return getEntities((PlayerEvent) event);
+                } else {
+                    sendConsoleMessage("&6[RandomPackage] &cMissing Event Entities for event &f" + name);
+                    return new HashMap<>();
+                }
         }
     }
 

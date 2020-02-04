@@ -7,6 +7,8 @@ import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
+import me.randomhashtags.randompackage.attribute.EventAttribute;
+import me.randomhashtags.randompackage.attribute.SetSuccessRate;
 import me.randomhashtags.randompackage.attribute.SpawnEntity;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
@@ -71,9 +73,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true)) {
             sender.sendMessage(colorize(getAll(Feature.CUSTOM_ENCHANT_DISABLED).keySet().toString()));
         } else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
-            if(args.length == 0)
+            if(args.length == 0) {
                 viewEnchants(sender, 1);
-            else {
+            } else {
                 final int page = getRemainingInt(args[0]);
                 viewEnchants(sender, page > 0 ? page : 1);
             }
@@ -94,8 +96,14 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         save("custom enchants", "global attributes.yml");
         CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES = getStringList(YamlConfiguration.loadConfiguration(new File(folderString, "global attributes.yml")), "attributes");
 
-        new SpawnEntity().load();
-        new StopEnchant().load();
+        final EventAttribute[] attributes = new EventAttribute[] {
+                new SetSuccessRate(),
+                new SpawnEntity(),
+                new StopEnchant()
+        };
+        for(EventAttribute attribute : attributes) {
+            attribute.load();
+        }
 
         if(!otherdata.getBoolean("saved default custom enchants")) {
             generateDefaultCustomEnchants();

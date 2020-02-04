@@ -64,7 +64,9 @@ public class FactionUpgrades extends EventAttributes {
 
     public static HashMap<String, List<FactionUpgradeInfo>> factionUpgrades;
 
-    public String getIdentifier() { return "FACTION_UPGRADES"; }
+    public String getIdentifier() {
+        return "FACTION_UPGRADES";
+    }
     public void load() {
         if(hookedFactionsUUID()) {
             final long started = System.currentTimeMillis();

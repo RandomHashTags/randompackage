@@ -8,6 +8,10 @@ public abstract class RPEventCancellable extends RPEvent implements Cancellable 
     public RPEventCancellable(Player player) {
         super(player);
     }
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+    public boolean isCancelled() {
+        return cancelled;
+    }
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 }

@@ -22,11 +22,25 @@ public class PendingEventAttribute {
         this.attributeString = attributeString;
     }
 
-    public Event getEvent() { return event; }
-    public EventAttribute getEventAttribute() { return attribute; }
-    public HashMap<String, Entity> getEntities() { return entities; }
-    public HashMap<String, Entity> getKeyEntities() { return keyEntities; }
-    public HashMap<String, Entity> getValueEntities() { return valueEntities; }
-    public HashMap<Entity, String> getRecipientValues() { return recipientValues; }
-    public String getAttributeString() { return attributeString; }
+    public Event getEvent() {
+        return event;
+    }
+    public EventAttribute getEventAttribute() {
+        return attribute;
+    }
+    public HashMap<String, Entity> getEntities() {
+        return entities;
+    }
+    public HashMap<String, Entity> getKeyEntities() {
+        return keyEntities;
+    }
+    public HashMap<String, Entity> getValueEntities() {
+        return valueEntities;
+    }
+    public HashMap<Entity, String> getRecipientValues() {
+        return recipientValues;
+    }
+    public String getAttributeString() {
+        return attributeString;
+    }
 }

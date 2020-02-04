@@ -7,5 +7,7 @@ public abstract class RPEvent extends AbstractEvent {
     public RPEvent(Player player) {
         this.player = player;
     }
-    public Player getPlayer() { return player; }
+    public Player getPlayer() {
+        return player;
+    }
 }

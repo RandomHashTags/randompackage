@@ -5,10 +5,13 @@ import me.randomhashtags.randompackage.addon.file.PathBlackScroll;
 import me.randomhashtags.randompackage.addon.file.PathRandomizationScroll;
 import me.randomhashtags.randompackage.addon.file.PathTransmogScroll;
 import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
-import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.event.BlackScrollUseEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
+import me.randomhashtags.randompackage.event.TransmogScrollUseEvent;
+import me.randomhashtags.randompackage.event.WhiteScrollUseEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +26,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public class Scrolls extends CustomEnchants {
+import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
+
+public class Scrolls extends RPFeature {
     private static Scrolls instance;
     public static Scrolls getScrolls() {
         if(instance == null) instance = new Scrolls();
@@ -35,11 +40,9 @@ public class Scrolls extends CustomEnchants {
 
     private Set<Feature> enabled;
 
-    @Override
     public String getIdentifier() {
         return "SCROLLS";
     }
-    @Override
     public void load() {
         save("addons", "scrolls.yml");
         folder = DATA_FOLDER + SEPARATOR + "addons";
@@ -56,7 +59,6 @@ public class Scrolls extends CustomEnchants {
             tryLoadingScroll(scroll);
         }
     }
-    @Override
     public void unload() {
         for(Feature scroll : new HashSet<>(enabled)) {
             tryUnloadingScroll(scroll);
@@ -182,18 +184,25 @@ public class Scrolls extends CustomEnchants {
         unregister(Feature.SCROLL_RANDOMIZATION);
     }
 
-    public ItemStack applyBlackScroll(ItemStack is, ItemStack blackscroll, BlackScroll bs) {
-        final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);
+    public ItemStack applyBlackScroll(Player player, ItemStack is, ItemStack blackscroll, BlackScroll scroll) {
+        final HashMap<CustomEnchant, Integer> enchants = getCustomEnchants().getEnchantsOnItem(is);
         if(is != null && enchants.size() > 0) {
             final Set<CustomEnchant> key = enchants.keySet();
             CustomEnchant enchant = (CustomEnchant) key.toArray()[RANDOM.nextInt(key.size())];
-            final List<EnchantRarity> rarityList = bs.getAppliesToRarities();
-            int percentSuccess = -1;
+            final List<EnchantRarity> rarityList = scroll.getAppliesToRarities();
+            int successRate = -1;
             for(String string : blackscroll.getItemMeta().getLore()) {
                 if(getRemainingInt(string) != -1) {
-                    percentSuccess = getRemainingInt(string);
+                    successRate = getRemainingInt(string);
                 }
             }
+            final BlackScrollUseEvent event = new BlackScrollUseEvent(player, scroll, is, successRate);
+            PLUGIN_MANAGER.callEvent(event);
+            if(event.isCancelled()) {
+                return null;
+            }
+            successRate = event.getSuccessRate();
+
             for(int f = 1; f <= 5; f++) {
                 final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
                 if(rarityList.contains(rarity)) {
@@ -207,17 +216,19 @@ public class Scrolls extends CustomEnchants {
                             enchantslot = i;
                         }
                     }
-                    if(enchantslot == -1) return null;
+                    if(enchantslot == -1) {
+                        return null;
+                    }
                     lore.remove(enchantslot);
                     itemMeta.setLore(lore); lore.clear();
                     is.setItemMeta(itemMeta);
-                    return getRevealedItem(enchant, enchantlevel, percentSuccess, 100, true, true).clone();
+                    return getCustomEnchants().getRevealedItem(enchant, enchantlevel, successRate, 100, true, true).clone();
                 } else {
                     enchant = (CustomEnchant) key.toArray()[RANDOM.nextInt(key.size())];
                 }
             }
         }
-        return item;
+        return null;
     }
     public boolean applyRandomizationScroll(Player player, ItemStack item, RandomizationScroll scroll) {
         final CustomEnchant enchant = valueOfCustomEnchant(item);
@@ -226,10 +237,14 @@ public class Scrolls extends CustomEnchants {
         if(meta != null && rarity != null && scroll.getAppliesToRarities().contains(rarity)) {
             final String success = rarity.getSuccess(), destroy = rarity.getDestroy();
             int newSuccess = RANDOM.nextInt(101), newDestroy = RANDOM.nextInt(101);
-            final RandomizationScrollUseEvent useEvent = new RandomizationScrollUseEvent(player, enchant, getEnchantmentLevel(meta.getDisplayName()), scroll, newSuccess, newDestroy);
-            PLUGIN_MANAGER.callEvent(useEvent);
-            newSuccess = useEvent.getNewSuccess();
-            newDestroy = useEvent.getNewDestroy();
+            final RandomizationScrollUseEvent event = new RandomizationScrollUseEvent(player, scroll, item, enchant, getCustomEnchants().getEnchantmentLevel(meta.getDisplayName()), newSuccess, newDestroy);
+            PLUGIN_MANAGER.callEvent(event);
+            if(event.isCancelled()) {
+                return false;
+            }
+
+            newSuccess = event.getNewSuccess();
+            newDestroy = event.getNewDestroy();
             final List<String> lore = new ArrayList<>();
             for(String string : meta.getLore()) {
                 final String remainingInt = "" + getRemainingInt(string);
@@ -247,11 +262,22 @@ public class Scrolls extends CustomEnchants {
         return false;
     }
     public boolean applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
+        return applyTransmogScroll(null, is, scroll);
+    }
+    public boolean applyTransmogScroll(Player player, ItemStack is, TransmogScroll scroll) {
         boolean did = true;
         if(is != null && scroll != null) {
             did = scroll.canBeApplied(is);
             if(did) {
-                final HashMap<CustomEnchant, Integer> enchants = getEnchantsOnItem(is);
+                if(player != null) {
+                    final TransmogScrollUseEvent event = new TransmogScrollUseEvent(player, scroll, is);
+                    PLUGIN_MANAGER.callEvent(event);
+                    if(event.isCancelled()) {
+                        return false;
+                    }
+                }
+
+                final HashMap<CustomEnchant, Integer> enchants = getCustomEnchants().getEnchantsOnItem(is);
                 final int size = enchants.size();
                 final ItemMeta itemMeta = is.getItemMeta();
                 final List<String> lore = new ArrayList<>();
@@ -321,6 +347,11 @@ public class Scrolls extends CustomEnchants {
     public boolean applyWhiteScroll(Player player, ItemStack is, WhiteScroll scroll) {
         final boolean did = player != null && is != null && scroll != null && scroll.canBeApplied(is);
         if(did) {
+            final WhiteScrollUseEvent e = new WhiteScrollUseEvent(player, scroll, is);
+            PLUGIN_MANAGER.callEvent(e);
+            if(e.isCancelled()) {
+                return false;
+            }
             final String requiredString = scroll.getRequiredWhiteScroll();
             final WhiteScroll required = requiredString != null ? getWhiteScroll(requiredString) : null;
             final ItemMeta itemMeta = is.getItemMeta();
@@ -362,12 +393,17 @@ public class Scrolls extends CustomEnchants {
             final WhiteScroll whitescroll = valueOfWhiteScroll(cursor);
             if(blackscroll != null) {
                 final boolean hasMeta = item.hasItemMeta() && itemMeta.hasLore();
-                final HashMap<CustomEnchant, Integer> enchantsOnItem = hasMeta ? getEnchantsOnItem(current) : null;
+                final HashMap<CustomEnchant, Integer> enchantsOnItem = hasMeta ? getCustomEnchants().getEnchantsOnItem(current) : null;
                 if(enchantsOnItem != null && !enchantsOnItem.isEmpty()) {
-                    giveItem(player, applyBlackScroll(current, cursor, blackscroll));
-                    if(itemMeta.hasDisplayName() && isEnabled(Feature.SCROLL_TRANSMOG)) {
-                        final int size = enchantsOnItem.size();
-                        updateTransmogScroll(current, size, size-1);
+                    final ItemStack scroll = applyBlackScroll(player, current, cursor, blackscroll);
+                    if(scroll != null) {
+                        giveItem(player, scroll);
+                        if(itemMeta.hasDisplayName() && isEnabled(Feature.SCROLL_TRANSMOG)) {
+                            final int size = enchantsOnItem.size();
+                            updateTransmogScroll(current, size, size-1);
+                        }
+                    } else {
+                        return;
                     }
                 } else {
                     return;
@@ -377,7 +413,7 @@ public class Scrolls extends CustomEnchants {
                     return;
                 }
             } else if(transmogscroll != null) {
-                if(!applyTransmogScroll(current, transmogscroll)) {
+                if(!applyTransmogScroll(player, current, transmogscroll)) {
                     return;
                 }
             } else if(whitescroll != null) {
@@ -390,11 +426,11 @@ public class Scrolls extends CustomEnchants {
 
             event.setCancelled(true);
             event.setCurrentItem(current);
-            final int a = cursor.getAmount();
-            if(a == 1) {
+            final int amount = cursor.getAmount();
+            if(amount == 1) {
                 event.setCursor(new ItemStack(Material.AIR));
             } else {
-                cursor.setAmount(a-1);
+                cursor.setAmount(amount-1);
             }
             player.updateInventory();
         }

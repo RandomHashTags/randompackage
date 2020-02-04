@@ -44,4 +44,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;"
+  - "PlayerInteract;PlayerSetCombo=INVENTORY_PET_BLACKSCROLL:{LEVEL}"

@@ -32,3 +32,8 @@ items:
     - "&7increase its level by +1 and trigger its"
     - "&7ability cooldown."
 #
+global attributes:
+  - "BlackScrollUse;PlayerHasCombo=INVENTORY_PET_BLACKSCROLL;PlayerSetSuccessRate=rate+getPlayerCombo(INVENTORY_PET_BLACKSCROLL);PlayerComboStop=INVENTORY_PET_BLACKSCROLL"
+  - "CustomEnchantApply;PlayerHasCombo=INVENTORY_PET_ENCHANTER;PlayerSetSuccess=rate+getPlayerCombo(INVENTORY_PET_ENCHANTER);PlayerComboStop=INVENTORY_PET_ENCHANTER"
+  - "PlayerCommandPreprocess;PlayerIsInList=INVENTORY_PET_STRONGHOLD_SELL;cancelled=true;Command=/sh sell;SetAllowed=true"
+  - "EntityDeath;KillerIsInList=INVENTORY_PET_XP_BOOSTER;SetDroppedExp=xp*getKillerCombo(INVENTORY_PET_XP_BOOSTER)"

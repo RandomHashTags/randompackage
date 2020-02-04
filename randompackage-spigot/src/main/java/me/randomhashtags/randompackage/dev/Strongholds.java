@@ -9,7 +9,6 @@ import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,7 +41,6 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     private UInventory gui;
     private int captureTask;
 
-    public String getIdentifier() { return "STRONGHOLDS"; }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
@@ -63,6 +61,9 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    public String getIdentifier() {
+        return "STRONGHOLDS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("strongholds", "_settings.yml");
@@ -91,7 +92,7 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             }
         }, 20, 20);
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.STRONGHOLD).size() + " Strongholds &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.STRONGHOLD).size() + " Strongholds", started);
     }
     public void unload() {
         SCHEDULER.cancelTask(captureTask);
@@ -125,15 +126,14 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
-        final Block b = event.getBlock();
-        final Location l = b.getLocation();
-        for(Stronghold s : getAllStrongholds().values()) {
-            final ActiveStronghold a = s.getActiveStronghold();
-            if(a != null && s.getZone().contains(l)) {
-                final List<PolyBoundary> walls = a.getRepairableWalls();
+        final Location loc = event.getBlockPlaced().getLocation();
+        for(Stronghold stronghold : getAllStrongholds().values()) {
+            final ActiveStronghold active = stronghold.getActiveStronghold();
+            if(active != null && stronghold.getZone().contains(loc)) {
+                final List<PolyBoundary> walls = active.getRepairableWalls();
                 for(PolyBoundary p : walls) {
-                    if(p.contains(l)) {
-                        a.getBlockDurability().put(l, s.getBlockDurability());
+                    if(p.contains(loc)) {
+                        active.getBlockDurability().put(loc, stronghold.getBlockDurability());
                         break;
                     }
                 }
@@ -144,21 +144,20 @@ public class Strongholds extends RPFeature implements CommandExecutor {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockBreakEvent(BlockBreakEvent event) {
         final Player player = event.getPlayer();
-        final Block b = event.getBlock();
-        final Location l = b.getLocation();
-        for(Stronghold s : getAllStrongholds().values()) {
-            final ActiveStronghold a = s.getActiveStronghold();
-            if(a != null && s.getZone().contains(l)) {
+        final Location loc = event.getBlock().getLocation();
+        for(Stronghold stronghold : getAllStrongholds().values()) {
+            final ActiveStronghold active = stronghold.getActiveStronghold();
+            if(active != null && stronghold.getZone().contains(loc)) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final HashMap<Location, Integer> durability = a.getBlockDurability();
-                final int bd = durability.getOrDefault(l, -1);
-                if(bd != -1) {
-                    final int next = bd-1;
+                final HashMap<Location, Integer> durability = active.getBlockDurability();
+                final int currentDurability = durability.getOrDefault(loc, -1);
+                if(currentDurability != -1) {
+                    final int next = currentDurability-1;
                     if(next == 0) {
-                        l.getWorld().getBlockAt(l).setType(Material.AIR);
+                        loc.getWorld().getBlockAt(loc).setType(Material.AIR);
                     } else {
-                        durability.put(l, next);
+                        durability.put(loc, next);
                     }
                 }
                 break;

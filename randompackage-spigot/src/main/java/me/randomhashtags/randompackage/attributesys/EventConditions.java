@@ -584,7 +584,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                     final EnchantRarity rarity = enchant != null ? valueOfCustomEnchantRarity(enchant) : null;
                     identifier = rarity != null ? rarity.getIdentifier() : null;
                 } else if(event instanceof RandomizationScrollUseEvent) {
-                    identifier = ((RandomizationScrollUseEvent) event).scroll.getIdentifier();
+                    identifier = ((RandomizationScrollUseEvent) event).getScroll().getIdentifier();
                 } else if(event instanceof ServerCrateOpenEvent) {
                     identifier = ((ServerCrateOpenEvent) event).crate.getIdentifier();
                 }

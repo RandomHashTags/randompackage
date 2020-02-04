@@ -256,7 +256,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         return entities;
     }
     private TObject replaceAllNearbyUsages(String string, List<String> entityKeys, HashMap<String, Entity> entities, String value1, boolean useStringAsValue) {
-        final String og = string;
+        final String original = string;
         string = string.toUpperCase();
         final HashMap<String, String> entityValues = new HashMap<>();
         boolean did = false;
@@ -285,13 +285,13 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     string = string.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
                 }
                 did = true;
-            } else if(string.contains(E) && !string.contains(":" + E) && !string.startsWith(E + ":") && !string.startsWith("@" + E + ":")) {
-                string = string.replace(E, "");
+            } else if(original.contains(entity) && !original.contains(":" + entity) && !original.startsWith(entity + ":") && !original.startsWith("@" + entity + ":") && !original.contains("get" + entity)) {
+                string = original.replace(entity, "").toUpperCase();
                 entityValues.put(entity, value1);
                 did = true;
             }
         }
-        return new TObject(did ? string : og, entityValues, entities);
+        return new TObject(did ? string : original, entityValues, entities);
     }
 
     private boolean tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes) {
@@ -326,12 +326,12 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                                     conditions.add(string);
                                 } else {
                                     final HashMap<Entity, String> recipientValues = new HashMap<>();
-                                    final HashMap<String, Entity> entitiesIn = getEntitiesIn(attributeKey, entities, entityKeys);
-                                    for(Entity entity : entitiesIn.values()) {
+                                    final HashMap<String, Entity> entitiesInKey = getEntitiesIn(attributeKey, entities, entityKeys);
+                                    for(Entity entity : entitiesInKey.values()) {
                                         recipientValues.put(entity, value);
                                     }
                                     recipientValues.put(null, value);
-                                    final PendingEventAttribute pending = new PendingEventAttribute(event, attribute, entities, entitiesIn, (HashMap<String, Entity>) valueObj.getThird(), recipientValues, string);
+                                    final PendingEventAttribute pending = new PendingEventAttribute(event, attribute, entities, entitiesInKey, (HashMap<String, Entity>) valueObj.getThird(), recipientValues, string);
                                     execute.add(pending);
                                 }
                             }
@@ -350,8 +350,8 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         final String[] array = getReplacements(event);
         list.addAll(Arrays.asList(replacements));
         list.addAll(Arrays.asList(array));
-        final String[] d = list.toArray(new String[replacements.length+array.length]);
-        return trigger(event, getEntities(event), attributes, d);
+        final String[] finalArray = list.toArray(new String[replacements.length+array.length]);
+        return trigger(event, getEntities(event), attributes, finalArray);
     }
     public boolean trigger(Event event, HashMap<String, Entity> entities, List<String> attributes, String...replacements) {
         if(event != null && attributes != null && !attributes.isEmpty() && entities != null) {
@@ -403,8 +403,9 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
     }
     public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
+        final String[] eventReplacements = getReplacements(event);
         try {
-            if(trigger(event, entities, globalattributes)) {
+            if(trigger(event, entities, globalattributes, eventReplacements)) {
             }
         } catch (Exception error) {
             sendConsoleMessage("&6[RandomPackage] &cERROR &eGenerated a global attribute error! &e(" + RP_VERSION + ")");
@@ -428,15 +429,17 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
                     //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getIdentifier() + ";event=" + event.getEventName() + ";onCorrectItem=" + onCorrectItem);
                     if(onCorrectItem && enchant.canProcInWorld(world)) {
                         final int lvl = enchants.get(enchant);
-                        final String[] replacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacementz = getReplacements(getReplacements(event), replacements);
-
+                        final String[] enchantReplacements = new String[] {"level", Integer.toString(lvl), "{ENCHANT}", enchant.getName() + " " + toRoman(lvl)}, replacements = getReplacements(eventReplacements, enchantReplacements);
+                        final List<String> attributes = enchant.getAttributes();
                         try {
-                            if(trigger(event, entities, replaceCE(lvl, enchant.getAttributes()), replacementz)) {
+                            if(trigger(event, entities, replaceCE(lvl, attributes), replacements)) {
                                 final CustomEnchantProcEvent proc = new CustomEnchantProcEvent(player, event, entities, enchant, lvl, is);
                                 PLUGIN_MANAGER.callEvent(proc);
                             }
                         } catch (Exception error) {
                             sendConsoleMessage("&6[RandomPackage] &cERROR &eCustom Enchant with identifier &f" + enchant.getIdentifier() + " &egenerated an attribute error! &e(" + RP_VERSION + ")");
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eReplacements=&f" + Arrays.toString(replacements));
+                            sendConsoleMessage("&6[RandomPackage] &cERROR &eAttributes=&f" + attributes);
                             error.printStackTrace();
                         }
                     }

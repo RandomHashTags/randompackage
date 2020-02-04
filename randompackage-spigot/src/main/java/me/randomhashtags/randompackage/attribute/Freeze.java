@@ -31,24 +31,24 @@ public class Freeze extends AbstractEventAttribute {
         final PlayerQuitEvent q = event instanceof PlayerQuitEvent ? (PlayerQuitEvent) event : null;
         if(q != null) {
             final Player player = q.getPlayer();
-            final TObject t = tasks.getOrDefault(player, null);
-            if(t != null) {
-                SCHEDULER.cancelTask((int) t.getFirst());
-                player.setWalkSpeed((float) t.getSecond());
+            final TObject tobj = tasks.getOrDefault(player, null);
+            if(tobj != null) {
+                SCHEDULER.cancelTask((int) tobj.getFirst());
+                player.setWalkSpeed((float) tobj.getSecond());
                 tasks.remove(player);
             }
         }
 
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
-        for(Entity e : recipientValues.keySet()) {
-            final Player player = e instanceof Player ? (Player) e : null;
+        for(Entity entity : recipientValues.keySet()) {
+            final Player player = entity instanceof Player ? (Player) entity : null;
             if(player != null) {
-                final float ws = player.getWalkSpeed();
+                final float previousWalkSpeed = player.getWalkSpeed();
                 player.setWalkSpeed(0);
                 final TObject t = new TObject(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                    player.setWalkSpeed(ws);
+                    player.setWalkSpeed(previousWalkSpeed);
                     tasks.remove(player);
-                }, (int) evaluate(recipientValues.get(e))), ws, null);
+                }, (int) evaluate(recipientValues.get(entity))), previousWalkSpeed, null);
                 tasks.put(player, t);
             }
         }

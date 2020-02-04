@@ -65,7 +65,10 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         unregister(Feature.TRINKET);
     }
 
-    public HashMap<Trinket, String> isTrinket(ItemStack is) {
+    public boolean isTrinket(ItemStack is) {
+        return getRPItemStackValue(is, "TrinketInfo") != null;
+    }
+    public HashMap<Trinket, String> getTrinketsApplied(ItemStack is) {
         final HashMap<Trinket, String> info = new HashMap<>();
         final String value = getRPItemStackValue(is, "TrinketInfo");
         if(value != null) {
@@ -77,7 +80,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
     private void triggerPassive(Event event, Player player) {
         for(ItemStack is : player.getInventory().getContents()) {
             if(is != null) {
-                final HashMap<Trinket, String> trinkets = isTrinket(is);
+                final HashMap<Trinket, String> trinkets = getTrinketsApplied(is);
                 for(Trinket trinket : trinkets.keySet()) {
                     final String s = trinket.getSetting("passive");
                     if(s != null && s.equalsIgnoreCase("true") && trigger(event, trinket.getAttributes())) {
@@ -88,12 +91,12 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         }
     }
     private byte didTriggerTrinket(Event event, ItemStack is, Player player) {
-        final String id = getRPItemStackValue(is, "TrinketInfo");
-        if(id != null) {
-            final String[] info = id.split(":");
-            final String identifier = info[0];
+        final String info = getRPItemStackValue(is, "TrinketInfo");
+        if(info != null) {
+            final String[] values = info.split(":");
+            final String identifier = values[0];
             final Trinket trinket = getTrinket(identifier);
-            final long expiration = Long.parseLong(info[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+            final long expiration = Long.parseLong(values[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
 
             if(remainingtime <= 0) {
                 if(trigger(event, trinket.getAttributes())) {

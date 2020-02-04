@@ -96,10 +96,12 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		return true;
 	}
 
+	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();
-	    new IncreaseGlobalChallenge().load();
 		registerEventAttributeListener(this);
+	    new IncreaseGlobalChallenge().load();
+
 		save("global challenges", "_settings.yml");
 		save("_Data", "global challenges.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "global challenges", "_settings.yml"));
@@ -140,6 +142,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		sendConsoleDidLoadFeature(getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes", started);
 		reloadChallenges();
 	}
+	@Override
 	public void unload() {
 		data.set("active global challenges", null);
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
@@ -155,11 +158,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 
 		save();
-
 		if(mcmmoChallenges != null) {
             HandlerList.unregisterAll(mcmmoChallenges);
         }
-
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.active = null;
 		unregisterEventAttributeListener(this);

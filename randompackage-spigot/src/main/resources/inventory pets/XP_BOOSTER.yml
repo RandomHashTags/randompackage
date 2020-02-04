@@ -39,7 +39,7 @@ item:
   - " "
   - "&f&lAbility"
   - "&7Gain a {VALUE_1}x Vanilla XP"
-  - "&7increase for {VALUE_2}!"
+  - "&7increase for {VALUE_2}s!"
   - " "
   - "&f&lCooldown"
   - " &7{COOLDOWN}"
@@ -52,5 +52,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "PlayerInteract;PlayerAddToList=PET_XP_BOOSTER;wait=20*60*{VALUE_2};PlayerRemoveFromList=PET_XP_BOOSTER"
-  - "EntityDeath;KillerIsInList=PET_XP_BOOSTER;SetDroppedExp=xp*1.25+(level-1)*0.194444444444"
+  - "PlayerInteract;PlayerSetCombo=INVENTORY_PET_XP_BOOSTER:{VALUE_1};Wait=20*{VALUE_2};PlayerComboStop=INVENTORY_PET_XP_BOOSTER"

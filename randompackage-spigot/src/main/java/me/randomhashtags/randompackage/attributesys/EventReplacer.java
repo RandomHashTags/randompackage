@@ -20,9 +20,9 @@ public interface EventReplacer extends Combo, Mathable, UVersionable, RPValues {
         if(string != null) {
             if(valueReplacements != null) {
                 for(String s : valueReplacements.keySet()) {
-                    final String r = valueReplacements.get(s);
-                    if(r != null) {
-                        string = string.replace(s, r);
+                    final String replacement = valueReplacements.get(s);
+                    if(replacement != null) {
+                        string = string.replace(s, replacement);
                     }
                 }
             }

@@ -42,4 +42,4 @@ item:
   - " &7({XP}/{COMPLETION})"
 #
 attributes:
-  - "CustomEnchantApply;SetSuccess=success+1"
+  - "PlayerInteract;PlayerSetCombo=INVENTORY_PET_ENCHANTER:{LEVEL}"

@@ -18,10 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +84,10 @@ public class EACoreListener extends EventExecutor implements Listener {
         callEventAttributeListeners(event);
     }
 
+    /*
+     * Vanilla Listeners
+     */
+
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         callEventAttributeListeners(event);
@@ -120,20 +121,25 @@ public class EACoreListener extends EventExecutor implements Listener {
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
         callEventAttributeListeners(event);
     }
+
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerFishEvent(PlayerFishEvent event) {
+    private void playerAnimationEvent(PlayerAnimationEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerItemDamageEvent(PlayerItemDamageEvent event) {
+    private void playerBedEnterEvent(PlayerBedEnterEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerJoinEvent(PlayerJoinEvent event) {
+    private void playerBedLeaveEvent(PlayerBedLeaveEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void playerQuitEvent(PlayerQuitEvent event) {
+    private void playerCommandPreProcessEvent(PlayerCommandPreprocessEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerDropItemEvent(PlayerDropItemEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -141,14 +147,72 @@ public class EACoreListener extends EventExecutor implements Listener {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerFishEvent(PlayerFishEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerInteractEvent(PlayerInteractEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerItemConsumeEvent(PlayerItemConsumeEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerItemDamageEvent(PlayerItemDamageEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerItemHeldEvent(PlayerItemHeldEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerJoinEvent(PlayerJoinEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerPickupItemEvent(PlayerPickupItemEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerQuitEvent(PlayerQuitEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerResourcePackStatusEvent(PlayerResourcePackStatusEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerRespawnEvent(PlayerRespawnEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerToggleFlightEvent(PlayerToggleFlightEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerToggleSneakEvent(PlayerToggleSneakEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerToggleSprintEvent(PlayerToggleSprintEvent event) {
+        callEventAttributeListeners(event);
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void projectileLaunchEvent(ProjectileLaunchEvent event) {
         callEventAttributeListeners(event);
     }
     /*
-     * RandomPackage Events
+     * RandomPackage Listeners
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     private void alchemistExchangeEvent(AlchemistExchangeEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void blackScrollUseEvent(BlackScrollUseEvent event) {
         callEventAttributeListeners(event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -221,6 +285,14 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void tinkererTradeEvent(TinkererTradeEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void transmogScrollUseEvent(TransmogScrollUseEvent event) {
+        callEventAttributeListeners(event);
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void whiteScrollUseEvent(WhiteScrollUseEvent event) {
         callEventAttributeListeners(event);
     }
 
