@@ -68,11 +68,12 @@ public class Fireballs extends CustomEnchants {
             event.setCancelled(true);
             removeItem(player, is, 1);
             ItemStack reward = fireball.getRevealedItem(true);
-            if(reward == null) {
+            final boolean isMystery = reward == null;
+            if(isMystery) {
                 reward = mysterydust.clone();
-                playParticle(config, "particles.dust.default.mystery", player.getEyeLocation(), 15);
-                playSound(config, "sounds.dust.reveal dust", player, player.getLocation(), false);
             }
+            playParticle(config, "particles.dust.default." + (isMystery ? "mystery" : "regular"), player.getEyeLocation(), 15);
+            playSound(config, "sounds.dust.reveal" + (isMystery ? " mystery" : "") + " dust", player, player.getLocation(), false);
             giveItem(player, reward);
         }
     }

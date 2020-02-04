@@ -63,7 +63,7 @@ fireballs:
     exchangeable rarities: "UNIQUE"
     reveals:
       - "chance=5;UNIQUE_PRIMAL"
-      - "chance=10;UNIQUE_PRIMAL"
+      - "chance=10;UNIQUE_REGULAR"
     item: "fireball"
     name: "&a&lUnique Secret Dust"
     lore:
