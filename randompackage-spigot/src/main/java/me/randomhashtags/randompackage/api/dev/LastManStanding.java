@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.api.dev;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +31,9 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     private HashMap<Long, List<String>> rewards;
     private int task;
 
-    public String getIdentifier() { return "LAST_MAN_STANDING"; }
+    public String getIdentifier() {
+        return "LAST_MAN_STANDING";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final int l = args.length;
         if(l == 0) {
@@ -54,16 +55,13 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         final long started = System.currentTimeMillis();
         save(null, "last man standing.yml");
         if(otherdata.get("last man standing.boundary") != null) {
-            final String[] a = otherdata.getString("last man standing.boundary").split("\\|");
-            boundary = new PolyBoundary(toLocation(a[0]), Integer.parseInt(a[1]));
+            final String[] values = otherdata.getString("last man standing.boundary").split("\\|");
+            boundary = new PolyBoundary(toLocation(values[0]), Integer.parseInt(values[1]));
         }
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "last man standing.yml"));
         rewards = new HashMap<>();
-        final ConfigurationSection c = config.getConfigurationSection("rewards");
-        if(c != null) {
-            for(String s : c.getKeys(false)) {
-                rewards.put(Long.parseLong(s), config.getStringList("rewards." + s));
-            }
+        for(String s : getConfigurationSectionKeys(config, "rewards", false)) {
+            rewards.put(Long.parseLong(s), config.getStringList("rewards." + s));
         }
 
         playerStartTimes = new HashMap<>();

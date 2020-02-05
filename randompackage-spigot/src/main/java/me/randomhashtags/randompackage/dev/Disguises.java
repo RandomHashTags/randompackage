@@ -10,7 +10,6 @@ import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,7 +45,9 @@ public class Disguises extends RPFeature {
         return true;
     }
 
-    public String getIdentifier() { return "DISGUISES"; }
+    public String getIdentifier() {
+        return "DISGUISES";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
@@ -58,25 +59,21 @@ public class Disguises extends RPFeature {
         final Inventory inv = inventory.getInventory();
         slots = new HashMap<>();
 
-        final ConfigurationSection cs = config.getConfigurationSection("entity types");
-        if(cs != null) {
-            for(String s : cs.getKeys(false)) {
-                final String path = "entity types." + s + ".";
-                final int slot = config.getInt(path + "slot");
-                new PathDisguise(s, slot, colorize(config.getString(path + "name")));
-                slots.put(slot, getDisguise(s));
-                inv.setItem(slot, item);
-            }
+        for(String s : getConfigurationSectionKeys(config, "entity types", false)) {
+            final String path = "entity types." + s + ".";
+            final int slot = config.getInt(path + "slot");
+            new PathDisguise(s, slot, colorize(config.getString(path + "name")));
+            slots.put(slot, getDisguise(s));
+            inv.setItem(slot, item);
         }
 
         subDisguise = new HashMap<>();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DISGUISE).size() + " Disguises &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleDidLoadFeature(getAll(Feature.DISGUISE).size() + " Disguises", started);
     }
     public void unload() {
         for(Player player : new ArrayList<>(subDisguise.keySet())) {
             player.closeInventory();
         }
-
         unregister(Feature.DISGUISE);
     }
 
@@ -122,9 +119,12 @@ public class Disguises extends RPFeature {
         top.setContents(type.getContents());
         player.updateInventory();
     }
-
-    public void disguise(@NotNull Player player, @Nullable Disguise disguise) { setDisguise(player, EntityType.valueOf(disguise.getEntityType())); }
-    public void undisguise(@NotNull Player player) { setDisguise(player, null); }
+    public void disguise(@NotNull Player player, @Nullable Disguise disguise) {
+        setDisguise(player, EntityType.valueOf(disguise.getEntityType()));
+    }
+    public void undisguise(@NotNull Player player) {
+        setDisguise(player, null);
+    }
     private void setDisguise(@NotNull Player player, EntityType disguise) {
         final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
         final DisguiseStats stats = pdata.getDisguiseStats();
@@ -134,7 +134,6 @@ public class Disguises extends RPFeature {
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
     }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
@@ -142,12 +141,14 @@ public class Disguises extends RPFeature {
         if(player.equals(top.getHolder())) {
             final String title = event.getView().getTitle();
             final boolean menu = title.equals(inventory.getTitle()), sub = subDisguise.containsKey(player);
-            if(!menu && !sub) return;
-            final int r = event.getRawSlot();
+            if(!menu && !sub) {
+                return;
+            }
+            final int slot = event.getRawSlot();
             event.setCancelled(true);
             player.updateInventory();
-            if(menu && slots.containsKey(r)) {
-                viewSubDisguises(player, slots.get(r));
+            if(menu && slots.containsKey(slot)) {
+                viewSubDisguises(player, slots.get(slot));
             } else if(sub) {
             }
         }
@@ -156,7 +157,6 @@ public class Disguises extends RPFeature {
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         subDisguise.remove(event.getPlayer());
     }
-
     @EventHandler
     private void playerJoinEvent(PlayerJoinEvent event) {
         final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
@@ -168,7 +168,6 @@ public class Disguises extends RPFeature {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageEvent(EntityDamageEvent event) {
     }
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void playerMoveEvent(PlayerMoveEvent event) {
     }

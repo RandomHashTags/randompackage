@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage.dev;
+package me.randomhashtags.randompackage.api;
 
 import com.sun.istack.internal.NotNull;
 import me.randomhashtags.randompackage.addon.ItemSkin;
@@ -105,14 +105,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
         return materials.get(skin.getMaterial());
     }
     public ItemSkin valueOfItemSkin(@NotNull ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            for(ItemSkin skin : getAllItemSkins().values()) {
-                if(cache.containsKey(skin) && is.isSimilar(cache.get(skin))) {
-                    return skin;
-                }
-            }
-        }
-        return null;
+        return isItemSkin(is) ? getItemSkin(getRPItemStackValue(is, "AppliedItemSkin")) : null;
     }
     public ItemSkin valueOfItemSkinApplied(@NotNull ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
@@ -127,9 +120,8 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
     }
 
     public boolean isItemSkin(@NotNull ItemStack is) {
-        return getRPItemStackValue(is, "isItemSkin") != null;
+        return getRPItemStackValue(is, "AppliedItemSkin") != null;
     }
-
     public boolean applyItemSkin(@NotNull ItemStack is, @NotNull ItemSkin skin) {
         if(isItemSkin(is) && is.getType().name().endsWith(skin.getMaterial())) {
             final ItemMeta meta = is.getItemMeta();
@@ -137,7 +129,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
             lore.add(appliedLore.replace("{NAME}", skin.getName()));
             meta.setLore(lore); lore.clear();
             is.setItemMeta(meta);
-            addRPItemStackValue(is, "isItemSkin", "true");
+            addRPItemStackValue(is, "AppliedItemSkin", skin.getIdentifier());
             return true;
         }
         return false;
@@ -148,7 +140,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
             final List<String> lore = meta.getLore();
             lore.remove(appliedLore.replace("{NAME}", appliedSkin.getName()));
             meta.setLore(lore);
-            removeRPItemStackValue(is, "isItemSkin");
+            removeRPItemStackValue(is, "AppliedItemSkin");
             return true;
         }
         return false;

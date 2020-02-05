@@ -259,7 +259,9 @@ public class Masks extends CustomEnchants {
     public void apply(Mask m, ItemStack is) {
         if(m != null && is != null) {
             itemMeta = is.getItemMeta(); lore.clear();
-            if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+            if(itemMeta.hasLore()) {
+                lore.addAll(itemMeta.getLore());
+            }
             lore.add(m.getApplied());
             itemMeta.setLore(lore); lore.clear();
             is.setItemMeta(itemMeta);

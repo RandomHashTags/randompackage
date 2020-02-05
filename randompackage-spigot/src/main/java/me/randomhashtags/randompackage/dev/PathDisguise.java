@@ -12,10 +12,20 @@ public class PathDisguise extends RPAddon implements Disguise {
         this.name = name;
         register(Feature.DISGUISE, this);
     }
-    public String getIdentifier() { return identifier; }
-    public String getEntityType() { return identifier; }
+    public String getIdentifier() {
+        return identifier;
+    }
+    public String getEntityType() {
+        return identifier;
+    }
 
-    public int getSlot() { return slot; }
-    public String getName() { return name; }
-    public boolean allowsBaby() { return Disguises.getDisguises().config.getBoolean("entity types." + identifier + ".baby"); }
+    public int getSlot() {
+        return slot;
+    }
+    public String getName() {
+        return name;
+    }
+    public boolean allowsBaby() {
+        return Disguises.getDisguises().config.getBoolean("entity types." + identifier + ".baby");
+    }
 }

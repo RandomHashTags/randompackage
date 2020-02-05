@@ -15,11 +15,25 @@ public class ActiveDungeon {
         this.players = players;
         this.objective = objective;
     }
-    public Dungeon getType() { return type; }
-    public long getStartedTime() { return startedTime; }
-    public List<Player> getPlayers() { return players; }
-    public long getObjectiveStartTime() { return objectiveStartTime; }
-    public void setObjectiveStartTime(long objectiveStartTime) { this.objectiveStartTime = objectiveStartTime; }
-    public DungeonObjective getObjective() { return objective; }
-    public void setObjective(DungeonObjective objective) { this.objective = objective; }
+    public Dungeon getType() {
+        return type;
+    }
+    public long getStartedTime() {
+        return startedTime;
+    }
+    public List<Player> getPlayers() {
+        return players;
+    }
+    public long getObjectiveStartTime() {
+        return objectiveStartTime;
+    }
+    public void setObjectiveStartTime(long objectiveStartTime) {
+        this.objectiveStartTime = objectiveStartTime;
+    }
+    public DungeonObjective getObjective() {
+        return objective;
+    }
+    public void setObjective(DungeonObjective objective) {
+        this.objective = objective;
+    }
 }

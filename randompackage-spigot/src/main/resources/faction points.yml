@@ -21,6 +21,8 @@ messages:
   #
   cannot afford faction points:
     - "&c&l(!)&r &cYou cannot afford {AMOUNT}x Faction Points for &l$&r&c{PRICE}!"
+  purchased faction points:
+    - ""
   #
   view points:
     - "&a&l{FACTION}'s Faction Points:&r &a&n{POINTS}"
@@ -31,46 +33,43 @@ item:
   item: "paper"
   name: "&6&lFaction Points Note&r &7(Right Click)"
   lore:
-  - "&6Value &f{VALUE}"
+  - "&6Value &f{POINTS}"
   - "&7Click to apply faction points"
   - "&7to your faction's /f top value!"
 #
-purchase:
+settings:
+  daily limit: 1372
+  cost per point: 100000
+#
+gui:
   title: "Purchase Faction Points"
   size: 9
+  display:
+    item: "paper"
+    name: "&a&l{POINTS} Faction Points"
+    lore:
+      - "&7Click to purchase &a{POINTS}&7x Faction Points"
+      - "&7for &a&l$&r&a{PRICE}&7!"
+      - " "
+      - "&a&lCurrent Faction Points"
+      - " &f{POINTS}"
+      - " "
+      - "&c&lDaily Purchases"
+      - " &f{DAILY_BOUGHT} / {DAILY_LIMIT}"
+      - " "
+      - " &cDaily limit resets in {DAILY_LIMIT_RESETS_IN}"
+      - " "
+      - "&a&lWhat are Faction Points?"
+      - "&7Faction points are used in /f top"
+      - "&7to determine the #1 Faction!"
   #
-  max daily purchases: 1824
-  cost per point: 100000
-  #
-  added lore:
-    - "&7Click to purchase &a{AMOUNT}&7x Faction Points"
-    - "&7for &a&l$&r&a{PRICE}&7!"
-    - " "
-    - "&a&lCurrent Faction Points"
-    - " &f{POINTS}"
-    - " "
-    - "&c&lDaily Purchases"
-    - " &f{DAILY_BOUGHT} / {DAILY_MAX}"
-    - " "
-    - " &cDaily limit resets in {RESETS_IN}"
-    - " "
-    - "&a&lWhat are Faction Points?"
-    - "&7Faction points are used in /f top"
-    - "&7to determine the #1 Faction!"
-  #
-  1:
+  one:
     slot: 3
-    item: "paper"
-    name: "&a&l1x Faction Points"
     points: 1
-  10:
+  ten:
     slot: 4
-    item: "paper"
-    name: "&a&l10x Faction Points"
     points: 10
-  100:
+  one hundred:
     slot: 5
-    item: "paper"
-    name: "&a&l100x Faction Points"
     points: 100
 #

@@ -15,14 +15,30 @@ public class ActiveStronghold {
         this.blockDurability = blockDurability;
         this.repairableWalls = repairableWalls;
     }
-    public String getController() { return controller; }
-    public void setController(String controller) { this.controller = controller; }
-    public String getAttacking() { return attacking; }
-    public void setAttacking(String attacking) { this.attacking = attacking; }
+    public String getController() {
+        return controller;
+    }
+    public void setController(String controller) {
+        this.controller = controller;
+    }
+    public String getAttacking() {
+        return attacking;
+    }
+    public void setAttacking(String attacking) {
+        this.attacking = attacking;
+    }
 
-    public float getCapturePercent() { return capturePercent; }
-    public void setCapturePercent(float percent) { capturePercent = percent; }
+    public float getCapturePercent() {
+        return capturePercent;
+    }
+    public void setCapturePercent(float percent) {
+        capturePercent = percent;
+    }
 
-    public HashMap<Location, Integer> getBlockDurability() { return blockDurability; }
-    public List<PolyBoundary> getRepairableWalls() { return repairableWalls; }
+    public HashMap<Location, Integer> getBlockDurability() {
+        return blockDurability;
+    }
+    public List<PolyBoundary> getRepairableWalls() {
+        return repairableWalls;
+    }
 }

@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.api.RandomizedLoot;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
-import me.randomhashtags.randompackage.dev.ItemSkins;
+import me.randomhashtags.randompackage.api.ItemSkins;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;

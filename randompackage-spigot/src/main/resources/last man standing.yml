@@ -17,9 +17,9 @@ messages:
   top survivors:
     - " "
     - "&e&lTop Warzone Survivors (&r&6&l{PAGE}&r&e&l/&r&6&l{MAX_PAGE}&r&e&l)"
-    - " "
     - "{SURVIVOR}"
     - " "
+  survivor format: "&b&l{PLACE}.&r &3{PLAYER}: &b{TIME_IN_AREA}"
   has faction format: "&e{FACTION} &l{PLAYER}"
   new last man standing:
     - "&6&lLMS >&r &e&l{PLAYER}&r &e is the new &nWarzone LMS,&r &ethey have survived in the main /spawn warzone for &6{MIN} minute(s) &eat: &6&l{X}x, {Y}y, {Z}z!"
@@ -28,7 +28,15 @@ messages:
     - "&6&lLMS >&r &eThey have gained {REWARDS}"
 #
 settings:
+  afk loses multiplier: true
   gives loot every: 60
+  multipliers:
+    5: 1.5
+    10: 1.25
+    25: 1.1
+    else: 1
+  disabled in area:
+    disguises: true
 #
 rewards:
   - ""
