@@ -6,7 +6,9 @@ import me.randomhashtags.randompackage.addon.MonthlyCrate;
 import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.util.ChatUtils;
 import me.randomhashtags.randompackage.util.RPFeature;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public class SlotBot extends RPFeature implements Listener, CommandExecutor {
+public class SlotBot extends RPFeature implements Listener, CommandExecutor, ChatUtils {
     private static SlotBot instance;
     public static SlotBot getSlotBot() {
         if(instance == null) instance = new SlotBot();
@@ -90,7 +92,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             ticketSlots.add(slot);
         }
 
-        for(String key : config.getConfigurationSection("gui.reward slots").getKeys(false)) {
+        for(String key : getConfigurationSectionKeys(config, "gui.reward slots", false)) {
             final int slot = Integer.parseInt(key);
             inv.setItem(slot, rewardSlot);
             final HashSet<Integer> rewardSlots = new HashSet<>();
@@ -101,15 +103,15 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             }
             slots.put(slot, rewardSlots);
         }
-        for(String key : config.getConfigurationSection("gui").getKeys(false)) {
-            if(!key.equals("title") && !key.equals("size") && !key.equals("background") && !key.equals("reward slots") && !key.equals("visual placeholder slots")) {
-                final String path = "gui." + key;
-                final String item = config.getString(path + ".item");
-                final int slot = config.getInt(path + ".slot");
-                final boolean isWithdraw = "WITHDRAW_TICKETS".equals(item);
-                if(isWithdraw) { withdrawTicketsSlot = slot; }
-                inv.setItem(slot, isWithdraw ? null : d(config, path));
+        for(String key : getConfigurationSectionKeys(config, "gui", false, "title", "size", "background", "reward slots", "visual placeholder slots")) {
+            final String path = "gui." + key;
+            final String item = config.getString(path + ".item");
+            final int slot = config.getInt(path + ".slot");
+            final boolean isWithdraw = "WITHDRAW_TICKETS".equals(item);
+            if(isWithdraw) {
+                withdrawTicketsSlot = slot;
             }
+            inv.setItem(slot, isWithdraw ? null : d(config, path));
         }
 
         final ItemStack visualPlaceholder = d(config, "items.visual placeholder");
@@ -161,7 +163,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
                         }
                         ItemMeta meta = is.getItemMeta();
                         if(previewIsSource) {
-                            lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : reward));
+                            lore.add(s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", meta.hasDisplayName() ? meta.getDisplayName() : item.getType().name()));
                             previewRewardList.add(is);
                         } else {
                             final List<ItemStack> items = isLootbox ? lootbox.getAllRewards() : isServerCrate ? serverCrate.getAllRewards() : isMonthlyCrate ? monthlyCrate.getAllRewards() : null;
@@ -373,13 +375,13 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
     private void giveLoot(Player player) {
         if(pending.containsKey(player)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
-            final LinkedHashMap<String, Integer> items = new LinkedHashMap<>();
+            final List<ItemStack> items = new ArrayList<>();
             final String tickets = Integer.toString(getInsertedTickets(player)), playerName = player.getName();
             for(int i : slots.keySet()) {
                 item = top.getItem(i);
                 if(item != null && !rewardSlot.isSimilar(item)) {
                     itemMeta = item.getItemMeta();
-                    items.put(itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : "UNKNOWN", item.getAmount());
+                    items.add(item);
                     giveItem(player, item);
                 }
             }
@@ -387,9 +389,13 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor {
             for(String s : getStringList(config, "messages.loot.msg")) {
                 s = s.replace("{PLAYER}", playerName).replace("{TICKETS}", tickets);
                 if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
-                    for(String string : items.keySet()) {
-                        final String target = s.replace("{AMOUNT}", Integer.toString(items.get(string))).replace("{ITEM}", string);
-                        Bukkit.broadcastMessage(isCentered ? center(target, 70) : target);
+                    for(ItemStack is : items) {
+                        itemMeta = is.getItemMeta();
+                        final String name = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : is.getType().name();
+                        final String target = s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", name);
+                        final String message = isCentered ? center(target, 70) : target;
+                        final TextComponent hover = getHoverMessage(message, is);
+                        sendHoverMessage(null, hover, true);
                     }
                 } else {
                     Bukkit.broadcastMessage(isCentered ? center(s, 70) : s);
