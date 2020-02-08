@@ -59,9 +59,9 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "addons", "tinkerer.yml"));
 
         accepting = new ArrayList<>();
-        accept = d(config, "gui.accept");
-        acceptDupe = d(config, "gui.accept dupe");
-        divider = d(config, "gui.divider");
+        accept = createItemStack(config, "gui.accept");
+        acceptDupe = createItemStack(config, "gui.accept dupe");
+        divider = createItemStack(config, "gui.divider");
         tinkerer = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory inv = tinkerer.getInventory();
         for(int i = 0; i < inv.getSize(); i++) {

@@ -25,7 +25,7 @@ public class FileRarityGem extends RPAddon implements RarityGem {
 	public String getIdentifier() { return getYamlName(); }
 
 	public ItemStack getItem() {
-		if(item == null) item = API.d(yml, "item");
+		if(item == null) item = API.createItemStack(yml, "item");
 		return getClone(item);
 	}
 	public ItemStack getItem(int souls) {

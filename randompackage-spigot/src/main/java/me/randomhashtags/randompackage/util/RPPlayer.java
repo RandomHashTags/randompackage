@@ -480,7 +480,7 @@ public class RPPlayer implements RPStorage {
                             try {
                                 is = yml.getItemStack("showcases." + s + "." + sl);
                             } catch (Exception e) {
-                                is = API.d(yml, "showcases." + s + "." + sl);
+                                is = API.createItemStack(yml, "showcases." + s + "." + sl);
                             }
                             items[slot] = is;
                         }
@@ -622,7 +622,7 @@ public class RPPlayer implements RPStorage {
             final ConfigurationSection cs = yml.getConfigurationSection("unclaimed purchases");
             if(cs != null) {
                 for(String s : cs.getKeys(false)) {
-                    unclaimedPurchases.add(API.d(yml, "unclaimed purchases." + s));
+                    unclaimedPurchases.add(API.createItemStack(yml, "unclaimed purchases." + s));
                 }
             }
         }

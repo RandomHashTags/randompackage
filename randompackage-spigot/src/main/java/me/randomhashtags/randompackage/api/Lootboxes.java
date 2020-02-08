@@ -82,7 +82,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         } else {
             gui = new UInventory(null, size, title);
         }
-        background = d(config, "gui.background");
+        background = createItemStack(config, "gui.background");
 
         if(!otherdata.getBoolean("saved default lootboxes")) {
             generateDefaultLootboxes();
@@ -98,7 +98,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         final Inventory gi = gui.getInventory();
         for(String s : config.getConfigurationSection("gui").getKeys(false)) {
             if(!s.equals("title") && !s.equals("type") && !s.equals("size") && !s.equals("background")) {
-                final ItemStack is = d(config, "gui." + s);
+                final ItemStack is = createItemStack(config, "gui." + s);
                 final int slot = config.getInt("gui." + s + ".slot");
                 final Lootbox l = valueOfLootbox(is);
                 if(l != null) {

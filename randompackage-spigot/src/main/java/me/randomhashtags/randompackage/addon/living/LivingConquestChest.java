@@ -17,7 +17,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class LivingConquestChest implements UVersionable {
-    public static List<LivingConquestChest> living;
+    public static List<LivingConquestChest> living = new ArrayList<>();
 
     public Location location;
     private int x, y, z;
@@ -36,8 +36,10 @@ public class LivingConquestChest implements UVersionable {
         this.z = location.getBlockZ();
         this.type = type;
         this.spawnedTime = spawnedTime;
-        q(spawnBosses);
-        if(sendMessage) send(type.getSpawnMsg());
+        finish(spawnBosses);
+        if(sendMessage) {
+            send(type.getSpawnMsg());
+        }
     }
     public LivingConquestChest(Location location, ConquestChest type, int health, long spawnedTime, boolean sendMessage, boolean spawnBosses) {
         this.health = health;
@@ -47,13 +49,12 @@ public class LivingConquestChest implements UVersionable {
         this.z = location.getBlockZ();
         this.type = type;
         this.spawnedTime = spawnedTime;
-        q(spawnBosses);
-        if(sendMessage) send(type.getSpawnMsg());
-    }
-    private void q(boolean spawnBosses) {
-        if(living == null) {
-            living = new ArrayList<>();
+        finish(spawnBosses);
+        if(sendMessage) {
+            send(type.getSpawnMsg());
         }
+    }
+    private void finish(boolean spawnBosses) {
         final World w = location.getWorld();
         final Block b = w.getBlockAt(location);
         b.setType(type.getPlacedBlock().getMaterial());
@@ -151,14 +152,13 @@ public class LivingConquestChest implements UVersionable {
             }
         }
         if(despawnMobs) {
-            for(LivingConquestMob mob : mobs.values()) {
-                mob.getEntity().remove();
+            if(mobs != null) {
+                for(LivingConquestMob mob : mobs.values()) {
+                    mob.getEntity().remove();
+                }
             }
         }
         living.remove(this);
-        if(living.isEmpty()) {
-            living = null;
-        }
     }
     public List<ItemStack> getRandomRewards() {
         final List<ItemStack> r = new ArrayList<>();
@@ -168,7 +168,7 @@ public class LivingConquestChest implements UVersionable {
         final int min = rs.contains("-") ? Integer.parseInt(split[0]) : 0, amount = !rs.contains("-") ? Integer.parseInt(rs) : min + RANDOM.nextInt(Integer.parseInt(split[1])-min+1);
         for(int i = 1; i <= amount; i++) {
             final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
-            final ItemStack is = API.d(null, reward);
+            final ItemStack is = API.createItemStack(null, reward);
             if(is != null && !is.getType().equals(Material.AIR)) {
                 r.add(is);
             }
@@ -181,32 +181,26 @@ public class LivingConquestChest implements UVersionable {
     }
 
     public static LivingConquestChest valueOf(Location l) {
-        if(living != null) {
-            for(LivingConquestChest c : living) {
-                if(c.location.equals(l)) {
-                    return c;
-                }
+        for(LivingConquestChest c : living) {
+            if(c.location.equals(l)) {
+                return c;
             }
         }
         return null;
     }
     public static LivingConquestChest valueOf(Chunk chunk) {
-        if(living != null) {
-            for(LivingConquestChest c : living) {
-                if(c.location.getChunk().equals(chunk)) {
-                    return c;
-                }
+        for(LivingConquestChest c : living) {
+            if(c.location.getChunk().equals(chunk)) {
+                return c;
             }
         }
         return null;
     }
     public static LivingConquestChest valueOf(UUID conquestMob) {
-        if(living != null) {
-            for(LivingConquestChest cc : living) {
-                final HashMap<UUID, LivingConquestMob> mobs = cc.getMobs();
-                if(mobs != null && mobs.containsKey(conquestMob)) {
-                    return cc;
-                }
+        for(LivingConquestChest cc : living) {
+            final HashMap<UUID, LivingConquestMob> mobs = cc.getMobs();
+            if(mobs != null && mobs.containsKey(conquestMob)) {
+                return cc;
             }
         }
         return null;
@@ -219,7 +213,6 @@ public class LivingConquestChest implements UVersionable {
                 iter.next().delete(dropsRewards);
                 iter.remove();
             }
-            living = null;
         }
     }
 }

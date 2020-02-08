@@ -68,14 +68,14 @@ public class KitsEvolution extends Kits {
             saveOtherData();
         }
 
-        vkitFallenHeroBundle = d(config, "vkits.items.fallen hero bundle");
+        vkitFallenHeroBundle = createItemStack(config, "vkits.items.fallen hero bundle");
         GIVEDP_ITEM.items.put("vkitfallenherobundle", vkitFallenHeroBundle);
-        cooldown = d(config, "vkits.items.cooldown");
+        cooldown = createItemStack(config, "vkits.items.cooldown");
         vkit = new UInventory(null, config.getInt("vkits.gui.size"), colorize(config.getString("vkits.gui.title")));
         preview = new UInventory(null, 54, colorize(config.getString("vkits.items.preview.title")));
-        omniGem = d(config, "vkits.items.omni gem");
-        previewBackground = d(config, "vkits.items.preview");
-        locked = d(config, "vkits.permissions.locked");
+        omniGem = createItemStack(config, "vkits.items.omni gem");
+        previewBackground = createItemStack(config, "vkits.items.preview");
+        locked = createItemStack(config, "vkits.permissions.locked");
         tiermultipliers = new TreeMap<>();
         for(String s : config.getConfigurationSection("vkits.gui.settings.tier custom enchant multiplier").getKeys(false)) {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("vkits.gui.settings.tier custom enchant multiplier." + s));

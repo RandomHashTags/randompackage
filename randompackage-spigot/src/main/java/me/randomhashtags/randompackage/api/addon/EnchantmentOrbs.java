@@ -33,7 +33,7 @@ public class EnchantmentOrbs extends RPFeature {
         final YamlConfiguration config = getAddonConfig("enchantment orbs.yml");
         for(String key : config.getConfigurationSection("enchantment orbs").getKeys(false)) {
             final String path = "enchantment orbs." + key;
-            item = d(config, path);
+            item = createItemStack(config, path);
             final List<String> appliesto = new ArrayList<>();
             for(String s : config.getString(path + ".applies to").split(";")) {
                 appliesto.add(s.toUpperCase());

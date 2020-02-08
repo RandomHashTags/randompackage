@@ -56,7 +56,7 @@ public class Shop extends RPFeature implements CommandExecutor {
 	    final String folder = DATA_FOLDER + SEPARATOR + "shops";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
-        back = d(config, "items.back to categories");
+        back = createItemStack(config, "items.back to categories");
         defaultShop = config.getString("settings./shop opens");
 
         if(!otherdata.getBoolean("saved default shops")) {

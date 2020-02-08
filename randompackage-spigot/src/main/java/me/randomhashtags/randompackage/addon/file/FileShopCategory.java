@@ -37,9 +37,9 @@ public class FileShopCategory extends ShopCategory {
                 final String[] o = p != null ? p.split(";") : null;
                 final String custom = yml.getString("gui." + s + ".custom.item"), i = yml.getString("gui." + s + ".item"), d = i.toUpperCase();
                 final boolean isBack = d.equals("BACK");
-                final ItemStack display = isBack ? back : shop.d(yml, "gui." + s);
+                final ItemStack display = isBack ? back : shop.createItemStack(yml, "gui." + s);
                 if(display != null) {
-                    final ItemStack purchased = !isBack ? custom != null ? shop.d(yml, "gui." + s + ".custom") : shop.d(null, i) : null;
+                    final ItemStack purchased = !isBack ? custom != null ? shop.createItemStack(yml, "gui." + s + ".custom") : shop.createItemStack(null, i) : null;
                     if(!isBack && custom == null) {
                         purchased.setAmount(display.getAmount());
                     }

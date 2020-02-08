@@ -16,7 +16,7 @@ public class GiveItem extends AbstractEventAttribute {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
-                final ItemStack is = API.d(null, recipientValues.get(e));
+                final ItemStack is = API.createItemStack(null, recipientValues.get(e));
                 if(is != null && !is.getType().equals(Material.AIR)) {
                     giveItem((Player) e, is);
                 }

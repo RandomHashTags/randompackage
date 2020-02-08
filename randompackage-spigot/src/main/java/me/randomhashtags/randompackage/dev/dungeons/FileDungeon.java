@@ -21,23 +21,23 @@ public abstract class FileDungeon extends RPAddon implements Dungeon {
 
     public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {
-        if(display == null) display = API.d(yml, "gui");
+        if(display == null) display = API.createItemStack(yml, "gui");
         return getClone(display);
     }
     public ItemStack getKey() {
-        if(key == null) key = API.d(yml, "key");
+        if(key == null) key = API.createItemStack(yml, "key");
         return getClone(key);
     }
     public ItemStack getKeyLocked() {
-        if(keyLocked == null) keyLocked = API.d(yml, "gui.key locked");
+        if(keyLocked == null) keyLocked = API.createItemStack(yml, "gui.key locked");
         return getClone(keyLocked);
     }
     public ItemStack getPortal() {
-        if(portal == null) portal = API.d(yml, "portal");
+        if(portal == null) portal = API.createItemStack(yml, "portal");
         return getClone(portal);
     }
     public ItemStack getLootbag() {
-        if(lootbag == null) lootbag = API.d(yml, "lootbag");
+        if(lootbag == null) lootbag = API.createItemStack(yml, "lootbag");
         return getClone(lootbag);
     }
     public List<String> getLootbagRewards() {

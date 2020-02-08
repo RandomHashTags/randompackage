@@ -47,7 +47,7 @@ public class KitItem extends RPFeature implements CustomKitItem {
     public ItemStack getItemStack(String player, int level, float enchantMultiplier) {
         ItemStack i = null;
         if(item != null && level >= getRequiredLevel() && (chance >= 100 || RANDOM.nextInt(100) < chance)) {
-            i = d(null, item, level, enchantMultiplier);
+            i = createItemStack(null, item, level, enchantMultiplier);
             if(i != null) {
                 final String lvl = Integer.toString(level), max = Integer.toString(kit.getMaxLevel());
                 final ItemMeta m = i.getItemMeta();

@@ -64,20 +64,20 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         save(null, "slot bot.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "slot bot.yml"));
 
-        ticket = d(config, "items.ticket");
-        ticketLocked = d(config, "items.ticket locked");
-        ticketUnlocked = d(config, "items.ticket unlocked");
-        rewardSlot = d(config, "items.reward slot");
-        withdrawTickets = d(config, "items.withdraw tickets");
-        spinnerMissingTickets = d(config, "items.spinner missing ticket");
-        spinnerReadyToSpin = d(config, "items.spinner ready to spin");
+        ticket = createItemStack(config, "items.ticket");
+        ticketLocked = createItemStack(config, "items.ticket locked");
+        ticketUnlocked = createItemStack(config, "items.ticket unlocked");
+        rewardSlot = createItemStack(config, "items.reward slot");
+        withdrawTickets = createItemStack(config, "items.withdraw tickets");
+        spinnerMissingTickets = createItemStack(config, "items.spinner missing ticket");
+        spinnerReadyToSpin = createItemStack(config, "items.spinner ready to spin");
         spinnerSlot = config.getInt("items.spinner missing ticket.slot");
 
         preview = new UInventory(null, config.getInt("preview rewards.size"), colorize(config.getString("preview rewards.title")));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        randomizedLootPlaceholder = d(config, "items.randomized loot placeholder");
-        randomizedLootReadyToRoll = d(config, "items.randomized loot ready to roll");
-        background = d(config, "gui.background");
+        randomizedLootPlaceholder = createItemStack(config, "items.randomized loot placeholder");
+        randomizedLootReadyToRoll = createItemStack(config, "items.randomized loot ready to roll");
+        background = createItemStack(config, "gui.background");
 
         final Inventory inv = gui.getInventory();
         inv.setItem(spinnerSlot, spinnerMissingTickets);
@@ -111,10 +111,10 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
             if(isWithdraw) {
                 withdrawTicketsSlot = slot;
             }
-            inv.setItem(slot, isWithdraw ? null : d(config, path));
+            inv.setItem(slot, isWithdraw ? null : createItemStack(config, path));
         }
 
-        final ItemStack visualPlaceholder = d(config, "items.visual placeholder");
+        final ItemStack visualPlaceholder = createItemStack(config, "items.visual placeholder");
         for(String s : config.getStringList("gui.visual placeholder slots")) {
             inv.setItem(Integer.parseInt(s), visualPlaceholder);
         }
@@ -130,7 +130,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         rewards = config.getStringList("rewards");
 
         previewRewardsSlot = config.getInt("items.preview rewards.slot");
-        previewRewards = d(config, "items.preview rewards");
+        previewRewards = createItemStack(config, "items.preview rewards");
         itemMeta = previewRewards.getItemMeta(); lore.clear();
         previewRewardList = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         for(String s : itemMeta.getLore()) {
             if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
                 for(String reward : rewards) {
-                    final ItemStack is = d(null, reward);
+                    final ItemStack is = createItemStack(null, reward);
                     if(is != null) {
                         final Lootbox lootbox = valueOfLootbox(is);
                         final ServerCrate serverCrate = lootbox == null ? valueOfServerCrate(is) : null;
@@ -314,9 +314,9 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
     }
     private void updateRandomLoot(Player player, Inventory top, int rewardSlot, boolean isRandom) {
         final int size = rewards.size();
-        top.setItem(rewardSlot, isRandom ? d(null, rewards.get(RANDOM.nextInt(size))) : null);
+        top.setItem(rewardSlot, isRandom ? createItemStack(null, rewards.get(RANDOM.nextInt(size))) : null);
         for(int value : slots.get(rewardSlot)) {
-            top.setItem(value, isRandom ? d(null, rewards.get(RANDOM.nextInt(size))) : null);
+            top.setItem(value, isRandom ? createItemStack(null, rewards.get(RANDOM.nextInt(size))) : null);
         }
         player.updateInventory();
     }

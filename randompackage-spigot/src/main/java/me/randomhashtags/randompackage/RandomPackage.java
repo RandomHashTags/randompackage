@@ -218,7 +218,7 @@ public final class RandomPackage extends JavaPlugin {
         EventAttributes.unloadEventAttributes();
 
         CommandManager.getCommandManager().disable();
-        RPFeature.d();
+        RPFeature.createItemStack();
         HandlerList.unregisterAll(this);
         scheduler.cancelTasks(this);
     }

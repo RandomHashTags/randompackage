@@ -56,8 +56,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
         if(args.length == 0) {
             viewLast(sender);
         } else {
-            final String a = args[0];
-            switch (a) {
+            switch (args[0]) {
                 case "stop":
                     destroyConquests(sender);
                     break;
@@ -161,7 +160,6 @@ public class Conquest extends RPFeature implements CommandExecutor {
             if(living != null) {
                 for(LivingConquestChest l : new ArrayList<>(living)) {
                     l.delete(false, true);
-                    living.remove(l);
                 }
             }
         }
@@ -173,9 +171,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
         lastConquerer = null;
     }
     public Location getRandomLocation(@NotNull ConquestChest chest) {
-        final String[] sr = chest.getSpawnRegion().split(";");
-        final String[] xValues = sr[1].split(":"), zValues = sr[2].split(":");
-        final String world = sr[0];
+        final String[] spawnRegion = chest.getSpawnRegion().split(";");
+        final String[] xValues = spawnRegion[1].split(":"), zValues = spawnRegion[2].split(":");
+        final String world = spawnRegion[0];
         final World w = Bukkit.getWorld(world);
         if(w != null) {
             final int xMin = Integer.parseInt(xValues[0]), xMax = Integer.parseInt(xValues[1]), zMin = Integer.parseInt(zValues[0]), zMax = Integer.parseInt(zValues[1]);

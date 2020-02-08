@@ -39,7 +39,7 @@ public class ArmorSockets extends RPFeature {
         save(null, "armor sockets.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "armor sockets.yml"));
 
-        socket = d(config, "item");
+        socket = createItemStack(config, "item");
         final List<String> lore = socket.getItemMeta().getLore();
         for(int i = 0; i < lore.size(); i++) {
             if(lore.get(i).contains("{CHANCE}")) {

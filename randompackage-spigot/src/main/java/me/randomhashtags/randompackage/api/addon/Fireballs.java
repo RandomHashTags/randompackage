@@ -40,7 +40,7 @@ public class Fireballs extends CustomEnchants {
         final long started = System.currentTimeMillis();
         save("addons", "fireballs.yml");
         config = getAddonConfig("fireballs.yml");
-        mysterydust = d(config, "items.mystery dust");
+        mysterydust = createItemStack(config, "items.mystery dust");
         GIVEDP_ITEM.items.put("mysterydust", mysterydust);
 
         final List<ItemStack> list = new ArrayList<>();

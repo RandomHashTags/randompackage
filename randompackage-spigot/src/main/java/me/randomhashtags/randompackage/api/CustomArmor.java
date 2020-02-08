@@ -57,11 +57,11 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 		inEquipmentLootbox = new ArrayList<>();
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "custom armor", "_settings.yml"));
-		equipmentLootbox = d(config, "items.equipment lootbox");
-		crystal = d(config, "items.crystal");
-		heroicUpgrade = d(config, "items.heroic upgrade");
+		equipmentLootbox = createItemStack(config, "items.equipment lootbox");
+		crystal = createItemStack(config, "items.crystal");
+		heroicUpgrade = createItemStack(config, "items.heroic upgrade");
 		crystalAddedLore = colorize(config.getString("items.crystal.applied lore"));
-		omniCrystal = d(config, "items.omni crystal");
+		omniCrystal = createItemStack(config, "items.omni crystal");
 		omniAppliedLore = colorizeListString(config.getStringList("items.omni crystal.applied lore"));
 
 		heroicAddedLore = colorizeListString(config.getStringList("heroic.added lore"));

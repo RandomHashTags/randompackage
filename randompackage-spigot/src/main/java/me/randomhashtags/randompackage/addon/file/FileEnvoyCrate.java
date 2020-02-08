@@ -65,7 +65,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         return cannotLandIn;
     }
     public ItemStack getItem() {
-        if(item == null) item = API.d(yml, "item");
+        if(item == null) item = API.createItemStack(yml, "item");
         return getClone(item);
     }
     public List<String> getRewards() {
@@ -104,7 +104,7 @@ public class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
         final List<String> r = getRandomRewards();
         final List<ItemStack> a = new ArrayList<>();
         for(String s : r) {
-            final ItemStack i = API.d(null, s);
+            final ItemStack i = API.createItemStack(null, s);
             if(i != null && !i.getType().equals(Material.AIR)) {
                 a.add(i);
             }

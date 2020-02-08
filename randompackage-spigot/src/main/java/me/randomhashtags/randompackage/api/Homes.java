@@ -56,7 +56,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
-		maxHomeIncreaser = d(config, "items.max home increaser");
+		maxHomeIncreaser = createItemStack(config, "items.max home increaser");
 		GIVEDP_ITEM.items.put("maxhomeincrease", maxHomeIncreaser);
 
 		viewingHomes = new ArrayList<>();
@@ -67,7 +67,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		final List<String> addedLore = colorizeListString(config.getStringList("edit icon.added lore"));
 		for(String s : getConfigurationSectionKeys(config, "edit icon", false)) {
 			if(!s.equals("title") && !s.equals("size") && !s.equals("added lore")) {
-				item = d(config, "edit icon." + s);
+				item = createItemStack(config, "edit icon." + s);
 				itemMeta = item.getItemMeta(); lore.clear();
 				if(itemMeta.hasLore()) {
 					lore.addAll(itemMeta.getLore());

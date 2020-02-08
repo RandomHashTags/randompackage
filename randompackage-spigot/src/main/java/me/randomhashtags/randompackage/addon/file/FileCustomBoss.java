@@ -59,7 +59,7 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
     }
 
     public ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = API.d(yml, "spawn item");
+        if(spawnitem == null) spawnitem = API.createItemStack(yml, "spawn item");
         return spawnitem.clone();
     }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }

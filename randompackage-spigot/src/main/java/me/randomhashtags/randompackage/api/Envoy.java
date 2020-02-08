@@ -93,7 +93,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		}
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "envoy tiers", "_settings.yml"));
 		type = config.getString("settings.type");
-		envoySummon = d(config, "items.envoy summon");
+		envoySummon = createItemStack(config, "items.envoy summon");
 
 		GIVEDP_ITEM.items.put("envoysummon", envoySummon);
 
@@ -194,7 +194,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 			removeItem(player, is, 1);
 			final List<String> rewards = crate.getRandomRewards();
 			for(String s : rewards) {
-				giveItem(player, d(null, s));
+				giveItem(player, createItemStack(null, s));
 			}
 		} else if(is != null && is.hasItemMeta() && is.getItemMeta().equals(envoySummon.getItemMeta())) {
 			event.setCancelled(true);

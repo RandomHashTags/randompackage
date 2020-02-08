@@ -51,7 +51,7 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 	}
 
 	public ItemStack getItem() {
-		if(is == null) is = API.d(getYaml(), "flare");
+		if(is == null) is = API.createItemStack(getYaml(), "flare");
 		return getClone(is);
 	}
 	public List<String> getRewards() { return null; }

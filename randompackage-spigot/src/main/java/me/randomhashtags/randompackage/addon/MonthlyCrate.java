@@ -32,13 +32,13 @@ public interface MonthlyCrate extends Itemable {
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
         for(String reward : getRewards()) {
-            final ItemStack target = API.d(null, reward);
+            final ItemStack target = API.createItemStack(null, reward);
             if(target != null && !target.getType().equals(Material.AIR)) {
                 items.add(target);
             }
         }
         for(String reward : getBonusRewards()) {
-            final ItemStack target = API.d(null, reward);
+            final ItemStack target = API.createItemStack(null, reward);
             if(target != null && !target.getType().equals(Material.AIR)) {
                 items.add(target);
             }

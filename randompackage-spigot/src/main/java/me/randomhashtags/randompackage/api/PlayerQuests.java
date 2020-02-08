@@ -80,13 +80,13 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         shop = new UInventory(null, config.getInt("shop.size"), colorize(config.getString("shop.title")));
-        background = d(config, "shop.background");
-        returnToQuests = d(config, "shop.return to quests");
+        background = createItemStack(config, "shop.background");
+        returnToQuests = createItemStack(config, "shop.return to quests");
         returnToQuestsSlot = config.getInt("shop.return to quests.slot");
-        active = d(config, "gui.active");
-        claim = d(config, "gui.claim");
-        claimed = d(config, "gui.claimed");
-        locked = d(config, "gui.locked");
+        active = createItemStack(config, "gui.active");
+        claim = createItemStack(config, "gui.claim");
+        claimed = createItemStack(config, "gui.claimed");
+        locked = createItemStack(config, "gui.locked");
 
         shopitems = new HashMap<>();
         tokencost = new HashMap<>();
@@ -95,7 +95,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         final Inventory gi = gui.getInventory();
         for(String s : config.getConfigurationSection("gui").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("quest slots") && !s.equals("active") && !s.equals("claim") && !s.equals("claimed") && !s.equals("locked")) {
-                gi.setItem(config.getInt("gui." + s + ".slot"), d(config, "gui." + s));
+                gi.setItem(config.getInt("gui." + s + ".slot"), createItemStack(config, "gui." + s));
             }
         }
 
@@ -111,7 +111,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                 if(d) {
                     SLOT++;
                 }
-                final ItemStack r = d(config, "shop." + s);
+                final ItemStack r = createItemStack(config, "shop." + s);
                 if(r != null && !r.getType().equals(Material.AIR)) {
                     item = r.clone();
                     if(!returnToQuests) {
@@ -337,7 +337,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                                 if(b.startsWith("questtokens=")) {
                                     pdata.questTokens += Integer.parseInt(b.split("=")[1].split(":")[0]);
                                 } else {
-                                    giveItem(player, d(null, b.split(":")[0]));
+                                    giveItem(player, createItemStack(null, b.split(":")[0]));
                                 }
                                 event.setCurrentItem(getStatus(System.currentTimeMillis(), active, null, null, claimed));
                             }

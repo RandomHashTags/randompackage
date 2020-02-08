@@ -77,13 +77,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         categories = new HashMap<>();
         categoriez = new HashMap<>();
 
-        mysteryCrate = d(config, "items.mystery crate");
-        heroicMysteryCrate = d(config, "items.heroic mystery crate");
-        superiorMysteryCrate = d(config, "items.superior mystery crate");
-        final ItemStack background = d(config, "gui.background");
-        alreadyClaimed = d(config, "category view.already claimed");
-        locked = d(config, "category view.locked");
-        categoryViewBackground = d(config, "category view.background");
+        mysteryCrate = createItemStack(config, "items.mystery crate");
+        heroicMysteryCrate = createItemStack(config, "items.heroic mystery crate");
+        superiorMysteryCrate = createItemStack(config, "items.superior mystery crate");
+        final ItemStack background = createItemStack(config, "gui.background");
+        alreadyClaimed = createItemStack(config, "category view.already claimed");
+        locked = createItemStack(config, "category view.locked");
+        categoryViewBackground = createItemStack(config, "category view.background");
 
         if(!otherdata.getBoolean("saved default monthly crates")) {
             generateDefaultMonthlyCrates();
@@ -101,7 +101,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                     categoriez.put(a, new UInventory(null, 54, categoryView.getTitle().replace("{CATEGORY}", Integer.toString(a))));
                 } catch (NumberFormatException ignored) {
                 }
-                gi.setItem(slot, d(config, "gui." + s));
+                gi.setItem(slot, createItemStack(config, "gui." + s));
             }
         }
         for(int i = 0; i < gui.getSize(); i++) {

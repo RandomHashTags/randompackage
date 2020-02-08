@@ -99,7 +99,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
-        final ItemStack confirm = d(config, "gui.confirm"), cancel = d(config, "gui.cancel");
+        final ItemStack confirm = createItemStack(config, "gui.confirm"), cancel = createItemStack(config, "gui.cancel");
         confirmSlots = new ArrayList<>();
         cancelSlots = new ArrayList<>();
         for(String s : getConfigurationSectionKeys(config, "gui", false)) {
@@ -112,7 +112,7 @@ public class Jackpot extends RPFeature implements CommandExecutor {
                 } else if(isCancel) {
                     cancelSlots.add(slot);
                 }
-                item = isConfirm ? confirm : isCancel ? cancel : d(config, "gui." + s);
+                item = isConfirm ? confirm : isCancel ? cancel : createItemStack(config, "gui." + s);
                 gi.setItem(slot, item);
             }
         }

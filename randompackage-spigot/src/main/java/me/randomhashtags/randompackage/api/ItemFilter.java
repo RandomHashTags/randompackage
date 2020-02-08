@@ -89,7 +89,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             if(!s.equals("title") && !s.equals("size")) {
                 final String p = "categories." + s + ".", opens = config.getString(p + "opens");
                 final int slot = config.getInt(p + "slot");
-                item = d(config, "categories." + s); itemMeta = item.getItemMeta();
+                item = createItemStack(config, "categories." + s); itemMeta = item.getItemMeta();
                 itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
                 itemMeta.setLore(addedLore);
                 item.setItemMeta(itemMeta);

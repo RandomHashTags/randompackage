@@ -58,9 +58,9 @@ public class Trade extends RPFeature implements CommandExecutor {
 		save(null, "trade.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trade.yml"));
 
-		divider = d(config, "gui.divider");
-		accept = d(config, "gui.accept");
-		accepting = d(config, "gui.accepting");
+		divider = createItemStack(config, "gui.divider");
+		accept = createItemStack(config, "gui.accept");
+		accepting = createItemStack(config, "gui.accepting");
 		countdown = config.getInt("gui.countdown start", 0);
 		radius = config.getInt("radius", 0);
 		title = colorize(config.getString("gui.title"));

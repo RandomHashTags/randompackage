@@ -94,10 +94,10 @@ public class FactionUpgrades extends EventAttributes {
             fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
             fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
             aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");
-            heroicFactionCrystal = d(config, "items.heroic faction crystal");
-            factionCrystal = d(config, "items.faction crystal");
-            background = d(config, "gui.background");
-            locked = d(config, "gui.locked");
+            heroicFactionCrystal = createItemStack(config, "items.heroic faction crystal");
+            factionCrystal = createItemStack(config, "items.faction crystal");
+            background = createItemStack(config, "gui.background");
+            locked = createItemStack(config, "gui.locked");
             addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
 
             GIVEDP_ITEM.items.put("heroicfactioncrystal", heroicFactionCrystal);

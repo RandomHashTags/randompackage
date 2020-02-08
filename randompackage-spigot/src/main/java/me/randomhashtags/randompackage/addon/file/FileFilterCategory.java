@@ -23,7 +23,7 @@ public class FileFilterCategory extends RPAddon implements FilterCategory {
             gui = new UInventory(null, yml.getInt("size"), getTitle());
             final Inventory i = gui.getInventory();
             for(String s : yml.getConfigurationSection("gui").getKeys(false)) {
-                i.setItem(yml.getInt("gui." + s + ".slot"), API.d(yml, "gui." + s));
+                i.setItem(yml.getInt("gui." + s + ".slot"), API.createItemStack(yml, "gui." + s));
             }
         }
         return gui;

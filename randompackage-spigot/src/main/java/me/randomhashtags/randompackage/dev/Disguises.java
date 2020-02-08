@@ -53,7 +53,7 @@ public class Disguises extends RPFeature {
         save(null, "disguises.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "disguises.yml"));
 
-        disguiseItem = d(config, "item");
+        disguiseItem = createItemStack(config, "item");
         inventory = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         subDisguises = new UInventory(null, config.getInt("sub disguises.size"), colorize(config.getString("sub disguises.title")));
         final Inventory inv = inventory.getInventory();

@@ -59,8 +59,8 @@ public class Enchanter extends RPFeature implements CommandExecutor {
             if(config.get("gui." + i) != null) {
                 final long cost = config.getLong("gui." + i + ".cost");
                 costs.put(i, cost);
-                purchased.put(i, d(null, config.getString("gui." + i + ".purchase")));
-                item = d(config, "gui." + i);
+                purchased.put(i, createItemStack(null, config.getString("gui." + i + ".purchase")));
+                item = createItemStack(config, "gui." + i);
                 itemMeta = item.getItemMeta(); lore.clear();
                 if(itemMeta.hasLore()) {
                     for(String string : itemMeta.getLore()) {

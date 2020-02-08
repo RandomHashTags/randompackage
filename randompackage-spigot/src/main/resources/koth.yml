@@ -148,7 +148,7 @@ items:
       - "whitescroll;amount=2-4;chance=35"
       - "itemnametag;chance=35"
       - "blackscroll:REGULAR:95;amount=3;chance=35"
-      - "soultracker:REGULAR;chance=20"
+      - "soultracker:ULTIMATE;chance=20"
       - "randomizationscroll:GODLY;amount=1-2;chance=20"
       - "hopper;amount=64;chance=30"
       - "factioncrystal;amount=50;chance=15"

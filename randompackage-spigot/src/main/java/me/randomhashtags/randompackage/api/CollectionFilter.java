@@ -99,7 +99,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         save(null, "collection filter.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "collection filter.yml"));
 
-        collectionchest = d(config, "collection chests.chest");
+        collectionchest = createItemStack(config, "collection chests.chest");
         allType = colorize(config.getString("collection chests.chest.filter types.all"));
         defaultType = colorize(config.getString("collection chests.chest.filter types.default"));
         itemType = colorize(config.getString("collection chests.chest.filter types.item"));
@@ -111,10 +111,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
 
         collectionchestgui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory inv = collectionchestgui.getInventory();
-        final ItemStack background = d(config, "gui.background");
+        final ItemStack background = createItemStack(config, "gui.background");
         for(int i = 0; i < collectionchestgui.getSize(); i++) {
             if(config.get("gui." + i) != null) {
-                final ItemStack itemstack = d(config, "gui." + i);
+                final ItemStack itemstack = createItemStack(config, "gui." + i);
                 inv.setItem(i, itemstack);
                 final String[] j = config.getString("gui." + i + ".picks up").toUpperCase().split(":");
                 final UMaterial um = UMaterial.match(j[0], j.length > 1 ? Byte.parseByte(j[1]) : 0);

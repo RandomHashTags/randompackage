@@ -135,20 +135,20 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         format = colorizeListString(config.getStringList("auction house.format"));
         clickToBuyStatus = colorizeListString(config.getStringList("auction house.status.click to buy"));
         cancelStatus = colorizeListString(config.getStringList("auction house.status.cancel"));
-        categoryView = d(config, "auction house.category view");
-        collectionBin = d(config, "player collection bin");
-        returnToAH = d(config, "return to ah");
+        categoryView = createItemStack(config, "auction house.category view");
+        collectionBin = createItemStack(config, "player collection bin");
+        returnToAH = createItemStack(config, "return to ah");
         categoryFormat = colorizeListString(config.getStringList("categories.format"));
-        mainCategoryView = d(config, "category items.main category view");
+        mainCategoryView = createItemStack(config, "category items.main category view");
         collectionBinClaim = colorizeListString(config.getStringList("collection bin.claim"));
         collectionBinInAuction = colorizeListString(config.getStringList("collection bin.in auction"));
 
         ah = new UInventory(null, config.getInt("auction house.size"), colorize(config.getString("auction house.title")));
-        previousPage = d(config, "auction house.previous page");
+        previousPage = createItemStack(config, "auction house.previous page");
         previousPageSlot = config.getInt("auction house.previous page.slot");
-        nextPage = d(config, "auction house.next page");
+        nextPage = createItemStack(config, "auction house.next page");
         nextPageSlot = config.getInt("auction house.next page.slot");
-        refresh = d(config, "refresh");
+        refresh = createItemStack(config, "refresh");
 
         final Inventory ahInventory = ah.getInventory();
         setupInventory("auction house", ahInventory, Arrays.asList("title", "size", "item slots", "organization", "auction expiration", "collection bin expiration", "format", "status", "previous page", "next page"), new HashMap<String, ItemStack>() {{
@@ -161,12 +161,12 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
         purchaseItem = new UInventory(null, config.getInt("purchase item.size"), colorize(config.getString("purchase item.title")));
         final Inventory pii = purchaseItem.getInventory();
-        final ItemStack confirmPurchase = d(config, "purchase item.confirm"), cancelPurchase = d(config, "purchase item.cancel");
+        final ItemStack confirmPurchase = createItemStack(config, "purchase item.confirm"), cancelPurchase = createItemStack(config, "purchase item.cancel");
         for(String s : config.getConfigurationSection("purchase item").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("confirm") && !s.equals("cancel")) {
                 final String i = config.getString("purchase item." + s + ".item").toLowerCase();
                 final boolean isConfirm = i.equals("confirm"), isCancel = i.equals("cancel"), isItem = i.equals("{item}");
-                item = isConfirm ? confirmPurchase : isCancel ? cancelPurchase : isItem ? air : d(config, "purchase item." + s);
+                item = isConfirm ? confirmPurchase : isCancel ? cancelPurchase : isItem ? air : createItemStack(config, "purchase item." + s);
                 final int slot = config.getInt("purchase item." + s + ".slot");
                 if(isConfirm) {
                     confirmPurchaseSlots.add(slot);
@@ -179,13 +179,13 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
 
         confirmAuction = new UInventory(null, config.getInt("confirm auction.size"), colorize(config.getString("confirm auction.title")));
         final Inventory cai = confirmAuction.getInventory();
-        final ItemStack confirmAuctionAccept = d(config, "confirm auction.accept"), confirmAuctionDecline = d(config, "confirm auction.decline");
+        final ItemStack confirmAuctionAccept = createItemStack(config, "confirm auction.accept"), confirmAuctionDecline = createItemStack(config, "confirm auction.decline");
         for(String s : config.getConfigurationSection("confirm auction").getKeys(false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("accept") && !s.equals("decline")) {
                 final String i = config.getString("confirm auction." + s + ".item");
                 final int slot = config.getInt("confirm auction." + s + ".slot");
                 final boolean accept = i.equals("accept"), decline = i.equals("decline"), isI = i.equals("{ITEM}");
-                item = isI ? air : accept ? confirmAuctionAccept : decline ? confirmAuctionDecline : d(config, "confirm auction." + s);
+                item = isI ? air : accept ? confirmAuctionAccept : decline ? confirmAuctionDecline : createItemStack(config, "confirm auction." + s);
                 if(accept) {
                     confirmAuctionSlots.add(slot);
                 } else if(decline) {
@@ -222,7 +222,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
             if(!excludedKeys.contains(key)) {
                 final int slot = config.getInt(identifier + "." + key + ".slot");
                 final String targetItem = config.getString(identifier + "." + key + ".item");
-                item = specialItems.containsKey(targetItem) ? specialItems.get(targetItem): d(config, identifier + "." + key);
+                item = specialItems.containsKey(targetItem) ? specialItems.get(targetItem): createItemStack(config, identifier + "." + key);
                 inventory.setItem(slot, item);
             }
         }

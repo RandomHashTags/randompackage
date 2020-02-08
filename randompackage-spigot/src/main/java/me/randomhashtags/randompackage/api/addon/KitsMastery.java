@@ -61,7 +61,7 @@ public class KitsMastery extends Kits {
 
         gui = new UInventory(null, config.getInt("mkits.gui.size"), colorize(config.getString("mkits.gui.title")));
         preview = new UInventory(null, 54, colorize(config.getString("mkits.items.preview.title")));
-        background = d(config, "mkits.gui.background");
+        background = createItemStack(config, "mkits.gui.background");
 
         final List<ItemStack> gems = new ArrayList<>();
         final Inventory inv = gui.getInventory();

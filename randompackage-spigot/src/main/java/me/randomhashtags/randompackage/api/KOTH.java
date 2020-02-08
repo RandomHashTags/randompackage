@@ -105,7 +105,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "koth.yml"));
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
-		lootbag = d(config, "items.lootbag");
+		lootbag = createItemStack(config, "items.lootbag");
 		GIVEDP_ITEM.items.put("kothlootbag", lootbag);
 
 		displaySlot = DisplaySlot.valueOf(config.getString("settings.scoreboards.display slot").toUpperCase());
@@ -157,10 +157,10 @@ public class KOTH extends RPFeature implements CommandExecutor {
 				final String original = isChance2 ? reward.split("chance=" + chance + "->")[1] : isChance1 ? reward.split(";chance=")[0] : reward;
 				String actualReward = isChance2 ? rewardLC.split("chance=" + chance + "->")[1] : isChance1 ? rewardLC.split(";chance=")[0] : reward;
 				if(actualReward.contains("||")) {
-					final String[] a = actualReward.split("\\|\\|");
-					actualReward = original.split("\\|\\|")[RANDOM.nextInt(a.length)];
+					final String[] valueArray = actualReward.split("\\|\\|");
+					actualReward = original.split("\\|\\|")[RANDOM.nextInt(valueArray.length)];
 				}
-				final ItemStack is = d(null, actualReward);
+				final ItemStack is = createItemStack(null, actualReward);
 				if(is != null && !is.getType().equals(Material.AIR)) {
 					loot.add(is);
 				}

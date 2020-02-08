@@ -39,7 +39,7 @@ public class RandomizedLoot extends RPFeature {
         items = new HashMap<>();
         for(String key : config.getConfigurationSection("").getKeys(false)) {
             final String rewardSize = config.getString(key + ".reward size", "1");
-            final ItemStack item = d(config, key);
+            final ItemStack item = createItemStack(config, key);
             if(item != null) {
                 final ItemMeta itemMeta = item.getItemMeta();
                 lore.clear();
@@ -49,7 +49,7 @@ public class RandomizedLoot extends RPFeature {
                     for(String s : itemMeta.getLore()) {
                         if(s.contains("{ITEM}")) {
                             for(String reward : rewardList) {
-                                final ItemStack is = d(null, reward);
+                                final ItemStack is = createItemStack(null, reward);
                                 if(is != null) {
                                     rewards.add(reward);
                                     final ItemMeta m = is.getItemMeta();
@@ -94,7 +94,7 @@ public class RandomizedLoot extends RPFeature {
             event.setCancelled(true);
             removeItem(player, is, 1);
             for(String s : i.getRandomRewards(false)) {
-                giveItem(player, d(null, s));
+                giveItem(player, createItemStack(null, s));
             }
             player.updateInventory();
         }

@@ -75,7 +75,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		save(null, "showcase.yml");
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "showcase.yml"));
-		expansion = d(config, "items.expansion");
+		expansion = createItemStack(config, "items.expansion");
 		GIVEDP_ITEM.items.put("showcaseexpansion", expansion);
 		GIVEDP_ITEM.items.put("showcaseexpander", expansion);
 		addedRows = config.getInt("items.expansion.added rows");
@@ -92,10 +92,10 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		selftitle = colorize(config.getString("settings.self title"));
 		TCOLOR = config.getString("settings.time color");
 
-		addItemConfirm = d(config, "add item.confirm");
-		addItemCancel = d(config, "add item.cancel");
-		removeItemConfirm = d(config, "remove item.confirm");
-		removeItemCancel = d(config, "remove item.cancel");
+		addItemConfirm = createItemStack(config, "add item.confirm");
+		addItemCancel = createItemStack(config, "add item.cancel");
+		removeItemConfirm = createItemStack(config, "remove item.confirm");
+		removeItemCancel = createItemStack(config, "remove item.cancel");
 
 		final Inventory ai = additems.getInventory(), ri = removeitems.getInventory();
 		for(int i = 1; i <= 2; i++) {

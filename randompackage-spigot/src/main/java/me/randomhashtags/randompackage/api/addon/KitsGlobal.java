@@ -73,15 +73,15 @@ public class KitsGlobal extends Kits {
             saveOtherData();
         }
 
-        gkitFallenHeroBundle = d(config, "gkits.items.fallen hero bundle");
+        gkitFallenHeroBundle = createItemStack(config, "gkits.items.fallen hero bundle");
         GIVEDP_ITEM.items.put("gkitfallenherobundle", gkitFallenHeroBundle);
         heroicEnchantedEffect = config.getBoolean("gkits.items.heroic.enchanted effect");
         tierZeroEnchantEffect = config.getBoolean("gkits.gui.settings.tier zero enchant effect");
-        previewBackground = d(config, "gkits.items.preview");
+        previewBackground = createItemStack(config, "gkits.items.preview");
         gkit = new UInventory(null, config.getInt("gkits.gui.size"), colorize(config.getString("gkits.gui.title")));
         preview = new UInventory(null, 54, colorize(config.getString("gkits.items.preview.title")));
-        omniGem = d(config, "gkits.items.omni gem");
-        cooldown = d(config, "gkits.items.cooldown");
+        omniGem = createItemStack(config, "gkits.items.omni gem");
+        cooldown = createItemStack(config, "gkits.items.cooldown");
         tiermultipliers = new TreeMap<>();
         for(String s : getConfigurationSectionKeys(config, "gkits.gui.settings.tier custom enchant multiplier", false)) {
             tiermultipliers.put(Integer.parseInt(s), (float) config.getDouble("gkits.gui.settings.tier custom enchant multiplier." + s));

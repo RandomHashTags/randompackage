@@ -71,7 +71,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
     public ItemStack getItem() {
         if(item == null) {
-            item = API.d(yml, "item");
+            item = API.createItemStack(yml, "item");
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);
@@ -81,7 +81,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
 
     public ItemStack getEgg() {
-        if(egg == null) egg = API.d(yml, "egg");
+        if(egg == null) egg = API.createItemStack(yml, "egg");
         return getClone(egg);
     }
     public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() {

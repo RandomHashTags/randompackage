@@ -101,7 +101,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
 
         yourSelection = colorize(config.getString("challenge.your selection"));
         opponentSelection = colorize(config.getString("challenge.opponent selection"));
-        countdown = d(config, "challenge.countdown");
+        countdown = createItemStack(config, "challenge.countdown");
 
         gui = new UInventory(null, 54, colorize(config.getString("gui.title")));
         options = new UInventory(null, config.getInt("gui.options.size"), colorize(config.getString("gui.options.title")));
@@ -115,11 +115,11 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             if(!s.equals("title") && !s.equals("size") && !s.equals("countdown") && !s.equals("added lore")) {
                 final String p = "gui.options." + s + ".";
                 final int slot = config.getInt(p + "slot");
-                final ItemStack dis = d(config, "gui.options." + s);
+                final ItemStack dis = createItemStack(config, "gui.options." + s);
                 itemMeta = dis.getItemMeta();
                 itemMeta.setLore(addedLore);
                 dis.setItemMeta(itemMeta);
-                final CoinFlipOption o = new CoinFlipOption(s, slot, colorize(config.getString(p + "chosen")), dis, d(config, p + "selection"), colorize(config.getString(p + "selection.color")));
+                final CoinFlipOption o = new CoinFlipOption(s, slot, colorize(config.getString(p + "chosen")), dis, createItemStack(config, p + "selection"), colorize(config.getString(p + "selection.color")));
                 optionz.put(slot, o);
                 oi.setItem(slot, dis);
             }

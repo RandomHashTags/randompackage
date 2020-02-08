@@ -59,12 +59,12 @@ public class Titles extends RPFeature implements CommandExecutor {
 		pages = new HashMap<>();
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "titles.yml"));
-		interactableItem = d(config, "interactable item");
+		interactableItem = createItemStack(config, "interactable item");
 		FileTitle.i = interactableItem;
-		nextpage = d(config, "gui.next page");
-		background = d(config, "gui.background");
-		active = d(config, "gui.active title");
-		inactive = d(config, "gui.inactive title");
+		nextpage = createItemStack(config, "gui.next page");
+		background = createItemStack(config, "gui.background");
+		active = createItemStack(config, "gui.active title");
+		inactive = createItemStack(config, "gui.inactive title");
 		for(String s : config.getStringList("titles")) {
 			new FileTitle(s);
 		}

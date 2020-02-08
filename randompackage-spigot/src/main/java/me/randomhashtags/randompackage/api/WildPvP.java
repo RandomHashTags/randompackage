@@ -86,8 +86,8 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        enterQueue = d(config, "gui.enter queue");
-        request = d(config, "request");
+        enterQueue = createItemStack(config, "gui.enter queue");
+        request = createItemStack(config, "request");
         gui.getInventory().setItem(config.getInt("gui.enter queue.slot"), enterQueue);
         invincibilityDuration = config.getInt("settings.invincibility duration");
         nearbyRadius = config.getInt("settings.nearby radius");

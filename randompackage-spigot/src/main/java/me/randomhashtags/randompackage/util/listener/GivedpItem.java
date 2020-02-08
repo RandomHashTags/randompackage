@@ -19,7 +19,6 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +57,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             } else if(args.length >= 2) {
                 final OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                 final String i = args[1];
-                item = d(null, i);
+                item = createItemStack(null, i);
                 if(item != null) {
                     if(args.length >= 3) {
                         item.setAmount(getRemainingInt(args[2]));
@@ -84,26 +83,26 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
         customitems = new HashMap<>();
         for(String s : getConfigurationSectionKeys(itemsConfig, "custom items", false)) {
-            customitems.put(s, d(itemsConfig, "custom items." + s));
+            customitems.put(s, createItemStack(itemsConfig, "custom items." + s));
         }
 
         items = new HashMap<>();
-        items.put("banknote", d(itemsConfig, "banknote"));
-        items.put("christmascandy", d(itemsConfig, "christmas candy"));
-        items.put("christmaseggnog", d(itemsConfig, "christmas eggnog"));
-        items.put("commandreward", d(itemsConfig, "command reward"));
-        items.put("explosivecake", d(itemsConfig, "explosive cake"));
-        items.put("explosivesnowball", d(itemsConfig, "explosive snowball"));
-        items.put("halloweencandy", d(itemsConfig, "halloween candy"));
-        items.put("itemlorecrystal", d(itemsConfig, "item lore crystal"));
-        items.put("itemnametag", d(itemsConfig, "item name tag"));
-        items.put("mcmmocreditvoucher", d(itemsConfig, "mcmmo vouchers.credit"));
-        items.put("mcmmolevelvoucher", d(itemsConfig, "mcmmo vouchers.level"));
-        items.put("mcmmoxpvoucher", d(itemsConfig, "mcmmo vouchers.xp"));
-        items.put("mysterymobspawner", d(itemsConfig, "mystery mob spawner"));
-        items.put("spacedrink", d(itemsConfig, "space drink"));
-        items.put("spacefirework", d(itemsConfig, "space firework"));
-        items.put("xpbottle", d(itemsConfig, "xpbottle"));
+        items.put("banknote", createItemStack(itemsConfig, "banknote"));
+        items.put("christmascandy", createItemStack(itemsConfig, "christmas candy"));
+        items.put("christmaseggnog", createItemStack(itemsConfig, "christmas eggnog"));
+        items.put("commandreward", createItemStack(itemsConfig, "command reward"));
+        items.put("explosivecake", createItemStack(itemsConfig, "explosive cake"));
+        items.put("explosivesnowball", createItemStack(itemsConfig, "explosive snowball"));
+        items.put("halloweencandy", createItemStack(itemsConfig, "halloween candy"));
+        items.put("itemlorecrystal", createItemStack(itemsConfig, "item lore crystal"));
+        items.put("itemnametag", createItemStack(itemsConfig, "item name tag"));
+        items.put("mcmmocreditvoucher", createItemStack(itemsConfig, "mcmmo vouchers.credit"));
+        items.put("mcmmolevelvoucher", createItemStack(itemsConfig, "mcmmo vouchers.level"));
+        items.put("mcmmoxpvoucher", createItemStack(itemsConfig, "mcmmo vouchers.xp"));
+        items.put("mysterymobspawner", createItemStack(itemsConfig, "mystery mob spawner"));
+        items.put("spacedrink", createItemStack(itemsConfig, "space drink"));
+        items.put("spacefirework", createItemStack(itemsConfig, "space firework"));
+        items.put("xpbottle", createItemStack(itemsConfig, "xpbottle"));
         air = new ItemStack(Material.AIR);
 
         itemnametag = new ArrayList<>();
@@ -222,8 +221,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         } else if(input.startsWith("booster:")) {
             final Boosters boosters = Boosters.getBoosters();
             if(boosters.isEnabled()) {
-                final String[] a = Q.split(":");
-                return getBooster(a[1]).getItem(Long.parseLong(a[3])*1000, Double.parseDouble(a[2]));
+                final String[] values = Q.split(":");
+                final Booster booster = getBooster(values[1]);
+                return booster != null ? booster.getItem(Long.parseLong(values[3])*1000, Double.parseDouble(values[2])) : air;
             }
             return air;
 
@@ -306,10 +306,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 if(mcmmo.isEnabled()) {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
                     final ItemStack i = items.get(lvl ? "mcmmolevelvoucher" : xp ? "mcmmoxpvoucher" : "mcmmocreditvoucher").clone();
-                    final String[] a = input.split(":");
-                    final String skill = a[1];
-                    final boolean r = a[2].contains("-");
-                    final int min = r ? Integer.parseInt(a[2].split("-")[0]) : Integer.parseInt(a[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(a[2].split("-")[1])-min+1) : min;
+                    final String[] values = input.split(":");
+                    Bukkit.broadcastMessage("GivedpItem;input=" + input);
+                    final String skill = values[1];
+                    final boolean r = values[2].contains("-");
+                    final int min = r ? Integer.parseInt(values[2].split("-")[0]) : Integer.parseInt(values[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(values[2].split("-")[1])-min+1) : min;
                     final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
                     final String n = name != null ? colorize(name) : "UNKNOWN";
                     itemMeta = i.getItemMeta();
@@ -451,7 +452,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 PLUGIN_MANAGER.callEvent(e);
                 if(!e.isCancelled()) {
                     removeItem(player, is, 1);
-                    final ItemStack r = d(null, spawner);
+                    final ItemStack r = createItemStack(null, spawner);
                     giveItem(player, r);
                     player.updateInventory();
                     if(!receivemsg.isEmpty()) {

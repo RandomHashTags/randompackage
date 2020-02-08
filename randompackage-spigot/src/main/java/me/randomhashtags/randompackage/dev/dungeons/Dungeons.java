@@ -52,22 +52,22 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         save(null, "dungeons.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "dungeons.yml"));
 
-        dimensionweb = d(config, "items.dimension web");
-        enchantedobsidian = d(config, "items.enchanted obsidian");
-        fuelcell = d(config, "items.fuel cell");
+        dimensionweb = createItemStack(config, "items.dimension web");
+        enchantedobsidian = createItemStack(config, "items.enchanted obsidian");
+        fuelcell = createItemStack(config, "items.fuel cell");
         addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         master = new UInventory(null, config.getInt("master.size"), colorize(config.getString("master.title")));
-        final ItemStack background = d(config, "gui.background");
-        final ItemStack undisDungeon = d(config, "gui.undiscovered.dungeon"), undisKey = d(config, "gui.undiscovered.key");
+        final ItemStack background = createItemStack(config, "gui.background");
+        final ItemStack undisDungeon = createItemStack(config, "gui.undiscovered.dungeon"), undisKey = createItemStack(config, "gui.undiscovered.key");
         final Inventory di = gui.getInventory();
         for(String s : config.getConfigurationSection("gui").getKeys(false)) {
             if(!s.equals("background") && !s.contains("discovered") && config.get("gui." + s + ".slot") != null) {
                 final int slot = config.getInt("gui." + s + ".slot");
                 final String i = config.getString("gui." + s + ".item").toUpperCase();
                 //if(i.startsWith("KEY:")) keys.put(slot, Dungeon.valueOf(config.getString("gui." + s + ".item").split(":")[1]));
-                di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.clone() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.clone() : d(config, "gui." + s));
+                di.setItem(slot, i.equals("{DUNGEON}") ? undisDungeon.clone() : i.equals("{KEY}") || i.startsWith("KEY:") ? undisKey.clone() : createItemStack(config, "gui." + s));
             }
         }
         for(int i = 0; i < gui.getSize(); i++) {

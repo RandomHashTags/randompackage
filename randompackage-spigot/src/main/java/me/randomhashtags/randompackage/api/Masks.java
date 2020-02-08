@@ -55,7 +55,7 @@ public class Masks extends CustomEnchants {
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "masks", "_settings.yml"));
 
         equippedMasks = new HashMap<>();
-        maskgenerator = d(config, "items.generator");
+        maskgenerator = createItemStack(config, "items.generator");
         GIVEDP_ITEM.items.put("maskgenerator", maskgenerator);
         maskCanObtain = config.getStringList("items.generator.can obtain");
 

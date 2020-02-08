@@ -47,19 +47,19 @@ public class LivingConquestMob implements UVersionable {
             a = a.toLowerCase().split("=")[0];
             switch (a) {
                 case "helmet":
-                    e.setHelmet(API.d(null, A.substring(7)));
+                    e.setHelmet(API.createItemStack(null, A.substring(7)));
                     break;
                 case "chestplate":
-                    e.setChestplate(API.d(null, A.substring(11)));
+                    e.setChestplate(API.createItemStack(null, A.substring(11)));
                     break;
                 case "leggings":
-                    e.setLeggings(API.d(null, A.substring(9)));
+                    e.setLeggings(API.createItemStack(null, A.substring(9)));
                     break;
                 case "boots":
-                    e.setBoots(API.d(null, A.substring(6)));
+                    e.setBoots(API.createItemStack(null, A.substring(6)));
                     break;
                 case "weapon":
-                    e.setItemInHand(API.d(null, A.substring(7)));
+                    e.setItemInHand(API.createItemStack(null, A.substring(7)));
                     break;
             }
         }
@@ -93,7 +93,7 @@ public class LivingConquestMob implements UVersionable {
                 final int chance = s.contains(";chance=") ? getRemainingInt(s.split(";chance=")[1].split(";")[0]) : 100;
                 if(chance == 100 || chance <= r.nextInt(100)) {
                     s = s.split(";chance")[0];
-                    final ItemStack i = API.d(null, s);
+                    final ItemStack i = API.createItemStack(null, s);
                     if(i != null) {
                         w.dropItem(l, i);
                     }

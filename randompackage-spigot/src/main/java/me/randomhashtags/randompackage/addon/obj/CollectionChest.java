@@ -55,7 +55,7 @@ public class CollectionChest {
 					try {
 						is = otherdata.getItemStack("collection chests." + s + ".storage." + i);
 					} catch (Exception e) {
-						is = API.d(otherdata, "collection chests." + s + ".storage." + i);
+						is = API.createItemStack(otherdata, "collection chests." + s + ".storage." + i);
 					}
 					inv.setItem(Integer.parseInt(i), is);
 				}

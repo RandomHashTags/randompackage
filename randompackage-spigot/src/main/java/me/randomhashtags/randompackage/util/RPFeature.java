@@ -89,7 +89,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             }
         }
     }
-    public static void d() {
+    public static void createItemStack() {
         otherdata = null;
         otherdataF = null;
         givedp = null;
@@ -143,10 +143,10 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
     }
 
 
-    public ItemStack d(FileConfiguration config, String path) {
-        return d(config, path, 0, 0.00f);
+    public ItemStack createItemStack(FileConfiguration config, String path) {
+        return createItemStack(config, path, 0, 0.00f);
     }
-    public ItemStack d(FileConfiguration config, String path, int tier, float enchantMultiplier) {
+    public ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
         item = null;
         if(config == null && path != null || config != null && config.get(path + ".item") != null) {
             final String itemPath = config == null ? path : config.getString(path + ".item");

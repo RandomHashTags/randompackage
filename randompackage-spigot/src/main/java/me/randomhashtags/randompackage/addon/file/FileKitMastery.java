@@ -28,11 +28,11 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
         return getString(yml, "settings.name");
     }
     public ItemStack getItem() {
-        if(item == null) item = set(API.d(yml, "gui settings"));
+        if(item == null) item = set(API.createItemStack(yml, "gui settings"));
         return getClone(item);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = set(API.d(yml, "redeem"));
+        if(redeem == null) redeem = set(API.createItemStack(yml, "redeem"));
         return getClone(redeem);
     }
     private ItemStack set(ItemStack is) {
@@ -69,11 +69,11 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
     }
     public boolean losesRequiredKits() { return yml.getBoolean("settings.loses required kits"); }
     public ItemStack getShard() {
-        if(shard == null) shard = API.d(yml, "shard");
+        if(shard == null) shard = API.createItemStack(yml, "shard");
         return getClone(shard);
     }
     public ItemStack getAntiCrystal() {
-        if(antiCrystal == null) antiCrystal = API.d(yml, "anti crystal");
+        if(antiCrystal == null) antiCrystal = API.createItemStack(yml, "anti crystal");
         return getClone(antiCrystal);
     }
     public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }

@@ -205,7 +205,7 @@ public class LivingCustomBoss extends UVersion {
                     rewards.put(target, new ArrayList<>());
                     rewardNames.put(target, new ArrayList<>());
                 }
-                final ItemStack reward = API.d(null, s.split("\\{")[1].split("}")[0]);
+                final ItemStack reward = API.createItemStack(null, s.split("\\{")[1].split("}")[0]);
                 reward.setAmount(amount);
                 rewards.get(target).add(reward);
                 rewardNames.get(target).add(ChatColor.translateAlternateColorCodes('&', s.split(";")[3]));

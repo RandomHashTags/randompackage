@@ -36,7 +36,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return getString(yml, "title");
     }
     public ItemStack getItem() {
-        if(item == null) item = API.d(yml, "item");
+        if(item == null) item = API.createItemStack(yml, "item");
         return getClone(item);
     }
     public List<String> getRewards() {
@@ -52,19 +52,19 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return getStringList(yml, "inventory.bonus format");
     }
     public ItemStack getBackground() {
-        if(background == null) background = API.d(yml, "inventory.background");
+        if(background == null) background = API.createItemStack(yml, "inventory.background");
         return getClone(background);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = API.d(yml, "inventory.redeem");
+        if(redeem == null) redeem = API.createItemStack(yml, "inventory.redeem");
         return getClone(redeem);
     }
     public ItemStack getBonus1() {
-        if(bonus1 == null) bonus1 = API.d(yml, "inventory.bonus 1");
+        if(bonus1 == null) bonus1 = API.createItemStack(yml, "inventory.bonus 1");
         return getClone(bonus1);
     }
     public ItemStack getBonus2() {
-        if(bonus2 == null) bonus2 = API.d(yml, "inventory.bonus 2");
+        if(bonus2 == null) bonus2 = API.createItemStack(yml, "inventory.bonus 2");
         return getClone(bonus2);
     }
     public UInventory getRegular() {
@@ -151,7 +151,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         if(!canRepeatRewards) {
             type.get(player).add(r);
         }
-        final ItemStack is = API.d(null, R);
+        final ItemStack is = API.createItemStack(null, R);
         if(is != null) {
         }
         return is;

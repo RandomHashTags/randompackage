@@ -41,7 +41,7 @@ public interface Lootbox extends Itemable, Nameable {
         final List<ItemStack> items = new ArrayList<>();
         final List<String> l = getRewards(type);
         for(String s : l) {
-            items.add(API.d(null, s));
+            items.add(API.createItemStack(null, s));
         }
         return items;
     }
@@ -55,9 +55,9 @@ public interface Lootbox extends Itemable, Nameable {
 
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRegularLoot()) items.add(API.d(null, s));
-        for(String s : getJackpotLoot()) items.add(API.d(null, s));
-        for(String s : getBonusLoot()) items.add(API.d(null, s));
+        for(String s : getRegularLoot()) items.add(API.createItemStack(null, s));
+        for(String s : getJackpotLoot()) items.add(API.createItemStack(null, s));
+        for(String s : getBonusLoot()) items.add(API.createItemStack(null, s));
         return items;
     }
 }

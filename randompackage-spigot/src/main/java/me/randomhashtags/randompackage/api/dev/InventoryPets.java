@@ -66,9 +66,9 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         final String folder = DATA_FOLDER + SEPARATOR + "inventory pets";
 
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
-        leash = d(config, "items.leash");
+        leash = createItemStack(config, "items.leash");
         leashedLore = colorize(config.getString("items.leash.applied lore"));
-        rarecandy = d(config, "items.rare candy");
+        rarecandy = createItemStack(config, "items.rare candy");
         GIVEDP_ITEM.items.put("rarecandy", rarecandy);
         GIVEDP_ITEM.items.put("petleash", leash);
 

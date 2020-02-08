@@ -64,10 +64,10 @@ public class Alchemist extends RPFeature implements CommandExecutor {
 
         accepting = new ArrayList<>();
         currency = config.getString("settings.currency", "EXP");
-        accept = d(config, "items.accept");
-        exchange = d(config, "items.exchange");
-        preview = d(config, "items.preview");
-        background = d(config, "items.background");
+        accept = createItemStack(config, "items.accept");
+        exchange = createItemStack(config, "items.exchange");
+        preview = createItemStack(config, "items.preview");
+        background = createItemStack(config, "items.background");
         alchemist = new UInventory(null, 27, colorize(config.getString("gui.title")));
         final Inventory inv = alchemist.getInventory();
         for(int i = 0; i < inv.getSize(); i++) {

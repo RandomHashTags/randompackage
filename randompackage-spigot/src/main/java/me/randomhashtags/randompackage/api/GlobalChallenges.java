@@ -128,7 +128,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		final List<ItemStack> list = new ArrayList<>();
 		for(String s : getConfigurationSectionKeys(config, "rewards", false)) {
 			if(!s.equals("title")) {
-				final GlobalChallengePrizeObject obj = new GlobalChallengePrizeObject(d(config, "rewards." + s + ".prize"), config.getInt("rewards." + s + ".amount"), Integer.parseInt(s), config.getStringList("rewards." + s + ".prizes"));
+				final GlobalChallengePrizeObject obj = new GlobalChallengePrizeObject(createItemStack(config, "rewards." + s + ".prize"), config.getInt("rewards." + s + ".amount"), Integer.parseInt(s), config.getStringList("rewards." + s + ".prizes"));
 				list.add(obj.getItem());
 			}
 		}
@@ -242,7 +242,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						f += 1;
 					}
 				} else {
-					item = d(config, "gui." + i);
+					item = createItemStack(config, "gui." + i);
 				}
 				inv.setItem(i, item);
 			}
@@ -276,7 +276,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			}
 			final HashMap<String, ItemStack> rewards = prize.getRandomRewards();
 			for(String s : rewards.keySet()) {
-				giveItem(player, d(null, s));
+				giveItem(player, createItemStack(null, s));
 			}
 			if(sendMessage) {
 				final String placing = prize.getPlacement() + "";

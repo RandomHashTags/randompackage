@@ -30,7 +30,7 @@ public class DropItem extends AbstractEventAttribute {
         final Entity e = isEntity ? (Entity) o : null;
         final Location l = isEntity ? e.getLocation() : (Location) o;
 
-        final ItemStack is = API.d(null, value);
+        final ItemStack is = API.createItemStack(null, value);
         if(is != null && !is.getType().equals(Material.AIR)) {
             l.getWorld().dropItem(l, is);
         }

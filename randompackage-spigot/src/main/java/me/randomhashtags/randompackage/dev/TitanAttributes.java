@@ -36,7 +36,7 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
         final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";
         save("titan attributes", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
-        extractor = d(config, "items.extractor");
+        extractor = createItemStack(config, "items.extractor");
 
         if(!otherdata.getBoolean("saved default titan attributes")) {
             generateDefaultTitanAttributes();

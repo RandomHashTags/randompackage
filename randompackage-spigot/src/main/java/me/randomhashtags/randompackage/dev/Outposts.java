@@ -80,7 +80,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
                 //gi.setItem(o.getSlot(), o.getItem());
             }
         }
-        background = d(config, "gui.background");
+        background = createItemStack(config, "gui.background");
         int i = 0;
         for(ItemStack is : gi.getContents()) {
             if(is == null) gi.setItem(i, background);

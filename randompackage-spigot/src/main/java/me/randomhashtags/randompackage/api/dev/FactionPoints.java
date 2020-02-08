@@ -45,8 +45,8 @@ public class FactionPoints extends RPFeature implements RPItemStack {
         costPerPoint = BigInteger.valueOf(config.getLong("settings.cost per point"));
         dailyLimit = BigInteger.valueOf(config.getLong("settings.daily limit"));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        interactable = d(config, "item");
-        display = d(config, "gui.display");
+        interactable = createItemStack(config, "item");
+        display = createItemStack(config, "gui.display");
 
         points = new HashMap<>();
         purchaseAmounts = new HashMap<>();
@@ -62,7 +62,7 @@ public class FactionPoints extends RPFeature implements RPItemStack {
                 purchaseAmounts.put(slot, points);
                 inv.setItem(slot, getDisplayedFactionPoints(points));
             } else {
-                inv.setItem(slot, d(config, path));
+                inv.setItem(slot, createItemStack(config, path));
             }
         }
 

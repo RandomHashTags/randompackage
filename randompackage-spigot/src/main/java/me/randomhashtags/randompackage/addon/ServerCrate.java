@@ -29,7 +29,7 @@ public interface ServerCrate extends Itemable {
         final HashMap<String, List<String>> rewards = getRewards();
         for(String rarity : rewards.keySet()) {
             for(String item : rewards.get(rarity)) {
-                final ItemStack target = API.d(null, item);
+                final ItemStack target = API.createItemStack(null, item);
                 if(target != null && !target.getType().equals(Material.AIR)) {
                     items.add(target);
                 }

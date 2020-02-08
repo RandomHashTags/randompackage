@@ -43,7 +43,7 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         for(int i = 0; i < availableRewards.size(); i++) {
             final String s = availableRewards.get(i);
             if(!s.toLowerCase().startsWith("chance=")) {
-                rewards.put(s, API.d(null, s));
+                rewards.put(s, API.createItemStack(null, s));
                 availableRewards.remove(s);
                 amount += 1;
                 i -= 1;
@@ -60,9 +60,9 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
                 if(target.contains("||")) {
                     final String[] t = target.split("\\|\\|");
                     final String ta = t[RANDOM.nextInt(t.length)];
-                    rewards.put(ta, API.d(null, ta));
+                    rewards.put(ta, API.createItemStack(null, ta));
                 } else {
-                    rewards.put(target, API.d(null, target));
+                    rewards.put(target, API.createItemStack(null, target));
                 }
                 availableRewards.remove(randomReward);
             } else {

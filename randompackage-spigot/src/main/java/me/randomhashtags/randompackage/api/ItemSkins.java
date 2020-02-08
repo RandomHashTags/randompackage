@@ -61,7 +61,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
         final String folder = DATA_FOLDER + SEPARATOR + "item skins";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-        skin = d(config, "item");
+        skin = createItemStack(config, "item");
         appliedLore = colorize(config.getString("item.applied lore"));
         materials = new HashMap<>();
         for(String s : getConfigurationSectionKeys(config, "materials", false)) {

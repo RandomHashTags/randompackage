@@ -22,14 +22,14 @@ public class PathFireball extends RPAddon implements RarityFireball {
 	}
 
 	public ItemStack getItem() {
-		if(is == null) is = API.d(getAddonConfig("fireballs.yml"), "fireballs." + path);
+		if(is == null) is = API.createItemStack(getAddonConfig("fireballs.yml"), "fireballs." + path);
 		return getClone(is);
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
 		getReveals();
 		String reward = usesChances ? null : reveals.get(RANDOM.nextInt(reveals.size())).split(";")[1];
 		if(reward != null) {
-			return API.d(null, reward);
+			return API.createItemStack(null, reward);
 		}
 		for(String s : reveals) {
 			final String[] a = s.split(";");

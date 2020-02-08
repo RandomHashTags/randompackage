@@ -22,7 +22,7 @@ public class FileTrinket extends RPAddon implements Trinket {
 
     public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled", "false")); }
     public ItemStack getItem() {
-        if(item == null) item = API.d(yml, "item");
+        if(item == null) item = API.createItemStack(yml, "item");
         return getClone(item);
     }
     public HashMap<String, String> getSettings() {
