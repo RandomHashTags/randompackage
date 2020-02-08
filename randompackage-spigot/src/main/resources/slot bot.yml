@@ -21,7 +21,7 @@ items:
     item: "paper"
     name: "&d&lSlot Bot&r &f&lTicket"
     lore:
-      - "&7Right-CLick the Slot Bot located"
+      - "&7Right-Click the Slot Bot located"
       - "&7at &f/spawn &7or use &f/bot &7then"
       - "&7insert (Left-Click) this ticket"
       - "&7into the bot."

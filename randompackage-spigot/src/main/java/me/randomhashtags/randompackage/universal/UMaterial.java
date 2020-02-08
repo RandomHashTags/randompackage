@@ -205,7 +205,7 @@ public enum UMaterial implements Versionable {
     CARROT_ITEM("CARROT_ITEM", null, null, null, null, "CARROT"),
     CARROT_ON_A_STICK("CARROT_STICK", null, null, null, null, "CARROT_ON_A_STICK"),
     CARTOGRAPHY_TABLE(null, null, null, null, null, null, "CARTOGRAPHY_TABLE"),
-    CARVED_PUMPKIN(null, null, null, null, null, "CARVED_PUMPKIN"),
+    CARVED_PUMPKIN("PUMPKIN", null, null, null, null, "CARVED_PUMPKIN"),
     CAULDRON("CAULDRON"),
     CAULDRON_ITEM("CAULDRON_ITEM", null, null, null, null, "CAULDRON"),
     CAVE_AIR("AIR", null, null, null, null, "CAVE_AIR"),

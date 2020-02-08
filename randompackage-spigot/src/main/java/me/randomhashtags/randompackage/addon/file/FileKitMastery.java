@@ -24,7 +24,9 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
     public String getIdentifier() { return getYamlName(); }
     public Kits getKitClass() { return KitsMastery.getKitsMastery(); }
 
-    public String getName() { return colorize(yml.getString("settings.name")); }
+    public String getName() {
+        return getString(yml, "settings.name");
+    }
     public ItemStack getItem() {
         if(item == null) item = set(API.d(yml, "gui settings"));
         return getClone(item);
@@ -39,9 +41,10 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
             final List<String> l = new ArrayList<>();
             int req = 0;
             final HashMap<CustomKit, Integer> re = getRequiredKits();
+            final CustomKit[] kitKeys = re.keySet().toArray(new CustomKit[re.size()]);
             for(String s : m.getLore()) {
                 if(s.contains("{REQUIREMENT}")) {
-                    final CustomKit kit = (CustomKit) re.keySet().toArray()[req];
+                    final CustomKit kit = kitKeys[req];
                     final String name = kit.getItem().getItemMeta().getDisplayName();
                     s = s.replace("{REQUIREMENT}", name).replace("{TIER}", API.toRoman(re.get(kit)));
                     req++;

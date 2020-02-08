@@ -508,7 +508,7 @@ public interface UVersionable extends Versionable {
     }
     default Entity getEntity(UUID uuid) {
         if(uuid != null) {
-            if(EIGHT || NINE) {
+            if(EIGHT || NINE || TEN) {
                 for(World w : Bukkit.getWorlds()) {
                     for(LivingEntity le : w.getLivingEntities()) {
                         if(uuid.equals(le.getUniqueId())) {

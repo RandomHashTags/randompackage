@@ -115,14 +115,23 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
         player.updateInventory();
     }
     public void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
-        item = m.getItemStack(); itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
-        item.setItemMeta(itemMeta);
-        givedp.getInventory().addItem(item);
-        final int size = items.size();
-        final Inventory inv = Bukkit.createInventory(null, size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9, invtitle);
-        for(ItemStack is : items) if(is != null) inv.addItem(is);
-        givedpCategories.add(inv);
+        item = m.getItemStack();
+        if(item == null) {
+            sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
+        } else {
+            itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
+            item.setItemMeta(itemMeta);
+            givedp.getInventory().addItem(item);
+            final int size = items.size();
+            final Inventory inv = Bukkit.createInventory(null, size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9, invtitle);
+            for(ItemStack is : items) {
+                if(is != null) {
+                    inv.addItem(is);
+                }
+            }
+            givedpCategories.add(inv);
+        }
     }
 
     public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
@@ -195,6 +204,9 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             } catch (Exception e) {
                 System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getVersionName() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
                 return null;
+            }
+            if(item == null) {
+                sendConsoleMessage("&6[RandomPackage] &cERROR: Material=" + mat + ";umaterial=" + umaterial);
             }
             final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
             if(!i.equals(Material.AIR)) {

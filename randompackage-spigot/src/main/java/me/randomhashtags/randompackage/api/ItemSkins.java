@@ -76,7 +76,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
                 list.add(getItemSkinItem(skin, false));
             }
         }
-        addGivedpCategory(list, UMaterial.DRAGON_HEAD, "Item Skins", "Givedp: Item Skins");
+        addGivedpCategory(list, UMaterial.LEATHER, "Item Skins", "Givedp: Item Skins");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ITEM_SKIN).size() + " Item Skins &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {

@@ -77,7 +77,7 @@ public class CustomExplosions extends RPFeature {
 		}
 
 		final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
-		sendConsoleDidLoadFeature(explosions.size() + "Custom Explosions", started);
+		sendConsoleDidLoadFeature(explosions.size() + " Custom Explosions", started);
 
 		final List<ItemStack> explosionsList = new ArrayList<>();
 		for(Identifiable id : explosions.values()) {

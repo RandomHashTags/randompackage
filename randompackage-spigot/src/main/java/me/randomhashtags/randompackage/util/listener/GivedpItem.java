@@ -44,7 +44,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public static final GivedpItem GIVEDP_ITEM = new GivedpItem();
 
     public YamlConfiguration itemsConfig;
-    public HashMap<String, ItemStack> customitems;
+    private HashMap<String, ItemStack> customitems;
 
     public HashMap<String, ItemStack> items;
     private ItemStack air;
@@ -83,12 +83,10 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         save(null, "items.yml");
         itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
         customitems = new HashMap<>();
-        final ConfigurationSection cs = itemsConfig.getConfigurationSection("custom items");
-        if(cs != null) {
-            for(String s : cs.getKeys(false)) {
-                customitems.put(s, d(itemsConfig, "custom items." + s));
-            }
+        for(String s : getConfigurationSectionKeys(itemsConfig, "custom items", false)) {
+            customitems.put(s, d(itemsConfig, "custom items." + s));
         }
+
         items = new HashMap<>();
         items.put("banknote", d(itemsConfig, "banknote"));
         items.put("christmascandy", d(itemsConfig, "christmas candy"));
@@ -326,8 +324,12 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
             return air;
         } else if(input.startsWith("monthlycrate:")) {
-            final MonthlyCrate m = getMonthlyCrate(Q.split(":")[1]);
-            return m != null ? m.getItem() : air;
+            final MonthlyCrates crates = MonthlyCrates.getMonthlyCrates();
+            if(crates.isEnabled()) {
+                final MonthlyCrate m = getMonthlyCrate(Q.split(":")[1]);
+                return m != null ? m.getItem() : air;
+            }
+            return air;
         } else if(input.startsWith("randomizationscroll:")) {
             final RandomizationScroll r = getRandomizationScroll(Q.split(":")[1]);
             return r != null ? r.getItem() : air;
@@ -424,7 +426,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         return item;
     }
     public ItemStack getXPBottle(BigDecimal value, String enchanter) {
-        item = items.get("xpbottle").clone(); itemMeta = item.getItemMeta(); lore.clear();
+        item = items.get("xpbottle").clone();
+        itemMeta = item.getItemMeta(); lore.clear();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{ENCHANTER}")) s = enchanter != null ? s.replace("{ENCHANTER}", enchanter) : null;
             if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));

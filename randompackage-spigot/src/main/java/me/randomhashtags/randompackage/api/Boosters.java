@@ -178,7 +178,9 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 									sendStringListMessage(p, b.getActivateMsg(), replacements);
 								}
 							}
-							if(!activeRegionalBoosters.containsKey(faction)) activeRegionalBoosters.put(faction, new ArrayList<>());
+							if(!activeRegionalBoosters.containsKey(faction)) {
+								activeRegionalBoosters.put(faction, new ArrayList<>());
+							}
 							activeRegionalBoosters.get(faction).add(booster);
 						}
 					} else {
@@ -191,7 +193,9 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 					if(player.isOnline()) {
 						sendStringListMessage(player.getPlayer(), b.getActivateMsg(), replacements);
 					}
-					if(!activePlayerBoosters.containsKey(u)) activePlayerBoosters.put(u, new ArrayList<>());
+					if(!activePlayerBoosters.containsKey(u)) {
+						activePlayerBoosters.put(u, new ArrayList<>());
+					}
 					activePlayerBoosters.get(u).add(booster);
 					return true;
 				default:

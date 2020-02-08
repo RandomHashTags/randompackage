@@ -71,7 +71,9 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         bottle = GIVEDP_ITEM.items.get("xpbottle");
         int i = 0;
         for(String s : bottle.getItemMeta().getLore()) {
-            if(s.contains("{VALUE}")) xpbottleValueSlot = i;
+            if(s.contains("{VALUE}")) {
+                xpbottleValueSlot = i;
+            }
             i++;
         }
 

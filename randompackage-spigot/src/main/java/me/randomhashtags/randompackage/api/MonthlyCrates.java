@@ -85,6 +85,12 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         locked = d(config, "category view.locked");
         categoryViewBackground = d(config, "category view.background");
 
+        if(!otherdata.getBoolean("saved default monthly crates")) {
+            generateDefaultMonthlyCrates();
+            otherdata.set("saved default monthly crates", true);
+            saveOtherData();
+        }
+
         final Inventory gi = gui.getInventory();
         for(String s : getConfigurationSectionKeys(config, "gui", false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("background") && !s.equals("already claimed") && !s.equals("locked")) {
@@ -109,11 +115,6 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         GIVEDP_ITEM.items.put("superiormysterycrate", superiorMysteryCrate);
         GIVEDP_ITEM.items.put("superiorcrate", superiorMysteryCrate);
 
-        if(!otherdata.getBoolean("saved default monthly crates")) {
-            generateDefaultMonthlyCrates();
-            otherdata.set("saved default monthly crates", true);
-            saveOtherData();
-        }
         final HashMap<Integer, HashMap<Integer, MonthlyCrate>> categorySlots = new HashMap<>();
         final HashMap<Integer, HashMap<Integer, ItemStack>> categoryItemStacks = new HashMap<>();
         for(File f : getFilesInFolder(folder)) {
