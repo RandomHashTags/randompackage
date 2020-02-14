@@ -50,6 +50,8 @@ public interface UVersionable extends Versionable {
     ScoreboardManager SCOREBOARD_MANAGER = Bukkit.getScoreboardManager();
     ConsoleCommandSender CONSOLE = Bukkit.getConsoleSender();
 
+    ItemStack AIR = new ItemStack(Material.AIR);
+
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
     EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND, EIGHT ? null : EquipmentSlot.OFF_HAND };
     TreeMap<Integer, String> ROMAN_MAP = new TreeMap<Integer, String>() {{
@@ -260,6 +262,12 @@ public interface UVersionable extends Versionable {
     }
     default String formatInt(int integer) {
         return String.format("%,d", integer);
+    }
+    default int getIntegerFromString(String input, int minimum) {
+        final boolean hasHyphen = input.contains("-");
+        final String[] values = input.split("-");
+        final int min = hasHyphen ? Integer.parseInt(values[0]) : minimum;
+        return hasHyphen ? min+RANDOM.nextInt(Integer.parseInt(values[1])-min+1) : Integer.parseInt(input);
     }
     default int parseInt(String input) {
         input = input.toLowerCase();

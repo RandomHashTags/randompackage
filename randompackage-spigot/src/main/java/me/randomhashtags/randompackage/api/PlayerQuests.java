@@ -51,7 +51,9 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     private int returnToQuestsSlot;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if(!(sender instanceof Player)) return true;
+        if(!(sender instanceof Player)) {
+            return true;
+        }
         final Player player = (Player) sender;
         final int l = args.length;
         if(l == 0) {

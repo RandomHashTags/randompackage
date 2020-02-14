@@ -12,7 +12,18 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
-public interface ServerCrate extends Itemable {
+public interface ServerCrate extends Itemable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "serverflare", "spaceflare", "servercrateflare", "servercrate", "spacecrate", "spacechest", "serverchest" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final boolean isFlare = lowercaseInput.contains("flare");
+        final ServerCrate crate = getServerCrate(originalInput.split(":")[1]);
+        final ItemStack target = crate != null ? isFlare ? crate.getFlare().getItem() : crate.getItem() : null;
+        return target != null ? target : AIR;
+    }
+
     int getRedeemableItems();
     String getDisplayRarity();
     List<Integer> getSelectableSlots();

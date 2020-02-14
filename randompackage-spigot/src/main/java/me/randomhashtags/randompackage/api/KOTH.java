@@ -56,7 +56,9 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	private long cappingStartedTime = -1, capturedTime = -1;
 	public Player currentPlayerCapturing, previouscapturer;
 
-	public String getIdentifier() { return "KOTH"; }
+	public String getIdentifier() {
+		return "KOTH";
+	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		switch (args.length) {
@@ -150,7 +152,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		final List<ItemStack> loot = new ArrayList<>();
 		for(String reward : lootbagRewards) {
 			final String rewardLC = reward.toLowerCase();
-			final boolean isChance1 = rewardLC.contains(";chance"), isChance2 = reward.startsWith("chance=");
+			final boolean isChance1 = rewardLC.contains(";chance"), isChance2 = rewardLC.startsWith("chance=");
 			final String[] values = isChance2 ? rewardLC.split("chance=") : isChance1 ? rewardLC.split(";chance=") : null;
 			final int chance = values != null ? Integer.parseInt(values[1].split("-")[0]) : 100;
 			if(RANDOM.nextInt(100) < chance) {

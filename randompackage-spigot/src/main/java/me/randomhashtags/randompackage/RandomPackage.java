@@ -146,17 +146,18 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(ServerCrates.getServerCrates(), null, isTrue("server crates"));
         cmd.load(Titles.getTitles(), Arrays.asList("title"), isTrue("title"));
         cmd.load(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
-        cmd.loadCustom(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
         cmd.loadCustom(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
+        cmd.loadCustom(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
+
+        RandomizedLoot.getRandomizedLoot().enable();
+        cmd.loadCustom(SlotBot.getSlotBot(), getHash("slotbot", "slot bot"), isTrue("slot bot"));
+        cmd.load(Enchanter.getEnchanter(), Arrays.asList("enchanter"), isTrue("enchanter"));
+
         cmd.load(Shop.getShop(), Arrays.asList("shop"), isTrue("shop"));
         cmd.loadCustom(SpawnerStacking.getSpawnerStacking(), null, isTrue("spawner stacking"));
         cmd.load(Trade.getTrade(), Arrays.asList("trade"), isTrue("trade"));
         cmd.load(Wild.getWild(), Arrays.asList("wild"), isTrue("wild"));
         cmd.loadCustom(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
-
-        RandomizedLoot.getRandomizedLoot().enable();
-        cmd.loadCustom(SlotBot.getSlotBot(), getHash("slotbot", "slot bot"), isTrue("slot bot"));
-        cmd.load(Enchanter.getEnchanter(), Arrays.asList("enchanter"), isTrue("enchanter"));
 
         final int interval = config.getInt("backup interval")*20*60;
         scheduler.scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);

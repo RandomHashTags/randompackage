@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Toggleable;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.World;
@@ -16,7 +17,16 @@ import org.bukkit.inventory.PlayerInventory;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Toggleable, Versionable {
+public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Toggleable, Versionable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "customenchant", "ce" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final ItemStack target = CustomEnchants.getCustomEnchants().getRevealedItemFromString(originalInput);
+        return target != null ? target : AIR;
+    }
+
     List<String> getEnabledInWorlds();
     default boolean canProcInWorld(@NotNull World world) {
         return canProcInWorld(world.getName());

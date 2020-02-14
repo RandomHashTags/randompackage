@@ -13,7 +13,16 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
-public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable {
+public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "customboss" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final CustomBoss boss = getCustomBoss(originalInput.split(":")[1]);
+        return boss != null ? boss.getSpawnItem() : AIR;
+    }
+
     ItemStack getSpawnItem();
     List<CustomBossAttack> getAttacks();
     HashMap<Integer, List<String>> getMessages();

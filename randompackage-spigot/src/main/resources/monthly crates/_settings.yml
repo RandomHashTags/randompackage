@@ -55,22 +55,6 @@ gui:
     - " &d&l*&r {CRATE}"
     - " "
     - "&7Click to view Monthly Crates from &n2018&r&7!"
-  #
-  jan 2019:
-    slot: 18
-    item: "monthlycrate:JANUARY_2019"
-  feb 2019:
-    slot: 19
-    item: "monthlycrate:FEBRUARY_2019"
-  mar 2019:
-    slot: 20
-    item: "monthlycrate:MARCH_2019"
-  apr 2019:
-    slot: 21
-    item: "monthlycrate:APRIL_2019"
-  may 2019:
-    slot: 22
-    item: "monthlycrate:MAY_2019"
 #
 category view:
   title: "{CATEGORY} Monthly Crates"

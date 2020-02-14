@@ -12,4 +12,4 @@ alchemist: "1000:2250:3500:4750"
 tinkerer: "58:66:74:82:90"
 #
 attributes:
-  - "BlockBreak;chance=15*level;SetDroppedExp=droppedxp+getRandom(level:level+3)"
+  - "BlockBreak;chance=15*level;SetDroppedExp=xp+getRandom(level:level+3)"

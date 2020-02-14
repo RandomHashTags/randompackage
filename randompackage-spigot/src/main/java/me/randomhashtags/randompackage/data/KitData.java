@@ -1,0 +1,19 @@
+package me.randomhashtags.randompackage.data;
+
+import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.addon.CustomKit;
+
+import java.util.HashMap;
+
+public interface KitData {
+    HashMap<CustomKit, Integer> getLevels();
+    default int getKitLevel(@NotNull CustomKit kit) {
+        final HashMap<CustomKit, Integer> levels = getLevels();
+        return levels != null ? levels.getOrDefault(kit, -1) : -1;
+    }
+    HashMap<CustomKit, Long> getCooldowns();
+    default long getKitCooldown(@NotNull CustomKit kit) {
+        final HashMap<CustomKit, Long> cooldowns = getCooldowns();
+        return cooldowns != null ? cooldowns.getOrDefault(kit, -1l) : -1;
+    }
+}

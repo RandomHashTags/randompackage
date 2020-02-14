@@ -53,7 +53,7 @@ public class RPPlayer implements RPStorage {
     private Title activeTitle;
     public BigDecimal jackpotWonCash = BigDecimal.ZERO, jackpotTickets = BigDecimal.ZERO;
     public long xpExhaustionExpiration = 0;
-    public int jackpotWins, addedMaxHomes , questTokens , reputationPoints;
+    public int jackpotWins, addedMaxHomes, questTokens, reputationPoints;
     private boolean coinflipNotifications = true, jackpotNotifications = true, filter = false;
     public boolean isLoaded = false, activeTitleIsLoaded = false;
 

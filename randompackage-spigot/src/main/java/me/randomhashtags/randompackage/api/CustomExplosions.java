@@ -5,8 +5,8 @@ import me.randomhashtags.randompackage.addon.file.FileCustomCreeper;
 import me.randomhashtags.randompackage.addon.file.FileCustomTNT;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -273,20 +273,15 @@ public class CustomExplosions extends RPFeature {
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void entityExplodeEvent(EntityExplodeEvent event) {
-		final Entity e = event.getEntity();
-		final UUID uuid = e.getUniqueId();
-		final HashMap<UUID, FileCustomCreeper> CC = FileCustomCreeper.living;
-		final HashMap<UUID, FileCustomTNT> CT = FileCustomTNT.primed;
-		final FileCustomCreeper creeper = CC != null ? CC.getOrDefault(uuid, null) : null;
-		final FileCustomTNT tnt = creeper == null && CT != null ? CT.getOrDefault(uuid, null) : null;
+		final Entity entity = event.getEntity();
+		final UUID uuid = entity.getUniqueId();
+		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
+		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.primed;
+		final FileCustomCreeper creeper = creepers != null ? creepers.getOrDefault(uuid, null) : null;
+		final FileCustomTNT tnt = creeper == null && primed != null ? primed.getOrDefault(uuid, null) : null;
 		if(creeper == null && tnt == null) {
 			return;
 		}
-		final Location l = e.getLocation();
-		if(creeper != null) {
-			creeper.explode(event, l, RANDOM);
-		} else {
-			tnt.explode(event, l, RANDOM);
-		}
+		(creeper != null ? creeper : tnt).explode(event, entity.getLocation());
 	}
 }

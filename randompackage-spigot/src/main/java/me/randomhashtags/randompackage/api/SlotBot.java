@@ -28,6 +28,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
+import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
+
 public class SlotBot extends RPFeature implements Listener, CommandExecutor, ChatUtils {
     private static SlotBot instance;
     public static SlotBot getSlotBot() {
@@ -65,6 +67,8 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "slot bot.yml"));
 
         ticket = createItemStack(config, "items.ticket");
+        GIVEDP_ITEM.items.put("slotbotticket", ticket);
+
         ticketLocked = createItemStack(config, "items.ticket locked");
         ticketUnlocked = createItemStack(config, "items.ticket unlocked");
         rewardSlot = createItemStack(config, "items.reward slot");

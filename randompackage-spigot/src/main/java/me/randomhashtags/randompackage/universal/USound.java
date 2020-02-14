@@ -83,10 +83,17 @@ public enum USound implements Versionable {
     //
     ENTITY_PLAYER_LEVELUP("LEVEL_UP", "ENTITY_PLAYER_LEVELUP"),
     //
+    ENTITY_VILLAGER_AMBIENT("VILLAGER_IDLE", "ENTITY_VILLAGER_AMBIENT"),
+    ENTITY_VILLAGER_DEATH("VILLAGER_DEATH", "ENTITY_VILLAGER_DEATH"),
+    ENTITY_VILLAGER_HURT("VILLAGER_HIT", "ENTITY_VILLAGER_HURT"),
+    ENTITY_VILLAGER_NO("VILLAGER_NO", "ENTITY_VILLAGER_NO"),
+    ENTITY_VILLAGER_TRADING("VILLAGER_HAGGLE", "ENTITY_VILLAGER_TRADING"),
+    ENTITY_VILLAGER_YES("VILLAGER_YES", "ENTITY_VILLAGER_YES"),
+    //
     WEATHER_RAIN("AMBIENCE_RAIN", "WEATHER_RAIN"),
     WEATHER_RAIN_ABOVE("AMBIENCE_RAIN", "WEATHER_RAIN_ABOVE"),
     ;
-    private static final USound[] sounds = USound.values();
+    private static final USound[] SOUNDS = USound.values();
     private static final HashMap<String, USound> CACHE = new HashMap<>();
     private static final HashMap<String, Sound> SOUND_CACHE = new HashMap<>();
     private String[] names;
@@ -95,9 +102,15 @@ public enum USound implements Versionable {
         this.names = names;
         this.sound = getVersionSound();
     }
-    public Sound getSound() { return sound; }
-    public void playSound(Player player, float volume, float pitch) { player.playSound(player.getLocation(), sound, volume, pitch); }
-    public void playSound(Location l, float volume, float pitch) { l.getWorld().playSound(l, sound, volume, pitch); }
+    public Sound getSound() {
+        return sound;
+    }
+    public void playSound(Player player, float volume, float pitch) {
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+    public void playSound(Location l, float volume, float pitch) {
+        l.getWorld().playSound(l, sound, volume, pitch);
+    }
 
     private Sound getVersionSound() {
         final int ver = EIGHT ? 0 : NINE ? 1 : TEN ? 2 : ELEVEN ? 3 : TWELVE ? 4 : THIRTEEN ? 5 : FOURTEEN ? 6 : FIFTEEN ? 7 : names.length-1;
@@ -127,7 +140,7 @@ public enum USound implements Versionable {
                 CACHE.put(name, sound);
                 return sound;
             } catch (Exception e) {
-                for(USound sound : sounds) {
+                for(USound sound : SOUNDS) {
                     for(String target : sound.names) {
                         if(name.equals(target)) {
                             CACHE.put(name, sound);

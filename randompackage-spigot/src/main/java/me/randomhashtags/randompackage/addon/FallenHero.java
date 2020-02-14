@@ -6,9 +6,39 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public interface FallenHero extends Spawnable {
+public interface FallenHero extends Spawnable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "fallenherogem", "fallenhero" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final boolean isSpawnItem = !lowercaseInput.startsWith("fallenherogem");
+        final String type = originalInput.contains(":") ? originalInput.split(":")[1] : null;
+        CustomKit kit = type != null ? getCustomKit(type) : null;
+        final Collection<CustomKit> kits = getAllCustomKits().values();
+        if(type != null && kit == null) {
+            final List<CustomKit> list = new ArrayList<>();
+            for(CustomKit targetKit : kits) {
+                if(targetKit.getIdentifier().startsWith(type)) {
+                    list.add(targetKit);
+                }
+            }
+            final int size = list.size();
+            if(size > 0) {
+                kit = list.get(RANDOM.nextInt(size));
+            }
+        }
+        if(kit == null) {
+            kit = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
+        }
+        final FallenHero f = kit != null ? kit.getFallenHero() : null;
+        return f != null ? kit.getFallenHeroItem(kit, isSpawnItem) : AIR;
+    }
+
     ItemStack getSpawnItem();
     ItemStack getGem();
     List<PotionEffect> getPotionEffects();

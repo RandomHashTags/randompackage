@@ -8,9 +8,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
+public interface Booster extends Attributable, Itemable, GivedpItemable {
 
-public interface Booster extends Attributable, Itemable {
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "booster" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final String[] values = originalInput.split(":");
+        final Booster booster = getBooster(values[1]);
+        return booster != null ? booster.getItem(Long.parseLong(values[3])*1000, Double.parseDouble(values[2])) : AIR;
+    }
+
     BoosterRecipients getRecipients();
     int getTimeLoreSlot();
     int getMultiplierLoreSlot();
@@ -18,15 +26,15 @@ public interface Booster extends Attributable, Itemable {
     List<String> getExpireMsg();
     List<String> getNotifyMsg();
     default ItemStack getItem(long duration, double multiplier) {
-        final String d = API.getRemainingTime(duration), mu = Double.toString(API.round(multiplier, 4));
-        final ItemStack i = getItem();
-        final ItemMeta m = i.getItemMeta();
+        final String durationString = getRemainingTime(duration), multiplierString = Double.toString(round(multiplier, 4));
+        final ItemStack is = getItem();
+        final ItemMeta m = is.getItemMeta();
         final List<String> l = new ArrayList<>();
         for(String s : m.getLore()) {
-            l.add(s.replace("{TIME}", d).replace("{MULTIPLIER}", mu));
+            l.add(s.replace("{TIME}", durationString).replace("{MULTIPLIER}", multiplierString));
         }
         m.setLore(l);
-        i.setItemMeta(m);
-        return i;
+        is.setItemMeta(m);
+        return is;
     }
 }

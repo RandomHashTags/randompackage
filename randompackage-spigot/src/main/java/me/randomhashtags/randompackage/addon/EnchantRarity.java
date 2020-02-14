@@ -6,7 +6,17 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface EnchantRarity extends Identifiable {
+public interface EnchantRarity extends Identifiable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "raritybook" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final EnchantRarity rarity = getCustomEnchantRarity(originalInput.split(":")[1]);
+        final ItemStack target = rarity != null ? rarity.getRevealItem() : null;
+        return target != null ? target : AIR;
+    }
+
     String[] getRevealedEnchantRarities();
     List<String> getRevealedEnchantMsg();
     ItemStack getRevealItem();

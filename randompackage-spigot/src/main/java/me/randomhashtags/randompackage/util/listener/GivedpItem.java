@@ -1,20 +1,15 @@
 package me.randomhashtags.randompackage.util.listener;
 
-import me.randomhashtags.randompackage.addon.*;
-import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
-import me.randomhashtags.randompackage.api.RandomizedLoot;
-import me.randomhashtags.randompackage.api.*;
-import me.randomhashtags.randompackage.api.addon.Scrolls;
-import me.randomhashtags.randompackage.api.dev.InventoryPets;
-import me.randomhashtags.randompackage.api.ItemSkins;
-import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.addon.CustomKit;
+import me.randomhashtags.randompackage.addon.CustomKitMastery;
+import me.randomhashtags.randompackage.addon.GivedpItemable;
+import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,7 +28,6 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -116,190 +110,40 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public void unload() {
     }
 
-    private int getInteger(String input, int minimum) {
-        final boolean m = input.contains("-");
-        final String[] values = input.split("-");
-        final int min = m ? Integer.parseInt(values[0]) : minimum;
-        return m ? min+RANDOM.nextInt(Integer.parseInt(values[1])-min+1) : Integer.parseInt(input);
-    }
-
     public final ItemStack valueOf(String input) {
         final String Q = input.split(";")[0];
         input = input.toLowerCase();
+
+        if(customitems != null && customitems.containsKey(Q)) {
+            return getClone(customitems.get(Q));
+        } else if(items != null && items.containsKey(input)) {
+            return getClone(items.get(input));
+        }
+
+        final HashMap<String, GivedpItemable> givedpitems = GivedpItemable.GIVEDP_ITEMS;
+        for(String key : givedpitems.keySet()) {
+            if(Q.startsWith(key) || input.startsWith(key)) {
+                final ItemStack target = givedpitems.get(key).valueOfInput(Q, key);
+                return target != null ? target : air;
+            }
+        }
+
         if(input.startsWith("banknote:")) {
             final String[] a = Q.split(":");
-            return getBanknote(BigDecimal.valueOf(getInteger(a[1], 0)), a.length == 3 ? a[2] : null);
-        } else if(input.startsWith("blackscroll:")) {
-            final String[] a = Q.split(":");
-            final BlackScroll b = getBlackScroll(a[1]);
-            int amount = 0;
-            if(b != null) {
-                amount = a.length == 3 ? getInteger(a[2], b.getMinPercent()) : b.getRandomPercent(RANDOM);
-            }
-            return b != null ? b.getItem(amount) : air;
+            return getBanknote(BigDecimal.valueOf(getIntegerFromString(a[1], 0)), a.length == 3 ? a[2] : null);
         } else if(input.equals("collectionchest")) {
             final CollectionFilter cf = CollectionFilter.getCollectionFilter();
             return cf.isEnabled() ? cf.getCollectionChest("all") : air;
-        } else if(input.startsWith("customarmor:")) {
-            if(CustomArmor.getCustomArmor().isEnabled()) {
-                final String[] b = Q.split(":");
-                final ArmorSet s = getArmorSet(b[1]);
-                if(s != null) {
-                    String type = b.length == 2 ? "random" : b[2];
-                    final int R = RANDOM.nextInt(4);
-                    type = type.equals("random") ? R == 0 ? "helmet" : R == 1 ? "chestplate" : R == 2 ? "leggings" : R == 3 ? "boots" : null : type;
-                    final ArmorSetWeaponInfo weapon = s.getWeapon(type);
-                    item = type != null ? type.equals("helmet") ? s.getHelmet() : type.equals("chestplate") ? s.getChestplate() : type.equals("leggings") ? s.getLeggings() : type.equals("boots") ? s.getBoots() : weapon != null ? weapon.getItem() : air : air;
-                    if(item != air) {
-                        itemMeta = item.getItemMeta(); lore.clear();
-                        if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
-                        lore.addAll(s.getArmorLore());
-                        itemMeta.setLore(lore); lore.clear();
-                        item.setItemMeta(itemMeta);
-                    }
-                    return item;
-                }
-                return air;
-            }
-            return air;
-        } else if(input.startsWith("customarmorcrystal:")) {
-            final CustomArmor ca = CustomArmor.getCustomArmor();
-            if(ca.isEnabled()) {
-                final String[] values = Q.split(":");
-                final ArmorSet a = getArmorSet(values[1]);
-                if(a != null) {
-                    final int percent = values.length >= 3 && !values[2].equals("random") ? Integer.parseInt(values[2]) : RANDOM.nextInt(101);
-                    return ca.getCrystal(a, percent);
-                }
-            }
-            return air;
-        } else if(input.startsWith("multicustomarmorcrystal:")) {
-            return air;
-
-        } else if(input.startsWith("customboss:")) {
-            final CustomBosses bosses = CustomBosses.getCustomBosses();
-            if(bosses.isEnabled()) {
-                final CustomBoss b = getCustomBoss(Q.split(":")[1]);
-                return b != null ? b.getSpawnItem() : air;
-            }
-            return air;
-        } else if(input.startsWith("customexplosion:")) {
-            final CustomExplosion e = getCustomExplosion(Q.split(":")[1]);
-            return e != null ? e.getItem() : air;
-        } else if(input.startsWith("customenchant:") || input.startsWith("ce:")) {
-            final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
-            if(enchants.isEnabled()) {
-                final ItemStack target = enchants.getRevealedItemFromString(Q);
-                return target == null ? air : target;
-            }
-            return air;
-        } else if(input.startsWith("dust:")) {
-            final String[] a = Q.split(":");
-            final MagicDust d = getMagicDust(a[1]);
-            final int percent = a.length >= 3 ? Integer.parseInt(a[2]) : -1;
-            return d != null ? percent == -1 ? d.getRandomPercentItem(RANDOM) : d.getItem(percent) : air;
-        } else if(input.startsWith("enchantmentorb:")) {
-            final String[] values = Q.split(":");
-            String p = values[1], percent = values.length == 3 ? values[2] : Integer.toString(RANDOM.nextInt(101));
-            EnchantmentOrb o = getEnchantmentOrb(p);
-            if(o == null) {
-                final List<EnchantmentOrb> e = new ArrayList<>();
-                for(String s : getAllEnchantmentOrbs().keySet()) {
-                    if(s.startsWith(p)) {
-                        e.add(getEnchantmentOrb(s));
-                    }
-                }
-                o = !e.isEmpty() ? e.get(RANDOM.nextInt(e.size())) : null;
-            }
-            final boolean h = percent.contains("-");
-            final int min = h ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = h ? min+RANDOM.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
-            return o != null ? o.getItem(P) : air;
 
         } else if(input.startsWith("equipmentlootbox:")) {
             return air;
 
-        } else if(input.startsWith("booster:")) {
-            final Boosters boosters = Boosters.getBoosters();
-            if(boosters.isEnabled()) {
-                final String[] values = Q.split(":");
-                final Booster booster = getBooster(values[1]);
-                return booster != null ? booster.getItem(Long.parseLong(values[3])*1000, Double.parseDouble(values[2])) : air;
-            }
-            return air;
-
         } else if(input.startsWith("omnigem:")) {
             return air;
-        } else if(input.startsWith("fallenherogem")) {
-            final String type = Q.contains(":") ? Q.split(":")[1] : null;
-            CustomKit k = type != null ? getCustomKit(type) : null;
-            final Collection<CustomKit> kits = getAllCustomKits().values();
-            if(type != null && k == null) {
-                final List<CustomKit> list = new ArrayList<>();
-                for(CustomKit kk : kits) {
-                    if(kk.getIdentifier().startsWith(type)) {
-                        list.add(kk);
-                    }
-                }
-                final int s = list.size();
-                if(s > 0) k = list.get(RANDOM.nextInt(s));
-            }
-            if(k == null) k = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
-            final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? k.getFallenHeroItem(k, false) : air;
-        } else if(input.startsWith("fallenhero")) {
-            final String type = Q.contains(":") ? Q.split(":")[1] : null;
-            CustomKit k = type != null ? getCustomKit(type) : null;
-            final Collection<CustomKit> kits = getAllCustomKits().values();
-            if(type != null && k == null) {
-                final List<CustomKit> list = new ArrayList<>();
-                for(CustomKit kk : kits) {
-                    if(kk.getIdentifier().startsWith(type)) {
-                        list.add(kk);
-                    }
-                }
-                final int s = list.size();
-                if(s > 0) k = list.get(RANDOM.nextInt(s));
-            }
-            if(k == null) k = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
-            final FallenHero f = k != null ? k.getFallenHero() : null;
-            return f != null ? k.getFallenHeroItem(k, true) : air;
 
-        } else if(input.startsWith("fatbucket:")) {
-            final String[] values = Q.split(":");
-            final FatBucket fb = getFatBucket(values[1]);
-            return fb != null ? values.length > 2 ? fb.getItem(Integer.parseInt(values[1])) : fb.getItem(0) : air;
-        } else if(input.startsWith("inventorypet:") || input.startsWith("pet:")) {
-            final InventoryPets pets = InventoryPets.getInventoryPets();
-            if(pets.isEnabled()) {
-                final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
-                return pet != null ? pet.getItem(1) : air;
-            }
-            return air;
-        } else if(input.startsWith("inventorypetegg:") || input.startsWith("petegg:")) {
-            final InventoryPets pets = InventoryPets.getInventoryPets();
-            if(pets.isEnabled()) {
-                final InventoryPet pet = getInventoryPet(Q.split(":")[1]);
-                return pet != null ? pet.getEgg() : air;
-            }
-            return air;
         } else if(input.startsWith("inventorypetegghatchingkit:")) {
             return air;
 
-        } else if(input.startsWith("itemskin:")) {
-            final ItemSkins skins = ItemSkins.getItemSkins();
-            if(skins.isEnabled()) {
-                final ItemSkin skin = getItemSkin(Q.split(":")[1]);
-                return skin != null ? skins.getItemSkinItem(skin, true) : air;
-            }
-            return air;
-        } else if(input.startsWith("lootbox:")) {
-            final Lootbox l = getLootbox(Q.split(":")[1]);
-            return l != null ? l.getItem() : air;
-        } else if(input.startsWith("mask:") && !input.equals("maskgenerator")) {
-            final Mask m = getMask(Q.split(":")[1]);
-            return m != null ? m.getItem() : air;
-        } else if(input.startsWith("multimask:")) {
-            return air;
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
             if(mcmmoIsEnabled()) {
                 final MCMMOAPI mcmmo = MCMMOAPI.getMCMMOAPI();
@@ -307,7 +151,6 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
                     final ItemStack i = items.get(lvl ? "mcmmolevelvoucher" : xp ? "mcmmoxpvoucher" : "mcmmocreditvoucher").clone();
                     final String[] values = input.split(":");
-                    Bukkit.broadcastMessage("GivedpItem;input=" + input);
                     final String skill = values[1];
                     final boolean r = values[2].contains("-");
                     final int min = r ? Integer.parseInt(values[2].split("-")[0]) : Integer.parseInt(values[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(values[2].split("-")[1])-min+1) : min;
@@ -324,96 +167,16 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 }
             }
             return air;
-        } else if(input.startsWith("monthlycrate:")) {
-            final MonthlyCrates crates = MonthlyCrates.getMonthlyCrates();
-            if(crates.isEnabled()) {
-                final MonthlyCrate m = getMonthlyCrate(Q.split(":")[1]);
-                return m != null ? m.getItem() : air;
-            }
-            return air;
-        } else if(input.startsWith("randomizationscroll:")) {
-            final RandomizationScroll r = getRandomizationScroll(Q.split(":")[1]);
-            return r != null ? r.getItem() : air;
-        } else if(input.startsWith("raritybook:")) {
-            final EnchantRarity r = getCustomEnchantRarity(Q.split(":")[1]);
-            return r != null ? r.getRevealItem() : air;
-        } else if(input.startsWith("rarityfireball:")) {
-            final RarityFireball f = getRarityFireball(Q.split(":")[1]);
-            return f != null ? f.getItem() : air;
-        } else if(input.startsWith("raritygem")) {
-            final RarityGem g = getRarityGem(Q.split(":")[1]);
-            final String three = input.split(":").length == 3 ? input.split(":")[2] : null;
-            final int min = three != null ? Integer.parseInt(three.contains("-") ? three.split("-")[0] : three) : 0;
-            final int amount = three != null && three.contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(three.split("-")[1])-min+1) : min;
-            return g != null ? g.getItem(amount) : air;
-        } else if(input.startsWith("servercrate:") || input.startsWith("spacecrate:") || input.startsWith("spacechest:")) {
-            final ServerCrate s = getServerCrate(Q.split(":")[1]);
-            return s != null ? s.getItem() : air;
-        } else if(input.startsWith("servercrateflare:") || input.startsWith("serverflare:") || input.startsWith("spaceflare:")) {
-            final ServerCrate c = getServerCrate(Q.split(":")[1]);
-            return c != null ? c.getFlare().getItem() : air;
-        } else if(input.startsWith("slotbotticket")) {
-            final SlotBot bot = SlotBot.getSlotBot();
-            return bot.isEnabled() ? getClone(bot.ticket) : air;
-        } else if(input.startsWith("soultracker:")) {
-            final SoulTracker s = getSoulTracker(Q.split(":")[1]);
-            return s != null ? s.getItem() : air;
-        } else if(input.startsWith("title")) {
-            if(Titles.getTitles().isEnabled()) {
-                Title t = getTitle(Q.contains(":") ? Q.split(":")[1] : "random");
-                if(t == null) {
-                    try {
-                        t = getTitle((String) getAll(Feature.TITLE).keySet().toArray()[getRemainingInt(Q.contains(":") ? Q.split(":")[1] : Q)-1]);
-                    } catch(Exception e) {
-                        System.out.println("[RandomPackage] That title doesn't exist!");
-                    }
-                }
-                return t != null ? t.getItem() : air;
-            }
-            return air;
-        } else if(input.startsWith("transmogscroll")) {
-            final Scrolls scrolls = Scrolls.getScrolls();
-            if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
-                TransmogScroll t = getTransmogScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
-                if(t == null) {
-                }
-                return t != null ? t.getItem() : air;
-            }
-            return air;
-        } else if(input.startsWith("trinket")) {
-            if(Trinkets.getTrinkets().isEnabled()) {
-                Trinket t = getTrinket(Q.contains(":") ? Q.split(":")[1] : "random");
-                if(t == null) {
-                }
-                return t != null ? t.getItem() : air;
-            }
-            return air;
-        } else if(input.startsWith("whitescroll")) {
-            final Scrolls scrolls = Scrolls.getScrolls();
-            if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_WHITE)) {
-                WhiteScroll w = getWhiteScroll(Q.contains(":") ? Q.split(":")[1] : "REGULAR");
-                if(w == null) {
-                }
-                return w != null ? w.getItem() : air;
-            }
-            return air;
         } else if(input.startsWith("xpbottle:")) {
-            final String[] a = Q.split(":");
-            final boolean r = a[1].contains("-");
-            final int min = r ? Integer.parseInt(a[1].split("-")[0]) : Integer.parseInt(a[1]), amt = r ? min+ RANDOM.nextInt(Integer.parseInt(a[1].split("-")[1])-min+1) : min;
-            return getXPBottle(BigDecimal.valueOf(amt), a.length == 3 ? a[2] : null);
+            final String[] values = Q.split(":");
+            final boolean hasHyphen = values[1].contains("-");
+            final int min = hasHyphen ? Integer.parseInt(values[1].split("-")[0]) : Integer.parseInt(values[1]), amt = hasHyphen ? min+ RANDOM.nextInt(Integer.parseInt(values[1].split("-")[1])-min+1) : min;
+            return getXPBottle(BigDecimal.valueOf(amt), values.length == 3 ? values[2] : null);
         } else if(input.startsWith("mkitredeem:")) {
             final CustomKit kit = getCustomKit("MKIT_" + Q.split(":")[1]);
             return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : air;
-        } else if(customitems != null && customitems.containsKey(Q)) {
-            return getClone(customitems.get(Q));
-        } else if(items != null && items.containsKey(input)) {
-            return getClone(items.get(input));
-        } else {
-            final RandomizedLoot r = RandomizedLoot.getRandomizedLoot();
-            final HashMap<String, RandomizedLootItem> items = r.isEnabled() ? r.items : null;
-            return items != null && items.containsKey(Q) ? items.get(Q).getItem() : null;
         }
+        return null;
     }
 
     public ItemStack getBanknote(BigDecimal value, String signer) {

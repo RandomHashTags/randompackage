@@ -56,9 +56,9 @@ public class LivingConquestChest implements UVersionable {
     }
     private void finish(boolean spawnBosses) {
         final World w = location.getWorld();
-        final Block b = w.getBlockAt(location);
-        b.setType(type.getPlacedBlock().getMaterial());
-        b.getState().update();
+        final Block block = w.getBlockAt(location);
+        block.setType(type.getPlacedBlock().getMaterial());
+        block.getState().update();
         living.add(this);
 
         final int a = type.getAnnounceIntervalAfterSpawned(), repeat = a*60*20;
@@ -96,16 +96,19 @@ public class LivingConquestChest implements UVersionable {
         }
     }
     private void send(List<String> msg) {
+        final String min = Integer.toString(minutes), X = Integer.toString(x), Y = Integer.toString(y), Z = Integer.toString(z), hp = Integer.toString(health), max = Integer.toString(type.getMaxHP());
         for(String s : msg) {
-            s = colorize(s.replace("{MIN}", Integer.toString(minutes)).replace("{X}", Integer.toString(x)).replace("{Y}", Integer.toString(y)).replace("{Z}", Integer.toString(z)).replace("{HP}", Integer.toString(health)).replace("{MAX_HP}", Integer.toString(type.getMaxHP())));
+            s = colorize(s.replace("{MIN}", min).replace("{X}", X).replace("{Y}", Y).replace("{Z}",Z).replace("{HP}", hp).replace("{MAX_HP}", max));
             Bukkit.broadcastMessage(s);
         }
     }
     public void damage(Player player, double damage, boolean callEvent) {
-        final long t = System.currentTimeMillis();
-        final double d = type.getDamageDelay();
-        if(d <= 0 || t >= damageDelayExpire) {
-            if(d > 0) damageDelayExpire = (long) (t+(d/20*1000));
+        final long time = System.currentTimeMillis();
+        final double damageDelay = type.getDamageDelay();
+        if(damageDelay <= 0 || time >= damageDelayExpire) {
+            if(damageDelay > 0) {
+                damageDelayExpire = (long) (time+(damageDelay/20*1000));
+            }
             ConquestBlockDamageEvent cde;
             if(callEvent) {
                 cde = new ConquestBlockDamageEvent(player, this, type.getDamagePerHit());
@@ -114,7 +117,7 @@ public class LivingConquestChest implements UVersionable {
             }
             if(living.contains(this)) {
                 health -= damage;
-                final int r = type.getHealthMsgRadius();
+                final int healthMsgRadius = type.getHealthMsgRadius();
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{PLAYER}", player.getName());
                 replacements.put("{X}", Integer.toString(x));
@@ -122,7 +125,7 @@ public class LivingConquestChest implements UVersionable {
                 replacements.put("{Z}", Integer.toString(z));
                 replacements.put("{HP}", Integer.toString(health));
                 replacements.put("{MAX_HP}", Integer.toString(type.getMaxHP()));
-                final Collection<Entity> nearby = location.getWorld().getNearbyEntities(location, r, r, r);
+                final Collection<Entity> nearby = location.getWorld().getNearbyEntities(location, healthMsgRadius, healthMsgRadius, healthMsgRadius);
                 final List<String> msg = health <= 0.00 ? type.getUnlockedMsg() : type.getHealthMsg();
                 if(health <= 0.00) {
                     conquerer = player.getName();

@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.*;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
-import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,7 +11,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface InventoryPet extends UVersionable, Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack {
+public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "inventorypetegg", "petegg", "inventorypet", "pet" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final boolean isEgg = lowercaseInput.startsWith("inventorypetegg") || lowercaseInput.startsWith("petegg");
+        final InventoryPet pet = getInventoryPet(originalInput.split(":")[1]);
+        final ItemStack target = pet != null ? isEgg ? pet.getEgg() : pet.getItem(1) : null;
+        return target != null ? target  : AIR;
+    }
+
     HashMap<Integer, String> getValues();
     default String getValue(int level) {
         final HashMap<Integer, String> values = getValues();

@@ -12,8 +12,18 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
-public interface MonthlyCrate extends Itemable {
+public interface MonthlyCrate extends Itemable, GivedpItemable {
     HashMap<Player, List<String>> revealedRegular = new HashMap<>(), revealedBonus = new HashMap<>();
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "monthlycrate" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final MonthlyCrate crate = getMonthlyCrate(originalInput.split(":")[1]);
+        final ItemStack target = crate != null ? crate.getItem() : null;
+        return target != null ? target : AIR;
+    }
+
     int getCategory();
     int getCategorySlot();
     String getGuiTitle();

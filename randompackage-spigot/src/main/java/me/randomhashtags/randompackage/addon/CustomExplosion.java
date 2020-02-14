@@ -12,52 +12,63 @@ import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
 
-public interface CustomExplosion extends Attributable, Itemable {
+public interface CustomExplosion extends Attributable, Itemable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "customexplosion" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final CustomExplosion explosion = getCustomExplosion(originalInput.split(":")[1]);
+        return explosion != null ? explosion.getItem() : AIR;
+    }
 
     void didExplode(UUID uuid, List<Block> blockList);
 
-    default void explode(EntityExplodeEvent event, Location l, Random random) {
+    default void explode(EntityExplodeEvent event, Location l) {
         event.setCancelled(true);
         final UUID u = event.getEntity().getUniqueId();
-        final List<Block> bl = getBlockList(event, random);
+        final List<Block> bl = getBlockList(event);
         didExplode(u, bl);
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||")) {
-                doExplosion(string, l, event, random);
+                doExplosion(string, l, event);
             } else if(string.contains("&&") && !string.contains("||")) {
                 for(String s : string.split("&&")) {
-                    doExplosion(s, l, event, random);
+                    doExplosion(s, l, event);
                 }
             } else if(string.contains("&&") && string.contains("||")) {
-                for(String s : random.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&")) {
-                    doExplosion(s, l, event, random);
+                for(String s : RANDOM.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&")) {
+                    doExplosion(s, l, event);
                 }
             }
         }
     }
-    default List<Block> getBlockList(EntityExplodeEvent event, Random random) {
+    default List<Block> getBlockList(EntityExplodeEvent event) {
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||") && string.toLowerCase().startsWith("affects_only;")) {
                 return getAffectedBlocks(event, string);
             } else if(string.contains("&&") && !string.contains("||")) {
                 for(String s : string.split("&&")) {
-                    if(s.toLowerCase().startsWith("affects_only;"))
+                    if(s.toLowerCase().startsWith("affects_only;")) {
                         return getAffectedBlocks(event, s);
+                    }
                 }
             } else if(string.contains("&&") && string.contains("||")) {
-                for(String s : random.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&"))
-                    if(s.toLowerCase().startsWith("affects_only;"))
+                for(String s : RANDOM.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&")) {
+                    if(s.toLowerCase().startsWith("affects_only;")) {
                         return getAffectedBlocks(event, s);
+                    }
+                }
             }
         }
         return event.blockList();
@@ -74,7 +85,7 @@ public interface CustomExplosion extends Attributable, Itemable {
         return bl;
     }
     // Only meant for this class usage
-    default void doExplosion(String input, Location loc, EntityExplodeEvent event, Random random) {
+    default void doExplosion(String input, Location loc, EntityExplodeEvent event) {
         final World w = loc.getWorld();
         input = input.replace(" ", "").toLowerCase();
         if(input.startsWith("affects_only;")) {
@@ -114,14 +125,16 @@ public interface CustomExplosion extends Attributable, Itemable {
             final double d = spawnerchance * Double.parseDouble(input.split(";")[1]);
             for(Block block : event.blockList()) {
                 boolean mobspawner = false;
-                if(block.getType().equals(m) && d <= random.nextInt(100)) {
+                if(block.getType().equals(m) && d <= RANDOM.nextInt(100)) {
                     mobspawner = true;
                     if(spawner != null) {
                         w.dropItemNaturally(block.getLocation(), uv.getSpawner(((CreatureSpawner) block).getSpawnedType().name()));
                     }
                     block.setType(Material.AIR);
                 }
-                if(!mobspawner) block.breakNaturally();
+                if(!mobspawner) {
+                    block.breakNaturally();
+                }
             }
         }
     }

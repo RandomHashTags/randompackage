@@ -11,7 +11,17 @@ import java.util.Random;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
-public interface Lootbox extends Itemable, Nameable {
+public interface Lootbox extends Itemable, Nameable, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "lootbox" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final Lootbox lootbox = getLootbox(originalInput.split(":")[1]);
+        final ItemStack target = lootbox != null ? lootbox.getItem() : null;
+        return target != null ? target : AIR;
+    }
+
     int getPriority();
     long getAvailableFor();
     int getGuiSize();
@@ -55,9 +65,15 @@ public interface Lootbox extends Itemable, Nameable {
 
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRegularLoot()) items.add(API.createItemStack(null, s));
-        for(String s : getJackpotLoot()) items.add(API.createItemStack(null, s));
-        for(String s : getBonusLoot()) items.add(API.createItemStack(null, s));
+        for(String s : getRegularLoot()) {
+            items.add(API.createItemStack(null, s));
+        }
+        for(String s : getJackpotLoot()) {
+            items.add(API.createItemStack(null, s));
+        }
+        for(String s : getBonusLoot()) {
+            items.add(API.createItemStack(null, s));
+        }
         return items;
     }
 }

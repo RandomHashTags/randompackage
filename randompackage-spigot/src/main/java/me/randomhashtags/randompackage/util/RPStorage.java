@@ -39,6 +39,12 @@ public interface RPStorage extends RPValues {
             FEATURES.put(f, new LinkedHashMap<>());
         }
         FEATURES.get(f).put(obj.getIdentifier(), obj);
+        if(obj instanceof GivedpItemable) {
+            final GivedpItemable item = (GivedpItemable) obj;
+            for(String identifier : item.getGivedpItemIdentifiers()) {
+                GivedpItemable.GIVEDP_ITEMS.put(identifier, item);
+            }
+        }
     }
 
     default Identifiable get(Feature f, @NotNull String identifier) {

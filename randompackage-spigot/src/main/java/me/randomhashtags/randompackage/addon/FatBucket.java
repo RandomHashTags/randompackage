@@ -9,11 +9,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.List;
 
-public interface FatBucket extends Itemable, RPItemStack {
+public interface FatBucket extends Itemable, RPItemStack, GivedpItemable {
+
+    default String[] getGivedpItemIdentifiers() {
+        return new String[] { "fatbucket" };
+    }
+    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+        final String[] values = originalInput.split(":");
+        final FatBucket bucket = getFatBucket(values[1]);
+        final ItemStack target = bucket != null ? values.length > 2 ? bucket.getItem(Integer.parseInt(values[1])) : bucket.getItem(0) : null;
+        return target != null ? target : AIR;
+    }
+
     default String getValues(ItemStack is) {
         return getRPItemStackValue(is, "FatBucketInfo");
     }
-    default ItemStack getItem(int usesLeft) { return getItem(usesLeft, 0, true); }
+    default ItemStack getItem(int usesLeft) {
+        return getItem(usesLeft, 0, true);
+    }
     default ItemStack getItem(int usesLeft, int sourcesRequired, boolean updateMetadata) {
         final ItemStack is;
         final ItemMeta meta;
