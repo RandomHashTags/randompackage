@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.ItemSkin;
 import me.randomhashtags.randompackage.addon.file.FileItemSkin;
 import me.randomhashtags.randompackage.enums.Feature;

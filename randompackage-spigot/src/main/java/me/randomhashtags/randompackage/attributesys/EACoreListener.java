@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attributesys;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;

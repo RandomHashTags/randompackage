@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.util;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

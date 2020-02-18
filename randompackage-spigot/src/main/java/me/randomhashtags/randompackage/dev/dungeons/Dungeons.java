@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
-import com.sun.istack.internal.NotNull;
-import me.randomhashtags.randompackage.dev.Dungeon;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.attribute.SetOpenDuration;
+import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;

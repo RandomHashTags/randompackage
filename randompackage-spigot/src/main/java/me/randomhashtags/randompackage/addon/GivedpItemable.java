@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.inventory.ItemStack;
 

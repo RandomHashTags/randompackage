@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.universal;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.Color;
 import org.bukkit.Material;

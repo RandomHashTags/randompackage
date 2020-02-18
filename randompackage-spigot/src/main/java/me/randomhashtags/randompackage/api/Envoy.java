@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
 import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;

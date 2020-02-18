@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.util.Spawnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

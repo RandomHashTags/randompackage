@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,21 +1,25 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
-import me.randomhashtags.randompackage.addon.PlayerQuest;
-import me.randomhashtags.randompackage.addon.RarityGem;
-import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
+import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.RarityGems;
 import me.randomhashtags.randompackage.data.*;
 import me.randomhashtags.randompackage.data.obj.*;
+import me.randomhashtags.randompackage.dev.Disguises;
+import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -33,14 +37,19 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
     private YamlConfiguration yml;
 
     private CoinFlipData coinflip;
+    private CustomEnchantData customenchant;
+    private DisguiseData disguises;
+    private DuelData duel;
     private GlobalChallengeData globalchallenges;
     private HomeData home;
     private ItemFilterData itemfilter;
     private JackpotData jackpot;
+    private KitData kits;
     private MonthlyCrateData monthlycrates;
     private PlayerQuestData playerquests;
     private RarityGemData raritygems;
     private ShowcaseData showcase;
+    private SlotBotData slotbot;
     private TitleData titles;
 
     public boolean isLoaded() {
@@ -65,6 +74,7 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             yml.set("ints", null);
             yml.set("longs", null);
             yml.set("coinflip stats", null);
+            yml.set("custom enchant entities", null);
             yml.set("global challenge prizes", null);
             yml.set("filtered items", null);
             yml.set("homes", null);
@@ -79,6 +89,41 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             yml.set("coinflip.wonCash", coinflip.getWonCash());
             yml.set("coinflip.lostCash", coinflip.getLostCash());
             yml.set("coinflip.taxesPaid", coinflip.getTaxesPaid());
+        }
+        if(customenchant != null) {
+            final List<String> ids = new ArrayList<>();
+            for(LivingCustomEnchantEntity cee : customenchant.getEntities()) {
+                ids.add(cee.getEntity().getUniqueId().toString());
+            }
+            yml.set("custom enchants.entities", ids);
+        }
+        if(disguises != null) {
+            final String active = disguises.getActive();
+            yml.set("disguises.active", active != null ? active : "nil");
+            yml.set("disguises.owned", disguises.getOwned());
+        }
+        if(duel != null) {
+            yml.set("duel.notifications", duel.receivesNotifications());
+            int i = 0;
+            yml.set("duel.collection", null);
+            for(ItemStack is : duel.getCollection()) {
+                yml.set("duel.collection." + i, is.toString());
+                i++;
+            }
+            final DuelRankedData ranked = duel.getRankedData();
+            yml.set("duel.ranked.elo", ranked.getELO().doubleValue());
+
+            final HashMap<ItemStack, List<CustomEnchant>> godset = ranked.getGodset();
+            i = 0;
+            for(ItemStack is : godset.keySet()) {
+                final List<String> customenchants = new ArrayList<>();
+                for(CustomEnchant enchant : godset.get(is)) {
+                    customenchants.add(enchant.getIdentifier());
+                }
+                yml.set("duel.ranked.godset." + i + ".item", is.toString());
+                yml.set("duel.ranked.godset." + i + ".custom enchants", customenchants);
+                i++;
+            }
         }
         if(globalchallenges != null) {
             final HashMap<GlobalChallengePrize, Integer> prizes = globalchallenges.getPrizes();
@@ -108,10 +153,20 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             yml.set("jackpot.total wins", jackpot.getTotalWins().longValue());
             yml.set("jackpot.total won cash", jackpot.getTotalWonCash().doubleValue());
         }
+        if(kits != null) {
+            final HashMap<CustomKit, Long> cooldowns = kits.getCooldowns();
+            final HashMap<CustomKit, Integer> levels = kits.getLevels();
+            for(CustomKit kit : cooldowns.keySet()) {
+                yml.set("kits." + kit.getIdentifier() + ".cooldown expiration", cooldowns.get(kit));
+            }
+            for(CustomKit kit : levels.keySet()) {
+                yml.set("kits." + kit.getIdentifier() + ".level", levels.get(kit));
+            }
+        }
         if(monthlycrates != null) {
-            final HashMap<String, Boolean> owned = monthlycrates.getOwned();
-            for(String key : owned.keySet()) {
-                yml.set("monthly crates." + key, owned.get(key));
+            final HashMap<MonthlyCrate, Boolean> owned = monthlycrates.getOwned();
+            for(MonthlyCrate crate : owned.keySet()) {
+                yml.set("monthly crates." + crate.getIdentifier(), owned.get(crate));
             }
         }
         if(playerquests != null) {
@@ -144,6 +199,18 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 }
             }
         }
+        if(slotbot != null) {
+            yml.set("slot bot.credits", slotbot.getCredits().doubleValue());
+        }
+        if(titles != null) {
+            final Title active = titles.getActive();
+            final List<String> owned = new ArrayList<>();
+            yml.set("titles.active", active != null ? active.getIdentifier() : "nil");
+            for(Title title : titles.getOwned()) {
+                owned.add(title.getIdentifier());
+            }
+            yml.set("titles.owned", owned);
+        }
 
         save();
     }
@@ -159,6 +226,9 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
 
     public UUID getUUID() {
         return uuid;
+    }
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
     }
     public YamlConfiguration getConfig() {
         return yml;
@@ -180,12 +250,71 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
         return coinflip;
     }
 
+    public CustomEnchantData getCustomEnchantData() {
+        if(customenchant == null && CustomEnchants.getCustomEnchants().isEnabled()) {
+            List<String> list = new ArrayList<>();
+            if(yml.get("custom enchants") != null) {
+                list = yml.getStringList("custom enchants.entities");
+            } else if(yml.get("custom enchant entities") != null) {
+                list = yml.getStringList("custom enchant entities");
+            }
+
+            final List<LivingCustomEnchantEntity> entities = new ArrayList<>();
+            for(String s : list) {
+                final UUID uuid = UUID.fromString(s);
+                final Entity entity = getEntity(uuid);
+                if(entity instanceof LivingEntity && !entity.isDead()) {
+                    final LivingCustomEnchantEntity e = new LivingCustomEnchantEntity(null, getPlayer(), (LivingEntity) entity, null);
+                    entities.add(e);
+                }
+            }
+
+            customenchant = new CustomEnchantDataObj(entities);
+        }
+        return customenchant;
+    }
+
     public DisguiseData getDisguiseData() {
-        return null;
+        if(disguises == null && Disguises.getDisguises().isEnabled()) {
+            String active = "";
+            List<String> owned = new ArrayList<>();
+            if(yml.get("disguises") != null) {
+                active = yml.getString("disguises.active");
+                owned = yml.getStringList("disguises.owned");
+            }
+            disguises = new DisguiseDataObj(active, owned);
+        }
+        return disguises;
     }
 
     public DuelData getDuelData() {
-        return null;
+        if(duel == null && Duels.getDuels().isEnabled()) {
+            boolean notifications = true;
+            final List<ItemStack> collection = new ArrayList<>();
+            final HashMap<ItemStack, List<CustomEnchant>> godset = new HashMap<>();
+            DuelRankedData ranked = null;
+            if(yml.get("duel") != null) {
+                notifications = yml.getBoolean("duel.notifications");
+                for(String key : getConfigurationSectionKeys(yml, "duel.collection", false)) {
+                    collection.add(yml.getItemStack("duel.collection." + key));
+                }
+
+                for(String key : getConfigurationSectionKeys(yml, "duel.ranked.godset", false)) {
+                    final String path = "duel.ranked.godset." + key + ".";
+                    final List<CustomEnchant> enchants = new ArrayList<>();
+                    for(String enchant : yml.getStringList(path + "custom enchants")) {
+                        final CustomEnchant ce = getCustomEnchant(enchant);
+                        if(ce != null) {
+                            enchants.add(ce);
+                        }
+                    }
+                    godset.put(yml.getItemStack(path + "item"), enchants);
+                }
+                ranked = new DuelRankedDataObj(getBigDecimal(yml.getString("duel.ranked.elo")), godset);
+            }
+            duel = new DuelDataObj(notifications, collection, ranked);
+        }
+        return duel;
     }
 
     public GlobalChallengeData getGlobalChallengeData() {
@@ -281,6 +410,30 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             jackpot = new JackpotDataObj(enabled, BigInteger.valueOf(totalTicketsBought), BigInteger.valueOf(totalWins), BigDecimal.valueOf(totalWonCash));
         }
         return jackpot;
+    }
+
+    public KitData getKitData() {
+        if(kits == null) {
+            final HashMap<CustomKit, Long> cooldowns = new HashMap<>();
+            final HashMap<CustomKit, Integer> levels = new HashMap<>();
+            if(yml.get("kits") != null) {
+                for(String key : getConfigurationSectionKeys(yml, "kits", false)) {
+                    final CustomKit kit = getCustomKit(key);
+                    if(kit != null) {
+                        final long cooldownExpiration = yml.getLong("kits." + key + ".cooldown expiration", -1);
+                        final int level = yml.getInt("kits." + key + ".level", -1);
+                        if(cooldownExpiration >= 0) {
+                            cooldowns.put(kit, cooldownExpiration);
+                        }
+                        if(level >= 0) {
+                            levels.put(kit, level);
+                        }
+                    }
+                }
+            }
+            kits = new KitDataObj(cooldowns, levels);
+        }
+        return kits;
     }
 
     public MonthlyCrateData getMonthlyCrateData() {
@@ -380,7 +533,12 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
     }
 
     public SlotBotData getSlotBotData() {
-        return null;
+        if(slotbot == null && SlotBot.getSlotBot().isEnabled()) {
+            if(yml.get("slot bot") != null) {
+                slotbot = new SlotBotDataObj(getBigDecimal(yml.getString("slot bot.credits")));
+            }
+        }
+        return slotbot;
     }
 
     public TitleData getTitleData() {
@@ -388,12 +546,12 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             Title active = null;
             final List<Title> owned = new ArrayList<>();
             final List<String> target = new ArrayList<>();
-            if(yml.get("owned titles") != null) {
-                active = getTitle(yml.getString("strings").split(";")[0]);
-                target.addAll(yml.getStringList("owned titles"));
-            } else if(yml.get("titles") != null) {
+            if(yml.get("titles") != null) {
                 active = getTitle(yml.getString("titles.active"));
                 target.addAll(yml.getStringList("titles.owned"));
+            } else if(yml.get("owned titles") != null) {
+                active = getTitle(yml.getString("strings").split(";")[0]);
+                target.addAll(yml.getStringList("owned titles"));
             }
             for(String s : target) {
                 final Title title = getTitle(s);

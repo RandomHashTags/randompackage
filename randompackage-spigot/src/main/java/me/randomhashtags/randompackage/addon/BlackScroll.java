@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.util.AppliesToRarities;
 import me.randomhashtags.randompackage.addon.util.Percentable;
 import org.bukkit.inventory.ItemStack;

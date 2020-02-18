@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.duels;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.addon.stats.DuelStats;

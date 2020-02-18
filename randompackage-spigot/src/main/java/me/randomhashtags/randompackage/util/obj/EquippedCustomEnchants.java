@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.util.obj;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;

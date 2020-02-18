@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;

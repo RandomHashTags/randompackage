@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.supported;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.attribute.faction.AddFactionPower;

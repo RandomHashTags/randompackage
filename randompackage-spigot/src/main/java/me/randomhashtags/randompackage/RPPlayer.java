@@ -14,12 +14,14 @@ public interface RPPlayer {
     UUID getUUID();
 
     CoinFlipData getCoinFlipData();
+    CustomEnchantData getCustomEnchantData();
     DisguiseData getDisguiseData();
     DuelData getDuelData();
     GlobalChallengeData getGlobalChallengeData();
     HomeData getHomeData();
     ItemFilterData getItemFilterData();
     JackpotData getJackpotData();
+    KitData getKitData();
     MonthlyCrateData getMonthlyCrateData();
     PlayerQuestData getPlayerQuestData();
     RarityGemData getRarityGemData();

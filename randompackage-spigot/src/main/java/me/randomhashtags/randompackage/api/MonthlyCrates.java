@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
 import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
 import me.randomhashtags.randompackage.enums.Feature;

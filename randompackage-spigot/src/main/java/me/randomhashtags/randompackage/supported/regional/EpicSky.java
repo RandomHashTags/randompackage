@@ -4,8 +4,8 @@ import com.peaches.epicskyblock.EpicSkyblock;
 import com.peaches.epicskyblock.Island;
 import com.peaches.epicskyblock.IslandManager;
 import com.peaches.epicskyblock.User;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.supported.Regional;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -25,7 +25,9 @@ public final class EpicSky extends RPFeature implements Regional {
 
     private IslandManager im;
 
-    public String getIdentifier() { return "REGIONAL_EPICSKYBLOCK"; }
+    public String getIdentifier() {
+        return "REGIONAL_EPICSKYBLOCK";
+    }
     public void load() {
         im = EpicSkyblock.getIslandManager();
     }

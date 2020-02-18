@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.supported.regional;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.supported.WGFlag;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Bukkit;

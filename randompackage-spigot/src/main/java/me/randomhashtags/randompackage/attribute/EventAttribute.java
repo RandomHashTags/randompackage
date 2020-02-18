@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;

@@ -30,7 +30,7 @@ repositories {
 dependencies {
     // You need to add the Spigot jars yourself, otherwise you need to use BuildTools and import them
     compileOnly 'org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT'
-    compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
+    //compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
     //
     implementation 'me.clip:placeholderapi:2.10.3'
     implementation 'net.milkbowl.vault:VaultAPI:1.7'

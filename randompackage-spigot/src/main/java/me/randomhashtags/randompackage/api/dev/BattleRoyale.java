@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.dev;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.BattleRoyaleTeam;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.living.ActiveRaidEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Chunk;

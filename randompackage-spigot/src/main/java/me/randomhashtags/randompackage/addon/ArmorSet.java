@@ -1,11 +1,10 @@
 package me.randomhashtags.randompackage.addon;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.api.CustomArmor;
 import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

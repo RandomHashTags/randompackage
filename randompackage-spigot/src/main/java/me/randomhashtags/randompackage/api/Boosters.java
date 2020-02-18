@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;

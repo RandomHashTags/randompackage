@@ -1,11 +1,12 @@
 package me.randomhashtags.randompackage.data;
 
 import me.randomhashtags.randompackage.dev.Disguise;
-import org.bukkit.entity.EntityType;
 
-import java.util.HashMap;
+import java.util.List;
 
 public interface DisguiseData {
-    EntityType getDisguise();
-    HashMap<Disguise, String> getSettings();
+    String getActive();
+    void setActive(Disguise disguise);
+    List<String> getOwned();
+    void setOwned(List<String> owned);
 }
