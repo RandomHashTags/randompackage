@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.data;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 
 import java.math.BigDecimal;
 

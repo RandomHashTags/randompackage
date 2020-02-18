@@ -3,8 +3,10 @@ apply plugin: 'maven'
 apply plugin: 'java-library'
 
 repositories {
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     mavenLocal()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+    }
 
     maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
     maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
@@ -26,6 +28,7 @@ repositories {
 }
 
 dependencies {
+    // You need to add the Spigot jars yourself, otherwise you need to use BuildTools and import them
     compileOnly 'org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT'
     compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
     //

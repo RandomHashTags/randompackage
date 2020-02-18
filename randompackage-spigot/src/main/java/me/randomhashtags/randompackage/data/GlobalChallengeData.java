@@ -6,4 +6,5 @@ import java.util.HashMap;
 
 public interface GlobalChallengeData {
     HashMap<GlobalChallengePrize, Integer> getPrizes();
+    void setPrizes(HashMap<GlobalChallengePrize, Integer> prizes);
 }

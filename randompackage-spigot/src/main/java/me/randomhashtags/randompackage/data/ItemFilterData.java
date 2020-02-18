@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ItemFilterData {
     boolean isEnabled();
+    void toggle();
     List<UMaterial> getFilteredItems();
 }

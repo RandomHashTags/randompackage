@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.util;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.util.Identifiable;

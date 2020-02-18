@@ -5,9 +5,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public interface ShowcaseData {
-    HashMap<Integer, Integer> getShowcaseSizes();
+    HashMap<Integer, Integer> getSizes();
     default int getShowcaseSize(int page) {
-        final HashMap<Integer, Integer> sizes = getShowcaseSizes();
+        final HashMap<Integer, Integer> sizes = getSizes();
         return sizes != null ? sizes.getOrDefault(page, -1) : -1;
     }
     HashMap<Integer, ItemStack[]> getShowcases();

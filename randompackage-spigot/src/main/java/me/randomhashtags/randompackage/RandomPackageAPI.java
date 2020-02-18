@@ -28,7 +28,9 @@ public class RandomPackageAPI extends RPFeature implements CommandExecutor {
 
     public static int spawnerchance = 0;
 
-    public String getIdentifier() { return "RANDOMPACKAGE_API"; }
+    public String getIdentifier() {
+        return "RANDOMPACKAGE_API";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();

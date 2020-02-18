@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.data;
 
-import com.sun.istack.internal.NotNull;
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.RarityGem;
 
 import java.util.HashMap;
@@ -11,5 +11,10 @@ public interface RarityGemData {
         final HashMap<RarityGem, Boolean> gems = getRarityGems();
         return gems != null && gems.containsKey(gem) && gems.get(gem);
     }
-    void toggle(@NotNull RarityGem gem);
+    default void toggle(@NotNull RarityGem gem) {
+        final HashMap<RarityGem, Boolean> gems = getRarityGems();
+        if(gems != null) {
+            gems.put(gem, !gems.getOrDefault(gem, false));
+        }
+    }
 }
