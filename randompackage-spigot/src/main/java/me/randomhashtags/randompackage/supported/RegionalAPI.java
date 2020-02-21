@@ -31,7 +31,7 @@ public class RegionalAPI extends UVersion {
     protected static FactionsUUID factions;
     protected static ASky asky;
     protected static SuperiorSky ssky;
-    protected static EpicSky esky;
+    protected static IridiumSky esky;
 
     private boolean isTrue(String path) { return config.getBoolean(path); }
     public void setup(RandomPackage randompackage) {
@@ -80,7 +80,7 @@ public class RegionalAPI extends UVersion {
     public void trySupportingEpicSkyblock() {
         epicskyblock = isTrue("supported plugins.regional.EpicSkyblock") && PLUGIN_MANAGER.isPluginEnabled("EpicSkyblock");
         if(epicskyblock) {
-            esky = EpicSky.getEpicSkyblock();
+            esky = IridiumSky.getEpicSkyblock();
             esky.enable();
             hooked("EpicSkyblock");
         }

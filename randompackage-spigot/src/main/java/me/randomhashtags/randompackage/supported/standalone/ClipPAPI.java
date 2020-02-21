@@ -2,10 +2,10 @@ package me.randomhashtags.randompackage.supported.standalone;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import me.randomhashtags.randompackage.api.Envoy;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -21,9 +21,15 @@ public final class ClipPAPI extends PlaceholderExpansion implements UVersionable
         register();
         sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
-    public String getIdentifier() { return "randompackage"; }
-    public String getAuthor() { return "RandomHashTags"; }
-    public String getVersion() { return RP_VERSION; }
+    public String getIdentifier() {
+        return "randompackage";
+    }
+    public String getAuthor() {
+        return "RandomHashTags";
+    }
+    public String getVersion() {
+        return RP_VERSION;
+    }
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {

@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.supported.regional;
 
-import com.peaches.epicskyblock.EpicSkyblock;
-import com.peaches.epicskyblock.Island;
-import com.peaches.epicskyblock.IslandManager;
-import com.peaches.epicskyblock.User;
+import com.iridium.iridiumskyblock.IridiumSkyblock;
+import com.iridium.iridiumskyblock.Island;
+import com.iridium.iridiumskyblock.IslandManager;
+import com.iridium.iridiumskyblock.User;
 import me.randomhashtags.randompackage.supported.Regional;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -16,20 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class EpicSky extends RPFeature implements Regional {
-    private static EpicSky instance;
-    public static EpicSky getEpicSkyblock() {
-        if(instance == null) instance = new EpicSky();
+public final class IridiumSky extends RPFeature implements Regional {
+    private static IridiumSky instance;
+    public static IridiumSky getEpicSkyblock() {
+        if(instance == null) instance = new IridiumSky();
         return instance;
     }
 
     private IslandManager im;
 
     public String getIdentifier() {
-        return "REGIONAL_EPICSKYBLOCK";
+        return "REGIONAL_IRIDIUM_SKYBLOCK";
     }
     public void load() {
-        im = EpicSkyblock.getIslandManager();
+        im = IridiumSkyblock.getIslandManager();
     }
     public void unload() {
     }
@@ -57,10 +57,18 @@ public final class EpicSky extends RPFeature implements Regional {
         }
         return a;
     }
-    public List<UUID> getNeutrals(UUID player) { return getAssociates(player); }
-    public List<UUID> getAllies(UUID player) { return getAssociates(player); }
-    public List<UUID> getTruces(UUID player) { return getAssociates(player); }
-    public List<UUID> getEnemies(UUID player) { return new ArrayList<>(); }
+    public List<UUID> getNeutrals(UUID player) {
+        return getAssociates(player);
+    }
+    public List<UUID> getAllies(UUID player) {
+        return getAssociates(player);
+    }
+    public List<UUID> getTruces(UUID player) {
+        return getAssociates(player);
+    }
+    public List<UUID> getEnemies(UUID player) {
+        return new ArrayList<>();
+    }
 
     public List<Player> getOnlineAssociates(UUID player) {
         final List<UUID> a = getAssociates(player);

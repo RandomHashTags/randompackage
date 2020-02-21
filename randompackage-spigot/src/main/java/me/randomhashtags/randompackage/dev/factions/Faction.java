@@ -27,19 +27,33 @@ public interface Faction {
     @Nullable HashMap<Relation, FactionWarp> getWarps();
 
     @NotNull HashMap<String, Boolean> getFactionSettings();
-    default boolean getFactionSetting(@NotNull String identifier) { return getFactionSettings().getOrDefault(identifier, false); }
-    default void setFactionSetting(@NotNull String identifier, boolean enabled) { getFactionSettings().put(identifier, enabled); }
-    default boolean isOpen() { return getFactionSetting("OPEN"); }
-    default void setOpen(boolean open) { setFactionSetting("OPEN", open); }
+    default boolean getFactionSetting(@NotNull String identifier) {
+        return getFactionSettings().getOrDefault(identifier, false);
+    }
+    default void setFactionSetting(@NotNull String identifier, boolean enabled) {
+        getFactionSettings().put(identifier, enabled);
+    }
+    default boolean isOpen() {
+        return getFactionSetting("OPEN");
+    }
+    default void setOpen(boolean open) {
+        setFactionSetting("OPEN", open);
+    }
 
     @NotNull HashMap<FPlayer, HashMap<String, Boolean>> getPlayerSettings();
-    default boolean getPlayerSetting(@NotNull FPlayer player, @NotNull String identifier) { return getPlayerSettings().get(player).getOrDefault(identifier, false); }
+    default boolean getPlayerSetting(@NotNull FPlayer player, @NotNull String identifier) {
+        return getPlayerSettings().get(player).getOrDefault(identifier, false);
+    }
     default void setPlayerSetting(@NotNull FPlayer player, @NotNull String identifier, boolean enabled) {
         final HashMap<FPlayer, HashMap<String, Boolean>> settings = getPlayerSettings();
-        if(!settings.containsKey(player)) settings.put(player, new HashMap<>());
+        if(!settings.containsKey(player)) {
+            settings.put(player, new HashMap<>());
+        }
         settings.get(player).put(identifier, enabled);
     }
-    default boolean inChatMode(@NotNull FPlayer player, @NotNull FactionChatMode mode) { return getPlayerSetting(player, mode.getIdentifier()); }
+    default boolean inChatMode(@NotNull FPlayer player, @NotNull FactionChatMode mode) {
+        return getPlayerSetting(player, mode.getIdentifier());
+    }
 
     @Nullable List<UUID> getBanned();
     @Nullable HashMap<UUID, Relationship> getRelations();

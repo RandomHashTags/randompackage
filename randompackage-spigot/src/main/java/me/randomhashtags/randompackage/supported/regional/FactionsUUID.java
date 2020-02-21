@@ -35,7 +35,9 @@ public final class FactionsUUID extends Reflect implements Regional {
     private HashMap<String, HashMap<String, List<UUID>>> relations;
     private boolean isLegacy;
 
-    public String getIdentifier() { return "REGIONAL_FACTIONS_UUID"; }
+    public String getIdentifier() {
+        return "REGIONAL_FACTIONS_UUID";
+    }
     public void load() {
         fi = FPlayers.getInstance();
         f = Factions.getInstance();
@@ -71,7 +73,9 @@ public final class FactionsUUID extends Reflect implements Regional {
         return fp != null ? fp.getFaction() : null;
     }
 
-    private FPlayer getFPlayer(UUID uuid) { return fi.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid)); }
+    private FPlayer getFPlayer(UUID uuid) {
+        return fi.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
+    }
     public ChatColor getRelationColor(OfflinePlayer player, Player target) {
         final Faction f = getFaction(player.getUniqueId());
         return f != null ? f.getColorTo(getFPlayer(target.getUniqueId())) : null;
@@ -107,11 +111,21 @@ public final class FactionsUUID extends Reflect implements Regional {
             return members;
         }
     }
-    public List<UUID> getAssociates(UUID player) { return getType(player, "MEMBERS"); }
-    public List<UUID> getNeutrals(UUID player) { return getType(player, "NEUTRAL"); }
-    public List<UUID> getAllies(UUID player) { return getType(player, "ALLIES"); }
-    public List<UUID> getTruces(UUID player) { return getType(player, "TRUCES"); }
-    public List<UUID> getEnemies(UUID player) { return getType(player, "ENEMIES"); }
+    public List<UUID> getAssociates(UUID player) {
+        return getType(player, "MEMBERS");
+    }
+    public List<UUID> getNeutrals(UUID player) {
+        return getType(player, "NEUTRAL");
+    }
+    public List<UUID> getAllies(UUID player) {
+        return getType(player, "ALLIES");
+    }
+    public List<UUID> getTruces(UUID player) {
+        return getType(player, "TRUCES");
+    }
+    public List<UUID> getEnemies(UUID player) {
+        return getType(player, "ENEMIES");
+    }
 
     public boolean canModify(UUID player, Location blockLocation) {
         final Faction p = getFPlayer(player).getFaction(), f = b.getFactionAt(new FLocation(blockLocation));

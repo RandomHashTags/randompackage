@@ -164,9 +164,9 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             }
         }
         if(monthlycrates != null) {
-            final HashMap<MonthlyCrate, Boolean> owned = monthlycrates.getOwned();
-            for(MonthlyCrate crate : owned.keySet()) {
-                yml.set("monthly crates." + crate.getIdentifier(), owned.get(crate));
+            final HashMap<String, Boolean> owned = monthlycrates.getOwned();
+            for(String crate : owned.keySet()) {
+                yml.set("monthly crates." + crate, owned.get(crate));
             }
         }
         if(playerquests != null) {

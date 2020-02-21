@@ -44,7 +44,9 @@ public class SpawnerStacking extends RPFeature {
     private HashMap<String, HashMap<String, Integer>> maxStackSizes;
     private HashMap<Location, StackedSpawner> stacks;
 
-    public String getIdentifier() { return "SPAWNER_STACKING"; }
+    public String getIdentifier() {
+        return "SPAWNER_STACKING";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "spawner stacking.yml");
@@ -79,8 +81,11 @@ public class SpawnerStacking extends RPFeature {
     }
 
     public void loadBackup(boolean async) {
-        if(async) SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> loadbackup(true));
-        else loadbackup(false);
+        if(async) {
+            SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> loadbackup(true));
+        } else {
+            loadbackup(false);
+        }
     }
     private void loadbackup(boolean async) {
         final long started = System.currentTimeMillis();
@@ -109,7 +114,9 @@ public class SpawnerStacking extends RPFeature {
         data = YamlConfiguration.loadConfiguration(dataF);
     }
 
-    private boolean isSpawner(Block b) { return b != null && b.getType().name().equals(spawnerMaterial); }
+    private boolean isSpawner(Block b) {
+        return b != null && b.getType().name().equals(spawnerMaterial);
+    }
     public int getMaxAllowedStackSize(@NotNull World world, @NotNull EntityType type) {
         final HashMap<String, Integer> sizes = maxStackSizes.getOrDefault(world.getName(), null);
         return sizes != null ? sizes.getOrDefault(type.name(), defaultMaxStackSize) : defaultMaxStackSize;

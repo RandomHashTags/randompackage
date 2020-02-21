@@ -50,7 +50,9 @@ public final class MCMMOAPI extends Reflect {
 		itemsConfig = null;
 	}
 
-	public boolean isClassic() { return isClassic; }
+	public boolean isClassic() {
+		return isClassic;
+	}
 	public String getSkillName(String input, String o) {
 		if(isClassic) {
 			for(com.gmail.nossr50.datatypes.skills.SkillType type : com.gmail.nossr50.datatypes.skills.SkillType.values()) {

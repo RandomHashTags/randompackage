@@ -1,17 +1,15 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
-import me.randomhashtags.randompackage.universal.UVersion;
-import org.bukkit.ChatColor;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.Event;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
-public class CustomEnchantEntity {
+public class CustomEnchantEntity implements UVersionable {
 	public static HashMap<String, CustomEnchantEntity> paths;
-	private static UVersion uv;
 	private EntityType type;
 	private String path, customname;
 	private List<String> attributes;
@@ -20,11 +18,10 @@ public class CustomEnchantEntity {
 	public CustomEnchantEntity(EntityType type, String path, String customname, List<String> attributes, boolean canTargetSummoner, boolean dropsItemsUponDeath) {
 		if(paths == null) {
 			paths = new HashMap<>();
-			uv = UVersion.getUVersion();
 		}
 		this.type = type;
 		this.path = path;
-		this.customname = ChatColor.translateAlternateColorCodes('&', customname);
+		this.customname = colorize(customname);
 		this.attributes = attributes;
 		this.canTargetSummoner = canTargetSummoner;
 		this.dropsItemsUponDeath = dropsItemsUponDeath;
@@ -43,17 +40,17 @@ public class CustomEnchantEntity {
 		return attributes;
 	}
 	public boolean canTargetSummoner() {
-		return canTargetSummoner; }
+		return canTargetSummoner;
+	}
 	public boolean dropsItemsUponDeath() {
 		return dropsItemsUponDeath;
 	}
-	public void spawn(LivingEntity summoner, LivingEntity target, Event event) {
-		final LivingEntity le = uv.getEntity(type.name(), summoner.getLocation(), true);
-		new LivingCustomEnchantEntity(this, event, summoner, le, target);
+	public void spawn(LivingEntity summoner, LivingEntity target) {
+		final LivingEntity le = getEntity(type.name(), summoner.getLocation(), true);
+		new LivingCustomEnchantEntity(this, summoner, le, target);
 	}
 
 	public static void deleteAll() {
 		paths = null;
-		uv = null;
 	}
 }

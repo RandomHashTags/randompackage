@@ -14,7 +14,10 @@ repositories {
     maven { url "https://jitpack.io" } // SuperiorSkyblock API
     maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
     //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
-    maven { url "https://maven.enginehub.org/repo/" } // WorldEdit & WorldGuard
+    /*maven {
+        name = "WorldEdit and WorldGuard"
+        url = "https://maven.enginehub.org/repo/"
+    }*/
 
     /*
         EpicSkyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/PeachesMLG/EpicSkyblock
@@ -40,6 +43,8 @@ dependencies {
     //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'
     //implementation 'com.sk89q.worldguard:worldedit-bukkit:7.0.1'
     //implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.1-SNAPSHOT'
+
+    //implementation 'com.gmail.nossr50:mcMMO:LATEST'
 }
 
 configurations {

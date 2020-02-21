@@ -92,22 +92,22 @@ public class WorldGuardAPI implements UVersionable {
 
     // unfinished
     public List<Chunk> getChunks(String regionName) {
-        final List<Chunk> c = new ArrayList<>();
+        final List<Chunk> chunks = new ArrayList<>();
         final List<World> worlds = Bukkit.getWorlds();
         if(version == 6) {
             final com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin();
             for(World w : worlds) {
                 final com.sk89q.worldguard.protection.regions.ProtectedRegion region = wg.getRegionManager(w).getRegion(regionName);
-                c.addAll(getchunks(region, w));
+                chunks.addAll(getchunks(region, w));
             }
         } else  {
             final com.sk89q.worldguard.protection.regions.RegionContainer container = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
             for(World w : worlds) {
                 final com.sk89q.worldguard.protection.regions.ProtectedRegion region = container.get(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(w)).getRegion(regionName);
-                c.addAll(getchunks(region, w));
+                chunks.addAll(getchunks(region, w));
             }
         }
-        return c;
+        return chunks;
     }
     private List<Chunk> getchunks(com.sk89q.worldguard.protection.regions.ProtectedRegion region, World w) {
         final List<Chunk> c = new ArrayList<>();

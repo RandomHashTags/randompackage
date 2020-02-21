@@ -4,8 +4,8 @@ import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandRole;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.supported.Regional;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -24,16 +24,24 @@ public final class SuperiorSky extends RPFeature implements Regional {
 
     private com.bgsoftware.superiorskyblock.api.SuperiorSkyblock ss;
 
-    public String getIdentifier() { return "REGIONAL_SUPERIOR_SKYBLOCK"; }
+    public String getIdentifier() {
+        return "REGIONAL_SUPERIOR_SKYBLOCK";
+    }
     public void load() {
         ss = SuperiorSkyblockAPI.getSuperiorSkyblock();
     }
     public void unload() {
     }
 
-    private Island getIsland(UUID player) { return getSPlayer(player).getIsland(); }
-    private Island getIslandAt(Location l) { return SuperiorSkyblockAPI.getIslandAt(l); }
-    private SuperiorPlayer getSPlayer(UUID player) { return SuperiorSkyblockAPI.getPlayer(player); }
+    private Island getIsland(UUID player) {
+        return getSPlayer(player).getIsland();
+    }
+    private Island getIslandAt(Location l) {
+        return SuperiorSkyblockAPI.getIslandAt(l);
+    }
+    private SuperiorPlayer getSPlayer(UUID player) {
+        return SuperiorSkyblockAPI.getPlayer(player);
+    }
 
     public boolean canModify(UUID player, Location location) {
         final Island i = getIslandAt(location);
@@ -55,9 +63,15 @@ public final class SuperiorSky extends RPFeature implements Regional {
         if(i != null) a.addAll(i.getAllMembers());
         return a;
     }
-    public List<UUID> getAllies(UUID player) { return getNeutrals(player); }
-    public List<UUID> getTruces(UUID player) { return getNeutrals(player); }
-    public List<UUID> getEnemies(UUID player) { return null; }
+    public List<UUID> getAllies(UUID player) {
+        return getNeutrals(player);
+    }
+    public List<UUID> getTruces(UUID player) {
+        return getNeutrals(player);
+    }
+    public List<UUID> getEnemies(UUID player) {
+        return null;
+    }
 
     public List<Player> getOnlineAssociates(UUID player) {
         final Island i = getIsland(player);
@@ -75,7 +89,7 @@ public final class SuperiorSky extends RPFeature implements Regional {
             final UUID u = UUID.fromString(regionalIdentifier);
             final Island i = ss.getGrid().getIsland(u);
             return i.getAllChunks();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new NullPointerException("Regional Identifier with UUID \"" + regionalIdentifier + "\" not found!");
         }
     }
@@ -91,5 +105,7 @@ public final class SuperiorSky extends RPFeature implements Regional {
         final Island i = getIslandAt(l);
         return i != null ? i.getOwner().getUniqueId().toString() : null;
     }
-    public String getChatMode(UUID player) { return "GLOBAL"; }
+    public String getChatMode(UUID player) {
+        return "GLOBAL";
+    }
 }
