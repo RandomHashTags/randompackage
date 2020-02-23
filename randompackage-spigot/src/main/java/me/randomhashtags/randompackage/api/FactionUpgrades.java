@@ -14,6 +14,7 @@ import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.perms.FactionUpgradePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Bukkit;
@@ -373,10 +374,10 @@ public class FactionUpgrades extends EventAttributes {
                 if(msg.startsWith(alias)) {
                     event.setCancelled(true);
                     if(msg.contains("reset")) {
-                        if(hasPermission(player, "RandomPackage.fupgrade.reset", true)) {
+                        if(hasPermission(player, FactionUpgradePermission.COMMAND_RESET, true)) {
                             factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
                         }
-                    } else if(hasPermission(player, "RandomPackage.fupgrade", true)) {
+                    } else if(hasPermission(player, FactionUpgradePermission.COMMAND, true)) {
                         viewFactionUpgrades(player);
                     }
                     return;
@@ -393,7 +394,9 @@ public class FactionUpgrades extends EventAttributes {
             event.setCancelled(true);
             player.updateInventory();
             final String click = event.getClick().name();
-            if(slot < 0 || slot >= top.getSize() || !click.contains("LEFT") && !click.contains("RIGHT") || event.getCurrentItem() == null) return;
+            if(slot < 0 || slot >= top.getSize() || !click.contains("LEFT") && !click.contains("RIGHT") || event.getCurrentItem() == null) {
+                return;
+            }
             final FactionUpgrade f = valueOfFactionUpgrade(slot);
             if(f != null) {
                 tryToUpgrade(player, f);

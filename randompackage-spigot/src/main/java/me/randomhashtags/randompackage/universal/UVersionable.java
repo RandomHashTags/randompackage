@@ -355,6 +355,22 @@ public interface UVersionable extends Versionable {
     default String colorize(String input) {
         return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL";
     }
+    default HashMap<String, String> getReplacements(@NotNull Object...values) {
+        final HashMap<String, String> replacements = new HashMap<>();
+        boolean isKey = false;
+        int index = 0;
+        for(Object obj : values) {
+            if(isKey) {
+                final Object key = values[index-1];
+                if(key instanceof String) {
+                    replacements.put((String) key, obj.toString());
+                }
+            }
+            isKey = !isKey;
+            index++;
+        }
+        return replacements;
+    }
     default void sendStringListMessage(CommandSender sender, List<String> message, HashMap<String, String> replacements) {
         if(message != null && message.size() > 0 && !message.get(0).equals("")) {
             final boolean papi = RANDOM_PACKAGE.placeholderapi, isPlayer = sender instanceof Player;

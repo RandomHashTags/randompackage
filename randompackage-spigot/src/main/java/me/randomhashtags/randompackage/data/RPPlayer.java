@@ -1,6 +1,4 @@
-package me.randomhashtags.randompackage;
-
-import me.randomhashtags.randompackage.data.*;
+package me.randomhashtags.randompackage.data;
 
 import java.util.UUID;
 

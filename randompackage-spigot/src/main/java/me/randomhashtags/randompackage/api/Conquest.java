@@ -9,6 +9,7 @@ import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
+import me.randomhashtags.randompackage.perms.ConquestPermission;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -134,7 +135,7 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
 
     public void viewLast(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.conquest", true)) {
+        if(hasPermission(sender, ConquestPermission.VIEW_LAST, true)) {
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{LAST}", lastSpawnTime > 0 ? (System.currentTimeMillis()-lastSpawnTime) + "ms" : "N/A");
             replacements.put("{LOCATION}", lastLocation != null ? lastLocation.getBlockX() + "x " + lastLocation.getBlockY() + "y " + lastLocation.getBlockZ() + "z" : "N/A");
@@ -143,19 +144,19 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.conquest.help", true)) {
+        if(hasPermission(sender, ConquestPermission.VIEW_HELP, true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void spawn(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.conquest.spawn", true)) {
+        if(hasPermission(player, ConquestPermission.SPAWN, true)) {
             final List<ConquestChest> chests = new ArrayList<>(getAllConquestChests().values());
             final Location L = player.getLocation(), l = new Location(L.getWorld(), L.getBlockX(), L.getBlockY(), L.getBlockZ());
             spawn(chests.get(RANDOM.nextInt(chests.size())), l);
         }
     }
     public void destroyConquests(@Nullable CommandSender sender) {
-        if(sender == null || hasPermission(sender, "RandomPackage.conquest.stop", true)) {
+        if(sender == null || hasPermission(sender, ConquestPermission.STOP, true)) {
             final List<LivingConquestChest> living = LivingConquestChest.living;
             if(living != null) {
                 for(LivingConquestChest l : new ArrayList<>(living)) {

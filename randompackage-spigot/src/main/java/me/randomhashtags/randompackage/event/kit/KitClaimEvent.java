@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.event.kit;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.RPEventCancellable;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,9 +22,18 @@ public class KitClaimEvent extends RPEventCancellable {
         this.level = level;
         this.lootObtained = lootObtained;
     }
-    public RPPlayer getRPPlayer() { return pdata; }
-    public Player getPlayer() { return player; }
-    public CustomKit getKit() { return kit; }
-    public int getLevel() { return level; }
-    public List<ItemStack> getLootObtained() { return lootObtained; }
+    public RPPlayer getRPPlayer() {
+        return pdata;
+    }
+    public Player getPlayer() {
+        return player; }
+    public CustomKit getKit() {
+        return kit;
+    }
+    public int getLevel() {
+        return level;
+    }
+    public List<ItemStack> getLootObtained() {
+        return lootObtained;
+    }
 }

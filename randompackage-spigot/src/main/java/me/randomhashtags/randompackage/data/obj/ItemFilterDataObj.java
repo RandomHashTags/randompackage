@@ -6,21 +6,26 @@ import me.randomhashtags.randompackage.universal.UMaterial;
 import java.util.List;
 
 public class ItemFilterDataObj implements ItemFilterData {
-    private boolean enabled;
+    private boolean active;
     private List<UMaterial> filter;
 
-    public ItemFilterDataObj(boolean enabled, List<UMaterial> filter) {
-        this.enabled = enabled;
+    public ItemFilterDataObj(boolean active, List<UMaterial> filter) {
+        this.active = active;
         this.filter = filter;
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public boolean isActive() {
+        return active;
     }
     @Override
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Override
     public void toggle() {
-        enabled = !enabled;
+        active = !active;
     }
 
     @Override

@@ -2,9 +2,12 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Title;
 import me.randomhashtags.randompackage.addon.file.FileTitle;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RPPlayer;
+import me.randomhashtags.randompackage.data.TitleData;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.perms.TitlePermission;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -41,7 +44,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {
-			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+			final RPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
 			if(args.length == 0) {
 				viewTitles(player, pdata, 1);
 			}
@@ -92,14 +95,15 @@ public class Titles extends RPFeature implements CommandExecutor {
 				final Player player = event.getPlayer();
 				event.setCancelled(true);
 				player.updateInventory();
-				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-				final boolean has = pdata.getTitles().contains(title);
+				final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+				final TitleData data = pdata.getTitleData();
+				final boolean has = data.getOwned().contains(title);
 				for(String s : getStringList(config, "messages." + (has ? "already own" : "redeem"))) {
 					s = s.replace("{TITLE}", colorize(title.getIdentifier()));
 					player.sendMessage(s);
 				}
 				if(!has) {
-					pdata.addTitle(title);
+					data.addTitle(title);
 					removeItem(player, i, 1);
 				}
 			}
@@ -117,10 +121,11 @@ public class Titles extends RPFeature implements CommandExecutor {
 			if(slot >= top.getSize()) {
 				return;
 			}
-			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final Title title = pdata.getActiveTitle();
+			final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+			final TitleData data = pdata.getTitleData();
+			final Title title = data.getActive();
 			final String activeTitle = title != null ? title.getIdentifier() : null;
-			final List<Title> titles = pdata.getTitles();
+			final List<Title> titles = data.getOwned();
 			final int page = pages.getOrDefault(player, 0), Z = (page*53)+slot;
 			if(current.equals(nextpage)) {
 				player.closeInventory();
@@ -132,7 +137,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 				for(String s : getStringList(config, "messages." + type)) {
 					player.sendMessage(s.replace("{TITLE}", coloredId));
 				}
-				pdata.setActiveTitle(type.equals("unequip") ? null : target);
+				data.setActive(type.equals("unequip") ? null : target);
 				update(player, pdata);
 			}
 		}
@@ -143,14 +148,15 @@ public class Titles extends RPFeature implements CommandExecutor {
 		pages.remove(player);
 	}
 	private void viewTitles(Player player, RPPlayer pdata, int page) {
-		if(hasPermission(player, "RandomPackage.titles", true)) {
-			final List<Title> owned = pdata.getTitles();
+		if(hasPermission(player, TitlePermission.COMMAND, true)) {
+			final TitleData data = pdata.getTitleData();
+			final List<Title> owned = data.getOwned();
 			page = page-1;
 			int size = owned.size()-(53*page);
 			if(size <= 0) {
 				sendStringListMessage(player, getStringList(config, "messages.no unlocked titles"), null);
 			} else {
-				final Title activeTitle = pdata.getActiveTitle();
+				final Title activeTitle = data.getActive();
 				final String activetitle = activeTitle != null ? activeTitle.getIdentifier() : null;
 				pages.put(player, page);
 				size = Math.min(size%9 == 0 ? size : ((size+9)/9)*9, 54);
@@ -175,10 +181,11 @@ public class Titles extends RPFeature implements CommandExecutor {
 		}
 	}
 	private void update(Player player, RPPlayer pdata) {
+		final TitleData data = pdata.getTitleData();
 		final int page = pages.get(player)-1;
-		final List<Title> owned = pdata.getTitles();
-		final Title A = pdata.getActiveTitle();
-		final String activetitle = A != null ? A.getIdentifier() : null;
+		final List<Title> owned = data.getOwned();
+		final Title activeTitle = data.getActive();
+		final String activetitle = activeTitle != null ? activeTitle.getIdentifier() : null;
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		for(int i = 0; i < top.getSize() && i < owned.size(); i++) {
 			final ItemStack is = top.getItem(i);

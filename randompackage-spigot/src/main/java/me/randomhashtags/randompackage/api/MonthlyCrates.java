@@ -4,10 +4,13 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
 import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.MonthlyCrateData;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.perms.MonthlyCratePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -57,7 +60,7 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(args.length == 0 && player != null) {
             viewCrates(player);
-        } else if(args.length == 2 && args[0].equals("reset") && hasPermission(player, "RandomPackage.monthlycrates.reset", true)) {
+        } else if(args.length == 2 && args[0].equals("reset") && hasPermission(player, MonthlyCratePermission.COMMAND_RESET, true)) {
             reset(player, Bukkit.getOfflinePlayer(args[1]));
         }
         return true;
@@ -174,9 +177,10 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
     }
 
     public void viewCrates(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.monthlycrates", true)) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final List<String> owned = pdata.getMonthlyCrates(), claimed = pdata.getClaimedMonthlyCrates();
+        if(hasPermission(player, MonthlyCratePermission.VIEW, true)) {
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final MonthlyCrateData data = pdata.getMonthlyCrateData();
+            final HashMap<String, Boolean> owned = data.getOwned();
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
@@ -184,17 +188,17 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null) {
-                    final MonthlyCrate cc = valueOfMonthlyCrate(item);
-                    if(cc != null) {
-                        final String n = cc.getIdentifier();
-                        final boolean owns = owned.contains(n), hasPerm = player.hasPermission("RandomPackage.monthlycrates." + n), h = !owns && !hasPerm;
+                    final MonthlyCrate targetCrate = valueOfMonthlyCrate(item);
+                    if(targetCrate != null) {
+                        final String targetIdentifier = targetCrate.getIdentifier();
+                        final boolean isOwned = owned.containsKey(targetIdentifier), hasPerm = player.hasPermission(MonthlyCratePermission.HAS_MC_PREFIX + targetIdentifier), notUnlocked = !isOwned && !hasPerm, isClaimed = owned.getOrDefault(targetIdentifier, false);
                         itemMeta = item.getItemMeta(); lore.clear();
-                        if(h) {
+                        if(notUnlocked) {
                             item = locked.clone();
-                        } else if(claimed.contains(n)) {
+                        } else if(isClaimed) {
                             item = alreadyClaimed.clone();
                         }
-                        check(playerName, item, cc, h || claimed.contains(n));
+                        check(playerName, item, targetCrate, notUnlocked || isClaimed);
                         top.setItem(i, item);
                     }
                 }
@@ -323,19 +327,21 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         if(target == null || !target.isOnline()) {
             sendStringListMessage(sender, getStringList(config, "messages.reset.target doesnt exist"), null);
         } else {
-            final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
-            pdata.getClaimedMonthlyCrates().clear();
+            final FileRPPlayer pdata = FileRPPlayer.get(target.getUniqueId());
+            pdata.getMonthlyCrateData().getOwned().clear();
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{TARGET}", target.getName());
             sendStringListMessage(sender, getStringList(config, "messages.reset.success"), replacements);
         }
     }
     public void give(RPPlayer pdata, Player player, MonthlyCrate crate, boolean claimed) {
-        item = crate.getItem(); itemMeta = item.getItemMeta(); lore.clear();
+        item = crate.getItem();
+        itemMeta = item.getItemMeta(); lore.clear();
         if(item.hasItemMeta()) {
             if(itemMeta.hasLore()) {
+                final String name = player.getName();
                 for(String s : itemMeta.getLore()) {
-                    lore.add(s.replace("{UNLOCKED_BY}", player.getName()));
+                    lore.add(s.replace("{UNLOCKED_BY}", name));
                 }
             }
             itemMeta.setLore(lore); lore.clear();
@@ -343,14 +349,14 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
         }
         giveItem(player, item);
         if(claimed) {
-            pdata.getClaimedMonthlyCrates().add(crate.getIdentifier());
+            pdata.getMonthlyCrateData().getOwned().put(crate.getIdentifier(), true);
         }
     }
     public void viewCategory(Player player, int category) {
         if(categoriez.containsKey(category)) {
             final String playerName = player.getName();
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final List<String> owned = pdata.getMonthlyCrates(), claimed = pdata.getClaimedMonthlyCrates();
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final HashMap<String, Boolean> owned = pdata.getMonthlyCrateData().getOwned();
             final UInventory i = categoriez.get(category);
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, i.getSize(), i.getTitle()));
@@ -364,12 +370,13 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                     final MonthlyCrate crate = valueOfMonthlyCrate(item);
                     if(crate != null) {
                         final String identifier = crate.getIdentifier();
-                        if(claimed.contains(identifier)) {
+                        final boolean isOwned = owned.containsKey(identifier), isClaimed = owned.getOrDefault(identifier, false);
+                        if(isClaimed) {
                             item = alreadyClaimed.clone();
-                        } else if(!owned.contains(identifier) && !hasPermission(player, "RandomPackage.monthlycrate." + identifier, false)) {
+                        } else if(!isOwned && !hasPermission(player, MonthlyCratePermission.HAS_MC_PREFIX + identifier, false)) {
                             item = locked.clone();
                         }
-                        check(playerName, item, crate, owned.contains(identifier));
+                        check(playerName, item, crate, isOwned);
                         top.setItem(o, item);
                     }
                 }
@@ -402,11 +409,14 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                 final MonthlyCrate crate = valueOfMonthlyCrate(player, current);
                 if(crate != null) {
                     final String identifier = crate.getIdentifier();
-                    final RPPlayer pdata = RPPlayer.get(uuid);
-                    final boolean hasPerm = pdata.getMonthlyCrates().contains(identifier) || player.hasPermission("RandomPackage.monthlycrates." + identifier);
+                    final FileRPPlayer pdata = FileRPPlayer.get(uuid);
+                    final MonthlyCrateData data = pdata.getMonthlyCrateData();
+                    final HashMap<String, Boolean> owned = data.getOwned();
+                    final boolean hasPerm = owned.containsKey(identifier) || player.hasPermission(MonthlyCratePermission.HAS_MC_PREFIX + identifier);
+                    final boolean isClaimed = owned.getOrDefault(identifier, false);
                     if(!hasPerm) {
                         sendStringListMessage(player, getStringList(config, "messages.no access"), null);
-                    } else if(!pdata.getClaimedMonthlyCrates().contains(identifier)) {
+                    } else if(!isClaimed) {
                         give(pdata, player, crate, true);
                     }
                     player.closeInventory();
@@ -422,8 +432,10 @@ public class MonthlyCrates extends RPFeature implements CommandExecutor {
                     final MonthlyCrate crate = valueOfMonthlyCrate(category, slot);
                     if(crate != null) {
                         final String identifier = crate.getIdentifier();
-                        final RPPlayer pdata = RPPlayer.get(uuid);
-                        if(!pdata.getClaimedMonthlyCrates().contains(identifier) && (pdata.getMonthlyCrates().contains(identifier) || hasPermission(player, "RandomPackage.monthlycrate." + identifier, false))) {
+                        final FileRPPlayer pdata = FileRPPlayer.get(uuid);
+                        final MonthlyCrateData data = pdata.getMonthlyCrateData();
+                        final HashMap<String, Boolean> owned = data.getOwned();
+                        if(!owned.getOrDefault(identifier, false) && (owned.containsKey(identifier) || hasPermission(player, MonthlyCratePermission.HAS_MC_PREFIX + identifier, false))) {
                             give(pdata, player, crate, true);
                         }
                     }

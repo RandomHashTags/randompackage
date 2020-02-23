@@ -3,11 +3,13 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.FilterCategory;
 import me.randomhashtags.randompackage.addon.file.FileFilterCategory;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.ItemFilterData;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.perms.ItemFilterPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -117,12 +119,12 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     }
 
     public void viewHelp(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.filter", true)) {
+        if(hasPermission(sender, ItemFilterPermission.VIEW_HELP, true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void viewCategories(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.filter.view", true)) {
+        if(hasPermission(player, ItemFilterPermission.VIEW_CATEGORIES, true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             player.getOpenInventory().getTopInventory().setContents(gui.getInventory().getContents());
@@ -145,30 +147,29 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         return is;
     }
     public void toggleFilter(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.filter.toggle", true)) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final boolean status = !pdata.hasActiveFilter();
-            pdata.setActiveFilter(status);
+        if(hasPermission(player, ItemFilterPermission.TOGGLE, true)) {
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final ItemFilterData data = pdata.getItemFilterData();
+            final boolean status = !data.isActive();
+            data.setActive(status);
             sendStringListMessage(player, getStringList(config, "messages." + (status ? "en" : "dis") + "able"), null);
         }
     }
     public void viewCategory(@NotNull Player player, @NotNull FilterCategory category) {
-        if(hasPermission(player, "RandomPackage.filter.view." + category.getIdentifier(), true)) {
-            player.closeInventory();
-            final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
-            final UInventory target = category.getInventory();
-            final int size = target.getSize();
-            player.openInventory(Bukkit.createInventory(player, size, target.getTitle()));
-            final Inventory top = player.getOpenInventory().getTopInventory();
-            top.setContents(target.getInventory().getContents());
-            for(int i = 0; i < size; i++) {
-                item = top.getItem(i);
-                if(item != null) {
-                    top.setItem(i, getStatus(filtered, item.clone()));
-                }
+        player.closeInventory();
+        final List<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
+        final UInventory target = category.getInventory();
+        final int size = target.getSize();
+        player.openInventory(Bukkit.createInventory(player, size, target.getTitle()));
+        final Inventory top = player.getOpenInventory().getTopInventory();
+        top.setContents(target.getInventory().getContents());
+        for(int i = 0; i < size; i++) {
+            item = top.getItem(i);
+            if(item != null) {
+                top.setItem(i, getStatus(filtered, item.clone()));
             }
-            player.updateInventory();
         }
+        player.updateInventory();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -187,7 +188,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             }
 
             if(category != null) {
-                final List<UMaterial> filtered = RPPlayer.get(player.getUniqueId()).getFilteredItems();
+                final List<UMaterial> filtered = FileRPPlayer.get(player.getUniqueId()).getItemFilterData().getFilteredItems();
                 final UMaterial target = UMaterial.match(current);
                 if(filtered.contains(target)) {
                     filtered.remove(target);
@@ -207,8 +208,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     }
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
-        final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-        if(pdata.hasActiveFilter() && !pdata.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
+        final ItemFilterData data = FileRPPlayer.get(event.getPlayer().getUniqueId()).getItemFilterData();
+        if(data.isActive() && !data.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
             event.setCancelled(true);
         }
     }

@@ -3,12 +3,13 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipMatch;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipOption;
-import me.randomhashtags.randompackage.addon.stats.CoinFlipStats;
+import me.randomhashtags.randompackage.data.CoinFlipData;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
+import me.randomhashtags.randompackage.perms.CoinFlipPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -52,7 +53,9 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     private HashMap<CoinFlipMatch, List<Integer>> tasks;
     private HashMap<Player, CoinFlipMatch> pickingChallengeOption, active;
 
-    public String getIdentifier() { return "COIN_FLIP"; }
+    public String getIdentifier() {
+        return "COIN_FLIP";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -172,7 +175,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
     }
 
     public void viewCoinFlips(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.coinflip.view", true)) {
+        if(hasPermission(player, CoinFlipPermission.VIEW_MATCHES, true)) {
             player.closeInventory();
             final int size = ((available.size()+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, size, gui.getTitle()));
@@ -208,33 +211,34 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         }
     }
     public void viewStats(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.coinflip.stats", true)) {
+        if(hasPermission(player, CoinFlipPermission.VIEW_STATS, true)) {
             final HashMap<String, String> replacements = new HashMap<>();
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final CoinFlipStats s = pdata.getCoinFlipStats();
-            replacements.put("{WINS}", formatBigDecimal(s.wins));
-            replacements.put("{LOSSES}", formatBigDecimal(s.losses));
-            replacements.put("{WON$}", formatBigDecimal(s.wonCash));
-            replacements.put("{LOST$}", formatBigDecimal(s.lostCash));
-            replacements.put("{TAXES}", formatBigDecimal(s.taxesPaid));
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final CoinFlipData s = pdata.getCoinFlipData();
+            replacements.put("{WINS}", formatBigDecimal(s.getWins()));
+            replacements.put("{LOSSES}", formatBigDecimal(s.getLosses()));
+            replacements.put("{WON$}", formatBigDecimal(s.getWonCash()));
+            replacements.put("{LOST$}", formatBigDecimal(s.getLostCash()));
+            replacements.put("{TAXES}", formatBigDecimal(s.getTaxesPaid()));
             sendStringListMessage(player, getStringList(config, "messages.stats"), replacements);
         }
     }
     public void tryToggleNotifications(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.coinflip.toggle", true)) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final boolean status = !pdata.doesReceiveCoinFlipNotifications();
-            pdata.setReceivesCoinFlipNotifications(status);
+        if(hasPermission(player, CoinFlipPermission.TOGGLE_NOTIFICATIONS, true)) {
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final CoinFlipData data = pdata.getCoinFlipData();
+            final boolean status = !data.receivesNotifications();
+            data.setReceivesNotifications(status);
             sendStringListMessage(player, getStringList(config, "messages.toggle notifications." + (status ? "on" : "off")), null);
         }
     }
     public void viewHelp(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.coinflip.help", true)) {
+        if(hasPermission(sender, CoinFlipPermission.VIEW_HELP, true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
     public void tryCreating(@NotNull Player player, @NotNull  BigDecimal w) {
-        if(hasPermission(player, "RandomPackage.coinflip.create", true)) {
+        if(hasPermission(player, CoinFlipPermission.CREATE_MATCH, true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOfCreator(player);
             if(m != null) {
                 sendStringListMessage(player, getStringList(config, "messages.already in a match"), null);
@@ -275,7 +279,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         }
     }
     public void tryCancelling(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.coinflip.cancel", true)) {
+        if(hasPermission(player, CoinFlipPermission.CANCEL_MATCH, true)) {
             final CoinFlipMatch m = CoinFlipMatch.valueOfCreator(player);
             if(m == null) {
                 sendStringListMessage(player, getStringList(config, "messages.cancel dont have one"), null);
@@ -288,7 +292,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         }
     }
     public void tryChallenging(@NotNull Player player, @NotNull CoinFlipMatch match) {
-        if(hasPermission(player, "RandomPackage.coinflip.challenge", true)) {
+        if(hasPermission(player, CoinFlipPermission.CHALLENGE_MATCH, true)) {
             player.closeInventory();
             final CoinFlipMatch f = CoinFlipMatch.valueOfCreator(player);
             if(f != null) {
@@ -461,15 +465,15 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
         final boolean zero = RANDOM.nextInt(2) == 0;
         final CoinFlipOption winningOption = zero ? l : r, losingOption = zero ? r : l;
         final OfflinePlayer winner = zero ? a : b, loser = winner == a ? b : a;
-        final RPPlayer W = RPPlayer.get(winner.getUniqueId()), ll = RPPlayer.get(loser.getUniqueId());
+        final FileRPPlayer W = FileRPPlayer.get(winner.getUniqueId()), ll = FileRPPlayer.get(loser.getUniqueId());
 
-        final CoinFlipStats s1 = W.getCoinFlipStats(), s2 = ll.getCoinFlipStats();
-        s1.wonCash = s1.wonCash.add(t);
-        s1.wins = s1.wins.add(BigDecimal.ONE);
-        s1.taxesPaid = s1.taxesPaid.add(taxed);
-        s2.lostCash = s2.lostCash.add(t);
-        s2.losses = s2.losses.add(BigDecimal.ONE);
-        s2.taxesPaid = s2.taxesPaid.add(taxed);
+        final CoinFlipData s1 = W.getCoinFlipData(), s2 = ll.getCoinFlipData();
+        s1.setWonCash(s1.getWonCash().add(t));
+        s1.setWins(s1.getWins().add(BigDecimal.ONE));
+        s1.setTaxesPaid(s1.getTaxesPaid().add(taxed));
+        s2.setLostCash(s2.getLostCash().add(t));
+        s2.setLosses(s2.getLosses().add(BigDecimal.ONE));
+        s2.setTaxesPaid(s2.getTaxesPaid().add(taxed));
 
         final Player ap = a.getPlayer(), bp = b.getPlayer();
         if(active.containsKey(ap)) {
@@ -515,7 +519,7 @@ public class CoinFlip extends RPFeature implements CommandExecutor {
             sendConsoleMessage(s);
         }
         for(Player p : Bukkit.getOnlinePlayers()) {
-            if(RPPlayer.get(p.getUniqueId()).doesReceiveCoinFlipNotifications()) {
+            if(FileRPPlayer.get(p.getUniqueId()).getCoinFlipData().receivesNotifications()) {
                 sendStringListMessage(p, msg, replacements);
             }
         }

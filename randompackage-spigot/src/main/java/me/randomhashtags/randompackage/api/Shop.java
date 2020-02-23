@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.addon.obj.ShopItem;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ShopPurchaseEvent;
 import me.randomhashtags.randompackage.event.ShopSellEvent;
+import me.randomhashtags.randompackage.perms.ShopPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -81,19 +82,19 @@ public class Shop extends RPFeature implements CommandExecutor {
 
 	public BigDecimal getDiscount(Player player) {
 	    final BigDecimal zero = BigDecimal.ZERO;
-	    if(player.hasPermission("RandomPackage.shop.discount.cancel")) {
+	    if(player.hasPermission(ShopPermission.CANCEL_DISCOUNT)) {
 	        return zero;
         }
 	    BigDecimal d = zero;
         for(int k = 1; k <= 100; k++) {
-            if(player.hasPermission("RandomPackage.shop.discount." + k)) {
+            if(player.hasPermission(ShopPermission.DISCOUNT_PREFIX + k)) {
                 d = BigDecimal.valueOf(k);
             }
         }
         return BigDecimal.valueOf(d.doubleValue()/100);
     }
 	public void view(@NotNull Player player) {
-	    if(hasPermission(player, "RandomPackage.shop", true)) {
+	    if(hasPermission(player, ShopPermission.COMMAND, true)) {
             player.closeInventory();
             final UInventory inv = getShopCategory(defaultShop).getInventory();
             player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));

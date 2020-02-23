@@ -19,6 +19,7 @@ import me.randomhashtags.randompackage.event.enchant.*;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
+import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
@@ -70,9 +71,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String n = cmd.getName();
-        if(n.equals("disabledenchants") && hasPermission(player, "RandomPackage.disabledenchants", true)) {
+        if(n.equals("disabledenchants") && hasPermission(player, CustomEnchantPermission.COMMAND_DISABLED_ENCHANTS, true)) {
             sender.sendMessage(colorize(getAll(Feature.CUSTOM_ENCHANT_DISABLED).keySet().toString()));
-        } else if(n.equals("enchants") && hasPermission(sender, "RandomPackage.enchants", true)) {
+        } else if(n.equals("enchants") && hasPermission(sender, CustomEnchantPermission.COMMAND_ENCHANTS, true)) {
             if(args.length == 0) {
                 viewEnchants(sender, 1);
             } else {
@@ -243,8 +244,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public int getLevelCap(@NotNull Player player) {
         int cap = 0;
+        final String prefix = CustomEnchantPermission.LEVEL_CAP_PREFIX;
         for(int i = 0; i <= 100; i++) {
-            if(player.hasPermission("RandomPackage.levelcap." + i)) {
+            if(player.hasPermission(prefix + i)) {
                 cap = i;
             }
         }

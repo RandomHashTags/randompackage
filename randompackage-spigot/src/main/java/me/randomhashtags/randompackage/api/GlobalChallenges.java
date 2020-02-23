@@ -9,10 +9,12 @@ import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.perms.GlobalChallengePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -66,7 +68,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			final String a = args[0];
 			switch (a) {
 				case "stop":
-					if(l >= 2 && hasPermission(player, "RandomPackage.globalchallenges.stop", true)) {
+					if(l >= 2 && hasPermission(player, GlobalChallengePermission.COMMAND_STOP_CHALLENGE, true)) {
 						stopChallenge(getGlobalChallenge(args[1].replace("_", " ")), false);
 					}
 					break;
@@ -76,16 +78,16 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 					}
 					break;
 				case "reload":
-					if(hasPermission(sender, "RandomPackage.globalchallenges.reload", true)) {
+					if(hasPermission(sender, GlobalChallengePermission.COMMAND_RELOAD, true)) {
 						reloadChallenges();
 					}
 					break;
 				case "giveprize":
-					if(l >= 3 && hasPermission(sender, "RandomPackage.globalchallenges.giveprize", true)) {
+					if(l >= 3 && hasPermission(sender, GlobalChallengePermission.COMMAND_GIVE_PRIZE, true)) {
 						final OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
 						final int placing = getRemainingInt(args[2]);
 						if(placing != -1) {
-							RPPlayer.get(op.getUniqueId()).addGlobalChallengePrize(valueOfGlobalChallengePrize(placing));
+							FileRPPlayer.get(op.getUniqueId()).getGlobalChallengeData().addPrize(valueOfGlobalChallengePrize(placing));
 						}
 					}
 					break;
@@ -250,8 +252,8 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	}
 
 	public void viewPrizes(@NotNull Player player) {
-		if(hasPermission(player, "RandomPackage.globalchallenges.claim", true)) {
-			final HashMap<GlobalChallengePrize, Integer> prizes = RPPlayer.get(player.getUniqueId()).getGlobalChallengePrizes();
+		if(hasPermission(player, GlobalChallengePermission.VIEW_PRIZES, true)) {
+			final HashMap<GlobalChallengePrize, Integer> prizes = FileRPPlayer.get(player.getUniqueId()).getGlobalChallengeData().getPrizes();
 			int size = (prizes.size()/9)*9;
 			size = size == 0 ? 9 : Math.min(size, 54);
 			player.openInventory(Bukkit.createInventory(player, size, claimPrizes.getTitle()));
@@ -265,8 +267,8 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 	}
 	public void claimPrize(@NotNull Player player, @NotNull GlobalChallengePrize prize, boolean sendMessage) {
-		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-		final HashMap<GlobalChallengePrize, Integer> prizes = pdata.getGlobalChallengePrizes();
+		final RPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+		final HashMap<GlobalChallengePrize, Integer> prizes = pdata.getGlobalChallengeData().getPrizes();
 		if(prizes.containsKey(prize)) {
 			final int amount = prizes.get(prize)-1;
 			if(amount <= 0) {
@@ -317,7 +319,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		return rankings;
 	}
 	public void viewCurrent(@NotNull Player player) {
-		if(hasPermission(player, "RandomPackage.globalchallenges", true)) {
+		if(hasPermission(player, GlobalChallengePermission.VIEW, true)) {
 			final UUID u = player.getUniqueId();
 			player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();

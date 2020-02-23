@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
 import me.randomhashtags.randompackage.attribute.EventCondition;
-import me.randomhashtags.randompackage.util.RPStorage;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
@@ -17,10 +17,10 @@ import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.util.RPItemStack;
+import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Chunk;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -106,6 +106,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "iscreature": return entity instanceof Creature == Boolean.parseBoolean(value);
             case "isanimal": return entity instanceof Animals == Boolean.parseBoolean(value);
             case "isflying": return entity instanceof Flying || entity instanceof Player && ((Player) entity).isFlying() == Boolean.parseBoolean(value);
+            case "isprojectile": return entity instanceof Projectile == Boolean.parseBoolean(value);
             case "istype": return entity.getType().name().equalsIgnoreCase(value);
             case "isfacing": return getFacing(entity).name().toLowerCase().startsWith(value);
             case "isop": return entity.isOp() == Boolean.parseBoolean(value);
@@ -646,32 +647,32 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 final Mask mask = ee != null ? valueOfMask(ee.getHelmet()) : null;
                 return mask != null && mask.getIdentifier().equals(value);
             case "equippedtitle":
-                Title t = RPPlayer.get(entity.getUniqueId()).getActiveTitle();
+                Title t = FileRPPlayer.get(entity.getUniqueId()).getTitleData().getActive();
                 return t != null &&  entity instanceof Player && t.getIdentifier().equals(value);
             case "ownstitle":
                 t = entity instanceof Player ? getTitle(value) : null;
-                return t != null && RPPlayer.get(entity.getUniqueId()).getTitles().contains(t);
+                return t != null && FileRPPlayer.get(entity.getUniqueId()).getTitleData().getOwned().contains(t);
             case "hasactivefilter":
-                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).hasActiveFilter() == Boolean.parseBoolean(value);
+                return entity instanceof Player && FileRPPlayer.get(entity.getUniqueId()).getItemFilterData().isActive() == Boolean.parseBoolean(value);
             case "hasactiveplayerquest":
                 final PlayerQuest q = entity instanceof Player ? getPlayerQuest(value) : null;
-                final HashMap<PlayerQuest, ActivePlayerQuest> pquests = q != null ? RPPlayer.get(entity.getUniqueId()).getQuests() : null;
+                final HashMap<PlayerQuest, ActivePlayerQuest> pquests = q != null ? FileRPPlayer.get(entity.getUniqueId()).getPlayerQuestData().getQuests() : null;
                 return pquests != null && pquests.containsKey(q) && !pquests.get(q).isExpired();
             case "hasactiveraritygem":
                 final String[] values = value.split(":");
                 final int l = values.length;
-                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).hasActiveRarityGem(getRarityGem(values[0])) == (l < 2 || Boolean.parseBoolean(values[1]));
+                return entity instanceof Player && FileRPPlayer.get(entity.getUniqueId()).getRarityGemData().isActive(getRarityGem(values[0])) == (l < 2 || Boolean.parseBoolean(values[1]));
             case "hasactivetitle":
-                return entity instanceof Player && RPPlayer.get(entity.getUniqueId()).getActiveTitle() != null == Boolean.parseBoolean(value);
+                return entity instanceof Player && FileRPPlayer.get(entity.getUniqueId()).getTitleData().getActive() != null == Boolean.parseBoolean(value);
             case "hascustomentities":
-                return entity instanceof Player && !RPPlayer.get(entity.getUniqueId()).getCustomEnchantEntities().isEmpty() == Boolean.parseBoolean(value);
+                return entity instanceof Player && !(FileRPPlayer.get(entity.getUniqueId()).getCustomEnchantData().getEntities().isEmpty() == Boolean.parseBoolean(value));
             case "hasequippedarmorset":
                 return entity instanceof Player && valueOfArmorSet((Player) entity) != null == Boolean.parseBoolean(value);
             case "hasequippedmask":
                 final EntityEquipment eq = entity instanceof Player ? ((Player) entity).getEquipment() : null;
                 return eq != null && valueOfMask(eq.getHelmet()) != null == Boolean.parseBoolean(value);
             case "hasfiltereditem":
-                final List<UMaterial> m = entity instanceof Player ? RPPlayer.get(entity.getUniqueId()).getFilteredItems() : null;
+                final List<UMaterial> m = entity instanceof Player ? FileRPPlayer.get(entity.getUniqueId()).getItemFilterData().getFilteredItems() : null;
                 return m != null && m.contains(UMaterial.match(value));
             case "iscustomboss":
                 return LivingCustomBoss.living != null && LivingCustomBoss.living.containsKey(entity.getUniqueId()) == Boolean.parseBoolean(value);

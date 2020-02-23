@@ -1,10 +1,11 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
+import me.randomhashtags.randompackage.addon.file.FileRarityGem;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RarityGemData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
-import me.randomhashtags.randompackage.addon.file.FileRarityGem;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -70,9 +71,10 @@ public class RarityGems extends RPFeature {
     private void playerDropItemEvent(PlayerDropItemEvent event) {
         final RarityGem gem = valueOfRarityGem(event.getItemDrop().getItemStack());
         if(gem != null) {
-            final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-            if(pdata.hasActiveRarityGem(gem)) {
-                pdata.toggleRarityGem(gem, gem.getToggleOffDroppedMsg());
+            final FileRPPlayer pdata = FileRPPlayer.get(event.getPlayer().getUniqueId());
+            final RarityGemData data = pdata.getRarityGemData();
+            if(data.isActive(gem)) {
+                data.toggle(gem, gem.getToggleOffDroppedMsg());
             }
         }
     }
@@ -114,18 +116,20 @@ public class RarityGems extends RPFeature {
             player.updateInventory();
             final int souls = getRemainingInt(is.getItemMeta().getDisplayName());
             if(souls > 0) {
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                pdata.toggleRarityGem(gem, pdata.hasActiveRarityGem(gem) ? gem.getToggleOffInteractMsg() : gem.getToggleOnMsg());
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+                final RarityGemData data = pdata.getRarityGemData();
+                data.toggle(gem, data.isActive(gem) ? gem.getToggleOffInteractMsg() : gem.getToggleOnMsg());
             }
         }
     }
     @EventHandler
     private void playerDeathEvent(PlayerDeathEvent event) {
         final UUID uuid = event.getEntity().getUniqueId();
-        final RPPlayer pdata = RPPlayer.get(uuid);
-        for(RarityGem gem : pdata.getRarityGems().keySet()) {
-            if(pdata.hasActiveRarityGem(gem)) {
-                pdata.toggleRarityGem(gem, gem.getToggleOffDroppedMsg());
+        final FileRPPlayer pdata = FileRPPlayer.get(uuid);
+        final RarityGemData data = pdata.getRarityGemData();
+        for(RarityGem gem : data.getRarityGems().keySet()) {
+            if(data.isActive(gem)) {
+                data.toggle(gem, gem.getToggleOffDroppedMsg());
             }
         }
     }

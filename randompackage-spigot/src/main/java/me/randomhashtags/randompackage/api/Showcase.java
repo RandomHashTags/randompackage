@@ -2,9 +2,10 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.ShowcaseData;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -127,8 +128,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 
 	public void resetShowcases(OfflinePlayer player) {
 		if(player != null) {
-			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			pdata.resetShowcases();
+			final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+			pdata.getShowcaseData().reset();
 		}
 	}
 	public void confirmAddition(@NotNull Player player, @NotNull ItemStack item) {
@@ -177,8 +178,9 @@ public class Showcase extends RPFeature implements CommandExecutor {
 	public void open(@NotNull Player opener, @Nullable OfflinePlayer target, int page) {
 		if(target == null || target == opener) target = opener;
 		final boolean self = target == opener;
-		final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
-		final HashMap<Integer, ItemStack[]> showcases = pdata.getShowcases();
+		final FileRPPlayer pdata = FileRPPlayer.get(target.getUniqueId());
+		final ShowcaseData data = pdata.getShowcaseData();
+		final HashMap<Integer, ItemStack[]> showcases = data.getShowcases();
 		int maxpage = 0;
 		for(int i = 1; i <= 100; i++) {
 			if(showcases.containsKey(i)) {
@@ -188,7 +190,7 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		if(!hasPermission(opener, "RandomPackage.showcase" + (self ? "" : ".other"), false)) {
 			sendStringListMessage(opener, getStringList(config, "messages.no access"), null);
 		} else {
-			int size = pdata.getShowcaseSize(page);
+			int size = data.getSize(page);
 			size = size == 0 ? 9 : size;
 			(self ? inSelf : inOther).add(opener);
 			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", (self ? opener : target).getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", Integer.toString(maxpage)));
@@ -252,8 +254,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 		final ItemStack i = event.getItem();
 		if(i != null && i.isSimilar(expansion)) {
 			final Player player = event.getPlayer();
-			final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-			final HashMap<Integer, Integer> sizes = pdata.getShowcaseSizes();
+			final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+			final HashMap<Integer, Integer> sizes = pdata.getShowcaseData().getSizes();
 			event.setCancelled(true);
 			player.updateInventory();
 			for(int o = 1; o <= 10; o++) {

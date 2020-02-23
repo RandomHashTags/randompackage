@@ -25,7 +25,9 @@ public class EnchantmentOrbs extends RPFeature {
         return instance;
     }
 
-    public String getIdentifier() { return "ENCHANTMENT_ORBS"; }
+    public String getIdentifier() {
+        return "ENCHANTMENT_ORBS";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         final List<ItemStack > orbs = new ArrayList<>();

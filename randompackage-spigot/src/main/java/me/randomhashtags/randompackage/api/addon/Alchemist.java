@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
+import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -98,7 +99,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
     }
 
     public void view(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.alchemist", true)) {
+        if(hasPermission(player, CustomEnchantPermission.VIEW_ALCHEMIST, true)) {
             player.openInventory(Bukkit.createInventory(player, alchemist.getSize(), alchemist.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(alchemist.getInventory().getContents());

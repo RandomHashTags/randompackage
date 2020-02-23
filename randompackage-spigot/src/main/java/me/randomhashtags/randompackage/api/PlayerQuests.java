@@ -7,10 +7,12 @@ import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
 import me.randomhashtags.randompackage.attributesys.EACoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.PlayerQuestData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
+import me.randomhashtags.randompackage.perms.PlayerQuestPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -29,6 +31,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,8 +65,8 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             final String a = args[0];
             if(a.equals("shop")) {
                 viewShop(player);
-            } else if(a.equals("reroll") && hasPermission(player, "RandomPackage.playerquests.reroll", true)) {
-                RPPlayer.get(player.getUniqueId()).setQuests(null);
+            } else if(a.equals("reroll") && hasPermission(player, PlayerQuestPermission.COMMAND_REROLL, true)) {
+                FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().setQuests(null);
             }
         }
         return true;
@@ -164,8 +167,8 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final String name = is.getItemMeta().getDisplayName();
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final HashMap<PlayerQuest, ActivePlayerQuest> quests = pdata.getQuests();
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final HashMap<PlayerQuest, ActivePlayerQuest> quests = pdata.getPlayerQuestData().getQuests();
             if(!quests.isEmpty()) {
                 for(ActivePlayerQuest quest : quests.values()) {
                     final String targetName = (quest.isCompleted() ? quest.hasClaimedRewards() ? claimed : claim : active).getItemMeta().getDisplayName();
@@ -217,18 +220,20 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     }
 
     public void view(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.playerquests.view", true)) {
+        if(hasPermission(player, PlayerQuestPermission.VIEW, true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
 
             final long time = System.currentTimeMillis();
-            final HashMap<PlayerQuest, ActivePlayerQuest> activeQuests = RPPlayer.get(player.getUniqueId()).getQuests();
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final PlayerQuestData data = pdata.getPlayerQuestData();
+            final HashMap<PlayerQuest, ActivePlayerQuest> activeQuests = data.getQuests();
             final int size = activeQuests != null ? activeQuests.size() : 0;
             final Object[] activeQuestsArray = activeQuests.values().toArray();
             final List<String> available = getStringList(config, "status.available"), completed = getStringList(config, "status.completed"), claimed = getStringList(config, "status.claimed");
-            final String tokens = Integer.toString(RPPlayer.get(player.getUniqueId()).questTokens);
+            final String tokens = formatInt(data.getTokens().intValue());
             int q = 0;
             for(int i = 0; i < gui.getSize(); i++) {
                 item = top.getItem(i);
@@ -272,13 +277,13 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         }
     }
     public void viewShop(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.playerquests.view.shop", true)) {
+        if(hasPermission(player, PlayerQuestPermission.VIEW_SHOP, true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, shop.getSize(), shop.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(shop.getInventory().getContents());
 
-            final String tokens = formatLong(RPPlayer.get(player.getUniqueId()).questTokens);
+            final String tokens = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
             for(int i = 0; i < top.getSize(); i++) {
                 item = top.getItem(i);
                 if(item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
@@ -297,7 +302,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
 
     private ItemStack getReturnToQuests(Player player) {
         if(player != null) {
-            final String t = formatLong(RPPlayer.get(player.getUniqueId()).questTokens);
+            final String t = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
             item = returnToQuests.clone();
             itemMeta = item.getItemMeta(); lore.clear();
             for(String s : itemMeta.getLore()) {
@@ -333,11 +338,12 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                         } else if(!active.hasClaimedRewards()) {
                             final PlayerQuest quest = active.getQuest();
                             final List<String> claimed = getStringList(config, "status.claimed");
-                            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+                            final PlayerQuestData data = pdata.getPlayerQuestData();
                             active.setHasClaimedRewards(true);
                             for(String b : quest.getRewards()) {
                                 if(b.startsWith("questtokens=")) {
-                                    pdata.questTokens += Integer.parseInt(b.split("=")[1].split(":")[0]);
+                                    data.setTokens(data.getTokens().add(BigInteger.valueOf(Integer.parseInt(b.split("=")[1].split(":")[0]))));
                                 } else {
                                     giveItem(player, createItemStack(null, b.split(":")[0]));
                                 }
@@ -351,20 +357,23 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                     viewShop(player);
                 }
             } else if(shopitems.containsKey(slot)) {
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final int cost = tokencost.get(slot), current = pdata.questTokens;
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+                final PlayerQuestData data = pdata.getPlayerQuestData();
+                final BigInteger current = data.getTokens();
+                final int cost = tokencost.get(slot), currentInt = current.intValue();
                 final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{TOKENS}", Integer.toString(current));
+                replacements.put("{TOKENS}", formatInt(currentInt));
                 replacements.put("{COST}", Integer.toString(cost));
-                if(current >= cost) {
-                    pdata.questTokens -= cost;
+                final boolean isEnough = currentInt >= cost;
+                final String msg = isEnough ? "purchase" : "not enough tokens";
+                if(isEnough) {
+                    final BigInteger newAmount = current.subtract(BigInteger.valueOf(cost));
+                    data.setTokens(newAmount);
                     giveItem(player, shopitems.get(slot));
                     updateReturnToQuests(player);
-                    replacements.put("{TOKENS}", Integer.toString(pdata.questTokens));
-                    sendStringListMessage(player, getStringList(config, "messages.purchase"), replacements);
-                } else {
-                    sendStringListMessage(player, getStringList(config, "messages.not enough tokens"), replacements);
+                    replacements.put("{TOKENS}", formatInt(newAmount.intValue()));
                 }
+                sendStringListMessage(player, getStringList(config, "messages." + msg), replacements);
             } else if(slot == returnToQuestsSlot) {
                 view(player);
             }
@@ -375,7 +384,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     private void triggerPlayerQuests(Event event, Player player) {
         if(player != null) {
             final HashMap<String, Entity> entities = getEntities(event);
-            final Collection<ActivePlayerQuest> quests = RPPlayer.get(player.getUniqueId()).getQuests().values();
+            final Collection<ActivePlayerQuest> quests = FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getQuests().values();
             final String[] replacements = getReplacements(event);
             for(ActivePlayerQuest quest : quests) {
                 trigger(event, entities, quest.getQuest().getTrigger(), replacements);
@@ -395,7 +404,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : null;
         if(player != null) {
             final String[] replacements = getReplacements(event);
-            final Collection<ActivePlayerQuest> a = RPPlayer.get(player.getUniqueId()).getQuests().values();
+            final Collection<ActivePlayerQuest> a = FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getQuests().values();
             for(ActivePlayerQuest quest : a) {
                 trigger(event, entities, quest.getQuest().getTrigger(), replacements);
             }

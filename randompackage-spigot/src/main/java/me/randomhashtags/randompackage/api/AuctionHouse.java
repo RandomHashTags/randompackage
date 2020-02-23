@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.obj.AuctionedItem;
+import me.randomhashtags.randompackage.perms.AuctionHousePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -334,7 +335,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     }
 
     public void viewHelp(@NotNull CommandSender sender) {
-        if(hasPermission(sender, "RandomPackage.ah.help", true)) {
+        if(hasPermission(sender, AuctionHousePermission.HELP, true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
@@ -516,7 +517,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         top.setItem(nextPageSlot, next);
     }
     public void view(@NotNull Player player, int page) {
-        if(hasPermission(player, "RandomPackage.ah.view", true)) {
+        if(hasPermission(player, AuctionHousePermission.VIEW, true)) {
             player.closeInventory();
             this.page.put(player, page);
             viewing.put(player, "AUCTION_HOUSE");
@@ -528,7 +529,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
     public void viewCategories(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.ah.view.categories", true)) {
+        if(hasPermission(player, AuctionHousePermission.VIEW_CATEGORIES, true)) {
             player.closeInventory();
             page.put(player, 1);
             viewing.put(player, "CATEGORY_VIEW");
@@ -540,7 +541,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
     public void viewCategory(@NotNull Player player, @NotNull UMaterial material, @Nullable String name) {
-        if(hasPermission(player, "RandomPackage.ah.view.category", true)) {
+        if(hasPermission(player, AuctionHousePermission.VIEW_CATEGORY, true)) {
             player.closeInventory();
             player.openInventory(Bukkit.createInventory(null, categoryItems.getSize(), categoryItems.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -549,7 +550,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
     public void viewCollectionBin(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.ah.view.collectionbin", true)) {
+        if(hasPermission(player, AuctionHousePermission.VIEW_COLLECTION_BIN, true)) {
             player.closeInventory();
             page.put(player, 1);
             viewing.put(player, "COLLECTION_BIN");
@@ -594,7 +595,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
     }
 
     public void confirmAuction(@NotNull Player player, @NotNull ItemStack item, @NotNull BigDecimal price) {
-        if(hasPermission(player, "RandomPackage.ah.sell", true)) {
+        if(hasPermission(player, AuctionHousePermission.VIEW_SELL, true)) {
             final String p = formatBigDecimal(price);
             player.closeInventory();
 
@@ -624,7 +625,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         }
     }
     public void auction(@NotNull Player player, @NotNull ItemStack item, @NotNull BigDecimal price) {
-        if(hasPermission(player, "RandomPackage.ah.auction", true)) {
+        if(hasPermission(player, AuctionHousePermission.AUCTION_ITEM, true)) {
             final UUID uuid = player.getUniqueId();
             if(!auctions.containsKey(uuid)) {
                 auctions.put(uuid, new ArrayList<>());
@@ -656,7 +657,7 @@ public class AuctionHouse extends RPFeature implements CommandExecutor {
         category.get(name).add(auction);
     }
     public void tryPurchasing(@NotNull Player player, @NotNull AuctionedItem auction) {
-        if(auction != null && hasPermission(player, "RandomPackage.ah.buy", true)) {
+        if(auction != null && hasPermission(player, AuctionHousePermission.BUY_AUCTION, true)) {
             player.closeInventory();
 
             final ItemStack its = auction.item();

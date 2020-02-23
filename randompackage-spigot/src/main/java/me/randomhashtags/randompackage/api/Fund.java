@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
+import me.randomhashtags.randompackage.perms.FundPermission;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -95,7 +96,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 	}
 	
 	public void deposit(@NotNull Player player, @NotNull String arg) {
-		if(hasPermission(player, "RandomPackage.fund.deposit", true)) {
+		if(hasPermission(player, FundPermission.DEPOSIT, true)) {
 			if(total.doubleValue() >= maxfund.doubleValue()) {
 				sendStringListMessage(player, getStringList(config, "messages.already complete"), null);
 			} else if(arg.contains(".") && !config.getBoolean("allows decimals")) {
@@ -144,7 +145,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 					if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
 							|| m.equals(s.toLowerCase())
 							|| m.equals(s.replace(pl, cmd).toLowerCase())) {
-						if(hasPermission(player, "RandomPackage.fund.bypass", false)) {
+						if(hasPermission(player, FundPermission.BYPASS_LOCKED, false)) {
 							return;
 						}
 						event.setCancelled(true);
@@ -187,19 +188,21 @@ public class Fund extends RPFeature implements CommandExecutor {
 	}
 
 	public void reset(@Nullable CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.fund.reset", true)) {
+		if(hasPermission(sender, FundPermission.RESET, true)) {
 			Bukkit.broadcastMessage(colorize("&c&l(!)&r &e" + (sender != null ? sender.getName() : "CONSOLE") + " &chas reset the server fund!"));
 			total = BigDecimal.ZERO;
 			deposits.clear();
 		}
 	}
 	public void view(@NotNull CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.fund", true)) {
+		if(hasPermission(sender, FundPermission.VIEW, true)) {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
 			final String symbol = getString(config, "messages.progress bar.symbol"), achieved = getString(config, "messages.progress bar.achieved"), notachieved = getString(config, "messages.progress bar.not achieved");
 			final String completed = getString(config, "messages.completed");
 			for(String s : getStringList(config, "messages.view")) {
-				if(s.contains("{BALANCE}")) s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
+				if(s.contains("{BALANCE}")) {
+					s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
+				}
 				if(s.equals("{CONTENT}")) {
 					final List<String> content = getStringList(config, "messages.content");
 					for(String i : getStringList(config, "unlock")) {
@@ -233,7 +236,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 		return builder.toString();
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.fund.help", true)) {
+		if(hasPermission(sender, FundPermission.VIEW_HELP, true)) {
 			sendStringListMessage(sender, getStringList(config, "messages.help"), null);
 		}
 	}

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
+import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -79,7 +80,7 @@ public class Enchanter extends RPFeature implements CommandExecutor {
     }
     
     public void view(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.enchanter", true)) {
+        if(hasPermission(player, CustomEnchantPermission.VIEW_ENCHANTER, true)) {
             player.openInventory(Bukkit.createInventory(player, enchanter.getSize(), enchanter.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(enchanter.getInventory().getContents());

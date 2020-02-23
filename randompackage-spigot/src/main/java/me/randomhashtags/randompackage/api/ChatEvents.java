@@ -1,10 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.Title;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.TitleData;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -67,8 +68,12 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 			final Player player = event.getPlayer();
 			final List<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
 
-			final Title ac = RPPlayer.get(player.getUniqueId()).getActiveTitle();
-			String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", ac != null ? " " + ac.getChatTitle() : ""));
+			final TitleData data = FileRPPlayer.get(player.getUniqueId()).getTitleData();
+			Title title = null;
+			if(data != null) {
+				title = data.getActive();
+			}
+			String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", title != null ? " " + title.getChatTitle() : ""));
 			if(RANDOM_PACKAGE.placeholderapi) {
 				format = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
 			}

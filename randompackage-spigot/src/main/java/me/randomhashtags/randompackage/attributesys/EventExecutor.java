@@ -2,12 +2,13 @@ package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.attribute.EventAttribute;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
@@ -143,7 +144,7 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
             if(entityValues.containsKey(s)) {
                 final Entity e = entities.get(s);
                 if(e instanceof Player) {
-                    a.put(RPPlayer.get(e.getUniqueId()), entityValues.get(s));
+                    a.put(FileRPPlayer.get(e.getUniqueId()), entityValues.get(s));
                 }
             }
         }

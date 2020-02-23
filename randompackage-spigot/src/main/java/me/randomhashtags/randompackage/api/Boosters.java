@@ -137,7 +137,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		try {
 			data.save(dataF);
 			data = YamlConfiguration.loadConfiguration(dataF);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

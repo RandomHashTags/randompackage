@@ -16,8 +16,18 @@ public class ShowcaseDataObj implements ShowcaseData {
     public HashMap<Integer, Integer> getSizes() {
         return sizes;
     }
+
+    @Override
+    public void setSizes(HashMap<Integer, Integer> sizes) {
+        this.sizes = sizes;
+    }
+
     @Override
     public HashMap<Integer, ItemStack[]> getShowcases() {
         return showcases;
+    }
+    @Override
+    public void setShowcases(HashMap<Integer, ItemStack[]> showcases) {
+        this.showcases = showcases;
     }
 }

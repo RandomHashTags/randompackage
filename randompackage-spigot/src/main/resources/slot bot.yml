@@ -16,6 +16,20 @@ messages:
       - "&b&l*&r &f&l{AMOUNT}x&r {ITEM}"
       - " "
 #
+sounds:
+  cancelled: "ENTITY_VILLAGER_NO:1:1"
+  withdraw tickets: "ENTITY_VILLAGER_YES:1:2"
+  #
+  insert ticket: "ENTITY_EXPERIENCE_ORB_PICKUP:1:1"
+  started spinning: "ENTITY_EXPERIENCE_ORB_PICKUP:1:2"
+  spinning: "ENTITY_EXPERIENCE_ORB_PICKUP:1:3"
+  finished spinning: "ENTITY_PLAYER_LEVELUP:1:1"
+#
+settings:
+  always random loot: false # rewards are always random instead of like a real Slot Machine
+  instant custom item command execution: false # the player won't receive the Custom Item if it executes commands
+  inventory is closeable when spinning: true # if true, the player will obtain the rewards in the Reward Slots. If false, they have to wait until it is done spinning
+#
 items:
   ticket:
     item: "paper"
@@ -93,7 +107,6 @@ items:
 preview rewards:
   title: "Slot Bot Loot"
   size: 27
-  show reward source item: true
 #
 gui:
   title: "Slot Bot"
@@ -164,10 +177,28 @@ gui:
       - "&7tickets will be refunded."
 #
 rewards:
-  - "itemskin:FLAMING_HALO"
-  - "slotbottickets"
-  #- "randomemotelootbox"
-  - "lootbox:PET_COLLECTOR"
-  - "lootbox:DETENTION"
-  - "lootbox:SUGAR_DADDY"
-  - "lootbox:RAINBOW"
+  - "slotbotticket"
+  - "big boie"
+  - "custom command brother"
+  - "carrot;amount=32"
+  - "potato;amount=16"
+  - "experience_bottle;amount=16-32"
+  - "obsidian;amount=12-24"
+  - "diamond_pickaxe"
+  - "diamond_shovel"
+  - "diamond_hoe"
+  - "diamond_axe"
+  - "diamond_sword"
+  - "diamond_helmet"
+  - "diamond_chestplate"
+  - "diamond_leggings"
+  - "diamond_boots"
+  - "iron_pickaxe"
+  - "iron_shovel"
+  - "iron_hoe"
+  - "iron_axe"
+  - "iron_sword"
+  - "iron_helmet"
+  - "iron_chestplate"
+  - "iron_leggings"
+  - "iron_boots"

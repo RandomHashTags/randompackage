@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.obj.PvPCountdownMatch;
 import me.randomhashtags.randompackage.addon.obj.PvPMatch;
+import me.randomhashtags.randompackage.perms.WildPvPPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -48,14 +49,14 @@ public class WildPvP extends RPFeature implements CommandExecutor {
     private int invincibilityDuration, nearbyRadius;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if(!(sender instanceof Player)) return true;
+        if(!(sender instanceof Player)) {
+            return true;
+        }
         final Player player = (Player) sender;
-        final int l = args.length;
-        if(l == 0) {
+        if(args.length == 0) {
             viewQueue(player);
         } else {
-            final String a = args[0];
-            if(a.equals("leave")) {
+            if(args[0].equals("leave")) {
                 final PvPMatch m = PvPMatch.valueOf(player);
                 if(m != null) {
                     leaveQueue(m, getStringList(config, "messages.leave"));
@@ -125,13 +126,13 @@ public class WildPvP extends RPFeature implements CommandExecutor {
     }
 
     public void viewQueue(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.wildpvp.view", true)) {
+        if(hasPermission(player, WildPvPPermission.VIEW_QUEUE, true)) {
             player.closeInventory();
             player.openInventory(gui.getInventory());
         }
     }
     public void joinQueue(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.wildpvp.create", true)) {
+        if(hasPermission(player, WildPvPPermission.JOIN_QUEUE, true)) {
             player.closeInventory();
             final PvPMatch m = PvPMatch.valueOf(player);
             if(m == null) {
@@ -180,13 +181,13 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
     }
     public void leaveQueue(@NotNull PvPMatch match, @Nullable List<String> reason) {
-        if(hasPermission(match.getCreator(), "RandomPackage.wildpvp.leave", true)) {
+        if(hasPermission(match.getCreator(), WildPvPPermission.LEAVE_QUEUE, true)) {
             sendStringListMessage(match.getCreator(), reason, null);
             delete(match);
         }
     }
     public void leaveCountdown(@NotNull Player player) {
-        if(countdown.containsKey(player) && hasPermission(player, "RandomPackage.wildpvp.leave.countdown", true)) {
+        if(countdown.containsKey(player) && hasPermission(player, WildPvPPermission.LEAVE_QUEUE_DURING_COUNTDOWN, true)) {
             player.teleport(countdown.get(player), PlayerTeleportEvent.TeleportCause.UNKNOWN);
             countdown.remove(player);
             final PvPCountdownMatch match = PvPCountdownMatch.valueOf(player);
@@ -200,7 +201,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
     }
     public void viewInventoryOfQueue(@NotNull Player player, @NotNull PvPMatch match) {
-        if(hasPermission(player, "RandomPackage.wildpvp.viewinventory", true)) {
+        if(hasPermission(player, WildPvPPermission.VIEW_QUEUE_INVENTORY, true)) {
             player.closeInventory();
             final Inventory inv = match.getInventory();
             player.openInventory(Bukkit.createInventory(player, 54, viewInventory.getTitle().replace("{PLAYER}", match.getCreator().getName())));
@@ -215,7 +216,7 @@ public class WildPvP extends RPFeature implements CommandExecutor {
         }
     }
     public void challenge(@NotNull Player player, @NotNull PvPMatch match) {
-        if(hasPermission(player, "RandomPackage.wildpvp.challenge", true)) {
+        if(hasPermission(player, WildPvPPermission.CHALLENGE, true)) {
             final Player creator = match.getCreator();
             player.closeInventory();
             creator.closeInventory();

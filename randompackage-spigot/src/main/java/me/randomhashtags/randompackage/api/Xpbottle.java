@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
+import me.randomhashtags.randompackage.perms.XpbottlePermission;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.ChatColor;
@@ -43,12 +44,11 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        if(player != null && hasPermission(sender, "RandomPackage.xpbottle", true)) {
+        if(player != null && hasPermission(sender, XpbottlePermission.COMMAND, true)) {
             if(args.length == 0) {
                 sendStringListMessage(player, getStringList(config, "messages.argument zero"), null);
             } else {
-                final String a = args[0];
-                final BigDecimal amount = BigDecimal.valueOf(getRemainingInt(a));
+                final BigDecimal amount = BigDecimal.valueOf(getRemainingInt(args[0]));
                 final int i = amount.intValue();
                 if(i <= 0) {
                     sendStringListMessage(sender, getStringList(config, "messages.withdraw at least"), null);
@@ -62,7 +62,9 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "XPBOTTLE"; }
+    public String getIdentifier() {
+        return "XPBOTTLE";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "xpbottle.yml");
@@ -137,7 +139,7 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
         } else {
             final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
             final long time = System.currentTimeMillis();
-            if(pdata.isXPExhausted() && !hasPermission(player, "RandomPackage.xpbottle.bypass-exhaustion", false)) {
+            if(pdata.isXPExhausted() && !hasPermission(player, XpbottlePermission.BYPASS_EXHAUSTION, false)) {
                 replacements.put("{TIME}", getRemainingTime(pdata.xpExhaustionExpiration-time));
                 sendStringListMessage(player, getStringList(config, "messages.cannot xpbottle"), replacements);
             } else {
@@ -221,7 +223,9 @@ public class Xpbottle extends RPFeature implements Listener, CommandExecutor {
             delayed.remove(player);
             final World world = player.getWorld();
             double delay = getTeleportationDelay(world);
-            if(hasPermission(player, "RandomPackage.xpbottle.bypass-delay", false) || delay <= 0) return;
+            if(hasPermission(player, XpbottlePermission.BYPASS_DELAY, false) || delay <= 0) {
+                return;
+            }
             final UUID uuid = player.getUniqueId();
             final RPPlayer pdata = RPPlayer.get(uuid);
             if(pdata.isXPExhausted()) {

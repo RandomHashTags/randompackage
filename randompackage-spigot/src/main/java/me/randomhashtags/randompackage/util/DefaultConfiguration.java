@@ -10,16 +10,24 @@ public interface DefaultConfiguration extends UVersionable {
         }
     }
     default void generateDefaultBoosters() {
-        generateAllDefault("boosters", new String[] {"FACTION_MCMMO", "FACTION_XP"});
+        generateAllDefault("boosters", new String[] {
+                "FACTION_MCMMO", "FACTION_XP"
+        });
     }
     default void generateDefaultCustomArmor() {
-        generateAllDefault("custom armor", new String[] {"DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"});
+        generateAllDefault("custom armor", new String[] {
+                "DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI"
+        });
     }
     default void generateDefaultConquests() {
-        generateAllDefault("conquests", new String[] {"NORMAL"});
+        generateAllDefault("conquests", new String[] {
+                "NORMAL"
+        });
     }
     default void generateDefaultCustomBosses() {
-        generateAllDefault("custom bosses", new String[] {"BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER"});
+        generateAllDefault("custom bosses", new String[] {
+                "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER"
+        });
     }
     default void generateDefaultCustomEnchants() {
         final String[] mastery = new String[] {
@@ -162,16 +170,24 @@ public interface DefaultConfiguration extends UVersionable {
         generateAllDefault("custom enchants" + SEPARATOR + "RANDOM", new String[] {"_settings"});
     }
     default void generateDefaultCustomCreepers() {
-        generateAllDefault("custom creepers", new String[] {"ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL"});
+        generateAllDefault("custom creepers", new String[] {
+                "ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL"
+        });
     }
     default void generateDefaultCustomTNT() {
-        generateAllDefault("custom tnt", new String[] {"GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL"});
+        generateAllDefault("custom tnt", new String[] {
+                "GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL"
+        });
     }
     default void generateDefaultDuelArenas() {
-        generateAllDefault("duel arenas", new String[] {"DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID"});
+        generateAllDefault("duel arenas", new String[] {
+                "DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID"
+        });
     }
     default void generateDefaultEnvoyTiers() {
-        generateAllDefault("envoy tiers", new String[]{"ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"});
+        generateAllDefault("envoy tiers", new String[]{
+                "ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"
+        });
     }
     default void generateDefaultFactionQuests() {
         generateAllDefault("faction quests", new String[]{
@@ -240,7 +256,9 @@ public interface DefaultConfiguration extends UVersionable {
         });
     }
     default void generateDefaultFilterCategories() {
-        generateAllDefault("filter categories", new String[] {"EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY"});
+        generateAllDefault("filter categories", new String[] {
+                "EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY"
+        });
     }
     default void generateDefaultInventoryPets() {
         generateAllDefault("inventory pets", new String[] {
@@ -320,7 +338,9 @@ public interface DefaultConfiguration extends UVersionable {
         });
     }
     default void generateDefaultOutposts() {
-        generateAllDefault("outposts", new String[]{"HERO", "SERVONAUT", "TRAINEE", "VANILLA"});
+        generateAllDefault("outposts", new String[]{
+                "HERO", "SERVONAUT", "TRAINEE", "VANILLA"
+        });
     }
     default void generateDefaultPlayerQuests() {
         generateAllDefault("player quests", new String[] {
@@ -373,7 +393,9 @@ public interface DefaultConfiguration extends UVersionable {
         });
     }
     default void generateDefaultServerCrates() {
-        generateAllDefault("server crates", new String[] {"ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"});
+        generateAllDefault("server crates", new String[] {
+                "ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE"
+        });
     }
     default void generateDefaultShopCategories() {
         generateAllDefault("shops", new String[] {
@@ -390,7 +412,9 @@ public interface DefaultConfiguration extends UVersionable {
         });
     }
     default void generateDefaultStrongholds() {
-        generateAllDefault("strongholds", new String[] {"FROZEN", "INFERNAL"});
+        generateAllDefault("strongholds", new String[] {
+                "FROZEN", "INFERNAL"
+        });
     }
     default void generateDefaultTitanAttributes() {
         generateAllDefault("titan attributes", new String[] {
@@ -401,6 +425,7 @@ public interface DefaultConfiguration extends UVersionable {
     }
     default void generateDefaultTrinkets() {
         generateAllDefault("trinkets", new String[] {
+                "ANTI_PROJECTILE_FORCEFIELD",
                 "BATTLESTAFF_OF_YIJKI",
                 "EMP_PULSE",
                 "FACTION_BANNER",

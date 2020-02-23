@@ -1,4 +1,4 @@
-package me.randomhashtags.randompackage;
+package me.randomhashtags.randompackage.data;
 
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.RarityGems;
-import me.randomhashtags.randompackage.data.*;
 import me.randomhashtags.randompackage.data.obj.*;
 import me.randomhashtags.randompackage.dev.Disguises;
 import me.randomhashtags.randompackage.dev.duels.Duels;
@@ -30,6 +29,8 @@ import java.util.*;
 import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
+    private static final String FOLDER = DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "players";
+    public static final HashMap<UUID, FileRPPlayer> PLAYERS = new HashMap<>();
 
     private boolean isLoaded;
     private UUID uuid;
@@ -51,6 +52,37 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
     private ShowcaseData showcase;
     private SlotBotData slotbot;
     private TitleData titles;
+
+    public FileRPPlayer(UUID uuid) {
+        this.uuid = uuid;
+        final String UUID = uuid.toString();
+        final File f = new File(FOLDER, UUID + ".yml");
+        boolean backup = false;
+        if(!PLAYERS.containsKey(uuid)) {
+            if(!f.exists()) {
+                try {
+                    final File folder = new File(FOLDER);
+                    if(!folder.exists()) {
+                        folder.mkdirs();
+                    }
+                    f.createNewFile();
+                    backup = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            file = new File(FOLDER, UUID + ".yml");
+            yml = YamlConfiguration.loadConfiguration(file);
+            PLAYERS.put(uuid, this);
+        }
+        if(backup) {
+            backup();
+        }
+    }
+
+    public static FileRPPlayer get(UUID player) {
+        return PLAYERS.getOrDefault(player, new FileRPPlayer(player)).load();
+    }
 
     public boolean isLoaded() {
         return isLoaded;
@@ -140,7 +172,7 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             yml.set("homes.list", homes);
         }
         if(itemfilter != null) {
-            yml.set("item filter.enabled", itemfilter.isEnabled());
+            yml.set("item filter.enabled", itemfilter.isActive());
             final List<String> materials = new ArrayList<>();
             for(UMaterial m : itemfilter.getFilteredItems()) {
                 materials.add(m.name());
@@ -189,7 +221,7 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             final HashMap<Integer, ItemStack[]> showcases = showcase.getShowcases();
             for(int page : showcases.keySet()) {
                 yml.set("showcase." + page, null);
-                yml.set("showcase." + page + ".size", showcase.getShowcaseSize(page));
+                yml.set("showcase." + page + ".size", showcase.getSize(page));
                 int s = 0;
                 for(ItemStack i : showcases.get(page)) {
                     if(i != null && !i.getType().equals(Material.AIR)) {

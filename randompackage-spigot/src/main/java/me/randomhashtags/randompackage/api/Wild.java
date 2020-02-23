@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.Nullable;
+import me.randomhashtags.randompackage.perms.WildPermission;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
@@ -34,8 +36,19 @@ public class Wild extends RPFeature implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        if(player != null && cmd.getName().equals("wild")) {
-            tryTeleporting(player);
+        switch (args.length) {
+            case 1:
+                if(args[0].equals("reload") && hasPermission(sender, WildPermission.COMMAND_RELOAD, true)) {
+                    disable();
+                    enable();
+                    sender.sendMessage(colorize("&6[RandomPackage] &aWild successfully reloaded!"));
+                }
+                break;
+            default:
+                if(player != null) {
+                    tryTeleporting(player);
+                }
+                break;
         }
         return true;
     }
@@ -88,16 +101,16 @@ public class Wild extends RPFeature implements CommandExecutor {
     public long getCooldownExpireTime(UUID player) {
         return expirations.get(player);
     }
-    public boolean isCooldowned(UUID player) {
+    public boolean isCooldowned(@NotNull UUID player) {
         if(expirations.containsKey(player) && getCooldownTimeLeft(player) <= 0) {
             expirations.remove(player);
         }
         return expirations.containsKey(player);
     }
-    public long getCooldownTimeLeft(UUID player) {
+    public long getCooldownTimeLeft(@NotNull UUID player) {
         return expirations.get(player);
     }
-    public String getCooldownLeft(UUID player) {
+    public String getCooldownLeft(@NotNull UUID player) {
         return !expirations.containsKey(player) ? "" : getRemainingTime(getCooldownExpireTime(player)-System.currentTimeMillis());
     }
 
@@ -107,10 +120,7 @@ public class Wild extends RPFeature implements CommandExecutor {
         l.setY(w.getHighestBlockYAt(l));
         return l;
     }
-    public Location getRandomLocation(World w) {
-        return getRandomLocation(w, null);
-    }
-    public Location getRandomLocation(World w, List<String> exceptions) {
+    public Location getRandomLocation(@NotNull World w, @Nullable List<String> exceptions) {
         final BigDecimal minx = getMinX(w), maxx = getMaxX(w), minz = getMinZ(w), maxz = getMaxZ(w);
         for(int i = 1; i <= 100; i++) {
             final Location l = getRandomLocation(w, minx, maxx, minz, maxz);
@@ -121,7 +131,7 @@ public class Wild extends RPFeature implements CommandExecutor {
         return null;
     }
     public void tryTeleporting(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.wild", true)) {
+        if(hasPermission(player, WildPermission.COMMAND, true)) {
             final UUID uuid = player.getUniqueId();
             if(isCooldowned(uuid)) {
                 final HashMap<String, String> replacements = new HashMap<>();
@@ -131,7 +141,7 @@ public class Wild extends RPFeature implements CommandExecutor {
                 if(regions.isPvPZone(player.getLocation())) {
                     sendStringListMessage(player, getStringList(config, "messages.cannot be used in area"), null);
                 } else {
-                    if(!hasPermission(player, "RandomPackage.wild.bypass", false)) {
+                    if(!hasPermission(player, WildPermission.BYPASS_COOLDOWN, false)) {
                         expirations.put(uuid, System.currentTimeMillis()+cooldown*1000);
                     }
                     final Location l = getRandomLocation(player.getWorld(), teleportExceptions);

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.KothCaptureEvent;
+import me.randomhashtags.randompackage.perms.KOTHPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
@@ -68,12 +69,12 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			default:
 				switch (args[0]) {
 					case "stop":
-						if(hasPermission(sender, "RandomPackage.koth.stop", true)) {
+						if(hasPermission(sender, KOTHPermission.COMMAND_STOP, true)) {
 							stopKOTH();
 						}
 						break;
 					case "start":
-						if(hasPermission(sender, "RandomPackage.koth.start", true)) {
+						if(hasPermission(sender, KOTHPermission.COMMAND_START, true)) {
 							startKOTH();
 						}
 						break;
@@ -170,8 +171,8 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		}
 		return loot;
 	}
-	public void previewLootbag(Player player) {
-		if(hasPermission(player, "RandomPackage.koth.loot", true)) {
+	public void previewLootbag(@NotNull Player player) {
+		if(hasPermission(player, KOTHPermission.PREVIEW_LOOT, true)) {
 			player.openInventory(Bukkit.createInventory(player, lootbagInv.getSize(), lootbagInv.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final List<ItemStack> lootbag = getRandomLootbagContents();
@@ -203,7 +204,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		return System.currentTimeMillis()-started;
 	}
 	public void viewStatus(@NotNull CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.koth", true)) {
+		if(hasPermission(sender, KOTHPermission.VIEW, true)) {
 			final boolean captured = status.equals("CAPTURED"), stopped = status.equals("STOPPED");
 			final String status = config.getString("messages.status." + (center == null || captured || stopped ? "closed" : "open")),
 					name = currentPlayerCapturing != null ? currentPlayerCapturing.getName() : "",
@@ -269,7 +270,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void setCenter(@NotNull CommandSender sender, @NotNull Location loc) {
-		if(hasPermission(sender, "RandomPackage.koth.setcenter", true)) {
+		if(hasPermission(sender, KOTHPermission.SET_CENTER, true)) {
 			center = loc;
 			final HashMap<String, String> replacements = new HashMap<>();
 			replacements.put("{LOCATION}", loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ());
@@ -427,7 +428,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void teleportToKOTH(@NotNull Player player) {
-		if(hasPermission(player, "RandomPackage.koth.teleport", true) && teleportLocation != null) {
+		if(hasPermission(player, KOTHPermission.TELEPORT, true) && teleportLocation != null) {
 			final boolean captured = status.equals("CAPTURED");
 			sendStringListMessage(player, null, getStringList(config, "messages." + (captured ? "already capped" : "teleport")), 0, null);
 			if(!captured) {
@@ -457,7 +458,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		if(world != null) {
 			final Player player = event.getPlayer();
 			final boolean isStopped = status.equals("STOPPED");
-			if(event.getTo().getWorld().equals(world) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission("RandomPackage.koth.teleport bypass") && (isStopped || status.equals("CAPTURED"))) {
+			if(event.getTo().getWorld().equals(world) && event.getCause().equals(TeleportCause.COMMAND) && !player.hasPermission(KOTHPermission.TELEPORT_BYPASS) && (isStopped || status.equals("CAPTURED"))) {
 				event.setCancelled(true);
 				sendStringListMessage(player, null, getStringList(config, "messages." + (isStopped ? "no event running" : "already capped")), -1, null);
 			} else if(event.getFrom().getWorld().equals(world)) {

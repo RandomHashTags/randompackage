@@ -2,11 +2,14 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.Home;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.HomeData;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
+import me.randomhashtags.randompackage.perms.HomePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -95,14 +98,15 @@ public class Homes extends RPFeature implements CommandExecutor {
 			return true;
 		}
 		final Player player = (Player) sender;
-		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+		final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+		final HomeData data = pdata.getHomeData();
 		final String c = cmd.getName();
 		final boolean zero = args.length == 0;
 		if(c.equals("home")) {
 			if(zero) {
 				viewHomes(player, pdata);
 			} else {
-				final Home home = pdata.getHome(getArguments(args));
+				final Home home = data.getHome(getArguments(args));
 				if(home != null) {
 					teleportToHome(player, home);
 				} else {
@@ -110,9 +114,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 				}
 			}
 		} else if(c.equals("sethome")) {
-			if(hasPermission(player, "RandomPackage.sethome", true) && pdata.getHomes().size()+1 <= pdata.getMaxHomes()) {
+			if(hasPermission(player, HomePermission.COMMAND_SETHOME, true) && data.getHomes().size()+1 <= data.getMaxHomes(player)) {
 				final String z = zero ? config.getString("settings.default name") : getArguments(args);
-				pdata.addHome(player.getLocation(), z, UMaterial.GRASS_BLOCK);
+				data.addHome(player.getLocation(), z, UMaterial.GRASS_BLOCK);
 				final HashMap<String, String> replacements = new HashMap<>();
 				replacements.put("{HOME}", z);
 				sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
@@ -130,12 +134,13 @@ public class Homes extends RPFeature implements CommandExecutor {
 		return s.toString();
 	}
 	public void viewHomes(@NotNull Player opener, @NotNull RPPlayer target) {
-		if(hasPermission(opener, "RandomPackage.home", true)) {
+		if(hasPermission(opener, HomePermission.VIEW_HOMES, true)) {
 			viewingHomes.add(opener);
-			final List<Home> homes = target.getHomes();
+			final HomeData data = target.getHomeData();
+			final List<Home> homes = data.getHomes();
 			final String name = getString(config, "menu.name");
 			final List<String> menuLore = getStringList(config, "menu.lore");
-			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(target.getMaxHomes())))));
+			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(data.getMaxHomes(opener))))));
 			final Inventory top = opener.getOpenInventory().getTopInventory();
 			for(Home home : homes) {
 				final Location loc = home.getLocation();
@@ -154,7 +159,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void teleportToHome(@NotNull Player player, @NotNull Home home) {
-		if(hasPermission(player, "RandomPackage.home.teleport", true)) {
+		if(hasPermission(player, HomePermission.TELEPORT_TO_HOME, true)) {
 			player.teleport(home.getLocation(), TeleportCause.PLUGIN);
 		}
 	}
@@ -186,8 +191,9 @@ public class Homes extends RPFeature implements CommandExecutor {
 				return;
 			}
 			if(isViewingHomes) {
-				final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-				final List<Home> homes = pdata.getHomes();
+				final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+				final HomeData data = pdata.getHomeData();
+				final List<Home> homes = data.getHomes();
 				player.closeInventory();
 				final Home home = homes.get(slot);
 				if(click.contains("LEFT")) {
@@ -196,7 +202,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 					final HashMap<String, String> replacements = new HashMap<>();
 					replacements.put("{HOME}", home.getName());
 					sendStringListMessage(player, getStringList(config, "messages.delete"), replacements);
-					pdata.deleteHome(home);
+					data.deleteHome(home);
 				} else if(click.contains("RIGHT")) {
 					editIcon(player, home);
 				}
@@ -222,15 +228,15 @@ public class Homes extends RPFeature implements CommandExecutor {
 			event.setCancelled(true);
 			removeItem(player, is, 1);
 			player.updateInventory();
-			RPPlayer.get(player.getUniqueId()).addedMaxHomes += 1;
+			final HomeData data = FileRPPlayer.get(player.getUniqueId()).getHomeData();
+			data.setAddedMaxHomes(data.getAddedMaxHomes()+1);
 			sendStringListMessage(player, getStringList(config, "messages.unlocked new home slot"), null);
 		}
 	}
 	@EventHandler
 	private void factionLeaveEvent(FactionLeaveEvent event) {
 		final Player player = event.player;
-		final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-		final List<Home> homes = pdata.getHomes();
+		final List<Home> homes = FileRPPlayer.get(player.getUniqueId()).getHomeData().getHomes();
 		if(homes != null && !homes.isEmpty()) {
 			final List<String> msg = getStringList(config, "messages.deleted due to inside a faction claim");
 			final HashMap<String, String> replacements = new HashMap<>();

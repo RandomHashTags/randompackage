@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.CustomEnchant;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
@@ -90,7 +91,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
     }
 
     public void view(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.tinkerer", true)) {
+        if(hasPermission(player, CustomEnchantPermission.VIEW_TINKERER, true)) {
             player.openInventory(Bukkit.createInventory(player, tinkerer.getSize(), tinkerer.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(tinkerer.getInventory().getContents());

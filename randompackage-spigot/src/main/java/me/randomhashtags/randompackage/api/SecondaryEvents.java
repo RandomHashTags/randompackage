@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.perms.SecondaryPermission;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
@@ -48,9 +49,9 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         final int length = args.length;
         if(cmdName.equals("balance")) {
             String type, qq = "", bal = player != null ? formatBigDecimal(BigDecimal.valueOf(eco.getBalance(player)), true) : "0.00";
-            if(player != null && length == 0 && hasPermission(sender, "RandomPackage.balance", true)) {
+            if(player != null && length == 0 && hasPermission(sender, SecondaryPermission.BALANCE, true)) {
                 type = "self";
-            } else if(length >= 1 && hasPermission(sender, "RandomPackage.balance-other", true) && Bukkit.getOfflinePlayer(args[0]) != null) {
+            } else if(length >= 1 && hasPermission(sender, SecondaryPermission.BALANCE_OTHER, true)) {
                 final OfflinePlayer op = Bukkit.getOfflinePlayer(args[0]);
                 if(op.equals(player)) {
                     type = "self";
@@ -67,14 +68,16 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
                 if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
                 if(s.contains("{TARGET}")) s = s.replace("{TARGET}", Bukkit.getOfflinePlayer(args[0]).getName());
-                if(!s.equals("{RICHER}")) sender.sendMessage(colorize(s));
+                if(!s.equals("{RICHER}")) {
+                    sender.sendMessage(colorize(s));
+                }
             }
         } else if(player != null) {
-            if(cmdName.equals("bless") && hasPermission(player, "RandomPackage.bless", true)) {
+            if(cmdName.equals("bless") && hasPermission(player, SecondaryPermission.BLESS, true)) {
                 bless(player);
-            } else if(cmdName.equals("bump") && hasPermission(sender, "RandomPackage.bump", true)) {
+            } else if(cmdName.equals("bump") && hasPermission(sender, SecondaryPermission.BUMP, true)) {
                 player.damage(1.0);
-            } else if(cmdName.equals("confirm") && hasPermission(sender, "RandomPackage.confirm", true)) {
+            } else if(cmdName.equals("confirm") && hasPermission(sender, SecondaryPermission.CONFIRM, true)) {
                 final RPPlayer pdata = RPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
                 if(pdata != null) {
                     if(pdata.getUnclaimedPurchases().isEmpty()) {
@@ -83,9 +86,9 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                         confirm(player, pdata);
                     }
                 }
-            } else if(cmdName.equals("roll") && hasPermission(sender, "RandomPackage.roll", true)) {
+            } else if(cmdName.equals("roll") && hasPermission(sender, SecondaryPermission.ROLL, true)) {
                 roll(player, args.toString());
-            } else if(cmdName.equals("withdraw") && hasPermission(player, "RandomPackage.withdraw", true)) {
+            } else if(cmdName.equals("withdraw") && hasPermission(player, SecondaryPermission.WITHDRAW, true)) {
                 if(length == 0) {
                     sendStringListMessage(player, getStringList(config, "withdraw.argument 0"), null);
                 } else {
@@ -148,7 +151,8 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     }
 
     public ItemStack getBanknote(BigDecimal value, String signer) {
-        item = GIVEDP_ITEM.items.get("banknote").clone(); itemMeta = item.getItemMeta(); lore.clear();
+        item = GIVEDP_ITEM.items.get("banknote").clone();
+        itemMeta = item.getItemMeta(); lore.clear();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{SIGNER}")) {
                 s = signer != null ? s.replace("{SIGNER}", signer) : null;
@@ -187,10 +191,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             }
         }
         if(!players.isEmpty()) {
-            final HashMap<String, String> replacements = new HashMap<>();
-            replacements.put("{MAX}", formatInt(maxroll));
-            replacements.put("{PLAYER}", player.getName());
-            replacements.put("{ROLLED}", formatInt(roll));
+            final HashMap<String, String> replacements = getReplacements("{MAX}", formatInt(maxroll), "{PLAYER}", player.getName(), "{ROLLED}", formatInt(roll));
             final List<String> msg = getStringList(config, "roll.message");
             for(Player target : players) {
                 sendStringListMessage(target, msg, replacements);

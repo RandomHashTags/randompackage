@@ -3,9 +3,9 @@ package me.randomhashtags.randompackage.addon.living;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.api.GlobalChallenges;
-import me.randomhashtags.randompackage.util.RPStorage;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.GlobalChallengeEndEvent;
-import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,17 +31,29 @@ public class ActiveGlobalChallenge implements RPStorage {
         this.type = type;
         this.participants = participants;
         long remainingTime = getRemainingTime();
-        if(remainingTime < 0) remainingTime = 0;
+        if(remainingTime < 0) {
+            remainingTime = 0;
+        }
         task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> end(true, 3), remainingTime);
         active.put(type, this);
     }
 
-    public long getStartedTime() { return started; }
-    public GlobalChallenge getType() { return type; }
-    public HashMap<UUID, BigDecimal> getParticipants() { return participants; }
-    public void setParticipants(HashMap<UUID, BigDecimal> participants) { this.participants = participants; }
+    public long getStartedTime() {
+        return started;
+    }
+    public GlobalChallenge getType() {
+        return type;
+    }
+    public HashMap<UUID, BigDecimal> getParticipants() {
+        return participants;
+    }
+    public void setParticipants(HashMap<UUID, BigDecimal> participants) {
+        this.participants = participants;
+    }
 
-    public long getRemainingTime() { return started+type.getDuration()*1000-System.currentTimeMillis(); }
+    public long getRemainingTime() {
+        return started+type.getDuration()*1000-System.currentTimeMillis();
+    }
     public void increaseValue(UUID player, BigDecimal value) {
         final Map<UUID, BigDecimal> a = gc.getPlacing(participants, 1);
         final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
@@ -77,10 +89,10 @@ public class ActiveGlobalChallenge implements RPStorage {
         if(giveRewards) {
             int i = 1;
             for(UUID p : placements.keySet()) {
-                final RPPlayer pdata = RPPlayer.get(p);
+                final FileRPPlayer pdata = FileRPPlayer.get(p);
                 if(i <= recordPlacements) {
                     final GlobalChallengePrize prize = valueOfGlobalChallengePrize(i);
-                    pdata.addGlobalChallengePrize(prize);
+                    pdata.getGlobalChallengeData().addPrize(prize);
                     i += 1;
                 }
             }

@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.addon.file.FileEnvoyCrate;
 import me.randomhashtags.randompackage.addon.living.LivingEnvoyCrate;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PlayerClaimEnvoyCrateEvent;
+import me.randomhashtags.randompackage.perms.EnvoyPermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.*;
@@ -55,13 +56,13 @@ public class Envoy extends RPFeature implements CommandExecutor {
 				case "summon":
 				case "begin":
 				case "start":
-					if(hasPermission(sender, "RandomPackage.envoy.start", true)) {
+					if(hasPermission(sender, EnvoyPermission.START, true)) {
 						spawnEnvoy(colorize(config.getString("messages.default summon type")), false, l == 1 ? type : args[1].toUpperCase());
 					}
 					break;
 				case "stop":
 				case "end":
-					if(hasPermission(sender, "RandomPackage.envoy.stop", true)) {
+					if(hasPermission(sender, EnvoyPermission.STOP, true)) {
 						stopAllEnvoys();
 					}
 					break;
@@ -230,7 +231,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 	}
 
     public void enterEditMode(@NotNull Player player) {
-		if(hasPermission(player, "RandomPackage.envoy.preset", true)) {
+		if(hasPermission(player, EnvoyPermission.TOGGLE_EDIT_PRESET, true)) {
 			final PlayerInventory inv = player.getInventory();
 			final boolean viewing = settingPreset.contains(player);
 			final Material mat = viewing ? Material.AIR : Material.BEDROCK;
@@ -331,7 +332,7 @@ public class Envoy extends RPFeature implements CommandExecutor {
 		return hyphen ? min+ RANDOM.nextInt(Integer.parseInt(s[1])-min+1) : min;
 	}
 	public void viewHelp(@NotNull CommandSender sender) {
-		if(hasPermission(sender, "RandomPackage.envoy.help", true)) {
+		if(hasPermission(sender, EnvoyPermission.VIEW_HELP, true)) {
 			sendStringListMessage(sender, getStringList(config, "messages.envoy help"), null);
 		}
 	}

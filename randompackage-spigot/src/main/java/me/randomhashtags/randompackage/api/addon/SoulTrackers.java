@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
 import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.perms.SoulTrackerPermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.ChatColor;
@@ -37,7 +38,7 @@ public class SoulTrackers extends RPFeature implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        if(player != null && hasPermission(sender, "RandomPackage.splitsouls", true)) {
+        if(player != null && hasPermission(sender, SoulTrackerPermission.COMMAND_SPLITSOULS, true)) {
             splitsouls(player, args.length == 0 ? -1 : getRemainingInt(args[0]));
         }
         return true;

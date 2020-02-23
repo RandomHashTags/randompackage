@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CollectionChest;
+import me.randomhashtags.randompackage.perms.CollectionFilterPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -51,7 +52,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        if(player != null && hasPermission(sender, "RandomPackage.collectionfilter", true)) {
+        if(player != null && hasPermission(sender, CollectionFilterPermission.COMMAND, true)) {
             final int length = args.length;
             if(length == 0 || length == 1 || length == 2 && !args[1].equals("all")) {
                 final String arg = length >= 1 ? length == 1 ? args[0] : args[0] + "_" + args[1] : "";

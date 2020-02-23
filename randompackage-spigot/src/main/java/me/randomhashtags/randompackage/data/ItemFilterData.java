@@ -5,7 +5,8 @@ import me.randomhashtags.randompackage.universal.UMaterial;
 import java.util.List;
 
 public interface ItemFilterData {
-    boolean isEnabled();
+    boolean isActive();
+    void setActive(boolean active);
     void toggle();
     List<UMaterial> getFilteredItems();
 }

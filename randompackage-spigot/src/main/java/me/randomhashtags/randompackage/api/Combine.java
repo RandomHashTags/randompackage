@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.perms.CombinePermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Material;
@@ -29,7 +30,7 @@ public class Combine extends RPFeature implements CommandExecutor {
     private List<String> combineores;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player && hasPermission(sender, "RandomPackage.combine", true)) {
+        if(sender instanceof Player && hasPermission(sender, CombinePermission.COMMAND, true)) {
             combine((Player) sender);
         }
         return true;
@@ -57,10 +58,11 @@ public class Combine extends RPFeature implements CommandExecutor {
         final boolean isChest = targetType.equals(Material.CHEST) || targetType.equals(Material.TRAPPED_CHEST);
         final Chest chest = isChest ? (Chest) target.getState() : null;
         final Inventory inventory = isChest ? chest.getBlockInventory() : player.getInventory();
-        final String format = colorize(getString(config, "messages.format"));
+        final String format = getString(config, "messages.format");
+        final int size = combineores.size();
         for(String string : getStringList(config, "messages.success")) {
             if(string.equals("{SUCCESS}")) {
-                for(int i = 0; i < combineores.size(); i++) {
+                for(int i = 0; i < size; i++) {
                     final Material material = Material.valueOf(combineores.get(i).toUpperCase());
                     final String name = material.name();
                     final Material block = !name.replace("INGOT", "BLOCK").endsWith("BLOCK") ? Material.valueOf(name + "_BLOCK") : Material.valueOf(name.replace("INGOT", "BLOCK"));

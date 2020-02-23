@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.living.ActiveTrade;
+import me.randomhashtags.randompackage.perms.TradePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
@@ -42,7 +43,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
-		if(args.length == 0 && hasPermission(player, "RandomPackage.trade", true)) {
+		if(args.length == 0 && hasPermission(player, TradePermission.COMMAND, true)) {
 			sendStringListMessage(player, getStringList(config, "messages.commands"), null);
 		} else if(args.length == 1) {
 			sendRequest(player, args[0]);
@@ -92,7 +93,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 	}
 	public void sendRequest(@NotNull Player sender, String receiver) {
 		final HashMap<String, String> replacements = new HashMap<>();
-		if(hasPermission(sender, "RandomPackage.trade.request", true)) {
+		if(hasPermission(sender, TradePermission.SEND_REQUEST, true)) {
 			if(receiver == null
 					|| Bukkit.getPlayer(receiver) == null
 					|| Bukkit.getPlayer(receiver) != null && !Bukkit.getPlayer(receiver).isOnline()
@@ -124,11 +125,11 @@ public class Trade extends RPFeature implements CommandExecutor {
 		}
 	}
 	public void acceptRequest(Player accepter, Player requester) {
-		if(hasPermission(accepter, "RandomPackage.trade.accept", true)) {
+		if(hasPermission(accepter, TradePermission.ACCEPT_REQUEST, true)) {
 			final Inventory inv1 = Bukkit.createInventory(requester, 54, title.replace("{PLAYER}", requester.getName())), inv2 = Bukkit.createInventory(accepter, 54, title.replace("{PLAYER}", accepter.getName()));
-			final ItemStack[] c = tradeInventory.getInventory().getContents();
-			inv1.setContents(c);
-			inv2.setContents(c);
+			final ItemStack[] contents = tradeInventory.getInventory().getContents();
+			inv1.setContents(contents);
+			inv2.setContents(contents);
 			accepter.openInventory(inv1);
 			requester.openInventory(inv2);
 			accepter.updateInventory();

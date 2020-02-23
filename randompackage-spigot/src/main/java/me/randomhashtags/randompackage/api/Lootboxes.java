@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.addon.file.FileLootbox;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.perms.LootboxPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPPlayer;
@@ -140,7 +141,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     }
 
     public void viewLootbox(@NotNull Player player) {
-        if(hasPermission(player, "RandomPackage.lootbox", true)) {
+        if(hasPermission(player, LootboxPermission.VIEW, true)) {
             player.closeInventory();
             final int size = gui.getSize();
             final long time = System.currentTimeMillis();
@@ -282,7 +283,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
     }
     public void previewLootbox(@NotNull Player player, @NotNull Lootbox lootbox) {
-        if(hasPermission(player, "RandomPackage.lootbox.preview", true)) {
+        if(hasPermission(player, LootboxPermission.PREVIEW_LOOT, true)) {
             player.closeInventory();
             final List<ItemStack> items = lootbox.getAllRewards();
             final int s = ((items.size()+9)/9)*9;
