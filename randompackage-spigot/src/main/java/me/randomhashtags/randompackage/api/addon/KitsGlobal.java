@@ -174,7 +174,7 @@ public class KitsGlobal extends Kits {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR) && top.getHolder() == player) {
-            final boolean inPreview = previewing.contains(player);
+            final boolean inPreview = PREVIEWING.contains(player);
             final String t = event.getView().getTitle();
             if(t.equals(gkit.getTitle()) || inPreview) {
                 event.setCancelled(true);

@@ -7,7 +7,13 @@ public class TObject {
         this.second = second;
         this.third = third;
     }
-    public final Object getFirst() { return first; }
-    public final Object getSecond() { return second; }
-    public final Object getThird() { return third; }
+    public final Object getFirst() {
+        return first;
+    }
+    public final Object getSecond() {
+        return second;
+    }
+    public final Object getThird() {
+        return third;
+    }
 }

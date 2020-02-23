@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.util.listener;
 
+import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitMastery;
 import me.randomhashtags.randompackage.addon.GivedpItemable;
@@ -110,14 +111,14 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     public void unload() {
     }
 
-    public final ItemStack valueOf(String input) {
+    public final ItemStack valueOf(@NotNull String input) {
         final String Q = input.split(";")[0];
         input = input.toLowerCase();
 
         if(customitems != null && customitems.containsKey(Q)) {
             return getClone(customitems.get(Q));
-        } else if(items != null && items.containsKey(input)) {
-            return getClone(items.get(input));
+        } else if(items != null && items.containsKey(Q)) {
+            return getClone(items.get(Q));
         }
 
         final HashMap<String, GivedpItemable> givedpitems = GivedpItemable.GIVEDP_ITEMS;

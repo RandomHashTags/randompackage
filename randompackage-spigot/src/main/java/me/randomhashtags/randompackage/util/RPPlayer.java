@@ -401,23 +401,4 @@ public class RPPlayer implements RPStorage {
             save();
         }
     }
-
-    public static void loadAllPlayerData() {
-        try {
-            for(File f : new File(folder).listFiles()) {
-                RPPlayer.get(UUID.fromString(f.getName().split("\\.yml")[0]));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public static void unloadAllPlayerData() {
-        try {
-            for(RPPlayer pdata : new ArrayList<>(players.values())) {
-                pdata.unload();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

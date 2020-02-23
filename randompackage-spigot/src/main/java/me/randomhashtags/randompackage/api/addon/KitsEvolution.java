@@ -8,12 +8,13 @@ import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.addon.file.FileKitEvolution;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.KitData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -165,9 +166,10 @@ public class KitsEvolution extends Kits {
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(vkit.getInventory().getContents());
         player.updateInventory();
-        final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-        final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
-        final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+        final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+        final KitData data = pdata.getKitData();
+        final HashMap<CustomKit, Integer> tiers = data.getLevels();
+        final HashMap<CustomKit, Long> cooldowns = data.getCooldowns();
         for(int i = 0; i < top.getSize(); i++) {
             item = top.getItem(i);
             if(item != null) {
@@ -215,8 +217,8 @@ public class KitsEvolution extends Kits {
             return;
         }
         final UUID uuid = player.getUniqueId();
-        final RPPlayer pdata = RPPlayer.get(uuid);
-        final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
+        final FileRPPlayer pdata = FileRPPlayer.get(uuid);
+        final HashMap<CustomKit, Integer> levels = pdata.getKitData().getLevels();
         final int vkitlvl = preview ? vkit.getMaxLevel() : hasPermissionToObtain(pdata, player, vkit) ? levels.getOrDefault(vkit, 1) : 0;
         final List<ItemStack> rewards = new ArrayList<>();
         final String playerName = player.getName();
@@ -231,7 +233,7 @@ public class KitsEvolution extends Kits {
             int s = rewards.size();
             s = s > 54 ? 54 : s%9 == 0 ? s : ((s+9)/9)*9;
             player.openInventory(Bukkit.createInventory(player, s, this.preview.getTitle()));
-            previewing.add(player);
+            PREVIEWING.add(player);
         }
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(ItemStack is : new ArrayList<>(rewards)) {
@@ -286,7 +288,8 @@ public class KitsEvolution extends Kits {
         player.updateInventory();
 
         if(!preview) {
-            pdata.getKitCooldowns().put(vkit, System.currentTimeMillis() + (vkit.getCooldown()*1000));
+            final KitData data = pdata.getKitData();
+            data.getCooldowns().put(vkit, System.currentTimeMillis() + (vkit.getCooldown()*1000));
             final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, vkit, vkitlvl);
             event.setLevelupChance(vkit.getUpgradeChance());
             PLUGIN_MANAGER.callEvent(event);
@@ -303,7 +306,7 @@ public class KitsEvolution extends Kits {
                             return;
                         }
                         final String name = vkit.getItem().getItemMeta().getDisplayName(), level = Integer.toBinaryString(newlvl);
-                        pdata.getKitLevels().put(vkit, newlvl);
+                        data.getLevels().put(vkit, newlvl);
                         for(String s : getUpgradeMsg()) {
                             player.sendMessage(s.replace("{LEVEL}", level).replace("{VKIT}", name).replace("{NAME}", name));
                         }
@@ -321,7 +324,7 @@ public class KitsEvolution extends Kits {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(top.getHolder() == player) {
-            final boolean inPreview = previewing.contains(player);
+            final boolean inPreview = PREVIEWING.contains(player);
             final String title = event.getView().getTitle();
             if(title.equals(vkit.getTitle()) || inPreview) {
                 event.setCancelled(true);
@@ -331,7 +334,7 @@ public class KitsEvolution extends Kits {
                     return;
                 }
 
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
                 if(inPreview) {
                     player.closeInventory();
                     sendStringListMessage(player, getStringList(config, "vkits.messages.cannot withdraw"), null);
@@ -344,8 +347,9 @@ public class KitsEvolution extends Kits {
                     if(vkit == null) {
                         return;
                     }
-                    final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
-                    final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
+                    final KitData data = pdata.getKitData();
+                    final HashMap<CustomKit, Long> cooldowns = data.getCooldowns();
+                    final HashMap<CustomKit, Integer> levels = data.getLevels();
                     final boolean hasPerm = hasPermissionToObtain(player, vkit);
                     final long time = System.currentTimeMillis();
                     if(!hasPerm) {
@@ -369,8 +373,8 @@ public class KitsEvolution extends Kits {
             if(vkit != null) {
                 event.setCancelled(true);
                 player.updateInventory();
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-                final HashMap<CustomKit, Integer> kits = pdata.getKitLevels();
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+                final HashMap<CustomKit, Integer> kits = pdata.getKitData().getLevels();
                 if(!kits.containsKey(vkit)) {
                     sendStringListMessage(player, getStringList(config, "vkits.messages.not unlocked kit"), null);
                 } else {

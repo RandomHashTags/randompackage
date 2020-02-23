@@ -24,7 +24,9 @@ public class EquippedCustomEnchants implements Versionable {
         enchants = new LinkedHashMap<>();
     }
 
-    public Player getPlayer() { return player; }
+    public Player getPlayer() {
+        return player;
+    }
 
     public void clear() {
         enchants.clear();
@@ -43,7 +45,9 @@ public class EquippedCustomEnchants implements Versionable {
         return map;
     }
 
-    public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> getEnchants() { return enchants; }
+    public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> getEnchants() {
+        return enchants;
+    }
 
     public ItemStack getItem(EquipmentSlot slot) {
         return getItem(slot, false);
@@ -81,7 +85,9 @@ public class EquippedCustomEnchants implements Versionable {
         update(slot, is);
     }
 
-    private ItemStack getItemInSlot(EquipmentSlot slot) { return getItemInSlot(slot, false); }
+    private ItemStack getItemInSlot(EquipmentSlot slot) {
+        return getItemInSlot(slot, false);
+    }
     private ItemStack getItemInSlot(EquipmentSlot slot, boolean getEventItem) {
         if(slot == null) { return null; }
         if(getEventItem && EVENTS.containsKey(player)) {

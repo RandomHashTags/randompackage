@@ -28,15 +28,35 @@ public final class PolyBoundary {
         final int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
         return x <= maxX && x >= minX && y <= maxY && y >= minY && z <= maxZ && z >= minZ;
     }
-    public World getWorld() { return center.getWorld(); }
-    public Location getCenter() { return center; }
-    public int getRadius() { return radius; }
-    public int getMaxX() { return maxX; }
-    public int getMinX() { return minX; }
-    public int getMaxZ() { return maxZ; }
-    public int getMinZ() { return minZ; }
-    public int getMaxY() { return maxY; }
-    public int getMinY() { return minY; }
+    public World getWorld() {
+        return center.getWorld();
+    }
+    public Location getCenter() {
+        return center;
+    }
+    public int getRadius() {
+        return radius;
+    }
+    public int getMaxX() {
+        return maxX;
+    }
+    public int getMinX() {
+        return minX;
+    }
+    public int getMaxZ() {
+        return maxZ;
+    }
+    public int getMinZ() {
+        return minZ;
+    }
+    public int getMaxY() {
+        return maxY;
+    }
+    public int getMinY() {
+        return minY;
+    }
 
-    public Collection<Entity> getEntities() { return getWorld().getNearbyEntities(center, radius, radius, radius); }
+    public Collection<Entity> getEntities() {
+        return getWorld().getNearbyEntities(center, radius, radius, radius);
+    }
 }

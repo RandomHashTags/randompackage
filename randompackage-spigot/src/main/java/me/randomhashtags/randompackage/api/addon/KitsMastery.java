@@ -3,10 +3,11 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.file.FileKitMastery;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.KitData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -183,16 +184,16 @@ public class KitsMastery extends Kits {
                 if(slot < 0 || slot >= top.getSize() || !click.contains("LEFT") && !click.contains("RIGHT") || event.getCurrentItem() == null || mkit == null) {
                     return;
                 }
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
                 if(click.contains("RIGHT")) {
                     preview(player, kit, kit.getMaxLevel());
                 } else {
-                    if(pdata.getKitLevels().containsKey(mkit)) {
+                    if(pdata.getKitData().getLevels().containsKey(mkit)) {
                     } else {
                         sendStringListMessage(player, getStringList(config, "mkits.messages.not unlocked"), null);
                     }
                 }
-            } else if(previewing.contains(player)) {
+            } else if(PREVIEWING.contains(player)) {
                 event.setCancelled(true);
                 player.updateInventory();
             }
@@ -208,7 +209,7 @@ public class KitsMastery extends Kits {
                 event.setCancelled(true);
                 player.updateInventory();
 
-                final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
                 final HashMap<CustomKit, Integer> required = mkit.getRequiredKits();
                 final List<CustomKitGlobal> gkits = new ArrayList<>();
                 final List<CustomKitEvolution> vkits = new ArrayList<>();
@@ -221,8 +222,9 @@ public class KitsMastery extends Kits {
                 }
                 CustomKitGlobal missingGkit = null;
                 CustomKitEvolution missingVkit = null;
-                final HashMap<CustomKit, Integer> levels = pdata.getKitLevels();
-                final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+                final KitData data = pdata.getKitData();
+                final HashMap<CustomKit, Integer> levels = data.getLevels();
+                final HashMap<CustomKit, Long> cooldowns = data.getCooldowns();
                 if(!gkits.isEmpty()) {
                     for(CustomKitGlobal gkit : gkits) {
                         if(missingGkit == null && (!levels.containsKey(gkit) || levels.get(gkit) < required.get(gkit))) {

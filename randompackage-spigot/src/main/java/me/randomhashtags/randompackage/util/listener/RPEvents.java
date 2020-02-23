@@ -26,7 +26,9 @@ public final class RPEvents extends RPFeature {
         if(instance == null) instance = new RPEvents();
         return instance;
     }
-    public String getIdentifier() { return "RP_EVENTS"; }
+    public String getIdentifier() {
+        return "RP_EVENTS";
+    }
     public void load() {
         for(Player p : Bukkit.getOnlinePlayers()) {
             RPPlayer.get(p.getUniqueId());

@@ -5,12 +5,14 @@ import me.randomhashtags.randompackage.addon.file.FileFallenHero;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.attribute.SetLevelupChance;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.KitData;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.util.listener.KitEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,7 +33,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     private static boolean isEnabled = false;
     private static byte loadedInstances = 0;
     public static YamlConfiguration config;
-    public static List<HumanEntity> previewing;
+    public static List<HumanEntity> PREVIEWING;
 
     public final boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final boolean preCommand = executeCommand(sender, cmd, commandLabel, args);
@@ -43,11 +45,15 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         final String c = cmd.getName();
         final int l = args.length;
         if(l == 0 && player != null) {
-            if(hasPermission(sender, "RandomPackage." + c, true))
+            if(hasPermission(sender, "RandomPackage." + c, true)) {
                 view(player);
+            }
         } else if(l >= 1 && args[0].equals("reset") && type != null) {
-            if(l == 2 && hasPermission(sender, "RandomPackage." + c + ".reset", true)) resetAll(player, args[1], type);
-            else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) reset(player, args[1], getCustomKit(args[2]));
+            if(l == 2 && hasPermission(sender, "RandomPackage." + c + ".reset", true)) {
+                resetAll(player, args[1], type);
+            } else if(l == 3 && hasPermission(sender, "RandomPackage." + c + ".reset-kit", true)) {
+                reset(player, args[1], getCustomKit(args[2]));
+            }
         }
         return true;
     }
@@ -91,7 +97,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "fallen heroes")) {
                 new FileFallenHero(f);
             }
-            previewing = new ArrayList<>();
+            PREVIEWING = new ArrayList<>();
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
@@ -109,10 +115,10 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
 
     public final boolean hasPermissionToObtain(@NotNull Player player, @NotNull CustomKit kit) {
-        return player != null && hasPermissionToObtain(RPPlayer.get(player.getUniqueId()), player, kit);
+        return player != null && hasPermissionToObtain(FileRPPlayer.get(player.getUniqueId()), player, kit);
     }
     public final boolean hasPermissionToObtain(@NotNull RPPlayer pdata, @NotNull Player player, @NotNull CustomKit kit) {
-        return pdata != null && player != null && kit != null && (pdata.getKitLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
+        return pdata != null && player != null && kit != null && (pdata.getKitData().getLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
     }
     public final void trySpawningFallenHero(Player player, ItemStack is, CustomKit kit, Location l) {
         final FallenHero h = kit.getFallenHero();
@@ -127,11 +133,11 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         }
     }
     public final void tryIncreaseTier(Player player, ItemStack is, CustomKit kit) {
-        final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+        final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
         final FallenHero fh = kit.getFallenHero();
         final String n = kit.getIdentifier(), name = fh != null ? kit.getFallenHeroName() : kit.getItem().getItemMeta().getDisplayName();
         final HashMap<String, String> replacements = new HashMap<>();
-        final HashMap<CustomKit, Integer> tiers = pdata.getKitLevels();
+        final HashMap<CustomKit, Integer> tiers = pdata.getKitData().getLevels();
         boolean diduse = false;
         if(!tiers.containsKey(kit) && player.hasPermission("RandomPackage.kit." + n)) {
             diduse = true;
@@ -160,17 +166,18 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
     public final void setCooldown(RPPlayer pdata, CustomKit kit) {
         if(pdata != null && kit != null) {
-            pdata.getKitCooldowns().put(kit, System.currentTimeMillis()+kit.getCooldown()*1000);
+            pdata.getKitData().getCooldowns().put(kit, System.currentTimeMillis()+kit.getCooldown()*1000);
         }
     }
     public final void setCooldown(Player player, CustomKit kit) {
         if(player != null && kit != null) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final KitData data = pdata.getKitData();
             final boolean hasPerm = hasPermissionToObtain(player, kit);
-            final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+            final HashMap<CustomKit, Long> cooldowns = data.getCooldowns();
             final long remaining = cooldowns.get(kit)-System.currentTimeMillis();
             final boolean onCooldown = remaining > 0;
-            final int slot = kit.getSlot(), tier = pdata.getKitLevel(kit);
+            final int slot = kit.getSlot(), tier = data.getLevel(kit);
             final ItemStack displayed = kit.getItem();
             final String remainingTime = getRemainingTime(remaining);
             item = getCooldown(); itemMeta = item.getItemMeta(); lore.clear();
@@ -226,7 +233,7 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     public final void resetAll(CommandSender sender, String target, Class type) {
         final RPPlayer pdata = r(sender, target);
         if(pdata != null) {
-            final HashMap<CustomKit, Long> cooldowns = pdata.getKitCooldowns();
+            final HashMap<CustomKit, Long> cooldowns = pdata.getKitData().getCooldowns();
             for(CustomKit k : new ArrayList<>(cooldowns.keySet())) {
                 final boolean isInstance = Arrays.asList(k.getClass().getInterfaces()).contains(type);
                 if(isInstance) {
@@ -237,11 +244,13 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
     public final void reset(CommandSender sender, String target, CustomKit kit) {
         final RPPlayer pdata = r(sender, target);
-        if(pdata != null) pdata.getKitCooldowns().remove(kit);
+        if(pdata != null) {
+            pdata.getKitData().getCooldowns().remove(kit);
+        }
     }
     private RPPlayer r(CommandSender sender, String target) {
         final OfflinePlayer p = Bukkit.getOfflinePlayer(target);
-        final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
+        final FileRPPlayer pdata = FileRPPlayer.get(p.getUniqueId());
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{PLAYER}", p.getName());
         sendStringListMessage(sender, pdata == null ? getResetTargetDoesntExist() : getResetSuccess(), replacements);
@@ -249,7 +258,9 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     }
 
     public final void preview(Player player, CustomKit kit, int tier) {
-        if(player == null || kit == null) return;
+        if(player == null || kit == null) {
+            return;
+        }
         player.closeInventory();
         final List<ItemStack> rewards = new ArrayList<>();
         final String pn = player.getName();
@@ -272,6 +283,6 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
                 top.setItem(i, bg);
         }
         player.updateInventory();
-        previewing.add(player);
+        PREVIEWING.add(player);
     }
 }

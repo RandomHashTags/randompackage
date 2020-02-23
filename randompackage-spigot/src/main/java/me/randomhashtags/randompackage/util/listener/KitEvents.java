@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.addon.Kits.previewing;
+import static me.randomhashtags.randompackage.addon.Kits.PREVIEWING;
 
 public final class KitEvents extends RegionalAPI implements Listener, RPStorage {
     private static KitEvents instance;
@@ -30,7 +30,7 @@ public final class KitEvents extends RegionalAPI implements Listener, RPStorage 
     }
 
     public void unload() {
-        for(HumanEntity player : new ArrayList<>(previewing)) {
+        for(HumanEntity player : new ArrayList<>(PREVIEWING)) {
             player.closeInventory();
         }
         HandlerList.unregisterAll(this);
@@ -66,6 +66,6 @@ public final class KitEvents extends RegionalAPI implements Listener, RPStorage 
     }
     @EventHandler
     private void inventoryCloseEvent(InventoryCloseEvent event) {
-        previewing.remove(event.getPlayer());
+        PREVIEWING.remove(event.getPlayer());
     }
 }

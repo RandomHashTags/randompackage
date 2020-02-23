@@ -10,8 +10,16 @@ public final class ArmorSetWeaponInfo extends TObject {
         super(identifier, item, setlore);
         this.attributes = attributes;
     }
-    public String getIdentifier() { return (String) first; }
-    public ItemStack getItem() { return (ItemStack) second; }
-    public List<String> getSetLore() { return (List<String>) third; }
-    public List<String> getAttributes() { return attributes; }
+    public String getIdentifier() {
+        return (String) first;
+    }
+    public ItemStack getItem() {
+        return (ItemStack) second;
+    }
+    public List<String> getSetLore() {
+        return (List<String>) third;
+    }
+    public List<String> getAttributes() {
+        return attributes;
+    }
 }
