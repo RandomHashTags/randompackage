@@ -14,17 +14,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldGuardAPI implements UVersionable {
-    private static WorldGuardAPI instance;
+public enum WorldGuardAPI implements UVersionable {
+    INSTANCE;
+
     public byte version;
-    public static WorldGuardAPI getWorldGuardAPI() {
-        if(instance == null) {
-            instance = new WorldGuardAPI();
-            final Plugin p = PLUGIN_MANAGER.getPlugin("WorldGuard");
-            final String version = p != null && p.isEnabled() ? p.getDescription().getVersion() : null;
-            instance.version = (byte) (version != null ? version.startsWith("6") ? 6 : 7 : -1);
-        }
-        return instance;
+
+    WorldGuardAPI() {
+        final Plugin p = PLUGIN_MANAGER.getPlugin("WorldGuard");
+        final String version = p != null && p.isEnabled() ? p.getDescription().getVersion() : null;
+        this.version = (byte) (version != null ? version.startsWith("6") ? 6 : 7 : -1);
     }
 
     public boolean allowsPvP(@NotNull Player player, @NotNull Location l) {

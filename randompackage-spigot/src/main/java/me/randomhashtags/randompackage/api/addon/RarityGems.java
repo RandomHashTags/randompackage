@@ -16,21 +16,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class RarityGems extends RPFeature {
-    private static RarityGems instance;
-    public static RarityGems getRarityGems() {
-        if(instance == null) instance = new RarityGems();
-        return instance;
-    }
+public enum RarityGems implements RPFeature {
+    INSTANCE;
 
+    @Override
     public String getIdentifier() {
         return "RARITY_GEMS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("rarity gems", "_settings.yml");
@@ -46,12 +45,12 @@ public class RarityGems extends RPFeature {
             }
         }
 
-        if(!otherdata.getBoolean("saved default rarity gems")) {
+        if(!OTHER_YML.getBoolean("saved default rarity gems")) {
             final String[] g = new String[]{ "SOUL" };
             for(String s : g) {
                 save("rarity gems", s + ".yml");
             }
-            otherdata.set("saved default rarity gems", true);
+            OTHER_YML.set("saved default rarity gems", true);
             saveOtherData();
         }
 
@@ -62,6 +61,7 @@ public class RarityGems extends RPFeature {
         }
         sendConsoleDidLoadFeature(getAll(Feature.RARITY_GEM).size() + " Rarity Gems", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.RARITY_GEM);
         FileRarityGem.defaultColors = null;
@@ -90,8 +90,8 @@ public class RarityGems extends RPFeature {
                 final Player player = (Player) event.getWhoClicked();
                 final int combinedTotal = getRemainingInt(cursor.getItemMeta().getDisplayName()) + getRemainingInt(current.getItemMeta().getDisplayName());
                 event.setCancelled(true);
-                item = cursorGem.getItem();
-                itemMeta = item.getItemMeta();
+                final ItemStack item = cursorGem.getItem();
+                final ItemMeta itemMeta = item.getItemMeta();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SOULS}", colorize(cursorGem.getColors(combinedTotal)) + combinedTotal));
                 item.setItemMeta(itemMeta);
                 event.setCurrentItem(item);

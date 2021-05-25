@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
 
-public class SetDamage extends AbstractEventAttribute implements EventEntities {
+public final class SetDamage extends AbstractEventAttribute implements EventEntities {
     @Override
     public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

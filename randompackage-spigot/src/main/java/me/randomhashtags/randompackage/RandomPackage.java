@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage;
 
+import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
-import me.randomhashtags.randompackage.api.ItemSkins;
 import me.randomhashtags.randompackage.api.dev.LastManStanding;
+import me.randomhashtags.randompackage.attributesys.EventAttributes;
 import me.randomhashtags.randompackage.dev.Outposts;
 import me.randomhashtags.randompackage.dev.SpawnerStacking;
 import me.randomhashtags.randompackage.dev.duels.Duels;
@@ -13,9 +13,7 @@ import me.randomhashtags.randompackage.dev.dungeons.Dungeons;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
-import me.randomhashtags.randompackage.universal.UVersion;
 import me.randomhashtags.randompackage.util.CommandManager;
-import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.listener.RPEvents;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import org.bukkit.Bukkit;
@@ -39,25 +37,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
+import static me.randomhashtags.randompackage.RandomPackageAPI.SPAWNER_CHANCE;
 
 public final class RandomPackage extends JavaPlugin {
-    public static RandomPackage getPlugin;
+    public static RandomPackage GET_PLUGIN;
 
     public FileConfiguration config;
 
     private RandomPackageAPI api;
     private RPEvents rpevents;
 
-    public static String spawner;
-    public static Plugin spawnerPlugin, mcmmo;
+    public static String SPAWNER_PLUGIN_NAME;
+    public static Plugin SPAWNER_PLUGIN, MCMMO;
     public boolean placeholderapi = false;
-
-    private BukkitScheduler scheduler;
-    private PluginManager pluginmanager;
-
+    
     public void onEnable() {
-        getPlugin = this;
+        GET_PLUGIN = this;
         enable();
     }
     public void onDisable() {
@@ -65,49 +60,47 @@ public final class RandomPackage extends JavaPlugin {
     }
 
     private void enable() {
-        scheduler = Bukkit.getScheduler();
-        pluginmanager = Bukkit.getPluginManager();
         checkForUpdate();
         checkFiles();
         loadSoftDepends();
 
-        api = RandomPackageAPI.API;
-        rpevents = RPEvents.getRPEvents();
+        api = RandomPackageAPI.INSTANCE;
+        rpevents = RPEvents.INSTANCE;
 
-        final Vault vault = Vault.getVault();
+        final Vault vault = Vault.INSTANCE;
         vault.setupEconomy();
         vault.setupPermissions();
 
         api.enable();
         getCommand("randompackage").setExecutor(api);
         rpevents.enable();
-        RegionalAPI.getRegionalAPI().setup(this);
+        RegionalAPI.INSTANCE.setup(this);
 
         EventAttributes.loadEventAttributes();
 
-        final CommandManager cmd = CommandManager.getCommandManager();
+        final CommandManager cmd = CommandManager.INSTANCE;
 
-        cmd.load(ArmorSockets.getArmorSockets(), null, isTrue("armor sockets"));
-        cmd.load(Combine.getCombine(), Arrays.asList("combine"), isTrue("combine"));
-        cmd.load(Xpbottle.getXpbottle(), Arrays.asList("xpbottle"), isTrue("xpbottle"));
-        cmd.load(SecondaryEvents.getSecondaryEvents(), Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
-        cmd.loadCustom(AuctionHouse.getAuctionHouse(), getHash("auctionhouse", "auction house"), isTrue("auction house"));
+        cmd.load(ArmorSockets.INSTANCE, null, isTrue("armor sockets"));
+        cmd.load(Combine.INSTANCE, Arrays.asList("combine"), isTrue("combine"));
+        cmd.load(Xpbottle.INSTANCE, Arrays.asList("xpbottle"), isTrue("xpbottle"));
+        cmd.load(SecondaryEvents.INSTANCE, Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
+        cmd.loadCustom(AuctionHouse.INSTANCE, getHash("auctionhouse", "auction house"), isTrue("auction house"));
         cmd.loadCustom(Boosters.getBoosters(), null, isTrue("boosters"));
-        cmd.loadCustom(ChatEvents.getChatEvents(), getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
-        cmd.load(CoinFlip.getCoinFlip(), Arrays.asList("coinflip"), isTrue("coinflip"));
-        cmd.loadCustom(CollectionFilter.getCollectionFilter(), getHash("collectionfilter", "collection filter"), isTrue("collection filter"));
-        cmd.load(Conquest.getConquest(), Arrays.asList("conquest"), isTrue("conquest"));
+        cmd.loadCustom(ChatEvents.INSTANCE, getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
+        cmd.load(CoinFlip.INSTANCE, Arrays.asList("coinflip"), isTrue("coinflip"));
+        cmd.loadCustom(CollectionFilter.INSTANCE, getHash("collectionfilter", "collection filter"), isTrue("collection filter"));
+        cmd.load(Conquest.INSTANCE, Arrays.asList("conquest"), isTrue("conquest"));
         cmd.load(CustomArmor.getCustomArmor(), null, isTrue("custom armor"));
         cmd.loadCustom(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
 
-        cmd.load(Alchemist.getAlchemist(), Arrays.asList("alchemist"), isTrue("alchemist"));
-        cmd.load(Tinkerer.getTinkerer(), Arrays.asList("tinkerer"), isTrue("tinkerer"));
+        cmd.load(Alchemist.INSTANCE, Arrays.asList("alchemist"), isTrue("alchemist"));
+        cmd.load(Tinkerer.INSTANCE, Arrays.asList("tinkerer"), isTrue("tinkerer"));
 
         cmd.loadCustom(CustomEnchants.getCustomEnchants(), getHash("disabledenchants", "disabled enchants", "enchants", "enchants"), isTrue("disabled enchants", "enchants"));
-        cmd.load(EnchantmentOrbs.getEnchantmentOrbs(), null, isTrue("custom enchants.enchantment orbs", true));
+        cmd.load(EnchantmentOrbs.INSTANCE, null, isTrue("custom enchants.enchantment orbs", true));
         cmd.load(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
-        cmd.load(RarityGems.getRarityGems(), null, isTrue("custom enchants.rarity gems", true));
-        cmd.load(SoulTrackers.getSoulTrackers(), Arrays.asList("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
+        cmd.load(RarityGems.INSTANCE, null, isTrue("custom enchants.rarity gems", true));
+        cmd.load(SoulTrackers.INSTANCE, Arrays.asList("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
 
         final Set<Boolean> scrolls = new HashSet<Boolean>() {{
             add(config.getBoolean("custom enchants.black scrolls"));
@@ -116,51 +109,51 @@ public final class RandomPackage extends JavaPlugin {
             add(config.getBoolean("custom enchants.white scrolls"));
             add(config.getBoolean("custom enchants.holy scrolls"));
         }};
-        cmd.load(Scrolls.getScrolls(), null, scrolls.contains(true));
+        cmd.load(Scrolls.INSTANCE, null, scrolls.contains(true));
 
-        cmd.loadCustom(CustomExplosions.getCustomExplosions(), null, isTrue("custom creepers", "custom tnt"));
-        cmd.loadCustom(Duels.getDuels(), getHash("duel", "duels"), isTrue("duels"));
-        cmd.loadCustom(Dungeons.getDungeons(), getHash("dungeon", "dungeons"), isTrue("dungeons"));
-        cmd.load(Envoy.getEnvoy(), Arrays.asList("envoy"), isTrue("envoy"));
+        cmd.loadCustom(CustomExplosions.INSTANCE, null, isTrue("custom creepers", "custom tnt"));
+        cmd.loadCustom(Duels.INSTANCE, getHash("duel", "duels"), isTrue("duels"));
+        cmd.loadCustom(Dungeons.INSTANCE, getHash("dungeon", "dungeons"), isTrue("dungeons"));
+        cmd.load(Envoy.INSTANCE, Arrays.asList("envoy"), isTrue("envoy"));
         cmd.loadCustom(FactionUpgrades.getFactionUpgrades(), null, isTrue("faction upgrades"));
-        cmd.loadCustom(FatBuckets.getFatBuckets(), null, isTrue("fat buckets"));
-        cmd.load(Fund.getFund(), Arrays.asList("fund"), isTrue("fund"));
+        cmd.loadCustom(FatBuckets.INSTANCE, null, isTrue("fat buckets"));
+        cmd.load(Fund.INSTANCE, Arrays.asList("fund"), isTrue("fund"));
         cmd.loadCustom(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
-        cmd.load(Homes.getHomes(), Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
-        cmd.loadCustom(ItemFilter.getItemFilter(), getHash("filter", "item filter"), isTrue("item filter"));
-        cmd.load(ItemSkins.getItemSkins(), null, isTrue("item skins"));
-        cmd.load(Jackpot.getJackpot(), Arrays.asList("jackpot"), isTrue("jackpot"));
+        cmd.load(Homes.INSTANCE, Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
+        cmd.loadCustom(ItemFilter.INSTANCE, getHash("filter", "item filter"), isTrue("item filter"));
+        cmd.load(ItemSkins.INSTANCE, null, isTrue("item skins"));
+        cmd.load(Jackpot.INSTANCE, Arrays.asList("jackpot"), isTrue("jackpot"));
 
         cmd.loadCustom(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));
         cmd.loadCustom(KitsGlobal.getKitsGlobal(), getHash("gkit", "gkits"), isTrue("gkits"));
         cmd.loadCustom(KitsMastery.getKitsMastery(), getHash("mkit", "mkits"), isTrue("mkits"));
 
-        cmd.load(KOTH.getKOTH(), Arrays.asList("kingofthehill"), isTrue("kingofthehill"));
-        cmd.loadCustom(LastManStanding.getLastManStanding(), getHash("lastmanstanding", "last man standing"), isTrue("last man standing"));
+        cmd.load(KOTH.INSTANCE, Arrays.asList("kingofthehill"), isTrue("kingofthehill"));
+        cmd.loadCustom(LastManStanding.INSTANCE, getHash("lastmanstanding", "last man standing"), isTrue("last man standing"));
         cmd.load(Masks.getMasks(), null, isTrue("masks"));
-        cmd.load(MobStacker.getMobStacker(), null, isTrue("mob stacker"));
-        cmd.loadCustom(Outposts.getOutposts(), getHash("outpost", "outposts"), isTrue("outposts"));
+        cmd.load(MobStacker.INSTANCE, null, isTrue("mob stacker"));
+        cmd.loadCustom(Outposts.INSTANCE, getHash("outpost", "outposts"), isTrue("outposts"));
         cmd.load(InventoryPets.getInventoryPets(), null, isTrue("inventory pets"));
         cmd.load(Trinkets.getTrinkets(), null, isTrue("trinkets"));
-        cmd.loadCustom(MonthlyCrates.getMonthlyCrates(), getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
-        cmd.load(ServerCrates.getServerCrates(), null, isTrue("server crates"));
-        cmd.load(Titles.getTitles(), Arrays.asList("title"), isTrue("title"));
-        cmd.load(Showcase.getShowcase(), Arrays.asList("showcase"), isTrue("showcase"));
+        cmd.loadCustom(MonthlyCrates.INSTANCE, getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
+        cmd.load(ServerCrates.INSTANCE, null, isTrue("server crates"));
+        cmd.load(Titles.INSTANCE, Arrays.asList("title"), isTrue("title"));
+        cmd.load(Showcase.INSTANCE, Arrays.asList("showcase"), isTrue("showcase"));
         cmd.loadCustom(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
-        cmd.loadCustom(Lootboxes.getLootboxes(), getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
+        cmd.loadCustom(Lootboxes.INSTANCE, getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
 
-        RandomizedLoot.getRandomizedLoot().enable();
-        cmd.loadCustom(SlotBot.getSlotBot(), getHash("slotbot", "slot bot"), isTrue("slot bot"));
-        cmd.load(Enchanter.getEnchanter(), Arrays.asList("enchanter"), isTrue("enchanter"));
+        RandomizedLoot.INSTANCE.enable();
+        cmd.loadCustom(SlotBot.INSTANCE, getHash("slotbot", "slot bot"), isTrue("slot bot"));
+        cmd.load(Enchanter.INSTANCE, Arrays.asList("enchanter"), isTrue("enchanter"));
 
-        cmd.load(Shop.getShop(), Arrays.asList("shop"), isTrue("shop"));
-        cmd.loadCustom(SpawnerStacking.getSpawnerStacking(), null, isTrue("spawner stacking"));
-        cmd.load(Trade.getTrade(), Arrays.asList("trade"), isTrue("trade"));
-        cmd.load(Wild.getWild(), Arrays.asList("wild"), isTrue("wild"));
-        cmd.loadCustom(WildPvP.getWildPvP(), getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
+        cmd.load(Shop.INSTANCE, Arrays.asList("shop"), isTrue("shop"));
+        cmd.loadCustom(SpawnerStacking.INSTANCE, null, isTrue("spawner stacking"));
+        cmd.load(Trade.INSTANCE, Arrays.asList("trade"), isTrue("trade"));
+        cmd.load(Wild.INSTANCE, Arrays.asList("wild"), isTrue("wild"));
+        cmd.loadCustom(WildPvP.INSTANCE, getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
 
         final int interval = config.getInt("backup interval")*20*60;
-        scheduler.scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, ()-> new Backup(), interval, interval);
     }
     private boolean isTrue(String path, boolean exact) {
         return config.getBoolean(path + (exact ? "" : ".enabled"));
@@ -186,31 +179,34 @@ public final class RandomPackage extends JavaPlugin {
     }
 
     private void checkFiles() {
-        UVersion.getUVersion().save(null, "config.yml");
+        RandomPackageAPI.INSTANCE.save(null, "config.yml");
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
     private void loadSoftDepends() {
         tryLoadingMCMMO();
         tryLoadingSpawner();
-        if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && pluginmanager.isPluginEnabled("PlaceholderAPI")) {
+        if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderapi = true;
             ClipPAPI.getPAPI();
         }
     }
     public void tryLoadingMCMMO() {
-        if(isTrue("supported plugins.mechanics.MCMMO", true) && pluginmanager.isPluginEnabled("mcMMO")) {
-            mcmmo = pluginmanager.getPlugin("mcMMO");
+        final PluginManager pluginManager = Bukkit.getPluginManager();
+        if(isTrue("supported plugins.mechanics.MCMMO", true) && pluginManager.isPluginEnabled("mcMMO")) {
+            MCMMO = pluginManager.getPlugin("mcMMO");
         }
     }
     public void tryLoadingSpawner() {
-        final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pluginmanager.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
-        final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pluginmanager.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pluginmanager.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
+        final PluginManager pluginManager = Bukkit.getPluginManager();
+        final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pluginManager.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
+        final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pluginManager.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pluginManager.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
         final boolean epic = es != null;
         if(epic || ss != null) {
-            spawnerPlugin = pluginmanager.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
-            spawner = epic ? es : ss;
-            final FileConfiguration c = spawnerPlugin.getConfig();
-            spawnerchance = epic ? Integer.parseInt(c.getString("Spawner Drops.Chance On TNT Explosion").replace("%", "")): c.getInt("explosionDropChance");
+            SPAWNER_PLUGIN = pluginManager.getPlugin(epic ? "EpicSpawners" : "SilkSpawners");
+            SPAWNER_PLUGIN_NAME = epic ? es : ss;
+            final FileConfiguration config = SPAWNER_PLUGIN.getConfig();
+            final String targetString = epic ? config.getString("Spawner Drops.Chance On TNT Explosion") : null;
+            SPAWNER_CHANCE = epic ? targetString != null ? Integer.parseInt(targetString.replace("%", "")) : 0 : config.getInt("explosionDropChance");
         }
     }
     private void disable() {
@@ -218,20 +214,20 @@ public final class RandomPackage extends JavaPlugin {
         api.disable();
         EventAttributes.unloadEventAttributes();
 
-        CommandManager.getCommandManager().disable();
-        RPFeature.createItemStack();
+        CommandManager.INSTANCE.disable();
         HandlerList.unregisterAll(this);
-        scheduler.cancelTasks(this);
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     public void checkForUpdate() {
-        final int l = 20*60*30;
+        final int updateCheckInterval = 20*60*30;
+        final BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             scheduler.runTaskAsynchronously(this, () -> {
                 String msg = null;
                 try {
                     final URLConnection con = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501").openConnection();
-                    final String v = getPlugin.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                    final String v = GET_PLUGIN.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
                     final boolean canUpdate = !v.equals(newVersion);
                     if(canUpdate) {
                         msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion);
@@ -242,11 +238,13 @@ public final class RandomPackage extends JavaPlugin {
                 if(msg != null) {
                     Bukkit.getConsoleSender().sendMessage(msg);
                     for(Player p : Bukkit.getOnlinePlayers()) {
-                        if(p.isOp()) p.sendMessage(msg);
+                        if(p.isOp()) {
+                            p.sendMessage(msg);
+                        }
                     }
                 }
             });
-        }, 0, l);
+        }, 0, updateCheckInterval);
     }
     public void reload() {
         disable();

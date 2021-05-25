@@ -1,9 +1,11 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.perms.SecondaryPermission;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +22,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
@@ -28,14 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class SecondaryEvents extends RPFeature implements CommandExecutor {
-    private static SecondaryEvents instance;
-    public static SecondaryEvents getSecondaryEvents() {
-        if(instance == null) instance = new SecondaryEvents();
-        return instance;
-    }
+public enum SecondaryEvents implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private List<PotionEffectType> removedPotionEffects;
@@ -43,12 +40,13 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
     private ItemStack banknote;
     private int banknoteValueSlot;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String cmdName = cmd.getName();
         final int length = args.length;
         if(cmdName.equals("balance")) {
-            String type, qq = "", bal = player != null ? formatBigDecimal(BigDecimal.valueOf(eco.getBalance(player)), true) : "0.00";
+            String type, qq = "", bal = player != null ? formatNumber(BigDecimal.valueOf(ECONOMY.getBalance(player)), true) : "0.00";
             if(player != null && length == 0 && hasPermission(sender, SecondaryPermission.BALANCE, true)) {
                 type = "self";
             } else if(length >= 1 && hasPermission(sender, SecondaryPermission.BALANCE_OTHER, true)) {
@@ -57,19 +55,27 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     type = "self";
                 } else {
                     type = "other";
-                    qq = eco.getBalance(player) >= eco.getBalance(op) ? "other" : "self";
-                    bal = formatBigDecimal(BigDecimal.valueOf(eco.getBalance(op)));
+                    qq = ECONOMY.getBalance(player) >= ECONOMY.getBalance(op) ? "other" : "self";
+                    bal = formatBigDecimal(BigDecimal.valueOf(ECONOMY.getBalance(op)));
                 }
             } else {
                 return true;
             }
-            for(String s : getStringList(config, "balance.view " + type)) {
-                if(s.contains("{INT}")) s = s.replace("{INT}", bal.contains(".") ? bal.split("\\.")[0] : bal);
-                if(s.contains("{DECIMALS}")) s = s.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
-                if(s.equals("{RICHER}") && player != null) s = config.getString("balance.richer than " + qq);
-                if(s.contains("{TARGET}")) s = s.replace("{TARGET}", Bukkit.getOfflinePlayer(args[0]).getName());
-                if(!s.equals("{RICHER}")) {
-                    sender.sendMessage(colorize(s));
+            for(String string : getStringList(config, "balance.view " + type)) {
+                if(string.contains("{INT}")) {
+                    string = string.replace("{INT}", bal.contains(".") ? bal.split("\\.")[0] : bal);
+                }
+                if(string.contains("{DECIMALS}")) {
+                    string = string.replace("{DECIMALS}", bal.contains(".") ? "." + (bal.split("\\.")[1].length() > 2 ? bal.split("\\.")[1].substring(0, 2) : bal.split("\\.")[1]) : "");
+                }
+                if(string.equals("{RICHER}") && player != null) {
+                    string = config.getString("balance.richer than " + qq);
+                }
+                if(string.contains("{TARGET}")) {
+                    string = string.replace("{TARGET}", Bukkit.getOfflinePlayer(args[0]).getName());
+                }
+                if(!string.equals("{RICHER}")) {
+                    sender.sendMessage(colorize(string));
                 }
             }
         } else if(player != null) {
@@ -78,9 +84,10 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
             } else if(cmdName.equals("bump") && hasPermission(sender, SecondaryPermission.BUMP, true)) {
                 player.damage(1.0);
             } else if(cmdName.equals("confirm") && hasPermission(sender, SecondaryPermission.CONFIRM, true)) {
-                final RPPlayer pdata = RPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
+                final RPPlayer pdata = FileRPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
                 if(pdata != null) {
-                    if(pdata.getUnclaimedPurchases().isEmpty()) {
+                    final List<ItemStack> unclaimedPurchases = pdata.getUnclaimedPurchases();
+                    if(unclaimedPurchases == null || unclaimedPurchases.isEmpty()) {
                         sendStringListMessage(player, getStringList(config, "confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
                     } else {
                         confirm(player, pdata);
@@ -94,17 +101,17 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 } else {
                     BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[0]));
                     final double amountDouble = amount.doubleValue();
-                    String msg = null, formattedAmount = formatBigDecimal(amount, true);
+                    String msg = null, formattedAmount = formatNumber(amount, true);
                     formattedAmount = formattedAmount.contains("E") ? formattedAmount.split("E")[0] : formattedAmount;
-                    if(eco == null) {
+                    if(ECONOMY == null) {
                         player.sendMessage("[RandomPackage] You need an Economy plugin installed and enabled to use this feature!");
                         return true;
                     } else if(amountDouble <= 0.00) {
                         msg = "withdraw.cannot withdraw zero";
-                    } else if(eco.getBalance(player) < amountDouble) {
+                    } else if(ECONOMY.getBalance(player) < amountDouble) {
                         msg = "withdraw.cannot withdraw more than balance";
-                    } else if(eco.withdrawPlayer(player, amountDouble).transactionSuccess()) {
-                        item = getBanknote(amount, player.getName());
+                    } else if(ECONOMY.withdrawPlayer(player, amountDouble).transactionSuccess()) {
+                        final ItemStack item = getBanknote(amount, player.getName());
                         giveItem(player, item);
                         msg = "withdraw.success";
                     } else {
@@ -112,7 +119,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     }
                     final HashMap<String, String> replacements = new HashMap<>();
                     replacements.put("{VALUE}", formattedAmount);
-                    replacements.put("{BALANCE}", formatDouble(eco.getBalance(player)));
+                    replacements.put("{BALANCE}", formatDouble(ECONOMY.getBalance(player)));
                     sendStringListMessage(player, getStringList(config, msg), replacements);
                 }
             }
@@ -120,9 +127,11 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "SECONDARY_EVENTS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
@@ -130,7 +139,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
         confirm = colorize(config.getString("confirm.title"));
 
         int i = 0;
-        banknote = GIVEDP_ITEM.items.get("banknote");
+        banknote = GivedpItem.INSTANCE.items.get("banknote");
         for(String s : banknote.getItemMeta().getLore()) {
             if(s.contains("{VALUE}")) banknoteValueSlot = i;
             i++;
@@ -138,30 +147,31 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
 
         final List<String> pe = getStringList(config, "bless.removed potion effects");
         removedPotionEffects = new ArrayList<>();
-        for(String s : pe) {
-            final PotionEffectType a = getPotionEffectType(s);
-            if(a != null) {
-                removedPotionEffects.add(a);
+        for(String string : pe) {
+            final PotionEffectType type = getPotionEffectType(string);
+            if(type != null) {
+                removedPotionEffects.add(type);
             }
         }
-
         sendConsoleDidLoadFeature("Secondary Events", started);
     }
+    @Override
     public void unload() {
     }
 
     public ItemStack getBanknote(BigDecimal value, String signer) {
-        item = GIVEDP_ITEM.items.get("banknote").clone();
-        itemMeta = item.getItemMeta(); lore.clear();
-        for(String s : itemMeta.getLore()) {
-            if(s.contains("{SIGNER}")) {
-                s = signer != null ? s.replace("{SIGNER}", signer) : null;
+        final ItemStack item = GivedpItem.INSTANCE.items.get("banknote").clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
+        for(String string : itemMeta.getLore()) {
+            if(string.contains("{SIGNER}")) {
+                string = signer != null ? string.replace("{SIGNER}", signer) : null;
             }
-            if(s != null) {
-                lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+            if(string != null) {
+                lore.add(string.replace("{VALUE}", formatBigDecimal(value)));
             }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }
@@ -217,7 +227,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                     return;
                 }
                 giveItem(player, current);
-                RPPlayer.get(player.getUniqueId()).removeUnclaimedPurchase(current);
+                FileRPPlayer.get(player.getUniqueId()).getUnclaimedPurchases().remove(current);
                 top.setItem(slot, new ItemStack(Material.AIR));
             } else {
                 return;
@@ -236,7 +246,7 @@ public class SecondaryEvents extends RPFeature implements CommandExecutor {
                 event.setCancelled(true);
                 removeItem(player, is, 1);
                 final double amount = getRemainingDouble(ChatColor.stripColor(is.getItemMeta().getLore().get(banknoteValueSlot)));
-                eco.depositPlayer(player, amount);
+                ECONOMY.depositPlayer(player, amount);
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{VALUE}", formatDouble(amount));
                 sendStringListMessage(player, getStringList(config, "withdraw.deposit"), replacements);

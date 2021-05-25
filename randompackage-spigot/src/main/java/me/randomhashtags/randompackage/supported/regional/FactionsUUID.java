@@ -22,26 +22,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class FactionsUUID extends Reflect implements Regional {
-    private static FactionsUUID instance;
-    public static FactionsUUID getFactionsUUID() {
-        if(instance == null) instance = new FactionsUUID();
-        return instance;
-    }
+public enum FactionsUUID implements Reflect, Regional {
+    INSTANCE;
 
-    private FPlayers fi;
-    private Factions f;
-    private Board b;
+    private FPlayers fplayers;
+    private Factions factions;
+    private Board board;
     private HashMap<String, HashMap<String, List<UUID>>> relations;
     private boolean isLegacy;
 
+    @Override
     public String getIdentifier() {
         return "REGIONAL_FACTIONS_UUID";
     }
+    @Override
     public void load() {
-        fi = FPlayers.getInstance();
-        f = Factions.getInstance();
-        b = Board.getInstance();
+        fplayers = FPlayers.getInstance();
+        factions = Factions.getInstance();
+        board = Board.getInstance();
         relations = new HashMap<>();
         try {
             Class.forName("com.massivecraft.factions.struct.Relation");
@@ -49,22 +47,23 @@ public final class FactionsUUID extends Reflect implements Regional {
         } catch (Exception ignored) {
         }
     }
+    @Override
     public void unload() {
     }
 
-    private boolean isRelation(FPlayer fplayer, Faction f, String type) {
-        final Class<? extends FPlayer> c = fplayer.getClass();
-        String n = "";
+    private boolean isRelation(FPlayer fplayer, Faction faction, String type) {
+        final Class<? extends FPlayer> targetClass = fplayer.getClass();
+        String relation = "";
         try {
             if(isLegacy) {
-                n = ((com.massivecraft.factions.struct.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, f)).name();
+                relation = ((com.massivecraft.factions.struct.Relation) targetClass.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, faction)).name();
             } else {
-                n = ((com.massivecraft.factions.perms.Relation) c.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, f)).name();
+                relation = ((com.massivecraft.factions.perms.Relation) targetClass.getMethod("getRelationTo", RelationParticipator.class).invoke(fplayer, faction)).name();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return n.equalsIgnoreCase(type);
+        return relation.equalsIgnoreCase(type);
 
     }
 
@@ -74,7 +73,7 @@ public final class FactionsUUID extends Reflect implements Regional {
     }
 
     private FPlayer getFPlayer(UUID uuid) {
-        return fi.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
+        return fplayers.getByOfflinePlayer(Bukkit.getOfflinePlayer(uuid));
     }
     public ChatColor getRelationColor(OfflinePlayer player, Player target) {
         final Faction f = getFaction(player.getUniqueId());
@@ -84,23 +83,23 @@ public final class FactionsUUID extends Reflect implements Regional {
     private List<UUID> getType(UUID player, String TYPE) {
         final Faction f = getFaction(player);
         final String faction = f != null ? f.getTag() : null;
-        if(faction == null) return new ArrayList<>();
-        if(!relations.containsKey(faction)) {
-            relations.put(faction, new HashMap<>());
+        if(faction == null) {
+            return new ArrayList<>();
         }
+        relations.putIfAbsent(faction, new HashMap<>());
         final HashMap<String, List<UUID>> list = relations.get(faction);
         if(list.containsKey(TYPE)) {
             return list.get(TYPE);
         } else {
-            final boolean m = TYPE.equals("MEMBERS"), e = TYPE.equals("ENEMIES"), a = TYPE.equals("ALLIES"), t = TYPE.equals("TRUCES"), n = TYPE.equals("NEUTRAL");
+            final boolean isMembers = TYPE.equals("MEMBERS"), isEnemies = TYPE.equals("ENEMIES"), isAllies = TYPE.equals("ALLIES"), isTruces = TYPE.equals("TRUCES"), isNeutral = TYPE.equals("NEUTRAL");
             final List<UUID> members = new ArrayList<>();
-            for(FPlayer fp : fi.getAllFPlayers()) {
+            for(FPlayer fp : fplayers.getAllFPlayers()) {
                 if(fp != null && (
-                        m && isRelation(fp, f, "MEMBER")
-                        || e && isRelation(fp, f, "ENEMY")
-                        || a && isRelation(fp, f, "ALLY")
-                        || t && isRelation(fp, f, "TRUCE")
-                        || n && isRelation(fp, f, "NEUTRAL"))) {
+                        isMembers && isRelation(fp, f, "MEMBER")
+                        || isEnemies && isRelation(fp, f, "ENEMY")
+                        || isAllies && isRelation(fp, f, "ALLY")
+                        || isTruces && isRelation(fp, f, "TRUCE")
+                        || isNeutral && isRelation(fp, f, "NEUTRAL"))) {
                     final Player target = fp.getPlayer();
                     if(target != null) {
                         members.add(target.getUniqueId());
@@ -128,7 +127,7 @@ public final class FactionsUUID extends Reflect implements Regional {
     }
 
     public boolean canModify(UUID player, Location blockLocation) {
-        final Faction p = getFPlayer(player).getFaction(), f = b.getFactionAt(new FLocation(blockLocation));
+        final Faction p = getFPlayer(player).getFaction(), f = board.getFactionAt(new FLocation(blockLocation));
         return f.isWilderness() || p != null && p.equals(f);
     }
 
@@ -138,15 +137,17 @@ public final class FactionsUUID extends Reflect implements Regional {
     }
 
     public List<Chunk> getRegionalChunks(String regionalIdentifier) {
-        final Faction faction = f.getByTag(regionalIdentifier);
-        final List<Chunk> a = new ArrayList<>();
+        final Faction faction = factions.getByTag(regionalIdentifier);
+        final List<Chunk> chunks = new ArrayList<>();
         if(faction != null) {
-            for(FLocation l : faction.getAllClaims()) {
-                final Chunk c = l.getWorld().getChunkAt((int) l.getX(), (int) l.getZ());
-                if(!a.contains(c)) a.add(c);
+            for(FLocation location : faction.getAllClaims()) {
+                final Chunk chunk = location.getWorld().getChunkAt((int) location.getX(), (int) location.getZ());
+                if(!chunks.contains(chunk)) {
+                    chunks.add(chunk);
+                }
             }
         }
-        return a;
+        return chunks;
     }
 
     public String getRole(UUID player) {
@@ -161,9 +162,11 @@ public final class FactionsUUID extends Reflect implements Regional {
         return f != null ? f.getTag() : null;
     }
     public String getRegionalIdentifierAt(Location l) {
-        return ChatColor.stripColor(b.getFactionAt(new FLocation(l)).getTag());
+        return ChatColor.stripColor(board.getFactionAt(new FLocation(l)).getTag());
     }
-    public String getChatMode(UUID player) { return getFPlayer(player).getChatMode().name(); }
+    public String getChatMode(UUID player) {
+        return getFPlayer(player).getChatMode().name();
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void factionDisbandEvent(FactionDisbandEvent event) {

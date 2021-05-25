@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileFallenHero extends RPFallenHero implements FallenHero {
+public final class FileFallenHero extends RPFallenHero implements FallenHero {
     private ItemStack spawnitem, gem;
 
     public FileFallenHero(File f) {
@@ -28,11 +28,11 @@ public class FileFallenHero extends RPFallenHero implements FallenHero {
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() { return new ArrayList<>(); }
     public ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = API.createItemStack(yml, "spawn item");
+        if(spawnitem == null) spawnitem = createItemStack(yml, "spawn item");
         return getClone(spawnitem);
     }
     public ItemStack getGem() {
-        if(gem == null) gem = API.createItemStack(yml, "gem");
+        if(gem == null) gem = createItemStack(yml, "gem");
         return getClone(gem);
     }
     public void spawn(LivingEntity summoner, Location loc, CustomKit kit) {

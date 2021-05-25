@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public class SetSuccessRate extends AbstractEventAttribute {
+public final class SetSuccessRate extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

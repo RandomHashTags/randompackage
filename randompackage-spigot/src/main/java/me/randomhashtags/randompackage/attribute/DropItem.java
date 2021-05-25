@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -8,9 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
-public class DropItem extends AbstractEventAttribute {
+public final class DropItem extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
@@ -30,7 +29,7 @@ public class DropItem extends AbstractEventAttribute {
         final Entity e = isEntity ? (Entity) o : null;
         final Location l = isEntity ? e.getLocation() : (Location) o;
 
-        final ItemStack is = API.createItemStack(null, value);
+        final ItemStack is = RandomPackageAPI.INSTANCE.createItemStack(null, value);
         if(is != null && !is.getType().equals(Material.AIR)) {
             l.getWorld().dropItem(l, is);
         }

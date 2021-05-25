@@ -6,8 +6,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class ArmorEvent extends RPEventCancellable {
-    private EquipmentSlot slot;
-    private ArmorEventReason reason;
+    private final EquipmentSlot slot;
+    private final ArmorEventReason reason;
     private ItemStack item, currentItem, cursor;
     public ArmorEvent(Player player, EquipmentSlot slot, ArmorEventReason reason, ItemStack item) {
         super(player);

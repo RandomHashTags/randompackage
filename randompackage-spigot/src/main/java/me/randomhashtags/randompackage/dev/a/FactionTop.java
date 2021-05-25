@@ -15,21 +15,21 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.HashMap;
 
-public class FactionTop extends RPFeature implements CommandExecutor {
-    private static FactionTop instance;
-    public static FactionTop getFactionTop() {
-        if(instance == null) instance = new FactionTop();
-        return instance;
-    }
+public enum FactionTop implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public static HashMap<String, FactionTopInfo> topFactions;
     public HashMap<Integer, String> topFactionPlacements;
     public YamlConfiguration config;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return true;
     }
-    public String getIdentifier() { return "FACTION_TOP"; }
+    @Override
+    public String getIdentifier() {
+        return "FACTION_TOP";
+    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "faction top.yml");
@@ -41,6 +41,7 @@ public class FactionTop extends RPFeature implements CommandExecutor {
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Top &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         topFactions = null;
     }

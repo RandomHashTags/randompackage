@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.HashMap;
 
-public class SetDroppedExp extends AbstractEventAttribute {
+public final class SetDroppedExp extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

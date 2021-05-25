@@ -24,18 +24,16 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class Strongholds extends RPFeature implements CommandExecutor {
-    private static Strongholds instance;
-    public static Strongholds getStrongholds() {
-        if(instance == null) instance = new Strongholds();
-        return instance;
-    }
+public enum Strongholds implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;
@@ -61,14 +59,15 @@ public class Strongholds extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "STRONGHOLDS";
     }
     public void load() {
         final long started = System.currentTimeMillis();
         save("strongholds", "_settings.yml");
-        if(!otherdata.getBoolean("saved default strongholds")) {
-            otherdata.set("saved default strongholds", true);
+        if(!OTHER_YML.getBoolean("saved default strongholds")) {
+            OTHER_YML.set("saved default strongholds", true);
             saveOtherData();
         }
 
@@ -107,9 +106,9 @@ public class Strongholds extends RPFeature implements CommandExecutor {
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
             for(int i = 0; i < size; i++) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
                 if(item != null) {
-                    itemMeta = item.getItemMeta();
+                    final ItemMeta itemMeta = item.getItemMeta();
                 }
             }
             player.updateInventory();

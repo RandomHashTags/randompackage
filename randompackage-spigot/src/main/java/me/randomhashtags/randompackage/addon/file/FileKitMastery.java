@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FileKitMastery extends RPKit implements CustomKitMastery {
+public final class FileKitMastery extends RPKit implements CustomKitMastery {
     private ItemStack item, redeem, shard, antiCrystal;
     private LinkedHashMap<CustomKit, Integer> requiredKits;
     public FileKitMastery(File f) {
@@ -28,11 +28,11 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
         return getString(yml, "settings.name");
     }
     public ItemStack getItem() {
-        if(item == null) item = set(API.createItemStack(yml, "gui settings"));
+        if(item == null) item = set(createItemStack(yml, "gui settings"));
         return getClone(item);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = set(API.createItemStack(yml, "redeem"));
+        if(redeem == null) redeem = set(createItemStack(yml, "redeem"));
         return getClone(redeem);
     }
     private ItemStack set(ItemStack is) {
@@ -46,7 +46,7 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
                 if(s.contains("{REQUIREMENT}")) {
                     final CustomKit kit = kitKeys[req];
                     final String name = kit.getItem().getItemMeta().getDisplayName();
-                    s = s.replace("{REQUIREMENT}", name).replace("{TIER}", API.toRoman(re.get(kit)));
+                    s = s.replace("{REQUIREMENT}", name).replace("{TIER}", toRoman(re.get(kit)));
                     req++;
                 }
                 l.add(s);
@@ -69,11 +69,11 @@ public class FileKitMastery extends RPKit implements CustomKitMastery {
     }
     public boolean losesRequiredKits() { return yml.getBoolean("settings.loses required kits"); }
     public ItemStack getShard() {
-        if(shard == null) shard = API.createItemStack(yml, "shard");
+        if(shard == null) shard = createItemStack(yml, "shard");
         return getClone(shard);
     }
     public ItemStack getAntiCrystal() {
-        if(antiCrystal == null) antiCrystal = API.createItemStack(yml, "anti crystal");
+        if(antiCrystal == null) antiCrystal = createItemStack(yml, "anti crystal");
         return getClone(antiCrystal);
     }
     public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }

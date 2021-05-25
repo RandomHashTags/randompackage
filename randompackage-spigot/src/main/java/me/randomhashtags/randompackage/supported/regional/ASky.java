@@ -12,23 +12,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class ASky extends RPFeature implements Regional {
-    private static ASky instance;
-    public static ASky getASkyblock() {
-        if(instance == null) instance = new ASky();
-        return instance;
-    }
+public enum ASky implements RPFeature, Regional {
+    INSTANCE;
 
     private ASkyBlockAPI api;
 
-    public String getIdentifier() { return "REGIONAL_ASKYBLOCK"; }
+    @Override
+    public String getIdentifier() {
+        return "REGIONAL_ASKYBLOCK";
+    }
+    @Override
     public void load() {
         api = ASkyBlockAPI.getInstance();
     }
+    @Override
     public void unload() {
     }
 
-    private boolean areTeammates(UUID player1, UUID player2) { return api.inTeam(player1) && api.getTeamMembers(player1).contains(player2); }
+    private boolean areTeammates(UUID player1, UUID player2) {
+        return api.inTeam(player1) && api.getTeamMembers(player1).contains(player2);
+    }
 
     public boolean canModify(UUID player, Location location) {
         final Island i = api.getIslandAt(location);
@@ -39,10 +42,18 @@ public final class ASky extends RPFeature implements Regional {
         final Island is = api.getIslandOwnedBy(player);
         return is != null ? is.getMembers() : new ArrayList<>();
     }
-    public List<UUID> getNeutrals(UUID player) { return api.getTeamMembers(player); }
-    public List<UUID> getAllies(UUID player) { return getNeutrals(player); }
-    public List<UUID> getTruces(UUID player) { return getNeutrals(player); }
-    public List<UUID> getEnemies(UUID player) { return null; }
+    public List<UUID> getNeutrals(UUID player) {
+        return api.getTeamMembers(player);
+    }
+    public List<UUID> getAllies(UUID player) {
+        return getNeutrals(player);
+    }
+    public List<UUID> getTruces(UUID player) {
+        return getNeutrals(player);
+    }
+    public List<UUID> getEnemies(UUID player) {
+        return null;
+    }
 
     public List<Player> getOnlineAssociates(UUID player) {
         final List<UUID> a = getAssociates(player);
@@ -76,10 +87,14 @@ public final class ASky extends RPFeature implements Regional {
         final Island i = api.getIslandOwnedBy(player);
         return i != null ? "ISLAND_OWNER" : "ISLAND_VISITOR";
     }
-    public String getRegionalIdentifier(UUID player) { return api.getIslandName(player); }
+    public String getRegionalIdentifier(UUID player) {
+        return api.getIslandName(player);
+    }
     public String getRegionalIdentifierAt(Location l) {
         final Island i = api.getIslandAt(l);
         return i != null ? api.getIslandName(i.getOwner()) : null;
     }
-    public String getChatMode(UUID player) { return "GLOBAL"; }
+    public String getChatMode(UUID player) {
+        return "GLOBAL";
+    }
 }

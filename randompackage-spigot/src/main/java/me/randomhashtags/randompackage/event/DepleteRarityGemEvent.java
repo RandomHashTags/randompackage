@@ -3,8 +3,8 @@ package me.randomhashtags.randompackage.event;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import org.bukkit.entity.Player;
 
-public class DepleteRarityGemEvent extends RPEventCancellable {
-    private RarityGem gem;
+public final class DepleteRarityGemEvent extends RPEventCancellable {
+    private final RarityGem gem;
     private int gemAmount, depleteAmount;
     public DepleteRarityGemEvent(Player player, RarityGem gem, int gemAmount, int depleteAmount) {
         super(player);

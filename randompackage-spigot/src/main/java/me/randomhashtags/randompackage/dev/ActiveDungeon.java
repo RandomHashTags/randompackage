@@ -5,9 +5,10 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class ActiveDungeon {
-    private Dungeon type;
-    private long startedTime, objectiveStartTime;
-    private List<Player> players;
+    private final Dungeon type;
+    private final long startedTime;
+    private long objectiveStartTime;
+    private final List<Player> players;
     private DungeonObjective objective;
     public ActiveDungeon(Dungeon type, long startedTime, List<Player> players, long objectiveStarTime, DungeonObjective objective) {
         this.type = type;

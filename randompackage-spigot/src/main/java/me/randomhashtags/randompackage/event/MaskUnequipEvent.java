@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.armor.ArmorEventReason;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class MaskUnequipEvent extends RPEventCancellable {
+public final class MaskUnequipEvent extends RPEventCancellable {
     public final Mask mask;
     public final ItemStack helmet;
     public final ArmorEventReason reason;

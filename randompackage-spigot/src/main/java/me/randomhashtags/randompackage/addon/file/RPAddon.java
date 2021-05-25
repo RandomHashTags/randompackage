@@ -1,17 +1,15 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.RandomPackageAPI;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPStorage;
-import me.randomhashtags.randompackage.supported.RegionalAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public abstract class RPAddon extends RegionalAPI implements RPStorage {
-    protected static RandomPackageAPI API = RandomPackageAPI.API;
-
+public abstract class RPAddon implements RPFeature, RPStorage {
     protected File file;
     protected YamlConfiguration yml;
+
     public void load(File file) {
         if(file.exists()) {
             this.file = file;
@@ -26,6 +24,14 @@ public abstract class RPAddon extends RegionalAPI implements RPStorage {
     }
     public String getYamlName() {
         return file.getName().split("\\.yml")[0];
+    }
+
+    @Override
+    public void load() {
+    }
+
+    @Override
+    public void unload() {
     }
 
     public void save() {

@@ -92,7 +92,7 @@ public interface EventReplacements extends EventEntities {
             case "shopsell": return getReplacements((ShopEvent) event);
 
             case "mcmmoplayerxpgain":
-                if(MCMMOAPI.getMCMMOAPI().isEnabled()) {
+                if(MCMMOAPI.INSTANCE.isEnabled()) {
                     return new String[] {"xp", Float.toString(((com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event).getRawXpGained())};
                 }
 
@@ -105,9 +105,9 @@ public interface EventReplacements extends EventEntities {
     }
     // Bukkit event replacements
     default String[] getReplacements(EntityDeathEvent event) {
-        final LivingEntity e = event.getEntity(), k = e.getKiller();
-        final boolean NN = k != null;
-        final String[] a = new String[] {"xp", Integer.toString(event.getDroppedExp()), "@Victim", toString(e.getLocation())}, b = NN ? new String[]{"@Killer", toString(k.getLocation())} : null;
+        final LivingEntity entity = event.getEntity(), killer = entity.getKiller();
+        final boolean NN = killer != null;
+        final String[] a = new String[] {"xp", Integer.toString(event.getDroppedExp()), "@Victim", toString(entity.getLocation())}, b = NN ? new String[]{"@Killer", toString(killer.getLocation())} : null;
         return NN ? getReplacements(a, b) : a;
     }
     default String[] getLocationReplacements(Entity entity, String id) {
@@ -207,7 +207,7 @@ public interface EventReplacements extends EventEntities {
         return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"amount", event.amount.toString()});
     }
     default String[] getReplacements(JackpotPurchaseTicketsEvent event) {
-        return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"moneySpent", event.price.toPlainString(), "tickets", event.amount.toBigInteger().toString()});
+        return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"moneySpent", event.price.toPlainString(), "tickets", event.amount.toString()});
     }
     default String[] getReplacements(KitClaimEvent event) {
         return getReplacements(getLocationReplacements(event.getPlayer(), "Player"), new String[] {"level", Integer.toString(event.getLevel())});

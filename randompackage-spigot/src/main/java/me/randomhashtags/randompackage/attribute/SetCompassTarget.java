@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class SetCompassTarget extends AbstractEventAttribute {
+public final class SetCompassTarget extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

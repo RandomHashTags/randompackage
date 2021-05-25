@@ -5,8 +5,8 @@ import me.randomhashtags.randompackage.data.RarityGemData;
 
 import java.util.HashMap;
 
-public class RarityGemDataObj implements RarityGemData {
-    private HashMap<RarityGem, Boolean> gems;
+public final class RarityGemDataObj implements RarityGemData {
+    private final HashMap<RarityGem, Boolean> gems;
 
     public RarityGemDataObj(HashMap<RarityGem, Boolean> gems) {
         this.gems = gems;

@@ -9,16 +9,18 @@ import org.bukkit.entity.LivingEntity;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class LivingCustomEnchantEntity extends CustomEnchants implements Mathable {
-    public static HashMap<UUID, LivingCustomEnchantEntity> living;
-    private CustomEnchantEntity type;
-    private boolean isCreature;
-    private LivingEntity summoner, entity, target;
-    private UUID uuid;
+public final class LivingCustomEnchantEntity extends CustomEnchants implements Mathable {
+    public static HashMap<UUID, LivingCustomEnchantEntity> LIVING;
+    private final CustomEnchantEntity type;
+    private final boolean isCreature;
+    private LivingEntity summoner;
+    private final LivingEntity entity;
+    private LivingEntity target;
+    private final UUID uuid;
 
     public LivingCustomEnchantEntity(CustomEnchantEntity type, LivingEntity summoner, LivingEntity entity, LivingEntity target) {
-        if(living == null) {
-            living = new HashMap<>();
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
         this.type = type;
         this.summoner = summoner;
@@ -43,7 +45,7 @@ public class LivingCustomEnchantEntity extends CustomEnchants implements Mathabl
                 }
             }
         }
-        living.put(uuid, this);
+        LIVING.put(uuid, this);
     }
 
     public CustomEnchantEntity getType() {
@@ -69,16 +71,16 @@ public class LivingCustomEnchantEntity extends CustomEnchants implements Mathabl
     }
 
     public void delete(boolean remove) {
-        living.remove(uuid);
+        LIVING.remove(uuid);
         if(remove) {
             entity.remove();
         }
-        if(living.isEmpty()) {
-            living = null;
+        if(LIVING.isEmpty()) {
+            LIVING = null;
         }
     }
     public static LivingCustomEnchantEntity valueOf(LivingEntity summoner) {
-        for(LivingCustomEnchantEntity l : living.values()) {
+        for(LivingCustomEnchantEntity l : LIVING.values()) {
             if(l.summoner.equals(summoner)) {
                 return l;
             }

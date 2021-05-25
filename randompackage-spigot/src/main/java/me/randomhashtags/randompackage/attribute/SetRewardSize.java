@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public class SetRewardSize extends AbstractEventAttribute {
+public final class SetRewardSize extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

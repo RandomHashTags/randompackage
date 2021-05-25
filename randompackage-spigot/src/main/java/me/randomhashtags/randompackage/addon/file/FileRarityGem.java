@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileRarityGem extends RPAddon implements RarityGem {
+public final class FileRarityGem extends RPAddon implements RarityGem {
 	public static HashMap<Integer, String> defaultColors;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
@@ -25,7 +25,7 @@ public class FileRarityGem extends RPAddon implements RarityGem {
 	public String getIdentifier() { return getYamlName(); }
 
 	public ItemStack getItem() {
-		if(item == null) item = API.createItemStack(yml, "item");
+		if(item == null) item = createItemStack(yml, "item");
 		return getClone(item);
 	}
 	public ItemStack getItem(int souls) {

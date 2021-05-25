@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public class FileServerCrate extends RPAddon implements ServerCrate {
+public final class FileServerCrate extends RPAddon implements ServerCrate {
 	private UInventory inv;
 	private LinkedHashMap<String, Integer> revealChances;
 	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
@@ -76,23 +76,23 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		return revealChances;
 	}
 	public ItemStack getItem() {
-		if(physicalItem == null) physicalItem = API.createItemStack(yml, "item");
+		if(physicalItem == null) physicalItem = createItemStack(yml, "item");
 		return getClone(physicalItem);
 	}
 	public ItemStack getDisplay() {
-		if(display == null) display = API.createItemStack(yml, "display");;
+		if(display == null) display = createItemStack(yml, "display");
 		return getClone(display);
 	}
 	public ItemStack getOpenGui() {
-		if(opengui == null) opengui = API.createItemStack(yml, "open gui");
+		if(opengui == null) opengui = createItemStack(yml, "open gui");
 		return getClone(opengui);
 	}
 	public ItemStack getSelected() {
-		if(selected == null) selected = API.createItemStack(yml, "selected");
+		if(selected == null) selected = createItemStack(yml, "selected");
 		return getClone(selected);
 	}
 	public ItemStack getRevealSlotRarity() {
-		if(revealSlotRarity == null) revealSlotRarity = API.createItemStack(yml, "reveal slot rarity");
+		if(revealSlotRarity == null) revealSlotRarity = createItemStack(yml, "reveal slot rarity");
 		return getClone(revealSlotRarity);
 	}
 	public HashMap<String, List<String>> getRewards() {
@@ -105,11 +105,11 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 		return rewards;
 	}
 	public ItemStack getBackground() {
-		if(background == null) background = API.createItemStack(yml, "settings.background");
+		if(background == null) background = createItemStack(yml, "settings.background");
 		return getClone(background);
 	}
 	public ItemStack getBackground2() {
-		if(background2 == null) background2 = API.createItemStack(yml, "settings.background 2");
+		if(background2 == null) background2 = createItemStack(yml, "settings.background 2");
 		return getClone(background2);
 	}
 	public FileServerCrateFlareObj getFlare() {
@@ -137,6 +137,6 @@ public class FileServerCrate extends RPAddon implements ServerCrate {
 	public ItemStack getRandomReward(@NotNull String rarity) {
 		final List<String> rewards = getRewards().get(rarity);
 		final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
-		return API.createItemStack(null, reward);
+		return createItemStack(null, reward);
 	}
 }

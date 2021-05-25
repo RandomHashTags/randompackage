@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 
-public class GiveDrops extends AbstractEventAttribute {
+public final class GiveDrops extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value) {
         final Event event = pending.getEvent();

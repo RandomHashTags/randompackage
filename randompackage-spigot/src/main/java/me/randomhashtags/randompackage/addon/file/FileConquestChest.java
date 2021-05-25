@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileConquestChest extends RPAddon implements ConquestChest {
+public final class FileConquestChest extends RPAddon implements ConquestChest {
     private HashMap<ConquestMob, String> spawnedBosses;
     private UMaterial placedBlock;
 
@@ -29,7 +29,7 @@ public class FileConquestChest extends RPAddon implements ConquestChest {
             spawnedBosses = new HashMap<>();
             for(String s : yml.getStringList("spawned bosses")) {
                 final String[] a = s.split(":");
-                spawnedBosses.put(ConquestMob.bosses.get(a[0]), a[1]);
+                spawnedBosses.put(ConquestMob.BOSSES.get(a[0]), a[1]);
             }
         }
         return spawnedBosses;

@@ -17,11 +17,11 @@ public interface GlobalChallenge extends Attributable, Itemable, Toggleable {
         return start(System.currentTimeMillis(), new HashMap<>());
     }
     default ActiveGlobalChallenge start(long started, HashMap<UUID, BigDecimal> participants) {
-        final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
+        final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.ACTIVE;
         return a != null ? a.getOrDefault(this, new ActiveGlobalChallenge(started, this, participants)) : new ActiveGlobalChallenge(started, this, participants);
     }
     default boolean isActive() {
-        final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.active;
+        final HashMap<GlobalChallenge, ActiveGlobalChallenge> a = ActiveGlobalChallenge.ACTIVE;
         return a != null && a.containsKey(this);
     }
 }

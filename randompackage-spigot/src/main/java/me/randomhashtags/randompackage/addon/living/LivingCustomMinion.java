@@ -11,7 +11,7 @@ import org.bukkit.event.Event;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class LivingCustomMinion {
+public final class LivingCustomMinion {
     public static HashMap<UUID, LivingCustomMinion> living;
     public LivingEntity entity, target;
     public CustomMinion type;
@@ -48,7 +48,9 @@ public class LivingCustomMinion {
             living = null;
         }
     }
-    public LivingEntity getTarget() { return target; }
+    public LivingEntity getTarget() {
+        return target;
+    }
     public static void deleteAll() {
         living = null;
     }

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackMergeEvent;
-import me.randomhashtags.randompackage.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StackedEntity extends UVersion {
-    public static final List<StackedEntity> stackedEntities = new ArrayList<>();
+public final class StackedEntity implements UVersionable {
+    public static final List<StackedEntity> STACKED_ENTITIES = new ArrayList<>();
 
     public final long creationTime;
     public final LivingEntity entity;
@@ -29,7 +29,7 @@ public class StackedEntity extends UVersion {
         this.customname = ChatColor.translateAlternateColorCodes('&', customname);
         this.size = size;
         entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
-        stackedEntities.add(this);
+        STACKED_ENTITIES.add(this);
     }
     public void setSize(int size) {
         final MobStackMergeEvent e = new MobStackMergeEvent(this, size);
@@ -48,13 +48,13 @@ public class StackedEntity extends UVersion {
             final Location lo = entity.getLocation();
             final EntityType t = entity.getType();
             if(size-amount <= 0) {
-                stackedEntities.remove(this);
+                STACKED_ENTITIES.remove(this);
                 entity.setHealth(0.0001);
                 entity.damage(entity.getMaxHealth(), killer);
             } else {
                 size -= amount;
             }
-            if(stackedEntities.contains(this)) {
+            if(STACKED_ENTITIES.contains(this)) {
                 SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> entity.setNoDamageTicks(0), 0);
                 entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
                 for(int i = 1; i <= amount; i++) {
@@ -92,23 +92,28 @@ public class StackedEntity extends UVersion {
         }
     }
     public void remove(boolean dropLoot, LivingEntity killer) {
-        if(dropLoot) kill(killer, size);
-        else entity.remove();
-        stackedEntities.remove(this);
+        if(dropLoot) {
+            kill(killer, size);
+        } else {
+            entity.remove();
+        }
+        STACKED_ENTITIES.remove(this);
     }
 
     public static StackedEntity valueOf(UUID uuid) {
-        for(StackedEntity s : stackedEntities) {
-            if(s.uuid.equals(uuid))
+        for(StackedEntity s : STACKED_ENTITIES) {
+            if(s.uuid.equals(uuid)) {
                 return s;
+            }
         }
         return null;
     }
     public static List<StackedEntity> valueOf(EntityType type) {
         final List<StackedEntity> list = new ArrayList<>();
-        for(StackedEntity s : stackedEntities) {
-            if(s.entity.getType().equals(type))
+        for(StackedEntity s : STACKED_ENTITIES) {
+            if(s.entity.getType().equals(type)) {
                 list.add(s);
+            }
         }
         return list;
     }

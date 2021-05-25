@@ -18,6 +18,11 @@ public interface ShowcaseData {
         final HashMap<Integer, ItemStack[]> showcases = getShowcases();
         return showcases != null ? showcases.getOrDefault(page, null) : null;
     }
+    default void setShowcase(int page, ItemStack[] itemstacks) {
+        getShowcases().put(page, itemstacks);
+    }
+    void addToShowcase(int page, ItemStack item);
+    void removeFromShowcase(int page, ItemStack item);
 
     default void reset() {
         setShowcases(new HashMap<>());

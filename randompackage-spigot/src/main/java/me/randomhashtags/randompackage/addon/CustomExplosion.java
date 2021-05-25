@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -14,13 +13,11 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.List;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-import static me.randomhashtags.randompackage.RandomPackageAPI.spawnerchance;
+import static me.randomhashtags.randompackage.RandomPackageAPI.SPAWNER_CHANCE;
 
 public interface CustomExplosion extends Attributable, Itemable, GivedpItemable {
 
@@ -109,26 +106,23 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemable 
         } else if(input.startsWith("repeat_explode;")) {
             final double x = loc.getX(), y = loc.getY(), z = loc.getZ();
             final int delay = Integer.parseInt(input.split(";")[1]);
-            final BukkitScheduler s = API.SCHEDULER;
-            final Plugin rp = API.RANDOM_PACKAGE;
 
             for(int i = 1; i <= Integer.parseInt(input.split(";")[2]); i++) {
-                s.scheduleSyncDelayedTask(rp, () -> {
+                SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                     final TNTPrimed a = w.spawn(new Location(w, x, y, z), TNTPrimed.class);
                     a.setFuseTicks(0);
                 }, 20 * delay + (delay * 20 * (i - 1)));
             }
         } else if(input.startsWith("increase_spawner_drop;")) {
-            final UVersion uv = UVersion.getUVersion();
-            final Plugin spawner = RandomPackage.spawnerPlugin;
+            final Plugin spawner = RandomPackage.SPAWNER_PLUGIN;
             final Material m = UMaterial.SPAWNER.getMaterial();
-            final double d = spawnerchance * Double.parseDouble(input.split(";")[1]);
+            final double chance = SPAWNER_CHANCE * Double.parseDouble(input.split(";")[1]);
             for(Block block : event.blockList()) {
                 boolean mobspawner = false;
-                if(block.getType().equals(m) && d <= RANDOM.nextInt(100)) {
+                if(block.getType().equals(m) && chance < RANDOM.nextInt(100)) {
                     mobspawner = true;
                     if(spawner != null) {
-                        w.dropItemNaturally(block.getLocation(), uv.getSpawner(((CreatureSpawner) block).getSpawnedType().name()));
+                        w.dropItemNaturally(block.getLocation(), getSpawner(((CreatureSpawner) block).getSpawnedType().name()));
                     }
                     block.setType(Material.AIR);
                 }

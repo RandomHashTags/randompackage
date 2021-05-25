@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class GivePetExp extends AbstractEventAttribute implements RPItemStack {
+public final class GivePetExp extends AbstractEventAttribute implements RPItemStack {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

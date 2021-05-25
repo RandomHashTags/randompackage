@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.List;
 
-public class FileMask extends RPAddon implements Mask, Skullable {
+public final class FileMask extends RPAddon implements Mask, Skullable {
     private ItemStack item;
 
     public FileMask(File f) {
@@ -24,7 +24,7 @@ public class FileMask extends RPAddon implements Mask, Skullable {
     }
     public ItemStack getItem() {
         if(item == null) {
-            item = API.createItemStack(yml, "item");
+            item = createItemStack(yml, "item");
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);

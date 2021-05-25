@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class ServerCrateCloseEvent extends RPEvent {
+public final class ServerCrateCloseEvent extends RPEvent {
     public final ServerCrate crate;
     public final List<ItemStack> rewards;
     public ServerCrateCloseEvent(Player player, ServerCrate crate, List<ItemStack> rewards) {

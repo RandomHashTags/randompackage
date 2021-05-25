@@ -7,15 +7,15 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-public class IsHeadshot extends AbstractEventCondition {
+public final class IsHeadshot extends AbstractEventCondition {
     @Override
     public boolean check(Event event, String value) {
         if(event instanceof ProjectileHitEvent) {
-            final ProjectileHitEvent e = (ProjectileHitEvent) event;
-            final Entity victim = getHitEntity(e);
+            final ProjectileHitEvent projectileEvent = (ProjectileHitEvent) event;
+            final Entity victim = getHitEntity(projectileEvent);
             if(victim instanceof LivingEntity) {
-                final Projectile p = e.getEntity();
-                return p.getLocation().getY() > ((LivingEntity) victim).getEyeLocation().getY();
+                final Projectile projectile = projectileEvent.getEntity();
+                return projectile.getLocation().getY() > ((LivingEntity) victim).getEyeLocation().getY();
             }
         }
         return false;

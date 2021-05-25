@@ -7,8 +7,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.*;
 
-public class YamlUpdater {
-    public static YamlUpdater INSTANCE = new YamlUpdater();
+public enum YamlUpdater {
+    INSTANCE;
+
     public boolean updateYaml(@NotNull String folder, @NotNull File file) {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(folder, file);

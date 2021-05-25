@@ -1,8 +1,9 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.ServerCrateFlare;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,22 +15,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
-public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlare {
-	private FileServerCrate crate;
+public final class FileServerCrateFlareObj implements UVersionable, ServerCrateFlare {
+	private final FileServerCrate crate;
 	private ItemStack is;
 	private List<UMaterial> cannotLandAbove, cannotLandIn;
 
 	public FileServerCrateFlareObj(FileServerCrate crate) {
 		this.crate = crate;
 	}
-	public String getIdentifier() { return crate.getYamlName(); }
 
-	private YamlConfiguration getYaml() { return crate.getYaml(); }
-	public UMaterial getBlock() { return UMaterial.match(crate.getItem().getType().name()); }
-	public boolean dropsFromSky() { return getYaml().getBoolean("flare.settings.drops from sky"); }
-	public UMaterial getFallingBlock() { return null; }
+	@Override
+	public String getIdentifier() {
+		return crate.getYamlName();
+	}
+
+	private YamlConfiguration getYaml() {
+		return crate.getYaml();
+	}
+	public UMaterial getBlock() {
+		return UMaterial.match(crate.getItem().getType().name());
+	}
+	public boolean dropsFromSky() {
+		return getYaml().getBoolean("flare.settings.drops from sky");
+	}
+	public UMaterial getFallingBlock() {
+		return null;
+	}
 
 	public List<UMaterial> cannotLandAbove() {
 		if(cannotLandAbove == null) {
@@ -51,15 +62,35 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 	}
 
 	public ItemStack getItem() {
-		if(is == null) is = API.createItemStack(getYaml(), "flare");
+		if(is == null) {
+			is = RandomPackageAPI.INSTANCE.createItemStack(getYaml(), "flare");
+		}
 		return getClone(is);
 	}
-	public List<String> getRewards() { return null; }
-	public int getSpawnRadius() { return getYaml().getInt("flare.settings.spawn radius"); }
-	public int getSpawnInDelay() { return getYaml().getInt("flare.settings.spawn in delay"); }
-	public int getNearbyRadius() { return getYaml().getInt("flare.settings.nearby radius"); }
-	public List<String> getRequestMsg() { return colorizeListString(getYaml().getStringList("flare.request msg")); }
-	public List<String> getNearbySpawnMsg() { return colorizeListString(getYaml().getStringList("flare.nearby spawn msg")); }
+	public List<String> getRewards() {
+		return null;
+	}
+
+	@Override
+	public int getSpawnRadius() {
+		return getYaml().getInt("flare.settings.spawn radius");
+	}
+	@Override
+	public int getSpawnInDelay() {
+		return getYaml().getInt("flare.settings.spawn in delay");
+	}
+	@Override
+	public int getNearbyRadius() {
+		return getYaml().getInt("flare.settings.nearby radius");
+	}
+	@Override
+	public List<String> getRequestMsg() {
+		return colorizeListString(getYaml().getStringList("flare.request msg"));
+	}
+	@Override
+	public List<String> getNearbySpawnMsg() {
+		return colorizeListString(getYaml().getStringList("flare.nearby spawn msg"));
+	}
 
 	private Location getRandomLocation(World w, int bx, int bz, int sr) {
 		final int x = (RANDOM.nextInt(2) == 0 ? 1 : -1)* RANDOM.nextInt(sr), z = (RANDOM.nextInt(2) == 0 ? 1 : -1)* RANDOM.nextInt(sr);
@@ -68,37 +99,38 @@ public class FileServerCrateFlareObj extends UVersion implements ServerCrateFlar
 		return l;
 	}
 	private Location getRandomLocation(World w, int bx, int bz) {
-		final int sr = getSpawnRadius();
+		final int spawnRadius = getSpawnRadius();
 		for(int i = 1; i <= 100; i++) {
-			final Location loc = getRandomLocation(w, bx, bz, sr);
+			final Location loc = getRandomLocation(w, bx, bz, spawnRadius);
 			if(canLand(loc)) {
 				return loc;
 			}
 		}
-		return getRandomLocation(w, bz, bz, sr).add(0, 1, 0);
+		return getRandomLocation(w, bz, bz, spawnRadius).add(0, 1, 0);
 	}
 
+	@Override
 	public Location spawn(Player player, Location requestLocation) {
-		final int bx = requestLocation.getBlockX(), by = requestLocation.getBlockY(), bz = requestLocation.getBlockZ();
-		final World w = requestLocation.getWorld();
-		final Location l = getRandomLocation(w, bx, bz);
+		final int blockX = requestLocation.getBlockX(), blockY = requestLocation.getBlockY(), blockZ = requestLocation.getBlockZ();
+		final World world = requestLocation.getWorld();
+		final Location l = getRandomLocation(world, blockX, blockZ);
 		if(l != null) {
 			if(player != null) {
 				final HashMap<String, String> replacements = new HashMap<>();
-				replacements.put("{X}", formatInt(bx));
-				replacements.put("{Y}", formatInt(by));
-				replacements.put("{Z}", formatInt(bz));
+				replacements.put("{X}", formatInt(blockX));
+				replacements.put("{Y}", formatInt(blockY));
+				replacements.put("{Z}", formatInt(blockZ));
 				final List<String> r = getRequestMsg(), n = getNearbySpawnMsg();
 				final int ra = getNearbyRadius();
 				sendStringListMessage(player, r, replacements);
 
-				for(Entity e : player.getNearbyEntities(ra, ra, ra)) {
-					if(e instanceof Player) {
-						sendStringListMessage(e, n, replacements);
+				for(Entity entity : player.getNearbyEntities(ra, ra, ra)) {
+					if(entity instanceof Player) {
+						sendStringListMessage(entity, n, replacements);
 					}
 				}
 			}
-			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> w.getBlockAt(l).setType(getBlock().getMaterial()), 20*getSpawnInDelay());
+			SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> world.getBlockAt(l).setType(getBlock().getMaterial()), 20*getSpawnInDelay());
 			return l;
 		}
 		return null;

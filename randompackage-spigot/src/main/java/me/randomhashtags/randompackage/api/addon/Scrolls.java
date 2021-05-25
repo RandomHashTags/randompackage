@@ -28,21 +28,18 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
-public class Scrolls extends RPFeature {
-    private static Scrolls instance;
-    public static Scrolls getScrolls() {
-        if(instance == null) instance = new Scrolls();
-        return instance;
-    }
+public enum Scrolls implements RPFeature {
+    INSTANCE;
 
     private String folder;
     public YamlConfiguration config;
-
     private Set<Feature> enabled;
 
+    @Override
     public String getIdentifier() {
         return "SCROLLS";
     }
+    @Override
     public void load() {
         save("addons", "scrolls.yml");
         folder = DATA_FOLDER + SEPARATOR + "addons";
@@ -59,6 +56,7 @@ public class Scrolls extends RPFeature {
             tryLoadingScroll(scroll);
         }
     }
+    @Override
     public void unload() {
         for(Feature scroll : new HashSet<>(enabled)) {
             tryUnloadingScroll(scroll);
@@ -261,9 +259,6 @@ public class Scrolls extends RPFeature {
         }
         return false;
     }
-    public boolean applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
-        return applyTransmogScroll(null, is, scroll);
-    }
     public boolean applyTransmogScroll(Player player, ItemStack is, TransmogScroll scroll) {
         boolean did = true;
         if(is != null && scroll != null) {
@@ -336,7 +331,7 @@ public class Scrolls extends RPFeature {
             for(TransmogScroll scroll : getAllTransmogScrolls().values()) {
                 final String applied = scroll.getApplied(), actual = applied.replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size);
                 if(name.endsWith(actual)) {
-                    itemMeta = is.getItemMeta();
+                    final ItemMeta itemMeta = is.getItemMeta();
                     itemMeta.setDisplayName(itemMeta.getDisplayName().replace(actual, applied.replace("{LORE_COUNT}", newsize).replace("{ENCHANT_SIZE}", newsize)));
                     is.setItemMeta(itemMeta);
                     return;
@@ -384,15 +379,14 @@ public class Scrolls extends RPFeature {
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(current != null && !current.getType().equals(Material.AIR) && cursor != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             final Player player = (Player) event.getWhoClicked();
-            item = current;
-            itemMeta = current.getItemMeta();
+            final ItemMeta itemMeta = current.getItemMeta();
 
             final RandomizationScroll randomizationscroll = valueOfRandomizationScroll(cursor);
             final BlackScroll blackscroll = randomizationscroll == null ? valueOfBlackScroll(cursor) : null;
             final TransmogScroll transmogscroll = blackscroll == null ? valueOfTransmogScroll(cursor) : null;
             final WhiteScroll whitescroll = valueOfWhiteScroll(cursor);
             if(blackscroll != null) {
-                final boolean hasMeta = item.hasItemMeta() && itemMeta.hasLore();
+                final boolean hasMeta = current.hasItemMeta() && itemMeta.hasLore();
                 final HashMap<CustomEnchant, Integer> enchantsOnItem = hasMeta ? getCustomEnchants().getEnchantsOnItem(current) : null;
                 if(enchantsOnItem != null && !enchantsOnItem.isEmpty()) {
                     final ItemStack scroll = applyBlackScroll(player, current, cursor, blackscroll);

@@ -8,9 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathBlackScroll extends RPAddon implements BlackScroll {
-	private String identifier;
-	private int min, max;
+public final class PathBlackScroll extends RPAddon implements BlackScroll {
+	private final String identifier;
+	private final int min;
+    private final int max;
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;
 	public PathBlackScroll(String identifier) {
@@ -23,7 +24,7 @@ public class PathBlackScroll extends RPAddon implements BlackScroll {
 	public String getIdentifier() { return identifier; }
 
 	public ItemStack getItem() {
-		if(is == null) is = API.createItemStack(getAddonConfig("scrolls.yml"), "black scrolls." + identifier);
+		if(is == null) is = createItemStack(getAddonConfig("scrolls.yml"), "black scrolls." + identifier);
 		return getClone(is);
 	}
 

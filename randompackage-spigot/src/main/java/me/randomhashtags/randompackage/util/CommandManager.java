@@ -6,45 +6,48 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public final class CommandManager extends Reflect {
-    private static CommandManager instance;
-    public static CommandManager getCommandManager() {
-        if(instance == null) {
-            instance = new CommandManager();
-        }
-        return instance;
-    }
+public enum CommandManager implements Reflect {
+    INSTANCE;
 
     private SimpleCommandMap commandMap;
     private HashMap<String, Command> knownCommands;
 
-    private HashMap<String, RPFeature> features;
-    private static HashMap<String, PluginCommand> actualCmds;
+    private final HashMap<String, RPFeature> features;
+    private static final HashMap<String, PluginCommand> ACTUAL_COMMANDS = new HashMap<>();
     private Object dispatcher, nodes;
 
-    public String getIdentifier() { return "COMMAND_MANAGER"; }
-    private CommandManager() {
-        actualCmds = new HashMap<>();
+    @Override
+    public String getIdentifier() {
+        return "COMMAND_MANAGER";
+    }
+    CommandManager() {
         try {
             if(!LEGACY) {
-                final Field o = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
-                o.setAccessible(true);
+                com.mojang.brigadier.CommandDispatcher versionDispatcher = null;
                 if(THIRTEEN) {
-                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
-                    dispatcher = d;
-                    nodes = o.get(d.getRoot());
+                    versionDispatcher = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
                 } else if(FOURTEEN) {
-                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_14_R1.MinecraftServer.getServer().commandDispatcher.a();
-                    dispatcher = d;
-                    nodes = o.get(d.getRoot());
+                    versionDispatcher = net.minecraft.server.v1_14_R1.MinecraftServer.getServer().commandDispatcher.a();
                 } else if(FIFTEEN) {
-                    final com.mojang.brigadier.CommandDispatcher d = net.minecraft.server.v1_15_R1.MinecraftServer.getServer().commandDispatcher.a();
-                    dispatcher = d;
-                    nodes = o.get(d.getRoot());
+                    versionDispatcher = net.minecraft.server.v1_15_R1.MinecraftServer.getServer().commandDispatcher.a();
+                } else if(SIXTEEN) {
+                    versionDispatcher = net.minecraft.server.v1_16_R3.MinecraftServer.getServer().vanillaCommandDispatcher.a();
+                } else {
+                    sendConsoleMessage("&6[RandomPackage &cWARNING&6] &c&lYou're running an unsupported Spigot version! Custom commands won't work, and disabled commands won't disable!");
                 }
-                o.setAccessible(false);
+                if(versionDispatcher != null) {
+                    dispatcher = versionDispatcher;
+
+                    final Field field = getPrivateField(Class.forName("com.mojang.brigadier.tree.CommandNode"), "children");
+                    field.setAccessible(true);
+                    nodes = field.get(versionDispatcher.getRoot());
+                    field.setAccessible(false);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,7 +62,9 @@ public final class CommandManager extends Reflect {
         }
     }
 
+    @Override
     public void load() {}
+    @Override
     public void unload() {}
 
     public void load(RPFeature f, List<String> baseCmds, boolean enabled) {
@@ -73,56 +78,52 @@ public final class CommandManager extends Reflect {
     }
     public void loadCustom(RPFeature feature, HashMap<String, String> baseCmds, boolean isEnabled) {
         if(isEnabled) {
-            try {
-                final List<Boolean> enabledList = new ArrayList<>();
-                if(baseCmds != null && !baseCmds.isEmpty()) {
-                    for(String base : baseCmds.keySet()) {
-                        final String path = baseCmds.get(base);
-                        final boolean enabled = RP_CONFIG.getBoolean(path + ".enabled");
-                        enabledList.add(enabled);
-                        if(!knownCommands.containsKey(base)) {
-                            final PluginCommand cmd = actualCmds.get(base);
-                            commandMap.register(base, cmd);
-                            knownCommands.put(base, cmd);
-                            knownCommands.put("randompackage:" + base, cmd);
-                        }
-                        final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
-                        baseCmd.setExecutor((CommandExecutor) feature);
-                        if(!actualCmds.containsKey(base)) {
-                            actualCmds.put(base, baseCmd);
-                        }
-                        if(enabled) {
-                            final List<String> cmds = RP_CONFIG.getStringList(path + ".cmds");
-                            if(!cmds.isEmpty()) {
-                                final String first = cmds.get(0);
-                                baseCmd.unregister(commandMap);
-                                if(!first.equalsIgnoreCase(base)) {
-                                    baseCmd.setName(first);
-                                }
-                                cmds.remove(first);
-                                baseCmd.setAliases(cmds);
-                                for(String s : cmds) {
-                                    commandMap.register(s, baseCmd);
-                                    knownCommands.put(s, baseCmd);
-                                    knownCommands.put("randompackage:" + s, baseCmd);
-                                }
-                                baseCmd.register(commandMap);
-                                updateBrigadierCmd(baseCmd, false);
-                            }
-                        } else {
-                            unregisterPluginCommand(baseCmd);
-                        }
+            final String featureIdentifier = feature.getIdentifier();
+            final List<Boolean> enabledList = new ArrayList<>();
+            if(baseCmds != null && !baseCmds.isEmpty()) {
+                for(String base : baseCmds.keySet()) {
+                    final String path = baseCmds.get(base);
+                    final boolean enabled = RP_CONFIG.getBoolean(path + ".enabled");
+                    enabledList.add(enabled);
+                    if(!knownCommands.containsKey(base)) {
+                        final PluginCommand cmd = ACTUAL_COMMANDS.get(base);
+                        commandMap.register(base, cmd);
+                        knownCommands.put(base, cmd);
+                        knownCommands.put("randompackage:" + base, cmd);
                     }
-                } else {
-                    enabledList.add(true);
+                    final PluginCommand baseCmd = (PluginCommand) knownCommands.get("randompackage:" + base);
+                    baseCmd.setExecutor((CommandExecutor) feature);
+                    if(!ACTUAL_COMMANDS.containsKey(base)) {
+                        ACTUAL_COMMANDS.put(base, baseCmd);
+                    }
+                    if(enabled) {
+                        final List<String> cmds = RP_CONFIG.getStringList(path + ".cmds");
+                        if(!cmds.isEmpty()) {
+                            final String first = cmds.get(0);
+                            baseCmd.unregister(commandMap);
+                            if(!first.equalsIgnoreCase(base)) {
+                                baseCmd.setName(first);
+                            }
+                            cmds.remove(first);
+                            baseCmd.setAliases(cmds);
+                            for(String s : cmds) {
+                                commandMap.register(s, baseCmd);
+                                knownCommands.put(s, baseCmd);
+                                knownCommands.put("randompackage:" + s, baseCmd);
+                            }
+                            baseCmd.register(commandMap);
+                            updateBrigadierCmd(featureIdentifier, baseCmd, false);
+                        }
+                    } else {
+                        unregisterPluginCommand(featureIdentifier, baseCmd);
+                    }
                 }
-                if(enabledList.contains(true)) {
-                    feature.enable();
-                    features.put(feature.getIdentifier(), feature);
-                }
-            } catch (Exception e) {
-                sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to load feature commands:&r &f" + feature.getIdentifier());
-                e.printStackTrace();
+            } else {
+                enabledList.add(true);
+            }
+            if(enabledList.contains(true)) {
+                feature.enable();
+                features.put(featureIdentifier, feature);
             }
         }
     }
@@ -137,25 +138,31 @@ public final class CommandManager extends Reflect {
         }
     }
 
-    private void updateBrigadierCmd(PluginCommand cmd, boolean unregister) {
+    private void updateBrigadierCmd(String featureIdentifier, PluginCommand cmd, boolean unregister) {
         if(LEGACY) {
             return;
         }
         final String name = cmd.getName();
-        final Map<String, com.mojang.brigadier.tree.CommandNode<?>> nodes = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) this.nodes;
-        if(unregister) {
-            nodes.remove("randompackage:" + name);
-            nodes.remove(name);
-        } else {
-            //final com.mojang.brigadier.tree.CommandNode<?> c = nodes.get(name);
-            final com.mojang.brigadier.CommandDispatcher dispatcher = (com.mojang.brigadier.CommandDispatcher) this.dispatcher;
-            for(String a : cmd.getAliases()) {
-                dispatcher.register(com.mojang.brigadier.builder.LiteralArgumentBuilder.literal(a));
+        try {
+            final Map<String, com.mojang.brigadier.tree.CommandNode<?>> nodes = (Map<String, com.mojang.brigadier.tree.CommandNode<?>>) this.nodes;
+            if(unregister) {
+                nodes.remove("randompackage:" + name);
+                nodes.remove(name);
+            } else {
+                //final com.mojang.brigadier.tree.CommandNode<?> c = nodes.get(name);
+                final com.mojang.brigadier.CommandDispatcher dispatcher = (com.mojang.brigadier.CommandDispatcher) this.dispatcher;
+                for(String a : cmd.getAliases()) {
+                    dispatcher.register(com.mojang.brigadier.builder.LiteralArgumentBuilder.literal(a));
+                }
             }
+        } catch (Exception e) {
+            sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to update the Brigadier command(s) for feature:&r &f" + featureIdentifier);
+
+            e.printStackTrace();
         }
     }
 
-    private void unregisterPluginCommand(PluginCommand cmd) {
+    private void unregisterPluginCommand(String featureIdentifier, PluginCommand cmd) {
         final String cmdName = cmd.getName();
         knownCommands.remove("randompackage:" + cmdName);
         cmd.unregister(commandMap);
@@ -178,7 +185,7 @@ public final class CommandManager extends Reflect {
         }
         if(!hasOtherCmd) { // removes the command completely
             knownCommands.remove(cmdName);
-            updateBrigadierCmd(cmd, true);
+            updateBrigadierCmd(featureIdentifier, cmd, true);
         }
     }
 }

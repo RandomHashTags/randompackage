@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
 import me.randomhashtags.randompackage.perms.FundPermission;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -22,12 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Fund extends RPFeature implements CommandExecutor {
-	private static Fund instance;
-	public static Fund getFund() {
-		if(instance == null) instance = new Fund();
-		return instance;
-	}
+public enum Fund implements RPFeature, CommandExecutor {
+	INSTANCE;
+
 	public YamlConfiguration config;
 
 	private HashMap<String, String> unlockstring;
@@ -36,15 +34,17 @@ public class Fund extends RPFeature implements CommandExecutor {
 	
 	public BigDecimal maxfund, total;
 
+	@Override
 	public String getIdentifier() {
 		return "FUND";
 	}
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(args.length == 0) {
 			view(sender);
 		} else {
-			final String a = args[0];
-			switch (a) {
+			final String key = args[0];
+			switch (key) {
 				case "reset":
 					reset(sender);
 					break;
@@ -61,6 +61,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "fund.yml");
@@ -81,16 +82,17 @@ public class Fund extends RPFeature implements CommandExecutor {
 			}
 		}
 
-		total = BigDecimal.valueOf(otherdata.getDouble("fund.total"));
-		for(String uuid : getConfigurationSectionKeys(otherdata, "fund.depositors", false)) {
-			deposits.put(UUID.fromString(uuid), BigDecimal.valueOf(otherdata.getDouble("fund.depositors." + uuid)));
+		total = BigDecimal.valueOf(OTHER_YML.getDouble("fund.total"));
+		for(String uuid : getConfigurationSectionKeys(OTHER_YML, "fund.depositors", false)) {
+			deposits.put(UUID.fromString(uuid), BigDecimal.valueOf(OTHER_YML.getDouble("fund.depositors." + uuid)));
 		}
 		sendConsoleDidLoadFeature("Server Fund", started);
 	}
+	@Override
 	public void unload() {
-		otherdata.set("fund.total", total);
+		OTHER_YML.set("fund.total", total);
 		for(UUID u : deposits.keySet()) {
-			otherdata.set("fund.depositors." + u.toString(), deposits.get(u));
+			OTHER_YML.set("fund.depositors." + u.toString(), deposits.get(u));
 		}
 		saveOtherData();
 	}
@@ -103,22 +105,21 @@ public class Fund extends RPFeature implements CommandExecutor {
 				sendStringListMessage(player, getStringList(config, "messages.cannot include decimals"), null);
 			} else {
 				BigDecimal amount = valueOfBigDecimal(arg);
-				final double min = config.getDouble("min deposit");
-				final double d = amount.doubleValue();
-				final String a = d < config.getDouble("min deposit") ? "less than min" : d > eco.getBalance(player) ? "need more money" : null;
-				if(a != null) {
-					sendMessage(player, a, null, a.equals("less than min") ? min : d, false);
+				final double min = config.getDouble("min deposit"), amountValue = amount.doubleValue();
+				final String msg = amountValue < config.getDouble("min deposit") ? "less than min" : amountValue > ECONOMY.getBalance(player) ? "need more money" : null;
+				if(msg != null) {
+					sendMessage(player, msg, null, msg.equals("less than min") ? min : amountValue, false);
 					return;
 				}
-				final FundDepositEvent e = new FundDepositEvent(player, amount);
-				PLUGIN_MANAGER.callEvent(e);
-				if(!e.isCancelled()) {
-					amount = e.amount;
-					final UUID u = player.getUniqueId();
-					deposits.put(u, deposits.getOrDefault(u, BigDecimal.ZERO).add(amount));
-					eco.withdrawPlayer(player, d);
+				final FundDepositEvent depositEvent = new FundDepositEvent(player, amount);
+				PLUGIN_MANAGER.callEvent(depositEvent);
+				if(!depositEvent.isCancelled()) {
+					amount = depositEvent.amount;
+					final UUID uuid = player.getUniqueId();
+					deposits.put(uuid, deposits.getOrDefault(uuid, BigDecimal.ZERO).add(amount));
+					ECONOMY.withdrawPlayer(player, amountValue);
 					total = total.add(amount);
-					sendMessage(player, "deposited", null, d, true);
+					sendMessage(player, "deposited", null, amountValue, true);
 				}
 			}
 		}
@@ -156,10 +157,10 @@ public class Fund extends RPFeature implements CommandExecutor {
 			}
 		}
 	}
-	private void sendMessage(CommandSender sender, String path, String unlockstring, double q, boolean broadcasted) {
+	private void sendMessage(CommandSender sender, String path, String unlockString, double amount, boolean broadcasted) {
 		final HashMap<String, String> replacements = new HashMap<>();
-		if(unlockstring != null) {
-			final String[] values = unlockstring.split(";");
+		if(unlockString != null) {
+			final String[] values = unlockString.split(";");
 			final String value = values[1];
 			final String arg1 = values[3], arg2 = values[0], req = getAbbreviation(Double.parseDouble(value)), req$ = formatInt(Integer.parseInt(value));
 			replacements.put("{ARG1}", arg1);
@@ -167,21 +168,21 @@ public class Fund extends RPFeature implements CommandExecutor {
 			replacements.put("{REQ}", req);
 			replacements.put("{REQ$}", req$);
 		}
-		replacements.put("{FACTION}", sender instanceof Player ? getFactionTag(((Player) sender).getUniqueId()) : "");
+		replacements.put("{FACTION}", sender instanceof Player ? RegionalAPI.INSTANCE.getFactionTag(((Player) sender).getUniqueId()) : "");
 		replacements.put("{PLAYER}", sender.getName());
-		replacements.put("{AMOUNT}", formatDouble(q).split("\\.")[0]);
+		replacements.put("{AMOUNT}", formatDouble(amount).split("\\.")[0]);
 
-		for(String ss : getStringList(config, "messages." + path)) {
-			for(String r : replacements.keySet()) {
-				final String replacement = replacements.get(r);
-				if(r != null && replacement != null) {
-					ss = ss.replace(r, replacement);
+		for(String string : getStringList(config, "messages." + path)) {
+			for(String replacementKey : replacements.keySet()) {
+				final String replacement = replacements.get(replacementKey);
+				if(replacementKey != null && replacement != null) {
+					string = string.replace(replacementKey, replacement);
 				}
 			}
 			if(broadcasted) {
-				Bukkit.broadcastMessage(ss);
+				Bukkit.broadcastMessage(string);
 			} else {
-				sender.sendMessage(ss);
+				sender.sendMessage(string);
 			}
 			return;
 		}
@@ -199,11 +200,11 @@ public class Fund extends RPFeature implements CommandExecutor {
 			final int length = config.getInt("messages.progress bar.length"), pdigits = config.getInt("messages.unlock percent digits");
 			final String symbol = getString(config, "messages.progress bar.symbol"), achieved = getString(config, "messages.progress bar.achieved"), notachieved = getString(config, "messages.progress bar.not achieved");
 			final String completed = getString(config, "messages.completed");
-			for(String s : getStringList(config, "messages.view")) {
-				if(s.contains("{BALANCE}")) {
-					s = s.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
+			for(String string : getStringList(config, "messages.view")) {
+				if(string.contains("{BALANCE}")) {
+					string = string.replace("{BALANCE}", formatBigDecimal(total).split("\\.")[0]);
 				}
-				if(s.equals("{CONTENT}")) {
+				if(string.equals("{CONTENT}")) {
 					final List<String> content = getStringList(config, "messages.content");
 					for(String i : getStringList(config, "unlock")) {
 						final String[] values = i.split(";");
@@ -222,7 +223,7 @@ public class Fund extends RPFeature implements CommandExecutor {
 						sendStringListMessage(sender, content, replacements);
 					}
 				} else {
-					sender.sendMessage(s);
+					sender.sendMessage(string);
 				}
 			}
 		}

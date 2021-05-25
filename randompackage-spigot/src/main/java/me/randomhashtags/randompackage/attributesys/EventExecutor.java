@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import me.randomhashtags.randompackage.util.obj.TObject;
@@ -28,7 +29,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
-public abstract class EventExecutor extends RPFeature implements EventReplacements, EventReplacer {
+public abstract class EventExecutor implements RPFeature, EventReplacements, EventReplacer {
     public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
         final String eventName = event.getEventName().toLowerCase().split("event")[0];
         final Player involved;
@@ -124,7 +125,10 @@ public abstract class EventExecutor extends RPFeature implements EventReplacemen
     }
     private HashMap<String, Entity> getNearbyType(Player player, double radiusX, double radiusY, double radiusZ, String type) {
         final HashMap<String, Entity> nearby = getNearbyEntities(player.getLocation(), radiusX, radiusY, radiusZ);
-        if(type.equals("ENTITIES")) return nearby;
+        if(type.equals("ENTITIES")) {
+            return nearby;
+        }
+        final RegionalAPI regions = RegionalAPI.INSTANCE;
         final UUID u = player.getUniqueId();
         final boolean enemy = type.equals("ENEMY");
         final List<UUID> t = type.equals("ALLY") ? regions.getAllies(u) : enemy ? regions.getEnemies(u) : type.equals("TRUCE") ? regions.getTruces(u) : regions.getAssociates(u);

@@ -7,7 +7,7 @@ import org.bukkit.World;
 
 import java.util.HashMap;
 
-public class PlayParticle extends AbstractEventAttribute {
+public final class PlayParticle extends AbstractEventAttribute {
     // TODO: finish this attribute
     @Override
     public void executeAt(HashMap<Location, String> locations) {

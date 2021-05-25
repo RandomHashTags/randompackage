@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public class SetDelay extends AbstractEventAttribute {
+public final class SetDelay extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

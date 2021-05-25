@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class PathTransmogScroll extends RPAddon implements TransmogScroll {
-    private String path;
+public final class PathTransmogScroll extends RPAddon implements TransmogScroll {
+    private final String path;
     private ItemStack item;
     public PathTransmogScroll(String path) {
         this.path = path;
@@ -27,7 +27,7 @@ public class PathTransmogScroll extends RPAddon implements TransmogScroll {
         return false;
     }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
+        if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }
     public String getApplied() {

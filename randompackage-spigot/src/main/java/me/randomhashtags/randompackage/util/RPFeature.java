@@ -9,10 +9,11 @@ import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,96 +34,94 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
+public interface RPFeature extends Listener, Identifiable, Mathable, RPStorage, UVersionable {
+    HashSet<String> ENABLED_RP_FEATURES = new HashSet<>();
 
-public abstract class RPFeature extends RegionalAPI implements Listener, Identifiable, Mathable, RPStorage {
-    private boolean isEnabled = false;
-    private static boolean mcmmoIsEnabled = false;
-    public boolean isEnabled() { return isEnabled; }
-    protected boolean mcmmoIsEnabled() { return mcmmoIsEnabled; }
+    static boolean mcmmoIsEnabled() {
+        return PLUGIN_MANAGER.isPluginEnabled("mcMMO");
+    }
 
-    public static final RegionalAPI regions = RegionalAPI.getRegionalAPI();
-    protected static final Economy eco = Vault.getVault().getEconomy();
+    default boolean isEnabled() {
+        return ENABLED_RP_FEATURES.contains(getIdentifier());
+    }
 
-    public static YamlConfiguration otherdata;
-    protected static File otherdataF;
-    public static UInventory givedp;
-    public static List<Inventory> givedpCategories;
+    Economy ECONOMY = Vault.INSTANCE.getEconomy();
 
-    public void enable() {
-        if(otherdataF == null) {
-            save("_Data", "other.yml");
-            otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
-            otherdata = YamlConfiguration.loadConfiguration(otherdataF);
+    File OTHER_YML_FILE = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
+    YamlConfiguration OTHER_YML = YamlConfiguration.loadConfiguration(OTHER_YML_FILE);
 
-            givedp = new UInventory(null, 27, "Givedp Categories");
-            givedpCategories = new ArrayList<>();
+    UInventory GIVEDP_INVENTORY = new UInventory(null, 27, "Givedp Categories");
+    List<Inventory> GIVEDP_CATEGORIES = new ArrayList<>();
 
-            mcmmoIsEnabled = PLUGIN_MANAGER.isPluginEnabled("mcMMO");
-        }
-        if(isEnabled) return;
-        try {
-            isEnabled = true;
-            load();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(isEnabled) {
-                PLUGIN_MANAGER.registerEvents(this, RANDOM_PACKAGE);
+    default boolean canBeEnabled() {
+        return true;
+    }
+    default void enable() {
+        if(canBeEnabled()) {
+            if(OTHER_YML_FILE == null) {
+                save("_Data", "other.yml");
+            }
+            if(isEnabled()) {
+                return;
+            }
+            try {
+                ENABLED_RP_FEATURES.add(getIdentifier());
+                load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(isEnabled()) {
+                    PLUGIN_MANAGER.registerEvents(this, RANDOM_PACKAGE);
+                }
             }
         }
     }
-    public void disable() {
-        if(!isEnabled) return;
+    default void disable() {
+        if(!isEnabled()) {
+            return;
+        }
         try {
-            isEnabled = false;
+            ENABLED_RP_FEATURES.remove(getIdentifier());
             unload();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(!isEnabled) {
+            if(!isEnabled()) {
                 HandlerList.unregisterAll(this);
                 sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
             }
         }
     }
-    public static void createItemStack() {
-        otherdata = null;
-        otherdataF = null;
-        givedp = null;
-        givedpCategories = null;
-        mcmmoIsEnabled = false;
-    }
 
-    public abstract void load();
-    public abstract void unload();
+    void load();
+    void unload();
 
-    public void saveOtherData() {
+    default void saveOtherData() {
         try {
-            otherdata.save(otherdataF);
-            otherdataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");;
-            otherdata = YamlConfiguration.loadConfiguration(otherdataF);
+            OTHER_YML.save(OTHER_YML_FILE);
+            OTHER_YML.load(OTHER_YML_FILE);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void viewGivedp(@NotNull Player player) {
-        player.openInventory(Bukkit.createInventory(player, givedp.getSize(), givedp.getTitle()));
-        player.getOpenInventory().getTopInventory().setContents(givedp.getInventory().getContents());
+    default void viewGivedp(@NotNull Player player) {
+        player.openInventory(Bukkit.createInventory(player, GIVEDP_INVENTORY.getSize(), GIVEDP_INVENTORY.getTitle()));
+        player.getOpenInventory().getTopInventory().setContents(GIVEDP_INVENTORY.getInventory().getContents());
         player.updateInventory();
     }
-    public void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
-        item = m.getItemStack();
+    default void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
+        final ItemStack item = m.getItemStack();
         if(item == null) {
             sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
         } else {
-            itemMeta = item.getItemMeta();
+            final ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
             item.setItemMeta(itemMeta);
-            givedp.getInventory().addItem(item);
+            GIVEDP_INVENTORY.getInventory().addItem(item);
             final int size = items.size();
             final Inventory inv = Bukkit.createInventory(null, size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9, invtitle);
             for(ItemStack is : items) {
@@ -130,24 +129,25 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                     inv.addItem(is);
                 }
             }
-            givedpCategories.add(inv);
+            GIVEDP_CATEGORIES.add(inv);
         }
     }
 
-    public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
-        if(!(sender instanceof Player) || sender.hasPermission(permission)) return true;
-        else if(sendNoPermMessage) {
+    default boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
+        if(!(sender instanceof Player) || sender.hasPermission(permission)) {
+            return true;
+        } else if(sendNoPermMessage) {
             sendStringListMessage(sender, getStringList(RP_CONFIG, "no permission"), null);
         }
         return false;
     }
 
 
-    public ItemStack createItemStack(FileConfiguration config, String path) {
+    default ItemStack createItemStack(FileConfiguration config, String path) {
         return createItemStack(config, path, 0, 0.00f);
     }
-    public ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
-        item = null;
+    default ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
+        ItemStack item = null;
         if(config == null && path != null || config != null && config.get(path + ".item") != null) {
             final String itemPath = config == null ? path : config.getString(path + ".item");
             String itemPathLC = itemPath.toLowerCase();
@@ -169,31 +169,32 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 return getSpawner(itemPathLC);
             } else if(itemPathLC.startsWith("enchantedbook:")) {
                 final String[] values = itemPathLC.split(":");
-                final Enchantment e = getEnchantment(values[1]);
-                if(e != null) {
+                final Enchantment enchant = getEnchantment(values[1]);
+                if(enchant != null) {
                     int level = 1;
                     if(values.length == 3) {
                         final String[] ints = values[2].split("-");
                         final boolean isRandom = ints[0].equalsIgnoreCase("random");
                         final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
-                        level = isRandom ? 1+RANDOM.nextInt(e.getMaxLevel()) : ints[2].contains("-") ? min+RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
+                        level = isRandom ? 1+RANDOM.nextInt(enchant.getMaxLevel()) : ints[2].contains("-") ? min+RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
                     }
                     item = new ItemStack(Material.ENCHANTED_BOOK, amount);
                     final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-                    meta.addStoredEnchant(e, level, true);
+                    meta.addStoredEnchant(enchant, level, true);
                     item.setItemMeta(meta);
                     return item;
                 }
                 return null;
             }
-            ItemStack B = GIVEDP_ITEM.valueOf(itemPath);
-            if(B == null) B = GIVEDP_ITEM.valueOf(itemPathLC);
-            if(B != null) {
-                item = B.clone();
+            ItemStack parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(itemPath);
+            if(parsedGivedpItem == null) {
+                parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(itemPathLC);
+            }
+            if(parsedGivedpItem != null) {
+                item = parsedGivedpItem.clone();
                 item.setAmount(amount);
                 return item;
             }
-            lore.clear();
             String name = config != null ? config.getString(path + ".name") : null;
             final String[] material = itemPathLC.toUpperCase().split(":");
             final String mat = material[0];
@@ -202,7 +203,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             try {
                 item = umaterial.getItemStack();
             } catch (Exception e) {
-                System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getVersionName() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
+                System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getMaterial().name() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
                 return null;
             }
             if(item == null) {
@@ -211,7 +212,7 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
             final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
             if(!i.equals(Material.AIR)) {
                 item.setAmount(amount);
-                itemMeta = item.getItemMeta();
+                ItemMeta itemMeta = item.getItemMeta();
                 if(i.equals(skullitem)) {
                     final String owner = itemPathLC.contains(";owner=") ? itemPathLC.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
                     final SkullMeta m = (SkullMeta) itemMeta;
@@ -233,13 +234,13 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
         }
         return item;
     }
-    public ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
-        lore.clear();
+    default ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
         if(is != null && toLore != null && !toLore.isEmpty()) {
             final ItemMeta meta = is.getItemMeta();
             if(meta != null) {
                 final LinkedHashMap<Enchantment, Integer> enchants = new LinkedHashMap<>();
                 final List<ItemFlag> flags = new ArrayList<>();
+                final List<String> lore = new ArrayList<>();
                 for(String string : toLore) {
                     final String stringLC = string.toLowerCase();
                     if(stringLC.startsWith("venchants{")) {
@@ -298,14 +299,13 @@ public abstract class RPFeature extends RegionalAPI implements Listener, Identif
                 }
             }
         }
-        lore.clear();
         return is;
     }
 
-    private void applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
-        final Scrolls scrolls = Scrolls.getScrolls();
+    default void applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
+        final Scrolls scrolls = Scrolls.INSTANCE;
         if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
-            scrolls.applyTransmogScroll(is, scroll);
+            scrolls.applyTransmogScroll(null, is, scroll);
         }
     }
 }

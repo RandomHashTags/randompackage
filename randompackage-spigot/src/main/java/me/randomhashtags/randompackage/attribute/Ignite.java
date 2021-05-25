@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 
-public class Ignite extends AbstractEventAttribute {
+public final class Ignite extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

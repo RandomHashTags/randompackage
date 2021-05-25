@@ -3,6 +3,8 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.Title;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.TitleData;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.RPItemStack;
@@ -26,26 +28,26 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStack {
-	private static ChatEvents instance;
-	public static ChatEvents getChatEvents() {
-		if(instance == null) instance = new ChatEvents();
-		return instance;
-	}
+public enum ChatEvents implements RPFeature, CommandExecutor, RPItemStack {
+	INSTANCE;
 
 	private String bragDisplay, itemDisplay, chatformat;
 	private HashMap<UUID, PlayerInventory> bragInventories;
 	private List<UUID> viewingBrag;
 
+	@Override
 	public String getIdentifier() {
 		return "CHAT_EVENTS";
 	}
+
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		bragDisplay = colorize(RP_CONFIG.getString("chat cmds.brag.display"));
@@ -55,11 +57,13 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 		chatformat = RP_CONFIG.getString("chat cmds.format");
 		sendConsoleDidLoadFeature("ChatEvents", started);
 	}
+	@Override
 	public void unload() {
 		for(UUID id : new ArrayList<>(viewingBrag)) {
 			Bukkit.getPlayer(id).closeInventory();
 		}
 	}
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void playerChatEvent(AsyncPlayerChatEvent event) {
 		final String message = colorize(event.getMessage());
@@ -102,7 +106,7 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
 		bragInventories.put(player.getUniqueId(), player.getInventory());
 		final TextComponent m = new TextComponent(message);
 		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(RP_CONFIG.getString("chat cmds.brag.hover message").replace("{PLAYER}", player.getName()))).create()));
-		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId().toString()));
+		m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/brag " + player.getUniqueId()));
 		for(Player p : recipients) {
 			send(player, p, prefix, m, suffix);
 		}
@@ -139,50 +143,54 @@ public class ChatEvents extends RPFeature implements CommandExecutor, RPItemStac
     }
 	
 	private void send(Player sender, Player recipient, TextComponent prefix, TextComponent m, TextComponent suffix) {
-		final UUID u = sender.getUniqueId();
-		final String tag = regions.getFactionTag(u);
+		final UUID uuid = sender.getUniqueId();
+		final String tag = RegionalAPI.INSTANCE.getFactionTag(uuid);
 		String text = prefix.toPlainText();
 		if(text.contains("{F_TAG}")) {
-			text = prefix.toLegacyText().replace("{F_TAG}", tag != null && !ChatColor.stripColor(tag).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(u) + tag + " " : "");
+			final FactionsUUID factions = FactionsUUID.INSTANCE;
+			text = prefix.toLegacyText().replace("{F_TAG}", tag != null && !ChatColor.stripColor(tag).toLowerCase().contains("wilderness") ? factions.getRelationColor(sender, recipient) + factions.getRole(uuid) + tag + " " : "");
 		}
 		final TextComponent base = text.isEmpty() ? prefix : new TextComponent(text);
 		recipient.spigot().sendMessage(base, m, suffix);
 	}
-	
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if(args.length != 1) return true;
+		if(args.length != 1) {
+			return true;
+		}
 		final Player player = sender instanceof Player ? (Player) sender : null;
-		UUID v;
+		UUID uuid;
 		try {
-			v = UUID.fromString(args[0]);
+			uuid = UUID.fromString(args[0]);
 		} catch (Exception e) {
 			sendStringListMessage(sender, getStringList(RP_CONFIG, "chat cmds.brag.invalid"), null);
 			return true;
 		}
-		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.containsKey(v)) {
-			player.openInventory(Bukkit.createInventory(player, 45, ChatColor.stripColor(bragDisplay.replace("{PLAYER}", Bukkit.getOfflinePlayer(v).getName()))));
+		if(player != null && hasPermission(sender, "RandomPackage.brag", true) && bragInventories.containsKey(uuid)) {
+			player.openInventory(Bukkit.createInventory(player, 45, ChatColor.stripColor(bragDisplay.replace("{PLAYER}", Bukkit.getOfflinePlayer(uuid).getName()))));
 			final Inventory top = player.getOpenInventory().getTopInventory();
-			final PlayerInventory bi = bragInventories.get(v);
-			final ItemStack[] con = bi.getContents();
+			final PlayerInventory bragInv = bragInventories.get(uuid);
+			final ItemStack[] con = bragInv.getContents();
 			for(int i = 0; i < top.getSize(); i++) {
 				if(i < con.length && con[i] != null) {
 					top.setItem(i, con[i]);
 				}
 			}
-			final ItemStack b = UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack();
-			if(b != null) {
-				itemMeta = b.getItemMeta();
+			final ItemStack stainedGlass = UMaterial.BLACK_STAINED_GLASS_PANE.getItemStack();
+			if(stainedGlass != null) {
+				final ItemMeta itemMeta = stainedGlass.getItemMeta();
 				itemMeta.setDisplayName(" ");
-				b.setItemMeta(itemMeta);
-				top.setItem(36, b);
-				top.setItem(37, b);
-				top.setItem(40, b);
-				top.setItem(43, b);
-				top.setItem(44, b);
-				top.setItem(38, bi.getHelmet());
-				top.setItem(39, bi.getChestplate());
-				top.setItem(41, bi.getLeggings());
-				top.setItem(42, bi.getBoots());
+				stainedGlass.setItemMeta(itemMeta);
+				top.setItem(36, stainedGlass);
+				top.setItem(37, stainedGlass);
+				top.setItem(40, stainedGlass);
+				top.setItem(43, stainedGlass);
+				top.setItem(44, stainedGlass);
+				top.setItem(38, bragInv.getHelmet());
+				top.setItem(39, bragInv.getChestplate());
+				top.setItem(41, bragInv.getLeggings());
+				top.setItem(42, bragInv.getBoots());
 			}
 			viewingBrag.add(player.getUniqueId());
 		} else {

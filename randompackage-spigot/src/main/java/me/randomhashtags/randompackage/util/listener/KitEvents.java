@@ -2,7 +2,6 @@ package me.randomhashtags.randompackage.util.listener;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
-import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -22,29 +21,26 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.addon.Kits.PREVIEWING;
 
-public final class KitEvents extends RegionalAPI implements Listener, RPStorage {
-    private static KitEvents instance;
-    public static KitEvents getKitEvents() {
-        if(instance == null) instance = new KitEvents();
-        return instance;
-    }
+public enum KitEvents implements Listener, RPStorage {
+    INSTANCE;
 
     public void unload() {
         for(HumanEntity player : new ArrayList<>(PREVIEWING)) {
             player.closeInventory();
         }
+        PREVIEWING = null;
         HandlerList.unregisterAll(this);
     }
 
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
-        final LivingEntity e = event.getEntity();
-        if(!(e instanceof Player)) {
-            final HashMap<UUID, LivingFallenHero> L = LivingFallenHero.living;
-            if(L != null) {
-                final LivingFallenHero f = L.getOrDefault(e.getUniqueId(), null);
-                if(f != null) {
-                    f.killed(event);
+        final LivingEntity entity = event.getEntity();
+        if(!(entity instanceof Player)) {
+            final HashMap<UUID, LivingFallenHero> living = LivingFallenHero.LIVING;
+            if(living != null) {
+                final LivingFallenHero fallenHero = living.getOrDefault(entity.getUniqueId(), null);
+                if(fallenHero != null) {
+                    fallenHero.killed(event);
                 }
             }
         }
@@ -59,7 +55,9 @@ public final class KitEvents extends RegionalAPI implements Listener, RPStorage 
                 spawn.getKitClass().trySpawningFallenHero(player, is, spawn, event.getClickedBlock().getLocation());
             } else if(gem != null) {
                 gem.getKitClass().tryIncreaseTier(player, is, gem);
-            } else return;
+            } else {
+                return;
+            }
             event.setCancelled(true);
             player.updateInventory();
         }

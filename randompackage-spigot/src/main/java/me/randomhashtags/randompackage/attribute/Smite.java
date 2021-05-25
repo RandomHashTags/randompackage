@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 
-public class Smite extends AbstractEventAttribute {
+public final class Smite extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();

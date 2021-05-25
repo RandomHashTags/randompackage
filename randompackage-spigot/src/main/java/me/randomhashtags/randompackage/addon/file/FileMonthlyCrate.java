@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
+public final class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
     private ItemStack item, background, redeem, bonus1, bonus2;
     private UInventory regular, bonus;
     private List<Integer> rewardSlots, bonusRewardSlots;
@@ -36,7 +36,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return getString(yml, "title");
     }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
     public List<String> getRewards() {
@@ -52,19 +52,19 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return getStringList(yml, "inventory.bonus format");
     }
     public ItemStack getBackground() {
-        if(background == null) background = API.createItemStack(yml, "inventory.background");
+        if(background == null) background = createItemStack(yml, "inventory.background");
         return getClone(background);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = API.createItemStack(yml, "inventory.redeem");
+        if(redeem == null) redeem = createItemStack(yml, "inventory.redeem");
         return getClone(redeem);
     }
     public ItemStack getBonus1() {
-        if(bonus1 == null) bonus1 = API.createItemStack(yml, "inventory.bonus 1");
+        if(bonus1 == null) bonus1 = createItemStack(yml, "inventory.bonus 1");
         return getClone(bonus1);
     }
     public ItemStack getBonus2() {
-        if(bonus2 == null) bonus2 = API.createItemStack(yml, "inventory.bonus 2");
+        if(bonus2 == null) bonus2 = createItemStack(yml, "inventory.bonus 2");
         return getClone(bonus2);
     }
     public UInventory getRegular() {
@@ -108,7 +108,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
             for(int i = 0; i < f.size(); i++) {
                 final String k = f.get(i);
                 for(int o = 0; o < k.length(); o++) {
-                    if(f.get(i).substring(o, o+1).equals("-")) {
+                    if(f.get(i).charAt(o) == '-') {
                         rewardSlots.add(i*9+o);
                     }
                 }
@@ -123,7 +123,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
             for(int i = 0; i < f.size(); i++) {
                 final String k = f.get(i);
                 for(int o = 0; o < k.length(); o++) {
-                    if(f.get(i).substring(o, o+1).equals("+")) {
+                    if(f.get(i).charAt(o) == '+') {
                         bonusRewardSlots.add(i*9+o);
                     }
                 }
@@ -132,10 +132,10 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         return bonusRewardSlots;
     }
     public ItemStack getRandomReward(Player player, List<String> excluding, boolean canRepeatRewards) {
-        return getReward(player, revealedRegular, excluding, canRepeatRewards, new ArrayList<>(getRewards()));
+        return getReward(player, REVEALED_REGULAR, excluding, canRepeatRewards, new ArrayList<>(getRewards()));
     }
     public ItemStack getRandomBonusReward(Player player, List<String> excluding, boolean canRepeatRewards) {
-        return getReward(player, revealedBonus, excluding, canRepeatRewards, new ArrayList<>(getBonusRewards()));
+        return getReward(player, REVEALED_BONUS, excluding, canRepeatRewards, new ArrayList<>(getBonusRewards()));
     }
     private ItemStack getReward(Player player, HashMap<Player, List<String>> type, List<String> excluding, boolean canRepeatRewards, List<String> rewardType) {
         if(!type.containsKey(player)) {
@@ -151,7 +151,7 @@ public class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
         if(!canRepeatRewards) {
             type.get(player).add(r);
         }
-        final ItemStack is = API.createItemStack(null, R);
+        final ItemStack is = createItemStack(null, R);
         if(is != null) {
         }
         return is;

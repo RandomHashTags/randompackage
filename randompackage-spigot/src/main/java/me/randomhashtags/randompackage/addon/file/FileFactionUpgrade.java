@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
+public final class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
     private ItemStack item;
     private LinkedHashMap<Integer, FactionUpgradeLevel> levels;
 
@@ -26,7 +26,7 @@ public class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
 
     public ItemStack getItem() {
         if(item == null) {
-            item = API.createItemStack(yml, "item");
+            item = createItemStack(yml, "item");
             if(item != null) {
                 final List<String> lore = item.getItemMeta().getLore(), format = getType().getFormat(), l = new ArrayList<>();
                 final ItemMeta m = item.getItemMeta();

@@ -4,9 +4,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class isDamagedEvent extends DamageEvent {
-    private Player victim;
-    private LivingEntity damager;
+public final class isDamagedEvent extends DamageEvent {
+    private final Player victim;
+    private final LivingEntity damager;
     public isDamagedEvent(Player victim, LivingEntity damager, double damage) {
         super(damager, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
         this.victim = victim;
@@ -17,6 +17,12 @@ public class isDamagedEvent extends DamageEvent {
         this.victim = victim;
         this.damager = null;
     }
-    @Override public Player getEntity() { return victim; }
-    @Override public LivingEntity getDamager() { return damager; }
+    @Override
+    public Player getEntity() {
+        return victim;
+    }
+    @Override
+    public LivingEntity getDamager() {
+        return damager;
+    }
 }

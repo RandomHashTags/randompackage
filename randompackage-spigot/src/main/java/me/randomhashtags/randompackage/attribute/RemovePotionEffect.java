@@ -7,7 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 
-public class RemovePotionEffect extends AbstractEventAttribute {
+public final class RemovePotionEffect extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();

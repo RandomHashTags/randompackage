@@ -26,12 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Trade extends RPFeature implements CommandExecutor {
-	private static Trade instance;
-	public static Trade getTrade() {
-		if(instance == null) instance = new Trade();
-		return instance;
-	}
+public enum Trade implements RPFeature, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	protected int radius, countdown;
@@ -41,6 +37,7 @@ public class Trade extends RPFeature implements CommandExecutor {
 	private HashMap<UUID, UUID> requests;
 	private List<String> blacklistedMaterials;
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && hasPermission(player, TradePermission.COMMAND, true)) {
@@ -51,9 +48,11 @@ public class Trade extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return "TRADE";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");
@@ -79,13 +78,13 @@ public class Trade extends RPFeature implements CommandExecutor {
 		for(String s : config.getStringList("blacklisted materials")) {
 			blacklistedMaterials.add(s.toUpperCase());
 		}
-		lore.clear();
 
 		requests = new HashMap<>();
 		sendConsoleDidLoadFeature("Trade", started);
 	}
+	@Override
 	public void unload() {
-		ActiveTrade.trades = null;
+		ActiveTrade.ACTIVE_TRADES = null;
 	}
 
 	public int getCountdown() {
@@ -153,42 +152,42 @@ public class Trade extends RPFeature implements CommandExecutor {
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
-		final ItemStack c = event.getCurrentItem();
-		if(c != null && !c.getType().equals(Material.AIR)) {
+		final ItemStack currentItem = event.getCurrentItem();
+		if(currentItem != null && !currentItem.getType().equals(Material.AIR)) {
 			final Player player = (Player) event.getWhoClicked();
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			final ActiveTrade trade = ActiveTrade.valueOf(player);
 			if(trade != null) {
-				final int r = event.getRawSlot();
+				final int rawSlot = event.getRawSlot();
 				final Player sender = trade.getSender();
 				final boolean senderIsPlayer = sender == player;
 				event.setCancelled(true);
-				if(r == 0 && (c.getItemMeta().equals(accept.getItemMeta()) || c.getItemMeta().equals(accepting.getItemMeta()))) {
-					final boolean ready = c.getItemMeta().equals(accept.getItemMeta());
+				if(rawSlot == 0 && (currentItem.getItemMeta().equals(accept.getItemMeta()) || currentItem.getItemMeta().equals(accepting.getItemMeta()))) {
+					final boolean ready = currentItem.getItemMeta().equals(accept.getItemMeta());
 					if(senderIsPlayer) {
 						trade.setSenderReady(ready);
 					} else {
 						trade.setReceiverReady(ready);
 					}
-				} else if(r >= top.getSize()) {
+				} else if(rawSlot >= top.getSize()) {
 					final int slot = trade.getNextEmptySlot(player);
 					if(slot != -1) {
-						if(blacklistedMaterials.contains(UMaterial.match(c).name())) {
+						if(blacklistedMaterials.contains(UMaterial.match(currentItem).name())) {
 							sendStringListMessage(player, getStringList(config, "messages.cannot trade blacklisted material"), null);
 							player.updateInventory();
 							return;
 						}
 						if(senderIsPlayer) {
-							trade.getSenderTrade().put(slot, c);
+							trade.getSenderTrade().put(slot, currentItem);
 						} else {
-							trade.getReceiverTrade().put(slot, c);
+							trade.getReceiverTrade().put(slot, currentItem);
 						}
 						trade.updateTrades();
 						event.setCurrentItem(new ItemStack(Material.AIR));
 					}
-				} else if(trade.isOnSelfSide(r)) {
-					giveItem(player, c);
-					(senderIsPlayer ? trade.getSenderTrade() : trade.getReceiverTrade()).remove(r);
+				} else if(trade.isOnSelfSide(rawSlot)) {
+					giveItem(player, currentItem);
+					(senderIsPlayer ? trade.getSenderTrade() : trade.getReceiverTrade()).remove(rawSlot);
 					trade.updateTrades();
 					trade.cancelCountdown();
 				} else {

@@ -5,18 +5,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class Battlefield extends RPFeature {
-    private static Battlefield instance;
-    public static Battlefield getBattlefield() {
-        if(instance == null) instance = new Battlefield();
-        return instance;
-    }
+public enum Battlefield implements RPFeature {
+    INSTANCE;
 
-    public String getIdentifier() { return "BATTLEFIELD"; }
+    @Override
+    public String getIdentifier() {
+        return "BATTLEFIELD";
+    }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Battlefield &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
     }
 

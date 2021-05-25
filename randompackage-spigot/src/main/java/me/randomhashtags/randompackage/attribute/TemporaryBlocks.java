@@ -6,5 +6,5 @@ import org.bukkit.Location;
 import java.util.HashMap;
 
 public interface TemporaryBlocks {
-    HashMap<Location, UMaterial> tempblocks = new HashMap<>();
+    HashMap<Location, UMaterial> TEMPORARY_BLOCKS = new HashMap<>();
 }

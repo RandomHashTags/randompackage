@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
-public class Explode extends AbstractEventAttribute {
+public final class Explode extends AbstractEventAttribute {
     @Override
     public void executeAt(HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {

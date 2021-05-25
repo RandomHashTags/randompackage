@@ -8,30 +8,41 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileTitle extends RPAddon implements Title {
-    private String title;
+public final class FileTitle extends RPAddon implements Title {
+    public static ItemStack TITLE_ITEMSTACK;
+    public static String TITLE_CHAT_FORMAT, TITLE_TAB_FORMAT;
+
+    private final String title;
     public FileTitle(String title) {
         this.title = title;
         register(Feature.TITLE, this);
     }
-    public String getIdentifier() { return title; }
 
-    public static ItemStack i;
-    public static String titleChatFormat, titleTabFormat;
+    @Override
+    public String getIdentifier() {
+        return title;
+    }
 
-    public String getChatTitle() { return titleChatFormat.replace("{TITLE}", getIdentifier()); }
-    public String getTabTitle() { return titleTabFormat.replace("{TITLE}", getIdentifier()); }
+    @Override
+    public String getChatTitle() {
+        return TITLE_CHAT_FORMAT.replace("{TITLE}", getIdentifier());
+    }
+
+    @Override
+    public String getTabTitle() {
+        return TITLE_TAB_FORMAT.replace("{TITLE}", getIdentifier());
+    }
 
     public ItemStack getItem() {
         final String title = getIdentifier();
-        final ItemStack item = getClone(i);
+        final ItemStack item = getClone(TITLE_ITEMSTACK);
         final ItemMeta itemMeta = item.getItemMeta();
-        final List<String> a = new ArrayList<>();
+        final List<String> lore = new ArrayList<>();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", colorize(title)));
-        for(String l : itemMeta.getLore()) {
-            a.add(colorize(l.replace("{TITLE}", title)));
+        for(String string : itemMeta.getLore()) {
+            lore.add(colorize(string.replace("{TITLE}", title)));
         }
-        itemMeta.setLore(a);
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }

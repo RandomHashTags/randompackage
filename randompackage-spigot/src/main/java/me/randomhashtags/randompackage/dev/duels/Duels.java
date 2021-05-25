@@ -3,12 +3,12 @@ package me.randomhashtags.randompackage.dev.duels;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
-import me.randomhashtags.randompackage.addon.stats.DuelStats;
+import me.randomhashtags.randompackage.data.DuelData;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,17 +29,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Duels extends RPFeature implements CommandExecutor {
-    private static Duels instance;
-    public static Duels getDuels() {
-        if(instance == null) instance = new Duels();
-        return instance;
-    }
+public enum Duels implements RPFeature, CommandExecutor {
+    INSTANCE;
+
     public YamlConfiguration config;
     private UInventory type, godset;
     public List<ActiveDuel> activeDuels;
 
-    public String getIdentifier() { return "DUELS"; }
+    @Override
+    public String getIdentifier() {
+        return "DUELS";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -80,9 +80,9 @@ public class Duels extends RPFeature implements CommandExecutor {
         save("duel arenas", "_settings.yml");
         final String folder = DATA_FOLDER + SEPARATOR + "duel arenas";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
-        if(!otherdata.getBoolean("saved default duel arenas")) {
+        if(!OTHER_YML.getBoolean("saved default duel arenas")) {
             generateDefaultDuelArenas();
-            otherdata.set("saved default duel arenas", true);
+            OTHER_YML.set("saved default duel arenas", true);
             saveOtherData();
         }
 
@@ -164,10 +164,10 @@ public class Duels extends RPFeature implements CommandExecutor {
     }
     public void toggleRequests(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.duel.toggle", true)) {
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final DuelStats stats = pdata.getDuelStats();
-            final boolean toggled = !stats.receivesRequests();
-            stats.setReceivesRequests(toggled);
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final DuelData stats = pdata.getDuelData();
+            final boolean toggled = !stats.receivesNotifications();
+            stats.setReceivesNotifications(toggled);
             sendStringListMessage(player, getStringList(config, "messages.toggle " + (toggled ? "on" : "off")), null);
         }
     }

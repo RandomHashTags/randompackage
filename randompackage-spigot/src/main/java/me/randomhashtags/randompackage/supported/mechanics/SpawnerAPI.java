@@ -4,24 +4,20 @@ import me.randomhashtags.randompackage.RandomPackage;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-public final class SpawnerAPI {
-    private static SpawnerAPI instance;
-    public static SpawnerAPI getSpawnerAPI() {
-        if(instance == null) {
-            instance = new SpawnerAPI();
-            final String plugin = RandomPackage.spawner;
-            instance.plugin = plugin == null ? "" : plugin;
-            if(plugin != null && plugin.equals("SilkSpawners")) {
-                instance.util = de.dustplanet.util.SilkUtil.hookIntoSilkSpanwers();
-            }
-        }
-        return instance;
-    }
-    private String plugin;
+public enum SpawnerAPI {
+    INSTANCE;
+
     private Object util;
 
+    SpawnerAPI() {
+        final String plugin = RandomPackage.SPAWNER_PLUGIN_NAME;
+        if(plugin != null && plugin.equals("SilkSpawners")) {
+            util = de.dustplanet.util.SilkUtil.hookIntoSilkSpanwers();
+        }
+    }
+
     public ItemStack getItem(String entitytype) {
-        switch (plugin) {
+        switch (RandomPackage.SPAWNER_PLUGIN_NAME) {
             case "EpicSpawners5": return getItemES5(entitytype);
             case "EpicSpawners6": return getItemES6(entitytype);
             case "SilkSpawners":  return getItemSS(entitytype);
@@ -29,7 +25,7 @@ public final class SpawnerAPI {
         }
     }
     public EntityType getType(ItemStack is) {
-        switch (plugin) {
+        switch (RandomPackage.SPAWNER_PLUGIN_NAME) {
             case "EpicSpawners6": return getTypeES6(is);
             case "SilkSpawners": return getTypeSS(is);
             default: return null;
@@ -41,7 +37,9 @@ public final class SpawnerAPI {
         com.songoda.epicspawners.api.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.api.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawnersPlugin.getInstance().getSpawnerManager().getAllSpawnerData()) {
             final String compare = spawnerData.getIdentifyingName().toUpperCase().replace("_", "").replace(" ", "");
-            if(type.equals(compare)) data = spawnerData;
+            if(type.equals(compare)) {
+                data = spawnerData;
+            }
         }
         return data != null ? data.toItemStack() : null;
     }
@@ -55,7 +53,9 @@ public final class SpawnerAPI {
         com.songoda.epicspawners.spawners.spawner.SpawnerData data = null;
         for(com.songoda.epicspawners.spawners.spawner.SpawnerData spawnerData : com.songoda.epicspawners.EpicSpawners.getInstance().getSpawnerManager().getAllSpawnerData()) {
             final String compare = spawnerData.getIdentifyingName().toUpperCase().replace("_", "").replace(" ", "");
-            if(type.equals(compare)) data = spawnerData;
+            if(type.equals(compare)) {
+                data = spawnerData;
+            }
         }
         return data != null ? data.toItemStack() : null;
     }

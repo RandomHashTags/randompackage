@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.living.LivingCustomBoss;
 import me.randomhashtags.randompackage.addon.obj.CustomBossAttack;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
@@ -10,8 +11,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpItemable {
 
@@ -29,7 +28,8 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpI
     int getMessageRadius();
     int getMaxMinions();
     CustomMinion getMinion();
+
     default LivingCustomBoss spawn(LivingEntity summoner, Location location) {
-        return new LivingCustomBoss(summoner, API.getEntity(getType(), location, true), this);
+        return new LivingCustomBoss(summoner, RandomPackageAPI.INSTANCE.getEntity(getType(), location, true), this);
     }
 }

@@ -32,19 +32,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomExplosions extends RPFeature {
-	private static CustomExplosions instance;
-	public static CustomExplosions getCustomExplosions() {
-		if(instance == null) instance = new CustomExplosions();
-		return instance;
-	}
+public enum CustomExplosions implements RPFeature {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
 
+	@Override
 	public String getIdentifier() {
 		return "CUSTOM_EXPLOSIONS";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "custom explosions.yml");
@@ -58,14 +56,14 @@ public class CustomExplosions extends RPFeature {
 			cannotBreakCreepers.add(UMaterial.match(s));
 		}
 
-		if(!otherdata.getBoolean("saved default custom creepers")) {
+		if(!OTHER_YML.getBoolean("saved default custom creepers")) {
 			generateDefaultCustomCreepers();
-			otherdata.set("saved default custom creepers", true);
+			OTHER_YML.set("saved default custom creepers", true);
 			saveOtherData();
 		}
-		if(!otherdata.getBoolean("saved default custom tnt")) {
+		if(!OTHER_YML.getBoolean("saved default custom tnt")) {
 			generateDefaultCustomTNT();
-			otherdata.set("saved default custom tnt", true);
+			OTHER_YML.set("saved default custom tnt", true);
 			saveOtherData();
 		}
 
@@ -87,12 +85,12 @@ public class CustomExplosions extends RPFeature {
 		addGivedpCategory(explosionsList, UMaterial.TNT, "Custom Explosions", "Givedp: Custom Explosions");
 
 		int loadedPlaced = 0, loadedPrimed = 0, loadedLiving = 0;
-		final List<String> placedtnt = otherdata.getStringList("tnt.placed"), primedtnt = otherdata.getStringList("tnt.primed"), livingcreepers = otherdata.getStringList("creepers");
+		final List<String> placedtnt = OTHER_YML.getStringList("tnt.placed"), primedtnt = OTHER_YML.getStringList("tnt.primed"), livingcreepers = OTHER_YML.getStringList("creepers");
 		if(!placedtnt.isEmpty()) {
 			for(String s : placedtnt) {
 				final Location l = toLocation(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
-					FileCustomTNT.placed.put(l, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
+					FileCustomTNT.PLACED.put(l, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
 					loadedPlaced += 1;
 				}
 			}
@@ -106,7 +104,7 @@ public class CustomExplosions extends RPFeature {
 				final UUID uuid = UUID.fromString(values[0]);
 				final Entity en = getEntity(uuid);
 				if(en != null && !en.isDead()) {
-					FileCustomTNT.primed.put(uuid, (FileCustomTNT) getCustomExplosion("TNT_" + values[1]));
+					FileCustomTNT.PRIMED.put(uuid, (FileCustomTNT) getCustomExplosion("TNT_" + values[1]));
 					loadedPrimed += 1;
 				}
 			}
@@ -129,37 +127,38 @@ public class CustomExplosions extends RPFeature {
 			}
 		}
 	}
+	@Override
 	public void unload() {
-		final HashMap<Location, FileCustomTNT> tnt = FileCustomTNT.placed;
+		final HashMap<Location, FileCustomTNT> tnt = FileCustomTNT.PLACED;
 		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
-		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.primed;
-		otherdata.set("tnt", null);
-		otherdata.set("creepers", null);
+		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.PRIMED;
+		OTHER_YML.set("tnt", null);
+		OTHER_YML.set("creepers", null);
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
 		if(tnt != null) {
 			for(Location l : tnt.keySet()) {
 				placedtnt.add(toString(l) + ":" + tnt.get(l).getIdentifier());
 			}
 		}
-		otherdata.set("tnt.placed", placedtnt);
+		OTHER_YML.set("tnt.placed", placedtnt);
 		if(primed != null) {
 			for(UUID uuid : primed.keySet()) {
 				primedtnt.add(uuid.toString() + ":" + primed.get(uuid).getIdentifier());
 			}
 		}
-		otherdata.set("tnt.primed", primedtnt);
+		OTHER_YML.set("tnt.primed", primedtnt);
 		if(creepers != null) {
 			for(UUID uuid : creepers.keySet()) {
 				cree.add(uuid.toString() + ":" + creepers.get(uuid).getIdentifier());
 			}
 		}
-		otherdata.set("creepers", cree);
+		OTHER_YML.set("creepers", cree);
 		saveOtherData();
 
 		unregister(Feature.CUSTOM_EXPLOSION);
 		FileCustomCreeper.living = null;
-		FileCustomTNT.placed = null;
-		FileCustomTNT.primed = null;
+		FileCustomTNT.PLACED = null;
+		FileCustomTNT.PRIMED = null;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -167,7 +166,7 @@ public class CustomExplosions extends RPFeature {
 		final Block block = event.getBlock();
 		if(block.getType().equals(Material.TNT)) {
 			final Location l = block.getLocation();
-			final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.placed;
+			final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
 			if(placed != null && placed.containsKey(l)) {
 				event.setCancelled(true);
 				block.setType(Material.AIR);
@@ -194,7 +193,7 @@ public class CustomExplosions extends RPFeature {
 			final Location l = block.getLocation();
 			if(block.getType().equals(Material.TNT) && !is.getType().equals(Material.AIR)) {
 				final Material material = is.getType();
-				final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.placed;
+				final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
 				final FileCustomTNT tnt = placed != null ? placed.getOrDefault(l, null) : null;
 				if(tnt != null && (material.equals(UMaterial.FIREWORK_STAR.getMaterial()) || material.equals(Material.FLINT_AND_STEEL))) {
 					event.setCancelled(true);
@@ -220,8 +219,8 @@ public class CustomExplosions extends RPFeature {
 			if(explosion instanceof FileCustomTNT) {
 				event.setCancelled(true);
 				final Block block = event.getBlock();
-				final Location bl = block.getLocation();
-				double x = bl.getBlockX(), y = bl.getBlockY(), z = bl.getBlockZ();
+				final Location blockLocation = block.getLocation();
+				double x = blockLocation.getBlockX(), y = blockLocation.getBlockY(), z = blockLocation.getBlockZ();
 				final Dispenser disp = (Dispenser) block.getState().getData();
 				final BlockFace face = disp.getFacing();
 				final boolean down = face.equals(BlockFace.DOWN), up = face.equals(BlockFace.UP), north = face.equals(BlockFace.NORTH), east = face.equals(BlockFace.EAST), west = face.equals(BlockFace.WEST), south = face.equals(BlockFace.SOUTH);
@@ -276,7 +275,7 @@ public class CustomExplosions extends RPFeature {
 		final Entity entity = event.getEntity();
 		final UUID uuid = entity.getUniqueId();
 		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
-		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.primed;
+		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.PRIMED;
 		final FileCustomCreeper creeper = creepers != null ? creepers.getOrDefault(uuid, null) : null;
 		final FileCustomTNT tnt = creeper == null && primed != null ? primed.getOrDefault(uuid, null) : null;
 		if(creeper == null && tnt == null) {

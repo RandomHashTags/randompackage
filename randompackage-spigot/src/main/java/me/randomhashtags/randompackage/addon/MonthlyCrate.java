@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Material;
@@ -10,10 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
 public interface MonthlyCrate extends Itemable, GivedpItemable {
-    HashMap<Player, List<String>> revealedRegular = new HashMap<>(), revealedBonus = new HashMap<>();
+    HashMap<Player, List<String>> REVEALED_REGULAR = new HashMap<>(), REVEALED_BONUS = new HashMap<>();
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "monthlycrate" };
@@ -41,14 +40,15 @@ public interface MonthlyCrate extends Itemable, GivedpItemable {
     ItemStack getRandomBonusReward(Player player, List<String> excluding, boolean canRepeatRewards);
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
         for(String reward : getRewards()) {
-            final ItemStack target = API.createItemStack(null, reward);
+            final ItemStack target = api.createItemStack(null, reward);
             if(target != null && !target.getType().equals(Material.AIR)) {
                 items.add(target);
             }
         }
         for(String reward : getBonusRewards()) {
-            final ItemStack target = API.createItemStack(null, reward);
+            final ItemStack target = api.createItemStack(null, reward);
             if(target != null && !target.getType().equals(Material.AIR)) {
                 items.add(target);
             }

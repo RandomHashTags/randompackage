@@ -25,12 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack {
-    private static ItemSkins instance;
-    public static ItemSkins getItemSkins() {
-        if(instance == null) instance = new ItemSkins();
-        return instance;
-    }
+public enum ItemSkins implements RPFeature, CommandExecutor, RPItemStack {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;
@@ -39,22 +35,25 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
     private HashMap<String, String> materials;
     private HashMap<ItemSkin, ItemStack> cache;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
         }
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "ITEM_SKINS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("item skins", "_settings.yml");
 
-        if(!otherdata.getBoolean("saved default item skins")) {
+        if(!OTHER_YML.getBoolean("saved default item skins")) {
             generateDefaultItemSkins();
-            otherdata.set("saved default item skins", true);
+            OTHER_YML.set("saved default item skins", true);
             saveOtherData();
         }
 
@@ -79,6 +78,7 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
         addGivedpCategory(list, UMaterial.LEATHER, "Item Skins", "Givedp: Item Skins");
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ITEM_SKIN).size() + " Item Skins &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         unregister(Feature.ITEM_SKIN);
     }
@@ -89,14 +89,13 @@ public class ItemSkins extends RPFeature implements CommandExecutor, RPItemStack
         }
         final String name = skin.getName(), material = getItemSkinMaterialString(skin);
         final ItemStack is = getClone(this.skin);
-        itemMeta = is.getItemMeta();
+        final ItemMeta itemMeta = is.getItemMeta();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name).replace("{MATERIAL}", material));
-        lore.clear();
+        final List<String> lore = new ArrayList<>();
         for(String s : itemMeta.getLore()) {
             lore.add(s.replace("{NAME}", name).replace("{MATERIAL}", material));
         }
         itemMeta.setLore(lore);
-        lore.clear();
         is.setItemMeta(itemMeta);
         cache.put(skin, is);
         return is;

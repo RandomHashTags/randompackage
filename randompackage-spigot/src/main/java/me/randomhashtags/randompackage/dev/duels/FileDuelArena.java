@@ -13,14 +13,19 @@ import java.util.List;
 public class FileDuelArena extends RPAddon implements DuelArena {
     private ItemStack item;
     private List<Location> locations;
+
     public FileDuelArena(File f) {
         load(f);
         register(Feature.DUEL_ARENA, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
     public String getName() { return colorize(yml.getString("name")); }
@@ -28,7 +33,7 @@ public class FileDuelArena extends RPAddon implements DuelArena {
         if(locations == null) {
             locations = new ArrayList<>();
             for(String s : yml.getStringList("locations")) {
-                locations.add(API.toLocation(s));
+                locations.add(toLocation(s));
             }
         }
         return locations;

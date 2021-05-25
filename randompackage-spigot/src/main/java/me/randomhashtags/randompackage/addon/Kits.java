@@ -25,16 +25,17 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.*;
 
-public abstract class Kits extends RPFeature implements CommandExecutor {
-    private static boolean isEnabled = false;
-    private static byte loadedInstances = 0;
-    public static YamlConfiguration config;
+public abstract class Kits implements RPFeature, CommandExecutor {
+    private static byte LOADED_INSTANCES = 0;
+    public static YamlConfiguration KITS_CONFIG;
     public static List<HumanEntity> PREVIEWING;
 
+    @Override
     public final boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final boolean preCommand = executeCommand(sender, cmd, commandLabel, args);
         if(preCommand) {
@@ -78,20 +79,19 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
     public abstract List<String> getPermissionsLocked();
     public abstract List<String> getPermissionsPreview();
 
-    protected final void loadKitUtils() {
-        loadedInstances++;
-        if(!isEnabled) {
+    public void enableKits() {
+        LOADED_INSTANCES++;
+        if(LOADED_INSTANCES == 1) {
             final long started = System.currentTimeMillis();
             new SetLevelupChance().load();
-            isEnabled = true;
             save("kits", "_settings.yml");
-            config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "kits", "_settings.yml"));
-            PLUGIN_MANAGER.registerEvents(KitEvents.getKitEvents(), RANDOM_PACKAGE);
+            KITS_CONFIG = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "kits", "_settings.yml"));
+            PLUGIN_MANAGER.registerEvents(KitEvents.INSTANCE, RANDOM_PACKAGE);
 
-            if(!otherdata.getBoolean("saved default fallen heroes")) {
+            if(!OTHER_YML.getBoolean("saved default fallen heroes")) {
                 final String[] f = new String[] {"GKIT", "VKIT", "MKIT"};
                 for(String s : f) save("fallen heroes", s + ".yml");
-                otherdata.set("saved default fallen heroes", true);
+                OTHER_YML.set("saved default fallen heroes", true);
                 saveOtherData();
             }
             for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "fallen heroes")) {
@@ -101,17 +101,21 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
-    protected final void unloadKitUtils() {
-        if(loadedInstances > 0) {
-            loadedInstances--;
+
+    public void disableKits() {
+        if(LOADED_INSTANCES > 0) {
+            LOADED_INSTANCES--;
         }
-        if(isEnabled && loadedInstances == 0) {
-            isEnabled = false;
-            config = null;
-            unregister(Feature.FALLEN_HERO, Feature.CUSTOM_KIT);
-            LivingFallenHero.deleteAll();
-            KitEvents.getKitEvents().unload();
+        if(LOADED_INSTANCES == 0) {
+            unloadKitsData();
         }
+    }
+    private void unloadKitsData() {
+        LOADED_INSTANCES = 0;
+        KITS_CONFIG = null;
+        unregister(Feature.FALLEN_HERO, Feature.CUSTOM_KIT);
+        LivingFallenHero.deleteAll();
+        KitEvents.INSTANCE.unload();
     }
 
     public final boolean hasPermissionToObtain(@NotNull Player player, @NotNull CustomKit kit) {
@@ -180,22 +184,27 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
             final int slot = kit.getSlot(), tier = data.getLevel(kit);
             final ItemStack displayed = kit.getItem();
             final String remainingTime = getRemainingTime(remaining);
-            item = getCooldown(); itemMeta = item.getItemMeta(); lore.clear();
-            for(String s : itemMeta.getLore()) {
-                if(s.equals("{LORE}"))
-                    for(String q : displayed.getItemMeta().getLore())
+            final ItemStack item = getCooldown();
+            final ItemMeta itemMeta = item.getItemMeta();
+            final List<String> lore = new ArrayList<>();
+            for(String string : itemMeta.getLore()) {
+                if(string.equals("{LORE}")) {
+                    for(String q : displayed.getItemMeta().getLore()) {
                         lore.add(q.replace("{LEVEL}", Integer.toString(tier)));
-                else
-                    lore.add(s.replace("{LEVEL}", Integer.toString(tier)).replace("{TIME}", remainingTime));
+                    }
+                } else {
+                    lore.add(string.replace("{LEVEL}", Integer.toString(tier)).replace("{TIME}", remainingTime));
+                }
             }
             if(hasPerm) {
-                if(!onCooldown)
+                if(!onCooldown) {
                     lore.addAll(getPermissionsUnlocked());
+                }
             } else {
                 lore.addAll(getPermissionsLocked());
             }
             lore.addAll(getPermissionsPreview());
-            itemMeta.setLore(lore); lore.clear();
+            itemMeta.setLore(lore);
             item.setItemMeta(itemMeta);
             player.getOpenInventory().getTopInventory().setItem(slot, item);
             player.updateInventory();
@@ -265,22 +274,25 @@ public abstract class Kits extends RPFeature implements CommandExecutor {
         final List<ItemStack> rewards = new ArrayList<>();
         final String pn = player.getName();
         final List<KitItem> items = kit.getItems();
-        for(KitItem ki : items) {
-            final ItemStack is = ki.getItemStack(pn, tier, 1.00f);
+        for(KitItem kitItem : items) {
+            final ItemStack is = kitItem.getItemStack(pn, tier, 1.00f);
             if(is != null) {
                 rewards.add(is);
             }
         }
-        int s = rewards.size();
-        s = s > 54 ? 54 : s%9 == 0 ? s : ((s+9)/9)*9;
-        player.openInventory(Bukkit.createInventory(player, s, getPreview().getTitle().replace("{KIT}", kit.getIdentifier())));
+        int rewardsSize = rewards.size();
+        rewardsSize = rewardsSize > 54 ? 54 : rewardsSize % 9 == 0 ? rewardsSize : ((rewardsSize+9)/9)*9;
+        player.openInventory(Bukkit.createInventory(player, rewardsSize, getPreview().getTitle().replace("{KIT}", kit.getIdentifier())));
         final Inventory top = player.getOpenInventory().getTopInventory();
-        for(ItemStack i : rewards) top.setItem(top.firstEmpty(), i);
-        final ItemStack bg = getPreviewBackground();
+        for(ItemStack i : rewards) {
+            top.setItem(top.firstEmpty(), i);
+        }
+        final ItemStack previewBackground = getPreviewBackground();
         for(int i = 0; i < top.getSize(); i++) {
-            item = top.getItem(i);
-            if(item == null || item.getType().name().contains("AIR"))
-                top.setItem(i, bg);
+            final ItemStack item = top.getItem(i);
+            if(item == null || item.getType().name().contains("AIR")) {
+                top.setItem(i, previewBackground);
+            }
         }
         player.updateInventory();
         PREVIEWING.add(player);

@@ -15,6 +15,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.GlobalChallengePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -30,6 +31,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
@@ -57,6 +59,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	public String getIdentifier() {
 		return "GLOBAL_CHALLENGES";
 	}
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -110,9 +113,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "global challenges.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
 
-		if(!otherdata.getBoolean("saved default global challenges")) {
+		if(!OTHER_YML.getBoolean("saved default global challenges")) {
 			generateDefaultGlobalChallenges();
-			otherdata.set("saved default global challenges", true);
+			OTHER_YML.set("saved default global challenges", true);
 			saveOtherData();
 		}
 		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "global challenges")) {
@@ -136,7 +139,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 		addGivedpCategory(list, UMaterial.CHEST, "Global Challenge Prizes", "Givedp: GlobalChallenge Prizes");
 
-		if(mcmmoIsEnabled()) {
+		if(RPFeature.mcmmoIsEnabled()) {
 		    mcmmoChallenges = new MCMMOChallenges();
 		    PLUGIN_MANAGER.registerEvents(mcmmoChallenges, RANDOM_PACKAGE);
         }
@@ -147,7 +150,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	@Override
 	public void unload() {
 		data.set("active global challenges", null);
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 		if(active != null) {
 			for(ActiveGlobalChallenge challenge : active.values()) {
 				final String id = challenge.getType().getIdentifier();
@@ -164,7 +167,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
             HandlerList.unregisterAll(mcmmoChallenges);
         }
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
-		ActiveGlobalChallenge.active = null;
+		ActiveGlobalChallenge.ACTIVE = null;
 		unregisterEventAttributeListener(this);
 	}
 
@@ -221,12 +224,13 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	public void reloadInventory() {
 		final Inventory inv = this.inv.getInventory();
 		int f = 0;
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 		final List<String> addedLore = colorizeListString(config.getStringList("challenge settings.added lore"));
 		for(int i = 0; i < inv.getSize(); i++) {
 			if(config.get("gui." + i) != null) {
-				final String p = config.getString("gui." + i + ".item");
-				if(p.toUpperCase().equals("{CHALLENGE}")) {
+				final String targetItem = config.getString("gui." + i + ".item");
+				ItemStack item = null;
+				if(targetItem.equalsIgnoreCase("{CHALLENGE}")) {
 					ActiveGlobalChallenge targetChallenge = f < active.size() ? (ActiveGlobalChallenge) active.values().toArray()[f] : null;
 					if(targetChallenge == null && f < max) {
 						targetChallenge = getRandomChallenge().start();
@@ -235,9 +239,10 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						final GlobalChallenge challenge = targetChallenge.getType();
 						final String type = challenge.getType();
 						item = challenge.getItem().clone();
-						itemMeta = item.getItemMeta(); lore.clear();
-						for(String s : addedLore) {
-							lore.add(s.replace("{TYPE}", type));
+						final ItemMeta itemMeta = item.getItemMeta();
+						final List<String> lore = new ArrayList<>();
+						for(String string : addedLore) {
+							lore.add(string.replace("{TYPE}", type));
 						}
 						itemMeta.setLore(lore); lore.clear();
 						item.setItemMeta(itemMeta);
@@ -260,7 +265,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			player.updateInventory();
 			for(GlobalChallengePrize prize : prizes.keySet()) {
-				item = prize.getItem();
+				final ItemStack item = prize.getItem();
 				item.setAmount(prizes.get(prize));
 				top.addItem(item);
 			}
@@ -277,13 +282,13 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 				prizes.put(prize, amount);
 			}
 			final HashMap<String, ItemStack> rewards = prize.getRandomRewards();
-			for(String s : rewards.keySet()) {
-				giveItem(player, createItemStack(null, s));
+			for(String reward : rewards.keySet()) {
+				giveItem(player, createItemStack(null, reward));
 			}
 			if(sendMessage) {
 				final String placing = prize.getPlacement() + "";
-				for(String s : getStringList(config, "messages.claimed prize")) {
-					player.sendMessage(s.replace("{PLACING}", placing));
+				for(String string : getStringList(config, "messages.claimed prize")) {
+					player.sendMessage(string.replace("{PLACING}", placing));
 				}
 			}
 		}
@@ -327,7 +332,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			player.updateInventory();
 			final String dateFormat = config.getString("challenge settings.date format");
 			for(int i = 0; i < top.getSize(); i++) {
-				item = top.getItem(i);
+				final ItemStack item = top.getItem(i);
 				if(item != null) {
 					final ActiveGlobalChallenge challenge = ActiveGlobalChallenge.valueOf(item);
 					if(challenge != null) {
@@ -336,26 +341,27 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						int topp = 0;
 						UUID ranked = topp < placings.size() ? (UUID) placings.keySet().toArray()[topp] : null;
 						final String remainingtime = getRemainingTime(challenge.getRemainingTime());
-						itemMeta = item.getItemMeta(); lore.clear();
+						final ItemMeta itemMeta = item.getItemMeta();
+						final List<String> lore = new ArrayList<>();
 						if(item.hasItemMeta()) {
 							if(itemMeta.hasLore()) {
 								final String ranking = getRanking(getRanking(u, challenge)), date = toReadableDate(new Date(challenge.getStartedTime()), dateFormat), value = formatBigDecimal(challenge.getValue(u));
-								for(String s : itemMeta.getLore()) {
-									s = s.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
-									if(s.contains("{TOP}")) {
+								for(String string : itemMeta.getLore()) {
+									string = string.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
+									if(string.contains("{TOP}")) {
 										if(ranked == null) {
-											s = s.replace("{TOP}", "None").replace("{VALUE}", "0");
+											string = string.replace("{TOP}", "None").replace("{VALUE}", "0");
 										} else {
-											s = s.replace("{TOP}", Bukkit.getOfflinePlayer(ranked).getName());
-											if(s.contains("{VALUE}")) {
+											string = string.replace("{TOP}", Bukkit.getOfflinePlayer(ranked).getName());
+											if(string.contains("{VALUE}")) {
 												final BigDecimal d = participants.getOrDefault(ranked, BigDecimal.ZERO);
-												s = s.replace("{VALUE}", d.doubleValue() > 0.00 ? formatBigDecimal(d) : "0");
+												string = string.replace("{VALUE}", d.doubleValue() > 0.00 ? formatBigDecimal(d) : "0");
 											}
 										}
 										topp += 1;
 										ranked = topp < placings.size() ? (UUID) placings.keySet().toArray()[topp] : null;
 									}
-									lore.add(s);
+									lore.add(string);
 								}
 							}
 							itemMeta.setLore(lore); lore.clear();
@@ -368,7 +374,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 	}
 	public void stopChallenge(@NotNull GlobalChallenge chall, boolean giveRewards) {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> challenges = ActiveGlobalChallenge.active;
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> challenges = ActiveGlobalChallenge.ACTIVE;
 		if(challenges != null && challenges.containsKey(chall)) {
 			challenges.get(chall).end(giveRewards, 3);
 		}
@@ -377,22 +383,23 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		player.closeInventory();
 		player.openInventory(Bukkit.createInventory(player, leaderboard.getSize(), leaderboard.getTitle()));
 		final Inventory top = player.getOpenInventory().getTopInventory();
-		final String n = colorize(config.getString("challenge leaderboard.name")), challengeName = active.getType().getType();
+		final String leaderboardName = colorize(config.getString("challenge leaderboard.name")), challengeName = active.getType().getType();
 		final HashMap<Integer, UUID> rankings = getRankings(active);
 		final List<String> leaderboardLore = getStringList(config, "challenge leaderboard.lore");
-		item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
+		final ItemStack item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
 		for(int i = 0; i < topPlayersSize && i < rankings.size(); i++) {
 			final UUID uuid = rankings.get(i+1);
 			final OfflinePlayer OP = Bukkit.getOfflinePlayer(uuid);
 			final String ranking = getRanking(i+1), playerName = OP.getName(), value = formatBigDecimal(active.getValue(uuid));
 			item.setAmount(i+1);
 			final SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-			skullMeta.setDisplayName(n.replace("{PLAYER}", playerName));
-			skullMeta.setOwner(playerName); lore.clear();
+			skullMeta.setDisplayName(leaderboardName.replace("{PLAYER}", playerName));
+			skullMeta.setOwner(playerName);
+			final List<String> lore = new ArrayList<>();
 			for(String s : leaderboardLore) {
 				lore.add(s.replace("{RANKING}", ranking).replace("{CHALLENGE}", challengeName).replace("{VALUE}", value));
 			}
-			skullMeta.setLore(lore); lore.clear();
+			skullMeta.setLore(lore);
 			item.setItemMeta(skullMeta);
 			top.setItem(i, item);
 		}
@@ -442,10 +449,10 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	}
 
 	public void called(Event event) {
-		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 		if(active != null) {
-			for(GlobalChallenge g : active.keySet()) {
-				trigger(event, g.getAttributes());
+			for(GlobalChallenge challenge : active.keySet()) {
+				trigger(event, challenge.getAttributes());
 			}
 		}
 	}
@@ -462,7 +469,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 
 		public void tryIncreasing(com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent event) {
 			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
-			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 			if(active != null) {
 				for(GlobalChallenge g : active.keySet()) {
 					trigger(event, entities, g.getAttributes());
@@ -472,7 +479,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		public void tryIncreasing(com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent event) {
 			final HashMap<String, Entity> entities = getEntities("Player", event.getPlayer());
 			final String[] replacements = new String[] {"xp", Float.toString(event.getRawXpGained())};
-			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+			final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 			if(active != null) {
 				for(GlobalChallenge g : active.keySet()) {
 					trigger(event, entities, g.getAttributes(), replacements);

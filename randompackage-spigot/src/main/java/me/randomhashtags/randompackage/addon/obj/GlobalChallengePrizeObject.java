@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallengePrize {
+public final class GlobalChallengePrizeObject extends RPAddon implements GlobalChallengePrize {
     private final ItemStack display;
     private final int placement, amount;
     private final List<String> rewards;
@@ -20,6 +20,8 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         this.rewards = rewards;
         register(Feature.GLOBAL_CHALLENGE_PRIZE, this);
     }
+
+    @Override
     public String getIdentifier() {
         return "GLOBAL_CHALLENGE_PRIZE_" + placement;
     }
@@ -43,7 +45,7 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
         for(int i = 0; i < availableRewards.size(); i++) {
             final String s = availableRewards.get(i);
             if(!s.toLowerCase().startsWith("chance=")) {
-                rewards.put(s, API.createItemStack(null, s));
+                rewards.put(s, createItemStack(null, s));
                 availableRewards.remove(s);
                 amount += 1;
                 i -= 1;
@@ -60,9 +62,9 @@ public class GlobalChallengePrizeObject extends RPAddon implements GlobalChallen
                 if(target.contains("||")) {
                     final String[] t = target.split("\\|\\|");
                     final String ta = t[RANDOM.nextInt(t.length)];
-                    rewards.put(ta, API.createItemStack(null, ta));
+                    rewards.put(ta, createItemStack(null, ta));
                 } else {
-                    rewards.put(target, API.createItemStack(null, target));
+                    rewards.put(target, createItemStack(null, target));
                 }
                 availableRewards.remove(randomReward);
             } else {

@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 import java.math.BigDecimal;
 
-public class GlobalChallengeParticipateEvent extends RPEventCancellable {
+public final class GlobalChallengeParticipateEvent extends RPEventCancellable {
 	public final Event event;
 	public final ActiveGlobalChallenge challenge;
 	public BigDecimal value;

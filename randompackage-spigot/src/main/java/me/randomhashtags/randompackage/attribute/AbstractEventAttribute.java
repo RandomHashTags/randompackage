@@ -12,17 +12,25 @@ import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 
-public abstract class AbstractEventAttribute extends RegionalAPI implements EventAttribute, EventReplacer, RPStorage {
+public abstract class AbstractEventAttribute implements EventAttribute, EventReplacer, RPStorage {
     private boolean cancelled;
+
+    @Override
     public String getIdentifier() {
-        final String[] n = getClass().getName().split("\\.");
-        return n[n.length-1].toUpperCase();
+        final String[] className = getClass().getName().split("\\.");
+        return className[className.length-1].toUpperCase();
     }
-    public void load() { register(Feature.EVENT_ATTRIBUTE, this); }
+    public void load() {
+        register(Feature.EVENT_ATTRIBUTE, this);
+    }
     public void unload() {}
 
-    public boolean isCancelled() { return cancelled; }
-    public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
+    public boolean isCancelled() {
+        return cancelled;
+    }
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
     public void execute(@NotNull PendingEventAttribute pending) {}
     public void execute(@NotNull PendingEventAttribute pending, @NotNull HashMap<String, String> valueReplacements) {}

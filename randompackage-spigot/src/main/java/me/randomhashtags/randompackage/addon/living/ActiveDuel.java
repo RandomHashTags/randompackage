@@ -12,14 +12,15 @@ import org.bukkit.potion.PotionEffect;
 import java.util.Collection;
 import java.util.List;
 
-public class ActiveDuel {
+public final class ActiveDuel {
     private Location requesterAcceptLocation, accepterAcceptLocation;
     private PlayerInventory requesterAcceptInventory, accepterAcceptInventory;
     private double requesterHP, accepterHP;
     private Collection<PotionEffect> requesterPEs, accepterPEs;
-    private Player requester, accepter;
-    private List<DuelSetting> settings;
-    private DuelArena arena;
+    private final Player requester;
+    private final Player accepter;
+    private final List<DuelSetting> settings;
+    private final DuelArena arena;
 
     public ActiveDuel(Player requester, Player accepter, List<DuelSetting> settings, DuelArena arena) {
         this.requester = requester;
@@ -28,10 +29,18 @@ public class ActiveDuel {
         this.arena = arena;
         start();
     }
-    public Player getRequester() { return requester; }
-    public Player getAccepter() { return accepter; }
-    public List<DuelSetting> getSettings() { return settings; }
-    public DuelArena getArena() { return arena; }
+    public Player getRequester() {
+        return requester;
+    }
+    public Player getAccepter() {
+        return accepter;
+    }
+    public List<DuelSetting> getSettings() {
+        return settings;
+    }
+    public DuelArena getArena() {
+        return arena;
+    }
 
     private void start() {
         requesterAcceptLocation = requester.getLocation();

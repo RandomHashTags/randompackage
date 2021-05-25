@@ -1,3 +1,6 @@
 package me.randomhashtags.randompackage.enums;
 
-public enum CaptureType {CIRCLE, SQUARE;}
+public enum CaptureType {
+    CIRCLE,
+    SQUARE,
+}

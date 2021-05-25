@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,12 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CollectionFilter extends RPFeature implements CommandExecutor {
-    private static CollectionFilter instance;
-    public static CollectionFilter getCollectionFilter() {
-        if(instance == null) instance = new CollectionFilter();
-        return instance;
-    }
+public enum CollectionFilter implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private ItemStack collectionchest;
@@ -50,6 +47,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     private HashMap<Integer, UMaterial> picksup;
     private HashMap<UUID, Location> editingfilter;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, CollectionFilterPermission.COMMAND, true)) {
@@ -92,9 +90,11 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "COLLECTION_FILTER";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");
@@ -137,14 +137,15 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         sendConsoleDidLoadFeature("Collection Filter", started);
 
         SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
-            for(String s : getConfigurationSectionKeys(otherdata, "collection chests", false)) {
-                final String[] info = otherdata.getString("collection chests." + s + ".info").split(":");
+            for(String s : getConfigurationSectionKeys(OTHER_YML, "collection chests", false)) {
+                final String[] info = OTHER_YML.getString("collection chests." + s + ".info").split(":");
                 new CollectionChest(UUID.fromString(s), info[0], toLocation(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
             }
-            final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
+            final HashMap<UUID, CollectionChest> chests = CollectionChest.CHESTS;
             sendConsoleDidLoadAsyncFeature((chests != null ? chests.size() : 0) + " collection chests");
         });
     }
+    @Override
     public void unload() {
         for(UUID u : new ArrayList<>(editingfilter.keySet())) {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
@@ -152,8 +153,8 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 o.getPlayer().closeInventory();
             }
         }
-        otherdata.set("collection chests", null);
-        final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
+        OTHER_YML.set("collection chests", null);
+        final HashMap<UUID, CollectionChest> chests = CollectionChest.CHESTS;
         if(chests != null) {
             for(CollectionChest c : chests.values()) {
                 c.backup();
@@ -171,10 +172,10 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
-        final Entity e = event.getEntity();
-        final HashMap<UUID, CollectionChest> chests = CollectionChest.chests;
-        if(chests != null && getStringList(config, "enabled worlds").contains(e.getWorld().getName())) {
-            final Chunk chunk = e.getLocation().getChunk();
+        final Entity entity = event.getEntity();
+        final HashMap<UUID, CollectionChest> chests = CollectionChest.CHESTS;
+        if(chests != null && getStringList(config, "enabled worlds").contains(entity.getWorld().getName())) {
+            final Chunk chunk = entity.getLocation().getChunk();
             final List<ItemStack> drops = event.getDrops();
             for(CollectionChest chest : chests.values()) {
                 if(chest.getLocation().getChunk().equals(chunk)) {
@@ -194,16 +195,16 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final Block b = event.getClickedBlock();
-        if(b != null && !b.getType().equals(Material.AIR) && b.getType().name().contains("CHEST")) {
+        final Block block = event.getClickedBlock();
+        if(block != null && !block.getType().equals(Material.AIR) && block.getType().name().contains("CHEST")) {
             final Player player = event.getPlayer();
-            final CollectionChest chest = CollectionChest.valueOf(b);
+            final CollectionChest chest = CollectionChest.valueOf(block);
             if(chest != null) {
                 switch (event.getAction()) {
                     case RIGHT_CLICK_BLOCK:
                         if(player.isSneaking()) {
                             event.setCancelled(true);
-                            editFilter(player, b);
+                            editFilter(player, block);
                         } else {
                             chest.getInventory();
                         }
@@ -222,7 +223,8 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final ItemStack is = event.getItemInHand();
         if(UMaterial.match(is).equals(UMaterial.match(collectionchest)) && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(collectionchest.getItemMeta().getDisplayName())) {
             final Player player = event.getPlayer();
-            item = is.clone(); item.setAmount(1);
+            final ItemStack item = is.clone();
+            item.setAmount(1);
             final UMaterial material = getFiltered(item);
             new CollectionChest(player.getUniqueId().toString(), event.getBlockPlaced().getLocation(), material);
             sendStringListMessage(player, getStringList(config, "messages.placed"), null);
@@ -242,11 +244,11 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 event.setCancelled(true);
                 block.setType(Material.AIR);
                 if(config.getBoolean("collection chests.chest.keeps meta")) {
-                    final UMaterial u = chest.getFilter();
-                    item = collectionchest.clone();
-                    itemMeta = item.getItemMeta();
-                    lore = itemMeta.getLore();
-                    lore.set(filtertypeSlot, filtertypeString.replace("{FILTER_TYPE}", u == null ? allType : itemType.replace("{ITEM}", toMaterial(u.name(), false))));
+                    final UMaterial filter = chest.getFilter();
+                    final ItemStack item = collectionchest.clone();
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    final List<String> lore = itemMeta.getLore();
+                    lore.set(filtertypeSlot, filtertypeString.replace("{FILTER_TYPE}", filter == null ? allType : itemType.replace("{ITEM}", toMaterial(filter.name(), false))));
                     itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                     block.getWorld().dropItemNaturally(block.getLocation(), item);
@@ -279,7 +281,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 } else {
                     setFilter(player, getItemInHand(player), slot);
                 }
-                player.closeInventory();;
+                player.closeInventory();
             }
         }
     }
@@ -297,14 +299,15 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
         final Material filterMaterial = filter != null ? filter.getMaterial() : null;
         final List<String> selectedLore = getStringList(config, "gui.selected.added lore"), notSelectedLore = getStringList(config, "gui.not selected.added lore");
         for(int i = 0; i < top.getSize(); i++) {
-            item = top.getItem(i);
+            final ItemStack item = top.getItem(i);
             if(item != null && !item.getType().equals(Material.AIR)) {
                 final UMaterial target = picksup.get(i);
                 final String umaterial = toMaterial(target != null ? target.name() : allMaterial.name(), false);
-                itemMeta = item.getItemMeta(); lore.clear();
+                final ItemMeta itemMeta = item.getItemMeta();
                 final boolean isSelected = filter == null && item.getType().equals(allMaterial) || filter != null && target.equals(filterMaterial), isEnchanted = isSelected && selectedEnchanted || !isSelected && notselectedEnchanted;
                 final String name = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : itemMeta.hasEnchants() ? ChatColor.AQUA + umaterial : umaterial;
                 itemMeta.setDisplayName((isSelected ? selectedPrefix : notSelectedPrefix) + name);
+                final List<String> lore = new ArrayList<>();
                 if(itemMeta.hasLore()) {
                     lore.addAll(itemMeta.getLore());
                 }
@@ -312,7 +315,7 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
                 if(isEnchanted) {
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 }
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
                 if(isEnchanted) {
                     item.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
@@ -324,58 +327,67 @@ public class CollectionFilter extends RPFeature implements CommandExecutor {
     public ItemStack getCollectionChest(@NotNull String filter) {
         filter = filter.toLowerCase();
         filter = filter.equals("all") ? allType : filter.equals("default") ? defaultType : toMaterial(filter, false);
-        item = collectionchest.clone(); itemMeta = item.getItemMeta(); lore.clear();
+        final ItemStack item = collectionchest.clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         if(itemMeta.hasLore()) {
-            for(String s : itemMeta.getLore()) {
-                if(s.contains("{FILTER_TYPE}")) s = s.replace("{FILTER_TYPE}", filter);
-                lore.add(s);
+            for(String string : itemMeta.getLore()) {
+                if(string.contains("{FILTER_TYPE}")) {
+                    string = string.replace("{FILTER_TYPE}", filter);
+                }
+                lore.add(string);
             }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }
     public void setFilter(@NotNull Player player, @NotNull ItemStack is, int slot) {
-        itemMeta = is.getItemMeta(); lore.clear();
-        final List<String> l = collectionchest.getItemMeta().getLore();
-        final String m = toMaterial(picksup.get(slot).name(), false);
-        for(int i = 0; i < l.size(); i++) {
-            final String target = l.get(i);
+        final ItemMeta itemMeta = is.getItemMeta();
+        final List<String> lore = new ArrayList<>(), collectionChestLore = collectionchest.getItemMeta().getLore();
+        final String material = toMaterial(picksup.get(slot).name(), false);
+        for(int i = 0; i < collectionChestLore.size(); i++) {
+            final String target = collectionChestLore.get(i);
             if(i == filtertypeSlot) {
-                lore.add(colorize(target.replace("{FILTER_TYPE}", m)));
+                lore.add(colorize(target.replace("{FILTER_TYPE}", material)));
             } else {
                 lore.add(target);
             }
         }
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
-        lore.clear();
         for(String string : getStringList(config, "messages.updated cc")) {
-            if(string.contains("{AMOUNT}")) string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
-            if(string.contains("{ITEM}")) string = string.replace("{ITEM}", m);
+            if(string.contains("{AMOUNT}")) {
+                string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
+            }
+            if(string.contains("{ITEM}")) {
+                string = string.replace("{ITEM}", material);
+            }
             player.sendMessage(colorize(string));
         }
         player.updateInventory();
     }
     public void setFilter(@NotNull Player player, @NotNull ItemStack is, @NotNull String filter) {
-        itemMeta = is.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = is.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         if(itemMeta.hasLore()) {
             lore.addAll(itemMeta.getLore());
         }
         lore.set(filtertypeSlot, collectionchest.getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", filter));
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
-        lore.clear();
         for(String string : getStringList(config, "messages.set")) {
-            if(string.contains("{ITEM}")) string = string.replace("{ITEM}", filter);
+            if(string.contains("{ITEM}")) {
+                string = string.replace("{ITEM}", filter);
+            }
             player.sendMessage(colorize(string));
         }
     }
     public UMaterial getFiltered(@NotNull ItemStack is) {
         final String filter = ChatColor.stripColor(collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType)), filterString = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
-        for(UMaterial s : picksup.values()) {
-            if(s != null && filterString.equals(filter.replace("{ITEM}", s.name().replace("_", " ")))) {
-                return s;
+        for(UMaterial umaterial : picksup.values()) {
+            if(umaterial != null && filterString.equals(filter.replace("{ITEM}", umaterial.name().replace("_", " ")))) {
+                return umaterial;
             }
         }
         return null;

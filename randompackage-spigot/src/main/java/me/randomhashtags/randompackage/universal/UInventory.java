@@ -5,12 +5,13 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class UInventory {
+public final class UInventory {
     private Inventory inventory;
-    private InventoryHolder holder;
-    private InventoryType type;
-    private int size;
-    private String title;
+    private final InventoryHolder holder;
+    private final InventoryType type;
+    private final int size;
+    private final String title;
+
     public UInventory(InventoryHolder holder, int size, String title) {
         this.holder = holder;
         type = InventoryType.CHEST;
@@ -24,11 +25,21 @@ public class UInventory {
         this.title = title;
     }
     public Inventory getInventory() {
-        if(inventory == null) inventory = type == InventoryType.CHEST ? Bukkit.createInventory(holder, size, title) : Bukkit.createInventory(holder, type, title);
+        if(inventory == null) {
+            inventory = type == InventoryType.CHEST ? Bukkit.createInventory(holder, size, title) : Bukkit.createInventory(holder, type, title);
+        }
         return inventory;
     }
-    public InventoryHolder getHolder() { return holder; }
-    public InventoryType getType() { return type; }
-    public int getSize() { return size; }
-    public String getTitle() { return title; }
+    public InventoryHolder getHolder() {
+        return holder;
+    }
+    public InventoryType getType() {
+        return type;
+    }
+    public int getSize() {
+        return size;
+    }
+    public String getTitle() {
+        return title;
+    }
 }

@@ -7,11 +7,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class BattleRoyaleTeam {
-    private int id;
-    private LinkedHashMap<Player, Boolean> players; // [Player, isAlive]
-    private HashMap<Player, Location> locations;
-    private HashMap<Player, ItemStack[]>  inventory;
+public final class BattleRoyaleTeam {
+    private final int id;
+    private final LinkedHashMap<Player, Boolean> players; // [Player, isAlive]
+    private final HashMap<Player, Location> locations;
+    private final HashMap<Player, ItemStack[]>  inventory;
     public BattleRoyaleTeam(int id) {
         this(id, new LinkedHashMap<>(), new HashMap<>(), new HashMap<>());
     }
@@ -21,10 +21,18 @@ public class BattleRoyaleTeam {
         this.locations = locations;
         this.inventory = inventory;
     }
-    public int getID() { return id; }
-    public LinkedHashMap<Player, Boolean> getPlayers() { return players; }
-    public HashMap<Player, Location> getPreviousLocations() { return locations; }
-    public HashMap<Player, ItemStack[]> getPreviousInventories() { return inventory; }
+    public int getID() {
+        return id;
+    }
+    public LinkedHashMap<Player, Boolean> getPlayers() {
+        return players;
+    }
+    public HashMap<Player, Location> getPreviousLocations() {
+        return locations;
+    }
+    public HashMap<Player, ItemStack[]> getPreviousInventories() {
+        return inventory;
+    }
     public void join(Player player) {
         players.put(player, true);
         locations.put(player, player.getLocation());

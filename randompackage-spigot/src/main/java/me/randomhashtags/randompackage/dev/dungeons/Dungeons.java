@@ -26,18 +26,20 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.Arrays;
 
-public class Dungeons extends RPFeature implements CommandExecutor {
-    private static Dungeons instance;
-    public static Dungeons getDungeons() {
-        if(instance == null) instance = new Dungeons();
-        return instance;
-    }
+public enum Dungeons implements RPFeature, CommandExecutor {
+    INSTANCE;
+
     public YamlConfiguration config;
     private UInventory gui, master;
 
     public ItemStack dimensionweb, enchantedobsidian, fuelcell;
 
-    public String getIdentifier() { return "DUNGEONS"; }
+    @Override
+    public String getIdentifier() {
+        return "DUNGEONS";
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && args.length == 0 && hasPermission(player, "RandomPackage.dungeons", true)) {
@@ -46,6 +48,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         new SetOpenDuration().load();
@@ -77,6 +80,7 @@ public class Dungeons extends RPFeature implements CommandExecutor {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUNGEON).size() + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         unregister(Feature.DUNGEON);
     }

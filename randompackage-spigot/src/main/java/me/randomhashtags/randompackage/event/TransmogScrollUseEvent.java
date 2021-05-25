@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.TransmogScroll;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class TransmogScrollUseEvent extends ScrollUseEvent {
+public final class TransmogScrollUseEvent extends ScrollUseEvent {
     public TransmogScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem) {
         super(player, scroll, usedOnItem);
     }

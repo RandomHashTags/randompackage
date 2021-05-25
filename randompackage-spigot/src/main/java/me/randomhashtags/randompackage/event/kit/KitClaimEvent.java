@@ -9,11 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class KitClaimEvent extends RPEventCancellable {
-    private RPPlayer pdata;
-    private Player player;
-    private CustomKit kit;
-    private int level;
-    private List<ItemStack> lootObtained;
+    private final RPPlayer pdata;
+    private final Player player;
+    private final CustomKit kit;
+    private final int level;
+    private final List<ItemStack> lootObtained;
     public KitClaimEvent(RPPlayer pdata, Player player, CustomKit kit, int level, List<ItemStack> lootObtained) {
         super(player);
         this.pdata = pdata;

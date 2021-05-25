@@ -12,6 +12,7 @@ import me.randomhashtags.randompackage.attribute.SetSuccessRate;
 import me.randomhashtags.randompackage.attribute.SpawnEntity;
 import me.randomhashtags.randompackage.attribute.StopEnchant;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.armor.*;
@@ -20,8 +21,10 @@ import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPPlayer;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,8 +53,6 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
 import java.util.*;
-
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class CustomEnchants extends EventAttributes implements CommandExecutor, Listener {
     private static CustomEnchants instance;
@@ -84,6 +85,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "CUSTOM_ENCHANTS";
     }
@@ -106,9 +108,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             attribute.load();
         }
 
-        if(!otherdata.getBoolean("saved default custom enchants")) {
+        if(!OTHER_YML.getBoolean("saved default custom enchants")) {
             generateDefaultCustomEnchants();
-            otherdata.set("saved default custom enchants", true);
+            OTHER_YML.set("saved default custom enchants", true);
             saveOtherData();
         }
 
@@ -124,7 +126,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 final File[] files = new File(folderString + SEPARATOR + f.getName()).listFiles();
                 if(files != null) {
                     FileEnchantRarity rarity = null;
-                    final List<File> F = Arrays.asList(files);
+                    final File[] F = files;
                     for(File k : F) {
                         if(k.getName().contains("_settings")) {
                             rarity = new FileEnchantRarity(f, k);
@@ -167,7 +169,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             updateEquippedTimedEnchants(player);
         }
 
-        sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks.toString());
+        sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks);
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
         createCustomEnchantEntities();
 
@@ -177,8 +179,8 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         for(CustomEnchant e : timedEnchants.keySet()) {
             SCHEDULER.cancelTask(timedEnchants.get(e));
         }
-        GIVEDP_ITEM.items.remove("transmogscroll");
-        GIVEDP_ITEM.items.remove("whitescroll");
+        GivedpItem.INSTANCE.items.remove("transmogscroll");
+        GivedpItem.INSTANCE.items.remove("whitescroll");
         CustomEnchantEntity.deleteAll();
         unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }
@@ -186,7 +188,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private void createCustomEnchantEntities() {
         final long started = System.currentTimeMillis();
         final boolean defaultDropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), defaultCanTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
-        final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.paths;
+        final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.PATHS;
         for(String s : getConfigurationSectionKeys(config, "entities", false)) {
             if(!s.startsWith("settings")) {
                 final String identifier = s.split("\\.")[0];
@@ -202,10 +204,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         }
-        sendConsoleDidLoadFeature((entities != null ? entities.size() : 0) + "Custom Enchant Entities", started);
+        sendConsoleDidLoadFeature((entities != null ? entities.size() : 0) + " Custom Enchant Entities", started);
     }
     public void viewEnchants(@NotNull CommandSender sender, int page) {
-        final ChatEvents chatEvents = ChatEvents.getChatEvents();
+        final ChatEvents chatEvents = ChatEvents.INSTANCE;
         final String format = getString(RP_CONFIG, "enchants.format");
         final List<String> hoverLore = getStringList(RP_CONFIG, "enchants.hover");
         final HashMap<String, CustomEnchant> enabled = getAllCustomEnchants(true);
@@ -225,10 +227,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                         replacements.put("{DESC}", ce.getLore());
                         final String msg = colorize(format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {
-                            lore.clear();
-                            lore.addAll(hoverLore);
-                            chatEvents.sendHoverMessage((Player) sender, msg, lore, replacements);
-                            lore.clear();
+                            chatEvents.sendHoverMessage((Player) sender, msg, hoverLore, replacements);
                         } else {
                             sender.sendMessage(msg);
                         }
@@ -256,10 +255,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     @EventHandler(priority = EventPriority.HIGH)
     private void projectileHitEvent(EntityDamageByEntityEvent event) {
         final Entity damager = event.getDamager();
-        final UUID u = damager.getUniqueId();
-        if(PROJECTILE_EVENTS.containsKey(u)) {
+        final UUID damagerUUID = damager.getUniqueId();
+        if(PROJECTILE_EVENTS.containsKey(damagerUUID)) {
             final Projectile e = (Projectile) damager;
-            final EntityShootBowEvent p = PROJECTILE_EVENTS.getOrDefault(u, null);
+            final EntityShootBowEvent p = PROJECTILE_EVENTS.getOrDefault(damagerUUID, null);
             if(p != null) {
                 final ProjectileSource shooter = e.getShooter();
                 if(shooter instanceof Player) {
@@ -315,7 +314,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     event.setDamage(e.getDamage());
                 }
             }
-            final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.living;
+            final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.LIVING;
             if(living != null) {
                 final LivingCustomEnchantEntity cee = living.getOrDefault(entity.getUniqueId(), null);
                 if(cee != null) {
@@ -387,29 +386,29 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public ItemStack getRevealedItem(CustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
         final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
-        item = rarity.getRevealedItem().clone();
-        itemMeta = item.getItemMeta(); lore.clear();
+        final ItemStack item = rarity.getRevealedItem().clone();
+        final ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level));
-        final List<String> enchantLore = enchant.getLore();
-        for(String s : rarity.getLoreFormat()) {
-            if(s.equals("{SUCCESS}")) {
+        final List<String> lore = new ArrayList<>(), enchantLore = enchant.getLore();
+        for(String string : rarity.getLoreFormat()) {
+            if(string.equals("{SUCCESS}")) {
                 if(success != -1) {
                     lore.add(rarity.getSuccess().replace("{PERCENT}", Integer.toString(success)));
                 }
-            } else if(s.equals("{DESTROY}")) {
+            } else if(string.equals("{DESTROY}")) {
                 if(destroy != -1) {
                     lore.add(rarity.getDestroy().replace("{PERCENT}", Integer.toString(destroy)));
                 }
-            } else if(s.equals("{ENCHANT_LORE}")) {
+            } else if(string.equals("{ENCHANT_LORE}")) {
                 lore.addAll(enchantLore);
-            } else if(s.equals("{ENCHANT_TYPE}") && showEnchantType) {
+            } else if(string.equals("{ENCHANT_TYPE}") && showEnchantType) {
                 final String path = enchant.getAppliesTo().toString().toLowerCase().replace(",", ";").replace("[", "").replace("]", "").replaceAll("\\p{Z}", "");
                 lore.add(getString(config, "enchant types." + path));
             } else if(showOtherLore) {
-                lore.add(s);
+                lore.add(string);
             }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }
@@ -418,24 +417,36 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final int l = rarities.length;
         final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[RANDOM.nextInt(l)]);
         final List<CustomEnchant> enchants = rar.getEnchants();
-        item = new ItemStack(Material.BOOK);
+        ItemStack item = new ItemStack(Material.BOOK);
         for(int i = 1; i <= 100; i++) {
             final CustomEnchant enchant = enchants.get(RANDOM.nextInt(enchants.size()));
             if(enchant.isEnabled()) {
                 rarity = valueOfCustomEnchantRarity(enchant);
                 final int level = RANDOM.nextInt(enchant.getMaxLevel()+1);
-                item = rarity.getRevealedItem().clone(); itemMeta = item.getItemMeta(); lore.clear();
+                item = rarity.getRevealedItem().clone();
+                final ItemMeta itemMeta = item.getItemMeta();
                 itemMeta.setDisplayName(rarity.getNameColors() + enchant.getName() + " " + toRoman(level == 0 ? 1 : level));
+                final List<String> lore = new ArrayList<>();
                 final String appliesto = enchant.getAppliesTo().toString().replace(" ", "").replace(",", ";");
                 final int sp = RANDOM.nextInt(101), dp = rarity.percentsAddUpto100() ? 100-sp : RANDOM.nextInt(101);
                 for(String s : rarity.getLoreFormat()) {
-                    if(s.equals("{SUCCESS}")) s = rarity.getSuccess().replace("{PERCENT}", Integer.toString(sp));
-                    if(s.equals("{DESTROY}")) s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
-                    if(s.equals("{ENCHANT_LORE}")) lore.addAll(enchant.getLore());
-                    if(s.equals("{ENCHANT_TYPE}")) s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
-                    if(s != null && !s.equals("{ENCHANT_LORE}")) lore.add(colorize(s));
+                    if(s.equals("{SUCCESS}")) {
+                        s = rarity.getSuccess().replace("{PERCENT}", Integer.toString(sp));
+                    }
+                    if(s.equals("{DESTROY}")) {
+                        s = rarity.getDestroy().replace("{PERCENT}", Integer.toString(dp));
+                    }
+                    if(s.equals("{ENCHANT_LORE}")) {
+                        lore.addAll(enchant.getLore());
+                    }
+                    if(s.equals("{ENCHANT_TYPE}")) {
+                        s = config.getString("enchant types." + appliesto.substring(1, appliesto.length()-1));
+                    }
+                    if(s != null && !s.equals("{ENCHANT_LORE}")) {
+                        lore.add(colorize(s));
+                    }
                 }
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
                 break;
             }
@@ -490,12 +501,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDamageEvent(EntityDamageEvent event) {
-        final EntityDamageEvent.DamageCause c = event.getCause();
+        final EntityDamageEvent.DamageCause cause = event.getCause();
         final Entity entity = event.getEntity();
         if(entity instanceof Player) {
             final Player victim = (Player) entity;
-            if(!c.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
-                final isDamagedEvent e = new isDamagedEvent(victim, c, event.getDamage());
+            if(!cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+                final isDamagedEvent e = new isDamagedEvent(victim, cause, event.getDamage());
                 PLUGIN_MANAGER.callEvent(e);
                 triggerEnchants(event, getEnchants(victim));
             }
@@ -525,15 +536,15 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
         EnchantRarity rarity = valueOfCustomEnchantRarity(item);
         if(rarity != null) {
-            final ItemStack r = getRandomEnabledEnchant(rarity);
-            final String displayname = r.getItemMeta().getDisplayName();
-            final CustomEnchant enchant = valueOfCustomEnchant(r);
+            final ItemStack enabledEnchant = getRandomEnabledEnchant(rarity);
+            final String displayname = enabledEnchant.getItemMeta().getDisplayName();
+            final CustomEnchant enchant = valueOfCustomEnchant(enabledEnchant);
             final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, item, enchant, getEnchantmentLevel(displayname));
             PLUGIN_MANAGER.callEvent(e);
             if(!e.isCancelled()) {
                 event.setCancelled(true);
                 removeItem(player, item, 1);
-                giveItem(player, r);
+                giveItem(player, enabledEnchant);
                 spawnFirework(rarity.getFirework(), player.getLocation());
                 player.updateInventory();
                 for(String s : rarity.getRevealedEnchantMsg()) {
@@ -570,24 +581,24 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void entityDeathEvent(EntityDeathEvent event) {
-        final LivingEntity e = event.getEntity();
-        final Player killer = e.getKiller();
-        final UUID u = e.getUniqueId();
-        if(!(e instanceof Player) && killer != null) {
+        final LivingEntity entity = event.getEntity();
+        final Player killer = entity.getKiller();
+        final UUID u = entity.getUniqueId();
+        if(!(entity instanceof Player) && killer != null) {
             triggerEnchants(event, getEnchants(killer));
         }
-        final HashMap<UUID, LivingCustomEnchantEntity> L = LivingCustomEnchantEntity.living;
-        if(L != null) {
-            final LivingCustomEnchantEntity entity = L.get(u);
-            if(entity != null) {
-                if(!entity.getType().dropsItemsUponDeath()) {
+        final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.LIVING;
+        if(living != null) {
+            final LivingCustomEnchantEntity ceEntity = living.get(u);
+            if(ceEntity != null) {
+                if(!ceEntity.getType().dropsItemsUponDeath()) {
                     event.getDrops().clear();
                     event.setDroppedExp(0);
                 }
-                final LivingEntity s = entity.getSummoner();
-                if(s instanceof Player) {
-                    final RPPlayer pdata = RPPlayer.get(s.getUniqueId());
-                    pdata.removeCustomEnchantEntity(u);
+                final LivingEntity summoner = ceEntity.getSummoner();
+                if(summoner instanceof Player) {
+                    final FileRPPlayer pdata = FileRPPlayer.get(summoner.getUniqueId());
+                    pdata.getCustomEnchantData().getEntities().remove(ceEntity);
                 }
             }
         }
@@ -611,9 +622,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             PLUGIN_MANAGER.callEvent(ev);
             if(!ev.isCancelled() && isOnCorrectItem(enchant, current)) {
                 boolean apply = false;
-                item = current.clone();
-                itemMeta = item.getItemMeta();
-                lore.clear();
+                ItemStack item = current.clone();
+                final ItemMeta itemMeta = item.getItemMeta();
+                List<String> lore = new ArrayList<>();
                 if(item.hasItemMeta() && itemMeta.hasLore()) {
                     if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
                         ev.setCancelled(true);
@@ -708,7 +719,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 if(apply) {
                     if(!item.getType().equals(Material.AIR)) {
                         if(itemMeta.hasDisplayName()) {
-                            final Scrolls scrolls = Scrolls.getScrolls();
+                            final Scrolls scrolls = Scrolls.INSTANCE;
                             if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
                                 final TransmogScroll transmog = scrolls.valueOfTransmogScrollApplied(item);
                                 if(transmog != null) {
@@ -716,7 +727,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                 }
                             }
                         }
-                        itemMeta.setLore(lore); lore.clear();
+                        itemMeta.setLore(lore);
                         item.setItemMeta(itemMeta);
                     }
                     event.setCancelled(true);
@@ -744,7 +755,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() || event.getClick().equals(ClickType.NUMBER_KEY)) {
                 CustomEnchant enchant = null;
                 final int hb = event.getHotbarButton();
-                item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
+                final ItemStack item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
                 if(item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                     enchant = valueOfCustomEnchant(item.getItemMeta().getDisplayName());
                 }
@@ -759,17 +770,18 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
+        final RegionalAPI regions = RegionalAPI.INSTANCE;
         final Entity entity = event.getEntity();
         final LivingEntity target = event.getTarget();
         if(entity instanceof LivingEntity && target instanceof Player) {
             final UUID uuid = entity.getUniqueId();
-            final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.living;
+            final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.LIVING;
             if(living != null) {
                 final LivingCustomEnchantEntity enchantEntity = living.getOrDefault(uuid, null);
                 if(enchantEntity != null) {
                     final Player player = (Player) target, summoner = (Player) enchantEntity.getSummoner();
-                    final RPPlayer pdata = RPPlayer.get(target.getUniqueId());
-                    if(!enchantEntity.getType().canTargetSummoner() && pdata.getCustomEnchantEntities().contains(uuid) || hookedFactionsUUID() && (!factions.isEnemy(player, summoner) || factions.isNeutral(player, summoner))) {
+                    final FileRPPlayer pdata = FileRPPlayer.get(target.getUniqueId());
+                    if(!enchantEntity.getType().canTargetSummoner() && pdata.getCustomEnchantData().containsEntity(uuid) || regions.hookedFactionsUUID() && (!FactionsUUID.INSTANCE.isEnemy(player, summoner) || FactionsUUID.INSTANCE.isNeutral(player, summoner))) {
                         event.setCancelled(true);
                     }
                 }

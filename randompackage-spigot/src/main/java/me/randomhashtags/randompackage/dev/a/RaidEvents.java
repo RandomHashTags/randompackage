@@ -14,12 +14,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class RaidEvents extends RPFeature implements CommandExecutor {
-    private static RaidEvents instance;
-    public static RaidEvents getRaidEvent() {
-        if(instance == null) instance = new RaidEvents();
-        return instance;
-    }
+public enum RaidEvents implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     private ActiveRaidEvent active;
     private YamlConfiguration config;
@@ -28,6 +24,7 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
     private boolean canRepeatRewards;
     private List<String> rewards;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final int l = args.length;
         if(l == 0) {
@@ -38,7 +35,11 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "RAID_EVENT"; }
+    @Override
+    public String getIdentifier() {
+        return "RAID_EVENT";
+    }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "raid events.yml");
@@ -50,6 +51,7 @@ public class RaidEvents extends RPFeature implements CommandExecutor {
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Raid Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
     }
 

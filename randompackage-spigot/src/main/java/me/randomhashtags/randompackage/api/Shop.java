@@ -22,18 +22,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Shop extends RPFeature implements CommandExecutor {
-	private static Shop instance;
-	public static Shop getShop() {
-	    if(instance == null) instance = new Shop();
-	    return instance;
-	}
+public enum Shop implements RPFeature, CommandExecutor {
+    INSTANCE;
 
 	public YamlConfiguration config;
 	public ItemStack back;
@@ -48,9 +46,11 @@ public class Shop extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
 	public String getIdentifier() {
 	    return "SHOP";
 	}
+	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
@@ -60,13 +60,13 @@ public class Shop extends RPFeature implements CommandExecutor {
         back = createItemStack(config, "items.back to categories");
         defaultShop = config.getString("settings./shop opens");
 
-        if(!otherdata.getBoolean("saved default shops")) {
+        if(!OTHER_YML.getBoolean("saved default shops")) {
             generateDefaultShopCategories();
-            otherdata.set("saved default shops", true);
+            OTHER_YML.set("saved default shops", true);
             saveOtherData();
         }
 
-        ShopCategory.shop = this;
+        ShopCategory.SHOP = this;
         titles = new HashMap<>();
         for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
@@ -76,6 +76,7 @@ public class Shop extends RPFeature implements CommandExecutor {
         }
         sendConsoleDidLoadFeature(getAll(Feature.SHOP_CATEGORY).size() + " Shop Categories", started);
     }
+    @Override
     public void unload() {
 	    unregister(Feature.SHOP_CATEGORY);
     }
@@ -114,11 +115,12 @@ public class Shop extends RPFeature implements CommandExecutor {
             final BigDecimal discount = getDiscount(player), one = BigDecimal.ONE;
             final List<String> buyLore = getStringList(config, "lores.purchase"), sellLore = getStringList(config, "lores.sell");
             for(int i = 0; i < top.getSize(); i++) {
-                item = top.getItem(i);
+                ItemStack item = top.getItem(i);
                 if(item != null && !item.equals(back)) {
                     final ShopItem si = s.getItem(i);
                     item = item.clone();
-                    itemMeta = item.getItemMeta(); lore.clear();
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    final List<String> lore = new ArrayList<>();
                     if(itemMeta.hasLore()) {
                         lore.addAll(itemMeta.getLore());
                     }
@@ -163,24 +165,26 @@ public class Shop extends RPFeature implements CommandExecutor {
             final ItemStack is = shopItem.getPurchased();
             int amountPurchased = clickType.equals("LEFT") ? 1 : is.getMaxStackSize();
             cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
-            item = is;
+            ItemStack item = is;
             item.setAmount(is.getAmount()*amountPurchased);
-            final ShopPurchaseEvent e = new ShopPurchaseEvent(player, shopItem, item, amountPurchased, cost);
-            PLUGIN_MANAGER.callEvent(e);
-            if(e.isCancelled()) return;
-            cost = e.getTotal();
-            amountPurchased = e.getAmount();
+            final ShopPurchaseEvent purchaseEvent = new ShopPurchaseEvent(player, shopItem, item, amountPurchased, cost);
+            PLUGIN_MANAGER.callEvent(purchaseEvent);
+            if(purchaseEvent.isCancelled()) {
+                return;
+            }
+            cost = purchaseEvent.getTotal();
+            amountPurchased = purchaseEvent.getAmount();
             item = is;
             item.setAmount(is.getAmount());
             boolean purchased = false;
-            if(eco.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
+            if(ECONOMY.withdrawPlayer(player, cost.doubleValue()).transactionSuccess()) {
                 purchased = true;
                 giveItem(player, item);
                 final List<String> commands = shopItem.getExecutedCommands();
                 if(commands != null) {
                     final String name = player.getName();
-                    for(String s : commands) {
-                        SERVER.dispatchCommand(CONSOLE, s.replace("%player%", name));
+                    for(String command : commands) {
+                        SERVER.dispatchCommand(CONSOLE, command.replace("%player%", name));
                     }
                 }
             }
@@ -198,32 +202,34 @@ public class Shop extends RPFeature implements CommandExecutor {
     public void trySelling(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
         final BigDecimal sell = shopItem.sellPrice;
         if(sell.doubleValue() > 0.00) {
-            ItemStack A = shopItem.getPurchased();
+            ItemStack purchasedItem = shopItem.getPurchased();
             final Inventory inv = player.getInventory();
-            String msg = "messages.sell" + (!inv.containsAtLeast(A, 1) ? " incomplete" : "");
+            String msg = "messages.sell" + (!inv.containsAtLeast(purchasedItem, 1) ? " incomplete" : "");
             final BigDecimal price = shopItem.sellPrice;
-            int amountSold = clickType.equals("RIGHT") ? A.getAmount() : A.getMaxStackSize();
+            int amountSold = clickType.equals("RIGHT") ? purchasedItem.getAmount() : purchasedItem.getMaxStackSize();
 
-            if(!inv.containsAtLeast(A, 1)) {
+            if(!inv.containsAtLeast(purchasedItem, 1)) {
                 playSound(config, "sounds.not enough to sell", player, player.getLocation(), false);
             } else {
-                final int has = getTotalAmount(inv, UMaterial.match(A));
+                final int has = getTotalAmount(inv, UMaterial.match(purchasedItem));
                 amountSold = Math.min(has, amountSold);
-                if(inv.containsAtLeast(A, amountSold)) {
+                if(inv.containsAtLeast(purchasedItem, amountSold)) {
                     BigDecimal profit = price.multiply(BigDecimal.valueOf(amountSold));
-                    final ShopSellEvent e = new ShopSellEvent(player, shopItem, A, amountSold, profit);
-                    PLUGIN_MANAGER.callEvent(e);
-                    if(e.isCancelled()) return;
-                    A = e.getItem();
-                    profit = e.getTotal();
-                    amountSold = e.getAmount();
-                    eco.depositPlayer(player, profit.doubleValue());
-                    removeItem(player, A, amountSold);
+                    final ShopSellEvent sellEvent = new ShopSellEvent(player, shopItem, purchasedItem, amountSold, profit);
+                    PLUGIN_MANAGER.callEvent(sellEvent);
+                    if(sellEvent.isCancelled()) {
+                        return;
+                    }
+                    purchasedItem = sellEvent.getItem();
+                    profit = sellEvent.getTotal();
+                    amountSold = sellEvent.getAmount();
+                    ECONOMY.depositPlayer(player, profit.doubleValue());
+                    removeItem(player, purchasedItem, amountSold);
                 } else {
                     msg = "messages.sell incomplete";
                 }
             }
-            final String item = UMaterial.match(A).name(), priceString = formatBigDecimal(price), amount = formatInt(amountSold), total = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
+            final String item = UMaterial.match(purchasedItem).name(), priceString = formatBigDecimal(price), amount = formatInt(amountSold), total = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
             final HashMap<String, String> replacements = new HashMap<String, String>() {{
                 put("{TOTAL", total);
                 put("{AMOUNT}", amount);
@@ -254,16 +260,16 @@ public class Shop extends RPFeature implements CommandExecutor {
 
                 if(current.equals(back)) {
                     view(player);
-                } else if(eco == null) {
+                } else if(ECONOMY == null) {
                     Bukkit.broadcastMessage("[RandomPackage] An Economy plugin is required to use /shop!");
                     player.closeInventory();
                 } else {
                     final ShopItem shopItem = category.getItem(slot);
                     if(shopItem != null) {
-                        final String o = shopItem.opensCategory;
-                        if(o != null) {
+                        final String targetCategory = shopItem.opensCategory;
+                        if(targetCategory != null) {
                             player.closeInventory();
-                            viewCategory(player, o);
+                            viewCategory(player, targetCategory);
                         } else if(click.endsWith("LEFT")) {
                             tryPurchasing(player, shopItem, click);
                         } else if(click.endsWith("RIGHT")) {

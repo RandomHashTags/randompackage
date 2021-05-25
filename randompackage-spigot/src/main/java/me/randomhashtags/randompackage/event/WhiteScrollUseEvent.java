@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.WhiteScroll;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class WhiteScrollUseEvent extends ScrollUseEvent {
+public final class WhiteScrollUseEvent extends ScrollUseEvent {
     public WhiteScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem) {
         super(player, scroll, usedOnItem);
     }

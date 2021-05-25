@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FileCustomCreeper extends RPAddon implements CustomExplosion {
+public final class FileCustomCreeper extends RPAddon implements CustomExplosion {
     public static HashMap<UUID, FileCustomCreeper> living;
     private ItemStack item;
     public FileCustomCreeper(File f) {
@@ -32,7 +32,7 @@ public class FileCustomCreeper extends RPAddon implements CustomExplosion {
         return getStringList(yml, "attributes");
     }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
 

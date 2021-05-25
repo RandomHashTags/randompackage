@@ -7,7 +7,7 @@ import org.bukkit.block.BlockState;
 
 import java.util.HashMap;
 
-public class SetBlock extends AbstractEventAttribute implements TemporaryBlocks {
+public final class SetBlock extends AbstractEventAttribute implements TemporaryBlocks {
     @Override
     public void executeAt(HashMap<Location, String> locations) {
         for(Location l : locations.keySet()) {
@@ -26,14 +26,14 @@ public class SetBlock extends AbstractEventAttribute implements TemporaryBlocks 
 
                 final int c = values.length;
                 if(c >= 2) {
-                    tempblocks.put(l, previous);
+                    TEMPORARY_BLOCKS.put(l, previous);
                     SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                        b.setType(previous.getMaterial());
                        if(LEGACY) {
                            state.setRawData(previous.getData());
                        }
                        state.update(true);
-                       tempblocks.remove(l);
+                       TEMPORARY_BLOCKS.remove(l);
                     });
                 }
             }

@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
 
-public class Teleport extends AbstractEventAttribute {
+public final class Teleport extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();

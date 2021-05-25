@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.dev.Disguise;
 
 import java.util.List;
 
-public class DisguiseDataObj implements DisguiseData {
+public final class DisguiseDataObj implements DisguiseData {
     private String active;
     private List<String> owned;
 

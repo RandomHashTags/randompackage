@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 
-public class FileFilterCategory extends RPAddon implements FilterCategory {
+public final class FileFilterCategory extends RPAddon implements FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
         load(f);
@@ -23,7 +23,7 @@ public class FileFilterCategory extends RPAddon implements FilterCategory {
             gui = new UInventory(null, yml.getInt("size"), getTitle());
             final Inventory i = gui.getInventory();
             for(String s : yml.getConfigurationSection("gui").getKeys(false)) {
-                i.setItem(yml.getInt("gui." + s + ".slot"), API.createItemStack(yml, "gui." + s));
+                i.setItem(yml.getInt("gui." + s + ".slot"), createItemStack(yml, "gui." + s));
             }
         }
         return gui;

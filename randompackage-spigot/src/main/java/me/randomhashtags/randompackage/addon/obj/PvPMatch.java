@@ -6,37 +6,43 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
 
-public class PvPMatch {
-    public static HashMap<Player, PvPMatch> matches;
+public final class PvPMatch {
+    public static HashMap<Player, PvPMatch> MATCHES;
 
     public int slot;
     private Player creator;
-    private Inventory inventory;
+    private final Inventory inventory;
     private Chunk chunk;
     public PvPMatch(Player creator, Inventory inventory, Chunk chunk) {
-        if(matches == null) {
-            matches = new HashMap<>();
+        if(MATCHES == null) {
+            MATCHES = new HashMap<>();
         }
         this.creator = creator;
         this.inventory = inventory;
         this.chunk = chunk;
-        matches.put(creator, this);
+        MATCHES.put(creator, this);
     }
-    public Player getCreator() { return creator; }
-    public Inventory getInventory() { return inventory; }
-    public Chunk getChunk() { return chunk; }
+    public Player getCreator() {
+        return creator;
+    }
+    public Inventory getInventory() {
+        return inventory;
+    }
+    public Chunk getChunk() {
+        return chunk;
+    }
     public void delete() {
-        matches.remove(creator);
+        MATCHES.remove(creator);
         creator = null;
         chunk = null;
     }
 
     public static PvPMatch valueOf(Player player) {
-        return matches != null ? matches.getOrDefault(player, null) : null;
+        return MATCHES != null ? MATCHES.getOrDefault(player, null) : null;
     }
     public static PvPMatch valueOf(int slot) {
-        if(matches != null) {
-            for(PvPMatch m : matches.values()) {
+        if(MATCHES != null) {
+            for(PvPMatch m : MATCHES.values()) {
                 if(m.slot == slot) {
                     return m;
                 }

@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 
-public class ExecuteCommand extends AbstractEventAttribute {
+public final class ExecuteCommand extends AbstractEventAttribute {
     @Override
     public void execute(String value) {
         CONSOLE.getServer().dispatchCommand(CONSOLE, value);

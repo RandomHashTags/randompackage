@@ -56,7 +56,9 @@ public interface DatabaseFile {
     void set(String path, Object value);
     default void set(String path, Object value, boolean save) {
         set(path, value);
-        if(save) save();
+        if(save) {
+            save();
+        }
     }
 
     void convertTo(Class<? extends DatabaseFile> file);

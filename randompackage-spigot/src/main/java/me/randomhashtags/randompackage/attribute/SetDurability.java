@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public class SetDurability extends AbstractEventAttribute {
+public final class SetDurability extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value) {
         final Event event = pending.getEvent();
@@ -31,7 +31,9 @@ public class SetDurability extends AbstractEventAttribute {
             setDurability(e, recipientValues.get(e));
         }
     }
-    private void setDurability(Entity entity, String value) { setDurability(entity, value, null); }
+    private void setDurability(Entity entity, String value) {
+        setDurability(entity, value, null);
+    }
     private void setDurability(Entity entity, String value, ItemStack item) {
         if(entity instanceof LivingEntity) {
             final LivingEntity l = (LivingEntity) entity;

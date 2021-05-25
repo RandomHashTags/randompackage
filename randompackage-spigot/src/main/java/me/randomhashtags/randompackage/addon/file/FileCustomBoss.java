@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileCustomBoss extends RPSpawnable implements CustomBoss {
+public final class FileCustomBoss extends RPSpawnable implements CustomBoss {
     private Scoreboard scoreboard;
 
     private ItemStack spawnitem;
@@ -59,7 +59,7 @@ public class FileCustomBoss extends RPSpawnable implements CustomBoss {
     }
 
     public ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = API.createItemStack(yml, "spawn item");
+        if(spawnitem == null) spawnitem = createItemStack(yml, "spawn item");
         return spawnitem.clone();
     }
     public List<String> getAttributes() { return yml.getStringList("attributes"); }

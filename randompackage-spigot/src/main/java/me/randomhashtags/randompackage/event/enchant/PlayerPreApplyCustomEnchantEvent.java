@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerPreApplyCustomEnchantEvent extends RPEventCancellable {
+public final class PlayerPreApplyCustomEnchantEvent extends RPEventCancellable {
 	public final CustomEnchant enchant;
 	public final int level;
 	public PlayerPreApplyCustomEnchantEvent(Player player, CustomEnchant enchant, int level, ItemStack applytoItem) {

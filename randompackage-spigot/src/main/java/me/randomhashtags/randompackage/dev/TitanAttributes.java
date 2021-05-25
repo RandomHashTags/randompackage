@@ -14,23 +14,22 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public class TitanAttributes extends RPFeature implements Listener, CommandExecutor {
-    private static TitanAttributes instance;
-    public static TitanAttributes getTitanAttributes() {
-        if(instance == null) instance = new TitanAttributes();
-        return instance;
-    }
+public enum TitanAttributes implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private ItemStack extractor;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "TITAN_ATTRIBUTES";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";
@@ -38,9 +37,9 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
         extractor = createItemStack(config, "items.extractor");
 
-        if(!otherdata.getBoolean("saved default titan attributes")) {
+        if(!OTHER_YML.getBoolean("saved default titan attributes")) {
             generateDefaultTitanAttributes();
-            otherdata.set("saved default titan attributes", true);
+            OTHER_YML.set("saved default titan attributes", true);
             saveOtherData();
         }
 
@@ -52,6 +51,7 @@ public class TitanAttributes extends RPFeature implements Listener, CommandExecu
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TITAN_ATTRIBUTE).size() + " Titan Attributes &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         unregister(Feature.TITAN_ATTRIBUTE);
     }

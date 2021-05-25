@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 
-public class SetNoDamageTicks extends AbstractEventAttribute {
+public final class SetNoDamageTicks extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

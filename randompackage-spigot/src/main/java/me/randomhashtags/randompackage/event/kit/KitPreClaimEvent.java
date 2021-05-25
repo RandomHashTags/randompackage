@@ -6,9 +6,11 @@ import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 
 public class KitPreClaimEvent extends RPEventCancellable {
-    private RPPlayer pdata;
-    private CustomKit kit;
-    private int level, chance, levelupChance;
+    private final RPPlayer pdata;
+    private final CustomKit kit;
+    private final int level;
+    private int chance;
+    private int levelupChance;
     public KitPreClaimEvent(RPPlayer pdata, Player player, CustomKit kit, int level) {
         this(pdata, player, kit, level, -1);
     }

@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-public class DuelRankedDataObj implements DuelRankedData {
+public final class DuelRankedDataObj implements DuelRankedData {
     private BigDecimal elo;
-    private HashMap<ItemStack, List<CustomEnchant>> godset;
+    private final HashMap<ItemStack, List<CustomEnchant>> godset;
 
     public DuelRankedDataObj(BigDecimal elo, HashMap<ItemStack, List<CustomEnchant>> godset) {
         this.elo = elo;

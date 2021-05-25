@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathRandomizationScroll extends RPAddon implements RandomizationScroll {
-	private String path;
+public final class PathRandomizationScroll extends RPAddon implements RandomizationScroll {
+	private final String path;
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;
 	public PathRandomizationScroll(String path) {
@@ -19,7 +19,7 @@ public class PathRandomizationScroll extends RPAddon implements RandomizationScr
 	public String getIdentifier() { return path; }
 
 	public ItemStack getItem() {
-		if(is == null) is = API.createItemStack(getAddonConfig("scrolls.yml"), "randomization scrolls." + path);
+		if(is == null) is = createItemStack(getAddonConfig("scrolls.yml"), "randomization scrolls." + path);
 		return getClone(is);
 	}
 	public List<EnchantRarity> getAppliesToRarities() {

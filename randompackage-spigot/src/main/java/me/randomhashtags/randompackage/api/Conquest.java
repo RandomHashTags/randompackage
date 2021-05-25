@@ -38,18 +38,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Conquest extends RPFeature implements CommandExecutor {
-    private static Conquest instance;
-    public static Conquest getConquest() {
-        if(instance == null) instance = new Conquest();
-        return instance;
-    }
+public enum Conquest implements RPFeature, CommandExecutor {
+    INSTANCE;
+
     public YamlConfiguration config;
     private List<Integer> tasks;
     private long lastSpawnTime;
     private Location lastLocation;
     public String lastConquerer;
 
+    @Override
     public String getIdentifier() {
         return "CONQUEST";
     }
@@ -80,9 +78,9 @@ public class Conquest extends RPFeature implements CommandExecutor {
         save("conquests", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
 
-        if(!otherdata.getBoolean("saved default conquests")) {
+        if(!OTHER_YML.getBoolean("saved default conquests")) {
             generateDefaultConquests();
-            otherdata.set("saved default conquests", true);
+            OTHER_YML.set("saved default conquests", true);
             saveOtherData();
         }
 
@@ -102,14 +100,14 @@ public class Conquest extends RPFeature implements CommandExecutor {
             }
         }
 
-        final List<String> conquests = otherdata.getStringList("conquests");
+        final List<String> conquests = OTHER_YML.getStringList("conquests");
         if(!conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");
                 new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
             }
         }
-        final HashMap<String, ConquestMob> bosses = ConquestMob.bosses;
+        final HashMap<String, ConquestMob> bosses = ConquestMob.BOSSES;
         sendConsoleDidLoadFeature(getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (bosses != null ? bosses.size() : 0) + " bosses", started);
     }
     public void unload() {
@@ -118,13 +116,13 @@ public class Conquest extends RPFeature implements CommandExecutor {
         }
 
         LivingConquestMob.deleteAll();
-        final List<LivingConquestChest> C = LivingConquestChest.living;
-        if(C != null) {
-            final List<String> con = new ArrayList<>();
-            for(LivingConquestChest c : C) {
-                con.add(toString(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.getIdentifier() + ":" + c.conquerer);
+        final List<LivingConquestChest> livingChests = LivingConquestChest.LIVING;
+        if(livingChests != null) {
+            final List<String> chests = new ArrayList<>();
+            for(LivingConquestChest c : livingChests) {
+                chests.add(toString(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.getIdentifier() + ":" + c.conquerer);
             }
-            otherdata.set("conquests", con);
+            OTHER_YML.set("conquests", chests);
         }
         destroyConquests(null);
         saveOtherData();
@@ -157,10 +155,10 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     public void destroyConquests(@Nullable CommandSender sender) {
         if(sender == null || hasPermission(sender, ConquestPermission.STOP, true)) {
-            final List<LivingConquestChest> living = LivingConquestChest.living;
+            final List<LivingConquestChest> living = LivingConquestChest.LIVING;
             if(living != null) {
-                for(LivingConquestChest l : new ArrayList<>(living)) {
-                    l.delete(false, true);
+                for(LivingConquestChest chest : new ArrayList<>(living)) {
+                    chest.delete(false, true);
                 }
             }
         }
@@ -174,19 +172,19 @@ public class Conquest extends RPFeature implements CommandExecutor {
     public Location getRandomLocation(@NotNull ConquestChest chest) {
         final String[] spawnRegion = chest.getSpawnRegion().split(";");
         final String[] xValues = spawnRegion[1].split(":"), zValues = spawnRegion[2].split(":");
-        final String world = spawnRegion[0];
-        final World w = Bukkit.getWorld(world);
-        if(w != null) {
+        final String targetWorld = spawnRegion[0];
+        final World world = Bukkit.getWorld(targetWorld);
+        if(world != null) {
             final int xMin = Integer.parseInt(xValues[0]), xMax = Integer.parseInt(xValues[1]), zMin = Integer.parseInt(zValues[0]), zMax = Integer.parseInt(zValues[1]);
             final int xDifference = xMax-xMin, zDifference = zMax-zMin;
             final int xNum = xDifference < 0 ? -1 : 1, zNum = zDifference < 0 ? -1 : 1;
             final int X = xNum*xDifference, Z = zNum*zDifference;
-            final int x = xNum*(xMax- RANDOM.nextInt(X)), z = zNum*(zMax- RANDOM.nextInt(Z));
-            final Location l = new Location(w, x, 256, z);
-            l.setY(w.getHighestBlockYAt(l));
-            return l;
+            final int x = xNum*(xMax- RANDOM.nextInt(X)), z = zNum*(zMax - RANDOM.nextInt(Z));
+            final Location location = new Location(world, x, world.getMaxHeight(), z);
+            location.setY(world.getHighestBlockYAt(location));
+            return location;
         } else {
-            sendConsoleMessage("&6[RandomPackage] &cERROR &eInvalid world &f\"" + world + "\"&e for conquest \"" + chest.getIdentifier() + "\" spawn location!");
+            sendConsoleMessage("&6[RandomPackage] &cERROR &eInvalid world &f\"" + targetWorld + "\"&e for conquest \"" + chest.getIdentifier() + "\" spawn location!");
             return null;
         }
     }
@@ -213,42 +211,40 @@ public class Conquest extends RPFeature implements CommandExecutor {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
-        final LivingConquestChest c = LivingConquestChest.valueOf(event.getBlock().getLocation());
-        if(c != null) {
+        final LivingConquestChest chest = LivingConquestChest.valueOf(event.getBlock().getLocation());
+        if(chest != null) {
             event.setCancelled(true);
             event.getPlayer().updateInventory();
         }
     }
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
-        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.living;
+        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.LIVING;
         if(living != null) {
             final UUID uuid = event.getEntity().getUniqueId();
-            final LivingConquestMob l = living.getOrDefault(uuid, null);
-            if(l != null) {
-                final LivingConquestChest c = LivingConquestChest.valueOf(uuid);
-                if(c != null) {
-                    c.getMobs().remove(uuid);
+            final LivingConquestMob mob = living.getOrDefault(uuid, null);
+            if(mob != null) {
+                final LivingConquestChest chest = LivingConquestChest.valueOf(uuid);
+                if(chest != null) {
+                    chest.getMobs().remove(uuid);
                 }
-                l.kill(event);
+                mob.kill(event);
             }
         }
     }
     @EventHandler
     private void chunkUnloadEvent(ChunkUnloadEvent event) {
-        final LivingConquestChest l = LivingConquestChest.valueOf(event.getChunk());
-        if(l != null && event instanceof Cancellable) {
-            final Cancellable ca = (Cancellable) event;
-            if(!ca.isCancelled()) {
-                ca.setCancelled(true);
-            }
+        final LivingConquestChest chest = LivingConquestChest.valueOf(event.getChunk());
+        if(chest != null && event instanceof Cancellable) {
+            final Cancellable cancellable = (Cancellable) event;
+            cancellable.setCancelled(true);
         }
     }
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void entityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
         final Entity entity = event.getEntity();
         final LivingEntity target = event.getTarget();
-        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.living;
+        final HashMap<UUID, LivingConquestMob> living = LivingConquestMob.LIVING;
         if(living != null) {
             final LivingConquestMob mob = target != null ? living.getOrDefault(entity.getUniqueId(), null) : null;
             if(mob != null && living.containsKey(target.getUniqueId())) {

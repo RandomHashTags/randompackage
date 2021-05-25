@@ -19,12 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Combine extends RPFeature implements CommandExecutor {
-    private static Combine instance;
-    public static Combine getCombine() {
-        if(instance == null) instance = new Combine();
-        return instance;
-    }
+public enum Combine implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private List<String> combineores;
@@ -36,9 +32,11 @@ public class Combine extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "COMBINE";
     }
+
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "combine.yml");

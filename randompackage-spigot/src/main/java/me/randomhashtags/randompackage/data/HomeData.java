@@ -18,8 +18,16 @@ public interface HomeData {
                 return addedMaxHomes+i;
             }
         }
-        return Homes.getHomes().defaultMax+addedMaxHomes;
+        return Homes.INSTANCE.defaultMax + addedMaxHomes;
     }
-    Home getHome(String identifier);
+    default Home getHome(String identifier) {
+        for(Home h : getHomes()) {
+            if(h.getName().equals(identifier)) {
+                return h;
+            }
+        }
+        return null;
+    }
+    void addHome(Home home);
     void deleteHome(@NotNull Home home);
 }

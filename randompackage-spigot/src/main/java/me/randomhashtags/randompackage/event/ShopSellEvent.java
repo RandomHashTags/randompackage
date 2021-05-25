@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
-public class ShopSellEvent extends ShopEvent {
+public final class ShopSellEvent extends ShopEvent {
     public ShopSellEvent(Player player, ShopItem shopitem, ItemStack item, int amount, BigDecimal cost) {
         super(player, shopitem, item, amount, cost);
     }

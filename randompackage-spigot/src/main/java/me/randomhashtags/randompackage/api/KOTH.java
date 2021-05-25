@@ -3,8 +3,10 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.KothCaptureEvent;
 import me.randomhashtags.randompackage.perms.KOTHPermission;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,14 +32,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class KOTH extends RPFeature implements CommandExecutor {
-	private static KOTH instance;
-	public static KOTH getKOTH() {
-	    if(instance == null) instance = new KOTH();
-	    return instance;
-	}
+public enum KOTH implements RPFeature, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private UInventory lootbagInv;
@@ -57,9 +53,11 @@ public class KOTH extends RPFeature implements CommandExecutor {
 	private long cappingStartedTime = -1, capturedTime = -1;
 	public Player currentPlayerCapturing, previouscapturer;
 
+	@Override
 	public String getIdentifier() {
 		return "KOTH";
 	}
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		switch (args.length) {
@@ -101,6 +99,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "koth.yml");
@@ -109,7 +108,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		lootbagInv = new UInventory(null, config.getInt("items.lootbag.size"), colorize(config.getString("items.lootbag.title")));
 
 		lootbag = createItemStack(config, "items.lootbag");
-		GIVEDP_ITEM.items.put("kothlootbag", lootbag);
+		GivedpItem.INSTANCE.items.put("kothlootbag", lootbag);
 
 		displaySlot = DisplaySlot.valueOf(config.getString("settings.scoreboards.display slot").toUpperCase());
 		kothtitle = colorize(config.getString("settings.scoreboards.title"));
@@ -117,7 +116,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 
 		status = "Not Active";
 
-		teleportLocation = otherdata.getString("koth.tp") != null && !otherdata.getString("koth.tp").equals("") ? toLocation(otherdata.getString("koth.tp")) : null;
+		teleportLocation = OTHER_YML.getString("koth.tp") != null && !OTHER_YML.getString("koth.tp").equals("") ? toLocation(OTHER_YML.getString("koth.tp")) : null;
 		captureTime = config.getInt("settings.time to cap");
 		startCapCountdown = config.getInt("settings.start cap countdown");
 		captureRadius = config.getInt("settings.capture radius");
@@ -128,7 +127,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		limitedcommands = config.getStringList("limited commands");
 		lootbagRewards = config.getStringList("items.lootbag.rewards");
 
-		final String center = otherdata.getString("koth.center");
+		final String center = OTHER_YML.getString("koth.center");
 		if(center != null && !center.equals("")) {
 			this.center = toLocation(center);
 			startKOTH();
@@ -136,9 +135,10 @@ public class KOTH extends RPFeature implements CommandExecutor {
 
 		sendConsoleDidLoadFeature("Koth of the Hill", started);
 	}
+	@Override
 	public void unload() {
-		otherdata.set("koth.center", center != null ? toString(center) : "");
-		otherdata.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
+		OTHER_YML.set("koth.center", center != null ? toString(center) : "");
+		OTHER_YML.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
 		saveOtherData();
 
 		if(center != null && !status.equals("STOPPED")) {
@@ -180,14 +180,14 @@ public class KOTH extends RPFeature implements CommandExecutor {
 			for(ItemStack is : lootbag) {
 			    final int f = top.firstEmpty();
 				if(is != null && !(f < 0)) {
-				    item = is;
-				    itemMeta = item.getItemMeta();
+				    final ItemStack item = is;
+				    final ItemMeta itemMeta = item.getItemMeta();
 				    if(itemMeta != null && itemMeta.hasLore()) {
-				        lore.clear();
+				    	final List<String> lore = new ArrayList<>();
 				        for(String s : itemMeta.getLore()) {
 				            lore.add(s.replace("{PLAYER}", n).replace("{UNLOCKED_BY}", n));
                         }
-				        itemMeta.setLore(lore); lore.clear();
+				        itemMeta.setLore(lore);
 				        item.setItemMeta(itemMeta);
                     }
 					top.setItem(f, item);
@@ -210,7 +210,7 @@ public class KOTH extends RPFeature implements CommandExecutor {
 					name = currentPlayerCapturing != null ? currentPlayerCapturing.getName() : "",
 					flag = config.getString("messages.flag." + (captured || stopped ? "captured" : currentPlayerCapturing == null ? "uncontested" : "capturing"));
 
-			String faction = currentPlayerCapturing != null ? regions.getFactionTag(currentPlayerCapturing.getUniqueId()) : "";
+			String faction = currentPlayerCapturing != null ? RegionalAPI.INSTANCE.getFactionTag(currentPlayerCapturing.getUniqueId()) : "";
 			if(!faction.equals("")) {
 				faction = faction + " ";
 			}
@@ -360,9 +360,9 @@ public class KOTH extends RPFeature implements CommandExecutor {
 		if(!isStopped) {
 			if(!isCaptured && isCapturing) {
 				if(captureTimeLeft <= 0) {
-					final KothCaptureEvent e = new KothCaptureEvent(currentPlayerCapturing);
-					PLUGIN_MANAGER.callEvent(e);
-					if(!e.isCancelled()) {
+					final KothCaptureEvent captureEvent = new KothCaptureEvent(currentPlayerCapturing);
+					PLUGIN_MANAGER.callEvent(captureEvent);
+					if(!captureEvent.isCancelled()) {
 						final String currentCapturer = currentPlayerCapturing.getName();
 						status = "CAPTURED";
 						for(Player player : kothPlayers) {
@@ -370,11 +370,13 @@ public class KOTH extends RPFeature implements CommandExecutor {
 								player.sendMessage(string.replace("{PLAYER}", currentCapturer));
 							}
 						}
-						item = lootbag.clone(); itemMeta = item.getItemMeta(); lore.clear();
+						final ItemStack item = lootbag.clone();
+						final ItemMeta itemMeta = item.getItemMeta();
+						final List<String> lore = new ArrayList<>();
 						for(String string : itemMeta.getLore()) {
 							lore.add(string.replace("{PLAYER}", currentCapturer));
 						}
-						itemMeta.setLore(lore); lore.clear();
+						itemMeta.setLore(lore);
 						item.setItemMeta(itemMeta);
 						giveItem(currentPlayerCapturing, item.clone());
 						return;
@@ -520,8 +522,8 @@ public class KOTH extends RPFeature implements CommandExecutor {
 						loot.add(is.getItemMeta().getDisplayName());
 					} else if(is.getType().equals(Material.ENCHANTED_BOOK)) {
 						loot.add(ChatColor.YELLOW + "Enchanted Book");
-						item = lootbag.get(z);
-						itemMeta = item.getItemMeta();
+						final ItemStack item = lootbag.get(z);
+						final ItemMeta itemMeta = item.getItemMeta();
 						itemMeta.setDisplayName(loot.get(loot.size()-1));
 						item.setItemMeta(itemMeta);
 					}

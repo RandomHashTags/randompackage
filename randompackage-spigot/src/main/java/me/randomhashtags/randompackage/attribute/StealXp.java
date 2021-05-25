@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public class StealXp extends AbstractEventAttribute {
+public final class StealXp extends AbstractEventAttribute {
     @Override
     public void execute(Entity entity1, Entity entity2, String value) {
         if(entity1 instanceof Player && entity2 instanceof Player && value != null) {

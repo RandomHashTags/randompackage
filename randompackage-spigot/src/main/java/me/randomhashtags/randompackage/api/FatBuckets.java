@@ -25,23 +25,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FatBuckets extends RPFeature implements RPItemStack {
-    private static FatBuckets instance;
-    public static FatBuckets getFatBuckets() {
-        if(instance == null) instance = new FatBuckets();
-        return instance;
-    }
+public enum FatBuckets implements RPFeature, RPItemStack {
+    INSTANCE;
 
     public YamlConfiguration config;
 
+    @Override
     public String getIdentifier() {
         return "FAT_BUCKETS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        if(!otherdata.getBoolean("saved default fat buckets")) {
+        if(!OTHER_YML.getBoolean("saved default fat buckets")) {
             generateDefaultFatBuckets();
-            otherdata.set("saved default fat buckets", true);
+            OTHER_YML.set("saved default fat buckets", true);
             saveOtherData();
         }
         final List<ItemStack> list = new ArrayList<>();
@@ -52,6 +50,7 @@ public class FatBuckets extends RPFeature implements RPItemStack {
         addGivedpCategory(list, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
         sendConsoleDidLoadFeature(getAll(Feature.FAT_BUCKET).size() + " Fat Buckets", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.FAT_BUCKET);
     }

@@ -8,14 +8,19 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-public class FileBooster extends RPAddon implements Booster {
+public final class FileBooster extends RPAddon implements Booster {
     private ItemStack item;
     private BoosterRecipients recipients;
+
     public FileBooster(File f) {
         load(f);
         register(Feature.BOOSTER, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
     public BoosterRecipients getRecipients() {
         if(recipients == null) {
@@ -25,12 +30,16 @@ public class FileBooster extends RPAddon implements Booster {
         return recipients;
     }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
 
-    public int getTimeLoreSlot() { return get("{TIME}"); }
-    public int getMultiplierLoreSlot() { return get("{MULTIPLIER}"); }
+    public int getTimeLoreSlot() {
+        return get("{TIME}");
+    }
+    public int getMultiplierLoreSlot() {
+        return get("{MULTIPLIER}");
+    }
     private int get(String string) {
         final List<String> l = getItem().getItemMeta().getLore();
         for(int i = 0; i < l.size(); i++) {

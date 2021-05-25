@@ -7,13 +7,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Factions extends RPFeature implements CommandExecutor {
-    private static Factions instance;
-    public static Factions getFactions() {
-        if(instance == null) instance = new Factions();
-        return instance;
-    }
+public enum Factions implements RPFeature, CommandExecutor {
+    INSTANCE;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
@@ -65,11 +62,16 @@ public class Factions extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "FACTIONS"; }
+    @Override
+    public String getIdentifier() {
+        return "FACTIONS";
+    }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Factions &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
     }
 

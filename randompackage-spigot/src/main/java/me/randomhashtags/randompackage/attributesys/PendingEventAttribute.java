@@ -6,12 +6,12 @@ import org.bukkit.event.Event;
 
 import java.util.HashMap;
 
-public class PendingEventAttribute {
-    private Event event;
-    private EventAttribute attribute;
-    private HashMap<String, Entity> entities, keyEntities, valueEntities;
-    private HashMap<Entity, String> recipientValues;
-    private String attributeString;
+public final class PendingEventAttribute {
+    private final Event event;
+    private final EventAttribute attribute;
+    private final HashMap<String, Entity> entities, keyEntities, valueEntities;
+    private final HashMap<Entity, String> recipientValues;
+    private final String attributeString;
     public PendingEventAttribute(Event event, EventAttribute attribute, HashMap<String, Entity> entities, HashMap<String, Entity> keyEntities, HashMap<String, Entity> valueEntities, HashMap<Entity, String> recipientValues, String attributeString) {
         this.event = event;
         this.attribute = attribute;

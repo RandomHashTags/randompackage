@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class BoosterTriggerEvent extends RPEventCancellable {
+public final class BoosterTriggerEvent extends RPEventCancellable {
     public final Event event;
     public final ActiveBooster booster;
     public BoosterTriggerEvent(Event event, Player player, ActiveBooster booster) {

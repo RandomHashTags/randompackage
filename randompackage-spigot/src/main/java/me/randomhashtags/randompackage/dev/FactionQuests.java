@@ -22,7 +22,10 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
 
     public YamlConfiguration config;
 
-    public String getIdentifier() { return "FACTION_QUESTS"; }
+    @Override
+    public String getIdentifier() {
+        return "FACTION_QUESTS";
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }
@@ -32,9 +35,9 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
         save("faction quests", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction quests", "_settings.yml"));
 
-        if(!otherdata.getBoolean("saved default faction quests")) {
+        if(!OTHER_YML.getBoolean("saved default faction quests")) {
             generateDefaultFactionQuests();
-            otherdata.set("saved default faction quests", true);
+            OTHER_YML.set("saved default faction quests", true);
             saveOtherData();
         }
         for(File f : new File(DATA_FOLDER + SEPARATOR + "faction quests").listFiles()) {

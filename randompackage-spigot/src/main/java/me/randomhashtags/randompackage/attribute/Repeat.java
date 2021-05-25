@@ -1,4 +1,4 @@
 package me.randomhashtags.randompackage.attribute;
 
-public class Repeat extends AbstractEventAttribute {
+public final class Repeat extends AbstractEventAttribute {
 }

@@ -10,12 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class CustomEnchantProcEvent extends AbstractCancellable {
-	private Event event;
-	private Player player;
-	private HashMap<String, Entity> entities;
-	private CustomEnchant enchant;
-	private int level;
-	private ItemStack itemWithEnchant;
+	private final Event event;
+	private final Player player;
+	private final HashMap<String, Entity> entities;
+	private final CustomEnchant enchant;
+	private final int level;
+	private final ItemStack itemWithEnchant;
 	public CustomEnchantProcEvent(Player player, Event event, HashMap<String, Entity> entities, CustomEnchant enchant, int level, ItemStack itemWithEnchant) {
 		this.event = event;
 		this.player = player;

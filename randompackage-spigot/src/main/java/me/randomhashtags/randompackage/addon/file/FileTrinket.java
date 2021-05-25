@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileTrinket extends RPAddon implements Trinket {
+public final class FileTrinket extends RPAddon implements Trinket {
     private ItemStack item;
     private HashMap<String, String> settings;
 
@@ -22,7 +22,7 @@ public class FileTrinket extends RPAddon implements Trinket {
 
     public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled", "false")); }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
     public HashMap<String, String> getSettings() {

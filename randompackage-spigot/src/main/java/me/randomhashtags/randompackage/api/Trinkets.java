@@ -35,15 +35,17 @@ public class Trinkets extends EventAttributes implements RPItemStack {
 
     public YamlConfiguration config;
 
+    @Override
     public String getIdentifier() {
         return "TRINKETS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("trinkets", "_settings.yml");
-        if(!otherdata.getBoolean("saved default trinkets")) {
+        if(!OTHER_YML.getBoolean("saved default trinkets")) {
             generateDefaultTrinkets();
-            otherdata.set("saved default trinkets", true);
+            OTHER_YML.set("saved default trinkets", true);
             saveOtherData();
         }
 
@@ -61,6 +63,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trinkets.yml"));
         sendConsoleDidLoadFeature(getAll(Feature.TRINKET).size() + " Trinkets", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.TRINKET);
     }
@@ -140,10 +143,10 @@ public class Trinkets extends EventAttributes implements RPItemStack {
     }
     @EventHandler(priority = EventPriority.LOWEST)
     private void projectileLaunchEvent(ProjectileLaunchEvent event) {
-        final Projectile p = event.getEntity();
-        final ProjectileSource s = p.getShooter();
-        if(s instanceof Player) {
-            final Player player = (Player) s;
+        final Projectile projectile = event.getEntity();
+        final ProjectileSource source = projectile.getShooter();
+        if(source instanceof Player) {
+            final Player player = (Player) source;
             triggerPassive(event, player);
             didTriggerTrinket(event, player.getItemInHand(), player);
         }

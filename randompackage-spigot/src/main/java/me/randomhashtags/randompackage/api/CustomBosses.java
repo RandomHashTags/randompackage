@@ -43,9 +43,9 @@ public class CustomBosses extends EventAttributes {
 		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();
 
-		if(!otherdata.getBoolean("saved default custom bosses")) {
+		if(!OTHER_YML.getBoolean("saved default custom bosses")) {
 			generateDefaultCustomBosses();
-			otherdata.set("saved default custom bosses", true);
+			OTHER_YML.set("saved default custom bosses", true);
 			saveOtherData();
 		}
 		final List<ItemStack> list = new ArrayList<>();
@@ -59,42 +59,42 @@ public class CustomBosses extends EventAttributes {
 	}
 	public void unload() {
 		backup();
-		LivingCustomBoss.living = null;
+		LivingCustomBoss.LIVING = null;
 		LivingCustomMinion.deleteAll();
 		unregister(Feature.CUSTOM_BOSS);
 	}
 
 	public void backup() {
-		otherdata.set("custom bosses", null);
-		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.living;
+		OTHER_YML.set("custom bosses", null);
+		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.LIVING;
 		if(living != null) {
 			for(LivingCustomBoss boss : living.values()) {
-				final String path = "custom bosses." + boss.entity.getUniqueId().toString() + ".";
+				final String path = "custom bosses." + boss.entity.getUniqueId() + ".";
 				final LivingEntity summoner = boss.summoner;
-				otherdata.set(path + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
-				otherdata.set(path + "type", boss.type.getIdentifier());
+				OTHER_YML.set(path + "summoner", summoner != null ? summoner.getUniqueId().toString() : "null");
+				OTHER_YML.set(path + "type", boss.type.getIdentifier());
 				final List<String> minions = new ArrayList<>();
 				for(LivingCustomMinion lcm : boss.minions) {
 					minions.add(lcm.entity.getUniqueId().toString());
 				}
-				otherdata.set(path + "minions", minions);
+				OTHER_YML.set(path + "minions", minions);
 				final HashMap<UUID, Double> damagers = boss.damagers;
 				for(UUID u : damagers.keySet()) {
-                    otherdata.set(path + "damager." + u.toString(), damagers.get(u));
+                    OTHER_YML.set(path + "damager." + u.toString(), damagers.get(u));
                 }
 			}
 		}
 		saveOtherData();
 	}
 	public void loadBackup() {
-		for(String s : getConfigurationSectionKeys(otherdata, "custom bosses", false)) {
+		for(String s : getConfigurationSectionKeys(OTHER_YML, "custom bosses", false)) {
 			final Entity entity = getEntity(UUID.fromString(s));
 			if(entity != null && !entity.isDead()) {
-				final String path = "custom bosses." + s + ".", summonerUUID = otherdata.getString(path + "summoner");
+				final String path = "custom bosses." + s + ".", summonerUUID = OTHER_YML.getString(path + "summoner");
 				final LivingEntity summoner = summonerUUID != null && !summonerUUID.equals("null") ? (LivingEntity) getEntity(UUID.fromString(summonerUUID)) : null;
-				final LivingCustomBoss boss = new LivingCustomBoss(summoner, (LivingEntity) entity, getCustomBoss(otherdata.getString(path + "type")));
-				for(String uuid : getConfigurationSectionKeys(otherdata, path + "damager", false)) {
-					boss.damagers.put(UUID.fromString(uuid), otherdata.getDouble(path + "damager." + uuid));
+				final LivingCustomBoss boss = new LivingCustomBoss(summoner, (LivingEntity) entity, getCustomBoss(OTHER_YML.getString(path + "type")));
+				for(String uuid : getConfigurationSectionKeys(OTHER_YML, path + "damager", false)) {
+					boss.damagers.put(UUID.fromString(uuid), OTHER_YML.getDouble(path + "damager." + uuid));
 				}
 			}
 		}
@@ -119,7 +119,7 @@ public class CustomBosses extends EventAttributes {
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.living;
+		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.LIVING;
 		if(living != null) {
 			final LivingCustomBoss boss = living.getOrDefault(event.getEntity().getUniqueId(), null);
 			if(boss != null) {
@@ -145,7 +145,7 @@ public class CustomBosses extends EventAttributes {
 	private void entityDeathEvent(EntityDeathEvent event) {
 		final LivingEntity entity = event.getEntity();
 		final UUID uuid = entity.getUniqueId();
-		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.living;
+		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.LIVING;
 		if(living != null) {
 			final LivingCustomBoss boss = living.get(uuid);
 			final HashMap<UUID, LivingCustomMinion> minions = LivingCustomMinion.living;

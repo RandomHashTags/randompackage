@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileLootbox extends RPAddon implements Lootbox {
+public final class FileLootbox extends RPAddon implements Lootbox {
     private ItemStack item, background;
 
     public FileLootbox(File f) {
@@ -67,7 +67,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
 
     public ItemStack getItem() {
         if(item == null) {
-            final ItemStack i = API.createItemStack(yml, "lootbox");
+            final ItemStack i = createItemStack(yml, "lootbox");
             final ItemMeta itemMeta = i.getItemMeta();
             final List<String> lore = new ArrayList<>(), regularLootFormat = getRegularLootFormat(), jackpotLootFormat = getJackpotLootFormat(), bonusLootFormat = getBonusLootFormat();
             final List<ItemStack> regular = getAllRewards(LootboxRewardType.REGULAR);
@@ -118,7 +118,7 @@ public class FileLootbox extends RPAddon implements Lootbox {
         return getClone(item);
     }
     public ItemStack getBackground() {
-        if(background == null) background = API.createItemStack(yml, "gui.background");
+        if(background == null) background = createItemStack(yml, "gui.background");
         return getClone(background);
     }
 }

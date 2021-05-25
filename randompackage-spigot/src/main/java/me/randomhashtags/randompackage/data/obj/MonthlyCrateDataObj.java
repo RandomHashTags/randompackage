@@ -4,8 +4,8 @@ import me.randomhashtags.randompackage.data.MonthlyCrateData;
 
 import java.util.HashMap;
 
-public class MonthlyCrateDataObj implements MonthlyCrateData {
-    private HashMap<String, Boolean> owned;
+public final class MonthlyCrateDataObj implements MonthlyCrateData {
+    private final HashMap<String, Boolean> owned;
 
     public MonthlyCrateDataObj(HashMap<String, Boolean> owned) {
         this.owned = owned;

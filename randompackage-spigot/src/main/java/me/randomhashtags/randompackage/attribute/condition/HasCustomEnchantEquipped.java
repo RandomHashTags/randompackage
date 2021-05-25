@@ -10,19 +10,19 @@ import org.bukkit.inventory.ItemStack;
 
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
-public class HasCustomEnchantEquipped extends AbstractEventCondition {
+public final class HasCustomEnchantEquipped extends AbstractEventCondition {
     @Override
     public boolean check(Entity entity, String value) {
         boolean has = false;
         if(entity instanceof LivingEntity) {
-            final EntityEquipment e = ((LivingEntity) entity).getEquipment();
-            if(e != null) {
-                final CustomEnchant c = valueOfCustomEnchant(value);
-                if(c != null) {
+            final EntityEquipment equipment = ((LivingEntity) entity).getEquipment();
+            if(equipment != null) {
+                final CustomEnchant enchant = valueOfCustomEnchant(value);
+                if(enchant != null) {
                     final CustomEnchants enchants = getCustomEnchants();
-                    final ItemStack[] items = new ItemStack[] {e.getHelmet(), e.getChestplate(), e.getLeggings(), e.getBoots(), EIGHT ? e.getItemInHand() : e.getItemInMainHand(), EIGHT ? null : e.getItemInOffHand()};
+                    final ItemStack[] items = new ItemStack[] {equipment.getHelmet(), equipment.getChestplate(), equipment.getLeggings(), equipment.getBoots(), EIGHT ? equipment.getItemInHand() : equipment.getItemInMainHand(), EIGHT ? null : equipment.getItemInOffHand()};
                     for(ItemStack is : items) {
-                        if(enchants.getEnchantsOnItem(is).containsKey(c)) {
+                        if(enchants.getEnchantsOnItem(is).containsKey(enchant)) {
                             has = true;
                             break;
                         }

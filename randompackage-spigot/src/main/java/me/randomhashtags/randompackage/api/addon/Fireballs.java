@@ -9,6 +9,7 @@ import me.randomhashtags.randompackage.addon.file.PathMagicDust;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,11 +17,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Fireballs extends CustomEnchants {
     private static Fireballs instance;
@@ -41,7 +41,7 @@ public class Fireballs extends CustomEnchants {
         save("addons", "fireballs.yml");
         config = getAddonConfig("fireballs.yml");
         mysterydust = createItemStack(config, "items.mystery dust");
-        GIVEDP_ITEM.items.put("mysterydust", mysterydust);
+        GivedpItem.INSTANCE.items.put("mysterydust", mysterydust);
 
         final List<ItemStack> list = new ArrayList<>();
         for(String s : getConfigurationSectionKeys(config, "fireballs", false)) {
@@ -82,8 +82,9 @@ public class Fireballs extends CustomEnchants {
         final Player player = (Player) event.getWhoClicked();
         final ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
         if(current != null && !current.getType().equals(Material.AIR) && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
-            item = current;
-            itemMeta = current.getItemMeta(); lore.clear();
+            final ItemStack item = current;
+            final ItemMeta itemMeta = current.getItemMeta();
+            final List<String> lore = new ArrayList<>();
             final CustomEnchant enchant = valueOfCustomEnchant(current);
             final MagicDust dust = valueOfMagicDust(cursor);
             if(dust != null && enchant != null) {
@@ -113,7 +114,7 @@ public class Fireballs extends CustomEnchants {
                         }
                         lore.add(colorize(string));
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     //playSuccess((Player) event.getWhoClicked());
                     item.setItemMeta(itemMeta);
                     event.setCancelled(true);

@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.Scroll;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class BlackScrollUseEvent extends ScrollUseEvent {
+public final class BlackScrollUseEvent extends ScrollUseEvent {
     private int successRate;
     public BlackScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem, int successRate) {
         super(player, scroll, usedOnItem);

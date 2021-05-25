@@ -8,8 +8,9 @@ import java.sql.ResultSet;
 import java.util.List;
 
 public class MySQLFile /*implements DatabaseFile*/ { // TODO: fix dis
-    private String host, database;
-    private int port;
+    private final String host;
+    private final String database;
+    private final int port;
     private Connection connection;
     public MySQLFile(String host, int port, String database, String username, String password) {
         this.host = host;

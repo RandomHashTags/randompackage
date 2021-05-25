@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.data.JackpotData;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class JackpotDataObj implements JackpotData {
+public final class JackpotDataObj implements JackpotData {
     private boolean notifications;
     private BigInteger totalTicketsBought, totalWins;
     private BigDecimal totalWonCash;

@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
@@ -8,8 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface Lootbox extends Itemable, Nameable, GivedpItemable {
 
@@ -49,9 +48,10 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemable {
     }
     default List<ItemStack> getAllRewards(final LootboxRewardType type) {
         final List<ItemStack> items = new ArrayList<>();
-        final List<String> l = getRewards(type);
-        for(String s : l) {
-            items.add(API.createItemStack(null, s));
+        final List<String> rewards = getRewards(type);
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
+        for(String string : rewards) {
+            items.add(api.createItemStack(null, string));
         }
         return items;
     }
@@ -65,14 +65,15 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemable {
 
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
-        for(String s : getRegularLoot()) {
-            items.add(API.createItemStack(null, s));
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
+        for(String string : getRegularLoot()) {
+            items.add(api.createItemStack(null, string));
         }
-        for(String s : getJackpotLoot()) {
-            items.add(API.createItemStack(null, s));
+        for(String string : getJackpotLoot()) {
+            items.add(api.createItemStack(null, string));
         }
-        for(String s : getBonusLoot()) {
-            items.add(API.createItemStack(null, s));
+        for(String string : getBonusLoot()) {
+            items.add(api.createItemStack(null, string));
         }
         return items;
     }

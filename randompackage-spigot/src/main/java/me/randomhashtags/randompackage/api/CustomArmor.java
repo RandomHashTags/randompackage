@@ -12,6 +12,7 @@ import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPItemStack;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,13 +27,12 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class CustomArmor extends EventAttributes implements RPItemStack {
 	private static CustomArmor instance;
@@ -66,11 +66,11 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 		heroicAddedLore = colorizeListString(config.getStringList("heroic.added lore"));
 
-		GIVEDP_ITEM.items.put("equipmentlootbox", equipmentLootbox);
+		GivedpItem.INSTANCE.items.put("equipmentlootbox", equipmentLootbox);
 
-		if(!otherdata.getBoolean("saved default custom armor")) {
+		if(!OTHER_YML.getBoolean("saved default custom armor")) {
 			generateDefaultCustomArmor();
-			otherdata.set("saved default custom armor", true);
+			OTHER_YML.set("saved default custom armor", true);
 			saveOtherData();
 		}
 		final List<ItemStack> crystals = new ArrayList<>();
@@ -91,13 +91,13 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
 		final String p = Integer.toString(percent), n = set.getName();
-		item = null;
+		ItemStack item = null;
 		if(n != null) {
 			final List<String> perks = set.getCrystalPerks();
 			item = crystal.clone();
-			itemMeta = item.getItemMeta();
+			final ItemMeta itemMeta = item.getItemMeta();
 			itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", n));
-			lore.clear();
+			final List<String> lore = new ArrayList<>();
 			for(String s : itemMeta.getLore()) {
 				if(s.equals("{PERKS}")) {
 					lore.addAll(perks);
@@ -105,7 +105,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 					lore.add(s.replace("{PERCENT}", p).replace("{NAME}", n));
 				}
 			}
-			itemMeta.setLore(lore); lore.clear();
+			itemMeta.setLore(lore);
 			item.setItemMeta(itemMeta);
 		}
 		return item;
@@ -146,12 +146,13 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 				return -2;
 			}
 			if(RANDOM.nextInt(100) < percent) {
-				itemMeta = is.getItemMeta(); lore.clear();
+				final ItemMeta itemMeta = is.getItemMeta();
+				final List<String> lore = new ArrayList<>();
 				if(itemMeta.hasLore()) {
 					lore.addAll(itemMeta.getLore());
 				}
 				lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
-				itemMeta.setLore(lore); lore.clear();
+				itemMeta.setLore(lore);
 				is.setItemMeta(itemMeta);
 				sendStringListMessage(player, type.getCrystalAppliedMsg(), null);
 				return 2;
@@ -166,11 +167,11 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 
 	public ItemStack getRandomEquipmentLootboxLoot() {
 		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
-		String l = rewards.get(RANDOM.nextInt(rewards.size()));
-		if(l.contains("||")) {
-			l = l.split("\\|\\|")[RANDOM.nextInt(l.split("\\|\\|").length)];
+		String reward = rewards.get(RANDOM.nextInt(rewards.size()));
+		if(reward.contains("||")) {
+			reward = reward.split("\\|\\|")[RANDOM.nextInt(reward.split("\\|\\|").length)];
 		}
-		return GIVEDP_ITEM.valueOf(l);
+		return GivedpItem.INSTANCE.valueOfRPItem(reward);
 	}
 
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {
@@ -178,13 +179,14 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	}
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set, int percent) {
 		final String name = set.getName(), percentString = Integer.toString(percent);
-		item = heroicUpgrade.clone();
-		itemMeta = item.getItemMeta(); lore.clear();
+		final ItemStack item = heroicUpgrade.clone();
+		final ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
+		final List<String> lore = new ArrayList<>();
 		for(String s : itemMeta.getLore()) {
 			lore.add(s.replace("{NAME}", name).replace("{PERCENT}", percentString));
 		}
-		itemMeta.setLore(lore); lore.clear();
+		itemMeta.setLore(lore);
 		item.setItemMeta(itemMeta);
 		return item;
 	}
@@ -212,7 +214,8 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		if(!hasCustomDurability(is)) {
 			final String max = Integer.toString(maxDurability), value = Integer.toString(armorValueORbonusAttackDmg);
 			final boolean isArmor = isArmorPiece(is.getType());
-			itemMeta = is.getItemMeta(); lore.clear();
+			final ItemMeta itemMeta = is.getItemMeta();
+			final List<String> lore = new ArrayList<>();
 			if(itemMeta.hasLore()) {
 				lore.addAll(itemMeta.getLore());
 			}
@@ -222,7 +225,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 					lore.add(s.replace("{ARMOR_VALUE}", value).replace("{BONUS_ATTACK_DMG}", value).replace("{DURABILITY}", max));
 				}
 			}
-			itemMeta.setLore(lore); lore.clear();
+			itemMeta.setLore(lore);
 			is.setItemMeta(itemMeta);
 			addRPItemStackValues(is, new HashMap<String, String>() {{
 				put("CustomDurability", Integer.toString(getCustomDurability(is, maxDurability)));
@@ -326,15 +329,15 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			final Player player = event.getPlayer();
 			if(is.isSimilar(equipmentLootbox)) {
 				final ItemStack reward = getRandomEquipmentLootboxLoot();
-				final EquipmentLootboxOpenEvent e = new EquipmentLootboxOpenEvent(player, reward);
-				PLUGIN_MANAGER.callEvent(e);
-				if(!e.isCancelled()) {
+				final EquipmentLootboxOpenEvent openEvent = new EquipmentLootboxOpenEvent(player, reward);
+				PLUGIN_MANAGER.callEvent(openEvent);
+				if(!openEvent.isCancelled()) {
 					removeItem(player, is, 1);
 					giveItem(player, reward);
 
-					final String p = player.getName(), it = reward.getItemMeta().getDisplayName();
+					final String playerName = player.getName(), rewardDisplayName = reward.getItemMeta().getDisplayName();
 					for(String s : getStringList(config, "messages.receive loot from Equipment Lootbox")) {
-						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", p).replace("{ITEM}", it)));
+						Bukkit.broadcastMessage(colorize(s.replace("{PLAYER}", playerName).replace("{ITEM}", rewardDisplayName)));
 					}
 				}
 			} else if(valueOfArmorCrystal(is) != null) {
@@ -354,6 +357,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			if(tryApplyingArmorCrystal(player, crystal, getRemainingInt(cursor.getItemMeta().getLore().get(percentSlot)), current) >= 1) {
 				event.setCancelled(true);
 				final int amount = cursor.getAmount();
+				final ItemStack item;
 				if(amount == 1) {
 					item = new ItemStack(Material.AIR);
 				} else {

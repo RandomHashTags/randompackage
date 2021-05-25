@@ -6,12 +6,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class HitCEEntity extends AbstractEventCondition {
+public final class HitCEEntity extends AbstractEventCondition {
     @Override
     public boolean check(Event event, Entity entity) {
         if(event instanceof EntityDamageByEntityEvent) {
-            final EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
-            return e.getDamager().equals(entity) && LivingCustomEnchantEntity.living.containsKey(e.getEntity().getUniqueId());
+            final EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+            return damageEvent.getDamager().equals(entity) && LivingCustomEnchantEntity.LIVING.containsKey(damageEvent.getEntity().getUniqueId());
         }
         return false;
     }

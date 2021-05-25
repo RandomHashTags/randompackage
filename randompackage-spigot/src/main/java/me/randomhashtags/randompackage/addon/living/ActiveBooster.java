@@ -7,13 +7,14 @@ import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.OfflinePlayer;
 
-public class ActiveBooster implements UVersionable {
+public final class ActiveBooster implements UVersionable {
     private int task;
-    private OfflinePlayer activator;
-    private String faction;
-    private Booster booster;
+    private final OfflinePlayer activator;
+    private final String faction;
+    private final Booster booster;
     private double multiplier;
-    private long duration, expiration;
+    private final long duration;
+    private long expiration;
     public ActiveBooster(OfflinePlayer activator, Booster booster, double multiplier, long duration, long expiration) {
         this(activator, null, booster, multiplier, duration, expiration);
     }

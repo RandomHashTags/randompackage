@@ -5,9 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-public class PvAnyEvent extends DamageEvent {
-    private Player damager;
-    private LivingEntity victim;
+public final class PvAnyEvent extends DamageEvent {
+    private final Player damager;
+    private final LivingEntity victim;
     private Projectile proj;
     public PvAnyEvent(Player damager, LivingEntity victim, double damage) {
         super(damager, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
@@ -19,8 +19,14 @@ public class PvAnyEvent extends DamageEvent {
         this.proj = proj;
     }
     @Override
-    public LivingEntity getEntity() { return victim; }
+    public LivingEntity getEntity() {
+        return victim;
+    }
     @Override
-    public Player getDamager() { return damager; }
-    public Projectile getProjectile() { return proj; }
+    public Player getDamager() {
+        return damager;
+    }
+    public Projectile getProjectile() {
+        return proj;
+    }
 }

@@ -6,9 +6,9 @@ import me.randomhashtags.randompackage.addon.Scroll;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class RandomizationScrollUseEvent extends ScrollUseEvent {
-    private CustomEnchant enchant;
-    private int enchantlevel;
+public final class RandomizationScrollUseEvent extends ScrollUseEvent {
+    private final CustomEnchant enchant;
+    private final int enchantlevel;
     private int newSuccess, newDestroy;
     public RandomizationScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem, CustomEnchant enchant, int enchantlevel, int newSuccess, int newDestroy) {
         super(player, scroll, usedOnItem);

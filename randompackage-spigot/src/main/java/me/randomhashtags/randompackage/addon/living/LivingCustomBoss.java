@@ -1,17 +1,15 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
-import me.randomhashtags.randompackage.event.mob.CustomBossDeathEvent;
-import me.randomhashtags.randompackage.event.mob.CustomBossSpawnEvent;
 import me.randomhashtags.randompackage.addon.CustomBoss;
 import me.randomhashtags.randompackage.addon.obj.CustomBossAttack;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
+import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossDeathEvent;
+import me.randomhashtags.randompackage.event.mob.CustomBossSpawnEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersion;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.util.RPFeature;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,18 +23,18 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
-public class LivingCustomBoss extends UVersion {
-    public static HashMap<UUID, LivingCustomBoss> living;
+public final class LivingCustomBoss implements RPFeature, UVersionable {
+    public static HashMap<UUID, LivingCustomBoss> LIVING;
 
     public LivingEntity summoner, entity;
     public CustomBoss type;
     public List<LivingCustomMinion> minions;
     public HashMap<UUID, Double> damagers;
+
     public LivingCustomBoss(LivingEntity summoner, LivingEntity entity, CustomBoss type) {
-        if(living == null) {
-            living = new HashMap<>();
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
         minions = new ArrayList<>();
         damagers = new HashMap<>();
@@ -79,8 +77,20 @@ public class LivingCustomBoss extends UVersion {
         updateScoreboards(summoner, 0);
         final CustomBossSpawnEvent e = new CustomBossSpawnEvent(summoner, entity.getLocation(), this);
         PLUGIN_MANAGER.callEvent(e);
-        living.put(entity.getUniqueId(), this);
+        LIVING.put(entity.getUniqueId(), this);
     }
+
+    @Override
+    public String getIdentifier() {
+        return null;
+    }
+    @Override
+    public void load() {
+    }
+    @Override
+    public void unload() {
+    }
+
     public void damage(LivingEntity customboss, Entity damager, double damage) {
         final CustomBossDamageByEntityEvent e = new CustomBossDamageByEntityEvent(customboss, damager, damage);
         PLUGIN_MANAGER.callEvent(e);
@@ -104,10 +114,10 @@ public class LivingCustomBoss extends UVersion {
                 if(RANDOM.nextInt(100) <= atk.getChance()) {
                     final int radius = atk.getRadius();
                     for(String attack : atk.getAttacks()) {
-                        final String att = attack.toLowerCase();
-                        if(att.startsWith("delay=")) {
-                            final int r = Integer.parseInt(att.split("delay=")[1].split("\\{")[0]);
-                            final ArrayList<Location> locations = new ArrayList<>();
+                        final String attackLowercase = attack.toLowerCase();
+                        if(attackLowercase.startsWith("delay=")) {
+                            final int r = Integer.parseInt(attackLowercase.split("delay=")[1].split("\\{")[0]);
+                            final List<Location> locations = new ArrayList<>();
                             for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
                                 if(entity instanceof Player) {
                                     locations.add(entity.getLocation());
@@ -115,20 +125,21 @@ public class LivingCustomBoss extends UVersion {
                             }
 
                             SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                                String ss = att.replace("delay=" + r, ""), sss = null;
+                                String ss = attackLowercase.replace("delay=" + r, ""), sss = null;
                                 int x1, y1, z1, x2, y2, z2, a;
                                 List<String> message;
                                 if(ss.startsWith("{surround")) {
                                     sss = ss.replace("{surround:", "").replace("}", "");
-                                    x1 = Integer.parseInt(sss.split(":")[0]);
-                                    y1 = Integer.parseInt(sss.split(":")[1]);
-                                    z1 = Integer.parseInt(sss.split(":")[2]);
-                                    x2 = Integer.parseInt(sss.split(":")[3]);
-                                    y2 = Integer.parseInt(sss.split(":")[4]);
-                                    z2 = Integer.parseInt(sss.split(":")[5]);
+                                    final String[] values = sss.split(":");
+                                    x1 = Integer.parseInt(values[0]);
+                                    y1 = Integer.parseInt(values[1]);
+                                    z1 = Integer.parseInt(values[2]);
+                                    x2 = Integer.parseInt(values[3]);
+                                    y2 = Integer.parseInt(values[4]);
+                                    z2 = Integer.parseInt(values[5]);
+                                    final Material replaceMaterial = UMaterial.match(values[6]).getMaterial(), replacedMaterial = UMaterial.match(values[7]).getMaterial();
                                     for(Location l : locations) {
-                                        final UMaterial replacee = UMaterial.match(sss.split(":")[6]);
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + replacee.getVersionName().toLowerCase() + (LEGACY ? " " + replacee.getData() : "") + " replace " + UMaterial.match(sss.split(":")[7]).getVersionName().toLowerCase());
+                                        Bukkit.dispatchCommand(CONSOLE, "minecraft:fill " + (l.getBlockX() + x1) + " " + (l.getBlockY() + y1) + " " + (l.getBlockZ() + z1) + " " + (l.getBlockX() + x2) + " " + (l.getBlockY() + y2) + " " + (l.getBlockZ() + z2) + " " + replaceMaterial.name().toLowerCase() + (LEGACY ? " " + replaceMaterial.getData() : "") + " replace " + replacedMaterial.name().toLowerCase());
                                     }
                                 } else {
                                     String replace = ss.replace("{", "").replace("}", "").replace("/", "");
@@ -147,7 +158,7 @@ public class LivingCustomBoss extends UVersion {
                                     } else {
                                         if(ss.startsWith("{message")) {
                                             for(String v  : messages.get(Integer.parseInt(ss.split("message")[1].split("}")[0]))) {
-                                                for (Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                                for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
                                                     entity.sendMessage(ChatColor.translateAlternateColorCodes('&', v));
                                                 }
                                             }
@@ -205,7 +216,7 @@ public class LivingCustomBoss extends UVersion {
                     rewards.put(target, new ArrayList<>());
                     rewardNames.put(target, new ArrayList<>());
                 }
-                final ItemStack reward = API.createItemStack(null, s.split("\\{")[1].split("}")[0]);
+                final ItemStack reward = createItemStack(null, s.split("\\{")[1].split("}")[0]);
                 reward.setAmount(amount);
                 rewards.get(target).add(reward);
                 rewardNames.get(target).add(ChatColor.translateAlternateColorCodes('&', s.split(";")[3]));
@@ -213,12 +224,14 @@ public class LivingCustomBoss extends UVersion {
             for(int i : rewards.keySet()) {
                 if(i-1 < top.size()) {
                     final OfflinePlayer p = Bukkit.getOfflinePlayer((UUID) top.keySet().toArray()[i-1]);
-                    if(p.isOnline())
-                        for(ItemStack re : rewards.get(i))
-                            API.giveItem(p.getPlayer(), re);
+                    if(p.isOnline()) {
+                        for(ItemStack re : rewards.get(i)) {
+                            giveItem(p.getPlayer(), re);
+                        }
+                    }
                 }
             }
-            living.remove(entity.getUniqueId());
+            LIVING.remove(entity.getUniqueId());
             final List<String> topdamagers = new ArrayList<>();
             for(int i = 0; i < 10 && i < top.size(); i++) {
                 final String OP = Bukkit.getOfflinePlayer((UUID) top.keySet().toArray()[i]).getName();

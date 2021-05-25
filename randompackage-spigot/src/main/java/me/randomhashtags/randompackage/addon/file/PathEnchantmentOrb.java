@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class PathEnchantmentOrb extends RPAddon implements EnchantmentOrb {
+public final class PathEnchantmentOrb extends RPAddon implements EnchantmentOrb {
 	private final ItemStack is;
 	private final String path, appliedlore;
 	private final List<String> appliesto;

@@ -3,12 +3,12 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.addon.file.FileLootbox;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.perms.LootboxPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -25,18 +25,15 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Lootboxes extends RPFeature implements CommandExecutor {
-    private static Lootboxes instance;
-    public static Lootboxes getLootboxes() {
-        if(instance == null) instance = new Lootboxes();
-        return instance;
-    }
+public enum Lootboxes implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;
@@ -85,9 +82,9 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         }
         background = createItemStack(config, "gui.background");
 
-        if(!otherdata.getBoolean("saved default lootboxes")) {
+        if(!OTHER_YML.getBoolean("saved default lootboxes")) {
             generateDefaultLootboxes();
-            otherdata.set("saved default lootboxes", true);
+            OTHER_YML.set("saved default lootboxes", true);
             saveOtherData();
         }
         for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "lootboxes")) {
@@ -109,21 +106,21 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             }
         }
         for(int i = 0; i < size; i++) {
-            item = gi.getItem(i);
+            final ItemStack item = gi.getItem(i);
             if(item == null) {
                 gi.setItem(i, background);
             }
         }
 
-        final ConfigurationSection section = otherdata.getConfigurationSection("lootboxes.started");
+        final ConfigurationSection section = OTHER_YML.getConfigurationSection("lootboxes.started");
         if(section == null) {
             for(Lootbox l : guiLootboxes.values()) {
                 this.started.put(l, started);
             }
         } else {
             for(String s : section.getKeys(false)) {
-                for(String id : getConfigurationSectionKeys(otherdata, "lootboxes.started." + s, false)) {
-                    this.started.put(getLootbox(id), otherdata.getLong("lootboxes.started." + s));
+                for(String id : getConfigurationSectionKeys(OTHER_YML, "lootboxes.started." + s, false)) {
+                    this.started.put(getLootbox(id), OTHER_YML.getLong("lootboxes.started." + s));
                 }
             }
         }
@@ -131,7 +128,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     }
     public void unload() {
         for(Lootbox l : started.keySet()) {
-            otherdata.set("lootboxes.started." + l.getIdentifier(), started.get(l));
+            OTHER_YML.set("lootboxes.started." + l.getIdentifier(), started.get(l));
         }
         saveOtherData();
         for(Player player : new ArrayList<>(viewing)) {
@@ -149,20 +146,21 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
             for(int i = 0; i < size; i++) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
             }
             final List<String> available = getStringList(config, "lores.available"), expired = getStringList(config, "lores.expired"), preview = getStringList(config, "lores.preview");
             for(int i : guiLootboxes.keySet()) {
                 final Lootbox lootbox = guiLootboxes.get(i);
                 final long startTime = started.get(lootbox), expirationTime = startTime+lootbox.getAvailableFor()*1000;
                 final String n = lootbox.getName();
-                item = top.getItem(i); itemMeta = item.getItemMeta(); lore.clear();
-                lore.addAll(itemMeta.getLore());
+                final ItemStack item = top.getItem(i);
+                final ItemMeta itemMeta = item.getItemMeta();
+                final List<String> lore = itemMeta.getLore();
                 for(String s : time < expirationTime ? available : expired) {
                     lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(expirationTime-time)));
                 }
                 lore.addAll(preview);
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
             }
             viewing.add(player);
@@ -174,7 +172,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
     }
     public void tryClaiming(@NotNull Player player, @NotNull Lootbox lootbox) {
         final String y = lootbox.getIdentifier();
-        final HashMap<String, Integer> lootboxes = RPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
+        final HashMap<String, Integer> lootboxes = FileRPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
         if(lootboxes.getOrDefault(y, 0) > 0) {
             if(isAvailable(lootbox)) {
                 if(lootboxes.get(y) == 1) {
@@ -213,7 +211,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
                         top.setItem(slot, background);
                         break;
                     case "C":
-                        item = background.clone();
+                        final ItemStack item = background.clone();
                         item.setAmount(countdownStart);
                         top.setItem(slot, item);
                         countdownSlots.add(slot);
@@ -255,7 +253,7 @@ public class Lootboxes extends RPFeature implements CommandExecutor {
         for(int i = 1; i <= countdownStart; i++) {
             final int k = i;
             T.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                item = background.clone();
+                final ItemStack item = background.clone();
                 item.setAmount(countdownStart-k);
                 for(int c : countdownSlots) {
                     top.setItem(c, item);

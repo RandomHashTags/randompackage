@@ -6,10 +6,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class DuelDataObj implements DuelData {
+public final class DuelDataObj implements DuelData {
     private boolean notifications;
-    private List<ItemStack> collection;
-    private DuelRankedData ranked;
+    private final List<ItemStack> collection;
+    private final DuelRankedData ranked;
 
     public DuelDataObj(boolean notifications, List<ItemStack> collection, DuelRankedData ranked) {
         this.notifications = notifications;
@@ -20,6 +20,10 @@ public class DuelDataObj implements DuelData {
     @Override
     public boolean receivesNotifications() {
         return notifications;
+    }
+    @Override
+    public void setReceivesNotifications(boolean receivesNotifications) {
+        this.notifications = receivesNotifications;
     }
 
     @Override

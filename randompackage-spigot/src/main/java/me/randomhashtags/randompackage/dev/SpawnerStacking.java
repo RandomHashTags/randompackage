@@ -2,11 +2,14 @@ package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.StackedSpawner;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -26,19 +29,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI.getSpawnerAPI;
-
-public class SpawnerStacking extends RPFeature {
-    private static SpawnerStacking instance;
-    public static SpawnerStacking getSpawnerStacking() {
-        if(instance == null) instance = new SpawnerStacking();
-        return instance;
-    }
+public enum SpawnerStacking implements RPFeature {
+    INSTANCE;
 
     private File dataF;
     public YamlConfiguration config, data;
 
-    private String spawnerMaterial;
+    private Material spawnerMaterial;
     private boolean onlyStackableInClaimFactionLand;
     private int defaultMaxStackSize;
     private HashMap<String, HashMap<String, Integer>> maxStackSizes;
@@ -56,7 +53,7 @@ public class SpawnerStacking extends RPFeature {
         save(null, "spawner stacking.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "spawner stacking.yml"));
 
-        spawnerMaterial = UMaterial.SPAWNER.getVersionName();
+        spawnerMaterial = UMaterial.SPAWNER.getMaterial();
         onlyStackableInClaimFactionLand = config.getBoolean("only stackable in.claimed faction land");
         defaultMaxStackSize = config.getInt("max stacking.default");
 
@@ -97,7 +94,7 @@ public class SpawnerStacking extends RPFeature {
                 stacks.put(toLocation(s), new StackedSpawner(EntityType.valueOf(values[0]), Integer.parseInt(values[1])));
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "&6[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void backup() {
         data.set("locations", null);
@@ -115,7 +112,7 @@ public class SpawnerStacking extends RPFeature {
     }
 
     private boolean isSpawner(Block b) {
-        return b != null && b.getType().name().equals(spawnerMaterial);
+        return b != null && b.getType().equals(spawnerMaterial);
     }
     public int getMaxAllowedStackSize(@NotNull World world, @NotNull EntityType type) {
         final HashMap<String, Integer> sizes = maxStackSizes.getOrDefault(world.getName(), null);
@@ -127,9 +124,10 @@ public class SpawnerStacking extends RPFeature {
     private boolean canPlaceAt(Player player, Location l) {
         final List<Boolean> checks = new ArrayList<>();
         final Chunk c = l.getChunk();
-        if(hookedFactionsUUID()) {
-            final String fac = getFactionTag(player.getUniqueId());
-            checks.add(onlyStackableInClaimFactionLand && fac != null && FactionsUUID.getFactionsUUID().getRegionalChunks(fac).contains(c));
+        final RegionalAPI regions = RegionalAPI.INSTANCE;
+        if(regions.hookedFactionsUUID()) {
+            final String fac = regions.getFactionTag(player.getUniqueId());
+            checks.add(onlyStackableInClaimFactionLand && fac != null && FactionsUUID.INSTANCE.getRegionalChunks(fac).contains(c));
         }
         return !checks.contains(false);
     }
@@ -165,7 +163,7 @@ public class SpawnerStacking extends RPFeature {
             final Location l = b.getLocation();
             if(canPlaceAt(player, l)) {
                 final ItemStack is = event.getItemInHand();
-                final EntityType first = getSpawnerAPI().getType(is);
+                final EntityType first = SpawnerAPI.INSTANCE.getType(is);
                 final Block target = event.getBlockAgainst();
                 if(!player.isSneaking() && isSpawner(target)) {
                     final EntityType second = ((CreatureSpawner) target).getSpawnedType();
@@ -210,7 +208,7 @@ public class SpawnerStacking extends RPFeature {
                 event.setCancelled(true);
                 player.updateInventory();
                 spawner.setStack(stack-1);
-                final ItemStack is = getSpawnerAPI().getItem(spawner.getType().name());
+                final ItemStack is = SpawnerAPI.INSTANCE.getItem(spawner.getType().name());
                 if(is != null) {
                     l.getWorld().dropItem(l.clone().add(0, 1, 0), is);
                 }

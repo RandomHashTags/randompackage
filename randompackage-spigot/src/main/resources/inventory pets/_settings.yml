@@ -36,5 +36,5 @@ global attributes:
   - "BlackScrollUse;PlayerHasCombo=INVENTORY_PET_BLACKSCROLL;PlayerSetSuccessRate=rate+getPlayerCombo(INVENTORY_PET_BLACKSCROLL);PlayerComboStop=INVENTORY_PET_BLACKSCROLL"
   - "CustomEnchantApply;PlayerHasCombo=INVENTORY_PET_ENCHANTER;PlayerSetSuccess=rate+getPlayerCombo(INVENTORY_PET_ENCHANTER);PlayerComboStop=INVENTORY_PET_ENCHANTER"
   - "PlayerCommandPreprocess;PlayerIsInList=INVENTORY_PET_STRONGHOLD_SELL;cancelled=true;Command=/sh sell;SetAllowed=true"
-  - "EntityDeath;KillerIsInList=INVENTORY_PET_XP_BOOSTER;SetDroppedExp=xp*getKillerCombo(INVENTORY_PET_XP_BOOSTER)"
+  - "EntityDeath;KillerIsPlayer=true;KillerIsInList=INVENTORY_PET_XP_BOOSTER;SetDroppedExp=xp*getKillerCombo(INVENTORY_PET_XP_BOOSTER)"
   - "DepleteRarityGem;PlayerIsInList=INVENTORY_PET_TESLA;PlayerSetDepleteAmount=0"

@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.data.PlayerQuestData;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
 
-public class PlayerQuestDataObj implements PlayerQuestData {
+public final class PlayerQuestDataObj implements PlayerQuestData {
     private BigInteger tokens;
     private LinkedHashMap<PlayerQuest, ActivePlayerQuest> quests;
 

@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.util.listener;
 
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.FoodLevelLostEvent;
 import me.randomhashtags.randompackage.event.PlayerExpGainEvent;
 import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,37 +20,37 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public final class RPEvents extends RPFeature {
-    private static RPEvents instance;
-    public static RPEvents getRPEvents() {
-        if(instance == null) instance = new RPEvents();
-        return instance;
-    }
+public enum RPEvents implements RPFeature {
+    INSTANCE;
+
+    @Override
     public String getIdentifier() {
         return "RP_EVENTS";
     }
+    @Override
     public void load() {
         for(Player p : Bukkit.getOnlinePlayers()) {
-            RPPlayer.get(p.getUniqueId());
+            FileRPPlayer.get(p.getUniqueId());
         }
     }
+    @Override
     public void unload() {
         backup();
     }
 
     public void backup() {
-        for(RPPlayer p : RPPlayer.players.values()) {
+        for(FileRPPlayer p : FileRPPlayer.PLAYERS.values()) {
             p.backup();
         }
     }
 
     @EventHandler
     private void playerJoinEvent(PlayerJoinEvent event) {
-        RPPlayer.get(event.getPlayer().getUniqueId());
+        FileRPPlayer.get(event.getPlayer().getUniqueId());
     }
     @EventHandler
     private void playerQuitEvent(PlayerQuitEvent event) {
-        RPPlayer.get(event.getPlayer().getUniqueId()).unload();
+        FileRPPlayer.get(event.getPlayer().getUniqueId()).unload();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

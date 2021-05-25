@@ -7,22 +7,39 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-public class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
+public final class FileGlobalChallenge extends RPAddon implements GlobalChallenge {
     private ItemStack display;
+
     public FileGlobalChallenge(File f) {
         load(f);
         if(isEnabled()) {
             register(Feature.GLOBAL_CHALLENGE, this);
         }
     }
-    public String getIdentifier() { return getYamlName();  }
 
-    public boolean isEnabled() { return yml.getBoolean("settings.enabled", false); }
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
+    @Override
+    public boolean isEnabled() {
+        return yml.getBoolean("settings.enabled", false);
+    }
+    @Override
     public ItemStack getItem() {
-        if(display == null) display = API.createItemStack(yml, "item");
+        if(display == null) display = createItemStack(yml, "item");
         return getClone(display);
     }
-    public long getDuration() { return yml.getLong("settings.duration"); }
-    public String getType() { return yml.getString("settings.type"); }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    @Override
+    public long getDuration() {
+        return yml.getLong("settings.duration");
+    }
+    @Override
+    public String getType() {
+        return yml.getString("settings.type");
+    }
+    @Override
+    public List<String> getAttributes() {
+        return yml.getStringList("attributes");
+    }
 }

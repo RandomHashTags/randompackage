@@ -34,12 +34,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alchemist extends RPFeature implements CommandExecutor {
-    private static Alchemist instance;
-    public static Alchemist getAlchemist() {
-        if(instance == null) instance = new Alchemist();
-        return instance;
-    }
+public enum Alchemist implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory alchemist;
@@ -48,6 +44,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
     private ItemStack accept, exchange, preview, background;
     private List<Player> accepting;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
@@ -55,9 +52,11 @@ public class Alchemist extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "ALCHEMIST";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "alchemist.yml");
@@ -95,6 +94,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
         }
         sendConsoleDidLoadFeature("Alchemist", started);
     }
+    @Override
     public void unload() {
     }
 
@@ -121,7 +121,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                 if(r == 3 || r == 5) {
                     giveItem(player, current);
                     top.setItem(r, new ItemStack(Material.AIR));
-                    item = preview.clone();
+                    ItemStack item = preview.clone();
                     if(!top.getItem(13).equals(item)) {
                         top.setItem(13, item);
                     }
@@ -147,8 +147,8 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                                     setTotalExperience(player, totalxp-cost);
                                 }
                                 playSound(config, "sounds." + (notenough ? "need more xp" : "upgrade via xp"), player, l, false);
-                            } else if(eco != null) {
-                                if(!eco.withdrawPlayer(player, cost).transactionSuccess()) {
+                            } else if(ECONOMY != null) {
+                                if(!ECONOMY.withdrawPlayer(player, cost).transactionSuccess()) {
                                     notenough = true;
                                     sendStringListMessage(player, getStringList(config, "messages.not enough cash"), null);
                                 }
@@ -164,8 +164,8 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                         } else {
                             playSound(config, "sounds.upgrade creative", player, l, false);
                         }
-                        item = top.getItem(13).clone();
-                        itemMeta = item.getItemMeta();
+                        final ItemStack item = top.getItem(13).clone();
+                        final ItemMeta itemMeta = item.getItemMeta();
                         itemMeta.removeEnchant(Enchantment.ARROW_DAMAGE);
                         itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
                         item.setItemMeta(itemMeta);
@@ -184,6 +184,8 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                     boolean upgrade = false;
                     final BigDecimal zero = BigDecimal.ZERO;
                     BigDecimal cost = zero;
+                    ItemStack item = null;
+                    ItemMeta itemMeta = null;
                     if(firstEmpty == 5 && !top.getItem(3).getItemMeta().getDisplayName().equals(currentName)
                             || firstEmpty == 3 && top.getItem(5) != null && !top.getItem(5).getItemMeta().getDisplayName().equals(currentName)
                             || firstEmpty < 0
@@ -200,7 +202,7 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                             final MagicDust upgradedDust = dust.getUpgradesTo();
                             if(upgradedDust != null) {
                                 item = top.getItem(slot).clone();
-                                itemMeta = item.getItemMeta(); lore.clear();
+                                itemMeta = item.getItemMeta();
                                 cost = dust.getUpgradeCost();
                                 boolean did = false;
                                 if(cost.equals(zero)) {
@@ -216,14 +218,16 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                                         if(item == null) {
                                             return;
                                         }
-                                        item = item.clone(); itemMeta = item.getItemMeta();
+                                        item = item.clone();
+                                        itemMeta = item.getItemMeta();
+                                        final List<String> lore = new ArrayList<>();
                                         for(String s : itemMeta.getLore()) {
                                             if(s.contains("{PERCENT}")) {
                                                 s = s.replace("{PERCENT}", "" + percent);
                                             }
                                             lore.add(s);
                                         }
-                                        itemMeta.setLore(lore); lore.clear();
+                                        itemMeta.setLore(lore);
                                         item.setItemMeta(itemMeta);
                                     }
                                 }
@@ -273,12 +277,12 @@ public class Alchemist extends RPFeature implements CommandExecutor {
                         top.setItem(13, item);
                         item = accept.clone();
                         itemMeta = item.getItemMeta();
-                        lore.clear();
+                        final List<String> lore = new ArrayList<>();
                         for(String string : itemMeta.getLore()) {
                             if(string.contains("{COST}")) string = string.replace("{COST}", formatBigDecimal(cost));
                             lore.add(string);
                         }
-                        itemMeta.setLore(lore); lore.clear();
+                        itemMeta.setLore(lore);
                         item.setItemMeta(itemMeta);
                         top.setItem(22, item);
                     }

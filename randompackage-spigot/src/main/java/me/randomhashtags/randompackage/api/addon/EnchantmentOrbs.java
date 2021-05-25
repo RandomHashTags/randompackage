@@ -14,20 +14,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentOrbs extends RPFeature {
-    private static EnchantmentOrbs instance;
-    public static EnchantmentOrbs getEnchantmentOrbs() {
-        if(instance == null) instance = new EnchantmentOrbs();
-        return instance;
-    }
+public enum EnchantmentOrbs implements RPFeature {
+    INSTANCE;
 
+    @Override
     public String getIdentifier() {
         return "ENCHANTMENT_ORBS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         final List<ItemStack > orbs = new ArrayList<>();
@@ -35,7 +34,7 @@ public class EnchantmentOrbs extends RPFeature {
         final YamlConfiguration config = getAddonConfig("enchantment orbs.yml");
         for(String key : config.getConfigurationSection("enchantment orbs").getKeys(false)) {
             final String path = "enchantment orbs." + key;
-            item = createItemStack(config, path);
+            final ItemStack item = createItemStack(config, path);
             final List<String> appliesto = new ArrayList<>();
             for(String s : config.getString(path + ".applies to").split(";")) {
                 appliesto.add(s.toUpperCase());
@@ -47,14 +46,16 @@ public class EnchantmentOrbs extends RPFeature {
                     increm += increment;
                 }
                 final String slots = Integer.toString(k), increments = Integer.toString(increm), appliedlore = colorize(config.getString(path + ".apply").replace("{SLOTS}", slots).replace("{ADD_SLOTS}", increments));
-                final ItemStack i = item.clone(); itemMeta = i.getItemMeta(); lore.clear();
+                final ItemStack i = item.clone();
+                final ItemMeta itemMeta = i.getItemMeta();
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOTS}", slots));
+                final List<String> lore = new ArrayList<>();
                 if(itemMeta.hasLore()) {
                     for(String s : itemMeta.getLore()) {
                         lore.add(s.replace("{SLOTS}", slots).replace("{INCREMENT}", increments));
                     }
                 }
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
                 i.setItemMeta(itemMeta);
                 new PathEnchantmentOrb(key, i, appliedlore, appliesto, k, increm);
                 orbs.add(i);
@@ -63,6 +64,7 @@ public class EnchantmentOrbs extends RPFeature {
         addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");
         sendConsoleDidLoadFeature(getAll(Feature.ENCHANTMENT_ORB).size() + " Enchantment Orbs", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.ENCHANTMENT_ORB);
     }
@@ -70,8 +72,8 @@ public class EnchantmentOrbs extends RPFeature {
     public void applyEnchantmentOrb(@NotNull Player player, @NotNull ItemStack is, @NotNull ItemStack enchantmentorb, @NotNull EnchantmentOrb orb) {
         EnchantmentOrb appliedOrb = null;
         final int percent = getRemainingInt(enchantmentorb.getItemMeta().getLore().get(orb.getPercentLoreSlot()));
-        itemMeta = is.getItemMeta();
-        lore.clear();
+        final ItemMeta itemMeta = is.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         if(itemMeta.hasLore()) {
             lore.addAll(itemMeta.getLore());
         }
@@ -104,16 +106,16 @@ public class EnchantmentOrbs extends RPFeature {
             //playDestroy(player);
             return;
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
         player.updateInventory();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack i = event.getItem();
-        if(i != null && !i.getType().equals(Material.AIR)) {
-            final EnchantmentOrb eo = valueOfEnchantmentOrb(i);
+        final ItemStack item = event.getItem();
+        if(item != null && !item.getType().equals(Material.AIR)) {
+            final EnchantmentOrb eo = valueOfEnchantmentOrb(item);
             if(eo != null) {
                 event.setCancelled(true);
                 event.getPlayer().updateInventory();

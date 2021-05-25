@@ -7,9 +7,11 @@ import me.randomhashtags.randompackage.data.HomeData;
 import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.regional.FactionLeaveEvent;
 import me.randomhashtags.randompackage.perms.HomePermission;
+import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -27,20 +29,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class Homes extends RPFeature implements CommandExecutor {
-	private static Homes instance;
-	public static Homes getHomes() {
-		if(instance == null) instance = new Homes();
-		return instance;
-	}
+public enum Homes implements RPFeature, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	public int defaultMax;
@@ -50,9 +47,11 @@ public class Homes extends RPFeature implements CommandExecutor {
 	private HashMap<Player, Home> editingIcons;
 	private UInventory editicon;
 
+	@Override
 	public String getIdentifier() {
 		return "HOMES";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
@@ -60,7 +59,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "homes.yml"));
 		defaultMax = config.getInt("settings.default max");
 		maxHomeIncreaser = createItemStack(config, "items.max home increaser");
-		GIVEDP_ITEM.items.put("maxhomeincrease", maxHomeIncreaser);
+		GivedpItem.INSTANCE.items.put("maxhomeincrease", maxHomeIncreaser);
 
 		viewingHomes = new ArrayList<>();
 		editingIcons = new HashMap<>();
@@ -68,23 +67,25 @@ public class Homes extends RPFeature implements CommandExecutor {
 		editicon = new UInventory(null, config.getInt("edit icon.size"), colorize(config.getString("edit icon.title")));
 		final Inventory eii = editicon.getInventory();
 		final List<String> addedLore = colorizeListString(config.getStringList("edit icon.added lore"));
-		for(String s : getConfigurationSectionKeys(config, "edit icon", false)) {
-			if(!s.equals("title") && !s.equals("size") && !s.equals("added lore")) {
-				item = createItemStack(config, "edit icon." + s);
-				itemMeta = item.getItemMeta(); lore.clear();
+		for(String string : getConfigurationSectionKeys(config, "edit icon", false)) {
+			if(!string.equals("title") && !string.equals("size") && !string.equals("added lore")) {
+				final ItemStack item = createItemStack(config, "edit icon." + string);
+				final ItemMeta itemMeta = item.getItemMeta();
+				final List<String> lore = new ArrayList<>();
 				if(itemMeta.hasLore()) {
 					lore.addAll(itemMeta.getLore());
 				}
 				lore.addAll(addedLore);
-				itemMeta.setLore(lore); lore.clear();
+				itemMeta.setLore(lore);
 				item.setItemMeta(itemMeta);
-				eii.setItem(config.getInt("edit icon." + s + ".slot"), item);
+				eii.setItem(config.getInt("edit icon." + string + ".slot"), item);
 			}
 		}
 		sendConsoleDidLoadFeature("Homes", started);
 	}
+	@Override
 	public void unload() {
-		GIVEDP_ITEM.items.remove("maxhomeincreaser");
+		GivedpItem.INSTANCE.items.remove("maxhomeincreaser");
 		for(Player player : new ArrayList<>(viewingHomes)) {
 			player.closeInventory();
 		}
@@ -92,46 +93,53 @@ public class Homes extends RPFeature implements CommandExecutor {
 			player.closeInventory();
 		}
 	}
-	
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if(!(sender instanceof Player)) {
 			return true;
 		}
 		final Player player = (Player) sender;
 		final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
-		final HomeData data = pdata.getHomeData();
-		final String c = cmd.getName();
+		final HomeData homeData = pdata.getHomeData();
+		final String commandName = cmd.getName();
 		final boolean zero = args.length == 0;
-		if(c.equals("home")) {
-			if(zero) {
-				viewHomes(player, pdata);
-			} else {
-				final Home home = data.getHome(getArguments(args));
-				if(home != null) {
-					teleportToHome(player, home);
-				} else {
+		switch (commandName) {
+			case "home":
+				if(zero) {
 					viewHomes(player, pdata);
+				} else {
+					final Home home = homeData.getHome(getArguments(args));
+					if(home != null) {
+						teleportToHome(player, home);
+					} else {
+						viewHomes(player, pdata);
+					}
 				}
-			}
-		} else if(c.equals("sethome")) {
-			if(hasPermission(player, HomePermission.COMMAND_SETHOME, true) && data.getHomes().size()+1 <= data.getMaxHomes(player)) {
-				final String z = zero ? config.getString("settings.default name") : getArguments(args);
-				data.addHome(player.getLocation(), z, UMaterial.GRASS_BLOCK);
-				final HashMap<String, String> replacements = new HashMap<>();
-				replacements.put("{HOME}", z);
-				sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
-			}
+				break;
+			case "sethome":
+				if(hasPermission(player, HomePermission.COMMAND_SETHOME, true) && homeData.getHomes().size()+1 <= homeData.getMaxHomes(player)) {
+					final String homeName = zero ? config.getString("settings.default name") : getArguments(args);
+					final Home home = new Home(homeName, player.getLocation(), UMaterial.GRASS_BLOCK);
+					homeData.addHome(home);
+					final HashMap<String, String> replacements = new HashMap<>();
+					replacements.put("{HOME}", homeName);
+					sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
+				}
+				break;
+			default:
+				break;
 		}
 		return true;
 	}
 	
 	private String getArguments(String[] args) {
-		final StringBuilder s = new StringBuilder();
-		final int l = args.length;
-		for(int i = 0; i < l; i++) {
-			s.append(args[i]).append(i == l-1 ? "" : " ");
+		final StringBuilder builder = new StringBuilder();
+		final int length = args.length;
+		for(int i = 0; i < length; i++) {
+			builder.append(args[i]).append(i == length-1 ? "" : " ");
 		}
-		return s.toString();
+		return builder.toString();
 	}
 	public void viewHomes(@NotNull Player opener, @NotNull RPPlayer target) {
 		if(hasPermission(opener, HomePermission.VIEW_HOMES, true)) {
@@ -145,13 +153,14 @@ public class Homes extends RPFeature implements CommandExecutor {
 			for(Home home : homes) {
 				final Location loc = home.getLocation();
 				final String world = loc.getWorld().getName(), x = Double.toString(round(loc.getX(), 1)), y = Double.toString(round(loc.getY(), 1)), z = Double.toString(round(loc.getZ(), 1));
-				item = home.getIcon().getItemStack();
-				itemMeta = item.getItemMeta(); lore.clear();
+				final ItemStack item = home.getIcon().getItemStack();
+				final ItemMeta itemMeta = item.getItemMeta();
 				itemMeta.setDisplayName(name.replace("{HOME}", home.getName()));
+				final List<String> lore = new ArrayList<>();
 				for(String s : menuLore) {
 					lore.add(s.replace("{WORLD}", world).replace("{X}", x).replace("{Y}", y).replace("{Z}", z));
 				}
-				itemMeta.setLore(lore); lore.clear();
+				itemMeta.setLore(lore);
 				item.setItemMeta(itemMeta);
 				top.setItem(top.firstEmpty(), item);
 			}
@@ -194,8 +203,8 @@ public class Homes extends RPFeature implements CommandExecutor {
 				final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
 				final HomeData data = pdata.getHomeData();
 				final List<Home> homes = data.getHomes();
-				player.closeInventory();
 				final Home home = homes.get(slot);
+				player.closeInventory();
 				if(click.contains("LEFT")) {
 					teleportToHome(player, home);
 				} else if(click.equals("MIDDLE")) {
@@ -209,7 +218,8 @@ public class Homes extends RPFeature implements CommandExecutor {
 			} else {
 				final Home home = editingIcons.get(player);
 				final UMaterial um = UMaterial.match(current);
-				final String name = home.getName(), material = um.name();
+				final String name = home.getName();
+				final String material = um.name();
 				home.setIcon(um);
 				player.closeInventory();
 				final HashMap<String, String> replacements = new HashMap<>();
@@ -240,7 +250,7 @@ public class Homes extends RPFeature implements CommandExecutor {
 		if(homes != null && !homes.isEmpty()) {
 			final List<String> msg = getStringList(config, "messages.deleted due to inside a faction claim");
 			final HashMap<String, String> replacements = new HashMap<>();
-			final List<Chunk> chunks = factions.getRegionalChunks(event.faction);
+			final List<Chunk> chunks = FactionsUUID.INSTANCE.getRegionalChunks(event.faction);
 			for(Home h : new ArrayList<>(homes)) {
 				final Location l = h.getLocation();
 				if(chunks.contains(l.getChunk())) {

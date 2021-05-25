@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class AuctionedItem {
+public final class AuctionedItem {
     public long auctionTime;
     public final UUID auctioner;
     private final ItemStack item;
@@ -17,5 +17,7 @@ public class AuctionedItem {
         this.item = item;
         this.price = price;
     }
-    public ItemStack item() { return item.clone(); }
+    public ItemStack item() {
+        return item.clone();
+    }
 }

@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.FallenHero;
 import me.randomhashtags.randompackage.addon.Kits;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.addon.CustomKit;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
 import me.randomhashtags.randompackage.addon.util.ILivingFallenHero;
 import org.bukkit.Bukkit;
@@ -19,18 +19,19 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class LivingFallenHero implements ILivingFallenHero {
-    public static HashMap<UUID, LivingFallenHero> living;
+public final class LivingFallenHero implements ILivingFallenHero {
+    public static HashMap<UUID, LivingFallenHero> LIVING;
 
-    private CustomKit kit;
-    private Kits kitclass;
-    private FallenHero type;
-    private UUID summoner;
-    private LivingEntity fallenhero;
-    private Location spawnedLocation;
+    private final CustomKit kit;
+    private final Kits kitclass;
+    private final FallenHero type;
+    private final UUID summoner;
+    private final LivingEntity fallenhero;
+    private final Location spawnedLocation;
+
     public LivingFallenHero(CustomKit kit, FallenHero type, UUID summoner, Location spawnedLocation) {
-        if(living == null) {
-            living = new HashMap<>();
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
         this.kit = kit;
         kitclass = kit.getKitClass();
@@ -39,32 +40,44 @@ public class LivingFallenHero implements ILivingFallenHero {
         this.spawnedLocation = spawnedLocation;
         fallenhero = kitclass.getEntity(getFallenHero().getType(), getSpawnedLocation(), true);
         fallenhero.setCustomName(kit.getFallenHeroName());
-        int pl = RPPlayer.get(summoner).getKitLevel(kit);
+        int pl = FileRPPlayer.get(summoner).getKitData().getLevel(kit);
         pl = pl <= 0 ? 1 : pl;
         final EntityEquipment eq = fallenhero.getEquipment();
         for(KitItem i : kit.getItems()) {
             final ItemStack is = i.getItemStack(pl);
-            final String n = is.getType().name();
-            if(n.contains("HELMET")) {
+            final String materialName = is.getType().name();
+            if(materialName.contains("HELMET")) {
                 eq.setHelmet(is);
-            } else if(n.contains("CHESTPLATE")) {
+            } else if(materialName.contains("CHESTPLATE")) {
                 eq.setChestplate(is);
-            } else if(n.contains("LEGGINGS")) {
+            } else if(materialName.contains("LEGGINGS")) {
                 eq.setLeggings(is);
-            } else if(n.contains("BOOTS")) {
+            } else if(materialName.contains("BOOTS")) {
                 eq.setBoots(is);
-            } else if(n.contains("SWORD") || n.contains("_AXE")) {
+            } else if(materialName.contains("SWORD") || materialName.contains("_AXE")) {
                 eq.setItemInHand(is);
             }
         }
-        living.put(fallenhero.getUniqueId(), this);
+        LIVING.put(fallenhero.getUniqueId(), this);
     }
-    public LivingEntity getEntity() { return fallenhero; }
-    public CustomKit getKit() { return kit; }
-    public Kits getKitClass() { return kitclass; }
-    public FallenHero getFallenHero() { return type; }
-    public UUID getSummoner() { return summoner; }
-    public Location getSpawnedLocation() { return spawnedLocation; }
+    public LivingEntity getEntity() {
+        return fallenhero;
+    }
+    public CustomKit getKit() {
+        return kit;
+    }
+    public Kits getKitClass() {
+        return kitclass;
+    }
+    public FallenHero getFallenHero() {
+        return type;
+    }
+    public UUID getSummoner() {
+        return summoner;
+    }
+    public Location getSpawnedLocation() {
+        return spawnedLocation;
+    }
 
     public void delete() {
         fallenhero.remove();
@@ -80,20 +93,20 @@ public class LivingFallenHero implements ILivingFallenHero {
             final boolean droppedGem = random.nextInt(100) <= type.getGemDropChance();
             final Player killer = event.getEntity().getKiller();
             if(droppedGem) {
-                final HashMap<String, String> r = new HashMap<>();
-                r.put("{PLAYER}", killer.getName());
-                r.put("{NAME}", kit.getItem().getItemMeta().getDisplayName());
-                for(String s : type.getReceiveKitMsg()) {
-                    for(String re : r.keySet()) {
-                        s = s.replace(re, r.get(re));
+                final HashMap<String, String> replacements = new HashMap<>();
+                replacements.put("{PLAYER}", killer.getName());
+                replacements.put("{NAME}", kit.getItem().getItemMeta().getDisplayName());
+                for(String string : type.getReceiveKitMsg()) {
+                    for(String re : replacements.keySet()) {
+                        string = string.replace(re, replacements.get(re));
                     }
-                    Bukkit.broadcastMessage(s);
+                    Bukkit.broadcastMessage(string);
                 }
                 w.dropItem(fallenhero.getLocation(), kit.getFallenHeroItem(kit, false));
             } else {
                 final List<KitItem> items = kit.getItems();
-                final RPPlayer pdata = RPPlayer.get(killer.getUniqueId());
-                int lvl = pdata.getKitLevel(kit);
+                final FileRPPlayer pdata = FileRPPlayer.get(killer.getUniqueId());
+                int lvl = pdata.getKitData().getLevel(kit);
                 lvl = lvl <= 0 ? 1 : lvl;
                 final KitItem ki = items.get(random.nextInt(items.size()));
                 final ItemStack is = ki.getItemStack(killer.getName(), lvl, kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(lvl, 0f));
@@ -101,16 +114,16 @@ public class LivingFallenHero implements ILivingFallenHero {
                     w.dropItem(fallenhero.getLocation(), is);
                 }
             }
-            final FallenHeroSlainEvent e = new FallenHeroSlainEvent(event.getEntity().getKiller(), this, droppedGem);
-            kitclass.PLUGIN_MANAGER.callEvent(e);
+            final FallenHeroSlainEvent slainEvent = new FallenHeroSlainEvent(event.getEntity().getKiller(), this, droppedGem);
+            kitclass.PLUGIN_MANAGER.callEvent(slainEvent);
         }
-        living.remove(fallenhero.getUniqueId());
-        if(living.isEmpty()) {
-            living = null;
+        LIVING.remove(fallenhero.getUniqueId());
+        if(LIVING.isEmpty()) {
+            LIVING = null;
         }
     }
 
     public static void deleteAll() {
-        living = null;
+        LIVING = null;
     }
 }

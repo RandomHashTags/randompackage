@@ -5,8 +5,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public abstract class DamageEvent extends AbstractCancellable {
-    private Entity damagee, damager;
-    private EntityDamageEvent.DamageCause cause;
+    private final Entity damagee;
+    private final Entity damager;
+    private final EntityDamageEvent.DamageCause cause;
     private double damage;
     public DamageEvent(@NotNull Entity damagee, @NotNull EntityDamageEvent.DamageCause cause, double damage) {
         this(null, damagee, cause, damage);

@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 
-public class Freeze extends AbstractEventAttribute {
+public final class Freeze extends AbstractEventAttribute {
     private static HashMap<Player, TObject> tasks;
     @Override
     public void load() {
@@ -28,9 +28,9 @@ public class Freeze extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final Event event = pending.getEvent();
-        final PlayerQuitEvent q = event instanceof PlayerQuitEvent ? (PlayerQuitEvent) event : null;
-        if(q != null) {
-            final Player player = q.getPlayer();
+        final PlayerQuitEvent quitEvent = event instanceof PlayerQuitEvent ? (PlayerQuitEvent) event : null;
+        if(quitEvent != null) {
+            final Player player = quitEvent.getPlayer();
             final TObject tobj = tasks.getOrDefault(player, null);
             if(tobj != null) {
                 SCHEDULER.cancelTask((int) tobj.getFirst());

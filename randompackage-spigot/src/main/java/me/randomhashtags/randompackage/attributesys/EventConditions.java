@@ -184,13 +184,13 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedEnderCrystal(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isshowingbottom": return EIGHT ? true : entity instanceof EnderCrystal && ((EnderCrystal) entity).isShowingBottom() == Boolean.parseBoolean(value);
+            case "isshowingbottom": return EIGHT || entity instanceof EnderCrystal && ((EnderCrystal) entity).isShowingBottom() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
     default boolean passedEnderDragon(Entity entity, String condition, String value) {
         switch (condition) {
-            case "phase": return EIGHT ? true : entity instanceof EnderDragon && ((EnderDragon) entity).getPhase().name().equalsIgnoreCase(value);
+            case "phase": return EIGHT || entity instanceof EnderDragon && ((EnderDragon) entity).getPhase().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
@@ -202,7 +202,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedEndermite(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isplayerspawned": return LEGACY || THIRTEEN ? false : entity instanceof Endermite && ((Endermite) entity).isPlayerSpawned() == Boolean.parseBoolean(value);
+            case "isplayerspawned": return !LEGACY && !THIRTEEN && entity instanceof Endermite && ((Endermite) entity).isPlayerSpawned() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
@@ -216,14 +216,14 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "isinvulnerable": return !EIGHT && entity.isInvulnerable() == Boolean.parseBoolean(value);
             case "issilent": return !EIGHT && !NINE && entity.isSilent() == Boolean.parseBoolean(value);
             case "isitem": return entity instanceof Item == Boolean.parseBoolean(value);
-            case "hasgravity": return entity instanceof ArmorStand && ((ArmorStand) entity).hasGravity() || !EIGHT && !NINE && !TEN && entity.hasGravity() == Boolean.parseBoolean(value);
+            case "hasgravity": return entity instanceof ArmorStand && entity.hasGravity() || !EIGHT && !NINE && !TEN && entity.hasGravity() == Boolean.parseBoolean(value);
             case "worlddifficulty": return entity.getWorld().getDifficulty().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
     default boolean passedEvoker(Entity entity, String condition, String value) {
         switch (condition) {
-            case "currentspell": return EIGHT || NINE | TEN ? false : entity instanceof Evoker && ((Evoker) entity).getCurrentSpell().name().equalsIgnoreCase(value);
+            case "currentspell": return !EIGHT && !(NINE | TEN) && entity instanceof Evoker && ((Evoker) entity).getCurrentSpell().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
@@ -245,14 +245,14 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedFirework(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isshotatangle": return LEGACY || THIRTEEN ? false : entity instanceof Firework && ((Firework) entity).isShotAtAngle() == Boolean.parseBoolean(value);
+            case "isshotatangle": return !LEGACY && !THIRTEEN && entity instanceof Firework && ((Firework) entity).isShotAtAngle() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
     default boolean passedFox(Entity entity, String condition, String value) {
         switch (condition) {
-            case "foxtype": return LEGACY || THIRTEEN ? false : entity instanceof Fox && ((Fox) entity).getFoxType().name().equalsIgnoreCase(value);
-            case "iscrouching": return LEGACY || THIRTEEN ? false : entity instanceof Fox && ((Fox) entity).isCrouching() == Boolean.parseBoolean(value);
+            case "foxtype": return !LEGACY && !THIRTEEN && entity instanceof Fox && ((Fox) entity).getFoxType().name().equalsIgnoreCase(value);
+            case "iscrouching": return !LEGACY && !THIRTEEN && entity instanceof Fox && ((Fox) entity).isCrouching() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
@@ -316,10 +316,10 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     default boolean passedLivingEntity(Entity entity, String condition, String value) {
         switch (condition) {
             case "isleashed": return entity instanceof LivingEntity && ((LivingEntity) entity).isLeashed() == Boolean.parseBoolean(value);
-            case "isswimming": return LEGACY ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isSwimming() == Boolean.parseBoolean(value);
-            case "isgliding": return EIGHT ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isGliding() == Boolean.parseBoolean(value);
+            case "isswimming": return !LEGACY && entity instanceof LivingEntity && ((LivingEntity) entity).isSwimming() == Boolean.parseBoolean(value);
+            case "isgliding": return !EIGHT && entity instanceof LivingEntity && ((LivingEntity) entity).isGliding() == Boolean.parseBoolean(value);
             case "isholding": return entity instanceof LivingEntity && ((LivingEntity) entity).getEquipment().getItemInHand().getType().name().toLowerCase().endsWith(value);
-            case "issleeping": return LEGACY || THIRTEEN ? false : entity instanceof LivingEntity && ((LivingEntity) entity).isSleeping() == Boolean.parseBoolean(value);
+            case "issleeping": return !LEGACY && !THIRTEEN && entity instanceof LivingEntity && ((LivingEntity) entity).isSleeping() == Boolean.parseBoolean(value);
             case "hasai": return EIGHT || entity instanceof LivingEntity && ((LivingEntity) entity).hasAI() == Boolean.parseBoolean(value);
             case "iscollideable": return EIGHT || entity instanceof LivingEntity && ((LivingEntity) entity).isCollidable() == Boolean.parseBoolean(value);
             case "health<": // health<=
@@ -368,10 +368,10 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedPanda(Entity entity, String condition, String value) {
         switch (condition) {
-            case "maingene": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getMainGene().name().equalsIgnoreCase(value);
-            case "maingeneisrecessive": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getMainGene().isRecessive() == Boolean.parseBoolean(value);
-            case "hiddengene": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getHiddenGene().name().equalsIgnoreCase(value);
-            case "hiddengeneisrecessive": return LEGACY || THIRTEEN ? false : entity instanceof Panda && ((Panda) entity).getHiddenGene().isRecessive() == Boolean.parseBoolean(value);
+            case "maingene": return !LEGACY && !THIRTEEN && entity instanceof Panda && ((Panda) entity).getMainGene().name().equalsIgnoreCase(value);
+            case "maingeneisrecessive": return !LEGACY && !THIRTEEN && entity instanceof Panda && ((Panda) entity).getMainGene().isRecessive() == Boolean.parseBoolean(value);
+            case "hiddengene": return !LEGACY && !THIRTEEN && entity instanceof Panda && ((Panda) entity).getHiddenGene().name().equalsIgnoreCase(value);
+            case "hiddengeneisrecessive": return !LEGACY && !THIRTEEN && entity instanceof Panda && ((Panda) entity).getHiddenGene().isRecessive() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
@@ -460,8 +460,8 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedRaider(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ispatrolleader": return LEGACY || THIRTEEN ? false : entity instanceof Raider && ((Raider) entity).isPatrolLeader() == Boolean.parseBoolean(value);
-            case "patroltargetblock": return LEGACY ? false : entity instanceof Raider && UMaterial.match(((Raider) entity).getPatrolTarget().getType().name()).name().toLowerCase().endsWith(value);
+            case "ispatrolleader": return !LEGACY && !THIRTEEN && entity instanceof Raider && ((Raider) entity).isPatrolLeader() == Boolean.parseBoolean(value);
+            case "patroltargetblock": return !LEGACY && entity instanceof Raider && UMaterial.match(((Raider) entity).getPatrolTarget().getType().name()).name().toLowerCase().endsWith(value);
             default: return true;
         }
     }
@@ -507,7 +507,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedSnowman(Entity entity, String condition, String value) {
         switch (condition) {
-            case "isderp": return EIGHT || NINE ? false : entity instanceof Snowman && ((Snowman) entity).isDerp() == Boolean.parseBoolean(value);
+            case "isderp": return !EIGHT && !NINE && entity instanceof Snowman && ((Snowman) entity).isDerp() == Boolean.parseBoolean(value);
             default: return true;
         }
     }
@@ -519,15 +519,15 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
     }
     default boolean passedTropicalFish(Entity entity, String condition, String value) {
         switch (condition) {
-            case "patterncolor": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getPatternColor().name().equalsIgnoreCase(value);
-            case "bodycolor": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getBodyColor().name().equalsIgnoreCase(value);
-            case "pattern": return LEGACY ? false : entity instanceof TropicalFish && ((TropicalFish) entity).getPattern().name().equalsIgnoreCase(value);
+            case "patterncolor": return !LEGACY && entity instanceof TropicalFish && ((TropicalFish) entity).getPatternColor().name().equalsIgnoreCase(value);
+            case "bodycolor": return !LEGACY && entity instanceof TropicalFish && ((TropicalFish) entity).getBodyColor().name().equalsIgnoreCase(value);
+            case "pattern": return !LEGACY && entity instanceof TropicalFish && ((TropicalFish) entity).getPattern().name().equalsIgnoreCase(value);
             default: return true;
         }
     }
     default boolean passedVex(Entity entity, String condition, String value) {
         switch (condition) {
-            case "ischarging": return EIGHT || NINE || TEN ? false : entity instanceof Vex && ((Vex) entity).isCharging() == Boolean.valueOf(value);
+            case "ischarging": return !EIGHT && !NINE && !TEN && entity instanceof Vex && ((Vex) entity).isCharging() == Boolean.valueOf(value);
             default: return true;
         }
     }
@@ -625,7 +625,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
 
             case "skill":
                 final com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent ev = (com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent) event;
-                final String skill = MCMMOAPI.getMCMMOAPI().getSkillName(ev);
+                final String skill = MCMMOAPI.INSTANCE.getSkillName(ev);
                 return skill != null && skill.equalsIgnoreCase(value);
             default:
                 return true;
@@ -675,7 +675,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 final List<UMaterial> m = entity instanceof Player ? FileRPPlayer.get(entity.getUniqueId()).getItemFilterData().getFilteredItems() : null;
                 return m != null && m.contains(UMaterial.match(value));
             case "iscustomboss":
-                return LivingCustomBoss.living != null && LivingCustomBoss.living.containsKey(entity.getUniqueId()) == Boolean.parseBoolean(value);
+                return LivingCustomBoss.LIVING != null && LivingCustomBoss.LIVING.containsKey(entity.getUniqueId()) == Boolean.parseBoolean(value);
             default:
                 return true;
         }

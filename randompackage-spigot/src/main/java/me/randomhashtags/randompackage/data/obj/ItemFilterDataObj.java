@@ -5,9 +5,9 @@ import me.randomhashtags.randompackage.universal.UMaterial;
 
 import java.util.List;
 
-public class ItemFilterDataObj implements ItemFilterData {
+public final class ItemFilterDataObj implements ItemFilterData {
     private boolean active;
-    private List<UMaterial> filter;
+    private final List<UMaterial> filter;
 
     public ItemFilterDataObj(boolean active, List<UMaterial> filter) {
         this.active = active;

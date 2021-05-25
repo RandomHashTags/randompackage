@@ -11,8 +11,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileEnchantRarity extends RPAddon implements EnchantRarity {
-    private File folder;
+public final class FileEnchantRarity extends RPAddon implements EnchantRarity {
+    private final File folder;
     private ItemStack revealItem, revealedItem;
     private Firework firework;
     protected List<CustomEnchant> enchants;
@@ -23,7 +23,11 @@ public class FileEnchantRarity extends RPAddon implements EnchantRarity {
         enchants = new ArrayList<>();
         register(Feature.CUSTOM_ENCHANT_RARITY, this);
     }
-    public String getIdentifier() { return folder.getName(); }
+
+    @Override
+    public String getIdentifier() {
+        return folder.getName();
+    }
 
     public String[] getRevealedEnchantRarities() {
         return yml.getString("reveals enchant rarities").split(";");
@@ -32,11 +36,11 @@ public class FileEnchantRarity extends RPAddon implements EnchantRarity {
         return getStringList(yml, "reveal enchant msg");
     }
     public ItemStack getRevealItem() {
-        if(revealItem == null) revealItem = API.createItemStack(yml, "reveal item");
+        if(revealItem == null) revealItem = createItemStack(yml, "reveal item");
         return getClone(revealItem);
     }
     public ItemStack getRevealedItem() {
-        if(revealedItem == null) revealedItem = API.createItemStack(yml, "revealed item");
+        if(revealedItem == null) revealedItem = createItemStack(yml, "revealed item");
         return getClone(revealedItem);
     }
     public String getNameColors() {

@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -25,13 +26,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class Masks extends CustomEnchants {
     private static Masks instance;
@@ -49,6 +49,7 @@ public class Masks extends CustomEnchants {
     public String getIdentifier() {
         return "MASKS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");
@@ -56,12 +57,12 @@ public class Masks extends CustomEnchants {
 
         equippedMasks = new HashMap<>();
         maskgenerator = createItemStack(config, "items.generator");
-        GIVEDP_ITEM.items.put("maskgenerator", maskgenerator);
+        GivedpItem.INSTANCE.items.put("maskgenerator", maskgenerator);
         maskCanObtain = config.getStringList("items.generator.can obtain");
 
-        if(!otherdata.getBoolean("saved default masks")) {
+        if(!OTHER_YML.getBoolean("saved default masks")) {
             generateDefaultMasks();
-            otherdata.set("saved default masks", true);
+            OTHER_YML.set("saved default masks", true);
             saveOtherData();
         }
         final List<ItemStack> list = new ArrayList<>();
@@ -74,6 +75,7 @@ public class Masks extends CustomEnchants {
         addGivedpCategory(list, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
         sendConsoleDidLoadFeature(getAll(Feature.MASK).size() + " Masks", started);
     }
+    @Override
     public void unload() {
         for(Player p : equippedMasks.keySet()) {
             p.getInventory().setHelmet(equippedMasks.get(p));
@@ -110,6 +112,7 @@ public class Masks extends CustomEnchants {
         final ItemStack mask = event.getCursor();
         final Mask m = valueOfMask(mask), onitem = getMaskOnItem(current);
         final Player player = (Player) event.getWhoClicked();
+        ItemStack item = null;
         if(m != null && onitem == null) {
             event.setCancelled(true);
             final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
@@ -117,13 +120,16 @@ public class Masks extends CustomEnchants {
             apply(m, current);
             item = m.getItem();
             final int a = item.getAmount()-mask.getAmount();
-            if(a <= 0) item = new ItemStack(Material.AIR);
-            else       item.setAmount(a);
+            if(a <= 0) {
+                item = new ItemStack(Material.AIR);
+            } else {
+                item.setAmount(a);
+            }
             event.setCursor(item);
         } else if(click.equals("RIGHT") && onitem != null) {
             item = current;
-            itemMeta = item.getItemMeta(); lore.clear();
-            lore.addAll(itemMeta.getLore());
+            final ItemMeta itemMeta = item.getItemMeta();
+            final List<String> lore = itemMeta.getLore();
             lore.remove(onitem.getApplied());
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
@@ -258,7 +264,8 @@ public class Masks extends CustomEnchants {
 
     public void apply(Mask m, ItemStack is) {
         if(m != null && is != null) {
-            itemMeta = is.getItemMeta(); lore.clear();
+            final ItemMeta itemMeta = is.getItemMeta();
+            final List<String> lore = new ArrayList<>();
             if(itemMeta.hasLore()) {
                 lore.addAll(itemMeta.getLore());
             }

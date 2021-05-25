@@ -13,27 +13,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ArmorSockets extends RPFeature {
-    private static ArmorSockets instance;
-    public static ArmorSockets getArmorSockets() {
-        if(instance == null) instance = new ArmorSockets();
-        return instance;
-    }
+public enum ArmorSockets implements RPFeature {
+    INSTANCE;
 
     public YamlConfiguration config;
     private ItemStack socket;
     private HashMap<String, String> itemTypes;
     private int chanceSlot;
 
+    @Override
     public String getIdentifier() {
         return "ARMOR_SOCKETS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "armor sockets.yml");
@@ -60,6 +59,7 @@ public class ArmorSockets extends RPFeature {
         addGivedpCategory(list, UMaterial.TRIPWIRE_HOOK, "Armor Sockets", "Givedp: Armor Sockets");
         sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SOCKET).size() + " Armor Sockets", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.ARMOR_SOCKET);
     }
@@ -67,12 +67,13 @@ public class ArmorSockets extends RPFeature {
     public ItemStack getArmorSocketItem(@NotNull ArmorSocket socket, int chance) {
         final String name = socket.getName(), nameLC = name.toLowerCase(), itemType = itemTypes.get(socket.getItemType()), limit = Integer.toString(socket.getLimit()), chanceString = Integer.toString(Math.min(chance, 100));
         final ItemStack item = getClone(this.socket);
-        itemMeta = item.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
         for(String s : itemMeta.getLore()) {
             lore.add(s.replace("{NAME}", name).replace("{ITEM_TYPE}", itemType).replace("{NAME_LC}", nameLC).replace("{LIMIT}", limit).replace("{CHANCE}", chanceString));
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }

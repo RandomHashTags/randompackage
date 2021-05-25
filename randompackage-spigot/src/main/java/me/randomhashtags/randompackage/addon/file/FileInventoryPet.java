@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class FileInventoryPet extends RPAddon implements InventoryPet {
+public final class FileInventoryPet extends RPAddon implements InventoryPet {
     private ItemStack item, egg;
     private HashMap<Integer, String> values;
     private HashMap<Integer, Integer> cooldowns, requiredxp;
@@ -71,7 +71,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
     public ItemStack getItem() {
         if(item == null) {
-            item = API.createItemStack(yml, "item");
+            item = createItemStack(yml, "item");
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);
@@ -81,7 +81,7 @@ public class FileInventoryPet extends RPAddon implements InventoryPet {
     }
 
     public ItemStack getEgg() {
-        if(egg == null) egg = API.createItemStack(yml, "egg");
+        if(egg == null) egg = createItemStack(yml, "egg");
         return getClone(egg);
     }
     public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() {

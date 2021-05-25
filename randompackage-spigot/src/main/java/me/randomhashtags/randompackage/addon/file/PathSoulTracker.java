@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class PathSoulTracker extends RPAddon implements SoulTracker {
-    private String path;
+public final class PathSoulTracker extends RPAddon implements SoulTracker {
+    private final String path;
     private ItemStack is;
     private List<String> apply, split;
     public PathSoulTracker(String path) {
@@ -49,7 +49,7 @@ public class PathSoulTracker extends RPAddon implements SoulTracker {
         return getRarityGem(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".converts to gem"));
     }
     public ItemStack getItem() {
-        if(is == null) is = API.createItemStack(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
+        if(is == null) is = createItemStack(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
         return getClone(is);
     }
     public String getApplied() { return colorize(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }

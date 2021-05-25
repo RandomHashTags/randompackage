@@ -126,7 +126,7 @@ public interface RPValues extends UVersionable {
 
 
     default List<ItemStack> getFatBuckets(@NotNull Player player) {
-        final FatBuckets buckets = FatBuckets.getFatBuckets();
+        final FatBuckets buckets = FatBuckets.INSTANCE;
         final List<ItemStack> list = new ArrayList<>();
         if(buckets.isEnabled()) {
             for(ItemStack is : player.getInventory().getContents()) {
@@ -138,7 +138,6 @@ public interface RPValues extends UVersionable {
         return list;
     }
 
-
     default ArmorSet valueOfArmorSet(@NotNull Player player) {
         return valueOfArmorSet(player, false);
     }
@@ -149,7 +148,7 @@ public interface RPValues extends UVersionable {
             final List<String> helmetLore = helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasLore() ? helmet.getItemMeta().getLore() : null;
             final List<String> chestLore = chest != null && chest.hasItemMeta() && chest.getItemMeta().hasLore() ? chest.getItemMeta().getLore() : null;
             final List<String> legLore = legs != null && legs.hasItemMeta() && legs.getItemMeta().hasLore() ? legs.getItemMeta().getLore() : null;
-            final List<String> bootsLore = boots != null && helmet.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
+            final List<String> bootsLore = boots != null && boots.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
             final List<String> omniLore = getCustomArmor().omniAppliedLore;
             for(ArmorSet set : getAllArmorSets().values()) {
                 final List<String> lore = set.getArmorLore();
@@ -209,7 +208,7 @@ public interface RPValues extends UVersionable {
     }
 
     default ArmorSocket valueOfArmorSocket(@NotNull ItemStack item) {
-        final ArmorSockets sockets = ArmorSockets.getArmorSockets();
+        final ArmorSockets sockets = ArmorSockets.INSTANCE;
         if(sockets.isEnabled()) {
             if(item != null && !item.getType().equals(Material.AIR)) {
                 final ItemMeta meta = item.getItemMeta();

@@ -2,12 +2,15 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
+import me.randomhashtags.randompackage.addon.slotbot.CustomItem;
 import me.randomhashtags.randompackage.enums.SlotBotSetting;
 import me.randomhashtags.randompackage.perms.SlotBotPermission;
+import me.randomhashtags.randompackage.universal.CustomSound;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.USound;
 import me.randomhashtags.randompackage.util.ChatUtils;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -28,19 +31,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class SlotBot extends RPFeature implements Listener, CommandExecutor, ChatUtils {
-    private static SlotBot instance;
-    public static SlotBot getSlotBot() {
-        if(instance == null) instance = new SlotBot();
-        return instance;
-    }
+public enum SlotBot implements RPFeature, Listener, CommandExecutor, ChatUtils {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, preview;
@@ -59,6 +53,9 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
     private HashMap<String, CustomSound> sounds;
     private HashMap<SlotBotSetting, Boolean> settings;
 
+    private Collection<CustomItem> customItems;
+
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final boolean isPlayer = sender instanceof Player;
         final int length = args.length;
@@ -100,9 +97,12 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "SLOT_BOT";
     }
+
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "slot bot.yml");
@@ -130,7 +130,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         }
 
         ticket = createItemStack(config, "items.ticket");
-        GIVEDP_ITEM.items.put("slotbotticket", ticket);
+        GivedpItem.INSTANCE.items.put("slotbotticket", ticket);
         
         ticket = createItemStack(config, "items.ticket");
         ticketLocked = createItemStack(config, "items.ticket locked");
@@ -200,10 +200,10 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
 
         previewRewardsSlot = config.getInt("items.preview rewards.slot");
         previewRewards = createItemStack(config, "items.preview rewards");
-        itemMeta = previewRewards.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = previewRewards.getItemMeta();
 
         final List<ItemStack> previewRewardList = new ArrayList<>();
-        final List<String> actualRewards = new ArrayList<>();
+        final List<String> lore = new ArrayList<>(), actualRewards = new ArrayList<>();
         for(String s : itemMeta.getLore()) {
             if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
                 for(String reward : rewards) {
@@ -219,7 +219,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
                 lore.add(s);
             }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         previewRewards.setItemMeta(itemMeta);
         inv.setItem(previewRewardsSlot, previewRewards);
         rewards = actualRewards;
@@ -230,10 +230,22 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
         }
         sendConsoleDidLoadFeature("Slot Bot", started);
     }
+    @Override
     public void unload() {
         for(Player player : new ArrayList<>(pendingRewardSlots.keySet())) {
             player.closeInventory();
         }
+    }
+
+    private CustomItem valueOfCustomItem(ItemStack item) {
+        if(item != null && customItems != null) {
+            for(CustomItem customItem : customItems) {
+                if(item.isSimilar(customItem.getItem())) {
+                    return customItem;
+                }
+            }
+        }
+        return null;
     }
 
     private void playSound(Player player, String identifier) {
@@ -252,8 +264,9 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
 
 
     private ItemStack getTicketLocked(int ticketAmount) {
-        item = ticketLocked.clone();
-        itemMeta = item.getItemMeta(); lore.clear();
+        final ItemStack item = ticketLocked.clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         for(String string : itemMeta.getLore()) {
             lore.add(string.replace("{AMOUNT}", Integer.toString(ticketAmount)));
         }
@@ -325,7 +338,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
             }
             removeItem(player, ticket, 1);
             final int slot = ticketSlots.get(inserted);
-            item = getClone(ticketUnlocked);
+            final ItemStack item = getClone(ticketUnlocked);
             item.setAmount(inserted+1);
             top.setItem(slot, item);
             player.updateInventory();
@@ -462,9 +475,6 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
             }
         }
     }
-    public boolean isCustomItemThatInstantlyExecutesCommands(@Nullable ItemStack is) {
-        return isCustomItemThatInstantlyExecutesCommands(CustomItemsAPI.INSTANCE.valueOf(is));
-    }
     public boolean isCustomItemThatInstantlyExecutesCommands(@Nullable CustomItem customItem) {
         return customItem != null && isSlotBotSettingEnabled(SlotBotSetting.INSTANT_CUSTOM_ITEM_COMMAND_EXECUTION) && customItem.doesExecuteCommands();
     }
@@ -479,7 +489,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
             tickets += ticketsInserted;
 
             for(int i : slots.keySet()) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
                 if(item != null && ticketsInserted > 0) {
                     if(!rewardSlot.isSimilar(item)) {
                         items.add(item);
@@ -503,7 +513,7 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
 
         if(!items.isEmpty()) {
             for(ItemStack is : items) {
-                final CustomItem customItem = CustomItemsAPI.INSTANCE.valueOf(is);
+                final CustomItem customItem = valueOfCustomItem(is);
                 if(isCustomItemThatInstantlyExecutesCommands(customItem)) {
                     executeCustomItemCommands.add(customItem);
                 } else {
@@ -512,19 +522,19 @@ public class SlotBot extends RPFeature implements Listener, CommandExecutor, Cha
             }
             final String playerName = player.getName(), ticketsInserted = Integer.toString(tickets);
             final boolean isCentered = config.getBoolean("messages.loot.centered");
-            for(String s : getStringList(config, "messages.loot.msg")) {
-                s = s.replace("{PLAYER}", playerName).replace("{TICKETS}", ticketsInserted);
-                if(s.contains("{AMOUNT}") && s.contains("{ITEM}")) {
+            for(String string : getStringList(config, "messages.loot.msg")) {
+                string = string.replace("{PLAYER}", playerName).replace("{TICKETS}", ticketsInserted);
+                if(string.contains("{AMOUNT}") && string.contains("{ITEM}")) {
                     for(ItemStack is : items) {
-                        itemMeta = is.getItemMeta();
+                        final ItemMeta itemMeta = is.getItemMeta();
                         final String name = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : is.getType().name();
-                        final String target = s.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", name);
+                        final String target = string.replace("{AMOUNT}", Integer.toString(is.getAmount())).replace("{ITEM}", name);
                         final String message = isCentered ? center(target, 70) : target;
                         final TextComponent hover = getHoverMessage(message, is);
                         sendHoverMessage(null, hover, true);
                     }
                 } else {
-                    Bukkit.broadcastMessage(isCentered ? center(s, 70) : s);
+                    Bukkit.broadcastMessage(isCentered ? center(string, 70) : string);
                 }
             }
             for(CustomItem customItem : executeCustomItemCommands) {

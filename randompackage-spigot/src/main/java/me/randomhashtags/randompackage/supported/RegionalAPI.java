@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.attribute.faction.AddFactionPower;
 import me.randomhashtags.randompackage.supported.regional.*;
-import me.randomhashtags.randompackage.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -18,22 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class RegionalAPI extends UVersion {
-    private static RegionalAPI instance;
-    public static RegionalAPI getRegionalAPI() {
-        if(instance == null) instance = new RegionalAPI();
-        return instance;
-    }
+public enum RegionalAPI implements UVersionable {
+    INSTANCE;
 
     private FileConfiguration config;
-    private static boolean worldguard, factionsUUID, askyblock, superiorskyblock, epicskyblock;
+    private static boolean WORLD_GUARD, factionsUUID, askyblock, superiorskyblock, epicskyblock;
 
-    protected static FactionsUUID factions;
-    protected static ASky asky;
-    protected static SuperiorSky ssky;
-    protected static IridiumSky esky;
+    protected static FactionsUUID FACTIONS_UUID;
+    protected static ASky A_SKY;
+    protected static SuperiorSky SUPERIOR_SKY;
+    protected static IridiumSky IRIDIUM_SKY;
 
-    private boolean isTrue(String path) { return config.getBoolean(path); }
+    private boolean isTrue(String path) {
+        return config.getBoolean(path);
+    }
     public void setup(RandomPackage randompackage) {
         this.config = randompackage.config;
         trySupportingWorldGuard();
@@ -44,16 +42,16 @@ public class RegionalAPI extends UVersion {
     }
 
     public void trySupportingWorldGuard() {
-        worldguard = isTrue("supported plugins.regional.WorldGuard") && PLUGIN_MANAGER.isPluginEnabled("WorldGuard");
-        if(worldguard) {
+        WORLD_GUARD = isTrue("supported plugins.regional.WorldGuard") && PLUGIN_MANAGER.isPluginEnabled("WorldGuard");
+        if(WORLD_GUARD) {
             hooked("WorldGuard");
         }
     }
     public void trySupportingFactions() {
         factionsUUID = isTrue("supported plugins.regional.FactionsUUID") && PLUGIN_MANAGER.isPluginEnabled("Factions");
         if(factionsUUID) {
-            factions = FactionsUUID.getFactionsUUID();
-            factions.enable();
+            FACTIONS_UUID = FactionsUUID.INSTANCE;
+            FACTIONS_UUID.enable();
             hooked("FactionsUUID");
             if(RP_CONFIG.getBoolean("faction upgrades.enabled")) {
                 FactionUpgrades.getFactionUpgrades().enable();
@@ -64,53 +62,63 @@ public class RegionalAPI extends UVersion {
     public void trySupportingASkyblock() {
         askyblock = isTrue("supported plugins.regional.ASkyblock") && PLUGIN_MANAGER.isPluginEnabled("ASkyblock");
         if(askyblock) {
-            asky = ASky.getASkyblock();
-            asky.enable();
+            A_SKY = ASky.INSTANCE;
+            A_SKY.enable();
             hooked("ASkyblock");
         }
     }
     public void trySupportingSuperiorSkyblock() {
         superiorskyblock = isTrue("supported plugins.regional.SuperiorSkyblock") && PLUGIN_MANAGER.isPluginEnabled("SuperiorSkyblock");
         if(superiorskyblock) {
-            ssky = SuperiorSky.getSuperiorSkyblock();
-            ssky.enable();
+            SUPERIOR_SKY = SuperiorSky.INSTANCE;
+            SUPERIOR_SKY.enable();
             hooked("SuperiorSkyblock");
         }
     }
     public void trySupportingEpicSkyblock() {
         epicskyblock = isTrue("supported plugins.regional.EpicSkyblock") && PLUGIN_MANAGER.isPluginEnabled("EpicSkyblock");
         if(epicskyblock) {
-            esky = IridiumSky.getEpicSkyblock();
-            esky.enable();
+            IRIDIUM_SKY = IridiumSky.INSTANCE;
+            IRIDIUM_SKY.enable();
             hooked("EpicSkyblock");
         }
     }
-    private void hooked(String plugin) { sendConsoleMessage("&6[RandomPackage] &aHooked Regional Plugin: " + plugin); }
-    public boolean hookedFactionsUUID() { return factionsUUID; }
-    public boolean hookedASkyblock() { return askyblock; }
-    public boolean hookedSuperiorSkyblock() { return superiorskyblock; }
-    public boolean hookedEpicSkyblock() { return epicskyblock; }
+    private void hooked(String plugin) {
+        sendConsoleMessage("&6[RandomPackage] &aHooked Regional Plugin: " + plugin);
+    }
+    public boolean hookedFactionsUUID() {
+        return factionsUUID;
+    }
+    public boolean hookedASkyblock() {
+        return askyblock;
+    }
+    public boolean hookedSuperiorSkyblock() {
+        return superiorskyblock;
+    }
+    public boolean hookedEpicSkyblock() {
+        return epicskyblock;
+    }
 
     public HashMap<Regional, String> getRegionalIdentifiersAt(Location l) {
         final HashMap<Regional, String> a = new HashMap<>();
         if(hookedFactionsUUID()) {
-            a.put(factions, factions.getRegionalIdentifierAt(l));
+            a.put(FACTIONS_UUID, FACTIONS_UUID.getRegionalIdentifierAt(l));
         }
         if(hookedASkyblock()) {
-            a.put(asky, asky.getRegionalIdentifierAt(l));
+            a.put(A_SKY, A_SKY.getRegionalIdentifierAt(l));
         }
         if(hookedSuperiorSkyblock()) {
-            a.put(ssky, ssky.getRegionalIdentifierAt(l));
+            a.put(SUPERIOR_SKY, SUPERIOR_SKY.getRegionalIdentifierAt(l));
         }
         if(hookedEpicSkyblock()) {
-            a.put(esky, esky.getRegionalIdentifierAt(l));
+            a.put(IRIDIUM_SKY, IRIDIUM_SKY.getRegionalIdentifierAt(l));
         }
         return a;
     }
     public boolean allowsPvP(@NotNull Player player, @NotNull Location l) {
         final List<Boolean> booleans = new ArrayList<>();
-        if(worldguard) {
-            booleans.add(WorldGuardAPI.getWorldGuardAPI().allowsPvP(player, l));
+        if(WORLD_GUARD) {
+            booleans.add(WorldGuardAPI.INSTANCE.allowsPvP(player, l));
         }
         if(factionsUUID || askyblock || superiorskyblock || epicskyblock) {
             booleans.add(isPvPZone(l));
@@ -122,17 +130,19 @@ public class RegionalAPI extends UVersion {
     }
     public boolean isPvPZone(@NotNull Location l, @Nullable List<String> exceptions) {
         final HashMap<Regional, String> ids = getRegionalIdentifiersAt(l);
-        final boolean e = exceptions != null;
-        for(Regional r : ids.keySet()) {
-            String id = ids.get(r);
+        final boolean hasExceptions = exceptions != null;
+        for(Regional regional : ids.keySet()) {
+            String id = ids.get(regional);
             if(id != null) {
                 id = ChatColor.stripColor(id);
-                if(e && exceptions.contains(id)) return false;
+                if(hasExceptions && exceptions.contains(id)) {
+                    return false;
+                }
                 switch (id) {
                     case "Safezone":
-                        return !(r instanceof FactionsUUID);
+                        return !(regional instanceof FactionsUUID);
                     case "spawn":
-                        return !(r instanceof ASky);
+                        return !(regional instanceof ASky);
                     case "":
                         return false;
                     default:
@@ -144,73 +154,97 @@ public class RegionalAPI extends UVersion {
     }
 
     public HashMap<Regional, String> getChatModes(UUID player) {
-        final HashMap<Regional, String> m = new HashMap<>();
+        final HashMap<Regional, String> modes = new HashMap<>();
         if(hookedFactionsUUID()) {
-            m.put(factions, factions.getChatMode(player));
+            modes.put(FACTIONS_UUID, FACTIONS_UUID.getChatMode(player));
         }
         if(hookedASkyblock()) {
-            m.put(asky, asky.getChatMode(player));
+            modes.put(A_SKY, A_SKY.getChatMode(player));
         }
         if(hookedSuperiorSkyblock()) {
-            m.put(ssky, ssky.getChatMode(player));
+            modes.put(SUPERIOR_SKY, SUPERIOR_SKY.getChatMode(player));
         }
         if(hookedEpicSkyblock()) {
-            m.put(esky, ssky.getChatMode(player));
+            modes.put(IRIDIUM_SKY, SUPERIOR_SKY.getChatMode(player));
         }
-        return m;
+        return modes;
     }
     public List<Player> getReceivingPlayers(UUID player, HashMap<Regional, String> chatModes) {
-        final List<Player> a = new ArrayList<>();
-        for(Regional r : chatModes.keySet()) {
-            final List<Player> o = r.getOnlineAssociates(player);
-            if(o != null) a.addAll(o);
+        final List<Player> players = new ArrayList<>();
+        for(Regional regional : chatModes.keySet()) {
+            final List<Player> associates = regional.getOnlineAssociates(player);
+            if(associates != null) {
+                players.addAll(associates);
+            }
         }
-        return a;
+        return players;
     }
 
     private List<UUID> getRelation(UUID player, int type) {
-        final List<UUID> a = new ArrayList<>();
-        if(factions != null) add(player, type, factions, a);
-        if(asky != null) add(player, type, asky, a);
-        if(ssky != null) add(player, type, ssky, a);
-        return a;
+        final List<UUID> uuids = new ArrayList<>();
+        if(FACTIONS_UUID != null) {
+            add(player, type, FACTIONS_UUID, uuids);
+        }
+        if(A_SKY != null) {
+            add(player, type, A_SKY, uuids);
+        }
+        if(SUPERIOR_SKY != null) {
+            add(player, type, SUPERIOR_SKY, uuids);
+        }
+        return uuids;
     }
     private void add(UUID player, int type, Regional plugin, List<UUID> list) {
-        List<UUID> l = null;
+        List<UUID> flist = null;
         switch (type) {
             case 0:
-                l = plugin.getAssociates(player);
-                if(l != null) list.addAll(l);
-                return;
+                flist = plugin.getAssociates(player);
+                break;
             case 1:
-                l = plugin.getNeutrals(player);
-                if(l != null) list.addAll(l);
+                flist = plugin.getNeutrals(player);
                 break;
             case 2:
-                l = plugin.getAllies(player);
-                if(l != null) list.addAll(l);
+                flist = plugin.getAllies(player);
                 break;
             case 3:
-                l = plugin.getTruces(player);
-                if(l != null) list.addAll(l);
+                flist = plugin.getTruces(player);
                 break;
             case 4:
-                l = plugin.getEnemies(player);
-                if(l != null) list.addAll(l);
+                flist = plugin.getEnemies(player);
                 break;
             default:
                 break;
         }
+        if(flist != null) {
+            list.addAll(flist);
+        }
     }
 
-    public List<UUID> getAssociates(UUID player) { return getRelation(player, 0); }
-    public List<UUID> getNeutrals(UUID player) { return getRelation(player, 1); }
-    public List<UUID> getAllies(UUID player) { return getRelation(player, 2); }
-    public List<UUID> getTruces(UUID player) { return getRelation(player, 3); }
-    public List<UUID> getEnemies(UUID player) { return getRelation(player, 4); }
+    public List<UUID> getAssociates(UUID player) {
+        return getRelation(player, 0);
+    }
+    public List<UUID> getNeutrals(UUID player) {
+        return getRelation(player, 1);
+    }
+    public List<UUID> getAllies(UUID player) {
+        return getRelation(player, 2);
+    }
+    public List<UUID> getTruces(UUID player) {
+        return getRelation(player, 3);
+    }
+    public List<UUID> getEnemies(UUID player) {
+        return getRelation(player, 4);
+    }
 
-    public String getFactionTagAt(Location l) { return factionsUUID ? factions.getRegionalIdentifierAt(l) : null; }
-    public String getFactionTag(UUID player) { return factionsUUID ? factions.getRegionalIdentifier(player) : null; }
-    public String getFactionTag(OfflinePlayer player) { return getFactionTag(player.getUniqueId()); }
-    public List<UUID> getFactionMembers(UUID player) { return factionsUUID ? factions.getAssociates(player) : null; }
+    public String getFactionTagAt(Location l) {
+        return factionsUUID ? FACTIONS_UUID.getRegionalIdentifierAt(l) : null;
+    }
+    public String getFactionTag(UUID player) {
+        return factionsUUID ? FACTIONS_UUID.getRegionalIdentifier(player) : null;
+    }
+    public String getFactionTag(OfflinePlayer player) {
+        return getFactionTag(player.getUniqueId());
+    }
+    public List<UUID> getFactionMembers(UUID player) {
+        return factionsUUID ? FACTIONS_UUID.getAssociates(player) : null;
+    }
 }

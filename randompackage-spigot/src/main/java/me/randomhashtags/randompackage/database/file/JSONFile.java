@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONFile implements DatabaseFile {
-    private File file;
+    private final File file;
     private JSONObject json;
     private List<JSONAware> pending;
 

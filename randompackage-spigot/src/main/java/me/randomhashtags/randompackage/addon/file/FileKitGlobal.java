@@ -10,25 +10,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 
-public class FileKitGlobal extends RPKit implements CustomKitGlobal {
-    public static String heroicprefix;
+public final class FileKitGlobal extends RPKit implements CustomKitGlobal {
     private ItemStack item;
 
     public FileKitGlobal(File f) {
         load(f);
         register(Feature.CUSTOM_KIT, this);
     }
-    public String getIdentifier() { return getYamlName(); }
-    public Kits getKitClass() { return KitsGlobal.getKitsGlobal(); }
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
+    @Override
+    public Kits getKitClass() {
+        return KitsGlobal.getKitsGlobal();
+    }
 
-    public boolean isHeroic() { return yml.getBoolean("settings.heroic"); }
+    public boolean isHeroic() {
+        return yml.getBoolean("settings.heroic");
+    }
     public ItemStack getItem() {
         if(item == null) {
-            item = API.createItemStack(yml, "gui settings");
+            item = createItemStack(yml, "gui settings");
             if(isHeroic()) {
-                final ItemMeta m = item.getItemMeta();
-                m.setDisplayName(heroicprefix.replace("{NAME}", m.hasDisplayName() ? ChatColor.stripColor(m.getDisplayName()) : item.getType().name()));
-                item.setItemMeta(m);
+                final ItemMeta itemMeta = item.getItemMeta();
+                itemMeta.setDisplayName(KitsGlobal.getKitsGlobal().heroicPrefix.replace("{NAME}", itemMeta.hasDisplayName() ? ChatColor.stripColor(itemMeta.getDisplayName()) : item.getType().name()));
+                item.setItemMeta(itemMeta);
             }
         }
         return getClone(item);

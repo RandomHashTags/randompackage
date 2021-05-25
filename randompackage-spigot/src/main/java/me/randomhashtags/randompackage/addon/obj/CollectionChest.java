@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon.obj;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,48 +15,60 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-import static me.randomhashtags.randompackage.util.RPFeature.otherdata;
+import static me.randomhashtags.randompackage.util.RPFeature.OTHER_YML;
 
-public class CollectionChest {
-	public static HashMap<UUID, CollectionChest> chests;
+public final class CollectionChest {
+	public static HashMap<UUID, CollectionChest> CHESTS;
 
-	private UUID uuid;
+	private final UUID uuid;
 	private UMaterial filter;
-	private String placer;
-	private Location location;
+	private final String placer;
+	private final Location location;
 	private Inventory inv;
+
 	public CollectionChest(String placer, Location location, UMaterial filter) {
 		this(UUID.randomUUID(), placer, location, filter);
 	}
 	public CollectionChest(UUID uuid, String placer, Location location, UMaterial filter) {
-		if(chests == null) chests = new HashMap<>();
+		if(CHESTS == null) {
+			CHESTS = new HashMap<>();
+		}
 		this.uuid = uuid;
 		this.placer = placer;
 		this.filter = filter;
 		this.location = location;
-		chests.put(uuid, this);
+		CHESTS.put(uuid, this);
 	}
-	public UUID getUUID() { return uuid; }
-	public UMaterial getFilter() { return filter; }
-	public String getPlacer() { return placer; }
-	public Location getLocation() { return location; }
+
+	public UUID getUUID() {
+		return uuid;
+	}
+	public UMaterial getFilter() {
+		return filter;
+	}
+	public String getPlacer() {
+		return placer;
+	}
+	public Location getLocation() {
+		return location;
+	}
 	public Inventory getInventory() {
-		final BlockState b = location.getWorld().getBlockAt(location).getState();
-		if(inv == null && b instanceof Chest) {
-			final Chest c = (Chest) b;
-			inv = c.getBlockInventory();
-			c.setCustomName("Collection Chest");
-			c.update();
-			final String s = uuid.toString();
-			final ConfigurationSection st = otherdata.getConfigurationSection("collection chests." + s + ".storage");
+		final BlockState blockState = location.getWorld().getBlockAt(location).getState();
+		if(inv == null && blockState instanceof Chest) {
+			final Chest chest = (Chest) blockState;
+			inv = chest.getBlockInventory();
+			chest.setCustomName("Collection Chest");
+			chest.update();
+			final String uuidString = uuid.toString();
+			final ConfigurationSection st = OTHER_YML.getConfigurationSection("collection chests." + uuidString + ".storage");
 			if(st != null) {
+				final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
 				for(String i : st.getKeys(false)) {
 					ItemStack is;
 					try {
-						is = otherdata.getItemStack("collection chests." + s + ".storage." + i);
+						is = OTHER_YML.getItemStack("collection chests." + uuidString + ".storage." + i);
 					} catch (Exception e) {
-						is = API.createItemStack(otherdata, "collection chests." + s + ".storage." + i);
+						is = api.createItemStack(OTHER_YML, "collection chests." + uuidString + ".storage." + i);
 					}
 					inv.setItem(Integer.parseInt(i), is);
 				}
@@ -65,39 +78,40 @@ public class CollectionChest {
 	}
 	public void backup() {
 		int i = 0;
-		final String u = uuid.toString();
+		final String uuidString = uuid.toString();
+		final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
 		for(ItemStack is : getInventory().getContents()) {
 			if(is != null) {
-				otherdata.set("collection chests." + u + ".info", placer + ":" + API.toString(location) + ":" + (filter != null ? filter.name() : "null"));
-				otherdata.set("collection chests." + u + ".storage." + i, is.toString());
+				OTHER_YML.set("collection chests." + uuidString + ".info", placer + ":" + api.toString(location) + ":" + (filter != null ? filter.name() : "null"));
+				OTHER_YML.set("collection chests." + uuidString + ".storage." + i, is.toString());
 			}
 			i++;
 		}
-		API.saveOtherData();
+		api.saveOtherData();
 	}
 
 	public void setFilter(UMaterial newfilter) {
 		filter = newfilter;
 	}
 	public void destroy() {
-		final World w = location.getWorld();
-		final Inventory i = getInventory();
-		if(i != null) {
-			for(ItemStack is : i.getContents()) {
+		final World world = location.getWorld();
+		final Inventory inv = getInventory();
+		if(inv != null) {
+			for(ItemStack is : inv.getContents()) {
 				if(is != null) {
-					w.dropItemNaturally(location, is);
+					world.dropItemNaturally(location, is);
 				}
 			}
 		}
 		delete();
 	}
 	public void delete() {
-		chests.remove(uuid);
+		CHESTS.remove(uuid);
 	}
 	
 	public static CollectionChest valueOf(Block block) {
-		if(chests != null) {
-			for(CollectionChest cc : chests.values()) {
+		if(CHESTS != null) {
+			for(CollectionChest cc : CHESTS.values()) {
 				if(cc.location.equals(block.getLocation())) {
 					return cc;
 				}
@@ -106,11 +120,11 @@ public class CollectionChest {
 		return null;
 	}
 	public static void deleteAll() {
-		if(chests != null) {
-			for(CollectionChest c : new ArrayList<>(chests.values())) {
+		if(CHESTS != null) {
+			for(CollectionChest c : new ArrayList<>(CHESTS.values())) {
 				c.delete();
 			}
 		}
-		chests = null;
+		CHESTS = null;
 	}
 }

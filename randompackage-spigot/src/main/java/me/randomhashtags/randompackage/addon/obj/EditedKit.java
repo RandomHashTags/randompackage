@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.List;
 
-public class EditedKit {
+public final class EditedKit {
     public static HashMap<Player, EditedKit> editing;
 
     public Player player;

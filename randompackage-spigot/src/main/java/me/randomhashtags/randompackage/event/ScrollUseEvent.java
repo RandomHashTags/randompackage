@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class ScrollUseEvent extends RPEventCancellable {
     protected Scroll scroll;
-    private ItemStack usedOnItem;
+    private final ItemStack usedOnItem;
     public ScrollUseEvent(Player player, Scroll scroll, ItemStack usedOnItem) {
         super(player);
         this.scroll = scroll;

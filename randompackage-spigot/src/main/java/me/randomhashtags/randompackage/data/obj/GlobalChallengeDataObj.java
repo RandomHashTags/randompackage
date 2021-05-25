@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.data.GlobalChallengeData;
 
 import java.util.HashMap;
 
-public class GlobalChallengeDataObj implements GlobalChallengeData {
+public final class GlobalChallengeDataObj implements GlobalChallengeData {
     private HashMap<GlobalChallengePrize, Integer> prizes;
 
     public GlobalChallengeDataObj(HashMap<GlobalChallengePrize, Integer> prizes) {

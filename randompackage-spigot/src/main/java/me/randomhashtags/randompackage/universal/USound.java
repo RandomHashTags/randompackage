@@ -87,17 +87,16 @@ public enum USound implements Versionable {
     ENTITY_VILLAGER_DEATH("VILLAGER_DEATH", "ENTITY_VILLAGER_DEATH"),
     ENTITY_VILLAGER_HURT("VILLAGER_HIT", "ENTITY_VILLAGER_HURT"),
     ENTITY_VILLAGER_NO("VILLAGER_NO", "ENTITY_VILLAGER_NO"),
-    ENTITY_VILLAGER_TRADING("VILLAGER_HAGGLE", "ENTITY_VILLAGER_TRADING"),
+    ENTITY_VILLAGER_TRADE("VILLAGER_HAGGLE", "ENTITY_VILLAGER_TRADING", null, null, null, "ENTITY_VILLAGER_TRADE"),
     ENTITY_VILLAGER_YES("VILLAGER_YES", "ENTITY_VILLAGER_YES"),
     //
     WEATHER_RAIN("AMBIENCE_RAIN", "WEATHER_RAIN"),
     WEATHER_RAIN_ABOVE("AMBIENCE_RAIN", "WEATHER_RAIN_ABOVE"),
     ;
-    private static final USound[] SOUNDS = USound.values();
     private static final HashMap<String, USound> CACHE = new HashMap<>();
     private static final HashMap<String, Sound> SOUND_CACHE = new HashMap<>();
-    private String[] names;
-    private Sound sound;
+    private final String[] names;
+    private final Sound sound;
     USound(String...names) {
         this.names = names;
         this.sound = getVersionSound();
@@ -140,7 +139,7 @@ public enum USound implements Versionable {
                 CACHE.put(name, sound);
                 return sound;
             } catch (Exception e) {
-                for(USound sound : SOUNDS) {
+                for(USound sound : USound.values()) {
                     for(String target : sound.names) {
                         if(name.equals(target)) {
                             CACHE.put(name, sound);

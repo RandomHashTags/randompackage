@@ -15,8 +15,10 @@ import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.perms.FactionUpgradePermission;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,13 +29,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -42,15 +44,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackage.getPlugin;
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
+import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
 
-public class FactionUpgrades extends EventAttributes {
+public final class FactionUpgrades extends EventAttributes {
     private static FactionUpgrades instance;
     public static FactionUpgrades getFactionUpgrades() {
         if(instance == null) instance = new FactionUpgrades();
         return instance;
     }
+
+    public static HashMap<String, List<FactionUpgradeInfo>> FACTION_UPGRADES;
 
     public YamlConfiguration config;
     private File fupgradesF;
@@ -63,71 +66,76 @@ public class FactionUpgrades extends EventAttributes {
 
     private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
 
-    public static HashMap<String, List<FactionUpgradeInfo>> factionUpgrades;
-
+    @Override
     public String getIdentifier() {
         return "FACTION_UPGRADES";
     }
-    public void load() {
-        if(hookedFactionsUUID()) {
-            final long started = System.currentTimeMillis();
-            save("faction upgrades", "_settings.yml");
-            save("_Data", "faction upgrades.yml");
 
-            if(!otherdata.getBoolean("saved default faction upgrades")) {
-                generateDefaultFactionUpgrades();
-                otherdata.set("saved default faction upgrades", true);
-            }
-            config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
-            for(String s : config.getConfigurationSection("types").getKeys(false)) {
-                new FileFactionUpgradeType(s);
-            }
-            gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-            final Inventory fi = gui.getInventory();
-            for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "faction upgrades")) {
-                if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
-                    final FileFactionUpgrade fu = new FileFactionUpgrade(f);
-                    fi.setItem(fu.getSlot(), fu.getItem());
-                }
-            }
-
-            cropGrowthRate = new HashMap<>();
-            fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
-            fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-            aliases = getPlugin.getConfig().getStringList("faction upgrades.cmds");
-            heroicFactionCrystal = createItemStack(config, "items.heroic faction crystal");
-            factionCrystal = createItemStack(config, "items.faction crystal");
-            background = createItemStack(config, "gui.background");
-            locked = createItemStack(config, "gui.locked");
-            addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
-
-            GIVEDP_ITEM.items.put("heroicfactioncrystal", heroicFactionCrystal);
-            GIVEDP_ITEM.items.put("factioncrystal", factionCrystal);
-
-            for(int i = 0; i < gui.getSize(); i++) {
-                if(fi.getItem(i) == null) {
-                    fi.setItem(i, background);
-                }
-            }
-
-            loadBackup();
-            sendConsoleDidLoadFeature(getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades", started);
-        } else {
+    @Override
+    public boolean canBeEnabled() {
+        final boolean enabled = RegionalAPI.INSTANCE.hookedFactionsUUID();
+        if(!enabled) {
             sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
-            HandlerList.unregisterAll(instance);
-            disable();
         }
+        return enabled;
     }
+
+    @Override
+    public void load() {
+        final long started = System.currentTimeMillis();
+        save("faction upgrades", "_settings.yml");
+        save("_Data", "faction upgrades.yml");
+
+        if(!OTHER_YML.getBoolean("saved default faction upgrades")) {
+            generateDefaultFactionUpgrades();
+            OTHER_YML.set("saved default faction upgrades", true);
+        }
+        config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
+        for(String s : config.getConfigurationSection("types").getKeys(false)) {
+            new FileFactionUpgradeType(s);
+        }
+        gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
+        final Inventory fi = gui.getInventory();
+        for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "faction upgrades")) {
+            if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
+                final FileFactionUpgrade fu = new FileFactionUpgrade(f);
+                fi.setItem(fu.getSlot(), fu.getItem());
+            }
+        }
+
+        cropGrowthRate = new HashMap<>();
+        fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
+        fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
+        aliases = GET_PLUGIN.getConfig().getStringList("faction upgrades.cmds");
+        heroicFactionCrystal = createItemStack(config, "items.heroic faction crystal");
+        factionCrystal = createItemStack(config, "items.faction crystal");
+        background = createItemStack(config, "gui.background");
+        locked = createItemStack(config, "gui.locked");
+        addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
+
+        GivedpItem.INSTANCE.items.put("heroicfactioncrystal", heroicFactionCrystal);
+        GivedpItem.INSTANCE.items.put("factioncrystal", factionCrystal);
+
+        for(int i = 0; i < gui.getSize(); i++) {
+            if(fi.getItem(i) == null) {
+                fi.setItem(i, background);
+            }
+        }
+
+        loadBackup();
+        sendConsoleDidLoadFeature(getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades", started);
+    }
+    @Override
     public void unload() {
         backup();
-        factionUpgrades = null;
+        FACTION_UPGRADES = null;
         unregister(Feature.FACTION_UPGRADE, Feature.FACTION_UPGRADE_TYPE);
     }
 
     private void backup() {
         if(isEnabled()) {
-            for(String faction : factionUpgrades.keySet()) {
-                final List<FactionUpgradeInfo> f = factionUpgrades.get(faction);
+            for(String faction : FACTION_UPGRADES.keySet()) {
+                final List<FactionUpgradeInfo> f = FACTION_UPGRADES.get(faction);
                 fupgrades.set("factions." + faction, null);
                 for(FactionUpgradeInfo info : f) {
                     fupgrades.set("factions." + faction + "." + info.getType().getIdentifier(), info.getLevel().asInt());
@@ -142,18 +150,18 @@ public class FactionUpgrades extends EventAttributes {
         }
     }
     private void loadBackup() {
-        final ConfigurationSection c = fupgrades.getConfigurationSection("factions");
-        factionUpgrades = new HashMap<>();
-        if(c != null) {
-            for(String s : c.getKeys(false)) {
+        final ConfigurationSection configuration = fupgrades.getConfigurationSection("factions");
+        FACTION_UPGRADES = new HashMap<>();
+        if(configuration != null) {
+            for(String key : configuration.getKeys(false)) {
                 final List<FactionUpgradeInfo> upgrades = new ArrayList<>();
-                for(String upgrade : getConfigurationSectionKeys(fupgrades, "factions." + s, false)) {
-                    final FactionUpgrade u = getFactionUpgrade(upgrade);
-                    if(u != null) {
-                        upgrades.add(new FactionUpgradeInfo(u, u.getLevels().get(fupgrades.getInt("factions." + s + "." + upgrade))));
+                for(String upgrade : getConfigurationSectionKeys(fupgrades, "factions." + key, false)) {
+                    final FactionUpgrade factionUpgrade = getFactionUpgrade(upgrade);
+                    if(factionUpgrade != null) {
+                        upgrades.add(new FactionUpgradeInfo(factionUpgrade, factionUpgrade.getLevels().get(fupgrades.getInt("factions." + key + "." + upgrade))));
                     }
                 }
-                factionUpgrades.put(s, upgrades);
+                FACTION_UPGRADES.put(key, upgrades);
             }
         }
     }
@@ -162,8 +170,8 @@ public class FactionUpgrades extends EventAttributes {
         return getFactionUpgradeInfo(upgrade, faction, getDefaultUpgradeInfo(upgrade));
     }
     public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction, FactionUpgradeInfo def) {
-        if(upgrade != null && faction != null && factionUpgrades.containsKey(faction)) {
-            for(FactionUpgradeInfo info : factionUpgrades.get(faction)) {
+        if(upgrade != null && faction != null && FACTION_UPGRADES.containsKey(faction)) {
+            for(FactionUpgradeInfo info : FACTION_UPGRADES.get(faction)) {
                 if(info.getType().equals(upgrade)) {
                     return info;
                 }
@@ -175,6 +183,8 @@ public class FactionUpgrades extends EventAttributes {
         return new FactionUpgradeInfo(upgrade, upgrade.getLevels().get(0));
     }
     public void tryToUpgrade(@NotNull Player player, @NotNull FactionUpgrade upgrade) {
+        final RegionalAPI regions = RegionalAPI.INSTANCE;
+        final GivedpItem givedpItem = GivedpItem.INSTANCE;
         final String faction = regions.getFactionTag(player.getUniqueId());
         final FactionUpgradeInfo info = getFactionUpgradeInfo(upgrade, faction);
         if(info != null) {
@@ -185,33 +195,33 @@ public class FactionUpgrades extends EventAttributes {
             BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
             ItemStack requiredItem = null;
             final HashMap<String, String> replacements = new HashMap<>();
-            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(faction);
-            for(String s : nextLevel.getCost()) {
-                s = s.toLowerCase();
-                if(s.startsWith("cash{")) {
-                    final double amount = getRemainingDouble(s.split("\\{")[1]);
+            final List<FactionUpgradeInfo> upgrades = FACTION_UPGRADES.get(faction);
+            for(String costString : nextLevel.getCost()) {
+                costString = costString.toLowerCase();
+                if(costString.startsWith("cash{")) {
+                    final double amount = getRemainingDouble(costString.split("\\{")[1]);
                     requiredCash = BigDecimal.valueOf(amount);
-                    if(eco.getBalance(player) < amount) {
+                    if(ECONOMY.getBalance(player) < amount) {
                         replacements.put("{COST}", formatDouble(requiredCash.doubleValue()).split("E")[0]);
                         sendStringListMessage(player, getStringList(config, "messages.dont have enough cash"), replacements);
                         return;
                     }
-                } else if(s.startsWith("item{")) {
-                    final String value = s.split("\\{")[1];
-                    final ItemStack a = GIVEDP_ITEM.valueOf(value.split(";")[0]);
-                    requiredItem = a;
-                    a.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
-                    if(!player.getInventory().containsAtLeast(a, a.getAmount())) {
-                        replacements.put("{ITEM}", s.split("};")[1]);
+                } else if(costString.startsWith("item{")) {
+                    final String value = costString.split("\\{")[1];
+                    final ItemStack item = givedpItem.valueOfRPItem(value.split(";")[0]);
+                    requiredItem = item;
+                    item.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
+                    if(!player.getInventory().containsAtLeast(item, item.getAmount())) {
+                        replacements.put("{ITEM}", costString.split("};")[1]);
                         sendStringListMessage(player, getStringList(config, "messages.dont have item"), replacements);
                         return;
                     }
-                } else if(s.startsWith("spawnervalue{")) {
-                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(Double.parseDouble(s.split("\\{")[1].split("}")[0]))));
+                } else if(costString.startsWith("spawnervalue{")) {
+                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(Double.parseDouble(costString.split("\\{")[1].split("}")[0]))));
                     sendStringListMessage(player, getStringList(config, "messages.dont have enough spawner value"), replacements);
                     return;
-                } else if(s.startsWith("factionupgrade{")) {
-                    final String[] values = s.split("\\{")[1].split("}")[0].split(":");
+                } else if(costString.startsWith("factionupgrade{")) {
+                    final String[] values = costString.split("\\{")[1].split("}")[0].split(":");
                     final FactionUpgrade target = getFactionUpgrade(values[0]);
                     final int lvl = Integer.parseInt(values[1].split("=")[1]);
                     if(!upgrades.contains(getFactionUpgradeInfo(target, faction))) {
@@ -222,13 +232,13 @@ public class FactionUpgrades extends EventAttributes {
                     }
                 }
             }
-            final FactionUpgradeLevelupEvent e = new FactionUpgradeLevelupEvent(player, upgrade, tier);
-            PLUGIN_MANAGER.callEvent(e);
-            if(e.isCancelled()) {
+            final FactionUpgradeLevelupEvent upgradeEvent = new FactionUpgradeLevelupEvent(player, upgrade, tier);
+            PLUGIN_MANAGER.callEvent(upgradeEvent);
+            if(upgradeEvent.isCancelled()) {
                 return;
             }
             if(!requiredCash.equals(BigDecimal.ZERO)) {
-                eco.withdrawPlayer(player, requiredCash.doubleValue());
+                ECONOMY.withdrawPlayer(player, requiredCash.doubleValue());
             }
             if(requiredItem != null) {
                 removeItem(player, requiredItem, requiredItem.getAmount());
@@ -240,17 +250,17 @@ public class FactionUpgrades extends EventAttributes {
         }
     }
     private ItemStack getUpgrade(String faction, int slot, String W, String L) {
-        final FactionUpgrade f = valueOfFactionUpgrade(slot);
-        if(f != null) {
-            final FactionUpgradeInfo info = getFactionUpgradeInfo(f, faction);
+        final FactionUpgrade upgrade = valueOfFactionUpgrade(slot);
+        if(upgrade != null) {
+            final FactionUpgradeInfo info = getFactionUpgradeInfo(upgrade, faction);
             if(info != null) {
-                final HashMap<Integer, FactionUpgradeLevel> levels = f.getLevels();
+                final HashMap<Integer, FactionUpgradeLevel> levels = upgrade.getLevels();
                 final FactionUpgradeLevel level = info.getLevel();
-                final int tier = level.asInt(), max = f.getMaxLevel();
+                final int tier = level.asInt(), max = upgrade.getMaxLevel();
                 final boolean isTierZero = tier == 0;
-                item = f.getItem();
-                itemMeta = item.getItemMeta(); lore.clear();
-                final FactionUpgradeType type = f.getType();
+                ItemStack item = upgrade.getItem();
+                ItemMeta itemMeta = item.getItemMeta();
+                final FactionUpgradeType type = upgrade.getType();
                 final String perkAchieved = type.getPerkAchievedPrefix(), perkUnachieved = type.getPerkUnachievedPrefix(), requirementsPrefix = type.getRequirementsPrefix();
                 final List<String> achievedPerks = new ArrayList<>(), unachievedPerks = new ArrayList<>();
                 for(int i = 1; i <= max; i++) {
@@ -258,14 +268,15 @@ public class FactionUpgrades extends EventAttributes {
                     (achieved ? achievedPerks : unachievedPerks).add(colorize((achieved ? perkAchieved : perkUnachieved) + levels.get(i).getString()));
                 }
                 if(item.hasItemMeta() && itemMeta.hasLore()) {
-                    for(String s : itemMeta.getLore()) {
-                        if(s.equals("{TIER}")) {
+                    final List<String> lore = new ArrayList<>();
+                    for(String string : itemMeta.getLore()) {
+                        if(string.equals("{TIER}")) {
                             lore.add(isTierZero ? L : W.replace("{MAX_TIER}", Integer.toString(max)).replace("{TIER}", Integer.toString(tier)));
                         } else {
-                            if(s.equals("{PERKS}")) {
+                            if(string.equals("{PERKS}")) {
                                 lore.addAll(achievedPerks);
                                 lore.addAll(unachievedPerks);
-                            } else if(s.equals("{REQUIREMENTS}")) {
+                            } else if(string.equals("{REQUIREMENTS}")) {
                                 final FactionUpgradeLevel next = levels.getOrDefault(tier+1, null);
                                 if(next != null) {
                                     for(String r : next.getCost()) {
@@ -273,26 +284,26 @@ public class FactionUpgrades extends EventAttributes {
                                     }
                                 }
                             } else {
-                                lore.add(s);
+                                lore.add(string);
                             }
                         }
                     }
-                    for(String s : isTierZero ? type.getUnlock() : type.getUpgrade()) {
-                        lore.add(colorize(s));
+                    for(String string : isTierZero ? type.getUnlock() : type.getUpgrade()) {
+                        lore.add(colorize(string));
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
                     item.setItemMeta(itemMeta);
                     if(isTierZero) {
-                        final String n = itemMeta.getDisplayName();
-                        final List<String> l = itemMeta.getLore();
-                        ItemStack F = locked.clone(); itemMeta = F.getItemMeta();
-                        itemMeta.setDisplayName(n);
-                        itemMeta.setLore(l);
-                        F.setItemMeta(itemMeta);
-                        item = F;
+                        final String displayName = itemMeta.getDisplayName();
+                        final ItemStack lockedItem = locked.clone();
+                        itemMeta = lockedItem.getItemMeta();
+                        itemMeta.setDisplayName(displayName);
+                        itemMeta.setLore(lore);
+                        lockedItem.setItemMeta(itemMeta);
+                        item = lockedItem;
                     }
-                    if(f.itemAmountEqualsTier()) {
+                    if(upgrade.itemAmountEqualsTier()) {
                         item.setAmount(isTierZero ? 1 : tier);
                     }
                 }
@@ -302,20 +313,18 @@ public class FactionUpgrades extends EventAttributes {
         return null;
     }
     public void viewFactionUpgrades(Player player) {
-        final String faction = regions.getFactionTag(player.getUniqueId());
+        final String faction = RegionalAPI.INSTANCE.getFactionTag(player.getUniqueId());
         if(faction != null) {
             player.closeInventory();
-            if(!factionUpgrades.containsKey(faction)) {
-                factionUpgrades.put(faction, new ArrayList<>());
-            }
+            FACTION_UPGRADES.putIfAbsent(faction, new ArrayList<>());
             player.openInventory(Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
-            final String W = colorize(config.getString("gui.tier")), L = colorize(config.getString("gui.locked.tier"));
+            final String tierString = colorize(config.getString("gui.tier")), lockedTierName = colorize(config.getString("gui.locked.tier"));
             for(int i = 0; i < top.getSize(); i++) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
                 if(item != null) {
-                    final ItemStack upgrade = getUpgrade(faction, i, W, L);
+                    final ItemStack upgrade = getUpgrade(faction, i, tierString, lockedTierName);
                     if(upgrade != null) {
                         top.setItem(i, upgrade);
                     }
@@ -370,12 +379,13 @@ public class FactionUpgrades extends EventAttributes {
         if(aliases != null) {
             final Player player = event.getPlayer();
             final String msg = event.getMessage().toLowerCase().substring(1);
+            final RegionalAPI regions = RegionalAPI.INSTANCE;
             for(String alias : aliases) {
                 if(msg.startsWith(alias)) {
                     event.setCancelled(true);
                     if(msg.contains("reset")) {
                         if(hasPermission(player, FactionUpgradePermission.COMMAND_RESET, true)) {
-                            factionUpgrades.get(regions.getFactionTag(player.getUniqueId())).clear();
+                            FACTION_UPGRADES.get(regions.getFactionTag(player.getUniqueId())).clear();
                         }
                     } else if(hasPermission(player, FactionUpgradePermission.COMMAND, true)) {
                         viewFactionUpgrades(player);
@@ -405,8 +415,8 @@ public class FactionUpgrades extends EventAttributes {
     }
 
     private void triggerFactionUpgrades(Event event, String faction) {
-        if(faction != null && factionUpgrades.containsKey(faction)) {
-            final List<FactionUpgradeInfo> upgrades = factionUpgrades.get(faction);
+        if(faction != null && FACTION_UPGRADES.containsKey(faction)) {
+            final List<FactionUpgradeInfo> upgrades = FACTION_UPGRADES.get(faction);
             for(FactionUpgradeInfo info : upgrades) {
                 trigger(event, info.getType().getAttributes(), "value", Double.toString(info.getLevel().getValue()));
             }
@@ -417,28 +427,28 @@ public class FactionUpgrades extends EventAttributes {
     private void customBossDamageByEntityEvent(CustomBossDamageByEntityEvent event) {
         final Entity damager = event.getDamager();
         if(damager instanceof Player) {
-            triggerFactionUpgrades(event, getFactionTag((Player) damager));
+            triggerFactionUpgrades(event, RegionalAPI.INSTANCE.getFactionTag((Player) damager));
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void pvAnyEvent(PvAnyEvent event) {
-        triggerFactionUpgrades(event, getFactionTag(event.getDamager()));
+        triggerFactionUpgrades(event, RegionalAPI.INSTANCE.getFactionTag(event.getDamager()));
     }
     @EventHandler
     private void isDamagedEvent(isDamagedEvent event) {
-        triggerFactionUpgrades(event, getFactionTag(event.getEntity()));
+        triggerFactionUpgrades(event, RegionalAPI.INSTANCE.getFactionTag(event.getEntity()));
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerTeleportDelayEvent(PlayerTeleportDelayEvent event) {
-        triggerFactionUpgrades(event, getFactionTag(event.getPlayer()));
+        triggerFactionUpgrades(event, RegionalAPI.INSTANCE.getFactionTag(event.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
-        final Location l = event.getBlock().getLocation();
-        final String f = regions.getFactionTagAt(l);
-        if(f != null && cropGrowthRate.containsKey(f)) {
-            cropGrowthRate.get(f).remove(l);
+        final Location location = event.getBlock().getLocation();
+        final String factionTag = RegionalAPI.INSTANCE.getFactionTagAt(location);
+        if(factionTag != null && cropGrowthRate.containsKey(factionTag)) {
+            cropGrowthRate.get(factionTag).remove(location);
         }
     }
 }

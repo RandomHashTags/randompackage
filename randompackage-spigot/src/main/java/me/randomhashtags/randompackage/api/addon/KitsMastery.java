@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api.addon;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.file.FileKitMastery;
+import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.KitData;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -18,12 +19,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public class KitsMastery extends Kits {
     private static KitsMastery instance;
@@ -35,34 +34,39 @@ public class KitsMastery extends Kits {
     private UInventory gui, preview;
     private ItemStack background, cooldown;
 
+    @Override
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return false;
     }
+    @Override
     public String getIdentifier() {
         return "KITS_MASTERY";
     }
+    @Override
     public Class<? extends CustomKit> getCustomKit() {
         return CustomKitMastery.class;
     }
+    @Override
     public String getPath() {
         return "mkits";
     }
 
+    @Override
     public void load() {
-        loadKitUtils();
+        enableKits();
         final long started = System.currentTimeMillis();
-        if(!otherdata.getBoolean("saved default mkits")) {
+        if(!OTHER_YML.getBoolean("saved default mkits")) {
             final String[] v = new String[] {"DEATH_KNIGHT", "GHOST", "NECROMANCER"};
             for(String s : v) {
                 save("kits", "MKIT_" + s + ".yml");
             }
-            otherdata.set("saved default mkits", true);
+            OTHER_YML.set("saved default mkits", true);
             saveOtherData();
         }
 
-        gui = new UInventory(null, config.getInt("mkits.gui.size"), colorize(config.getString("mkits.gui.title")));
-        preview = new UInventory(null, 54, colorize(config.getString("mkits.items.preview.title")));
-        background = createItemStack(config, "mkits.gui.background");
+        gui = new UInventory(null, KITS_CONFIG.getInt("mkits.gui.size"), colorize(KITS_CONFIG.getString("mkits.gui.title")));
+        preview = new UInventory(null, 54, colorize(KITS_CONFIG.getString("mkits.items.preview.title")));
+        background = createItemStack(KITS_CONFIG, "mkits.gui.background");
 
         final List<ItemStack> gems = new ArrayList<>();
         final Inventory inv = gui.getInventory();
@@ -83,13 +87,15 @@ public class KitsMastery extends Kits {
         }
         sendConsoleDidLoadFeature(loaded + " Mastery Kits", started);
     }
+    @Override
     public void unload() {
+        final LinkedHashMap<String, Identifiable> features = FEATURES.get(Feature.CUSTOM_KIT);
         for(CustomKit k : new ArrayList<>(getAllCustomKits().values())) {
             if(k instanceof CustomKitMastery) {
-                FEATURES.get(Feature.CUSTOM_KIT).remove(k.getIdentifier());
+                features.remove(k.getIdentifier());
             }
         }
-        unloadKitUtils();
+        disableKits();
     }
 
     public boolean usesTiers() {
@@ -129,13 +135,13 @@ public class KitsMastery extends Kits {
         return getClone(cooldown);
     }
     public List<String> getPermissionsUnlocked() {
-        return getStringList(config, "mkits.permissions.unlocked");
+        return getStringList(KITS_CONFIG, "mkits.permissions.unlocked");
     }
     public List<String> getPermissionsLocked() {
-        return getStringList(config, "mkits.permissions.locked.lore");
+        return getStringList(KITS_CONFIG, "mkits.permissions.locked.lore");
     }
     public List<String> getPermissionsPreview() {
-        return getStringList(config, "mkits.permissions.preview");
+        return getStringList(KITS_CONFIG, "mkits.permissions.preview");
     }
 
     public void view(@NotNull Player player) {
@@ -147,21 +153,22 @@ public class KitsMastery extends Kits {
         for(int i = 0; i < top.getSize(); i++) {
             final CustomKit mkit = valueOfCustomKit(i, CustomKitMastery.class);
             if(mkit != null) {
-                item = top.getItem(i);
-                itemMeta = item.getItemMeta(); lore.clear();
+                final ItemStack item = top.getItem(i);
+                final ItemMeta itemMeta = item.getItemMeta();
+                final List<String> lore = new ArrayList<>();
                 if(itemMeta.hasLore()) {
-                    for(String s : itemMeta.getLore()) {
-                        if(s.contains("{") && s.contains("}")) {
-                            final String target = s.split("\\{")[1].split("}")[0];
+                    for(String string : itemMeta.getLore()) {
+                        if(string.contains("{") && string.contains("}")) {
+                            final String target = string.split("\\{")[1].split("}")[0];
                             final CustomKit kit = getCustomKit(target);
                             if(kit != null) {
-                                s = s.replace("{" + kit.getIdentifier() + "}", kit.getFallenHeroName());
+                                string = string.replace("{" + kit.getIdentifier() + "}", kit.getFallenHeroName());
                             }
                         }
-                        lore.add(s);
+                        lore.add(string);
                     }
                 }
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
                 item.setItemMeta(itemMeta);
             }
         }
@@ -173,8 +180,8 @@ public class KitsMastery extends Kits {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         if(top.getHolder() == player) {
-            final String t = event.getView().getTitle();
-            if(t.equals(gui.getTitle())) {
+            final String title = event.getView().getTitle();
+            if(title.equals(gui.getTitle())) {
                 event.setCancelled(true);
                 player.updateInventory();
                 final int slot = event.getRawSlot();
@@ -190,7 +197,7 @@ public class KitsMastery extends Kits {
                 } else {
                     if(pdata.getKitData().getLevels().containsKey(mkit)) {
                     } else {
-                        sendStringListMessage(player, getStringList(config, "mkits.messages.not unlocked"), null);
+                        sendStringListMessage(player, getStringList(KITS_CONFIG, "mkits.messages.not unlocked"), null);
                     }
                 }
             } else if(PREVIEWING.contains(player)) {
@@ -243,14 +250,14 @@ public class KitsMastery extends Kits {
                 if(missingGkit != null) {
                     replacements.put("{KIT}", missingGkit.getItem().getItemMeta().getDisplayName());
                     replacements.put("{TIER}", toRoman(required.get(missingGkit)));
-                    sendStringListMessage(player, getStringList(config, "mkits.messages.unlock missing required gkit"), replacements);
+                    sendStringListMessage(player, getStringList(KITS_CONFIG, "mkits.messages.unlock missing required gkit"), replacements);
                 } else if(missingVkit != null) {
                     replacements.put("{KIT}", missingVkit.getItem().getItemMeta().getDisplayName());
                     replacements.put("{TIER}", toRoman(required.get(missingVkit)));
-                    sendStringListMessage(player, getStringList(config, "mkits.messages.unlock missing required vkit"), replacements);
+                    sendStringListMessage(player, getStringList(KITS_CONFIG, "mkits.messages.unlock missing required vkit"), replacements);
                 } else {
                     if(!gkits.isEmpty()) {
-                        for(String s : getStringList(config, "mkits.messages.unlocked lost gkits")) {
+                        for(String s : getStringList(KITS_CONFIG, "mkits.messages.unlocked lost gkits")) {
                             if(s.contains("{KIT}")) {
                                 for(CustomKitGlobal k : gkits) {
                                     player.sendMessage(s.replace("{KIT}", k.getItem().getItemMeta().getDisplayName()));
@@ -259,30 +266,30 @@ public class KitsMastery extends Kits {
                                 player.sendMessage(s);
                             }
                         }
-                        for(CustomKitGlobal g : gkits) {
-                            levels.remove(g);
-                            cooldowns.remove(g);
+                        for(CustomKitGlobal gkit : gkits) {
+                            levels.remove(gkit);
+                            cooldowns.remove(gkit);
                         }
                     }
                     if(!vkits.isEmpty()) {
-                        for(String s : getStringList(config, "mkits.messages.unlocked lost vkits")) {
-                            if(s.contains("{KIT}")) {
-                                for(CustomKitEvolution k : vkits) {
-                                    player.sendMessage(s.replace("{KIT}", k.getItem().getItemMeta().getDisplayName()));
+                        for(String string : getStringList(KITS_CONFIG, "mkits.messages.unlocked lost vkits")) {
+                            if(string.contains("{KIT}")) {
+                                for(CustomKitEvolution vkit : vkits) {
+                                    player.sendMessage(string.replace("{KIT}", vkit.getItem().getItemMeta().getDisplayName()));
                                 }
                             } else {
-                                player.sendMessage(s);
+                                player.sendMessage(string);
                             }
                         }
-                        for(CustomKitEvolution v : vkits) {
-                            levels.remove(v);
-                            cooldowns.remove(v);
+                        for(CustomKitEvolution vkit : vkits) {
+                            levels.remove(vkit);
+                            cooldowns.remove(vkit);
                         }
                     }
                     removeItem(player, is, 1);
                     levels.put(mkit, 1);
                     replacements.put("{KIT}", mkit.getName());
-                    sendStringListMessage(player, getStringList(config, "mkits.messages.unlocked"), replacements);
+                    sendStringListMessage(player, getStringList(KITS_CONFIG, "mkits.messages.unlocked"), replacements);
                     player.updateInventory();
                 }
             }

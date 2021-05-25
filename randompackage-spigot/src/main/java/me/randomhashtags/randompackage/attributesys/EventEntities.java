@@ -80,12 +80,8 @@ public interface EventEntities extends EventConditions, UVersionable {
     }
 
     default HashMap<String, Entity> getEntities(EntityDeathEvent event) {
-        final LivingEntity v = event.getEntity(), k = v.getKiller();
-        final HashMap<String, Entity> e = getEntities("Victim", v);
-        if(k != null) {
-            e.put("Killer", k);
-        }
-        return e;
+        final LivingEntity victim = event.getEntity(), killer = victim.getKiller();
+        return getEntities("Victim", victim, "Killer", killer);
     }
     default HashMap<String, Entity> getEntities(EntityDamageEvent event) {
         return getEntities("Victim", event.getEntity());

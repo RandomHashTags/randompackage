@@ -12,7 +12,10 @@ import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterPreActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterTriggerEvent;
 import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
+import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,34 +44,37 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	    return instance;
 	}
 
+	public static HashMap<String, List<ActiveBooster>> ACTIVE_REGIONAL_BOOSTERS;
+	public static HashMap<UUID, List<ActiveBooster>> ACTIVE_PLAYER_BOOSTERS;
+
 	public File dataF;
 	public YamlConfiguration data;
-	public static HashMap<String, List<ActiveBooster>> activeRegionalBoosters;
-	public static HashMap<UUID, List<ActiveBooster>> activePlayerBoosters;
 	private MCMMOBoosterEvents mcmmoboosters;
 
+	@Override
 	public String getIdentifier() {
 		return "BOOSTERS";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		registerEventAttributeListener(this);
 		save("_Data", "boosters.yml");
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
-		if(!otherdata.getBoolean("saved default boosters")) {
+		if(!OTHER_YML.getBoolean("saved default boosters")) {
 			generateDefaultBoosters();
-			otherdata.set("saved default boosters", true);
+			OTHER_YML.set("saved default boosters", true);
 			saveOtherData();
 		}
 
-		if(mcmmoIsEnabled()) {
+		if(RPFeature.mcmmoIsEnabled()) {
 			mcmmoboosters = new MCMMOBoosterEvents();
 			PLUGIN_MANAGER.registerEvents(mcmmoboosters, RANDOM_PACKAGE);
 		}
 
-		activeRegionalBoosters = new HashMap<>();
-		activePlayerBoosters = new HashMap<>();
+		ACTIVE_REGIONAL_BOOSTERS = new HashMap<>();
+		ACTIVE_PLAYER_BOOSTERS = new HashMap<>();
 
 		final List<ItemStack> b = new ArrayList<>();
 		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "boosters")) {
@@ -81,26 +87,26 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	}
 	public void unload() {
 		backup();
-		if(mcmmoIsEnabled()) {
+		if(RPFeature.mcmmoIsEnabled()) {
 			HandlerList.unregisterAll(mcmmoboosters);
 			mcmmoboosters = null;
 		}
 		unregister(Feature.BOOSTER);
-		activeRegionalBoosters = null;
-		activePlayerBoosters = null;
+		ACTIVE_REGIONAL_BOOSTERS = null;
+		ACTIVE_PLAYER_BOOSTERS = null;
 	}
 
 	public void backup() {
 		data.set("factions", null);
-		if(activeRegionalBoosters != null) {
-			for(String s : activeRegionalBoosters.keySet()) {
-				final List<ActiveBooster> boosters = activeRegionalBoosters.get(s);
-				for(ActiveBooster ab : boosters) {
-					final String p = "factions." + s + "." + ab.getBooster().getIdentifier() + ".";
-					data.set(p + "activator", ab.getActivator().getUniqueId().toString());
-					data.set(p + "expiration", ab.getExpiration());
-					data.set(p + "duration", ab.getDuration());
-					data.set(p + "multiplier", ab.getMultiplier());
+		if(ACTIVE_REGIONAL_BOOSTERS != null) {
+			for(String factionUUID : ACTIVE_REGIONAL_BOOSTERS.keySet()) {
+				final List<ActiveBooster> boosters = ACTIVE_REGIONAL_BOOSTERS.get(factionUUID);
+				for(ActiveBooster booster : boosters) {
+					final String key = "factions." + factionUUID + "." + booster.getBooster().getIdentifier() + ".";
+					data.set(key + "activator", booster.getActivator().getUniqueId().toString());
+					data.set(key + "expiration", booster.getExpiration());
+					data.set(key + "duration", booster.getDuration());
+					data.set(key + "multiplier", booster.getMultiplier());
 				}
 			}
 		}
@@ -109,20 +115,18 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	public void loadBackup() {
 		SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
 			int loaded = 0, expired = 0;
-			final ConfigurationSection c = data.getConfigurationSection("factions");
-			if(c != null) {
-				if(activeRegionalBoosters == null) {
-					activeRegionalBoosters = new HashMap<>();
+			final ConfigurationSection configuration = data.getConfigurationSection("factions");
+			if(configuration != null) {
+				if(ACTIVE_REGIONAL_BOOSTERS == null) {
+					ACTIVE_REGIONAL_BOOSTERS = new HashMap<>();
 				}
-				for(String s : c.getKeys(false)) {
-					if(!activeRegionalBoosters.containsKey(s)) {
-						activeRegionalBoosters.put(s, new ArrayList<>());
-					}
-					for(String key : getConfigurationSectionKeys(data, "factions." + s, false)) {
-						final String path = "factions." + s + "." + key + ".";
+				for(String factionUUID : configuration.getKeys(false)) {
+					ACTIVE_REGIONAL_BOOSTERS.putIfAbsent(factionUUID, new ArrayList<>());
+					for(String key : getConfigurationSectionKeys(data, "factions." + factionUUID, false)) {
+						final String path = "factions." + factionUUID + "." + key + ".";
 						final ActiveBooster booster = new ActiveBooster(Bukkit.getOfflinePlayer(UUID.fromString(data.getString(path + "activator"))), getBooster(key), data.getDouble(path + "multiplier"), data.getLong(path + "duration"), data.getLong(path + "expiration"));
 						if(booster.getRemainingTime() > 0) {
-							activeRegionalBoosters.get(s).add(booster);
+							ACTIVE_REGIONAL_BOOSTERS.get(factionUUID).add(booster);
 							loaded++;
 						} else {
 							expired++;
@@ -165,10 +169,12 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			replacements.put("{PLAYER}", player.getName());
 			replacements.put("{MULTIPLIER}", Double.toString(multiplier));
 
+			final RegionalAPI regions = RegionalAPI.INSTANCE;
 			switch (b.getRecipients()) {
 				case FACTION_MEMBERS:
-					if(hookedFactionsUUID()) {
-						final String faction = getFactionTag(u);
+					if(regions.hookedFactionsUUID()) {
+						final FactionsUUID factions = FactionsUUID.INSTANCE;
+						final String faction = regions.getFactionTag(u);
 						if(faction != null) {
 							final ActiveBooster booster = new ActiveBooster(event, faction, System.currentTimeMillis()+duration);
 							replacements.put("{TIME}", getRemainingTime(booster.getRemainingTime()));
@@ -178,10 +184,8 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 									sendStringListMessage(p, b.getActivateMsg(), replacements);
 								}
 							}
-							if(!activeRegionalBoosters.containsKey(faction)) {
-								activeRegionalBoosters.put(faction, new ArrayList<>());
-							}
-							activeRegionalBoosters.get(faction).add(booster);
+							ACTIVE_REGIONAL_BOOSTERS.putIfAbsent(faction, new ArrayList<>());
+							ACTIVE_REGIONAL_BOOSTERS.get(faction).add(booster);
 						}
 					} else {
 						return false;
@@ -193,10 +197,10 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 					if(player.isOnline()) {
 						sendStringListMessage(player.getPlayer(), b.getActivateMsg(), replacements);
 					}
-					if(!activePlayerBoosters.containsKey(u)) {
-						activePlayerBoosters.put(u, new ArrayList<>());
+					if(!ACTIVE_PLAYER_BOOSTERS.containsKey(u)) {
+						ACTIVE_PLAYER_BOOSTERS.put(u, new ArrayList<>());
 					}
-					activePlayerBoosters.get(u).add(booster);
+					ACTIVE_PLAYER_BOOSTERS.get(u).add(booster);
 					return true;
 				default:
 					return false;
@@ -205,13 +209,14 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		return false;
 	}
 	private List<ActiveBooster> getRegionalBoosters(String identifier) {
-		return activeRegionalBoosters != null ? activeRegionalBoosters.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>();
+		return ACTIVE_REGIONAL_BOOSTERS != null ? ACTIVE_REGIONAL_BOOSTERS.getOrDefault(identifier, new ArrayList<>()) : new ArrayList<>();
 	}
 	private List<ActiveBooster> getSelfBoosters(UUID player) {
-		return activePlayerBoosters != null ? activePlayerBoosters.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
+		return ACTIVE_PLAYER_BOOSTERS != null ? ACTIVE_PLAYER_BOOSTERS.getOrDefault(player, new ArrayList<>()) : new ArrayList<>();
 	}
 	private List<ActiveBooster> getFactionBoosters(UUID player) {
-		return hookedFactionsUUID() ? getRegionalBoosters(getFactionTag(player)) : new ArrayList<>();
+		final RegionalAPI regions = RegionalAPI.INSTANCE;
+		return regions.hookedFactionsUUID() ? getRegionalBoosters(regions.getFactionTag(player)) : new ArrayList<>();
 	}
 	private void sendNotify(Player player, ActiveBooster b, HashMap<String, String> replacements) {
 		if(player != null && b != null) {
@@ -249,7 +254,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 				final ItemStack i = b.getItem();
 				if(d.equals(i.getItemMeta().getDisplayName())) {
 					double multiplier = getRemainingDouble(ChatColor.stripColor(l.get(b.getMultiplierLoreSlot())));
-					long duration = getTime(ChatColor.stripColor(l.get(b.getTimeLoreSlot())));
+					long duration = parseTime(ChatColor.stripColor(l.get(b.getTimeLoreSlot())));
 					return new TObject(b, multiplier, duration);
 				}
 			}
@@ -303,12 +308,12 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			case FACTION_MEMBERS:
 				boolean did = false;
 				final String faction = b.getFaction();
-				if(faction != null && activeRegionalBoosters.containsKey(faction)) {
-					final List<ActiveBooster> boosters = activeRegionalBoosters.get(faction);
+				if(faction != null && ACTIVE_REGIONAL_BOOSTERS.containsKey(faction)) {
+					final List<ActiveBooster> boosters = ACTIVE_REGIONAL_BOOSTERS.get(faction);
 					if(boosters.contains(b)) {
 						did = true;
 						boosters.remove(b);
-						for(Player p : factions.getOnlineAssociates(u)) {
+						for(Player p : FactionsUUID.INSTANCE.getOnlineAssociates(u)) {
 							sendStringListMessage(p, expire, replacements);
 						}
 					}
@@ -319,7 +324,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 				break;
 			case SELF:
 			default:
-				if(activePlayerBoosters.containsKey(u) && a.isOnline()) {
+				if(ACTIVE_PLAYER_BOOSTERS.containsKey(u) && a.isOnline()) {
 					sendStringListMessage(a.getPlayer(), expire, replacements);
 				}
 				break;
@@ -328,11 +333,11 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	@EventHandler
 	private void regionDisbandEvent(RegionDisbandEvent event) {
 		final String s = event.identifier;
-		if(activeRegionalBoosters.containsKey(s)) {
-			for(ActiveBooster b : activeRegionalBoosters.get(s)) {
+		if(ACTIVE_REGIONAL_BOOSTERS.containsKey(s)) {
+			for(ActiveBooster b : ACTIVE_REGIONAL_BOOSTERS.get(s)) {
 				b.expire(false);
 			}
-			activeRegionalBoosters.remove(s);
+			ACTIVE_REGIONAL_BOOSTERS.remove(s);
 		}
 	}
 

@@ -11,13 +11,13 @@ import org.bukkit.event.Event;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-public class IncreaseGlobalChallenge extends AbstractEventAttribute {
+public final class IncreaseGlobalChallenge extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
-        final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.active;
+        final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
                 final String[] values = recipientValues.get(e).split(":");

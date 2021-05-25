@@ -14,17 +14,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class FactionPoints extends RPFeature implements RPItemStack {
-    private static FactionPoints instance;
-    public static FactionPoints getFactionPoints() {
-        if(instance == null) instance = new FactionPoints();
-        return instance;
-    }
+public enum FactionPoints implements RPFeature, RPItemStack {
+    INSTANCE;
 
     private File dataF;
     private YamlConfiguration config, data;
@@ -34,9 +33,11 @@ public class FactionPoints extends RPFeature implements RPItemStack {
     private HashMap<String, BigInteger> points, dailyBought;
     private HashMap<Integer, BigInteger> purchaseAmounts;
 
+    @Override
     public String getIdentifier() {
         return "FACTION_POINTS";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "faction points.yml");
@@ -72,6 +73,7 @@ public class FactionPoints extends RPFeature implements RPItemStack {
 
         sendConsoleDidLoadFeature("Faction Points", started);
     }
+    @Override
     public void unload() {
         backup();
     }
@@ -101,22 +103,24 @@ public class FactionPoints extends RPFeature implements RPItemStack {
     public ItemStack getDisplayedFactionPoints(@NotNull BigInteger points) {
         final ItemStack target = getClone(display);
         final String price = formatInt(costPerPoint.multiply(points).intValue()), pointsString = Integer.toString(points.intValue());
-        itemMeta = target.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = target.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         for(String s : itemMeta.getLore()) {
             lore.add(s.replace("{PRICE}", price).replace("{POINTS}", pointsString));
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         target.setItemMeta(itemMeta);
         return target;
     }
     public ItemStack getItem(@NotNull int points) {
         final ItemStack target = getClone(interactable);
         final String pointsString = formatInt(points);
-        itemMeta = target.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = target.getItemMeta();
+        final List<String> lore = new ArrayList<>();
         for(String s : itemMeta.getLore()) {
             lore.add(s.replace("{POINTS}", pointsString));
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         target.setItemMeta(itemMeta);
         addRPItemStackValue(target, "AddFactionPoints", Integer.toString(points));
         return target;
@@ -167,7 +171,7 @@ public class FactionPoints extends RPFeature implements RPItemStack {
                     final HashMap<String, String> replacements = new HashMap<>();
                     replacements.put("{POINTS}", formatInt(intAmount));
                     replacements.put("{DAILY_LIMIT}", formatInt(dailyLimit.intValue()));
-                    if(eco.withdrawPlayer(player, intAmount).transactionSuccess()) {
+                    if(ECONOMY.withdrawPlayer(player, intAmount).transactionSuccess()) {
                         sendStringListMessage(player, getStringList(config, "messages.purchased faction points"), replacements);
                     } else {
                         sendStringListMessage(player, getStringList(config, "messages.cannot afford faction points"), replacements);

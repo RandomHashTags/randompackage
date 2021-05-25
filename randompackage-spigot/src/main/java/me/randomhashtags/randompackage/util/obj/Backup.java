@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.util.obj;
 
-import me.randomhashtags.randompackage.universal.UVersion;
+import me.randomhashtags.randompackage.universal.UVersionable;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public final class Backup extends UVersion {
+public final class Backup implements UVersionable {
     public Backup() {
         final String folder = DATA_FOLDER.getAbsolutePath() + "_backups";
         final File[] total = new File(folder).listFiles();
@@ -59,7 +59,7 @@ public final class Backup extends UVersion {
                     }
                 }
             } finally {
-                closeQuietly(new Closeable[]{output, fos, input, fis});
+                closeQuietly(output, fos, input, fis);
             }
 
             srcLen = srcFile.length();
@@ -100,7 +100,7 @@ public final class Backup extends UVersion {
     }
 
     private void copyDirectory(File srcDir, File destDir, boolean preserveFileDate) throws IOException {
-        copyDirectory(srcDir, destDir, (FileFilter)null, preserveFileDate);
+        copyDirectory(srcDir, destDir, null, preserveFileDate);
     }
 
     private void copyDirectory(File srcDir, File destDir, FileFilter filter, boolean preserveFileDate) throws IOException {

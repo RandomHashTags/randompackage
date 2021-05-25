@@ -14,10 +14,10 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class EquippedCustomEnchants implements Versionable {
+public final class EquippedCustomEnchants implements Versionable {
     public static HashMap<Player, ArmorEquipEvent> EVENTS = new HashMap<>();
-    private Player player;
-    private LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> enchants;
+    private final Player player;
+    private final LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> enchants;
 
     public EquippedCustomEnchants(@NotNull Player player) {
         this.player = player;
@@ -89,7 +89,9 @@ public class EquippedCustomEnchants implements Versionable {
         return getItemInSlot(slot, false);
     }
     private ItemStack getItemInSlot(EquipmentSlot slot, boolean getEventItem) {
-        if(slot == null) { return null; }
+        if(slot == null) {
+            return null;
+        }
         if(getEventItem && EVENTS.containsKey(player)) {
             return EVENTS.get(player).getItem();
         }

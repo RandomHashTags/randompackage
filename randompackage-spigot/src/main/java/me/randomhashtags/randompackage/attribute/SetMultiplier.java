@@ -1,4 +1,4 @@
 package me.randomhashtags.randompackage.attribute;
 
-public class SetMultiplier extends SetCombo {
+public final class SetMultiplier extends SetCombo {
 }

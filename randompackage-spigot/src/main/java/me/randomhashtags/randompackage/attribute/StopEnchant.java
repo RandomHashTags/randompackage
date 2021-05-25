@@ -10,29 +10,31 @@ import org.bukkit.event.Event;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class StopEnchant extends AbstractEventAttribute {
-    private static HashMap<UUID, HashMap<CustomEnchant, TObject>> stoppedEnchants;
+public final class StopEnchant extends AbstractEventAttribute {
+    private static HashMap<UUID, HashMap<CustomEnchant, TObject>> STOPPED_ENCHANTS;
+
     @Override
     public void load() {
         super.load();
-        stoppedEnchants = new HashMap<>();
+        STOPPED_ENCHANTS = new HashMap<>();
     }
     @Override
     public void unload() {
-        for(UUID u : stoppedEnchants.keySet()) {
+        for(UUID u : STOPPED_ENCHANTS.keySet()) {
             stopTasks(u);
         }
-        stoppedEnchants = null;
+        STOPPED_ENCHANTS = null;
     }
+
     @Override
     public void execute(PendingEventAttribute pending) {
         final Event event = pending.getEvent();
         if(event instanceof CustomEnchantProcEvent) {
             final CustomEnchantProcEvent c = (CustomEnchantProcEvent) event;
             final UUID u = c.getEntities().get("Player").getUniqueId();
-            if(stoppedEnchants.containsKey(u)) {
+            if(STOPPED_ENCHANTS.containsKey(u)) {
                 final CustomEnchant e = c.getEnchant();
-                final HashMap<CustomEnchant, TObject> t = stoppedEnchants.get(u);
+                final HashMap<CustomEnchant, TObject> t = STOPPED_ENCHANTS.get(u);
                 if(t.containsKey(e)) {
                     final TObject o = t.get(e);
                     if(c.getEnchantLevel() <= (int) o.getFirst()) {
@@ -48,8 +50,8 @@ public class StopEnchant extends AbstractEventAttribute {
                     final String[] v = recipientValues.get(e).split(":");
                     final int level = (int) evaluate(v[0].replace("max", Integer.toString(enchant.getMaxLevel())));
                     final UUID u = e.getUniqueId();
-                    if(!stoppedEnchants.containsKey(u)) stoppedEnchants.put(u, new HashMap<>());
-                    final HashMap<CustomEnchant, TObject> a = stoppedEnchants.get(u);
+                    if(!STOPPED_ENCHANTS.containsKey(u)) STOPPED_ENCHANTS.put(u, new HashMap<>());
+                    final HashMap<CustomEnchant, TObject> a = STOPPED_ENCHANTS.get(u);
                     final int task = resumeEnchant(u, enchant, (int) evaluate(v[1]));
                     a.put(enchant, new TObject(level, task, null));
                 }
@@ -57,13 +59,13 @@ public class StopEnchant extends AbstractEventAttribute {
         }
     }
     private void stopTasks(UUID uuid) {
-        for(TObject t : stoppedEnchants.get(uuid).values()) {
+        for(TObject t : STOPPED_ENCHANTS.get(uuid).values()) {
             SCHEDULER.cancelTask((int) t.getSecond());
         }
     }
     private int resumeEnchant(UUID player, CustomEnchant enchant, int ticks) {
         return SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-            stoppedEnchants.get(player).remove(enchant);
+            STOPPED_ENCHANTS.get(player).remove(enchant);
         }, ticks);
     }
 }

@@ -5,12 +5,12 @@ import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitMastery;
 import me.randomhashtags.randompackage.addon.GivedpItemable;
 import me.randomhashtags.randompackage.api.CollectionFilter;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +24,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.File;
@@ -32,10 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackage.mcmmo;
+import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
-public class GivedpItem extends RPFeature implements CommandExecutor {
-    public static final GivedpItem GIVEDP_ITEM = new GivedpItem();
+public enum GivedpItem implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration itemsConfig;
     private HashMap<String, ItemStack> customitems;
@@ -44,6 +45,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     private ItemStack air;
     private List<Player> itemnametag, itemlorecrystal, explosivesnowball;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(hasPermission(sender, "RandomPackage.givedp", true)) {
@@ -52,7 +54,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             } else if(args.length >= 2) {
                 final OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                 final String i = args[1];
-                item = createItemStack(null, i);
+                final ItemStack item = createItemStack(null, i);
                 if(item != null) {
                     if(args.length >= 3) {
                         item.setAmount(getRemainingInt(args[2]));
@@ -60,7 +62,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     if(p.isOnline()) {
                         p.getPlayer().getInventory().addItem(item);
                     } else {
-                        final RPPlayer pdata = RPPlayer.get(p.getUniqueId());
+                        final FileRPPlayer pdata = FileRPPlayer.get(p.getUniqueId());
                         pdata.getUnclaimedPurchases().add(item);
                         pdata.unload();
                     }
@@ -70,9 +72,11 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "GIVEDP_ITEM";
     }
+    @Override
     public void load() {
         save(null, "items.yml");
         itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
@@ -104,36 +108,37 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
         itemlorecrystal = new ArrayList<>();
         explosivesnowball = new ArrayList<>();
 
-        if(mcmmo != null) {
-            MCMMOAPI.getMCMMOAPI().enable();
+        if(MCMMO != null) {
+            MCMMOAPI.INSTANCE.enable();
         }
     }
+    @Override
     public void unload() {
     }
 
-    public final ItemStack valueOf(@NotNull String input) {
-        final String Q = input.split(";")[0];
+    public final ItemStack valueOfRPItem(@NotNull String input) {
+        final String targetString = input.split(";")[0];
         input = input.toLowerCase();
 
-        if(customitems != null && customitems.containsKey(Q)) {
-            return getClone(customitems.get(Q));
-        } else if(items != null && items.containsKey(Q)) {
-            return getClone(items.get(Q));
+        if(customitems != null && customitems.containsKey(targetString)) {
+            return getClone(customitems.get(targetString));
+        } else if(items != null && items.containsKey(targetString)) {
+            return getClone(items.get(targetString));
         }
 
         final HashMap<String, GivedpItemable> givedpitems = GivedpItemable.GIVEDP_ITEMS;
         for(String key : givedpitems.keySet()) {
-            if(Q.startsWith(key) || input.startsWith(key)) {
-                final ItemStack target = givedpitems.get(key).valueOfInput(Q, key);
+            if(targetString.startsWith(key) || input.startsWith(key)) {
+                final ItemStack target = givedpitems.get(key).valueOfInput(targetString, key);
                 return target != null ? target : air;
             }
         }
 
         if(input.startsWith("banknote:")) {
-            final String[] a = Q.split(":");
+            final String[] a = targetString.split(":");
             return getBanknote(BigDecimal.valueOf(getIntegerFromString(a[1], 0)), a.length == 3 ? a[2] : null);
         } else if(input.equals("collectionchest")) {
-            final CollectionFilter cf = CollectionFilter.getCollectionFilter();
+            final CollectionFilter cf = CollectionFilter.INSTANCE;
             return cf.isEnabled() ? cf.getCollectionChest("all") : air;
 
         } else if(input.startsWith("equipmentlootbox:")) {
@@ -146,8 +151,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             return air;
 
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
-            if(mcmmoIsEnabled()) {
-                final MCMMOAPI mcmmo = MCMMOAPI.getMCMMOAPI();
+            if(RPFeature.mcmmoIsEnabled()) {
+                final MCMMOAPI mcmmo = MCMMOAPI.INSTANCE;
                 if(mcmmo.isEnabled()) {
                     final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
                     final ItemStack i = items.get(lvl ? "mcmmolevelvoucher" : xp ? "mcmmoxpvoucher" : "mcmmocreditvoucher").clone();
@@ -157,47 +162,58 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     final int min = r ? Integer.parseInt(values[2].split("-")[0]) : Integer.parseInt(values[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(values[2].split("-")[1])-min+1) : min;
                     final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
                     final String n = name != null ? colorize(name) : "UNKNOWN";
-                    itemMeta = i.getItemMeta();
-                    lore.clear();
-                    for(String s : itemMeta.getLore()) {
-                        lore.add(s.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", n));
+                    final ItemMeta itemMeta = i.getItemMeta();
+                    final List<String> lore = new ArrayList<>();
+                    for(String string : itemMeta.getLore()) {
+                        lore.add(string.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", n));
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     i.setItemMeta(itemMeta);
                     return i;
                 }
             }
             return air;
         } else if(input.startsWith("xpbottle:")) {
-            final String[] values = Q.split(":");
+            final String[] values = targetString.split(":");
             final boolean hasHyphen = values[1].contains("-");
             final int min = hasHyphen ? Integer.parseInt(values[1].split("-")[0]) : Integer.parseInt(values[1]), amt = hasHyphen ? min+ RANDOM.nextInt(Integer.parseInt(values[1].split("-")[1])-min+1) : min;
             return getXPBottle(BigDecimal.valueOf(amt), values.length == 3 ? values[2] : null);
         } else if(input.startsWith("mkitredeem:")) {
-            final CustomKit kit = getCustomKit("MKIT_" + Q.split(":")[1]);
+            final CustomKit kit = getCustomKit("MKIT_" + targetString.split(":")[1]);
             return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : air;
         }
         return null;
     }
 
     public ItemStack getBanknote(BigDecimal value, String signer) {
-        item = items.get("banknote").clone(); itemMeta = item.getItemMeta(); lore.clear();
-        for(String s : itemMeta.getLore()) {
-            if(s.contains("{SIGNER}")) s = signer != null ? s.replace("{SIGNER}", signer) : null;
-            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+        final ItemStack item = items.get("banknote").clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
+        for(String string : itemMeta.getLore()) {
+            if(string.contains("{SIGNER}")) {
+                string = signer != null ? string.replace("{SIGNER}", signer) : null;
+            }
+            if(string != null) {
+                lore.add(string.replace("{VALUE}", formatBigDecimal(value)));
+            }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }
     public ItemStack getXPBottle(BigDecimal value, String enchanter) {
-        item = items.get("xpbottle").clone();
-        itemMeta = item.getItemMeta(); lore.clear();
-        for(String s : itemMeta.getLore()) {
-            if(s.contains("{ENCHANTER}")) s = enchanter != null ? s.replace("{ENCHANTER}", enchanter) : null;
-            if(s != null) lore.add(s.replace("{VALUE}", formatBigDecimal(value)));
+        final ItemStack item = items.get("xpbottle").clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        final List<String> lore = new ArrayList<>();
+        for(String string : itemMeta.getLore()) {
+            if(string.contains("{ENCHANTER}")) {
+                string = enchanter != null ? string.replace("{ENCHANTER}", enchanter) : null;
+            }
+            if(string != null) {
+                lore.add(string.replace("{VALUE}", formatBigDecimal(value)));
+            }
         }
-        itemMeta.setLore(lore); lore.clear();
+        itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
     }
@@ -279,16 +295,16 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             itemnametag.remove(player);
             event.setCancelled(true);
             final String message = colorize(msg);
-            item = getItemInHand(player);
+            final ItemStack item = getItemInHand(player);
             if(item == null || item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, getStringList(itemsConfig, "item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
             } else if(isEquipment(item)) {
-                final ItemNameTagUseEvent e = new ItemNameTagUseEvent(player, item, message);
-                PLUGIN_MANAGER.callEvent(e);
-                if(!e.isCancelled()) {
-                    final String name = e.getMessage();
-                    itemMeta = item.getItemMeta(); lore.clear();
+                final ItemNameTagUseEvent useEvent = new ItemNameTagUseEvent(player, item, message);
+                PLUGIN_MANAGER.callEvent(useEvent);
+                if(!useEvent.isCancelled()) {
+                    final String name = useEvent.getMessage();
+                    final ItemMeta itemMeta = item.getItemMeta();
                     itemMeta.setDisplayName(name);
                     item.setItemMeta(itemMeta);
                     player.updateInventory();
@@ -304,7 +320,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
             }
         } else if(itemlorecrystal.contains(player)) {
             String apply = colorize(itemsConfig.getString("item lore crystal.apply"));
-            item = getItemInHand(player);
+            final ItemStack item = getItemInHand(player);
             event.setCancelled(true);
             itemlorecrystal.remove(player);
             if(item == null || item.getType().equals(Material.AIR)) {
@@ -315,8 +331,9 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                 final ItemLoreCrystalUseEvent e = new ItemLoreCrystalUseEvent(player, item, apply + message);
                 PLUGIN_MANAGER.callEvent(e);
                 if(!e.isCancelled()) {
-                    itemMeta = item.getItemMeta(); lore.clear();
+                    final ItemMeta itemMeta = item.getItemMeta();
                     boolean did = false;
+                    final List<String> lore = new ArrayList<>();
                     if(itemMeta.hasLore()) {
                         lore.addAll(itemMeta.getLore());
                         for(int i = 0; i < lore.size(); i++) {
@@ -330,7 +347,7 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
                     if(!did) {
                         lore.add(apply + message);
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                     player.updateInventory();
                     sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.add lore"), new HashMap<String, String>(){{ put("{LORE}", message); }});
@@ -343,8 +360,8 @@ public class GivedpItem extends RPFeature implements CommandExecutor {
     }
     private boolean isEquipment(ItemStack is) {
         if(is != null) {
-            final String m = is.getType().name();
-            return m.endsWith("BOW") || m.endsWith("_AXE") || m.endsWith("SWORD") || m.endsWith("HELMET") || m.endsWith("CHESTPLATE") || m.endsWith("LEGGINGS") || m.endsWith("BOOTS");
+            final String materialName = is.getType().name();
+            return materialName.endsWith("BOW") || materialName.endsWith("_AXE") || materialName.endsWith("SWORD") || materialName.endsWith("HELMET") || materialName.endsWith("CHESTPLATE") || materialName.endsWith("LEGGINGS") || materialName.endsWith("BOOTS");
         }
         return false;
     }

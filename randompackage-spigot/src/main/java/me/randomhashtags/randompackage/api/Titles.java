@@ -22,18 +22,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Titles extends RPFeature implements CommandExecutor {
-	private static Titles instance;
-	public static Titles getTitles() {
-		if(instance == null) instance = new Titles();
-		return instance;
-	}
+public enum Titles implements RPFeature, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	public ItemStack interactableItem;
@@ -41,6 +38,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 	private String selftitle, chatformat, tabformat;
 	private HashMap<Player, Integer> pages;
 
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {
@@ -52,9 +50,11 @@ public class Titles extends RPFeature implements CommandExecutor {
 		return true;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return "TITLES";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "titles.yml");
@@ -63,7 +63,7 @@ public class Titles extends RPFeature implements CommandExecutor {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "titles.yml"));
 		interactableItem = createItemStack(config, "interactable item");
-		FileTitle.i = interactableItem;
+		FileTitle.TITLE_ITEMSTACK = interactableItem;
 		nextpage = createItemStack(config, "gui.next page");
 		background = createItemStack(config, "gui.background");
 		active = createItemStack(config, "gui.active title");
@@ -75,10 +75,11 @@ public class Titles extends RPFeature implements CommandExecutor {
 		//othertitle = colorize(config.getString("gui.other-title"));
 		chatformat = colorize(config.getString("chat.format"));
 		tabformat = colorize(config.getString("tab.format"));
-		FileTitle.titleChatFormat = chatformat;
-		FileTitle.titleTabFormat = tabformat;
+		FileTitle.TITLE_CHAT_FORMAT = chatformat;
+		FileTitle.TITLE_TAB_FORMAT = tabformat;
 		sendConsoleDidLoadFeature(getAll(Feature.TITLE).size() + " Titles", started);
 	}
+	@Override
 	public void unload() {
 		for(Player player : new ArrayList<>(pages.keySet())) {
 			player.closeInventory();
@@ -197,8 +198,8 @@ public class Titles extends RPFeature implements CommandExecutor {
 	}
 	private ItemStack getTitle(String activetitle, Title input) {
 		final String title = input.getIdentifier();
-		item = (title.equals(activetitle) ? active : inactive).clone();
-		itemMeta = item.getItemMeta();
+		final ItemStack item = (title.equals(activetitle) ? active : inactive).clone();
+		final ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TITLE}", title));
 		item.setItemMeta(itemMeta);
 		return item;

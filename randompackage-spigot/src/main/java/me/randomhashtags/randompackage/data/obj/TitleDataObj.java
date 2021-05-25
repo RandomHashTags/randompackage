@@ -5,9 +5,9 @@ import me.randomhashtags.randompackage.data.TitleData;
 
 import java.util.List;
 
-public class TitleDataObj implements TitleData {
+public final class TitleDataObj implements TitleData {
     private Title active;
-    private List<Title> owned;
+    private final List<Title> owned;
 
     public TitleDataObj(Title active, List<Title> owned) {
         this.active = active;

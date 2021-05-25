@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.attribute;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -8,15 +9,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
-public class GiveItem extends AbstractEventAttribute {
+public final class GiveItem extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
-                final ItemStack is = API.createItemStack(null, recipientValues.get(e));
+                final ItemStack is = api.createItemStack(null, recipientValues.get(e));
                 if(is != null && !is.getType().equals(Material.AIR)) {
                     giveItem((Player) e, is);
                 }

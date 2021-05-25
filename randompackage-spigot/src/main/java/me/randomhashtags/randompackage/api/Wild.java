@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.perms.WildPermission;
+import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPFeature;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
@@ -21,12 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Wild extends RPFeature implements CommandExecutor {
-    private static Wild instance;
-    public static Wild getWild() {
-        if(instance == null) instance = new Wild();
-        return instance;
-    }
+public enum Wild implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     private YamlConfiguration config;
     private HashMap<UUID, Long> expirations;
@@ -53,9 +50,11 @@ public class Wild extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "WILD";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "wild.yml");
@@ -67,16 +66,17 @@ public class Wild extends RPFeature implements CommandExecutor {
         teleportExceptions = new ArrayList<>();
         teleportExceptions.add("Wilderness");
 
-        for(String s : config.getStringList("settings.x coords")) {
-            final String[] values = s.split(";");
+        for(String string : config.getStringList("settings.x coords")) {
+            final String[] values = string.split(";");
             xcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
-        for(String s : config.getStringList("settings.z coords")) {
-            final String[] values = s.split(";");
+        for(String string : config.getStringList("settings.z coords")) {
+            final String[] values = string.split(";");
             zcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
         sendConsoleDidLoadFeature("Wild", started);
     }
+    @Override
     public void unload() {
     }
 
@@ -120,12 +120,13 @@ public class Wild extends RPFeature implements CommandExecutor {
         l.setY(w.getHighestBlockYAt(l));
         return l;
     }
-    public Location getRandomLocation(@NotNull World w, @Nullable List<String> exceptions) {
-        final BigDecimal minx = getMinX(w), maxx = getMaxX(w), minz = getMinZ(w), maxz = getMaxZ(w);
+    public Location getRandomLocation(@NotNull World world, @Nullable List<String> exceptions) {
+        final BigDecimal minX = getMinX(world), maxX = getMaxX(world), minZ = getMinZ(world), maxZ = getMaxZ(world);
+        final RegionalAPI regions = RegionalAPI.INSTANCE;
         for(int i = 1; i <= 100; i++) {
-            final Location l = getRandomLocation(w, minx, maxx, minz, maxz);
-            if(!regions.isPvPZone(l, exceptions)) {
-                return l;
+            final Location location = getRandomLocation(world, minX, maxX, minZ, maxZ);
+            if(!regions.isPvPZone(location, exceptions)) {
+                return location;
             }
         }
         return null;
@@ -138,7 +139,7 @@ public class Wild extends RPFeature implements CommandExecutor {
                 replacements.put("{TIME}", getCooldownLeft(uuid));
                 sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
             } else {
-                if(regions.isPvPZone(player.getLocation())) {
+                if(RegionalAPI.INSTANCE.isPvPZone(player.getLocation())) {
                     sendStringListMessage(player, getStringList(config, "messages.cannot be used in area"), null);
                 } else {
                     if(!hasPermission(player, WildPermission.BYPASS_COOLDOWN, false)) {

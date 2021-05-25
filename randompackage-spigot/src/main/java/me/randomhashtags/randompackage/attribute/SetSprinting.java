@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class SetSprinting extends AbstractEventAttribute {
+public final class SetSprinting extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

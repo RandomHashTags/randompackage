@@ -9,8 +9,8 @@ import java.util.List;
 public class ActiveStronghold {
     private String controller, attacking;
     private float capturePercent;
-    private HashMap<Location, Integer> blockDurability;
-    private List<PolyBoundary> repairableWalls;
+    private final HashMap<Location, Integer> blockDurability;
+    private final List<PolyBoundary> repairableWalls;
     public ActiveStronghold(HashMap<Location, Integer> blockDurability, List<PolyBoundary> repairableWalls) {
         this.blockDurability = blockDurability;
         this.repairableWalls = repairableWalls;

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.NotNull;
+import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,34 +12,50 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.api.Trade.getTrade;
+public final class ActiveTrade implements UVersionable {
+    public static List<ActiveTrade> ACTIVE_TRADES;
 
-public class ActiveTrade implements UVersionable {
-    public static List<ActiveTrade> trades;
-
-    private List<Integer> tasks;
+    private final List<Integer> tasks;
     private boolean successful, senderReady, receiverReady, countingDown;
-    private Player sender, receiver;
-    private HashMap<Integer, ItemStack> sendingTrade, receivingTrade;
+    private final Player sender, receiver;
+    private final HashMap<Integer, ItemStack> sendingTrade, receivingTrade;
 
     public ActiveTrade(Player sender, Player receiver) {
-        if(trades == null) {
-            trades = new ArrayList<>();
+        if(ACTIVE_TRADES == null) {
+            ACTIVE_TRADES = new ArrayList<>();
         }
         this.sender = sender;
         this.receiver = receiver;
         tasks = new ArrayList<>();
         sendingTrade = new HashMap<>();
         receivingTrade = new HashMap<>();
-        trades.add(this);
+        ACTIVE_TRADES.add(this);
     }
-    public boolean isSuccessful() { return successful; }
-    public Player getSender() { return sender; }
-    public Player getReceiver() { return receiver; }
-    public HashMap<Integer, ItemStack> getSenderTrade() { return sendingTrade; }
-    public HashMap<Integer, ItemStack> getReceiverTrade() { return receivingTrade; }
-    public boolean senderIsReady() { return senderReady; }
-    public boolean receiverIsReady() { return receiverReady; }
+
+    private Trade getTrade() {
+        return Trade.INSTANCE;
+    }
+    public boolean isSuccessful() {
+        return successful;
+    }
+    public Player getSender() {
+        return sender;
+    }
+    public Player getReceiver() {
+        return receiver;
+    }
+    public HashMap<Integer, ItemStack> getSenderTrade() {
+        return sendingTrade;
+    }
+    public HashMap<Integer, ItemStack> getReceiverTrade() {
+        return receivingTrade;
+    }
+    public boolean senderIsReady() {
+        return senderReady;
+    }
+    public boolean receiverIsReady() {
+        return receiverReady;
+    }
     public void setSenderReady(boolean ready) {
         senderReady = ready;
         tryAccepting();
@@ -168,18 +185,18 @@ public class ActiveTrade implements UVersionable {
     }
 
     private void stopTrade() {
-        trades.remove(this);
+        ACTIVE_TRADES.remove(this);
         sender.closeInventory();
         receiver.closeInventory();
 
-        if(trades.isEmpty()) {
-            trades = null;
+        if(ACTIVE_TRADES.isEmpty()) {
+            ACTIVE_TRADES = null;
         }
     }
 
     public static ActiveTrade valueOf(Player player) {
-        if(trades != null) {
-            for(ActiveTrade trade : trades) {
+        if(ACTIVE_TRADES != null) {
+            for(ActiveTrade trade : ACTIVE_TRADES) {
                 if(trade.sender == player || trade.receiver == player) {
                     return trade;
                 }

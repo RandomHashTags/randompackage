@@ -4,9 +4,11 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 
-public abstract class Reflect extends RPFeature {
-    protected Object getPrivateField(Object object, String field) throws Exception { return getPrivateField(object, field, false); }
-    protected Object getPrivateField(Object object, String field, boolean inSuper) throws Exception {
+public interface Reflect extends RPFeature {
+    default Object getPrivateField(Object object, String field) throws Exception {
+        return getPrivateField(object, field, false);
+    }
+    default Object getPrivateField(Object object, String field, boolean inSuper) throws Exception {
         final Class<?> clazz = object.getClass();
         final Field objectField = inSuper ? clazz.getSuperclass().getDeclaredField(field) : clazz.getDeclaredField(field);
         if(objectField == null) {
@@ -19,8 +21,10 @@ public abstract class Reflect extends RPFeature {
         return result;
     }
 
-    protected Field getPrivateField(Class clazz, String field) throws Exception { return getPrivateField(clazz, field, false); }
-    protected Field getPrivateField(Class clazz, String field, boolean inSuper) throws Exception {
+    default Field getPrivateField(Class clazz, String field) throws Exception {
+        return getPrivateField(clazz, field, false);
+    }
+    default Field getPrivateField(Class clazz, String field, boolean inSuper) throws Exception {
         final Field objectField = inSuper ? clazz.getSuperclass().getDeclaredField(field) : clazz.getDeclaredField(field);
         if(objectField == null) {
             Bukkit.broadcastMessage("objectField == null!");

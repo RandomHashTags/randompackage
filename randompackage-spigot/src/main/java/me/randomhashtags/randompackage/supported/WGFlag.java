@@ -94,23 +94,29 @@ public enum WGFlag {
     ENTRY_DENY_MESSAGE,
     EXIT_DENY_MESSAGE
     ;
-    private static byte version = WorldGuardAPI.getWorldGuardAPI().version;
+    private static final byte VERSION = WorldGuardAPI.INSTANCE.version;
     private StateFlag flag;
-    private boolean supportsLegacy;
-    WGFlag() { supportsLegacy = true; }
-    WGFlag(boolean supportsLegacy) { this.supportsLegacy = supportsLegacy; }
+    private final boolean supportsLegacy;
+    WGFlag() {
+        supportsLegacy = true;
+    }
+    WGFlag(boolean supportsLegacy) {
+        this.supportsLegacy = supportsLegacy;
+    }
 
     public StateFlag getFlag() {
-        if(flag != null) return flag;
-        final String n = name();
-        final boolean six = version == 6;
+        if(flag != null) {
+            return flag;
+        }
+        final String flagName = name();
+        final boolean six = VERSION == 6;
         if(six && !supportsLegacy) {
-            throw new UnsupportedOperationException("Flag " + n + " doesn't exist using WorldGuard " + version + "!");
+            throw new UnsupportedOperationException("Flag " + flagName + " doesn't exist using WorldGuard " + VERSION + "!");
         }
         try {
-            flag = (StateFlag) ((six ? com.sk89q.worldguard.protection.flags.DefaultFlag.class : Flags.class).getDeclaredField(n).get(null));
+            flag = (StateFlag) ((six ? com.sk89q.worldguard.protection.flags.DefaultFlag.class : Flags.class).getDeclaredField(flagName).get(null));
         } catch (Exception e) {
-            throw new UnsupportedOperationException("[RandomPackage] Flag " + n + " doesn't exist, running WorldGuard " + version + "!");
+            throw new UnsupportedOperationException("[RandomPackage] Flag " + flagName + " doesn't exist, running WorldGuard " + VERSION + "!");
         }
         return flag;
     }

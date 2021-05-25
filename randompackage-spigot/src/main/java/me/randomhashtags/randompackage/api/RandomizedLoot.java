@@ -17,19 +17,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RandomizedLoot extends RPFeature {
-    private static RandomizedLoot instance;
-    public static RandomizedLoot getRandomizedLoot() {
-        if(instance == null) instance = new RandomizedLoot();
-        return instance;
-    }
+public enum RandomizedLoot implements RPFeature {
+    INSTANCE;
 
     public YamlConfiguration config;
     public HashMap<String, RandomizedLootItem> items;
 
+    @Override
     public String getIdentifier() {
         return "RANDOMIZED_LOOT";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "randomized loot.yml");
@@ -42,8 +40,7 @@ public class RandomizedLoot extends RPFeature {
             final ItemStack item = createItemStack(config, key);
             if(item != null) {
                 final ItemMeta itemMeta = item.getItemMeta();
-                lore.clear();
-                final List<String> rewards = new ArrayList<>();
+                final List<String> lore = new ArrayList<>(), rewards = new ArrayList<>();
                 if(itemMeta.hasLore()) {
                     final List<String> rewardList = config.getStringList(key + ".rewards");
                     for(String s : itemMeta.getLore()) {
@@ -60,7 +57,7 @@ public class RandomizedLoot extends RPFeature {
                             lore.add(s.replace("{REWARD_SIZE}", rewardSize));
                         }
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                 }
                 item.setItemMeta(itemMeta);
                 final RandomizedLootItem i = new RandomizedLootItem(key, item, rewardSize, rewards);
@@ -71,6 +68,7 @@ public class RandomizedLoot extends RPFeature {
         addGivedpCategory(values, UMaterial.GLISTERING_MELON_SLICE, "Randomized Loot", "Givedp Item: Randomized Loot");
         sendConsoleDidLoadFeature(items.size() + " Randomized Loot", started);
     }
+    @Override
     public void unload() {
     }
 

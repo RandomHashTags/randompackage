@@ -2,16 +2,15 @@ package me.randomhashtags.randompackage.supported;
 
 import me.randomhashtags.randompackage.util.RPFeature;
 
-public class EconomyAPI extends RPFeature {
-    private static EconomyAPI instance;
-    public static EconomyAPI getEconomyAPI() {
-        if(instance == null) instance = new EconomyAPI();
-        return instance;
-    }
+public enum EconomyAPI implements RPFeature {
+    INSTANCE;
 
     private boolean vault;
 
-    public String getIdentifier() { return "ECONOMY_API"; }
+    @Override
+    public String getIdentifier() {
+        return "ECONOMY_API";
+    }
     public void load() {
     }
     public void unload() {

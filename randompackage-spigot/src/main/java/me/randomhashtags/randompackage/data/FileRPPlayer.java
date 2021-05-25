@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.data;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
@@ -12,46 +13,46 @@ import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionable;
 import me.randomhashtags.randompackage.util.RPStorage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
-public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
+public final class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
     private static final String FOLDER = DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "players";
     public static final HashMap<UUID, FileRPPlayer> PLAYERS = new HashMap<>();
 
     private boolean isLoaded;
-    private UUID uuid;
+    private final UUID uuid;
     private File file;
     private YamlConfiguration yml;
 
-    private CoinFlipData coinflip;
-    private CustomEnchantData customenchant;
-    private DisguiseData disguises;
-    private DuelData duel;
-    private GlobalChallengeData globalchallenges;
-    private HomeData home;
-    private ItemFilterData itemfilter;
-    private JackpotData jackpot;
-    private KitData kits;
-    private MonthlyCrateData monthlycrates;
-    private PlayerQuestData playerquests;
-    private RarityGemData raritygems;
-    private ShowcaseData showcase;
-    private SlotBotData slotbot;
-    private TitleData titles;
+    private HashMap<String, Integer> unclaimedLootboxes;
+    private List<ItemStack> unclaimedPurchases;
+    private SecondaryData secondaryData;
+    private CoinFlipData coinFlipData;
+    private CustomEnchantData customEnchantData;
+    private DisguiseData disguiseData;
+    private DuelData duelData;
+    private GlobalChallengeData globalChallengeData;
+    private HomeData homeData;
+    private ItemFilterData itemFilterData;
+    private JackpotData jackpotData;
+    private KitData kitData;
+    private MonthlyCrateData monthlyCrateData;
+    private PlayerQuestData playerQuestData;
+    private RarityGemData rarityGemData;
+    private ReputationData reputationData;
+    private ShowcaseData showcaseData;
+    private SlotBotData slotBotData;
+    private TitleData titleData;
 
     public FileRPPlayer(UUID uuid) {
         this.uuid = uuid;
@@ -84,22 +85,25 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
         return PLAYERS.getOrDefault(player, new FileRPPlayer(player)).load();
     }
 
+    @Override
     public boolean isLoaded() {
         return isLoaded;
     }
+    @Override
     public FileRPPlayer load() {
         if(!isLoaded) {
             isLoaded = true;
         }
         return this;
     }
+    @Override
     public void unload() {
         if(isLoaded) {
             isLoaded = false;
         }
     }
+    @Override
     public void backup() {
-
         if(yml.get("strings") != null) {
             yml.set("strings", null);
             yml.set("booleans", null);
@@ -114,35 +118,62 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             yml.set("claimed monthly crates", null);
         }
 
-        if(coinflip != null) {
-            yml.set("coinflip.notifications", coinflip.receivesNotifications());
-            yml.set("coinflip.wins", coinflip.getWins());
-            yml.set("coinflip.losses", coinflip.getLosses());
-            yml.set("coinflip.wonCash", coinflip.getWonCash());
-            yml.set("coinflip.lostCash", coinflip.getLostCash());
-            yml.set("coinflip.taxesPaid", coinflip.getTaxesPaid());
+        if(unclaimedLootboxes != null) {
+            yml.set("unclaimed lootboxes", unclaimedLootboxes);
         }
-        if(customenchant != null) {
+        if(unclaimedPurchases != null) {
+            yml.set("unclaimed purchases", null);
+            for(ItemStack is : unclaimedPurchases) {
+                if(is != null && !is.getType().equals(Material.AIR)) {
+                    final String prefix = "unclaimed purchases." + UUID.randomUUID() + ".";
+                    yml.set(prefix + "material", UMaterial.match(is).name());
+                    final ItemMeta itemMeta = is.getItemMeta();
+                    final String colorCharacter = "§";
+                    if(itemMeta.hasDisplayName()) {
+                        yml.set(prefix + "name", itemMeta.getDisplayName().replace(colorCharacter, "&"));
+                    }
+                    if(itemMeta.hasLore()) {
+                        final List<String> lore = new ArrayList<>();
+                        for(String string : itemMeta.getLore()) {
+                            lore.add(string.replace(colorCharacter, "&"));
+                        }
+                        yml.set(prefix + "lore", lore);
+                    }
+                }
+            }
+        }
+        if(secondaryData != null) {
+            yml.set("secondary data.xpbottle.exhaustion expiration", secondaryData.getXPExhaustionExpiration());
+        }
+        if(coinFlipData != null) {
+            yml.set("coinflip.notifications", coinFlipData.receivesNotifications());
+            yml.set("coinflip.wins", coinFlipData.getWins());
+            yml.set("coinflip.losses", coinFlipData.getLosses());
+            yml.set("coinflip.wonCash", coinFlipData.getWonCash());
+            yml.set("coinflip.lostCash", coinFlipData.getLostCash());
+            yml.set("coinflip.taxesPaid", coinFlipData.getTaxesPaid());
+        }
+        if(customEnchantData != null) {
             final List<String> ids = new ArrayList<>();
-            for(LivingCustomEnchantEntity cee : customenchant.getEntities()) {
+            for(LivingCustomEnchantEntity cee : customEnchantData.getEntities()) {
                 ids.add(cee.getEntity().getUniqueId().toString());
             }
             yml.set("custom enchants.entities", ids);
         }
-        if(disguises != null) {
-            final String active = disguises.getActive();
+        if(disguiseData != null) {
+            final String active = disguiseData.getActive();
             yml.set("disguises.active", active != null ? active : "nil");
-            yml.set("disguises.owned", disguises.getOwned());
+            yml.set("disguises.owned", disguiseData.getOwned());
         }
-        if(duel != null) {
-            yml.set("duel.notifications", duel.receivesNotifications());
+        if(duelData != null) {
+            yml.set("duel.notifications", duelData.receivesNotifications());
             int i = 0;
             yml.set("duel.collection", null);
-            for(ItemStack is : duel.getCollection()) {
+            for(ItemStack is : duelData.getCollection()) {
                 yml.set("duel.collection." + i, is.toString());
                 i++;
             }
-            final DuelRankedData ranked = duel.getRankedData();
+            final DuelRankedData ranked = duelData.getRankedData();
             yml.set("duel.ranked.elo", ranked.getELO().doubleValue());
 
             final HashMap<ItemStack, List<CustomEnchant>> godset = ranked.getGodset();
@@ -157,37 +188,37 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 i++;
             }
         }
-        if(globalchallenges != null) {
-            final HashMap<GlobalChallengePrize, Integer> prizes = globalchallenges.getPrizes();
+        if(globalChallengeData != null) {
+            final HashMap<GlobalChallengePrize, Integer> prizes = globalChallengeData.getPrizes();
             for(GlobalChallengePrize prize : prizes.keySet()) {
                 yml.set("global challenges.prizes." + prize.getPlacement(), prizes.get(prize));
             }
         }
-        if(home != null) {
-            yml.set("homes.added max homes", home.getAddedMaxHomes());
+        if(homeData != null) {
+            yml.set("homes.added max homes", homeData.getAddedMaxHomes());
             final List<String> homes = new ArrayList<>();
-            for(Home h : home.getHomes()) {
+            for(Home h : homeData.getHomes()) {
                 homes.add(h.getName() + ";" + h.getIcon().name() + ";" + toString(h.getLocation()));
             }
             yml.set("homes.list", homes);
         }
-        if(itemfilter != null) {
-            yml.set("item filter.enabled", itemfilter.isActive());
+        if(itemFilterData != null) {
+            yml.set("item filter.enabled", itemFilterData.isActive());
             final List<String> materials = new ArrayList<>();
-            for(UMaterial m : itemfilter.getFilteredItems()) {
+            for(UMaterial m : itemFilterData.getFilteredItems()) {
                 materials.add(m.name());
             }
             yml.set("item filter.materials", materials);
         }
-        if(jackpot != null) {
-            yml.set("jackpot.notifications", jackpot.receivesNotifications());
-            yml.set("jackpot.total tickets bought", jackpot.getTotalTicketsBought().doubleValue());
-            yml.set("jackpot.total wins", jackpot.getTotalWins().longValue());
-            yml.set("jackpot.total won cash", jackpot.getTotalWonCash().doubleValue());
+        if(jackpotData != null) {
+            yml.set("jackpot.notifications", jackpotData.receivesNotifications());
+            yml.set("jackpot.total tickets bought", jackpotData.getTotalTicketsBought().doubleValue());
+            yml.set("jackpot.total wins", jackpotData.getTotalWins().longValue());
+            yml.set("jackpot.total won cash", jackpotData.getTotalWonCash().doubleValue());
         }
-        if(kits != null) {
-            final HashMap<CustomKit, Long> cooldowns = kits.getCooldowns();
-            final HashMap<CustomKit, Integer> levels = kits.getLevels();
+        if(kitData != null) {
+            final HashMap<CustomKit, Long> cooldowns = kitData.getCooldowns();
+            final HashMap<CustomKit, Integer> levels = kitData.getLevels();
             for(CustomKit kit : cooldowns.keySet()) {
                 yml.set("kits." + kit.getIdentifier() + ".cooldown expiration", cooldowns.get(kit));
             }
@@ -195,33 +226,34 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 yml.set("kits." + kit.getIdentifier() + ".level", levels.get(kit));
             }
         }
-        if(monthlycrates != null) {
-            final HashMap<String, Boolean> owned = monthlycrates.getOwned();
+        if(monthlyCrateData != null) {
+            final HashMap<String, Boolean> owned = monthlyCrateData.getOwned();
             for(String crate : owned.keySet()) {
                 yml.set("monthly crates." + crate, owned.get(crate));
             }
         }
-        if(playerquests != null) {
+        if(playerQuestData != null) {
             yml.set("quests", null);
-            final LinkedHashMap<PlayerQuest, ActivePlayerQuest> quests = playerquests.getQuests();
+            yml.set("quests.questTokens", playerQuestData.getTokens().longValue());
+            final LinkedHashMap<PlayerQuest, ActivePlayerQuest> quests = playerQuestData.getQuests();
             for(PlayerQuest quest : quests.keySet()) {
                 final ActivePlayerQuest active = quests.get(quest);
                 yml.set("quests." + quest.getIdentifier(), active.getStartedTime() + ";" + active.getProgress() + ";" + active.isCompleted() + ";" + active.hasClaimedRewards());
             }
         }
-        if(raritygems != null) {
+        if(rarityGemData != null) {
             yml.set("rarity gems", null);
-            final HashMap<RarityGem, Boolean> gems = raritygems.getRarityGems();
+            final HashMap<RarityGem, Boolean> gems = rarityGemData.getRarityGems();
             for(RarityGem gem : gems.keySet()) {
                 yml.set("rarity gems." + gem.getIdentifier(), gems.get(gem));
             }
         }
-        if(showcase != null) {
+        if(showcaseData != null) {
             yml.set("showcase", null);
-            final HashMap<Integer, ItemStack[]> showcases = showcase.getShowcases();
+            final HashMap<Integer, ItemStack[]> showcases = showcaseData.getShowcases();
             for(int page : showcases.keySet()) {
                 yml.set("showcase." + page, null);
-                yml.set("showcase." + page + ".size", showcase.getSize(page));
+                yml.set("showcase." + page + ".size", showcaseData.getSize(page));
                 int s = 0;
                 for(ItemStack i : showcases.get(page)) {
                     if(i != null && !i.getType().equals(Material.AIR)) {
@@ -231,14 +263,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 }
             }
         }
-        if(slotbot != null) {
-            yml.set("slot bot.credits", slotbot.getCredits().doubleValue());
+        if(slotBotData != null) {
+            yml.set("slot bot.credits", slotBotData.getCredits().doubleValue());
         }
-        if(titles != null) {
-            final Title active = titles.getActive();
+        if(titleData != null) {
+            final Title active = titleData.getActive();
             final List<String> owned = new ArrayList<>();
             yml.set("titles.active", active != null ? active.getIdentifier() : "nil");
-            for(Title title : titles.getOwned()) {
+            for(Title title : titleData.getOwned()) {
                 owned.add(title.getIdentifier());
             }
             yml.set("titles.owned", owned);
@@ -256,34 +288,82 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
         }
     }
 
+    @Override
     public UUID getUUID() {
         return uuid;
-    }
-    public Player getPlayer() {
-        return Bukkit.getPlayer(uuid);
     }
     public YamlConfiguration getConfig() {
         return yml;
     }
 
-    public CoinFlipData getCoinFlipData() {
-        if(coinflip == null && CoinFlip.getCoinFlip().isEnabled()) {
-            if(yml.get("coinflip") != null) {
-                final BigDecimal wins = getBigDecimal("coinflip.wins"), losses = getBigDecimal("coinflip.losses"), wonCash = getBigDecimal("coinflip.wonCash"), lostCash = getBigDecimal("coinflip.lostCash"), taxesPaid = getBigDecimal("coinflip.taxesPaid");
-                coinflip = new CoinFlipDataObj(yml.getBoolean("coinflip.notifications"), wins, losses, wonCash, lostCash, taxesPaid);
-            } else if(yml.get("coinflip stats") != null) {
-                final String[] values = yml.getString("coinflip stats").split(";");
-                coinflip = new CoinFlipDataObj(Boolean.parseBoolean(yml.getString("booleans").split(";")[0]), getBigDecimal(values[0]), getBigDecimal(values[1]), getBigDecimal(values[2]), getBigDecimal(values[3]), getBigDecimal(values[4]));
-            } else {
-                final BigDecimal zero = BigDecimal.ZERO;
-                coinflip = new CoinFlipDataObj(true, zero, zero, zero, zero, zero);
+    @Override
+    public HashMap<String, Integer> getUnclaimedLootboxes() {
+        if(unclaimedLootboxes == null && Lootboxes.INSTANCE.isEnabled()) {
+            unclaimedLootboxes = new HashMap<>();
+            for(String key : getConfigurationSectionKeys(yml, "unclaimed lootboxes", false)) {
+                unclaimedLootboxes.put(key, yml.getInt("unclaimed lootboxes." + key));
             }
         }
-        return coinflip;
+        return unclaimedLootboxes;
     }
 
+    @Override
+    public List<ItemStack> getUnclaimedPurchases() {
+        if(unclaimedPurchases == null && yml.get("unclaimed purchases") != null) {
+            unclaimedPurchases = new ArrayList<>();
+            for(String uuid : getConfigurationSectionKeys(yml, "unclaimed purchases", false)) {
+                final String prefix = "unclaimed purchases." + uuid + ".";
+                final UMaterial umaterial = UMaterial.match(yml.getString(prefix + "material"));
+                final ItemStack is = umaterial.getItemStack();
+                final ItemMeta itemMeta = is.getItemMeta();
+                final String targetName = yml.getString(prefix + "name");
+                if(targetName != null) {
+                    itemMeta.setDisplayName(colorize(targetName));
+                }
+                final List<String> lore = yml.getStringList(prefix + "lore");
+                if(!lore.isEmpty()) {
+                    final List<String> newLore = new ArrayList<>();
+                    for(String string : lore) {
+                        newLore.add(colorize(string));
+                    }
+                    itemMeta.setLore(newLore);
+                }
+                is.setItemMeta(itemMeta);
+                unclaimedPurchases.add(is);
+            }
+        }
+        return unclaimedPurchases;
+    }
+
+    @Override
+    public SecondaryData getSecondaryData() {
+        if(secondaryData == null && SecondaryEvents.INSTANCE.isEnabled()) {
+            final long xpExhaustionExpiration = yml.getLong("secondary data.xpbottle.exhaustion expiration");
+            secondaryData = new SecondaryDataObj(xpExhaustionExpiration);
+        }
+        return secondaryData;
+    }
+
+    @Override
+    public CoinFlipData getCoinFlipData() {
+        if(coinFlipData == null && CoinFlip.INSTANCE.isEnabled()) {
+            if(yml.get("coinflip") != null) {
+                final BigDecimal wins = getBigDecimal("coinflip.wins"), losses = getBigDecimal("coinflip.losses"), wonCash = getBigDecimal("coinflip.wonCash"), lostCash = getBigDecimal("coinflip.lostCash"), taxesPaid = getBigDecimal("coinflip.taxesPaid");
+                coinFlipData = new CoinFlipDataObj(yml.getBoolean("coinflip.notifications"), wins, losses, wonCash, lostCash, taxesPaid);
+            } else if(yml.get("coinflip stats") != null) {
+                final String[] values = yml.getString("coinflip stats").split(";");
+                coinFlipData = new CoinFlipDataObj(Boolean.parseBoolean(yml.getString("booleans").split(";")[0]), getBigDecimal(values[0]), getBigDecimal(values[1]), getBigDecimal(values[2]), getBigDecimal(values[3]), getBigDecimal(values[4]));
+            } else {
+                final BigDecimal zero = BigDecimal.ZERO;
+                coinFlipData = new CoinFlipDataObj(true, zero, zero, zero, zero, zero);
+            }
+        }
+        return coinFlipData;
+    }
+
+    @Override
     public CustomEnchantData getCustomEnchantData() {
-        if(customenchant == null && CustomEnchants.getCustomEnchants().isEnabled()) {
+        if(customEnchantData == null && CustomEnchants.getCustomEnchants().isEnabled()) {
             List<String> list = new ArrayList<>();
             if(yml.get("custom enchants") != null) {
                 list = yml.getStringList("custom enchants.entities");
@@ -300,27 +380,28 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     entities.add(e);
                 }
             }
-
-            customenchant = new CustomEnchantDataObj(entities);
+            customEnchantData = new CustomEnchantDataObj(entities);
         }
-        return customenchant;
+        return customEnchantData;
     }
 
+    @Override
     public DisguiseData getDisguiseData() {
-        if(disguises == null && Disguises.getDisguises().isEnabled()) {
+        if(disguiseData == null && Disguises.INSTANCE.isEnabled()) {
             String active = "";
             List<String> owned = new ArrayList<>();
             if(yml.get("disguises") != null) {
                 active = yml.getString("disguises.active");
                 owned = yml.getStringList("disguises.owned");
             }
-            disguises = new DisguiseDataObj(active, owned);
+            disguiseData = new DisguiseDataObj(active, owned);
         }
-        return disguises;
+        return disguiseData;
     }
 
+    @Override
     public DuelData getDuelData() {
-        if(duel == null && Duels.getDuels().isEnabled()) {
+        if(duelData == null && Duels.INSTANCE.isEnabled()) {
             boolean notifications = true;
             final List<ItemStack> collection = new ArrayList<>();
             final HashMap<ItemStack, List<CustomEnchant>> godset = new HashMap<>();
@@ -344,13 +425,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 }
                 ranked = new DuelRankedDataObj(getBigDecimal(yml.getString("duel.ranked.elo")), godset);
             }
-            duel = new DuelDataObj(notifications, collection, ranked);
+            duelData = new DuelDataObj(notifications, collection, ranked);
         }
-        return duel;
+        return duelData;
     }
 
+    @Override
     public GlobalChallengeData getGlobalChallengeData() {
-        if(globalchallenges == null && GlobalChallenges.getChallenges().isEnabled()) {
+        if(globalChallengeData == null && GlobalChallenges.getChallenges().isEnabled()) {
             final HashMap<GlobalChallengePrize, Integer> prizes = new HashMap<>();
             String path = null;
             if(yml.get("global challenges") != null) {
@@ -366,13 +448,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            globalchallenges = new GlobalChallengeDataObj(prizes);
+            globalChallengeData = new GlobalChallengeDataObj(prizes);
         }
-        return globalchallenges;
+        return globalChallengeData;
     }
 
+    @Override
     public HomeData getHomeData() {
-        if(home == null && Homes.getHomes().isEnabled()) {
+        if(homeData == null && Homes.INSTANCE.isEnabled()) {
             int addedMaxHomes = 0;
             final List<Home> homes = new ArrayList<>();
             if(yml.get("homes") != null) {
@@ -392,13 +475,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     homes.add(new Home(name, toLocation(s.substring(name.length()+values[1].length()+2)), mat));
                 }
             }
-            home = new HomeDataObj(addedMaxHomes, homes);
+            homeData = new HomeDataObj(addedMaxHomes, homes);
         }
-        return home;
+        return homeData;
     }
 
+    @Override
     public ItemFilterData getItemFilterData() {
-        if(itemfilter == null && ItemFilter.getItemFilter().isEnabled()) {
+        if(itemFilterData == null && ItemFilter.INSTANCE.isEnabled()) {
             boolean enabled = false;
             final List<UMaterial> filter = new ArrayList<>();
             String path = null;
@@ -417,13 +501,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            itemfilter = new ItemFilterDataObj(enabled, filter);
+            itemFilterData = new ItemFilterDataObj(enabled, filter);
         }
-        return itemfilter;
+        return itemFilterData;
     }
 
+    @Override
     public JackpotData getJackpotData() {
-        if(jackpot == null && Jackpot.getJackpot().isEnabled()) {
+        if(jackpotData == null && Jackpot.INSTANCE.isEnabled()) {
             boolean enabled = true;
             long totalTicketsBought = 0, totalWins = 0;
             double totalWonCash = 0;
@@ -439,13 +524,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                 totalWins = Long.parseLong(ints[1]);
                 totalWonCash = Double.parseDouble(yml.getString("longs").split(";")[0]);
             }
-            jackpot = new JackpotDataObj(enabled, BigInteger.valueOf(totalTicketsBought), BigInteger.valueOf(totalWins), BigDecimal.valueOf(totalWonCash));
+            jackpotData = new JackpotDataObj(enabled, BigInteger.valueOf(totalTicketsBought), BigInteger.valueOf(totalWins), BigDecimal.valueOf(totalWonCash));
         }
-        return jackpot;
+        return jackpotData;
     }
 
+    @Override
     public KitData getKitData() {
-        if(kits == null) {
+        if(kitData == null) {
             final HashMap<CustomKit, Long> cooldowns = new HashMap<>();
             final HashMap<CustomKit, Integer> levels = new HashMap<>();
             if(yml.get("kits") != null) {
@@ -463,13 +549,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            kits = new KitDataObj(cooldowns, levels);
+            kitData = new KitDataObj(cooldowns, levels);
         }
-        return kits;
+        return kitData;
     }
 
+    @Override
     public MonthlyCrateData getMonthlyCrateData() {
-        if(monthlycrates == null && MonthlyCrates.getMonthlyCrates().isEnabled()) {
+        if(monthlyCrateData == null && MonthlyCrates.INSTANCE.isEnabled()) {
             final HashMap<String, Boolean> owned = new HashMap<>();
             if(yml.get("monthly crates") != null) {
                 for(String key : getConfigurationSectionKeys(yml, "monthly crates", false)) {
@@ -481,16 +568,20 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     owned.put(crate, claimed.contains(crate));
                 }
             }
-            monthlycrates = new MonthlyCrateDataObj(owned);
+            monthlyCrateData = new MonthlyCrateDataObj(owned);
         }
-        return monthlycrates;
+        return monthlyCrateData;
     }
 
+    @Override
     public PlayerQuestData getPlayerQuestData() {
-        if(playerquests == null && PlayerQuests.getPlayerQuests().isEnabled()) {
+        if(playerQuestData == null && PlayerQuests.getPlayerQuests().isEnabled()) {
             final LinkedHashMap<PlayerQuest, ActivePlayerQuest> activeQuests = new LinkedHashMap<>();
-            if(yml.get("quests") != null) {
-                for(String key : getConfigurationSectionKeys(yml, "quests", false)) {
+            BigInteger questTokens = BigInteger.ZERO;
+            for(String key : getConfigurationSectionKeys(yml, "quests", false)) {
+                if(key.equals("questTokens")) {
+                    questTokens = BigInteger.valueOf(yml.getLong("quests." + key));
+                } else {
                     final PlayerQuest quest = getPlayerQuest(key);
                     if(quest != null) {
                         final String[] values = yml.getString("quests." + key).split(";");
@@ -499,13 +590,14 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            playerquests = new PlayerQuestDataObj(activeQuests);
+            playerQuestData = new PlayerQuestDataObj(questTokens, activeQuests);
         }
-        return playerquests;
+        return playerQuestData;
     }
 
+    @Override
     public RarityGemData getRarityGemData() {
-        if(raritygems == null && RarityGems.getRarityGems().isEnabled()) {
+        if(rarityGemData == null && RarityGems.INSTANCE.isEnabled()) {
             final HashMap<RarityGem, Boolean> gems = new HashMap<>();
             if(yml.get("rarity gems") != null) {
                 for(String key : getConfigurationSectionKeys(yml, "rarity gems", false)) {
@@ -515,41 +607,41 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            raritygems = new RarityGemDataObj(gems);
+            rarityGemData = new RarityGemDataObj(gems);
         }
-        return raritygems;
+        return rarityGemData;
     }
 
+    @Override
     public ReputationData getReputationData() {
-        return null;
+        return reputationData;
     }
 
+    @Override
     public ShowcaseData getShowcaseData() {
-        if(showcase == null && Showcase.getShowcase().isEnabled()) {
+        if(showcaseData == null && Showcase.INSTANCE.isEnabled()) {
             final HashMap<Integer, Integer> sizes = new HashMap<>();
             final HashMap<Integer, ItemStack[]> showcases = new HashMap<>();
             if(yml.get("showcases") != null) {
-                for(String pageString : yml.getConfigurationSection("showcases").getKeys(false)) {
+                final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
+                for(String pageString : getConfigurationSectionKeys(yml, "showcases", false)) {
                     final int page = Integer.parseInt(pageString);
                     sizes.put(page, yml.getInt("showcases." + pageString + ".size"));
-                    final ConfigurationSection i = yml.getConfigurationSection("showcases." + pageString);
                     final ItemStack[] items = new ItemStack[54];
-                    if(i != null) {
-                        for(String sl : i.getKeys(false)) {
-                            final int slot = Integer.parseInt(sl);
-                            ItemStack is;
-                            try {
-                                is = yml.getItemStack("showcases." + pageString + "." + sl);
-                            } catch (Exception e) {
-                                is = API.createItemStack(yml, "showcases." + pageString + "." + sl);
-                            }
-                            items[slot] = is;
+                    for(String targetSlot : getConfigurationSectionKeys(yml, "showcases." + pageString, false, "size")) {
+                        final int slot = Integer.parseInt(targetSlot);
+                        ItemStack is;
+                        try {
+                            is = yml.getItemStack("showcases." + pageString + "." + targetSlot);
+                        } catch (Exception e) {
+                            is = api.createItemStack(yml, "showcases." + pageString + "." + targetSlot);
                         }
+                        items[slot] = is;
                     }
                     showcases.put(page, items);
                 }
             } else {
-                final YamlConfiguration config = Showcase.getShowcase().config;
+                final YamlConfiguration config = Showcase.INSTANCE.config;
                 final int defaultShowcase = config.getInt("settings.default showcases"), defaultSize = config.getInt("settings.default showcase size");
                 if(defaultShowcase > 0) {
                     final ItemStack[] a = new ItemStack[54];
@@ -559,22 +651,24 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     }
                 }
             }
-            showcase = new ShowcaseDataObj(sizes, showcases);
+            showcaseData = new ShowcaseDataObj(sizes, showcases);
         }
-        return showcase;
+        return showcaseData;
     }
 
+    @Override
     public SlotBotData getSlotBotData() {
-        if(slotbot == null && SlotBot.getSlotBot().isEnabled()) {
+        if(slotBotData == null && SlotBot.INSTANCE.isEnabled()) {
             if(yml.get("slot bot") != null) {
-                slotbot = new SlotBotDataObj(getBigDecimal(yml.getString("slot bot.credits")));
+                slotBotData = new SlotBotDataObj(getBigDecimal(yml.getString("slot bot.credits")));
             }
         }
-        return slotbot;
+        return slotBotData;
     }
 
+    @Override
     public TitleData getTitleData() {
-        if(titles == null && Titles.getTitles().isEnabled()) {
+        if(titleData == null && Titles.INSTANCE.isEnabled()) {
             Title active = null;
             final List<Title> owned = new ArrayList<>();
             final List<String> target = new ArrayList<>();
@@ -591,8 +685,8 @@ public class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
                     owned.add(title);
                 }
             }
-            titles = new TitleDataObj(active, owned);
+            titleData = new TitleDataObj(active, owned);
         }
-        return titles;
+        return titleData;
     }
 }

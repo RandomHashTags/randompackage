@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.event;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class AlchemistExchangeEvent extends RPEventCancellable {
+public final class AlchemistExchangeEvent extends RPEventCancellable {
 	public final ItemStack one, two, result;
 	public final String currency;
 	public double price;

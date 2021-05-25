@@ -9,9 +9,15 @@ import java.util.List;
 
 public abstract class RPKit extends RPAddon implements CustomKit {
     private List<KitItem> items;
-    public int getMaxLevel() { return yml.getInt("settings.max level"); }
-    public long getCooldown() { return yml.getLong("settings.cooldown"); }
-    public int getSlot() { return yml.getInt("gui settings.slot"); }
+    public int getMaxLevel() {
+        return yml.getInt("settings.max level");
+    }
+    public long getCooldown() {
+        return yml.getLong("settings.cooldown");
+    }
+    public int getSlot() {
+        return yml.getInt("gui settings.slot");
+    }
     public FallenHero getFallenHero() {
         final String p = yml.getString("settings.fallen hero");
         return p != null ? getFallenHero(p) : null;
@@ -30,5 +36,7 @@ public abstract class RPKit extends RPAddon implements CustomKit {
         }
         return items;
     }
-    public void setItems(List<KitItem> items) { this.items = items; }
+    public void setItems(List<KitItem> items) {
+        this.items = items;
+    }
 }

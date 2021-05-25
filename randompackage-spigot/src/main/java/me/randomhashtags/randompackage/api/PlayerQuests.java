@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -118,14 +119,15 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                 }
                 final ItemStack r = createItemStack(config, "shop." + s);
                 if(r != null && !r.getType().equals(Material.AIR)) {
-                    item = r.clone();
+                    final ItemStack item = r.clone();
                     if(!returnToQuests) {
-                        itemMeta = item.getItemMeta(); lore.clear();
+                        final ItemMeta itemMeta = item.getItemMeta();
+                        final List<String> lore = new ArrayList<>();
                         if(itemMeta.hasLore()) {
                             lore.addAll(itemMeta.getLore());
                         }
-                        for(String a : addedLore) {
-                            lore.add(a.replace("{COST}", Integer.toString(cost)));
+                        for(String string : addedLore) {
+                            lore.add(string.replace("{COST}", Integer.toString(cost)));
                         }
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
@@ -147,9 +149,9 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             questSlots.add(Integer.parseInt(s));
         }
 
-        if(!otherdata.getBoolean("saved default player quests")) {
+        if(!OTHER_YML.getBoolean("saved default player quests")) {
             generateDefaultPlayerQuests();
-            otherdata.set("saved default player quests", true);
+            OTHER_YML.set("saved default player quests", true);
             saveOtherData();
         }
         for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "player quests")) {
@@ -184,19 +186,18 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         final PlayerQuest quest = a.getQuest();
         final boolean isCompleted = a.isCompleted(), hasClaimed = a.hasClaimedRewards(), expired = a.isExpired();
         final String completion = getCompletion(quest), p = Double.toString(round(a.getProgress(), 2)), expiration = getRemainingTime(a.getExpirationTime()-time);
-        item = (isCompleted ? hasClaimed ? this.claimed : claim : active).clone();
-        itemMeta = item.getItemMeta();
+        final ItemStack item = (isCompleted ? hasClaimed ? this.claimed : claim : active).clone();
+        final ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", quest.getName()));
-        lore.clear();;
-        final List<String> questLore = quest.getLore(), rewards = quest.getRewards();
-        for(String s : itemMeta.getLore()) {
-            if(s.equals("{LORE}")) {
+        final List<String> lore = new ArrayList<>(), questLore = quest.getLore(), rewards = quest.getRewards();
+        for(String string : itemMeta.getLore()) {
+            if(string.equals("{LORE}")) {
                 lore.addAll(questLore);
-            } else if(s.contains("{REWARDS}")) {
+            } else if(string.contains("{REWARDS}")) {
                 for(String r : rewards) {
-                    lore.add(s.replace("{REWARDS}", r.split(":")[1]));
+                    lore.add(string.replace("{REWARDS}", r.split(":")[1]));
                 }
-            } else if(s.equals("{STATUS}")) {
+            } else if(string.equals("{STATUS}")) {
                 final List<String> l = hasClaimed ? claimed : isCompleted ? completed : !expired ? available : null;
                 if(l != null) {
                     for(String e : l) {
@@ -204,7 +205,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                     }
                 }
             } else {
-                lore.add(s.replace("{COMPLETION}", completion).replace("{PROGRESS}", p));
+                lore.add(string.replace("{COMPLETION}", completion).replace("{PROGRESS}", p));
             }
         }
         itemMeta.setLore(lore); lore.clear();
@@ -236,11 +237,13 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
             final String tokens = formatInt(data.getTokens().intValue());
             int q = 0;
             for(int i = 0; i < gui.getSize(); i++) {
-                item = top.getItem(i);
+                ItemStack item = top.getItem(i);
+                ItemMeta itemMeta = null;
                 if(questSlots.contains(i)) {
                     final boolean isActive = q < size;
                     item = (isActive ? active : locked).clone();
                     itemMeta = item.getItemMeta();
+                    final List<String> lore = new ArrayList<>();
                     if(itemMeta.hasDisplayName()) {
                         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{SLOT}", Integer.toString(i+1)));
                     }
@@ -254,7 +257,6 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                     } else {
                         itemMeta.setLore(lore);
                     }
-                    lore.clear();
                     item.setItemMeta(itemMeta);
                     top.setItem(i, item);
                 } else if(item != null && !item.getType().equals(Material.AIR)) {
@@ -263,11 +265,11 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
                         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TOKENS}", tokens));
                     }
                     if(itemMeta.hasLore()) {
-                        lore.clear();
+                        final List<String> lore = new ArrayList<>();
                         for(String s : itemMeta.getLore()) {
                             lore.add(s.replace("{TOKENS}", tokens));
                         }
-                        itemMeta.setLore(lore); lore.clear();
+                        itemMeta.setLore(lore);
                     }
                     item.setItemMeta(itemMeta);
                     top.setItem(i, item);
@@ -285,13 +287,14 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
 
             final String tokens = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
             for(int i = 0; i < top.getSize(); i++) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
                 if(item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
-                    itemMeta = item.getItemMeta(); lore.clear();
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    final List<String> lore = new ArrayList<>();
                     for(String s : itemMeta.getLore()) {
                         lore.add(s.replace("{TOKENS}", tokens));
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                     top.setItem(i, item);
                 }
@@ -303,12 +306,13 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     private ItemStack getReturnToQuests(Player player) {
         if(player != null) {
             final String t = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
-            item = returnToQuests.clone();
-            itemMeta = item.getItemMeta(); lore.clear();
-            for(String s : itemMeta.getLore()) {
-                lore.add(s.replace("{TOKENS}", t));
+            final ItemStack item = returnToQuests.clone();
+            final ItemMeta itemMeta = item.getItemMeta();
+            final List<String> lore = new ArrayList<>();
+            for(String string : itemMeta.getLore()) {
+                lore.add(string.replace("{TOKENS}", t));
             }
-            itemMeta.setLore(lore); lore.clear();
+            itemMeta.setLore(lore);
             item.setItemMeta(itemMeta);
             return item;
         }

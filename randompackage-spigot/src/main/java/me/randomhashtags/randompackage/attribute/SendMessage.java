@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 
-public class SendMessage extends AbstractEventAttribute {
+public final class SendMessage extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

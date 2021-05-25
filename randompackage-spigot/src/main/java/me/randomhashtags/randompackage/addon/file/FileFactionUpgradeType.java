@@ -7,10 +7,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.List;
 
-public class FileFactionUpgradeType extends RPAddon implements FactionUpgradeType {
+public final class FileFactionUpgradeType extends RPAddon implements FactionUpgradeType {
 	private static YamlConfiguration yml;
 
-	private String path;
+	private final String path;
 	private List<String> unlock, upgrade, maxed, format;
 	public FileFactionUpgradeType(String path) {
 		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));

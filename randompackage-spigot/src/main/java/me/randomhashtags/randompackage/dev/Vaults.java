@@ -6,23 +6,25 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 
-public class Vaults extends RPFeature implements CommandExecutor, Listener {
-    private static Vaults instance;
-    public static Vaults getVaults() {
-        if(instance == null) instance = new Vaults();
-        return instance;
-    }
+public enum Vaults implements RPFeature, CommandExecutor {
+    INSTANCE;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return true;
     }
 
-    public String getIdentifier() { return "VAULTS"; }
+    @Override
+    public String getIdentifier() {
+        return "VAULTS";
+    }
 
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Vaults &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
     }
 }

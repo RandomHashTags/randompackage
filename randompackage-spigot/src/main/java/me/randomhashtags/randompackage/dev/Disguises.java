@@ -2,13 +2,15 @@ package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
-import me.randomhashtags.randompackage.addon.stats.DisguiseStats;
+import me.randomhashtags.randompackage.data.DisguiseData;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -23,17 +25,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class Disguises extends RPFeature {
-    private static Disguises instance;
-    public static Disguises getDisguises() {
-        if(instance == null) instance = new Disguises();
-        return instance;
-    }
+public enum Disguises implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory inventory, subDisguises;
@@ -41,13 +41,16 @@ public class Disguises extends RPFeature {
     private HashMap<Integer, Disguise> slots;
     private HashMap<Player, Disguise> subDisguise;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "DISGUISES";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
@@ -62,14 +65,15 @@ public class Disguises extends RPFeature {
         for(String s : getConfigurationSectionKeys(config, "entity types", false)) {
             final String path = "entity types." + s + ".";
             final int slot = config.getInt(path + "slot");
-            new PathDisguise(s, slot, colorize(config.getString(path + "name")));
+            final Disguise disguise = new PathDisguise(s, slot, colorize(config.getString(path + "name")));
             slots.put(slot, getDisguise(s));
-            inv.setItem(slot, item);
+            inv.setItem(slot, getDisguiseItem(disguise));
         }
 
         subDisguise = new HashMap<>();
         sendConsoleDidLoadFeature(getAll(Feature.DISGUISE).size() + " Disguises", started);
     }
+    @Override
     public void unload() {
         for(Player player : new ArrayList<>(subDisguise.keySet())) {
             player.closeInventory();
@@ -77,20 +81,21 @@ public class Disguises extends RPFeature {
         unregister(Feature.DISGUISE);
     }
 
-    public ItemStack getDisguise(@NotNull Disguise disguise) {
-        final String entitytype = disguise.getEntityType();
-        if(entitytype != null) {
+    public ItemStack getDisguiseItem(@NotNull Disguise disguise) {
+        final String entityType = disguise.getEntityType();
+        if(entityType != null) {
             final ItemStack is = disguiseItem.clone();
             final String name = disguise.getName();
-            itemMeta = is.getItemMeta(); lore.clear();
+            final ItemMeta itemMeta = is.getItemMeta();
             if(itemMeta.hasDisplayName()) {
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TYPE}", name));
             }
             if(itemMeta.hasLore()) {
+                final List<String> lore = new ArrayList<>();
                 for(String s : itemMeta.getLore()) {
                     lore.add(s.replace("{TYPE}", name));
                 }
-                itemMeta.setLore(lore); lore.clear();
+                itemMeta.setLore(lore);
             }
             is.setItemMeta(itemMeta);
             return is;
@@ -100,8 +105,8 @@ public class Disguises extends RPFeature {
     public void viewMenu(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.disguise", true)) {
             viewInventory(player, null);
-            final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-            final DisguiseStats stats = pdata.getDisguiseStats();
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+            final DisguiseData stats = pdata.getDisguiseData();
         }
     }
     public void viewSubDisguises(@NotNull Player player, @NotNull Disguise disguise) {
@@ -120,15 +125,15 @@ public class Disguises extends RPFeature {
         player.updateInventory();
     }
     public void disguise(@NotNull Player player, @Nullable Disguise disguise) {
-        setDisguise(player, EntityType.valueOf(disguise.getEntityType()));
+        setDisguise(player, disguise);
     }
     public void undisguise(@NotNull Player player) {
         setDisguise(player, null);
     }
-    private void setDisguise(@NotNull Player player, EntityType disguise) {
-        final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
-        final DisguiseStats stats = pdata.getDisguiseStats();
-        stats.setDisguise(disguise);
+    private void setDisguise(@NotNull Player player, Disguise disguise) {
+        final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
+        final DisguiseData stats = pdata.getDisguiseData();
+        stats.setActive(disguise);
     }
 
     @EventHandler
@@ -159,9 +164,9 @@ public class Disguises extends RPFeature {
     }
     @EventHandler
     private void playerJoinEvent(PlayerJoinEvent event) {
-        final RPPlayer pdata = RPPlayer.get(event.getPlayer().getUniqueId());
-        final DisguiseStats stats = pdata.getDisguiseStats();
-        final EntityType disguise = stats.getDisguise();
+        final FileRPPlayer pdata = FileRPPlayer.get(event.getPlayer().getUniqueId());
+        final DisguiseData stats = pdata.getDisguiseData();
+        final EntityType disguise = EntityType.valueOf(stats.getActive());
         if(disguise != null) {
         }
     }

@@ -14,7 +14,7 @@ public interface ItemSkin extends Nameable, Attributable, GivedpItemable {
     }
     default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
         final ItemSkin skin = getItemSkin(originalInput.split(":")[1]);
-        final ItemStack target = ItemSkins.getItemSkins().getItemSkinItem(skin, true);
+        final ItemStack target = ItemSkins.INSTANCE.getItemSkinItem(skin, true);
         return target != null ? target : AIR;
     }
 

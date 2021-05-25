@@ -8,38 +8,42 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class LivingServerCrate {
-    public static HashMap<Location, LivingServerCrate> living;
+public final class LivingServerCrate {
+    public static HashMap<Location, LivingServerCrate> LIVING;
     private ServerCrate type;
     private Location location;
     public LivingServerCrate(ServerCrate type, Location location) {
-        if(living == null) {
-            living = new HashMap<>();
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
         this.type = type;
         this.location = location;
-        living.put(location, this);
+        LIVING.put(location, this);
     }
-    public ServerCrate getType() { return type; }
-    public Location getLocation() { return location; }
+    public ServerCrate getType() {
+        return type;
+    }
+    public Location getLocation() {
+        return location;
+    }
     public void delete(boolean drop) {
         final World w = location.getWorld();
         w.getBlockAt(location).setType(Material.AIR);
         if(drop) w.dropItemNaturally(location, type.getItem());
-        living.remove(location);
+        LIVING.remove(location);
         location = null;
         type = null;
-        if(living.isEmpty()) {
-            living = null;
+        if(LIVING.isEmpty()) {
+            LIVING = null;
         }
     }
 
     public static void deleteAll(boolean drop) {
-        if(living != null) {
-            for(LivingServerCrate l : new ArrayList<>(living.values())) {
+        if(LIVING != null) {
+            for(LivingServerCrate l : new ArrayList<>(LIVING.values())) {
                 l.delete(drop);
             }
-            living = null;
+            LIVING = null;
         }
     }
 }

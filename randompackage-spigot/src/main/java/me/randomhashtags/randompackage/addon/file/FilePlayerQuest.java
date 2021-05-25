@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import java.io.File;
 import java.util.List;
 
-public class FilePlayerQuest extends RPAddon implements PlayerQuest {
+public final class FilePlayerQuest extends RPAddon implements PlayerQuest {
     public FilePlayerQuest(File f) {
         load(f);
         if(isEnabled()) {

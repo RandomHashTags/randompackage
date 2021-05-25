@@ -18,12 +18,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class LastManStanding extends RPFeature implements CommandExecutor {
-    private static LastManStanding instance;
-    public static LastManStanding getLastManStanding() {
-        if(instance == null) instance = new LastManStanding();
-        return instance;
-    }
+public enum LastManStanding implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private PolyBoundary boundary;
@@ -31,9 +27,11 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
     private HashMap<Long, List<String>> rewards;
     private int task;
 
+    @Override
     public String getIdentifier() {
         return "LAST_MAN_STANDING";
     }
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final int l = args.length;
         if(l == 0) {
@@ -51,11 +49,12 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         }
         return true;
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "last man standing.yml");
-        if(otherdata.get("last man standing.boundary") != null) {
-            final String[] values = otherdata.getString("last man standing.boundary").split("\\|");
+        if(OTHER_YML.get("last man standing.boundary") != null) {
+            final String[] values = OTHER_YML.getString("last man standing.boundary").split("\\|");
             boundary = new PolyBoundary(toLocation(values[0]), Integer.parseInt(values[1]));
         }
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "last man standing.yml"));
@@ -69,13 +68,14 @@ public class LastManStanding extends RPFeature implements CommandExecutor {
         task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, this::check, interval, interval);
         sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         SCHEDULER.cancelTask(task);
     }
 
     public void setBoundary(@NotNull PolyBoundary boundary) {
         this.boundary = boundary;
-        otherdata.set("last man standing.boundary", toString(boundary.getCenter()) + "|" + boundary.getRadius());
+        OTHER_YML.set("last man standing.boundary", toString(boundary.getCenter()) + "|" + boundary.getRadius());
         saveOtherData();
     }
 

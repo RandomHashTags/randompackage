@@ -10,12 +10,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathMagicDust extends RPAddon implements MagicDust {
-	private String path;
+public final class PathMagicDust extends RPAddon implements MagicDust {
+	private final String path;
 	private MagicDust upgradesto;
 	private ItemStack is;
-	private int chance, min, max;
-	private BigDecimal upgradecost;
+	private final int chance;
+    private final int min;
+    private final int max;
+	private final BigDecimal upgradecost;
 	private List<EnchantRarity> appliesto;
 	public PathMagicDust(String path) {
 		this.path = path;
@@ -33,7 +35,7 @@ public class PathMagicDust extends RPAddon implements MagicDust {
 	public int getMinPercent() { return min; }
 	public int getMaxPercent() { return max; }
 	public ItemStack getItem() {
-		if(is == null) is = API.createItemStack(getAddonConfig("fireballs.yml"), "dusts." + path);
+		if(is == null) is = createItemStack(getAddonConfig("fireballs.yml"), "dusts." + path);
 		return getClone(is);
 	}
 

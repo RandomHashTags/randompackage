@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.obj;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 
-public class Home {
+public final class Home {
 	private Location location;
 	private String name;
 	private UMaterial icon;

@@ -7,10 +7,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomizedLootItem implements RandomizedLoot, UVersionable {
-    private String key, rewardSize;
-    private ItemStack item;
-    private List<String> rewards;
+public final class RandomizedLootItem implements RandomizedLoot, UVersionable {
+    private final String key, rewardSize;
+    private final ItemStack item;
+    private final List<String> rewards;
     public RandomizedLootItem(String identifier, ItemStack item, String rewardSize, List<String> rewards) {
         this.key = identifier;
         this.item = item;

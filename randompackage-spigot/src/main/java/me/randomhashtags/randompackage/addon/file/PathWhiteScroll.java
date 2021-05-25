@@ -6,8 +6,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class PathWhiteScroll extends RPAddon implements WhiteScroll {
-    private String path, apply;
+public final class PathWhiteScroll extends RPAddon implements WhiteScroll {
+    private final String path;
+    private String apply;
     private ItemStack item;
     public PathWhiteScroll(String path) {
         this.path = path;
@@ -37,7 +38,7 @@ public class PathWhiteScroll extends RPAddon implements WhiteScroll {
         return getAddonConfig("scrolls.yml").getBoolean("white scrolls." + path + ".removes required after application");
     }
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(getAddonConfig("scrolls.yml"), "white scrolls." + path);
+        if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "white scrolls." + path);
         return getClone(item);
     }
     public String getApplied() {

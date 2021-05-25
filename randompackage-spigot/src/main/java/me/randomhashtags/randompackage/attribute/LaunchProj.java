@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 
-public class LaunchProj extends AbstractEventAttribute {
+public final class LaunchProj extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final Event event = pending.getEvent();

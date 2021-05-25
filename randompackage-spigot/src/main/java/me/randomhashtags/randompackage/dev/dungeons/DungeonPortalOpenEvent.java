@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 
 public class DungeonPortalOpenEvent extends RPEventCancellable {
-    private Dungeon type;
+    private final Dungeon type;
     private int ticksOpen;
     public DungeonPortalOpenEvent(Player player, Dungeon type, int ticksOpen) {
         super(player);

@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.ShowcaseData;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -21,18 +22,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class Showcase extends RPFeature implements CommandExecutor {
-	private static Showcase instance;
-	public static Showcase getShowcase() {
-		if(instance == null) instance = new Showcase();
-		return instance;
-	}
+public enum Showcase implements RPFeature, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private ItemStack addItemConfirm, addItemCancel, removeItemConfirm, removeItemCancel, expansion;
@@ -77,8 +73,8 @@ public class Showcase extends RPFeature implements CommandExecutor {
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "showcase.yml"));
 		expansion = createItemStack(config, "items.expansion");
-		GIVEDP_ITEM.items.put("showcaseexpansion", expansion);
-		GIVEDP_ITEM.items.put("showcaseexpander", expansion);
+		GivedpItem.INSTANCE.items.put("showcaseexpansion", expansion);
+		GivedpItem.INSTANCE.items.put("showcaseexpander", expansion);
 		addedRows = config.getInt("items.expansion.added rows");
 
 		itemslots = new ArrayList<>();
@@ -161,19 +157,22 @@ public class Showcase extends RPFeature implements CommandExecutor {
 				removeItem(op.getPlayer(), item, item.getAmount());
 			}
 			final String format = toReadableDate(new Date(), "MMMM dd, yyyy");
-			itemMeta = item.getItemMeta(); lore.clear();
-			if(itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+			final ItemMeta itemMeta = item.getItemMeta();
+			final List<String> lore = new ArrayList<>();
+			if(itemMeta.hasLore()) {
+				lore.addAll(itemMeta.getLore());
+			}
 			lore.add(colorize(TCOLOR + format));
-			itemMeta.setLore(lore); lore.clear();
+			itemMeta.setLore(lore);
 			item.setItemMeta(itemMeta);
 
-			final RPPlayer pdata = RPPlayer.get(player);
-			pdata.addToShowcase(page, item);
+			final FileRPPlayer pdata = FileRPPlayer.get(player);
+			pdata.getShowcaseData().addToShowcase(page, item);
 		}
 	}
 	private void delete(UUID player, int page, ItemStack is) {
-		final RPPlayer pdata = RPPlayer.get(player);
-		pdata.removeFromShowcase(page, is);
+		final FileRPPlayer pdata = FileRPPlayer.get(player);
+		pdata.getShowcaseData().removeFromShowcase(page, is);
 	}
 	public void open(@NotNull Player opener, @Nullable OfflinePlayer target, int page) {
 		if(target == null || target == opener) target = opener;
@@ -196,11 +195,13 @@ public class Showcase extends RPFeature implements CommandExecutor {
 			final Inventory inv = Bukkit.createInventory(opener, size, (self ? selftitle : othertitle).replace("{PLAYER}", (self ? opener : target).getName()).replace("{PAGE}", Integer.toString(page)).replace("{MAX}", Integer.toString(maxpage)));
 			opener.openInventory(inv);
 			final Inventory top = opener.getOpenInventory().getTopInventory();
-			final HashMap<Integer, ItemStack> showcase = pdata.getShowcaseItems(page);
-			for(int i : showcase.keySet()) {
-				if(i < size) {
-					top.setItem(i, showcase.get(i));
+			final ItemStack[] showcase = pdata.getShowcaseData().getShowcaseItems(page);
+			int slot = 0;
+			for(ItemStack is : showcase) {
+				if(slot < size) {
+					top.setItem(slot, is);
 				}
+				slot += 1;
 			}
 			opener.updateInventory();
 		}

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 
-public class SetCancelled extends AbstractEventAttribute {
+public final class SetCancelled extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, String value) {
         final Event event = pending.getEvent();

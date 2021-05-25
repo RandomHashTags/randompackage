@@ -21,24 +21,20 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
-    private static ItemFilter instance;
-    public static ItemFilter getItemFilter() {
-        if(instance == null) instance = new ItemFilter();
-        return instance;
-    }
+public enum ItemFilter implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;
@@ -47,8 +43,11 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     private HashMap<Integer, String> categorySlots;
     private HashMap<String, FileFilterCategory> categories, categoryTitles;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if(!(sender instanceof Player)) return true;
+        if(!(sender instanceof Player)) {
+            return true;
+        }
         final Player player = (Player) sender;
         final int l = args.length;
         if(l == 0) {
@@ -67,9 +66,12 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         }
         return true;
     }
+
+    @Override
     public String getIdentifier() {
         return "ITEM_FILTER";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");
@@ -91,7 +93,8 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             if(!s.equals("title") && !s.equals("size")) {
                 final String p = "categories." + s + ".", opens = config.getString(p + "opens");
                 final int slot = config.getInt(p + "slot");
-                item = createItemStack(config, "categories." + s); itemMeta = item.getItemMeta();
+                final ItemStack item = createItemStack(config, "categories." + s);
+                final ItemMeta itemMeta = item.getItemMeta();
                 itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
                 itemMeta.setLore(addedLore);
                 item.setItemMeta(itemMeta);
@@ -100,9 +103,9 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
             }
         }
 
-        if(!otherdata.getBoolean("saved default filter categories")) {
+        if(!OTHER_YML.getBoolean("saved default filter categories")) {
             generateDefaultFilterCategories();
-            otherdata.set("saved default filter categories", true);
+            OTHER_YML.set("saved default filter categories", true);
             saveOtherData();
         }
         for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "filter categories")) {
@@ -114,6 +117,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         }
         sendConsoleDidLoadFeature(getAll(Feature.FILTER_CATEGORY).size() + " Item Filter categories", started);
     }
+    @Override
     public void unload() {
         unregister(Feature.FILTER_CATEGORY);
     }
@@ -132,7 +136,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         }
     }
     private ItemStack getStatus(List<UMaterial> filtered, ItemStack is) {
-        itemMeta = is.getItemMeta(); lore.clear();
+        final ItemMeta itemMeta = is.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
         final UMaterial u = UMaterial.match(is);
         final boolean isFiltered = filtered.contains(u);
@@ -164,7 +168,7 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(target.getInventory().getContents());
         for(int i = 0; i < size; i++) {
-            item = top.getItem(i);
+            final ItemStack item = top.getItem(i);
             if(item != null) {
                 top.setItem(i, getStatus(filtered, item.clone()));
             }
@@ -176,9 +180,9 @@ public class ItemFilter extends RPFeature implements CommandExecutor, Listener {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        final String t = event.getView().getTitle();
-        final FileFilterCategory category = categoryTitles.getOrDefault(t, null);
-        if(t.equals(gui.getTitle()) || category != null) {
+        final String title = event.getView().getTitle();
+        final FileFilterCategory category = categoryTitles.getOrDefault(title, null);
+        if(title.equals(gui.getTitle()) || category != null) {
             event.setCancelled(true);
             player.updateInventory();
             final ItemStack current = event.getCurrentItem();

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.event.AbstractCancellable;
 import org.bukkit.entity.Player;
 
-public class BoosterPreActivateEvent extends AbstractCancellable {
+public final class BoosterPreActivateEvent extends AbstractCancellable {
     public final Player player;
     public final Booster booster;
     public double multiplier;

@@ -4,7 +4,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.math.BigDecimal;
 
-public class CoinFlipEndEvent extends AbstractEvent {
+public final class CoinFlipEndEvent extends AbstractEvent {
     public final OfflinePlayer winner, loser;
     public final BigDecimal wager, tax;
     public CoinFlipEndEvent(OfflinePlayer winner, OfflinePlayer loser, BigDecimal wager, BigDecimal tax) {

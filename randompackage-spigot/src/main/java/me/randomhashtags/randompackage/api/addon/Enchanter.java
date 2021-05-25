@@ -17,34 +17,36 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Enchanter extends RPFeature implements CommandExecutor {
-    private static Enchanter instance;
-    public static Enchanter getEnchanter() {
-        if(instance == null) instance = new Enchanter();
-        return instance;
+public enum Enchanter implements RPFeature, CommandExecutor {
+    INSTANCE;
+
+    public YamlConfiguration config;
+    private UInventory enchanter;
+    private String currency;
+    private HashMap<Integer, Long> costs;
+    private HashMap<Integer, ItemStack> purchased;
+
+    @Override
+    public String getIdentifier() {
+        return "ENCHANTER";
     }
-    
+
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
         }
         return true;
     }
-    
-    public YamlConfiguration config;
-    private UInventory enchanter;
-    private String currency;
-    private HashMap<Integer, Long> costs;
-    private HashMap<Integer, ItemStack> purchased;
-    
-    public String getIdentifier() {
-        return "ENCHANTER";
-    }
+
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "enchanter.yml");
@@ -61,14 +63,15 @@ public class Enchanter extends RPFeature implements CommandExecutor {
                 final long cost = config.getLong("gui." + i + ".cost");
                 costs.put(i, cost);
                 purchased.put(i, createItemStack(null, config.getString("gui." + i + ".purchase")));
-                item = createItemStack(config, "gui." + i);
-                itemMeta = item.getItemMeta(); lore.clear();
+                final ItemStack item = createItemStack(config, "gui." + i);
+                final ItemMeta itemMeta = item.getItemMeta();
                 if(itemMeta.hasLore()) {
+                    final List<String> lore = new ArrayList<>();
                     for(String string : itemMeta.getLore()) {
                         if(string.contains("{COST}")) string = string.replace("{COST}", formatLong(cost));
                         lore.add(string);
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                 }
                 ei.setItem(i, item);
@@ -76,6 +79,7 @@ public class Enchanter extends RPFeature implements CommandExecutor {
         }
         sendConsoleDidLoadFeature("Enchanter", started);
     }
+    @Override
     public void unload() {
     }
     
@@ -93,26 +97,26 @@ public class Enchanter extends RPFeature implements CommandExecutor {
         final Player player = (Player) event.getWhoClicked();
         final String title = event.getView().getTitle();
         if(title.equals(enchanter.getTitle())) {
-            final int r = event.getRawSlot();
+            final int rawSlot = event.getRawSlot();
             event.setCancelled(true);
             player.updateInventory();
-            if(costs.containsKey(r)) {
-                long cost = costs.get(r);
-                item = purchased.get(r).clone();
+            if(costs.containsKey(rawSlot)) {
+                long cost = costs.get(rawSlot);
+                final ItemStack item = purchased.get(rawSlot).clone();
                 List<String> message = null;
                 final int totalxp = getTotalExperience(player);
-                final double bal = eco != null ? eco.getBalance(player) : 0.00;
+                final double bal = ECONOMY != null ? ECONOMY.getBalance(player) : 0.00;
                 final boolean give, isCreative = player.getGameMode().equals(GameMode.CREATIVE), exp = currency.equals("EXP");
                 give = isCreative || exp && totalxp >= cost || bal >= cost;
 
                 if(give) {
-                    final EnchanterPurchaseEvent e = new EnchanterPurchaseEvent(player, item, currency, cost);
-                    PLUGIN_MANAGER.callEvent(e);
-                    if(e.isCancelled()) {
+                    final EnchanterPurchaseEvent purchaseEvent = new EnchanterPurchaseEvent(player, item, currency, cost);
+                    PLUGIN_MANAGER.callEvent(purchaseEvent);
+                    if(purchaseEvent.isCancelled()) {
                         return;
                     }
                     boolean bought = true;
-                    cost = e.cost;
+                    cost = purchaseEvent.cost;
                     if(!isCreative) {
                         if(exp) {
                             if(totalxp >= cost) {
@@ -123,7 +127,7 @@ public class Enchanter extends RPFeature implements CommandExecutor {
                             message = getStringList(config, "messages." + (bought ? "xp purchase" : "need more xp"));
                         } else {
                             if(bal >= cost) {
-                                eco.withdrawPlayer(player, cost);
+                                ECONOMY.withdrawPlayer(player, cost);
                             } else {
                                 bought = false;
                             }

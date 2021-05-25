@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -30,20 +31,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public class Tinkerer extends RPFeature implements CommandExecutor {
-    private static Tinkerer instance;
-    public static Tinkerer getTinkerer() {
-        if(instance == null) instance = new Tinkerer();
-        return instance;
-    }
+public enum Tinkerer implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory tinkerer;
     private ItemStack accept, acceptDupe, divider;
     private List<Player> accepting;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
@@ -51,9 +47,11 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public String getIdentifier() {
         return "TINKERER";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "tinkerer.yml");
@@ -87,6 +85,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
         }
         sendConsoleDidLoadFeature("Tinkerer", started);
     }
+    @Override
     public void unload() {
     }
 
@@ -119,6 +118,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
             if(rawslot < 0 || !click.contains("LEFT") && !click.contains("RIGHT") || material == null || material.equals("AIR")) return;
 
             final CustomEnchant customEnchant = current.hasItemMeta() && current.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(current.getItemMeta().getDisplayName()) : null;
+            ItemStack item = null;
             if(rawslot >= 4 && rawslot <= 8
                     || rawslot >= 13 && rawslot <= 17
                     || rawslot >= 22 && rawslot <= 26
@@ -162,7 +162,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
                     }
                 }
                 if(!xp.equals(zero)) {
-                    item = GIVEDP_ITEM.getXPBottle(xp, "Tinkerer").clone();
+                    item = GivedpItem.INSTANCE.getXPBottle(xp, "Tinkerer").clone();
                 }
             } else {
                 sendStringListMessage(player, getStringList(config, "messages.doesnt want item"), null);
@@ -189,7 +189,7 @@ public class Tinkerer extends RPFeature implements CommandExecutor {
             if(title.equals(tinkerer.getTitle())) {
                 sendStringListMessage(player, getStringList(config, "messages." + (isTinkerering ? "accept" : "cancel") + " trade"), null);
                 for(int i = 0; i < inv.getSize(); i++) {
-                    item = inv.getItem(i);
+                    final ItemStack item = inv.getItem(i);
                     if(item != null && (isTinkerering && isOnTradingSide(i) || !isTinkerering && isOnReceivingSide(i))) {
                         giveItem(player, item);
                     }

@@ -8,23 +8,29 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public class FileKitEvolution extends RPKit implements CustomKitEvolution {
+public final class FileKitEvolution extends RPKit implements CustomKitEvolution {
     private ItemStack item, upgradeGem;
 
     public FileKitEvolution(File f) {
         load(f);
         register(Feature.CUSTOM_KIT, this);
     }
-    public String getIdentifier() { return getYamlName(); }
-    public Kits getKitClass() { return KitsEvolution.getKitsEvolution(); }
+    public String getIdentifier() {
+        return getYamlName();
+    }
+    public Kits getKitClass() {
+        return KitsEvolution.getKitsEvolution();
+    }
 
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "gui settings");
+        if(item == null) item = createItemStack(yml, "gui settings");
         return getClone(item);
     }
-    public int getUpgradeChance() { return yml.getInt("settings.upgrade chance"); }
+    public int getUpgradeChance() {
+        return yml.getInt("settings.upgrade chance");
+    }
     public ItemStack getUpgradeGem() {
-        if(upgradeGem == null) upgradeGem = API.createItemStack(yml, "upgrade gem");
+        if(upgradeGem == null) upgradeGem = createItemStack(yml, "upgrade gem");
         return getClone(upgradeGem);
     }
 }

@@ -8,16 +8,16 @@ import org.bukkit.entity.LivingEntity;
 import java.util.HashMap;
 import java.util.List;
 
-public class CustomEnchantEntity implements UVersionable {
-	public static HashMap<String, CustomEnchantEntity> paths;
-	private EntityType type;
-	private String path, customname;
-	private List<String> attributes;
-	private boolean canTargetSummoner, dropsItemsUponDeath;
+public final class CustomEnchantEntity implements UVersionable {
+	public static HashMap<String, CustomEnchantEntity> PATHS;
+	private final EntityType type;
+	private final String path, customname;
+	private final List<String> attributes;
+	private final boolean canTargetSummoner, dropsItemsUponDeath;
 
 	public CustomEnchantEntity(EntityType type, String path, String customname, List<String> attributes, boolean canTargetSummoner, boolean dropsItemsUponDeath) {
-		if(paths == null) {
-			paths = new HashMap<>();
+		if(PATHS == null) {
+			PATHS = new HashMap<>();
 		}
 		this.type = type;
 		this.path = path;
@@ -25,7 +25,7 @@ public class CustomEnchantEntity implements UVersionable {
 		this.attributes = attributes;
 		this.canTargetSummoner = canTargetSummoner;
 		this.dropsItemsUponDeath = dropsItemsUponDeath;
-		paths.put(path, this);
+		PATHS.put(path, this);
 	}
 	public EntityType getEntityType() {
 		return type;
@@ -51,6 +51,6 @@ public class CustomEnchantEntity implements UVersionable {
 	}
 
 	public static void deleteAll() {
-		paths = null;
+		PATHS = null;
 	}
 }

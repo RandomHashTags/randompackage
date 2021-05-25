@@ -22,18 +22,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class MobStacker extends RPFeature {
-    private static MobStacker instance;
-    public static MobStacker getMobStacker() {
-        if(instance == null) instance = new MobStacker();
-        return instance;
-    }
+public enum MobStacker implements RPFeature {
+    INSTANCE;
 
     public YamlConfiguration config;
     public List<EntityType> stackable;
     public HashMap<EntityType, String> customNames;
     private HashMap<UUID, LivingEntity> lastDamager;
-    private boolean stacksViaNatural = false, stacksViaSpawner = false, stacksViaEgg = false;
+    private final boolean stacksViaNatural = false;
+    private final boolean stacksViaSpawner = false;
+    private final boolean stacksViaEgg = false;
     private List<Integer> tasks;
     private HashMap<String, Integer> maxStackSize;
     private HashMap<String, Double> stackRadius;
@@ -92,14 +90,14 @@ public class MobStacker extends RPFeature {
     }
 
     public void backup() {
-        final List<StackedEntity> se = StackedEntity.stackedEntities;
-        otherdata.set("stacked mobs", null);
+        final List<StackedEntity> se = StackedEntity.STACKED_ENTITIES;
+        OTHER_YML.set("stacked mobs", null);
         for(StackedEntity e : se) {
             final long c = e.creationTime;
             if(c != 0) {
-                final String u = "stacked mobs." + e.uuid.toString() + ".";
-                otherdata.set(u + "creation", c);
-                otherdata.set(u + "size", e.size);
+                final String u = "stacked mobs." + e.uuid + ".";
+                OTHER_YML.set(u + "creation", c);
+                OTHER_YML.set(u + "size", e.size);
             }
         }
         saveOtherData();
@@ -108,10 +106,10 @@ public class MobStacker extends RPFeature {
     public void loadBackup() {
         final long started = System.currentTimeMillis();
         int loaded = 0;
-        for(String s : getConfigurationSectionKeys(otherdata, "stacked mobs", false)) {
+        for(String s : getConfigurationSectionKeys(OTHER_YML, "stacked mobs", false)) {
             final Entity e = getEntity(UUID.fromString(s));
             if(e != null && !e.isDead() && e instanceof LivingEntity) {
-                new StackedEntity(otherdata.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), otherdata.getInt("stacked mobs." + s + ".size"));
+                new StackedEntity(OTHER_YML.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), OTHER_YML.getInt("stacked mobs." + s + ".size"));
                 loaded += 1;
             }
         }
@@ -207,7 +205,7 @@ public class MobStacker extends RPFeature {
                 s.kill(null, 1);
             }
             if(s.size == 1) {
-                StackedEntity.stackedEntities.remove(s);
+                StackedEntity.STACKED_ENTITIES.remove(s);
             }
         }
     }
@@ -223,7 +221,7 @@ public class MobStacker extends RPFeature {
                 s.kill(damager, 1);
             }
             if(s != null && s.size == 1) {
-                StackedEntity.stackedEntities.remove(s);
+                StackedEntity.STACKED_ENTITIES.remove(s);
             }
         }
     }

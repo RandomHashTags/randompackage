@@ -9,15 +9,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class KitItem extends RPFeature implements CustomKitItem {
-    private CustomKit kit;
-    private String path, item, amount, name;
-    private int chance, requiredLevel;
-    private List<String> lore;
+public final class KitItem implements RPFeature, CustomKitItem {
+    private final CustomKit kit;
+    private final String path, item, amount, name;
+    private final int chance, requiredLevel;
+    private final List<String> lore;
 
-    public String getIdentifier() { return path; }
-    public void load() {}
-    public void unload() {}
+    @Override
+    public String getIdentifier() {
+        return path;
+    }
+    @Override
+    public void load() {
+    }
+    @Override
+    public void unload() {
+    }
 
     public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore) {
         this(kit, path, item, amount, name, lore, 100, 0);
@@ -36,13 +43,27 @@ public class KitItem extends RPFeature implements CustomKitItem {
         this.requiredLevel = requiredLevel;
     }
 
-    public CustomKit getKit() { return kit; }
-    public String getItem() { return item; }
-    public String getAmount() { return amount; }
-    public String getName() { return name; }
-    public List<String> getLore() { return lore; }
-    public int getChance() { return chance; }
-    public int getRequiredLevel() { return requiredLevel; }
+    public CustomKit getKit() {
+        return kit;
+    }
+    public String getItem() {
+        return item;
+    }
+    public String getAmount() {
+        return amount;
+    }
+    public String getName() {
+        return name;
+    }
+    public List<String> getLore() {
+        return lore;
+    }
+    public int getChance() {
+        return chance;
+    }
+    public int getRequiredLevel() {
+        return requiredLevel;
+    }
 
     public ItemStack getItemStack(String player, int level, float enchantMultiplier) {
         ItemStack i = null;

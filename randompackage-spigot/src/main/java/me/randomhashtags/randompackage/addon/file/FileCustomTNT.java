@@ -14,57 +14,64 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FileCustomTNT extends RPAddon implements CustomExplosion {
-    public static HashMap<Location, FileCustomTNT> placed;
-    public static HashMap<UUID, FileCustomTNT> primed;
+public final class FileCustomTNT extends RPAddon implements CustomExplosion {
+    public static HashMap<Location, FileCustomTNT> PLACED;
+    public static HashMap<UUID, FileCustomTNT> PRIMED;
 
     private ItemStack item;
     public FileCustomTNT(File f) {
-        if(placed == null) {
-            placed = new HashMap<>();
-            primed = new HashMap<>();
+        if(PLACED == null) {
+            PLACED = new HashMap<>();
+            PRIMED = new HashMap<>();
         }
         load(f);
         register(Feature.CUSTOM_EXPLOSION, this);
     }
+
+    @Override
     public String getIdentifier() {
         return "TNT_" + getYamlName();
     }
 
+    @Override
     public ItemStack getItem() {
-        if(item == null) item = API.createItemStack(yml, "item");
+        if(item == null) {
+            item = createItemStack(yml, "item");
+        }
         return getClone(item);
     }
+    @Override
     public List<String> getAttributes() {
         return getStringList(yml, "attributes");
     }
+    @Override
     public void didExplode(UUID uuid, List<Block> blockList) {
-        primed.remove(uuid);
-        final HashMap<Location, FileCustomTNT> p = FileCustomTNT.placed;
-        if(p != null) {
+        PRIMED.remove(uuid);
+        final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
+        if(placed != null) {
             for(Block b : blockList) {
-                final Location lo = b.getLocation();
-                if(p.containsKey(lo)) {
-                    lo.getWorld().getBlockAt(lo).setType(Material.AIR);
-                    p.get(lo).ignite(lo).setFuseTicks(10+RANDOM.nextInt(21));
+                final Location location = b.getLocation();
+                if(placed.containsKey(location)) {
+                    location.getWorld().getBlockAt(location).setType(Material.AIR);
+                    placed.get(location).ignite(location).setFuseTicks(10+RANDOM.nextInt(21));
                 }
             }
         }
     }
 
     public void place(@NotNull Location l) {
-        final Block b = l.getWorld().getBlockAt(l);
-        b.setType(Material.TNT);
-        b.getState().update();
-        placed.put(l, this);
+        final Block block = l.getWorld().getBlockAt(l);
+        block.setType(Material.TNT);
+        block.getState().update();
+        PLACED.put(l, this);
     }
     public TNTPrimed spawn(@NotNull Location l) {
-        final TNTPrimed t = l.getWorld().spawn(l, TNTPrimed.class);
-        primed.put(t.getUniqueId(), this);
-        return t;
+        final TNTPrimed tnt = l.getWorld().spawn(l, TNTPrimed.class);
+        PRIMED.put(tnt.getUniqueId(), this);
+        return tnt;
     }
     public TNTPrimed ignite(@NotNull Location l) {
-        placed.remove(l);
+        PLACED.remove(l);
         return spawn(l);
     }
 }

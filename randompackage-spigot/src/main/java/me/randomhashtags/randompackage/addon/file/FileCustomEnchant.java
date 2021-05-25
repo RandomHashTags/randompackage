@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileCustomEnchant extends RPAddon implements CustomEnchant {
+public final class FileCustomEnchant extends RPAddon implements CustomEnchant {
     private List<String> worlds, appliesto, attributes;
     private BigDecimal[] alchemist, tinkerer;
 

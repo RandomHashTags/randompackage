@@ -1,4 +1,4 @@
 package me.randomhashtags.randompackage.attribute;
 
-public class MultiplierDeplete extends ComboDeplete {
+public final class MultiplierDeplete extends ComboDeplete {
 }

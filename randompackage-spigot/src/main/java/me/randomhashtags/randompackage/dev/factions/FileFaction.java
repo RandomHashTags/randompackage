@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class FileFaction extends RPAddon implements Faction {
-    public static HashMap<UUID, FileFaction> factions = new HashMap<>();
+    public static HashMap<UUID, FileFaction> FACTIONS = new HashMap<>();
+
     private boolean isLoaded;
     private UUID uuid;
     private FactionBankObj bank;
@@ -22,6 +23,7 @@ public class FileFaction extends RPAddon implements Faction {
     private HashMap<String, Boolean> fsettings;
     private HashMap<FPlayer, HashMap<String, Boolean>> psettings;
     private List<UUID> banned;
+
     public FileFaction(@NotNull File f) {
         load(f);
     }
@@ -45,14 +47,16 @@ public class FileFaction extends RPAddon implements Faction {
         yml.set("info.description", "&eDefault faction description :(");
         save();
 
-        factions.put(uuid, this);
+        FACTIONS.put(uuid, this);
     }
 
+    @Override
     public void load() {
         if(!isLoaded) {
             isLoaded = true;
         }
     }
+    @Override
     public void unload() {
         if(isLoaded) {
             isLoaded = false;
@@ -60,6 +64,7 @@ public class FileFaction extends RPAddon implements Faction {
         }
     }
 
+    @Override
     public void backup() {
         final List<String> claimz = new ArrayList<>();
         for(Chunk c : getClaims()) {
@@ -87,6 +92,11 @@ public class FileFaction extends RPAddon implements Faction {
         }
 
         save();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return uuid.toString();
     }
 
     public UUID getUUID() {

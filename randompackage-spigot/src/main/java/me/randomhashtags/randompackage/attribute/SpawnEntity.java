@@ -7,7 +7,7 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 
-public class SpawnEntity extends AbstractEventAttribute {
+public final class SpawnEntity extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<String, Entity> entities = pending.getEntities(), keyEntities = pending.getKeyEntities();
@@ -21,7 +21,7 @@ public class SpawnEntity extends AbstractEventAttribute {
         final int amount = Integer.parseInt(values[1]);
         final Entity entity = entities.get(values[2]);
         final LivingEntity target = entity instanceof LivingEntity ? (LivingEntity) entity : null;
-        final CustomEnchantEntity cee = CustomEnchantEntity.paths.getOrDefault(values[0], null);
+        final CustomEnchantEntity cee = CustomEnchantEntity.PATHS.getOrDefault(values[0], null);
         if(cee != null) {
             for(String s : keyEntities.keySet()) {
                 final Entity summoner = keyEntities.get(s);

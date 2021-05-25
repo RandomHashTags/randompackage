@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.api.dev;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.BattleRoyaleTeam;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.util.RPFeature;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -27,12 +27,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.io.File;
 import java.util.*;
 
-public class BattleRoyale extends RPFeature implements CommandExecutor {
-    private static BattleRoyale instance;
-    public static BattleRoyale getBattleRoyale() {
-        if(instance == null) instance = new BattleRoyale();
-        return instance;
-    }
+public enum BattleRoyale implements RPFeature, CommandExecutor {
+    INSTANCE;
 
     public LinkedHashMap<Integer, BattleRoyaleTeam> teams;
     public YamlConfiguration config;
@@ -44,6 +40,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
     private String world;
     private int activeTask, startTask, maxTeamSize, maxPlayers, maxTeams;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
@@ -66,9 +63,11 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
         return true;
     }
 
+    @Override
     public final String getIdentifier() {
         return "BATTLE_ROYALE";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");
@@ -91,6 +90,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
 
         sendConsoleDidLoadFeature("Battle Royale", started);
     }
+    @Override
     public void unload() {
         end(null);
         if(activeTask != -1) {
@@ -193,7 +193,7 @@ public class BattleRoyale extends RPFeature implements CommandExecutor {
                         giveItem(player, lootbag);
                         sendStringListMessage(player, receivedLootbag, null);
                     } else {
-                        final RPPlayer pdata = RPPlayer.get(player.getUniqueId());
+                        final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
                         pdata.getUnclaimedPurchases().add(lootbag);
                         pdata.unload();
                     }

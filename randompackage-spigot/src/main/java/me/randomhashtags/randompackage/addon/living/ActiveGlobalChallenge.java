@@ -14,17 +14,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ActiveGlobalChallenge implements RPStorage {
-    public static HashMap<GlobalChallenge, ActiveGlobalChallenge> active;
+public final class ActiveGlobalChallenge implements RPStorage {
+    public static HashMap<GlobalChallenge, ActiveGlobalChallenge> ACTIVE;
     private static GlobalChallenges gc;
-    private GlobalChallenge type;
+    private final GlobalChallenge type;
     private HashMap<UUID, BigDecimal> participants;
-    private int task;
-    private long started;
+    private final int task;
+    private final long started;
 
     public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
-        if(active == null) {
-            active = new HashMap<>();
+        if(ACTIVE == null) {
+            ACTIVE = new HashMap<>();
             gc = GlobalChallenges.getChallenges();
         }
         this.started = started;
@@ -35,7 +35,7 @@ public class ActiveGlobalChallenge implements RPStorage {
             remainingTime = 0;
         }
         task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> end(true, 3), remainingTime);
-        active.put(type, this);
+        ACTIVE.put(type, this);
     }
 
     public long getStartedTime() {
@@ -85,7 +85,7 @@ public class ActiveGlobalChallenge implements RPStorage {
         gc.reloadInventory();
         final Map<UUID, BigDecimal> placements = gc.getPlacing(participants);
         if(task != -1) SCHEDULER.cancelTask(task);
-        active.remove(type);
+        ACTIVE.remove(type);
         if(giveRewards) {
             int i = 1;
             for(UUID p : placements.keySet()) {
@@ -100,9 +100,9 @@ public class ActiveGlobalChallenge implements RPStorage {
     }
 
     public static ActiveGlobalChallenge valueOf(ItemStack display) {
-        if(active !=  null && display != null && display.hasItemMeta() && display.getItemMeta().hasDisplayName()) {
+        if(ACTIVE !=  null && display != null && display.hasItemMeta() && display.getItemMeta().hasDisplayName()) {
             final String d = display.getItemMeta().getDisplayName();
-            for(ActiveGlobalChallenge g : active.values()) {
+            for(ActiveGlobalChallenge g : ACTIVE.values()) {
                 if(g.getType().getItem().getItemMeta().getDisplayName().equals(d)) {
                     return g;
                 }
@@ -112,6 +112,6 @@ public class ActiveGlobalChallenge implements RPStorage {
     }
 
     public static void deleteAll() {
-        active = null;
+        ACTIVE = null;
     }
 }

@@ -2,22 +2,24 @@ package me.randomhashtags.randompackage.attribute.condition;
 
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.attribute.AbstractEventCondition;
+import me.randomhashtags.randompackage.data.FileRPPlayer;
+import me.randomhashtags.randompackage.data.RarityGemData;
 import me.randomhashtags.randompackage.event.DepleteRarityGemEvent;
-import me.randomhashtags.randompackage.util.RPPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class DepleteRarityGem extends AbstractEventCondition {
+public final class DepleteRarityGem extends AbstractEventCondition {
     @Override
     public boolean check(Entity entity, String value) {
         if(entity instanceof Player) {
             final String[] values = value.split(":");
             final RarityGem gem = getRarityGem(values[0]);
             if(gem != null) {
-                final RPPlayer pdata = RPPlayer.get(entity.getUniqueId());
-                if(pdata.hasActiveRarityGem(gem)) {
+                final FileRPPlayer pdata = FileRPPlayer.get(entity.getUniqueId());
+                final RarityGemData rarityGemData = pdata.getRarityGemData();
+                if(rarityGemData.isActive(gem)) {
                     final Player player = (Player) entity;
                     final ItemStack rarityGem = getRarityGem(gem, player);
                     if(rarityGem != null) {
@@ -41,7 +43,7 @@ public class DepleteRarityGem extends AbstractEventCondition {
 
                         if(gemAmount-depleteAmount <= 0) {
                             depleteAmount = gemAmount;
-                            pdata.toggleRarityGem(gem, gem.getToggleOffRanOutMsg());
+                            rarityGemData.toggle(gem, gem.getToggleOffRanOutMsg());
                         }
                         itemMeta = rarityGem.getItemMeta();
                         itemMeta.setDisplayName(gem.getItem().getItemMeta().getDisplayName().replace("{SOULS}", Integer.toString(gemAmount - depleteAmount)));

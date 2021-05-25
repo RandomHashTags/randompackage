@@ -17,23 +17,23 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Outposts extends RPFeature implements CommandExecutor {
-    private static Outposts instance;
-    public static Outposts getOutposts() {
-        if(instance == null) instance = new Outposts();
-        return instance;
-    }
+public enum Outposts implements RPFeature, CommandExecutor {
+    INSTANCE;
+
     public YamlConfiguration config;
 
     private UInventory gui;
     private ItemStack background;
-    public static HashMap<String, String> statuses;
+    public static HashMap<String, String> STATUSES;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
@@ -54,14 +54,18 @@ public class Outposts extends RPFeature implements CommandExecutor {
         return true;
     }
 
-    public String getIdentifier() { return "OUTPOSTS"; }
+    @Override
+    public String getIdentifier() {
+        return "OUTPOSTS";
+    }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("outposts", "_settings.yml");
 
-        if(!otherdata.getBoolean("saved default outposts")) {
+        if(!OTHER_YML.getBoolean("saved default outposts")) {
             generateDefaultOutposts();
-            otherdata.set("saved default outposts", true);
+            OTHER_YML.set("saved default outposts", true);
             saveOtherData();
         }
 
@@ -69,9 +73,9 @@ public class Outposts extends RPFeature implements CommandExecutor {
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
-        statuses = new HashMap<>();
+        STATUSES = new HashMap<>();
         for(String s : config.getConfigurationSection("status").getKeys(false)) {
-            statuses.put(s.toUpperCase().replace(" ", "_"), colorize(config.getString("status." + s)));
+            STATUSES.put(s.toUpperCase().replace(" ", "_"), colorize(config.getString("status." + s)));
         }
         for(File f : new File(DATA_FOLDER + SEPARATOR + "outposts").listFiles()) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
@@ -88,6 +92,7 @@ public class Outposts extends RPFeature implements CommandExecutor {
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.OUTPOST).size() + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         unregister(Feature.OUTPOST);
     }
@@ -120,16 +125,21 @@ public class Outposts extends RPFeature implements CommandExecutor {
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setContents(gui.getInventory().getContents());
             for(int i = 0; i < size; i++) {
-                item = top.getItem(i);
+                final ItemStack item = top.getItem(i);
                 final Outpost o = valueOfOutpost(i);
                 if(o != null) {
                     final String cap = Double.toString(round(/*o.getControlPercent()*/0, 4)), attacking = o.getAttackingFaction(), controlling = o.getControllingFaction(), status = o.getStatus();
-                    itemMeta = item.getItemMeta(); lore.clear();
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    final List<String> lore = new ArrayList<>();
                     for(String s : itemMeta.getLore()) {
-                        if(s.contains("{CAP%}") && controlling == null || s.contains("{ATTACKING}") && attacking == null || s.contains("{CONTROLLING}") && controlling == null) s = null;
-                        if(s != null) lore.add(s.replace("{STATUS}", status).replace("{CAP%}", cap).replace("{ATTACKING}", attacking != null ? attacking : "N/A").replace("{CONTROLLING}", controlling != null ? controlling : "N/A"));
+                        if(s.contains("{CAP%}") && controlling == null || s.contains("{ATTACKING}") && attacking == null || s.contains("{CONTROLLING}") && controlling == null) {
+                            s = null;
+                        }
+                        if(s != null) {
+                            lore.add(s.replace("{STATUS}", status).replace("{CAP%}", cap).replace("{ATTACKING}", attacking != null ? attacking : "N/A").replace("{CONTROLLING}", controlling != null ? controlling : "N/A"));
+                        }
                     }
-                    itemMeta.setLore(lore); lore.clear();
+                    itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                 }
             }

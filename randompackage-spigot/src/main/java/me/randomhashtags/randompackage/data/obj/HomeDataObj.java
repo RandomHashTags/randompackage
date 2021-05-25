@@ -6,9 +6,10 @@ import me.randomhashtags.randompackage.data.HomeData;
 
 import java.util.List;
 
-public class HomeDataObj implements HomeData {
+public final class HomeDataObj implements HomeData {
     private int addedMaxHomes;
-    private List<Home> homes;
+    private final List<Home> homes;
+
     public HomeDataObj(int addedMaxHomes, List<Home> homes) {
         this.addedMaxHomes = addedMaxHomes;
         this.homes = homes;
@@ -22,15 +23,12 @@ public class HomeDataObj implements HomeData {
     public void setAddedMaxHomes(int addedMaxHomes) {
         this.addedMaxHomes = addedMaxHomes;
     }
+
     @Override
-    public Home getHome(String identifier) {
-        for(Home h : homes) {
-            if(h.getName().equals(identifier)) {
-                return h;
-            }
-        }
-        return null;
+    public void addHome(Home home) {
+        homes.add(home);
     }
+
     @Override
     public void deleteHome(@NotNull Home home) {
         homes.remove(home);

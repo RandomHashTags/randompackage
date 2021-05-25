@@ -16,21 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class IridiumSky extends RPFeature implements Regional {
-    private static IridiumSky instance;
-    public static IridiumSky getEpicSkyblock() {
-        if(instance == null) instance = new IridiumSky();
-        return instance;
-    }
+public enum IridiumSky implements RPFeature, Regional {
+    INSTANCE;
 
     private IslandManager im;
 
+    @Override
     public String getIdentifier() {
         return "REGIONAL_IRIDIUM_SKYBLOCK";
     }
+    @Override
     public void load() {
         im = IridiumSkyblock.getIslandManager();
     }
+    @Override
     public void unload() {
     }
 
@@ -45,17 +44,17 @@ public final class IridiumSky extends RPFeature implements Regional {
     }
 
     public List<UUID> getAssociates(UUID player) {
-        final List<UUID> a = new ArrayList<>();
-        final User u = getUser(player);
-        if(u != null) {
-            final Island i = u.getIsland();
-            if(i != null) {
-                for(String s : i.getMembers()) {
-                    a.add(Bukkit.getOfflinePlayer(s).getUniqueId());
+        final List<UUID> associates = new ArrayList<>();
+        final User user = getUser(player);
+        if(user != null) {
+            final Island island = user.getIsland();
+            if(island != null) {
+                for(String s : island.getMembers()) {
+                    associates.add(Bukkit.getOfflinePlayer(s).getUniqueId());
                 }
             }
         }
-        return a;
+        return associates;
     }
     public List<UUID> getNeutrals(UUID player) {
         return getAssociates(player);
@@ -71,9 +70,9 @@ public final class IridiumSky extends RPFeature implements Regional {
     }
 
     public List<Player> getOnlineAssociates(UUID player) {
-        final List<UUID> a = getAssociates(player);
+        final List<UUID> associates = getAssociates(player);
         final List<Player> online = new ArrayList<>();
-        for(UUID u : a) {
+        for(UUID u : associates) {
             final OfflinePlayer op = Bukkit.getOfflinePlayer(u);
             if(op.isOnline()) {
                 online.add(op.getPlayer());
@@ -99,5 +98,7 @@ public final class IridiumSky extends RPFeature implements Regional {
         final Island i = im.getIslandViaLocation(l);
         return i != null ? Integer.toString(i.getId()) : null;
     }
-    public String getChatMode(UUID player) { return "GLOBAL"; }
+    public String getChatMode(UUID player) {
+        return "GLOBAL";
+    }
 }

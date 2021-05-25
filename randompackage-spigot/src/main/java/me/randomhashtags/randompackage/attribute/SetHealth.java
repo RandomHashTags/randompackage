@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 
-public class SetHealth extends AbstractEventAttribute {
+public final class SetHealth extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();

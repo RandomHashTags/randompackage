@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
-public class FactionTopInfo {
+public final class FactionTopInfo {
     private UUID richestMember;
-    private BigInteger factionPoints, mobSpawners, kothWins, raidEventWins;
+    private BigInteger factionPoints;
+    private final BigInteger mobSpawners;
+    private BigInteger kothWins;
+    private BigInteger raidEventWins;
     private BigDecimal factionWealth, memberWealth, spawnerValue, blockValue, factionUpgrades;
     public FactionTopInfo(UUID richestMember, BigInteger factionPoints, BigDecimal factionWealth, BigDecimal spawnerValue, BigInteger mobSpawners, BigDecimal blockValue, BigDecimal factionUpgrades, BigInteger kothWins, BigInteger raidEventWins) {
         this.richestMember = richestMember;
@@ -19,30 +22,66 @@ public class FactionTopInfo {
         this.kothWins = kothWins;
         this.raidEventWins = raidEventWins;
     }
-    public UUID getRichestMember() { return richestMember; }
-    public void setRichestMember(UUID richestMember) { this.richestMember = richestMember; }
+    public UUID getRichestMember() {
+        return richestMember;
+    }
+    public void setRichestMember(UUID richestMember) {
+        this.richestMember = richestMember;
+    }
 
-    public BigInteger getFactionPoints() { return factionPoints; }
-    public void setFactionPoints(BigInteger factionPoints) { this.factionPoints = factionPoints; }
+    public BigInteger getFactionPoints() {
+        return factionPoints;
+    }
+    public void setFactionPoints(BigInteger factionPoints) {
+        this.factionPoints = factionPoints;
+    }
 
-    public BigDecimal getFactionWealth() { return factionWealth; }
-    public void setFactionWealth(BigDecimal factionWealth) { this.factionWealth = factionWealth; }
+    public BigDecimal getFactionWealth() {
+        return factionWealth;
+    }
+    public void setFactionWealth(BigDecimal factionWealth) {
+        this.factionWealth = factionWealth;
+    }
 
-    public BigDecimal getMemberWealth() { return memberWealth; }
-    public void setMemberWealth(BigDecimal memberWealth) { this.memberWealth = memberWealth; }
+    public BigDecimal getMemberWealth() {
+        return memberWealth;
+    }
+    public void setMemberWealth(BigDecimal memberWealth) {
+        this.memberWealth = memberWealth;
+    }
 
-    public BigDecimal getSpawnerValue() { return spawnerValue; }
-    public void setSpawnerValue(BigDecimal spawnerValue) { this.spawnerValue = spawnerValue; }
+    public BigDecimal getSpawnerValue() {
+        return spawnerValue;
+    }
+    public void setSpawnerValue(BigDecimal spawnerValue) {
+        this.spawnerValue = spawnerValue;
+    }
 
-    public BigDecimal getBlockValue() { return blockValue; }
-    public void setBlockValue(BigDecimal blockValue) { this.blockValue = blockValue; }
+    public BigDecimal getBlockValue() {
+        return blockValue;
+    }
+    public void setBlockValue(BigDecimal blockValue) {
+        this.blockValue = blockValue;
+    }
 
-    public BigDecimal getFactionUpgrades() { return factionUpgrades; }
-    public void setFactionUpgrades(BigDecimal factionUpgrades) { this.factionUpgrades = factionUpgrades; }
+    public BigDecimal getFactionUpgrades() {
+        return factionUpgrades;
+    }
+    public void setFactionUpgrades(BigDecimal factionUpgrades) {
+        this.factionUpgrades = factionUpgrades;
+    }
 
-    public BigInteger getKOTHWins() { return kothWins; }
-    public void setKOTHWins(BigInteger kothWins) { this.kothWins = kothWins; }
+    public BigInteger getKOTHWins() {
+        return kothWins;
+    }
+    public void setKOTHWins(BigInteger kothWins) {
+        this.kothWins = kothWins;
+    }
 
-    public BigInteger getRaidEventWins() { return raidEventWins; }
-    public void setRaidEventWins(BigInteger raidEventWins) { this.raidEventWins = raidEventWins; }
+    public BigInteger getRaidEventWins() {
+        return raidEventWins;
+    }
+    public void setRaidEventWins(BigInteger raidEventWins) {
+        this.raidEventWins = raidEventWins;
+    }
 }

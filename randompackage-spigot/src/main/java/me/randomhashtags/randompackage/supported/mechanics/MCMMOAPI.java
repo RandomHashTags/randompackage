@@ -5,6 +5,7 @@ import com.gmail.nossr50.events.experience.McMMOPlayerXpGainEvent;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.mcmmo.SetGainedXp;
 import me.randomhashtags.randompackage.util.Reflect;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,32 +21,31 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
-
-public final class MCMMOAPI extends Reflect {
-	private static MCMMOAPI instance;
-	public static MCMMOAPI getMCMMOAPI() {
-		if(instance == null) instance = new MCMMOAPI();
-		return instance;
-	}
+public enum MCMMOAPI implements Reflect {
+	INSTANCE;
 
 	private boolean isClassic = false;
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
-	public String getIdentifier() { return "MECHANIC_MCMMO"; }
+	@Override
+	public String getIdentifier() {
+		return "MECHANIC_MCMMO";
+	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		new SetGainedXp().load();
 		itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));
-		creditVoucher = GIVEDP_ITEM.items.get("mcmmocreditvoucher");
-		levelVoucher = GIVEDP_ITEM.items.get("mcmmolevelvoucher");
-		xpVoucher = GIVEDP_ITEM.items.get("mcmmoxpvoucher");
+		creditVoucher = GivedpItem.INSTANCE.items.get("mcmmocreditvoucher");
+		levelVoucher = GivedpItem.INSTANCE.items.get("mcmmolevelvoucher");
+		xpVoucher = GivedpItem.INSTANCE.items.get("mcmmoxpvoucher");
 
 		final String version = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion();
 		isClassic = version.startsWith("1.");
 		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " (" + version + ") &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
+	@Override
 	public void unload() {
 		itemsConfig = null;
 	}
@@ -56,16 +56,16 @@ public final class MCMMOAPI extends Reflect {
 	public String getSkillName(String input, String o) {
 		if(isClassic) {
 			for(com.gmail.nossr50.datatypes.skills.SkillType type : com.gmail.nossr50.datatypes.skills.SkillType.values()) {
-				final String n = type.name();
-				if(input.equals(o.replace("{SKILL}", getSkillName(n)))) {
-					return n;
+				final String skillName = type.name();
+				if(input.equals(o.replace("{SKILL}", getSkillName(skillName)))) {
+					return skillName;
 				}
 			}
 		} else {
 			for(com.gmail.nossr50.datatypes.skills.PrimarySkillType type : com.gmail.nossr50.datatypes.skills.PrimarySkillType.values()) {
-				final String n = type.name();
-				if(input.equals(o.replace("{SKILL}", getSkillName(n)))) {
-					return n;
+				final String skillName = type.name();
+				if(input.equals(o.replace("{SKILL}", getSkillName(skillName)))) {
+					return skillName;
 				}
 			}
 		}
@@ -75,8 +75,8 @@ public final class MCMMOAPI extends Reflect {
 		if(skill.equalsIgnoreCase("random")) {
 			skill = getRandomSkill();
 		}
-		final String a = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase().replace("_skills", ""));
-		return a != null ? colorize(a) : null;
+		final String skillName = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase().replace("_skills", ""));
+		return skillName != null ? colorize(skillName) : null;
 	}
 	public String getRandomSkill() {
 		if(isClassic) {
@@ -90,14 +90,14 @@ public final class MCMMOAPI extends Reflect {
 	public String getSkillName(McMMOPlayerXpGainEvent event) {
 		try {
 			final String skill;
-			final Field f = getPrivateField(event.getClass(), "skill", true);
-			f.setAccessible(true);
+			final Field field = getPrivateField(event.getClass(), "skill", true);
+			field.setAccessible(true);
 			if(isClassic) {
-				skill = ((com.gmail.nossr50.datatypes.skills.SkillType) f.get(event)).name().toLowerCase();
+				skill = ((com.gmail.nossr50.datatypes.skills.SkillType) field.get(event)).name().toLowerCase();
 			} else {
-				skill = ((com.gmail.nossr50.datatypes.skills.PrimarySkillType) f.get(event)).name().toLowerCase();
+				skill = ((com.gmail.nossr50.datatypes.skills.PrimarySkillType) field.get(event)).name().toLowerCase();
 			}
-			f.setAccessible(false);
+			field.setAccessible(false);
 			return skill;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,7 +163,9 @@ public final class MCMMOAPI extends Reflect {
 					addRawXP(player, type, xp);
 				} else if(level) {
 					addLevels(player, type, xp);
-				} else return;
+				} else {
+					return;
+				}
 				removeItem(player, it, 1);
 				playSound(itemsConfig, "mcmmo vouchers.sounds.redeem " + itemtype, player, player.getLocation(), false);
 			}

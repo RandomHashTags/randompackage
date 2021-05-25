@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Material;
@@ -9,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
 
 public interface ServerCrate extends Itemable, GivedpItemable {
 
@@ -38,9 +37,10 @@ public interface ServerCrate extends Itemable, GivedpItemable {
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
         final HashMap<String, List<String>> rewards = getRewards();
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
         for(String rarity : rewards.keySet()) {
             for(String item : rewards.get(rarity)) {
-                final ItemStack target = API.createItemStack(null, item);
+                final ItemStack target = api.createItemStack(null, item);
                 if(target != null && !target.getType().equals(Material.AIR)) {
                     items.add(target);
                 }

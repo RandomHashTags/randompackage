@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.addon.file.RPAddon;
 import java.util.List;
 
 public abstract class ShopCategory extends RPAddon implements Inventoryable {
-    public static Shop shop;
+    public static Shop SHOP;
     public abstract List<ShopItem> getShopItems();
     public abstract ShopItem getItem(int slot);
 }

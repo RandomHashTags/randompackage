@@ -12,6 +12,7 @@ import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.Packeter;
 import me.randomhashtags.randompackage.util.RPItemStack;
+import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -24,14 +25,13 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import static me.randomhashtags.randompackage.util.listener.GivedpItem.GIVEDP_ITEM;
 
 public class InventoryPets extends EACoreListener implements EventAttributeListener, RPItemStack, Packeter {
     private static InventoryPets instance;
@@ -58,9 +58,9 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         registerEventAttributeListener(this);
         new GivePetExp().load();
         save("inventory pets", "_settings.yml");
-        if(!otherdata.getBoolean("saved default inventory pets")) {
+        if(!OTHER_YML.getBoolean("saved default inventory pets")) {
             generateDefaultInventoryPets();
-            otherdata.set("saved default inventory pets", true);
+            OTHER_YML.set("saved default inventory pets", true);
             saveOtherData();
         }
         final String folder = DATA_FOLDER + SEPARATOR + "inventory pets";
@@ -69,8 +69,8 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         leash = createItemStack(config, "items.leash");
         leashedLore = colorize(config.getString("items.leash.applied lore"));
         rarecandy = createItemStack(config, "items.rare candy");
-        GIVEDP_ITEM.items.put("rarecandy", rarecandy);
-        GIVEDP_ITEM.items.put("petleash", leash);
+        GivedpItem.INSTANCE.items.put("rarecandy", rarecandy);
+        GivedpItem.INSTANCE.items.put("petleash", leash);
 
         leashedUponDeath = new HashMap<>();
         expCharacter = config.getString("settings.exp.character");
@@ -157,7 +157,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
     }
     public boolean tryLeashing(@NotNull ItemStack is) {
         if(!isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
-            itemMeta = is.getItemMeta();
+            final ItemMeta itemMeta = is.getItemMeta();
             final List<String> lore = new ArrayList<>(itemMeta.getLore());
             lore.add(leashedLore);
             itemMeta.setLore(lore);
@@ -253,14 +253,13 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         final UUID uuid = player.getUniqueId();
         if(leashedUponDeath.containsKey(uuid)) {
             for(ItemStack is : leashedUponDeath.get(uuid)) {
-                itemMeta = is.getItemMeta();
-                lore = itemMeta.getLore();
+                final ItemMeta itemMeta = is.getItemMeta();
+                final List<String> lore = itemMeta.getLore();
                 lore.remove(leashedLore);
                 itemMeta.setLore(lore);
                 is.setItemMeta(itemMeta);
                 giveItem(player, is);
             }
-            lore.clear();
             leashedUponDeath.remove(uuid);
         }
     }

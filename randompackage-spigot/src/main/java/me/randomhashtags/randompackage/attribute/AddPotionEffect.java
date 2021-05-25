@@ -7,16 +7,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import static me.randomhashtags.randompackage.RandomPackageAPI.API;
-
-public class AddPotionEffect extends AbstractEventAttribute {
+public final class AddPotionEffect extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending, HashMap<String, String> valueReplacements) {
         final HashMap<String, Entity> entities = pending.getEntities();
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
-        for(Entity e : recipientValues.keySet()) {
-            addPotionEffect(entities, e, recipientValues.get(e), valueReplacements);
+        for(Map.Entry<Entity, String> map : recipientValues.entrySet()) {
+            addPotionEffect(entities, map.getKey(), map.getValue(), valueReplacements);
         }
     }
     private void addPotionEffect(HashMap<String, Entity> entities, Entity entity, String value, HashMap<String, String> valueReplacements) {
@@ -34,7 +33,7 @@ public class AddPotionEffect extends AbstractEventAttribute {
                         if(valueReplacements != null) {
                             replacements.putAll(valueReplacements);
                         }
-                        replacements.put("{POTION_EFFECT}", type.getName() + " " + API.toRoman(amplifier+1));
+                        replacements.put("{POTION_EFFECT}", type.getName() + " " + toRoman(amplifier+1));
                         replacements.put("{DURATION_TICKS}", Integer.toString(duration));
                         replacements.put("{DURATION_SECONDS}", Integer.toString(duration/20));
                         replacements.put("{AMPLIFIER}", Integer.toString(amplifier));

@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class PathFireball extends RPAddon implements RarityFireball {
-	private String path;
+public final class PathFireball extends RPAddon implements RarityFireball {
+	private final String path;
 	private ItemStack is;
 	private List<EnchantRarity> exchangeablerarities;
 	private List<String> reveals;
@@ -22,18 +22,18 @@ public class PathFireball extends RPAddon implements RarityFireball {
 	}
 
 	public ItemStack getItem() {
-		if(is == null) is = API.createItemStack(getAddonConfig("fireballs.yml"), "fireballs." + path);
+		if(is == null) is = createItemStack(getAddonConfig("fireballs.yml"), "fireballs." + path);
 		return getClone(is);
 	}
 	public ItemStack getRevealedItem(boolean usesChances) {
 		getReveals();
 		String reward = usesChances ? null : reveals.get(RANDOM.nextInt(reveals.size())).split(";")[1];
 		if(reward != null) {
-			return API.createItemStack(null, reward);
+			return createItemStack(null, reward);
 		}
 		for(String s : reveals) {
 			final String[] a = s.split(";");
-			final int chance = API.getRemainingInt(a[0]);
+			final int chance = getRemainingInt(a[0]);
 			if(RANDOM.nextInt(100) <= chance) {
 				final int R = ("chance=" + chance + ";").length();
 				final String r = s.substring(R);
