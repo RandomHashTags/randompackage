@@ -17,5 +17,5 @@ tinkerer: "180:205:230:255"
 #
 attributes:
   - "isDamaged;VictimIsInList=SOUL_TRAPPED;Return=false"
-  - "isDamaged;chance=level;VictimHasActiveRarityGem=SOUL:true;VictimDepleteRarityGem=SOUL:75;NearbyVictimEnemies(45)Smite=11;;NearbyVictimEnemies(45:45:45)SendMessage=&2&l** NATURE'S WRATH **"
+  - "isDamaged;chance=level;VictimHasActiveRarityGem=SOUL:true;VictimDepleteRarityGem=SOUL:75;NearbyVictimEnemies[45]Smite=11;;NearbyVictimEnemies[45:45:45]SendMessage=&2&l** NATURE'S WRATH **"
   - "isDamaged;didProc;DamagerSendMessage= ;DamagerSendMessage=&a&l** NATURE'S WRATH **;DamagerSendMessage=&c&l- Soul Gems;DamagerSendMessage=&7You have &nx&r &7souls left.;DamagerSendMessage= "

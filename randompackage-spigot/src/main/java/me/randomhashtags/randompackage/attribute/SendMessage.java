@@ -9,16 +9,17 @@ public final class SendMessage extends AbstractEventAttribute {
     @Override
     public void execute(PendingEventAttribute pending) {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
-        for(Entity e : recipientValues.keySet()) {
-            if(e != null) {
-                final String v = recipientValues.get(e);
-                if(v != null) {
-                    if(v.contains("\\n")) {
-                        for(String s : v.split("\\n")) {
-                            e.sendMessage(colorize(s));
+        for(Entity entity : recipientValues.keySet()) {
+            if(entity != null) {
+                String targetMessage = recipientValues.get(entity);
+                if(targetMessage != null) {
+                    targetMessage = colorize(targetMessage);
+                    if(targetMessage.contains("\\n")) {
+                        for(String string : targetMessage.split("\\n")) {
+                            entity.sendMessage(string);
                         }
                     } else {
-                        e.sendMessage(colorize(v));
+                        entity.sendMessage(targetMessage);
                     }
                 }
             }

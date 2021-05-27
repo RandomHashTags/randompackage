@@ -20,6 +20,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -116,7 +117,9 @@ public interface EventReplacements extends EventEntities {
     }
 
     default String[] getProjectileReplacements(Projectile p) {
-        return getReplacements(getLocationReplacements(p, "Projectile"), getLocationReplacements((Entity) p.getShooter(), "Shooter"));
+        final ProjectileSource shooter = p.getShooter();
+        final String[] shooterReplacements = shooter != null ? getLocationReplacements((Entity) shooter, "Shooter") : null;
+        return getReplacements(getLocationReplacements(p, "Projectile"), shooterReplacements);
     }
 
     default String[] getReplacements(BlockBreakEvent event) {

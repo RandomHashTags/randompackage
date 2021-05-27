@@ -13,4 +13,4 @@ alchemist: "6000:7000:8000:9000"
 tinkerer: "81:93:105:117:129"
 #
 attributes:
-  - "CustomEnchantTimer;interval=20*12;NearbyPlayerEnemies(30)Damage=level"
+  - "CustomEnchantTimer;interval=20*12;NearbyPlayerEnemies[30]Damage=level"

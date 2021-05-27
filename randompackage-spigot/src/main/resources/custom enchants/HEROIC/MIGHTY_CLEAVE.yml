@@ -15,4 +15,4 @@ tinkerer: ""
 requires: "Cleave;7"
 #
 attributes:
-  - "PvAny;chance=4+(3*level);NearbyVictimEnemies(1.0625*level)Damage=level*2"
+  - "PvAny;chance=4+(3*level);NearbyVictimEnemies[1.0625*level]Damage=level*2"

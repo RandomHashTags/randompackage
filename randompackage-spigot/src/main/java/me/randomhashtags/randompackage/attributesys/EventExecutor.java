@@ -116,12 +116,12 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
         return getNearbyEntities(center, radius, radius, radius);
     }
     public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
-        final HashMap<String, Entity> e = new HashMap<>();
+        final HashMap<String, Entity> nearbyEntities = new HashMap<>();
         final List<Entity> nearby = new ArrayList<>(center.getWorld().getNearbyEntities(center, radiusX, radiusY, radiusZ));
         for(int i = 0; i < nearby.size(); i++) {
-            e.put("Nearby" + i, nearby.get(i));
+            nearbyEntities.put("Nearby" + i, nearby.get(i));
         }
-        return e;
+        return nearbyEntities;
     }
     private HashMap<String, Entity> getNearbyType(Player player, double radiusX, double radiusY, double radiusZ, String type) {
         final HashMap<String, Entity> nearby = getNearbyEntities(player.getLocation(), radiusX, radiusY, radiusZ);
@@ -129,17 +129,17 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
             return nearby;
         }
         final RegionalAPI regions = RegionalAPI.INSTANCE;
-        final UUID u = player.getUniqueId();
+        final UUID uuid = player.getUniqueId();
         final boolean enemy = type.equals("ENEMY");
-        final List<UUID> t = type.equals("ALLY") ? regions.getAllies(u) : enemy ? regions.getEnemies(u) : type.equals("TRUCE") ? regions.getTruces(u) : regions.getAssociates(u);
-        final HashMap<String, Entity> n = new HashMap<>();
+        final List<UUID> targetUUIDs = type.equals("ALLY") ? regions.getAllies(uuid) : enemy ? regions.getEnemies(uuid) : type.equals("TRUCE") ? regions.getTruces(uuid) : regions.getAssociates(uuid);
+        final HashMap<String, Entity> nearbyEntities = new HashMap<>();
         for(String s : nearby.keySet()) {
             final Entity entity = nearby.get(s);
-            if(entity instanceof Player && t.contains(entity.getUniqueId()) || enemy && !(entity instanceof Player)) {
-                n.put(s, entity);
+            if(entity instanceof Player && targetUUIDs.contains(entity.getUniqueId()) || enemy && !(entity instanceof Player)) {
+                nearbyEntities.put(s, entity);
             }
         }
-        return n;
+        return nearbyEntities;
     }
 
     private HashMap<RPPlayer, String> getData(HashMap<String, Entity> entities, HashMap<String, String> entityValues) {
@@ -233,28 +233,11 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
         attributeKey = attributeKey.toUpperCase();
         final LinkedHashMap<String, Entity> entities = new LinkedHashMap<>();
         for(String entity : entityKeys) {
-            final String E = entity.toUpperCase();
-            if(attributeKey.contains("NEARBY" + E)) {
-                final String nearbyString = "NEARBY" + E + attributeKey.split("NEARBY" + E)[1].split("\\)")[0], radius = nearbyString.split("\\(")[1];
-                final boolean ally = attributeKey.contains(E + "ALLIES"), enemy = attributeKey.contains(E + "ENEMIES"), truce = attributeKey.contains(E + "TRUCES"), member = attributeKey.contains(E + "MEMBERS");
-                if(ally || enemy || truce || member) {
-                    final String type = ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS";
-                    final boolean isSize = attributeKey.contains("SIZE");
-                    final Entity en = entities.get(entity);
-                    entities.remove(entity);
-                    HashMap<String, Entity> nearby = null;
-                    if(en instanceof Player) {
-                        final Player player = (Player) en;
-                        final String[] a = radius.split(":");
-                        final int length = a.length;
-                        final double x = evaluate(a[0]), y = length >= 2 ? evaluate(a[1]) : x, z = length >= 3 ? evaluate(a[2]) : x;
-                        nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : member ? "MEMBER" : "ENTITIES");
-                        entities.putAll(nearby);
-                    }
-                    attributeKey = attributeKey.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
-                }
-            } else if(attributeKey.contains(E) && !attributeKey.contains(":" + E)) {
-                attributeKey = attributeKey.replace(E, "");
+            final String targetEntity = entity.toUpperCase();
+            if(attributeKey.contains("NEARBY" + targetEntity)) {
+                attributeKey = replaceNearby(attributeKey, entity, entities);
+            } else if(attributeKey.contains(targetEntity) && !attributeKey.contains(":" + targetEntity)) {
+                attributeKey = attributeKey.replace(targetEntity, "");
                 entities.put(entity, entityList.get(entity));
             }
         }
@@ -266,29 +249,8 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
         final HashMap<String, String> entityValues = new HashMap<>();
         boolean did = false;
         for(String entity : entityKeys) {
-            final String E = entity.toUpperCase();
-            if(string.contains("NEARBY" + E)) {
-                final String nearbyString = "NEARBY" + E + string.split("NEARBY" + E)[1].split("\\)")[0], radius = nearbyString.split("\\(")[1];
-                final boolean ally = string.contains(E + "ALLIES"), enemy = string.contains(E + "ENEMIES"), truce = string.contains(E + "TRUCES"), member = string.contains(E + "MEMBERS");
-                if(ally || enemy || truce || member) {
-                    final String type = ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS";
-                    final boolean isSize = string.contains("SIZE");
-                    final Entity en = entities.get(entity);
-                    entities.remove(entity);
-                    HashMap<String, Entity> nearby = null;
-                    if(en instanceof Player) {
-                        final Player player = (Player) en;
-                        final String[] a = radius.split(":");
-                        final int length = a.length;
-                        final double x = evaluate(a[0]), y = length >= 2 ? evaluate(a[1]) : x, z = length >= 3 ? evaluate(a[2]) : x;
-                        nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : member ? "MEMBER" : "ENTITIES");
-                        entities.putAll(nearby);
-                        for(String n : nearby.keySet()) {
-                            entityValues.put(n, useStringAsValue ? string : value1);
-                        }
-                    }
-                    string = string.replace("NEARBY" + E + type + (isSize ? "SIZE" : "") + "(" + radius + ")", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
-                }
+            if(string.contains("NEARBY" + entity.toUpperCase())) {
+                string = replaceNearby(entityValues, string, entity, entities, value1, useStringAsValue);
                 did = true;
             } else if(original.contains(entity) && !original.contains(":" + entity) && !original.startsWith(entity + ":") && !original.startsWith("@" + entity + ":") && !original.contains("get" + entity)) {
                 string = original.replace(entity, "").toUpperCase();
@@ -297,6 +259,37 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
             }
         }
         return new TObject(did ? string : original, entityValues, entities);
+    }
+    private String replaceNearby(String string, String entity, HashMap<String, Entity> entities) {
+        return replaceNearby(null, string, entity, entities, null, false);
+    }
+    private String replaceNearby(HashMap<String, String> entityValues, String string, String entity, HashMap<String, Entity> entities, String value1, boolean useStringAsValue) {
+        final String targetEntity = entity.toUpperCase();
+        final String nearbyType = string.split("NEARBY" + targetEntity)[1].split("\\[")[0];
+        final String radius = string.split("\\[")[1].split("]")[0];
+        final boolean ally = nearbyType.equals("ALLIES"), enemy = nearbyType.equals("ENEMIES"), truce = nearbyType.equals("TRUCES"), member = nearbyType.equals("MEMBERS");
+        if(ally || enemy || truce || member) {
+            final String type = ally ? "ALLIES" : enemy ? "ENEMIES" : truce ? "TRUCES" : "MEMBERS";
+            final boolean isSize = string.contains("SIZE");
+            final Entity en = entities.get(entity);
+            entities.remove(entity);
+            HashMap<String, Entity> nearby = null;
+            if(en instanceof Player) {
+                final Player player = (Player) en;
+                final String[] values = radius.split(":");
+                final int length = values.length;
+                final double x = evaluate(values[0]), y = length >= 2 ? evaluate(values[1]) : x, z = length >= 3 ? evaluate(values[2]) : x;
+                nearby = getNearbyType(player, x, y, z, ally ? "ALLY" : enemy ? "ENEMY" : truce ? "TRUCE" : "MEMBER");
+                entities.putAll(nearby);
+                if(entityValues != null) {
+                    for(String nearbyEntity : nearby.keySet()) {
+                        entityValues.put(nearbyEntity, useStringAsValue ? string : value1);
+                    }
+                }
+            }
+            return string.replace("NEARBY" + targetEntity + type + (isSize ? "SIZE" : "") + "[" + radius + "]", isSize && nearby != null ? Integer.toString(nearby.size()) : "");
+        }
+        return string;
     }
 
     private boolean tryGeneric(Event event, HashMap<String, Entity> entities, List<String> attributes) {

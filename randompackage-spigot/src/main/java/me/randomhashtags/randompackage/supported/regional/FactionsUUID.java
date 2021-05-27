@@ -110,18 +110,23 @@ public enum FactionsUUID implements Reflect, Regional {
             return members;
         }
     }
+    @Override
     public List<UUID> getAssociates(UUID player) {
         return getType(player, "MEMBERS");
     }
+    @Override
     public List<UUID> getNeutrals(UUID player) {
         return getType(player, "NEUTRAL");
     }
+    @Override
     public List<UUID> getAllies(UUID player) {
         return getType(player, "ALLIES");
     }
+    @Override
     public List<UUID> getTruces(UUID player) {
         return getType(player, "TRUCES");
     }
+    @Override
     public List<UUID> getEnemies(UUID player) {
         return getType(player, "ENEMIES");
     }

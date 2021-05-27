@@ -19,4 +19,4 @@ tinkerer: ""
 attributes:
   - "CustomEnchantTimer;interval=20;PlayerIsInList=SOUL_TRAPPED:false;PlayerHasActiveRarityGem=SOUL:true;PlayerDepleteRarityGem=SOUL:20"
   - "PvAny;DamagerIsInList=SOUL_TRAPPED;Return=false"
-  - "PvAny;DamagerHasActiveRarityGem=SOUL:true;NearbyDamagerEnemies(level*4:level+6:level*4)Ignite=20*level+40;NearbyDamagerEnemies(level*4:level+6:level*4)Damage=dmg*(1+(level*0.05))"
+  - "PvAny;DamagerHasActiveRarityGem=SOUL:true;NearbyDamagerEnemies[level*4:level+6:level*4]Ignite=20*level+40;NearbyDamagerEnemies[level*4:level+6:level*4]Damage=dmg*(1+(level*0.05))"
