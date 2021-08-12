@@ -190,7 +190,9 @@ public final class FactionUpgrades extends EventAttributes {
         if(info != null) {
             final FactionUpgradeLevel level = info.getLevel();
             final int tier = level.asInt();
-            if(tier >= upgrade.getMaxLevel()) return;
+            if(tier >= upgrade.getMaxLevel()) {
+                return;
+            }
             final FactionUpgradeLevel nextLevel = upgrade.getLevels().get(tier+1);
             BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
             ItemStack requiredItem = null;
@@ -200,9 +202,9 @@ public final class FactionUpgrades extends EventAttributes {
                 costString = costString.toLowerCase();
                 if(costString.startsWith("cash{")) {
                     final double amount = getRemainingDouble(costString.split("\\{")[1]);
-                    requiredCash = BigDecimal.valueOf(amount);
+                    requiredCash = BigDecimal.valueOf(Double.parseDouble(costString.split("\\{")[1].split("}")[0]));
                     if(ECONOMY.getBalance(player) < amount) {
-                        replacements.put("{COST}", formatDouble(requiredCash.doubleValue()).split("E")[0]);
+                        replacements.put("{COST}", formatBigDecimal(requiredCash));
                         sendStringListMessage(player, getStringList(config, "messages.dont have enough cash"), replacements);
                         return;
                     }
@@ -217,7 +219,7 @@ public final class FactionUpgrades extends EventAttributes {
                         return;
                     }
                 } else if(costString.startsWith("spawnervalue{")) {
-                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(Double.parseDouble(costString.split("\\{")[1].split("}")[0]))));
+                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(getRemainingDouble(costString.split("\\{")[1].split("}")[0]))));
                     sendStringListMessage(player, getStringList(config, "messages.dont have enough spawner value"), replacements);
                     return;
                 } else if(costString.startsWith("factionupgrade{")) {

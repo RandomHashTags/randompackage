@@ -430,7 +430,7 @@ public enum MonthlyCrates implements RPFeature, CommandExecutor {
                 }
             } else {
                 final int category = valueOfCategory(title);
-                final MonthlyCrate m = category == -1 ? valueOfMonthlyCrate(title) : null;
+                final MonthlyCrate monthlyCrate = category == -1 ? valueOfMonthlyCrate(title) : null;
                 if(category != -1) {
                     event.setCancelled(true);
                     player.updateInventory();
@@ -444,23 +444,24 @@ public enum MonthlyCrates implements RPFeature, CommandExecutor {
                             give(pdata, player, crate, true);
                         }
                     }
-                } else if(m != null) {
+                } else if(monthlyCrate != null) {
                     event.setCancelled(true);
                     player.updateInventory();
                     if(slot >= top.getSize()) {
                         return;
                     }
                     final List<Integer> regular = regularRewardsLeft.getOrDefault(player, null), bonus = bonusRewardsLeft.getOrDefault(player, null);
+                    final Object slotObject = slot;
                     if(regular != null && regular.contains(slot)) {
-                        top.setItem(slot, m.getRandomReward(player, MonthlyCrate.REVEALED_REGULAR.get(player), false));
-                        regular.remove(slot);
+                        top.setItem(slot, monthlyCrate.getRandomReward(player, MonthlyCrate.REVEALED_REGULAR.get(player), false));
+                        regular.remove(slotObject);
                         if(regular.size() == 0 && bonus != null) {
-                            bonusRewardsLeft.put(player, new ArrayList<>(m.getBonusRewardSlots()));
-                            doAnimation(player, m);
+                            bonusRewardsLeft.put(player, new ArrayList<>(monthlyCrate.getBonusRewardSlots()));
+                            doAnimation(player, monthlyCrate);
                         }
                     } else if(bonus != null && (regular == null || regular.isEmpty()) && bonus.contains(slot)) {
-                        top.setItem(slot, m.getRandomReward(player, MonthlyCrate.REVEALED_BONUS.get(player), false));
-                        bonus.remove(slot);
+                        top.setItem(slot, monthlyCrate.getRandomReward(player, MonthlyCrate.REVEALED_BONUS.get(player), false));
+                        bonus.remove(slotObject);
                     }
                     player.updateInventory();
                     if(regular != null && regular.isEmpty() && bonus != null && bonus.isEmpty()) {

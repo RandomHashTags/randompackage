@@ -9,7 +9,7 @@ repositories {
     }
 
     maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
-    maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
+    //maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
     maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
     maven { url "https://jitpack.io" } // SuperiorSkyblock API
     maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
@@ -20,7 +20,9 @@ repositories {
     }*/
 
     /*
+        ASkyblock -> https://www.spigotmc.org/resources/1220/ | https://github.com/tastybento/askyblock
         EpicSkyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/PeachesMLG/EpicSkyblock
+        Iridium Skyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/Iridium-Development/IridiumSkyblock
 
         SilkSpawners -> https://dev.bukkit.org/projects/silkspawners | https://github.com/timbru31/SilkSpawners
         EpicSpawners -> https://songoda.com/marketplace/product/13 | https://gitlab.com/Songoda/epicspawners
@@ -37,7 +39,7 @@ dependencies {
     //
     implementation 'me.clip:placeholderapi:2.10.3'
     implementation 'net.milkbowl.vault:VaultAPI:1.7'
-    implementation 'com.wasteofplastic:askyblock:3.0.9.4'
+    //implementation 'com.wasteofplastic:askyblock:3.0.9.4'
     implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
     implementation 'com.massivecraft:Factions:1.6.9.5-U0.5.3'
     //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'

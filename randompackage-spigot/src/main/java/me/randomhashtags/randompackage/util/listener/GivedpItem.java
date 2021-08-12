@@ -135,8 +135,8 @@ public enum GivedpItem implements RPFeature, CommandExecutor {
         }
 
         if(input.startsWith("banknote:")) {
-            final String[] a = targetString.split(":");
-            return getBanknote(BigDecimal.valueOf(getIntegerFromString(a[1], 0)), a.length == 3 ? a[2] : null);
+            final String[] values = targetString.split(":");
+            return getBanknote(BigDecimal.valueOf(getIntegerFromString(values[1], 0)), values.length == 3 ? values[2] : null);
         } else if(input.equals("collectionchest")) {
             final CollectionFilter cf = CollectionFilter.INSTANCE;
             return cf.isEnabled() ? cf.getCollectionChest("all") : air;
@@ -154,22 +154,23 @@ public enum GivedpItem implements RPFeature, CommandExecutor {
             if(RPFeature.mcmmoIsEnabled()) {
                 final MCMMOAPI mcmmo = MCMMOAPI.INSTANCE;
                 if(mcmmo.isEnabled()) {
-                    final boolean lvl = input.startsWith("mcmmolevelvoucher"), xp = input.startsWith("mcmmoxpvoucher");
-                    final ItemStack i = items.get(lvl ? "mcmmolevelvoucher" : xp ? "mcmmoxpvoucher" : "mcmmocreditvoucher").clone();
+                    final boolean isLevelVoucher = input.startsWith("mcmmolevelvoucher"), isXPVoucher = input.startsWith("mcmmoxpvoucher");
+                    final ItemStack item = items.get("mcmmo" + (isLevelVoucher ? "level" : isXPVoucher ? "xp" : "credit") + "voucher").clone();
                     final String[] values = input.split(":");
                     final String skill = values[1];
-                    final boolean r = values[2].contains("-");
-                    final int min = r ? Integer.parseInt(values[2].split("-")[0]) : Integer.parseInt(values[2]), amount = r ? min+ RANDOM.nextInt(Integer.parseInt(values[2].split("-")[1])-min+1) : min;
+                    final String amountString = values.length == 2 ? "1" : values[2];
+                    final boolean isRandom = amountString.contains("-");
+                    final int min = Integer.parseInt(isRandom ? amountString.split("-")[0] : amountString), amount = isRandom ? min+ RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : min;
                     final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
-                    final String n = name != null ? colorize(name) : "UNKNOWN";
-                    final ItemMeta itemMeta = i.getItemMeta();
+                    final String skillName = name != null ? colorize(name) : "UNKNOWN";
+                    final ItemMeta itemMeta = item.getItemMeta();
                     final List<String> lore = new ArrayList<>();
                     for(String string : itemMeta.getLore()) {
-                        lore.add(string.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", n));
+                        lore.add(string.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", skillName));
                     }
                     itemMeta.setLore(lore);
-                    i.setItemMeta(itemMeta);
-                    return i;
+                    item.setItemMeta(itemMeta);
+                    return item;
                 }
             }
             return air;
