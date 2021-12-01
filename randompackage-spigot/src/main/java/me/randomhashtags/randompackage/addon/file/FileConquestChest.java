@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileConquestChest extends RPAddon implements ConquestChest {
+public final class FileConquestChest extends RPAddonSpigot implements ConquestChest {
     private HashMap<ConquestMob, String> spawnedBosses;
     private UMaterial placedBlock;
 

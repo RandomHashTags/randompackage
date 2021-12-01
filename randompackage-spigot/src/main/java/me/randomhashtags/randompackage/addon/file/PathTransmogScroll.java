@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public final class PathTransmogScroll extends RPAddon implements TransmogScroll {
+public final class PathTransmogScroll extends RPAddonSpigot implements TransmogScroll {
     private final String path;
     private ItemStack item;
     public PathTransmogScroll(String path) {

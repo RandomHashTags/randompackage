@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.util.obj;
 
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public final class Backup implements UVersionable {
+public final class Backup implements UVersionableSpigot {
     public Backup() {
         final String folder = DATA_FOLDER.getAbsolutePath() + "_backups";
         final File[] total = new File(folder).listFiles();
@@ -52,7 +52,7 @@ public final class Backup implements UVersionable {
                 long bytesCopied;
                 for(long count = 0L; dstLen < srcLen; dstLen += bytesCopied) {
                     long remain = srcLen - dstLen;
-                    count = remain > 31457280L ? 31457280L : remain;
+                    count = Math.min(remain, 31457280L);
                     bytesCopied = output.transferFrom(input, dstLen, count);
                     if (bytesCopied == 0L) {
                         break;

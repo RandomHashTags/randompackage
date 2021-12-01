@@ -12,7 +12,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.KitEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public abstract class Kits implements RPFeature, CommandExecutor {
+public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
     private static byte LOADED_INSTANCES = 0;
     public static YamlConfiguration KITS_CONFIG;
     public static List<HumanEntity> PREVIEWING;

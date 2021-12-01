@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.EnvoyCrate;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 
-public final class LivingEnvoyCrate implements UVersionable {
+public final class LivingEnvoyCrate implements UVersionableSpigot {
     public static HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> LIVING;
     private final int envoyID;
     private EnvoyCrate type;

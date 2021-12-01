@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Stronghold;
-import me.randomhashtags.randompackage.enums.CaptureType;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.enums.CaptureType;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class FileStronghold extends RPAddon implements Stronghold {
+public abstract class FileStronghold extends RPAddonSpigot implements Stronghold {
     private ItemStack is;
     private Location center;
     private CaptureType captureType;

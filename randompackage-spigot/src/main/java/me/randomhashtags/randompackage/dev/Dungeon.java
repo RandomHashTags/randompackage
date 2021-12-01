@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.dev;
 
+import me.randomhashtags.randompackage.addon.dev.DungeonStats;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Scheduleable;

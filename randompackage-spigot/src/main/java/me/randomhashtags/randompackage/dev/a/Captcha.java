@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public enum Captcha implements RPFeature {
+public enum Captcha implements RPFeatureSpigot {
     INSTANCE;
 
     public YamlConfiguration config;

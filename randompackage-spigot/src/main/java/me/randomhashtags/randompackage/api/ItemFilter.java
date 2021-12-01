@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.ItemFilterPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -33,8 +33,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public enum ItemFilter implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class ItemFilter extends RPFeatureSpigot implements CommandExecutor {
+    public static final ItemFilter INSTANCE = new ItemFilter();
 
     public YamlConfiguration config;
     private UInventory gui;

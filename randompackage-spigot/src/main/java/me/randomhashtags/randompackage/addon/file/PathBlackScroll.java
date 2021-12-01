@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class PathBlackScroll extends RPAddon implements BlackScroll {
+public final class PathBlackScroll extends RPAddonSpigot implements BlackScroll {
 	private final String identifier;
 	private final int min;
     private final int max;

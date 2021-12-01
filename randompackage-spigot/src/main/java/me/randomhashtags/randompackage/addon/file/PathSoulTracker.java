@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public final class PathSoulTracker extends RPAddon implements SoulTracker {
+public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker {
     private final String path;
     private ItemStack is;
     private List<String> apply, split;

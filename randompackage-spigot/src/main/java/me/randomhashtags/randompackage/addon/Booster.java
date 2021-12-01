@@ -2,13 +2,14 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
+import me.randomhashtags.randompackage.addon.enums.BoosterRecipients;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Booster extends Attributable, Itemable, GivedpItemable {
+public interface Booster extends Attributable, Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "booster" };

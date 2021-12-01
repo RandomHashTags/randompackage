@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.perms.WildPvPPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,8 +29,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.io.File;
 import java.util.*;
 
-public enum WildPvP implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class WildPvP extends RPFeatureSpigot implements CommandExecutor {
+    public static final WildPvP INSTANCE = new WildPvP();
 
     public YamlConfiguration config;
     private UInventory gui, viewInventory;

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileMonthlyCrate extends RPAddon implements MonthlyCrate {
+public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrate {
     private ItemStack item, background, redeem, bonus1, bonus2;
     private UInventory regular, bonus;
     private List<Integer> rewardSlots, bonusRewardSlots;

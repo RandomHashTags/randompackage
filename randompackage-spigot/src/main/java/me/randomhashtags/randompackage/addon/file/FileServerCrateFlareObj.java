@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.ServerCrateFlare;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileServerCrateFlareObj implements UVersionable, ServerCrateFlare {
+public final class FileServerCrateFlareObj implements UVersionableSpigot, ServerCrateFlare {
 	private final FileServerCrate crate;
 	private ItemStack is;
 	private List<UMaterial> cannotLandAbove, cannotLandIn;

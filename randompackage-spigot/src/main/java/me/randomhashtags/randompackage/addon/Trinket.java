@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack, GivedpItemable {
+public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "trinket" };

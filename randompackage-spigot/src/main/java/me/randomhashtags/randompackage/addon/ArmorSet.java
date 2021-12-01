@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ArmorSet extends Identifiable, Nameable, GivedpItemable {
+public interface ArmorSet extends Identifiable, Nameable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customarmor", "customarmorcrystal", "multicustomarmorcrystal" };

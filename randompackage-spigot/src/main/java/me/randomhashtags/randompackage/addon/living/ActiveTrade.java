@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.api.Trade;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class ActiveTrade implements UVersionable {
+public final class ActiveTrade implements UVersionableSpigot {
     public static List<ActiveTrade> ACTIVE_TRADES;
 
     private final List<Integer> tasks;

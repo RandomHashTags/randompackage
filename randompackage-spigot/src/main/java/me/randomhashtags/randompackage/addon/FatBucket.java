@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.List;
 
-public interface FatBucket extends Itemable, RPItemStack, GivedpItemable {
+public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "fatbucket" };

@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.event.ServerCrateCloseEvent;
 import me.randomhashtags.randompackage.event.ServerCrateOpenEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,8 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum ServerCrates implements RPFeature {
-	INSTANCE;
+public final class ServerCrates extends RPFeatureSpigot {
+	public static final ServerCrates INSTANCE = new ServerCrates();
 
 	private List<UUID> canRevealRarities;
 	private HashMap<UUID, ServerCrate> revealingLoot;

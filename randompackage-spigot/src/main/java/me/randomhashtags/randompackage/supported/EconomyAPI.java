@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.supported;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 
-public enum EconomyAPI implements RPFeature {
+public enum EconomyAPI implements RPFeatureSpigot {
     INSTANCE;
 
     private boolean vault;

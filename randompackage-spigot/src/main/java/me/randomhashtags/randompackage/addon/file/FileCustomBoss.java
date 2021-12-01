@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileCustomBoss extends RPSpawnable implements CustomBoss {
+public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBoss {
     private Scoreboard scoreboard;
 
     private ItemStack spawnitem;

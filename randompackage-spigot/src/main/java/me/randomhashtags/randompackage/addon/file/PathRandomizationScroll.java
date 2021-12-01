@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class PathRandomizationScroll extends RPAddon implements RandomizationScroll {
+public final class PathRandomizationScroll extends RPAddonSpigot implements RandomizationScroll {
 	private final String path;
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;

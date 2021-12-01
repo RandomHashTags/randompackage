@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackMergeEvent;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class StackedEntity implements UVersionable {
+public final class StackedEntity implements UVersionableSpigot {
     public static final List<StackedEntity> STACKED_ENTITIES = new ArrayList<>();
 
     public final long creationTime;

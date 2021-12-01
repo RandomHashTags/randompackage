@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface TransmogScroll extends Scroll, Applyable, GivedpItemable {
+public interface TransmogScroll extends Scroll, Applyable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "transmogscroll" };

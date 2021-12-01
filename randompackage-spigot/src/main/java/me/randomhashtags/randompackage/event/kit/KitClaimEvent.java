@@ -26,7 +26,8 @@ public class KitClaimEvent extends RPEventCancellable {
         return pdata;
     }
     public Player getPlayer() {
-        return player; }
+        return player;
+    }
     public CustomKit getKit() {
         return kit;
     }

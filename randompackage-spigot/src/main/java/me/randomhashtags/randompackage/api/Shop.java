@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.event.ShopSellEvent;
 import me.randomhashtags.randompackage.perms.ShopPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,14 +30,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Shop implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Shop extends RPFeatureSpigot implements CommandExecutor {
+    public static final Shop INSTANCE = new Shop();
 
-	public YamlConfiguration config;
+    public YamlConfiguration config;
 	public ItemStack back;
 	private String defaultShop;
 	private HashMap<String, FileShopCategory> titles;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {

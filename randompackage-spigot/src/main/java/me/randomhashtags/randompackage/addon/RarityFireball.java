@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface RarityFireball extends Itemable, GivedpItemable {
+public interface RarityFireball extends Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "rarityfireball" };

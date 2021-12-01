@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface SoulTracker extends Applyable, GivedpItemable {
+public interface SoulTracker extends Applyable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "soultracker" };

@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
-import me.randomhashtags.randompackage.addon.file.FileCustomEnchant;
+import me.randomhashtags.randompackage.addon.file.FileCustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.file.FileEnchantRarity;
 import me.randomhashtags.randompackage.addon.living.LivingCustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
@@ -17,6 +17,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.armor.*;
 import me.randomhashtags.randompackage.event.enchant.*;
+import me.randomhashtags.randompackage.event.enums.ArmorEventReason;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
@@ -65,9 +66,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     public boolean levelZeroRemoval;
     public static List<String> CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES;
 
-    private HashMap<CustomEnchant, Integer> timedEnchants;
+    private HashMap<CustomEnchantSpigot, Integer> timedEnchants;
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
-    private HashMap<Player, List<CustomEnchant>> equippedTimedEnchants;
+    private HashMap<Player, List<CustomEnchantSpigot>> equippedTimedEnchants;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -136,7 +137,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     if(rarity != null) {
                         for(File ff : files) {
                             if(!ff.getName().startsWith("_settings")) {
-                                final FileCustomEnchant e = new FileCustomEnchant(ff);
+                                final FileCustomEnchantSpigot e = new FileCustomEnchantSpigot(ff);
                                 rarity.getEnchants().add(e);
                                 for(String s : e.getAttributes()) {
                                     final String[] split = s.split(";");
@@ -146,7 +147,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                         final int id = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
                                             for(Player player : equippedTimedEnchants.keySet()) {
                                                 final EquippedCustomEnchants enchants = getEnchants(player);
-                                                final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> enchant = enchants.getInfo();
+                                                final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> enchant = enchants.getInfo();
                                                 if(!enchant.isEmpty()) {
                                                     final CustomEnchantTimerEvent event = new CustomEnchantTimerEvent(player, enchant);
                                                     PLUGIN_MANAGER.callEvent(event);
@@ -176,7 +177,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + getAll(Feature.CUSTOM_ENCHANT_ENABLED).size() + "e, &c" + getAll(Feature.CUSTOM_ENCHANT_DISABLED).size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
-        for(CustomEnchant e : timedEnchants.keySet()) {
+        for(CustomEnchantSpigot e : timedEnchants.keySet()) {
             SCHEDULER.cancelTask(timedEnchants.get(e));
         }
         GivedpItem.INSTANCE.items.remove("transmogscroll");
@@ -210,7 +211,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final ChatEvents chatEvents = ChatEvents.INSTANCE;
         final String format = getString(RP_CONFIG, "enchants.format");
         final List<String> hoverLore = getStringList(RP_CONFIG, "enchants.hover");
-        final HashMap<String, CustomEnchant> enabled = getAllCustomEnchants(true);
+        final HashMap<String, CustomEnchantSpigot> enabled = getAllCustomEnchants(true);
         final Object[] enchants = enabled.values().toArray();
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
@@ -220,7 +221,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
-                        final CustomEnchant ce = (CustomEnchant) enchants[i];
+                        final CustomEnchantSpigot ce = (CustomEnchantSpigot) enchants[i];
                         final EnchantRarity rarity = valueOfCustomEnchantRarity(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getIdentifier()));
@@ -351,10 +352,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         // ce:<enchant>:<level>:<success>:<destroy>
         final String[] values = input.split(":");
         final int length = values.length;
-        CustomEnchant enchant = getCustomEnchant(values[1]);
+        CustomEnchantSpigot enchant = getCustomEnchant(values[1]);
         final EnchantRarity rarity = enchant == null ? getCustomEnchantRarity(values[1]) : null;
         if(rarity != null) {
-            final List<CustomEnchant> list = rarity.getEnchants();
+            final List<CustomEnchantSpigot> list = rarity.getEnchants();
             enchant = list.get(RANDOM.nextInt(list.size()));
         }
         int level = 1, success = 0, destroy = 0;
@@ -384,7 +385,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
         return enchant != null ? getRevealedItem(enchant, level, success, destroy, true, true) : null;
     }
-    public ItemStack getRevealedItem(CustomEnchant enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
+    public ItemStack getRevealedItem(CustomEnchantSpigot enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
         final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
         final ItemStack item = rarity.getRevealedItem().clone();
         final ItemMeta itemMeta = item.getItemMeta();
@@ -416,10 +417,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final String[] rarities = rarity.getRevealedEnchantRarities();
         final int l = rarities.length;
         final EnchantRarity rar = getCustomEnchantRarity(rarity.getRevealedEnchantRarities()[RANDOM.nextInt(l)]);
-        final List<CustomEnchant> enchants = rar.getEnchants();
+        final List<CustomEnchantSpigot> enchants = rar.getEnchants();
         ItemStack item = new ItemStack(Material.BOOK);
         for(int i = 1; i <= 100; i++) {
-            final CustomEnchant enchant = enchants.get(RANDOM.nextInt(enchants.size()));
+            final CustomEnchantSpigot enchant = enchants.get(RANDOM.nextInt(enchants.size()));
             if(enchant.isEnabled()) {
                 rarity = valueOfCustomEnchantRarity(enchant);
                 final int level = RANDOM.nextInt(enchant.getMaxLevel()+1);
@@ -461,7 +462,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             return 0;
         }
     }
-    public boolean isOnCorrectItem(@NotNull CustomEnchant enchant, @NotNull ItemStack is) {
+    public boolean isOnCorrectItem(@NotNull CustomEnchantSpigot enchant, @NotNull ItemStack is) {
         final String i = is != null ? is.getType().name() : null;
         if(enchant != null && i != null) {
             for(String s : enchant.getAppliesTo()) {
@@ -486,11 +487,11 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             return equipped;
         }
     }
-    public LinkedHashMap<CustomEnchant, Integer> getEnchantsOnItem(@NotNull ItemStack is) {
-        final LinkedHashMap<CustomEnchant, Integer> enchants = new LinkedHashMap<>();
+    public LinkedHashMap<CustomEnchantSpigot, Integer> getEnchantsOnItem(@NotNull ItemStack is) {
+        final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = new LinkedHashMap<>();
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {
-                final CustomEnchant e = valueOfCustomEnchant(s);
+                final CustomEnchantSpigot e = valueOfCustomEnchant(s);
                 if(e != null) {
                     enchants.put(e, getEnchantmentLevel(s));
                 }
@@ -538,7 +539,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         if(rarity != null) {
             final ItemStack enabledEnchant = getRandomEnabledEnchant(rarity);
             final String displayname = enabledEnchant.getItemMeta().getDisplayName();
-            final CustomEnchant enchant = valueOfCustomEnchant(enabledEnchant);
+            final CustomEnchantSpigot enchant = valueOfCustomEnchant(enabledEnchant);
             final PlayerRevealCustomEnchantEvent e = new PlayerRevealCustomEnchantEvent(player, item, enchant, getEnchantmentLevel(displayname));
             PLUGIN_MANAGER.callEvent(e);
             if(!e.isCancelled()) {
@@ -552,7 +553,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                 }
             }
         } else if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().hasLore()) {
-            final CustomEnchant enchant = valueOfCustomEnchant(item);
+            final CustomEnchantSpigot enchant = valueOfCustomEnchant(item);
             if(enchant != null) {
                 sendStringListMessage(player, getStringList(config, "messages.apply info"), null);
             }
@@ -615,7 +616,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
             final ItemMeta cursorMeta = cursor.getItemMeta();
             final String cursorName = cursorMeta.getDisplayName();
 
-            final CustomEnchant enchant = valueOfCustomEnchant(cursorName);
+            final CustomEnchantSpigot enchant = valueOfCustomEnchant(cursorName);
             final int level = getEnchantmentLevel(cursorName);
             int enchantsize = 0;
             final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(cursorName), current);
@@ -641,7 +642,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                     int prevlevel = -1, prevslot = -1, enchantOrbIncrement = 0;
                     for(int z = 0; z < lore.size(); z++) {
                         final String target = lore.get(z);
-                        final CustomEnchant e = valueOfCustomEnchant(target);
+                        final CustomEnchantSpigot e = valueOfCustomEnchant(target);
                         if(e != null) {
                             enchantsize += 1;
                             if(e.equals(enchant)) {
@@ -663,9 +664,9 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                         return;
                     } else {
                         final String requires = enchant.getRequiredEnchant();
-                        final CustomEnchant replaces = requires != null ? valueOfCustomEnchant(requires.split(";")[0]) : null;
+                        final CustomEnchantSpigot replaces = requires != null ? valueOfCustomEnchant(requires.split(";")[0]) : null;
                         final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
-                        final HashMap<CustomEnchant, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
+                        final HashMap<CustomEnchantSpigot, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
                         if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) {
                             return;
                         }
@@ -678,7 +679,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
                                 String replacedEnchant = null;
                                 final ArrayList<String> newlore = new ArrayList<>();
                                 for(String s : lore) {
-                                    final CustomEnchant ce = valueOfCustomEnchant(s);
+                                    final CustomEnchantSpigot ce = valueOfCustomEnchant(s);
                                     if(ce != null) {
                                         if(ce.equals(replaces)) {
                                             newlore.add(e);
@@ -753,7 +754,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         final ItemStack current = event.getCurrentItem();
         if(player.getOpenInventory().getTopInventory().getType().equals(InventoryType.ANVIL)) {
             if(current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() || event.getClick().equals(ClickType.NUMBER_KEY)) {
-                CustomEnchant enchant = null;
+                CustomEnchantSpigot enchant = null;
                 final int hb = event.getHotbarButton();
                 final ItemStack item = event.getClick().equals(ClickType.NUMBER_KEY) && inv.getItem(hb) != null ? inv.getItem(hb) : current;
                 if(item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
@@ -794,10 +795,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         equippedTimedEnchants.remove(player);
         for(EquipmentSlot slot : EQUIPMENT_SLOTS) {
             if(slot != null) {
-                final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
-                final List<CustomEnchant> timedEnchantments = new ArrayList<>();
+                final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = equipped.getEnchantsOn(slot);
+                final List<CustomEnchantSpigot> timedEnchantments = new ArrayList<>();
                 if(enchants != null) {
-                    for(CustomEnchant enchant : enchants.keySet()) {
+                    for(CustomEnchantSpigot enchant : enchants.keySet()) {
                         if(timedEnchants.containsKey(enchant)) {
                             timedEnchantments.add(enchant);
                         }

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
 import me.randomhashtags.randompackage.dev.Dungeon;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-public abstract class FileDungeon extends RPAddon implements Dungeon {
+public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
     private ItemStack display, key, keyLocked, portal, lootbag;
     private long fastestCompletion;
 

@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 
-public final class FileFilterCategory extends RPAddon implements FilterCategory {
+public final class FileFilterCategory extends RPAddonSpigot implements FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
         load(f);

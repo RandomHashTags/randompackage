@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FileTitle extends RPAddon implements Title {
+public final class FileTitle extends RPAddonSpigot implements Title {
     public static ItemStack TITLE_ITEMSTACK;
     public static String TITLE_CHAT_FORMAT, TITLE_TAB_FORMAT;
 

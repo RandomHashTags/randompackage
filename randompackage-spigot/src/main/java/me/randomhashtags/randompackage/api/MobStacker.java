@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.obj.StackedEntity;
 import me.randomhashtags.randompackage.attribute.DepleteStackSize;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum MobStacker implements RPFeature {
-    INSTANCE;
+public final class MobStacker extends RPFeatureSpigot {
+    public static final MobStacker INSTANCE = new MobStacker();
 
     public YamlConfiguration config;
     public List<EntityType> stackable;

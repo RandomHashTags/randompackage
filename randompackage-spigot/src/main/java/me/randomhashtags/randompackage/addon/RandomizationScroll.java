@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.util.AppliesToRarities;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import org.bukkit.inventory.ItemStack;
 
-public interface RandomizationScroll extends Scroll, AppliesToRarities, Itemable, GivedpItemable {
+public interface RandomizationScroll extends Scroll, AppliesToRarities, Itemable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "randomizationscroll" };
     }

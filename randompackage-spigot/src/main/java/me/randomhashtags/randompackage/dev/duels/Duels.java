@@ -2,13 +2,14 @@ package me.randomhashtags.randompackage.dev.duels;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
+import me.randomhashtags.randompackage.addon.dev.enums.DuelEndReason;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
 import me.randomhashtags.randompackage.data.DuelData;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,8 +30,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Duels implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Duels extends RPFeatureSpigot implements CommandExecutor {
+    public static final Duels INSTANCE = new Duels();
 
     public YamlConfiguration config;
     private UInventory type, godset;
@@ -40,6 +41,7 @@ public enum Duels implements RPFeature, CommandExecutor {
     public String getIdentifier() {
         return "DUELS";
     }
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
@@ -75,6 +77,7 @@ public enum Duels implements RPFeature, CommandExecutor {
         }
         return true;
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("duel arenas", "_settings.yml");
@@ -98,6 +101,7 @@ public enum Duels implements RPFeature, CommandExecutor {
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUEL_ARENA).size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         unregister(Feature.DUEL_ARENA);
     }

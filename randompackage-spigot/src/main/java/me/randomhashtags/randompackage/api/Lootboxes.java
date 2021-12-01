@@ -5,10 +5,10 @@ import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.addon.file.FileLootbox;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.perms.LootboxPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Lootboxes implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Lootboxes extends RPFeatureSpigot implements CommandExecutor {
+    public static final Lootboxes INSTANCE = new Lootboxes();
 
     public YamlConfiguration config;
     private UInventory gui;
@@ -46,9 +46,11 @@ public enum Lootboxes implements RPFeature, CommandExecutor {
     private List<Player> viewing;
     private HashMap<Player, List<Integer>> tasks;
 
+    @Override
     public String getIdentifier() {
         return "LOOTBOXES";
     }
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {
@@ -57,6 +59,7 @@ public enum Lootboxes implements RPFeature, CommandExecutor {
         return true;
     }
 
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("lootboxes", "_settings.yml");
@@ -126,6 +129,7 @@ public enum Lootboxes implements RPFeature, CommandExecutor {
         }
         sendConsoleDidLoadFeature(getAll(Feature.LOOTBOX).size() + " Lootboxes", started);
     }
+    @Override
     public void unload() {
         for(Lootbox l : started.keySet()) {
             OTHER_YML.set("lootboxes.started." + l.getIdentifier(), started.get(l));

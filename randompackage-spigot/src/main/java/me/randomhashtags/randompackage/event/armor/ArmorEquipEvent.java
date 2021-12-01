@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.event.armor;
 
+import me.randomhashtags.randompackage.event.enums.ArmorEventReason;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;

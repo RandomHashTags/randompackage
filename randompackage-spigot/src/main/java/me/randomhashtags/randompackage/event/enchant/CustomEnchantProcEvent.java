@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.event.enchant;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.event.AbstractCancellable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -13,10 +13,10 @@ public class CustomEnchantProcEvent extends AbstractCancellable {
 	private final Event event;
 	private final Player player;
 	private final HashMap<String, Entity> entities;
-	private final CustomEnchant enchant;
+	private final CustomEnchantSpigot enchant;
 	private final int level;
 	private final ItemStack itemWithEnchant;
-	public CustomEnchantProcEvent(Player player, Event event, HashMap<String, Entity> entities, CustomEnchant enchant, int level, ItemStack itemWithEnchant) {
+	public CustomEnchantProcEvent(Player player, Event event, HashMap<String, Entity> entities, CustomEnchantSpigot enchant, int level, ItemStack itemWithEnchant) {
 		this.event = event;
 		this.player = player;
 		this.entities = entities;
@@ -27,7 +27,7 @@ public class CustomEnchantProcEvent extends AbstractCancellable {
 	public Event getEvent() { return event; }
 	public Player getHolder() { return player; }
 	public HashMap<String, Entity> getEntities() { return entities; }
-	public CustomEnchant getEnchant() { return enchant; }
+	public CustomEnchantSpigot getEnchant() { return enchant; }
 	public int getEnchantLevel() { return level; }
 	public ItemStack getItemWithEnchant() { return itemWithEnchant; }
 

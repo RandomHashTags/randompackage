@@ -3,14 +3,14 @@ package me.randomhashtags.randompackage.util.listener;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitMastery;
-import me.randomhashtags.randompackage.addon.GivedpItemable;
+import me.randomhashtags.randompackage.addon.GivedpItemableSpigot;
 import me.randomhashtags.randompackage.api.CollectionFilter;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.event.MysteryMobSpawnerOpenEvent;
 import me.randomhashtags.randompackage.event.async.ItemLoreCrystalUseEvent;
 import me.randomhashtags.randompackage.event.async.ItemNameTagUseEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,8 +35,8 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
-public enum GivedpItem implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class GivedpItem extends RPFeatureSpigot implements CommandExecutor {
+    public static final GivedpItem INSTANCE = new GivedpItem();
 
     public YamlConfiguration itemsConfig;
     private HashMap<String, ItemStack> customitems;
@@ -126,7 +126,7 @@ public enum GivedpItem implements RPFeature, CommandExecutor {
             return getClone(items.get(targetString));
         }
 
-        final HashMap<String, GivedpItemable> givedpitems = GivedpItemable.GIVEDP_ITEMS;
+        final HashMap<String, GivedpItemableSpigot> givedpitems = GivedpItemableSpigot.GIVEDP_ITEMS;
         for(String key : givedpitems.keySet()) {
             if(targetString.startsWith(key) || input.startsWith(key)) {
                 final ItemStack target = givedpitems.get(key).valueOfInput(targetString, key);
@@ -151,7 +151,7 @@ public enum GivedpItem implements RPFeature, CommandExecutor {
             return air;
 
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
-            if(RPFeature.mcmmoIsEnabled()) {
+            if(RPFeatureSpigot.mcmmoIsEnabled()) {
                 final MCMMOAPI mcmmo = MCMMOAPI.INSTANCE;
                 if(mcmmo.isEnabled()) {
                     final boolean isLevelVoucher = input.startsWith("mcmmolevelvoucher"), isXPVoucher = input.startsWith("mcmmoxpvoucher");

@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.RandomizedLoot;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class RandomizedLootItem implements RandomizedLoot, UVersionable {
+public final class RandomizedLootItem implements RandomizedLoot, UVersionableSpigot {
     private final String key, rewardSize;
     private final ItemStack item;
     private final List<String> rewards;

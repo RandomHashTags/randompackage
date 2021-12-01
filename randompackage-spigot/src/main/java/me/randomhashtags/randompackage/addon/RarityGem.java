@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 
-public interface RarityGem extends Itemable, GivedpItemable {
+public interface RarityGem extends Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "raritygem" };

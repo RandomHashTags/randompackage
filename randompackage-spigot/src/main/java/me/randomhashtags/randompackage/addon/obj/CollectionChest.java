@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static me.randomhashtags.randompackage.util.RPFeature.OTHER_YML;
+import static me.randomhashtags.randompackage.util.RPFeatureSpigot.OTHER_YML;
 
 public final class CollectionChest {
 	public static HashMap<UUID, CollectionChest> CHESTS;

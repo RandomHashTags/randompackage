@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Outpost;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Outposts implements RPFeature, CommandExecutor {
+public enum Outposts implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;

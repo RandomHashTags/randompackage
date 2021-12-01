@@ -5,7 +5,7 @@ import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandRole;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import me.randomhashtags.randompackage.supported.Regional;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public enum SuperiorSky implements RPFeature, Regional {
+public enum SuperiorSky implements RPFeatureSpigot, Regional {
     INSTANCE;
 
     private com.bgsoftware.superiorskyblock.api.SuperiorSkyblock ss;

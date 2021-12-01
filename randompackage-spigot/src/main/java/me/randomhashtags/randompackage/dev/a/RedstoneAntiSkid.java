@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 
-public enum RedstoneAntiSkid implements RPFeature {
+public enum RedstoneAntiSkid implements RPFeatureSpigot {
     INSTANCE;
 
     @Override

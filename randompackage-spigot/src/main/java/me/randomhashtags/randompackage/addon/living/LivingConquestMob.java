@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 
-public final class LivingConquestMob implements UVersionable {
+public final class LivingConquestMob implements UVersionableSpigot {
     public static HashMap<UUID, LivingConquestMob> LIVING;
 
     private final LivingEntity entity;

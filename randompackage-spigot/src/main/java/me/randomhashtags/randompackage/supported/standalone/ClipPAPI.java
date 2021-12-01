@@ -6,12 +6,12 @@ import me.randomhashtags.randompackage.api.Envoy;
 import me.randomhashtags.randompackage.data.CoinFlipData;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.JackpotData;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public final class ClipPAPI extends PlaceholderExpansion implements UVersionable {
+public final class ClipPAPI extends PlaceholderExpansion implements UVersionableSpigot {
     private static ClipPAPI INSTANCE;
     public static ClipPAPI getPAPI() {
         if(INSTANCE == null) INSTANCE = new ClipPAPI();

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public final class FileInventoryPet extends RPAddon implements InventoryPet {
+public final class FileInventoryPet extends RPAddonSpigot implements InventoryPet {
     private ItemStack item, egg;
     private HashMap<Integer, String> values;
     private HashMap<Integer, Integer> cooldowns, requiredxp;

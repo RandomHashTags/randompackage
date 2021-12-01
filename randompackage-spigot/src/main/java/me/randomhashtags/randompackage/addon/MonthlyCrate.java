@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public interface MonthlyCrate extends Itemable, GivedpItemable {
+public interface MonthlyCrate extends Itemable, GivedpItemableSpigot {
     HashMap<Player, List<String>> REVEALED_REGULAR = new HashMap<>(), REVEALED_BONUS = new HashMap<>();
 
     default String[] getGivedpItemIdentifiers() {

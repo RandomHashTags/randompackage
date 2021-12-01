@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.dev;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum FactionPoints implements RPFeature, RPItemStack {
+public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
     INSTANCE;
 
     private File dataF;

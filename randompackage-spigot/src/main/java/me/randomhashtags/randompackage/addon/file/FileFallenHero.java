@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FileFallenHero extends RPFallenHero implements FallenHero {
+public final class FileFallenHero extends RPFallenHeroSpigot implements FallenHero {
     private ItemStack spawnitem, gem;
 
     public FileFallenHero(File f) {

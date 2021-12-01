@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.dev.a;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.living.ActiveRaidEvent;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public enum RaidEvents implements RPFeature, CommandExecutor {
+public enum RaidEvents implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     private ActiveRaidEvent active;

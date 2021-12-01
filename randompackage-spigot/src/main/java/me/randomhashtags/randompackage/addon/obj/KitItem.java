@@ -2,14 +2,14 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitItem;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public final class KitItem implements RPFeature, CustomKitItem {
+public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     private final CustomKit kit;
     private final String path, item, amount, name;
     private final int chance, requiredLevel;

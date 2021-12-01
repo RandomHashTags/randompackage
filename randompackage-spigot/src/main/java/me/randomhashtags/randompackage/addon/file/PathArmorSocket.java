@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.ArmorSocket;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public final class PathArmorSocket extends RPAddon implements ArmorSocket {
+public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket {
     private final String identifier;
     public PathArmorSocket(String identifier) {
         this.identifier = identifier;

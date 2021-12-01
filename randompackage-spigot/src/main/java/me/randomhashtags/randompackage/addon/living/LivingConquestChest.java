@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.ConquestChest;
 import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.api.Conquest;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public final class LivingConquestChest implements UVersionable {
+public final class LivingConquestChest implements UVersionableSpigot {
     public static List<LivingConquestChest> LIVING = new ArrayList<>();
 
     public Location location;

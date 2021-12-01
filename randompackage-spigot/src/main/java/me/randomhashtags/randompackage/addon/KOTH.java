@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Captureable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.addon.util.Scheduleable;
 import me.randomhashtags.randompackage.addon.util.Scoreboardable;
-import me.randomhashtags.randompackage.dev.KOTHMonster;
+import me.randomhashtags.randompackage.addon.dev.KOTHMonster;
 import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;

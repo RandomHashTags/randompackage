@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public final class FileFactionUpgrade extends RPAddon implements FactionUpgrade {
+public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUpgrade {
     private ItemStack item;
     private LinkedHashMap<Integer, FactionUpgradeLevel> levels;
 

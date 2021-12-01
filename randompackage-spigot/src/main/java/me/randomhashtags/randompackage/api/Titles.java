@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.data.TitleData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.TitlePermission;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Titles implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Titles extends RPFeatureSpigot implements CommandExecutor {
+	public static final Titles INSTANCE = new Titles();
 
 	public YamlConfiguration config;
 	public ItemStack interactableItem;

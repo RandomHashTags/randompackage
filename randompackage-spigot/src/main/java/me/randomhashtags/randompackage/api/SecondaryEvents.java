@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.perms.SecondaryPermission;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum SecondaryEvents implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class SecondaryEvents extends RPFeatureSpigot implements CommandExecutor {
+    public static final SecondaryEvents INSTANCE = new SecondaryEvents();
 
     public YamlConfiguration config;
     private List<PotionEffectType> removedPotionEffects;

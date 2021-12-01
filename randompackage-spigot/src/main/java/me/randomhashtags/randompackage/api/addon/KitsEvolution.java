@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitEvolution;
 import me.randomhashtags.randompackage.addon.Kits;
@@ -253,14 +253,14 @@ public class KitsEvolution extends Kits {
                             if(itemLoreString.startsWith("{") && itemLoreString.contains("reqlevel=")) {
                                 final String[] values = itemLoreString.split(":");
                                 final int level = getRemainingInt(values[0]), reqlevel = getRemainingInt(itemLoreString.split("reqlevel=")[1].split(":")[0]), chance = values.length == 3 ? getRemainingInt(values[2]) : 100;
-                                final CustomEnchant enchant = valueOfCustomEnchant(itemLoreString.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final CustomEnchantSpigot enchant = valueOfCustomEnchant(itemLoreString.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(RANDOM.nextInt(100) <= chance && enchant != null && vkitlvl >= reqlevel) {
                                     lore.add(valueOfCustomEnchantRarity(enchant).getApplyColors() + enchant.getName() + " " + toRoman(level != -1 ? level : 1+ RANDOM.nextInt(enchant.getMaxLevel())));
                                 }
                             } else if(itemLoreString.startsWith("{") && itemLoreString.contains(":") && itemLoreString.endsWith("}")) {
                                 final String randomAmount = itemLoreString.split(":")[RANDOM.nextInt(itemLoreString.split(":").length)];
                                 int level = getRemainingInt(itemLoreString.split("\\{")[1].split("}")[0]);
-                                final CustomEnchant enchant = valueOfCustomEnchant(randomAmount.split("\\{")[1].split("}")[0].replace("" + level, ""));
+                                final CustomEnchantSpigot enchant = valueOfCustomEnchant(randomAmount.split("\\{")[1].split("}")[0].replace("" + level, ""));
                                 if(enchant != null) {
                                     if(level == -1) {
                                         level = RANDOM.nextInt(enchant.getMaxLevel());

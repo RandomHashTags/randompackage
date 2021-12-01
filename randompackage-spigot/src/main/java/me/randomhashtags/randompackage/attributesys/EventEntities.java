@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.event.mob.MobStackDepleteEvent;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -21,7 +21,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 
 import java.util.HashMap;
 
-public interface EventEntities extends EventConditions, UVersionable {
+public interface EventEntities extends EventConditions, UVersionableSpigot {
     default HashMap<String, Entity> getEntities(Object...values) {
         final HashMap<String, Entity> e = new HashMap<>();
         for(int i = 0; i < values.length; i++) {

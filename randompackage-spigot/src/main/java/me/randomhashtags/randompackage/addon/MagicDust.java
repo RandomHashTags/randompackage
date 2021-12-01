@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
-public interface MagicDust extends AppliesToRarities, Itemable, Percentable, GivedpItemable {
+public interface MagicDust extends AppliesToRarities, Itemable, Percentable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "dust" };

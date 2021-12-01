@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.FireworkEffect;
@@ -11,11 +11,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FileEnchantRarity extends RPAddon implements EnchantRarity {
+public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRarity {
     private final File folder;
     private ItemStack revealItem, revealedItem;
     private Firework firework;
-    protected List<CustomEnchant> enchants;
+    protected List<CustomEnchantSpigot> enchants;
 
     public FileEnchantRarity(File folder, File f) {
         this.folder = folder;
@@ -74,7 +74,7 @@ public final class FileEnchantRarity extends RPAddon implements EnchantRarity {
         }
         return firework;
     }
-    public List<CustomEnchant> getEnchants() {
+    public List<CustomEnchantSpigot> getEnchants() {
         return enchants;
     }
 }

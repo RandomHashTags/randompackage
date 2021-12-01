@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public final class FileServerCrate extends RPAddon implements ServerCrate {
+public final class FileServerCrate extends RPAddonSpigot implements ServerCrate {
 	private UInventory inv;
 	private LinkedHashMap<String, Integer> revealChances;
 	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public final class PathFireball extends RPAddon implements RarityFireball {
+public final class PathFireball extends RPAddonSpigot implements RarityFireball {
 	private final String path;
 	private ItemStack is;
 	private List<EnchantRarity> exchangeablerarities;

@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.perms.WildPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Wild implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Wild extends RPFeatureSpigot implements CommandExecutor {
+    public static final Wild INSTANCE = new Wild();
 
     private YamlConfiguration config;
     private HashMap<UUID, Long> expirations;

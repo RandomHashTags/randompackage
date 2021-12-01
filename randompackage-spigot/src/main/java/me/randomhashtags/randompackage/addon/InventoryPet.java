@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack, GivedpItemable {
+public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLevelable, Toggleable, RPItemStack, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "inventorypetegg", "petegg", "inventorypet", "pet" };

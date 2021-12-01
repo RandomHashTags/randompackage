@@ -7,8 +7,8 @@ import me.randomhashtags.randompackage.event.mob.CustomBossDamageByEntityEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossDeathEvent;
 import me.randomhashtags.randompackage.event.mob.CustomBossSpawnEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -24,7 +24,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 
-public final class LivingCustomBoss implements RPFeature, UVersionable {
+public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpigot {
     public static HashMap<UUID, LivingCustomBoss> LIVING;
 
     public LivingEntity summoner, entity;

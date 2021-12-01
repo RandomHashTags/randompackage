@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.Booster;
-import me.randomhashtags.randompackage.addon.BoosterRecipients;
+import me.randomhashtags.randompackage.addon.enums.BoosterRecipients;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.List;
 
-public final class FileBooster extends RPAddon implements Booster {
+public final class FileBooster extends RPAddonSpigot implements Booster {
     private ItemStack item;
     private BoosterRecipients recipients;
 

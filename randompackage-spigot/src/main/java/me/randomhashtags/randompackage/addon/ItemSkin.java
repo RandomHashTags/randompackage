@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface ItemSkin extends Nameable, Attributable, GivedpItemable {
+public interface ItemSkin extends Nameable, Attributable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "itemskin" };

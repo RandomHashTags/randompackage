@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.EnchantmentOrb;
 import me.randomhashtags.randompackage.addon.file.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum EnchantmentOrbs implements RPFeature {
+public enum EnchantmentOrbs implements RPFeatureSpigot {
     INSTANCE;
 
     @Override

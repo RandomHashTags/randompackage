@@ -1,13 +1,14 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.dev.FactionQuest;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class FileFactionQuest extends RPAddon implements FactionQuest {
+public class FileFactionQuest extends RPAddonSpigot implements FactionQuest {
     private String name;
     private BigDecimal completion;
     public FileFactionQuest(File f) {

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attributesys;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.attribute.EventAttribute;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RPPlayer;
@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.event.RPEvent;
 import me.randomhashtags.randompackage.event.enchant.CustomEnchantProcEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Location;
@@ -29,7 +29,7 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
-public abstract class EventExecutor implements RPFeature, EventReplacements, EventReplacer {
+public abstract class EventExecutor implements RPFeatureSpigot, EventReplacements, EventReplacer {
     public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
         final String eventName = event.getEventName().toLowerCase().split("event")[0];
         final Player involved;
@@ -48,18 +48,18 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
 
         final boolean isInteract = event instanceof PlayerInteractEvent;
 
-        outerloop: for(String c : conditions) {
-            final String condition = c.toLowerCase();
+        outerloop: for(String condition : conditions) {
+            final String conditionLowercase = condition.toLowerCase();
             final Set<String> keys = entities.keySet();
             for(String key : keys) {
                 final String entityKey = key;
                 final Entity e = entities.get(entityKey);
-                String value = c.contains("=") ? c.split("=")[1] : "false";
+                String value = condition.contains("=") ? condition.split("=")[1] : "false";
                 if(!value.replaceAll("\\p{L}", "").equals(value)) {
                     // contains an enchantment proc value
                     // TODO: allow more than 1 enchant in value
                     final String string = value.replaceAll("\\p{Z}", "").replaceAll("\\p{S}", "").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{Z}", "").replaceAll("\\p{M}", "");
-                    final CustomEnchant enchant = valueOfCustomEnchant(string);
+                    final CustomEnchantSpigot enchant = valueOfCustomEnchant(string);
                     if(enchant != null) {
                         forloop: for(String attribute : enchant.getAttributes()) {
                             if(attribute.split(";")[0].equalsIgnoreCase(eventName)) {
@@ -67,7 +67,7 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
                                 int levels = 0;
                                 if(involved != null) {
                                     final EquippedCustomEnchants equipped = getCustomEnchants().getEnchants(involved);
-                                    for(LinkedHashMap<CustomEnchant, Integer> enchantLevels : equipped.getInfo().values()) {
+                                    for(LinkedHashMap<CustomEnchantSpigot, Integer> enchantLevels : equipped.getInfo().values()) {
                                         if(enchantLevels != null && enchantLevels.containsKey(enchant)) {
                                             levels += enchantLevels.get(enchant);
                                         }
@@ -91,18 +91,18 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
                 }
                 if(!hasCancelled && cancelled && !isInteract) {
                     passed = false;
-                } else if(condition.startsWith("cancelled=")) {
+                } else if(conditionLowercase.startsWith("cancelled=")) {
                     passed = cancelled == Boolean.parseBoolean(value);
                     hasCancelled = true;
-                } else if(condition.startsWith("chance=")) {
+                } else if(conditionLowercase.startsWith("chance=")) {
                     final double chance = evaluate(value);
                     final boolean check = RANDOM.nextInt(100) < chance;
                     passed = check;
                     didProc = check;
-                } else if(condition.startsWith("didproc")) {
+                } else if(conditionLowercase.startsWith("didproc")) {
                     passed = didProc;
                 } else {
-                    passed = passedAllConditions(event, entities, entityKey, e, condition, key, value);
+                    passed = passedAllConditions(event, entities, entityKey, e, conditionLowercase, key, value);
                 }
                 if(!passed) {
                     break outerloop;
@@ -419,10 +419,10 @@ public abstract class EventExecutor implements RPFeature, EventReplacements, Eve
         final ItemStack eventItem = getEventItem ? equipped.getEventItem() : null;
         for(EquipmentSlot slot : slots) {
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
-            final LinkedHashMap<CustomEnchant, Integer> enchants = equipped.getEnchantsOn(slot);
+            final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = equipped.getEnchantsOn(slot);
 
             if(enchants != null) {
-                for(CustomEnchant enchant : enchants.keySet()) {
+                for(CustomEnchantSpigot enchant : enchants.keySet()) {
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);
                     //Bukkit.broadcastMessage("EventExecutor;enchant=" + enchant.getIdentifier() + ";event=" + event.getEventName() + ";onCorrectItem=" + onCorrectItem);

@@ -1,20 +1,19 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public enum TitanAttributes implements RPFeature, CommandExecutor {
+public enum TitanAttributes implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;

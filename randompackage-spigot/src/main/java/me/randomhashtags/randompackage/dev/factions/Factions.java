@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.dev.factions;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public enum Factions implements RPFeature, CommandExecutor {
+public enum Factions implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     @Override

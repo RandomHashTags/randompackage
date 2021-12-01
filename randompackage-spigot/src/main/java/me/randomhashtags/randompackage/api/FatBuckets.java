@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.FatBucket;
 import me.randomhashtags.randompackage.addon.file.FileFatBucket;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum FatBuckets implements RPFeature, RPItemStack {
-    INSTANCE;
+public final class FatBuckets extends RPFeatureSpigot implements RPItemStack {
+    public static final FatBuckets INSTANCE = new FatBuckets();
 
     public YamlConfiguration config;
 

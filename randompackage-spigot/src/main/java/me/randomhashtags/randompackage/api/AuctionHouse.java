@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.obj.AuctionedItem;
 import me.randomhashtags.randompackage.perms.AuctionHousePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -31,8 +31,8 @@ import java.util.*;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toMap;
 
-public enum AuctionHouse implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class AuctionHouse extends RPFeatureSpigot implements CommandExecutor {
+    public static final AuctionHouse INSTANCE = new AuctionHouse();
 
     public YamlConfiguration config;
 

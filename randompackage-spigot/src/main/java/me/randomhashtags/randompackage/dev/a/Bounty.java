@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public enum Bounty implements RPFeature {
+public enum Bounty implements RPFeatureSpigot {
     INSTANCE;
 
     public YamlConfiguration config;

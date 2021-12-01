@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.supported.regional;
 
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum ASky implements RPFeature, Regional {
+public enum ASky implements RPFeatureSpigot, Regional {
     INSTANCE;
 
     private ASkyBlockAPI api;

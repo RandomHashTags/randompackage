@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.MonthlyCratePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -37,8 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum MonthlyCrates implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class MonthlyCrates extends RPFeatureSpigot implements CommandExecutor {
+    public static final MonthlyCrates INSTANCE = new MonthlyCrates();
 
     public YamlConfiguration config;
     private UInventory gui, categoryView;

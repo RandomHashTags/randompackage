@@ -15,7 +15,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.GlobalChallengePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -139,7 +139,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 		addGivedpCategory(list, UMaterial.CHEST, "Global Challenge Prizes", "Givedp: GlobalChallenge Prizes");
 
-		if(RPFeature.mcmmoIsEnabled()) {
+		if(RPFeatureSpigot.mcmmoIsEnabled()) {
 		    mcmmoChallenges = new MCMMOChallenges();
 		    PLUGIN_MANAGER.registerEvents(mcmmoChallenges, RANDOM_PACKAGE);
         }

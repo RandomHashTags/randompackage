@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.file.FileItemSkin;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum ItemSkins implements RPFeature, CommandExecutor, RPItemStack {
-    INSTANCE;
+public final class ItemSkins extends RPFeatureSpigot implements CommandExecutor, RPItemStack {
+    public static final ItemSkins INSTANCE = new ItemSkins();
 
     public YamlConfiguration config;
     private UInventory gui;

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public interface Lootbox extends Itemable, Nameable, GivedpItemable {
+public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "lootbox" };

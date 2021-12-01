@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public final class PathWhiteScroll extends RPAddon implements WhiteScroll {
+public final class PathWhiteScroll extends RPAddonSpigot implements WhiteScroll {
     private final String path;
     private String apply;
     private ItemStack item;

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.dev;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Reputation implements RPFeature {
+public enum Reputation implements RPFeatureSpigot {
     INSTANCE;
 
     public YamlConfiguration config;

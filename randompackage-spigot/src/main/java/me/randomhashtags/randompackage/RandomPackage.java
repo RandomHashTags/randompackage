@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage;
 
-import me.randomhashtags.randompackage.addon.Kits;
 import me.randomhashtags.randompackage.api.*;
 import me.randomhashtags.randompackage.api.addon.*;
 import me.randomhashtags.randompackage.api.dev.InventoryPets;
@@ -14,7 +13,7 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
 import me.randomhashtags.randompackage.util.CommandManager;
-import me.randomhashtags.randompackage.util.listener.RPEvents;
+import me.randomhashtags.randompackage.util.listener.RPEventsSpigot;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,7 +44,7 @@ public final class RandomPackage extends JavaPlugin {
     public FileConfiguration config;
 
     private RandomPackageAPI api;
-    private RPEvents rpevents;
+    private RPEventsSpigot rpevents;
 
     public static String SPAWNER_PLUGIN_NAME;
     public static Plugin SPAWNER_PLUGIN, MCMMO;
@@ -65,7 +64,7 @@ public final class RandomPackage extends JavaPlugin {
         loadSoftDepends();
 
         api = RandomPackageAPI.INSTANCE;
-        rpevents = RPEvents.INSTANCE;
+        rpevents = RPEventsSpigot.INSTANCE;
 
         final Vault vault = Vault.INSTANCE;
         vault.setupEconomy();

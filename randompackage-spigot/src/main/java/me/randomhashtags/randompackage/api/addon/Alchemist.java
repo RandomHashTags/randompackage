@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.api.CustomEnchants;
@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.event.AlchemistExchangeEvent;
 import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -34,7 +34,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Alchemist implements RPFeature, CommandExecutor {
+public enum Alchemist implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;
@@ -176,7 +176,7 @@ public enum Alchemist implements RPFeature, CommandExecutor {
                 }
             } else if(current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().hasLore()) {
                 final ItemMeta currentMeta = current.getItemMeta();
-                final CustomEnchant enchant = valueOfCustomEnchant(currentMeta.getDisplayName());
+                final CustomEnchantSpigot enchant = valueOfCustomEnchant(currentMeta.getDisplayName());
                 final MagicDust dust = enchant == null ? valueOfMagicDust(event.getCurrentItem()) : null;
                 final String suCCess = enchant != null ? "enchant" : dust != null ? "dust" : null, currentName = currentMeta.getDisplayName();
                 final int firstEmpty = top.firstEmpty();

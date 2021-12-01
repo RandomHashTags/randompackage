@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.ConquestBlockDamageEvent;
 import me.randomhashtags.randompackage.perms.ConquestPermission;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,8 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Conquest implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Conquest extends RPFeatureSpigot implements CommandExecutor {
+    public static final Conquest INSTANCE = new Conquest();
 
     public YamlConfiguration config;
     private List<Integer> tasks;
@@ -51,6 +51,7 @@ public enum Conquest implements RPFeature, CommandExecutor {
     public String getIdentifier() {
         return "CONQUEST";
     }
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);
@@ -72,6 +73,7 @@ public enum Conquest implements RPFeature, CommandExecutor {
         return true;
     }
 
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "conquests";
@@ -110,6 +112,7 @@ public enum Conquest implements RPFeature, CommandExecutor {
         final HashMap<String, ConquestMob> bosses = ConquestMob.BOSSES;
         sendConsoleDidLoadFeature(getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (bosses != null ? bosses.size() : 0) + " bosses", started);
     }
+    @Override
     public void unload() {
         for(int i : tasks) {
             SCHEDULER.cancelTask(i);

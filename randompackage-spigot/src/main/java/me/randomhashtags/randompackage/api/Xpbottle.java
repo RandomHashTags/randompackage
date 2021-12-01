@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.SecondaryData;
 import me.randomhashtags.randompackage.event.PlayerTeleportDelayEvent;
 import me.randomhashtags.randompackage.perms.XpbottlePermission;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,7 +17,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Xpbottle implements RPFeature, Listener, CommandExecutor {
-    INSTANCE;
+public final class Xpbottle extends RPFeatureSpigot implements CommandExecutor {
+    public static final Xpbottle INSTANCE = new Xpbottle();
 
     public YamlConfiguration config;
     public ItemStack bottle;

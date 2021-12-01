@@ -1,9 +1,10 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.dev.Disguise;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 
-public class PathDisguise extends RPAddon implements Disguise {
+public class PathDisguise extends RPAddonSpigot implements Disguise {
     private final String identifier, name;
     private final int slot;
     public PathDisguise(String identifier, int slot, String name) {

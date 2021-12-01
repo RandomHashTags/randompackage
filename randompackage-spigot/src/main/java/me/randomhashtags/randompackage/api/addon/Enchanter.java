@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.EnchanterPurchaseEvent;
 import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Enchanter implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Enchanter extends RPFeatureSpigot implements CommandExecutor {
+    public static final Enchanter INSTANCE = new Enchanter();
 
     public YamlConfiguration config;
     private UInventory enchanter;

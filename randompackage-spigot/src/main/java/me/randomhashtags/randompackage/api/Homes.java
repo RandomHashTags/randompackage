@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.perms.HomePermission;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Homes implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Homes extends RPFeatureSpigot implements CommandExecutor {
+	public static final Homes INSTANCE = new Homes();
 
 	public YamlConfiguration config;
 	public int defaultMax;

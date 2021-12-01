@@ -1,11 +1,11 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Location;
 
 import java.util.List;
 
-public abstract class AbstractBattlefield extends RPAddon implements BattlefieldEvent {
+public abstract class AbstractBattlefield extends RPAddonSpigot implements BattlefieldEvent {
     public Location getWarpLocation() { return toLocation(yml.getString("settings.warp location")); }
     public List<String> getAllowedCommands() { return yml.getStringList("allowed commands"); }
 

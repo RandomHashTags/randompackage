@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.List;
 
-public final class FileMask extends RPAddon implements Mask, Skullable {
+public final class FileMask extends RPAddonSpigot implements Mask, Skullable {
     private ItemStack item;
 
     public FileMask(File f) {

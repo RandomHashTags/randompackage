@@ -7,7 +7,7 @@ import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.perms.SoulTrackerPermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public enum SoulTrackers implements RPFeature, CommandExecutor {
+public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;

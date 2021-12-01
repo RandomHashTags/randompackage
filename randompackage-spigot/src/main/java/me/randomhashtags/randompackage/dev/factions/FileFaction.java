@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.factions;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class FileFaction extends RPAddon implements Faction {
+public class FileFaction extends RPAddonSpigot implements Faction {
     public static HashMap<UUID, FileFaction> FACTIONS = new HashMap<>();
 
     private boolean isLoaded;

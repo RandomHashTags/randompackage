@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.List;
 
-public final class FileFactionUpgradeType extends RPAddon implements FactionUpgradeType {
+public final class FileFactionUpgradeType extends RPAddonSpigot implements FactionUpgradeType {
 	private static YamlConfiguration yml;
 
 	private final String path;

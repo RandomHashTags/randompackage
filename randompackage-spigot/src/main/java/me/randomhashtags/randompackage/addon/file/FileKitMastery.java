@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public final class FileKitMastery extends RPKit implements CustomKitMastery {
+public final class FileKitMastery extends RPKitSpigot implements CustomKitMastery {
     private ItemStack item, redeem, shard, antiCrystal;
     private LinkedHashMap<CustomKit, Integer> requiredKits;
     public FileKitMastery(File f) {

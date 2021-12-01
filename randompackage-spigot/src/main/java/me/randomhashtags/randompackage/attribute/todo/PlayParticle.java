@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.attribute.todo;
 
 import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
-import me.randomhashtags.randompackage.universal.UParticle;
+import me.randomhashtags.randompackage.universal.UParticleSpigot;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -14,7 +14,7 @@ public final class PlayParticle extends AbstractEventAttribute {
         for(Location l : locations.keySet()) {
             final World w = l.getWorld();
             final String[] values = locations.get(l).split(":");
-            final Object particle = UParticle.matchParticle(values[0].toUpperCase()).getParticle();
+            final Object particle = UParticleSpigot.matchParticle(values[0].toUpperCase()).getParticle();
             final int amount = Integer.parseInt(values[1]);
             if(EIGHT) {
                 w.playEffect(l, (org.bukkit.Effect) particle, amount);

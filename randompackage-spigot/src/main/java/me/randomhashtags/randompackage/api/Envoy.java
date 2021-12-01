@@ -10,7 +10,7 @@ import me.randomhashtags.randompackage.perms.EnvoyPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -30,8 +30,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public enum Envoy implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Envoy extends RPFeatureSpigot implements CommandExecutor {
+	public static final Envoy INSTANCE = new Envoy();
 
 	public YamlConfiguration config;
 

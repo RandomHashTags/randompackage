@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.event.KothCaptureEvent;
 import me.randomhashtags.randompackage.perms.KOTHPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -32,8 +32,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public enum KOTH implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class KOTH extends RPFeatureSpigot implements CommandExecutor {
+	public static final KOTH INSTANCE = new KOTH();
 
 	public YamlConfiguration config;
 	private UInventory lootbagInv;

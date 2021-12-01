@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attribute.Combo;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import me.randomhashtags.randompackage.util.RPValues;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EventReplacer extends Combo, Mathable, UVersionable, RPValues {
+public interface EventReplacer extends Combo, Mathable, UVersionableSpigot, RPValues {
     default String replaceValue(HashMap<String, Entity> entities, String value, HashMap<String, String> valueReplacements) {
         String string = value;
 

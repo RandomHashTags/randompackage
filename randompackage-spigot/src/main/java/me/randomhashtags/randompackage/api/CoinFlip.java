@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.event.CoinFlipEndEvent;
 import me.randomhashtags.randompackage.perms.CoinFlipPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -31,8 +31,9 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
-public enum CoinFlip implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class CoinFlip extends RPFeatureSpigot implements CommandExecutor {
+    public static final CoinFlip INSTANCE = new CoinFlip();
+
 
     public YamlConfiguration config;
     private boolean isLegacy;

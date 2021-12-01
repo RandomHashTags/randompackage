@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.api.dev;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public enum LastManStanding implements RPFeature, CommandExecutor {
+public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;

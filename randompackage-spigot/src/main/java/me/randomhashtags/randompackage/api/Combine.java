@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.perms.CombinePermission;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -19,12 +19,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum Combine implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Combine extends RPFeatureSpigot implements CommandExecutor {
+    public static final Combine INSTANCE = new Combine();
 
     public YamlConfiguration config;
     private List<String> combineores;
 
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player && hasPermission(sender, CombinePermission.COMMAND, true)) {
             combine((Player) sender);

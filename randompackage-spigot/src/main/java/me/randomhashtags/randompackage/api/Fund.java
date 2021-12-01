@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.event.FundDepositEvent;
 import me.randomhashtags.randompackage.perms.FundPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Fund implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Fund extends RPFeatureSpigot implements CommandExecutor {
+	public static final Fund INSTANCE = new Fund();
 
 	public YamlConfiguration config;
 

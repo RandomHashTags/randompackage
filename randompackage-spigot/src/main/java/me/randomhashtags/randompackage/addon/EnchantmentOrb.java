@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface EnchantmentOrb extends Applyable, Percentable, GivedpItemable {
+public interface EnchantmentOrb extends Applyable, Percentable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "enchantmentorb" };

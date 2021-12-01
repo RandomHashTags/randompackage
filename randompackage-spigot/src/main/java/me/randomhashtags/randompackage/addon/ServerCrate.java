@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface ServerCrate extends Itemable, GivedpItemable {
+public interface ServerCrate extends Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "serverflare", "spaceflare", "servercrateflare", "servercrate", "spacecrate", "spacechest", "serverchest" };

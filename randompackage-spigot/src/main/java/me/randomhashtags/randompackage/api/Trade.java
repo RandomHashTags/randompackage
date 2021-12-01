@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.living.ActiveTrade;
 import me.randomhashtags.randompackage.perms.TradePermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum Trade implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Trade extends RPFeatureSpigot implements CommandExecutor {
+	public static final Trade INSTANCE = new Trade();
 
 	public YamlConfiguration config;
 	protected int radius, countdown;

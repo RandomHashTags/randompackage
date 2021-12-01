@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.util.AppliesToRarities;
 import me.randomhashtags.randompackage.addon.util.Percentable;
 import org.bukkit.inventory.ItemStack;
 
-public interface BlackScroll extends Scroll, AppliesToRarities, Percentable, GivedpItemable {
+public interface BlackScroll extends Scroll, AppliesToRarities, Percentable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "blackscroll" };
     }

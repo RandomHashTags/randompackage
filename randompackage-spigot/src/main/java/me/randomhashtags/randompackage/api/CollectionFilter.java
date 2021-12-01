@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.obj.CollectionChest;
 import me.randomhashtags.randompackage.perms.CollectionFilterPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -33,8 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum CollectionFilter implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class CollectionFilter extends RPFeatureSpigot implements CommandExecutor {
+    public static final CollectionFilter INSTANCE = new CollectionFilter();
 
     public YamlConfiguration config;
     private ItemStack collectionchest;

@@ -2,9 +2,9 @@ package me.randomhashtags.randompackage;
 
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
-import me.randomhashtags.randompackage.util.listener.RPEvents;
+import me.randomhashtags.randompackage.util.listener.RPEventsSpigot;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,8 +24,8 @@ import java.util.List;
 import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
 import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
-public enum RandomPackageAPI implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class RandomPackageAPI extends RPFeatureSpigot implements CommandExecutor {
+    public static final RandomPackageAPI INSTANCE = new RandomPackageAPI();
 
     public static int SPAWNER_CHANCE = 0;
 
@@ -63,7 +63,7 @@ public enum RandomPackageAPI implements RPFeature, CommandExecutor {
                     GET_PLUGIN.reload();
                     sender.sendMessage(colorize("&6[RandomPackage] &aReload complete!"));
                 } else if(a.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
-                    RPEvents.INSTANCE.backup();
+                    RPEventsSpigot.INSTANCE.backup();
                     sender.sendMessage(colorize("&6[RandomPackage] &aPlayer backup complete!"));
                 }
             }

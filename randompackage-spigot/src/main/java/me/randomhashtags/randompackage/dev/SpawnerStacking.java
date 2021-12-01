@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum SpawnerStacking implements RPFeature {
-    INSTANCE;
+public final class SpawnerStacking extends RPFeatureSpigot {
+    public static final SpawnerStacking INSTANCE = new SpawnerStacking();
 
     private File dataF;
     public YamlConfiguration config, data;
@@ -41,9 +41,11 @@ public enum SpawnerStacking implements RPFeature {
     private HashMap<String, HashMap<String, Integer>> maxStackSizes;
     private HashMap<Location, StackedSpawner> stacks;
 
+    @Override
     public String getIdentifier() {
         return "SPAWNER_STACKING";
     }
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "spawner stacking.yml");
@@ -74,6 +76,7 @@ public enum SpawnerStacking implements RPFeature {
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded Spawner Stacking &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
     }
 

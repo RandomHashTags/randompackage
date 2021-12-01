@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileTrinket extends RPAddon implements Trinket {
+public final class FileTrinket extends RPAddonSpigot implements Trinket {
     private ItemStack item;
     private HashMap<String, String> settings;
 

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.api.addon;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.addon.RarityFireball;
@@ -85,7 +85,7 @@ public class Fireballs extends CustomEnchants {
             final ItemStack item = current;
             final ItemMeta itemMeta = current.getItemMeta();
             final List<String> lore = new ArrayList<>();
-            final CustomEnchant enchant = valueOfCustomEnchant(current);
+            final CustomEnchantSpigot enchant = valueOfCustomEnchant(current);
             final MagicDust dust = valueOfMagicDust(cursor);
             if(dust != null && enchant != null) {
                 final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);

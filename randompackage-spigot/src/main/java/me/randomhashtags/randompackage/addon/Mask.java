@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Applyable;
 import me.randomhashtags.randompackage.addon.util.Attributable;
 import org.bukkit.inventory.ItemStack;
 
-public interface Mask extends Applyable, Attributable, GivedpItemable {
+public interface Mask extends Applyable, Attributable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "mask", "multimask" };

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FileRarityGem extends RPAddon implements RarityGem {
+public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 	public static HashMap<Integer, String> defaultColors;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;

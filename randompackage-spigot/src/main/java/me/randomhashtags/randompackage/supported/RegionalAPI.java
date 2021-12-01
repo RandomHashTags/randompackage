@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.api.FactionUpgrades;
 import me.randomhashtags.randompackage.attribute.faction.AddFactionPower;
 import me.randomhashtags.randompackage.supported.regional.*;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum RegionalAPI implements UVersionable {
+public enum RegionalAPI implements UVersionableSpigot {
     INSTANCE;
 
     private FileConfiguration config;

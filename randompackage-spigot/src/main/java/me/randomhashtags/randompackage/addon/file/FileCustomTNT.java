@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class FileCustomTNT extends RPAddon implements CustomExplosion {
+public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosion {
     public static HashMap<Location, FileCustomTNT> PLACED;
     public static HashMap<UUID, FileCustomTNT> PRIMED;
 

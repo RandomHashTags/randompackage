@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
         version = "16.5.0",
         authors = {"RandomHashTags"}
 )
-public class RandomPackage {
+public final class RandomPackage {
 
     public static RandomPackage getPlugin;
 
@@ -40,7 +40,6 @@ public class RandomPackage {
         enableSoftDepends();
     }
     private void enableSoftDepends() {
-
     }
     private PluginContainer getPlugin(String id) {
         final PluginManager pm = Sponge.getPluginManager();

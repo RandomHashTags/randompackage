@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.List;
 
-public final class ConquestMob implements UVersionable {
+public final class ConquestMob implements UVersionableSpigot {
     public static HashMap<String, ConquestMob> BOSSES;
 
     private final String path, type, name;

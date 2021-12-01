@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.RandomPackageAPI;
-import me.randomhashtags.randompackage.addon.RaidEventPhase;
+import me.randomhashtags.randompackage.addon.dev.RaidEventPhase;
 import org.bukkit.World;
 
 public final class ActiveRaidEvent {

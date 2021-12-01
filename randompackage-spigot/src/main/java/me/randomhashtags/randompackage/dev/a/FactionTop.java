@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.dev.a;
 
 import me.randomhashtags.randompackage.addon.obj.FactionTopInfo;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.HashMap;
 
-public enum FactionTop implements RPFeature, CommandExecutor {
+public enum FactionTop implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public static HashMap<String, FactionTopInfo> topFactions;

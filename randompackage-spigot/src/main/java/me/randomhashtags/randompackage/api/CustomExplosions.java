@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.file.FileCustomTNT;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,8 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum CustomExplosions implements RPFeature {
-	INSTANCE;
+public final class CustomExplosions extends RPFeatureSpigot {
+	public static final CustomExplosions INSTANCE = new CustomExplosions();
 
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;

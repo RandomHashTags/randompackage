@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public final class GlobalChallengePrizeObject extends RPAddon implements GlobalChallengePrize {
+public final class GlobalChallengePrizeObject extends RPAddonSpigot implements GlobalChallengePrize {
     private final ItemStack display;
     private final int placement, amount;
     private final List<String> rewards;

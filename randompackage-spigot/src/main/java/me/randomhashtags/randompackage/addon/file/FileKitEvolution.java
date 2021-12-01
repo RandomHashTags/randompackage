@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public final class FileKitEvolution extends RPKit implements CustomKitEvolution {
+public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvolution {
     private ItemStack item, upgradeGem;
 
     public FileKitEvolution(File f) {

@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum RandomizedLoot implements RPFeature {
-    INSTANCE;
+public final class RandomizedLoot extends RPFeatureSpigot {
+    public static final RandomizedLoot INSTANCE = new RandomizedLoot();
 
     public YamlConfiguration config;
     public HashMap<String, RandomizedLootItem> items;

@@ -3,12 +3,12 @@ package me.randomhashtags.randompackage.addon.slotbot;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Itemable;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public interface CustomItem extends Identifiable, Itemable, UVersionable {
+public interface CustomItem extends Identifiable, Itemable, UVersionableSpigot {
     List<String> getCommands();
     default boolean doesExecuteCommands() {
         final List<String> commands = getCommands();

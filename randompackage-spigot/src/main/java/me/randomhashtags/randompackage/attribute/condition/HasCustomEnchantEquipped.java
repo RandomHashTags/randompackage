@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.attribute.condition;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.AbstractEventCondition;
 import org.bukkit.entity.Entity;
@@ -17,7 +17,7 @@ public final class HasCustomEnchantEquipped extends AbstractEventCondition {
         if(entity instanceof LivingEntity) {
             final EntityEquipment equipment = ((LivingEntity) entity).getEquipment();
             if(equipment != null) {
-                final CustomEnchant enchant = valueOfCustomEnchant(value);
+                final CustomEnchantSpigot enchant = valueOfCustomEnchant(value);
                 if(enchant != null) {
                     final CustomEnchants enchants = getCustomEnchants();
                     final ItemStack[] items = new ItemStack[] {equipment.getHelmet(), equipment.getChestplate(), equipment.getLeggings(), equipment.getBoots(), EIGHT ? equipment.getItemInHand() : equipment.getItemInMainHand(), EIGHT ? null : equipment.getItemInOffHand()};

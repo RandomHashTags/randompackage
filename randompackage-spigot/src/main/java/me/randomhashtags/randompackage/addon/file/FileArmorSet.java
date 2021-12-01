@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FileArmorSet extends RPAddon implements ArmorSet {
+public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 	private ItemStack helmet, chestplate, leggings, boots;
 	private List<ArmorSetWeaponInfo> weapons;
 

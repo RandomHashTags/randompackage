@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Strongholds implements RPFeature, CommandExecutor {
+public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;

@@ -9,7 +9,7 @@ import me.randomhashtags.randompackage.api.FatBuckets;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ import java.util.*;
 import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
 
 @SuppressWarnings({"unchecked"})
-public interface RPValues extends UVersionable {
+public interface RPValues extends UVersionableSpigot {
     default LinkedHashMap<String, ?> getAllObj(Feature f) {
         return FEATURES.getOrDefault(f, new LinkedHashMap<>());
     }
@@ -48,8 +48,8 @@ public interface RPValues extends UVersionable {
     default LinkedHashMap<String, EnchantRarity> getAllCustomEnchantRarities() {
         return (LinkedHashMap<String, EnchantRarity>) getAllObj(Feature.CUSTOM_ENCHANT_RARITY);
     }
-    default LinkedHashMap<String, CustomEnchant> getAllCustomEnchants(boolean enabled) {
-        return (LinkedHashMap<String, CustomEnchant>) getAllObj(enabled ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED);
+    default LinkedHashMap<String, CustomEnchantSpigot> getAllCustomEnchants(boolean enabled) {
+        return (LinkedHashMap<String, CustomEnchantSpigot>) getAllObj(enabled ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED);
     }
     default LinkedHashMap<String, CustomExplosion> getAllCustomExplosions() {
         return (LinkedHashMap<String, CustomExplosion>) getAllObj(Feature.CUSTOM_EXPLOSION);
@@ -305,7 +305,7 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
-    default EnchantRarity valueOfCustomEnchantRarity(@NotNull CustomEnchant enchant) {
+    default EnchantRarity valueOfCustomEnchantRarity(@NotNull CustomEnchantSpigot enchant) {
         for(EnchantRarity e : getAllCustomEnchantRarities().values()) {
             if(e.getEnchants().contains(enchant)) {
                 return e;
@@ -313,17 +313,17 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
-    default CustomEnchant valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
-    default CustomEnchant valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
+    default CustomEnchantSpigot valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
+    default CustomEnchantSpigot valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
         if(string != null) {
             final String s = ChatColor.stripColor(string);
-            for(CustomEnchant ce : getAllCustomEnchants(true).values()) {
+            for(CustomEnchantSpigot ce : getAllCustomEnchants(true).values()) {
                 if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
                     return ce;
                 }
             }
             if(checkDisabledEnchants) {
-                for(CustomEnchant ce : getAllCustomEnchants(false).values()) {
+                for(CustomEnchantSpigot ce : getAllCustomEnchants(false).values()) {
                     if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
                         return ce;
                     }
@@ -332,9 +332,9 @@ public interface RPValues extends UVersionable {
         }
         return null;
     }
-    default CustomEnchant valueOfCustomEnchant(ItemStack is) {
+    default CustomEnchantSpigot valueOfCustomEnchant(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomEnchant e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
+            final CustomEnchantSpigot e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
             final EnchantRarity r = valueOfCustomEnchantRarity(e);
             return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
         }

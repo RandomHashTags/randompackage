@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.addon.living;
 
 import me.randomhashtags.randompackage.addon.Booster;
-import me.randomhashtags.randompackage.addon.BoosterRecipients;
+import me.randomhashtags.randompackage.addon.enums.BoosterRecipients;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.OfflinePlayer;
 
-public final class ActiveBooster implements UVersionable {
+public final class ActiveBooster implements UVersionableSpigot {
     private int task;
     private final OfflinePlayer activator;
     private final String faction;

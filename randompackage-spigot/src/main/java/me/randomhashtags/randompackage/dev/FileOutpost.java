@@ -2,8 +2,8 @@ package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.Outpost;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.enums.OutpostStatus;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.enums.OutpostStatus;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.util.List;
 
 // TODO: fix class
-public abstract class FileOutpost extends RPAddon implements Outpost {
+public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
     private ItemStack item;
     private List<String> lostControl, claimed;
     private Scoreboard scoreboard;

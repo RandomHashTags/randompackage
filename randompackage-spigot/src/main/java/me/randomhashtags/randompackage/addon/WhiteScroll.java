@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.util.Applyable;
 import org.bukkit.inventory.ItemStack;
 
-public interface WhiteScroll extends Scroll, Applyable, GivedpItemable {
+public interface WhiteScroll extends Scroll, Applyable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "whitescroll" };

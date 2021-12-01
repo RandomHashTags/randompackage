@@ -3,13 +3,13 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.slotbot.CustomItem;
-import me.randomhashtags.randompackage.enums.SlotBotSetting;
+import me.randomhashtags.randompackage.addon.enums.SlotBotSetting;
 import me.randomhashtags.randompackage.perms.SlotBotPermission;
 import me.randomhashtags.randompackage.universal.CustomSound;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.universal.USound;
 import me.randomhashtags.randompackage.util.ChatUtils;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -33,8 +33,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public enum SlotBot implements RPFeature, Listener, CommandExecutor, ChatUtils {
-    INSTANCE;
+public final class SlotBot extends RPFeatureSpigot implements CommandExecutor, ChatUtils {
+    public static final SlotBot INSTANCE = new SlotBot();
 
     public YamlConfiguration config;
     private UInventory gui, preview;

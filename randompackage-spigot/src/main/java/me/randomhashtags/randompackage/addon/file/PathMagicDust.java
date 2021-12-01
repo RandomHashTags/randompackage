@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class PathMagicDust extends RPAddon implements MagicDust {
+public final class PathMagicDust extends RPAddonSpigot implements MagicDust {
 	private final String path;
 	private MagicDust upgradesto;
 	private ItemStack is;

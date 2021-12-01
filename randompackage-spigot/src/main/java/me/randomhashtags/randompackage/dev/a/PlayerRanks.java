@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.addon.PlayerRank;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.addon.util.PlayerRank;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public enum PlayerRanks implements RPFeature {
+public enum PlayerRanks implements RPFeatureSpigot {
     INSTANCE;
 
     private ItemStack interactable;

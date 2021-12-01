@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 
-public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpItemable {
+public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customboss" };

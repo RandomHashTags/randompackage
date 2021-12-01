@@ -15,7 +15,7 @@ import me.randomhashtags.randompackage.event.regional.RegionDisbandEvent;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.TObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -68,7 +68,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 			saveOtherData();
 		}
 
-		if(RPFeature.mcmmoIsEnabled()) {
+		if(RPFeatureSpigot.mcmmoIsEnabled()) {
 			mcmmoboosters = new MCMMOBoosterEvents();
 			PLUGIN_MANAGER.registerEvents(mcmmoboosters, RANDOM_PACKAGE);
 		}
@@ -87,7 +87,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	}
 	public void unload() {
 		backup();
-		if(RPFeature.mcmmoIsEnabled()) {
+		if(RPFeatureSpigot.mcmmoIsEnabled()) {
 			HandlerList.unregisterAll(mcmmoboosters);
 			mcmmoboosters = null;
 		}

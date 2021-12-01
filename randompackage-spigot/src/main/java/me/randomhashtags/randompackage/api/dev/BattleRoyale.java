@@ -3,7 +3,7 @@ package me.randomhashtags.randompackage.api.dev;
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.BattleRoyaleTeam;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -27,7 +27,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.io.File;
 import java.util.*;
 
-public enum BattleRoyale implements RPFeature, CommandExecutor {
+public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public LinkedHashMap<Integer, BattleRoyaleTeam> teams;

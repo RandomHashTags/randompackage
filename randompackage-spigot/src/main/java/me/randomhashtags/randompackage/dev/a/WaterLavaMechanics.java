@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public enum WaterLavaMechanics implements RPFeature {
+public enum WaterLavaMechanics implements RPFeatureSpigot {
     INSTANCE;
 
     public YamlConfiguration config;

@@ -11,7 +11,7 @@ import me.randomhashtags.randompackage.data.obj.*;
 import me.randomhashtags.randompackage.dev.Disguises;
 import me.randomhashtags.randompackage.dev.duels.Duels;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public final class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
+public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStorage {
     private static final String FOLDER = DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "players";
     public static final HashMap<UUID, FileRPPlayer> PLAYERS = new HashMap<>();
 
@@ -176,11 +176,11 @@ public final class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
             final DuelRankedData ranked = duelData.getRankedData();
             yml.set("duel.ranked.elo", ranked.getELO().doubleValue());
 
-            final HashMap<ItemStack, List<CustomEnchant>> godset = ranked.getGodset();
+            final HashMap<ItemStack, List<CustomEnchantSpigot>> godset = ranked.getGodset();
             i = 0;
             for(ItemStack is : godset.keySet()) {
                 final List<String> customenchants = new ArrayList<>();
-                for(CustomEnchant enchant : godset.get(is)) {
+                for(CustomEnchantSpigot enchant : godset.get(is)) {
                     customenchants.add(enchant.getIdentifier());
                 }
                 yml.set("duel.ranked.godset." + i + ".item", is.toString());
@@ -404,7 +404,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
         if(duelData == null && Duels.INSTANCE.isEnabled()) {
             boolean notifications = true;
             final List<ItemStack> collection = new ArrayList<>();
-            final HashMap<ItemStack, List<CustomEnchant>> godset = new HashMap<>();
+            final HashMap<ItemStack, List<CustomEnchantSpigot>> godset = new HashMap<>();
             DuelRankedData ranked = null;
             if(yml.get("duel") != null) {
                 notifications = yml.getBoolean("duel.notifications");
@@ -414,9 +414,9 @@ public final class FileRPPlayer implements RPPlayer, UVersionable, RPStorage {
 
                 for(String key : getConfigurationSectionKeys(yml, "duel.ranked.godset", false)) {
                     final String path = "duel.ranked.godset." + key + ".";
-                    final List<CustomEnchant> enchants = new ArrayList<>();
+                    final List<CustomEnchantSpigot> enchants = new ArrayList<>();
                     for(String enchant : yml.getStringList(path + "custom enchants")) {
-                        final CustomEnchant ce = getCustomEnchant(enchant);
+                        final CustomEnchantSpigot ce = getCustomEnchant(enchant);
                         if(ce != null) {
                             enchants.add(ce);
                         }

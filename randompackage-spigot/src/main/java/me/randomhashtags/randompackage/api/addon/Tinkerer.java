@@ -1,13 +1,13 @@
 package me.randomhashtags.randompackage.api.addon;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.perms.CustomEnchantPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public enum Tinkerer implements RPFeature, CommandExecutor {
+public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     public YamlConfiguration config;
@@ -117,7 +117,7 @@ public enum Tinkerer implements RPFeature, CommandExecutor {
             final String click = event.getClick().name(), material = current != null ? current.getType().name() : null;
             if(rawslot < 0 || !click.contains("LEFT") && !click.contains("RIGHT") || material == null || material.equals("AIR")) return;
 
-            final CustomEnchant customEnchant = current.hasItemMeta() && current.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(current.getItemMeta().getDisplayName()) : null;
+            final CustomEnchantSpigot customEnchant = current.hasItemMeta() && current.getItemMeta().hasDisplayName() ? valueOfCustomEnchant(current.getItemMeta().getDisplayName()) : null;
             ItemStack item = null;
             if(rawslot >= 4 && rawslot <= 8
                     || rawslot >= 13 && rawslot <= 17
@@ -156,8 +156,8 @@ public enum Tinkerer implements RPFeature, CommandExecutor {
                     xp = xp.add(BigDecimal.valueOf(Integer.parseInt(target)));
                 }
                 if(current.hasItemMeta() && current.getItemMeta().hasLore()) {
-                    final HashMap<CustomEnchant, Integer> enchants = CustomEnchants.getCustomEnchants().getEnchantsOnItem(current);
-                    for(CustomEnchant enchant : enchants.keySet()) {
+                    final HashMap<CustomEnchantSpigot, Integer> enchants = CustomEnchants.getCustomEnchants().getEnchantsOnItem(current);
+                    for(CustomEnchantSpigot enchant : enchants.keySet()) {
                         xp = xp.add(enchant.getTinkererValue(enchants.get(enchant)));
                     }
                 }

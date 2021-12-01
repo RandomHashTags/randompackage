@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 
-public final class FileKitGlobal extends RPKit implements CustomKitGlobal {
+public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal {
     private ItemStack item;
 
     public FileKitGlobal(File f) {

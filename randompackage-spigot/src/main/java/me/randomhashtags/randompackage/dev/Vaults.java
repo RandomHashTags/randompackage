@@ -1,12 +1,11 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
 
-public enum Vaults implements RPFeature, CommandExecutor {
+public enum Vaults implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     @Override

@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.ShowcaseData;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,8 +27,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public enum Showcase implements RPFeature, CommandExecutor {
-	INSTANCE;
+public final class Showcase extends RPFeatureSpigot implements CommandExecutor {
+	public static final Showcase INSTANCE = new Showcase();
 
 	public YamlConfiguration config;
 	private ItemStack addItemConfirm, addItemCancel, removeItemConfirm, removeItemCancel, expansion;
@@ -64,9 +64,11 @@ public enum Showcase implements RPFeature, CommandExecutor {
 		return true;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return "SHOWCASE";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "showcase.yml");
@@ -110,6 +112,7 @@ public enum Showcase implements RPFeature, CommandExecutor {
 		}
 		sendConsoleDidLoadFeature("Showcase", started);
 	}
+	@Override
 	public void unload() {
 		final String msg = colorize("&e&l(!)&r &eYou've been forced to exit a showcase due to reloading the server.");
 		for(Player player : new ArrayList<>(inSelf)) {

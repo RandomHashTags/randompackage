@@ -4,7 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 
-public interface Title extends Itemable, GivedpItemable {
+public interface Title extends Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "title" };

@@ -17,7 +17,7 @@ public enum CommandManager implements Reflect {
     private SimpleCommandMap commandMap;
     private HashMap<String, Command> knownCommands;
 
-    private final HashMap<String, RPFeature> features;
+    private final HashMap<String, RPFeatureSpigot> features;
     private static final HashMap<String, PluginCommand> ACTUAL_COMMANDS = new HashMap<>();
     private Object dispatcher, nodes;
 
@@ -67,7 +67,7 @@ public enum CommandManager implements Reflect {
     @Override
     public void unload() {}
 
-    public void load(RPFeature f, List<String> baseCmds, boolean enabled) {
+    public void load(RPFeatureSpigot f, List<String> baseCmds, boolean enabled) {
         final HashMap<String, String> cmds = new HashMap<>();
         if(baseCmds != null) {
             for(String s : baseCmds) {
@@ -76,7 +76,7 @@ public enum CommandManager implements Reflect {
         }
         loadCustom(f, cmds, enabled);
     }
-    public void loadCustom(RPFeature feature, HashMap<String, String> baseCmds, boolean isEnabled) {
+    public void loadCustom(RPFeatureSpigot feature, HashMap<String, String> baseCmds, boolean isEnabled) {
         if(isEnabled) {
             final String featureIdentifier = feature.getIdentifier();
             final List<Boolean> enabledList = new ArrayList<>();
@@ -128,11 +128,11 @@ public enum CommandManager implements Reflect {
         }
     }
     public void disable() {
-        for(RPFeature f : features.values()) {
+        for(RPFeatureSpigot f : features.values()) {
             disable(f);
         }
     }
-    public void disable(RPFeature f) {
+    public void disable(RPFeatureSpigot f) {
         if(f != null) {
             f.disable();
         }

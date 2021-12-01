@@ -3,11 +3,11 @@ package me.randomhashtags.randompackage.addon.legacy;
 import me.randomhashtags.randompackage.api.Shop;
 import me.randomhashtags.randompackage.addon.util.Inventoryable;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 
 import java.util.List;
 
-public abstract class ShopCategory extends RPAddon implements Inventoryable {
+public abstract class ShopCategory extends RPAddonSpigot implements Inventoryable {
     public static Shop SHOP;
     public abstract List<ShopItem> getShopItems();
     public abstract ShopItem getItem(int slot);

@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.data.JackpotData;
 import me.randomhashtags.randompackage.event.JackpotPurchaseTicketsEvent;
 import me.randomhashtags.randompackage.perms.JackpotPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -28,8 +28,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public enum Jackpot implements RPFeature, CommandExecutor {
-    INSTANCE;
+public final class Jackpot extends RPFeatureSpigot implements CommandExecutor {
+    public static final Jackpot INSTANCE = new Jackpot();
 
     public YamlConfiguration config;
     public int task;

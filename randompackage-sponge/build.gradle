@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    compile project(":Utilities")
     compile 'org.spongepowered:spongeapi:7.1.0'
 }
 

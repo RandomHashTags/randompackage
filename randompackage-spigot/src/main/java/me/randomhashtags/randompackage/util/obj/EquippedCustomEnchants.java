@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.util.obj;
 
 import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.Nullable;
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.util.Versionable;
@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 public final class EquippedCustomEnchants implements Versionable {
     public static HashMap<Player, ArmorEquipEvent> EVENTS = new HashMap<>();
     private final Player player;
-    private final LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> enchants;
+    private final LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchantSpigot, Integer>> enchants;
 
     public EquippedCustomEnchants(@NotNull Player player) {
         this.player = player;
@@ -31,11 +31,11 @@ public final class EquippedCustomEnchants implements Versionable {
     public void clear() {
         enchants.clear();
     }
-    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getInfo() {
+    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> getInfo() {
         return getInfo(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND);
     }
-    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> getInfo(EquipmentSlot...slots) {
-        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchant, Integer>> map = new LinkedHashMap<>();
+    public LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> getInfo(EquipmentSlot...slots) {
+        final LinkedHashMap<ItemStack, LinkedHashMap<CustomEnchantSpigot, Integer>> map = new LinkedHashMap<>();
         for(EquipmentSlot slot : slots) {
             final ItemStack target = getItemInSlot(slot);
             if(target != null && enchants.containsKey(slot)) {
@@ -45,7 +45,7 @@ public final class EquippedCustomEnchants implements Versionable {
         return map;
     }
 
-    public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchant, Integer>> getEnchants() {
+    public LinkedHashMap<EquipmentSlot, LinkedHashMap<CustomEnchantSpigot, Integer>> getEnchants() {
         return enchants;
     }
 
@@ -61,7 +61,7 @@ public final class EquippedCustomEnchants implements Versionable {
         return event != null ? event.getItem() : null;
     }
     @Nullable
-    public LinkedHashMap<CustomEnchant, Integer> getEnchantsOn(EquipmentSlot slot) {
+    public LinkedHashMap<CustomEnchantSpigot, Integer> getEnchantsOn(EquipmentSlot slot) {
         return enchants.getOrDefault(slot, null);
     }
 

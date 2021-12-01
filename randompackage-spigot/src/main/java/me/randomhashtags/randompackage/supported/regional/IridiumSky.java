@@ -5,7 +5,7 @@ import com.iridium.iridiumskyblock.Island;
 import com.iridium.iridiumskyblock.IslandManager;
 import com.iridium.iridiumskyblock.User;
 import me.randomhashtags.randompackage.supported.Regional;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public enum IridiumSky implements RPFeature, Regional {
+public enum IridiumSky implements RPFeatureSpigot, Regional {
     INSTANCE;
 
     private IslandManager im;

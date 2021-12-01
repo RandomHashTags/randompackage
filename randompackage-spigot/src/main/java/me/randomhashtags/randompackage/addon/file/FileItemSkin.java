@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import java.io.File;
 import java.util.List;
 
-public final class FileItemSkin extends RPAddon implements ItemSkin {
+public final class FileItemSkin extends RPAddonSpigot implements ItemSkin {
 
     public FileItemSkin(File f) {
         load(f);

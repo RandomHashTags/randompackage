@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.attribute.EventAttribute;
 import me.randomhashtags.randompackage.attribute.EventCondition;
-import me.randomhashtags.randompackage.dev.Disguise;
+import me.randomhashtags.randompackage.addon.dev.Disguise;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,10 +39,10 @@ public interface RPStorage extends RPValues {
             FEATURES.put(f, new LinkedHashMap<>());
         }
         FEATURES.get(f).put(obj.getIdentifier(), obj);
-        if(obj instanceof GivedpItemable) {
-            final GivedpItemable item = (GivedpItemable) obj;
+        if(obj instanceof GivedpItemableSpigot) {
+            final GivedpItemableSpigot item = (GivedpItemableSpigot) obj;
             for(String identifier : item.getGivedpItemIdentifiers()) {
-                GivedpItemable.GIVEDP_ITEMS.put(identifier, item);
+                GivedpItemableSpigot.GIVEDP_ITEMS.put(identifier, item);
             }
         }
     }
@@ -87,9 +87,9 @@ public interface RPStorage extends RPValues {
         final Identifiable o = get(Feature.CUSTOM_BOSS, identifier);
         return o != null ? (CustomBoss) o : null;
     }
-    default CustomEnchant getCustomEnchant(@NotNull String identifier) {
+    default CustomEnchantSpigot getCustomEnchant(@NotNull String identifier) {
         final Identifiable o = get(Feature.CUSTOM_ENCHANT_ENABLED, identifier);
-        return o != null ? (CustomEnchant) o : null;
+        return o != null ? (CustomEnchantSpigot) o : null;
     }
     default EnchantRarity getCustomEnchantRarity(@NotNull String identifier) {
         final Identifiable o = get(Feature.CUSTOM_ENCHANT_RARITY, identifier);

@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.data.obj;
 
-import me.randomhashtags.randompackage.addon.CustomEnchant;
+import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.data.DuelRankedData;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,9 +10,9 @@ import java.util.List;
 
 public final class DuelRankedDataObj implements DuelRankedData {
     private BigDecimal elo;
-    private final HashMap<ItemStack, List<CustomEnchant>> godset;
+    private final HashMap<ItemStack, List<CustomEnchantSpigot>> godset;
 
-    public DuelRankedDataObj(BigDecimal elo, HashMap<ItemStack, List<CustomEnchant>> godset) {
+    public DuelRankedDataObj(BigDecimal elo, HashMap<ItemStack, List<CustomEnchantSpigot>> godset) {
         this.elo = elo;
         this.godset = godset;
     }
@@ -28,7 +28,7 @@ public final class DuelRankedDataObj implements DuelRankedData {
     }
 
     @Override
-    public HashMap<ItemStack, List<CustomEnchant>> getGodset() {
+    public HashMap<ItemStack, List<CustomEnchantSpigot>> getGodset() {
         return godset;
     }
 }

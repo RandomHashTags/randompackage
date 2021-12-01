@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
-public interface RandomizedLoot extends Itemable, Rewardable, RewardSizeable, GivedpItemable {
+public interface RandomizedLoot extends Itemable, Rewardable, RewardSizeable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "randomizedloot" };

@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.event;
 
 import me.randomhashtags.randompackage.addon.Mask;
-import me.randomhashtags.randompackage.event.armor.ArmorEventReason;
+import me.randomhashtags.randompackage.event.enums.ArmorEventReason;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

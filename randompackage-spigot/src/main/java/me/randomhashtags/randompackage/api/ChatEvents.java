@@ -6,7 +6,7 @@ import me.randomhashtags.randompackage.data.TitleData;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public enum ChatEvents implements RPFeature, CommandExecutor, RPItemStack {
-	INSTANCE;
+public final class ChatEvents extends RPFeatureSpigot implements CommandExecutor, RPItemStack {
+	public static final ChatEvents INSTANCE = new ChatEvents();
 
 	private String bragDisplay, itemDisplay, chatformat;
 	private HashMap<UUID, PlayerInventory> bragInventories;

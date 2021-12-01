@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.data.obj;
 
 import me.randomhashtags.randompackage.data.DisguiseData;
-import me.randomhashtags.randompackage.dev.Disguise;
+import me.randomhashtags.randompackage.addon.dev.Disguise;
 
 import java.util.List;
 

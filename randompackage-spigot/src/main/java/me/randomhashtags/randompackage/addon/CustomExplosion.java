@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.SPAWNER_CHANCE;
 
-public interface CustomExplosion extends Attributable, Itemable, GivedpItemable {
+public interface CustomExplosion extends Attributable, Itemable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customexplosion" };

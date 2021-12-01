@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.file.FileRarityGem;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RarityGemData;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
-public enum RarityGems implements RPFeature {
+public enum RarityGems implements RPFeatureSpigot {
     INSTANCE;
 
     @Override

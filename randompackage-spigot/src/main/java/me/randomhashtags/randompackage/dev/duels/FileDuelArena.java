@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.dev.duels;
 
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.enums.Feature;
-import me.randomhashtags.randompackage.addon.file.RPAddon;
+import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileDuelArena extends RPAddon implements DuelArena {
+public class FileDuelArena extends RPAddonSpigot implements DuelArena {
     private ItemStack item;
     private List<Location> locations;
 

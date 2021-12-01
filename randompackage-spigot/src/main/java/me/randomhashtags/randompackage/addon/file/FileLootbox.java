@@ -1,7 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.Lootbox;
-import me.randomhashtags.randompackage.enums.LootboxRewardType;
+import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FileLootbox extends RPAddon implements Lootbox {
+public final class FileLootbox extends RPAddonSpigot implements Lootbox {
     private ItemStack item, background;
 
     public FileLootbox(File f) {

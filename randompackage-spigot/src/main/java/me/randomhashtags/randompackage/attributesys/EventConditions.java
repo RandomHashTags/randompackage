@@ -18,7 +18,7 @@ import me.randomhashtags.randompackage.event.kit.KitClaimEvent;
 import me.randomhashtags.randompackage.event.kit.KitPreClaimEvent;
 import me.randomhashtags.randompackage.supported.mechanics.MCMMOAPI;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Chunk;
@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionable, RPStorage {
+public interface EventConditions extends Combo, RPItemStack, Mathable, UVersionableSpigot, RPStorage {
     List<UUID> SPAWNED_FROM_SPAWNER = new ArrayList<>();
     HashMap<UUID, EntityShootBowEvent> PROJECTILE_EVENTS = new HashMap<>();
 
@@ -582,7 +582,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                     identifier = valueOfCustomEnchantRarity(((CustomEnchantApplyEvent) event).enchant).getIdentifier();
                 } else if(event instanceof EnchanterPurchaseEvent) {
                     final EnchanterPurchaseEvent epe = (EnchanterPurchaseEvent) event;
-                    final CustomEnchant enchant = valueOfCustomEnchant(epe.purchased);
+                    final CustomEnchantSpigot enchant = valueOfCustomEnchant(epe.purchased);
                     final EnchantRarity rarity = enchant != null ? valueOfCustomEnchantRarity(enchant) : null;
                     identifier = rarity != null ? rarity.getIdentifier() : null;
                 } else if(event instanceof RandomizationScrollUseEvent) {
@@ -592,7 +592,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
                 }
                 return identifier != null && identifier.equals(value);
             case "enchant":
-                CustomEnchant enchant = null;
+                CustomEnchantSpigot enchant = null;
                 if(event instanceof CustomEnchantApplyEvent) {
                     enchant = ((CustomEnchantApplyEvent) event).enchant;
                 } else if(event instanceof CustomEnchantProcEvent) {

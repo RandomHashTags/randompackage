@@ -1,14 +1,14 @@
 package me.randomhashtags.randompackage.util;
 
 import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.universal.UVersionable;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public interface ChatUtils extends UVersionable, RPItemStack {
+public interface ChatUtils extends UVersionableSpigot, RPItemStack {
     default TextComponent getHoverMessage(@NotNull String message, @NotNull ItemStack is) {
         final TextComponent component = new TextComponent(message);
         final String craftItem = asNMSCopy(is);

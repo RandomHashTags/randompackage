@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public interface FallenHero extends Spawnable, GivedpItemable {
+public interface FallenHero extends Spawnable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "fallenherogem", "fallenhero" };

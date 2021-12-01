@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public interface EnchantRarity extends Identifiable, GivedpItemable {
+public interface EnchantRarity extends Identifiable, GivedpItemableSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "raritybook" };
@@ -30,5 +30,5 @@ public interface EnchantRarity extends Identifiable, GivedpItemable {
     int getSuccessSlot();
     int getDestroySlot();
     Firework getFirework();
-    List<CustomEnchant> getEnchants();
+    List<CustomEnchantSpigot> getEnchants();
 }

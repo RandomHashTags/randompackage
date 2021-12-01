@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.List;
 
-public final class FileFatBucket extends RPAddon implements FatBucket {
+public final class FileFatBucket extends RPAddonSpigot implements FatBucket {
     private ItemStack bucket;
     public FileFatBucket(File f) {
         load(f);

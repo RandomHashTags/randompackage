@@ -5,7 +5,7 @@ import me.randomhashtags.randompackage.addon.ArmorSocket;
 import me.randomhashtags.randompackage.addon.file.PathArmorSocket;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
-import me.randomhashtags.randompackage.util.RPFeature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -20,9 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public enum ArmorSockets implements RPFeature {
-    INSTANCE;
-
+public final class ArmorSockets extends RPFeatureSpigot {
+    public static final ArmorSockets INSTANCE = new ArmorSockets();
     public YamlConfiguration config;
     private ItemStack socket;
     private HashMap<String, String> itemTypes;

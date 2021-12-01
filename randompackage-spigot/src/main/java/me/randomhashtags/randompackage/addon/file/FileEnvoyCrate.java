@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public final class FileEnvoyCrate extends RPAddon implements EnvoyCrate {
+public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
     private UMaterial block, fallingblock;
     private List<UMaterial> cannotLandAbove, cannotLandIn;
     private ItemStack item;

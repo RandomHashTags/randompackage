@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 
-public interface Reflect extends RPFeature {
+public interface Reflect extends RPFeatureSpigot {
     default Object getPrivateField(Object object, String field) throws Exception {
         return getPrivateField(object, field, false);
     }
