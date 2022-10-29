@@ -13,5 +13,8 @@ public interface Versionable {
     boolean FOURTEEN = VERSION.contains("1.14");
     boolean FIFTEEN = VERSION.contains("1.15");
     boolean SIXTEEN = VERSION.contains("1.16");
+    boolean SEVENTEEN = VERSION.contains("1.17");
+    boolean EIGHTEEN = VERSION.contains("1.18");
+    boolean NINETEEN = VERSION.contains("1.19");
     boolean LEGACY = EIGHT || NINE || TEN || ELEVEN || TWELVE;
 }

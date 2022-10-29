@@ -11,9 +11,9 @@ repositories {
     }
 
     maven { url "https://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
-    //maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
+    //maven { url "https://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
     maven { url "https://nexus.hc.to/content/repositories/pub_releases" } // Vault
-    maven { url "https://jitpack.io" } // SuperiorSkyblock API
+    maven { url "https://jitpack.io" } // SuperiorSkyblock2 | ASkyblock
     maven { url "https://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
     //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
     /*maven {
@@ -25,6 +25,7 @@ repositories {
         ASkyblock -> https://www.spigotmc.org/resources/1220/ | https://github.com/tastybento/askyblock
         EpicSkyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/PeachesMLG/EpicSkyblock
         Iridium Skyblock -> https://www.spigotmc.org/resources/62480/ | https://github.com/Iridium-Development/IridiumSkyblock
+        SuperiorSkyblock -> https://www.spigotmc.org/resources/87411/ | https://github.com/BG-Software-LLC/SuperiorSkyblock2
 
         SilkSpawners -> https://dev.bukkit.org/projects/silkspawners | https://github.com/timbru31/SilkSpawners
         EpicSpawners -> https://songoda.com/marketplace/product/13 | https://gitlab.com/Songoda/epicspawners
@@ -37,13 +38,13 @@ repositories {
 dependencies {
     compileOnly project(':Utilities')
     // You need to add the Spigot jars yourself, otherwise you need to use BuildTools and import them
-    compileOnly 'org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
     //compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
     //
     implementation 'me.clip:placeholderapi:2.10.3'
     implementation 'net.milkbowl.vault:VaultAPI:1.7'
-    //implementation 'com.wasteofplastic:askyblock:3.0.9.4'
-    implementation 'com.github.OmerBenGera:SuperiorSkyblockAPI:b7'
+    //implementation 'com.github.tastybento:askyblock:3.0.6.3-SNAPSHOT'
+    //implementation 'com.github.omerbengera:superiorskyblock2:2022.8.1'
     implementation 'com.massivecraft:Factions:1.6.9.5-U0.5.3'
     //implementation 'be.maximvdw:MVdWPlaceholderAPI:3.0.0'
     //implementation 'com.sk89q.worldguard:worldedit-bukkit:7.0.1'
@@ -62,7 +63,6 @@ configurations {
     compile.exclude group: 'com.darkblade12'
     compile.exclude group: 'org.hamcrest'
     compile.exclude group: 'me.lucko'
-    compile.exclude group: 'mkremins'
 
     compile.exclude group: 'com.google.guava'
     compile.exclude group: 'com.google.code.gson'

@@ -73,6 +73,18 @@ public interface RPItemStack extends Versionable {
                 tag.remove(s);
             }
             is.setItemMeta(org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asCraftMirror(nmsItem).getItemMeta());
+        } else {
+            final net.minecraft.world.item.ItemStack nmsItem;
+            if(NINETEEN) {
+                nmsItem = org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack.asNMSCopy(is);
+            } else {
+                return;
+            }
+            final net.minecraft.nbt.NBTTagCompound tag = nmsItem.u();
+            for(String s : keys) {
+                tag.r(s);
+            }
+            is.setItemMeta(org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack.asCraftMirror(nmsItem).getItemMeta());
         }
     }
     default void addRPItemStackValue(@NotNull ItemStack is, String key, String value) {

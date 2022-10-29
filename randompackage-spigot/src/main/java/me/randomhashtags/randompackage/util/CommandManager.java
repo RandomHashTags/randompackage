@@ -38,7 +38,9 @@ public enum CommandManager implements Reflect {
                 } else if(SIXTEEN) {
                     versionDispatcher = net.minecraft.server.v1_16_R3.MinecraftServer.getServer().vanillaCommandDispatcher.a();
                 } else {
-                    sendConsoleMessage("&6[RandomPackage &cWARNING&6] &c&lYou're running an unsupported Spigot version! Custom commands won't work, and disabled commands won't disable!");
+                    sendConsoleMessage("&6[RandomPackage &3CommandManager&6] &3attempting to support a Spigot version >= 1.17.0...");
+                    versionDispatcher = net.minecraft.server.MinecraftServer.getServer().vanillaCommandDispatcher.a();
+                    sendConsoleMessage("&6[RandomPackage &3CommandManager&6] &asuccessful integration");
                 }
                 if(versionDispatcher != null) {
                     dispatcher = versionDispatcher;
@@ -50,6 +52,7 @@ public enum CommandManager implements Reflect {
                 }
             }
         } catch (Exception e) {
+            sendConsoleMessage("&6[RandomPackage &cWARNING&6] &c&lYou're running an unsupported Spigot version! Custom commands won't work, and disabled commands won't disable!");
             e.printStackTrace();
         }
 
@@ -139,7 +142,7 @@ public enum CommandManager implements Reflect {
     }
 
     private void updateBrigadierCmd(String featureIdentifier, PluginCommand cmd, boolean unregister) {
-        if(LEGACY) {
+        if(LEGACY || dispatcher == null) {
             return;
         }
         final String name = cmd.getName();

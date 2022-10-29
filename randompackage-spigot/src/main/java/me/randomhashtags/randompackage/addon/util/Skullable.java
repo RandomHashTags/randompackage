@@ -3,15 +3,18 @@ package me.randomhashtags.randompackage.addon.util;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public interface Skullable {
+public interface Skullable extends UVersionableSpigot {
     HashMap<String, ItemStack> CACHED_SKULLS = new HashMap<>();
     String getOwner();
     // https://www.spigotmc.org/threads/143323/ , edited by RandomHashTags
@@ -32,12 +35,7 @@ public interface Skullable {
             return head;
         } else if(skinURL.startsWith("http")) {
             final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-            final byte[] encoded;
-            if(isLegacy) {
-                encoded = org.apache.commons.codec.binary.Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL).getBytes());
-            } else {
-                encoded = org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL).getBytes());
-            }
+            final byte[] encoded = base64Encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL));
             profile.getProperties().put("textures", new Property("textures", new String(encoded)));
             Field profileField = null;
             try {
@@ -54,5 +52,12 @@ public interface Skullable {
         head.setItemMeta(headMeta);
         CACHED_SKULLS.put(skinURL, head);
         return head;
+    }
+    default byte[] base64Encode(String input) {
+        try {
+            return Base64.getEncoder().encodeToString(input.getBytes(StandardCharsets.UTF_8)).getBytes();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
