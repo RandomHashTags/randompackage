@@ -28,8 +28,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public final class Jackpot extends RPFeatureSpigot implements CommandExecutor {
-    public static final Jackpot INSTANCE = new Jackpot();
+public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     public int task;

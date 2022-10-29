@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class SecondaryEvents extends RPFeatureSpigot implements CommandExecutor {
-    public static final SecondaryEvents INSTANCE = new SecondaryEvents();
+public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private List<PotionEffectType> removedPotionEffects;

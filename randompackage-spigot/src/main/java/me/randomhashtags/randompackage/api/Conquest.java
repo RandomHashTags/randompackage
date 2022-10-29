@@ -38,8 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class Conquest extends RPFeatureSpigot implements CommandExecutor {
-    public static final Conquest INSTANCE = new Conquest();
+public enum Conquest implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private List<Integer> tasks;

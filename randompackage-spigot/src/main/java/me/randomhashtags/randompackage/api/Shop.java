@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class Shop extends RPFeatureSpigot implements CommandExecutor {
-    public static final Shop INSTANCE = new Shop();
+public enum Shop implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
 	public ItemStack back;

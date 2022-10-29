@@ -32,8 +32,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public final class KOTH extends RPFeatureSpigot implements CommandExecutor {
-	public static final KOTH INSTANCE = new KOTH();
+public enum KOTH implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private UInventory lootbagInv;

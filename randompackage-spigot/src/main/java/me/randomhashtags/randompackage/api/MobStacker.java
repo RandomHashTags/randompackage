@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class MobStacker extends RPFeatureSpigot {
-    public static final MobStacker INSTANCE = new MobStacker();
+public enum MobStacker implements RPFeatureSpigot {
+    INSTANCE;
 
     public YamlConfiguration config;
     public List<EntityType> stackable;

@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class RandomizedLoot extends RPFeatureSpigot {
-    public static final RandomizedLoot INSTANCE = new RandomizedLoot();
+public enum RandomizedLoot implements RPFeatureSpigot {
+    INSTANCE;
 
     public YamlConfiguration config;
     public HashMap<String, RandomizedLootItem> items;

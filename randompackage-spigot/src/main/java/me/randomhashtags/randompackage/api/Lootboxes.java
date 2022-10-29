@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class Lootboxes extends RPFeatureSpigot implements CommandExecutor {
-    public static final Lootboxes INSTANCE = new Lootboxes();
+public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;

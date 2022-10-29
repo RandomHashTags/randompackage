@@ -6,7 +6,9 @@ import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
+import me.randomhashtags.randompackage.util.UVersionable;
 import me.randomhashtags.randompackage.util.Versionable;
+import me.randomhashtags.randompackage.util.YamlUpdater;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -30,7 +32,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import java.io.File;
 import java.util.*;
 
-public interface UVersionableSpigot extends Versionable {
+public interface UVersionableSpigot extends Versionable, UVersionable {
     HashMap<Feature, LinkedHashMap<String, Identifiable>> FEATURES = new HashMap<>();
     RandomPackage RANDOM_PACKAGE = RandomPackage.GET_PLUGIN;
 
@@ -83,6 +85,19 @@ public interface UVersionableSpigot extends Versionable {
     HashMap<FileConfiguration, HashMap<String, List<String>>> FEATURE_MESSAGES = new HashMap<>();
     HashMap<FileConfiguration, HashMap<String, String>> FEATURE_STRINGS = new HashMap<>();
 
+    @Override
+    default void save(String folder, String file) {
+        final boolean hasFolder = folder != null && !folder.equals("");
+        final File f = new File(DATA_FOLDER + SEPARATOR + (hasFolder ? folder + SEPARATOR : ""), file);
+        if(!f.exists()) {
+            f.getParentFile().mkdirs();
+            RANDOM_PACKAGE.saveResource(hasFolder ? folder + SEPARATOR + file : file, false);
+        }
+        if(folder == null || !folder.equals("_Data")) {
+            YamlUpdater.INSTANCE.updateYaml(folder, f);
+        }
+    }
+
     default List<String> getStringList(FileConfiguration yml, String identifier) {
         FEATURE_MESSAGES.putIfAbsent(yml, new HashMap<>());
         final HashMap<String, List<String>> messages = FEATURE_MESSAGES.get(yml);
@@ -133,7 +148,6 @@ public interface UVersionableSpigot extends Versionable {
         return level <= 16 ? (level * level) + (level * 6) : level <= 31 ? (2.5 * level * level) - (40.5 * level) + 360 : (4.5 * level * level) - (162.5 * level) + 2220;
     }
 
-    void sendConsoleMessage(String msg);
     default void sendConsoleDidLoadFeature(String what, long started) {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -149,15 +163,24 @@ public interface UVersionableSpigot extends Versionable {
                 : null;
     }
 
-    String colorize(String input);
-    default List<String> colorizeListString(List<String> input) {
-        final List<String> i = new ArrayList<>();
-        if(input != null) {
-            for(String s : input) {
-                i.add(colorize(s));
-            }
-        }
-        return i;
+    @Override
+    default void sendConsoleMessage(String msg) {
+        CONSOLE.sendMessage(colorize(msg));
+    }
+    @Override
+    default int getRemainingInt(String string) {
+        string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
+        return string.isEmpty() ? -1 : Integer.parseInt(string);
+    }
+    @Override
+    default Double getRemainingDouble(String string) {
+        string = ChatColor.stripColor(colorize(string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
+        return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
+    }
+
+    @Override
+    default String colorize(String input) {
+        return ChatColor.translateAlternateColorCodes('&', input);
     }
 
     default HashMap<String, String> getReplacements(@NotNull Object...values) {
@@ -395,6 +418,9 @@ public interface UVersionableSpigot extends Versionable {
     }
     default LivingEntity getEntity(String type, Location location) {
         final World world = location.getWorld();
+        if(world == null) {
+            return null;
+        }
         final LivingEntity le;
         switch (type.toUpperCase()) {
             case "BAT": return world.spawn(location, Bat.class);

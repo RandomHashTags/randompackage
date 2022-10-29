@@ -29,8 +29,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.io.File;
 import java.util.*;
 
-public final class WildPvP extends RPFeatureSpigot implements CommandExecutor {
-    public static final WildPvP INSTANCE = new WildPvP();
+public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, viewInventory;

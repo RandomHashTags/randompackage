@@ -13,10 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public enum RegionalAPI implements UVersionableSpigot {
     INSTANCE;
@@ -174,7 +171,7 @@ public enum RegionalAPI implements UVersionableSpigot {
     public List<Player> getReceivingPlayers(UUID player, HashMap<Regional, String> chatModes) {
         final List<Player> players = new ArrayList<>();
         for(Regional regional : chatModes.keySet()) {
-            final List<Player> associates = regional.getOnlineAssociates(player);
+            final Collection<Player> associates = regional.getOnlineAssociates(player);
             if(associates != null) {
                 players.addAll(associates);
             }
@@ -199,7 +196,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return uuids;
     }
     private void add(UUID player, int type, Regional plugin, List<UUID> list) {
-        List<UUID> flist = null;
+        Collection<UUID> flist = null;
         switch (type) {
             case 0:
                 flist = plugin.getAssociates(player);

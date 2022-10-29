@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class Trade extends RPFeatureSpigot implements CommandExecutor {
-	public static final Trade INSTANCE = new Trade();
+public enum Trade implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	protected int radius, countdown;

@@ -35,8 +35,8 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
-public final class GivedpItem extends RPFeatureSpigot implements CommandExecutor {
-    public static final GivedpItem INSTANCE = new GivedpItem();
+public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration itemsConfig;
     private HashMap<String, ItemStack> customitems;

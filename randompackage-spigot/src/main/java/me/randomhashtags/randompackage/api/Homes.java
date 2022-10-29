@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class Homes extends RPFeatureSpigot implements CommandExecutor {
-	public static final Homes INSTANCE = new Homes();
+public enum Homes implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	public int defaultMax;

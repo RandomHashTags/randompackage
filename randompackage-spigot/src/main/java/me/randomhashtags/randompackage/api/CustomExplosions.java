@@ -32,8 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class CustomExplosions extends RPFeatureSpigot {
-	public static final CustomExplosions INSTANCE = new CustomExplosions();
+public enum CustomExplosions implements RPFeatureSpigot {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;

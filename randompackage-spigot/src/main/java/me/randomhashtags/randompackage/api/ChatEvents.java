@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class ChatEvents extends RPFeatureSpigot implements CommandExecutor, RPItemStack {
-	public static final ChatEvents INSTANCE = new ChatEvents();
+public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack {
+	INSTANCE;
 
 	private String bragDisplay, itemDisplay, chatformat;
 	private HashMap<UUID, PlayerInventory> bragInventories;

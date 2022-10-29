@@ -33,8 +33,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public final class ItemFilter extends RPFeatureSpigot implements CommandExecutor {
-    public static final ItemFilter INSTANCE = new ItemFilter();
+public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;

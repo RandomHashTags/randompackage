@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class SpawnerStacking extends RPFeatureSpigot {
-    public static final SpawnerStacking INSTANCE = new SpawnerStacking();
+public enum SpawnerStacking implements RPFeatureSpigot {
+    INSTANCE;
 
     private File dataF;
     public YamlConfiguration config, data;

@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class Xpbottle extends RPFeatureSpigot implements CommandExecutor {
-    public static final Xpbottle INSTANCE = new Xpbottle();
+public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     public ItemStack bottle;

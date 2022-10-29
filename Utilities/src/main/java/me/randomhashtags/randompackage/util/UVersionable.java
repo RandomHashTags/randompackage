@@ -7,25 +7,23 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public abstract class UVersionable implements RomanNumerals, DefaultFileGeneration {
-    public static String SEPARATOR = File.separator;
-    public static Random RANDOM = new Random();
+public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
+    String SEPARATOR = File.separator;
+    Random RANDOM = new Random();
 
-    public String toReadableDate(Date date, String format) {
+    default String toReadableDate(Date date, String format) {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public File[] getFilesInFolder(@NotNull String folder) {
+    default File[] getFilesInFolder(@NotNull String folder) {
         final File file = new File(folder);
         return file.exists() ? file.listFiles() : new File[]{};
     }
 
-    public String getRemainingTime(long time) {
+    default String getRemainingTime(long time) {
         int sec = (int) TimeUnit.MILLISECONDS.toSeconds(time), min = sec/60, hr = min/60, d = hr/24;
         hr -= d*24;
         min -= (hr*60)+(d*60*24);
@@ -37,55 +35,55 @@ public abstract class UVersionable implements RomanNumerals, DefaultFileGenerati
         return dys + hrs + mins + secs;
     }
 
-    public abstract void sendConsoleMessage(String message);
+    void sendConsoleMessage(String message);
 
-    public String formatBigDecimal(BigDecimal b) {
+    default String formatBigDecimal(BigDecimal b) {
         return formatNumber(b, false);
     }
-    public String formatNumber(Object number, boolean currency) {
+    default String formatNumber(Object number, boolean currency) {
         return (currency ? NumberFormat.getCurrencyInstance() : NumberFormat.getInstance()).format(number);
     }
-    public BigDecimal valueOfBigDecimal(@NotNull String input) {
+    default BigDecimal valueOfBigDecimal(@NotNull String input) {
         final long m = input.endsWith("k") ? 1000 : input.endsWith("m") ? 1000000 : input.endsWith("b") ? 1000000000 : 1;
         return BigDecimal.valueOf(getRemainingDouble(input)*m);
     }
-    public BigDecimal getBigDecimal(String value) {
+    default BigDecimal getBigDecimal(String value) {
         return BigDecimal.valueOf(Double.parseDouble(value));
     }
-    public BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {
+    default BigDecimal getRandomBigDecimal(BigDecimal min, BigDecimal max) {
         final BigDecimal range = max.subtract(min);
         return min.add(range.multiply(new BigDecimal(Math.random())));
     }
-    public String formatDouble(double d) {
+    default String formatDouble(double d) {
         String decimals = Double.toString(d).split("\\.")[1];
         if(decimals.equals("0")) { decimals = ""; } else { decimals = "." + decimals; }
         return formatInt((int) d) + decimals;
     }
-    public String formatLong(long l) {
+    default String formatLong(long l) {
         final String f = Long.toString(l);
         final boolean c = f.contains(".");
         String decimals = c ? f.split("\\.")[1] : f;
         decimals = c ? decimals.equals("0") ? "" : "." + decimals : "";
         return formatInt((int) l) + decimals;
     }
-    public String formatInt(int integer) {
+    default String formatInt(int integer) {
         return String.format("%,d", integer);
     }
-    public int getIntegerFromString(String input, int minimum) {
+    default int getIntegerFromString(String input, int minimum) {
         final boolean hasHyphen = input.contains("-");
         final String[] values = input.split("-");
         final int min = hasHyphen ? Integer.parseInt(values[0]) : minimum;
         return hasHyphen ? min+RANDOM.nextInt(Integer.parseInt(values[1])-min+1) : Integer.parseInt(input);
     }
-    public int parseInt(String input) {
+    default int parseInt(String input) {
         input = input.toLowerCase();
         return input.equals("random") ? RANDOM.nextInt(101) : Integer.parseInt(input);
     }
 
-    public abstract int getRemainingInt(String input);
-    public abstract Double getRemainingDouble(String input);
+    int getRemainingInt(String input);
+    Double getRemainingDouble(String input);
 
-    public long getDelay(String input) {
+    default long getDelay(String input) {
         input = input.toLowerCase();
         long value = 0;
         if(input.contains("d")) {
@@ -109,23 +107,23 @@ public abstract class UVersionable implements RomanNumerals, DefaultFileGenerati
         return value;
     }
 
-    public double round(double input, int decimals) {
+    default double round(double input, int decimals) {
         // From http://www.baeldung.com/java-round-decimal-number
         if(decimals < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(Double.toString(input));
         bd = bd.setScale(decimals, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-    public String roundDoubleString(double input, int decimals) {
+    default String roundDoubleString(double input, int decimals) {
         final double roundedValue = round(input, decimals);
         return Double.toString(roundedValue);
     }
 
-    public String center(String s, int size) {
+    default String center(String s, int size) {
         // Credit to "Sahil Mathoo" from StackOverFlow at https://stackoverflow.com/questions/8154366
         return center(s, size, ' ');
     }
-    public String center(String string, int size, char pad) {
+    default String center(String string, int size, char pad) {
         if(string == null || size <= string.length()) {
             return string;
         }
@@ -140,9 +138,18 @@ public abstract class UVersionable implements RomanNumerals, DefaultFileGenerati
         return buider.toString();
     }
 
-    public abstract String colorize(String input);
+    String colorize(String input);
+    default List<String> colorizeListString(List<String> input) {
+        final List<String> i = new ArrayList<>();
+        if(input != null) {
+            for(String s : input) {
+                i.add(colorize(s));
+            }
+        }
+        return i;
+    }
 
-    public String toMaterial(String input, boolean realitem) {
+    default String toMaterial(String input, boolean realitem) {
         if(input.contains(":")) input = input.split(":")[0];
         if(input.contains(" ")) input = input.replace(" ", "");
         if(input.contains("_")) input = input.replace("_", " ");
@@ -158,7 +165,7 @@ public abstract class UVersionable implements RomanNumerals, DefaultFileGenerati
         }
         return builder.toString();
     }
-    public long parseTime(String fromString) {
+    default long parseTime(String fromString) {
         /*
             TODO: if called from Spigot, strip color (ChatColor.stripColor)
          */
@@ -195,7 +202,7 @@ public abstract class UVersionable implements RomanNumerals, DefaultFileGenerati
         return time*1000;
     }
 
-    public int indexOf(Set<?> collection, Object value) {
+    default int indexOf(Set<?> collection, Object value) {
         int i = 0;
         for(Object o : collection) {
             if(value.equals(o)) {

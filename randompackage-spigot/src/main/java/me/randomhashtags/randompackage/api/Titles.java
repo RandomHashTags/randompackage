@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class Titles extends RPFeatureSpigot implements CommandExecutor {
-	public static final Titles INSTANCE = new Titles();
+public enum Titles implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	public ItemStack interactableItem;

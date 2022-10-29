@@ -2,7 +2,7 @@ package me.randomhashtags.randompackage.supported.regional;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
-import com.bgsoftware.superiorskyblock.api.island.IslandRole;
+import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import me.randomhashtags.randompackage.supported.Regional;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
@@ -10,10 +10,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public enum SuperiorSky implements RPFeatureSpigot, Regional {
     INSTANCE;
@@ -32,52 +33,61 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
     public void unload() {
     }
 
+    @Nullable
     private Island getIsland(UUID player) {
         return getSPlayer(player).getIsland();
     }
+    @Nullable
     private Island getIslandAt(Location l) {
         return SuperiorSkyblockAPI.getIslandAt(l);
     }
-    private SuperiorPlayer getSPlayer(UUID player) {
+    private SuperiorPlayer getSPlayer(@NotNull UUID player) {
         return SuperiorSkyblockAPI.getPlayer(player);
+    }
+    private Set<UUID> getAllMembers(@NotNull Island island) {
+        return island.getIslandMembers(true).stream().map(SuperiorPlayer::getUniqueId).collect(Collectors.toSet());
     }
 
     public boolean canModify(UUID player, Location location) {
         final Island i = getIslandAt(location);
-        return i == null || i.getAllMembers().contains(player);
+        return i == null || getAllMembers(i).contains(player);
     }
 
     public boolean areEnemies(UUID player1, UUID player2) {
         return false;
     }
-    public List<UUID> getAssociates(UUID player) {
+    public Set<UUID> getAssociates(UUID player) {
         final Island i = getIsland(player);
-        return i != null ? i.getAllMembers() : null;
+        return i != null ? getAllMembers(i) : null;
     }
-    public List<UUID> getNeutrals(UUID player) {
-        final List<UUID> a = new ArrayList<>();
-        final UUID tl = getSPlayer(player).getTeamLeader();
-        if(tl != null && !tl.equals(player)) a.add(tl);
+    public Set<UUID> getNeutrals(UUID player) {
+        final Set<UUID> a = new HashSet<>();
+        final UUID tl = getSPlayer(player).getIslandLeader().getUniqueId();
+        if(tl != null && !tl.equals(player)) {
+            a.add(tl);
+        }
         final Island i = getIsland(player);
-        if(i != null) a.addAll(i.getAllMembers());
+        if(i != null) {
+            a.addAll(getAllMembers(i));
+        }
         return a;
     }
-    public List<UUID> getAllies(UUID player) {
+    public Set<UUID> getAllies(UUID player) {
         return getNeutrals(player);
     }
-    public List<UUID> getTruces(UUID player) {
+    public Set<UUID> getTruces(UUID player) {
         return getNeutrals(player);
     }
-    public List<UUID> getEnemies(UUID player) {
+    public Set<UUID> getEnemies(UUID player) {
         return null;
     }
 
-    public List<Player> getOnlineAssociates(UUID player) {
+    public Set<Player> getOnlineAssociates(UUID player) {
         final Island i = getIsland(player);
-        final List<Player> a = new ArrayList<>();
+        final Set<Player> a = new HashSet<>();
         if(i != null) {
-            for(UUID u : i.getMembers()) {
-                a.add(Bukkit.getPlayer(u));
+            for(SuperiorPlayer u : i.getIslandMembers(true)) {
+                a.add(u.asPlayer());
             }
         }
         return a;
@@ -93,8 +103,8 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
         }
     }
     public String getRole(UUID player) {
-        final IslandRole r = getSPlayer(player).getIslandRole();
-        return r != null ? r.name() : null;
+        final PlayerRole r = getSPlayer(player).getPlayerRole();
+        return r != null ? r.getName() : null;
     }
     public String getRegionalIdentifier(UUID player) {
         final Island i = getIsland(player);

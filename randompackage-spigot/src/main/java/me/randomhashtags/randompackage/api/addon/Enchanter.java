@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class Enchanter extends RPFeatureSpigot implements CommandExecutor {
-    public static final Enchanter INSTANCE = new Enchanter();
+public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory enchanter;

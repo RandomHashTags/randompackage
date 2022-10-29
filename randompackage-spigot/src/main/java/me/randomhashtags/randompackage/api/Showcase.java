@@ -27,8 +27,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public final class Showcase extends RPFeatureSpigot implements CommandExecutor {
-	public static final Showcase INSTANCE = new Showcase();
+public enum Showcase implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 	private ItemStack addItemConfirm, addItemCancel, removeItemConfirm, removeItemCancel, expansion;

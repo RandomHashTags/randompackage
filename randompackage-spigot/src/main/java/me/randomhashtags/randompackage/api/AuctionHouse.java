@@ -31,8 +31,8 @@ import java.util.*;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.toMap;
 
-public final class AuctionHouse extends RPFeatureSpigot implements CommandExecutor {
-    public static final AuctionHouse INSTANCE = new AuctionHouse();
+public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
 

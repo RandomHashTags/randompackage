@@ -37,8 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class MonthlyCrates extends RPFeatureSpigot implements CommandExecutor {
-    public static final MonthlyCrates INSTANCE = new MonthlyCrates();
+public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, categoryView;

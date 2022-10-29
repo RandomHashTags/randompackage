@@ -24,8 +24,8 @@ import java.util.List;
 import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
 import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
-public final class RandomPackageAPI extends RPFeatureSpigot implements CommandExecutor {
-    public static final RandomPackageAPI INSTANCE = new RandomPackageAPI();
+public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public static int SPAWNER_CHANCE = 0;
 

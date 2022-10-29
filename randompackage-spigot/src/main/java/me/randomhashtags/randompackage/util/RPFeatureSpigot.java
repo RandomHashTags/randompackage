@@ -36,32 +36,32 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public abstract class RPFeatureSpigot extends RPFeature implements UVersionableSpigot, Listener, RPStorage {
-    public static HashSet<String> ENABLED_RP_FEATURES = new HashSet<>();
+public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener, RPStorage {
+    HashSet<String> ENABLED_RP_FEATURES = new HashSet<>();
 
-    public static Economy ECONOMY = Vault.INSTANCE.getEconomy();
+    Economy ECONOMY = Vault.INSTANCE.getEconomy();
 
-    public static File OTHER_YML_FILE = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
-    public static YamlConfiguration OTHER_YML = YamlConfiguration.loadConfiguration(OTHER_YML_FILE);
+    File OTHER_YML_FILE = new File(DATA_FOLDER + SEPARATOR + "_Data", "other.yml");
+    YamlConfiguration OTHER_YML = YamlConfiguration.loadConfiguration(OTHER_YML_FILE);
 
-    public static UInventory GIVEDP_INVENTORY = new UInventory(null, 27, "Givedp Categories");
-    public static List<Inventory> GIVEDP_CATEGORIES = new ArrayList<>();
+    UInventory GIVEDP_INVENTORY = new UInventory(null, 27, "Givedp Categories");
+    List<Inventory> GIVEDP_CATEGORIES = new ArrayList<>();
 
-    public static boolean mcmmoIsEnabled() {
+    static boolean mcmmoIsEnabled() {
         return PLUGIN_MANAGER.isPluginEnabled("mcMMO");
     }
 
     @Override
-    public boolean isEnabled() {
+    default boolean isEnabled() {
         return ENABLED_RP_FEATURES.contains(getIdentifier());
     }
 
     @Override
-    public boolean canBeEnabled() {
+    default boolean canBeEnabled() {
         return true;
     }
     @Override
-    public void enable() {
+    default void enable() {
         if(canBeEnabled()) {
             if(OTHER_YML_FILE == null) {
                 save("_Data", "other.yml");
@@ -82,7 +82,7 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
         }
     }
     @Override
-    public void disable() {
+    default void disable() {
         if(!isEnabled()) {
             return;
         }
@@ -100,39 +100,11 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
     }
 
     @Override
-    public void save(String folder, String file) {
-        final boolean hasFolder = folder != null && !folder.equals("");
-        final File f = new File(DATA_FOLDER + SEPARATOR + (hasFolder ? folder + SEPARATOR : ""), file);
-        if(!f.exists()) {
-            f.getParentFile().mkdirs();
-            RANDOM_PACKAGE.saveResource(hasFolder ? folder + SEPARATOR + file : file, false);
-        }
-        if(folder == null || !folder.equals("_Data")) {
-            YamlUpdater.INSTANCE.updateYaml(folder, f);
-        }
-    }
-
-    @Override
-    public void sendConsoleMessage(String msg) {
-        CONSOLE.sendMessage(colorize(msg));
-    }
-    @Override
-    public int getRemainingInt(String string) {
-        string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
-        return string.isEmpty() ? -1 : Integer.parseInt(string);
-    }
-    @Override
-    public Double getRemainingDouble(String string) {
-        string = ChatColor.stripColor(colorize(string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
-        return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
-    }
-
-    @Override
-    public String colorize(String input) {
+    default String colorize(String input) {
         return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL";
     }
 
-    public void saveOtherData() {
+    default void saveOtherData() {
         try {
             OTHER_YML.save(OTHER_YML_FILE);
             OTHER_YML.load(OTHER_YML_FILE);
@@ -140,12 +112,12 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
             e.printStackTrace();
         }
     }
-    public void viewGivedp(@NotNull Player player) {
+    default void viewGivedp(@NotNull Player player) {
         player.openInventory(Bukkit.createInventory(player, GIVEDP_INVENTORY.getSize(), GIVEDP_INVENTORY.getTitle()));
         player.getOpenInventory().getTopInventory().setContents(GIVEDP_INVENTORY.getInventory().getContents());
         player.updateInventory();
     }
-    public void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
+    default void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
         final ItemStack item = m.getItemStack();
         if(item == null) {
             sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
@@ -165,7 +137,7 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
         }
     }
 
-    public boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
+    default boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) {
             return true;
         } else if(sendNoPermMessage) {
@@ -175,10 +147,10 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
     }
 
 
-    public ItemStack createItemStack(FileConfiguration config, String path) {
+    default ItemStack createItemStack(FileConfiguration config, String path) {
         return createItemStack(config, path, 0, 0.00f);
     }
-    public ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
+    default ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
         ItemStack item = null;
         if(config == null && path != null || config != null && config.get(path + ".item") != null) {
             final String itemPath = config == null ? path : config.getString(path + ".item");
@@ -266,7 +238,7 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
         }
         return item;
     }
-    public ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
+    default ItemStack updateLore(ItemStack is, List<String> toLore, int tier, float enchantMultiplier, boolean levelzeroremoval, String max) {
         if(is != null && toLore != null && !toLore.isEmpty()) {
             final ItemMeta meta = is.getItemMeta();
             if(meta != null) {
@@ -334,7 +306,7 @@ public abstract class RPFeatureSpigot extends RPFeature implements UVersionableS
         return is;
     }
 
-    public void applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
+    default void applyTransmogScroll(ItemStack is, TransmogScroll scroll) {
         final Scrolls scrolls = Scrolls.INSTANCE;
         if(scrolls.isEnabled() && scrolls.isEnabled(Feature.SCROLL_TRANSMOG)) {
             scrolls.applyTransmogScroll(null, is, scroll);

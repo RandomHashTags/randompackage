@@ -33,8 +33,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public final class SlotBot extends RPFeatureSpigot implements CommandExecutor, ChatUtils {
-    public static final SlotBot INSTANCE = new SlotBot();
+public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, preview;

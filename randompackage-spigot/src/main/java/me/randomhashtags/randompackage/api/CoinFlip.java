@@ -31,9 +31,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
-public final class CoinFlip extends RPFeatureSpigot implements CommandExecutor {
-    public static final CoinFlip INSTANCE = new CoinFlip();
-
+public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private boolean isLegacy;

@@ -21,8 +21,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public final class RPEventsSpigot extends RPFeatureSpigot {
-    public static final RPEventsSpigot INSTANCE = new RPEventsSpigot();
+public enum RPEventsSpigot implements RPFeatureSpigot {
+    INSTANCE;
 
     @Override
     public String getIdentifier() {

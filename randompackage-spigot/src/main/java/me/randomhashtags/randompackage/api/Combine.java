@@ -19,8 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Combine extends RPFeatureSpigot implements CommandExecutor {
-    public static final Combine INSTANCE = new Combine();
+public enum Combine implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private List<String> combineores;

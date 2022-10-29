@@ -30,8 +30,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-public final class Envoy extends RPFeatureSpigot implements CommandExecutor {
-	public static final Envoy INSTANCE = new Envoy();
+public enum Envoy implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 

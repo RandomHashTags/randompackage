@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class FatBuckets extends RPFeatureSpigot implements RPItemStack {
-    public static final FatBuckets INSTANCE = new FatBuckets();
+public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
+    INSTANCE;
 
     public YamlConfiguration config;
 

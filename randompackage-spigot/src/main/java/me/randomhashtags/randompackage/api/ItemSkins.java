@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class ItemSkins extends RPFeatureSpigot implements CommandExecutor, RPItemStack {
-    public static final ItemSkins INSTANCE = new ItemSkins();
+public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui;

@@ -31,8 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class ServerCrates extends RPFeatureSpigot {
-	public static final ServerCrates INSTANCE = new ServerCrates();
+public enum ServerCrates implements RPFeatureSpigot {
+	INSTANCE;
 
 	private List<UUID> canRevealRarities;
 	private HashMap<UUID, ServerCrate> revealingLoot;

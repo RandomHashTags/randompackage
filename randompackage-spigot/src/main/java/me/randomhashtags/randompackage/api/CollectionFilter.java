@@ -33,8 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class CollectionFilter extends RPFeatureSpigot implements CommandExecutor {
-    public static final CollectionFilter INSTANCE = new CollectionFilter();
+public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private ItemStack collectionchest;

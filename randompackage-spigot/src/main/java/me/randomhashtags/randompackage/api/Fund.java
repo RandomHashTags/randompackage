@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class Fund extends RPFeatureSpigot implements CommandExecutor {
-	public static final Fund INSTANCE = new Fund();
+public enum Fund implements RPFeatureSpigot, CommandExecutor {
+	INSTANCE;
 
 	public YamlConfiguration config;
 

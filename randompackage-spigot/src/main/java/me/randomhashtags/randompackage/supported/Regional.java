@@ -7,11 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface Regional {
-    default boolean a(List<UUID> list, UUID player2) {
+    default boolean a(Collection<UUID> list, UUID player2) {
         return list != null && list.contains(player2);
     }
     default boolean isAssociate(UUID player1, UUID player2) {
@@ -47,7 +49,7 @@ public interface Regional {
     default void sendMessageToServer(BaseComponent...message) {
         Bukkit.getServer().spigot().broadcast(message);
     }
-    default void sendMessageTo(List<UUID> players, BaseComponent...message) {
+    default void sendMessageTo(Collection<UUID> players, BaseComponent...message) {
         if(players != null) {
             for(UUID u : players) {
                 final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
@@ -72,30 +74,30 @@ public interface Regional {
 
     boolean canModify(UUID player, Location location);
 
-    default List<UUID> getAssociates(OfflinePlayer player) {
+    default Collection<UUID> getAssociates(OfflinePlayer player) {
         return getAssociates(player.getUniqueId());
     }
-    default List<UUID> getNeutrals(OfflinePlayer player) {
+    default Collection<UUID> getNeutrals(OfflinePlayer player) {
         return getNeutrals(player.getUniqueId());
     }
-    default List<UUID> getAllies(OfflinePlayer player) {
+    default Collection<UUID> getAllies(OfflinePlayer player) {
         return getAllies(player.getUniqueId());
     }
-    default List<UUID> getTruces(OfflinePlayer player) {
+    default Collection<UUID> getTruces(OfflinePlayer player) {
         return getTruces(player.getUniqueId());
     }
-    default List<UUID> getEnemies(OfflinePlayer player) {
+    default Collection<UUID> getEnemies(OfflinePlayer player) {
         return getEnemies(player.getUniqueId());
     }
 
-    List<UUID> getAssociates(UUID player);
-    List<UUID> getNeutrals(UUID player);
-    List<UUID> getAllies(UUID player);
-    List<UUID> getTruces(UUID player);
-    List<UUID> getEnemies(UUID player);
+    Collection<UUID> getAssociates(UUID player);
+    Collection<UUID> getNeutrals(UUID player);
+    Collection<UUID> getAllies(UUID player);
+    Collection<UUID> getTruces(UUID player);
+    Collection<UUID> getEnemies(UUID player);
 
-    List<Player> getOnlineAssociates(UUID player);
-    List<Chunk> getRegionalChunks(String regionalIdentfier);
+    Collection<Player> getOnlineAssociates(UUID player);
+    Collection<Chunk> getRegionalChunks(String regionalIdentfier);
     String getRole(UUID uuid);
     String getRegionalIdentifier(UUID player);
     String getRegionalIdentifierAt(Location l);

@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-    compile project(":Utilities")
-    compile 'org.spongepowered:spongeapi:7.1.0'
+    compileOnly project(":Utilities")
+    implementation 'org.spongepowered:spongeapi:7.1.0'
 }
 
 sponge.plugin.id = pluginId

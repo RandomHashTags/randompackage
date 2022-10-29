@@ -1,6 +1,6 @@
 plugins {
     id 'idea'
-    id 'maven'
+    id 'maven-publish'
     id 'java-library'
 }
 
@@ -10,11 +10,11 @@ repositories {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
     }
 
-    maven { url "http://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
+    maven { url "https://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
     //maven { url "http://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
-    maven { url "http://nexus.hc.to/content/repositories/pub_releases" } // Vault
+    maven { url "https://nexus.hc.to/content/repositories/pub_releases" } // Vault
     maven { url "https://jitpack.io" } // SuperiorSkyblock API
-    maven { url "http://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
+    maven { url "https://ci.ender.zone/plugin/repository/everything/" } // FactionsUUID
     //maven { url "http://repo.mvdw-software.be/content/groups/public/" } // MVdWPlaceholderAPI
     /*maven {
         name = "WorldEdit and WorldGuard"
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':Utilities')
+    compileOnly project(':Utilities')
     // You need to add the Spigot jars yourself, otherwise you need to use BuildTools and import them
     compileOnly 'org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT'
     //compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'

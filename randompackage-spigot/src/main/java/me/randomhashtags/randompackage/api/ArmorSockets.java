@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public final class ArmorSockets extends RPFeatureSpigot {
-    public static final ArmorSockets INSTANCE = new ArmorSockets();
+public enum ArmorSockets implements RPFeatureSpigot {
+    INSTANCE;
+
     public YamlConfiguration config;
     private ItemStack socket;
     private HashMap<String, String> itemTypes;

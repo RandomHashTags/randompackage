@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public final class Wild extends RPFeatureSpigot implements CommandExecutor {
-    public static final Wild INSTANCE = new Wild();
+public enum Wild implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     private YamlConfiguration config;
     private HashMap<UUID, Long> expirations;

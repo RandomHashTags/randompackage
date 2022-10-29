@@ -30,8 +30,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Duels extends RPFeatureSpigot implements CommandExecutor {
-    public static final Duels INSTANCE = new Duels();
+public enum Duels implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory type, godset;

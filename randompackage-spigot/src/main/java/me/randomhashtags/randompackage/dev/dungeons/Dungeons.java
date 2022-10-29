@@ -26,8 +26,8 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.Arrays;
 
-public final class Dungeons extends RPFeatureSpigot implements CommandExecutor {
-    public static final Dungeons INSTANCE = new Dungeons();
+public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, master;
