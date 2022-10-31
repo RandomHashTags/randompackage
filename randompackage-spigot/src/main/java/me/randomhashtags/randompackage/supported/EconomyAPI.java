@@ -7,10 +7,6 @@ public enum EconomyAPI implements RPFeatureSpigot {
 
     private boolean vault;
 
-    @Override
-    public String getIdentifier() {
-        return "ECONOMY_API";
-    }
     public void load() {
     }
     public void unload() {

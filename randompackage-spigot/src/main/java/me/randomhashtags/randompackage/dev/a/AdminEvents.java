@@ -9,10 +9,6 @@ public enum AdminEvents implements RPFeatureSpigot {
     public YamlConfiguration config;
 
     @Override
-    public String getIdentifier() {
-        return "ADMIN_EVENTS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Admin Events &e(took " + (System.currentTimeMillis()-started) + "ms)");

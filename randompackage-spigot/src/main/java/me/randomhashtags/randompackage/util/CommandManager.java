@@ -21,10 +21,6 @@ public enum CommandManager implements Reflect {
     private static final HashMap<String, PluginCommand> ACTUAL_COMMANDS = new HashMap<>();
     private Object dispatcher, nodes;
 
-    @Override
-    public String getIdentifier() {
-        return "COMMAND_MANAGER";
-    }
     CommandManager() {
         try {
             if(!LEGACY) {

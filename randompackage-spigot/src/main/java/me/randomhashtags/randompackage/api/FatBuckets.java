@@ -31,10 +31,6 @@ public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
     public YamlConfiguration config;
 
     @Override
-    public String getIdentifier() {
-        return "FAT_BUCKETS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         if(!OTHER_YML.getBoolean("saved default fat buckets")) {

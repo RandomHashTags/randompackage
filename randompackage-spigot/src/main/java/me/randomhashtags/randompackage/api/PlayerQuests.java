@@ -73,9 +73,6 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         return true;
     }
 
-    public String getIdentifier() {
-        return "PLAYER_QUESTS";
-    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("player quests", "_settings.yml");

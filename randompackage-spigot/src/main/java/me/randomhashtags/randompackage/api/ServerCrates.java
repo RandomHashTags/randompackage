@@ -41,10 +41,6 @@ public enum ServerCrates implements RPFeatureSpigot {
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
 	@Override
-	public String getIdentifier() {
-		return "SERVER_CRATES";
-	}
-	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();
 		canRevealRarities = new ArrayList<>();

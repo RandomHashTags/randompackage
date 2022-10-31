@@ -34,11 +34,6 @@ public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Integer, ItemStack> purchased;
 
     @Override
-    public String getIdentifier() {
-        return "ENCHANTER";
-    }
-
-    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);

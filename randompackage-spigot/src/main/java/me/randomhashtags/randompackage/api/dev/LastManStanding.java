@@ -27,11 +27,6 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Long, List<String>> rewards;
     private int task;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "LAST_MAN_STANDING";
-    }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final int l = args.length;

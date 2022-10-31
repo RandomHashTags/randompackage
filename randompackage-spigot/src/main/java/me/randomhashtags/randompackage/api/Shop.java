@@ -47,10 +47,6 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @Override
-	public String getIdentifier() {
-	    return "SHOP";
-	}
 	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();

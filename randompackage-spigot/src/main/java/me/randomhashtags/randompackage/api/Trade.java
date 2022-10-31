@@ -49,10 +49,6 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return "TRADE";
-	}
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");

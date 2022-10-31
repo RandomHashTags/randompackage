@@ -92,10 +92,6 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "JACKPOT";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "jackpot.yml");

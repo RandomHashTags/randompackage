@@ -86,10 +86,6 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         return true;
     }
 
-    @Override
-    public String getIdentifier() {
-        return "CUSTOM_ENCHANTS";
-    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("custom enchants", "_settings.yml");

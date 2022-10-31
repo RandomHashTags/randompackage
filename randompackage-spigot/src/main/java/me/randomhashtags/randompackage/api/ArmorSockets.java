@@ -29,10 +29,6 @@ public enum ArmorSockets implements RPFeatureSpigot {
     private int chanceSlot;
 
     @Override
-    public String getIdentifier() {
-        return "ARMOR_SOCKETS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "armor sockets.yml");

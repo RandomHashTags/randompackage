@@ -57,11 +57,6 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
         }
         return true;
     }
-
-    @Override
-    public String getIdentifier() {
-        return "XPBOTTLE";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

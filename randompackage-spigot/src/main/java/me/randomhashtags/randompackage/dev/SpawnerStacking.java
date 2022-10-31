@@ -42,10 +42,6 @@ public enum SpawnerStacking implements RPFeatureSpigot {
     private HashMap<Location, StackedSpawner> stacks;
 
     @Override
-    public String getIdentifier() {
-        return "SPAWNER_STACKING";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("_Data", "spawner stacking.yml");

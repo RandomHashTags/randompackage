@@ -51,10 +51,6 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, CoinFlipMatch> pickingChallengeOption, active;
 
     @Override
-    public String getIdentifier() {
-        return "COIN_FLIP";
-    }
-    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if(!(sender instanceof Player)) {
             return true;

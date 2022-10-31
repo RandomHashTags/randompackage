@@ -32,10 +32,6 @@ public class Fireballs extends CustomEnchants {
     public ItemStack mysterydust;
 
     @Override
-    public String getIdentifier() {
-        return "FIREBALLS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "fireballs.yml");

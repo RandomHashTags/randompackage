@@ -42,14 +42,10 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, Disguise> subDisguise;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         return true;
     }
 
-    @Override
-    public String getIdentifier() {
-        return "DISGUISES";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

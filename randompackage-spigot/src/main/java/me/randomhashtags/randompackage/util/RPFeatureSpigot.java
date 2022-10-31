@@ -53,6 +53,12 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     }
 
     @Override
+    @NotNull
+    default String getIdentifier() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
     default boolean isEnabled() {
         return ENABLED_RP_FEATURES.contains(getIdentifier());
     }

@@ -66,12 +66,6 @@ public final class FactionUpgrades extends EventAttributes {
 
     private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "FACTION_UPGRADES";
-    }
-
     @Override
     public boolean canBeEnabled() {
         final boolean enabled = RegionalAPI.INSTANCE.hookedFactionsUUID();

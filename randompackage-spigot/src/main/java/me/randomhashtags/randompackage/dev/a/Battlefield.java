@@ -9,10 +9,6 @@ public enum Battlefield implements RPFeatureSpigot {
     INSTANCE;
 
     @Override
-    public String getIdentifier() {
-        return "BATTLEFIELD";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Battlefield &e(took " + (System.currentTimeMillis()-started) + "ms)");

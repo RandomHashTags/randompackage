@@ -30,10 +30,6 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
     public static int SPAWNER_CHANCE = 0;
 
     @Override
-    public String getIdentifier() {
-        return "RANDOMPACKAGE_API";
-    }
-    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String commandName = cmd.getName();

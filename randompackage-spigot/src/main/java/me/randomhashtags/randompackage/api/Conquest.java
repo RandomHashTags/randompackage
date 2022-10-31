@@ -48,11 +48,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
     public String lastConquerer;
 
     @Override
-    public String getIdentifier() {
-        return "CONQUEST";
-    }
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);
         } else {

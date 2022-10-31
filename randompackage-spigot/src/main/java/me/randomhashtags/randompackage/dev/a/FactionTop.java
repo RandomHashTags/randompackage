@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -23,12 +24,8 @@ public enum FactionTop implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         return true;
-    }
-    @Override
-    public String getIdentifier() {
-        return "FACTION_TOP";
     }
     public void load() {
         final long started = System.currentTimeMillis();

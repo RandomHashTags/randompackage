@@ -51,10 +51,6 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "WILD";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "wild.yml");

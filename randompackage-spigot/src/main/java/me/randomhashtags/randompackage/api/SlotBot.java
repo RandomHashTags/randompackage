@@ -97,11 +97,6 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     }
 
     @Override
-    public String getIdentifier() {
-        return "SLOT_BOT";
-    }
-
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "slot bot.yml");

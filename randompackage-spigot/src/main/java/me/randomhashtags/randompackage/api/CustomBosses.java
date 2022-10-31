@@ -36,9 +36,6 @@ public class CustomBosses extends EventAttributes {
 
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 
-	public String getIdentifier() {
-		return "CUSTOM_BOSSES";
-	}
 	public void load() {
 		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();

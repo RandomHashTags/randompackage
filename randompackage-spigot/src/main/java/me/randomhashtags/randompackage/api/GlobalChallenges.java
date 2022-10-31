@@ -56,10 +56,6 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	private YamlConfiguration data;
 
 	@Override
-	public String getIdentifier() {
-		return "GLOBAL_CHALLENGES";
-	}
-	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;

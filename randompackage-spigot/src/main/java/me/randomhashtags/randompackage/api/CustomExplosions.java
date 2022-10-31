@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Dispenser;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,11 +38,6 @@ public enum CustomExplosions implements RPFeatureSpigot {
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
 
-	@NotNull
-	@Override
-	public String getIdentifier() {
-		return "CUSTOM_EXPLOSIONS";
-	}
 	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();

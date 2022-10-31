@@ -46,10 +46,6 @@ public class Masks extends CustomEnchants {
     private List<String> maskCanObtain;
 
     @Override
-    public String getIdentifier() {
-        return "MASKS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");

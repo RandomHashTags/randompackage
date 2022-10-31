@@ -54,10 +54,6 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 	public Player currentPlayerCapturing, previouscapturer;
 
 	@Override
-	public String getIdentifier() {
-		return "KOTH";
-	}
-	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		switch (args.length) {

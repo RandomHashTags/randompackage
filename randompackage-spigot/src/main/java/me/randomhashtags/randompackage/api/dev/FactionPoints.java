@@ -33,11 +33,6 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
     private HashMap<String, BigInteger> points, dailyBought;
     private HashMap<Integer, BigInteger> purchaseAmounts;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "FACTION_POINTS";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

@@ -24,10 +24,6 @@ public enum RandomizedLoot implements RPFeatureSpigot {
     public HashMap<String, RandomizedLootItem> items;
 
     @Override
-    public String getIdentifier() {
-        return "RANDOMIZED_LOOT";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "randomized loot.yml");

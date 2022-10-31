@@ -43,10 +43,6 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 	private long nextNaturalEnvoy;
 
 	@Override
-	public String getIdentifier() {
-		return "ENVOY";
-	}
-	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;

@@ -62,11 +62,6 @@ public enum Factions implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "FACTIONS";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

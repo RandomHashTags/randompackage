@@ -52,10 +52,6 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	private MCMMOBoosterEvents mcmmoboosters;
 
 	@Override
-	public String getIdentifier() {
-		return "BOOSTERS";
-	}
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		registerEventAttributeListener(this);

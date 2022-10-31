@@ -43,11 +43,6 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 	private List<UUID> viewingBrag;
 
 	@Override
-	public String getIdentifier() {
-		return "CHAT_EVENTS";
-	}
-
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		bragDisplay = colorize(RP_CONFIG.getString("chat cmds.brag.display"));

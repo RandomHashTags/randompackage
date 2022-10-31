@@ -9,11 +9,6 @@ public enum Bounty implements RPFeatureSpigot {
     public YamlConfiguration config;
 
     @Override
-    public String getIdentifier() {
-        return "BOUNTY";
-    }
-
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Bounty &e(took " + (System.currentTimeMillis()-started) + "ms)");

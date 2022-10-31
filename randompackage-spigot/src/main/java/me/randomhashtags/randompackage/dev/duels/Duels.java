@@ -37,11 +37,6 @@ public enum Duels implements RPFeatureSpigot, CommandExecutor {
     private UInventory type, godset;
     public List<ActiveDuel> activeDuels;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "DUELS";
-    }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;

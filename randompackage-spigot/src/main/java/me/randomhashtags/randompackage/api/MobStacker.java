@@ -38,10 +38,6 @@ public enum MobStacker implements RPFeatureSpigot {
     private HashMap<String, Boolean> slaysStack;
 
     @Override
-    public String getIdentifier() {
-        return "MOB_STACKER";
-    }
-    @Override
     public void load() {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "mob stacker.yml"));

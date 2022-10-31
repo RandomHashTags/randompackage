@@ -47,10 +47,6 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, List<Integer>> tasks;
 
     @Override
-    public String getIdentifier() {
-        return "LOOTBOXES";
-    }
-    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {

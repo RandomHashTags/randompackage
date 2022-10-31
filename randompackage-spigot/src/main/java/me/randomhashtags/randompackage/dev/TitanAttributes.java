@@ -25,10 +25,6 @@ public enum TitanAttributes implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "TITAN_ATTRIBUTES";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";

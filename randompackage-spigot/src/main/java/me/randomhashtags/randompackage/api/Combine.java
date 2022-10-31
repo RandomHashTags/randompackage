@@ -33,11 +33,6 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @Override
-    public String getIdentifier() {
-        return "COMBINE";
-    }
-
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "combine.yml");

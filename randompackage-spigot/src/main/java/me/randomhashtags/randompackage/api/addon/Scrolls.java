@@ -36,10 +36,6 @@ public enum Scrolls implements RPFeatureSpigot {
     private Set<Feature> enabled;
 
     @Override
-    public String getIdentifier() {
-        return "SCROLLS";
-    }
-    @Override
     public void load() {
         save("addons", "scrolls.yml");
         folder = DATA_FOLDER + SEPARATOR + "addons";

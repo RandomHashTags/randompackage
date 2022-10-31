@@ -59,11 +59,6 @@ public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "STRONGHOLDS";
-    }
     public void load() {
         final long started = System.currentTimeMillis();
         save("strongholds", "_settings.yml");

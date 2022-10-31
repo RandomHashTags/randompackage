@@ -126,11 +126,6 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
         }
         return true;
     }
-
-    @Override
-    public String getIdentifier() {
-        return "SECONDARY_EVENTS";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

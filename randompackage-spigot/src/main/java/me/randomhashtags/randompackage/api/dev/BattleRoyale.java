@@ -65,10 +65,6 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public final String getIdentifier() {
-        return "BATTLE_ROYALE";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");

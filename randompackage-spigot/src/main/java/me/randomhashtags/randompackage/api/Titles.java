@@ -51,10 +51,6 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return "TITLES";
-	}
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "titles.yml");

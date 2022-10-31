@@ -43,10 +43,6 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "SOUL_TRACKERS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "soul trackers.yml");

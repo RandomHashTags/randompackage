@@ -48,10 +48,6 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "TINKERER";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("addons", "tinkerer.yml");

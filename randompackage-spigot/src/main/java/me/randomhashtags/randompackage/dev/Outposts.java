@@ -54,11 +54,6 @@ public enum Outposts implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "OUTPOSTS";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

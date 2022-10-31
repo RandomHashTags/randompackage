@@ -73,10 +73,6 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "GIVEDP_ITEM";
-    }
-    @Override
     public void load() {
         save(null, "items.yml");
         itemsConfig = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "items.yml"));

@@ -36,10 +36,6 @@ public class Trinkets extends EventAttributes implements RPItemStack {
     public YamlConfiguration config;
 
     @Override
-    public String getIdentifier() {
-        return "TRINKETS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("trinkets", "_settings.yml");

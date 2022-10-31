@@ -48,10 +48,6 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	private UInventory editicon;
 
 	@Override
-	public String getIdentifier() {
-		return "HOMES";
-	}
-	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");

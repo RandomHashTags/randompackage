@@ -26,10 +26,6 @@ public enum RarityGems implements RPFeatureSpigot {
     INSTANCE;
 
     @Override
-    public String getIdentifier() {
-        return "RARITY_GEMS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("rarity gems", "_settings.yml");

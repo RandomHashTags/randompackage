@@ -13,10 +13,6 @@ public enum Captcha implements RPFeatureSpigot {
     public YamlConfiguration config;
 
     @Override
-    public String getIdentifier() {
-        return "CAPTCHA";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         sendConsoleMessage("&6[RandomPackage] &aLoaded Captcha &e(took " + (System.currentTimeMillis()-started) + "ms)");

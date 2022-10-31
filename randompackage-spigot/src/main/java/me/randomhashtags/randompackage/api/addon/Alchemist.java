@@ -52,11 +52,6 @@ public enum Alchemist implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "ALCHEMIST";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

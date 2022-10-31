@@ -13,10 +13,6 @@ public enum PlayerRanks implements RPFeatureSpigot {
     private ItemStack interactable;
 
     @Override
-    public String getIdentifier() {
-        return "PLAYER_RANKS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "player ranks.yml");

@@ -49,10 +49,6 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
     private HashMap<UUID, List<ItemStack>> leashedUponDeath;
 
     @Override
-    public String getIdentifier() {
-        return "INVENTORY_PETS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         registerEventAttributeListener(this);

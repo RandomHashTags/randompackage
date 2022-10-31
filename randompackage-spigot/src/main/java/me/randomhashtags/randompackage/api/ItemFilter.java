@@ -68,10 +68,6 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "ITEM_FILTER";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");

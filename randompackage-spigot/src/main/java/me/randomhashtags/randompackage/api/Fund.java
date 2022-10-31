@@ -35,11 +35,7 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 	public BigDecimal maxfund, total;
 
 	@Override
-	public String getIdentifier() {
-		return "FUND";
-	}
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		if(args.length == 0) {
 			view(sender);
 		} else {

@@ -49,10 +49,6 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Integer, UInventory> categoriez;
 
     @Override
-    public String getIdentifier() {
-        return "MONTHLY_CRATES";
-    }
-    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(args.length == 0 && player != null) {

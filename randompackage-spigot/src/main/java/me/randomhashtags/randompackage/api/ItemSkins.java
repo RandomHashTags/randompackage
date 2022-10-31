@@ -43,10 +43,6 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
     }
 
     @Override
-    public String getIdentifier() {
-        return "ITEM_SKINS";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("item skins", "_settings.yml");

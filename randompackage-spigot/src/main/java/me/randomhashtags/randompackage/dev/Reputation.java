@@ -22,11 +22,6 @@ public enum Reputation implements RPFeatureSpigot {
 
     public YamlConfiguration config;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "REPUTATION";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

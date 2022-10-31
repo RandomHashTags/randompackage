@@ -48,11 +48,6 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
 
-	@NotNull
-	@Override
-	public String getIdentifier() {
-		return "CUSTOM_ARMOR";
-	}
 	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();

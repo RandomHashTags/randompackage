@@ -91,10 +91,6 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "COLLECTION_FILTER";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");

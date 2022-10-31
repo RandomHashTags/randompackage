@@ -22,11 +22,6 @@ import java.util.List;
 public enum EnchantmentOrbs implements RPFeatureSpigot {
     INSTANCE;
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "ENCHANTMENT_ORBS";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

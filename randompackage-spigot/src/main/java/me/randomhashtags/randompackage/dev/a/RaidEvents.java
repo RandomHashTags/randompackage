@@ -25,7 +25,7 @@ public enum RaidEvents implements RPFeatureSpigot, CommandExecutor {
     private List<String> rewards;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final int l = args.length;
         if(l == 0) {
             viewActive(sender);
@@ -35,11 +35,6 @@ public enum RaidEvents implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
-    @NotNull
-    @Override
-    public String getIdentifier() {
-        return "RAID_EVENT";
-    }
     @Override
     public void load() {
         final long started = System.currentTimeMillis();

@@ -22,10 +22,6 @@ public class FactionQuests extends EventAttributes implements CommandExecutor {
 
     public YamlConfiguration config;
 
-    @Override
-    public String getIdentifier() {
-        return "FACTION_QUESTS";
-    }
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return true;
     }

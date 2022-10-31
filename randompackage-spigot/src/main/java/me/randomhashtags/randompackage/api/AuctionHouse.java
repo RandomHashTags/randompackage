@@ -98,10 +98,6 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public String getIdentifier() {
-        return "AUCTION_HOUSE";
-    }
-    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save(null, "auction house.yml");
