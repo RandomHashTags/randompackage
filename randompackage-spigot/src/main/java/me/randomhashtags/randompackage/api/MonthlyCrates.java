@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.MonthlyCrate;
 import me.randomhashtags.randompackage.addon.file.FileMonthlyCrate;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
@@ -30,6 +28,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
         return "MONTHLY_CRATES";
     }
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(args.length == 0 && player != null) {
             viewCrates(player);
@@ -138,23 +138,25 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
 
         for(int i = 0; i < gui.getSize(); i++) {
             final ItemStack item = gi.getItem(i);
-            if(categories.containsKey(i)) {
+            if(item != null && categories.containsKey(i)) {
                 final HashMap<Integer, MonthlyCrate> targetCategorySlots = categorySlots.get(categories.get(i));
                 final ItemMeta itemMeta = item.getItemMeta();
-                final List<String> lore = new ArrayList<>();
-                if(itemMeta.hasLore()) {
-                    for(String string : itemMeta.getLore()) {
-                        if(string.contains("{CRATE}")) {
-                            for(int targetSlot : targetCategorySlots.keySet()) {
-                                lore.add(string.replace("{CRATE}", targetCategorySlots.get(targetSlot).getItem().getItemMeta().getDisplayName()));
+                if(itemMeta != null) {
+                    final List<String> lore = new ArrayList<>();
+                    if(itemMeta.hasLore()) {
+                        for(String string : itemMeta.getLore()) {
+                            if(string.contains("{CRATE}")) {
+                                for(int targetSlot : targetCategorySlots.keySet()) {
+                                    lore.add(string.replace("{CRATE}", targetCategorySlots.get(targetSlot).getItem().getItemMeta().getDisplayName()));
+                                }
+                            } else {
+                                lore.add(string);
                             }
-                        } else {
-                            lore.add(string);
                         }
                     }
+                    itemMeta.setLore(lore);
+                    item.setItemMeta(itemMeta);
                 }
-                itemMeta.setLore(lore);
-                item.setItemMeta(itemMeta);
             }
         }
         for(int i : categoryItemStacks.keySet()) {
@@ -191,7 +193,8 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
                     final MonthlyCrate targetCrate = valueOfMonthlyCrate(item);
                     if(targetCrate != null) {
                         final String targetIdentifier = targetCrate.getIdentifier();
-                        final boolean isOwned = owned.containsKey(targetIdentifier), hasPerm = player.hasPermission(MonthlyCratePermission.HAS_MC_PREFIX + targetIdentifier), notUnlocked = !isOwned && !hasPerm, isClaimed = owned.getOrDefault(targetIdentifier, false);
+                        final boolean isOwned = owned.containsKey(targetIdentifier), hasPerm = player.hasPermission(MonthlyCratePermission.HAS_MC_PREFIX + targetIdentifier);
+                        final boolean notUnlocked = !isOwned && !hasPerm, isClaimed = owned.getOrDefault(targetIdentifier, false);
                         if(notUnlocked) {
                             item = locked.clone();
                         } else if(isClaimed) {
@@ -209,25 +212,28 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
         if(is != null && is.hasItemMeta()) {
             final ItemStack crateItem = crate.getItem();
             final ItemMeta itemMeta = is.getItemMeta();
-            if(itemMeta.hasDisplayName()) {
-                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", crateItem.getItemMeta().getDisplayName()));
-            }
-            final List<String> lore = new ArrayList<>();
-            if(itemMeta.hasLore()) {
-                for(String string : (unlocked ? crateItem : locked.clone()).getItemMeta().getLore()) {
-                    if(string.equals("{LORE}")) {
-                        for(String crateLoreString : crateItem.getItemMeta().getLore()) {
-                            if(!crateLoreString.contains("{UNLOCKED_BY}")) {
-                                lore.add(crateLoreString);
+            if(itemMeta != null) {
+                if(itemMeta.hasDisplayName()) {
+                    itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", crateItem.getItemMeta().getDisplayName()));
+                }
+                final List<String> lore = new ArrayList<>();
+                if(itemMeta.hasLore()) {
+                    final List<String> crateLore = crateItem.getItemMeta().getLore();
+                    for(String string : (unlocked ? crateItem : locked.clone()).getItemMeta().getLore()) {
+                        if(string.equals("{LORE}")) {
+                            for(String crateLoreString : crateLore) {
+                                if(!crateLoreString.contains("{UNLOCKED_BY}")) {
+                                    lore.add(crateLoreString);
+                                }
                             }
+                        } else {
+                            lore.add(string.replace("{UNLOCKED_BY}", playerName));
                         }
-                    } else {
-                        lore.add(string.replace("{UNLOCKED_BY}", playerName));
                     }
                 }
+                itemMeta.setLore(lore);
+                is.setItemMeta(itemMeta);
             }
-            itemMeta.setLore(lore);
-            is.setItemMeta(itemMeta);
         }
     }
     public void openMonthlyCrate(@NotNull Player player, @NotNull MonthlyCrate crate) {
@@ -241,49 +247,60 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
         for(int i = 0; i < top.getSize(); i++) {
             if(rewardSlots.contains(i) || bonusRewardSlots.contains(i)) {
                 final ItemStack item = top.getItem(i);
-                final ItemMeta itemMeta = item.getItemMeta();
-                final List<String> lore = new ArrayList<>();
-                if(item.hasItemMeta()) {
-                    if(itemMeta.hasDisplayName()) {
-                        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", identifier));
-                    }
-                    if(itemMeta.hasLore()) {
-                        for(String string : itemMeta.getLore()) {
-                            lore.add(string.replace("{PATH}", identifier));
+                if(item != null) {
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    if(itemMeta != null) {
+                        final List<String> lore = new ArrayList<>();
+                        if(item.hasItemMeta()) {
+                            if(itemMeta.hasDisplayName()) {
+                                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", identifier));
+                            }
+                            final List<String> itemLore = itemMeta.getLore();
+                            if(itemLore != null) {
+                                for(String string : itemLore) {
+                                    lore.add(string.replace("{PATH}", identifier));
+                                }
+                            }
                         }
+                        itemMeta.setLore(lore);
+                        item.setItemMeta(itemMeta);
                     }
                 }
-                itemMeta.setLore(lore);
-                item.setItemMeta(itemMeta);
             }
         }
         player.updateInventory();
     }
-    private void doAnimation(Player player, MonthlyCrate m) {
-        final String p = m.getIdentifier();
-        final Inventory inv = m.getBonus().getInventory();
-        final List<Integer> rewardSlots = m.getRewardSlots(), bonusSlots = m.getBonusRewardSlots();
+    private void doAnimation(Player player, MonthlyCrate crate) {
+        final String identifier = crate.getIdentifier();
+        final Inventory inv = crate.getBonus().getInventory();
+        final List<Integer> rewardSlots = crate.getRewardSlots(), bonusSlots = crate.getBonusRewardSlots();
         final Inventory top = player.getOpenInventory().getTopInventory();
         for(int i = 0; i < top.getSize(); i++) {
             if(!rewardSlots.contains(i) && !bonusSlots.contains(i)) {
                 top.setItem(i, inv.getItem(i));
             }
         }
-        for(int i : bonusSlots) {
-            final ItemStack item = inv.getItem(i).clone();
-            final ItemMeta itemMeta = item.getItemMeta();
-            final List<String> lore = new ArrayList<>();
-            if(itemMeta.hasLore()) {
-                for(String s : itemMeta.getLore()) {
-                    if(s.contains("{PATH}")) {
-                        s = s.replace("{PATH}", p);
+        for(int slot : bonusSlots) {
+            final ItemStack itemstack = inv.getItem(slot);
+            if(itemstack != null) {
+                final ItemStack item = itemstack.clone();
+                final ItemMeta itemMeta = item.getItemMeta();
+                if(itemMeta != null) {
+                    final List<String> itemLore = itemMeta.getLore();
+                    if(itemLore != null) {
+                        final List<String> lore = new ArrayList<>();
+                        for(String string : itemLore) {
+                            if(string.contains("{PATH}")) {
+                                string = string.replace("{PATH}", identifier);
+                            }
+                            lore.add(string);
+                        }
+                        itemMeta.setLore(lore);
                     }
-                    lore.add(s);
+                    item.setItemMeta(itemMeta);
+                    top.setItem(slot, item);
                 }
-                itemMeta.setLore(lore);
             }
-            item.setItemMeta(itemMeta);
-            top.setItem(i, item);
         }
         player.updateInventory();
     }
@@ -296,7 +313,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
             final List<String> r = MonthlyCrate.REVEALED_REGULAR.getOrDefault(player, null);
             for(int i : crate.getRewardSlots()) {
                 final ItemStack is = regular.contains(i) ? crate.getRandomReward(player, r, false) : inv.getItem(i);
-                if(is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
+                if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
                     Bukkit.dispatchCommand(CONSOLE, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", playerName));
                 } else {
                     giveItem(player, is);
@@ -307,7 +324,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
             final List<String> r = MonthlyCrate.REVEALED_BONUS.getOrDefault(player, null);
             for(int i : crate.getBonusRewardSlots()) {
                 final ItemStack is = bonus == null || bonus.contains(i) ? crate.getRandomBonusReward(player, r, false) : inv.getItem(i);
-                if(is.hasItemMeta() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
+                if(is != null && is.hasItemMeta() && is.getItemMeta().getDisplayName().equals(cmd.getItemMeta().getDisplayName()) && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() == cmd.getItemMeta().getLore().size()) {
                     Bukkit.dispatchCommand(CONSOLE, is.getItemMeta().getLore().get(0).substring(1).replace("<player>", playerName));
                 } else {
                     giveItem(player, is);
@@ -341,12 +358,12 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
     public void give(RPPlayer pdata, Player player, MonthlyCrate crate, boolean claimed) {
         final ItemStack item = crate.getItem();
         final ItemMeta itemMeta = item.getItemMeta();
-        if(item.hasItemMeta()) {
-            final List<String> lore = new ArrayList<>();
-            if(itemMeta.hasLore()) {
+        if(itemMeta != null) {
+            final List<String> itemLore = itemMeta.getLore(), lore = new ArrayList<>();
+            if(itemLore != null) {
                 final String name = player.getName();
-                for(String s : itemMeta.getLore()) {
-                    lore.add(s.replace("{UNLOCKED_BY}", name));
+                for(String string : itemLore) {
+                    lore.add(string.replace("{UNLOCKED_BY}", name));
                 }
             }
             itemMeta.setLore(lore);
@@ -473,36 +490,38 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
     }
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
-        final ItemStack is = event.getItem();
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final ItemMeta m = is.getItemMeta();
+        final ItemStack item = event.getItem();
+        if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().hasLore()) {
+            final ItemMeta itemMeta = item.getItemMeta();
             final Player player = event.getPlayer();
-            final MonthlyCrate crate = valueOfMonthlyCrate(player, is);
+            final MonthlyCrate crate = valueOfMonthlyCrate(player, item);
             if(crate != null) {
                 event.setCancelled(true);
                 player.updateInventory();
                 openMonthlyCrate(player, crate);
-                removeItem(player, is, 1);
-            } else if(is.hasItemMeta() && (m.equals(heroicMysteryCrate.getItemMeta()) || m.equals(mysteryCrate.getItemMeta()) || m.equals(superiorMysteryCrate.getItemMeta()))) {
-                final String type = (m.equals(superiorMysteryCrate.getItemMeta()) ? "superior " : m.equals(heroicMysteryCrate.getItemMeta()) ? "heroic " : "") + "mystery crate";
+                removeItem(player, item, 1);
+            } else if(item.hasItemMeta() && (itemMeta.equals(heroicMysteryCrate.getItemMeta()) || itemMeta.equals(mysteryCrate.getItemMeta()) || itemMeta.equals(superiorMysteryCrate.getItemMeta()))) {
+                final String type = (itemMeta.equals(superiorMysteryCrate.getItemMeta()) ? "superior " : itemMeta.equals(heroicMysteryCrate.getItemMeta()) ? "heroic " : "") + "mystery crate";
                 final List<String> obtainable = getStringList(config, "items." + type + ".can obtain");
                 final String id = obtainable.get(RANDOM.nextInt(obtainable.size()));
                 final ItemStack itemstack = GivedpItem.INSTANCE.valueOfRPItem("monthlycrate:" + id);
-                final String playerName = player.getName();
-                final ItemMeta itemMeta = itemstack.getItemMeta();
-                if(itemMeta != null && itemMeta.hasLore()) {
-                    final List<String> lore = new ArrayList<>();
-                    for(String string : itemMeta.getLore()) {
-                        if(string.contains("{UNLOCKED_BY}")) string = string.replace("{UNLOCKED_BY}", playerName);
-                        lore.add(string);
+                if(itemstack != null) {
+                    final String playerName = player.getName();
+                    final ItemMeta itemstackMeta = itemstack.getItemMeta();
+                    if(itemstackMeta != null && itemstackMeta.hasLore()) {
+                        final List<String> lore = new ArrayList<>();
+                        for(String string : itemstackMeta.getLore()) {
+                            if(string.contains("{UNLOCKED_BY}")) string = string.replace("{UNLOCKED_BY}", playerName);
+                            lore.add(string);
+                        }
+                        itemstackMeta.setLore(lore);
+                        itemstack.setItemMeta(itemstackMeta);
                     }
-                    itemMeta.setLore(lore);
-                    itemstack.setItemMeta(itemMeta);
+                    event.setCancelled(true);
+                    removeItem(player, item, 1);
+                    giveItem(player, itemstack);
+                    player.updateInventory();
                 }
-                event.setCancelled(true);
-                removeItem(player, is, 1);
-                giveItem(player, itemstack);
-                player.updateInventory();
             }
         }
     }

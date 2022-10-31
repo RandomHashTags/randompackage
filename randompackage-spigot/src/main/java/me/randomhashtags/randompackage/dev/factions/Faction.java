@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.dev.factions;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;

@@ -6,7 +6,6 @@ import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import me.randomhashtags.randompackage.supported.Regional;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -21,6 +20,7 @@ public enum SuperiorSky implements RPFeatureSpigot, Regional {
 
     private com.bgsoftware.superiorskyblock.api.SuperiorSkyblock ss;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "REGIONAL_SUPERIOR_SKYBLOCK";

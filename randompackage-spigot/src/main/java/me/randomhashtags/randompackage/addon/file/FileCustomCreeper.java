@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -14,16 +14,20 @@ import java.util.List;
 import java.util.UUID;
 
 public final class FileCustomCreeper extends RPAddonSpigot implements CustomExplosion {
-    public static HashMap<UUID, FileCustomCreeper> living;
+    public static HashMap<UUID, FileCustomCreeper> LIVING;
     private ItemStack item;
-    public FileCustomCreeper(File f) {
-        if(living == null) {
-            living = new HashMap<>();
+    public FileCustomCreeper(File file) {
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
-        load(f);
+        load(file);
         register(Feature.CUSTOM_EXPLOSION, this);
     }
-    public String getIdentifier() { return "CREEPER_" + getYamlName(); }
+    @NotNull
+    @Override
+    public String getIdentifier() {
+        return "CREEPER_" + getYamlName();
+    }
 
     public String getCreeperName() {
         return getString(yml, "creeper name");
@@ -36,12 +40,12 @@ public final class FileCustomCreeper extends RPAddonSpigot implements CustomExpl
         return getClone(item);
     }
 
-    public void spawn(@NotNull Location l) {
-        final Creeper c = l.getWorld().spawn(l, Creeper.class);
-        c.setCustomName(getCreeperName());
-        living.put(c.getUniqueId(), this);
+    public void spawn(@NotNull Location location) {
+        final Creeper creeper = location.getWorld().spawn(location, Creeper.class);
+        creeper.setCustomName(getCreeperName());
+        LIVING.put(creeper.getUniqueId(), this);
     }
     public void didExplode(UUID uuid, List<Block> blockList) {
-        living.remove(uuid);
+        LIVING.remove(uuid);
     }
 }

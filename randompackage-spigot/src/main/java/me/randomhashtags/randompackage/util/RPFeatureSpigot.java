@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.util;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
@@ -29,6 +28,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,8 +124,10 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
             sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
         } else {
             final ItemMeta itemMeta = item.getItemMeta();
-            itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
-            item.setItemMeta(itemMeta);
+            if(itemMeta != null) {
+                itemMeta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + what);
+                item.setItemMeta(itemMeta);
+            }
             GIVEDP_INVENTORY.getInventory().addItem(item);
             final int size = items.size();
             final Inventory inv = Bukkit.createInventory(null, size == 9 || size == 18 || size == 27 || size == 36 || size == 45 || size == 54 ? size : ((size+9)/9)*9, invtitle);
@@ -137,7 +140,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         }
     }
 
-    default boolean hasPermission(CommandSender sender, String permission, boolean sendNoPermMessage) {
+    default boolean hasPermission(@Nullable CommandSender sender, @NotNull String permission, boolean sendNoPermMessage) {
         if(!(sender instanceof Player) || sender.hasPermission(permission)) {
             return true;
         } else if(sendNoPermMessage) {
@@ -145,7 +148,6 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         }
         return false;
     }
-
 
     default ItemStack createItemStack(FileConfiguration config, String path) {
         return createItemStack(config, path, 0, 0.00f);

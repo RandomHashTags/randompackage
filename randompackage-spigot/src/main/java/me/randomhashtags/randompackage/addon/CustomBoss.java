@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.addon.util.*;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpI
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customboss" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomBoss boss = getCustomBoss(originalInput.split(":")[1]);
         return boss != null ? boss.getSpawnItem() : AIR;
     }

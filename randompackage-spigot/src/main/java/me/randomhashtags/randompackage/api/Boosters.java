@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
@@ -30,6 +29,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -246,7 +246,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		}
 	}
 	public TObject valueOfBooster(@NotNull ItemStack is) {
-		if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
+		if(is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
 			final ItemMeta m = is.getItemMeta();
 			final String d = m.getDisplayName();
 			final List<String> l = m.getLore();
@@ -261,7 +261,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 		}
 		return null;
 	}
-	public void called(Event event) {
+	public void called(@NotNull Event event) {
 		if(event instanceof PlayerEvent) {
 			triggerBoosters(((PlayerEvent) event).getPlayer(), event);
 		} else {
@@ -283,12 +283,12 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	private void playerInteractEvent(PlayerInteractEvent event) {
 		final ItemStack is = event.getItem();
 		if(is != null && !is.getType().equals(Material.AIR)) {
-			final Player player = event.getPlayer();
-			final TObject m = valueOfBooster(is);
-			if(m != null) {
+			final TObject booster = valueOfBooster(is);
+			if(booster != null) {
 				event.setCancelled(true);
+				final Player player = event.getPlayer();
 				player.updateInventory();
-				if(activateBooster(player, (Booster) m.getFirst(), (double) m.getSecond(), (long) m.getThird())) {
+				if(activateBooster(player, (Booster) booster.getFirst(), (double) booster.getSecond(), (long) booster.getThird())) {
 					removeItem(player, is, 1);
 				}
 			}

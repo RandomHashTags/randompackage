@@ -7,6 +7,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +24,11 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         load(f);
         register(Feature.ENVOY_CRATE, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+    @NotNull
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
     public Firework getFirework() {
         if(fw == null) {

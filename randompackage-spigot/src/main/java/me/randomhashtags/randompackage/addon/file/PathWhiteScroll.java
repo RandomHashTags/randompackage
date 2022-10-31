@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.WhiteScroll;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -14,10 +15,14 @@ public final class PathWhiteScroll extends RPAddonSpigot implements WhiteScroll 
         this.path = path;
         register(Feature.SCROLL_WHITE, this);
     }
-    public String getIdentifier() { return path; }
+    @NotNull
+    @Override
+    public String getIdentifier() {
+        return path;
+    }
 
-    public boolean canBeApplied(ItemStack is) {
-        if(is != null && !is.getType().name().contains("AIR")) {
+    public boolean canBeApplied(@NotNull ItemStack is) {
+        if(!is.getType().name().contains("AIR")) {
             final List<WhiteScroll> list = valueOfWhiteScrollApplied(is);
             final String reqws = getRequiredWhiteScroll();
             if(list == null && reqws == null || list != null && !list.contains(this) && (reqws == null || list.contains(getWhiteScroll(reqws)))) {

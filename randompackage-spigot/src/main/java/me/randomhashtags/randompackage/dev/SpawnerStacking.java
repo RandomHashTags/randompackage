@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.StackedSpawner;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
@@ -23,6 +22,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;

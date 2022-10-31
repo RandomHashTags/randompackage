@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,9 +23,6 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         load(f);
         register(Feature.MONTHLY_CRATE, this);
     }
-    public String getIdentifier() {
-        return getYamlName();
-    }
 
     public int getCategory() {
         return yml.getInt("category");
@@ -35,6 +33,8 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     public String getGuiTitle() {
         return getString(yml, "title");
     }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);

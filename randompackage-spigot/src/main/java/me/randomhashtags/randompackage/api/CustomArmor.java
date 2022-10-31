@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
@@ -28,6 +26,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,9 +48,12 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	public String crystalAddedLore;
 	private List<Player> inEquipmentLootbox;
 
+	@NotNull
+	@Override
 	public String getIdentifier() {
 		return "CUSTOM_ARMOR";
 	}
+	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
 		save("custom armor", "_settings.yml");
@@ -85,6 +88,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		addGivedpCategory(crystals, UMaterial.NETHER_STAR, "Armor Set Crystals", "Givedp: ArmorSet Crystals");
 		sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SET).size() + " Armor Sets", started);
 	}
+	@Override
 	public void unload() {
 		unregister(Feature.ARMOR_SET);
 	}

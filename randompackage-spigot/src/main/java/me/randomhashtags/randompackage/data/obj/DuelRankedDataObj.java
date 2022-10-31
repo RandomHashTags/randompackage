@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.data.obj;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.data.DuelRankedData;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public final class DuelRankedDataObj implements DuelRankedData {
     }
 
     @Override
-    public void setELO(BigDecimal elo) {
+    public void setELO(@NotNull BigDecimal elo) {
         this.elo = elo;
     }
 

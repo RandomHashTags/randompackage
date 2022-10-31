@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,10 +21,13 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
         load(f);
         register(Feature.CONQUEST_CHEST, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
-    public String getSpawnRegion() { return yml.getString("settings.spawn region").toUpperCase(); }
-    public String getRewardSize() { return yml.getString("settings.reward size"); }
+    public String getSpawnRegion() {
+        return yml.getString("settings.spawn region").toUpperCase();
+    }
+    public String getRewardSize() {
+        return yml.getString("settings.reward size");
+    }
     public HashMap<ConquestMob, String> getSpawnedBosses() {
         if(spawnedBosses == null) {
             spawnedBosses = new HashMap<>();
@@ -43,8 +47,14 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
     public int getAnnounceIntervalAfterSpawned() { return yml.getInt("messages.announce interval after spawned"); }
     public int getDespawnDelay() { return yml.getInt("messages.despawn delay"); }
     public double getDamageDelay() { return yml.getDouble("settings.dmg delay"); }
+    @NotNull
     public UMaterial getPlacedBlock() {
-        if(placedBlock == null) placedBlock = UMaterial.match(yml.getString("settings.placed block").toUpperCase());
+        if(placedBlock == null) {
+            placedBlock = UMaterial.match(yml.getString("settings.placed block").toUpperCase());
+            if(placedBlock == null) {
+                placedBlock = UMaterial.ENDER_CHEST;
+            }
+        }
         return placedBlock;
     }
     public List<String> getRewards() { return getStringList(yml, "rewards"); }

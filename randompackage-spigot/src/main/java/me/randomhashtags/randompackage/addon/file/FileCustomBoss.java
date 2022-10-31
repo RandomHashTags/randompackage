@@ -28,7 +28,6 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         load(f);
         register(Feature.CUSTOM_BOSS, this);
     }
-    public String getIdentifier() { return getYamlName();  }
 
     public String getType() { return yml.getString("type").toUpperCase(); }
     public String getName() { return colorize(yml.getString("name")); }

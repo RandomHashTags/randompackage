@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,8 +18,6 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
         load(f);
         register(Feature.LOOTBOX, this);
     }
-    public String getIdentifier() { return getYamlName(); }
-
     public int getPriority() {
         return yml.getInt("priority");
     }
@@ -65,6 +64,8 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
         return getStringList(yml, "bonus loot");
     }
 
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) {
             final ItemStack i = createItemStack(yml, "lootbox");

@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,32 +18,32 @@ public interface RPPlayer {
     void unload();
     void backup();
 
-    UUID getUUID();
+    @NotNull UUID getUUID();
     default Player getPlayer() {
         return Bukkit.getPlayer(getUUID());
     }
     default OfflinePlayer getOfflinePlayer() {
         final UUID uuid = getUUID();
-        return uuid != null ? Bukkit.getOfflinePlayer(uuid) : null;
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     HashMap<String, Integer> getUnclaimedLootboxes();
     List<ItemStack> getUnclaimedPurchases();
-    SecondaryData getSecondaryData();
-    CoinFlipData getCoinFlipData();
-    CustomEnchantData getCustomEnchantData();
-    DisguiseData getDisguiseData();
-    DuelData getDuelData();
-    GlobalChallengeData getGlobalChallengeData();
-    HomeData getHomeData();
-    ItemFilterData getItemFilterData();
-    JackpotData getJackpotData();
-    KitData getKitData();
-    MonthlyCrateData getMonthlyCrateData();
-    PlayerQuestData getPlayerQuestData();
-    RarityGemData getRarityGemData();
-    ReputationData getReputationData();
-    ShowcaseData getShowcaseData();
-    SlotBotData getSlotBotData();
-    TitleData getTitleData();
+    @Nullable SecondaryData getSecondaryData();
+    @Nullable CoinFlipData getCoinFlipData();
+    @Nullable CustomEnchantData getCustomEnchantData();
+    @Nullable DisguiseData getDisguiseData();
+    @Nullable DuelData getDuelData();
+    @Nullable GlobalChallengeData getGlobalChallengeData();
+    @Nullable HomeData getHomeData();
+    @Nullable ItemFilterData getItemFilterData();
+    @Nullable JackpotData getJackpotData();
+    @Nullable KitData getKitData();
+    @Nullable MonthlyCrateData getMonthlyCrateData();
+    @Nullable PlayerQuestData getPlayerQuestData();
+    @Nullable RarityGemData getRarityGemData();
+    @Nullable ReputationData getReputationData();
+    @Nullable ShowcaseData getShowcaseData();
+    @Nullable SlotBotData getSlotBotData();
+    @Nullable TitleData getTitleData();
 }

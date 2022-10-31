@@ -51,6 +51,8 @@ dependencies {
     //implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.1-SNAPSHOT'
 
     //implementation 'com.gmail.nossr50:mcMMO:LATEST'
+
+    implementation 'org.jetbrains:annotations:23.0.0'
 }
 
 configurations {

@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.util.Spawnable;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -14,8 +14,9 @@ public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnab
     public static RegionPlugin SPAWN_TYPE = null;
     public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
     public boolean canSpawnAtFactionClaim(@Nullable Player summoner, @NotNull Location l) {
-        if(l != null && RegionalAPI.INSTANCE.hookedFactionsUUID()) {
-            final String own = summoner != null ? RegionalAPI.INSTANCE.getFactionTag(summoner.getUniqueId()) : null, w = l.getWorld().getName(), f = FactionsUUID.INSTANCE.getRegionalIdentifierAt(l);
+        final RegionalAPI regional = RegionalAPI.INSTANCE;
+        if(regional.hookedFactionsUUID()) {
+            final String own = summoner != null ? regional.getFactionTag(summoner.getUniqueId()) : null, w = l.getWorld().getName(), f = FactionsUUID.INSTANCE.getRegionalIdentifierAt(l);
             for(String s : getSpawnableFactionClaims()) {
                 if(s.startsWith(w + ";")) {
                     for(String r : s.split(w + ";")[1].split(";")) {

@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -54,8 +55,8 @@ public final class PathEnchantmentOrb extends RPAddonSpigot implements Enchantme
 	public int getMinPercent() { return 0; }
 	public int getMaxPercent() { return 100; }
 
-	public boolean canBeApplied(ItemStack itemstack) {
-		if(itemstack != null && !itemstack.getType().equals(Material.AIR)) {
+	public boolean canBeApplied(@NotNull ItemStack itemstack) {
+		if(!itemstack.getType().equals(Material.AIR)) {
 			final EnchantmentOrb orb = valueOfEnchantmentOrb(itemstack);
 			if(orb != null) {
 				final String c = itemstack.getType().name().toLowerCase();

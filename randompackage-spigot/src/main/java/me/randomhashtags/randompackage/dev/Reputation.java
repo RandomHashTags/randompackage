@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
@@ -9,6 +7,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -22,6 +22,7 @@ public enum Reputation implements RPFeatureSpigot {
 
     public YamlConfiguration config;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "REPUTATION";

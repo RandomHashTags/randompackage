@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,8 +23,9 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
         load(f);
         register(Feature.FACTION_UPGRADE, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) {
             item = createItemStack(yml, "item");

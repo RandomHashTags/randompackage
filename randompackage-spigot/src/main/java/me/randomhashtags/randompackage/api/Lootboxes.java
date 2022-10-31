@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Lootbox;
 import me.randomhashtags.randompackage.addon.file.FileLootbox;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -175,14 +175,15 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         return started.containsKey(lootbox) && started.get(lootbox)+(lootbox.getAvailableFor()*1000)-System.currentTimeMillis() > 0;
     }
     public void tryClaiming(@NotNull Player player, @NotNull Lootbox lootbox) {
-        final String y = lootbox.getIdentifier();
+        final String identifier = lootbox.getIdentifier();
         final HashMap<String, Integer> lootboxes = FileRPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
-        if(lootboxes.getOrDefault(y, 0) > 0) {
+        final int amount = lootboxes.getOrDefault(identifier, 0);
+        if(amount > 0) {
             if(isAvailable(lootbox)) {
-                if(lootboxes.get(y) == 1) {
-                    lootboxes.remove(y);
+                if(amount == 1) {
+                    lootboxes.remove(identifier);
                 } else {
-                    lootboxes.put(y, lootboxes.get(y)-1);
+                    lootboxes.put(identifier, amount-1);
                 }
                 giveItem(player, lootbox.getItem());
             }
@@ -195,22 +196,22 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         player.closeInventory();
         final int size = lootbox.getGuiSize();
         player.openInventory(Bukkit.createInventory(player, size, lootbox.getGuiTitle()));
-        final List<String> format = lootbox.getGuiFormat();
+        final List<String> guiFormat = lootbox.getGuiFormat();
         final ItemStack background = lootbox.getBackground();
         final Inventory top = player.getOpenInventory().getTopInventory();
         final List<Integer> countdownSlots = new ArrayList<>(), lootSlots = new ArrayList<>(), bonusSlots = new ArrayList<>();
 
         final List<ItemStack> bonus = lootbox.getAllRewards(LootboxRewardType.BONUS);
-        List<ItemStack> regular = new ArrayList<>(lootbox.getAllRewards(LootboxRewardType.REGULAR));
+        final List<ItemStack> regular = new ArrayList<>(lootbox.getAllRewards(LootboxRewardType.REGULAR));
         regular.addAll(lootbox.getAllRewards(LootboxRewardType.JACKPOT));
 
         redeeming.put(player, lootbox);
-        for(int i = 0; i < format.size(); i++) {
-            final String L = format.get(i);
-            for(int p = 0; p < L.length(); p++) {
-                final int slot = i*9+p;
-                final String s = L.substring(p, p+1);
-                switch (s) {
+        for(int i = 0; i < guiFormat.size(); i++) {
+            final String guiFormatString = guiFormat.get(i);
+            for(int p = 0; p < guiFormatString.length(); p++) {
+                final int slot = i*9 + p;
+                final String formatCharacter = guiFormatString.substring(p, p+1);
+                switch (formatCharacter) {
                     case "X":
                         top.setItem(slot, background);
                         break;
@@ -222,21 +223,17 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                         break;
                     case "B":
                         int rewardIndex = RANDOM.nextInt(bonus.size());
-                        if(rewardIndex >= 0) {
-                            final ItemStack b = bonus.get(rewardIndex);
-                            top.setItem(slot, b);
-                            bonus.remove(b);
-                            bonusSlots.add(slot);
-                        }
+                        final ItemStack bonusItem = bonus.get(rewardIndex);
+                        top.setItem(slot, bonusItem);
+                        bonus.remove(bonusItem);
+                        bonusSlots.add(slot);
                         break;
                     case "L":
                         rewardIndex = RANDOM.nextInt(regular.size());
-                        if(rewardIndex >= 0) {
-                            final ItemStack r = regular.get(rewardIndex);
-                            top.setItem(slot, r);
-                            regular.remove(r);
-                            lootSlots.add(slot);
-                        }
+                        final ItemStack rewardItem = regular.get(rewardIndex);
+                        top.setItem(slot, rewardItem);
+                        regular.remove(rewardItem);
+                        lootSlots.add(slot);
                         break;
                     default:
                         break;
@@ -250,46 +247,46 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private void startCountdown(Player player, Inventory top, List<Integer> countdownSlots, List<Integer> lootSlots, List<Integer> bonusSlots, ItemStack background) {
         final Lootbox lootbox = redeeming.get(player);
         final ItemStack air = new ItemStack(Material.AIR);
-        final List<Integer> T = tasks.get(player);
-        List<ItemStack> list = new ArrayList<>(lootbox.getAllRewards(LootboxRewardType.REGULAR));
+        final List<Integer> playerTasks = tasks.get(player);
+        final List<ItemStack> list = new ArrayList<>(lootbox.getAllRewards(LootboxRewardType.REGULAR));
         list.addAll(lootbox.getAllRewards(LootboxRewardType.JACKPOT));
 
+        final ItemStack item = background.clone();
         for(int i = 1; i <= countdownStart; i++) {
             final int k = i;
-            T.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                final ItemStack item = background.clone();
+            playerTasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                 item.setAmount(countdownStart-k);
-                for(int c : countdownSlots) {
-                    top.setItem(c, item);
+                for(int slot : countdownSlots) {
+                    top.setItem(slot, item);
                 }
                 if(k == countdownStart) {
-                    for(int n = 0; n < top.getSize(); n++) {
-                        if(!lootSlots.contains(n) && !bonusSlots.contains(n)) {
-                            top.setItem(n, air);
+                    for(int slot = 0; slot < top.getSize(); slot++) {
+                        if(!lootSlots.contains(slot) && !bonusSlots.contains(slot)) {
+                            top.setItem(slot, air);
                         }
                     }
                 } else {
                     for(int z = 0; z <= 18; z += 3) {
-                        T.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+                        playerTasks.add(SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
                             final List<ItemStack> loot = new ArrayList<>(list);
-                            for(int s : lootSlots) {
-                                final ItemStack r = loot.get(RANDOM.nextInt(loot.size()));
-                                loot.remove(r);
-                                top.setItem(s, r);
+                            for(int slot : lootSlots) {
+                                final ItemStack randomLoot = loot.get(RANDOM.nextInt(loot.size()));
+                                loot.remove(randomLoot);
+                                top.setItem(slot, randomLoot);
                             }
                         }, z));
                     }
                 }
                 player.updateInventory();
-            }, 20*i));
+            }, 20L * i));
         }
     }
     public void previewLootbox(@NotNull Player player, @NotNull Lootbox lootbox) {
         if(hasPermission(player, LootboxPermission.PREVIEW_LOOT, true)) {
             player.closeInventory();
             final List<ItemStack> items = lootbox.getAllRewards();
-            final int s = ((items.size()+9)/9)*9;
-            player.openInventory(Bukkit.createInventory(player, s, lootbox.getPreviewTitle()));
+            final int size = ((items.size()+9)/9)*9;
+            player.openInventory(Bukkit.createInventory(player, size, lootbox.getPreviewTitle()));
             final Inventory top = player.getOpenInventory().getTopInventory();
             for(ItemStack is : items) {
                 top.setItem(top.firstEmpty(), is);
@@ -302,25 +299,25 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private void inventoryClickEvent(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
-        final String t = event.getView().getTitle();
-        final Lootbox l = valueOfLootboxTitle(t), L = l == null ? valueOfLootboxPreviewTitle(t) : null;
+        final String title = event.getView().getTitle();
+        final Lootbox targetLootbox = valueOfLootboxTitle(title), targetLootbox2 = targetLootbox == null ? valueOfLootboxPreviewTitle(title) : null;
         if(redeeming.containsKey(player)) {
             event.setCancelled(true);
             player.updateInventory();
-        } else if(viewing.contains(player) || l != null || L != null) {
+        } else if(viewing.contains(player) || targetLootbox != null || targetLootbox2 != null) {
             event.setCancelled(true);
             player.updateInventory();
-            final ItemStack c = event.getCurrentItem();
-            final int r = event.getRawSlot();
-            if(r < 0 || r >= top.getSize() || c == null || c.getType().equals(Material.AIR)) return;
-            if(t.equals(gui.getTitle())) {
-                final Lootbox lootbox = guiLootboxes.getOrDefault(r, null);
+            final ItemStack currentItem = event.getCurrentItem();
+            final int rawSlot = event.getRawSlot();
+            if(rawSlot < 0 || rawSlot >= top.getSize() || currentItem == null || currentItem.getType().equals(Material.AIR)) return;
+            if(title.equals(gui.getTitle())) {
+                final Lootbox lootbox = guiLootboxes.getOrDefault(rawSlot, null);
                 final String click = event.getClick().name();
                 if(lootbox != null) {
                     if(click.contains("LEFT")) tryClaiming(player, lootbox);
                     else if(click.contains("RIGHT")) previewLootbox(player, lootbox);
                 }
-            } else if(L != null) {
+            } else if(targetLootbox2 != null) {
                 player.closeInventory();
                 sendStringListMessage(player, getStringList(config, "messages.unlock"), null);
             } else {

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.dev;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.BattleRoyaleTeam;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
@@ -23,6 +22,8 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -231,6 +232,7 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             }
         }
     }
+    @Nullable
     public final BattleRoyaleTeam getTeam(@NotNull Player player) {
         for(BattleRoyaleTeam team : getTeams()) {
             if(team.getPlayers().containsKey(player)) {
@@ -294,13 +296,13 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             if(damager.getWorld().getName().equals(world) && damager instanceof Player) {
                 final Entity victim = event.getEntity();
                 if(victim instanceof Player) {
-                    final Player d = (Player) damager, v = (Player) victim;
-                    final BattleRoyaleTeam t = getTeam(d);
-                    if(t != null && t.getPlayers().containsKey(v)) {
+                    final Player playerDamager = (Player) damager, playerVictim = (Player) victim;
+                    final BattleRoyaleTeam t = getTeam(playerDamager);
+                    if(t != null && t.getPlayers().containsKey(playerVictim)) {
                         event.setCancelled(true);
-                        d.updateInventory();
-                        v.updateInventory();
-                        sendStringListMessage(d, getStringList(config, "messages.cannot hurt team members"), null);
+                        playerDamager.updateInventory();
+                        playerVictim.updateInventory();
+                        sendStringListMessage(playerDamager, getStringList(config, "messages.cannot hurt team members"), null);
                     }
                 }
             }

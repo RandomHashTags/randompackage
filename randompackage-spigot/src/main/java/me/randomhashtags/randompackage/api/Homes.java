@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.HomeData;
@@ -30,6 +29,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,40 +95,42 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		if(!(sender instanceof Player)) {
 			return true;
 		}
 		final Player player = (Player) sender;
 		final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
 		final HomeData homeData = pdata.getHomeData();
-		final String commandName = cmd.getName();
-		final boolean zero = args.length == 0;
-		switch (commandName) {
-			case "home":
-				if(zero) {
-					viewHomes(player, pdata);
-				} else {
-					final Home home = homeData.getHome(getArguments(args));
-					if(home != null) {
-						teleportToHome(player, home);
-					} else {
+		if(homeData != null) {
+			final String commandName = cmd.getName();
+			final boolean zero = args.length == 0;
+			switch (commandName) {
+				case "home":
+					if(zero) {
 						viewHomes(player, pdata);
+					} else {
+						final Home home = homeData.getHome(getArguments(args));
+						if(home != null) {
+							teleportToHome(player, home);
+						} else {
+							viewHomes(player, pdata);
+						}
 					}
-				}
-				break;
-			case "sethome":
-				if(hasPermission(player, HomePermission.COMMAND_SETHOME, true) && homeData.getHomes().size()+1 <= homeData.getMaxHomes(player)) {
-					final String homeName = zero ? config.getString("settings.default name") : getArguments(args);
-					final Home home = new Home(homeName, player.getLocation(), UMaterial.GRASS_BLOCK);
-					homeData.addHome(home);
-					final HashMap<String, String> replacements = new HashMap<>();
-					replacements.put("{HOME}", homeName);
-					sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
-				}
-				break;
-			default:
-				break;
+					break;
+				case "sethome":
+					if(hasPermission(player, HomePermission.COMMAND_SETHOME, true) && homeData.getHomes().size()+1 <= homeData.getMaxHomes(player)) {
+						final String homeName = zero ? config.getString("settings.default name") : getArguments(args);
+						final Home home = new Home(homeName, player.getLocation(), UMaterial.GRASS_BLOCK);
+						homeData.addHome(home);
+						final HashMap<String, String> replacements = new HashMap<>();
+						replacements.put("{HOME}", homeName);
+						sendStringListMessage(player, getStringList(config, "messages.set home"), replacements);
+					}
+					break;
+				default:
+					break;
+			}
 		}
 		return true;
 	}
@@ -145,26 +147,28 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 		if(hasPermission(opener, HomePermission.VIEW_HOMES, true)) {
 			viewingHomes.add(opener);
 			final HomeData data = target.getHomeData();
-			final List<Home> homes = data.getHomes();
-			final String name = getString(config, "menu.name");
-			final List<String> menuLore = getStringList(config, "menu.lore");
-			opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(data.getMaxHomes(opener))))));
-			final Inventory top = opener.getOpenInventory().getTopInventory();
-			for(Home home : homes) {
-				final Location loc = home.getLocation();
-				final String world = loc.getWorld().getName(), x = Double.toString(round(loc.getX(), 1)), y = Double.toString(round(loc.getY(), 1)), z = Double.toString(round(loc.getZ(), 1));
-				final ItemStack item = home.getIcon().getItemStack();
-				final ItemMeta itemMeta = item.getItemMeta();
-				itemMeta.setDisplayName(name.replace("{HOME}", home.getName()));
-				final List<String> lore = new ArrayList<>();
-				for(String s : menuLore) {
-					lore.add(s.replace("{WORLD}", world).replace("{X}", x).replace("{Y}", y).replace("{Z}", z));
+			if(data != null) {
+				final List<Home> homes = data.getHomes();
+				final String name = getString(config, "menu.name");
+				final List<String> menuLore = getStringList(config, "menu.lore");
+				opener.openInventory(Bukkit.createInventory(opener, ((homes.size() + 9) / 9) * 9, colorize(config.getString("menu.title").replace("{SET}", Integer.toString(homes.size())).replace("{MAX}", Integer.toString(data.getMaxHomes(opener))))));
+				final Inventory top = opener.getOpenInventory().getTopInventory();
+				for(Home home : homes) {
+					final Location loc = home.getLocation();
+					final String world = loc.getWorld().getName(), x = Double.toString(round(loc.getX(), 1)), y = Double.toString(round(loc.getY(), 1)), z = Double.toString(round(loc.getZ(), 1));
+					final ItemStack item = home.getIcon().getItemStack();
+					final ItemMeta itemMeta = item.getItemMeta();
+					itemMeta.setDisplayName(name.replace("{HOME}", home.getName()));
+					final List<String> lore = new ArrayList<>();
+					for(String s : menuLore) {
+						lore.add(s.replace("{WORLD}", world).replace("{X}", x).replace("{Y}", y).replace("{Z}", z));
+					}
+					itemMeta.setLore(lore);
+					item.setItemMeta(itemMeta);
+					top.setItem(top.firstEmpty(), item);
 				}
-				itemMeta.setLore(lore);
-				item.setItemMeta(itemMeta);
-				top.setItem(top.firstEmpty(), item);
+				opener.updateInventory();
 			}
-			opener.updateInventory();
 		}
 	}
 	public void teleportToHome(@NotNull Player player, @NotNull Home home) {

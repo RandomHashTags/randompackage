@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.dev;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         return list;
     }
     public boolean isLeashed(@NotNull ItemStack is) {
-        return is != null && is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().contains(leashedLore);
+        return is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().contains(leashedLore);
     }
     public boolean tryLeashing(@NotNull ItemStack is) {
         if(!isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
@@ -167,7 +167,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         return false;
     }
     public boolean tryUsingRareCandy(@NotNull ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final String i = getRPItemStackValue(is, "InventoryPetInfo");
             if(i != null) {
                 final String[] info = i.split(":");
@@ -227,7 +227,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         return -1;
     }
 
-    public void called(Event event) {
+    public void called(@NotNull Event event) {
         trigger(event, INVENTORY_PET_GLOBAL_ATTRIBUTES, getReplacements(event));
     }
 

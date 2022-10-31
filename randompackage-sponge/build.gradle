@@ -18,6 +18,8 @@ repositories {
 dependencies {
     compileOnly project(":Utilities")
     implementation 'org.spongepowered:spongeapi:7.1.0'
+
+    implementation 'org.jetbrains:annotations:23.0.0'
 }
 
 sponge.plugin.id = pluginId

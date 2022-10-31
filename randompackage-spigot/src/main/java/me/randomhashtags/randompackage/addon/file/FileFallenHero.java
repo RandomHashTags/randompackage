@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,17 +21,18 @@ public final class FileFallenHero extends RPFallenHeroSpigot implements FallenHe
         load(f);
         register(Feature.FALLEN_HERO, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
     public int getGemDropChance() { return yml.getInt("gem.chance"); }
     public List<String> getSummonMsg() { return getStringList(yml, "messages.summon"); }
     public List<String> getReceiveKitMsg() { return getStringList(yml, "messages.receive kit"); }
     public String getType() { return yml.getString("settings.type").toUpperCase(); }
     public List<PotionEffect> getPotionEffects() { return new ArrayList<>(); }
+    @NotNull
     public ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = createItemStack(yml, "spawn item");
         return getClone(spawnitem);
     }
+    @NotNull
     public ItemStack getGem() {
         if(gem == null) gem = createItemStack(yml, "gem");
         return getClone(gem);

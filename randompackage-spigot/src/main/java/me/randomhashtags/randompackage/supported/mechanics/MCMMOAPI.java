@@ -15,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -28,6 +29,7 @@ public enum MCMMOAPI implements Reflect {
 	protected static YamlConfiguration itemsConfig;
 	public ItemStack creditVoucher, levelVoucher, xpVoucher;
 
+	@NotNull
 	@Override
 	public String getIdentifier() {
 		return "MECHANIC_MCMMO";

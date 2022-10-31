@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.api.addon.KitsMastery;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,12 +22,13 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         load(f);
         register(Feature.CUSTOM_KIT, this);
     }
-    public String getIdentifier() { return getYamlName(); }
     public Kits getKitClass() { return KitsMastery.getKitsMastery(); }
 
     public String getName() {
         return getString(yml, "settings.name");
     }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) item = set(createItemStack(yml, "gui settings"));
         return getClone(item);

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.file.FileShopCategory;
 import me.randomhashtags.randompackage.addon.legacy.ShopCategory;
 import me.randomhashtags.randompackage.addon.obj.ShopItem;
@@ -23,6 +22,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -105,10 +105,10 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
         }
 	}
 	public void viewCategory(@NotNull Player player, @NotNull String identifier) {
-	    final ShopCategory s = getShopCategory(identifier);
-	    if(player != null && s != null) {
+	    final ShopCategory category = getShopCategory(identifier);
+	    if(category != null) {
 	        player.closeInventory();
-	        final UInventory inv = s.getInventory();
+	        final UInventory inv = category.getInventory();
 	        player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
 	        final Inventory top = player.getOpenInventory().getTopInventory();
 	        top.setContents(inv.getInventory().getContents());
@@ -118,7 +118,7 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
             for(int i = 0; i < top.getSize(); i++) {
                 ItemStack item = top.getItem(i);
                 if(item != null && !item.equals(back)) {
-                    final ShopItem si = s.getItem(i);
+                    final ShopItem si = category.getItem(i);
                     item = item.clone();
                     final ItemMeta itemMeta = item.getItemMeta();
                     final List<String> lore = new ArrayList<>();

@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.ArmorSocket;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket {
     private final String identifier;
@@ -10,6 +11,8 @@ public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket 
         this.identifier = identifier;
         register(Feature.ARMOR_SOCKET, this);
     }
+    @NotNull
+    @Override
     public String getIdentifier() {
         return identifier;
     }

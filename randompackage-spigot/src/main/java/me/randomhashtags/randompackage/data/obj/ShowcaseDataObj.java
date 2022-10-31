@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.data.obj;
 import me.randomhashtags.randompackage.data.ShowcaseData;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -35,7 +36,7 @@ public final class ShowcaseDataObj implements ShowcaseData {
     }
 
     @Override
-    public void addToShowcase(int page, ItemStack item) {
+    public void addToShowcase(int page, @NotNull ItemStack item) {
         if(showcases.containsKey(page)) {
             int slot = 0;
             for(ItemStack is : showcases.get(page)) {
@@ -49,7 +50,7 @@ public final class ShowcaseDataObj implements ShowcaseData {
     }
 
     @Override
-    public void removeFromShowcase(int page, ItemStack item) {
+    public void removeFromShowcase(int page, @NotNull ItemStack item) {
         if(showcases.containsKey(page)) {
             int slot = 0;
             for(ItemStack is : showcases.get(page)) {

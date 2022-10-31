@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -13,15 +14,17 @@ public final class PathTransmogScroll extends RPAddonSpigot implements TransmogS
         this.path = path;
         register(Feature.SCROLL_TRANSMOG, this);
     }
-    public String getIdentifier() { return path; }
+    @NotNull
+    @Override
+    public String getIdentifier() {
+        return path;
+    }
 
-    public boolean canBeApplied(ItemStack is) {
-        if(is != null) {
-            final String material = is.getType().name();
-            for(String s : getAppliesTo()) {
-                if(material.endsWith(s.toUpperCase())) {
-                    return true;
-                }
+    public boolean canBeApplied(@NotNull ItemStack is) {
+        final String material = is.getType().name();
+        for(String s : getAppliesTo()) {
+            if(material.endsWith(s.toUpperCase())) {
+                return true;
             }
         }
         return false;

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.KothCaptureEvent;
 import me.randomhashtags.randompackage.perms.KOTHPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
@@ -25,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -274,7 +274,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 			center = loc;
 			final HashMap<String, String> replacements = new HashMap<>();
 			replacements.put("{LOCATION}", loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ());
-			sendStringListMessage(sender, getStringList(config, "messages.set center"), null);
+			sendStringListMessage(sender, getStringList(config, "messages.set center"), replacements);
 		}
 	}
 	

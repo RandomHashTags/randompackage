@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attributesys;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorPieceBreakEvent;
@@ -17,6 +16,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class EACoreListener extends EventExecutor implements Listener {
         return instance;
     }
 
-    private static List<EventAttributeListener> eventListeners;
+    private static List<EventAttributeListener> EVENT_LISTENERS;
 
     private Listener v1_9, v1_10, v1_12, v1_13, v1_14;
 
@@ -39,12 +39,12 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
 
     public void load() {
-        eventListeners = new ArrayList<>();
+        EVENT_LISTENERS = new ArrayList<>();
         initListeners();
         updateVersionListeners(true);
     }
     public void unload() {
-        eventListeners = null;
+        EVENT_LISTENERS = null;
         updateVersionListeners(false);
     }
 
@@ -143,23 +143,23 @@ public class EACoreListener extends EventExecutor implements Listener {
     }
 
     public final void registerEventAttributeListener(@NotNull EventAttributeListener listener) {
-        if(eventListeners == null) {
-            eventListeners = new ArrayList<>();
+        if(EVENT_LISTENERS == null) {
+            EVENT_LISTENERS = new ArrayList<>();
         }
-        if(listener != null && !eventListeners.contains(listener)) {
-            eventListeners.add(listener);
+        if(!EVENT_LISTENERS.contains(listener)) {
+            EVENT_LISTENERS.add(listener);
         }
     }
     public final void callEventAttributeListeners(@NotNull Event event) {
-        if(eventListeners != null) {
-            for(EventAttributeListener listener : eventListeners) {
+        if(EVENT_LISTENERS != null) {
+            for(EventAttributeListener listener : EVENT_LISTENERS) {
                 listener.called(event);
             }
         }
     }
     public final void unregisterEventAttributeListener(EventAttributeListener listener) {
-        if(listener != null && eventListeners != null) {
-            eventListeners.remove(listener);
+        if(listener != null && EVENT_LISTENERS != null) {
+            EVENT_LISTENERS.remove(listener);
         }
     }
 

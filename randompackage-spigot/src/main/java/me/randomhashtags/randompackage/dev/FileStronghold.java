@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,8 +23,9 @@ public abstract class FileStronghold extends RPAddonSpigot implements Stronghold
         load(f);
         register(Feature.STRONGHOLD, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(is == null) is = createItemStack(yml, "gui");
         return getClone(is);

@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -18,10 +19,6 @@ public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal 
         register(Feature.CUSTOM_KIT, this);
     }
     @Override
-    public String getIdentifier() {
-        return getYamlName();
-    }
-    @Override
     public Kits getKitClass() {
         return KitsGlobal.getKitsGlobal();
     }
@@ -29,6 +26,8 @@ public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal 
     public boolean isHeroic() {
         return yml.getBoolean("settings.heroic");
     }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) {
             item = createItemStack(yml, "gui settings");

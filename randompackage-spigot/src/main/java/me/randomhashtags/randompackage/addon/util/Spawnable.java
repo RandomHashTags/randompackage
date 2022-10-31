@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.addon.util;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface Spawnable extends Identifiable {
     boolean canSpawnAt(@Nullable Player player, @NotNull Location l);

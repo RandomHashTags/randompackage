@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.dev.duels;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.DuelArena;
 import me.randomhashtags.randompackage.addon.dev.enums.DuelEndReason;
 import me.randomhashtags.randompackage.addon.living.ActiveDuel;
@@ -25,6 +24,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,12 +37,13 @@ public enum Duels implements RPFeatureSpigot, CommandExecutor {
     private UInventory type, godset;
     public List<ActiveDuel> activeDuels;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "DUELS";
     }
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) return true;
         final Player player = (Player) sender;
         final int l = args.length;

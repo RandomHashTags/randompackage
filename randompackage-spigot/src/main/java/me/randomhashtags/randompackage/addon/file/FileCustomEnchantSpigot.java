@@ -16,7 +16,6 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         load(f);
         register(isEnabled() ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
     public boolean isEnabled() {
         return yml.getBoolean("enabled");

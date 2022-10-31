@@ -1,9 +1,9 @@
 package me.randomhashtags.randompackage.dev.factions;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;

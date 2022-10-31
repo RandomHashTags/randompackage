@@ -421,7 +421,7 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
             final ItemStack is = getEventItem ? eventItem : equipped.getItem(slot);
             final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = equipped.getEnchantsOn(slot);
 
-            if(enchants != null) {
+            if(is != null && enchants != null) {
                 for(CustomEnchantSpigot enchant : enchants.keySet()) {
                     final boolean onCorrectItem = enchant.isOnCorrectItem(is);
                     //final boolean canBeTriggered = enchant.canBeTriggered(event, player, is);

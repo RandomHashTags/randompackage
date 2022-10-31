@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.addon.dev.Disguise;
 import me.randomhashtags.randompackage.data.DisguiseData;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
@@ -26,6 +24,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -133,7 +133,9 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
     private void setDisguise(@NotNull Player player, Disguise disguise) {
         final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
         final DisguiseData stats = pdata.getDisguiseData();
-        stats.setActive(disguise);
+        if(stats != null) {
+            stats.setActive(disguise);
+        }
     }
 
     @EventHandler
@@ -166,8 +168,10 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
     private void playerJoinEvent(PlayerJoinEvent event) {
         final FileRPPlayer pdata = FileRPPlayer.get(event.getPlayer().getUniqueId());
         final DisguiseData stats = pdata.getDisguiseData();
-        final EntityType disguise = EntityType.valueOf(stats.getActive());
-        if(disguise != null) {
+        if(stats != null) {
+            final EntityType disguise = EntityType.valueOf(stats.getActive());
+            if(disguise != null) {
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

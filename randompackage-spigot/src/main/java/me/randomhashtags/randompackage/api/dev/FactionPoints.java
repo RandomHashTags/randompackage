@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.api.dev;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.universal.UInventory;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
@@ -15,6 +13,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -33,6 +33,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
     private HashMap<String, BigInteger> points, dailyBought;
     private HashMap<Integer, BigInteger> purchaseAmounts;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "FACTION_POINTS";
@@ -112,7 +113,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         target.setItemMeta(itemMeta);
         return target;
     }
-    public ItemStack getItem(@NotNull int points) {
+    public ItemStack getItem(int points) {
         final ItemStack target = getClone(interactable);
         final String pointsString = formatInt(points);
         final ItemMeta itemMeta = target.getItemMeta();

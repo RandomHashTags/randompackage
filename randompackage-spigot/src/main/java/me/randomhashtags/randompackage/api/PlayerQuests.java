@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
@@ -30,6 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -403,7 +403,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         }
     }
 
-    public void called(Event event) {
+    public void called(@NotNull Event event) {
         final HashMap<String, Entity> entities = getEntities(event);
         final Player player = entities.containsKey("Player") ? (Player) entities.get("Player") : null;
         if(player != null) {

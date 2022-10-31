@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.supported.regional;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.supported.WGFlag;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Bukkit;
@@ -9,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public enum WorldGuardAPI implements UVersionableSpigot {
     INSTANCE;
 
-    public byte version;
+    public final byte version;
 
     WorldGuardAPI() {
         final Plugin p = PLUGIN_MANAGER.getPlugin("WorldGuard");

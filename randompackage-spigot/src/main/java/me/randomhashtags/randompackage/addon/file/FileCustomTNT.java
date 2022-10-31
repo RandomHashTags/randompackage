@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.CustomExplosion;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
@@ -8,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -28,6 +28,7 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
         register(Feature.CUSTOM_EXPLOSION, this);
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "TNT_" + getYamlName();
@@ -45,7 +46,7 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
         return getStringList(yml, "attributes");
     }
     @Override
-    public void didExplode(UUID uuid, List<Block> blockList) {
+    public void didExplode(@NotNull UUID uuid, List<Block> blockList) {
         PRIMED.remove(uuid);
         final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
         if(placed != null) {

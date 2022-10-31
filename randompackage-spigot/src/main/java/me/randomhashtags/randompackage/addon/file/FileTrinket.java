@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.Trinket;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,9 +19,15 @@ public final class FileTrinket extends RPAddonSpigot implements Trinket {
             register(Feature.TRINKET, this);
         }
     }
-    public String getIdentifier() { return getYamlName(); }
+    @NotNull
+    @Override
+    public String getIdentifier() {
+        return getYamlName();
+    }
 
     public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled", "false")); }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);

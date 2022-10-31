@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.data.obj;
 
 import me.randomhashtags.randompackage.data.CoinFlipData;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
@@ -31,7 +32,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
         return wins;
     }
     @Override
-    public void setWins(BigDecimal wins) {
+    public void setWins(@NotNull BigDecimal wins) {
         this.wins = wins;
     }
 
@@ -40,7 +41,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
         return losses;
     }
     @Override
-    public void setLosses(BigDecimal losses) {
+    public void setLosses(@NotNull BigDecimal losses) {
         this.losses = losses;
     }
 
@@ -49,7 +50,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
         return wonCash;
     }
     @Override
-    public void setWonCash(BigDecimal wonCash) {
+    public void setWonCash(@NotNull BigDecimal wonCash) {
         this.wonCash = wonCash;
     }
 
@@ -58,7 +59,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
         return lostCash;
     }
     @Override
-    public void setLostCash(BigDecimal lostCash) {
+    public void setLostCash(@NotNull BigDecimal lostCash) {
         this.lostCash = lostCash;
     }
 
@@ -67,7 +68,7 @@ public final class CoinFlipDataObj implements CoinFlipData {
         return taxesPaid;
     }
     @Override
-    public void setTaxesPaid(BigDecimal taxesPaid) {
+    public void setTaxesPaid(@NotNull BigDecimal taxesPaid) {
         this.taxesPaid = taxesPaid;
     }
 }

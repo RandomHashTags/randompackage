@@ -12,10 +12,6 @@ public final class FileItemSkin extends RPAddonSpigot implements ItemSkin {
         load(f);
         register(Feature.ITEM_SKIN, this);
     }
-
-    public String getIdentifier() {
-        return getYamlName();
-    }
     public String getName() {
         return getString(yml, "name");
     }

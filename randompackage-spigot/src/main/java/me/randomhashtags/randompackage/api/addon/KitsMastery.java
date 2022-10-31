@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.addon;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.addon.file.FileKitMastery;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
@@ -20,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -38,6 +38,7 @@ public class KitsMastery extends Kits {
     public boolean executeCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         return false;
     }
+    @NotNull
     @Override
     public String getIdentifier() {
         return "KITS_MASTERY";

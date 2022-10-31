@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,11 +20,7 @@ public class FileDuelArena extends RPAddonSpigot implements DuelArena {
         register(Feature.DUEL_ARENA, this);
     }
 
-    @Override
-    public String getIdentifier() {
-        return getYamlName();
-    }
-
+    @NotNull
     public ItemStack getItem() {
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);

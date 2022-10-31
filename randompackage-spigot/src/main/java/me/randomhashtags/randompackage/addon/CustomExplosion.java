@@ -13,6 +13,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,33 +25,33 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customexplosion" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomExplosion explosion = getCustomExplosion(originalInput.split(":")[1]);
         return explosion != null ? explosion.getItem() : AIR;
     }
 
     void didExplode(UUID uuid, List<Block> blockList);
 
-    default void explode(EntityExplodeEvent event, Location l) {
+    default void explode(@NotNull EntityExplodeEvent event, @NotNull Location location) {
         event.setCancelled(true);
-        final UUID u = event.getEntity().getUniqueId();
-        final List<Block> bl = getBlockList(event);
-        didExplode(u, bl);
+        final UUID uuid = event.getEntity().getUniqueId();
+        final List<Block> blockList = getBlockList(event);
+        didExplode(uuid, blockList);
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||")) {
-                doExplosion(string, l, event);
+                doExplosion(string, location, event);
             } else if(string.contains("&&") && !string.contains("||")) {
                 for(String s : string.split("&&")) {
-                    doExplosion(s, l, event);
+                    doExplosion(s, location, event);
                 }
             } else if(string.contains("&&") && string.contains("||")) {
                 for(String s : RANDOM.nextInt(100) < 50 ? string.split("\\|\\|")[0].split("&&") : string.split("\\|\\|")[1].split("&&")) {
-                    doExplosion(s, l, event);
+                    doExplosion(s, location, event);
                 }
             }
         }
     }
-    default List<Block> getBlockList(EntityExplodeEvent event) {
+    default List<Block> getBlockList(@NotNull EntityExplodeEvent event) {
         for(String string : getAttributes()) {
             if(!string.contains("&&") && !string.contains("||") && string.toLowerCase().startsWith("affects_only;")) {
                 return getAffectedBlocks(event, string);
@@ -70,7 +71,7 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
         }
         return event.blockList();
     }
-    default List<Block> getAffectedBlocks(EntityExplodeEvent event, String input) {
+    default List<Block> getAffectedBlocks(@NotNull EntityExplodeEvent event, @NotNull String input) {
         final Material material = UMaterial.match(input.split(";")[1].toUpperCase()).getMaterial();
         final List<Block> bl = event.blockList();
         for(int i = 0; i < bl.size(); i++) {

@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.addon;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.EnchantmentOrb;
 import me.randomhashtags.randompackage.addon.file.PathEnchantmentOrb;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -15,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.List;
 public enum EnchantmentOrbs implements RPFeatureSpigot {
     INSTANCE;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "ENCHANTMENT_ORBS";

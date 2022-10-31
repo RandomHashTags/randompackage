@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -18,13 +19,10 @@ public final class FileGlobalChallenge extends RPAddonSpigot implements GlobalCh
     }
 
     @Override
-    public String getIdentifier() {
-        return getYamlName();
-    }
-    @Override
     public boolean isEnabled() {
         return yml.getBoolean("settings.enabled", false);
     }
+    @NotNull
     @Override
     public ItemStack getItem() {
         if(display == null) display = createItemStack(yml, "item");

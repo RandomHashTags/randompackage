@@ -1,10 +1,10 @@
 package me.randomhashtags.randompackage.universal;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.util.Versionable;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 

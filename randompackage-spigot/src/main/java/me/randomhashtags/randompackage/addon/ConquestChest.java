@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.addon.obj.ConquestMob;
 import me.randomhashtags.randompackage.addon.util.Rewardable;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public interface ConquestChest extends Identifiable, Rewardable {
     int getAnnounceIntervalAfterSpawned();
     int getDespawnDelay();
     double getDamageDelay();
-    UMaterial getPlacedBlock();
+    @NotNull UMaterial getPlacedBlock();
     List<String> getHitAttributes();
     List<String> getSpawnMsg();
     List<String> getWillSpawnMsg();

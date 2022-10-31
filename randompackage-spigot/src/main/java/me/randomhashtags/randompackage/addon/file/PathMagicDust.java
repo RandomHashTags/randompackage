@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.MagicDust;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public final class PathMagicDust extends RPAddonSpigot implements MagicDust {
 	public int getChance() { return chance; }
 	public int getMinPercent() { return min; }
 	public int getMaxPercent() { return max; }
+	@NotNull
+	@Override
 	public ItemStack getItem() {
 		if(is == null) is = createItemStack(getAddonConfig("fireballs.yml"), "dusts." + path);
 		return getClone(is);

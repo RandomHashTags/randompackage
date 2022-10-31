@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.dev;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.obj.PolyBoundary;
 import org.bukkit.World;
@@ -12,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
@@ -27,12 +27,13 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Long, List<String>> rewards;
     private int task;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "LAST_MAN_STANDING";
     }
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final int l = args.length;
         if(l == 0) {
             viewHelp(sender);

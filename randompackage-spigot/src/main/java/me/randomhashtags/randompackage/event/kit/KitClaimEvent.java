@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.event.RPEventCancellable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class KitClaimEvent extends RPEventCancellable {
     public RPPlayer getRPPlayer() {
         return pdata;
     }
+    @NotNull
     public Player getPlayer() {
         return player;
     }

@@ -1,17 +1,17 @@
 package me.randomhashtags.randompackage.dev.factions;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public enum Factions implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
         switch (l) {
@@ -62,6 +62,7 @@ public enum Factions implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "FACTIONS";

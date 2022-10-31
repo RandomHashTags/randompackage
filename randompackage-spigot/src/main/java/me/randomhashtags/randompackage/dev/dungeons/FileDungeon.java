@@ -17,7 +17,6 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
         load(f);
         register(Feature.DUNGEON, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
     public int getSlot() { return yml.getInt("gui.slot"); }
     public ItemStack getItem() {

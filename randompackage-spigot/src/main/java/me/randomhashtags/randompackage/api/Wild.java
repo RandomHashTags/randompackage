@@ -1,7 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
-import me.randomhashtags.randompackage.Nullable;
 import me.randomhashtags.randompackage.perms.WildPermission;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
@@ -14,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -80,20 +80,25 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
     public void unload() {
     }
 
+    @Nullable
     private BigDecimal get(World w, HashMap<String, TObject> coords, boolean max) {
         final TObject o = coords.get(w.getName());
         return o != null ? (BigDecimal) (max ? o.getFirst() : o.getSecond()) : null;
     }
 
+    @Nullable
     public BigDecimal getMaxX(@NotNull World w) {
         return get(w, xcoords, true);
     }
+    @Nullable
     public BigDecimal getMinX(@NotNull World w) {
         return get(w, xcoords, false);
     }
+    @Nullable
     public BigDecimal getMaxZ(@NotNull World w) {
         return get(w, zcoords, true);
     }
+    @Nullable
     public BigDecimal getMinZ(@NotNull World w) {
         return get(w, zcoords, false);
     }
@@ -114,12 +119,13 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
         return !expirations.containsKey(player) ? "" : getRemainingTime(getCooldownExpireTime(player)-System.currentTimeMillis());
     }
 
-    private Location getRandomLocation(World w, BigDecimal minx, BigDecimal maxx, BigDecimal minz, BigDecimal maxz) {
+    private Location getRandomLocation(@NotNull World w, BigDecimal minx, BigDecimal maxx, BigDecimal minz, BigDecimal maxz) {
         final int x = getRandomBigDecimal(minx, maxx).intValue(), z = getRandomBigDecimal(minz, maxz).intValue();
         final Location l = new Location(w, x, 256, z);
         l.setY(w.getHighestBlockYAt(l));
         return l;
     }
+    @Nullable
     public Location getRandomLocation(@NotNull World world, @Nullable List<String> exceptions) {
         final BigDecimal minX = getMinX(world), maxX = getMaxX(world), minZ = getMinZ(world), maxZ = getMaxZ(world);
         final RegionalAPI regions = RegionalAPI.INSTANCE;
@@ -145,9 +151,9 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
                     if(!hasPermission(player, WildPermission.BYPASS_COOLDOWN, false)) {
                         expirations.put(uuid, System.currentTimeMillis()+cooldown*1000);
                     }
-                    final Location l = getRandomLocation(player.getWorld(), teleportExceptions);
-                    if(l != null) {
-                        player.teleport(l, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    final Location location = getRandomLocation(player.getWorld(), teleportExceptions);
+                    if(location != null) {
+                        player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
                         sendStringListMessage(player, getStringList(config, "messages.teleported"), null);
                     }
                 }

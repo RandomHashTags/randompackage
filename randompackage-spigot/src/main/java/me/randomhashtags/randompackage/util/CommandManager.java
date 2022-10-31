@@ -28,7 +28,7 @@ public enum CommandManager implements Reflect {
     CommandManager() {
         try {
             if(!LEGACY) {
-                com.mojang.brigadier.CommandDispatcher versionDispatcher = null;
+                final com.mojang.brigadier.CommandDispatcher versionDispatcher;
                 if(THIRTEEN) {
                     versionDispatcher = net.minecraft.server.v1_13_R2.MinecraftServer.getServer().commandDispatcher.a();
                 } else if(FOURTEEN) {

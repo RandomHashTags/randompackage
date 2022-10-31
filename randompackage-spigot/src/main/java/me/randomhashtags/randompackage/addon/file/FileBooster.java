@@ -17,11 +17,6 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
         register(Feature.BOOSTER, this);
     }
 
-    @Override
-    public String getIdentifier() {
-        return getYamlName();
-    }
-
     public BoosterRecipients getRecipients() {
         if(recipients == null) {
             final String target = yml.getString("settings.recipients");

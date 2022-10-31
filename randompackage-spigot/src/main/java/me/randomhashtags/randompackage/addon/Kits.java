@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.addon;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.file.FileFallenHero;
 import me.randomhashtags.randompackage.addon.living.LivingFallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
@@ -26,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -119,10 +119,11 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
     }
 
     public final boolean hasPermissionToObtain(@NotNull Player player, @NotNull CustomKit kit) {
-        return player != null && hasPermissionToObtain(FileRPPlayer.get(player.getUniqueId()), player, kit);
+        return hasPermissionToObtain(FileRPPlayer.get(player.getUniqueId()), player, kit);
     }
     public final boolean hasPermissionToObtain(@NotNull RPPlayer pdata, @NotNull Player player, @NotNull CustomKit kit) {
-        return pdata != null && player != null && kit != null && (pdata.getKitData().getLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
+        final KitData kitData = pdata.getKitData();
+        return kitData != null && (kitData.getLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
     }
     public final void trySpawningFallenHero(Player player, ItemStack is, CustomKit kit, Location l) {
         final FallenHero h = kit.getFallenHero();

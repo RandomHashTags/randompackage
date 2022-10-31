@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Dispenser;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
 
+	@NotNull
 	@Override
 	public String getIdentifier() {
 		return "CUSTOM_EXPLOSIONS";
@@ -118,7 +120,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 				final UUID uuid = UUID.fromString(values[0]);
 				final Entity en = getEntity(uuid);
 				if(en != null && !en.isDead()) {
-					FileCustomCreeper.living.put(uuid, (FileCustomCreeper) getCustomExplosion("CREEPER_" + values[1]));
+					FileCustomCreeper.LIVING.put(uuid, (FileCustomCreeper) getCustomExplosion("CREEPER_" + values[1]));
 					loadedLiving += 1;
 				}
 			}
@@ -130,7 +132,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 	@Override
 	public void unload() {
 		final HashMap<Location, FileCustomTNT> tnt = FileCustomTNT.PLACED;
-		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
+		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.LIVING;
 		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.PRIMED;
 		OTHER_YML.set("tnt", null);
 		OTHER_YML.set("creepers", null);
@@ -156,7 +158,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		saveOtherData();
 
 		unregister(Feature.CUSTOM_EXPLOSION);
-		FileCustomCreeper.living = null;
+		FileCustomCreeper.LIVING = null;
 		FileCustomTNT.PLACED = null;
 		FileCustomTNT.PRIMED = null;
 	}
@@ -274,7 +276,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 	private void entityExplodeEvent(EntityExplodeEvent event) {
 		final Entity entity = event.getEntity();
 		final UUID uuid = entity.getUniqueId();
-		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.living;
+		final HashMap<UUID, FileCustomCreeper> creepers = FileCustomCreeper.LIVING;
 		final HashMap<UUID, FileCustomTNT> primed = FileCustomTNT.PRIMED;
 		final FileCustomCreeper creeper = creepers != null ? creepers.getOrDefault(uuid, null) : null;
 		final FileCustomTNT tnt = creeper == null && primed != null ? primed.getOrDefault(uuid, null) : null;

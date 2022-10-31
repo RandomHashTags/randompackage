@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.RandomizedLootItem;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
@@ -11,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public enum RandomizedLoot implements RPFeatureSpigot {
     }
 
     public RandomizedLootItem valueOfRandomizedLootItem(@NotNull ItemStack is) {
-        if(!items.isEmpty() && is != null) {
+        if(!items.isEmpty()) {
             for(RandomizedLootItem i : items.values()) {
                 if(i.getItem().isSimilar(is)) {
                     return i;

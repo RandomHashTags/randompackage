@@ -19,6 +19,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -54,7 +56,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     private SlotBotData slotBotData;
     private TitleData titleData;
 
-    public FileRPPlayer(UUID uuid) {
+    public FileRPPlayer(@NotNull UUID uuid) {
         this.uuid = uuid;
         final String UUID = uuid.toString();
         final File f = new File(FOLDER, UUID + ".yml");
@@ -289,6 +291,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     }
 
     @Override
+    @NotNull
     public UUID getUUID() {
         return uuid;
     }
@@ -296,6 +299,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return yml;
     }
 
+    @Nullable
     @Override
     public HashMap<String, Integer> getUnclaimedLootboxes() {
         if(unclaimedLootboxes == null && Lootboxes.INSTANCE.isEnabled()) {
@@ -307,6 +311,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return unclaimedLootboxes;
     }
 
+    @Nullable
     @Override
     public List<ItemStack> getUnclaimedPurchases() {
         if(unclaimedPurchases == null && yml.get("unclaimed purchases") != null) {
@@ -335,6 +340,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return unclaimedPurchases;
     }
 
+    @Nullable
     @Override
     public SecondaryData getSecondaryData() {
         if(secondaryData == null && SecondaryEvents.INSTANCE.isEnabled()) {
@@ -344,6 +350,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return secondaryData;
     }
 
+    @Nullable
     @Override
     public CoinFlipData getCoinFlipData() {
         if(coinFlipData == null && CoinFlip.INSTANCE.isEnabled()) {
@@ -385,6 +392,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return customEnchantData;
     }
 
+    @Nullable
     @Override
     public DisguiseData getDisguiseData() {
         if(disguiseData == null && Disguises.INSTANCE.isEnabled()) {
@@ -399,6 +407,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return disguiseData;
     }
 
+    @Nullable
     @Override
     public DuelData getDuelData() {
         if(duelData == null && Duels.INSTANCE.isEnabled()) {

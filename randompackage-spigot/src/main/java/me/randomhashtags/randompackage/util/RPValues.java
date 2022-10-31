@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.util;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.*;
 import me.randomhashtags.randompackage.api.ArmorSockets;
 import me.randomhashtags.randompackage.api.CustomArmor;
@@ -16,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -142,32 +142,30 @@ public interface RPValues extends UVersionableSpigot {
         return valueOfArmorSet(player, false);
     }
     default ArmorSet valueOfArmorSet(@NotNull Player player, boolean checkOmni) {
-        if(player != null) {
-            final PlayerInventory inv = player.getInventory();
-            final ItemStack helmet = inv.getHelmet(), chest = inv.getChestplate(), legs = inv.getLeggings(), boots = inv.getBoots();
-            final List<String> helmetLore = helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasLore() ? helmet.getItemMeta().getLore() : null;
-            final List<String> chestLore = chest != null && chest.hasItemMeta() && chest.getItemMeta().hasLore() ? chest.getItemMeta().getLore() : null;
-            final List<String> legLore = legs != null && legs.hasItemMeta() && legs.getItemMeta().hasLore() ? legs.getItemMeta().getLore() : null;
-            final List<String> bootsLore = boots != null && boots.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
-            final List<String> omniLore = getCustomArmor().omniAppliedLore;
-            for(ArmorSet set : getAllArmorSets().values()) {
-                final List<String> lore = set.getArmorLore();
-                if(lore != null
-                        && (
-                                helmetLore != null && (helmetLore.containsAll(lore) || checkOmni && helmetLore.containsAll(omniLore))
-                                && chestLore != null && (chestLore.containsAll(lore) || checkOmni && chestLore.containsAll(omniLore))
-                                && legLore != null && (legLore.containsAll(lore) || checkOmni && legLore.containsAll(omniLore))
-                                && bootsLore != null && (bootsLore.containsAll(lore) || checkOmni && bootsLore.containsAll(omniLore))
-                        )
-                ) {
-                    return set;
-                }
+        final PlayerInventory inv = player.getInventory();
+        final ItemStack helmet = inv.getHelmet(), chest = inv.getChestplate(), legs = inv.getLeggings(), boots = inv.getBoots();
+        final List<String> helmetLore = helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasLore() ? helmet.getItemMeta().getLore() : null;
+        final List<String> chestLore = chest != null && chest.hasItemMeta() && chest.getItemMeta().hasLore() ? chest.getItemMeta().getLore() : null;
+        final List<String> legLore = legs != null && legs.hasItemMeta() && legs.getItemMeta().hasLore() ? legs.getItemMeta().getLore() : null;
+        final List<String> bootsLore = boots != null && boots.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
+        final List<String> omniLore = getCustomArmor().omniAppliedLore;
+        for(ArmorSet set : getAllArmorSets().values()) {
+            final List<String> lore = set.getArmorLore();
+            if(lore != null
+                    && (
+                            helmetLore != null && (helmetLore.containsAll(lore) || checkOmni && helmetLore.containsAll(omniLore))
+                            && chestLore != null && (chestLore.containsAll(lore) || checkOmni && chestLore.containsAll(omniLore))
+                            && legLore != null && (legLore.containsAll(lore) || checkOmni && legLore.containsAll(omniLore))
+                            && bootsLore != null && (bootsLore.containsAll(lore) || checkOmni && bootsLore.containsAll(omniLore))
+                    )
+            ) {
+                return set;
             }
         }
         return null;
     }
     default ArmorSet valueOfArmorSet(@NotNull ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> l = is.getItemMeta().getLore();
             for(ArmorSet a : getAllArmorSets().values()) {
                 if(l.containsAll(a.getArmorLore())) {
@@ -210,7 +208,7 @@ public interface RPValues extends UVersionableSpigot {
     default ArmorSocket valueOfArmorSocket(@NotNull ItemStack item) {
         final ArmorSockets sockets = ArmorSockets.INSTANCE;
         if(sockets.isEnabled()) {
-            if(item != null && !item.getType().equals(Material.AIR)) {
+            if(!item.getType().equals(Material.AIR)) {
                 final ItemMeta meta = item.getItemMeta();
                 if(meta.hasLore()) {
                     final List<String> lore = meta.getLore();

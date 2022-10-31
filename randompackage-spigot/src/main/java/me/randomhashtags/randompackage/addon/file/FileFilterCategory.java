@@ -13,8 +13,6 @@ public final class FileFilterCategory extends RPAddonSpigot implements FilterCat
         load(f);
         register(Feature.FILTER_CATEGORY, this);
     }
-    public String getIdentifier() { return getYamlName(); }
-
     public String getTitle() {
         return colorize(yml.getString("title"));
     }

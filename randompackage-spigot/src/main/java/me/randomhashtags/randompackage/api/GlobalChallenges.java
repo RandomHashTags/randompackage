@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.GlobalChallenge;
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
@@ -33,6 +32,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -448,7 +448,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 		}
 	}
 
-	public void called(Event event) {
+	public void called(@NotNull Event event) {
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
 		if(active != null) {
 			for(GlobalChallenge challenge : active.keySet()) {

@@ -4,6 +4,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class PvAnyEvent extends DamageEvent {
     private final Player damager;
@@ -18,6 +19,7 @@ public final class PvAnyEvent extends DamageEvent {
         this(damager, victim, damage);
         this.proj = proj;
     }
+    @NotNull
     @Override
     public LivingEntity getEntity() {
         return victim;

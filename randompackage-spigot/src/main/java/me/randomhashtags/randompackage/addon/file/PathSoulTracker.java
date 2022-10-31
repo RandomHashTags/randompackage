@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,17 +16,17 @@ public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker 
         this.path = path;
         register(Feature.SOUL_TRACKER, this);
     }
+    @NotNull
+    @Override
     public String getIdentifier() {
         return path;
     }
 
-    public boolean canBeApplied(ItemStack is) {
-        if(is != null) {
-            final String m = is.getType().name();
-            for(String s : getAppliesTo()) {
-                if(m.toUpperCase().endsWith(s)) {
-                    return true;
-                }
+    public boolean canBeApplied(@NotNull ItemStack is) {
+        final String m = is.getType().name();
+        for(String s : getAppliesTo()) {
+            if(m.toUpperCase().endsWith(s)) {
+                return true;
             }
         }
         return false;

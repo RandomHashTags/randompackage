@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.universal;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -28,6 +27,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -122,7 +123,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         final ConfigurationSection section = yml.getConfigurationSection(key);
         if(section != null) {
             final HashSet<String> set = new HashSet<>(section.getKeys(includeKeys));
-            set.removeAll(Arrays.asList(excluding));
+            Arrays.asList(excluding).forEach(set::remove);
             return set;
         } else {
             return new HashSet<>();
@@ -199,7 +200,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
         return replacements;
     }
-    default void sendStringListMessage(CommandSender sender, List<String> message, HashMap<String, String> replacements) {
+    default void sendStringListMessage(@NotNull CommandSender sender, @Nullable List<String> message, @Nullable HashMap<String, String> replacements) {
         if(message != null && message.size() > 0 && !message.get(0).equals("")) {
             final boolean papi = RANDOM_PACKAGE.placeholderapi, isPlayer = sender instanceof Player;
             final Player player = isPlayer ? (Player) sender : null;
@@ -220,7 +221,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default Entity getHitEntity(ProjectileHitEvent event) {
+    default Entity getHitEntity(@NotNull ProjectileHitEvent event) {
         if(EIGHT || NINE || TEN) {
             final List<Entity> n = event.getEntity().getNearbyEntities(0.1, 0.1, 0.1);
             return n.size() > 0 ? n.get(0) : null;
@@ -234,7 +235,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return type.endsWith("_HELMET") || type.endsWith("_CHESTPLATE") || type.endsWith("_LEGGINGS") || type.endsWith("_BOOTS");
     }
 
-    default boolean isPassive(EntityType type) {
+    default boolean isPassive(@NotNull EntityType type) {
         if(type.isSpawnable()) {
             switch (type.name().toLowerCase()) {
                 case "bat":
@@ -263,8 +264,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                 case "turtle":
                 case "villager":
                 case "wandering_trader":
-                case "zombie_horse": return true;
-                default: return false;
+                case "zombie_horse":
+                    return true;
+                default:
+                    return false;
             }
         } else {
             return false;
@@ -325,7 +328,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         if(is == null || is.getType().equals(Material.AIR)) {
             return;
         }
-        final UMaterial m = UMaterial.match(is);
+        final UMaterial umaterial = UMaterial.match(is);
         final ItemMeta meta = is.getItemMeta();
         final PlayerInventory inv = player.getInventory();
         final int firstMaterialSlot = inv.first(is.getType()), firstEmptySlot = inv.firstEmpty(), max = is.getMaxStackSize();
@@ -334,7 +337,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         if(firstMaterialSlot != -1) {
             for(int i = 0; i < inv.getSize(); i++) {
                 final ItemStack targetItemStack = inv.getItem(i);
-                if(amountLeft > 0 && targetItemStack != null && targetItemStack.getItemMeta().equals(meta) && UMaterial.match(targetItemStack) == m) {
+                if(amountLeft > 0 && targetItemStack != null && targetItemStack.getItemMeta().equals(meta) && UMaterial.match(targetItemStack) == umaterial) {
                     final int amount = targetItemStack.getAmount(), toMax = max-amount, given = Math.min(amountLeft, toMax);
                     if(given > 0) {
                         targetItemStack.setAmount(amount+given);
@@ -483,10 +486,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
 
     default void didApply(InventoryClickEvent event, Player player, ItemStack current, ItemStack cursor) {
         event.setCancelled(true);
-        final int a = cursor.getAmount();
-        if(a == 1) event.setCursor(new ItemStack(Material.AIR));
+        final int amount = cursor.getAmount();
+        if(amount == 1) event.setCursor(new ItemStack(Material.AIR));
         else {
-            cursor.setAmount(a-1);
+            cursor.setAmount(amount-1);
             event.setCursor(cursor);
         }
         player.updateInventory();

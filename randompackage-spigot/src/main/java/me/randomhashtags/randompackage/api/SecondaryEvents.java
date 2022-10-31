@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.perms.SecondaryPermission;
@@ -24,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
     private int banknoteValueSlot;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String cmdName = cmd.getName();
         final int length = args.length;

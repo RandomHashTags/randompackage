@@ -1,7 +1,8 @@
 package me.randomhashtags.randompackage.util;
 
-import me.randomhashtags.randompackage.NotNull;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -84,7 +85,13 @@ public interface RPItemStack extends Versionable {
             for(String s : keys) {
                 tag.r(s);
             }
-            is.setItemMeta(org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack.asCraftMirror(nmsItem).getItemMeta());
+            final ItemMeta itemMeta;
+            if(NINETEEN) {
+                itemMeta = org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack.asCraftMirror(nmsItem).getItemMeta();
+            } else {
+                return;
+            }
+            is.setItemMeta(itemMeta);
         }
     }
     default void addRPItemStackValue(@NotNull ItemStack is, String key, String value) {
@@ -159,44 +166,42 @@ public interface RPItemStack extends Versionable {
         }
     }
     default String getRPItemStackValue(@NotNull ItemStack is, String key) {
-        if(is != null) {
-            if(EIGHT) {
-                final net.minecraft.server.v1_8_R3.ItemStack nmsItem = org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_8_R3.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(NINE) {
-                final net.minecraft.server.v1_9_R2.ItemStack nmsItem = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_9_R2.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(TEN) {
-                final net.minecraft.server.v1_10_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_10_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(ELEVEN) {
-                final net.minecraft.server.v1_11_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_11_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(TWELVE) {
-                final net.minecraft.server.v1_12_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_12_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(THIRTEEN) {
-                final net.minecraft.server.v1_13_R2.ItemStack nmsItem = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_13_R2.NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(FOURTEEN) {
-                final net.minecraft.server.v1_14_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_14_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(FIFTEEN) {
-                final net.minecraft.server.v1_15_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_15_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            } else if(SIXTEEN) {
-                final net.minecraft.server.v1_16_R3.ItemStack nmsItem = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(is);
-                final net.minecraft.server.v1_16_R3.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
-                return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
-            }
+        if(EIGHT) {
+            final net.minecraft.server.v1_8_R3.ItemStack nmsItem = org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_8_R3.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(NINE) {
+            final net.minecraft.server.v1_9_R2.ItemStack nmsItem = org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_9_R2.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(TEN) {
+            final net.minecraft.server.v1_10_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_10_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(ELEVEN) {
+            final net.minecraft.server.v1_11_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_11_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(TWELVE) {
+            final net.minecraft.server.v1_12_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_12_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(THIRTEEN) {
+            final net.minecraft.server.v1_13_R2.ItemStack nmsItem = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_13_R2.NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(FOURTEEN) {
+            final net.minecraft.server.v1_14_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_14_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(FIFTEEN) {
+            final net.minecraft.server.v1_15_R1.ItemStack nmsItem = org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_15_R1.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
+        } else if(SIXTEEN) {
+            final net.minecraft.server.v1_16_R3.ItemStack nmsItem = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(is);
+            final net.minecraft.server.v1_16_R3.NBTTagCompound tag = nmsItem != null && nmsItem.hasTag() ? nmsItem.getTag() : null;
+            return tag != null && tag.hasKey(key) ? tag.getString(key) : null;
         }
         return null;
     }
@@ -219,6 +224,9 @@ public interface RPItemStack extends Versionable {
             return org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_15_R1.NBTTagCompound()).toString();
         } else if(SIXTEEN) {
             return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(itemstack).save(new net.minecraft.server.v1_16_R3.NBTTagCompound()).toString();
+        } else if(NINETEEN) {
+            return null;
+            //return org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack.asNMSCopy(itemstack)
         } else {
             return null;
         }

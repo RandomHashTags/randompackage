@@ -1,12 +1,12 @@
 package me.randomhashtags.randompackage.addon.living;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.api.Trade;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;

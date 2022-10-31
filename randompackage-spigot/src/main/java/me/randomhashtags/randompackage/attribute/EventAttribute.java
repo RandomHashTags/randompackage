@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attribute;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
@@ -8,6 +7,7 @@ import me.randomhashtags.randompackage.data.RPPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 

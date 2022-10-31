@@ -15,8 +15,6 @@ public class FileFactionQuest extends RPAddonSpigot implements FactionQuest {
         load(f);
         register(Feature.FACTION_QUEST, this);
     }
-
-    public String getIdentifier() { return getYamlName(); }
     public String getName() {
         if(name == null) {
             name = colorize(yml.getString("settings.name"));

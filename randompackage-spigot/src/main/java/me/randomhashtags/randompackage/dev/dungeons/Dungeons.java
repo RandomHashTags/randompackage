@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.dev.dungeons;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.attribute.SetOpenDuration;
 import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -22,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
@@ -34,13 +34,14 @@ public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
 
     public ItemStack dimensionweb, enchantedobsidian, fuelcell;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "DUNGEONS";
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && args.length == 0 && hasPermission(player, "RandomPackage.dungeons", true)) {
             viewDungeons(player);

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.data;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -21,8 +22,8 @@ public interface ShowcaseData {
     default void setShowcase(int page, ItemStack[] itemstacks) {
         getShowcases().put(page, itemstacks);
     }
-    void addToShowcase(int page, ItemStack item);
-    void removeFromShowcase(int page, ItemStack item);
+    void addToShowcase(int page, @NotNull ItemStack item);
+    void removeFromShowcase(int page, @NotNull ItemStack item);
 
     default void reset() {
         setShowcases(new HashMap<>());

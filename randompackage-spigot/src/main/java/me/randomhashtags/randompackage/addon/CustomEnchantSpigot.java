@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.addon;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.util.Versionable;
@@ -9,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpI
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customenchant", "ce" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final ItemStack target = CustomEnchants.getCustomEnchants().getRevealedItemFromString(originalInput);
         return target != null ? target : AIR;
     }
@@ -30,13 +30,11 @@ public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpI
         return worlds == null || worlds.contains(world);
     }
 
-    default boolean isOnCorrectItem(ItemStack is) {
-        if(is != null) {
-            final String mat = is.getType().name();
-            for(String s : getAppliesTo()) {
-                if(mat.endsWith(s.toUpperCase())) {
-                    return true;
-                }
+    default boolean isOnCorrectItem(@NotNull ItemStack is) {
+        final String mat = is.getType().name();
+        for(String s : getAppliesTo()) {
+            if(mat.endsWith(s.toUpperCase())) {
+                return true;
             }
         }
         return false;

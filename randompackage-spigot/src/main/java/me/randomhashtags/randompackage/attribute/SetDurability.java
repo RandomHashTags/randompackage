@@ -9,12 +9,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public final class SetDurability extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, String value) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value) {
         final Event event = pending.getEvent();
         if(event instanceof PlayerItemDamageEvent) {
             final PlayerItemDamageEvent e = (PlayerItemDamageEvent) event;

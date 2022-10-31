@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,8 +40,8 @@ public interface FallenHero extends Spawnable, GivedpItemableSpigot {
         return f != null ? kit.getFallenHeroItem(kit, isSpawnItem) : AIR;
     }
 
-    ItemStack getSpawnItem();
-    ItemStack getGem();
+    @NotNull ItemStack getSpawnItem();
+    @NotNull ItemStack getGem();
     List<PotionEffect> getPotionEffects();
     int getGemDropChance();
     List<String> getSummonMsg();

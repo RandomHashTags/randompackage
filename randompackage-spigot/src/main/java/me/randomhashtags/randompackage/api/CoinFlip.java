@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipMatch;
 import me.randomhashtags.randompackage.addon.obj.CoinFlipOption;
 import me.randomhashtags.randompackage.data.CoinFlipData;
@@ -26,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -215,13 +215,12 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
     public void viewStats(@NotNull Player player) {
         if(hasPermission(player, CoinFlipPermission.VIEW_STATS, true)) {
             final HashMap<String, String> replacements = new HashMap<>();
-            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
-            final CoinFlipData s = pdata.getCoinFlipData();
-            replacements.put("{WINS}", formatBigDecimal(s.getWins()));
-            replacements.put("{LOSSES}", formatBigDecimal(s.getLosses()));
-            replacements.put("{WON$}", formatBigDecimal(s.getWonCash()));
-            replacements.put("{LOST$}", formatBigDecimal(s.getLostCash()));
-            replacements.put("{TAXES}", formatBigDecimal(s.getTaxesPaid()));
+            final CoinFlipData data = FileRPPlayer.get(player.getUniqueId()).getCoinFlipData();
+            replacements.put("{WINS}", formatBigDecimal(data.getWins()));
+            replacements.put("{LOSSES}", formatBigDecimal(data.getLosses()));
+            replacements.put("{WON$}", formatBigDecimal(data.getWonCash()));
+            replacements.put("{LOST$}", formatBigDecimal(data.getLostCash()));
+            replacements.put("{TAXES}", formatBigDecimal(data.getTaxesPaid()));
             sendStringListMessage(player, getStringList(config, "messages.stats"), replacements);
         }
     }

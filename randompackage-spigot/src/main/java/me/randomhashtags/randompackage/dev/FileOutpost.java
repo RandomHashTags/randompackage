@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -27,10 +28,11 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
         load(f);
         register(Feature.OUTPOST, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
     public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public int getSlot() { return yml.getInt("gui.slot"); }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) item = createItemStack(yml, "gui");
         return getClone(item);

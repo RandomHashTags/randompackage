@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api.addon;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.RarityGem;
 import me.randomhashtags.randompackage.addon.SoulTracker;
 import me.randomhashtags.randompackage.addon.file.PathSoulTracker;
@@ -22,6 +21,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +64,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     }
 
     public void applySoulTracker(@NotNull Player player, @NotNull ItemStack is, @NotNull SoulTracker soultracker) {
-        if(is != null && !is.getType().equals(Material.AIR)) {
+        if(!is.getType().equals(Material.AIR)) {
             final ItemMeta itemMeta = is.getItemMeta();
             final List<String> lore = new ArrayList<>();
             if(itemMeta.hasLore()) {
@@ -222,7 +222,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
         final Player killer = victim.getKiller();
         if(killer != null) {
             final ItemStack is = killer.getItemInHand();
-            if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+            if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
                 final HashMap<Integer, SoulTracker> appliedTracker = valueOfSoulTrackerApplied(is);
                 if(appliedTracker != null) {
                     final SoulTracker tracker = (SoulTracker) appliedTracker.values().toArray()[0];

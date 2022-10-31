@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.FatBucket;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -14,7 +15,7 @@ public final class FileFatBucket extends RPAddonSpigot implements FatBucket {
         register(Feature.FAT_BUCKET, this);
     }
 
-    public String getIdentifier() { return getYamlName(); }
+    @NotNull
     public ItemStack getItem() {
         if(bucket == null) bucket = createItemStack(yml, "item");
         return getClone(bucket);

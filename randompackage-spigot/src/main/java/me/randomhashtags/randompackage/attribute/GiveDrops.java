@@ -7,12 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 public final class GiveDrops extends AbstractEventAttribute {
     @Override
-    public void execute(PendingEventAttribute pending, String value) {
+    public void execute(@NotNull PendingEventAttribute pending, @NotNull String value) {
         final Event event = pending.getEvent();
         final String[] values = value.split(":");
         final int l = values.length;

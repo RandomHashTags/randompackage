@@ -1,6 +1,6 @@
 package me.randomhashtags.randompackage.data;
 
-import me.randomhashtags.randompackage.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 

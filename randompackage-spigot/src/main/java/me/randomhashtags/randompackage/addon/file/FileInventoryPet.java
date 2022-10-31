@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,9 +18,6 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
     public FileInventoryPet(File f) {
         load(f);
         register(Feature.INVENTORY_PET, this);
-    }
-    public String getIdentifier() {
-        return getYamlName();
     }
 
     public boolean isEnabled() {
@@ -69,6 +67,8 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
         final String tex = yml.getString("item.texture");
         return tex != null ? tex : yml.getString("item.owner");
     }
+    @NotNull
+    @Override
     public ItemStack getItem() {
         if(item == null) {
             item = createItemStack(yml, "item");

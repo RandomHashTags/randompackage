@@ -37,9 +37,11 @@ public enum MobStacker implements RPFeatureSpigot {
     private HashMap<String, Double> stackRadius;
     private HashMap<String, Boolean> slaysStack;
 
+    @Override
     public String getIdentifier() {
         return "MOB_STACKER";
     }
+    @Override
     public void load() {
         save(null, "mob stacker.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "mob stacker.yml"));
@@ -82,6 +84,7 @@ public enum MobStacker implements RPFeatureSpigot {
         }
         loadBackup();
     }
+    @Override
     public void unload() {
         for(int i : tasks) {
             SCHEDULER.cancelTask(i);

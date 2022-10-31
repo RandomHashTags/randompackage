@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.dev.a;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.living.ActiveRaidEvent;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Chunk;
@@ -9,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ public enum RaidEvents implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "RAID_EVENT";

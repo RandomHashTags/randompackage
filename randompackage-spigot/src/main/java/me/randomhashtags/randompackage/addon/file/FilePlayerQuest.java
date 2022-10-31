@@ -13,8 +13,6 @@ public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest 
             register(Feature.PLAYER_QUEST, this);
         }
     }
-    public String getIdentifier() { return getYamlName(); }
-
     public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
     public String getName() { return colorize(yml.getString("settings.name")); }
     public long getExpiration() { return yml.getLong("settings.expiration"); }

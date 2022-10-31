@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.util.Attributable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.api.ItemSkins;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ItemSkin extends Nameable, Attributable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "itemskin" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(String originalInput, @NotNull String lowercaseInput) {
         final ItemSkin skin = getItemSkin(originalInput.split(":")[1]);
         final ItemStack target = ItemSkins.INSTANCE.getItemSkinItem(skin, true);
         return target != null ? target : AIR;

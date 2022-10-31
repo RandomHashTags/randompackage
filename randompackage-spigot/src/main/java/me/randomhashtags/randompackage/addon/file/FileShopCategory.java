@@ -20,7 +20,6 @@ public final class FileShopCategory extends ShopCategory {
         load(f);
         register(Feature.SHOP_CATEGORY, this);
     }
-    public String getIdentifier() { return getYamlName(); }
 
     public String getTitle() {
         return colorize(yml.getString("title"));

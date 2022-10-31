@@ -1,8 +1,8 @@
 package me.randomhashtags.randompackage.universal;
 
-import me.randomhashtags.randompackage.NotNull;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 

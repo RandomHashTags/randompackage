@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,31 +20,31 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 		register(Feature.ARMOR_SET, this);
 	}
 
-	@Override
-	public String getIdentifier() {
-		return getYamlName();
-	}
-
 	public String getName() {
 		final String s = yml.getString("name");
 		return s != null ? colorize(s) : getIdentifier() + " name doesn't exist!";
 	}
+	@NotNull
 	public ItemStack getHelmet() {
 		if(helmet == null) helmet = createItemStack(yml, "helmet");
 		return getClone(helmet);
 	}
+	@NotNull
 	public ItemStack getChestplate() {
 		if(chestplate == null) chestplate = createItemStack(yml, "chestplate");
 		return getClone(chestplate);
 	}
+	@NotNull
 	public ItemStack getLeggings() {
 		if(leggings == null) leggings = createItemStack(yml, "leggings");
 		return getClone(leggings);
 	}
+	@NotNull
 	public ItemStack getBoots() {
 		if(boots == null) boots = createItemStack(yml, "boots");
 		return getClone(boots);
 	}
+	@NotNull
 	public List<ArmorSetWeaponInfo> getWeapons() {
 		if(weapons == null) {
 			weapons = new ArrayList<>();

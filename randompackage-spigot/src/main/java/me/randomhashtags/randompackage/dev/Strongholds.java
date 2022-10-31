@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.Stronghold;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
     private UInventory gui;
     private int captureTask;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
         switch (l) {
@@ -59,6 +59,7 @@ public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "STRONGHOLDS";

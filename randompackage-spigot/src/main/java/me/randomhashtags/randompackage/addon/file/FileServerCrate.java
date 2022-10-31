@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.addon.file;
 
-import me.randomhashtags.randompackage.NotNull;
 import me.randomhashtags.randompackage.addon.ServerCrate;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -8,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -23,7 +23,6 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 		load(f);
 		register(Feature.SERVER_CRATE, this);
 	}
-	public String getIdentifier() { return getYamlName(); }
 
 	public String getBossReward() {
 		return colorize(yml.getString("boss reward"));
@@ -75,6 +74,8 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 		}
 		return revealChances;
 	}
+	@NotNull
+	@Override
 	public ItemStack getItem() {
 		if(physicalItem == null) physicalItem = createItemStack(yml, "item");
 		return getClone(physicalItem);
