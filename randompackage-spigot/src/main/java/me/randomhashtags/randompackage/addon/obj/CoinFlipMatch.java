@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.obj;
 
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ public final class CoinFlipMatch {
     public void delete() {
         MATCHES.remove(created);
     }
+    @Nullable
     public static CoinFlipMatch valueOfCreator(OfflinePlayer creator) {
         if(MATCHES != null) {
             for(CoinFlipMatch match : MATCHES.values()) {
@@ -71,6 +73,7 @@ public final class CoinFlipMatch {
         }
         return null;
     }
+    @Nullable
     public static CoinFlipMatch valueOfChallenger(OfflinePlayer challenger) {
         if(MATCHES != null) {
             for(CoinFlipMatch match : MATCHES.values()) {

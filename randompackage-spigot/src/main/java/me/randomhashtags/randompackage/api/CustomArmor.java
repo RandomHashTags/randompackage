@@ -116,6 +116,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			trigger(event, set.getArmorAttributes());
 		}
 	}
+	@NotNull
 	private List<ItemStack> getArmor(Player player) {
 		final List<ItemStack> list = new ArrayList<>();
 		for(ItemStack is : player.getInventory().getArmorContents()) {
@@ -135,8 +136,8 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 	}
 	public byte tryApplyingArmorCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
 		final String mat = is != null ? is.getType().name() : null;
-		final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
 		if(mat != null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
+			final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
 			if(set != null) {
 				sendStringListMessage(player, getStringList(config, "messages.cannot apply.armor set piece"), null);
 				return -1;
@@ -146,13 +147,15 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			}
 			if(RANDOM.nextInt(100) < percent) {
 				final ItemMeta itemMeta = is.getItemMeta();
-				final List<String> lore = new ArrayList<>();
-				if(itemMeta.hasLore()) {
-					lore.addAll(itemMeta.getLore());
+				if(itemMeta != null) {
+					final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
+					if(itemLore != null) {
+						lore.addAll(itemLore);
+					}
+					lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
+					itemMeta.setLore(lore);
+					is.setItemMeta(itemMeta);
 				}
-				lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
-				itemMeta.setLore(lore);
-				is.setItemMeta(itemMeta);
 				sendStringListMessage(player, type.getCrystalAppliedMsg(), null);
 				return 2;
 			}
@@ -173,9 +176,11 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		return GivedpItem.INSTANCE.valueOfRPItem(reward);
 	}
 
+	@NotNull
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set) {
 		return getHeroicUpgrade(set, RANDOM.nextInt(101));
 	}
+	@NotNull
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set, int percent) {
 		final String name = set.getName(), percentString = Integer.toString(percent);
 		final ItemStack item = heroicUpgrade.clone();
@@ -206,7 +211,7 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 		}
 	}
 
-	public boolean hasCustomDurability(@Nullable ItemStack is) {
+	public boolean hasCustomDurability(@NotNull ItemStack is) {
 		return getRPItemStackValue(is, "CustomDurability") != null;
 	}
 	public ItemStack setCustomDurability(@NotNull ItemStack is, int maxDurability, int armorValueORbonusAttackDmg) {
@@ -214,22 +219,24 @@ public class CustomArmor extends EventAttributes implements RPItemStack {
 			final String max = Integer.toString(maxDurability), value = Integer.toString(armorValueORbonusAttackDmg);
 			final boolean isArmor = isArmorPiece(is.getType());
 			final ItemMeta itemMeta = is.getItemMeta();
-			final List<String> lore = new ArrayList<>();
-			if(itemMeta.hasLore()) {
-				lore.addAll(itemMeta.getLore());
-			}
-			for(String s : heroicAddedLore) {
-				final boolean containsArmorValue = s.contains("{ARMOR_VALUE}"), containsBonusAttackDmg = s.contains("{BONUS_ATTACK_DMG}");
-				if(containsArmorValue && isArmor || containsBonusAttackDmg && !isArmor || !containsArmorValue && !containsBonusAttackDmg) {
-					lore.add(s.replace("{ARMOR_VALUE}", value).replace("{BONUS_ATTACK_DMG}", value).replace("{DURABILITY}", max));
+			if(itemMeta != null) {
+				final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
+				if(itemLore != null) {
+					lore.addAll(itemLore);
 				}
+				for(String s : heroicAddedLore) {
+					final boolean containsArmorValue = s.contains("{ARMOR_VALUE}"), containsBonusAttackDmg = s.contains("{BONUS_ATTACK_DMG}");
+					if(containsArmorValue && isArmor || containsBonusAttackDmg && !isArmor || !containsArmorValue && !containsBonusAttackDmg) {
+						lore.add(s.replace("{ARMOR_VALUE}", value).replace("{BONUS_ATTACK_DMG}", value).replace("{DURABILITY}", max));
+					}
+				}
+				itemMeta.setLore(lore);
+				is.setItemMeta(itemMeta);
+				addRPItemStackValues(is, new HashMap<String, String>() {{
+					put("CustomDurability", Integer.toString(getCustomDurability(is, maxDurability)));
+					put("CustomMaxDurability", max);
+				}});
 			}
-			itemMeta.setLore(lore);
-			is.setItemMeta(itemMeta);
-			addRPItemStackValues(is, new HashMap<String, String>() {{
-				put("CustomDurability", Integer.toString(getCustomDurability(is, maxDurability)));
-				put("CustomMaxDurability", max);
-			}});
 		}
 		return is;
 	}

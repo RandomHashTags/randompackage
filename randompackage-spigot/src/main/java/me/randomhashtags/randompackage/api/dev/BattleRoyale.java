@@ -42,7 +42,7 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
     private int activeTask, startTask, maxTeamSize, maxPlayers, maxTeams;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final int l = args.length;
         switch (l) {
@@ -98,16 +98,16 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
         }
     }
 
-    public final void viewCurrent(CommandSender sender) {
+    public final void viewCurrent(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.battleroyale", true)) {
         }
     }
-    public final void viewHelp(CommandSender sender) {
+    public final void viewHelp(@NotNull CommandSender sender) {
         if(hasPermission(sender, "RandomPackage.battleroyale.help", true)) {
             sendStringListMessage(sender, getStringList(config, "messages.help"), null);
         }
     }
-    public final void tryJoining(Player player) {
+    public final void tryJoining(@NotNull Player player) {
         if(hasPermission(player, "RandomPackage.battleroyale.join", true)) {
             if(active) {
                 final BattleRoyaleTeam team = getEmptyTeam(player);
@@ -120,7 +120,8 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             }
         }
     }
-    private BattleRoyaleTeam getEmptyTeam(Player player) {
+    @Nullable
+    private BattleRoyaleTeam getEmptyTeam(@NotNull Player player) {
         if(active && !hasStarted) {
             final int size = teams.size();
             if(size != maxTeams) {
@@ -169,7 +170,7 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
     public final String getNextGame() {
         return getRemainingTime(nextStartTime-System.currentTimeMillis());
     }
-    public final void end(BattleRoyaleTeam winningTeam) {
+    public final void end(@Nullable BattleRoyaleTeam winningTeam) {
         if(active) {
             active = false;
             hasStarted = false;

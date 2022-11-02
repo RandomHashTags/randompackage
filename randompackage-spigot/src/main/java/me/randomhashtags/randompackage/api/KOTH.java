@@ -54,7 +54,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 	public Player currentPlayerCapturing, previouscapturer;
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		switch (args.length) {
 			case 0:
@@ -138,7 +138,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 		saveOtherData();
 
 		if(center != null && !status.equals("STOPPED")) {
-			for(Player player : center.getWorld().getPlayers()) {
+			for(Player player : getWorldPlayers(center)) {
 				player.setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
 			}
 		}
@@ -193,7 +193,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 		}
 	}
 	public long getTimeLeft() {
-		final int i = captureTime*1000;
+		final int i = captureTime * 1000;
 		return cappingStartedTime > 0 ? cappingStartedTime+i-System.currentTimeMillis() : i;
 	}
 	public long getRuntime() {
@@ -207,7 +207,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 					flag = config.getString("messages.flag." + (captured || stopped ? "captured" : currentPlayerCapturing == null ? "uncontested" : "capturing"));
 
 			String faction = currentPlayerCapturing != null ? RegionalAPI.INSTANCE.getFactionTag(currentPlayerCapturing.getUniqueId()) : "";
-			if(!faction.equals("")) {
+			if(faction != null && !faction.equals("")) {
 				faction = faction + " ";
 			}
 
@@ -294,7 +294,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 		cappingStartedTime = -1;
 		capturedTime = -1;
 		if(center != null) {
-			for(Player player : center.getWorld().getPlayers()) {
+			for(Player player : getWorldPlayers(center)) {
 				player.setScoreboard(SCOREBOARD_MANAGER.getNewScoreboard());
 			}
 		}
@@ -306,14 +306,14 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 		final HashMap<String, String> replacements = new HashMap<>();
 		replacements.put("{PLAYER}", capturingPlayer);
 		replacements.put("{TIME}", time);
-		for(Player player : center.getWorld().getPlayers()) {
+		for(Player player : getWorldPlayers(center)) {
 			sendStringListMessage(player, msg, replacements);
 		}
 	}
 	public void broadcastCapping() {
 		final String timeLeft = getRemainingTime(getTimeLeft());
 		final List<String> msg = getStringList(config, "messages.capping");
-		for(Player player : center.getWorld().getPlayers()) {
+		for(Player player : getWorldPlayers(center)) {
 			for(String string : msg) {
 				if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", currentPlayerCapturing.getName());
 				if(string.contains("{TIME}")) string = string.replace("{TIME}", timeLeft);
@@ -324,7 +324,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 	public void broadcastNoLongerCapping() {
 		final List<String> msg = getStringList(config, "messages.no longer capping");
 		final String p = previouscapturer.getName();
-		for(Player player : center.getWorld().getPlayers()) {
+		for(Player player : getWorldPlayers(center)) {
 			for(String string : msg) {
 				if(string.contains("{PLAYER}")) string = string.replace("{PLAYER}", p);
 				player.sendMessage(string);
@@ -349,7 +349,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 			previouscapturer = currentPlayerCapturing;
 		}
 
-		final Collection<Player> kothPlayers = center.getWorld().getPlayers();
+		final Collection<Player> kothPlayers = getWorldPlayers(center);
 		String closestPlayerToKOTH = null;
 		int distance = captureRadius;
 
@@ -474,7 +474,7 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		if(!status.equals("STOPPED") && !limitedcommands.contains("*") && center != null && center.getWorld().getPlayers().contains(player)) {
+		if(!status.equals("STOPPED") && !limitedcommands.contains("*") && center != null && getWorldPlayers(center).contains(player)) {
 			final String msg = event.getMessage().toLowerCase();
 			for(String string : limitedcommands) {
 				if(msg.startsWith(string.toLowerCase())) {

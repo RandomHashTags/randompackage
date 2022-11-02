@@ -209,7 +209,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final ItemFilterData data = FileRPPlayer.get(event.getPlayer().getUniqueId()).getItemFilterData();
-        if(data.isActive() && !data.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
+        if(data != null && data.isActive() && !data.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
             event.setCancelled(true);
         }
     }

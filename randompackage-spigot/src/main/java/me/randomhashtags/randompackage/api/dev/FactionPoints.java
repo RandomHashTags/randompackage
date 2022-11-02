@@ -96,6 +96,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         save();
     }
 
+    @NotNull
     public ItemStack getDisplayedFactionPoints(@NotNull BigInteger points) {
         final ItemStack target = getClone(display);
         final String price = formatInt(costPerPoint.multiply(points).intValue()), pointsString = Integer.toString(points.intValue());
@@ -108,6 +109,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         target.setItemMeta(itemMeta);
         return target;
     }
+    @NotNull
     public ItemStack getItem(int points) {
         final ItemStack target = getClone(interactable);
         final String pointsString = formatInt(points);
@@ -121,9 +123,10 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         addRPItemStackValue(target, "AddFactionPoints", Integer.toString(points));
         return target;
     }
-    public boolean isFactionPointItem(@Nullable ItemStack is) {
+    public boolean isFactionPointItem(@NotNull ItemStack is) {
         return getRPItemStackValue(is, "AddFactionPoints") != null;
     }
+    @NotNull
     public BigInteger getPoints(String identifier) {
         return points.getOrDefault(identifier, BigInteger.ZERO);
     }
@@ -137,7 +140,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
-        if(isFactionPointItem(is)) {
+        if(is != null && isFactionPointItem(is)) {
             final Player player = event.getPlayer();
             event.setCancelled(true);
             player.updateInventory();

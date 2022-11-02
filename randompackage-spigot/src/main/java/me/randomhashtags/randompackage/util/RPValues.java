@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -23,108 +24,142 @@ import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
 
 @SuppressWarnings({"unchecked"})
 public interface RPValues extends UVersionableSpigot {
+    @NotNull
     default LinkedHashMap<String, ?> getAllObj(Feature f) {
         return FEATURES.getOrDefault(f, new LinkedHashMap<>());
     }
 
+    @NotNull
     default LinkedHashMap<String, ArmorSet> getAllArmorSets() {
         return (LinkedHashMap<String, ArmorSet>) getAllObj(Feature.ARMOR_SET);
     }
+    @NotNull
     default LinkedHashMap<String, ArmorSocket> getAllArmorSockets() {
         return (LinkedHashMap<String, ArmorSocket>) getAllObj(Feature.ARMOR_SOCKET);
     }
+    @NotNull
     default LinkedHashMap<String, BlackScroll> getAllBlackScrolls() {
         return (LinkedHashMap<String, BlackScroll>) getAllObj(Feature.SCROLL_BLACK);
     }
+    @NotNull
     default LinkedHashMap<String, Booster> getAllBoosters() {
         return (LinkedHashMap<String, Booster>) getAllObj(Feature.BOOSTER);
     }
+    @NotNull
     default LinkedHashMap<String, ConquestChest> getAllConquestChests() {
         return (LinkedHashMap<String, ConquestChest>) getAllObj(Feature.CONQUEST_CHEST);
     }
+    @NotNull
     default LinkedHashMap<String, CustomBoss> getAllCustomBosses() {
         return (LinkedHashMap<String, CustomBoss>) getAllObj(Feature.CUSTOM_BOSS);
     }
+    @NotNull
     default LinkedHashMap<String, EnchantRarity> getAllCustomEnchantRarities() {
         return (LinkedHashMap<String, EnchantRarity>) getAllObj(Feature.CUSTOM_ENCHANT_RARITY);
     }
+    @NotNull
     default LinkedHashMap<String, CustomEnchantSpigot> getAllCustomEnchants(boolean enabled) {
         return (LinkedHashMap<String, CustomEnchantSpigot>) getAllObj(enabled ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED);
     }
+    @NotNull
     default LinkedHashMap<String, CustomExplosion> getAllCustomExplosions() {
         return (LinkedHashMap<String, CustomExplosion>) getAllObj(Feature.CUSTOM_EXPLOSION);
     }
+    @NotNull
     default LinkedHashMap<String, CustomKit> getAllCustomKits() {
         return (LinkedHashMap<String, CustomKit>) getAllObj(Feature.CUSTOM_KIT);
     }
+    @NotNull
     default LinkedHashMap<String, Dungeon> getAllDungeons() {
         return (LinkedHashMap<String, Dungeon>) getAllObj(Feature.DUNGEON);
     }
+    @NotNull
     default LinkedHashMap<String, EnchantmentOrb> getAllEnchantmentOrbs() {
         return (LinkedHashMap<String, EnchantmentOrb>) getAllObj(Feature.ENCHANTMENT_ORB);
     }
+    @NotNull
     default LinkedHashMap<String, EnvoyCrate> getAllEnvoyCrates() {
         return (LinkedHashMap<String, EnvoyCrate>) getAllObj(Feature.ENVOY_CRATE);
     }
+    @NotNull
     default LinkedHashMap<String, FactionUpgrade> getAllFactionUpgrades() {
         return (LinkedHashMap<String, FactionUpgrade>) getAllObj(Feature.FACTION_UPGRADE);
     }
+    @NotNull
     default LinkedHashMap<String, GlobalChallenge> getAllGlobalChallenges() {
         return (LinkedHashMap<String, GlobalChallenge>) getAllObj(Feature.GLOBAL_CHALLENGE);
     }
+    @NotNull
     default LinkedHashMap<String, GlobalChallengePrize> getAllGlobalChallengePrizes() {
         return (LinkedHashMap<String, GlobalChallengePrize>) getAllObj(Feature.GLOBAL_CHALLENGE_PRIZE);
     }
+    @NotNull
     default LinkedHashMap<String, ItemSkin> getAllItemSkins() {
         return (LinkedHashMap<String, ItemSkin>) getAllObj(Feature.ITEM_SKIN);
     }
+    @NotNull
     default LinkedHashMap<String, Lootbox> getAllLootboxes() {
         return (LinkedHashMap<String, Lootbox>) getAllObj(Feature.LOOTBOX);
     }
+    @NotNull
     default LinkedHashMap<String, MagicDust> getAllMagicDust() {
         return (LinkedHashMap<String, MagicDust>) getAllObj(Feature.MAGIC_DUST);
     }
+    @NotNull
     default LinkedHashMap<String, Mask> getAllMasks() {
         return (LinkedHashMap<String, Mask>) getAllObj(Feature.MASK);
     }
+    @NotNull
     default LinkedHashMap<String, MonthlyCrate> getAllMonthlyCrates() {
         return (LinkedHashMap<String, MonthlyCrate>) getAllObj(Feature.MONTHLY_CRATE);
     }
+    @NotNull
     default LinkedHashMap<String, Outpost> getAllOutposts() {
         return (LinkedHashMap<String, Outpost>) getAllObj(Feature.OUTPOST);
     }
+    @NotNull
     default LinkedHashMap<String, PlayerQuest> getAllPlayerQuests() {
         return (LinkedHashMap<String, PlayerQuest>) getAllObj(Feature.PLAYER_QUEST);
     }
+    @NotNull
     default LinkedHashMap<String, RandomizationScroll> getAllRandomizationScrolls() {
         return (LinkedHashMap<String, RandomizationScroll>) getAllObj(Feature.SCROLL_RANDOMIZATION);
     }
+    @NotNull
     default LinkedHashMap<String, RarityFireball> getAllRarityFireballs() {
         return (LinkedHashMap<String, RarityFireball>) getAllObj(Feature.RARITY_FIREBALL);
     }
+    @NotNull
     default LinkedHashMap<String, RarityGem> getAllRarityGems() {
         return (LinkedHashMap<String, RarityGem>) getAllObj(Feature.RARITY_GEM);
     }
+    @NotNull
     default LinkedHashMap<String, ServerCrate> getAllServerCrates() {
         return (LinkedHashMap<String, ServerCrate>) getAllObj(Feature.SERVER_CRATE);
     }
+    @NotNull
     default LinkedHashMap<String, SoulTracker> getAllSoulTrackers() {
         return (LinkedHashMap<String, SoulTracker>) getAllObj(Feature.SOUL_TRACKER);
     }
+    @NotNull
     default LinkedHashMap<String, Stronghold> getAllStrongholds() {
         return (LinkedHashMap<String, Stronghold>) getAllObj(Feature.STRONGHOLD);
     }
+    @NotNull
     default LinkedHashMap<String, Title> getAllTitles() {
         return (LinkedHashMap<String, Title>) getAllObj(Feature.TITLE);
     }
+    @NotNull
     default LinkedHashMap<String, TransmogScroll> getAllTransmogScrolls() {
         return (LinkedHashMap<String, TransmogScroll>) getAllObj(Feature.SCROLL_TRANSMOG);
     }
+    @NotNull
     default LinkedHashMap<String, WhiteScroll> getAllWhiteScrolls() {
         return (LinkedHashMap<String, WhiteScroll>) getAllObj(Feature.SCROLL_WHITE);
     }
 
 
+    @NotNull
     default List<ItemStack> getFatBuckets(@NotNull Player player) {
         final FatBuckets buckets = FatBuckets.INSTANCE;
         final List<ItemStack> list = new ArrayList<>();
@@ -138,9 +173,11 @@ public interface RPValues extends UVersionableSpigot {
         return list;
     }
 
+    @Nullable
     default ArmorSet valueOfArmorSet(@NotNull Player player) {
         return valueOfArmorSet(player, false);
     }
+    @Nullable
     default ArmorSet valueOfArmorSet(@NotNull Player player, boolean checkOmni) {
         final PlayerInventory inv = player.getInventory();
         final ItemStack helmet = inv.getHelmet(), chest = inv.getChestplate(), legs = inv.getLeggings(), boots = inv.getBoots();
@@ -164,6 +201,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ArmorSet valueOfArmorSet(@NotNull ItemStack is) {
         if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> l = is.getItemMeta().getLore();
@@ -175,6 +213,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ArmorSet valueOfArmorCrystal(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final CustomArmor armor = getCustomArmor();
@@ -189,6 +228,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ArmorSet getArmorCrystalOnItem(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final CustomArmor armor = getCustomArmor();
@@ -205,6 +245,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
+    @Nullable
     default ArmorSocket valueOfArmorSocket(@NotNull ItemStack item) {
         final ArmorSockets sockets = ArmorSockets.INSTANCE;
         if(sockets.isEnabled()) {
@@ -227,6 +268,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
+    @Nullable
     default BlackScroll valueOfBlackScroll(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();
@@ -240,6 +282,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default EnchantmentOrb valueOfEnchantmentOrb(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemStack item = is.clone();
@@ -262,6 +305,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default EnchantmentOrb valueOfEnchantmentOrb(String appliedlore) {
         if(appliedlore != null) {
             for(EnchantmentOrb orb : getAllEnchantmentOrbs().values()) {
@@ -271,6 +315,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default EnchantmentOrb getEnchantmentOrb(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> l = is.getItemMeta().getLore();
@@ -282,6 +327,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
         if(spawnitem != null && spawnitem.hasItemMeta()) {
             for(CustomBoss b : getAllCustomBosses().values()) {
@@ -292,6 +338,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default EnchantRarity valueOfCustomEnchantRarity(ItemStack is) {
         if(is != null) {
             for(EnchantRarity r : getAllCustomEnchantRarities().values()) {
@@ -303,6 +350,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default EnchantRarity valueOfCustomEnchantRarity(@NotNull CustomEnchantSpigot enchant) {
         for(EnchantRarity e : getAllCustomEnchantRarities().values()) {
             if(e.getEnchants().contains(enchant)) {
@@ -311,7 +359,11 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default CustomEnchantSpigot valueOfCustomEnchant(String string) { return valueOfCustomEnchant(string, false); }
+    @Nullable
+    default CustomEnchantSpigot valueOfCustomEnchant(String string) {
+        return valueOfCustomEnchant(string, false);
+    }
+    @Nullable
     default CustomEnchantSpigot valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
         if(string != null) {
             final String s = ChatColor.stripColor(string);
@@ -330,14 +382,18 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomEnchantSpigot valueOfCustomEnchant(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final CustomEnchantSpigot e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
-            final EnchantRarity r = valueOfCustomEnchantRarity(e);
-            return e != null && UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
+            if(e != null) {
+                final EnchantRarity r = valueOfCustomEnchantRarity(e);
+                return UMaterial.match(is).equals(UMaterial.match(r.getRevealedItem())) ? e : null;
+            }
         }
         return null;
     }
+    @Nullable
     default CustomExplosion valueOfCustomExplosion(ItemStack is) {
         for(CustomExplosion c : getAllCustomExplosions().values()) {
             if(c.getItem().isSimilar(is)) {
@@ -346,6 +402,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomKit valueOfCustomKit(int slot, Class<?> type) {
         if(type != null) {
             for(CustomKit k : getAllCustomKits().values()) {
@@ -356,6 +413,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomKitMastery valueOfCustomKitRedeem(ItemStack is) {
         if(is != null) {
             for(CustomKit k : getAllCustomKits().values()) {
@@ -371,6 +429,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomKitEvolution valueOfCustomKitUpgradeGem(ItemStack is) {
         if(is != null) {
             final Class clazz = CustomKitEvolution.class;
@@ -386,6 +445,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default Dungeon valueOfDungeonFromKey(ItemStack is) {
         if(is != null) {
             for(Dungeon d : getAllDungeons().values()) {
@@ -396,6 +456,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default Dungeon valueOfDungeonFromPortal(ItemStack is) {
         if(is != null) {
             for(Dungeon d : getAllDungeons().values()) {
@@ -407,6 +468,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
+    @Nullable
     default FactionUpgrade valueOfFactionUpgrade(int slot) {
         for(FactionUpgrade f : getAllFactionUpgrades().values()) {
             if(f.getSlot() == slot) {
@@ -415,6 +477,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomKit valueOfFallenHeroSpawnItem(ItemStack is, Class type) {
         if(is != null) {
             for(CustomKit k : getAllCustomKits().values()) {
@@ -426,6 +489,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default CustomKit valueOfFallenHeroGem(ItemStack is, Class type) {
         if(is != null) {
             for(CustomKit k : getAllCustomKits().values()) {
@@ -438,6 +502,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
+    @Nullable
     default GlobalChallengePrize valueOfGlobalChallengePrize(int placement) {
         for(GlobalChallengePrize p : getAllGlobalChallengePrizes().values()) {
             if(p.getPlacement() == placement) {
@@ -446,6 +511,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default GlobalChallengePrize valueOfGlobalChallengePrize(ItemStack display) {
         if(display != null && display.hasItemMeta()) {
             for(GlobalChallengePrize p : getAllGlobalChallengePrizes().values()) {
@@ -458,7 +524,8 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
-    default Lootbox valueOfLootbox(@NotNull ItemStack is) {
+    @Nullable
+    default Lootbox valueOfLootbox(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta()) {
             for(Lootbox l : getAllLootboxes().values()) {
                 if(l.getItem().isSimilar(is)) {
@@ -469,7 +536,8 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
-    default MagicDust valueOfMagicDust(ItemStack is) {
+    @Nullable
+    default MagicDust valueOfMagicDust(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final Material m = is.getType();
             final String d = is.getItemMeta().getDisplayName();
@@ -482,7 +550,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default Mask valueOfMask(ItemStack is) {
+    @Nullable
+    default Mask valueOfMask(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta()) {
             for(Mask m : getAllMasks().values()) {
                 final ItemStack i = m.getItem();
@@ -493,7 +562,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default Mask getMaskOnItem(ItemStack is) {
+    @Nullable
+    default Mask getMaskOnItem(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta()) {
             final ItemMeta im = is.getItemMeta();
             if(im.hasLore()) {
@@ -507,6 +577,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default MonthlyCrate valueOfMonthlyCrate(String title) {
         for(MonthlyCrate m : getAllMonthlyCrates().values()) {
             if(m.getGuiTitle().equals(title)) {
@@ -515,6 +586,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default MonthlyCrate valueOfMonthlyCrate(ItemStack item) {
         for(MonthlyCrate c : getAllMonthlyCrates().values()) {
             if(c.getItem().isSimilar(item)) {
@@ -523,6 +595,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default MonthlyCrate valueOfMonthlyCrate(Player player, ItemStack item) {
         if(player != null && item != null) {
             final String p = player.getName();
@@ -544,6 +617,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default MonthlyCrate valueOfMonthlyCrate(int category, int slot) {
         for(MonthlyCrate c : getAllMonthlyCrates().values()) {
             if(category == c.getCategory() && slot == c.getCategorySlot()) {
@@ -552,6 +626,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default Outpost valueOfOutpost(int slot) {
         for(Outpost o : getAllOutposts().values()) {
             if(o.getSlot() == slot) {
@@ -561,6 +636,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
 
+    @Nullable
     default RandomizationScroll valueOfRandomizationScroll(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemMeta m = is.getItemMeta();
@@ -572,6 +648,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default RarityFireball valueOfRarityFireball(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             for(RarityFireball f : getAllRarityFireballs().values()) {
@@ -582,6 +659,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default RarityFireball valueOfRarityFireball(List<EnchantRarity> exchangeablerarities) {
         for(RarityFireball f : getAllRarityFireballs().values()) {
             if(f.getExchangeableRarities().equals(exchangeablerarities)) {
@@ -590,6 +668,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ItemStack getRarityGem(@NotNull RarityGem gem, @NotNull Player player) {
         final PlayerInventory pi = player.getInventory();
         final List<String> l = gem.getItem().getItemMeta().getLore();
@@ -601,6 +680,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default RarityGem valueOfRarityGem(ItemStack item) {
         if(item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
             final List<String> l = item.getItemMeta().getLore();
@@ -612,6 +692,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ServerCrate valueOfServerCrate(@NotNull ItemStack item) {
         for(ServerCrate crate : getAllServerCrates().values()) {
             if(crate.getItem().isSimilar(item)) {
@@ -620,6 +701,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default ServerCrate valueOfServerCrateFlare(@NotNull ItemStack flare) {
         for(ServerCrate crate : getAllServerCrates().values()) {
             final ServerCrateFlare f = crate.getFlare();
@@ -629,6 +711,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default SoulTracker valueOfSoulTracker(@NotNull RarityGem gem) {
         for(SoulTracker st : getAllSoulTrackers().values()) {
             if(st.getConvertsTo().equals(gem)) {
@@ -637,7 +720,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default SoulTracker valueOfSoulTracker(@NotNull ItemStack is) {
+    @Nullable
+    default SoulTracker valueOfSoulTracker(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final ItemMeta m = is.getItemMeta();
             for(SoulTracker s : getAllSoulTrackers().values()) {
@@ -648,6 +732,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default HashMap<Integer, SoulTracker> valueOfSoulTrackerApplied(ItemStack is) {
         if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> itemLore = is.getItemMeta().getLore();
@@ -667,6 +752,7 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
+    @Nullable
     default SoulTracker valueOfSoulTrackerApplied(@NotNull String trackerAppliedString) {
         for(SoulTracker tracker : getAllSoulTrackers().values()) {
             if(trackerAppliedString.startsWith(tracker.getApplied().replace("{SOULS}", ""))) {
@@ -675,7 +761,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default Title valueOfTitle(ItemStack is) {
+    @Nullable
+    default Title valueOfTitle(@Nullable ItemStack is) {
         if(is != null) {
             for(Title title : getAllTitles().values()) {
                 if(title.getItem().isSimilar(is)) {
@@ -685,7 +772,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default TransmogScroll valueOfTransmogScroll(ItemStack is) {
+    @Nullable
+    default TransmogScroll valueOfTransmogScroll(@Nullable ItemStack is) {
         if(is != null) {
             for(TransmogScroll t : getAllTransmogScrolls().values()) {
                 if(t.getItem().isSimilar(is)) {
@@ -695,7 +783,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default TransmogScroll valueOfTransmogScrollApplied(ItemStack is) {
+    @Nullable
+    default TransmogScroll valueOfTransmogScrollApplied(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
             if(enchants.isEnabled()) {
@@ -709,7 +798,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default WhiteScroll valueOfWhiteScroll(@NotNull ItemStack is) {
+    @Nullable
+    default WhiteScroll valueOfWhiteScroll(@Nullable ItemStack is) {
         if(is != null) {
             for(WhiteScroll w : getAllWhiteScrolls().values()) {
                 if(is.isSimilar(w.getItem())) {
@@ -719,7 +809,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default WhiteScroll valueOfWhiteScroll(@NotNull String apply) {
+    @Nullable
+    default WhiteScroll valueOfWhiteScroll(@Nullable String apply) {
         if(apply != null && !apply.isEmpty()) {
             for(WhiteScroll w : getAllWhiteScrolls().values()) {
                 if(w.getApplied().equals(apply)) {
@@ -729,7 +820,8 @@ public interface RPValues extends UVersionableSpigot {
         }
         return null;
     }
-    default List<WhiteScroll> valueOfWhiteScrollApplied(ItemStack is) {
+    @Nullable
+    default List<WhiteScroll> valueOfWhiteScrollApplied(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<WhiteScroll> l = new ArrayList<>();
             for(String s : is.getItemMeta().getLore()) {

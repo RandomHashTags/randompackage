@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
         register(Feature.CUSTOM_ENCHANT_RARITY, this);
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return folder.getName();
@@ -39,6 +41,7 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
         if(revealItem == null) revealItem = createItemStack(yml, "reveal item");
         return getClone(revealItem);
     }
+    @NotNull
     public ItemStack getRevealedItem() {
         if(revealedItem == null) revealedItem = createItemStack(yml, "revealed item");
         return getClone(revealedItem);

@@ -29,6 +29,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,10 +69,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 			final List<Player> recipients = new ArrayList<>(Bukkit.getOnlinePlayers());
 
 			final TitleData data = FileRPPlayer.get(player.getUniqueId()).getTitleData();
-			Title title = null;
-			if(data != null) {
-				title = data.getActive();
-			}
+			final Title title = data.getActive();
 			String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", title != null ? " " + title.getChatTitle() : ""));
 			if(RANDOM_PACKAGE.placeholderapi) {
 				format = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
@@ -86,8 +84,8 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 				}
 			} else {
 				if(hasPermission(player, "RandomPackage.chat.item", false)) {
-					ItemStack i = getItemInHand(player);
-					if(i != null && !i.getType().equals(Material.AIR)) {
+					final ItemStack i = getItemInHand(player);
+					if(!i.getType().equals(Material.AIR)) {
 						String name = i.hasItemMeta() && i.getItemMeta().hasDisplayName() ? i.getItemMeta().getDisplayName() : i.getType().name();
 						sendItemMessage(player, itemDisplay.replace("{ITEM_NAME}", name).replace("{ITEM_AMOUNT}", Integer.toString(i.getAmount())), prefix, suffix, recipients);
 					}
@@ -118,7 +116,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 		}
 		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
 	}
-	public void sendHoverMessage(Player player, String message, List<String> hoverMessage, HashMap<String, List<String>> replacements) {
+	public void sendHoverMessage(@NotNull Player player, String message, @NotNull List<String> hoverMessage, @NotNull HashMap<String, List<String>> replacements) {
 	    String hover = "";
 	    for(int i = 0; i < hoverMessage.size(); i++) {
 	        hover = hover + (i != 0 ? "\n" : "") + hoverMessage.get(i);
@@ -132,7 +130,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
             }
             hover = hover.replace(s, b.toString());
         }
-        TextComponent m = new TextComponent(message);
+        final TextComponent m = new TextComponent(message);
 	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(hover)).create()));
 	    player.spigot().sendMessage(m);
     }
@@ -150,7 +148,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		if(args.length != 1) {
 			return true;
 		}

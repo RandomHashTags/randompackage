@@ -38,7 +38,7 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, String> delayed;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, XpbottlePermission.COMMAND, true)) {
             if(args.length == 0) {

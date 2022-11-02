@@ -19,9 +19,11 @@ public interface RPPlayer {
     void backup();
 
     @NotNull UUID getUUID();
+    @Nullable
     default Player getPlayer() {
         return Bukkit.getPlayer(getUUID());
     }
+    @NotNull
     default OfflinePlayer getOfflinePlayer() {
         final UUID uuid = getUUID();
         return Bukkit.getOfflinePlayer(uuid);
@@ -29,21 +31,21 @@ public interface RPPlayer {
 
     HashMap<String, Integer> getUnclaimedLootboxes();
     List<ItemStack> getUnclaimedPurchases();
-    @Nullable SecondaryData getSecondaryData();
-    @Nullable CoinFlipData getCoinFlipData();
-    @Nullable CustomEnchantData getCustomEnchantData();
-    @Nullable DisguiseData getDisguiseData();
-    @Nullable DuelData getDuelData();
-    @Nullable GlobalChallengeData getGlobalChallengeData();
-    @Nullable HomeData getHomeData();
-    @Nullable ItemFilterData getItemFilterData();
-    @Nullable JackpotData getJackpotData();
-    @Nullable KitData getKitData();
-    @Nullable MonthlyCrateData getMonthlyCrateData();
-    @Nullable PlayerQuestData getPlayerQuestData();
-    @Nullable RarityGemData getRarityGemData();
-    @Nullable ReputationData getReputationData();
-    @Nullable ShowcaseData getShowcaseData();
-    @Nullable SlotBotData getSlotBotData();
-    @Nullable TitleData getTitleData();
+    @NotNull SecondaryData getSecondaryData();
+    @NotNull CoinFlipData getCoinFlipData();
+    @NotNull CustomEnchantData getCustomEnchantData();
+    @NotNull DisguiseData getDisguiseData();
+    @NotNull DuelData getDuelData();
+    @NotNull GlobalChallengeData getGlobalChallengeData();
+    @NotNull HomeData getHomeData();
+    @NotNull ItemFilterData getItemFilterData();
+    @NotNull JackpotData getJackpotData();
+    @NotNull KitData getKitData();
+    @NotNull MonthlyCrateData getMonthlyCrateData();
+    @NotNull PlayerQuestData getPlayerQuestData();
+    @NotNull RarityGemData getRarityGemData();
+    @NotNull ReputationData getReputationData();
+    @NotNull ShowcaseData getShowcaseData();
+    @NotNull SlotBotData getSlotBotData();
+    @NotNull TitleData getTitleData();
 }

@@ -31,7 +31,7 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
     private HashMap<String, TObject> xcoords, zcoords;
     private List<String> teleportExceptions;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         switch (args.length) {
             case 1:

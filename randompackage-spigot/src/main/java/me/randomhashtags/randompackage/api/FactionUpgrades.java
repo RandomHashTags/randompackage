@@ -309,7 +309,7 @@ public final class FactionUpgrades extends EventAttributes {
         }
         return null;
     }
-    public void viewFactionUpgrades(Player player) {
+    public void viewFactionUpgrades(@NotNull Player player) {
         final String faction = RegionalAPI.INSTANCE.getFactionTag(player.getUniqueId());
         if(faction != null) {
             player.closeInventory();

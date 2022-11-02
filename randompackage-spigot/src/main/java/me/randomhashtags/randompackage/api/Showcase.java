@@ -39,7 +39,7 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 	private List<Player> inSelf, inOther;
 	private HashMap<Player, Integer> deleteSlot;
 
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
 		if(player != null) {

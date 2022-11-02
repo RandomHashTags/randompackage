@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
     private HashMap<UUID, Location> editingfilter;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, CollectionFilterPermission.COMMAND, true)) {
             final int length = args.length;
@@ -325,60 +326,67 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
         filter = filter.equals("all") ? allType : filter.equals("default") ? defaultType : toMaterial(filter, false);
         final ItemStack item = collectionchest.clone();
         final ItemMeta itemMeta = item.getItemMeta();
-        final List<String> lore = new ArrayList<>();
-        if(itemMeta.hasLore()) {
-            for(String string : itemMeta.getLore()) {
-                if(string.contains("{FILTER_TYPE}")) {
-                    string = string.replace("{FILTER_TYPE}", filter);
+        if(itemMeta != null) {
+            final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
+            if(itemLore != null) {
+                for(String string : itemLore) {
+                    if(string.contains("{FILTER_TYPE}")) {
+                        string = string.replace("{FILTER_TYPE}", filter);
+                    }
+                    lore.add(string);
                 }
-                lore.add(string);
             }
+            itemMeta.setLore(lore);
+            item.setItemMeta(itemMeta);
         }
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
         return item;
     }
     public void setFilter(@NotNull Player player, @NotNull ItemStack is, int slot) {
         final ItemMeta itemMeta = is.getItemMeta();
-        final List<String> lore = new ArrayList<>(), collectionChestLore = collectionchest.getItemMeta().getLore();
-        final String material = toMaterial(picksup.get(slot).name(), false);
-        for(int i = 0; i < collectionChestLore.size(); i++) {
-            final String target = collectionChestLore.get(i);
-            if(i == filtertypeSlot) {
-                lore.add(colorize(target.replace("{FILTER_TYPE}", material)));
-            } else {
-                lore.add(target);
+        if(itemMeta != null) {
+            final List<String> lore = new ArrayList<>(), collectionChestLore = collectionchest.getItemMeta().getLore();
+            final String material = toMaterial(picksup.get(slot).name(), false);
+            for(int i = 0; i < collectionChestLore.size(); i++) {
+                final String target = collectionChestLore.get(i);
+                if(i == filtertypeSlot) {
+                    lore.add(colorize(target.replace("{FILTER_TYPE}", material)));
+                } else {
+                    lore.add(target);
+                }
             }
+            itemMeta.setLore(lore);
+            is.setItemMeta(itemMeta);
+            for(String string : getStringList(config, "messages.updated cc")) {
+                if(string.contains("{AMOUNT}")) {
+                    string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
+                }
+                if(string.contains("{ITEM}")) {
+                    string = string.replace("{ITEM}", material);
+                }
+                player.sendMessage(colorize(string));
+            }
+            player.updateInventory();
         }
-        itemMeta.setLore(lore);
-        is.setItemMeta(itemMeta);
-        for(String string : getStringList(config, "messages.updated cc")) {
-            if(string.contains("{AMOUNT}")) {
-                string = string.replace("{AMOUNT}", Integer.toString(is.getAmount()));
-            }
-            if(string.contains("{ITEM}")) {
-                string = string.replace("{ITEM}", material);
-            }
-            player.sendMessage(colorize(string));
-        }
-        player.updateInventory();
     }
     public void setFilter(@NotNull Player player, @NotNull ItemStack is, @NotNull String filter) {
         final ItemMeta itemMeta = is.getItemMeta();
-        final List<String> lore = new ArrayList<>();
-        if(itemMeta.hasLore()) {
-            lore.addAll(itemMeta.getLore());
-        }
-        lore.set(filtertypeSlot, collectionchest.getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", filter));
-        itemMeta.setLore(lore);
-        is.setItemMeta(itemMeta);
-        for(String string : getStringList(config, "messages.set")) {
-            if(string.contains("{ITEM}")) {
-                string = string.replace("{ITEM}", filter);
+        if(itemMeta != null) {
+            final List<String> lore = new ArrayList<>();
+            if(itemMeta.hasLore()) {
+                lore.addAll(itemMeta.getLore());
             }
-            player.sendMessage(colorize(string));
+            lore.set(filtertypeSlot, collectionchest.getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", filter));
+            itemMeta.setLore(lore);
+            is.setItemMeta(itemMeta);
+            for(String string : getStringList(config, "messages.set")) {
+                if(string.contains("{ITEM}")) {
+                    string = string.replace("{ITEM}", filter);
+                }
+                player.sendMessage(colorize(string));
+            }
         }
     }
+    @Nullable
     public UMaterial getFiltered(@NotNull ItemStack is) {
         final String filter = ChatColor.stripColor(collectionchest.clone().getItemMeta().getLore().get(filtertypeSlot).replace("{FILTER_TYPE}", itemType)), filterString = ChatColor.stripColor(is.getItemMeta().getLore().get(filtertypeSlot).toUpperCase());
         for(UMaterial umaterial : picksup.values()) {

@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -99,11 +100,13 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
     public String getItemSkinMaterialString(@NotNull ItemSkin skin) {
         return materials.get(skin.getMaterial());
     }
+    @Nullable
     public ItemSkin valueOfItemSkin(@NotNull ItemStack is) {
         return isItemSkin(is) ? getItemSkin(getRPItemStackValue(is, "AppliedItemSkin")) : null;
     }
+    @Nullable
     public ItemSkin valueOfItemSkinApplied(@NotNull ItemStack is) {
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> lore = is.getItemMeta().getLore();
             for(ItemSkin skin : getAllItemSkins().values()) {
                 if(lore.contains(appliedLore.replace("{NAME}", skin.getName()))) {

@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 	private List<String> blacklistedMaterials;
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(args.length == 0 && hasPermission(player, TradePermission.COMMAND, true)) {
 			sendStringListMessage(player, getStringList(config, "messages.commands"), null);
@@ -86,7 +87,7 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 	public int getCountdown() {
 		return countdown;
 	}
-	public void sendRequest(@NotNull Player sender, String receiver) {
+	public void sendRequest(@NotNull Player sender, @Nullable String receiver) {
 		final HashMap<String, String> replacements = new HashMap<>();
 		if(hasPermission(sender, TradePermission.SEND_REQUEST, true)) {
 			if(receiver == null
@@ -119,7 +120,7 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 			}
 		}
 	}
-	public void acceptRequest(Player accepter, Player requester) {
+	public void acceptRequest(@NotNull Player accepter, @NotNull Player requester) {
 		if(hasPermission(accepter, TradePermission.ACCEPT_REQUEST, true)) {
 			final Inventory inv1 = Bukkit.createInventory(requester, 54, title.replace("{PLAYER}", requester.getName())), inv2 = Bukkit.createInventory(accepter, 54, title.replace("{PLAYER}", accepter.getName()));
 			final ItemStack[] contents = tradeInventory.getInventory().getContents();
@@ -135,11 +136,11 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 
 	@EventHandler
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
-		Player player = (Player) event.getPlayer(), other;
+		final Player player = (Player) event.getPlayer();
 		final ActiveTrade trade = ActiveTrade.valueOf(player);
 		if(trade != null) {
-			final Player s = trade.getSender();
-			other = s == player ? trade.getReceiver() : s;
+			final Player sender = trade.getSender();
+			final Player other = sender == player ? trade.getReceiver() : sender;
 			final List<String> msg = getStringList(config, "messages.cancelled");
 			sendStringListMessage(player, msg, null);
 			sendStringListMessage(other, msg, null);

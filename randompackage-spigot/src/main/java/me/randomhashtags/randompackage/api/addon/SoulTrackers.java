@@ -34,7 +34,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, SoulTrackerPermission.COMMAND_SPLITSOULS, true)) {
             splitsouls(player, args.length == 0 ? -1 : getRemainingInt(args[0]));
@@ -115,7 +115,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
                 gems = amount;
                 item.setItemMeta(gem.getItem(collectedsouls-gems).getItemMeta());
             }
-        } else if(item == null || !item.hasItemMeta() || !item.getItemMeta().hasLore()) {
+        } else if(!item.hasItemMeta() || !item.getItemMeta().hasLore()) {
             sendStringListMessage(player, getStringList(config, "messages.need item with soul tracker"), null);
         } else {
             itemMeta = item.getItemMeta();

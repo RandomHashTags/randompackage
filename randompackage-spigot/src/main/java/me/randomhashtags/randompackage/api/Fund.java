@@ -135,13 +135,13 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 		final PluginCommand pCmd = Bukkit.getPluginCommand(cmd);
 		if(pCmd != null) {
 			final String pl = pCmd.getName(), m = msg.toLowerCase();
-			final List<String> a = pCmd.getAliases();
-			for(String s : unlockstring.keySet()) {
-				final String us = unlockstring.get(s);
+			final List<String> aliases = pCmd.getAliases();
+			for(String string : unlockstring.keySet()) {
+				final String us = unlockstring.get(string);
 				if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
-					if(s.startsWith("/" + pl) && (a.contains(cmd) && !s.contains(" ") || pl.equals(cmd) && !s.contains(" "))
-							|| m.equals(s.toLowerCase())
-							|| m.equals(s.replace(pl, cmd).toLowerCase())) {
+					if(string.startsWith("/" + pl) && (aliases.contains(cmd) && !string.contains(" ") || pl.equals(cmd) && !string.contains(" "))
+							|| m.equals(string.toLowerCase())
+							|| m.equals(string.replace(pl, cmd).toLowerCase())) {
 						if(hasPermission(player, FundPermission.BYPASS_LOCKED, false)) {
 							return;
 						}

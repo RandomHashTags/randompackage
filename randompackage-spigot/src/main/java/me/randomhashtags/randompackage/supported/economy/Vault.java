@@ -5,6 +5,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.NotNull;
 
 public enum Vault {
     INSTANCE;
@@ -17,9 +18,12 @@ public enum Vault {
     public boolean setupEconomy() {
         didSetupEco = true;
         final RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if(economyProvider != null) economy = economyProvider.getProvider();
+        if(economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
         return economy != null;
     }
+    @NotNull
     public Economy getEconomy() {
         if(!didSetupEco) {
             setupEconomy();

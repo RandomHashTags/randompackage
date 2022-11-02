@@ -247,15 +247,13 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
                     final ItemMeta itemMeta = item.getItemMeta();
                     if(itemMeta != null) {
                         final List<String> lore = new ArrayList<>();
-                        if(item.hasItemMeta()) {
-                            if(itemMeta.hasDisplayName()) {
-                                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", identifier));
-                            }
-                            final List<String> itemLore = itemMeta.getLore();
-                            if(itemLore != null) {
-                                for(String string : itemLore) {
-                                    lore.add(string.replace("{PATH}", identifier));
-                                }
+                        if(itemMeta.hasDisplayName()) {
+                            itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PATH}", identifier));
+                        }
+                        final List<String> itemLore = itemMeta.getLore();
+                        if(itemLore != null) {
+                            for(String string : itemLore) {
+                                lore.add(string.replace("{PATH}", identifier));
                             }
                         }
                         itemMeta.setLore(lore);
@@ -505,10 +503,12 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
                     final String playerName = player.getName();
                     final ItemMeta itemstackMeta = itemstack.getItemMeta();
                     if(itemstackMeta != null && itemstackMeta.hasLore()) {
-                        final List<String> lore = new ArrayList<>();
-                        for(String string : itemstackMeta.getLore()) {
-                            if(string.contains("{UNLOCKED_BY}")) string = string.replace("{UNLOCKED_BY}", playerName);
-                            lore.add(string);
+                        final List<String> lore = new ArrayList<>(), itemLore = itemstackMeta.getLore();
+                        if(itemLore != null) {
+                            for(String string : itemLore) {
+                                if(string.contains("{UNLOCKED_BY}")) string = string.replace("{UNLOCKED_BY}", playerName);
+                                lore.add(string);
+                            }
                         }
                         itemstackMeta.setLore(lore);
                         itemstack.setItemMeta(itemstackMeta);

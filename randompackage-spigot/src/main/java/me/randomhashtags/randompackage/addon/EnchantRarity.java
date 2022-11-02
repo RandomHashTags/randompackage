@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface EnchantRarity extends Identifiable, GivedpItemableSpigot {
     String[] getRevealedEnchantRarities();
     List<String> getRevealedEnchantMsg();
     ItemStack getRevealItem();
-    ItemStack getRevealedItem();
+    @NotNull ItemStack getRevealedItem();
     String getNameColors();
     String getApplyColors();
     boolean percentsAddUpto100();

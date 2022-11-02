@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 public interface GlobalChallengeData {
+    @NotNull
     HashMap<GlobalChallengePrize, Integer> getPrizes();
     void setPrizes(HashMap<GlobalChallengePrize, Integer> prizes);
     default void addPrize(@NotNull GlobalChallengePrize prize) {

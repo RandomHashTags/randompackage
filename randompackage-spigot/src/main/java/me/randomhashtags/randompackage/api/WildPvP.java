@@ -44,7 +44,7 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
     private int invincibilityDuration, nearbyRadius;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) {
             return true;
         }
@@ -247,7 +247,7 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
                             SCHEDULER.cancelTask(t);
                         }
                     }
-                }, 20*i));
+                }, 20L * i));
             }
             delete(match);
         }

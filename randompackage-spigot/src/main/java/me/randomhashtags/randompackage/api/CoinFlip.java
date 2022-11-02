@@ -51,7 +51,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, CoinFlipMatch> pickingChallengeOption, active;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) {
             return true;
         }
@@ -294,34 +294,32 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
             final CoinFlipMatch f = CoinFlipMatch.valueOfCreator(player);
             if(f != null) {
                 sendStringListMessage(player, getStringList(config, "messages.already in a match"), null);
-            } else if(match != null) {
-                if(match.isActive()) {
-                    sendStringListMessage(player, getStringList(config, "messages.no longer available"), null);
-                    viewCoinFlips(player);
-                } else {
-                    final String w = formatBigDecimal(match.getWager());
-                    final int s = options.getSize();
-                    player.openInventory(Bukkit.createInventory(player, s, options.getTitle()));
-                    final Inventory top = player.getOpenInventory().getTopInventory();
-                    top.setContents(options.getInventory().getContents());
-                    top.setItem(match.getCreatorOption().slot, new ItemStack(Material.AIR));
-                    for(int i = 0; i < s; i++) {
-                        final ItemStack item = top.getItem(i);
-                        if(item != null) {
-                            final ItemMeta itemMeta = item.getItemMeta();
-                            final List<String> lore = new ArrayList<>();
-                            if(itemMeta.hasLore()) {
-                                for(String l : itemMeta.getLore()) {
-                                    lore.add(l.replace("{WAGER}", w));
-                                }
+            } else if(match.isActive()) {
+                sendStringListMessage(player, getStringList(config, "messages.no longer available"), null);
+                viewCoinFlips(player);
+            } else {
+                final String w = formatBigDecimal(match.getWager());
+                final int s = options.getSize();
+                player.openInventory(Bukkit.createInventory(player, s, options.getTitle()));
+                final Inventory top = player.getOpenInventory().getTopInventory();
+                top.setContents(options.getInventory().getContents());
+                top.setItem(match.getCreatorOption().slot, new ItemStack(Material.AIR));
+                for(int i = 0; i < s; i++) {
+                    final ItemStack item = top.getItem(i);
+                    if(item != null) {
+                        final ItemMeta itemMeta = item.getItemMeta();
+                        final List<String> lore = new ArrayList<>();
+                        if(itemMeta.hasLore()) {
+                            for(String l : itemMeta.getLore()) {
+                                lore.add(l.replace("{WAGER}", w));
                             }
-                            itemMeta.setLore(lore);
-                            item.setItemMeta(itemMeta);
                         }
+                        itemMeta.setLore(lore);
+                        item.setItemMeta(itemMeta);
                     }
-                    player.updateInventory();
-                    pickingChallengeOption.put(player, match);
                 }
+                player.updateInventory();
+                pickingChallengeOption.put(player, match);
             }
         }
     }
@@ -457,7 +455,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
                         }
                     }
                 }
-            }, 20*i));
+            }, 20L * i));
         }
     }
     private void chooseWinner(CoinFlipMatch match) {

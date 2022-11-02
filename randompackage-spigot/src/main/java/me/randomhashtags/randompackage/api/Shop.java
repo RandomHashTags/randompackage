@@ -39,7 +39,7 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
 	private HashMap<String, FileShopCategory> titles;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {
             view(player);

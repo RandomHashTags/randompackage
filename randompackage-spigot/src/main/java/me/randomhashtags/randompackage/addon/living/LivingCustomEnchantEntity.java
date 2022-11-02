@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -79,6 +80,7 @@ public final class LivingCustomEnchantEntity extends CustomEnchants implements M
             LIVING = null;
         }
     }
+    @Nullable
     public static LivingCustomEnchantEntity valueOf(LivingEntity summoner) {
         for(LivingCustomEnchantEntity l : LIVING.values()) {
             if(l.summoner.equals(summoner)) {

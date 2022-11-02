@@ -20,6 +20,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class Trinkets extends EventAttributes implements RPItemStack {
     public boolean isTrinket(ItemStack is) {
         return getRPItemStackValue(is, "TrinketInfo") != null;
     }
+    @NotNull
     public HashMap<Trinket, String> getTrinketsApplied(ItemStack is) {
         final HashMap<Trinket, String> info = new HashMap<>();
         final String value = getRPItemStackValue(is, "TrinketInfo");

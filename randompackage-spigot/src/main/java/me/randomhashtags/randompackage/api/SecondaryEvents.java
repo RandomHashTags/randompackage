@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -154,7 +155,7 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
     public void unload() {
     }
 
-    public ItemStack getBanknote(BigDecimal value, String signer) {
+    public ItemStack getBanknote(@NotNull BigDecimal value, @Nullable String signer) {
         final ItemStack item = GivedpItem.INSTANCE.items.get("banknote").clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();

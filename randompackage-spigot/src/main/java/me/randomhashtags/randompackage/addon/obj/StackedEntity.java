@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +89,9 @@ public final class StackedEntity implements UVersionableSpigot {
             } else {
                 entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
                 target.remove();
-                if(se != null) se.remove(false, null);
+                if(se != null) {
+                    se.remove(false, null);
+                }
             }
         }
     }
@@ -100,6 +104,7 @@ public final class StackedEntity implements UVersionableSpigot {
         STACKED_ENTITIES.remove(this);
     }
 
+    @Nullable
     public static StackedEntity valueOf(UUID uuid) {
         for(StackedEntity s : STACKED_ENTITIES) {
             if(s.uuid.equals(uuid)) {
@@ -108,6 +113,7 @@ public final class StackedEntity implements UVersionableSpigot {
         }
         return null;
     }
+    @NotNull
     public static List<StackedEntity> valueOf(EntityType type) {
         final List<StackedEntity> list = new ArrayList<>();
         for(StackedEntity s : STACKED_ENTITIES) {

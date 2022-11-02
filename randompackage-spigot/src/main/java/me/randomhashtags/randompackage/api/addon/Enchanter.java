@@ -34,7 +34,7 @@ public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Integer, ItemStack> purchased;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
             view((Player) sender);
         }
@@ -100,7 +100,7 @@ public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
                 final ItemStack item = purchased.get(rawSlot).clone();
                 List<String> message = null;
                 final int totalxp = getTotalExperience(player);
-                final double bal = ECONOMY != null ? ECONOMY.getBalance(player) : 0.00;
+                final double bal = ECONOMY.getBalance(player);
                 final boolean give, isCreative = player.getGameMode().equals(GameMode.CREATIVE), exp = currency.equals("EXP");
                 give = isCreative || exp && totalxp >= cost || bal >= cost;
 

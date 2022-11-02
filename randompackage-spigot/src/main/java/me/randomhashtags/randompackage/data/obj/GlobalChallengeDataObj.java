@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.data.obj;
 
 import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.data.GlobalChallengeData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -12,6 +13,7 @@ public final class GlobalChallengeDataObj implements GlobalChallengeData {
         this.prizes = prizes;
     }
 
+    @NotNull
     @Override
     public HashMap<GlobalChallengePrize, Integer> getPrizes() {
         return prizes;

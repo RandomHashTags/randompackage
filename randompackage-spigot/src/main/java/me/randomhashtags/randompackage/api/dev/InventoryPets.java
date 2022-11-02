@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,6 +106,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         }
         return builder.toString();
     }
+    @Nullable
     public HashMap<InventoryPet, String> isInventoryPet(ItemStack is) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         final boolean isPet = info != null;
@@ -117,26 +119,25 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
     public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(@NotNull Player player) {
         final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> pets = new ArrayList<>();
         final List<ItemStack> skull = new ArrayList<>();
-        if(player != null) {
-            for(ItemStack is : player.getInventory()) {
-                if(is != null) {
-                    final String material = is.getType().name();
-                    if(material.contains("SKULL") || material.contains("HEAD")) {
-                        skull.add(is);
-                    }
+        for(ItemStack is : player.getInventory()) {
+            if(is != null) {
+                final String material = is.getType().name();
+                if(material.contains("SKULL") || material.contains("HEAD")) {
+                    skull.add(is);
                 }
             }
-            for(ItemStack is : skull) {
-                final HashMap<InventoryPet, String> pet = isInventoryPet(is);
-                if(pet != null) {
-                    final HashMap<ItemStack, HashMap<InventoryPet, String>> map = new HashMap<>();
-                    map.put(is, pet);
-                    pets.add(map);
-                }
+        }
+        for(ItemStack is : skull) {
+            final HashMap<InventoryPet, String> pet = isInventoryPet(is);
+            if(pet != null) {
+                final HashMap<ItemStack, HashMap<InventoryPet, String>> map = new HashMap<>();
+                map.put(is, pet);
+                pets.add(map);
             }
         }
         return pets;
     }
+    @NotNull
     public List<ItemStack> getLeashed(@NotNull Player player) {
         final List<ItemStack> list = new ArrayList<>();
         for(HashMap<ItemStack, HashMap<InventoryPet, String>> pet : getPets(player)) {
@@ -178,7 +179,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         }
         return false;
     }
-    private byte didTriggerPet(Event event, ItemStack is, Player player) {
+    private byte didTriggerPet(Event event, @NotNull ItemStack is, @NotNull Player player) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         if(info != null) {
             final String[] infoValues = info.split(":");

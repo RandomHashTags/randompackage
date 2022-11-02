@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,12 +69,11 @@ public enum RandomizedLoot implements RPFeatureSpigot {
     public void unload() {
     }
 
+    @Nullable
     public RandomizedLootItem valueOfRandomizedLootItem(@NotNull ItemStack is) {
-        if(!items.isEmpty()) {
-            for(RandomizedLootItem i : items.values()) {
-                if(i.getItem().isSimilar(is)) {
-                    return i;
-                }
+        for(RandomizedLootItem i : items.values()) {
+            if(i.getItem().isSimilar(is)) {
+                return i;
             }
         }
         return null;
@@ -82,15 +82,17 @@ public enum RandomizedLoot implements RPFeatureSpigot {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
-        final RandomizedLootItem i = valueOfRandomizedLootItem(is);
-        if(i != null) {
-            final Player player = event.getPlayer();
-            event.setCancelled(true);
-            removeItem(player, is, 1);
-            for(String s : i.getRandomRewards(false)) {
-                giveItem(player, createItemStack(null, s));
+        if(is != null) {
+            final RandomizedLootItem i = valueOfRandomizedLootItem(is);
+            if(i != null) {
+                final Player player = event.getPlayer();
+                event.setCancelled(true);
+                removeItem(player, is, 1);
+                for(String s : i.getRandomRewards(false)) {
+                    giveItem(player, createItemStack(null, s));
+                }
+                player.updateInventory();
             }
-            player.updateInventory();
         }
     }
 }

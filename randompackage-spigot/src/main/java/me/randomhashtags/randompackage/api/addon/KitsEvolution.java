@@ -213,9 +213,6 @@ public class KitsEvolution extends Kits {
         }
     }
     public void give(@NotNull Player player, @NotNull CustomKitEvolution vkit, boolean preview) {
-        if(player == null || vkit == null) {
-            return;
-        }
         final UUID uuid = player.getUniqueId();
         final FileRPPlayer pdata = FileRPPlayer.get(uuid);
         final HashMap<CustomKit, Integer> levels = pdata.getKitData().getLevels();

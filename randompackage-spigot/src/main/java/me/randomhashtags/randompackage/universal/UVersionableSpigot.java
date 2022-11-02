@@ -302,9 +302,9 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                 case "INSTANT_HARM":
                 case "INSTANT_DAMAGE": return PotionEffectType.HARM;
                 default:
-                    for(PotionEffectType p : PotionEffectType.values()) {
-                        if(p != null && input.equalsIgnoreCase(p.getName())) {
-                            return p;
+                    for(PotionEffectType type : PotionEffectType.values()) {
+                        if(input.equalsIgnoreCase(type.getName())) {
+                            return type;
                         }
                     }
                     return null;
@@ -312,7 +312,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         } else return null;
     }
 
-    default String toString(Location loc) {
+    default String toString(@NotNull Location loc) {
         return loc.getWorld().getName() + ";" + loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw() + ";" + loc.getPitch();
     }
     default Location toLocation(String string) {
@@ -641,9 +641,11 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     default void playParticle(FileConfiguration config, String path, Location location, int count) {
         if(config != null && config.get(path) != null) {
             final String target = config.getString(path);
-            final UParticleSpigot up = UParticleSpigot.matchParticle(target.toUpperCase());
-            if(up != null) {
-                up.play(location, count);
+            if(target != null) {
+                final UParticleSpigot up = UParticleSpigot.matchParticle(target.toUpperCase());
+                if(up != null) {
+                    up.play(location, count);
+                }
             }
         }
     }
@@ -673,9 +675,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
+    @NotNull
     default List<Location> getChunkLocations(Chunk chunk) {
         final List<Location> l = new ArrayList<>();
-        final int x = chunk.getX()*16, z = chunk.getZ()*16;
+        final int x = chunk.getX() * 16, z = chunk.getZ() * 16;
         final World world = chunk.getWorld();
         for(int xx = x; xx < x+16; xx++) {
             for(int zz = z; zz < z+16; zz++) {
@@ -684,12 +687,14 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
         return l;
     }
-    default ItemStack getItemInHand(LivingEntity entity) {
-        if(entity == null) {
-            return null;
-        } else {
-            final EntityEquipment e = entity.getEquipment();
-            return EIGHT ? e.getItemInHand() : e.getItemInMainHand();
-        }
+    @NotNull
+    default List<Player> getWorldPlayers(@NotNull Location location) {
+        final World world = location.getWorld();
+        return world != null ? world.getPlayers() : new ArrayList<>();
+    }
+    @NotNull
+    default ItemStack getItemInHand(@NotNull LivingEntity entity) {
+        final EntityEquipment e = entity.getEquipment();
+        return EIGHT ? e.getItemInHand() : e.getItemInMainHand();
     }
 }

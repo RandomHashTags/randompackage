@@ -23,6 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 	private HashMap<Player, Integer> pages;
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {
 			final RPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
@@ -177,7 +179,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 			}
 		}
 	}
-	private void update(Player player, RPPlayer pdata) {
+	private void update(@NotNull Player player, @NotNull RPPlayer pdata) {
 		final TitleData data = pdata.getTitleData();
 		final int page = pages.get(player)-1;
 		final List<Title> owned = data.getOwned();
@@ -192,7 +194,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 		}
 		player.updateInventory();
 	}
-	private ItemStack getTitle(String activetitle, Title input) {
+	private ItemStack getTitle(@Nullable String activetitle, @NotNull Title input) {
 		final String title = input.getIdentifier();
 		final ItemStack item = (title.equals(activetitle) ? active : inactive).clone();
 		final ItemMeta itemMeta = item.getItemMeta();

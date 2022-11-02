@@ -56,7 +56,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	private YamlConfiguration data;
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
 		if(l == 0) {
@@ -86,7 +86,10 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						final OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
 						final int placing = getRemainingInt(args[2]);
 						if(placing != -1) {
-							FileRPPlayer.get(op.getUniqueId()).getGlobalChallengeData().addPrize(valueOfGlobalChallengePrize(placing));
+							final GlobalChallengePrize prize = valueOfGlobalChallengePrize(placing);
+							if(prize != null) {
+								FileRPPlayer.get(op.getUniqueId()).getGlobalChallengeData().addPrize(prize);
+							}
 						}
 					}
 					break;
@@ -183,16 +186,16 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			if(challengeData != null) {
 				final long started = System.currentTimeMillis();
 				int loaded = 0;
-				for(String s : challengeData.getKeys(false)) {
-					final GlobalChallenge challenge = getGlobalChallenge(s);
+				for(String string : challengeData.getKeys(false)) {
+					final GlobalChallenge challenge = getGlobalChallenge(string);
 					if(challenge != null) {
 						loaded += 1;
 						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
-						for(String u : getConfigurationSectionKeys(data, "active global challenges." + s + ".participants", false)) {
+						for(String u : getConfigurationSectionKeys(data, "active global challenges." + string + ".participants", false)) {
 							final UUID uuid = UUID.fromString(u);
-							participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + s + ".participants." + u)));
+							participants.put(uuid, BigDecimal.valueOf(data.getDouble("active global challenges." + string + ".participants." + u)));
 						}
-						challenge.start(Long.parseLong(data.getString("active global challenges." + s + ".started")), participants);
+						challenge.start(Long.parseLong(data.getString("active global challenges." + string + ".started")), participants);
 						maxAtOnce -= 1;
 						if(maxAtOnce == 0) {
 							break;
@@ -226,7 +229,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 			if(config.get("gui." + i) != null) {
 				final String targetItem = config.getString("gui." + i + ".item");
 				ItemStack item = null;
-				if(targetItem.equalsIgnoreCase("{CHALLENGE}")) {
+				if(targetItem != null && targetItem.equalsIgnoreCase("{CHALLENGE}")) {
 					ActiveGlobalChallenge targetChallenge = f < active.size() ? (ActiveGlobalChallenge) active.values().toArray()[f] : null;
 					if(targetChallenge == null && f < max) {
 						targetChallenge = getRandomChallenge().start();
@@ -321,7 +324,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	}
 	public void viewCurrent(@NotNull Player player) {
 		if(hasPermission(player, GlobalChallengePermission.VIEW, true)) {
-			final UUID u = player.getUniqueId();
+			final UUID playerUUID = player.getUniqueId();
 			player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			top.setContents(inv.getInventory().getContents());
@@ -339,9 +342,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 						final String remainingtime = getRemainingTime(challenge.getRemainingTime());
 						final ItemMeta itemMeta = item.getItemMeta();
 						final List<String> lore = new ArrayList<>();
-						if(item.hasItemMeta()) {
+						if(itemMeta != null) {
 							if(itemMeta.hasLore()) {
-								final String ranking = getRanking(getRanking(u, challenge)), date = toReadableDate(new Date(challenge.getStartedTime()), dateFormat), value = formatBigDecimal(challenge.getValue(u));
+								final String ranking = getRanking(getRanking(playerUUID, challenge)), date = toReadableDate(new Date(challenge.getStartedTime()), dateFormat), value = formatBigDecimal(challenge.getValue(playerUUID));
 								for(String string : itemMeta.getLore()) {
 									string = string.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
 									if(string.contains("{TOP}")) {
@@ -431,7 +434,9 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 					}
 				} else if(isClaimPrizes) {
 					final GlobalChallengePrize prize = valueOfGlobalChallengePrize(current);
-					claimPrize(player, prize, true);
+					if(prize != null) {
+						claimPrize(player, prize, true);
+					}
 					final int amount = current.getAmount();
 					if(amount == 1) {
 						top.setItem(slot, new ItemStack(Material.AIR));

@@ -26,7 +26,7 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
     private List<String> combineores;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if(sender instanceof Player && hasPermission(sender, CombinePermission.COMMAND, true)) {
             combine((Player) sender);
         }
@@ -62,18 +62,20 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
                     final Material block = !name.replace("INGOT", "BLOCK").endsWith("BLOCK") ? Material.valueOf(name + "_BLOCK") : Material.valueOf(name.replace("INGOT", "BLOCK"));
                     final String blockName = block.name();
                     final UMaterial umaterial = UMaterial.match(name);
-                    final int amount = (getTotalAmount(inventory, umaterial) / 9) * 9;
-                    if(amount != 0) {
-                        final int blockAmount = amount/9;
-                        player.sendMessage(format.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", name).replace("{AMOUNT_BLOCK}", "" + blockAmount).replace("{ITEM_BLOCK}", blockName));
-                        for(int z = 1; z <= amount; z++) {
-                            inventory.removeItem(new ItemStack(material, 1, (byte) 0));
-                        }
-                        inventory.addItem(new ItemStack(block, blockAmount));
-                        if(chest != null) {
-                            chest.update();
-                        } else {
-                            player.updateInventory();
+                    if(umaterial != null) {
+                        final int amount = (getTotalAmount(inventory, umaterial) / 9) * 9;
+                        if(amount != 0) {
+                            final int blockAmount = amount/9;
+                            player.sendMessage(format.replace("{AMOUNT_ITEM}", "" + amount).replace("{ITEM_ORE}", name).replace("{AMOUNT_BLOCK}", "" + blockAmount).replace("{ITEM_BLOCK}", blockName));
+                            for(int z = 1; z <= amount; z++) {
+                                inventory.removeItem(new ItemStack(material, 1, (byte) 0));
+                            }
+                            inventory.addItem(new ItemStack(block, blockAmount));
+                            if(chest != null) {
+                                chest.update();
+                            } else {
+                                player.updateInventory();
+                            }
                         }
                     }
                 }

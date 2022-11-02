@@ -70,12 +70,12 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
     private HashMap<Player, List<CustomEnchantSpigot>> equippedTimedEnchants;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        final String n = cmd.getName();
-        if(n.equals("disabledenchants") && hasPermission(player, CustomEnchantPermission.COMMAND_DISABLED_ENCHANTS, true)) {
+        final String cmdName = cmd.getName();
+        if(cmdName.equals("disabledenchants") && hasPermission(player, CustomEnchantPermission.COMMAND_DISABLED_ENCHANTS, true)) {
             sender.sendMessage(colorize(getAll(Feature.CUSTOM_ENCHANT_DISABLED).keySet().toString()));
-        } else if(n.equals("enchants") && hasPermission(sender, CustomEnchantPermission.COMMAND_ENCHANTS, true)) {
+        } else if(cmdName.equals("enchants") && hasPermission(sender, CustomEnchantPermission.COMMAND_ENCHANTS, true)) {
             if(args.length == 0) {
                 viewEnchants(sender, 1);
             } else {
@@ -459,12 +459,10 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
         }
     }
     public boolean isOnCorrectItem(@NotNull CustomEnchantSpigot enchant, @NotNull ItemStack is) {
-        final String i = is != null ? is.getType().name() : null;
-        if(enchant != null && i != null) {
-            for(String s : enchant.getAppliesTo()) {
-                if(i.endsWith(s.toUpperCase())) {
-                    return true;
-                }
+        final String i = is.getType().name();
+        for(String s : enchant.getAppliesTo()) {
+            if(i.endsWith(s.toUpperCase())) {
+                return true;
             }
         }
         return false;
@@ -485,7 +483,7 @@ public class CustomEnchants extends EventAttributes implements CommandExecutor, 
     }
     public LinkedHashMap<CustomEnchantSpigot, Integer> getEnchantsOnItem(@NotNull ItemStack is) {
         final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = new LinkedHashMap<>();
-        if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+        if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {
                 final CustomEnchantSpigot e = valueOfCustomEnchant(s);
                 if(e != null) {

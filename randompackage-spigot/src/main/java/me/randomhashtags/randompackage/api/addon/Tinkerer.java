@@ -137,9 +137,6 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
                 final RarityFireball fireball = valueOfRarityFireball(Arrays.asList(rarity));
                 if(fireball != null) {
                     final ItemStack itemstack = fireball.getItem();
-                    if(itemstack == null) {
-                        return;
-                    }
                     item = itemstack.clone();
                 } else {
                     return;

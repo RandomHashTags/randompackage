@@ -16,6 +16,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public enum FactionsUUID implements Reflect, Regional {
     private HashMap<String, HashMap<String, List<UUID>>> relations;
     private boolean isLegacy;
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "REGIONAL_FACTIONS_UUID";

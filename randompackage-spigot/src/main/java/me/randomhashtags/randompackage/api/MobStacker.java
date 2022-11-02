@@ -132,13 +132,13 @@ public enum MobStacker implements RPFeatureSpigot {
         }
     }
     public void stackEntities(World world) {
-        final List<EntityType> T = new ArrayList<>();
-        for(Entity e : world.getEntities()) {
-            if(e instanceof LivingEntity) {
-                final EntityType t = e.getType();
-                if(!T.contains(t)) {
-                    stackEntities(world, t);
-                    T.add(t);
+        final List<EntityType> types = new ArrayList<>();
+        for(Entity entity : world.getEntities()) {
+            if(entity instanceof LivingEntity) {
+                final EntityType type = entity.getType();
+                if(!types.contains(type)) {
+                    stackEntities(world, type);
+                    types.add(type);
                 }
             }
         }
@@ -156,27 +156,25 @@ public enum MobStacker implements RPFeatureSpigot {
         final double radius = stackRadius.getOrDefault(n, 0.00);
         if(max == 0 || radius <= 0) return;
         final String name = customNames.get(type);
-        for(int i = 0; i < entities.size(); i++) {
-            final Entity e = entities.get(i);
-            final UUID u = e.getUniqueId();
-            StackedEntity s = StackedEntity.valueOf(u);
-            final EntityType t = e.getType();
-            final List<Entity> nearby = e.getNearbyEntities(radius, radius, radius);
-            for(int o = 0; o < nearby.size(); o++) {
-                final Entity E = nearby.get(o);
-                final StackedEntity se = StackedEntity.valueOf(E.getUniqueId());
-                if(!e.isDead() && !E.isDead() && E.getType().equals(t) && (se != null || E.getCustomName() == null)) {
+        for(Entity entity : entities) {
+            final UUID u = entity.getUniqueId();
+            StackedEntity stackedEntity = StackedEntity.valueOf(u);
+            final EntityType t = entity.getType();
+            final List<Entity> nearby = entity.getNearbyEntities(radius, radius, radius);
+            for(Entity nearbyEntity : nearby) {
+                final StackedEntity se = StackedEntity.valueOf(nearbyEntity.getUniqueId());
+                if(!entity.isDead() && !nearbyEntity.isDead() && nearbyEntity.getType().equals(t) && (se != null || nearbyEntity.getCustomName() == null)) {
                     if(se != null) {
-                        if(max == -1 || se.size+(s == null ? 1 : s.size) <= max) {
-                            se.merge((LivingEntity) e);
+                        if(max == -1 || se.size+(stackedEntity == null ? 1 : stackedEntity.size) <= max) {
+                            se.merge((LivingEntity) entity);
                         }
-                    } else if(s != null) {
-                        if(max == -1 || s.size+1 <= max) {
-                            s.merge((LivingEntity) E);
+                    } else if(stackedEntity != null) {
+                        if(max == -1 || stackedEntity.size+1 <= max) {
+                            stackedEntity.merge((LivingEntity) nearbyEntity);
                         }
                     } else {
-                        s = new StackedEntity(System.currentTimeMillis(), (LivingEntity) e, name, 1);
-                        s.merge((LivingEntity) E);
+                        stackedEntity = new StackedEntity(System.currentTimeMillis(), (LivingEntity) entity, name, 1);
+                        stackedEntity.merge((LivingEntity) nearbyEntity);
                     }
                 }
             }

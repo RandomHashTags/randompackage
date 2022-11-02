@@ -505,22 +505,26 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         final List<String> lore = new ArrayList<>();
         if(prev != air) {
             itemMeta = prev.getItemMeta();
-            itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PREV_PAGE}", Integer.toString(p-1)).replace("{MAX_PAGE}", max));
-            if(itemMeta.hasLore()) {
-                lore.addAll(itemMeta.getLore());
+            if(itemMeta != null) {
+                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{PREV_PAGE}", Integer.toString(p-1)).replace("{MAX_PAGE}", max));
+                if(itemMeta.hasLore()) {
+                    lore.addAll(itemMeta.getLore());
+                }
+                itemMeta.setLore(lore);
+                lore.clear();
+                prev.setItemMeta(itemMeta);
             }
-            itemMeta.setLore(lore);
-            lore.clear();
-            prev.setItemMeta(itemMeta);
             prev.setAmount(p-1);
         }
         if(next != air) {
             itemMeta = next.getItemMeta();
-            itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NEXT_PAGE}", Integer.toString(p+1)).replace("{MAX_PAGE}", max));
-            if(itemMeta.hasLore()) {
-                lore.addAll(itemMeta.getLore());
+            if(itemMeta != null) {
+                itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NEXT_PAGE}", Integer.toString(p+1)).replace("{MAX_PAGE}", max));
+                if(itemMeta.hasLore()) {
+                    lore.addAll(itemMeta.getLore());
+                }
+                itemMeta.setLore(lore);
             }
-            itemMeta.setLore(lore);
             next.setItemMeta(itemMeta);
             next.setAmount(p+1);
         }
@@ -669,7 +673,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         category.get(name).add(auction);
     }
     public void tryPurchasing(@NotNull Player player, @NotNull AuctionedItem auction) {
-        if(auction != null && hasPermission(player, AuctionHousePermission.BUY_AUCTION, true)) {
+        if(hasPermission(player, AuctionHousePermission.BUY_AUCTION, true)) {
             player.closeInventory();
 
             final ItemStack auctionItem = auction.item();

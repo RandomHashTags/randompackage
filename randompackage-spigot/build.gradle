@@ -6,7 +6,7 @@ plugins {
 
 repositories {
     mavenLocal()
-    maven {
+    maven { // SpigotMC
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
     }
 

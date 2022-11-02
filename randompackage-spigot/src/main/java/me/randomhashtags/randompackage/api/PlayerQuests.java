@@ -30,6 +30,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -213,7 +214,8 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         String completion = quest.getCompletion();
         try {
             completion = formatDouble(Double.parseDouble(completion)).split("E")[0];
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return completion;
     }
 
@@ -300,17 +302,22 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         }
     }
 
+    @Nullable
     private ItemStack getReturnToQuests(Player player) {
         if(player != null) {
             final String t = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
             final ItemStack item = returnToQuests.clone();
             final ItemMeta itemMeta = item.getItemMeta();
-            final List<String> lore = new ArrayList<>();
-            for(String string : itemMeta.getLore()) {
-                lore.add(string.replace("{TOKENS}", t));
+            if(itemMeta != null) {
+                final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
+                if(itemLore != null) {
+                    for(String string : itemLore) {
+                        lore.add(string.replace("{TOKENS}", t));
+                    }
+                }
+                itemMeta.setLore(lore);
+                item.setItemMeta(itemMeta);
             }
-            itemMeta.setLore(lore);
-            item.setItemMeta(itemMeta);
             return item;
         }
         return null;

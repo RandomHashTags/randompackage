@@ -26,6 +26,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, List<Integer>> tasks;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {
             viewLootbox(player);
@@ -154,14 +155,18 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                 final long startTime = started.get(lootbox), expirationTime = startTime+lootbox.getAvailableFor()*1000;
                 final String n = lootbox.getName();
                 final ItemStack item = top.getItem(i);
-                final ItemMeta itemMeta = item.getItemMeta();
-                final List<String> lore = itemMeta.getLore();
-                for(String s : time < expirationTime ? available : expired) {
-                    lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(expirationTime-time)));
+                if(item != null) {
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    if(itemMeta != null) {
+                        final List<String> lore = itemMeta.getLore();
+                        for(String s : time < expirationTime ? available : expired) {
+                            lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(expirationTime-time)));
+                        }
+                        lore.addAll(preview);
+                        itemMeta.setLore(lore);
+                        item.setItemMeta(itemMeta);
+                    }
                 }
-                lore.addAll(preview);
-                itemMeta.setLore(lore);
-                item.setItemMeta(itemMeta);
             }
             viewing.add(player);
             player.updateInventory();
@@ -370,6 +375,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         }
     }
 
+    @Nullable
     public Lootbox valueOfLootboxTitle(@NotNull String title) {
         for(Lootbox lootbox : getAllLootboxes().values()) {
             if(title.equals(lootbox.getGuiTitle())) {
@@ -378,6 +384,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         }
         return null;
     }
+    @Nullable
     public Lootbox valueOfLootboxPreviewTitle(@NotNull String title) {
         for(Lootbox lootbox : getAllLootboxes().values()) {
             if(title.equals(lootbox.getPreviewTitle())) {
@@ -386,6 +393,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         }
         return null;
     }
+    @Nullable
     public Lootbox valueOfLootboxPriority(int priority) {
         for(Lootbox l : getAllLootboxes().values()) {
             if(l.getPriority() == priority) {

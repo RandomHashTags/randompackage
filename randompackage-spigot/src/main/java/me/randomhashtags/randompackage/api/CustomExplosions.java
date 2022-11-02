@@ -161,13 +161,13 @@ public enum CustomExplosions implements RPFeatureSpigot {
 	private void blockBreakEvent(BlockBreakEvent event) {
 		final Block block = event.getBlock();
 		if(block.getType().equals(Material.TNT)) {
-			final Location l = block.getLocation();
+			final Location location = block.getLocation();
 			final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
-			if(placed != null && placed.containsKey(l)) {
+			if(placed != null && placed.containsKey(location)) {
 				event.setCancelled(true);
 				block.setType(Material.AIR);
-				block.getWorld().dropItemNaturally(l, placed.get(l).getItem());
-				placed.remove(l);
+				block.getWorld().dropItemNaturally(location, placed.get(location).getItem());
+				placed.remove(location);
 			}
 		}
 	}
@@ -186,23 +186,25 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		final ItemStack is = event.getItem();
 		if(is != null && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			final Block block = event.getClickedBlock();
-			final Location l = block.getLocation();
-			if(block.getType().equals(Material.TNT) && !is.getType().equals(Material.AIR)) {
-				final Material material = is.getType();
-				final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
-				final FileCustomTNT tnt = placed != null ? placed.getOrDefault(l, null) : null;
-				if(tnt != null && (material.equals(UMaterial.FIREWORK_STAR.getMaterial()) || material.equals(Material.FLINT_AND_STEEL))) {
-					event.setCancelled(true);
-					l.getWorld().getBlockAt(l).setType(Material.AIR);
-					tnt.ignite(l);
-				}
-			} else {
-				final CustomExplosion explosion = valueOfCustomExplosion(is);
-				if(explosion instanceof FileCustomCreeper) {
-					final Location lo = l.clone().add(0.5, 1, 0.5);
-					event.setCancelled(true);
-					removeItem(event.getPlayer(), is, 1);
-					((FileCustomCreeper) explosion).spawn(lo);
+			if(block != null) {
+				final Location location = block.getLocation();
+				if(block.getType().equals(Material.TNT) && !is.getType().equals(Material.AIR)) {
+					final Material material = is.getType();
+					final HashMap<Location, FileCustomTNT> placed = FileCustomTNT.PLACED;
+					final FileCustomTNT tnt = placed != null ? placed.getOrDefault(location, null) : null;
+					if(tnt != null && (material.equals(UMaterial.FIREWORK_STAR.getMaterial()) || material.equals(Material.FLINT_AND_STEEL))) {
+						event.setCancelled(true);
+						block.setType(Material.AIR);
+						tnt.ignite(location);
+					}
+				} else {
+					final CustomExplosion explosion = valueOfCustomExplosion(is);
+					if(explosion instanceof FileCustomCreeper) {
+						final Location lo = location.clone().add(0.5, 1, 0.5);
+						event.setCancelled(true);
+						removeItem(event.getPlayer(), is, 1);
+						((FileCustomCreeper) explosion).spawn(lo);
+					}
 				}
 			}
 		}
@@ -242,21 +244,24 @@ public enum CustomExplosions implements RPFeatureSpigot {
 				if(!face.name().endsWith("TH")) {
 					z += 0.5;
 				}
-				final Location l = new Location(block.getWorld(), x, y, z);
-				((FileCustomTNT) explosion).spawn(l);
+				final Location location = new Location(block.getWorld(), x, y, z);
+				((FileCustomTNT) explosion).spawn(location);
 
 				org.bukkit.block.Dispenser dis = (org.bukkit.block.Dispenser) block.getState();
 				final Inventory inv = dis.getInventory();
-				for(int d = 0; d < inv.getSize(); d++) {
-					final ItemStack target = inv.getItem(d);
+				for(int slot = 0; slot < inv.getSize(); slot++) {
+					final ItemStack target = inv.getItem(slot);
 					if(target != null && target.isSimilar(is)) {
-						final int e = d;
+						final int slotFinal = slot;
 						SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-							final ItemStack amount = inv.getItem(e);
-							if(amount.getAmount() == 1) {
-								inv.setItem(e, new ItemStack(Material.AIR));
-							} else {
-								target.setAmount(amount.getAmount() - 1);
+							final ItemStack itemstack = inv.getItem(slotFinal);
+							if(itemstack != null) {
+								final int amount = itemstack.getAmount();
+								if(amount == 1) {
+									inv.setItem(slotFinal, new ItemStack(Material.AIR));
+								} else {
+									target.setAmount(amount - 1);
+								}
 							}
 							dis.update();
 						}, 0);

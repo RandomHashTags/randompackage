@@ -148,11 +148,11 @@ public enum ServerCrates implements RPFeatureSpigot {
 								canRevealRarities.add(uuid);
 							}
 							player.updateInventory();
-						}, n*5);
+						}, n* 5L);
 						tasks.add(K);
 					}
 				}
-			}, i*5);
+			}, i * 5L);
 			tasks.add(task);
 		}
 	}

@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -43,7 +44,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 	private long nextNaturalEnvoy;
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
 		if(l == 0) {
@@ -132,23 +133,23 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 					}
 				}
 			}
-		}, 0, 20*config.getInt("settings.firework delay"));
+		}, 0, 20L * config.getInt("settings.firework delay"));
 
 		sendConsoleDidLoadFeature(getAll(Feature.ENVOY_CRATE).size() + " Envoy Tiers", started);
 	}
 	@Override
 	public void unload() {
-		final List<String> p = new ArrayList<>();
-		for(Location l : preset) {
-			p.add(toString(l));
+		final List<String> preset = new ArrayList<>();
+		for(Location location : this.preset) {
+			preset.add(toString(location));
 		}
-		OTHER_YML.set("envoy.preset", p);
+		OTHER_YML.set("envoy.preset", preset);
 		saveOtherData();
 		if(!settingPreset.isEmpty()) {
 			for(Player player : settingPreset) {
 				player.getInventory().remove(presetLocationPlacer);
 			}
-			for(Location l : preset) {
+			for(Location l : this.preset) {
 				l.getWorld().getBlockAt(l).setType(Material.AIR);
 			}
 		}
@@ -297,7 +298,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				break;
 		}
 		final int t = totalEnvoys;
-		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stopEnvoy(t, false), 20*despawn);
+		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stopEnvoy(t, false), 20L * despawn);
 		totalEnvoys += 1;
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
@@ -316,6 +317,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		final int min = repeatTime.contains("-") ? Integer.parseInt(repeatTime.split("-")[0]) : 0, t = repeatTime.contains("-") ? min+ RANDOM.nextInt(Integer.parseInt(repeatTime.split("-")[1])-min+1) : Integer.parseInt(repeatTime);
 		return t*20;
 	}
+	@NotNull
 	private Location getRandomLocation(Random random, List<Location> locs) {
 		final Location rl = locs.get(random.nextInt(locs.size()));
 		final World w = rl.getWorld();
@@ -335,6 +337,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		}
 	}
 
+	@Nullable
 	public EnvoyCrate valueOfEnvoyCrate(ItemStack is) {
 		if(is != null && is.hasItemMeta()) {
 			for(EnvoyCrate crate : getAllEnvoyCrates().values()) {
