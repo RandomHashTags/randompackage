@@ -1,7 +1,8 @@
 package me.randomhashtags.randompackage.dev;
 
-import me.randomhashtags.randompackage.attributesys.EventAttributes;
+import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.enums.Feature;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,12 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.io.File;
 
-public class FactionQuests extends EventAttributes implements CommandExecutor {
-    private static FactionQuests instance;
-    public static FactionQuests getFactionQuests() {
-        if(instance == null) instance = new FactionQuests();
-        return instance;
-    }
+public enum FactionQuests implements RPFeatureSpigot, EventExecutor, CommandExecutor {
+    INSTANCE;
 
     public YamlConfiguration config;
 

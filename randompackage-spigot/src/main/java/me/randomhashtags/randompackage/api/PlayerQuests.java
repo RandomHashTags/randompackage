@@ -4,14 +4,16 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
-import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.PlayerQuestData;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.mob.FallenHeroSlainEvent;
 import me.randomhashtags.randompackage.perms.PlayerQuestPermission;
 import me.randomhashtags.randompackage.universal.UInventory;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -39,12 +41,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlayerQuests extends EACoreListener implements CommandExecutor, EventAttributeListener, Listener {
-    private static PlayerQuests instance;
-    public static PlayerQuests getPlayerQuests() {
-        if(instance == null) instance = new PlayerQuests();
-        return instance;
-    }
+public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecutor, EventAttributeListener, Listener {
+    INSTANCE;
 
     public YamlConfiguration config;
     private UInventory gui, shop;
@@ -79,7 +77,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
         save("player quests", "_settings.yml");
 
         new IncreasePQuest().load();
-        registerEventAttributeListener(this);
+        EventAttributeCoreListener.registerEventAttributeListener(this);
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "player quests", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
@@ -161,7 +159,7 @@ public class PlayerQuests extends EACoreListener implements CommandExecutor, Eve
     }
     public void unload() {
         unregister(Feature.PLAYER_QUEST);
-        unregisterEventAttributeListener(this);
+        EventAttributeCoreListener.unregisterEventAttributeListener(this);
     }
 
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {

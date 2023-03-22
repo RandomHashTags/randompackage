@@ -46,12 +46,8 @@ import java.util.List;
 
 import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
 
-public final class FactionUpgrades extends EventAttributes {
-    private static FactionUpgrades instance;
-    public static FactionUpgrades getFactionUpgrades() {
-        if(instance == null) instance = new FactionUpgrades();
-        return instance;
-    }
+public enum FactionUpgrades implements EventAttributes {
+    INSTANCE;
 
     public static HashMap<String, List<FactionUpgradeInfo>> FACTION_UPGRADES;
 

@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 
-public class CustomEnchants extends EventAttributes implements CommandExecutor, Listener {
+public class CustomEnchants implements EventAttributes, CommandExecutor, Listener {
     private static CustomEnchants instance;
     public static CustomEnchants getCustomEnchants() {
         if(instance == null) instance = new CustomEnchants();

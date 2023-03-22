@@ -40,7 +40,7 @@ public interface ArmorSet extends Identifiable, Nameable, GivedpItemableSpigot {
                     return item;
                 case "customarmorcrystal":
                     final int percent = values.length >= 3 && !values[2].equals("random") ? Integer.parseInt(values[2]) : RANDOM.nextInt(101);
-                    return CustomArmor.getCustomArmor().getCrystal(set, percent);
+                    return CustomArmor.INSTANCE.getCrystal(set, percent);
                 case "multicustomarmorcrystal":
                     return AIR;
                 default:

@@ -84,13 +84,13 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(Xpbottle.INSTANCE, Arrays.asList("xpbottle"), isTrue("xpbottle"));
         cmd.load(SecondaryEvents.INSTANCE, Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
         cmd.loadCustom(AuctionHouse.INSTANCE, getHash("auctionhouse", "auction house"), isTrue("auction house"));
-        cmd.loadCustom(Boosters.getBoosters(), null, isTrue("boosters"));
+        cmd.loadCustom(Boosters.INSTANCE, null, isTrue("boosters"));
         cmd.loadCustom(ChatEvents.INSTANCE, getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
         cmd.load(CoinFlip.INSTANCE, Arrays.asList("coinflip"), isTrue("coinflip"));
         cmd.loadCustom(CollectionFilter.INSTANCE, getHash("collectionfilter", "collection filter"), isTrue("collection filter"));
         cmd.load(Conquest.INSTANCE, Arrays.asList("conquest"), isTrue("conquest"));
-        cmd.load(CustomArmor.getCustomArmor(), null, isTrue("custom armor"));
-        cmd.loadCustom(CustomBosses.getCustomBosses(), null, isTrue("custom bosses"));
+        cmd.load(CustomArmor.INSTANCE, null, isTrue("custom armor"));
+        cmd.loadCustom(CustomBosses.INSTANCE, null, isTrue("custom bosses"));
 
         cmd.load(Alchemist.INSTANCE, Arrays.asList("alchemist"), isTrue("alchemist"));
         cmd.load(Tinkerer.INSTANCE, Arrays.asList("tinkerer"), isTrue("tinkerer"));
@@ -114,10 +114,10 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(Duels.INSTANCE, getHash("duel", "duels"), isTrue("duels"));
         cmd.loadCustom(Dungeons.INSTANCE, getHash("dungeon", "dungeons"), isTrue("dungeons"));
         cmd.load(Envoy.INSTANCE, Arrays.asList("envoy"), isTrue("envoy"));
-        cmd.loadCustom(FactionUpgrades.getFactionUpgrades(), null, isTrue("faction upgrades"));
+        cmd.loadCustom(FactionUpgrades.INSTANCE, null, isTrue("faction upgrades"));
         cmd.loadCustom(FatBuckets.INSTANCE, null, isTrue("fat buckets"));
         cmd.load(Fund.INSTANCE, Arrays.asList("fund"), isTrue("fund"));
-        cmd.loadCustom(GlobalChallenges.getChallenges(), getHash("challenge", "global challenges"), isTrue("global challenges"));
+        cmd.loadCustom(GlobalChallenges.INSTANCE, getHash("challenge", "global challenges"), isTrue("global challenges"));
         cmd.load(Homes.INSTANCE, Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
         cmd.loadCustom(ItemFilter.INSTANCE, getHash("filter", "item filter"), isTrue("item filter"));
         cmd.load(ItemSkins.INSTANCE, null, isTrue("item skins"));
@@ -132,13 +132,13 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(Masks.getMasks(), null, isTrue("masks"));
         cmd.load(MobStacker.INSTANCE, null, isTrue("mob stacker"));
         cmd.loadCustom(Outposts.INSTANCE, getHash("outpost", "outposts"), isTrue("outposts"));
-        cmd.load(InventoryPets.getInventoryPets(), null, isTrue("inventory pets"));
-        cmd.load(Trinkets.getTrinkets(), null, isTrue("trinkets"));
+        cmd.load(InventoryPets.INSTANCE, null, isTrue("inventory pets"));
+        cmd.load(Trinkets.INSTANCE, null, isTrue("trinkets"));
         cmd.loadCustom(MonthlyCrates.INSTANCE, getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
         cmd.load(ServerCrates.INSTANCE, null, isTrue("server crates"));
         cmd.load(Titles.INSTANCE, Arrays.asList("title"), isTrue("title"));
         cmd.load(Showcase.INSTANCE, Arrays.asList("showcase"), isTrue("showcase"));
-        cmd.loadCustom(PlayerQuests.getPlayerQuests(), getHash("quest", "player quests"), isTrue("player quests"));
+        cmd.loadCustom(PlayerQuests.INSTANCE, getHash("quest", "player quests"), isTrue("player quests"));
         cmd.loadCustom(Lootboxes.INSTANCE, getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
 
         RandomizedLoot.INSTANCE.enable();

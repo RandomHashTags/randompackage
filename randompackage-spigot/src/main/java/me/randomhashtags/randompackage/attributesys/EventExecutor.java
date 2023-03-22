@@ -29,8 +29,8 @@ import java.util.*;
 
 import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
-public abstract class EventExecutor implements RPFeatureSpigot, EventReplacements, EventReplacer {
-    public boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
+public interface EventExecutor extends RPFeatureSpigot, EventReplacements, EventReplacer {
+    default boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
         final String eventName = event.getEventName().toLowerCase().split("event")[0];
         final Player involved;
         switchloop: switch (eventName) {
@@ -112,10 +112,10 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
         return passed;
     }
 
-    public HashMap<String, Entity> getNearbyEntities(Location center, double radius) {
+    default HashMap<String, Entity> getNearbyEntities(Location center, double radius) {
         return getNearbyEntities(center, radius, radius, radius);
     }
-    public HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
+    default HashMap<String, Entity> getNearbyEntities(Location center, double radiusX, double radiusY, double radiusZ) {
         final HashMap<String, Entity> nearbyEntities = new HashMap<>();
         final List<Entity> nearby = new ArrayList<>(center.getWorld().getNearbyEntities(center, radiusX, radiusY, radiusZ));
         for(int i = 0; i < nearby.size(); i++) {
@@ -155,13 +155,13 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
         return a;
     }
 
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values) {
+    default boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values) {
         return executeAll(event, entities, conditions, cancelled, entityValues, values, new HashMap<>());
     }
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements) {
+    default boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements) {
         return executeAll(event, entities, conditions, cancelled, entityValues, values, valueReplacements, 0);
     }
-    public boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements, int repeatID) {
+    default boolean executeAll(Event event, HashMap<String, Entity> entities, List<String> conditions, boolean cancelled, HashMap<String, String> entityValues, List<PendingEventAttribute> values, HashMap<String, String> valueReplacements, int repeatID) {
         boolean passed = didPassConditions(event, entities, conditions, valueReplacements, cancelled);
         if(passed) {
             final Entity entity1 = entities.getOrDefault("Player", entities.getOrDefault("Killer", entities.getOrDefault("Damager", entities.getOrDefault("Owner", null))));
@@ -343,7 +343,7 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
         return false;
     }
 
-    public boolean trigger(Event event, List<String> attributes, String...replacements) {
+    default boolean trigger(Event event, List<String> attributes, String...replacements) {
         final List<String> list = new ArrayList<>();
         final String[] array = getReplacements(event);
         list.addAll(Arrays.asList(replacements));
@@ -351,7 +351,7 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
         final String[] finalArray = list.toArray(new String[replacements.length+array.length]);
         return trigger(event, getEntities(event), attributes, finalArray);
     }
-    public boolean trigger(Event event, HashMap<String, Entity> entities, List<String> attributes, String...replacements) {
+    default boolean trigger(Event event, HashMap<String, Entity> entities, List<String> attributes, String...replacements) {
         if(event != null && attributes != null && !attributes.isEmpty() && entities != null) {
             return tryGeneric(event, entities, attributes, getReplacements(replacements));
         }
@@ -388,19 +388,19 @@ public abstract class EventExecutor implements RPFeatureSpigot, EventReplacement
                 return event instanceof RPEvent ? ((RPEvent) event).getPlayer() : null;
         }
     }
-    public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes) {
+    default void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes) {
         triggerCustomEnchants(event, equipped, globalattributes, EQUIPMENT_SLOTS);
     }
-    public void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
+    default void triggerCustomEnchants(Event event, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
         triggerCustomEnchants(event, getEntities(event), equipped, globalattributes, slots);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes) {
+    default void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes) {
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, EQUIPMENT_SLOTS);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
+    default void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, EquipmentSlot...slots) {
         triggerCustomEnchants(event, entities, equipped, globalattributes, false, slots);
     }
-    public void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
+    default void triggerCustomEnchants(Event event, HashMap<String, Entity> entities, EquippedCustomEnchants equipped, List<String> globalattributes, boolean getEventItem, EquipmentSlot...slots) {
         final String[] eventReplacements = getReplacements(event);
         try {
             if(trigger(event, entities, globalattributes, eventReplacements)) {

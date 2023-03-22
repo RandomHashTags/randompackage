@@ -34,12 +34,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CustomArmor extends EventAttributes implements RPItemStack {
-	private static CustomArmor instance;
-	public static CustomArmor getCustomArmor() {
-		if(instance == null) instance = new CustomArmor();
-		return instance;
-	}
+public enum CustomArmor implements EventAttributes, RPItemStack {
+	INSTANCE;
 	
 	public YamlConfiguration config;
 	public ItemStack equipmentLootbox, crystal, heroicUpgrade, omniCrystal;

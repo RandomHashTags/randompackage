@@ -48,7 +48,7 @@ public enum RegionalAPI implements UVersionableSpigot {
             FactionsUUID.INSTANCE.enable();
             hooked("FactionsUUID");
             if(RP_CONFIG.getBoolean("faction upgrades.enabled")) {
-                FactionUpgrades.getFactionUpgrades().enable();
+                FactionUpgrades.INSTANCE.enable();
                 new AddFactionPower().load();
             }
         }

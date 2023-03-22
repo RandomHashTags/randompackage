@@ -16,7 +16,6 @@ import java.util.UUID;
 
 public final class ActiveGlobalChallenge implements RPStorage {
     public static HashMap<GlobalChallenge, ActiveGlobalChallenge> ACTIVE;
-    private static GlobalChallenges gc;
     private final GlobalChallenge type;
     private HashMap<UUID, BigDecimal> participants;
     private final int task;
@@ -25,7 +24,6 @@ public final class ActiveGlobalChallenge implements RPStorage {
     public ActiveGlobalChallenge(long started, GlobalChallenge type, HashMap<UUID, BigDecimal> participants) {
         if(ACTIVE == null) {
             ACTIVE = new HashMap<>();
-            gc = GlobalChallenges.getChallenges();
         }
         this.started = started;
         this.type = type;
@@ -55,7 +53,8 @@ public final class ActiveGlobalChallenge implements RPStorage {
         return started+type.getDuration()*1000-System.currentTimeMillis();
     }
     public void increaseValue(UUID player, BigDecimal value) {
-        final Map<UUID, BigDecimal> a = gc.getPlacing(participants, 1);
+        final GlobalChallenges global_challenges = GlobalChallenges.INSTANCE;
+        final Map<UUID, BigDecimal> a = global_challenges.getPlacing(participants, 1);
         final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
         if(!a.isEmpty()) {
             final UUID first = (UUID) a.keySet().toArray()[0];
@@ -63,7 +62,7 @@ public final class ActiveGlobalChallenge implements RPStorage {
                 final double v = ((BigDecimal) a.values().toArray()[0]).doubleValue();
                 if(before.doubleValue() <= v && after.doubleValue() > v) {
                     final HashMap<String, String> replacements = new HashMap<>();
-                    final String time = gc.getRemainingTime(getRemainingTime());
+                    final String time = global_challenges.getRemainingTime(getRemainingTime());
                     replacements.put("{TIME}", time);
                     replacements.put("{PLAYER}", Bukkit.getOfflinePlayer(player).getName());
                     replacements.put("{CHALLENGE}", type.getItem().getItemMeta().getDisplayName());
@@ -82,8 +81,9 @@ public final class ActiveGlobalChallenge implements RPStorage {
     public void end(boolean giveRewards, int recordPlacements) {
         final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
         PLUGIN_MANAGER.callEvent(e);
-        gc.reloadInventory();
-        final Map<UUID, BigDecimal> placements = gc.getPlacing(participants);
+        final GlobalChallenges global_challenges = GlobalChallenges.INSTANCE;
+        global_challenges.reloadInventory();
+        final Map<UUID, BigDecimal> placements = global_challenges.getPlacing(participants);
         if(task != -1) SCHEDULER.cancelTask(task);
         ACTIVE.remove(type);
         if(giveRewards) {

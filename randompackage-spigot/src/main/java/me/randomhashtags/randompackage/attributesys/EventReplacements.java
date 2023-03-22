@@ -43,7 +43,7 @@ public interface EventReplacements extends EventEntities {
         }
         if(addedReplacements != null && !addedReplacements.isEmpty()) {
             for(int i = 0; i < addedReplacements.size(); i++) {
-                if(i%2 == 1) {
+                if(i % 2 == 1) {
                     r.put(addedReplacements.get(i-1), addedReplacements.get(i));
                 }
             }

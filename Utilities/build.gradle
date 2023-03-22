@@ -8,16 +8,19 @@ repositories {
     mavenLocal()
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+        url = 'https://mvnrepository.com/artifact/org.json/json'
     }
 }
 
 dependencies {
+    implementation group: 'org.json', name: 'json', version: '20230227'
     implementation 'org.jetbrains:annotations:23.0.0'
+    compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
 }
 
 test {
     useJUnitPlatform()
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11

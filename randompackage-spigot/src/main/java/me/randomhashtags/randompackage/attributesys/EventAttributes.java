@@ -8,7 +8,7 @@ import me.randomhashtags.randompackage.util.RPStorage;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class EventAttributes extends EventExecutor {
+public interface EventAttributes extends EventExecutor {
     /*
         Read https://gitlab.com/RandomHashTags/randompackage-multi/wikis/Event-Attributes for all event attribute info
             * Event specific entity placeholders
@@ -16,7 +16,7 @@ public abstract class EventAttributes extends EventExecutor {
             * Available event attributes with their identifier, and what they do
      */
 
-    public static void loadEventAttributes() {
+    static void loadEventAttributes() {
         final List<EventAttribute> attributes = Arrays.asList(
                 // event attributes
                 new BreakHitBlock(),
@@ -93,12 +93,12 @@ public abstract class EventAttributes extends EventExecutor {
         for(EventCondition c : conditions) {
             c.load();
         }
-        EACoreListener.getEACoreListener().enable();
+        EventAttributeCoreListener.INSTANCE.enable();
     }
     public static void unloadEventAttributes() {
         RPStorage.unregisterAll(Feature.EVENT_ATTRIBUTE, Feature.EVENT_CONDITION);
         Combo.COMBOS.clear();
         Listable.LIST.clear();
-        EACoreListener.getEACoreListener().disable();
+        EventAttributeCoreListener.INSTANCE.disable();
     }
 }

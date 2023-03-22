@@ -35,15 +35,15 @@ configure(['spigot', 'sponge'].collect { project(":randompackage-$it") }) {
     apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'com.fipsoft.maven-repo-settings'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
-    if (JavaVersion.current().isJava8Compatible()) {
+    /*if (JavaVersion.current().isJava11Compatible()) {
         // Java 8 turns on doclint which we fail
         tasks.withType(Javadoc) {
             options.addStringOption('Xdoclint:none', '-quiet')
         }
-    }
+    }*/
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
         classifier = 'javadoc'

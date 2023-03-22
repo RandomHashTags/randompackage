@@ -1,9 +1,8 @@
 package me.randomhashtags.randompackage.database.file;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONAware;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,25 +14,27 @@ import java.util.List;
 public class JSONFile implements DatabaseFile {
     private final File file;
     private JSONObject json;
-    private List<JSONAware> pending;
+    private List<JSONObject> pending;
 
     public JSONFile(File file) {
         this.file = file;
         try {
-            json = (JSONObject) new JSONParser().parse(new FileReader(file.getAbsolutePath()));
+            json = new JSONObject(new JSONTokener(new FileReader(file.getAbsolutePath())));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Object get(String path) { return json.get(path); }
+    public Object get(String path) {
+        return json.get(path);
+    }
     public String getString(String path) {
-        final Object o = get(path);
-        return o != null ? (String) o : null;
+        final Object object = get(path);
+        return object != null ? (String) object : null;
     }
     public boolean getBoolean(String path) {
-        final Object o = get(path);
-        return o != null && Boolean.parseBoolean((String) o);
+        final Object object = get(path);
+        return object != null && Boolean.parseBoolean((String) object);
     }
     public int getInt(String path) {
         final Object o = get(path);
@@ -44,19 +45,20 @@ public class JSONFile implements DatabaseFile {
         return o != null ? Double.parseDouble((String) o) : -999;
     }
     public long getLong(String path) {
-        final Object o = get(path);
-        return o != null ? Long.parseLong((String) o) : -999;
+        final Object object = get(path);
+        return object != null ? Long.parseLong((String) object) : -999;
     }
     public List<String> getStringList(String path) {
-        final List<String> a = new ArrayList<>();
-        final Object o = get(path);
-        if(o instanceof JSONArray) {
-           final JSONArray array = (JSONArray) o;
-            for(String s : (Iterable<String>) array) {
-                a.add(s);
+        final List<String> array = new ArrayList<>();
+        final Object object = get(path);
+        if(object instanceof JSONArray) {
+           final JSONArray inner_array = (JSONArray) object;
+            for(Object inner_array_object : inner_array) {
+                final String s = (String) inner_array_object;
+                array.add(s);
             }
         }
-        return a.isEmpty() ? null : a;
+        return array.isEmpty() ? null : array;
     }
     public BigDecimal getBigDecimal(String path) {
         final Object o = get(path);
@@ -67,8 +69,8 @@ public class JSONFile implements DatabaseFile {
         final boolean isPending = pending != null;
         try (FileWriter file = new FileWriter(this.file.getAbsolutePath())) {
             if(isPending) {
-                for(JSONAware o : pending) {
-                    file.write(o.toJSONString());
+                for(JSONObject o : pending) {
+                    file.write(o.toString());
                 }
                 pending.clear();
             }

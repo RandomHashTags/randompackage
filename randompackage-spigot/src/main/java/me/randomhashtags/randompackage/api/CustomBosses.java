@@ -27,12 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomBosses extends EventAttributes {
-	private static CustomBosses instance;
-	public static CustomBosses getCustomBosses() {
-		if(instance == null) instance = new CustomBosses();
-		return instance;
-	}
+public enum CustomBosses implements EventAttributes {
+	INSTANCE;
 
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 

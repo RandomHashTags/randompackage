@@ -22,12 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class EACoreListener extends EventExecutor implements Listener {
-    private static EACoreListener instance;
-    public static EACoreListener getEACoreListener() {
-        if(instance == null) instance = new EACoreListener();
-        return instance;
-    }
+public enum EventAttributeCoreListener implements EventExecutor {
+    INSTANCE;
 
     private static List<EventAttributeListener> EVENT_LISTENERS;
 
@@ -142,7 +138,7 @@ public class EACoreListener extends EventExecutor implements Listener {
         }
     }
 
-    public final void registerEventAttributeListener(@NotNull EventAttributeListener listener) {
+    public static void registerEventAttributeListener(@NotNull EventAttributeListener listener) {
         if(EVENT_LISTENERS == null) {
             EVENT_LISTENERS = new ArrayList<>();
         }
@@ -157,7 +153,7 @@ public class EACoreListener extends EventExecutor implements Listener {
             }
         }
     }
-    public final void unregisterEventAttributeListener(EventAttributeListener listener) {
+    public static void unregisterEventAttributeListener(EventAttributeListener listener) {
         if(listener != null && EVENT_LISTENERS != null) {
             EVENT_LISTENERS.remove(listener);
         }

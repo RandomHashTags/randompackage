@@ -3,8 +3,9 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
-import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.booster.BoosterActivateEvent;
 import me.randomhashtags.randompackage.event.booster.BoosterExpireEvent;
@@ -38,12 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Boosters extends EACoreListener implements EventAttributeListener {
-	private static Boosters instance;
-	public static Boosters getBoosters() {
-	    if(instance == null) instance = new Boosters();
-	    return instance;
-	}
+public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventExecutor {
+	INSTANCE;
 
 	public static HashMap<String, List<ActiveBooster>> ACTIVE_REGIONAL_BOOSTERS;
 	public static HashMap<UUID, List<ActiveBooster>> ACTIVE_PLAYER_BOOSTERS;
@@ -55,7 +52,7 @@ public class Boosters extends EACoreListener implements EventAttributeListener {
 	@Override
 	public void load() {
 		final long started = System.currentTimeMillis();
-		registerEventAttributeListener(this);
+		EventAttributeCoreListener.registerEventAttributeListener(this);
 		save("_Data", "boosters.yml");
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);

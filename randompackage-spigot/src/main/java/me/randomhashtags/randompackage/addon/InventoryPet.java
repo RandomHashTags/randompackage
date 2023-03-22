@@ -59,7 +59,7 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
             final ItemMeta meta = is.getItemMeta();
             meta.setDisplayName(meta.getDisplayName().replace("{LEVEL}", lvl));
             final List<String> lore = new ArrayList<>();
-            final String expRegex = InventoryPets.getInventoryPets().getExpRegex(exp, required);
+            final String expRegex = InventoryPets.INSTANCE.getExpRegex(exp, required);
             if(meta.hasLore()) {
                 final String value = getValue(level), romanLevel = toRoman(level);
                 final String[] values = value.split(";");

@@ -27,12 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Trinkets extends EventAttributes implements RPItemStack {
-    private static Trinkets instance;
-    public static Trinkets getTrinkets() {
-        if(instance == null) instance = new Trinkets();
-        return instance;
-    }
+public enum Trinkets implements EventAttributes, RPItemStack {
+    INSTANCE;
 
     public YamlConfiguration config;
 

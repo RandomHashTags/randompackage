@@ -20,8 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.api.CustomArmor.getCustomArmor;
-
 @SuppressWarnings({"unchecked"})
 public interface RPValues extends UVersionableSpigot {
     @NotNull
@@ -185,7 +183,7 @@ public interface RPValues extends UVersionableSpigot {
         final List<String> chestLore = chest != null && chest.hasItemMeta() && chest.getItemMeta().hasLore() ? chest.getItemMeta().getLore() : null;
         final List<String> legLore = legs != null && legs.hasItemMeta() && legs.getItemMeta().hasLore() ? legs.getItemMeta().getLore() : null;
         final List<String> bootsLore = boots != null && boots.hasItemMeta() && boots.getItemMeta().hasLore() ? boots.getItemMeta().getLore() : null;
-        final List<String> omniLore = getCustomArmor().omniAppliedLore;
+        final List<String> omniLore = CustomArmor.INSTANCE.omniAppliedLore;
         for(ArmorSet set : getAllArmorSets().values()) {
             final List<String> lore = set.getArmorLore();
             if(lore != null
@@ -216,7 +214,7 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default ArmorSet valueOfArmorCrystal(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
-            final CustomArmor armor = getCustomArmor();
+            final CustomArmor armor = CustomArmor.INSTANCE;
             if(armor.isEnabled()) {
                 final int percent = getRemainingInt(is.getItemMeta().getLore().get(armor.percentSlot));
                 for(ArmorSet a : getAllArmorSets().values()) {
@@ -231,7 +229,7 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default ArmorSet getArmorCrystalOnItem(ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
-            final CustomArmor armor = getCustomArmor();
+            final CustomArmor armor = CustomArmor.INSTANCE;
             if(armor.isEnabled()) {
                 final String added = armor.crystalAddedLore;
                 final List<String> l = is.getItemMeta().getLore();

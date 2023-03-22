@@ -3,13 +3,15 @@ package me.randomhashtags.randompackage.api.dev;
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.PvAnyEvent;
 import me.randomhashtags.randompackage.event.isDamagedEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.util.Packeter;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,12 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class InventoryPets extends EACoreListener implements EventAttributeListener, RPItemStack, Packeter {
-    private static InventoryPets instance;
-    public static InventoryPets getInventoryPets() {
-        if(instance == null) instance = new InventoryPets();
-        return instance;
-    }
+public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttributeListener, RPItemStack, Packeter {
+    INSTANCE;
 
     public YamlConfiguration config;
     public ItemStack leash, rarecandy;
@@ -52,7 +50,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        registerEventAttributeListener(this);
+        EventAttributeCoreListener.registerEventAttributeListener(this);
         new GivePetExp().load();
         save("inventory pets", "_settings.yml");
         if(!OTHER_YML.getBoolean("saved default inventory pets")) {
@@ -94,7 +92,7 @@ public class InventoryPets extends EACoreListener implements EventAttributeListe
         for(UUID u : leashedUponDeath.keySet()) {
         }
         unregister(Feature.INVENTORY_PET);
-        unregisterEventAttributeListener(this);
+        EventAttributeCoreListener.unregisterEventAttributeListener(this);
     }
 
     public String getExpRegex(int currentXp, int maxXp) {

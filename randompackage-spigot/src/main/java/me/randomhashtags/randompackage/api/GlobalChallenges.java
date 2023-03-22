@@ -6,8 +6,9 @@ import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
-import me.randomhashtags.randompackage.attributesys.EACoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
+import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -40,12 +41,8 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 
-public class GlobalChallenges extends EACoreListener implements CommandExecutor, EventAttributeListener {
-	private static GlobalChallenges instance;
-	public static GlobalChallenges getChallenges() {
-		if(instance == null) instance = new GlobalChallenges();
-		return instance;
-	}
+public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandExecutor, EventAttributeListener {
+	INSTANCE;
 	
 	public YamlConfiguration config;
 	private MCMMOChallenges mcmmoChallenges;
@@ -103,7 +100,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
 	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();
-		registerEventAttributeListener(this);
+		EventAttributeCoreListener.registerEventAttributeListener(this);
 	    new IncreaseGlobalChallenge().load();
 
 		save("global challenges", "_settings.yml");
@@ -167,7 +164,7 @@ public class GlobalChallenges extends EACoreListener implements CommandExecutor,
         }
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.ACTIVE = null;
-		unregisterEventAttributeListener(this);
+		EventAttributeCoreListener.unregisterEventAttributeListener(this);
 	}
 
 	public void save() {

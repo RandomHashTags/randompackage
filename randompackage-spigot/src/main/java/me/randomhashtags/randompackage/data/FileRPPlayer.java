@@ -442,7 +442,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     @NotNull
     @Override
     public GlobalChallengeData getGlobalChallengeData() {
-        if(globalChallengeData == null && GlobalChallenges.getChallenges().isEnabled()) {
+        if(globalChallengeData == null && GlobalChallenges.INSTANCE.isEnabled()) {
             final HashMap<GlobalChallengePrize, Integer> prizes = new HashMap<>();
             String path = null;
             if(yml.get("global challenges") != null) {
@@ -591,7 +591,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     @NotNull
     @Override
     public PlayerQuestData getPlayerQuestData() {
-        if(playerQuestData == null && PlayerQuests.getPlayerQuests().isEnabled()) {
+        if(playerQuestData == null && PlayerQuests.INSTANCE.isEnabled()) {
             final LinkedHashMap<PlayerQuest, ActivePlayerQuest> activeQuests = new LinkedHashMap<>();
             BigInteger questTokens = BigInteger.ZERO;
             for(String key : getConfigurationSectionKeys(yml, "quests", false)) {
