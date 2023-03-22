@@ -23,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -39,6 +40,11 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
 	private HashMap<String, FileShopCategory> titles;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.SHOP_CATEGORY;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {
@@ -49,7 +55,6 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-	    final long started = System.currentTimeMillis();
 	    save("shops", "_settings.yml");
 	    final String folder = DATA_FOLDER + SEPARATOR + "shops";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
@@ -71,11 +76,9 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
                 titles.put(c.getTitle(), c);
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.SHOP_CATEGORY).size() + " Shop Categories", started);
     }
     @Override
     public void unload() {
-	    unregister(Feature.SHOP_CATEGORY);
     }
 
 	public BigDecimal getDiscount(Player player) {

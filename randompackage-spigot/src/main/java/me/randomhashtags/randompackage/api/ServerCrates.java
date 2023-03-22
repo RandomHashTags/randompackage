@@ -24,6 +24,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,8 +42,12 @@ public enum ServerCrates implements RPFeatureSpigot {
 	private HashMap<UUID, List<Integer>> tasks, revealedslots;
 
 	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.SERVER_CRATE;
+	}
+
+	@Override
 	public void load() {
-	    final long started = System.currentTimeMillis();
 		canRevealRarities = new ArrayList<>();
 		revealingLoot = new HashMap<>();
 		selectedSlots = new HashMap<>();
@@ -63,7 +68,6 @@ public enum ServerCrates implements RPFeatureSpigot {
 		}
 		addGivedpCategory(crates, UMaterial.CHEST, "Server Crates", "Givedp: Server Crates");
 		addGivedpCategory(flares, UMaterial.TORCH, "Server Crate Flares", "Givedp: Server Crate Flares");
-		sendConsoleDidLoadFeature(getAll(Feature.SERVER_CRATE).size() + " Server Crates and flares", started);
 	}
 	@Override
 	public void unload() {
@@ -76,7 +80,6 @@ public enum ServerCrates implements RPFeatureSpigot {
 		for(UUID u : tasks.keySet()) {
 			stopTasks(u);
 		}
-		unregister(Feature.SERVER_CRATE);
 		LivingServerCrate.deleteAll(true);
 	}
 

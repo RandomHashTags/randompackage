@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
@@ -40,11 +41,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
+import java.util.UUID;
 
 public enum FactionUpgrades implements EventAttributes {
     INSTANCE;
@@ -97,12 +96,12 @@ public enum FactionUpgrades implements EventAttributes {
         cropGrowthRate = new HashMap<>();
         fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
         fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
-        aliases = GET_PLUGIN.getConfig().getStringList("faction upgrades.cmds");
+        aliases = RandomPackage.INSTANCE.getConfig().getStringList("faction upgrades.cmds");
         heroicFactionCrystal = createItemStack(config, "items.heroic faction crystal");
         factionCrystal = createItemStack(config, "items.faction crystal");
         background = createItemStack(config, "gui.background");
         locked = createItemStack(config, "gui.locked");
-        addGivedpCategory(Arrays.asList(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
+        addGivedpCategory(List.of(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
 
         GivedpItem.INSTANCE.items.put("heroicfactioncrystal", heroicFactionCrystal);
         GivedpItem.INSTANCE.items.put("factioncrystal", factionCrystal);
@@ -371,6 +370,7 @@ public enum FactionUpgrades implements EventAttributes {
     private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         if(aliases != null) {
             final Player player = event.getPlayer();
+            final UUID player_uuid = player.getUniqueId();
             final String msg = event.getMessage().toLowerCase().substring(1);
             final RegionalAPI regions = RegionalAPI.INSTANCE;
             for(String alias : aliases) {
@@ -378,7 +378,7 @@ public enum FactionUpgrades implements EventAttributes {
                     event.setCancelled(true);
                     if(msg.contains("reset")) {
                         if(hasPermission(player, FactionUpgradePermission.COMMAND_RESET, true)) {
-                            FACTION_UPGRADES.get(regions.getFactionTag(player.getUniqueId())).clear();
+                            FACTION_UPGRADES.get(regions.getFactionTag(player_uuid)).clear();
                         }
                     } else if(hasPermission(player, FactionUpgradePermission.COMMAND, true)) {
                         viewFactionUpgrades(player);

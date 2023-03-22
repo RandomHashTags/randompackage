@@ -48,6 +48,11 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
     public String lastConquerer;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.CONQUEST_CHEST;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(args.length == 0) {
             viewLast(sender);
@@ -71,7 +76,6 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "conquests";
         save("conquests", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
@@ -105,8 +109,6 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
                 new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
             }
         }
-        final HashMap<String, ConquestMob> bosses = ConquestMob.BOSSES;
-        sendConsoleDidLoadFeature(getAll(Feature.CONQUEST_CHEST).size() + " conquest chests and " + (bosses != null ? bosses.size() : 0) + " bosses", started);
     }
     @Override
     public void unload() {
@@ -128,7 +130,6 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
 
         LivingConquestChest.deleteAll(false);
         ConquestMob.deleteAll();
-        unregister(Feature.CONQUEST_CHEST);
     }
 
     public void viewLast(@NotNull CommandSender sender) {

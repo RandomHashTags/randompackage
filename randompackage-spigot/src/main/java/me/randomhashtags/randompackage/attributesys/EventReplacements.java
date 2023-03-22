@@ -201,7 +201,7 @@ public interface EventReplacements extends EventEntities {
         final List<String> b = new ArrayList<>();
         final Entity damager = event.getDamager();
         if(damager != null) {
-            b.addAll(Arrays.asList("@Damager", toString(damager.getLocation())));
+            b.addAll(List.of("@Damager", toString(damager.getLocation())));
         }
         return getReplacements(a, b);
     }
@@ -233,7 +233,7 @@ public interface EventReplacements extends EventEntities {
 
     default String[] getReplacements(String[] a, List<String> b) {
         final List<String> c = new ArrayList<>();
-        c.addAll(Arrays.asList(a));
+        c.addAll(List.of(a));
         c.addAll(b);
         return c.toArray(new String[a.length+b.size()]);
     }
@@ -241,11 +241,11 @@ public interface EventReplacements extends EventEntities {
         final List<String> c = new ArrayList<>();
         int al = 0, bl = 0;
         if(a != null) {
-            c.addAll(Arrays.asList(a));
+            c.addAll(List.of(a));
             al = a.length;
         }
         if(b != null) {
-            c.addAll(Arrays.asList(b));
+            c.addAll(List.of(b));
             bl = b.length;
         }
         return c.toArray(new String[al+bl]);

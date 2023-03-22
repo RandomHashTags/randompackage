@@ -22,6 +22,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -34,6 +36,11 @@ public enum Scrolls implements RPFeatureSpigot {
     private String folder;
     public YamlConfiguration config;
     private Set<Feature> enabled;
+
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.SCROLL_BLACK;
+    }
 
     @Override
     public void load() {
@@ -114,11 +121,9 @@ public enum Scrolls implements RPFeatureSpigot {
         for(String key : getConfigurationSectionKeys(config, "black scrolls", false, "sounds", "particles")) {
             new PathBlackScroll(key);
         }
-        sendConsoleDidLoadFeature(getAll(Feature.SCROLL_BLACK).size() + " Black Scrolls", started);
     }
     private void unloadBlackScrolls() {
         enabled.remove(Feature.SCROLL_BLACK);
-        unregister(Feature.SCROLL_BLACK);
     }
 
     private void loadTransmogScrolls() {

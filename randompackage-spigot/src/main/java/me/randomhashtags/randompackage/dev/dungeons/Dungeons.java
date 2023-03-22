@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
     INSTANCE;
@@ -53,7 +54,7 @@ public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
         dimensionweb = createItemStack(config, "items.dimension web");
         enchantedobsidian = createItemStack(config, "items.enchanted obsidian");
         fuelcell = createItemStack(config, "items.fuel cell");
-        addGivedpCategory(Arrays.asList(dimensionweb, enchantedobsidian, fuelcell), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
+        addGivedpCategory(List.of(dimensionweb, enchantedobsidian, fuelcell), UMaterial.IRON_BARS, "Dungeon Items", "Givedp: Dungeon Items");
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         master = new UInventory(null, config.getInt("master.size"), colorize(config.getString("master.title")));

@@ -52,7 +52,6 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "wild.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild.yml"));
         cooldown = config.getLong("settings.cooldown");
@@ -70,7 +69,6 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
             final String[] values = string.split(";");
             zcoords.put(values[0], new TObject(BigDecimal.valueOf(Double.parseDouble(values[1])), BigDecimal.valueOf(Double.parseDouble(values[2])), null));
         }
-        sendConsoleDidLoadFeature("Wild", started);
     }
     @Override
     public void unload() {

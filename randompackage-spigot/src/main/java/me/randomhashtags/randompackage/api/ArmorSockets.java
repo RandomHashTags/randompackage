@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,8 +30,12 @@ public enum ArmorSockets implements RPFeatureSpigot {
     private int chanceSlot;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.ARMOR_SOCKET;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "armor sockets.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "armor sockets.yml"));
 
@@ -53,11 +58,9 @@ public enum ArmorSockets implements RPFeatureSpigot {
             list.add(getArmorSocketItem(socket, 100));
         }
         addGivedpCategory(list, UMaterial.TRIPWIRE_HOOK, "Armor Sockets", "Givedp: Armor Sockets");
-        sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SOCKET).size() + " Armor Sockets", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.ARMOR_SOCKET);
     }
 
     public ItemStack getArmorSocketItem(@NotNull ArmorSocket socket, int chance) {
@@ -79,7 +82,6 @@ public enum ArmorSockets implements RPFeatureSpigot {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
         final ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
         if(current == null || current.getType().equals(Material.AIR) || cursor == null || cursor.getType().equals(Material.AIR)) {
             return;
@@ -97,7 +99,7 @@ public enum ArmorSockets implements RPFeatureSpigot {
             }
             if(allowed) {
                 event.setCancelled(true);
-                player.updateInventory();
+                ((Player) event.getWhoClicked()).updateInventory();
             }
         }
     }

@@ -42,13 +42,17 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, Disguise> subDisguise;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.DISGUISE;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         return true;
     }
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "disguises.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "disguises.yml"));
 
@@ -67,14 +71,12 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
         }
 
         subDisguise = new HashMap<>();
-        sendConsoleDidLoadFeature(getAll(Feature.DISGUISE).size() + " Disguises", started);
     }
     @Override
     public void unload() {
         for(Player player : new ArrayList<>(subDisguise.keySet())) {
             player.closeInventory();
         }
-        unregister(Feature.DISGUISE);
     }
 
     public ItemStack getDisguiseItem(@NotNull Disguise disguise) {

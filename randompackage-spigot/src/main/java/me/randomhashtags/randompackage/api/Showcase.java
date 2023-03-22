@@ -66,7 +66,6 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "showcase.yml");
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "showcase.yml"));
@@ -106,7 +105,6 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 				}
 			}
 		}
-		sendConsoleDidLoadFeature("Showcase", started);
 	}
 	@Override
 	public void unload() {

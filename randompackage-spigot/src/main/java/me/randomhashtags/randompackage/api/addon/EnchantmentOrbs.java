@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,12 @@ public enum EnchantmentOrbs implements RPFeatureSpigot {
     INSTANCE;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.ENCHANTMENT_ORB;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         final List<ItemStack > orbs = new ArrayList<>();
         save("addons", "enchantment orbs.yml");
         final YamlConfiguration config = getAddonConfig("enchantment orbs.yml");
@@ -58,11 +63,9 @@ public enum EnchantmentOrbs implements RPFeatureSpigot {
             }
         }
         addGivedpCategory(orbs, UMaterial.ENDER_EYE, "Enchantment Orbs", "Givedp: Enchantment Orbs");
-        sendConsoleDidLoadFeature(getAll(Feature.ENCHANTMENT_ORB).size() + " Enchantment Orbs", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.ENCHANTMENT_ORB);
     }
 
     public void applyEnchantmentOrb(@NotNull Player player, @NotNull ItemStack is, @NotNull ItemStack enchantmentorb, @NotNull EnchantmentOrb orb) {

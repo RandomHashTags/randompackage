@@ -43,7 +43,6 @@ public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("addons", "enchanter.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "addons", "enchanter.yml"));
 
@@ -72,7 +71,6 @@ public enum Enchanter implements RPFeatureSpigot, CommandExecutor {
                 ei.setItem(i, item);
             }
         }
-        sendConsoleDidLoadFeature("Enchanter", started);
     }
     @Override
     public void unload() {

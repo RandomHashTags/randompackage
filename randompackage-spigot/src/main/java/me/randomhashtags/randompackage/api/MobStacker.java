@@ -133,37 +133,39 @@ public enum MobStacker implements RPFeatureSpigot {
     }
     public void stackEntities(World world) {
         final List<EntityType> types = new ArrayList<>();
-        for(Entity entity : world.getEntities()) {
-            if(entity instanceof LivingEntity) {
-                final EntityType type = entity.getType();
-                if(!types.contains(type)) {
-                    stackEntities(world, type);
-                    types.add(type);
-                }
+        for(LivingEntity entity : world.getLivingEntities()) {
+            final EntityType type = entity.getType();
+            if(!types.contains(type)) {
+                stackEntities(world, type);
+                types.add(type);
             }
         }
     }
-    public void stackEntities(World w, EntityType type) {
-        if(!stackable.contains(type)) return;
+    public void stackEntities(World world, EntityType type) {
+        if(!stackable.contains(type)) {
+            return;
+        }
         final List<Entity> entities = new ArrayList<>();
-        for(Entity e : w.getEntities()) {
+        for(Entity e : world.getEntities()) {
             if(e.getType().equals(type)) {
                 entities.add(e);
             }
         }
-        final String n = w.getName();
-        final int max = maxStackSize.getOrDefault(n, 0);
-        final double radius = stackRadius.getOrDefault(n, 0.00);
-        if(max == 0 || radius <= 0) return;
+        final String world_name = world.getName();
+        final int max = maxStackSize.getOrDefault(world_name, 0);
+        final double radius = stackRadius.getOrDefault(world_name, 0.00);
+        if(max == 0 || radius <= 0) {
+            return;
+        }
         final String name = customNames.get(type);
         for(Entity entity : entities) {
-            final UUID u = entity.getUniqueId();
-            StackedEntity stackedEntity = StackedEntity.valueOf(u);
-            final EntityType t = entity.getType();
-            final List<Entity> nearby = entity.getNearbyEntities(radius, radius, radius);
-            for(Entity nearbyEntity : nearby) {
+            final UUID entity_uuid = entity.getUniqueId();
+            StackedEntity stackedEntity = StackedEntity.valueOf(entity_uuid);
+            final EntityType entity_type = entity.getType();
+            final List<Entity> nearby_entities = entity.getNearbyEntities(radius, radius, radius);
+            for(Entity nearbyEntity : nearby_entities) {
                 final StackedEntity se = StackedEntity.valueOf(nearbyEntity.getUniqueId());
-                if(!entity.isDead() && !nearbyEntity.isDead() && nearbyEntity.getType().equals(t) && (se != null || nearbyEntity.getCustomName() == null)) {
+                if(!entity.isDead() && !nearbyEntity.isDead() && nearbyEntity.getType().equals(entity_type) && (se != null || nearbyEntity.getCustomName() == null)) {
                     if(se != null) {
                         if(max == -1 || se.size+(stackedEntity == null ? 1 : stackedEntity.size) <= max) {
                             se.merge((LivingEntity) entity);
@@ -182,10 +184,10 @@ public enum MobStacker implements RPFeatureSpigot {
     }
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
-        final UUID u = event.getEntity().getUniqueId();
-        final StackedEntity s = StackedEntity.valueOf(u);
-        if(s != null) {
-            s.kill(null, 1);
+        final UUID uuid = event.getEntity().getUniqueId();
+        final StackedEntity stacked_entity = StackedEntity.valueOf(uuid);
+        if(stacked_entity != null) {
+            stacked_entity.kill(null, 1);
         }
     }
     @EventHandler

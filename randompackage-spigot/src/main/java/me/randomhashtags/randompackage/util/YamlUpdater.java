@@ -95,8 +95,7 @@ public enum YamlUpdater {
     }
 
     private LinkedHashMap<String, Object> putAll(Object[] values) {
-        final List<Object> objects = new ArrayList<>();
-        objects.addAll(Arrays.asList(values));
+        final List<Object> objects = new ArrayList<>(List.of(values));
         final LinkedHashMap<String, Object> tree = new LinkedHashMap<>();
         for(Object o : values) {
             if(o instanceof Object[]) {
@@ -145,63 +144,63 @@ public enum YamlUpdater {
                 "supported plugins.regional.SuperiorSkyblock", true,
                 "supported plugins.regional.EpicSkyblock", true,
 
-                "alchemist.cmds", Arrays.asList("alchemist"),
-                "auction house.cmds", Arrays.asList("auctionhouse", "ah", "auction"),
-                "balance.cmds", Arrays.asList("balance", "bal"),
-                "bless.cmds", Arrays.asList("bless"),
-                "bump.cmds", Arrays.asList("bump"),
-                "coinflip.cmds", Arrays.asList("coinflip", "cf"),
-                "combine.cmds", Arrays.asList("combine"),
-                "confirm.cmds", Arrays.asList("confirm"),
-                "collection filter.cmds", Arrays.asList("collectionfilter"),
-                "conquest.cmds", Arrays.asList("conquest"),
+                "alchemist.cmds", List.of("alchemist"),
+                "auction house.cmds", List.of("auctionhouse", "ah", "auction"),
+                "balance.cmds", List.of("balance", "bal"),
+                "bless.cmds", List.of("bless"),
+                "bump.cmds", List.of("bump"),
+                "coinflip.cmds", List.of("coinflip", "cf"),
+                "combine.cmds", List.of("combine"),
+                "confirm.cmds", List.of("confirm"),
+                "collection filter.cmds", List.of("collectionfilter"),
+                "conquest.cmds", List.of("conquest"),
                 "disabled enchants.enabled", true,
-                "disabled enchants.cmds", Arrays.asList("disabledenchants"),
-                "duels.cmds", Arrays.asList("duel", "duels"),
-                "dungeons.cmds", Arrays.asList("dungeon", "dungeons"),
-                "enchants.cmds", Arrays.asList("enchants"),
-                "enchanter.cmds", Arrays.asList("enchanter"),
-                "envoy.cmds", Arrays.asList("envoy"),
-                "faction upgrades.cmds", Arrays.asList("f upgrade"),
-                "fund.cmds", Arrays.asList("fund"),
-                "gkits.cmds", Arrays.asList("gkit", "gkits"),
-                "global challenges.cmds", Arrays.asList("globalchallenge", "globalchallenges", "challenges"),
-                "home.cmds", Arrays.asList("home", "homes"),
-                "item filter.cmds", Arrays.asList("filter"),
-                "jackpot.cmds", Arrays.asList("jackpot"),
-                "kingofthehill.cmds", Arrays.asList("kingofthehill", "koth"),
-                "last man standing.cmds", Arrays.asList("lastmanstanding", "lms", "warzone"),
-                "lootboxes.cmds", Arrays.asList("lootbox", "lootboxes"),
-                "mkits.cmds", Arrays.asList("mkit", "mkits"),
-                "monthly crates.cmds", Arrays.asList("monthlycrate", "monthlycrates", "cc", "mc"),
-                "outposts.cmds", Arrays.asList("outpost", "outposts"),
-                "player quests.cmds", Arrays.asList("quest", "quests"),
-                "wild pvp.cmds", Arrays.asList("wildpvp", "pvp"),
+                "disabled enchants.cmds", List.of("disabledenchants"),
+                "duels.cmds", List.of("duel", "duels"),
+                "dungeons.cmds", List.of("dungeon", "dungeons"),
+                "enchants.cmds", List.of("enchants"),
+                "enchanter.cmds", List.of("enchanter"),
+                "envoy.cmds", List.of("envoy"),
+                "faction upgrades.cmds", List.of("f upgrade"),
+                "fund.cmds", List.of("fund"),
+                "gkits.cmds", List.of("gkit", "gkits"),
+                "global challenges.cmds", List.of("globalchallenge", "globalchallenges", "challenges"),
+                "home.cmds", List.of("home", "homes"),
+                "item filter.cmds", List.of("filter"),
+                "jackpot.cmds", List.of("jackpot"),
+                "kingofthehill.cmds", List.of("kingofthehill", "koth"),
+                "last man standing.cmds", List.of("lastmanstanding", "lms", "warzone"),
+                "lootboxes.cmds", List.of("lootbox", "lootboxes"),
+                "mkits.cmds", List.of("mkit", "mkits"),
+                "monthly crates.cmds", List.of("monthlycrate", "monthlycrates", "cc", "mc"),
+                "outposts.cmds", List.of("outpost", "outposts"),
+                "player quests.cmds", List.of("quest", "quests"),
+                "wild pvp.cmds", List.of("wildpvp", "pvp"),
                 "raid events.enabled", false,
-                "raid events.cmds", Arrays.asList("raid"),
-                "roll.cmds", Arrays.asList("roll"),
-                "shop.cmds", Arrays.asList("shop"),
-                "showcase.cmds", Arrays.asList("showcase"),
+                "raid events.cmds", List.of("raid"),
+                "roll.cmds", List.of("roll"),
+                "shop.cmds", List.of("shop"),
+                "showcase.cmds", List.of("showcase"),
                 "spawner stacking.enabled", false,
                 "splitsouls.enabled", true,
-                "splitsouls.cmds", Arrays.asList("splitsouls"),
-                "tinkerer.cmds", Arrays.asList("tinkerer"),
-                "title.cmds", Arrays.asList("title", "titles"),
-                "trade.cmds", Arrays.asList("trade"),
-                "vkits.cmds", Arrays.asList("vkit", "vkits"),
-                "wild.cmds", Arrays.asList("wild", "wilderness"),
-                "withdraw.cmds", Arrays.asList("withdraw"),
-                "xpbottle.cmds", Arrays.asList("xpbottle"),
+                "splitsouls.cmds", List.of("splitsouls"),
+                "tinkerer.cmds", List.of("tinkerer"),
+                "title.cmds", List.of("title", "titles"),
+                "trade.cmds", List.of("trade"),
+                "vkits.cmds", List.of("vkit", "vkits"),
+                "wild.cmds", List.of("wild", "wilderness"),
+                "withdraw.cmds", List.of("withdraw"),
+                "xpbottle.cmds", List.of("xpbottle"),
                 // 16.5.0
                 "fat buckets.enabled", true,
                 "inventory pets.enabled", true, // changed from "false" to "true" in 16.5.10
                 "sethome.enabled", true,
-                "sethome.cmds", Arrays.asList("sethome"),
+                "sethome.cmds", List.of("sethome"),
                 // 16.5.8
                 "supported plugins.regional.WorldGuard", true,
                 // 16.5.9
                 "slot bot.enabled", true, // changed from "false" to "true" in 16.5.10
-                "slot bot.cmds", Arrays.asList("slotbot", "slotbots", "bot", "bots", "slot"),
+                "slot bot.cmds", List.of("slotbot", "slotbots", "bot", "bots", "slot"),
                 // 16.5.10
                 "armor sockets.enabled", true,
                 "custom enchants.holy scrolls", true,
@@ -455,6 +454,6 @@ public enum YamlUpdater {
         };
     }
     private List<String> newStringList(String...list) {
-        return Arrays.asList(list);
+        return List.of(list);
     }
 }

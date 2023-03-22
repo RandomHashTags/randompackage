@@ -9,9 +9,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public enum WorldGuardAPI implements UVersionableSpigot {
@@ -44,12 +46,12 @@ public enum WorldGuardAPI implements UVersionableSpigot {
         }
     }
 
-    public boolean hasBypass(@NotNull Player player, @NotNull Location l) {
-        final World w = l.getWorld();
+    public boolean hasBypass(@NotNull Player player, @NotNull Location location) {
+        final World world = location.getWorld();
         if(version == 6) {
-            return com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().getSessionManager().hasBypass(player, w);
+            return com.sk89q.worldguard.bukkit.WorldGuardPlugin.inst().getSessionManager().hasBypass(player, world);
         } else {
-            final com.sk89q.worldedit.world.World wew = com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(w);
+            final com.sk89q.worldedit.world.World wew = com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(world);
             final com.sk89q.worldguard.session.SessionManager m = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getSessionManager();
             try {
                 final Method method = m.getClass().getDeclaredMethod("hasBypass", com.sk89q.worldguard.LocalPlayer.class, com.sk89q.worldedit.world.World.class);
@@ -96,31 +98,29 @@ public enum WorldGuardAPI implements UVersionableSpigot {
             final com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin();
             for(World w : worlds) {
                 final com.sk89q.worldguard.protection.regions.ProtectedRegion region = wg.getRegionManager(w).getRegion(regionName);
-                chunks.addAll(getchunks(region, w));
+                chunks.addAll(get_chunks(region, w));
             }
         } else  {
             final com.sk89q.worldguard.protection.regions.RegionContainer container = com.sk89q.worldguard.WorldGuard.getInstance().getPlatform().getRegionContainer();
             for(World w : worlds) {
                 final com.sk89q.worldguard.protection.regions.ProtectedRegion region = container.get(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(w)).getRegion(regionName);
-                chunks.addAll(getchunks(region, w));
+                chunks.addAll(get_chunks(region, w));
             }
         }
         return chunks;
     }
-    private List<Chunk> getchunks(com.sk89q.worldguard.protection.regions.ProtectedRegion region, World w) {
-        final List<Chunk> c = new ArrayList<>();
-        if(region != null && w != null) {
+    private HashSet<Chunk> get_chunks(@Nullable com.sk89q.worldguard.protection.regions.ProtectedRegion region, @NotNull World world) {
+        final HashSet<Chunk> chunks = new HashSet<>();
+        if(region != null) {
             final List<com.sk89q.worldedit.BlockVector2D> points = region.getPoints();
             if(points != null) {
                 for(com.sk89q.worldedit.BlockVector2D p : points) {
-                    final Chunk ch = w.getChunkAt(new Location(w, p.getBlockX(), 0, p.getBlockZ()));
-                    if(!c.contains(ch)) {
-                        c.add(ch);
-                    }
+                    final Chunk ch = world.getChunkAt(new Location(world, p.getBlockX(), 0, p.getBlockZ()));
+                    chunks.add(ch);
                 }
             }
         }
-        return c;
+        return chunks;
     }
 }
 

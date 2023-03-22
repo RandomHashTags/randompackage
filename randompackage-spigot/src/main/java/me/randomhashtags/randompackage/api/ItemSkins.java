@@ -37,6 +37,11 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
     private HashMap<ItemSkin, ItemStack> cache;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.ITEM_SKIN;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if(sender instanceof Player) {
         }
@@ -73,11 +78,9 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
             }
         }
         addGivedpCategory(list, UMaterial.LEATHER, "Item Skins", "Givedp: Item Skins");
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.ITEM_SKIN).size() + " Item Skins &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
-        unregister(Feature.ITEM_SKIN);
     }
 
     public ItemStack getItemSkinItem(@NotNull ItemSkin skin, boolean fromCache) {

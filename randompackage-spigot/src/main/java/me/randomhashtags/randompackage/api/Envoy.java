@@ -44,6 +44,11 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 	private long nextNaturalEnvoy;
 
 	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.ENVOY_CRATE;
+	}
+
+	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -79,7 +84,6 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save("envoy tiers", "_settings.yml");
 
 		preset = new ArrayList<>();
@@ -100,7 +104,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		presetLocationPlacer = new ItemStack(Material.BEDROCK);
 		final ItemMeta itemMeta = presetLocationPlacer.getItemMeta();
 		itemMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Preset EnvoyCrate Location");
-		itemMeta.setLore(Arrays.asList(ChatColor.GRAY + "Place me to add a preset envoy location for", ChatColor.GRAY + "a chance for an EnvoyCrate to spawn at this location."));
+		itemMeta.setLore(List.of(ChatColor.GRAY + "Place me to add a preset envoy location for", ChatColor.GRAY + "a chance for an EnvoyCrate to spawn at this location."));
 		presetLocationPlacer.setItemMeta(itemMeta);
 
 		if(!OTHER_YML.getBoolean("saved default envoy tiers")) {
@@ -134,8 +138,6 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				}
 			}
 		}, 0, 20L * config.getInt("settings.firework delay"));
-
-		sendConsoleDidLoadFeature(getAll(Feature.ENVOY_CRATE).size() + " Envoy Tiers", started);
 	}
 	@Override
 	public void unload() {
@@ -157,7 +159,6 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		SCHEDULER.cancelTask(task);
 		stopAllEnvoys();
 		GivedpItem.INSTANCE.items.remove("envoysummon");
-		unregister(Feature.ENVOY_CRATE);
 	}
 
 	public long getNextNaturalEnvoy() {

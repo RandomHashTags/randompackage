@@ -7,8 +7,10 @@ public enum EconomyAPI implements RPFeatureSpigot {
 
     private boolean vault;
 
+    @Override
     public void load() {
     }
+    @Override
     public void unload() {
     }
 }

@@ -51,7 +51,6 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "trade.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trade.yml"));
 
@@ -77,7 +76,6 @@ public enum Trade implements RPFeatureSpigot, CommandExecutor {
 		}
 
 		requests = new HashMap<>();
-		sendConsoleDidLoadFeature("Trade", started);
 	}
 	@Override
 	public void unload() {

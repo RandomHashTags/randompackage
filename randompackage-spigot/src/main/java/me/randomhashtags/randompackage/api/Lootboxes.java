@@ -48,6 +48,11 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Player, List<Integer>> tasks;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.LOOTBOX;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null) {
@@ -124,7 +129,6 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                 }
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.LOOTBOX).size() + " Lootboxes", started);
     }
     @Override
     public void unload() {
@@ -135,7 +139,6 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         for(Player player : new ArrayList<>(viewing)) {
             player.closeInventory();
         }
-        unregister(Feature.LOOTBOX);
     }
 
     public void viewLootbox(@NotNull Player player) {

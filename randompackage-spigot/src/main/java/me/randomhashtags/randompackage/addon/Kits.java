@@ -245,7 +245,7 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
         if(pdata != null) {
             final HashMap<CustomKit, Long> cooldowns = pdata.getKitData().getCooldowns();
             for(CustomKit k : new ArrayList<>(cooldowns.keySet())) {
-                final boolean isInstance = Arrays.asList(k.getClass().getInterfaces()).contains(type);
+                final boolean isInstance = List.of(k.getClass().getInterfaces()).contains(type);
                 if(isInstance) {
                     cooldowns.remove(k);
                 }

@@ -100,7 +100,6 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	@Override
 	public void load() {
 	    final long started = System.currentTimeMillis();
-		EventAttributeCoreListener.registerEventAttributeListener(this);
 	    new IncreaseGlobalChallenge().load();
 
 		save("global challenges", "_settings.yml");
@@ -164,7 +163,6 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
         }
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.ACTIVE = null;
-		EventAttributeCoreListener.unregisterEventAttributeListener(this);
 	}
 
 	public void save() {
@@ -295,8 +293,9 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	public Map<UUID, BigDecimal> getPlacing(@NotNull HashMap<UUID, BigDecimal> participants, int returnFirst) {
 		final HashMap<UUID, BigDecimal> map = new HashMap<>();
 		final HashMap<UUID, BigDecimal> d = participants.entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		final Object[] keys = d.keySet().toArray(), values = d.values().toArray();
 		for(int i = 1; i <= returnFirst && i-1 < d.size(); i++) {
-			map.put((UUID) d.keySet().toArray()[i-1], (BigDecimal) d.values().toArray()[i-1]);
+			map.put((UUID) keys[i-1], (BigDecimal) values[i-1]);
 		}
 		return map;
 	}

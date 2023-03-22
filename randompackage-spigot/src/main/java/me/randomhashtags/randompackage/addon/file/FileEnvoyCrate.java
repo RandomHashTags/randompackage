@@ -37,20 +37,28 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         }
         return fw;
     }
-    public int getChance() { return yml.getInt("chance"); }
+    public int getChance() {
+        return yml.getInt("chance");
+    }
     public UMaterial getBlock() {
         if(block == null) {
             block = UMaterial.match(yml.getString("settings.block"));
         }
         return block;
     }
-    public boolean canRepeatRewards() { return yml.getBoolean("settings.can repeat rewards"); }
-    public boolean dropsFromSky() { return yml.getBoolean("settings.drops from sky"); }
+    public boolean canRepeatRewards() {
+        return yml.getBoolean("settings.can repeat rewards");
+    }
+    public boolean dropsFromSky() {
+        return yml.getBoolean("settings.drops from sky");
+    }
     public UMaterial getFallingBlock() {
         if(fallingblock == null) fallingblock = UMaterial.match(yml.getString("settings.falling block"));
         return fallingblock;
     }
-    public String getRewardSize() { return yml.getString("settings.reward size"); }
+    public String getRewardSize() {
+        return yml.getString("settings.reward size");
+    }
     public List<UMaterial> cannotLandAbove() {
         if(cannotLandAbove == null) {
             cannotLandAbove = new ArrayList<>();
@@ -70,7 +78,9 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         return cannotLandIn;
     }
     public ItemStack getItem() {
-        if(item == null) item = createItemStack(yml, "item");
+        if(item == null) {
+            item = createItemStack(yml, "item");
+        }
         return getClone(item);
     }
     public List<String> getRewards() {
@@ -82,7 +92,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         final String[] s = rewardSize.split("-");
         final boolean c = rewardSize.contains("-");
         final int min = c ? Integer.parseInt(s[0]) : Integer.parseInt(rewardSize), max = c ? Integer.parseInt(s[1]) : -1;
-        return min+(max == -1 ? 0 : new Random().nextInt(max-min+1));
+        return min + (max == -1 ? 0 : new Random().nextInt(max-min+1));
     }
     public List<String> getRandomRewards() {
         final List<String> rewards = new ArrayList<>(this.getRewards()), actualrewards = new ArrayList<>();

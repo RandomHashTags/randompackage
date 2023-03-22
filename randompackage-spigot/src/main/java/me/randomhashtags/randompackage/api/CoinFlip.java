@@ -90,7 +90,6 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "coinflip.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "coinflip.yml"));
 
@@ -143,7 +142,6 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
             final CoinFlipMatch m = new CoinFlipMatch(OTHER_YML.getLong("coinflips." + key + ".created"), Bukkit.getOfflinePlayer(UUID.fromString(key)), CoinFlipOption.PATHS.get(OTHER_YML.getString("coinflips." + key + ".option")), getBigDecimal(OTHER_YML.getString("coinflips." + key + ".wager")));
             available.add(m);
         }
-        sendConsoleDidLoadFeature("Coin Flip", started);
     }
     public void unload() {
         for(OfflinePlayer p : new ArrayList<>(picking.keySet())) {

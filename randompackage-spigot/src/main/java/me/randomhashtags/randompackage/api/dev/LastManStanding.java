@@ -47,7 +47,6 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
     }
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "last man standing.yml");
         if(OTHER_YML.get("last man standing.boundary") != null) {
             final String[] values = OTHER_YML.getString("last man standing.boundary").split("\\|");
@@ -62,7 +61,6 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
         playerStartTimes = new HashMap<>();
         final long interval = 40;
         task = SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, this::check, interval, interval);
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Last Man Standing &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

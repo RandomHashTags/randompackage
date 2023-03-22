@@ -18,10 +18,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static me.randomhashtags.randompackage.RandomPackage.GET_PLUGIN;
 import static me.randomhashtags.randompackage.RandomPackage.MCMMO;
 
 public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
@@ -38,12 +36,12 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
                 if(player != null && player.getName().equals("RandomHashTags") || hasPermission(sender, "RandomPackage.randompackage", true)) {
                     final Plugin spawner = RandomPackage.SPAWNER_PLUGIN, mcmmo = RandomPackage.MCMMO;
                     final Plugin fac = PLUGIN_MANAGER.getPlugin("Factions");
-                    for(String string : Arrays.asList(" ",
+                    for(String string : List.of(" ",
                             "&6&m&l---------------------------------------------",
                             "&7- Author: &6RandomHashTags",
                             "&7- RandomPackage Version: &b" + RANDOM_PACKAGE.getDescription().getVersion(),
                             "&7- Server Version: &f" + VERSION,
-                            "&7- PlaceholderAPI: " + (RANDOM_PACKAGE.placeholderapi ? "&atrue &7(&2" + PLUGIN_MANAGER.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
+                            "&7- PlaceholderAPI: " + (RANDOM_PACKAGE.placeholder_api ? "&atrue &7(&2" + PLUGIN_MANAGER.getPlugin("PlaceholderAPI").getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Faction Plugin: " + (RegionalAPI.INSTANCE.hookedFactionsUUID() ? "&3" + getFactionType(fac) + " &7(&2" + fac.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- mcMMO: " + (mcmmo != null ? "&a" + (MCMMOAPI.INSTANCE.isClassic() ? "Classic" : "Overhaul") + " &7(&2" + mcmmo.getDescription().getVersion() + "&7)" : "&cfalse"),
                             "&7- Spawner Plugin: " + (spawner != null ? "&e" + spawner.getName() + " &7(&2" + spawner.getDescription().getVersion() + "&7)" : "&cfalse"),
@@ -54,11 +52,11 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
                         sender.sendMessage(colorize(string));
                 }
             } else {
-                final String a = args[0];
-                if(a.equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
-                    GET_PLUGIN.reload();
+                final String argument = args[0];
+                if(argument.equals("reload") && hasPermission(sender, "RandomPackage.randompackage.reload", true)) {
+                    RandomPackage.INSTANCE.reload();
                     sender.sendMessage(colorize("&6[RandomPackage] &aReload complete!"));
-                } else if(a.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
+                } else if(argument.equals("backup") && hasPermission(sender, "RandomPackage.randompackage.backup", true)) {
                     RPEventsSpigot.INSTANCE.backup();
                     sender.sendMessage(colorize("&6[RandomPackage] &aPlayer backup complete!"));
                 }
@@ -97,7 +95,7 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
     private void pluginEnableEvent(PluginEnableEvent event) {
         final String n = event.getPlugin().getName();
         if(RandomPackage.SPAWNER_PLUGIN_NAME == null && (n.equals("SilkSpawners") || n.equals("EpicSpawners"))) {
-            RANDOM_PACKAGE.tryLoadingSpawner();
+            RANDOM_PACKAGE.try_loading_spawner();
         } else if(!RegionalAPI.INSTANCE.hookedFactionsUUID() && n.equals("Factions")) {
             RegionalAPI.INSTANCE.trySupportingFactions();
         }

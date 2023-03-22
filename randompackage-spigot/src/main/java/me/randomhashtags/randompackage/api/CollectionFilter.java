@@ -93,7 +93,6 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "collection filter.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "collection filter.yml"));
 
@@ -131,7 +130,6 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
                 filtertypeString = lore.get(i);
             }
         }
-        sendConsoleDidLoadFeature("Collection Filter", started);
 
         SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
             for(String s : getConfigurationSectionKeys(OTHER_YML, "collection chests", false)) {

@@ -26,6 +26,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -38,6 +39,11 @@ public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
     private UInventory gui;
     private int captureTask;
+
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.STRONGHOLD;
+    }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
@@ -87,11 +93,9 @@ public enum Strongholds implements RPFeatureSpigot, CommandExecutor {
             }
         }, 20, 20);
 
-        sendConsoleDidLoadFeature(getAll(Feature.STRONGHOLD).size() + " Strongholds", started);
     }
     public void unload() {
         SCHEDULER.cancelTask(captureTask);
-        unregister(Feature.STRONGHOLD);
     }
 
     public void viewStrongholds(@NotNull Player player) {

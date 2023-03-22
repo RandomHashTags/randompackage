@@ -54,7 +54,6 @@ public enum Alchemist implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("addons", "alchemist.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "addons", "alchemist.yml"));
 
@@ -88,7 +87,6 @@ public enum Alchemist implements RPFeatureSpigot, CommandExecutor {
             }
             X++;
         }
-        sendConsoleDidLoadFeature("Alchemist", started);
     }
     @Override
     public void unload() {

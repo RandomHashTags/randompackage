@@ -346,8 +346,8 @@ public interface EventExecutor extends RPFeatureSpigot, EventReplacements, Event
     default boolean trigger(Event event, List<String> attributes, String...replacements) {
         final List<String> list = new ArrayList<>();
         final String[] array = getReplacements(event);
-        list.addAll(Arrays.asList(replacements));
-        list.addAll(Arrays.asList(array));
+        list.addAll(List.of(replacements));
+        list.addAll(List.of(array));
         final String[] finalArray = list.toArray(new String[replacements.length+array.length]);
         return trigger(event, getEntities(event), attributes, finalArray);
     }

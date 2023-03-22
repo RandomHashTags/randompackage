@@ -27,6 +27,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,8 +48,12 @@ public class Masks extends CustomEnchants {
     private List<String> maskCanObtain;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.MASK;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("masks", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "masks", "_settings.yml"));
 
@@ -69,7 +75,6 @@ public class Masks extends CustomEnchants {
             }
         }
         addGivedpCategory(list, UMaterial.PLAYER_HEAD_ITEM, "Masks", "Givedp: Masks");
-        sendConsoleDidLoadFeature(getAll(Feature.MASK).size() + " Masks", started);
     }
     @Override
     public void unload() {
@@ -77,7 +82,6 @@ public class Masks extends CustomEnchants {
             p.getInventory().setHelmet(equippedMasks.get(p));
             p.updateInventory();
         }
-        unregister(Feature.MASK);
     }
 
     @EventHandler

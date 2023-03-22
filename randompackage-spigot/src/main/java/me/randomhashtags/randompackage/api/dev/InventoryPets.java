@@ -48,9 +48,12 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
     private HashMap<UUID, List<ItemStack>> leashedUponDeath;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.INVENTORY_PET;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
-        EventAttributeCoreListener.registerEventAttributeListener(this);
         new GivePetExp().load();
         save("inventory pets", "_settings.yml");
         if(!OTHER_YML.getBoolean("saved default inventory pets")) {
@@ -85,14 +88,12 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
             }
         }
         addGivedpCategory(pets, UMaterial.PLAYER_HEAD_ITEM, "Inventory Pets", "Givedp: Inventory Pets");
-        sendConsoleDidLoadFeature(getAll(Feature.INVENTORY_PET).size() + " Inventory Pets", started);
     }
     @Override
     public void unload() {
         for(UUID u : leashedUponDeath.keySet()) {
         }
-        unregister(Feature.INVENTORY_PET);
-        EventAttributeCoreListener.unregisterEventAttributeListener(this);
+
     }
 
     public String getExpRegex(int currentXp, int maxXp) {

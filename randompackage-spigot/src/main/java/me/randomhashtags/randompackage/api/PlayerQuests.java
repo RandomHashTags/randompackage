@@ -53,7 +53,13 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
     private HashMap<Integer, Integer> tokencost;
     private int returnToQuestsSlot;
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.PLAYER_QUEST;
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) {
             return true;
         }
@@ -62,22 +68,21 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         if(l == 0) {
             view(player);
         } else {
-            final String a = args[0];
-            if(a.equals("shop")) {
+            final String argument = args[0];
+            if(argument.equals("shop")) {
                 viewShop(player);
-            } else if(a.equals("reroll") && hasPermission(player, PlayerQuestPermission.COMMAND_REROLL, true)) {
+            } else if(argument.equals("reroll") && hasPermission(player, PlayerQuestPermission.COMMAND_REROLL, true)) {
                 FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().setQuests(null);
             }
         }
         return true;
     }
 
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("player quests", "_settings.yml");
 
         new IncreasePQuest().load();
-        EventAttributeCoreListener.registerEventAttributeListener(this);
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "player quests", "_settings.yml"));
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
@@ -155,11 +160,9 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
                 new FilePlayerQuest(f);
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.PLAYER_QUEST).size() + " Player Quests", started);
     }
+    @Override
     public void unload() {
-        unregister(Feature.PLAYER_QUEST);
-        EventAttributeCoreListener.unregisterEventAttributeListener(this);
     }
 
     public ActivePlayerQuest valueOf(Player player, ItemStack is) {

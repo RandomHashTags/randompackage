@@ -17,7 +17,7 @@ public interface EventAttributes extends EventExecutor {
      */
 
     static void loadEventAttributes() {
-        final List<EventAttribute> attributes = Arrays.asList(
+        final List<EventAttribute> attributes = List.of(
                 // event attributes
                 new BreakHitBlock(),
                 new GiveDrops(),
@@ -79,7 +79,7 @@ public interface EventAttributes extends EventExecutor {
         for(EventAttribute e : attributes) {
             e.load();
         }
-        final List<EventCondition> conditions = Arrays.asList(
+        final List<EventCondition> conditions = List.of(
                 new DepleteRarityGem(),
                 new DoesDieFromDamage(),
                 new HasCombo(),

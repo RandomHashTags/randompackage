@@ -70,7 +70,6 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "wild pvp.yml");
 
         isLegacy = EIGHT || NINE || TEN || ELEVEN;
@@ -91,8 +90,6 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
         countdown = new HashMap<>();
         viewing = new HashSet<>();
         viewInventory = new UInventory(null, 54, colorize(config.getString("view inventory.title")));
-
-        sendConsoleDidLoadFeature("Wild PvP", started);
     }
     public void unload() {
         for(HashSet<Integer> set : tasks.values()) {

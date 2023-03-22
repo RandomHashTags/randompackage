@@ -20,6 +20,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,8 +34,13 @@ public enum CustomBosses implements EventAttributes {
 
 	private HashMap<UUID, LivingCustomBoss> deadBosses;
 
+	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.CUSTOM_BOSS;
+	}
+
+	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		deadBosses = new HashMap<>();
 
 		if(!OTHER_YML.getBoolean("saved default custom bosses")) {
@@ -48,13 +55,12 @@ public enum CustomBosses implements EventAttributes {
 		}
 		addGivedpCategory(list, UMaterial.SPIDER_SPAWN_EGG, "Custom Bosses", "Givedp: Custom Bosses");
 		loadBackup();
-		sendConsoleDidLoadFeature(getAll(Feature.CUSTOM_BOSS).size() + " Custom Bosses", started);
 	}
+	@Override
 	public void unload() {
 		backup();
 		LivingCustomBoss.LIVING = null;
 		LivingCustomMinion.deleteAll();
-		unregister(Feature.CUSTOM_BOSS);
 	}
 
 	public void backup() {

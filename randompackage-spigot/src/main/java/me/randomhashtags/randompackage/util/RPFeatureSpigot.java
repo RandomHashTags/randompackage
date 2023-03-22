@@ -5,6 +5,8 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
+import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
+import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.universal.UInventory;
@@ -58,6 +60,11 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         return getClass().getSimpleName();
     }
 
+    @Nullable
+    default Feature get_feature() {
+        return null;
+    }
+
     @Override
     default boolean isEnabled() {
         return ENABLED_RP_FEATURES.contains(getIdentifier());
@@ -76,9 +83,23 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
             if(isEnabled()) {
                 return;
             }
+            final Feature feature = get_feature();
+            final boolean has_feature = feature != null;
             try {
-                ENABLED_RP_FEATURES.add(getIdentifier());
+                final String identifier = getIdentifier();
+                ENABLED_RP_FEATURES.add(identifier);
+                final long started = System.currentTimeMillis();
+                if(this instanceof EventAttributeListener) {
+                    final EventAttributeListener event_attribute_listener = (EventAttributeListener) this;
+                    EventAttributeCoreListener.registerEventAttributeListener(event_attribute_listener);
+                }
                 load();
+                if(has_feature) {
+                    sendConsoleDidLoadFeature(getAll(feature).size() + " " + identifier, started);
+                } else {
+                    sendConsoleDidLoadFeature(identifier, started);
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -93,15 +114,24 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         if(!isEnabled()) {
             return;
         }
+        final String identifier = getIdentifier();
         try {
-            ENABLED_RP_FEATURES.remove(getIdentifier());
+            ENABLED_RP_FEATURES.remove(identifier);
+            final Feature feature = get_feature();
+            if(feature != null) {
+                unregister(feature);
+            }
             unload();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if(!isEnabled()) {
+                if(this instanceof EventAttributeListener) {
+                    final EventAttributeListener event_attribute_listener = (EventAttributeListener) this;
+                    EventAttributeCoreListener.unregisterEventAttributeListener(event_attribute_listener);
+                }
                 HandlerList.unregisterAll(this);
-                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + getIdentifier());
+                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + identifier);
             }
         }
     }

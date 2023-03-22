@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +35,11 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.SOUL_TRACKER;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(player != null && hasPermission(sender, SoulTrackerPermission.COMMAND_SPLITSOULS, true)) {
@@ -44,7 +50,6 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("addons", "soul trackers.yml");
         config = getAddonConfig("soul trackers.yml");
         final List<ItemStack> list = new ArrayList<>();
@@ -52,11 +57,9 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
             list.add(new PathSoulTracker(s).getItem());
         }
         addGivedpCategory(list, UMaterial.PAPER, "Soul Trackers", "Givedp: Soul Trackers");
-        sendConsoleDidLoadFeature(getAll(Feature.SOUL_TRACKER).size() + " Soul Trackers", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.SOUL_TRACKER);
     }
 
     public void applySoulTracker(@NotNull Player player, @NotNull ItemStack is, @NotNull SoulTracker soultracker) {

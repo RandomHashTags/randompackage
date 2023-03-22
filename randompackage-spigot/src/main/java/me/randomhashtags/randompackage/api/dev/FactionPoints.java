@@ -35,7 +35,6 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "faction points.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "faction points.yml"));
 
@@ -66,8 +65,6 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction points.yml");
         data = YamlConfiguration.loadConfiguration(dataF);
         loadBackup();
-
-        sendConsoleDidLoadFeature("Faction Points", started);
     }
     @Override
     public void unload() {

@@ -45,18 +45,19 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		bragDisplay = colorize(RP_CONFIG.getString("chat cmds.brag.display"));
 		itemDisplay = colorize(RP_CONFIG.getString("chat cmds.item.display"));
 		viewingBrag = new ArrayList<>();
 		bragInventories = new HashMap<>();
 		chatformat = RP_CONFIG.getString("chat cmds.format");
-		sendConsoleDidLoadFeature("ChatEvents", started);
 	}
 	@Override
 	public void unload() {
 		for(UUID id : new ArrayList<>(viewingBrag)) {
-			Bukkit.getPlayer(id).closeInventory();
+			final Player player = Bukkit.getPlayer(id);
+			if(player != null) {
+				player.closeInventory();
+			}
 		}
 	}
 
@@ -71,7 +72,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 			final TitleData data = FileRPPlayer.get(player.getUniqueId()).getTitleData();
 			final Title title = data.getActive();
 			String format = colorize(chatformat.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{TITLE}", title != null ? " " + title.getChatTitle() : ""));
-			if(RANDOM_PACKAGE.placeholderapi) {
+			if(RANDOM_PACKAGE.placeholder_api) {
 				format = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
 			}
 			final TextComponent prefix = new TextComponent(format.replace("{MESSAGE}", message.split("\\[").length > 0 ? message.split("\\[")[0] : "")), suffix = new TextComponent(message.split("]").length > 1 ? message.split("]")[1] : "");

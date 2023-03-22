@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +32,11 @@ public enum Trinkets implements EventAttributes, RPItemStack {
     INSTANCE;
 
     public YamlConfiguration config;
+
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.TRINKET;
+    }
 
     @Override
     public void load() {
@@ -54,11 +60,9 @@ public enum Trinkets implements EventAttributes, RPItemStack {
         addGivedpCategory(list, UMaterial.NETHER_STAR, "Trinkets", "Givedp: Trinkets");
 
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "trinkets.yml"));
-        sendConsoleDidLoadFeature(getAll(Feature.TRINKET).size() + " Trinkets", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.TRINKET);
     }
 
     public boolean isTrinket(ItemStack is) {

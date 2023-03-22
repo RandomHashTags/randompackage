@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,8 +32,12 @@ public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
     public YamlConfiguration config;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.FAT_BUCKET;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         if(!OTHER_YML.getBoolean("saved default fat buckets")) {
             generateDefaultFatBuckets();
             OTHER_YML.set("saved default fat buckets", true);
@@ -44,11 +49,9 @@ public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
             list.add(ffb.getItem(ffb.getUses()));
         }
         addGivedpCategory(list, UMaterial.LAVA_BUCKET, "Fat Buckets", "Givedp: Fat Buckets");
-        sendConsoleDidLoadFeature(getAll(Feature.FAT_BUCKET).size() + " Fat Buckets", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.FAT_BUCKET);
     }
 
     public boolean isFatBucket(@NotNull ItemStack is) {

@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -42,6 +43,11 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     private List<String> enable, disable, addedLore;
     private HashMap<Integer, String> categorySlots;
     private HashMap<String, FileFilterCategory> categories, categoryTitles;
+
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.FILTER_CATEGORY;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -69,7 +75,6 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("filter categories", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "filter categories", "_settings.yml"));
 
@@ -111,11 +116,9 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
                 categoryTitles.put(fc.getTitle(), fc);
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.FILTER_CATEGORY).size() + " Item Filter categories", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.FILTER_CATEGORY);
     }
 
     public void viewHelp(@NotNull CommandSender sender) {

@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,8 +28,12 @@ public enum RarityGems implements RPFeatureSpigot {
     INSTANCE;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.RARITY_GEM;
+    }
+
+    @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("rarity gems", "_settings.yml");
         final YamlConfiguration config = getRPConfig("rarity gems", "_settings.yml");
 
@@ -55,11 +61,9 @@ public enum RarityGems implements RPFeatureSpigot {
                 new FileRarityGem(f);
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.RARITY_GEM).size() + " Rarity Gems", started);
     }
     @Override
     public void unload() {
-        unregister(Feature.RARITY_GEM);
         FileRarityGem.defaultColors = null;
     }
 

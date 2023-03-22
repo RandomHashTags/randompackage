@@ -35,7 +35,7 @@ import java.util.*;
 
 public interface UVersionableSpigot extends Versionable, UVersionable {
     HashMap<Feature, LinkedHashMap<String, Identifiable>> FEATURES = new HashMap<>();
-    RandomPackage RANDOM_PACKAGE = RandomPackage.GET_PLUGIN;
+    RandomPackage RANDOM_PACKAGE = RandomPackage.INSTANCE;
 
     File DATA_FOLDER = RANDOM_PACKAGE.getDataFolder();
     FileConfiguration RP_CONFIG = RANDOM_PACKAGE.getConfig();
@@ -51,8 +51,8 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
 
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
     EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND, EIGHT ? null : EquipmentSlot.OFF_HAND };
-    Set<String> INTERACTABLE_MATERIALS = new HashSet<String>() {{
-        addAll(Arrays.asList(
+    Set<String> INTERACTABLE_MATERIALS = new HashSet<>() {{
+        addAll(List.of(
                 "BELL",
                 "BREWING_STAND",
                 "BLAST_FURNACE",
@@ -123,7 +123,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         final ConfigurationSection section = yml.getConfigurationSection(key);
         if(section != null) {
             final HashSet<String> set = new HashSet<>(section.getKeys(includeKeys));
-            Arrays.asList(excluding).forEach(set::remove);
+            List.of(excluding).forEach(set::remove);
             return set;
         } else {
             return new HashSet<>();
@@ -135,7 +135,8 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
 
     default int getTotalExperience(Player player) {
-        final double levelxp = convertLevelToExp(player.getLevel()), nextlevelxp = convertLevelToExp(player.getLevel() + 1), difference = nextlevelxp - levelxp;
+        final int level = player.getLevel();
+        final double levelxp = convertLevelToExp(level), nextlevelxp = convertLevelToExp(level + 1), difference = nextlevelxp - levelxp;
         final double p = (levelxp + (difference * player.getExp()));
         return (int) Math.round(p);
     }
@@ -202,7 +203,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
     default void sendStringListMessage(@NotNull CommandSender sender, @Nullable List<String> message, @Nullable HashMap<String, String> replacements) {
         if(message != null && message.size() > 0 && !message.get(0).equals("")) {
-            final boolean papi = RANDOM_PACKAGE.placeholderapi, isPlayer = sender instanceof Player;
+            final boolean papi = RANDOM_PACKAGE.placeholder_api, isPlayer = sender instanceof Player;
             final Player player = isPlayer ? (Player) sender : null;
             for(String s : message) {
                 if(replacements != null) {
@@ -284,23 +285,33 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                 case "polar_bear":
                 case "wolf":
                     return true;
+                default:
+                    return false;
             }
         }
         return false;
     }
 
-    default PotionEffectType getPotionEffectType(String input) {
-        if(input != null && !input.isEmpty()) {
+    @Nullable
+    default PotionEffectType getPotionEffectType(@NotNull String input) {
+        if(!input.isEmpty()) {
             switch (input.toUpperCase()) {
-                case "STRENGTH": return PotionEffectType.INCREASE_DAMAGE;
-                case "MINING_FATIGUE": return PotionEffectType.SLOW_DIGGING;
-                case "SLOWNESS": return PotionEffectType.SLOW;
-                case "HASTE": return PotionEffectType.FAST_DIGGING;
-                case "JUMP": return PotionEffectType.JUMP;
+                case "STRENGTH":
+                    return PotionEffectType.INCREASE_DAMAGE;
+                case "MINING_FATIGUE":
+                    return PotionEffectType.SLOW_DIGGING;
+                case "SLOWNESS":
+                    return PotionEffectType.SLOW;
+                case "HASTE":
+                    return PotionEffectType.FAST_DIGGING;
+                case "JUMP":
+                    return PotionEffectType.JUMP;
                 case "INSTANT_HEAL":
-                case "INSTANT_HEALTH": return PotionEffectType.HEAL;
+                case "INSTANT_HEALTH":
+                    return PotionEffectType.HEAL;
                 case "INSTANT_HARM":
-                case "INSTANT_DAMAGE": return PotionEffectType.HARM;
+                case "INSTANT_DAMAGE":
+                    return PotionEffectType.HARM;
                 default:
                     for(PotionEffectType type : PotionEffectType.values()) {
                         if(input.equalsIgnoreCase(type.getName())) {
@@ -309,7 +320,9 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                     }
                     return null;
             }
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     default String toString(@NotNull Location loc) {
@@ -394,10 +407,8 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return mob;
     }
 
-    default Color getColor(String path) {
-        if(path == null) {
-            return null;
-        }
+    @Nullable
+    default Color getColor(@NotNull String path) {
         switch (path.toLowerCase()) {
             case "aqua": return Color.AQUA;
             case "black": return Color.BLACK;
@@ -487,8 +498,9 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     default void didApply(InventoryClickEvent event, Player player, ItemStack current, ItemStack cursor) {
         event.setCancelled(true);
         final int amount = cursor.getAmount();
-        if(amount == 1) event.setCursor(new ItemStack(Material.AIR));
-        else {
+        if(amount == 1) {
+            event.setCursor(new ItemStack(Material.AIR));
+        } else {
             cursor.setAmount(amount-1);
             event.setCursor(cursor);
         }
@@ -676,7 +688,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
 
     @NotNull
-    default List<Location> getChunkLocations(Chunk chunk) {
+    default List<Location> getChunkLocations(@NotNull Chunk chunk) {
         final List<Location> l = new ArrayList<>();
         final int x = chunk.getX() * 16, z = chunk.getZ() * 16;
         final World world = chunk.getWorld();

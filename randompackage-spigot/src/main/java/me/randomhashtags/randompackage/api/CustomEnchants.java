@@ -70,6 +70,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
     private HashMap<UUID, EquippedCustomEnchants> playerEnchants;
     private HashMap<Player, List<CustomEnchantSpigot>> equippedTimedEnchants;
 
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         final String cmdName = cmd.getName();
@@ -86,6 +87,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         return true;
     }
 
+    @Override
     public void load() {
         final long started = System.currentTimeMillis();
         save("custom enchants", "_settings.yml");
@@ -168,7 +170,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
 
         sendConsoleMessage("&6[RandomPackage] &aStarted Custom Enchant Timers for enchants &e" + enchantTicks);
         addGivedpCategory(raritybooks, UMaterial.BOOK, "Rarity Books", "Givedp: Rarity Books");
-        createCustomEnchantEntities();
+        load_custom_enchant_entities();
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + getAll(Feature.CUSTOM_ENCHANT_ENABLED).size() + "e, &c" + getAll(Feature.CUSTOM_ENCHANT_DISABLED).size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
@@ -182,13 +184,13 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         unregister(Feature.CUSTOM_ENCHANT_ENABLED, Feature.CUSTOM_ENCHANT_RARITY);
     }
 
-    private void createCustomEnchantEntities() {
+    private void load_custom_enchant_entities() {
         final long started = System.currentTimeMillis();
         final boolean defaultDropsItemsUponDeath = config.getBoolean("entities.settings.default drops items upon death"), defaultCanTargetSummoner = config.getBoolean("entities.settings.default can target summoner");
         final HashMap<String, CustomEnchantEntity> entities = CustomEnchantEntity.PATHS;
-        for(String s : getConfigurationSectionKeys(config, "entities", false)) {
-            if(!s.startsWith("settings")) {
-                final String identifier = s.split("\\.")[0];
+        for(String string : getConfigurationSectionKeys(config, "entities", false)) {
+            if(!string.startsWith("settings")) {
+                final String identifier = string.split("\\.")[0];
                 if(entities == null || !entities.containsKey(identifier)) {
                     final String path = "entities." + identifier + ".";
                     final boolean canTargetSummoner = config.getBoolean(path + "can target summoner", defaultCanTargetSummoner);
@@ -220,7 +222,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
                         final CustomEnchantSpigot ce = (CustomEnchantSpigot) enchants[i];
                         final EnchantRarity rarity = valueOfCustomEnchantRarity(ce);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
-                        replacements.put("{TIER}", Arrays.asList(rarity.getApplyColors() + rarity.getIdentifier()));
+                        replacements.put("{TIER}", List.of(rarity.getApplyColors() + rarity.getIdentifier()));
                         replacements.put("{DESC}", ce.getLore());
                         final String msg = colorize(format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
                         if(sender instanceof Player) {

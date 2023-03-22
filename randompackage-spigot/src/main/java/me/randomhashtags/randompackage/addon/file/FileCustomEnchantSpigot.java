@@ -37,7 +37,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         return yml.getInt("max level");
     }
     public List<String> getAppliesTo() {
-        if(appliesto == null) appliesto = Arrays.asList(yml.getString("applies to").split(";"));
+        if(appliesto == null) appliesto = List.of(yml.getString("applies to").split(";"));
         return appliesto;
     }
     public String getRequiredEnchant() {

@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public enum KOTH implements RPFeatureSpigot, CommandExecutor {
+public enum KingOfTheHill implements RPFeatureSpigot, CommandExecutor {
 	INSTANCE;
 
 	public YamlConfiguration config;
@@ -97,7 +97,6 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "koth.yml");
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "koth.yml"));
@@ -128,8 +127,6 @@ public enum KOTH implements RPFeatureSpigot, CommandExecutor {
 			this.center = toLocation(center);
 			startKOTH();
 		}
-
-		sendConsoleDidLoadFeature("Koth of the Hill", started);
 	}
 	@Override
 	public void unload() {

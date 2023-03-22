@@ -59,7 +59,6 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "fund.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "fund.yml"));
 
@@ -82,7 +81,6 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 		for(String uuid : getConfigurationSectionKeys(OTHER_YML, "fund.depositors", false)) {
 			deposits.put(UUID.fromString(uuid), BigDecimal.valueOf(OTHER_YML.getDouble("fund.depositors." + uuid)));
 		}
-		sendConsoleDidLoadFeature("Server Fund", started);
 	}
 	@Override
 	public void unload() {

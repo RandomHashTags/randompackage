@@ -25,6 +25,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Dispenser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +39,11 @@ public enum CustomExplosions implements RPFeatureSpigot {
 
 	public YamlConfiguration config;
 	private List<UMaterial> cannotBreakTNT, cannotBreakCreepers;
+
+	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.CUSTOM_EXPLOSION;
+	}
 
 	@Override
 	public void load() {
@@ -71,8 +78,6 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		}
 
 		final HashMap<String, Identifiable> explosions = getAll(Feature.CUSTOM_EXPLOSION);
-		sendConsoleDidLoadFeature(explosions.size() + " Custom Explosions", started);
-
 		final List<ItemStack> explosionsList = new ArrayList<>();
 		for(Identifiable id : explosions.values()) {
 			final CustomExplosion explosion = (CustomExplosion) id;
@@ -151,7 +156,6 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		OTHER_YML.set("creepers", cree);
 		saveOtherData();
 
-		unregister(Feature.CUSTOM_EXPLOSION);
 		FileCustomCreeper.LIVING = null;
 		FileCustomTNT.PLACED = null;
 		FileCustomTNT.PRIMED = null;

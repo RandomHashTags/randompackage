@@ -49,7 +49,6 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "homes.yml");
 
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "homes.yml"));
@@ -79,7 +78,6 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 				eii.setItem(config.getInt("edit icon." + string + ".slot"), item);
 			}
 		}
-		sendConsoleDidLoadFeature("Homes", started);
 	}
 	@Override
 	public void unload() {

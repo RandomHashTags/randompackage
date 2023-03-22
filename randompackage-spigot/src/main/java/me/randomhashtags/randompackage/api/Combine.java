@@ -34,14 +34,12 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
     }
 
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "combine.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "combine.yml"));
         combineores = new ArrayList<>();
         for(String string : config.getStringList("combine ores")) {
             combineores.add(string.toUpperCase());
         }
-        sendConsoleDidLoadFeature("Combine", started);
     }
     public void unload() {
     }

@@ -8,7 +8,6 @@ import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,14 +17,12 @@ import java.util.*;
 public enum RegionalAPI implements UVersionableSpigot {
     INSTANCE;
 
-    private FileConfiguration config;
     private boolean WORLD_GUARD, FACTIONS_UUID, A_SKYBLOCK, SUPERIOR_SKYBLOCK, EPIC_SKYBLOCK;
 
     private boolean isTrue(String path) {
-        return config.getBoolean(path);
+        return RandomPackage.INSTANCE.config.getBoolean(path);
     }
-    public void setup(RandomPackage randompackage) {
-        this.config = randompackage.config;
+    public void setup() {
         trySupportingWorldGuard();
         trySupportingFactions();
         trySupportingASkyblock();

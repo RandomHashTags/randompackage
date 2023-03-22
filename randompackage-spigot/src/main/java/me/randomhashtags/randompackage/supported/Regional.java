@@ -8,39 +8,37 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public interface Regional {
-    default boolean a(Collection<UUID> list, UUID player2) {
+    default boolean list_contains_player(Collection<UUID> list, UUID player2) {
         return list != null && list.contains(player2);
     }
     default boolean isAssociate(UUID player1, UUID player2) {
-        return a(getAssociates(player1), player2);
+        return list_contains_player(getAssociates(player1), player2);
     }
     default boolean isAssociate(OfflinePlayer player1, OfflinePlayer player2) {
         return isAssociate(player1.getUniqueId(), player2.getUniqueId());
     }
     default boolean isNeutral(UUID player1, UUID player2) {
-        return a(getNeutrals(player1), player2);
+        return list_contains_player(getNeutrals(player1), player2);
     }
     default boolean isNeutral(OfflinePlayer player1, OfflinePlayer player2) {
         return isNeutral(player1.getUniqueId(), player2.getUniqueId());
     }
     default boolean isAlly(UUID player1, UUID player2) {
-        return a(getAllies(player1), player2);
+        return list_contains_player(getAllies(player1), player2);
     }
     default boolean isAlly(OfflinePlayer player1, OfflinePlayer player2) {
         return isAlly(player1.getUniqueId(), player2.getUniqueId()); }
     default boolean isTruce(UUID player1, UUID player2) {
-        return a(getTruces(player1), player2);
+        return list_contains_player(getTruces(player1), player2);
     }
     default boolean isTruce(OfflinePlayer player1, OfflinePlayer player2) {
         return isTruce(player1.getUniqueId(), player2.getUniqueId());
     }
     default boolean isEnemy(UUID player1, UUID player2) {
-        return a(getEnemies(player1), player2);
+        return list_contains_player(getEnemies(player1), player2);
     }
     default boolean isEnemy(OfflinePlayer player1, OfflinePlayer player2) {
         return isEnemy(player1.getUniqueId(), player2.getUniqueId());

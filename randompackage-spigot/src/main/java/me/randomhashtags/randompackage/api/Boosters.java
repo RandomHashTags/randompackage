@@ -50,9 +50,13 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 	private MCMMOBoosterEvents mcmmoboosters;
 
 	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.BOOSTER;
+	}
+
+	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
-		EventAttributeCoreListener.registerEventAttributeListener(this);
+
 		save("_Data", "boosters.yml");
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
@@ -76,16 +80,15 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 			b.add(bo.getItem(60*10000, 5.0));
 		}
 		addGivedpCategory(b, UMaterial.EMERALD, "Boosters", "Givedp: Boosters");
-		sendConsoleDidLoadFeature(getAll(Feature.BOOSTER).size() + " Boosters", started);
 		loadBackup();
 	}
+	@Override
 	public void unload() {
 		backup();
 		if(RPFeatureSpigot.mcmmoIsEnabled()) {
 			HandlerList.unregisterAll(mcmmoboosters);
 			mcmmoboosters = null;
 		}
-		unregister(Feature.BOOSTER);
 		ACTIVE_REGIONAL_BOOSTERS = null;
 		ACTIVE_PLAYER_BOOSTERS = null;
 	}
@@ -290,36 +293,36 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 	}
 	@EventHandler
 	private void boosterExpireEvent(BoosterExpireEvent event) {
-		final ActiveBooster b = event.booster;
-		final Booster booster = b.getBooster();
-		final List<String> expire = booster.getExpireMsg();
-		final OfflinePlayer a = b.getActivator();
-		final UUID u = a.getUniqueId();
+		final ActiveBooster booster = event.booster;
+		final Booster booster_type = booster.getBooster();
+		final List<String> expire = booster_type.getExpireMsg();
+		final OfflinePlayer activator = booster.getActivator();
+		final UUID activator_uuid = activator.getUniqueId();
 		final HashMap<String, String> replacements = new HashMap<>();
-		replacements.put("{PLAYER}", a.getName());
-		replacements.put("{MULTIPLIER}", Double.toString(b.getMultiplier()));
-		switch (booster.getRecipients()) {
+		replacements.put("{PLAYER}", activator.getName());
+		replacements.put("{MULTIPLIER}", Double.toString(booster.getMultiplier()));
+		switch (booster_type.getRecipients()) {
 			case FACTION_MEMBERS:
 				boolean did = false;
-				final String faction = b.getFaction();
+				final String faction = booster.getFaction();
 				if(faction != null && ACTIVE_REGIONAL_BOOSTERS.containsKey(faction)) {
 					final List<ActiveBooster> boosters = ACTIVE_REGIONAL_BOOSTERS.get(faction);
-					if(boosters.contains(b)) {
+					if(boosters.contains(booster)) {
 						did = true;
-						boosters.remove(b);
-						for(Player p : FactionsUUID.INSTANCE.getOnlineAssociates(u)) {
+						boosters.remove(booster);
+						for(Player p : FactionsUUID.INSTANCE.getOnlineAssociates(activator_uuid)) {
 							sendStringListMessage(p, expire, replacements);
 						}
 					}
 				}
-				if(!did && a.isOnline()) {
-					sendStringListMessage(a.getPlayer(), expire, replacements);
+				if(!did && activator.isOnline()) {
+					sendStringListMessage(activator.getPlayer(), expire, replacements);
 				}
 				break;
 			case SELF:
 			default:
-				if(ACTIVE_PLAYER_BOOSTERS.containsKey(u) && a.isOnline()) {
-					sendStringListMessage(a.getPlayer(), expire, replacements);
+				if(ACTIVE_PLAYER_BOOSTERS.containsKey(activator_uuid) && activator.isOnline()) {
+					sendStringListMessage(activator.getPlayer(), expire, replacements);
 				}
 				break;
 		}

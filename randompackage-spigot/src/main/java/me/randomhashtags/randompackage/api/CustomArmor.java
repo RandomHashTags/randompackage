@@ -45,8 +45,12 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 	private List<Player> inEquipmentLootbox;
 
 	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.ARMOR_SET;
+	}
+
+	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save("custom armor", "_settings.yml");
 
 		inEquipmentLootbox = new ArrayList<>();
@@ -77,11 +81,9 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 			}
 		}
 		addGivedpCategory(crystals, UMaterial.NETHER_STAR, "Armor Set Crystals", "Givedp: ArmorSet Crystals");
-		sendConsoleDidLoadFeature(getAll(Feature.ARMOR_SET).size() + " Armor Sets", started);
 	}
 	@Override
 	public void unload() {
-		unregister(Feature.ARMOR_SET);
 	}
 
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {

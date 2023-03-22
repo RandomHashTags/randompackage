@@ -59,7 +59,6 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
     }
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "xpbottle.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "xpbottle.yml"));
 
@@ -100,7 +99,6 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
 
         teleportCauses = config.getStringList("xpbottle.teleport causes");
         delayed = new HashMap<>();
-        sendConsoleDidLoadFeature("Xpbottle", started);
     }
     @Override
     public void unload() {

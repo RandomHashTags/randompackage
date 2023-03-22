@@ -99,7 +99,6 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "auction house.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "auction house.yml"));
         save("_Data", "auctions.yml");
@@ -149,7 +148,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         refresh = createItemStack(config, "refresh");
 
         final Inventory ahInventory = ah.getInventory();
-        setupInventory("auction house", ahInventory, Arrays.asList("title", "size", "item slots", "organization", "auction expiration", "collection bin expiration", "format", "status", "previous page", "next page"), new HashMap<String, ItemStack>() {{
+        setupInventory("auction house", ahInventory, List.of("title", "size", "item slots", "organization", "auction expiration", "collection bin expiration", "format", "status", "previous page", "next page"), new HashMap<String, ItemStack>() {{
             put("{REFRESH}", refresh);
             put("{COLLECTION_BIN}", collectionBin);
         }});
@@ -194,24 +193,22 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         }
 
         categories = new UInventory(null, config.getInt("categories.size"), colorize(config.getString("categories.title")));
-        setupInventory("categories", categories.getInventory(), Arrays.asList("title", "size", "format", "groups"), new HashMap<String, ItemStack>() {{
+        setupInventory("categories", categories.getInventory(), List.of("title", "size", "format", "groups"), new HashMap<String, ItemStack>() {{
             put("{REFRESH}", refresh);
             put("{COLLECTION_BIN}", collectionBin);
             put("{RETURN_TO_AH}", returnToAH);
         }});
 
         categoryItems = new UInventory(null, config.getInt("category items.size"), colorize(config.getString("category items.title")));
-        setupInventory("category items", categoryItems.getInventory(), Arrays.asList("title", "size"), new HashMap<String, ItemStack>() {{
+        setupInventory("category items", categoryItems.getInventory(), List.of("title", "size"), new HashMap<String, ItemStack>() {{
             put("{COLLECTION_BIN}", collectionBin);
         }});
 
         collectionbin = new UInventory(null, config.getInt("collection bin.size"), colorize(config.getString("collection bin.title")));
-        setupInventory("collection bin", collectionbin.getInventory(), Arrays.asList("title", "size", "not enough inventory space", "in auction", "claim"), new HashMap<String, ItemStack>() {{
+        setupInventory("collection bin", collectionbin.getInventory(), List.of("title", "size", "not enough inventory space", "in auction", "claim"), new HashMap<String, ItemStack>() {{
             put("{REFRESH}", refresh);
             put("{RETURN_TO_AH}", returnToAH);
         }});
-
-        sendConsoleDidLoadFeature("Auction House", started);
 
         loadAuctions(true);
     }
@@ -321,10 +318,10 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
     @Override
     public void unload() {
         backup(false);
-        for(Player player : new ArrayList<>(page.keySet())) {
+        for(Player player : page.keySet()) {
             player.closeInventory();
         }
-        for(Player player : new ArrayList<>(viewingCategory.keySet())) {
+        for(Player player : viewingCategory.keySet()) {
             player.closeInventory();
         }
         for(AuctionedItem i : task.keySet()) {

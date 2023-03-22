@@ -49,6 +49,11 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
     private HashMap<Integer, UInventory> categoriez;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.MONTHLY_CRATE;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
         if(args.length == 0 && player != null) {
@@ -61,7 +66,6 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("monthly crates", "_settings.yml");
         final String folder = DATA_FOLDER + SEPARATOR + "monthly crates";
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
@@ -164,14 +168,12 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
                 inv.setItem(targetSlot, targetCategoryItemStacks.get(targetSlot));
             }
         }
-        sendConsoleDidLoadFeature(getAll(Feature.MONTHLY_CRATE).size() + " Monthly Crates", started);
     }
     @Override
     public void unload() {
         for(Player player : new ArrayList<>(playerTimers.keySet())) {
             player.closeInventory();
         }
-        unregister(Feature.MONTHLY_CRATE);
     }
 
     public void viewCrates(@NotNull Player player) {

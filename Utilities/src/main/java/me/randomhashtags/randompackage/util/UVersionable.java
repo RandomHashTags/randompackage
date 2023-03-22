@@ -139,12 +139,10 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
     }
 
     String colorize(String input);
-    default List<String> colorizeListString(List<String> input) {
+    default List<String> colorizeListString(@NotNull List<String> input) {
         final List<String> i = new ArrayList<>();
-        if(input != null) {
-            for(String s : input) {
-                i.add(colorize(s));
-            }
+        for(String s : input) {
+            i.add(colorize(s));
         }
         return i;
     }
@@ -158,7 +156,8 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
             final String[] spaces = input.split(" ");
             final int length = spaces.length;
             for(int i = 0; i < length; i++) {
-                builder.append(spaces[i].substring(0, 1).toUpperCase()).append(spaces[i].substring(1).toLowerCase()).append(i != length - 1 ? (realitem ? "_" : " ") : "");
+                final String string = spaces[i];
+                builder.append(string.substring(0, 1).toUpperCase()).append(string.substring(1).toLowerCase()).append(i != length - 1 ? (realitem ? "_" : " ") : "");
             }
         } else {
             builder = new StringBuilder(input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase());

@@ -52,12 +52,12 @@ public interface RPStorage extends RPValues {
     }
     default LinkedHashMap<String, Identifiable> getAll(Feature f) { return FEATURES.getOrDefault(f, new LinkedHashMap<>()); }
 
-    static void unregisterAll(Feature...features) {
+    static void unregisterAll(@NotNull Feature...features) {
         for(Feature f : features) {
             FEATURES.remove(f);
         }
     }
-    default void unregister(Feature...features) {
+    default void unregister(@NotNull Feature...features) {
         for(Feature f : features) {
             FEATURES.remove(f);
         }

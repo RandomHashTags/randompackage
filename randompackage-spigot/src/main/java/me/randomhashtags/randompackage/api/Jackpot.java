@@ -128,7 +128,7 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         purchasing = new HashMap<>();
 
         final long e = OTHER_YML.getLong("jackpot.pick next winner");
-        pickNextWinner = e == 0 ? started+winnerPickedEvery*1000 : e;
+        pickNextWinner = e == 0 ? started + winnerPickedEvery*1000 : e;
 
         value = BigDecimal.valueOf(OTHER_YML.getDouble("jackpot.value"));
         for(String s : getConfigurationSectionKeys(OTHER_YML, "jackpot", false)) {
@@ -139,7 +139,6 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
             }
         }
         startTask(started);
-        sendConsoleDidLoadFeature("Jackpot", started);
     }
     @Override
     public void unload() {

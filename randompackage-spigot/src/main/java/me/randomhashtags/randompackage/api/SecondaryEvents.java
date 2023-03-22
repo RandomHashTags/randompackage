@@ -129,7 +129,6 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
     }
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "secondary.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "secondary.yml"));
         confirm = colorize(config.getString("confirm.title"));
@@ -149,7 +148,6 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
                 removedPotionEffects.add(type);
             }
         }
-        sendConsoleDidLoadFeature("Secondary Events", started);
     }
     @Override
     public void unload() {

@@ -31,15 +31,12 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.SPAWNER_CHANCE;
 
 public final class RandomPackage extends JavaPlugin {
-    public static RandomPackage GET_PLUGIN;
+    public static RandomPackage INSTANCE;
 
     public FileConfiguration config;
 
@@ -48,20 +45,22 @@ public final class RandomPackage extends JavaPlugin {
 
     public static String SPAWNER_PLUGIN_NAME;
     public static Plugin SPAWNER_PLUGIN, MCMMO;
-    public boolean placeholderapi = false;
-    
+    public boolean placeholder_api = false;
+
+    @Override
     public void onEnable() {
-        GET_PLUGIN = this;
+        INSTANCE = this;
         enable();
     }
+    @Override
     public void onDisable() {
         disable();
     }
 
     private void enable() {
-        checkForUpdate();
-        checkFiles();
-        loadSoftDepends();
+        check_for_update();
+        check_files();
+        load_soft_dependencies();
 
         api = RandomPackageAPI.INSTANCE;
         rpevents = RPEventsSpigot.INSTANCE;
@@ -73,35 +72,35 @@ public final class RandomPackage extends JavaPlugin {
         api.enable();
         getCommand("randompackage").setExecutor(api);
         rpevents.enable();
-        RegionalAPI.INSTANCE.setup(this);
+        RegionalAPI.INSTANCE.setup();
 
         EventAttributes.loadEventAttributes();
 
         final CommandManager cmd = CommandManager.INSTANCE;
 
         cmd.load(ArmorSockets.INSTANCE, null, isTrue("armor sockets"));
-        cmd.load(Combine.INSTANCE, Arrays.asList("combine"), isTrue("combine"));
-        cmd.load(Xpbottle.INSTANCE, Arrays.asList("xpbottle"), isTrue("xpbottle"));
-        cmd.load(SecondaryEvents.INSTANCE, Arrays.asList("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
+        cmd.load(Combine.INSTANCE, List.of("combine"), isTrue("combine"));
+        cmd.load(Xpbottle.INSTANCE, List.of("xpbottle"), isTrue("xpbottle"));
+        cmd.load(SecondaryEvents.INSTANCE, List.of("balance", "bless", "confirm", "roll", "withdraw"), isTrue("balance", "bless", "roll", "withdraw"));
         cmd.loadCustom(AuctionHouse.INSTANCE, getHash("auctionhouse", "auction house"), isTrue("auction house"));
         cmd.loadCustom(Boosters.INSTANCE, null, isTrue("boosters"));
         cmd.loadCustom(ChatEvents.INSTANCE, getHash("brag", "chat cmds.brag"), isTrue("chat cmds.brag", "chat cmds.item"));
-        cmd.load(CoinFlip.INSTANCE, Arrays.asList("coinflip"), isTrue("coinflip"));
+        cmd.load(CoinFlip.INSTANCE, List.of("coinflip"), isTrue("coinflip"));
         cmd.loadCustom(CollectionFilter.INSTANCE, getHash("collectionfilter", "collection filter"), isTrue("collection filter"));
-        cmd.load(Conquest.INSTANCE, Arrays.asList("conquest"), isTrue("conquest"));
+        cmd.load(Conquest.INSTANCE, List.of("conquest"), isTrue("conquest"));
         cmd.load(CustomArmor.INSTANCE, null, isTrue("custom armor"));
         cmd.loadCustom(CustomBosses.INSTANCE, null, isTrue("custom bosses"));
 
-        cmd.load(Alchemist.INSTANCE, Arrays.asList("alchemist"), isTrue("alchemist"));
-        cmd.load(Tinkerer.INSTANCE, Arrays.asList("tinkerer"), isTrue("tinkerer"));
+        cmd.load(Alchemist.INSTANCE, List.of("alchemist"), isTrue("alchemist"));
+        cmd.load(Tinkerer.INSTANCE, List.of("tinkerer"), isTrue("tinkerer"));
 
         cmd.loadCustom(CustomEnchants.getCustomEnchants(), getHash("disabledenchants", "disabled enchants", "enchants", "enchants"), isTrue("disabled enchants", "enchants"));
         cmd.load(EnchantmentOrbs.INSTANCE, null, isTrue("custom enchants.enchantment orbs", true));
         cmd.load(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
         cmd.load(RarityGems.INSTANCE, null, isTrue("custom enchants.rarity gems", true));
-        cmd.load(SoulTrackers.INSTANCE, Arrays.asList("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
+        cmd.load(SoulTrackers.INSTANCE, List.of("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
 
-        final Set<Boolean> scrolls = new HashSet<Boolean>() {{
+        final Set<Boolean> scrolls = new HashSet<>() {{
             add(config.getBoolean("custom enchants.black scrolls"));
             add(config.getBoolean("custom enchants.randomization scrolls"));
             add(config.getBoolean("custom enchants.transmog scrolls"));
@@ -113,21 +112,21 @@ public final class RandomPackage extends JavaPlugin {
         cmd.loadCustom(CustomExplosions.INSTANCE, null, isTrue("custom creepers", "custom tnt"));
         cmd.loadCustom(Duels.INSTANCE, getHash("duel", "duels"), isTrue("duels"));
         cmd.loadCustom(Dungeons.INSTANCE, getHash("dungeon", "dungeons"), isTrue("dungeons"));
-        cmd.load(Envoy.INSTANCE, Arrays.asList("envoy"), isTrue("envoy"));
+        cmd.load(Envoy.INSTANCE, List.of("envoy"), isTrue("envoy"));
         cmd.loadCustom(FactionUpgrades.INSTANCE, null, isTrue("faction upgrades"));
         cmd.loadCustom(FatBuckets.INSTANCE, null, isTrue("fat buckets"));
-        cmd.load(Fund.INSTANCE, Arrays.asList("fund"), isTrue("fund"));
+        cmd.load(Fund.INSTANCE, List.of("fund"), isTrue("fund"));
         cmd.loadCustom(GlobalChallenges.INSTANCE, getHash("challenge", "global challenges"), isTrue("global challenges"));
-        cmd.load(Homes.INSTANCE, Arrays.asList("home", "sethome"), isTrue("home", "sethome"));
+        cmd.load(Homes.INSTANCE, List.of("home", "sethome"), isTrue("home", "sethome"));
         cmd.loadCustom(ItemFilter.INSTANCE, getHash("filter", "item filter"), isTrue("item filter"));
         cmd.load(ItemSkins.INSTANCE, null, isTrue("item skins"));
-        cmd.load(Jackpot.INSTANCE, Arrays.asList("jackpot"), isTrue("jackpot"));
+        cmd.load(Jackpot.INSTANCE, List.of("jackpot"), isTrue("jackpot"));
 
         cmd.loadCustom(KitsEvolution.getKitsEvolution(), getHash("vkit", "vkits"), isTrue("vkits"));
         cmd.loadCustom(KitsGlobal.getKitsGlobal(), getHash("gkit", "gkits"), isTrue("gkits"));
         cmd.loadCustom(KitsMastery.getKitsMastery(), getHash("mkit", "mkits"), isTrue("mkits"));
 
-        cmd.load(KOTH.INSTANCE, Arrays.asList("kingofthehill"), isTrue("kingofthehill"));
+        cmd.load(KingOfTheHill.INSTANCE, List.of("kingofthehill"), isTrue("kingofthehill"));
         cmd.loadCustom(LastManStanding.INSTANCE, getHash("lastmanstanding", "last man standing"), isTrue("last man standing"));
         cmd.load(Masks.getMasks(), null, isTrue("masks"));
         cmd.load(MobStacker.INSTANCE, null, isTrue("mob stacker"));
@@ -136,19 +135,19 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(Trinkets.INSTANCE, null, isTrue("trinkets"));
         cmd.loadCustom(MonthlyCrates.INSTANCE, getHash("monthlycrate", "monthly crates"), isTrue("monthly crates"));
         cmd.load(ServerCrates.INSTANCE, null, isTrue("server crates"));
-        cmd.load(Titles.INSTANCE, Arrays.asList("title"), isTrue("title"));
-        cmd.load(Showcase.INSTANCE, Arrays.asList("showcase"), isTrue("showcase"));
+        cmd.load(Titles.INSTANCE, List.of("title"), isTrue("title"));
+        cmd.load(Showcase.INSTANCE, List.of("showcase"), isTrue("showcase"));
         cmd.loadCustom(PlayerQuests.INSTANCE, getHash("quest", "player quests"), isTrue("player quests"));
         cmd.loadCustom(Lootboxes.INSTANCE, getHash("lootbox", "lootboxes"), isTrue("lootboxes"));
 
         RandomizedLoot.INSTANCE.enable();
         cmd.loadCustom(SlotBot.INSTANCE, getHash("slotbot", "slot bot"), isTrue("slot bot"));
-        cmd.load(Enchanter.INSTANCE, Arrays.asList("enchanter"), isTrue("enchanter"));
+        cmd.load(Enchanter.INSTANCE, List.of("enchanter"), isTrue("enchanter"));
 
-        cmd.load(Shop.INSTANCE, Arrays.asList("shop"), isTrue("shop"));
+        cmd.load(Shop.INSTANCE, List.of("shop"), isTrue("shop"));
         cmd.loadCustom(SpawnerStacking.INSTANCE, null, isTrue("spawner stacking"));
-        cmd.load(Trade.INSTANCE, Arrays.asList("trade"), isTrue("trade"));
-        cmd.load(Wild.INSTANCE, Arrays.asList("wild"), isTrue("wild"));
+        cmd.load(Trade.INSTANCE, List.of("trade"), isTrue("trade"));
+        cmd.load(Wild.INSTANCE, List.of("wild"), isTrue("wild"));
         cmd.loadCustom(WildPvP.INSTANCE, getHash("wildpvp", "wild pvp"), isTrue("wild pvp"));
 
         final int interval = config.getInt("backup interval")*20*60;
@@ -170,32 +169,32 @@ public final class RandomPackage extends JavaPlugin {
     private HashMap<String, String> getHash(String...values) {
         final HashMap<String, String> a = new HashMap<>();
         for(int i = 0; i < values.length; i++) {
-            if(i%2 == 1) {
+            if(i % 2 == 1) {
                 a.put(values[i-1], values[i]);
             }
         }
         return a;
     }
 
-    private void checkFiles() {
+    private void check_files() {
         RandomPackageAPI.INSTANCE.save(null, "config.yml");
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
     }
-    private void loadSoftDepends() {
-        tryLoadingMCMMO();
-        tryLoadingSpawner();
+    private void load_soft_dependencies() {
+        try_loading_mcmmo();
+        try_loading_spawner();
         if(isTrue("supported plugins.standalone.PlaceholderAPI", true) && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            placeholderapi = true;
+            placeholder_api = true;
             ClipPAPI.getPAPI();
         }
     }
-    public void tryLoadingMCMMO() {
+    public void try_loading_mcmmo() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
         if(isTrue("supported plugins.mechanics.MCMMO", true) && pluginManager.isPluginEnabled("mcMMO")) {
             MCMMO = pluginManager.getPlugin("mcMMO");
         }
     }
-    public void tryLoadingSpawner() {
+    public void try_loading_spawner() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
         final String ss = isTrue("supported plugins.mechanics.SilkSpawners", true) && pluginManager.isPluginEnabled("SilkSpawners") ? "SilkSpawners" : null;
         final String es = isTrue("supported plugins.mechanics.EpicSpawners", true) && pluginManager.isPluginEnabled("EpicSpawners") ? "EpicSpawners" + (pluginManager.getPlugin("EpicSpawners").getDescription().getVersion().startsWith("5") ? "5" : "6") : null;
@@ -218,18 +217,19 @@ public final class RandomPackage extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
     }
 
-    public void checkForUpdate() {
-        final int updateCheckInterval = 20*60*30;
+    private void check_for_update() {
+        final int updateCheckInterval = 20 * 60 * 30;
         final BukkitScheduler scheduler = Bukkit.getScheduler();
+        final String version = getDescription().getVersion();
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             scheduler.runTaskAsynchronously(this, () -> {
                 String msg = null;
                 try {
                     final URLConnection con = new URL("https://api.spigotmc.org/legacy/update.php?resource=38501").openConnection();
-                    final String v = GET_PLUGIN.getDescription().getVersion(), newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-                    final boolean canUpdate = !v.equals(newVersion);
+                    final String newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+                    final boolean canUpdate = !version.equals(newVersion);
                     if(canUpdate) {
-                        msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + v + "&a. Latest version: &f" + newVersion);
+                        msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &eUpdate available! &aYour version: &f" + version + "&a. Latest version: &f" + newVersion);
                     }
                 } catch (Exception e) {
                     msg = ChatColor.translateAlternateColorCodes('&', "&6[RandomPackage] &cCould not check for updates due to being unable to connect to SpigotMC!");

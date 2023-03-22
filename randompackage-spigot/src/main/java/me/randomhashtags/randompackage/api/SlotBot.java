@@ -98,7 +98,6 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "slot bot.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "slot bot.yml"));
 
@@ -222,7 +221,6 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         for(ItemStack is : previewRewardList) {
             previewInv.setItem(previewInv.firstEmpty(), is);
         }
-        sendConsoleDidLoadFeature("Slot Bot", started);
     }
     @Override
     public void unload() {

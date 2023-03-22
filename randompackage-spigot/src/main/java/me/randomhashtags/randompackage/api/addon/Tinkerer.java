@@ -49,7 +49,6 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("addons", "tinkerer.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "addons", "tinkerer.yml"));
 
@@ -79,7 +78,6 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
                     break;
             }
         }
-        sendConsoleDidLoadFeature("Tinkerer", started);
     }
     @Override
     public void unload() {
@@ -134,7 +132,7 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
                 return;
             } else if(customEnchant != null) {
                 final EnchantRarity rarity = valueOfCustomEnchantRarity(customEnchant);
-                final RarityFireball fireball = valueOfRarityFireball(Arrays.asList(rarity));
+                final RarityFireball fireball = valueOfRarityFireball(List.of(rarity));
                 if(fireball != null) {
                     final ItemStack itemstack = fireball.getItem();
                     item = itemstack.clone();

@@ -66,7 +66,6 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save(null, "battle royale.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "battle royale.yml"));
         teams = new LinkedHashMap<>();
@@ -84,8 +83,6 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             obj.getScore(colorize(s)).setScore(score);
             score--;
         }
-
-        sendConsoleDidLoadFeature("Battle Royale", started);
     }
     @Override
     public void unload() {

@@ -40,7 +40,7 @@ public final class LivingCustomEnchantEntity extends CustomEnchants implements M
             int b = -1;
             for(String attr : s.split(";")) {
                 b += 1;
-                //ce.w(null, event, null, Arrays.asList(entity), attr, s, b, summoner instanceof Player ? (Player) summoner : null);
+                //ce.w(null, event, null, List.of(entity), attr, s, b, summoner instanceof Player ? (Player) summoner : null);
                 if(attr.toLowerCase().startsWith("despawn{")) {
                     SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> entity.remove(), (int) evaluate(attr.split("\\{")[1].split("}")[0]));
                 }

@@ -41,6 +41,11 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 	private HashMap<Player, Integer> pages;
 
 	@Override
+	public @NotNull Feature get_feature() {
+		return Feature.TITLE;
+	}
+
+	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		if(player != null) {
@@ -54,7 +59,6 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "titles.yml");
 
 		pages = new HashMap<>();
@@ -75,14 +79,12 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 		tabformat = colorize(config.getString("tab.format"));
 		FileTitle.TITLE_CHAT_FORMAT = chatformat;
 		FileTitle.TITLE_TAB_FORMAT = tabformat;
-		sendConsoleDidLoadFeature(getAll(Feature.TITLE).size() + " Titles", started);
 	}
 	@Override
 	public void unload() {
 		for(Player player : new ArrayList<>(pages.keySet())) {
 			player.closeInventory();
 		}
-		unregister(Feature.TITLE);
 	}
 
 	@EventHandler
@@ -181,7 +183,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 	}
 	private void update(@NotNull Player player, @NotNull RPPlayer pdata) {
 		final TitleData data = pdata.getTitleData();
-		final int page = pages.get(player)-1;
+		final int page = pages.get(player) - 1;
 		final List<Title> owned = data.getOwned();
 		final Title activeTitle = data.getActive();
 		final String activetitle = activeTitle != null ? activeTitle.getIdentifier() : null;
