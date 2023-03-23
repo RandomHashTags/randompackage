@@ -8,7 +8,7 @@ lore:
 max level: 5
 applies to: "pickaxe"
 #
-alchemist: "1000:2250:3500:4750"
+alchemist upgrade costs: "1000:2250:3500:4750"
 tinkerer: "58:66:74:82:90"
 #
 attributes:

@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Poison"
+  },
+  "lore": {
+    "en" : [
+      "&eA chance of giving the poison effect."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword",
+  "alchemist upgrade costs": [2500, 3000],
+  "tinkerer": "75:84:93",
+  "attributes": [
+    "PvAny;chance=7+level;VictimAddPotionEffect=poison:level-1:40+(40*level)"
+  ]
+}

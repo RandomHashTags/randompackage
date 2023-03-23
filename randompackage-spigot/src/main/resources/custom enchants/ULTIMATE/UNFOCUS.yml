@@ -10,7 +10,7 @@ lore:
 max level: 5
 applies to: "bow"
 #
-alchemist: "2300:2600:2900:3200"
+alchemist upgrade costs: "2300:2600:2900:3200"
 tinkerer: "60:72:84:96:108"
 #
 attributes: # Negation in "global attributes.yml"

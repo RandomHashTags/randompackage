@@ -12,7 +12,7 @@ lore:
 max level: 4
 applies to: "boots"
 #
-alchemist: "3000:3500:4000"
+alchemist upgrade costs: "3000:3500:4000"
 tinkerer: "112:134:156:178"
 #
 attributes:

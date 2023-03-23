@@ -11,7 +11,7 @@ lore:
 max level: 5
 applies to: "sword;_axe;bow"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 #
 attributes:

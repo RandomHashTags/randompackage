@@ -1,0 +1,21 @@
+{
+  "enabled" : false,
+  "name" : {
+    "en" : "Farcast"
+  },
+  "lore" : {
+    "en" : [
+      "&eChance to knockback melee attackers",
+      "&eby a couple of blocks when they hit",
+      "&eyou. The lower your health, the",
+      "&ehigher the chance to proc."
+    ]
+  },
+  "max level" : 5,
+  "applies to" : "bow",
+  "alchemist upgrade costs" : [4500, 5000, 5600, 6200],
+  "tinkerer" : "51:62:73:84:95",
+  "attributes" : [
+    "isDamaged;"
+  ]
+}

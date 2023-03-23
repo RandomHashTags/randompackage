@@ -1,0 +1,19 @@
+{
+  "enabled" : true,
+  "name" : {
+    "en" : "Blind"
+  },
+  "lore" : {
+    "en" : [
+      "&eA chance of causing blindness when",
+      "&eattacking."
+    ]
+  },
+  "max level" : 3,
+  "applies to" : "sword",
+  "alchemist upgrade costs" : [6000, 6500],
+  "tinkerer" : "54:64:74",
+  "attributes" : [
+    "PvAny;chance=5*level;VictimAddPotionEffect=blindness:level-1:(20*level)+40:false"
+  ]
+}

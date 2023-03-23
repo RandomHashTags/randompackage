@@ -9,7 +9,7 @@ lore:
 max level: 4
 applies to: "sword"
 #
-alchemist: "5500:6500:7500"
+alchemist upgrade costs: "5500:6500:7500"
 tinkerer: "67:76:85:94"
 #
 attributes:

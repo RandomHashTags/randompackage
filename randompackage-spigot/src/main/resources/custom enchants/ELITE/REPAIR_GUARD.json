@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Repair Guard"
+  },
+  "lore": {
+    "en" : [
+      "&eWhenever you remove a low",
+      "&epiece of armor to repair it, you will",
+      "&eget up to 10 absorption hearts",
+      "&e(depending on level) while you are",
+      "&efixing it."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [2250, 2750],
+  "tinkerer": "68:82:96",
+  "attributes": [
+    "ArmorUnequip;PlayerAddPotionEffect=absorption:level+1:30+(10*level):true"
+  ]
+}

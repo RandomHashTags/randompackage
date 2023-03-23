@@ -13,7 +13,7 @@ lore:
 max level: 3
 applies to: "_axe"
 #
-alchemist: "9000:16000"
+alchemist upgrade costs: "9000:16000"
 tinkerer: "172:197:222"
 #
 attributes:

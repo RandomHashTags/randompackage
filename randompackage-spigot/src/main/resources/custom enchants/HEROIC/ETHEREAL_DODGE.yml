@@ -15,7 +15,7 @@ max level: 1
 applies to: "boots"
 requires: "Dodge;5"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 #
 attributes:

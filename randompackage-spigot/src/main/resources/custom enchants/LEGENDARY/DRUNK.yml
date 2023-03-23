@@ -9,7 +9,7 @@ lore:
 max level: 4
 applies to: "helmet"
 #
-alchemist: "10000:15000:20000"
+alchemist upgrade costs: "10000:15000:20000"
 tinkerer: "109:144:179:214"
 #
 attributes:

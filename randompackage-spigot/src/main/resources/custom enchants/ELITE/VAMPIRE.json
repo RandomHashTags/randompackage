@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Vampire"
+  },
+  "lore": {
+    "en" : [
+      "&eA chance to heal you for up to 3hp a",
+      "&efew seconds after you strike."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword",
+  "alchemist upgrade costs": [2500, 3000],
+  "tinkerer": "72:81:90",
+  "attributes": [
+    "PvAny;chance=14+(2*level);DamagerSendMessage=&b&l** VAMPIRE **;Wait=20*3;DamagerHeal=level"
+  ]
+}

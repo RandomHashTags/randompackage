@@ -1,0 +1,19 @@
+{
+  "enabled" : true,
+  "name" : {
+    "en" : "Cactus"
+  },
+  "lore" : {
+    "en" : [
+      "&eInjurs your attacker but does not",
+      "&eaffect your durability."
+    ]
+  },
+  "max level" : 2,
+  "applies to" : "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs" : [2000],
+  "tinkerer" : "58:66",
+  "attributes" : [
+    "isDamaged;chance=25+(25*level);DamagerDamage=level"
+  ]
+}

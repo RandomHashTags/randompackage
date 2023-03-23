@@ -12,7 +12,7 @@ lore:
 max level: 3
 applies to: "sword"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 requires: "Lifesteal;3"
 #

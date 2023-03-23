@@ -13,7 +13,7 @@ max level: 3
 applies to: "_axe"
 requires: "Bleed;6"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 #
 attributes:

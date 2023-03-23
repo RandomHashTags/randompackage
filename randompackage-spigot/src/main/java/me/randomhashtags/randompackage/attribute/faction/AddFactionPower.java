@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attribute.faction;
 
-import com.massivecraft.factions.Faction;
 import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
 import me.randomhashtags.randompackage.attributesys.EventEntities;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
@@ -19,7 +18,7 @@ public final class AddFactionPower extends AbstractEventAttribute implements Eve
         final FactionsUUID factions = FactionsUUID.INSTANCE;
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
-                final Faction f = factions.getFaction(e.getUniqueId());
+                final com.massivecraft.factions.Faction f = factions.getFaction(e.getUniqueId());
                 if(f != null) {
                     f.setPowerBoost(f.getPowerBoost()+evaluate(replaceValue(getEntities(event), recipientValues.get(e), valueReplacements)));
                 }

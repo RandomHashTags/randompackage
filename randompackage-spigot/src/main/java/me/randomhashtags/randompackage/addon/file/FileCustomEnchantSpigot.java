@@ -45,7 +45,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
     }
     public BigDecimal[] getAlchemist() {
         if(alchemist == null) {
-            final String[] a = yml.getString("alchemist").split(":");
+            final String[] a = yml.getString("alchemist upgrade costs").split(":");
             final BigDecimal[] alchemist = new BigDecimal[a.length];
             int i = 0;
             for(String s : a) {

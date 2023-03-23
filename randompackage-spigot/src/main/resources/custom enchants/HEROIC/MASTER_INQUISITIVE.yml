@@ -12,7 +12,7 @@ lore:
 max level: 4
 applies to: "sword"
 #
-alchemist: "6000:6250:6500:6750:7000"
+alchemist upgrade costs: "6000:6250:6500:6750:7000"
 tinkerer: "85:97:109:115:129"
 requires: "Inquisitive;4"
 #

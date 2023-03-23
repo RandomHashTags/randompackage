@@ -8,7 +8,7 @@ lore:
 max level: 3
 applies to: "boots"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 requires: "Rocket Escape;3"
 #

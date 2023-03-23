@@ -10,7 +10,7 @@ max level: 5
 applies to: "bow"
 requires: "Teleportation;5"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 #
 attributes:

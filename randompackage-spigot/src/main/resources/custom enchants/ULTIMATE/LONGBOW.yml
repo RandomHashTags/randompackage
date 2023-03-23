@@ -10,7 +10,7 @@ lore:
 max level: 4
 applies to: "bow"
 #
-alchemist: "4500:5000:5500"
+alchemist upgrade costs: "4500:5000:5500"
 tinkerer: "58:71:84:97"
 #
 attributes:

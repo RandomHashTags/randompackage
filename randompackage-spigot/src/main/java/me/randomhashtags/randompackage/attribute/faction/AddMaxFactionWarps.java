@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.attribute.faction;
 
-import com.massivecraft.factions.Faction;
 import me.randomhashtags.randompackage.attribute.AbstractEventAttribute;
 import me.randomhashtags.randompackage.attributesys.PendingEventAttribute;
 import me.randomhashtags.randompackage.supported.regional.FactionsUUID;
@@ -16,7 +15,7 @@ public final class AddMaxFactionWarps extends AbstractEventAttribute {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             if(e instanceof Player) {
-                final Faction f = FactionsUUID.INSTANCE.getFaction(e.getUniqueId());
+                final com.massivecraft.factions.Faction f = FactionsUUID.INSTANCE.getFaction(e.getUniqueId());
                 if(f != null) {
                 }
             }

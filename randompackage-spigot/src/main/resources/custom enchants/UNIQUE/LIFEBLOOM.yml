@@ -9,7 +9,7 @@ lore:
 max level: 5
 applies to: "leggings"
 #
-alchemist: "4000:5000:6000:7000"
+alchemist upgrade costs: "4000:5000:6000:7000"
 tinkerer: "60:72:84:96:108"
 #
 attributes:

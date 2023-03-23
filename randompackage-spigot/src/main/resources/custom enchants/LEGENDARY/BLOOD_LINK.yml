@@ -9,7 +9,7 @@ lore:
 max level: 5
 applies to: "helmet;chestplate;leggings;boots"
 #
-alchemist: "4400:4600:4800:5000"
+alchemist upgrade costs: "4400:4600:4800:5000"
 tinkerer: "73:86:99:112:125"
 #
 attributes:

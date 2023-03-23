@@ -20,7 +20,7 @@ max level: 4
 applies to: "chestplate"
 requires: "Diminish;6"
 #
-alchemist: ""
+alchemist upgrade costs: ""
 tinkerer: ""
 #
 attributes:

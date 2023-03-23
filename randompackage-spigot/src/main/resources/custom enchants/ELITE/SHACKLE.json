@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Shackle"
+  },
+  "lore": {
+    "en" : [
+      "&ePrevents mobs spawned from mob",
+      "&espawners from suffering from",
+      "&eknockback from your attacks."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword;_axe",
+  "alchemist upgrade costs": [2500, 5000],
+  "tinkerer": "71:80:89",
+  "attributes": [
+    "PvAny;VictimIsFromSpawner=true;SetCancelled=true;VictimDamage=dmg"
+  ]
+}
