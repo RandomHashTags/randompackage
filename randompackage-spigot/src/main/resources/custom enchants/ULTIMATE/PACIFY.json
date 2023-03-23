@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Pacify"
+  },
+  "lore": {
+    "en" : [
+      "&eA chance to pacify your target,",
+      "&epreventing them from building rage",
+      "&estacks for 1-3 seconds depending on",
+      "&elevel."
+    ]
+  },
+  "max level": 4,
+  "applies to": "bow",
+  "alchemist upgrade costs": [2350, 2600, 2850],
+  "tinkerer": "121:135:148:162",
+  "attributes": [
+    "ProjectileHit;ProjectileIsType=ARROW;chance=level*4;VictimAddToList=PACIFY;Wait=level*20;VictimRemoveFromList=PACIFY"
+  ]
+}

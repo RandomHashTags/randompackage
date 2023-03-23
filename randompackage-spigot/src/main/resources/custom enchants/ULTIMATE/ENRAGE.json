@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Enrage"
+  },
+  "lore": {
+    "en" : [
+      "&eThe lower your HP is, the more damage",
+      "&eyou deal."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword",
+  "alchemist upgrade costs": [5000, 6000],
+  "tinkerer": "58:70:82",
+  "attributes": [
+    "PvAny;chance=10+(2*level);SetDamage=dmg+(0.25*(getDamagerMaxHP-getDamagerHP));DamagerSendMessage=&e&l** ENRAGE **"
+  ]
+}

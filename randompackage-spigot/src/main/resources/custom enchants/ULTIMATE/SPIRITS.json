@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Spirits"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to spawn blazes that heal",
+      "&eyourself and your allies in combat."
+    ]
+  },
+  "max level": 10,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500],
+  "tinkerer": "53:62:71:80:89:98:107:116:125:134",
+  "attributes": [
+    "isDamaged;"
+  ]
+}

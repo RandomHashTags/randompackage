@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Fuse"
+  },
+  "lore": {
+    "en" : [
+      "&eAllows Auto Smelt to apply to blocks",
+      "&edestroyed by the Detonate",
+      "&eenchantment."
+    ]
+  },
+  "max level": 1,
+  "applies to": "pickaxe",
+  "tinkerer": "134",
+  "attributes": [
+    ""
+  ]
+}

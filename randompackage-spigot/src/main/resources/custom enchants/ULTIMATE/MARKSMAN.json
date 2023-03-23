@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Marksman"
+  },
+  "lore": {
+    "en" : [
+      "&eIncreases damage dealt with bows,",
+      "&ethis enchantment is stackable."
+    ]
+  },
+  "max level": 4,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [4000, 4500, 5000],
+  "tinkerer": "121:137:150:161",
+  "attributes": [
+    "ProjectileHit;ProjectileIsType=ARROW;chance=60+(6*level);SetDamage=dmg*(1+(.09*level))"
+  ]
+}

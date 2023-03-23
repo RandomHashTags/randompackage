@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Piercing"
+  },
+  "lore": {
+    "en" : [
+      "&eInflicts more damage."
+    ]
+  },
+  "max level": 5,
+  "applies to": "bow",
+  "alchemist upgrade costs": [4000, 6000, 8000, 10000],
+  "tinkerer": "67:76:85:94:103",
+  "attributes": [
+    "ProjectileHit;ProjectileIsType=ARROW;chance=30+(6*level);SetDamage=dmg*(1+(level*0.35));DamagerSendMessage=&e&l** PIERCING **;VictimSendMessage=&e&l** PIERCING **"
+  ]
+}

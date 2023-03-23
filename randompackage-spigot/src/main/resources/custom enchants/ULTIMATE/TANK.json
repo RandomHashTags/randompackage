@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Tank"
+  },
+  "lore": {
+    "en" : [
+      "&eDecreases damage from enemy axes by",
+      "&e1.85% per level, this enchantment is",
+      "&estackable."
+    ]
+  },
+  "max level": 4,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [4500, 5000, 5500],
+  "tinkerer": "59:68:77:86",
+  "attributes": [
+    "isDamaged;chance=Lucky+(6*level);DamagerIsHolding=_AXE;SetDamage=dmg-(dmg*(.0185*level))"
+  ]
+}

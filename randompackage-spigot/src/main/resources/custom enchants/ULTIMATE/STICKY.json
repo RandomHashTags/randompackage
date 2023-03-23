@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Sticky"
+  },
+  "lore": {
+    "en" : [
+      "&eDecreases the chance of an enemy's",
+      "&eDisarmor enchantment procing on you",
+      "&eby 12.5% per level. At max level, you",
+      "&ecan never be disarmored."
+    ]
+  },
+  "max level": 8,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [4000, 4250, 4500, 4750, 5000, 5250, 5500],
+  "tinkerer": "62:73:84:95:106:117:128:139",
+  "attributes": [
+    ""
+  ]
+}
