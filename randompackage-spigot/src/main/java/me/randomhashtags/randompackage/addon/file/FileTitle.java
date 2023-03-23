@@ -15,12 +15,13 @@ public final class FileTitle extends RPAddonSpigot implements Title {
 
     private final String title;
     public FileTitle(String title) {
+        super(null);
         this.title = title;
         register(Feature.TITLE, this);
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return title;
     }
 

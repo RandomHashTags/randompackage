@@ -11,7 +11,7 @@
     ]
   },
   "max level": 3,
-  "applies to": "sword",
+  "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0],
   "tinkerer": "",
   "requires": "Trap;3",

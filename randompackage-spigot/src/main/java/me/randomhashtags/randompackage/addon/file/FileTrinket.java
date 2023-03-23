@@ -14,7 +14,7 @@ public final class FileTrinket extends RPAddonSpigot implements Trinket {
     private HashMap<String, String> settings;
 
     public FileTrinket(File f) {
-        load(f);
+        super(f);
         if(isEnabled()) {
             register(Feature.TRINKET, this);
         }

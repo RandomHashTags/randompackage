@@ -13,6 +13,7 @@ public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker 
     private ItemStack is;
     private List<String> apply, split;
     public PathSoulTracker(String path) {
+        super(null);
         this.path = path;
         register(Feature.SOUL_TRACKER, this);
     }

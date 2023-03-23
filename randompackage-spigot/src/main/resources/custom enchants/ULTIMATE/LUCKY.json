@@ -10,7 +10,7 @@
     ]
   },
   "max level": 10,
-  "applies to": "helmet;chestplate;leggings;boots",
+  "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [2650, 3000, 3350, 3700, 4150, 4500, 4850, 5200, 5550],
   "tinkerer": "62:71:80:89:97:106:115:124:133:142",
   "enchant proc value": "level",

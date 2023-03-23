@@ -16,7 +16,7 @@ public class FileDuelArena extends RPAddonSpigot implements DuelArena {
     private List<Location> locations;
 
     public FileDuelArena(File f) {
-        load(f);
+        super(f);
         register(Feature.DUEL_ARENA, this);
     }
 
@@ -25,7 +25,7 @@ public class FileDuelArena extends RPAddonSpigot implements DuelArena {
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
-    public String getName() { return colorize(yml.getString("name")); }
+    public @NotNull String getName() { return colorize(yml.getString("name")); }
     public List<Location> getLocations() {
         if(locations == null) {
             locations = new ArrayList<>();

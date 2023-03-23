@@ -10,7 +10,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "helmet",
+  "applies to" : ["helmet"],
   "alchemist upgrade costs": [10000, 15000, 20000],
   "tinkerer": "109:144:179:214",
   "attributes": [

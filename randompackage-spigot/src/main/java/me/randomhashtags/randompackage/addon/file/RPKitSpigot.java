@@ -3,12 +3,19 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.FallenHero;
 import me.randomhashtags.randompackage.addon.obj.KitItem;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RPKitSpigot extends RPAddonSpigot implements CustomKit {
     private List<KitItem> items;
+
+    public RPKitSpigot(@Nullable File file) {
+        super(file);
+    }
+
     public int getMaxLevel() {
         return yml.getInt("settings.max level");
     }

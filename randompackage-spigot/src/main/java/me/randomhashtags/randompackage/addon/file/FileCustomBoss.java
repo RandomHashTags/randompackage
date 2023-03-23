@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,12 +26,12 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     private List<String> scores;
 
     public FileCustomBoss(File f) {
-        load(f);
+        super(f);
         register(Feature.CUSTOM_BOSS, this);
     }
 
     public String getType() { return yml.getString("type").toUpperCase(); }
-    public String getName() { return colorize(yml.getString("name")); }
+    public @NotNull String getName() { return colorize(yml.getString("name")); }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
             scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();

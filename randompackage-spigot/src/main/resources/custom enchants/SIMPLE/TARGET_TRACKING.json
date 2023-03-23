@@ -9,7 +9,7 @@
     ]
   },
   "max level": 1,
-  "applies to": "bow",
+  "applies to" : ["bow"],
   "tinkerer": "81",
   "attributes": [
     ""

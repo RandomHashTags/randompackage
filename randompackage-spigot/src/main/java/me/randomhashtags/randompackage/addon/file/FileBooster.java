@@ -14,7 +14,7 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
     private BoosterRecipients recipients;
 
     public FileBooster(File f) {
-        load(f);
+        super(f);
         register(Feature.BOOSTER, this);
     }
 

@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.FactionUpgradeType;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -13,11 +14,14 @@ public final class FileFactionUpgradeType extends RPAddonSpigot implements Facti
 	private final String path;
 	private List<String> unlock, upgrade, maxed, format;
 	public FileFactionUpgradeType(String path) {
-		if(yml == null) yml = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
+		super(null);
+		if(yml == null) {
+			yml = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "faction upgrades", "_settings.yml"));
+		}
 		this.path = path;
 		register(Feature.FACTION_UPGRADE_TYPE, this);
 	}
-	public String getIdentifier() { return path; }
+	public @NotNull String getIdentifier() { return path; }
 
 	public String getPerkAchievedPrefix() { return colorize(yml.getString("types." + path + ".perk achieved prefix")); }
 	public String getPerkUnachievedPrefix() { return colorize(yml.getString("types." + path + ".perk unachieved prefix")); }

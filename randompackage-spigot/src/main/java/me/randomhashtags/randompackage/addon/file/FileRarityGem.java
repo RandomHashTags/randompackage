@@ -20,10 +20,10 @@ public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 	private HashMap<Integer, String> colors;
 
 	public FileRarityGem(File f) {
-		load(f);
+		super(f);
 		register(Feature.RARITY_GEM, this);
 	}
-	public String getIdentifier() { return getYamlName(); }
+	public @NotNull String getIdentifier() { return getYamlName(); }
 
 	public @NotNull ItemStack getItem() {
 		if(item == null) item = createItemStack(yml, "item");

@@ -13,7 +13,7 @@
     ]
   },
   "max level": 3,
-  "applies to": "helmet;chestplate;leggings;boots",
+  "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "requires": "Enlighted;3",
   "alchemist upgrade costs": [6000, 6250, 6500, 6750, 7000],
   "tinkerer": "85:97:109:115:129",

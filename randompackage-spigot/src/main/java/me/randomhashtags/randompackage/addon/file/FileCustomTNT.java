@@ -20,11 +20,11 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
 
     private ItemStack item;
     public FileCustomTNT(File f) {
+        super(f);
         if(PLACED == null) {
             PLACED = new HashMap<>();
             PRIMED = new HashMap<>();
         }
-        load(f);
         register(Feature.CUSTOM_EXPLOSION, this);
     }
 

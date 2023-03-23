@@ -13,7 +13,7 @@ public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvol
     private ItemStack item, upgradeGem;
 
     public FileKitEvolution(File f) {
-        load(f);
+        super(f);
         register(Feature.CUSTOM_KIT, this);
     }
     public Kits getKitClass() {

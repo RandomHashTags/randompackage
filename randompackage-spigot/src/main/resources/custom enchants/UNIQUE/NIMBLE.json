@@ -10,7 +10,7 @@
     ]
   },
   "max level": 5,
-  "applies to": "boots",
+  "applies to" : ["boots"],
   "alchemist upgrade costs": [6000, 6500, 7000, 7500],
   "tinkerer": "84:93:102:111:120",
   "attributes": [

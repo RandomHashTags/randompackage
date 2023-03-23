@@ -18,7 +18,7 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
     private UMaterial placedBlock;
 
     public FileConquestChest(File f) {
-        load(f);
+        super(f);
         register(Feature.CONQUEST_CHEST, this);
     }
 

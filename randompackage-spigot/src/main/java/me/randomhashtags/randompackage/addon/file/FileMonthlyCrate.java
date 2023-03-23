@@ -20,7 +20,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     private List<Integer> rewardSlots, bonusRewardSlots;
 
     public FileMonthlyCrate(File f) {
-        load(f);
+        super(f);
         register(Feature.MONTHLY_CRATE, this);
     }
 

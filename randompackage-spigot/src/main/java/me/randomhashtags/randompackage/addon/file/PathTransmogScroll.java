@@ -11,6 +11,7 @@ public final class PathTransmogScroll extends RPAddonSpigot implements TransmogS
     private final String path;
     private ItemStack item;
     public PathTransmogScroll(String path) {
+        super(null);
         this.path = path;
         register(Feature.SCROLL_TRANSMOG, this);
     }

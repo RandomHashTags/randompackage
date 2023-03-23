@@ -25,11 +25,11 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
     private long controlledStarting;
     private double controlPercent;
     public FileOutpost(File f) {
-        load(f);
+        super(f);
         register(Feature.OUTPOST, this);
     }
 
-    public String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
+    public @NotNull String getName() { return ChatColor.translateAlternateColorCodes('&', yml.getString("settings.name")); }
     public int getSlot() { return yml.getInt("gui.slot"); }
     @NotNull
     @Override

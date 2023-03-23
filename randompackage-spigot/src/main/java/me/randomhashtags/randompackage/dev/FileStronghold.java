@@ -20,7 +20,7 @@ public abstract class FileStronghold extends RPAddonSpigot implements Stronghold
     private CaptureType captureType;
     private PolyBoundary squareZone;
     public FileStronghold(File f) {
-        load(f);
+        super(f);
         register(Feature.STRONGHOLD, this);
     }
 

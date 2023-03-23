@@ -12,6 +12,7 @@ public final class PathWhiteScroll extends RPAddonSpigot implements WhiteScroll 
     private String apply;
     private ItemStack item;
     public PathWhiteScroll(String path) {
+        super(null);
         this.path = path;
         register(Feature.SCROLL_WHITE, this);
     }

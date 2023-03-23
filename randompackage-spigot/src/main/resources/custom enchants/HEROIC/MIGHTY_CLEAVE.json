@@ -11,7 +11,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "_axe",
+  "applies to" : ["_axe"],
   "alchemist upgrade costs": [0, 0, 0],
   "tinkerer": "",
   "requires": "Cleave;7",

@@ -8,10 +8,16 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnable {
     public static RegionPlugin SPAWN_TYPE = null;
+
+    public RPSpawnableSpigot(@Nullable File file) {
+        super(file);
+    }
+
     public List<String> getSpawnableFactionClaims() {
         return yml.getStringList("spawnable regions.faction claims");
     }

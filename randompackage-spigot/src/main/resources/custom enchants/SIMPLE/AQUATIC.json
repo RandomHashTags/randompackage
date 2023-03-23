@@ -9,7 +9,7 @@
     ]
   },
   "max level": 1,
-  "applies to": "helmet",
+  "applies to" : ["helmet"],
   "tinkerer": "134",
   "attributes": [
     "PlayerJoin;PlayerAddPotionEffect=water_breathing:level-1:99999:true",

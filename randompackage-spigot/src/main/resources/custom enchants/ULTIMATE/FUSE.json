@@ -11,7 +11,7 @@
     ]
   },
   "max level": 1,
-  "applies to": "pickaxe",
+  "applies to" : ["pickaxe"],
   "tinkerer": "134",
   "attributes": [
     ""

@@ -11,7 +11,7 @@ import java.util.List;
 public final class FileFatBucket extends RPAddonSpigot implements FatBucket {
     private ItemStack bucket;
     public FileFatBucket(File f) {
-        load(f);
+        super(f);
         register(Feature.FAT_BUCKET, this);
     }
 

@@ -10,7 +10,7 @@
     ]
   },
   "max level": 5,
-  "applies to": "helmet;chestplate;leggings;boots",
+  "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [4400, 4600, 4800, 5000],
   "tinkerer": "73:86:99:112:125",
   "attributes": [

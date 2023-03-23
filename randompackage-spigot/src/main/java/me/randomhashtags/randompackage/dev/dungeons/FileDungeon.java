@@ -15,7 +15,7 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
     private long fastestCompletion;
 
     public FileDungeon(File f) {
-        load(f);
+        super(f);
         register(Feature.DUNGEON, this);
     }
 

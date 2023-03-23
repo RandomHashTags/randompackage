@@ -10,7 +10,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "pickaxe",
+  "applies to" : ["pickaxe"],
   "requires": "Detonate;9",
   "alchemist upgrade costs": [6000, 6250, 6500, 6750, 7000],
   "tinkerer": "85:97:109:115:129",

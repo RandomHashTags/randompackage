@@ -10,7 +10,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "axe;spade;shears",
+  "applies to" : ["axe", "spade", "shears"],
   "alchemist upgrade costs": [2000, 2650, 3300],
   "tinkerer": "50:61:72:83",
   "attributes": [

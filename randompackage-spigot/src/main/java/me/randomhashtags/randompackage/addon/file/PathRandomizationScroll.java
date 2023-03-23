@@ -14,10 +14,11 @@ public final class PathRandomizationScroll extends RPAddonSpigot implements Rand
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;
 	public PathRandomizationScroll(String path) {
+		super(null);
 		this.path = path;
 		register(Feature.SCROLL_RANDOMIZATION, this);
 	}
-	public String getIdentifier() { return path; }
+	public @NotNull String getIdentifier() { return path; }
 
 	public @NotNull ItemStack getItem() {
 		if(is == null) is = createItemStack(getAddonConfig("scrolls.yml"), "randomization scrolls." + path);

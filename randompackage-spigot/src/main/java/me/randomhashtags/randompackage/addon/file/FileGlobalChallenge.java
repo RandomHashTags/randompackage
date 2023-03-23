@@ -12,7 +12,7 @@ public final class FileGlobalChallenge extends RPAddonSpigot implements GlobalCh
     private ItemStack display;
 
     public FileGlobalChallenge(File f) {
-        load(f);
+        super(f);
         if(isEnabled()) {
             register(Feature.GLOBAL_CHALLENGE, this);
         }

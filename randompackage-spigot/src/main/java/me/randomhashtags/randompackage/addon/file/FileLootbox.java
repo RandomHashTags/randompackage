@@ -15,7 +15,7 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
     private ItemStack item, background;
 
     public FileLootbox(File f) {
-        load(f);
+        super(f);
         register(Feature.LOOTBOX, this);
     }
     public int getPriority() {
@@ -27,7 +27,7 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
     public int getGuiSize() {
         return yml.getInt("gui.size");
     }
-    public String getName() {
+    public @NotNull String getName() {
         return getString(yml, "name");
     }
     public String getGuiTitle() {

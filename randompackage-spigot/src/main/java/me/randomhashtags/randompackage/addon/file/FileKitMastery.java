@@ -19,12 +19,12 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
     private ItemStack item, redeem, shard, antiCrystal;
     private LinkedHashMap<CustomKit, Integer> requiredKits;
     public FileKitMastery(File f) {
-        load(f);
+        super(f);
         register(Feature.CUSTOM_KIT, this);
     }
     public Kits getKitClass() { return KitsMastery.getKitsMastery(); }
 
-    public String getName() {
+    public @NotNull String getName() {
         return getString(yml, "settings.name");
     }
     @NotNull

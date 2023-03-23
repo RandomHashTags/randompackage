@@ -16,11 +16,11 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 	private List<ArmorSetWeaponInfo> weapons;
 
 	public FileArmorSet(File f) {
-		load(f);
+		super(f);
 		register(Feature.ARMOR_SET, this);
 	}
 
-	public String getName() {
+	public @NotNull String getName() {
 		final String s = yml.getString("name");
 		return s != null ? colorize(s) : getIdentifier() + " name doesn't exist!";
 	}

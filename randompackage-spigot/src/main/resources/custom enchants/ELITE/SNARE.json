@@ -10,7 +10,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "bow",
+  "applies to" : ["bow"],
   "alchemist upgrade costs": [3500, 4000, 4500],
   "tinkerer": "60:70:80:90",
   "attributes": [

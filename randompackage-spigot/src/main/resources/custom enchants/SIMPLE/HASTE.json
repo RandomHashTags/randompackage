@@ -9,7 +9,7 @@
     ]
   },
   "max level": 3,
-  "applies to": "pickaxe",
+  "applies to" : ["pickaxe"],
   "alchemist upgrade costs": [800, 1300],
   "tinkerer": "73:86:99",
   "attributes": [

@@ -15,6 +15,7 @@ public final class PathEnchantmentOrb extends RPAddonSpigot implements Enchantme
 	private final List<String> appliesto;
 	private final int maxenchants, percentlore, increment;
 	public PathEnchantmentOrb(String path, ItemStack is, String appliedlore, List<String> appliesto, int maxenchants, int increment) {
+		super(null);
 		this.path = path;
 		this.is = is;
 		int q = 0;
@@ -32,7 +33,7 @@ public final class PathEnchantmentOrb extends RPAddonSpigot implements Enchantme
 		this.increment = increment;
 		register(Feature.ENCHANTMENT_ORB, this);
 	}
-	public String getIdentifier() { return path + maxenchants; }
+	public @NotNull String getIdentifier() { return path + maxenchants; }
 
 	public String getPath() { return path; }
 	public @NotNull ItemStack getItem() { return getClone(is); }

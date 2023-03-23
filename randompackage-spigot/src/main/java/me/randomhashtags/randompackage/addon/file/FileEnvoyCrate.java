@@ -21,7 +21,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
     private Firework fw;
 
     public FileEnvoyCrate(File f) {
-        load(f);
+        super(f);
         register(Feature.ENVOY_CRATE, this);
     }
     @NotNull

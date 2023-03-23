@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket {
     private final String identifier;
     public PathArmorSocket(String identifier) {
+        super(null);
         this.identifier = identifier;
         register(Feature.ARMOR_SOCKET, this);
     }
@@ -20,7 +21,7 @@ public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket 
     private YamlConfiguration getArmorSocketsConfig() {
         return getRPConfig(null, "armor sockets.yml");
     }
-    public String getName() {
+    public @NotNull String getName() {
         return getString(getArmorSocketsConfig(), "types." + identifier + ".name");
     }
     public String getItemType() {

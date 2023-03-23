@@ -2,19 +2,20 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.enums.Feature;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
 
 public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest {
     public FilePlayerQuest(File f) {
-        load(f);
+        super(f);
         if(isEnabled()) {
             register(Feature.PLAYER_QUEST, this);
         }
     }
     public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
-    public String getName() { return colorize(yml.getString("settings.name")); }
+    public @NotNull String getName() { return colorize(yml.getString("settings.name")); }
     public long getExpiration() { return yml.getLong("settings.expiration"); }
     public String getCompletion() { return yml.getString("settings.completion"); }
     public boolean isTimeBased() {

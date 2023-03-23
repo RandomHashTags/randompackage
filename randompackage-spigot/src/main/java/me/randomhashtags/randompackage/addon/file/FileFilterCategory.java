@@ -10,7 +10,7 @@ import java.io.File;
 public final class FileFilterCategory extends RPAddonSpigot implements FilterCategory {
     private UInventory gui;
     public FileFilterCategory(File f) {
-        load(f);
+        super(f);
         register(Feature.FILTER_CATEGORY, this);
     }
     public String getTitle() {

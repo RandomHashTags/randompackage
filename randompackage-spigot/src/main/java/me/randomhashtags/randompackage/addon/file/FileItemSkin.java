@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.ItemSkin;
 import me.randomhashtags.randompackage.enums.Feature;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.List;
 public final class FileItemSkin extends RPAddonSpigot implements ItemSkin {
 
     public FileItemSkin(File f) {
-        load(f);
+        super(f);
         register(Feature.ITEM_SKIN, this);
     }
-    public String getName() {
+    public @NotNull String getName() {
         return getString(yml, "name");
     }
     public String getMaterial() {

@@ -21,6 +21,7 @@ public final class PathMagicDust extends RPAddonSpigot implements MagicDust {
 	private final BigDecimal upgradecost;
 	private List<EnchantRarity> appliesto;
 	public PathMagicDust(String path) {
+		super(null);
 		this.path = path;
 		final YamlConfiguration config = getAddonConfig("fireballs.yml");
 		chance = config.getInt("dusts." + path + ".chance");
@@ -30,7 +31,7 @@ public final class PathMagicDust extends RPAddonSpigot implements MagicDust {
 		upgradecost = BigDecimal.valueOf(config.getInt("dusts." + path + ".upgrade cost"));
 		register(Feature.MAGIC_DUST, this);
 	}
-	public String getIdentifier() { return path; }
+	public @NotNull String getIdentifier() { return path; }
 
 	public int getChance() { return chance; }
 	public int getMinPercent() { return min; }

@@ -20,7 +20,7 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
     private LinkedHashMap<Integer, FactionUpgradeLevel> levels;
 
     public FileFactionUpgrade(File f) {
-        load(f);
+        super(f);
         register(Feature.FACTION_UPGRADE, this);
     }
 

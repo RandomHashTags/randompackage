@@ -20,7 +20,7 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 	private List<Integer> selectableslots;
 	private FileServerCrateFlareObj flare;
 	public FileServerCrate(File f) {
-		load(f);
+		super(f);
 		register(Feature.SERVER_CRATE, this);
 	}
 

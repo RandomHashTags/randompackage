@@ -12,7 +12,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "sword",
+  "applies to" : ["sword"],
   "alchemist upgrade costs": [0, 0, 0],
   "tinkerer": "",
   "attributes": [

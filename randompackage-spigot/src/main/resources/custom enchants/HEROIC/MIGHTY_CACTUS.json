@@ -11,7 +11,7 @@
     ]
   },
   "max level": 2,
-  "applies to": "helmet;chestplate;leggings;boots",
+  "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [0],
   "tinkerer": "",
   "requires": "Cactus;2",

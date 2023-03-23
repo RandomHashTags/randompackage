@@ -17,10 +17,10 @@ public final class FileCustomCreeper extends RPAddonSpigot implements CustomExpl
     public static HashMap<UUID, FileCustomCreeper> LIVING;
     private ItemStack item;
     public FileCustomCreeper(File file) {
+        super(file);
         if(LIVING == null) {
             LIVING = new HashMap<>();
         }
-        load(file);
         register(Feature.CUSTOM_EXPLOSION, this);
     }
     @NotNull

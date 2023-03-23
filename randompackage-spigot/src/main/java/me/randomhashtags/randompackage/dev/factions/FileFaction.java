@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.dev.factions;
 import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -24,10 +25,8 @@ public class FileFaction extends RPAddonSpigot implements Faction {
     private HashMap<FPlayer, HashMap<String, Boolean>> psettings;
     private List<UUID> banned;
 
-    public FileFaction(@NotNull File f) {
-        load(f);
-    }
     public FileFaction(@NotNull String tag) {
+        super(null);
         this.uuid = UUID.randomUUID();
         final File folder = new File(DATA_FOLDER + SEPARATOR + "_Data" + SEPARATOR + "factions");
         final File f = new File(folder, uuid.toString() + ".yml");
@@ -39,7 +38,10 @@ public class FileFaction extends RPAddonSpigot implements Faction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        load(f);
+        file = f;
+        yml = YamlConfiguration.loadConfiguration(file);
+        identifier = getYamlName();
+        //super(f);
 
         isLoaded = true;
         yml.set("info.creation time", System.currentTimeMillis());
@@ -95,7 +97,7 @@ public class FileFaction extends RPAddonSpigot implements Faction {
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return uuid.toString();
     }
 

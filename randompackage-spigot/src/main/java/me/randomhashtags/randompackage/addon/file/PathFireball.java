@@ -15,10 +15,11 @@ public final class PathFireball extends RPAddonSpigot implements RarityFireball 
 	private List<String> reveals;
 
 	public PathFireball(String path) {
+		super(null);
 		this.path = path;
 		register(Feature.RARITY_FIREBALL, this);
 	}
-	public String getIdentifier() {
+	public @NotNull String getIdentifier() {
 		return path;
 	}
 

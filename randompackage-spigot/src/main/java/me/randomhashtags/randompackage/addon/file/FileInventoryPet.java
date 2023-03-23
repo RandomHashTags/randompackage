@@ -16,7 +16,7 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
     private HashMap<Integer, String> values;
     private HashMap<Integer, Integer> cooldowns, requiredxp;
     public FileInventoryPet(File f) {
-        load(f);
+        super(f);
         register(Feature.INVENTORY_PET, this);
     }
 

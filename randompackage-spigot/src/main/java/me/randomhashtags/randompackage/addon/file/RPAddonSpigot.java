@@ -4,19 +4,25 @@ import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
 public abstract class RPAddonSpigot implements RPFeatureSpigot, RPStorage {
     protected File file;
     protected YamlConfiguration yml;
+    protected String identifier;
 
-    public void load(File file) {
-        if(file.exists()) {
-            this.file = file;
+    public RPAddonSpigot(@Nullable File file) {
+        this.file = file;
+        if(file != null) {
+            identifier = file.getName().split("\\.yml")[0].split("\\.json")[0];
             yml = YamlConfiguration.loadConfiguration(file);
+        } else {
+            identifier = "NULL";
         }
     }
+
     public File getFile() {
         return file;
     }
@@ -27,7 +33,7 @@ public abstract class RPAddonSpigot implements RPFeatureSpigot, RPStorage {
     @NotNull
     @Override
     public String getIdentifier() {
-        return getYamlName();
+        return identifier;
     }
 
     public String getYamlName() {

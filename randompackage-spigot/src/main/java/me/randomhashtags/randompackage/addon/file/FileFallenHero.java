@@ -18,7 +18,7 @@ public final class FileFallenHero extends RPFallenHeroSpigot implements FallenHe
     private ItemStack spawnitem, gem;
 
     public FileFallenHero(File f) {
-        load(f);
+        super(f);
         register(Feature.FALLEN_HERO, this);
     }
 

@@ -15,7 +15,7 @@ public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal 
     private ItemStack item;
 
     public FileKitGlobal(File f) {
-        load(f);
+        super(f);
         register(Feature.CUSTOM_KIT, this);
     }
     @Override

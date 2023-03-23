@@ -9,7 +9,7 @@
     ]
   },
   "max level": 3,
-  "applies to": "boots",
+  "applies to" : ["boots"],
   "alchemist upgrade costs": [0, 0],
   "tinkerer": "",
   "requires": "Rocket Escape;3",

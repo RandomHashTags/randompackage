@@ -12,7 +12,7 @@
     ]
   },
   "max level": 3,
-  "applies to": "helmet;chestplate;leggings;boots",
+  "applies to" : ["helmet", "chestplate", "leggings", "boots"],
   "alchemist upgrade costs": [0, 0],
   "tinkerer": "",
   "requires": "Deathbringer;3",

@@ -15,6 +15,7 @@ public final class GlobalChallengePrizeObject extends RPAddonSpigot implements G
     private final int placement, amount;
     private final List<String> rewards;
     public GlobalChallengePrizeObject(ItemStack display, int amount, int placement, List<String> rewards) {
+        super(null);
         this.display = display;
         this.amount = amount;
         this.placement = placement;
@@ -23,7 +24,7 @@ public final class GlobalChallengePrizeObject extends RPAddonSpigot implements G
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "GLOBAL_CHALLENGE_PRIZE_" + placement;
     }
 

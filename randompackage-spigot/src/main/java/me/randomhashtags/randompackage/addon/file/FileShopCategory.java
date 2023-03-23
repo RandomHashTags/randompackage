@@ -18,7 +18,7 @@ public final class FileShopCategory extends ShopCategory {
     private List<ShopItem> items;
 
     public FileShopCategory(File f) {
-        load(f);
+        super(f);
         register(Feature.SHOP_CATEGORY, this);
     }
 

@@ -9,8 +9,8 @@
     ]
   },
   "max level": 10,
-  "applies to": "leggings",
-  "alchemist upgrade costs": [6000, 6250, 6500, 6750, 700≈],
+  "applies to" : ["leggings"],
+  "alchemist upgrade costs": [6000, 6250, 6500, 6750, 7000],
   "tinkerer": "85:97:109:115:129",
   "attributes": [
     ""

@@ -13,7 +13,7 @@
     ]
   },
   "max level": 4,
-  "applies to": "_axe",
+  "applies to" : ["_axe"],
   "alchemist upgrade costs": [5500, 5750, 6000],
   "tinkerer": "92:108:113:124",
   "attributes": [

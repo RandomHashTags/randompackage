@@ -14,10 +14,10 @@ public final class FileMask extends RPAddonSpigot implements Mask, Skullable {
     private ItemStack item;
 
     public FileMask(File f) {
-        load(f);
+        super(f);
         register(Feature.MASK, this);
     }
-    public String getIdentifier() { return getYamlName(); }
+    public @NotNull String getIdentifier() { return getYamlName(); }
 
     public String getOwner() {
         final String tex = yml.getString("texture");

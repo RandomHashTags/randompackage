@@ -19,8 +19,8 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
     protected List<CustomEnchantSpigot> enchants;
 
     public FileEnchantRarity(File folder, File f) {
+        super(f);
         this.folder = folder;
-        load(f);
         enchants = new ArrayList<>();
         register(Feature.CUSTOM_ENCHANT_RARITY, this);
     }

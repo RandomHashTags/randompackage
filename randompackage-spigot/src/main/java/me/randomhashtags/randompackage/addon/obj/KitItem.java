@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     public String getAmount() {
         return amount;
     }
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
     public List<String> getLore() {

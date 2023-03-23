@@ -10,7 +10,7 @@
     ]
   },
   "max level": 5,
-  "applies to": "bow",
+  "applies to" : ["bow"],
   "requires": "Teleportation;5",
   "alchemist upgrade costs": [0, 0, 0, 0],
   "tinkerer": "",

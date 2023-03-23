@@ -16,6 +16,7 @@ public final class PathBlackScroll extends RPAddonSpigot implements BlackScroll 
 	private ItemStack is;
 	private List<EnchantRarity> appliesto;
 	public PathBlackScroll(@NotNull String identifier) {
+		super(null);
 		this.identifier = identifier;
 		final String[] p = getAddonConfig("scrolls.yml").getString("black scrolls." + identifier + ".percents").split(";");
 		min = Integer.parseInt(p[0]);

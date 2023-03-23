@@ -26,8 +26,7 @@ public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpI
         return canProcInWorld(world.getName());
     }
     default boolean canProcInWorld(@NotNull String world) {
-        final List<String> worlds = getEnabledInWorlds();
-        return worlds == null || worlds.contains(world);
+        return getEnabledInWorlds().contains(world);
     }
 
     default boolean isOnCorrectItem(@NotNull ItemStack is) {
