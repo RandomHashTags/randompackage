@@ -1,0 +1,17 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Target Tracking"
+  },
+  "lore": {
+    "en" : [
+      "&eAutomatically /f focus any target you hit."
+    ]
+  },
+  "max level": 1,
+  "applies to": "bow",
+  "tinkerer": "81",
+  "attributes": [
+    ""
+  ]
+}

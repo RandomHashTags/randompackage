@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Healing"
+  },
+  "lore": {
+    "en" : [
+      "&eHeals friendly players hit with arrow",
+      "&eshot by this bow. Also has a chance",
+      "&eto increase durability of armor and",
+      "&egive absorption/health boost."
+    ]
+  },
+  "max level": 4,
+  "applies to": "bow",
+  "alchemist upgrade costs": [950, 1400, 1850],
+  "tinkerer": "54:63:72:81",
+  "attributes": [
+    "ProjectileHit;ProjectileIsType=ARROW;VictimIsAlly=true;VictimHeal=2;chance=10*level"
+  ]
+}

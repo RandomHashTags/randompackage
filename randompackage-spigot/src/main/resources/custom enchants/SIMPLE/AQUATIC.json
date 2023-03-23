@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Aquatic"
+  },
+  "lore": {
+    "en" : [
+      "&eGives permanent water breathing."
+    ]
+  },
+  "max level": 1,
+  "applies to": "helmet",
+  "tinkerer": "134",
+  "attributes": [
+    "PlayerJoin;PlayerAddPotionEffect=water_breathing:level-1:99999:true",
+    "PlayerQuit;PlayerRemovePotionEffect=water_breathing:false",
+    "ArmorEquip;PlayerAddPotionEffect=water_breathing:level-1:99999:true",
+    "ArmorUnequip;PlayerRemovePotionEffect=water_breathing:true",
+    "ArmorPieceBreak;PlayerRemovePotionEffect=water_breathing:true"
+  ]
+}

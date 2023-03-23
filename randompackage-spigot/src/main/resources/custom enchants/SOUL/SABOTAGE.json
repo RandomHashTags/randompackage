@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Sabotage"
+  },
+  "lore": {
+    "en" : [
+      "&eActive Soul Enchantment. A chance to",
+      "&eblock enemy player Rocket Escape and",
+      "&eGuided Rocket Escape from activating.",
+      "&eCosts 4 souls per second."
+    ]
+  },
+  "max level": 5,
+  "applies to": "sword",
+  "alchemist upgrade costs": [0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

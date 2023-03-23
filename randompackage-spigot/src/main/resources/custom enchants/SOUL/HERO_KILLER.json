@@ -1,0 +1,20 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Hero Killer"
+  },
+  "lore": {
+    "en" : [
+      "&eDeal (level x 5%) more damage to",
+      "&eplayers wearing Heroic Armor."
+    ]
+  },
+  "max level": 3,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [0, 0],
+  "tinkerer": "",
+  "attributes": [
+    "",
+    "PvAny;VictimIsType=PLAYER;VictimIsWearingHeroicArmor=true;SetDamage=dmg*(level*1.05)"
+  ]
+}

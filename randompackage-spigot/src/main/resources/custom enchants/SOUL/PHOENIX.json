@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Phoenix"
+  },
+  "lore": {
+    "en" : [
+      "&ePassive Soul Enchantment. An attack",
+      "&ethat would normally kill you will",
+      "&einstead heal you to full HP. Costs",
+      "&e1000+ souls per use. Can only be",
+      "&eactivated once every couple minutes."
+    ]
+  },
+  "max level": 3,
+  "applies to": "boots",
+  "alchemist upgrade costs": [8500, 13500],
+  "tinkerer": "190:215:240",
+  "attributes": [
+    "isDamaged;VictimIsInList=SOUL_TRAPPED;Return=false",
+    "isDamaged;VictimHealth<=dmg;VictimHasActiveRarityGem=SOUL:true;VictimDepleteRarityGem=SOUL:random{1000:1500};SetDamage=0;VictimSetHealth=getVictimMaxHP"
+  ]
+}

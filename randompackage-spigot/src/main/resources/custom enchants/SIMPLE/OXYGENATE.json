@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Oxygenate"
+  },
+  "lore": {
+    "en" : [
+      "&eRefills oxygen levels when breaking",
+      "&eblocks underwater."
+    ]
+  },
+  "max level": 1,
+  "applies to": "pickaxe",
+  "tinkerer": "73",
+  "attributes": [
+    "BlockBreak;chance=70+(5*level);PlayerIsUnderwater;PlayerSetAir=air+40"
+  ]
+}

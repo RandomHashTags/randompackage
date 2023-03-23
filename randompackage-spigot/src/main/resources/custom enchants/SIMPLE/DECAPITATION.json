@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Decapitation"
+  },
+  "lore": {
+    "en" : [
+      "&eVictims have a chance of dropping",
+      "&etheir head on death."
+    ]
+  },
+  "max level": 3,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [1500, 2000],
+  "tinkerer": "50:63:76",
+  "attributes": [
+    "EntityDeath;VictimIsPlayer=true;chance=20*level;VictimDropItem=player_head_item:Victim"
+  ]
+}

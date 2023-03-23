@@ -1,0 +1,26 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Teleblock"
+  },
+  "lore": {
+    "en" : [
+      "&eActive Soul Enchantment. Your bow is",
+      "&eenchanted with enderpearl blocking",
+      "&emagic, damaged players will be unable",
+      "&eto use enderpearls for up to 20",
+      "&eseconds, and will lose up to 15",
+      "&eenderpearls from their inventory.",
+      "&eCosts level x 6 souls per shot."
+    ]
+  },
+  "max level": 5,
+  "applies to": "bow",
+  "alchemist upgrade costs": [7000, 9000, 11000, 13000],
+  "tinkerer": "160:175:190:205:220",
+  "attributes": [
+    "EntityShootBow;ShooterIsInList=SOUL_TRAPPED:true;Return=false",
+    "EntityShootBow;ShooterHasActiveRarityGem=SOUL:true;ShooterDepleteRarityGem=SOUL:level*6;ShooterAddToList=TELEBLOCK",
+    "ProjectileHit;ShooterIsInList=TELEBLOCK:true;ShooterRemoveFromList=TELEBLOCK;VictimIsType=PLAYER;VictimRemoveItem=ENDER_PEARL:getRandom(0:15);VictimAddToList=TELEBLOCKED;Wait=20*4*getRandom(1:level-1);VictimRemoveFromList=TELEBLOCKED"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Haste"
+  },
+  "lore": {
+    "en" : [
+      "&eAllows you to swing your tools faster."
+    ]
+  },
+  "max level": 3,
+  "applies to": "pickaxe",
+  "alchemist upgrade costs": [800, 1300],
+  "tinkerer": "73:86:99",
+  "attributes": [
+    "PlayerInteract;PlayerAddPotionEffect=haste:level-1:20*level"
+  ]
+}
