@@ -29,7 +29,9 @@ public final class ShopItem {
     public ItemStack getPurchased() {
         final boolean d = purchasedItem != null;
         final ItemStack is = d ? purchasedItem.clone() : UMaterial.match(display).getItemStack();
-        if(!d) is.setAmount(display.getAmount());
+        if(!d) {
+            is.setAmount(display.getAmount());
+        }
         return is;
     }
     public List<String> getExecutedCommands() {

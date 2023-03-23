@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.living.LivingConquestMob;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public final class ConquestMob implements UVersionableSpigot {
         return drops;
     }
 
-    public LivingConquestMob spawn(Location location) {
+    public LivingConquestMob spawn(@NotNull Location location) {
         location.getChunk().load();
         final LivingEntity le = getEntity(type, location, true);
         return new LivingConquestMob(le, this);

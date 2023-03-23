@@ -120,24 +120,24 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         playerEnchants = new HashMap<>();
         equippedTimedEnchants = new HashMap<>();
 
-        for(File f : getFilesInFolder(folderString)) {
-            if(f.isDirectory()) {
-                final File[] files = new File(folderString + SEPARATOR + f.getName()).listFiles();
+        for(File enchant_rarity_file : getFilesInFolder(folderString)) {
+            if(enchant_rarity_file.isDirectory()) {
+                final File[] files = new File(folderString + SEPARATOR + enchant_rarity_file.getName()).listFiles();
                 if(files != null) {
                     FileEnchantRarity rarity = null;
                     final File[] F = files;
                     for(File k : F) {
                         if(k.getName().contains("_settings")) {
-                            rarity = new FileEnchantRarity(f, k);
+                            rarity = new FileEnchantRarity(enchant_rarity_file, k);
                             raritybooks.add(rarity.getRevealItem());
                         }
                     }
                     if(rarity != null) {
-                        for(File ff : files) {
-                            if(!ff.getName().startsWith("_settings")) {
-                                final FileCustomEnchantSpigot e = new FileCustomEnchantSpigot(ff);
-                                rarity.getEnchants().add(e);
-                                for(String s : e.getAttributes()) {
+                        for(File enchant_file : files) {
+                            if(!enchant_file.getName().startsWith("_settings")) {
+                                final FileCustomEnchantSpigot custom_enchant = new FileCustomEnchantSpigot(enchant_file);
+                                rarity.getEnchants().add(custom_enchant);
+                                for(String s : custom_enchant.getAttributes()) {
                                     final String[] split = s.split(";");
                                     final String l = split[0].toLowerCase();
                                     if(l.equals("customenchanttimer")) {
@@ -153,8 +153,8 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
                                                 }
                                             }
                                         }, ticks, ticks);
-                                        timedEnchants.put(e, id);
-                                        enchantTicks.put(rarity.getApplyColors() + e.getName(), ticks);
+                                        timedEnchants.put(custom_enchant, id);
+                                        enchantTicks.put(rarity.getApplyColors() + custom_enchant.getName(), ticks);
                                     }
                                 }
                             }

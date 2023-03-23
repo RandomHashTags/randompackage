@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -19,7 +20,7 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
     }
 
     public int getSlot() { return yml.getInt("gui.slot"); }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(display == null) display = createItemStack(yml, "gui");
         return getClone(display);
     }
@@ -43,7 +44,7 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
         return yml.getStringList("lootbag.rewards");
     }
 
-    public Location getTeleportLocation() { return toLocation(yml.getString("settings.warp location")); }
+    public Location getTeleportLocation() { return string_to_location(yml.getString("settings.warp location")); }
     public long getFastestCompletion() { return fastestCompletion; }
     public void setFastestCompletion(long fastestCompletion) { this.fastestCompletion = fastestCompletion; }
 }

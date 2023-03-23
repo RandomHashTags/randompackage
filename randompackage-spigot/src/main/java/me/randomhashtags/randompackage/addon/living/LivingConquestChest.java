@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -101,7 +102,7 @@ public final class LivingConquestChest implements UVersionableSpigot {
             Bukkit.broadcastMessage(s);
         }
     }
-    public void damage(Player player, double damage, boolean callEvent) {
+    public void damage(@NotNull Player player, double damage, boolean callEvent) {
         final long time = System.currentTimeMillis();
         final double damageDelay = type.getDamageDelay();
         if(damageDelay <= 0 || time >= damageDelayExpire) {
@@ -168,9 +169,10 @@ public final class LivingConquestChest implements UVersionableSpigot {
         final String rs = type.getRewardSize();
         final String[] split = rs.split("-");
         final int min = rs.contains("-") ? Integer.parseInt(split[0]) : 0, amount = !rs.contains("-") ? Integer.parseInt(rs) : min + RANDOM.nextInt(Integer.parseInt(split[1])-min+1);
+        final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
         for(int i = 1; i <= amount; i++) {
             final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
-            final ItemStack is = RandomPackageAPI.INSTANCE.createItemStack(null, reward);
+            final ItemStack is = api.createItemStack(null, reward);
             if(is != null && !is.getType().equals(Material.AIR)) {
                 r.add(is);
             }
@@ -182,7 +184,7 @@ public final class LivingConquestChest implements UVersionableSpigot {
         return mobs;
     }
 
-    public static LivingConquestChest valueOf(Location l) {
+    public static LivingConquestChest valueOf(@NotNull Location l) {
         for(LivingConquestChest c : LIVING) {
             if(c.location.equals(l)) {
                 return c;
@@ -190,7 +192,7 @@ public final class LivingConquestChest implements UVersionableSpigot {
         }
         return null;
     }
-    public static LivingConquestChest valueOf(Chunk chunk) {
+    public static LivingConquestChest valueOf(@NotNull Chunk chunk) {
         for(LivingConquestChest c : LIVING) {
             if(c.location.getChunk().equals(chunk)) {
                 return c;
@@ -198,7 +200,7 @@ public final class LivingConquestChest implements UVersionableSpigot {
         }
         return null;
     }
-    public static LivingConquestChest valueOf(UUID conquestMob) {
+    public static LivingConquestChest valueOf(@NotNull UUID conquestMob) {
         for(LivingConquestChest cc : LIVING) {
             final HashMap<UUID, LivingConquestMob> mobs = cc.getMobs();
             if(mobs != null && mobs.containsKey(conquestMob)) {

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 public final class Home {
 	private Location location;
@@ -18,16 +19,16 @@ public final class Home {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-	public String getName() {
+	public @NotNull String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(@NotNull String name) {
 		this.name = name;
 	}
-	public UMaterial getIcon() {
+	public @NotNull UMaterial getIcon() {
 		return icon;
 	}
-	public void setIcon(UMaterial icon) {
+	public void setIcon(@NotNull UMaterial icon) {
 		this.icon = icon;
 	}
 }

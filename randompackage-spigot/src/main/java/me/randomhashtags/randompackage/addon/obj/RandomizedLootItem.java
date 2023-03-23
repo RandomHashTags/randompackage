@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.obj;
 import me.randomhashtags.randompackage.addon.RandomizedLoot;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public final class RandomizedLootItem implements RandomizedLoot, UVersionableSpi
     public String getIdentifier() {
         return key;
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return getClone(item);
     }
     public String getRewardSize() {

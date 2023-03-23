@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 		return cannotLandIn;
 	}
 
-	public ItemStack getItem() {
+	public @NotNull ItemStack getItem() {
 		if(is == null) {
 			is = RandomPackageAPI.INSTANCE.createItemStack(getYaml(), "flare");
 		}

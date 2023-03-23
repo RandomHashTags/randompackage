@@ -29,7 +29,9 @@ public final class LivingServerCrate {
     public void delete(boolean drop) {
         final World w = location.getWorld();
         w.getBlockAt(location).setType(Material.AIR);
-        if(drop) w.dropItemNaturally(location, type.getItem());
+        if(drop) {
+            w.dropItemNaturally(location, type.getItem());
+        }
         LIVING.remove(location);
         location = null;
         type = null;

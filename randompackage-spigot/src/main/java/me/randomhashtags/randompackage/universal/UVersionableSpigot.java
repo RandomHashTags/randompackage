@@ -134,13 +134,13 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return RegionalAPI.INSTANCE.allowsPvP(player, location);
     }
 
-    default int getTotalExperience(Player player) {
+    default int getTotalExperience(@NotNull Player player) {
         final int level = player.getLevel();
         final double levelxp = convertLevelToExp(level), nextlevelxp = convertLevelToExp(level + 1), difference = nextlevelxp - levelxp;
         final double p = (levelxp + (difference * player.getExp()));
         return (int) Math.round(p);
     }
-    default void setTotalExperience(Player player, int total) {
+    default void setTotalExperience(@NotNull Player player, int total) {
         player.setTotalExperience(0);
         player.setExp(0f);
         player.setLevel(0);
@@ -157,7 +157,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e[async]");
     }
 
-    default EquipmentSlot getRespectiveSlot(String material) {
+    default EquipmentSlot getRespectiveSlot(@NotNull String material) {
         return material.contains("HELMET") || material.contains("SKULL") || material.contains("HEAD") ? EquipmentSlot.HEAD
                 : material.contains("CHESTPLATE") || material.contains("ELYTRA") ? EquipmentSlot.CHEST
                 : material.contains("LEGGINGS") ? EquipmentSlot.LEGS
@@ -170,12 +170,12 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         CONSOLE.sendMessage(colorize(msg));
     }
     @Override
-    default int getRemainingInt(String string) {
+    default int getRemainingInt(@NotNull String string) {
         string = ChatColor.stripColor(colorize(string)).replaceAll("\\p{L}", "").replaceAll("\\s", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "");
         return string.isEmpty() ? -1 : Integer.parseInt(string);
     }
     @Override
-    default Double getRemainingDouble(String string) {
+    default Double getRemainingDouble(@NotNull String string) {
         string = ChatColor.stripColor(colorize(string).replaceAll("\\p{L}", "").replaceAll("\\p{Z}", "").replaceAll("\\.", "d").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replace("d", "."));
         return string.isEmpty() ? -1.00 : Double.parseDouble(string.contains(".") && string.split("\\.").length > 1 && string.split("\\.")[1].length() > 2 ? string.substring(0, string.split("\\.")[0].length() + 3) : string);
     }
@@ -231,12 +231,12 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default boolean isArmorPiece(@NotNull Material material) {
+    default boolean material_is_armor_piece(@NotNull Material material) {
         final String type = material.name();
         return type.endsWith("_HELMET") || type.endsWith("_CHESTPLATE") || type.endsWith("_LEGGINGS") || type.endsWith("_BOOTS");
     }
 
-    default boolean isPassive(@NotNull EntityType type) {
+    default boolean entity_type_is_passive(@NotNull EntityType type) {
         if(type.isSpawnable()) {
             switch (type.name().toLowerCase()) {
                 case "bat":
@@ -274,11 +274,11 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             return false;
         }
     }
-    default boolean isAggressive(EntityType type) {
-        return !isPassive(type);
+    default boolean entity_type_is_aggressive(@NotNull EntityType type) {
+        return !entity_type_is_passive(type);
     }
-    default boolean isNeutral(EntityType type) {
-        if(type.isSpawnable() && !isPassive(type)) {
+    default boolean entity_type_is_neutral(@NotNull EntityType type) {
+        if(type.isSpawnable() && !entity_type_is_passive(type)) {
             switch (type.name()) {
                 case "enderman":
                 case "iron_golem":
@@ -293,7 +293,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
 
     @Nullable
-    default PotionEffectType getPotionEffectType(@NotNull String input) {
+    default PotionEffectType get_potion_effect_type(@NotNull String input) {
         if(!input.isEmpty()) {
             switch (input.toUpperCase()) {
                 case "STRENGTH":
@@ -325,10 +325,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default String toString(@NotNull Location loc) {
+    default String location_to_string(@NotNull Location loc) {
         return loc.getWorld().getName() + ";" + loc.getX() + ";" + loc.getY() + ";" + loc.getZ() + ";" + loc.getYaw() + ";" + loc.getPitch();
     }
-    default Location toLocation(String string) {
+    default Location string_to_location(@Nullable String string) {
         if(string != null && string.contains(";")) {
             final String[] a = string.split(";");
             return new Location(Bukkit.getWorld(a[0]), Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), Float.parseFloat(a[4]), Float.parseFloat(a[5]));
@@ -337,7 +337,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default void giveItem(Player player, ItemStack is) {
+    default void giveItem(@NotNull Player player, ItemStack is) {
         if(is == null || is.getType().equals(Material.AIR)) {
             return;
         }
@@ -371,26 +371,24 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default BlockFace getFacing(Entity entity) {
+    default BlockFace getFacing(@NotNull Entity entity) {
         return LEGACY || THIRTEEN ? BLOCK_FACES[Math.round(entity.getLocation().getYaw() / 45f) & 0x7] : entity.getFacing();
     }
-    default Entity getEntity(UUID uuid) {
-        if(uuid != null) {
-            if(EIGHT || NINE || TEN) {
-                for(World w : Bukkit.getWorlds()) {
-                    for(LivingEntity le : w.getLivingEntities()) {
-                        if(uuid.equals(le.getUniqueId())) {
-                            return le;
-                        }
+    default Entity get_entity_from_uuid(@NotNull UUID uuid) {
+        if(EIGHT || NINE || TEN) {
+            for(World w : Bukkit.getWorlds()) {
+                for(LivingEntity le : w.getLivingEntities()) {
+                    if(uuid.equals(le.getUniqueId())) {
+                        return le;
                     }
                 }
-            } else {
-                return Bukkit.getEntity(uuid);
             }
+        } else {
+            return Bukkit.getEntity(uuid);
         }
         return null;
     }
-    default LivingEntity getEntity(String type, Location l, boolean spawn) {
+    default LivingEntity getEntity(@NotNull String type, Location l, boolean spawn) {
         final boolean baby = type.contains(":") && type.toLowerCase().endsWith(":true");
         type = type.toUpperCase().split(":")[0];
         final LivingEntity mob = getEntity(type, l);
@@ -430,7 +428,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             default: return null;
         }
     }
-    default LivingEntity getEntity(String type, Location location) {
+    default LivingEntity getEntity(@NotNull String type, @NotNull Location location) {
         final World world = location.getWorld();
         if(world == null) {
             return null;
@@ -484,11 +482,11 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             default: return null;
         }
     }
-    default boolean isInteractable(Material material) {
-        final String m = material.name();
+    default boolean isInteractable(@NotNull Material material) {
         if(!LEGACY) {
             return material.isInteractable();
         } else {
+            final String m = material.name();
             return INTERACTABLE_MATERIALS.contains(m) || m.contains("ANVIL") || m.endsWith("_BED")
                     || m.endsWith("DOOR") && !m.equals("IRON_DOOR")
                     ;

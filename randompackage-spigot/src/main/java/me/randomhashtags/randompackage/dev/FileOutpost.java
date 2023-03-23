@@ -62,7 +62,7 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
         }
         return scoreboard;
     }
-    public Location getWarpLocation() { return toLocation(yml.getString("settings.warp location")); }
+    public Location getWarpLocation() { return string_to_location(yml.getString("settings.warp location")); }
 
     public String getAttackingFaction() { return attacking; }
     public void setAttackingFaction(String faction) { attacking = faction; }

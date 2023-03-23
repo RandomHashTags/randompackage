@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.RarityFireball;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -21,7 +22,7 @@ public final class PathFireball extends RPAddonSpigot implements RarityFireball 
 		return path;
 	}
 
-	public ItemStack getItem() {
+	public @NotNull ItemStack getItem() {
 		if(is == null) is = createItemStack(getAddonConfig("fireballs.yml"), "fireballs." + path);
 		return getClone(is);
 	}

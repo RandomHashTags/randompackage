@@ -35,7 +35,7 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(item == null) {
             item = createItemStack(yml, "item");
         }

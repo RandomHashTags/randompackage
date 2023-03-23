@@ -42,7 +42,7 @@ public final class PathWhiteScroll extends RPAddonSpigot implements WhiteScroll 
     public boolean removesRequiredAfterApplication() {
         return getAddonConfig("scrolls.yml").getBoolean("white scrolls." + path + ".removes required after application");
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "white scrolls." + path);
         return getClone(item);
     }

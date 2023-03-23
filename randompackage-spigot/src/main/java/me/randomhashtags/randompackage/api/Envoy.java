@@ -92,7 +92,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		final List<String> presetLocations = OTHER_YML.getStringList("envoy.preset");
 		if(!presetLocations.isEmpty()) {
 			for(String s : presetLocations) {
-				preset.add(toLocation(s));
+				preset.add(string_to_location(s));
 			}
 		}
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER + SEPARATOR + "envoy tiers", "_settings.yml"));
@@ -143,7 +143,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 	public void unload() {
 		final List<String> preset = new ArrayList<>();
 		for(Location location : this.preset) {
-			preset.add(toString(location));
+			preset.add(location_to_string(location));
 		}
 		OTHER_YML.set("envoy.preset", preset);
 		saveOtherData();

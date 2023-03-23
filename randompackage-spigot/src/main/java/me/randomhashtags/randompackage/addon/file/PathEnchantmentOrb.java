@@ -35,7 +35,7 @@ public final class PathEnchantmentOrb extends RPAddonSpigot implements Enchantme
 	public String getIdentifier() { return path + maxenchants; }
 
 	public String getPath() { return path; }
-	public ItemStack getItem() { return getClone(is); }
+	public @NotNull ItemStack getItem() { return getClone(is); }
 	public ItemStack getItem(int percent) {
 		final int slot = getPercentLoreSlot();
 		final ItemStack i = getItem();

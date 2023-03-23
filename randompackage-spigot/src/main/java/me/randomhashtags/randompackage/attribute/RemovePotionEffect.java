@@ -32,7 +32,7 @@ public final class RemovePotionEffect extends AbstractEventAttribute {
         }
     }
     private void removePotionEffect(LivingEntity entity, String input, HashMap<String, String> valueReplacements, boolean sendMessage) {
-        final PotionEffectType type = getPotionEffectType(input);
+        final PotionEffectType type = get_potion_effect_type(input);
         if(type != null) {
             entity.removePotionEffect(type);
             if(sendMessage) {

@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class LivingEnvoyCrate implements UVersionableSpigot {
     public static HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> LIVING;
@@ -33,9 +34,15 @@ public final class LivingEnvoyCrate implements UVersionableSpigot {
         LIVING.putIfAbsent(envoyID, new HashMap<>());
         LIVING.get(envoyID).put(location, this);
     }
-    public int getEnvoyID() { return envoyID; }
-    public EnvoyCrate getType() { return type; }
-    public Location getLocation() { return location; }
+    public int getEnvoyID() {
+        return envoyID;
+    }
+    public EnvoyCrate getType() {
+        return type;
+    }
+    public Location getLocation() {
+        return location;
+    }
     public void delete(boolean dropItems) {
         location.getChunk().load();
         final HashMap<Location, LivingEnvoyCrate> l = LIVING.get(envoyID);
@@ -69,8 +76,9 @@ public final class LivingEnvoyCrate implements UVersionableSpigot {
     }
     public static LivingEnvoyCrate valueOf(Location location) {
         if(LIVING != null) {
-            for(int envoyID : LIVING.keySet()) {
-                final HashMap<Location, LivingEnvoyCrate> living = LIVING.get(envoyID);
+            for(Map.Entry<Integer, HashMap<Location, LivingEnvoyCrate>> entry : LIVING.entrySet()) {
+                final int envoyID = entry.getKey();
+                final HashMap<Location, LivingEnvoyCrate> living = entry.getValue();
                 if(living.containsKey(location)) {
                     return living.get(location);
                 }

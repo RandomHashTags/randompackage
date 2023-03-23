@@ -199,7 +199,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
             yml.set("homes.added max homes", homeData.getAddedMaxHomes());
             final List<String> homes = new ArrayList<>();
             for(Home h : homeData.getHomes()) {
-                homes.add(h.getName() + ";" + h.getIcon().name() + ";" + toString(h.getLocation()));
+                homes.add(h.getName() + ";" + h.getIcon().name() + ";" + location_to_string(h.getLocation()));
             }
             yml.set("homes.list", homes);
         }
@@ -381,7 +381,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
             final List<LivingCustomEnchantEntity> entities = new ArrayList<>();
             for(String s : list) {
                 final UUID uuid = UUID.fromString(s);
-                final Entity entity = getEntity(uuid);
+                final Entity entity = get_entity_from_uuid(uuid);
                 if(entity instanceof LivingEntity && !entity.isDead()) {
                     final LivingCustomEnchantEntity e = new LivingCustomEnchantEntity(null, getPlayer(), (LivingEntity) entity, null);
                     entities.add(e);
@@ -483,7 +483,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
                     final String[] values = s.split(";");
                     final String name = values[0];
                     final UMaterial mat = UMaterial.match(values[1]);
-                    homes.add(new Home(name, toLocation(s.substring(name.length()+values[1].length()+2)), mat));
+                    homes.add(new Home(name, string_to_location(s.substring(name.length()+values[1].length()+2)), mat));
                 }
             }
             homeData = new HomeDataObj(addedMaxHomes, homes);

@@ -68,7 +68,6 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
             saveOtherData();
         }
 
-        ShopCategory.SHOP = this;
         titles = new HashMap<>();
         for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {

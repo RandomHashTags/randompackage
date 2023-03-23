@@ -14,7 +14,7 @@ public final class Teleport extends AbstractEventAttribute {
         final HashMap<Entity, String> recipientValues = pending.getRecipientValues();
         for(Entity e : recipientValues.keySet()) {
             final String value = replaceValue(entities, recipientValues.get(e), valueReplacements);
-            final Location l = toLocation(value);
+            final Location l = string_to_location(value);
             if(l != null) {
                 e.teleport(l, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }

@@ -134,7 +134,7 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
         SCHEDULER.runTaskAsynchronously(RANDOM_PACKAGE, () -> {
             for(String s : getConfigurationSectionKeys(OTHER_YML, "collection chests", false)) {
                 final String[] info = OTHER_YML.getString("collection chests." + s + ".info").split(":");
-                new CollectionChest(UUID.fromString(s), info[0], toLocation(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
+                new CollectionChest(UUID.fromString(s), info[0], string_to_location(info[1]), !info[2].equals("null") ? UMaterial.match(info[2]) : null);
             }
             final HashMap<UUID, CollectionChest> chests = CollectionChest.CHESTS;
             sendConsoleDidLoadAsyncFeature((chests != null ? chests.size() : 0) + " collection chests");

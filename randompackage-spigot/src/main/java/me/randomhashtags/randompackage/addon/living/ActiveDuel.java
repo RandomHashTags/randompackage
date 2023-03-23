@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,12 +60,12 @@ public final class ActiveDuel {
         removePotionEffects(accepter);
     }
 
-    private void removePotionEffects(Player player) {
+    private void removePotionEffects(@NotNull Player player) {
         for(PotionEffect pe : player.getActivePotionEffects()) {
             player.removePotionEffect(pe.getType());
         }
     }
-    private void resetPotionEffects(Player player, Collection<PotionEffect> previous) {
+    private void resetPotionEffects(@NotNull Player player, Collection<PotionEffect> previous) {
         removePotionEffects(player);
         for(PotionEffect pe : previous) {
             player.addPotionEffect(pe);
@@ -82,7 +83,7 @@ public final class ActiveDuel {
         resetPotionEffects(accepter, accepterPEs);
     }
 
-    public void end(DuelEndReason reason) {
+    public void end(@NotNull DuelEndReason reason) {
         List<String> msg = null;
         switch (reason) {
             case CHOOSE_WINNER:

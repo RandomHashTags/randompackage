@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.enums.BoosterRecipients;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -24,7 +25,7 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
         }
         return recipients;
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }

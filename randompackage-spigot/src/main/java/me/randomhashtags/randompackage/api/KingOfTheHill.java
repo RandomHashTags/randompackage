@@ -111,7 +111,7 @@ public enum KingOfTheHill implements RPFeatureSpigot, CommandExecutor {
 
 		status = "Not Active";
 
-		teleportLocation = OTHER_YML.getString("koth.tp") != null && !OTHER_YML.getString("koth.tp").equals("") ? toLocation(OTHER_YML.getString("koth.tp")) : null;
+		teleportLocation = OTHER_YML.getString("koth.tp") != null && !OTHER_YML.getString("koth.tp").equals("") ? string_to_location(OTHER_YML.getString("koth.tp")) : null;
 		captureTime = config.getInt("settings.time to cap");
 		startCapCountdown = config.getInt("settings.start cap countdown");
 		captureRadius = config.getInt("settings.capture radius");
@@ -124,14 +124,14 @@ public enum KingOfTheHill implements RPFeatureSpigot, CommandExecutor {
 
 		final String center = OTHER_YML.getString("koth.center");
 		if(center != null && !center.equals("")) {
-			this.center = toLocation(center);
+			this.center = string_to_location(center);
 			startKOTH();
 		}
 	}
 	@Override
 	public void unload() {
-		OTHER_YML.set("koth.center", center != null ? toString(center) : "");
-		OTHER_YML.set("koth.tp", teleportLocation != null ? toString(teleportLocation) : "");
+		OTHER_YML.set("koth.center", center != null ? location_to_string(center) : "");
+		OTHER_YML.set("koth.tp", teleportLocation != null ? location_to_string(teleportLocation) : "");
 		saveOtherData();
 
 		if(center != null && !status.equals("STOPPED")) {

@@ -82,7 +82,7 @@ public final class CollectionChest {
 		final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
 		for(ItemStack is : getInventory().getContents()) {
 			if(is != null) {
-				OTHER_YML.set("collection chests." + uuidString + ".info", placer + ":" + api.toString(location) + ":" + (filter != null ? filter.name() : "null"));
+				OTHER_YML.set("collection chests." + uuidString + ".info", placer + ":" + api.location_to_string(location) + ":" + (filter != null ? filter.name() : "null"));
 				OTHER_YML.set("collection chests." + uuidString + ".storage." + i, is.toString());
 			}
 			i++;

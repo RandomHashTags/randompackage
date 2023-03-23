@@ -143,7 +143,7 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
         final List<String> pe = getStringList(config, "bless.removed potion effects");
         removedPotionEffects = new ArrayList<>();
         for(String string : pe) {
-            final PotionEffectType type = getPotionEffectType(string);
+            final PotionEffectType type = get_potion_effect_type(string);
             if(type != null) {
                 removedPotionEffects.add(type);
             }

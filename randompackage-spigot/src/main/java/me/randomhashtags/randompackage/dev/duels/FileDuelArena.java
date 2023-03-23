@@ -30,7 +30,7 @@ public class FileDuelArena extends RPAddonSpigot implements DuelArena {
         if(locations == null) {
             locations = new ArrayList<>();
             for(String s : yml.getStringList("locations")) {
-                locations.add(toLocation(s));
+                locations.add(string_to_location(s));
             }
         }
         return locations;

@@ -32,9 +32,6 @@ public final class ActiveTrade implements UVersionableSpigot {
         ACTIVE_TRADES.add(this);
     }
 
-    private Trade getTrade() {
-        return Trade.INSTANCE;
-    }
     public boolean isSuccessful() {
         return successful;
     }
@@ -124,7 +121,7 @@ public final class ActiveTrade implements UVersionableSpigot {
         successful = accepted;
         if(accepted) {
             countingDown = true;
-            final int countdown = getTrade().getCountdown();
+            final int countdown = Trade.INSTANCE.getCountdown();
             setCountdown(true, countdown);
             for(int i = 1; i <= countdown; i++) {
                 final int integer = i;
@@ -144,7 +141,8 @@ public final class ActiveTrade implements UVersionableSpigot {
 
     private void setCountdown(boolean setAccepting, int integer) {
         final Inventory top = sender.getOpenInventory().getTopInventory(), t = receiver.getOpenInventory().getTopInventory();
-        final ItemStack i = (setAccepting ? getTrade().accepting : getTrade().accept).clone();
+        final Trade trade = Trade.INSTANCE;
+        final ItemStack i = (setAccepting ? trade.accepting : trade.accept).clone();
         i.setAmount(integer);
         top.setItem(0, i);
         top.setItem(8, i);
@@ -163,7 +161,7 @@ public final class ActiveTrade implements UVersionableSpigot {
             senderReady = false;
             receiverReady = false;
 
-            setCountdown(false, getTrade().getCountdown());
+            setCountdown(false, Trade.INSTANCE.getCountdown());
         }
     }
 

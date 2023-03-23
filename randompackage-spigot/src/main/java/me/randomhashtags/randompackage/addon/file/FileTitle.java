@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.Title;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public final class FileTitle extends RPAddonSpigot implements Title {
         return TITLE_TAB_FORMAT.replace("{TITLE}", getIdentifier());
     }
 
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         final String title = getIdentifier();
         final ItemStack item = getClone(TITLE_ITEMSTACK);
         final ItemMeta itemMeta = item.getItemMeta();

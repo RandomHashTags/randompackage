@@ -21,7 +21,6 @@ import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,10 +86,10 @@ public enum CustomBosses implements EventAttributes {
 	}
 	public void loadBackup() {
 		for(String s : getConfigurationSectionKeys(OTHER_YML, "custom bosses", false)) {
-			final Entity entity = getEntity(UUID.fromString(s));
+			final Entity entity = get_entity_from_uuid(UUID.fromString(s));
 			if(entity != null && !entity.isDead()) {
 				final String path = "custom bosses." + s + ".", summonerUUID = OTHER_YML.getString(path + "summoner");
-				final LivingEntity summoner = summonerUUID != null && !summonerUUID.equals("null") ? (LivingEntity) getEntity(UUID.fromString(summonerUUID)) : null;
+				final LivingEntity summoner = summonerUUID != null && !summonerUUID.equals("null") ? (LivingEntity) get_entity_from_uuid(UUID.fromString(summonerUUID)) : null;
 				final LivingCustomBoss boss = new LivingCustomBoss(summoner, (LivingEntity) entity, getCustomBoss(OTHER_YML.getString(path + "type")));
 				for(String uuid : getConfigurationSectionKeys(OTHER_YML, path + "damager", false)) {
 					boss.damagers.put(UUID.fromString(uuid), OTHER_YML.getDouble(path + "damager." + uuid));

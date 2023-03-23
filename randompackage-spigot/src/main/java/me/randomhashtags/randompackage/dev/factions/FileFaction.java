@@ -68,7 +68,7 @@ public class FileFaction extends RPAddonSpigot implements Faction {
     public void backup() {
         final List<String> claimz = new ArrayList<>();
         for(Chunk c : getClaims()) {
-            claimz.add(toString(c.getBlock(0, 0, 0).getLocation()));
+            claimz.add(location_to_string(c.getBlock(0, 0, 0).getLocation()));
         }
         yml.set("claims", claimz);
 
@@ -104,7 +104,7 @@ public class FileFaction extends RPAddonSpigot implements Faction {
         return uuid;
     }
     public long getCreationTime() { return yml.getLong("info.creation time"); }
-    public Location getHome() { return toLocation(yml.getString("info.home")); }
+    public Location getHome() { return string_to_location(yml.getString("info.home")); }
     public String getTag() { return yml.getString("info.tag"); }
     public String getDescription() { return yml.getString("info.description"); }
 
@@ -112,7 +112,7 @@ public class FileFaction extends RPAddonSpigot implements Faction {
         if(claims == null) {
             claims = new ArrayList<>();
             for(String s : yml.getStringList("claims")) {
-                claims.add(toLocation(s).getChunk());
+                claims.add(string_to_location(s).getChunk());
             }
         }
         return claims;

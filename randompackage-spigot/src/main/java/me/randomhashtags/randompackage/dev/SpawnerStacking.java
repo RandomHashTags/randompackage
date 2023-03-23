@@ -90,7 +90,7 @@ public enum SpawnerStacking implements RPFeatureSpigot {
         if(cs != null) {
             for(String s : cs.getKeys(false)) {
                 final String[] values = data.getString("locations." + s).split(";");
-                stacks.put(toLocation(s), new StackedSpawner(EntityType.valueOf(values[0]), Integer.parseInt(values[1])));
+                stacks.put(string_to_location(s), new StackedSpawner(EntityType.valueOf(values[0]), Integer.parseInt(values[1])));
             }
         }
         sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "&6[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
@@ -99,7 +99,7 @@ public enum SpawnerStacking implements RPFeatureSpigot {
         data.set("locations", null);
         for(Location l : stacks.keySet()) {
             final StackedSpawner ss = stacks.get(l);
-            data.set("locations." + toString(l), ss.getType().name() + ";" + ss.getStack());
+            data.set("locations." + location_to_string(l), ss.getType().name() + ";" + ss.getStack());
         }
         try {
             data.save(dataF);

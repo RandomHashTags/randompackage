@@ -24,7 +24,7 @@ public final class AddPotionEffect extends AbstractEventAttribute {
             final String rv = replaceValue(entities, value, valueReplacements);
             if(rv != null) {
                 final String[] values = rv.split(":");
-                final PotionEffectType type = getPotionEffectType(values[0]);
+                final PotionEffectType type = get_potion_effect_type(values[0]);
                 if(type != null) {
                     final int amplifier = (int) evaluate(values[1]), duration = (int) evaluate(values[2]);
                     l.addPotionEffect(new PotionEffect(type, duration, amplifier));

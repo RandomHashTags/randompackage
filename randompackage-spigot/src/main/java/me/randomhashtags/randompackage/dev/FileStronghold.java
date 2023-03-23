@@ -35,7 +35,7 @@ public abstract class FileStronghold extends RPAddonSpigot implements Stronghold
     public long getStartTime() { return 0; }
     public boolean allowsAFKCapturing() { return yml.getBoolean("settings.allows afk capturing"); }
     public Location getCenter() {
-        if(center == null) center = toLocation(yml.getString("settings.center"));
+        if(center == null) center = string_to_location(yml.getString("settings.center"));
         return center;
     }
     public CaptureType getCaptureType() {

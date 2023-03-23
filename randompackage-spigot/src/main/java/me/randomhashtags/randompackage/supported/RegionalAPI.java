@@ -87,7 +87,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return EPIC_SKYBLOCK;
     }
 
-    public HashMap<Regional, String> getRegionalIdentifiersAt(Location l) {
+    public HashMap<Regional, String> getRegionalIdentifiersAt(@NotNull Location l) {
         final HashMap<Regional, String> identifiers = new HashMap<>();
         if(hookedFactionsUUID()) {
             final FactionsUUID factionsUUID = FactionsUUID.INSTANCE;
@@ -145,7 +145,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return false;
     }
 
-    public HashMap<Regional, String> getChatModes(UUID player) {
+    public HashMap<Regional, String> getChatModes(@NotNull UUID player) {
         final HashMap<Regional, String> modes = new HashMap<>();
         if(hookedFactionsUUID()) {
             final FactionsUUID factionsUUID = FactionsUUID.INSTANCE;
@@ -165,7 +165,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         }
         return modes;
     }
-    public List<Player> getReceivingPlayers(UUID player, HashMap<Regional, String> chatModes) {
+    public List<Player> getReceivingPlayers(@NotNull UUID player, @NotNull HashMap<Regional, String> chatModes) {
         final List<Player> players = new ArrayList<>();
         for(Regional regional : chatModes.keySet()) {
             final Collection<Player> associates = regional.getOnlineAssociates(player);
@@ -176,7 +176,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         return players;
     }
 
-    private List<UUID> getRelation(UUID player, int type) {
+    private List<UUID> getRelation(@NotNull UUID player, int type) {
         final List<UUID> uuids = new ArrayList<>();
         if(FACTIONS_UUID) {
             add(player, type, FactionsUUID.INSTANCE, uuids);
@@ -218,32 +218,32 @@ public enum RegionalAPI implements UVersionableSpigot {
         }
     }
 
-    public List<UUID> getAssociates(UUID player) {
+    public List<UUID> getAssociates(@NotNull UUID player) {
         return getRelation(player, 0);
     }
-    public List<UUID> getNeutrals(UUID player) {
+    public List<UUID> getNeutrals(@NotNull UUID player) {
         return getRelation(player, 1);
     }
-    public List<UUID> getAllies(UUID player) {
+    public List<UUID> getAllies(@NotNull UUID player) {
         return getRelation(player, 2);
     }
-    public List<UUID> getTruces(UUID player) {
+    public List<UUID> getTruces(@NotNull UUID player) {
         return getRelation(player, 3);
     }
-    public List<UUID> getEnemies(UUID player) {
+    public List<UUID> getEnemies(@NotNull UUID player) {
         return getRelation(player, 4);
     }
 
-    public String getFactionTagAt(Location l) {
+    public String getFactionTagAt(@NotNull Location l) {
         return FACTIONS_UUID ? FactionsUUID.INSTANCE.getRegionalIdentifierAt(l) : null;
     }
-    public String getFactionTag(UUID player) {
+    public String getFactionTag(@NotNull UUID player) {
         return FACTIONS_UUID ? FactionsUUID.INSTANCE.getRegionalIdentifier(player) : null;
     }
-    public String getFactionTag(OfflinePlayer player) {
+    public String getFactionTag(@NotNull OfflinePlayer player) {
         return getFactionTag(player.getUniqueId());
     }
-    public List<UUID> getFactionMembers(UUID player) {
+    public List<UUID> getFactionMembers(@NotNull UUID player) {
         return FACTIONS_UUID ? FactionsUUID.INSTANCE.getAssociates(player) : null;
     }
 }

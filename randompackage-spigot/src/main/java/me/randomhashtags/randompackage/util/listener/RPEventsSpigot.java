@@ -20,12 +20,13 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 public enum RPEventsSpigot implements RPFeatureSpigot {
     INSTANCE;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "RP_EVENTS";
     }
     @Override
@@ -56,17 +57,19 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final ItemStack cursoritem = event.getCursor(), currentitem = event.getCurrentItem();
-        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && currentitem != null && cursoritem != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
+        final ItemStack cursoritem = event.getCursor(), current_item = event.getCurrentItem();
+        if(!event.getClick().equals(ClickType.DOUBLE_CLICK) && current_item != null && cursoritem != null && event.getInventory().getType().equals(InventoryType.CRAFTING)) {
             final Player player = (Player) event.getWhoClicked();
             final InventoryType.SlotType slotType = event.getSlotType();
             final ClickType clickType = event.getClick();
             final PlayerInventory inv = player.getInventory();
-            if((slotType.equals(InventoryType.SlotType.QUICKBAR) || slotType.equals(InventoryType.SlotType.CONTAINER)) && clickType.equals(ClickType.CONTROL_DROP)) return;
+            if((slotType.equals(InventoryType.SlotType.QUICKBAR) || slotType.equals(InventoryType.SlotType.CONTAINER)) && clickType.equals(ClickType.CONTROL_DROP)) {
+                return;
+            }
 
             ArmorUnequipEvent unequip = null;
             ArmorEquipEvent equip = null;
-            final String cursor = cursoritem.getType().name(), current = currentitem.getType().name();
+            final String cursor = cursoritem.getType().name(), current = current_item.getType().name();
             final int rawslot = event.getRawSlot(), targetSlot = getTargetSlot(current);
             final EquipmentSlot equipmentSlot = getRespectiveSlot(current);
             final boolean slotTypeIsArmor = slotType.equals(InventoryType.SlotType.ARMOR);
@@ -82,11 +85,11 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
                         equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.NUMBER_KEY_EQUIP, hotbarItem);
                     }
                 } else if(clickType.name().contains("DROP") && !current.equals("AIR")) {
-                    unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.DROP, currentitem);
+                    unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.DROP, current_item);
                 } else if(clickType == ClickType.LEFT || clickType == ClickType.RIGHT) {
                     final int cursorTargetSlot = getTargetSlot(cursor);
                     if(!current.equals("AIR") && (targetSlot == cursorTargetSlot || rawslot == targetSlot)) {
-                        unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_UNEQUIP, currentitem);
+                        unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_UNEQUIP, current_item);
                     }
                     if(!cursor.equals("AIR") && (targetSlot == cursorTargetSlot || rawslot == cursorTargetSlot)) {
                         equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.INVENTORY_EQUIP, cursoritem);
@@ -102,11 +105,11 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
             if(!alreadyDid) {
                 if(event.isShiftClick()) {
                     if(slotTypeIsArmor) {
-                        unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_UNEQUIP, currentitem);
+                        unequip = new ArmorUnequipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_UNEQUIP, current_item);
                     } else {
                         final ItemStack prevArmor = inv.getArmorContents()[targetSlot == 5 ? 3 : targetSlot == 6 ? 2 : targetSlot == 7 ? 1 : 0];
                         if((prevArmor == null || prevArmor.getType().equals(Material.AIR)) && canBeUsed(targetSlot, current)) {
-                            equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_EQUIP, currentitem);
+                            equip = new ArmorEquipEvent(player, equipmentSlot, ArmorEventReason.SHIFT_EQUIP, current_item);
                         }
                     }
                 } else {
@@ -120,8 +123,12 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
                 if(!unequip.isCancelled()) {
                     update = true;
                     final ItemStack x = unequip.getCurrentItem(), y = unequip.getCursor();
-                    if(x != null) event.setCurrentItem(x);
-                    if(y != null) event.setCursor(y);
+                    if(x != null) {
+                        event.setCurrentItem(x);
+                    }
+                    if(y != null) {
+                        event.setCursor(y);
+                    }
                 }
             }
             if(equip != null) {
@@ -129,8 +136,12 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
                 if(!equip.isCancelled()) {
                     update = true;
                     final ItemStack x = equip.getCurrentItem(), y = equip.getCursor();
-                    if(x != null) event.setCurrentItem(x);
-                    if(y != null) event.setCursor(y);
+                    if(x != null) {
+                        event.setCurrentItem(x);
+                    }
+                    if(y != null) {
+                        event.setCursor(y);
+                    }
                 }
             }
             if(update) {
@@ -140,14 +151,14 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
             }
         }
     }
-    private int getTargetSlot(String target) {
+    private int getTargetSlot(@NotNull String target) {
         return target.contains("HELMET") || target.contains("SKULL") || target.contains("HEAD") ? 5
                 : target.contains("CHESTPLATE") || target.contains("ELYTRA") ? 6
                 : target.contains("LEGGINGS") ? 7
                 : target.contains("BOOTS") ? 8
                 : -1;
     }
-    private boolean canBeUsed(int rawslot, String target) {
+    private boolean canBeUsed(int rawslot, @NotNull String target) {
         return rawslot == 5 && (target.contains("HELMET") || target.contains("SKULL") || target.contains("HEAD"))
                 || rawslot == 6 && (target.contains("CHESTPLATE") || target.contains("ELYTRA"))
                 || rawslot == 7 && target.contains("LEGGINGS")
@@ -160,23 +171,25 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
             final String item = is.getType().name();
             final EquipmentSlot slot = getRespectiveSlot(item);
             final boolean helmet = item.endsWith("HELMET"), chestplate = item.endsWith("CHESTPLATE"), leggings = item.endsWith("LEGGINGS"), boots = item.endsWith("BOOTS");
-            if(!helmet && !chestplate && !leggings && !boots) return;
+            if(!helmet && !chestplate && !leggings && !boots) {
+                return;
+            }
             final Player player = event.getPlayer();
-            final PlayerInventory PI = player.getInventory();
-            final ItemStack  h = PI.getHelmet(), c = PI.getChestplate(), l = PI.getLeggings(), b = PI.getBoots();
-            if(helmet && h == null || chestplate && c == null || leggings && l == null || boots && b == null) {
+            final PlayerInventory player_inventory = player.getInventory();
+            final ItemStack item_helment = player_inventory.getHelmet(), item_chestplate = player_inventory.getChestplate(), l = player_inventory.getLeggings(), b = player_inventory.getBoots();
+            if(helmet && item_helment == null || chestplate && item_chestplate == null || leggings && l == null || boots && b == null) {
                 final Block block = event.getClickedBlock();
                 if(block == null || !isInteractable(block.getType())) {
                     final ArmorEquipEvent e = new ArmorEquipEvent(player, slot, ArmorEventReason.HOTBAR_EQUIP, is);
                     PLUGIN_MANAGER.callEvent(e);
                 }
             } else {
-                final ArmorEvent e = new ArmorSwapEvent(player, slot, ArmorEventReason.HOTBAR_SWAP, is, helmet ? h : chestplate ? c : leggings ? l : b);
+                final ArmorEvent e = new ArmorSwapEvent(player, slot, ArmorEventReason.HOTBAR_SWAP, is, helmet ? item_helment : chestplate ? item_chestplate : leggings ? l : b);
                 PLUGIN_MANAGER.callEvent(e);
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerItemBreakEvent(PlayerItemBreakEvent event) {
         final ItemStack is = event.getBrokenItem();
         final String i = is.getType().name();
@@ -186,7 +199,7 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerExpChangeEvent(PlayerExpChangeEvent event) {
         final int amount = event.getAmount();
         if(amount > 0) {
@@ -197,13 +210,12 @@ public enum RPEventsSpigot implements RPFeatureSpigot {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void foodLevelChangeEvent(FoodLevelChangeEvent event) {
         final Player player = (Player) event.getEntity();
         final int l = player.getFoodLevel(), lvl = event.getFoodLevel();
         if(l > lvl) {
             final FoodLevelLostEvent e = new FoodLevelLostEvent(player, player.getFoodLevel(), lvl);
-            e.setCancelled(event.isCancelled());
             PLUGIN_MANAGER.callEvent(e);
         }
     }

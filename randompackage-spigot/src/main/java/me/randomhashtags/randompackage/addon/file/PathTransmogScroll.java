@@ -29,7 +29,7 @@ public final class PathTransmogScroll extends RPAddonSpigot implements TransmogS
         }
         return false;
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }

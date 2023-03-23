@@ -26,7 +26,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Dispenser;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,7 +88,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		final List<String> placedtnt = OTHER_YML.getStringList("tnt.placed"), primedtnt = OTHER_YML.getStringList("tnt.primed"), livingcreepers = OTHER_YML.getStringList("creepers");
 		if(!placedtnt.isEmpty()) {
 			for(String s : placedtnt) {
-				final Location l = toLocation(s.split(":")[0]);
+				final Location l = string_to_location(s.split(":")[0]);
 				if(l.getWorld().getBlockAt(l).getType().equals(Material.TNT)) {
 					FileCustomTNT.PLACED.put(l, (FileCustomTNT) getCustomExplosion("TNT_" + s.split(":")[1]));
 					loadedPlaced += 1;
@@ -103,7 +102,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 			for(String s : primedtnt) {
 				final String[] values = s.split(":");
 				final UUID uuid = UUID.fromString(values[0]);
-				final Entity en = getEntity(uuid);
+				final Entity en = get_entity_from_uuid(uuid);
 				if(en != null && !en.isDead()) {
 					FileCustomTNT.PRIMED.put(uuid, (FileCustomTNT) getCustomExplosion("TNT_" + values[1]));
 					loadedPrimed += 1;
@@ -117,7 +116,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 			for(String s : livingcreepers) {
 				final String[] values = s.split(":");
 				final UUID uuid = UUID.fromString(values[0]);
-				final Entity en = getEntity(uuid);
+				final Entity en = get_entity_from_uuid(uuid);
 				if(en != null && !en.isDead()) {
 					FileCustomCreeper.LIVING.put(uuid, (FileCustomCreeper) getCustomExplosion("CREEPER_" + values[1]));
 					loadedLiving += 1;
@@ -138,7 +137,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 		final List<String> placedtnt = new ArrayList<>(), primedtnt = new ArrayList<>(), cree = new ArrayList<>();
 		if(tnt != null) {
 			for(Location l : tnt.keySet()) {
-				placedtnt.add(toString(l) + ":" + tnt.get(l).getIdentifier());
+				placedtnt.add(location_to_string(l) + ":" + tnt.get(l).getIdentifier());
 			}
 		}
 		OTHER_YML.set("tnt.placed", placedtnt);

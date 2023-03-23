@@ -113,9 +113,9 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "isinsidevehicle": return entity.isInsideVehicle() == Boolean.parseBoolean(value);
             case "isriding": return entity.isInsideVehicle() && entity.getVehicle().getType().name().equalsIgnoreCase(value);
             case "iscustomnamevisible": return entity.isCustomNameVisible() == Boolean.parseBoolean(value);
-            case "isaggressive": return isAggressive(entity.getType()) == Boolean.parseBoolean(value);
-            case "isneutral": return isNeutral(entity.getType()) == Boolean.parseBoolean(value);
-            case "ispassive": return isPassive(entity.getType()) == Boolean.parseBoolean(value);
+            case "isaggressive": return entity_type_is_aggressive(entity.getType()) == Boolean.parseBoolean(value);
+            case "isneutral": return entity_type_is_neutral(entity.getType()) == Boolean.parseBoolean(value);
+            case "ispassive": return entity_type_is_passive(entity.getType()) == Boolean.parseBoolean(value);
             case "isonground": return entity.isOnGround() == Boolean.parseBoolean(value);
             default: return true;
         }
@@ -327,7 +327,7 @@ public interface EventConditions extends Combo, RPItemStack, Mathable, UVersiona
             case "health>": // health>=
                 return entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() >= evaluate(value);
             case "haspotioneffect":
-                final PotionEffectType t = getPotionEffectType(value);
+                final PotionEffectType t = get_potion_effect_type(value);
                 return t != null && entity instanceof LivingEntity && ((LivingEntity) entity).hasPotionEffect(t);
             case "nodamageticks<": // nodamageticks<=
                 return entity instanceof LivingEntity && ((LivingEntity) entity).getNoDamageTicks() <= evaluate(value);

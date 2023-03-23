@@ -77,7 +77,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         }
         return cannotLandIn;
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(item == null) {
             item = createItemStack(yml, "item");
         }

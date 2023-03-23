@@ -17,6 +17,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
         }
         return true;
     }
-    private String getFactionType(Plugin factions) {
+    private String getFactionType(@Nullable Plugin factions) {
         if(factions != null) {
             final List<String> authors = factions.getDescription().getAuthors();
             return authors.contains("ProSavage") ? "SavageFactions" : "FactionsUUID";
@@ -74,7 +75,6 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("_Data", "other.yml");
 
         GivedpItem.INSTANCE.enable();
@@ -83,8 +83,6 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
         if(MCMMO != null) {
             MCMMOAPI.INSTANCE.enable();
         }
-
-        sendConsoleMessage("&6[RandomPackage] &aLoaded API &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
@@ -93,10 +91,10 @@ public enum RandomPackageAPI implements RPFeatureSpigot, CommandExecutor {
 
     @EventHandler
     private void pluginEnableEvent(PluginEnableEvent event) {
-        final String n = event.getPlugin().getName();
-        if(RandomPackage.SPAWNER_PLUGIN_NAME == null && (n.equals("SilkSpawners") || n.equals("EpicSpawners"))) {
+        final String plugin_name = event.getPlugin().getName();
+        if(RandomPackage.SPAWNER_PLUGIN_NAME == null && (plugin_name.equals("SilkSpawners") || plugin_name.equals("EpicSpawners"))) {
             RANDOM_PACKAGE.try_loading_spawner();
-        } else if(!RegionalAPI.INSTANCE.hookedFactionsUUID() && n.equals("Factions")) {
+        } else if(!RegionalAPI.INSTANCE.hookedFactionsUUID() && plugin_name.equals("Factions")) {
             RegionalAPI.INSTANCE.trySupportingFactions();
         }
     }

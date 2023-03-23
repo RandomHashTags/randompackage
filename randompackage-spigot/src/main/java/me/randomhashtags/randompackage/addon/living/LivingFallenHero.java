@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -40,22 +41,22 @@ public final class LivingFallenHero implements ILivingFallenHero {
         this.spawnedLocation = spawnedLocation;
         fallenhero = kitclass.getEntity(getFallenHero().getType(), getSpawnedLocation(), true);
         fallenhero.setCustomName(kit.getFallenHeroName());
-        int pl = FileRPPlayer.get(summoner).getKitData().getLevel(kit);
-        pl = pl <= 0 ? 1 : pl;
-        final EntityEquipment eq = fallenhero.getEquipment();
+        int player_kit_level = FileRPPlayer.get(summoner).getKitData().getLevel(kit);
+        player_kit_level = player_kit_level <= 0 ? 1 : player_kit_level;
+        final EntityEquipment fallen_hero_equipment = fallenhero.getEquipment();
         for(KitItem i : kit.getItems()) {
-            final ItemStack is = i.getItemStack(pl);
+            final ItemStack is = i.getItemStack(player_kit_level);
             final String materialName = is.getType().name();
             if(materialName.contains("HELMET")) {
-                eq.setHelmet(is);
+                fallen_hero_equipment.setHelmet(is);
             } else if(materialName.contains("CHESTPLATE")) {
-                eq.setChestplate(is);
+                fallen_hero_equipment.setChestplate(is);
             } else if(materialName.contains("LEGGINGS")) {
-                eq.setLeggings(is);
+                fallen_hero_equipment.setLeggings(is);
             } else if(materialName.contains("BOOTS")) {
-                eq.setBoots(is);
+                fallen_hero_equipment.setBoots(is);
             } else if(materialName.contains("SWORD") || materialName.contains("_AXE")) {
-                eq.setItemInHand(is);
+                fallen_hero_equipment.setItemInHand(is);
             }
         }
         LIVING.put(fallenhero.getUniqueId(), this);
@@ -83,7 +84,7 @@ public final class LivingFallenHero implements ILivingFallenHero {
         fallenhero.remove();
         killed(null);
     }
-    public void killed(EntityDeathEvent event) {
+    public void killed(@Nullable EntityDeathEvent event) {
         if(event != null) {
             event.setDroppedExp(0);
             event.getDrops().clear();

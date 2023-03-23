@@ -63,15 +63,15 @@ public final class LivingConquestMob implements UVersionableSpigot {
                     break;
             }
         }
-        for(String a : type.getAttributes()) {
-            switch (a.toLowerCase().split("=")[0]) {
+        for(String attribute : type.getAttributes()) {
+            switch (attribute.toLowerCase().split("=")[0]) {
                 case "health":
-                    entity.setMaxHealth(Double.parseDouble(a.split("=")[1]));
+                    entity.setMaxHealth(Double.parseDouble(attribute.split("=")[1]));
                     entity.setHealth(entity.getMaxHealth());
                     break;
                 case "pe":
-                    final String[] b = a.split("=")[1].split(":");
-                    entity.addPotionEffect(new PotionEffect(getPotionEffectType(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
+                    final String[] b = attribute.split("=")[1].split(":");
+                    entity.addPotionEffect(new PotionEffect(get_potion_effect_type(b[0]), Integer.parseInt(b[2]), Integer.parseInt(b[1]), false, false));
                     break;
             }
         }

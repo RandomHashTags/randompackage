@@ -106,7 +106,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
         if(!conquests.isEmpty()) {
             for(String s : conquests) {
                 final String[] p = s.split(":");
-                new LivingConquestChest(toLocation(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
+                new LivingConquestChest(string_to_location(p[0]), getConquestChest(p[3]), Integer.parseInt(p[2]), Long.parseLong(p[1]), false, false);
             }
         }
     }
@@ -121,7 +121,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
         if(livingChests != null) {
             final List<String> chests = new ArrayList<>();
             for(LivingConquestChest c : livingChests) {
-                chests.add(toString(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.getIdentifier() + ":" + c.conquerer);
+                chests.add(location_to_string(c.location) + ":" + c.spawnedTime + ":" + c.health + ":" + c.type.getIdentifier() + ":" + c.conquerer);
             }
             OTHER_YML.set("conquests", chests);
         }

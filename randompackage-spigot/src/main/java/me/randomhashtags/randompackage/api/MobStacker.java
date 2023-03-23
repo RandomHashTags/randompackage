@@ -106,7 +106,7 @@ public enum MobStacker implements RPFeatureSpigot {
         final long started = System.currentTimeMillis();
         int loaded = 0;
         for(String s : getConfigurationSectionKeys(OTHER_YML, "stacked mobs", false)) {
-            final Entity e = getEntity(UUID.fromString(s));
+            final Entity e = get_entity_from_uuid(UUID.fromString(s));
             if(e != null && !e.isDead() && e instanceof LivingEntity) {
                 new StackedEntity(OTHER_YML.getLong("stacked mobs." + s + ".creation"), (LivingEntity) e, customNames.get(e.getType()), OTHER_YML.getInt("stacked mobs." + s + ".size"));
                 loaded += 1;

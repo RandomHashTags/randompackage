@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.slotbot;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public final class PathCustomItem implements CustomItem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return item;
     }
 

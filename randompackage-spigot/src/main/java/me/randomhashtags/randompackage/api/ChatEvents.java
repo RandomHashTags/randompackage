@@ -53,7 +53,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 	}
 	@Override
 	public void unload() {
-		for(UUID id : new ArrayList<>(viewingBrag)) {
+		for(UUID id : viewingBrag) {
 			final Player player = Bukkit.getPlayer(id);
 			if(player != null) {
 				player.closeInventory();

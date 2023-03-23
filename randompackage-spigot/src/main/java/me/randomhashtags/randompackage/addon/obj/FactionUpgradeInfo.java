@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.FactionUpgrade;
 import me.randomhashtags.randompackage.addon.FactionUpgradeLevel;
+import org.jetbrains.annotations.NotNull;
 
 public final class FactionUpgradeInfo {
     private final FactionUpgrade type;
@@ -16,7 +17,7 @@ public final class FactionUpgradeInfo {
     public FactionUpgradeLevel getLevel() {
         return level;
     }
-    public void setLevel(FactionUpgradeLevel level) {
+    public void setLevel(@NotNull FactionUpgradeLevel level) {
         this.level = level;
     }
 }

@@ -49,7 +49,7 @@ public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker 
     public RarityGem getConvertsTo() {
         return getRarityGem(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".converts to gem"));
     }
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         if(is == null) is = createItemStack(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
         return getClone(is);
     }

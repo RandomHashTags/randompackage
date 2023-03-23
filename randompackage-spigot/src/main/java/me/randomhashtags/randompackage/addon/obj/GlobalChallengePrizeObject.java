@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.GlobalChallengePrize;
 import me.randomhashtags.randompackage.addon.file.RPAddonSpigot;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,7 +27,7 @@ public final class GlobalChallengePrizeObject extends RPAddonSpigot implements G
         return "GLOBAL_CHALLENGE_PRIZE_" + placement;
     }
 
-    public ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return display;
     }
     public int getAmount() {

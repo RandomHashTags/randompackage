@@ -50,7 +50,7 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
         save(null, "last man standing.yml");
         if(OTHER_YML.get("last man standing.boundary") != null) {
             final String[] values = OTHER_YML.getString("last man standing.boundary").split("\\|");
-            boundary = new PolyBoundary(toLocation(values[0]), Integer.parseInt(values[1]));
+            boundary = new PolyBoundary(string_to_location(values[0]), Integer.parseInt(values[1]));
         }
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "last man standing.yml"));
         rewards = new HashMap<>();
@@ -69,7 +69,7 @@ public enum LastManStanding implements RPFeatureSpigot, CommandExecutor {
 
     public void setBoundary(@NotNull PolyBoundary boundary) {
         this.boundary = boundary;
-        OTHER_YML.set("last man standing.boundary", toString(boundary.getCenter()) + "|" + boundary.getRadius());
+        OTHER_YML.set("last man standing.boundary", location_to_string(boundary.getCenter()) + "|" + boundary.getRadius());
         saveOtherData();
     }
 

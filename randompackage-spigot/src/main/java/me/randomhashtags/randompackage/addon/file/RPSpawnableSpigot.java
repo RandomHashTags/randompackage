@@ -12,14 +12,16 @@ import java.util.List;
 
 public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnable {
     public static RegionPlugin SPAWN_TYPE = null;
-    public List<String> getSpawnableFactionClaims() { return yml.getStringList("spawnable regions.faction claims"); }
+    public List<String> getSpawnableFactionClaims() {
+        return yml.getStringList("spawnable regions.faction claims");
+    }
     public boolean canSpawnAtFactionClaim(@Nullable Player summoner, @NotNull Location l) {
         final RegionalAPI regional = RegionalAPI.INSTANCE;
         if(regional.hookedFactionsUUID()) {
-            final String own = summoner != null ? regional.getFactionTag(summoner.getUniqueId()) : null, w = l.getWorld().getName(), f = FactionsUUID.INSTANCE.getRegionalIdentifierAt(l);
+            final String own = summoner != null ? regional.getFactionTag(summoner.getUniqueId()) : null, world_name = l.getWorld().getName(), f = FactionsUUID.INSTANCE.getRegionalIdentifierAt(l);
             for(String s : getSpawnableFactionClaims()) {
-                if(s.startsWith(w + ";")) {
-                    for(String r : s.split(w + ";")[1].split(";")) {
+                if(s.startsWith(world_name + ";")) {
+                    for(String r : s.split(world_name + ";")[1].split(";")) {
                         if(r.equalsIgnoreCase(f) || r.equalsIgnoreCase("own") && f.equals(own)) {
                             return true;
                         }

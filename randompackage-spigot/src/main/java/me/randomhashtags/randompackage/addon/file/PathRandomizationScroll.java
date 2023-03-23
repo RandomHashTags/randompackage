@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.RandomizationScroll;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public final class PathRandomizationScroll extends RPAddonSpigot implements Rand
 	}
 	public String getIdentifier() { return path; }
 
-	public ItemStack getItem() {
+	public @NotNull ItemStack getItem() {
 		if(is == null) is = createItemStack(getAddonConfig("scrolls.yml"), "randomization scrolls." + path);
 		return getClone(is);
 	}

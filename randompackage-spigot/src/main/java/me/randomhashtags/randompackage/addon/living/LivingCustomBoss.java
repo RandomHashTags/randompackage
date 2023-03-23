@@ -19,6 +19,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -54,7 +55,9 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
             summoner.sendMessage(s);
             for(Entity en : summoner.getNearbyEntities(messageRadius, messageRadius, messageRadius)) if(en instanceof Player) en.sendMessage(s);
         }
-        for(PotionEffect t : entity.getActivePotionEffects()) entity.removePotionEffect(t.getType());
+        for(PotionEffect t : entity.getActivePotionEffects()) {
+            entity.removePotionEffect(t.getType());
+        }
         entity.setCustomName(type.getName());
         entity.setCustomNameVisible(true);
         for(String s : type.getAttributes()) {
@@ -64,16 +67,20 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
                 entity.setHealth(entity.getMaxHealth());
             } else if(d.startsWith("addpotioneffect")) {
                 final String p = d.split("\\{")[1].split("}")[0];
-                final PotionEffectType t = getPotionEffectType(p.split(":")[0].toUpperCase());
+                final PotionEffectType t = get_potion_effect_type(p.split(":")[0].toUpperCase());
                 if(t != null) {
                     entity.addPotionEffect(new PotionEffect(t, Integer.parseInt(p.split(":")[1]), Integer.parseInt(p.split(":")[2])));
                 }
             } else if(d.startsWith("size=")) {
-                final int r = Integer.parseInt(d.split("=")[1]);
-                if(entity instanceof Slime) ((Slime) entity).setSize(r);
+                if(entity instanceof Slime) {
+                    final int r = Integer.parseInt(d.split("=")[1]);
+                    ((Slime) entity).setSize(r);
+                }
             }
         }
-        if(entity instanceof Creature) ((Creature) entity).setTarget(summoner);
+        if(entity instanceof Creature) {
+            ((Creature) entity).setTarget(summoner);
+        }
         updateScoreboards(summoner, 0);
         final CustomBossSpawnEvent e = new CustomBossSpawnEvent(summoner, entity.getLocation(), this);
         PLUGIN_MANAGER.callEvent(e);
@@ -91,7 +98,7 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
     public void unload() {
     }
 
-    public void damage(LivingEntity customboss, Entity damager, double damage) {
+    public void damage(@NotNull LivingEntity customboss, Entity damager, double damage) {
         final CustomBossDamageByEntityEvent e = new CustomBossDamageByEntityEvent(customboss, damager, damage);
         PLUGIN_MANAGER.callEvent(e);
         if(!e.isCancelled()) {
@@ -110,15 +117,15 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
             }
             updateScoreboards(customboss, d);
             final int maxMinions = type.getMaxMinions();
-            for(CustomBossAttack atk : type.getAttacks()) {
-                if(RANDOM.nextInt(100) <= atk.getChance()) {
-                    final int radius = atk.getRadius();
-                    for(String attack : atk.getAttacks()) {
+            for(CustomBossAttack boss_attack : type.getAttacks()) {
+                if(RANDOM.nextInt(100) <= boss_attack.getChance()) {
+                    final int boss_attack_radius = boss_attack.getRadius();
+                    for(String attack : boss_attack.getAttacks()) {
                         final String attackLowercase = attack.toLowerCase();
                         if(attackLowercase.startsWith("delay=")) {
                             final int r = Integer.parseInt(attackLowercase.split("delay=")[1].split("\\{")[0]);
                             final List<Location> locations = new ArrayList<>();
-                            for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                            for(Entity entity : customboss.getNearbyEntities(boss_attack_radius, boss_attack_radius, boss_attack_radius)) {
                                 if(entity instanceof Player) {
                                     locations.add(entity.getLocation());
                                 }
@@ -144,13 +151,13 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
                                 } else {
                                     String replace = ss.replace("{", "").replace("}", "").replace("/", "");
                                     if(ss.startsWith("{/effect")) {
-                                        for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                        for(Entity entity : customboss.getNearbyEntities(boss_attack_radius, boss_attack_radius, boss_attack_radius)) {
                                             if(entity instanceof Player) {
                                                 Bukkit.dispatchCommand(entity, "/effect " + (LEGACY ? "" : "give ") + replace.replace("~player", entity.getName()));
                                             }
                                         }
                                     } else if(ss.startsWith("{/")) {
-                                        for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                        for(Entity entity : customboss.getNearbyEntities(boss_attack_radius, boss_attack_radius, boss_attack_radius)) {
                                             if(entity instanceof Player) {
                                                 Bukkit.dispatchCommand(entity, replace.replace("~player", entity.getName()));
                                             }
@@ -158,7 +165,7 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
                                     } else {
                                         if(ss.startsWith("{message")) {
                                             for(String v  : messages.get(Integer.parseInt(ss.split("message")[1].split("}")[0]))) {
-                                                for(Entity entity : customboss.getNearbyEntities(radius, radius, radius)) {
+                                                for(Entity entity : customboss.getNearbyEntities(boss_attack_radius, boss_attack_radius, boss_attack_radius)) {
                                                     entity.sendMessage(ChatColor.translateAlternateColorCodes('&', v));
                                                 }
                                             }

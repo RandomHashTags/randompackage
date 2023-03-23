@@ -19,7 +19,7 @@ public final class Smite extends AbstractEventAttribute {
                 final boolean at = values.length >= 2;
                 final String value = replaceValue(entities, at ? values[1] : values[0], valueReplacements);
                 final World w = e.getWorld();
-                final Location l = at ? toLocation(replaceValue(entities, values[0], valueReplacements)) : e.getLocation();
+                final Location l = at ? string_to_location(replaceValue(entities, values[0], valueReplacements)) : e.getLocation();
                 if(l != null) {
                     for(int i = 1; i <= (int) evaluate(value); i++) {
                         w.strikeLightning(l);
