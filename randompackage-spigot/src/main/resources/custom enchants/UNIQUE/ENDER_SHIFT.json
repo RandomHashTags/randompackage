@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Ender Shift"
+  },
+  "lore": {
+    "en" : [
+      "&eGives a speed/health boost at low hp."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet",
+  "alchemist upgrade costs": [2500, 3000],
+  "tinkerer": "103:119:135",
+  "attributes": [
+    "PvAny;Lucky+15+level;VictimHealthIs<=5+level;VictimAddPotionEffect=speed:level-1:80+(20*level);VictimAddPotionEffect=health_boost:level-1:80+(20*level)"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Cowification"
+  },
+  "lore": {
+    "en" : [
+      "&eShoots exploding cows."
+    ]
+  },
+  "max level": 3,
+  "applies to": "bow",
+  "alchemist upgrade costs": [750, 900],
+  "tinkerer": "104:129:154",
+  "attributes": [
+    "EntityShootBow;",
+    "ProjectileHit;"
+  ]
+}

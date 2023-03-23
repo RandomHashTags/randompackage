@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Molten"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to light your attacker."
+    ]
+  },
+  "max level": 4,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [1250, 2500, 3750],
+  "tinkerer": "104:116:128:140",
+  "attributes": [
+    "isDamaged;chance=8*level;DamagerIgnite=60*level"
+  ]
+}

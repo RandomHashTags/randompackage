@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Self Destruct"
+  },
+  "lore": {
+    "en" : [
+      "&eWhen close to death, buffed TNT spawns",
+      "&earound you."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [1500, 2000],
+  "tinkerer": "54:65:76",
+  "attributes": [
+    "isDamaged;chance=20*level;"
+  ]
+}

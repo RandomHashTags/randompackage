@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Training"
+  },
+  "lore": {
+    "en" : [
+      "&eIncreases mcMMO XP gained in all",
+      "&eCOMBAT skills while equipped."
+    ]
+  },
+  "max level": 10,
+  "applies to": "sword;_axe",
+  "alchemist upgrade costs": [2500, 2750, 3000, 3250, 3500, 3750, 4000, 4250, 4500],
+  "tinkerer": "58:67:76:85:94:103:112:121:130:139",
+  "attributes": [
+    "MCMMOPlayerXpGained;Skill=SWORDS;SetGainedXP=xp*(1+(0.05*level))",
+    "MCMMOPlayerXpGained;Skill=AXES;SetGainedXP=xp*(1+(0.05*level))"
+  ]
+}

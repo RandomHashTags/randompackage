@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Featherweight"
+  },
+  "lore": {
+    "en" : [
+      "&eA chance to give a burst of haste."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword",
+  "alchemist upgrade costs": [3000, 3500],
+  "tinkerer": "138:162:186",
+  "attributes": [
+    "PvAny;chance=10+(4*level);DamagerAddPotionEffect=haste:level-1:40*level"
+  ]
+}
