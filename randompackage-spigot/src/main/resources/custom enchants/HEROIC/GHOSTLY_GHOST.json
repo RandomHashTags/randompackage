@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Ghostly Ghost"
+  },
+  "lore": {
+    "en" : [
+      "&eInvisible to all /near lookups when",
+      "&eoutside of a certain range depending",
+      "&eon enchantment level."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0, 0],
+  "tinkerer": "",
+  "requires": "Ghost;3",
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Vengeful Diminish"
+  },
+  "lore": {
+    "en" : [
+      "&eHeroic Enchantment. When this effect",
+      "&eprocs, the next attack dealt to you",
+      "&ecannot deal more than the (total",
+      "&eamount of damage / 2) you took from",
+      "&ethe previous attack, any damage above",
+      "&ethis limit will be dealt to the",
+      "&eattacker. (i.e. if you're damaged for",
+      "&e2HP, the next attack cannot deal more",
+      "&ethan 1HP of damage, while the",
+      "&eattacker is damaged by 1HP) Requires",
+      "&eDiminish VI enchant on item to apply",
+      "&eCannot be black-scrolled."
+    ]
+  },
+  "max level": 4,
+  "applies to": "chestplate",
+  "requires": "Diminish;6",
+  "alchemist upgrade costs": [0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    "isDamaged;"
+  ]
+}

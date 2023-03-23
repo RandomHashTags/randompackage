@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Mighty Cactus"
+  },
+  "lore": {
+    "en" : [
+      "&eHeroic Enchantment. +50% chance per",
+      "&elevel to negate all Thorns",
+      "&eenchantment damage."
+    ]
+  },
+  "max level": 2,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0],
+  "tinkerer": "",
+  "requires": "Cactus;2",
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Master Blacksmith"
+  },
+  "lore": {
+    "en" : [
+      "&eHeroic Enchantment. Chance to heal",
+      "&eyour most damaged piece of armor by",
+      "&e2-3 durability whenever you hit a",
+      "&eplayer, but when it procs your attack",
+      "&ewill only deal 75-100% of the normal",
+      "&edamage. Requires Blacksmith V enchant",
+      "&eon item to apply. Cannot be",
+      "&eblack-scrolled."
+    ]
+  },
+  "max level": 5,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [0, 0, 0, 0],
+  "tinkerer": "",
+  "requires": "Blacksmith;5",
+  "attributes": [
+    "PvAny;VictimIsPlayer=true;chance=30+(5*level);DamagerSetDurability=mostDamaged:durability-random{2:3};SetDamage=dmg*(1+(level*0.05))"
+  ]
+}

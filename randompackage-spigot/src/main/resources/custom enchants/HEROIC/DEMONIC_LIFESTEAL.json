@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Demonic Lifesteal"
+  },
+  "lore": {
+    "en" : [
+      "&eHeals much more HP at a greatly",
+      "&eincreased rate compared to normal",
+      "&eLifesteal. Once applied this",
+      "&eenchantment can only be extracted",
+      "&efrom items with heroic black scrolls."
+    ]
+  },
+  "max level": 3,
+  "applies to": "sword",
+  "alchemist upgrade costs": [0, 0],
+  "tinkerer": "",
+  "requires": "Lifesteal;3",
+  "attributes": [
+    "PvAny;chance=3*level;DamagerHeal=4;VictimSetHealth=VictimHealth-2;DamagerSendMessage=&d&l** DEMONIC LIFESTEAL **"
+  ]
+}

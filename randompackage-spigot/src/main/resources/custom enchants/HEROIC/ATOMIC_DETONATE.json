@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Atomic Detonate"
+  },
+  "lore": {
+    "en" : [
+      "&eSummons up to a 7x7x7 explosion",
+      "&earound any blocks you break."
+    ]
+  },
+  "max level": 4,
+  "applies to": "pickaxe",
+  "requires": "Detonate;9",
+  "alchemist upgrade costs": [6000, 6250, 6500, 6750, 7000],
+  "tinkerer": "85:97:109:115:129",
+  "attributes": [
+    "BlockBreak;chance=20*level;PlayerIsFacing=NORTH;BreakBlocks{[player]-3:-3:0:3:3:-6}}",
+    "BlockBreak;didProc;PlayerIsFacing=EAST;BreakBlocks{[player]0:-3:-3:6:3:3}}",
+    "BlockBreak;didProc;PlayerIsFacing=SOUTH;BreakBlocks{[player]3:-3:0:-3:3:6}}",
+    "BlockBreak;didProc;PlayerIsFacing=WEST;BreakBlocks{[player]0:-3:3:-6:3:-3}}"
+  ]
+}
