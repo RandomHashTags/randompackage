@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Boss Slayer"
+  },
+  "lore": {
+    "en" : [
+      "&eDeal an extra (level x 5%) base",
+      "&edamage to bosses."
+    ]
+  },
+  "max level": 5,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    "CustomBossIsDamaged;SetDamage=dmg*(1+(0.05*level))"
+  ]
+}

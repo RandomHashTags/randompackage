@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Blacksmith"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to heal your most damaged",
+      "&epiece of armor by 1-2 durability",
+      "&ewhenever you hit a player, but when",
+      "&eit procs, your attack will only deal",
+      "&e50% of the normal damage."
+    ]
+  },
+  "max level": 5,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [8000, 9000, 10000, 11000],
+  "tinkerer": "74:86:94:125:139",
+  "attributes": [
+    "PvAny;VictimIsPlayer=true;chance=level;DamagerSetDurability=mostDamaged:durability-random{1:2};SetDamage=dmg*0.50;DamagerSendMessage=&6&l** BLACKSMITH **"
+  ]
+}

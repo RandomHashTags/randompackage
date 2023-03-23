@@ -1,0 +1,20 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Disarmor"
+  },
+  "lore": {
+    "en" : [
+      "&eA slight chance of removing one piece",
+      "&eof armor from your enemy when they",
+      "&eare at low health."
+    ]
+  },
+  "max level": 8,
+  "applies to": "sword",
+  "alchemist upgrade costs": [0, 0, 0, 0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    "PvAny;"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Enchant Reflect"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to cause enemy offensive",
+      "&eenchants up to Legendary (up to",
+      "&elevel) to proc on themselves instead",
+      "&eof you."
+    ]
+  },
+  "max level": 10,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

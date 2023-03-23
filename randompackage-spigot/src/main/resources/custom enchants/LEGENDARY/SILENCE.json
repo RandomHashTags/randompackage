@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Silence"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to stop activation of your",
+      "&eenemy's custom enchants."
+    ]
+  },
+  "max level": 4,
+  "applies to": "sword",
+  "alchemist upgrade costs": [5500, 6500, 7500],
+  "tinkerer": "67:76:85:94",
+  "attributes": [
+    "CustomEnchantProc;chance=4*level;VictimStopEnchant=all:getRandom(3:3+level);VictimSendMessage=&5&l* SILENCED&r &7[getRandom(3:3+level)s] &5&l*"
+  ]
+}

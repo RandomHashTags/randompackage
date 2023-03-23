@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Sniper"
+  },
+  "lore": {
+    "en" : [
+      "&eHeadshots with projectile deal up to",
+      "&e3.5x damage."
+    ]
+  },
+  "max level": 5,
+  "applies to": "bow",
+  "alchemist upgrade costs": [6000, 7250, 8500, 9750],
+  "tinkerer": "128:139:150:161:172",
+  "attributes": [
+    "ProjectileHit;ProjectileIsType=ARROW;chance=30+(8*level);IsHeadshot=true;SetDamage=dmg*(1+(0.5*level));DamagerSendMessage=&6&l** HEADSHOT **;VictimSendMessage=&c&l** HEADSHOT [+previousEvaluationx DMG] **"
+  ]
+}

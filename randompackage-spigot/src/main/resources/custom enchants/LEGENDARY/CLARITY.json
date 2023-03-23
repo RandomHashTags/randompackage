@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Clarity"
+  },
+  "lore": {
+    "en" : [
+      "&eImmune to Blindness up to level of",
+      "&eclarity enchantment."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [6000, 7000],
+  "tinkerer": "87:100:113",
+  "attributes": [
+    "CEApplyPotionEffect;level<=potionlevel;SetCancelled=true"
+  ]
+}

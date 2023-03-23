@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Deathbringer"
+  },
+  "lore": {
+    "en" : [
+      "&eChance to deal double damage."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [6000, 7000],
+  "tinkerer": "143:157:171",
+  "attributes": [
+    "PvAny;chance=Lucky+(2*level);SetDamage=dmg*2;DamagerSendMessage=&6&l** DEATHBRINGER **"
+  ]
+}

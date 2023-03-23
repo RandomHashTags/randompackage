@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Drunk"
+  },
+  "lore": {
+    "en" : [
+      "&eSlowness and slow swinging with a",
+      "&echance to give buffed strength."
+    ]
+  },
+  "max level": 4,
+  "applies to": "helmet",
+  "alchemist upgrade costs": [10000, 15000, 20000],
+  "tinkerer": "109:144:179:214",
+  "attributes": [
+    "PlayerJoin;PlayerAddPotionEffect=strength:level-1:99999:true;PlayerAddPotionEffect=slowness:level-1:99999:true;PlayerAddPotionEffect=mining_fatigue:level-1:99999:true",
+    "PlayerQuit;PlayerRemovePotionEffect=strength:false;PlayerRemovePotionEffect=slowness:false;PlayerRemovePotionEffect=mining_fatigue:false",
+    "ArmorEquip;PlayerAddPotionEffect=strength:level-1:99999:true;PlayerAddPotionEffect=slowness:level-1:99999:true;PlayerAddPotionEffect=mining_fatigue:level-1:99999:true",
+    "ArmorUnequip;PlayerRemovePotionEffect=strength:true;PlayerRemovePotionEffect=slowness:true;PlayerRemovePotionEffect=mining_fatigue:true",
+    "ArmorPieceBreak;PlayerRemovePotionEffect=strength:true"
+  ]
+}

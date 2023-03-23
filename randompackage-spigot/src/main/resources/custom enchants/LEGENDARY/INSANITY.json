@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": {
+    "en" : "Insanity"
+  },
+  "lore": {
+    "en" : [
+      "&eYou swing your axe like a maniac.",
+      "&eMultiplies damage against players who",
+      "&eare wielding a SWORD at the time they",
+      "&eare hit."
+    ]
+  },
+  "max level": 8,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [6000, 7000, 8000, 9000, 10000, 11000, 12000],
+  "tinkerer": "76:88:100:112:124:136:148:160",
+  "attributes": [
+    "PvAny;VictimIsPlayer=true;chance=4+(2*level);VictimIsHolding=SWORD;SetDamage=dmg*(.5*level)"
+  ]
+}

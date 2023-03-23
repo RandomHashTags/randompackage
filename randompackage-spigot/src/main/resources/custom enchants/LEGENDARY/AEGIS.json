@@ -1,0 +1,22 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Aegis"
+  },
+  "lore": {
+    "en" : [
+      "&eIf you are taking damage from more",
+      "&ethan (8-level) enemies in a short",
+      "&eperiod, the damage from any",
+      "&eadditional players beyond that",
+      "&einitial group will be halved."
+    ]
+  },
+  "max level": 6,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [6000, 6250, 6500, 6750, 7000],
+  "tinkerer": "85:97:109:115:129",
+  "attributes": [
+    "isDamaged;"
+  ]
+}

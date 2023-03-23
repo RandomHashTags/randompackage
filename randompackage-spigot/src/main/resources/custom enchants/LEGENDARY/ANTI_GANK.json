@@ -1,0 +1,23 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Anti Gank"
+  },
+  "lore": {
+    "en" : [
+      "&eIf more than (6-level) enemies hit",
+      "&eyou in a short period, your outgoing",
+      "&edamage will be multiplied by up to",
+      "&e1.5x depending on the amount of",
+      "&eenemies nearby."
+    ]
+  },
+  "max level": 4,
+  "applies to": "_axe",
+  "alchemist upgrade costs": [5500, 5750, 6000],
+  "tinkerer": "92:108:113:124",
+  "attributes": [
+    "isDamaged;",
+    "PvAny;"
+  ]
+}
