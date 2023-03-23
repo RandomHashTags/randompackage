@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Explosives Expert"
+  },
+  "lore": {
+    "en" : [
+      "&eAllows Atomic Detonate to work on all",
+      "&eblock types for pickaxes, spades, and",
+      "&eaxes irregardless of the tool being",
+      "&eused."
+    ]
+  },
+  "max level": 1,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

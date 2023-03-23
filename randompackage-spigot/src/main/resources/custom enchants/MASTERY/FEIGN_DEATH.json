@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Feign Death"
+  },
+  "lore": {
+    "en" : [
+      "&e"
+    ]
+  },
+  "max level": 4,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

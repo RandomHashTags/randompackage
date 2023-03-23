@@ -1,0 +1,19 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Auto Sell"
+  },
+  "lore": {
+    "en" : [
+      "&eAutomatically sells all blocks broken",
+      "&eby your pickaxe for /shop value."
+    ]
+  },
+  "max level": 1,
+  "applies to": "pickaxe",
+  "alchemist upgrade costs": [],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Tombstone"
+  },
+  "lore": {
+    "en" : [
+      ""
+    ]
+  },
+  "max level": 10,
+  "applies to": "leggings",
+  "alchemist upgrade costs": [6000, 6250, 6500, 6750, 700≈],
+  "tinkerer": "85:97:109:115:129",
+  "attributes": [
+    ""
+  ]
+}

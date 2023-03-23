@@ -1,0 +1,21 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Neutralize"
+  },
+  "lore": {
+    "en" : [
+      "&eNegate all enemy defensive",
+      "&eenchantments for on the damage event",
+      "&ethat Neutralize activates for. This",
+      "&eeffect can stack with Silence."
+    ]
+  },
+  "max level": 5,
+  "applies to": "sword;_axe;bow",
+  "alchemist upgrade costs": [0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    "PvAny;"
+  ]
+}

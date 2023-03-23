@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Chain Lifesteal"
+  },
+  "lore": {
+    "en" : [
+      ""
+    ]
+  },
+  "max level": 5,
+  "applies to": "helmet",
+  "alchemist upgrade costs": [0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

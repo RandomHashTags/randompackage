@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Mark of the Beast"
+  },
+  "lore": {
+    "en" : [
+      "&e"
+    ]
+  },
+  "max level": 6,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0, 0, 0, 0 ,0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Poltergeist"
+  },
+  "lore": {
+    "en" : [
+      "&eImmune to Nature's Wrath snare, a",
+      "&echance to negate Dimensional Traveler",
+      "&eand mother of Yijki stun and damage",
+      "&efrom set abilities. Also negates all",
+      "&efall damage."
+    ]
+  },
+  "max level": 3,
+  "applies to": "helmet;chestplate;leggings;boots",
+  "alchemist upgrade costs": [0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}

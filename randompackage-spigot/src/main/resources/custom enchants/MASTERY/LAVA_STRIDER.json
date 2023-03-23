@@ -1,0 +1,23 @@
+{
+  "enabled": false,
+  "name": {
+    "en" : "Lava Strider"
+  },
+  "lore": {
+    "en" : [
+      "&eDepth Strider, but for lava. This",
+      "&eenchantment requires the user to be",
+      "&eon the ServerClient",
+      "&e(https://serverclient.com) to",
+      "&efunction properly due to vanilla",
+      "&eclient limitations."
+    ]
+  },
+  "max level": 10,
+  "applies to": "boots",
+  "alchemist upgrade costs": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  "tinkerer": "",
+  "attributes": [
+    ""
+  ]
+}
