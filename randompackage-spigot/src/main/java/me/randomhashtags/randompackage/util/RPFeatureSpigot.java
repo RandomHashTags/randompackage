@@ -266,7 +266,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
                 item.setItemMeta(itemMeta);
 
                 if(config != null && config.get(path + ".lore") != null) {
-                    item = updateLore(item, config.getStringList(path + ".lore"), tier, enchantMultiplier, CustomEnchants.getCustomEnchants().levelZeroRemoval, "null");
+                    item = updateLore(item, config.getStringList(path + ".lore"), tier, enchantMultiplier, CustomEnchants.INSTANCE.levelZeroRemoval, "null");
                     itemMeta = item.getItemMeta();
                 }
                 item.setItemMeta(itemMeta);

@@ -69,7 +69,7 @@ public final class EquippedCustomEnchants implements Versionable {
         if(slot != null) {
             enchants.remove(slot);
             if(withItem != null) {
-                enchants.put(slot, CustomEnchants.getCustomEnchants().getEnchantsOnItem(withItem));
+                enchants.put(slot, CustomEnchants.INSTANCE.getEnchantsOnItem(withItem));
             }
         }
     }

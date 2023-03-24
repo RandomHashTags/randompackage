@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.attributesys;
 
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.attribute.EventAttribute;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.data.RPPlayer;
@@ -27,13 +28,11 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.*;
 
-import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
-
 public interface EventExecutor extends RPFeatureSpigot, EventReplacements, EventReplacer {
     default boolean didPassConditions(Event event, HashMap<String, Entity> entities, List<String> conditions, HashMap<String, String> valueReplacements, boolean cancelled) {
-        final String eventName = event.getEventName().toLowerCase().split("event")[0];
+        final String event_name = event.getEventName().toLowerCase().split("event")[0];
         final Player involved;
-        switchloop: switch (eventName) {
+        switch (event_name) {
             case "pvany":
                 involved = ((PvAnyEvent) event).getDamager();
                 break;
@@ -47,6 +46,7 @@ public interface EventExecutor extends RPFeatureSpigot, EventReplacements, Event
         boolean passed = true, hasCancelled = false, didProc = false;
 
         final boolean isInteract = event instanceof PlayerInteractEvent;
+        final CustomEnchants custom_enchants = CustomEnchants.INSTANCE;
 
         outerloop: for(String condition : conditions) {
             final String conditionLowercase = condition.toLowerCase();
@@ -62,11 +62,11 @@ public interface EventExecutor extends RPFeatureSpigot, EventReplacements, Event
                     final CustomEnchantSpigot enchant = valueOfCustomEnchant(string);
                     if(enchant != null) {
                         forloop: for(String attribute : enchant.getAttributes()) {
-                            if(attribute.split(";")[0].equalsIgnoreCase(eventName)) {
+                            if(attribute.split(";")[0].equalsIgnoreCase(event_name)) {
                                 final String procValue = enchant.getEnchantProcValue();
                                 int levels = 0;
                                 if(involved != null) {
-                                    final EquippedCustomEnchants equipped = getCustomEnchants().getEnchants(involved);
+                                    final EquippedCustomEnchants equipped = custom_enchants.getEnchants(involved);
                                     for(LinkedHashMap<CustomEnchantSpigot, Integer> enchantLevels : equipped.getInfo().values()) {
                                         if(enchantLevels != null && enchantLevels.containsKey(enchant)) {
                                             levels += enchantLevels.get(enchant);

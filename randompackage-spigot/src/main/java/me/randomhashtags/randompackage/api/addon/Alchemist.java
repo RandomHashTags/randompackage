@@ -227,7 +227,7 @@ public enum Alchemist implements RPFeatureSpigot, CommandExecutor {
                                 }
                             }
                         } else {
-                            final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
+                            final CustomEnchants enchants = CustomEnchants.INSTANCE;
                             final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
                             final String successString = rarity.getSuccess(), destroyString = rarity.getDestroy();
                             final int level = enchants.getEnchantmentLevel(currentMeta.getDisplayName());

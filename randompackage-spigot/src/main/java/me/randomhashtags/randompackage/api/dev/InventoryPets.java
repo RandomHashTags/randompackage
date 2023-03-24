@@ -207,7 +207,8 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
 
                     if(trigger(event, replacedAttributes)) {
                         pet.didUse(is, identifier, level, exp);
-                        sendItemCooldownPacket(player, is.getType(), 20*20);
+                        final int cooldown_ticks = 20 * ((int) pet.getCooldown(level));
+                        sendItemCooldownPacket(player, is.getType(), cooldown_ticks);
                         return 1;
                     }
                 } else {

@@ -8,8 +8,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
-
 public final class HasCustomEnchantEquipped extends AbstractEventCondition {
     @Override
     public boolean check(Entity entity, String value) {
@@ -19,7 +17,7 @@ public final class HasCustomEnchantEquipped extends AbstractEventCondition {
             if(equipment != null) {
                 final CustomEnchantSpigot enchant = valueOfCustomEnchant(value);
                 if(enchant != null) {
-                    final CustomEnchants enchants = getCustomEnchants();
+                    final CustomEnchants enchants = CustomEnchants.INSTANCE;
                     final ItemStack[] items = new ItemStack[] {equipment.getHelmet(), equipment.getChestplate(), equipment.getLeggings(), equipment.getBoots(), EIGHT ? equipment.getItemInHand() : equipment.getItemInMainHand(), EIGHT ? null : equipment.getItemInOffHand()};
                     for(ItemStack is : items) {
                         if(enchants.getEnchantsOnItem(is).containsKey(enchant)) {

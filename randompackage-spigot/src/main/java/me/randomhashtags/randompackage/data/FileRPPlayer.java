@@ -370,7 +370,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
     @Nullable
     @Override
     public CustomEnchantData getCustomEnchantData() {
-        if(customEnchantData == null && CustomEnchants.getCustomEnchants().isEnabled()) {
+        if(customEnchantData == null && CustomEnchants.INSTANCE.isEnabled()) {
             List<String> list = new ArrayList<>();
             if(yml.get("custom enchants") != null) {
                 list = yml.getStringList("custom enchants.entities");

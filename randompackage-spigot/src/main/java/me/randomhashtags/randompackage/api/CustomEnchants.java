@@ -55,14 +55,10 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.*;
 
-public class CustomEnchants implements EventAttributes, CommandExecutor, Listener {
-    private static CustomEnchants instance;
-    public static CustomEnchants getCustomEnchants() {
-        if(instance == null) instance = new CustomEnchants();
-        return instance;
-    }
+public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener {
+    INSTANCE;
 
-    public YamlConfiguration config;
+    private YamlConfiguration config;
     public boolean levelZeroRemoval;
     public static List<String> CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES;
 
@@ -174,6 +170,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
 
         sendConsoleMessage("&6[RandomPackage] &aLoaded [&f" + getAll(Feature.CUSTOM_ENCHANT_ENABLED).size() + "e, &c" + getAll(Feature.CUSTOM_ENCHANT_DISABLED).size() + "d&a] Custom Enchants &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
+    @Override
     public void unload() {
         for(CustomEnchantSpigot e : timedEnchants.keySet()) {
             SCHEDULER.cancelTask(timedEnchants.get(e));

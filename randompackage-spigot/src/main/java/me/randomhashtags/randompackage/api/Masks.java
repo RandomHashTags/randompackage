@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.event.*;
 import me.randomhashtags.randompackage.event.armor.ArmorEquipEvent;
 import me.randomhashtags.randompackage.event.armor.ArmorUnequipEvent;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import me.randomhashtags.randompackage.util.obj.EquippedCustomEnchants;
 import org.bukkit.Bukkit;
@@ -28,19 +29,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Masks extends CustomEnchants {
-    private static Masks instance;
-    public static Masks getMasks() {
-        if(instance == null) instance = new Masks();
-        return instance;
-    }
+public enum Masks implements RPFeatureSpigot {
+    INSTANCE;
 
     public YamlConfiguration config;
     private HashMap<Player, ItemStack> equippedMasks;
@@ -91,7 +87,7 @@ public class Masks extends CustomEnchants {
             final PlayerInventory i = player.getInventory();
             final Mask m = valueOfMask(i.getHelmet());
             if(m != null) {
-                trigger(event, m.getAttributes());
+                CustomEnchants.INSTANCE.trigger(event, m.getAttributes());
                 i.setHelmet(equippedMasks.get(player));
                 player.updateInventory();
                 equippedMasks.remove(player);
@@ -230,7 +226,7 @@ public class Masks extends CustomEnchants {
             if(m != null) {
                 final MaskEquipEvent e = new MaskEquipEvent(player, m, i, event.getReason());
                 PLUGIN_MANAGER.callEvent(e);
-                trigger(e, m.getAttributes());
+                CustomEnchants.INSTANCE.trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
                     equippedMasks.put(player, i.clone());
                     SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
@@ -250,13 +246,14 @@ public class Masks extends CustomEnchants {
             if(m != null) {
                 final MaskUnequipEvent e = new MaskUnequipEvent(player, m, equippedMasks.get(player), event.getReason());
                 PLUGIN_MANAGER.callEvent(e);
-                trigger(e, m.getAttributes());
+                final CustomEnchants custom_enchants = CustomEnchants.INSTANCE;
+                custom_enchants.trigger(e, m.getAttributes());
                 if(!e.isCancelled()) {
                     final ItemStack h = e.helmet;
                     event.setCurrentItem(h);
                     equippedMasks.remove(player);
-                    final EquippedCustomEnchants enchants = getEnchants(player);
-                    triggerCustomEnchants(event, enchants, CustomEnchants.CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES);
+                    final EquippedCustomEnchants enchants = custom_enchants.getEnchants(player);
+                    custom_enchants.triggerCustomEnchants(event, enchants, CustomEnchants.CUSTOM_ENCHANT_GLOBAL_ATTRIBUTES);
                 }
             }
         }
@@ -279,7 +276,7 @@ public class Masks extends CustomEnchants {
         final ItemStack hel = player.getInventory().getHelmet();
         final Mask m = valueOfMask(hel);
         if(m != null) {
-            trigger(event, m.getAttributes());
+            CustomEnchants.INSTANCE.trigger(event, m.getAttributes());
         }
     }
 }

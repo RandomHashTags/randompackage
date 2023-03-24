@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.living;
 import me.randomhashtags.randompackage.addon.obj.CustomEnchantEntity;
 import me.randomhashtags.randompackage.addon.util.Mathable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
+import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public final class LivingCustomEnchantEntity extends CustomEnchants implements Mathable {
+public final class LivingCustomEnchantEntity implements Mathable, UVersionableSpigot {
     public static HashMap<UUID, LivingCustomEnchantEntity> LIVING;
     private final CustomEnchantEntity type;
     private final boolean isCreature;

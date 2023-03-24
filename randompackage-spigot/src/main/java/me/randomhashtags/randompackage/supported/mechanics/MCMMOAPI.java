@@ -123,8 +123,8 @@ public enum MCMMOAPI implements Reflect {
 		final Player player = event.getPlayer();
 		final String skill = getSkillName(event);
 		if(skill != null) {
-			final CustomEnchants e = CustomEnchants.getCustomEnchants();
-			e.triggerEnchants(event, e.getEnchants(player));
+			final CustomEnchants custom_enchants = CustomEnchants.INSTANCE;
+			custom_enchants.triggerEnchants(event, custom_enchants.getEnchants(player));
 		}
 	}
 	

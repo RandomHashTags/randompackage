@@ -9,8 +9,10 @@ import me.randomhashtags.randompackage.addon.file.PathMagicDust;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
+import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.util.listener.GivedpItem;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,13 +24,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fireballs extends CustomEnchants {
-    private static Fireballs instance;
-    public static Fireballs getFireballs() {
-        if(instance == null) instance = new Fireballs();
-        return instance;
-    }
+public enum Fireballs implements RPFeatureSpigot {
+    INSTANCE;
 
+    private YamlConfiguration config;
     public ItemStack mysterydust;
 
     @Override

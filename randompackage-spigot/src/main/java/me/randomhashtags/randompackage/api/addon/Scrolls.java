@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.file.PathBlackScroll;
 import me.randomhashtags.randompackage.addon.file.PathRandomizationScroll;
 import me.randomhashtags.randompackage.addon.file.PathTransmogScroll;
 import me.randomhashtags.randompackage.addon.file.PathWhiteScroll;
+import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.event.BlackScrollUseEvent;
 import me.randomhashtags.randompackage.event.RandomizationScrollUseEvent;
@@ -23,12 +24,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
 
-import static me.randomhashtags.randompackage.api.CustomEnchants.getCustomEnchants;
 
 public enum Scrolls implements RPFeatureSpigot {
     INSTANCE;
@@ -184,7 +183,8 @@ public enum Scrolls implements RPFeatureSpigot {
     }
 
     public ItemStack applyBlackScroll(Player player, ItemStack is, ItemStack blackscroll, BlackScroll scroll) {
-        final HashMap<CustomEnchantSpigot, Integer> enchants = getCustomEnchants().getEnchantsOnItem(is);
+        final CustomEnchants custom_enchants = CustomEnchants.INSTANCE;
+        final HashMap<CustomEnchantSpigot, Integer> enchants = custom_enchants.getEnchantsOnItem(is);
         if(is != null && enchants.size() > 0) {
             final Set<CustomEnchantSpigot> key = enchants.keySet();
             CustomEnchantSpigot enchant = (CustomEnchantSpigot) key.toArray()[RANDOM.nextInt(key.size())];
@@ -221,7 +221,7 @@ public enum Scrolls implements RPFeatureSpigot {
                     lore.remove(enchantslot);
                     itemMeta.setLore(lore); lore.clear();
                     is.setItemMeta(itemMeta);
-                    return getCustomEnchants().getRevealedItem(enchant, enchantlevel, successRate, 100, true, true).clone();
+                    return custom_enchants.getRevealedItem(enchant, enchantlevel, successRate, 100, true, true).clone();
                 } else {
                     enchant = (CustomEnchantSpigot) key.toArray()[RANDOM.nextInt(key.size())];
                 }
@@ -236,7 +236,7 @@ public enum Scrolls implements RPFeatureSpigot {
         if(meta != null && rarity != null && scroll.getAppliesToRarities().contains(rarity)) {
             final String success = rarity.getSuccess(), destroy = rarity.getDestroy();
             int newSuccess = RANDOM.nextInt(101), newDestroy = RANDOM.nextInt(101);
-            final RandomizationScrollUseEvent event = new RandomizationScrollUseEvent(player, scroll, item, enchant, getCustomEnchants().getEnchantmentLevel(meta.getDisplayName()), newSuccess, newDestroy);
+            final RandomizationScrollUseEvent event = new RandomizationScrollUseEvent(player, scroll, item, enchant, CustomEnchants.INSTANCE.getEnchantmentLevel(meta.getDisplayName()), newSuccess, newDestroy);
             PLUGIN_MANAGER.callEvent(event);
             if(event.isCancelled()) {
                 return false;
@@ -273,7 +273,7 @@ public enum Scrolls implements RPFeatureSpigot {
                     }
                 }
 
-                final HashMap<CustomEnchantSpigot, Integer> enchants = getCustomEnchants().getEnchantsOnItem(is);
+                final HashMap<CustomEnchantSpigot, Integer> enchants = CustomEnchants.INSTANCE.getEnchantsOnItem(is);
                 final int size = enchants.size();
                 final ItemMeta itemMeta = is.getItemMeta();
                 final List<String> lore = new ArrayList<>();
@@ -388,7 +388,7 @@ public enum Scrolls implements RPFeatureSpigot {
             final WhiteScroll whitescroll = valueOfWhiteScroll(cursor);
             if(blackscroll != null) {
                 final boolean hasMeta = current.hasItemMeta() && itemMeta.hasLore();
-                final HashMap<CustomEnchantSpigot, Integer> enchantsOnItem = hasMeta ? getCustomEnchants().getEnchantsOnItem(current) : null;
+                final HashMap<CustomEnchantSpigot, Integer> enchantsOnItem = hasMeta ? CustomEnchants.INSTANCE.getEnchantsOnItem(current) : null;
                 if(enchantsOnItem != null && !enchantsOnItem.isEmpty()) {
                     final ItemStack scroll = applyBlackScroll(player, current, cursor, blackscroll);
                     if(scroll != null) {

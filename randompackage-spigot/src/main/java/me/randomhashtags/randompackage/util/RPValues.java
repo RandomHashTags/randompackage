@@ -784,7 +784,7 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default TransmogScroll valueOfTransmogScrollApplied(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
-            final CustomEnchants enchants = CustomEnchants.getCustomEnchants();
+            final CustomEnchants enchants = CustomEnchants.INSTANCE;
             if(enchants.isEnabled()) {
                 final String size = Integer.toString(enchants.getEnchantsOnItem(is).size()), d = is.getItemMeta().getDisplayName();
                 for(TransmogScroll t : getAllTransmogScrolls().values()) {

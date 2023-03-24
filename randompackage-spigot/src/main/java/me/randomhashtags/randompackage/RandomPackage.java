@@ -96,9 +96,9 @@ public final class RandomPackage extends JavaPlugin {
         cmd.load(Alchemist.INSTANCE, List.of("alchemist"), isTrue("alchemist"));
         cmd.load(Tinkerer.INSTANCE, List.of("tinkerer"), isTrue("tinkerer"));
 
-        cmd.loadCustom(CustomEnchants.getCustomEnchants(), getHash("disabledenchants", "disabled enchants", "enchants", "enchants"), isTrue("disabled enchants", "enchants"));
+        cmd.loadCustom(CustomEnchants.INSTANCE, getHash("disabledenchants", "disabled enchants", "enchants", "enchants"), isTrue("disabled enchants", "enchants"));
         cmd.load(EnchantmentOrbs.INSTANCE, null, isTrue("custom enchants.enchantment orbs", true));
-        cmd.load(Fireballs.getFireballs(), null, isTrue("custom enchants.fireballs", true));
+        cmd.load(Fireballs.INSTANCE, null, isTrue("custom enchants.fireballs", true));
         cmd.load(RarityGems.INSTANCE, null, isTrue("custom enchants.rarity gems", true));
         cmd.load(SoulTrackers.INSTANCE, List.of("splitsouls"), isTrue("custom enchants.soul trackers", true) || isTrue("splitsouls"));
 
@@ -130,7 +130,7 @@ public final class RandomPackage extends JavaPlugin {
 
         cmd.load(KingOfTheHill.INSTANCE, List.of("kingofthehill"), isTrue("kingofthehill"));
         cmd.loadCustom(LastManStanding.INSTANCE, getHash("lastmanstanding", "last man standing"), isTrue("last man standing"));
-        cmd.load(Masks.getMasks(), null, isTrue("masks"));
+        cmd.load(Masks.INSTANCE, null, isTrue("masks"));
         cmd.load(MobStacker.INSTANCE, null, isTrue("mob stacker"));
         cmd.loadCustom(Outposts.INSTANCE, getHash("outpost", "outposts"), isTrue("outposts"));
         cmd.load(InventoryPets.INSTANCE, null, isTrue("inventory pets"));

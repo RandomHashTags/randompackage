@@ -75,7 +75,6 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
             if(item != null) {
                 final ItemMeta im = item.getItemMeta();
                 item = getSkull(im.getDisplayName(), im.getLore(), LEGACY || THIRTEEN);
-                set_inventory_pet_values(item, identifier, 1, 0, 0);
             }
         }
         return getClone(item);

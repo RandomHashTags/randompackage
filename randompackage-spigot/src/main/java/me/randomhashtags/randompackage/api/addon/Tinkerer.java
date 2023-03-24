@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -147,7 +146,7 @@ public enum Tinkerer implements RPFeatureSpigot, CommandExecutor {
                     xp = xp.add(BigDecimal.valueOf(Integer.parseInt(target)));
                 }
                 if(current.hasItemMeta() && current.getItemMeta().hasLore()) {
-                    final HashMap<CustomEnchantSpigot, Integer> enchants = CustomEnchants.getCustomEnchants().getEnchantsOnItem(current);
+                    final HashMap<CustomEnchantSpigot, Integer> enchants = CustomEnchants.INSTANCE.getEnchantsOnItem(current);
                     for(CustomEnchantSpigot enchant : enchants.keySet()) {
                         xp = xp.add(enchant.getTinkererValue(enchants.get(enchant)));
                     }
