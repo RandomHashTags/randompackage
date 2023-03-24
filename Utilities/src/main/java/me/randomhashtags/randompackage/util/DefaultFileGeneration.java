@@ -1,6 +1,8 @@
 package me.randomhashtags.randompackage.util;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface DefaultFileGeneration {
     void save(String folder, String file);
@@ -8,6 +10,11 @@ public interface DefaultFileGeneration {
     default void generateAllDefault(String folder, String...values) {
         for(String s : values) {
             save(folder, s + ".yml");
+        }
+    }
+    default void generate_all_default_json(String folder, String...values) {
+        for(String s : values) {
+            save(folder, s + ".json");
         }
     }
     default void generateDefaultBoosters() {
@@ -24,7 +31,6 @@ public interface DefaultFileGeneration {
     }
     default void generateDefaultCustomEnchants() {
         final String[] mastery = new String[] {
-                "_settings",
                 "AUTO_SELL",
                 "CHAIN_LIFESTEAL",
                 "DEATH_PACT",
@@ -39,7 +45,6 @@ public interface DefaultFileGeneration {
                 "WEB_WALKER"
         };
         final String[] heroic = new String[] {
-                "_settings",
                 "ALIEN_IMPLANTS", "ATOMIC_DETONATE",
                 "BIDIRECTIONAL_TELEPORTATION",
                 "DEEP_BLEED", "DEMONIC_LIFESTEAL", "DIVINE_ENLIGHTED",
@@ -56,7 +61,6 @@ public interface DefaultFileGeneration {
                 "VENGEFUL_DIMINISH",
         };
         final String[] soul = new String[] {
-                "_settings",
                 "DIVINE_IMMOLATION",
                 "HERO_KILLER",
                 "IMMORTAL",
@@ -66,7 +70,6 @@ public interface DefaultFileGeneration {
                 "TELEBLOCK",
         };
         final String[] legendary = new String[] {
-                "_settings",
                 "AEGIS", "ANTI_GANK", "ARMORED",
                 "BARBARIAN", "BLACKSMITH", "BLOOD_LINK", "BLOOD_LUST", "BOSS_SLAYER",
                 "CLARITY",
@@ -83,7 +86,6 @@ public interface DefaultFileGeneration {
                 "SILENCE", "SNIPER",
         };
         final String[] ultimate = new String[] {
-                "_settings",
                 "ANGELIC", "ARROW_BREAK", "ARROW_DEFLECT", "ARROW_LIFESTEAL", "ASSASSIN", "AVENGING_ANGEL",
                 "BLEED", "BLESSED", "BLOCK",
                 "CLEAVE", "CORRUPT", "CREEPER_ARMOR",
@@ -103,7 +105,6 @@ public interface DefaultFileGeneration {
                 "VALOR",
         };
         final String[] elite = new String[] {
-                "_settings",
                 "ANTI_GRAVITY",
                 "BLIND",
                 "CACTUS",
@@ -122,7 +123,6 @@ public interface DefaultFileGeneration {
                 "WITHER",
         };
         final String[] unique = new String[] {
-                "_settings",
                 "BERSERK",
                 "COMMANDER", "COWIFICATION", "CURSE",
                 "DEEP_WOUNDS",
@@ -139,7 +139,6 @@ public interface DefaultFileGeneration {
                 "VIRUS",
         };
         final String[] simple = new String[] {
-                "_settings",
                 "AQUATIC", "AUTO_SMELT",
                 "CONFUSION",
                 "DECAPITATION",
@@ -153,15 +152,25 @@ public interface DefaultFileGeneration {
                 "TARGET_TRACKING", "THUNDERING_BLOW",
         };
         final String SEPARATOR = File.separator;
-        generateAllDefault("custom enchants" + SEPARATOR + "MASTERY", mastery);
-        generateAllDefault("custom enchants" + SEPARATOR + "HEROIC", heroic);
-        generateAllDefault("custom enchants" + SEPARATOR + "SOUL", soul);
-        generateAllDefault("custom enchants" + SEPARATOR + "LEGENDARY", legendary);
-        generateAllDefault("custom enchants" + SEPARATOR + "ULTIMATE", ultimate);
-        generateAllDefault("custom enchants" + SEPARATOR + "ELITE", elite);
-        generateAllDefault("custom enchants" + SEPARATOR + "UNIQUE", unique);
-        generateAllDefault("custom enchants" + SEPARATOR + "SIMPLE", simple);
-        generateAllDefault("custom enchants" + SEPARATOR + "RANDOM", "_settings");
+        final HashMap<String, String[]> rarity_types = new HashMap<>() {{
+            put("MASTERY", mastery);
+            put("HEROIC", heroic);
+            put("SOUL", soul);
+            put("LEGENDARY", legendary);
+            put("ULTIMATE", ultimate);
+            put("ELITE", elite);
+            put("UNIQUE", unique);
+            put("SIMPLE", simple);
+            put("RANDOM", null);
+        }};
+        for(Map.Entry<String, String[]> types : rarity_types.entrySet()) {
+            final String rarity_type = types.getKey();
+            generateAllDefault("custom enchants" + SEPARATOR + rarity_type, "_settings");
+            final String[] enchants = types.getValue();
+            if(enchants != null) {
+                generate_all_default_json("custom enchants" + SEPARATOR + rarity_type, enchants);
+            }
+        }
     }
     default void generateDefaultCustomCreepers() {
         generateAllDefault("custom creepers", "ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL");

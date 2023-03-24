@@ -114,6 +114,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         if(!isEnabled()) {
             return;
         }
+        final long started = System.currentTimeMillis();
         final String identifier = getIdentifier();
         try {
             ENABLED_RP_FEATURES.remove(identifier);
@@ -131,7 +132,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
                     EventAttributeCoreListener.unregisterEventAttributeListener(event_attribute_listener);
                 }
                 HandlerList.unregisterAll(this);
-                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + identifier);
+                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + identifier + " (took " + (System.currentTimeMillis()-started) + "ms)");
             }
         }
     }

@@ -8,12 +8,14 @@ repositories {
     mavenLocal()
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+    }
+    maven {
         url = 'https://mvnrepository.com/artifact/org.json/json'
     }
 }
 
 dependencies {
-    implementation group: 'org.json', name: 'json', version: '20230227' // TODO: migrate to https://github.com/ngs-doo/dsl-json for better performance
+    compileOnly group: 'org.json', name: 'json', version: '20230227' // TODO: migrate to https://github.com/ngs-doo/dsl-json for better performance
     implementation 'org.jetbrains:annotations:23.0.0'
     compileOnly 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT'
 }

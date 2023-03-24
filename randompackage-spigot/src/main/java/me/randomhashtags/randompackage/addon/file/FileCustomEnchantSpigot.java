@@ -17,7 +17,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
     private final List<String> lore;
     private final int max_level;
     private final List<String> enabled_worlds, applies_to, attributes;
-    private final String required_enchant;
+    private final String required_enchant, enchant_proc_value;
     private final List<BigDecimal> alchemist, tinkerer;
 
     public FileCustomEnchantSpigot(File file) {
@@ -31,16 +31,22 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         enabled_worlds = parse_list_string_in_json(json, "enabled in worlds");
         applies_to = parse_list_string_in_json(json, "applies to");
         required_enchant = parse_string_in_json(json, "requires", null);
-        alchemist = parse_big_decimal_in_json(json, "alchemist upgrade costs");
-        final String[] tinkerer_values = parse_string_in_json(json, "tinkerer").split(":");
-        final BigDecimal[] tinkerer = new BigDecimal[tinkerer_values.length];
-        int i = 0;
-        for(String s : tinkerer_values) {
-            tinkerer[i] = BigDecimal.valueOf(Integer.parseInt(s));
-            i++;
+        alchemist = parse_big_decimal_in_json(json, "alchemist upgrade costs", null);
+        final String tinkerer_value = parse_string_in_json(json, "tinkerer", null);
+        if(tinkerer_value != null) {
+            final String[] tinkerer_values = tinkerer_value.split(":");
+            final BigDecimal[] tinkerer = new BigDecimal[tinkerer_values.length];
+            int i = 0;
+            for (String s : tinkerer_values) {
+                tinkerer[i] = BigDecimal.valueOf(Integer.parseInt(s));
+                i++;
+            }
+            this.tinkerer = List.of(tinkerer);
+        } else {
+            tinkerer = null;
         }
-        this.tinkerer = List.of(tinkerer);
         attributes = parse_list_string_in_json(json, "attributes");
+        enchant_proc_value = parse_string_in_json(json, "enchant proc value", "0");
         register(isEnabled() ? Feature.CUSTOM_ENCHANT_ENABLED : Feature.CUSTOM_ENCHANT_DISABLED, this);
     }
 
@@ -78,7 +84,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         return tinkerer;
     }
     public String getEnchantProcValue() {
-        return yml.getString("enchant proc value", "0");
+        return enchant_proc_value;
     }
     public List<String> getAttributes() {
         return attributes;

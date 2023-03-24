@@ -55,7 +55,11 @@ public interface NonThrowableJSONBehavior {
 
     @NotNull
     default List<BigDecimal> parse_big_decimal_in_json(@NotNull JSONObject json, @NotNull String key) {
+        return parse_big_decimal_in_json(json, key, List.of());
+    }
+    @Nullable
+    default List<BigDecimal> parse_big_decimal_in_json(@NotNull JSONObject json, @NotNull String key, @Nullable List<BigDecimal> default_value) {
         final JSONArray array = json.optJSONArray(key);
-        return array != null ? array.toList().stream().map(object -> BigDecimal.valueOf(Long.parseLong(Objects.toString(object, "0")))).collect(Collectors.toList()) : List.of();
+        return array != null ? array.toList().stream().map(object -> BigDecimal.valueOf(Long.parseLong(Objects.toString(object, "0")))).collect(Collectors.toList()) : default_value;
     }
 }

@@ -31,7 +31,10 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static me.randomhashtags.randompackage.RandomPackageAPI.SPAWNER_CHANCE;
 
@@ -42,7 +45,6 @@ public final class RandomPackage extends JavaPlugin {
 
     private RandomPackageAPI api;
     private RPEventsSpigot rpevents;
-
     public static String SPAWNER_PLUGIN_NAME;
     public static Plugin SPAWNER_PLUGIN, MCMMO;
     public boolean placeholder_api = false;
@@ -207,6 +209,7 @@ public final class RandomPackage extends JavaPlugin {
             SPAWNER_CHANCE = epic ? targetString != null ? Integer.parseInt(targetString.replace("%", "")) : 0 : config.getInt("explosionDropChance");
         }
     }
+
     private void disable() {
         rpevents.disable();
         api.disable();

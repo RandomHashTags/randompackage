@@ -24,6 +24,7 @@ public interface CustomEnchant extends Attributable, MaxLevelable, Nameable, Tog
     String getRequiredEnchant();
     @Nullable
     List<BigDecimal> getAlchemist();
+    @Nullable
     List<BigDecimal> getTinkerer();
     String getEnchantProcValue();
 

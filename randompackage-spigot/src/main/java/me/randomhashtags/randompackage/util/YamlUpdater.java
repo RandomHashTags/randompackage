@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.util;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.*;
 public enum YamlUpdater {
     INSTANCE;
 
-    public boolean updateYaml(@NotNull String folder, @NotNull File file) {
+    public boolean updateYaml(@Nullable String folder, @NotNull File file) {
         if(file.exists()) {
             final LinkedHashMap<String, Object> changes = getChanges(folder, file);
             if(changes != null && !changes.isEmpty()) {
@@ -38,30 +39,34 @@ public enum YamlUpdater {
         return false;
     }
 
-    public LinkedHashMap<String, Object> getChanges(String folder, File file) { // Implemented since v16.3.1 - Updated v16.5.0
+    public LinkedHashMap<String, Object> getChanges(@Nullable String folder, File file) { // Implemented since v16.3.1 - Updated v16.5.0
         final String n = file.getName().split("\\.yml")[0];
         switch (n) {
             case "_settings":
-                switch (folder) {
-                    case "conquests": return getConquestSettings();
-                    case "custom armor": return getCustomArmorSettings();
-                    case "custom enchants": return getCustomEnchantSettings();
-                    case "duel arenas": return getDuelSettings();
-                    case "dungeons": return getDungeonSettings();
-                    case "envoy tiers": return getEnvoySettings();
-                    case "faction quests": return getFactionQuestSettings();
-                    case "faction upgrades": return getFactionUpgradeSettings();
-                    case "filter categories": return getItemFilterSettings();
-                    case "global challenges": return getGlobalChallengeSettings();
-                    case "kits": return getKitSettings();
-                    case "masks": return getMaskSettings();
-                    case "monthly crates": return getMonthlyCrateSettings();
-                    case "outposts": return getOutpostSettings();
-                    case "player quests": return getPlayerQuestSettings();
-                    case "shops": return getShopSettings();
-                    case "strongholds": return getStrongholdSettings();
-                    case "trinkets": return getTrinketSettings();
-                    default: return null;
+                if(folder != null) {
+                    switch (folder) {
+                        case "conquests": return getConquestSettings();
+                        case "custom armor": return getCustomArmorSettings();
+                        case "custom enchants": return getCustomEnchantSettings();
+                        case "duel arenas": return getDuelSettings();
+                        case "dungeons": return getDungeonSettings();
+                        case "envoy tiers": return getEnvoySettings();
+                        case "faction quests": return getFactionQuestSettings();
+                        case "faction upgrades": return getFactionUpgradeSettings();
+                        case "filter categories": return getItemFilterSettings();
+                        case "global challenges": return getGlobalChallengeSettings();
+                        case "kits": return getKitSettings();
+                        case "masks": return getMaskSettings();
+                        case "monthly crates": return getMonthlyCrateSettings();
+                        case "outposts": return getOutpostSettings();
+                        case "player quests": return getPlayerQuestSettings();
+                        case "shops": return getShopSettings();
+                        case "strongholds": return getStrongholdSettings();
+                        case "trinkets": return getTrinketSettings();
+                        default: return null;
+                    }
+                } else {
+                    return null;
                 }
             case "auction house": return getAH();
             case "battle royale": return getBattleRoyale();

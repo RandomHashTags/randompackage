@@ -199,7 +199,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		if(!isHeroic(is)) {
 			final ArmorSet set = valueOfArmorSet(is);
 			if(set != null) {
-				addRPItemStackValues(is, new HashMap<String, String>() {{
+				addRPItemStackValues(is, new HashMap<>() {{
 					put("isHeroic", "true");
 					put("CustomDurability", Integer.toString(durability));
 					put("CustomMaxDurability", Integer.toString(maxDurability));

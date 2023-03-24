@@ -30,15 +30,17 @@ public enum EventAttributeCoreListener implements EventExecutor {
     private Listener v1_9, v1_10, v1_12, v1_13, v1_14;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "EVENT_ATTRIBUTE_CORE_LISTENER";
     }
 
+    @Override
     public void load() {
         EVENT_LISTENERS = new ArrayList<>();
         initListeners();
         updateVersionListeners(true);
     }
+    @Override
     public void unload() {
         EVENT_LISTENERS = null;
         updateVersionListeners(false);

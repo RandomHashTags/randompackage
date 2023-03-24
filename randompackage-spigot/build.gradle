@@ -8,8 +8,9 @@ repositories {
     mavenLocal()
     maven { // SpigotMC
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
-        url = 'https://mvnrepository.com/artifact/org.json/json'
     }
+
+    maven { url = 'https://mvnrepository.com/artifact/org.json/json' }
 
     maven { url "https://repo.extendedclip.com/content/repositories/placeholderapi" } // PlaceholderAPI
     //maven { url "https://dl.bintray.com/tastybento/maven-repo" } // ASkyblock
