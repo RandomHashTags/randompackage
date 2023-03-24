@@ -13,9 +13,10 @@ import java.util.Map;
 
 public final class ReflectedCraftItemStack {
     private static ReflectedCraftItemStack INSTANCE;
+    private static boolean SENT_ERROR = false;
     @Nullable
     public static ReflectedCraftItemStack shared_instance() {
-        if(INSTANCE == null) {
+        if(!SENT_ERROR && INSTANCE == null) {
             final String version = get_craftbukkit_version();
             try {
                 if(version != null) {
@@ -24,8 +25,11 @@ public final class ReflectedCraftItemStack {
                     throw new Exception("failed to get craftbukkit version");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                RandomPackageAPI.INSTANCE.sendConsoleMessage("&6[RandomPackage] &cFailed to find craftbukkit version, some features will not work properly!");
+                if(!SENT_ERROR) {
+                    SENT_ERROR = true;
+                    e.printStackTrace();
+                    RandomPackageAPI.INSTANCE.sendConsoleMessage("&6[RandomPackage] &cFailed to find craftbukkit version, some features will not work properly!");
+                }
             }
         }
         return null;
@@ -129,9 +133,9 @@ public final class ReflectedCraftItemStack {
 
         Method tag_compound_get_string_function;
         try {
-            tag_compound_get_string_function = net_class.getMethod("getString");
+            tag_compound_get_string_function = tag_compound_class.getMethod("getString", String.class);
         } catch (Exception ignored) {
-            tag_compound_get_string_function = net_class.getMethod("l");
+            tag_compound_get_string_function = tag_compound_class.getMethod("l", String.class);
         }
         this.tag_compound_get_string_function = tag_compound_get_string_function;
 
