@@ -46,12 +46,15 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         return r.getOrDefault(-1, r.getOrDefault(level, 1000));
     }
 
+    @NotNull
     default ItemStack getItem(int level) {
         return getItem(level, 0);
     }
+    @NotNull
     default ItemStack getItem(int level, int exp) {
         return getItem(level, exp, System.currentTimeMillis()+getCooldown(level));
     }
+    @NotNull
     default ItemStack getItem(int level, int exp, long cooldownExpiration) {
         final int required = getRequiredXp(level+1);
         final String lvl = Integer.toString(level), xp = Integer.toString(exp), requiredString = formatInt(required), cooldown = getRemainingTime(getCooldown(level));

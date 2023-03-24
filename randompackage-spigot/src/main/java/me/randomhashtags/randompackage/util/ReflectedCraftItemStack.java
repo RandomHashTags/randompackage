@@ -106,14 +106,6 @@ public final class ReflectedCraftItemStack {
         this.tag_compound_remove_function = tag_compound_remove_function;
         this.tag_compound_set_string_function = tag_compound_set_string_function;
 
-        Method tag_compound_has_key_function;
-        try {
-            tag_compound_has_key_function = tag_compound_class.getMethod("hasKey", String.class);
-        } catch (Exception ignored) {
-            tag_compound_has_key_function = tag_compound_class.getMethod("e", String.class);
-        }
-        this.tag_compound_has_key_function = tag_compound_has_key_function;
-
         get_item_meta_function = clazz.getMethod("getItemMeta");
         Method has_tag_function;
         try {
@@ -130,6 +122,14 @@ public final class ReflectedCraftItemStack {
             get_tag_function = net_class.getMethod("u");
         }
         this.get_tag_function = get_tag_function;
+
+        Method tag_compound_has_key_function;
+        try {
+            tag_compound_has_key_function = tag_compound_class.getMethod("hasKey", String.class);
+        } catch (Exception ignored) {
+            tag_compound_has_key_function = tag_compound_class.getMethod("e", String.class);
+        }
+        this.tag_compound_has_key_function = tag_compound_has_key_function;
 
         Method tag_compound_get_string_function;
         try {
@@ -152,17 +152,10 @@ public final class ReflectedCraftItemStack {
     public String get_tag(@NotNull ItemStack itemstack, @NotNull String key) {
         try {
             final Object nmsItem = as_nms_copy_function.invoke(null, itemstack);
-            if(nmsItem != null) {
-                final Object has_tag = has_tag_function.invoke(nmsItem);
-                if(has_tag instanceof Boolean && (Boolean) has_tag) {
-                    final Object tag = get_tag_function.invoke(nmsItem);
-                    if(tag != null) {
-                        final Object has_key = tag_compound_has_key_function.invoke(tag, key);
-                        if(has_key instanceof Boolean && (Boolean) has_key) {
-                            final Object tag_value = tag_compound_get_string_function.invoke(tag, key);
-                            return tag_value instanceof String ? (String) tag_value : null;
-                        }
-                    }
+            if(nmsItem != null && (Boolean) has_tag_function.invoke(nmsItem)) {
+                final Object tag_compound = get_tag_function.invoke(nmsItem);
+                if(tag_compound != null && (Boolean) tag_compound_has_key_function.invoke(tag_compound, key)) {
+                    return (String) tag_compound_get_string_function.invoke(tag_compound, key);
                 }
             }
         } catch (Exception e) {
@@ -176,15 +169,14 @@ public final class ReflectedCraftItemStack {
         try {
             final Object craft_itemstack = as_nms_copy_function.invoke(null, itemstack);
             final Object saved_tag_compound = save_function.invoke(craft_itemstack, tag_compound_class.getConstructor().newInstance());
-            final Object tag_compound_to_string = tag_compound_to_string_function.invoke(saved_tag_compound);
-            return tag_compound_to_string instanceof String ? (String) tag_compound_to_string : null;
-        } catch (Exception ignored) {
+            return (String) tag_compound_to_string_function.invoke(saved_tag_compound);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     public void edit_itemstack_nbt(@NotNull ItemStack is, @Nullable String[] removedKeys, @Nullable HashMap<String, String> addedKeys) {
-        ItemMeta itemMeta = null;
         try {
             final Object nms_item = as_nms_copy_function.invoke(null, is);
             final Object tag = get_tag_function.invoke(nms_item);
@@ -199,13 +191,11 @@ public final class ReflectedCraftItemStack {
                     }
                 }
             }
-            final Object craft_itemstack_mirror = as_craft_mirror_function.invoke(nms_item, nms_item);
-            itemMeta = (ItemMeta) get_item_meta_function.invoke(craft_itemstack_mirror);
+            final Object craft_itemstack_mirror = as_craft_mirror_function.invoke(null, nms_item);
+            final ItemMeta itemMeta = (ItemMeta) get_item_meta_function.invoke(craft_itemstack_mirror);
+            is.setItemMeta(itemMeta);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if(itemMeta != null) {
-            is.setItemMeta(itemMeta);
         }
     }
 }

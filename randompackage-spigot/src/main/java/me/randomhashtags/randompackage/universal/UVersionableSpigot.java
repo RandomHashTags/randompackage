@@ -119,10 +119,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return is != null ? is.clone() : def;
     }
 
-    default HashSet<String> getConfigurationSectionKeys(YamlConfiguration yml, String key, boolean includeKeys, String...excluding) {
+    default Set<String> getConfigurationSectionKeys(YamlConfiguration yml, String key, boolean includeKeys, String...excluding) {
         final ConfigurationSection section = yml.getConfigurationSection(key);
         if(section != null) {
-            final HashSet<String> set = new HashSet<>(section.getKeys(includeKeys));
+            final Set<String> set = section.getKeys(includeKeys);
             List.of(excluding).forEach(set::remove);
             return set;
         } else {
@@ -314,7 +314,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                     return PotionEffectType.HARM;
                 default:
                     for(PotionEffectType type : PotionEffectType.values()) {
-                        if(input.equalsIgnoreCase(type.getName())) {
+                        if (type != null && input.equalsIgnoreCase(type.getName())) {
                             return type;
                         }
                     }

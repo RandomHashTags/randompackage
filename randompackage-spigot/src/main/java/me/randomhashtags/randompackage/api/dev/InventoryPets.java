@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.api.dev;
 import me.randomhashtags.randompackage.addon.InventoryPet;
 import me.randomhashtags.randompackage.addon.file.FileInventoryPet;
 import me.randomhashtags.randompackage.attribute.GivePetExp;
-import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -270,7 +269,7 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
         final ItemStack is = event.getItem();
         if(is != null) {
             final Player player = event.getPlayer();
-            if(is_pet(is) || didTriggerPet(event, is, player) >= 0 || is.isSimilar(leash) || is.isSimilar(rarecandy)) {
+            if(didTriggerPet(event, is, player) >= 0 || is.isSimilar(leash) || is.isSimilar(rarecandy)) {
                 event.setCancelled(true);
                 player.updateInventory();
             }
