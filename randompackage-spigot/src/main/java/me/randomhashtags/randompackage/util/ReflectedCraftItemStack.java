@@ -32,7 +32,7 @@ public final class ReflectedCraftItemStack {
                 }
             }
         }
-        return null;
+        return INSTANCE;
     }
     private static String get_craftbukkit_version() {
         String returned_version = null;
