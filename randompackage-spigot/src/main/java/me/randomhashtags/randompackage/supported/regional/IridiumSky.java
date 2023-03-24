@@ -11,6 +11,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public enum IridiumSky implements RPFeatureSpigot, Regional {
     private IslandManager im;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "REGIONAL_IRIDIUM_SKYBLOCK";
     }
     @Override

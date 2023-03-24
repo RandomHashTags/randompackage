@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ public interface Skullable extends UVersionableSpigot {
     HashMap<String, ItemStack> CACHED_SKULLS = new HashMap<>();
     String getOwner();
     // https://www.spigotmc.org/threads/143323/ , edited by RandomHashTags
+    @NotNull
     default ItemStack getSkull(String name, List<String> lore, boolean isLegacy) {
         final String skinURL = getOwner();
         if(CACHED_SKULLS.containsKey(skinURL)) {

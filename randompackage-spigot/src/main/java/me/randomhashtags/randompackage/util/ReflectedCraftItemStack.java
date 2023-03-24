@@ -3,10 +3,13 @@ package me.randomhashtags.randompackage.util;
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.RandomPackageAPI;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ReflectedCraftItemStack {
     private static ReflectedCraftItemStack INSTANCE;
@@ -20,7 +23,8 @@ public final class ReflectedCraftItemStack {
                 } else {
                     throw new Exception("failed to get craftbukkit version");
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 RandomPackageAPI.INSTANCE.sendConsoleMessage("&6[RandomPackage] &cFailed to find craftbukkit version, some features will not work properly!");
             }
         }
@@ -28,13 +32,10 @@ public final class ReflectedCraftItemStack {
     }
     private static String get_craftbukkit_version() {
         String returned_version = null;
-        int major = 1;
         final ClassLoader class_loader = RandomPackage.INSTANCE.getClass().getClassLoader();
-        while (major <= 2) {
-            int minor = 8;
-            while (minor <= 50) {
-                int release = 1;
-                while (release <= 5) {
+        loop : for(int major = 1; major <= 2; major++) {
+            for(int minor = 8; minor <= 50; minor++) {
+                for(int release = 1; release <= 5; release++) {
                     final String version = "v" + major + "_" + minor + "_R" + release;
                     Class<?> bruh = null;
                     final String[] tries = {
@@ -47,17 +48,14 @@ public final class ReflectedCraftItemStack {
                         } finally {
                             if(bruh != null) {
                                 returned_version = version;
-                                release = 10;
-                                minor = 100;
-                                major = 10;
                             }
                         }
                     }
-                    release += 1;
+                    if(returned_version != null) {
+                        break loop;
+                    }
                 }
-                minor += 1;
             }
-            major += 1;
         }
         return returned_version;
     }
@@ -69,8 +67,7 @@ public final class ReflectedCraftItemStack {
     public final Method as_craft_mirror_function;
     public final Class<?> tag_compound_class;
     public final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
-    public final Method tag_compound_get_tag_function;
-    public final Method has_tag_function, get_tag_function, save_function;
+    public final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
 
     private ReflectedCraftItemStack(@NotNull ClassLoader class_loader, @NotNull String version) throws Exception {
         this.version = version;
@@ -105,14 +102,6 @@ public final class ReflectedCraftItemStack {
         this.tag_compound_remove_function = tag_compound_remove_function;
         this.tag_compound_set_string_function = tag_compound_set_string_function;
 
-        Method tag_compound_get_function;
-        try {
-            tag_compound_get_function = tag_compound_class.getMethod("getTag");
-        } catch (Exception ignored) {
-            tag_compound_get_function = tag_compound_class.getMethod("u");
-        }
-        this.tag_compound_get_tag_function = tag_compound_get_function;
-
         Method tag_compound_has_key_function;
         try {
             tag_compound_has_key_function = tag_compound_class.getMethod("hasKey", String.class);
@@ -121,36 +110,98 @@ public final class ReflectedCraftItemStack {
         }
         this.tag_compound_has_key_function = tag_compound_has_key_function;
 
+        get_item_meta_function = clazz.getMethod("getItemMeta");
         Method has_tag_function;
         try {
-            has_tag_function = clazz.getMethod("hasTag");
+            has_tag_function = net_class.getMethod("hasTag");
         } catch (Exception ignored) {
-            has_tag_function = clazz.getMethod("t");
+            has_tag_function = net_class.getMethod("t");
         }
         this.has_tag_function = has_tag_function;
 
         Method get_tag_function;
         try {
-            get_tag_function = clazz.getMethod("getTag");
+            get_tag_function = net_class.getMethod("getTag");
         } catch (Exception ignored) {
-            get_tag_function = clazz.getMethod("u");
+            get_tag_function = net_class.getMethod("u");
         }
         this.get_tag_function = get_tag_function;
 
         Method tag_compound_get_string_function;
         try {
-            tag_compound_get_string_function = clazz.getMethod("getString");
+            tag_compound_get_string_function = net_class.getMethod("getString");
         } catch (Exception ignored) {
-            tag_compound_get_string_function = clazz.getMethod("l");
+            tag_compound_get_string_function = net_class.getMethod("l");
         }
         this.tag_compound_get_string_function = tag_compound_get_string_function;
 
         Method save_function;
         try {
-            save_function = clazz.getMethod("save", tag_compound_class);
+            save_function = net_class.getMethod("save", tag_compound_class);
         } catch (Exception ignored) {
-            save_function = clazz.getMethod("b", tag_compound_class);
+            save_function = net_class.getMethod("b", tag_compound_class);
         }
         this.save_function = save_function;
+    }
+
+    @Nullable
+    public String get_tag(@NotNull ItemStack itemstack, @NotNull String key) {
+        try {
+            final Object nmsItem = as_nms_copy_function.invoke(null, itemstack);
+            if(nmsItem != null) {
+                final Object has_tag = has_tag_function.invoke(nmsItem);
+                if(has_tag instanceof Boolean && (Boolean) has_tag) {
+                    final Object tag = get_tag_function.invoke(nmsItem);
+                    if(tag != null) {
+                        final Object has_key = tag_compound_has_key_function.invoke(tag, key);
+                        if(has_key instanceof Boolean && (Boolean) has_key) {
+                            final Object tag_value = tag_compound_get_string_function.invoke(tag, key);
+                            return tag_value instanceof String ? (String) tag_value : null;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    public String as_nms_copy(@NotNull ItemStack itemstack) {
+        try {
+            final Object craft_itemstack = as_nms_copy_function.invoke(null, itemstack);
+            final Object saved_tag_compound = save_function.invoke(craft_itemstack, tag_compound_class.getConstructor().newInstance());
+            final Object tag_compound_to_string = tag_compound_to_string_function.invoke(saved_tag_compound);
+            return tag_compound_to_string instanceof String ? (String) tag_compound_to_string : null;
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    public void edit_itemstack_nbt(@NotNull ItemStack is, @Nullable String[] removedKeys, @Nullable HashMap<String, String> addedKeys) {
+        ItemMeta itemMeta = null;
+        try {
+            final Object nms_item = as_nms_copy_function.invoke(null, is);
+            final Object tag = get_tag_function.invoke(nms_item);
+            if(tag != null) {
+                if(removedKeys != null) {
+                    for(String s : removedKeys) {
+                        tag_compound_remove_function.invoke(tag, s);
+                    }
+                } else if(addedKeys != null) {
+                    for(Map.Entry<String, String> entry : addedKeys.entrySet()) {
+                        tag_compound_set_string_function.invoke(tag, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            final Object craft_itemstack_mirror = as_craft_mirror_function.invoke(nms_item, nms_item);
+            itemMeta = (ItemMeta) get_item_meta_function.invoke(craft_itemstack_mirror);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(itemMeta != null) {
+            is.setItemMeta(itemMeta);
+        }
     }
 }

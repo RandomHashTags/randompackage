@@ -120,8 +120,8 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
         addRPItemStackValue(target, "AddFactionPoints", Integer.toString(points));
         return target;
     }
-    public boolean isFactionPointItem(@NotNull ItemStack is) {
-        return getRPItemStackValue(is, "AddFactionPoints") != null;
+    public boolean isFactionPointItem(@Nullable ItemStack is) {
+        return is != null && getRPItemStackValue(is, "AddFactionPoints") != null;
     }
     @NotNull
     public BigInteger getPoints(String identifier) {
@@ -137,7 +137,7 @@ public enum FactionPoints implements RPFeatureSpigot, RPItemStack {
     @EventHandler
     private void playerInteractEvent(PlayerInteractEvent event) {
         final ItemStack is = event.getItem();
-        if(is != null && isFactionPointItem(is)) {
+        if(isFactionPointItem(is)) {
             final Player player = event.getPlayer();
             event.setCancelled(true);
             player.updateInventory();

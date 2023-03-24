@@ -93,7 +93,10 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
     public void unload() {
         for(UUID u : leashedUponDeath.keySet()) {
         }
+    }
 
+    public boolean is_pet(@NotNull ItemStack itemstack) {
+        return getRPItemStackValue(itemstack, "InventoryPetInfo") != null;
     }
 
     public String getExpRegex(int currentXp, int maxXp) {
@@ -106,7 +109,7 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
         return builder.toString();
     }
     @Nullable
-    public HashMap<InventoryPet, String> isInventoryPet(ItemStack is) {
+    public HashMap<InventoryPet, String> isInventoryPet(@NotNull ItemStack is) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         final boolean isPet = info != null;
         final HashMap<InventoryPet, String> pet = new HashMap<>();
@@ -117,21 +120,17 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
     }
     public List<HashMap<ItemStack, HashMap<InventoryPet, String>>> getPets(@NotNull Player player) {
         final List<HashMap<ItemStack, HashMap<InventoryPet, String>>> pets = new ArrayList<>();
-        final List<ItemStack> skull = new ArrayList<>();
         for(ItemStack is : player.getInventory()) {
             if(is != null) {
                 final String material = is.getType().name();
                 if(material.contains("SKULL") || material.contains("HEAD")) {
-                    skull.add(is);
+                    final HashMap<InventoryPet, String> pet = isInventoryPet(is);
+                    if(pet != null) {
+                        final HashMap<ItemStack, HashMap<InventoryPet, String>> map = new HashMap<>();
+                        map.put(is, pet);
+                        pets.add(map);
+                    }
                 }
-            }
-        }
-        for(ItemStack is : skull) {
-            final HashMap<InventoryPet, String> pet = isInventoryPet(is);
-            if(pet != null) {
-                final HashMap<ItemStack, HashMap<InventoryPet, String>> map = new HashMap<>();
-                map.put(is, pet);
-                pets.add(map);
             }
         }
         return pets;
@@ -152,7 +151,7 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
         return is.hasItemMeta() && is.getItemMeta().hasLore() && is.getItemMeta().getLore().contains(leashedLore);
     }
     public boolean tryLeashing(@NotNull ItemStack is) {
-        if(!isLeashed(is) && getRPItemStackValue(is, "InventoryPetInfo") != null) {
+        if(!isLeashed(is) && is_pet(is)) {
             final ItemMeta itemMeta = is.getItemMeta();
             final List<String> lore = new ArrayList<>(itemMeta.getLore());
             lore.add(leashedLore);
@@ -271,12 +270,10 @@ public enum InventoryPets implements RPFeatureSpigot, EventExecutor, EventAttrib
         final ItemStack is = event.getItem();
         if(is != null) {
             final Player player = event.getPlayer();
-            if(didTriggerPet(event, is, player) >= 0 || is.isSimilar(leash) || is.isSimilar(rarecandy)) {
-            } else {
-                return;
+            if(is_pet(is) || didTriggerPet(event, is, player) >= 0 || is.isSimilar(leash) || is.isSimilar(rarecandy)) {
+                event.setCancelled(true);
+                player.updateInventory();
             }
-            event.setCancelled(true);
-            player.updateInventory();
         }
     }
 

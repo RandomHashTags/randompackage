@@ -5,6 +5,8 @@ import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,8 @@ public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
         return target != null ? target : AIR;
     }
 
-    default String getValues(ItemStack is) {
+    @Nullable
+    default String getValues(@NotNull ItemStack is) {
         return getRPItemStackValue(is, "FatBucketInfo");
     }
     default ItemStack getItem(int usesLeft) {
@@ -47,7 +50,7 @@ public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
         }
         return is;
     }
-    default void setItem(ItemStack is, int usesLeft, int sourcesRequired) {
+    default void setItem(@NotNull ItemStack is, int usesLeft, int sourcesRequired) {
         final ItemStack i = getItem(usesLeft, sourcesRequired, false);
         final Material first = i.getType(), second = is.getType();
         if(first != second) {
@@ -55,11 +58,11 @@ public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
         }
         final ItemMeta meta = i.getItemMeta();
         is.setItemMeta(meta);
-        addRPItemStackValues(is, new HashMap<String, String>() {{
+        addRPItemStackValues(is, new HashMap<>() {{
             put("FatBucketInfo", getIdentifier() + ":" + usesLeft + ":" + sourcesRequired);
         }});
     }
-    default void didPlace(ItemStack is) {
+    default void didPlace(@NotNull ItemStack is) {
         final String[] info = getValues(is).split(":");
         final int usesLeft = Integer.parseInt(info[1]);
         setItem(is, usesLeft-1, 0);

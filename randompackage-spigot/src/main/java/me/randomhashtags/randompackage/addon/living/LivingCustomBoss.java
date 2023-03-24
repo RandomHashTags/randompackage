@@ -88,7 +88,7 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return null;
     }
     @Override

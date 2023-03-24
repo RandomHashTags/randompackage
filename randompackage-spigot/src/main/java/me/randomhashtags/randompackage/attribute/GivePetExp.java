@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public final class GivePetExp extends AbstractEventAttribute implements RPItemSt
             }
         }
     }
-    private void givePetExp(Player player, ItemStack is, int amount, boolean addCooldown) {
+    private void givePetExp(Player player, @NotNull ItemStack is, int amount, boolean addCooldown) {
         final String info = getRPItemStackValue(is, "InventoryPetInfo");
         if(info != null) {
             final String[] values = info.split(":");
@@ -36,7 +37,7 @@ public final class GivePetExp extends AbstractEventAttribute implements RPItemSt
             final long expiration = Long.parseLong(values[3]);
             final InventoryPet targetPet = getInventoryPet(identifier);
             if(targetPet != null) {
-                targetPet.setItem(is, identifier, level, exp+amount, addCooldown ? System.currentTimeMillis()+targetPet.getCooldown(level) : expiration);
+                targetPet.set_inventory_pet_values(is, identifier, level, exp+amount, addCooldown ? System.currentTimeMillis()+targetPet.getCooldown(level) : expiration);
                 player.updateInventory();
             }
         }

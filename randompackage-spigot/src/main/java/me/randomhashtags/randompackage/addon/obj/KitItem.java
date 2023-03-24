@@ -17,7 +17,7 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     private final List<String> lore;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return path;
     }
     @Override

@@ -192,7 +192,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		item.setItemMeta(itemMeta);
 		return item;
 	}
-	public boolean isHeroic(@Nullable ItemStack is) {
+	public boolean isHeroic(@NotNull ItemStack is) {
 		return getRPItemStackValue(is, "isHeroic") != null;
 	}
 	public void setHeroic(@NotNull Player player, @NotNull ItemStack is, int durability, int maxDurability) {

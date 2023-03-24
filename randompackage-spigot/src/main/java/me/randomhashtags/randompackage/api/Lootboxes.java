@@ -181,20 +181,22 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     public void tryClaiming(@NotNull Player player, @NotNull Lootbox lootbox) {
         final String identifier = lootbox.getIdentifier();
         final HashMap<String, Integer> lootboxes = FileRPPlayer.get(player.getUniqueId()).getUnclaimedLootboxes();
-        final int amount = lootboxes.getOrDefault(identifier, 0);
-        if(amount > 0) {
-            if(isAvailable(lootbox)) {
-                if(amount == 1) {
-                    lootboxes.remove(identifier);
-                } else {
-                    lootboxes.put(identifier, amount-1);
+        if(lootboxes != null) {
+            final int amount = lootboxes.getOrDefault(identifier, 0);
+            if (amount > 0) {
+                if (isAvailable(lootbox)) {
+                    if (amount == 1) {
+                        lootboxes.remove(identifier);
+                    } else {
+                        lootboxes.put(identifier, amount - 1);
+                    }
+                    giveItem(player, lootbox.getItem());
                 }
-                giveItem(player, lootbox.getItem());
+            } else {
+                sendStringListMessage(player, getStringList(config, "messages.unlock"), null);
             }
-        } else {
-            sendStringListMessage(player, getStringList(config, "messages.unlock"), null);
+            player.closeInventory();
         }
-        player.closeInventory();
     }
     public void openLootbox(@NotNull Player player, @NotNull Lootbox lootbox) {
         player.closeInventory();

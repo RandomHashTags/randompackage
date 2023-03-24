@@ -40,7 +40,6 @@ public enum Trinkets implements EventAttributes, RPItemStack {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("trinkets", "_settings.yml");
         if(!OTHER_YML.getBoolean("saved default trinkets")) {
             generateDefaultTrinkets();
@@ -65,11 +64,11 @@ public enum Trinkets implements EventAttributes, RPItemStack {
     public void unload() {
     }
 
-    public boolean isTrinket(ItemStack is) {
+    public boolean isTrinket(@NotNull ItemStack is) {
         return getRPItemStackValue(is, "TrinketInfo") != null;
     }
     @NotNull
-    public HashMap<Trinket, String> getTrinketsApplied(ItemStack is) {
+    public HashMap<Trinket, String> get_applied_trinkets(@NotNull ItemStack is) {
         final HashMap<Trinket, String> info = new HashMap<>();
         final String value = getRPItemStackValue(is, "TrinketInfo");
         if(value != null) {
@@ -81,7 +80,7 @@ public enum Trinkets implements EventAttributes, RPItemStack {
     private void triggerPassive(Event event, Player player) {
         for(ItemStack is : player.getInventory().getContents()) {
             if(is != null) {
-                final HashMap<Trinket, String> trinkets = getTrinketsApplied(is);
+                final HashMap<Trinket, String> trinkets = get_applied_trinkets(is);
                 for(Trinket trinket : trinkets.keySet()) {
                     final String s = trinket.getSetting("passive");
                     if(s != null && s.equalsIgnoreCase("true") && trigger(event, trinket.getAttributes())) {
@@ -91,24 +90,26 @@ public enum Trinkets implements EventAttributes, RPItemStack {
             }
         }
     }
-    private byte didTriggerTrinket(Event event, ItemStack is, Player player) {
-        final String info = getRPItemStackValue(is, "TrinketInfo");
-        if(info != null) {
-            final String[] values = info.split(":");
-            final String identifier = values[0];
-            final Trinket trinket = getTrinket(identifier);
-            final long expiration = Long.parseLong(values[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
+    private byte didTriggerTrinket(Event event, @Nullable ItemStack is, Player player) {
+        if(is != null) {
+            final String info = getRPItemStackValue(is, "TrinketInfo");
+            if(info != null) {
+                final String[] values = info.split(":");
+                final String identifier = values[0];
+                final Trinket trinket = getTrinket(identifier);
+                final long expiration = Long.parseLong(values[1]), time = System.currentTimeMillis(), remainingtime = expiration-time;
 
-            if(remainingtime <= 0) {
-                if(trigger(event, trinket.getAttributes())) {
-                    trinket.didUse(is, identifier);
-                    return 1;
+                if(remainingtime <= 0) {
+                    if(trigger(event, trinket.getAttributes())) {
+                        trinket.didUse(is, identifier);
+                        return 1;
+                    }
+                } else {
+                    final HashMap<String, String> replacements = new HashMap<>();
+                    replacements.put("{TIME}", getRemainingTime(remainingtime));
+                    sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
+                    return 0;
                 }
-            } else {
-                final HashMap<String, String> replacements = new HashMap<>();
-                replacements.put("{TIME}", getRemainingTime(remainingtime));
-                sendStringListMessage(player, getStringList(config, "messages.on cooldown"), replacements);
-                return 0;
             }
         }
         return -1;

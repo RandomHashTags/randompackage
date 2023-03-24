@@ -20,6 +20,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -298,7 +299,6 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return yml;
     }
 
-    @NotNull
     @Override
     public HashMap<String, Integer> getUnclaimedLootboxes() {
         if(unclaimedLootboxes == null && Lootboxes.INSTANCE.isEnabled()) {
@@ -310,7 +310,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return unclaimedLootboxes;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public List<ItemStack> getUnclaimedPurchases() {
         if(unclaimedPurchases == null && yml.get("unclaimed purchases") != null) {
@@ -339,7 +339,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return unclaimedPurchases;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public SecondaryData getSecondaryData() {
         if(secondaryData == null && SecondaryEvents.INSTANCE.isEnabled()) {
@@ -349,7 +349,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return secondaryData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public CoinFlipData getCoinFlipData() {
         if(coinFlipData == null && CoinFlip.INSTANCE.isEnabled()) {
@@ -367,7 +367,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return coinFlipData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public CustomEnchantData getCustomEnchantData() {
         if(customEnchantData == null && CustomEnchants.getCustomEnchants().isEnabled()) {
@@ -392,7 +392,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return customEnchantData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public DisguiseData getDisguiseData() {
         if(disguiseData == null && Disguises.INSTANCE.isEnabled()) {
@@ -407,7 +407,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return disguiseData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public DuelData getDuelData() {
         if(duelData == null && Duels.INSTANCE.isEnabled()) {
@@ -439,7 +439,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return duelData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public GlobalChallengeData getGlobalChallengeData() {
         if(globalChallengeData == null && GlobalChallenges.INSTANCE.isEnabled()) {
@@ -463,7 +463,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return globalChallengeData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public HomeData getHomeData() {
         if(homeData == null && Homes.INSTANCE.isEnabled()) {
@@ -491,7 +491,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return homeData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public ItemFilterData getItemFilterData() {
         if(itemFilterData == null && ItemFilter.INSTANCE.isEnabled()) {
@@ -518,7 +518,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return itemFilterData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public JackpotData getJackpotData() {
         if(jackpotData == null && Jackpot.INSTANCE.isEnabled()) {
@@ -542,7 +542,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return jackpotData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public KitData getKitData() {
         if(kitData == null) {
@@ -568,7 +568,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return kitData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public MonthlyCrateData getMonthlyCrateData() {
         if(monthlyCrateData == null && MonthlyCrates.INSTANCE.isEnabled()) {
@@ -588,7 +588,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return monthlyCrateData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public PlayerQuestData getPlayerQuestData() {
         if(playerQuestData == null && PlayerQuests.INSTANCE.isEnabled()) {
@@ -611,7 +611,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return playerQuestData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public RarityGemData getRarityGemData() {
         if(rarityGemData == null && RarityGems.INSTANCE.isEnabled()) {
@@ -629,13 +629,13 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return rarityGemData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public ReputationData getReputationData() {
         return reputationData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public ShowcaseData getShowcaseData() {
         if(showcaseData == null && Showcase.INSTANCE.isEnabled()) {
@@ -675,7 +675,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return showcaseData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public SlotBotData getSlotBotData() {
         if(slotBotData == null && SlotBot.INSTANCE.isEnabled()) {
@@ -686,7 +686,7 @@ public final class FileRPPlayer implements RPPlayer, UVersionableSpigot, RPStora
         return slotBotData;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public TitleData getTitleData() {
         if(titleData == null && Titles.INSTANCE.isEnabled()) {

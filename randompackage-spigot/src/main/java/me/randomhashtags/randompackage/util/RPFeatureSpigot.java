@@ -155,8 +155,8 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         player.getOpenInventory().getTopInventory().setContents(GIVEDP_INVENTORY.getInventory().getContents());
         player.updateInventory();
     }
-    default void addGivedpCategory(List<ItemStack> items, UMaterial m, String what, String invtitle) {
-        final ItemStack item = m.getItemStack();
+    default void addGivedpCategory(List<ItemStack> items, @NotNull UMaterial material, @NotNull String what, String invtitle) {
+        final ItemStack item = material.getItemStack();
         if(item == null) {
             sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
         } else {

@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import me.randomhashtags.randompackage.supported.Regional;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public enum ASky implements RPFeatureSpigot, Regional {
     private ASkyBlockAPI api;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "REGIONAL_ASKYBLOCK";
     }
     @Override

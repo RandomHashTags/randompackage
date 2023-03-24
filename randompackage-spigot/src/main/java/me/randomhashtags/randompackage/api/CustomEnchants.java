@@ -452,13 +452,9 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         }
         return item;
     }
-    public int getEnchantmentLevel(String string) {
-        if(string != null) {
-            string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
-            return fromRoman(string);
-        } else {
-            return 0;
-        }
+    public int getEnchantmentLevel(@NotNull String string) {
+        string = ChatColor.stripColor(string.split(" ")[string.split(" ").length - 1].toLowerCase().replace("i", "1").replace("v", "2").replace("x", "3").replaceAll("\\p{L}", "").replace("1", "i").replace("2", "v").replace("3", "x").replaceAll("\\p{N}", "").replaceAll("\\p{P}", "").replaceAll("\\p{S}", "").replaceAll("\\p{M}", "").replaceAll("\\p{Z}", "").toUpperCase());
+        return fromRoman(string);
     }
     public boolean isOnCorrectItem(@NotNull CustomEnchantSpigot enchant, @NotNull ItemStack is) {
         final String i = is.getType().name();
@@ -487,9 +483,9 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         final LinkedHashMap<CustomEnchantSpigot, Integer> enchants = new LinkedHashMap<>();
         if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             for(String s : is.getItemMeta().getLore()) {
-                final CustomEnchantSpigot e = valueOfCustomEnchant(s);
-                if(e != null) {
-                    enchants.put(e, getEnchantmentLevel(s));
+                final CustomEnchantSpigot custom_enchant = valueOfCustomEnchant(s);
+                if(custom_enchant != null) {
+                    enchants.put(custom_enchant, getEnchantmentLevel(s));
                 }
             }
         }
@@ -531,7 +527,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         if(!event.isCancelled()) {
             triggerEnchants(event, getEnchants(player));
         }
-        EnchantRarity rarity = valueOfCustomEnchantRarity(item);
+        final EnchantRarity rarity = valueOfCustomEnchantRarity(item);
         if(rarity != null) {
             final ItemStack enabledEnchant = getRandomEnabledEnchant(rarity);
             final String displayname = enabledEnchant.getItemMeta().getDisplayName();
@@ -611,64 +607,63 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
         if(event.getRawSlot() >= 0 && cursor != null && current != null && cursor.hasItemMeta() && cursor.getItemMeta().hasDisplayName() && cursor.getItemMeta().hasLore()) {
             final ItemMeta cursorMeta = cursor.getItemMeta();
             final String cursorName = cursorMeta.getDisplayName();
-
             final CustomEnchantSpigot enchant = valueOfCustomEnchant(cursorName);
-            final int level = getEnchantmentLevel(cursorName);
-            int enchantsize = 0;
-            final PlayerPreApplyCustomEnchantEvent ev = new PlayerPreApplyCustomEnchantEvent(player, enchant, getEnchantmentLevel(cursorName), current);
-            PLUGIN_MANAGER.callEvent(ev);
-            if(!ev.isCancelled() && isOnCorrectItem(enchant, current)) {
-                boolean apply = false;
-                ItemStack item = current.clone();
-                final ItemMeta itemMeta = item.getItemMeta();
-                List<String> lore = new ArrayList<>();
-                if(item.hasItemMeta() && itemMeta.hasLore()) {
-                    if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
-                        ev.setCancelled(true);
-                        return;
+            if(enchant != null) {
+                final int level = getEnchantmentLevel(cursorName);
+                int enchantsize = 0;
+                final PlayerPreApplyCustomEnchantEvent pre_apply_event = new PlayerPreApplyCustomEnchantEvent(player, enchant, level, current);
+                PLUGIN_MANAGER.callEvent(pre_apply_event);
+                if(!pre_apply_event.isCancelled() && isOnCorrectItem(enchant, current)) {
+                    boolean apply = false;
+                    ItemStack item = current.clone();
+                    final ItemMeta itemMeta = item.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    if(item.hasItemMeta() && itemMeta.hasLore()) {
+                        if(itemMeta.getLore().containsAll(getStringList(config, "settings.no more enchants"))) {
+                            pre_apply_event.setCancelled(true);
+                            return;
+                        }
+                        lore.addAll(itemMeta.getLore());
                     }
-                    lore.addAll(itemMeta.getLore());
-                }
-                String result = null;
-                if(enchant != null) {
-                    final EnchantRarity rar = valueOfCustomEnchantRarity(enchant);
-                    final List<String> cml = cursorMeta.getLore();
-                    final int success = getRemainingInt(cml.get(rar.getSuccessSlot())), destroy = getRemainingInt(cml.get(rar.getDestroySlot()));
+                    String result = null;
+                    final EnchantRarity enchant_rarity = valueOfCustomEnchantRarity(enchant);
+                    final List<String> cursor_lore = cursorMeta.getLore();
+                    final int success = getRemainingInt(cursor_lore.get(enchant_rarity.getSuccessSlot())), destroy = getRemainingInt(cursor_lore.get(enchant_rarity.getDestroySlot()));
                     final int levelcap = getLevelCap(player);
                     int prevlevel = -1, prevslot = -1, enchantOrbIncrement = 0;
                     for(int z = 0; z < lore.size(); z++) {
                         final String target = lore.get(z);
-                        final CustomEnchantSpigot e = valueOfCustomEnchant(target);
-                        if(e != null) {
+                        final CustomEnchantSpigot target_enchant = valueOfCustomEnchant(target);
+                        if(target_enchant != null) {
                             enchantsize += 1;
-                            if(e.equals(enchant)) {
+                            if(target_enchant.equals(enchant)) {
                                 prevslot = z;
                                 prevlevel = getEnchantmentLevel(target);
-                                if(prevlevel == e.getMaxLevel()) {
+                                if(prevlevel == target_enchant.getMaxLevel()) {
                                     return;
                                 }
                             }
                         } else {
-                            final EnchantmentOrb eo = valueOfEnchantmentOrb(target);
-                            if(eo != null) {
-                                enchantOrbIncrement = eo.getIncrement();
+                            final EnchantmentOrb enchantment_orb = valueOfEnchantmentOrb(target);
+                            if(enchantment_orb != null) {
+                                enchantOrbIncrement = enchantment_orb.getIncrement();
                             }
                         }
                     }
-                    if(levelcap+enchantOrbIncrement <= enchantsize) {
-                        ev.setCancelled(true);
+                    if(levelcap + enchantOrbIncrement <= enchantsize) {
+                        pre_apply_event.setCancelled(true);
                         return;
                     } else {
-                        final String requires = enchant.getRequiredEnchant();
-                        final CustomEnchantSpigot replaces = requires != null ? valueOfCustomEnchant(requires.split(";")[0]) : null;
-                        final int requiredLvl = replaces != null ? Integer.parseInt(requires.split(";")[1]) : -1;
+                        final String required_enchant = enchant.getRequiredEnchant();
+                        final CustomEnchantSpigot replaces = required_enchant != null ? valueOfCustomEnchant(required_enchant.split(";")[0]) : null;
+                        final int requiredLvl = replaces != null ? Integer.parseInt(required_enchant.split(";")[1]) : -1;
                         final HashMap<CustomEnchantSpigot, Integer> enchants = replaces != null ? getEnchantsOnItem(current) : null;
                         if(enchants != null && (!enchants.containsKey(replaces) || enchants.get(replaces) < requiredLvl)) {
                             return;
                         }
                         //
                         if(RANDOM.nextInt(100) <= success) {
-                            final String a = rar.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
+                            final String a = enchant_rarity.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
                             if(lore.isEmpty()) {
                                 lore.add(e);
                             } else if(prevlevel == -1 && prevslot == -1) {
@@ -689,7 +684,7 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
                                     newlore.add(e);
                                 }
                                 for(String s : lore) {
-                                    if(!newlore.contains(s) && (replacedEnchant == null || !s.equals(replacedEnchant))) {
+                                    if(!newlore.contains(s) && !s.equals(replacedEnchant)) {
                                         newlore.add(s);
                                     }
                                 }
@@ -712,8 +707,6 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
                         final CustomEnchantApplyEvent ce = new CustomEnchantApplyEvent(player, enchant, level, success, destroy, result);
                         PLUGIN_MANAGER.callEvent(ce);
                     }
-                }
-                if(apply) {
                     if(!item.getType().equals(Material.AIR)) {
                         if(itemMeta.hasDisplayName()) {
                             final Scrolls scrolls = Scrolls.INSTANCE;
@@ -736,9 +729,9 @@ public class CustomEnchants implements EventAttributes, CommandExecutor, Listene
                         cursor.setAmount(amount-1);
                     }
                     player.updateInventory();
+                } else {
+                    pre_apply_event.setCancelled(true);
                 }
-            } else {
-                ev.setCancelled(true);
             }
         }
     }

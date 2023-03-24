@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.api.dev.InventoryPets;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         final HashMap<Integer, Integer> cooldowns = getCooldowns();
         return cooldowns.getOrDefault(-1, cooldowns.getOrDefault(level, 3600));
     }
-    default long getCooldown(ItemStack is) {
+    default long getCooldown(@NotNull ItemStack is) {
         final String v = getRPItemStackValue(is, "InventoryPetInfo");
         return v != null ? Long.parseLong(v.split(":")[3]) : -1;
     }
@@ -55,38 +56,36 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         final int required = getRequiredXp(level+1);
         final String lvl = Integer.toString(level), xp = Integer.toString(exp), requiredString = formatInt(required), cooldown = getRemainingTime(getCooldown(level));
         final ItemStack is = getItem();
-        if(is != null) {
-            final ItemMeta meta = is.getItemMeta();
-            meta.setDisplayName(meta.getDisplayName().replace("{LEVEL}", lvl));
-            final List<String> lore = new ArrayList<>();
-            final String expRegex = InventoryPets.INSTANCE.getExpRegex(exp, required);
-            if(meta.hasLore()) {
-                final String value = getValue(level), romanLevel = toRoman(level);
-                final String[] values = value.split(";");
-                for(String s : meta.getLore()) {
-                    int target = 1;
-                    for(String realValue : values) {
-                        s = s.replace("{VALUE_" + target + "}", realValue);
-                        target++;
-                    }
-                    lore.add(s.replace("{EXP}", expRegex).replace("{LEVEL}", lvl).replace("{ROMAN_LEVEL}", romanLevel).replace("{XP}", xp).replace("{COMPLETION}", requiredString).replace("{COOLDOWN}", cooldown).replace("{VALUE}", value));
+        final ItemMeta meta = is.getItemMeta();
+        meta.setDisplayName(meta.getDisplayName().replace("{LEVEL}", lvl));
+        final List<String> lore = new ArrayList<>();
+        final String expRegex = InventoryPets.INSTANCE.getExpRegex(exp, required);
+        if(meta.hasLore()) {
+            final String value = getValue(level), romanLevel = toRoman(level);
+            final String[] values = value.split(";");
+            for(String s : meta.getLore()) {
+                int target = 1;
+                for(String realValue : values) {
+                    s = s.replace("{VALUE_" + target + "}", realValue);
+                    target++;
                 }
+                lore.add(s.replace("{EXP}", expRegex).replace("{LEVEL}", lvl).replace("{ROMAN_LEVEL}", romanLevel).replace("{XP}", xp).replace("{COMPLETION}", requiredString).replace("{COOLDOWN}", cooldown).replace("{VALUE}", value));
             }
-            meta.setLore(lore);
-            is.setItemMeta(meta);
-            setItem(is, getIdentifier(), level, exp, cooldownExpiration);
         }
+        meta.setLore(lore);
+        is.setItemMeta(meta);
+        set_inventory_pet_values(is, getIdentifier(), level, exp, cooldownExpiration);
         return is;
     }
 
-    default void setItem(ItemStack is, String identifier, int level, int exp, long cooldownExpiration) {
-        addRPItemStackValues(is, new HashMap<String, String>() {{
+    default void set_inventory_pet_values(@NotNull ItemStack is, @NotNull String identifier, int level, int exp, long cooldownExpiration) {
+        addRPItemStackValues(is, new HashMap<>() {{
             put("InventoryPetInfo", identifier + ":" + level + ":" + exp + ":" + cooldownExpiration);
         }});
     }
 
     default void didUse(ItemStack is, String identifier, int level, int exp) {
-        setItem(is, identifier, level, exp, System.currentTimeMillis()+getCooldown(level));
+        set_inventory_pet_values(is, identifier, level, exp, System.currentTimeMillis() + getCooldown(level));
     }
 
     ItemStack getEgg();

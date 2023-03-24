@@ -33,12 +33,13 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         required_enchant = parse_string_in_json(json, "requires", null);
         alchemist = parse_big_decimal_in_json(json, "alchemist upgrade costs", null);
         final String tinkerer_value = parse_string_in_json(json, "tinkerer", null);
-        if(tinkerer_value != null) {
+        if(tinkerer_value != null && !tinkerer_value.isEmpty()) {
             final String[] tinkerer_values = tinkerer_value.split(":");
             final BigDecimal[] tinkerer = new BigDecimal[tinkerer_values.length];
             int i = 0;
             for (String s : tinkerer_values) {
-                tinkerer[i] = BigDecimal.valueOf(Integer.parseInt(s));
+                final int integer = Integer.parseInt(s);
+                tinkerer[i] = BigDecimal.valueOf(integer);
                 i++;
             }
             this.tinkerer = List.of(tinkerer);
