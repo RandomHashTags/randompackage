@@ -172,7 +172,9 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 		pdata.getShowcaseData().removeFromShowcase(page, is);
 	}
 	public void open(@NotNull Player opener, @Nullable OfflinePlayer target, int page) {
-		if(target == null || target == opener) target = opener;
+		if(target == null || target == opener) {
+			target = opener;
+		}
 		final boolean self = target == opener;
 		final FileRPPlayer pdata = FileRPPlayer.get(target.getUniqueId());
 		final ShowcaseData data = pdata.getShowcaseData();

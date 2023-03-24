@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +71,7 @@ public final class ReflectedCraftItemStack {
     public final Method as_nms_copy_function;
     public final Method as_craft_mirror_function;
     public final Class<?> tag_compound_class;
+    public final Constructor<?> tag_compound_constructor;
     public final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
     public final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
 
@@ -93,6 +95,7 @@ public final class ReflectedCraftItemStack {
             tag_compound_class = Class.forName("net.minecraft.nbt.NBTTagCompound", false, class_loader);
         }
         this.tag_compound_class = tag_compound_class;
+        tag_compound_constructor = tag_compound_class.getConstructor();
         tag_compound_to_string_function = tag_compound_class.getMethod("toString");
 
         Method tag_compound_remove_function, tag_compound_set_string_function;

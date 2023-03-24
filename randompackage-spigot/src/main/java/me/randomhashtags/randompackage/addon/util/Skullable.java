@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import me.randomhashtags.randompackage.universal.UVersionableSpigot;
+import me.randomhashtags.randompackage.util.ReflectedCraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
@@ -27,24 +28,37 @@ public interface Skullable extends UVersionableSpigot {
         }
         final ItemStack head = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
         final SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        if(headMeta != null) {
-            headMeta.setDisplayName(name);
-            headMeta.setLore(lore);
-            head.setItemMeta(headMeta);
-        }
+        headMeta.setDisplayName(name);
+        headMeta.setLore(lore);
+        head.setItemMeta(headMeta);
 
         if(skinURL.isEmpty()) {
             return head;
         } else if(skinURL.startsWith("http")) {
             final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-            final byte[] encoded = base64Encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", skinURL));
+            final String skin_value = "{SKIN:{url:\"%s\"}}";
+            final byte[] encoded = base64Encode(String.format("{textures:" + skin_value + "}", skinURL));
             profile.getProperties().put("textures", new Property("textures", new String(encoded)));
-            Field profileField = null;
+            Field profile_variable = null;
             try {
-                profileField = headMeta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(headMeta, profile);
-                profileField.setAccessible(false);
+                // CraftMetaSkull
+                final Class<?> head_meta_class = headMeta.getClass();
+                profile_variable = head_meta_class.getDeclaredField("profile");
+                profile_variable.setAccessible(true);
+                profile_variable.set(headMeta, profile);
+                profile_variable.setAccessible(false);
+                final ReflectedCraftItemStack shared_instance = ReflectedCraftItemStack.shared_instance();
+                if(shared_instance != null) {
+                    try {
+                        final Field serialized_profile_variable = head_meta_class.getDeclaredField("serializedProfile");
+                        serialized_profile_variable.setAccessible(true);
+                        final Object tag_compound = shared_instance.tag_compound_constructor.newInstance();
+                        shared_instance.tag_compound_set_string_function.invoke(tag_compound, "textures", skin_value);
+                        serialized_profile_variable.set(headMeta, tag_compound);
+                        serialized_profile_variable.setAccessible(false);
+                    } catch (Exception ignored) {
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
