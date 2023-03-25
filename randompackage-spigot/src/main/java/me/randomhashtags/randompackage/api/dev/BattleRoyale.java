@@ -161,9 +161,11 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             hasStarted = true;
         }
     }
+    @NotNull
     public final String getRuntime() {
         return getRemainingTime(System.currentTimeMillis()-startTime);
     }
+    @NotNull
     public final String getNextGame() {
         return getRemainingTime(nextStartTime-System.currentTimeMillis());
     }
@@ -209,6 +211,7 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             teams.clear();
         }
     }
+    @NotNull
     public Collection<BattleRoyaleTeam> getTeams() {
         return teams.values();
     }
@@ -276,8 +279,7 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
             final Entity victim = event.getEntity();
             if(victim.getWorld().getName().equals(world) && victim instanceof Player) {
                 final Player player = (Player) victim;
-                final double hp = player.getHealth();
-                if(hp-event.getDamage() <= 0.00) {
+                if(player.getHealth() - event.getDamage() <= 0.00) {
                     player.updateInventory();
                 }
             }
@@ -291,8 +293,8 @@ public enum BattleRoyale implements RPFeatureSpigot, CommandExecutor {
                 final Entity victim = event.getEntity();
                 if(victim instanceof Player) {
                     final Player playerDamager = (Player) damager, playerVictim = (Player) victim;
-                    final BattleRoyaleTeam t = getTeam(playerDamager);
-                    if(t != null && t.getPlayers().containsKey(playerVictim)) {
+                    final BattleRoyaleTeam team = getTeam(playerDamager);
+                    if(team != null && team.getPlayers().containsKey(playerVictim)) {
                         event.setCancelled(true);
                         playerDamager.updateInventory();
                         playerVictim.updateInventory();

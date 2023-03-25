@@ -50,7 +50,6 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("item skins", "_settings.yml");
 
         if(!OTHER_YML.getBoolean("saved default item skins")) {

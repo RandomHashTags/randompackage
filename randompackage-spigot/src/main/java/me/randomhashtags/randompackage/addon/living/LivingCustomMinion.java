@@ -12,13 +12,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public final class LivingCustomMinion {
-    public static HashMap<UUID, LivingCustomMinion> living;
+    public static HashMap<UUID, LivingCustomMinion> LIVING;
     public LivingEntity entity, target;
     public CustomMinion type;
     public LivingCustomBoss parent;
     public LivingCustomMinion(LivingEntity entity, LivingEntity target, CustomMinion type, LivingCustomBoss parent) {
-        if(living == null) {
-            living = new HashMap<>();
+        if(LIVING == null) {
+            LIVING = new HashMap<>();
         }
         entity.setCustomName(ChatColor.translateAlternateColorCodes('&', type.name));
         entity.setCustomNameVisible(true);
@@ -29,29 +29,26 @@ public final class LivingCustomMinion {
         this.entity = entity;
         this.type = type;
         this.parent = parent;
-        living.put(entity.getUniqueId(), this);
+        LIVING.put(entity.getUniqueId(), this);
     }
-    public void kill(Event damagecause) {
-        final CustomMinionDeathEvent e = new CustomMinionDeathEvent(this, damagecause);
+    public void kill(Event damage_cause) {
+        final CustomMinionDeathEvent e = new CustomMinionDeathEvent(this, damage_cause);
         Bukkit.getPluginManager().callEvent(e);
         delete();
     }
     public void delete() {
-        living.remove(entity.getUniqueId());
+        LIVING.remove(entity.getUniqueId());
         parent.minions.remove(this);
         entity.setHealth(0.00);
         entity = null;
         type = null;
         parent = null;
         target = null;
-        if(living.isEmpty()) {
-            living = null;
+        if(LIVING.isEmpty()) {
+            LIVING = null;
         }
     }
-    public LivingEntity getTarget() {
-        return target;
-    }
     public static void deleteAll() {
-        living = null;
+        LIVING = null;
     }
 }

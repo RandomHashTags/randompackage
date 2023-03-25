@@ -326,10 +326,10 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
     @Nullable
-    default CustomBoss valueOfCustomBoss(ItemStack spawnitem) {
-        if(spawnitem != null && spawnitem.hasItemMeta()) {
+    default CustomBoss valueOfCustomBoss(@Nullable ItemStack spawn_item) {
+        if(spawn_item != null && spawn_item.hasItemMeta()) {
             for(CustomBoss b : getAllCustomBosses().values()) {
-                if(b.getSpawnItem().isSimilar(spawnitem)) {
+                if(b.getSpawnItem().isSimilar(spawn_item)) {
                     return b;
                 }
             }
@@ -337,12 +337,12 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
     @Nullable
-    default EnchantRarity valueOfCustomEnchantRarity(ItemStack is) {
+    default EnchantRarity valueOfCustomEnchantRarity(@Nullable ItemStack is) {
         if(is != null) {
-            for(EnchantRarity r : getAllCustomEnchantRarities().values()) {
-                final ItemStack re = r.getRevealItem();
-                if(re != null && re.isSimilar(is)) {
-                    return r;
+            for(EnchantRarity rarity : getAllCustomEnchantRarities().values()) {
+                final ItemStack reveal_item = rarity.getRevealItem();
+                if(reveal_item != null && reveal_item.isSimilar(is)) {
+                    return rarity;
                 }
             }
         }
@@ -350,38 +350,36 @@ public interface RPValues extends UVersionableSpigot {
     }
     @Nullable
     default EnchantRarity valueOfCustomEnchantRarity(@NotNull CustomEnchantSpigot enchant) {
-        for(EnchantRarity e : getAllCustomEnchantRarities().values()) {
-            if(e.getEnchants().contains(enchant)) {
-                return e;
+        for(EnchantRarity rarity : getAllCustomEnchantRarities().values()) {
+            if(rarity.getEnchants().contains(enchant)) {
+                return rarity;
             }
         }
         return null;
     }
     @Nullable
-    default CustomEnchantSpigot valueOfCustomEnchant(String string) {
+    default CustomEnchantSpigot valueOfCustomEnchant(@NotNull String string) {
         return valueOfCustomEnchant(string, false);
     }
     @Nullable
-    default CustomEnchantSpigot valueOfCustomEnchant(String string, boolean checkDisabledEnchants) {
-        if(string != null) {
-            final String s = ChatColor.stripColor(string);
-            for(CustomEnchantSpigot ce : getAllCustomEnchants(true).values()) {
-                if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
-                    return ce;
-                }
+    default CustomEnchantSpigot valueOfCustomEnchant(@NotNull String string, boolean checkDisabledEnchants) {
+        string = ChatColor.stripColor(string);
+        for(CustomEnchantSpigot ce : getAllCustomEnchants(true).values()) {
+            if(string.startsWith(ce.getIdentifier()) || string.startsWith(ChatColor.stripColor(ce.getName()))) {
+                return ce;
             }
-            if(checkDisabledEnchants) {
-                for(CustomEnchantSpigot ce : getAllCustomEnchants(false).values()) {
-                    if(s.startsWith(ce.getIdentifier()) || s.startsWith(ChatColor.stripColor(ce.getName()))) {
-                        return ce;
-                    }
+        }
+        if(checkDisabledEnchants) {
+            for(CustomEnchantSpigot ce : getAllCustomEnchants(false).values()) {
+                if(string.startsWith(ce.getIdentifier()) || string.startsWith(ChatColor.stripColor(ce.getName()))) {
+                    return ce;
                 }
             }
         }
         return null;
     }
     @Nullable
-    default CustomEnchantSpigot valueOfCustomEnchant(ItemStack is) {
+    default CustomEnchantSpigot valueOfCustomEnchant(@Nullable ItemStack is) {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().hasLore()) {
             final CustomEnchantSpigot e = valueOfCustomEnchant(is.getItemMeta().getDisplayName());
             if(e != null) {
@@ -392,7 +390,7 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
     @Nullable
-    default CustomExplosion valueOfCustomExplosion(ItemStack is) {
+    default CustomExplosion valueOfCustomExplosion(@NotNull ItemStack is) {
         for(CustomExplosion c : getAllCustomExplosions().values()) {
             if(c.getItem().isSimilar(is)) {
                 return c;
@@ -401,12 +399,10 @@ public interface RPValues extends UVersionableSpigot {
         return null;
     }
     @Nullable
-    default CustomKit valueOfCustomKit(int slot, Class<?> type) {
-        if(type != null) {
-            for(CustomKit k : getAllCustomKits().values()) {
-                if(k.getSlot() == slot && type.isAssignableFrom(k.getClass())) {
-                    return k;
-                }
+    default CustomKit valueOfCustomKit(int slot, @NotNull Class<?> type) {
+        for(CustomKit kit : getAllCustomKits().values()) {
+            if(kit.getSlot() == slot && type.isAssignableFrom(kit.getClass())) {
+                return kit;
             }
         }
         return null;
@@ -430,7 +426,7 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default CustomKitEvolution valueOfCustomKitUpgradeGem(ItemStack is) {
         if(is != null) {
-            final Class clazz = CustomKitEvolution.class;
+            final Class<?> clazz = CustomKitEvolution.class;
             for(CustomKit k : getAllCustomKits().values()) {
                 if(k.getClass().isAssignableFrom(clazz)) {
                     final CustomKitEvolution e = (CustomKitEvolution) k;

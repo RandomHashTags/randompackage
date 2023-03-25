@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -192,6 +193,7 @@ public final class ActiveTrade implements UVersionableSpigot {
         }
     }
 
+    @Nullable
     public static ActiveTrade valueOf(Player player) {
         if(ACTIVE_TRADES != null) {
             for(ActiveTrade trade : ACTIVE_TRADES) {

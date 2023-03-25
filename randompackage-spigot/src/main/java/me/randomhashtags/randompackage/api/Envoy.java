@@ -38,9 +38,9 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 
 	public ItemStack envoySummon, presetLocationPlacer;
 	private int spawnTask, task, totalEnvoys = 0;
-	private String defaultTier, type;
+	private String default_tier, type;
 	public List<Location> preset;
-	private List<Player> settingPreset;
+	private List<Player> setting_preset;
 	private long nextNaturalEnvoy;
 
 	@Override
@@ -66,7 +66,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				case "stop":
 				case "end":
 					if(hasPermission(sender, EnvoyPermission.STOP, true)) {
-						stopAllEnvoys();
+						stop_all_envoys();
 					}
 					break;
 				case "preset":
@@ -87,7 +87,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		save("envoy tiers", "_settings.yml");
 
 		preset = new ArrayList<>();
-		settingPreset = new ArrayList<>();
+		setting_preset = new ArrayList<>();
 
 		final List<String> presetLocations = OTHER_YML.getStringList("envoy.preset");
 		if(!presetLocations.isEmpty()) {
@@ -119,7 +119,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				tiers.add(new FileEnvoyCrate(f).getItem());
 			}
 		}
-		defaultTier = config.getString("settings.default tier");
+		default_tier = config.getString("settings.default tier");
 		addGivedpCategory(tiers, UMaterial.ENDER_CHEST, "Envoy Tiers", "Givedp: Envoy Tiers");
 		final String defaultSummonType = colorize(config.getString("messages.default summon type"));
 
@@ -147,8 +147,8 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		}
 		OTHER_YML.set("envoy.preset", preset);
 		saveOtherData();
-		if(!settingPreset.isEmpty()) {
-			for(Player player : settingPreset) {
+		if(!setting_preset.isEmpty()) {
+			for(Player player : setting_preset) {
 				player.getInventory().remove(presetLocationPlacer);
 			}
 			for(Location l : this.preset) {
@@ -157,26 +157,27 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		}
 		SCHEDULER.cancelTask(spawnTask);
 		SCHEDULER.cancelTask(task);
-		stopAllEnvoys();
+		stop_all_envoys();
 		GivedpItem.INSTANCE.items.remove("envoysummon");
 	}
 
 	public long getNextNaturalEnvoy() {
 		return nextNaturalEnvoy;
 	}
+	@NotNull
 	public String getUntilNextNaturalEnvoy() {
-		return getRemainingTime(nextNaturalEnvoy-System.currentTimeMillis());
+		return getRemainingTime(nextNaturalEnvoy - System.currentTimeMillis());
 	}
 
-	public void stopAllEnvoys() {
+	public void stop_all_envoys() {
 		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> living = LivingEnvoyCrate.LIVING;
 		if(living != null) {
 			for(int i : living.keySet()) {
-				stopEnvoy(i, false);
+				stop_envoy(i, false);
 			}
 		}
 	}
-	public void stopEnvoy(int envoyID, boolean dropItems) {
+	public void stop_envoy(int envoyID, boolean dropItems) {
 		final HashMap<Integer, HashMap<Location, LivingEnvoyCrate>> envoys = LivingEnvoyCrate.LIVING;
 		if(envoys != null) {
 			final HashMap<Location, LivingEnvoyCrate> chests = new HashMap<>(envoys.get(envoyID));
@@ -220,13 +221,13 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void blockPlaceEvent(BlockPlaceEvent event) {
 		final Player player = event.getPlayer();
-		if(settingPreset.contains(player) && player.getItemInHand().equals(presetLocationPlacer)) {
+		if(setting_preset.contains(player) && player.getItemInHand().equals(presetLocationPlacer)) {
 			preset.add(event.getBlockPlaced().getLocation());
 		}
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void blockBreakEvent(BlockBreakEvent event) {
-		if(settingPreset.contains(event.getPlayer())) {
+		if(setting_preset.contains(event.getPlayer())) {
 			preset.remove(event.getBlock().getLocation());
 		}
 	}
@@ -234,16 +235,16 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
     public void enterEditMode(@NotNull Player player) {
 		if(hasPermission(player, EnvoyPermission.TOGGLE_EDIT_PRESET, true)) {
 			final PlayerInventory inv = player.getInventory();
-			final boolean viewing = settingPreset.contains(player);
+			final boolean viewing = setting_preset.contains(player);
 			final Material mat = viewing ? Material.AIR : Material.BEDROCK;
 			if(!viewing) {
-				settingPreset.add(player);
+				setting_preset.add(player);
 				inv.addItem(presetLocationPlacer);
 			} else {
-				settingPreset.remove(player);
+				setting_preset.remove(player);
 				inv.remove(presetLocationPlacer);
 			}
-			if(settingPreset.isEmpty()) {
+			if(setting_preset.isEmpty()) {
 				for(Location l : preset) {
 					l.getWorld().getBlockAt(l).setType(mat);
 				}
@@ -259,15 +260,16 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				if(RegionalAPI.INSTANCE.hookedFactionsUUID()) {
 					final List<Chunk> chunks = FactionsUUID.INSTANCE.getRegionalChunks("WarZone");
 					if(!chunks.isEmpty()) {
+						final int chunks_size = chunks.size();
 						for(int i = 1; i <= amount; i++) {
-							final List<Location> cl = getChunkLocations(chunks.get(random.nextInt(chunks.size())));
-							final EnvoyCrate crate = getRandomCrate(true, defaultTier);
-							final Location loc = getRandomLocation(random, cl), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
+							final List<Location> chunk_locations = getChunkLocations(chunks.get(random.nextInt(chunks_size)));
+							final EnvoyCrate crate = getRandomCrate(true, default_tier);
+							final Location loc = getRandomLocation(random, chunk_locations), newl = new Location(loc.getWorld(), loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
 							loc.getChunk().load();
 							LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 							if(lec == null && crate.canLand(loc)) {
 								lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);
-								lec.shootFirework();
+								lec.shoot_firework();
 							} else {
 								i -= 1;
 							}
@@ -284,11 +286,11 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 					loc.getChunk().load();
 					final World world = loc.getWorld();
 					final Location newl = new Location(world, loc.getBlockX(), loc.getBlockY()-1, loc.getBlockZ());
-					final EnvoyCrate crate = getRandomCrate(true, defaultTier);
+					final EnvoyCrate crate = getRandomCrate(true, default_tier);
 					LivingEnvoyCrate lec = LivingEnvoyCrate.valueOf(newl);
 					if(lec == null && crate.canLand(loc)) {
 						lec = new LivingEnvoyCrate(totalEnvoys, crate, loc);
-						lec.shootFirework();
+						lec.shoot_firework();
 					} else {
 						i -= 1;
 					}
@@ -299,7 +301,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 				break;
 		}
 		final int t = totalEnvoys;
-		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stopEnvoy(t, false), 20L * despawn);
+		SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> stop_envoy(t, false), 20L * despawn);
 		totalEnvoys += 1;
 	}
 	public void spawnEnvoy(String summonType, boolean natural, String where) {
@@ -349,6 +351,7 @@ public enum Envoy implements RPFeatureSpigot, CommandExecutor {
 		}
 		return null;
 	}
+	@Nullable
 	public EnvoyCrate getRandomCrate(boolean useChances, String defaultTier) {
 		if(useChances) {
 			for(EnvoyCrate crate : getAllEnvoyCrates().values()) {

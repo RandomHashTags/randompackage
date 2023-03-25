@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
 
     public HashMap<String, ItemStack> items;
     private ItemStack air;
-    private List<Player> itemnametag, itemlorecrystal, explosivesnowball;
+    private List<Player> itemnametag, itemlorecrystal, explosive_snowball_throwers;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -102,7 +103,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
 
         itemnametag = new ArrayList<>();
         itemlorecrystal = new ArrayList<>();
-        explosivesnowball = new ArrayList<>();
+        explosive_snowball_throwers = new ArrayList<>();
 
         if(MCMMO != null) {
             MCMMOAPI.INSTANCE.enable();
@@ -112,6 +113,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
     public void unload() {
     }
 
+    @Nullable
     public final ItemStack valueOfRPItem(@NotNull String input) {
         final String targetString = input.split(";")[0];
         input = input.toLowerCase();
@@ -147,27 +149,24 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
             return air;
 
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
-            if(RPFeatureSpigot.mcmmoIsEnabled()) {
-                final MCMMOAPI mcmmo = MCMMOAPI.INSTANCE;
-                if(mcmmo.isEnabled()) {
-                    final boolean isLevelVoucher = input.startsWith("mcmmolevelvoucher"), isXPVoucher = input.startsWith("mcmmoxpvoucher");
-                    final ItemStack item = items.get("mcmmo" + (isLevelVoucher ? "level" : isXPVoucher ? "xp" : "credit") + "voucher").clone();
-                    final String[] values = input.split(":");
-                    final String skill = values[1];
-                    final String amountString = values.length == 2 ? "1" : values[2];
-                    final boolean isRandom = amountString.contains("-");
-                    final int min = Integer.parseInt(isRandom ? amountString.split("-")[0] : amountString), amount = isRandom ? min+ RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : min;
-                    final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
-                    final String skillName = name != null ? colorize(name) : "UNKNOWN";
-                    final ItemMeta itemMeta = item.getItemMeta();
-                    final List<String> lore = new ArrayList<>();
-                    for(String string : itemMeta.getLore()) {
-                        lore.add(string.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", skillName));
-                    }
-                    itemMeta.setLore(lore);
-                    item.setItemMeta(itemMeta);
-                    return item;
+            if(RPFeatureSpigot.mcmmoIsEnabled() && MCMMOAPI.INSTANCE.isEnabled()) {
+                final boolean isLevelVoucher = input.startsWith("mcmmolevelvoucher"), isXPVoucher = input.startsWith("mcmmoxpvoucher");
+                final ItemStack item = items.get("mcmmo" + (isLevelVoucher ? "level" : isXPVoucher ? "xp" : "credit") + "voucher").clone();
+                final String[] values = input.split(":");
+                final String skill = values[1];
+                final String amountString = values.length == 2 ? "1" : values[2];
+                final boolean isRandom = amountString.contains("-");
+                final int min = Integer.parseInt(isRandom ? amountString.split("-")[0] : amountString), amount = isRandom ? min+ RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : min;
+                final String name = itemsConfig.getString("mcmmo vouchers.skill names." + skill.toLowerCase());
+                final String skillName = name != null ? colorize(name) : "UNKNOWN";
+                final ItemMeta itemMeta = item.getItemMeta();
+                final List<String> lore = new ArrayList<>();
+                for(String string : itemMeta.getLore()) {
+                    lore.add(string.replace("{AMOUNT}", Integer.toString(amount)).replace("{SKILL}", skillName));
                 }
+                itemMeta.setLore(lore);
+                item.setItemMeta(itemMeta);
+                return item;
             }
             return air;
         } else if(input.startsWith("xpbottle:")) {
@@ -182,7 +181,8 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         return null;
     }
 
-    public ItemStack getBanknote(BigDecimal value, String signer) {
+    @NotNull
+    public ItemStack getBanknote(@NotNull BigDecimal value, @Nullable String signer) {
         final ItemStack item = items.get("banknote").clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();
@@ -198,7 +198,8 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         item.setItemMeta(itemMeta);
         return item;
     }
-    public ItemStack getXPBottle(BigDecimal value, String enchanter) {
+    @NotNull
+    public ItemStack getXPBottle(@NotNull BigDecimal value, @Nullable String enchanter) {
         final ItemStack item = items.get("xpbottle").clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();
@@ -256,7 +257,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
                     removeItem(player, is, 1);
                 }
             } else if(is.isSimilar(items.get("explosivesnowball"))) {
-                explosivesnowball.add(player);
+                explosive_snowball_throwers.add(player);
             } else if(is.isSimilar(items.get("explosivecake"))) {
                 event.setCancelled(true);
                 final Location l = event.getAction().name().endsWith("_CLICK_BLOCK") ? event.getClickedBlock().getLocation() : player.getLocation();
@@ -274,14 +275,14 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
 
     @EventHandler
     private void projectileHitEvent(ProjectileHitEvent event) {
-        final ProjectileSource s = event.getEntity().getShooter();
-        if(s instanceof Player && explosivesnowball.contains(s)) {
-            final Player player = (Player) s;
-            final Location l = player.getLocation();
-            explosivesnowball.remove(player);
-            final int x = l.getBlockX(), y = l.getBlockY(), z = l.getBlockZ();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + player.getName() + " " + x + " " + y + " " + z + " particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
-            playSound(itemsConfig, "explosive snowball.sounds.placed", null, player.getLocation(), false);
+        final ProjectileSource source = event.getEntity().getShooter();
+        if(source instanceof Player && explosive_snowball_throwers.contains(source)) {
+            final Player player = (Player) source;
+            final Location location = player.getLocation();
+            explosive_snowball_throwers.remove(player);
+            final int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
+            Bukkit.dispatchCommand(CONSOLE, "execute " + player.getName() + " " + x + " " + y + " " + z + " particle smoke " + x + " " + y + " " + z + " 1 1 1 1 100");
+            playSound(itemsConfig, "explosive snowball.sounds.placed", null, location, false);
         }
     }
     @EventHandler(priority = EventPriority.LOWEST)

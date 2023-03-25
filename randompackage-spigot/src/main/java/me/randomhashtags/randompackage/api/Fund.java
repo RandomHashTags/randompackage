@@ -21,6 +21,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public enum Fund implements RPFeatureSpigot, CommandExecutor {
@@ -28,7 +29,7 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 
 	public YamlConfiguration config;
 
-	private HashMap<String, String> unlockstring;
+	private HashMap<String, String> unlock_string;
 	private HashMap<String, BigDecimal> needed_unlocks;
 	private HashMap<UUID, BigDecimal> deposits;
 	
@@ -62,7 +63,7 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 		save(null, "fund.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "fund.yml"));
 
-		unlockstring = new HashMap<>();
+		unlock_string = new HashMap<>();
 		needed_unlocks = new HashMap<>();
 		deposits = new HashMap<>();
 		maxfund = BigDecimal.ZERO;
@@ -70,7 +71,7 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 		for(String s : config.getStringList("unlock")) {
 			final String[] values = s.split(";");
 			final BigDecimal v = BigDecimal.valueOf(Double.parseDouble(values[1]));
-			unlockstring.put(values[0], s);
+			unlock_string.put(values[0], s);
 			needed_unlocks.put(values[2], v);
 			if(v.doubleValue() > maxfund.doubleValue()) {
 				maxfund = v;
@@ -105,10 +106,10 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 					sendMessage(player, msg, null, msg.equals("less than min") ? min : amountValue, false);
 					return;
 				}
-				final FundDepositEvent depositEvent = new FundDepositEvent(player, amount);
-				PLUGIN_MANAGER.callEvent(depositEvent);
-				if(!depositEvent.isCancelled()) {
-					amount = depositEvent.amount;
+				final FundDepositEvent event = new FundDepositEvent(player, amount);
+				PLUGIN_MANAGER.callEvent(event);
+				if(!event.isCancelled()) {
+					amount = event.amount;
 					final UUID uuid = player.getUniqueId();
 					deposits.put(uuid, deposits.getOrDefault(uuid, BigDecimal.ZERO).add(amount));
 					ECONOMY.withdrawPlayer(player, amountValue);
@@ -122,24 +123,26 @@ public enum Fund implements RPFeatureSpigot, CommandExecutor {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		final Player player = event.getPlayer();
-		final String msg = event.getMessage(), cmd;
+		final String msg = event.getMessage(), target_command;
 		if(msg.contains(":")) {
 			final String[] values = msg.split(":");
-			cmd = values.length > 1 ? values[1].split(" ")[0].toLowerCase() : null;
-			if(cmd == null) return;
+			target_command = values.length > 1 ? values[1].split(" ")[0].toLowerCase() : null;
+			if(target_command == null) {
+				return;
+			}
 		} else {
-			cmd = msg.substring(1).split(" ")[0].toLowerCase();
+			target_command = msg.substring(1).split(" ")[0].toLowerCase();
 		}
-		final PluginCommand pCmd = Bukkit.getPluginCommand(cmd);
-		if(pCmd != null) {
-			final String pl = pCmd.getName(), m = msg.toLowerCase();
-			final List<String> aliases = pCmd.getAliases();
-			for(String string : unlockstring.keySet()) {
-				final String us = unlockstring.get(string);
+		final PluginCommand command = Bukkit.getPluginCommand(target_command);
+		if(command != null) {
+			final String pl = command.getName(), m = msg.toLowerCase();
+			final List<String> aliases = command.getAliases();
+			for(Map.Entry<String, String> entry : unlock_string.entrySet()) {
+				final String string = entry.getKey(), us = entry.getValue();
 				if(total.doubleValue() < Double.parseDouble(us.split(";")[1])) {
-					if(string.startsWith("/" + pl) && (aliases.contains(cmd) && !string.contains(" ") || pl.equals(cmd) && !string.contains(" "))
+					if(string.startsWith("/" + pl) && (aliases.contains(target_command) && !string.contains(" ") || pl.equals(target_command) && !string.contains(" "))
 							|| m.equals(string.toLowerCase())
-							|| m.equals(string.replace(pl, cmd).toLowerCase())) {
+							|| m.equals(string.replace(pl, target_command).toLowerCase())) {
 						if(hasPermission(player, FundPermission.BYPASS_LOCKED, false)) {
 							return;
 						}

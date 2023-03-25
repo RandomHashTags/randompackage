@@ -56,7 +56,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
     public HashMap<UMaterial, HashMap<String, List<AuctionedItem>>> category;
     public HashMap<Player, Integer> page;
     public HashMap<Player, String> viewing;
-    public HashMap<Player, UMaterial> viewingCategory;
+    public HashMap<Player, UMaterial> viewing_category;
 
     private HashMap<AuctionedItem, Integer> task;
 
@@ -117,7 +117,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         category = new HashMap<>();
         page = new HashMap<>();
         viewing = new HashMap<>();
-        viewingCategory = new HashMap<>();
+        viewing_category = new HashMap<>();
         task = new HashMap<>();
 
         final ItemStack air = new ItemStack(Material.AIR);
@@ -321,7 +321,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         for(Player player : page.keySet()) {
             player.closeInventory();
         }
-        for(Player player : viewingCategory.keySet()) {
+        for(Player player : viewing_category.keySet()) {
             player.closeInventory();
         }
         for(AuctionedItem i : task.keySet()) {
@@ -466,7 +466,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         }
     }
     public void updatePage(@NotNull Player player, @NotNull Inventory top, @NotNull UMaterial material, @Nullable String name) {
-        viewingCategory.put(player, material);
+        viewing_category.put(player, material);
         final UUID u = player.getUniqueId();
         int slot = (int) slots.toArray()[0];
         for(AuctionedItem auction : category.get(material).get(name)) {
@@ -698,9 +698,11 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
             purchasing.put(player, auction);
         }
     }
+    @NotNull
     public List<AuctionedItem> getCollectionBin(@NotNull Player player) {
         return auctions.getOrDefault(player.getUniqueId(), new ArrayList<>());
     }
+    @NotNull
     public ItemStack getPlayerCollectionBin(@NotNull Player player) {
         final String size = Integer.toString(getCollectionBin(player).size());
         final ItemStack item = collectionBin.clone();
@@ -713,6 +715,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
         item.setItemMeta(itemMeta);
         return item;
     }
+    @Nullable
     public AuctionedItem valueOf(Player player, int slot, String type) {
         final String originalType = type;
         type = type.toUpperCase();
@@ -725,7 +728,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
                 final Collection<AuctionedItem> ah = auctionHouse.values();
                 return ah.size() > realPage+slot ? (AuctionedItem) ah.toArray()[realPage+slot] : null;
             default:
-                final UMaterial material = viewingCategory.get(player);
+                final UMaterial material = viewing_category.get(player);
                 final String categoryPrefix = "CATEGORY_" + material.name() + "_";
                 final String[] values = originalType.split(categoryPrefix);
                 final List<AuctionedItem> i = category.get(material).get(values.length == 1 ? null : values[1]);
@@ -870,7 +873,7 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
         viewing.remove(player);
-        viewingCategory.remove(player);
+        viewing_category.remove(player);
         page.remove(player);
         if(auctioning != null && auctioning.containsKey(player)) {
             giveItem(player, (ItemStack) auctioning.get(player).keySet().toArray()[0]);

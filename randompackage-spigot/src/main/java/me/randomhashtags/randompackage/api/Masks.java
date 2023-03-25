@@ -105,33 +105,33 @@ public enum Masks implements RPFeatureSpigot {
         if(current == null || !current.getType().name().endsWith("HELMET")) {
             return;
         }
-        final ItemStack mask = event.getCursor();
-        final Mask m = valueOfMask(mask), onitem = getMaskOnItem(current);
+        final ItemStack cursor_item = event.getCursor();
+        final Mask mask = valueOfMask(cursor_item), mask_on_item = getMaskOnItem(current);
         final Player player = (Player) event.getWhoClicked();
         ItemStack item = null;
-        if(m != null && onitem == null) {
+        if(mask != null && mask_on_item == null) {
             event.setCancelled(true);
-            final MaskApplyEvent e = new MaskApplyEvent(player, m, current);
+            final MaskApplyEvent e = new MaskApplyEvent(player, mask, current);
             PLUGIN_MANAGER.callEvent(e);
-            apply(m, current);
-            item = m.getItem();
-            final int a = item.getAmount()-mask.getAmount();
-            if(a <= 0) {
+            apply(mask, current);
+            item = mask.getItem();
+            final int amount = item.getAmount() - cursor_item.getAmount();
+            if(amount <= 0) {
                 item = new ItemStack(Material.AIR);
             } else {
-                item.setAmount(a);
+                item.setAmount(amount);
             }
             event.setCursor(item);
-        } else if(click.equals("RIGHT") && onitem != null) {
+        } else if(click.equals("RIGHT") && mask_on_item != null) {
             item = current;
             final ItemMeta itemMeta = item.getItemMeta();
             final List<String> lore = itemMeta.getLore();
-            lore.remove(onitem.getApplied());
+            lore.remove(mask_on_item.getApplied());
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
             event.setCancelled(true);
             event.setCurrentItem(item);
-            event.setCursor(onitem.getItem());
+            event.setCursor(mask_on_item.getItem());
         } else {
             return;
         }
@@ -181,8 +181,8 @@ public enum Masks implements RPFeatureSpigot {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void blockPlaceEvent(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
-        final Mask m = valueOfMask(event.getItemInHand());
-        if(m != null) {
+        final Mask mask = valueOfMask(event.getItemInHand());
+        if(mask != null) {
             event.setCancelled(true);
             player.updateInventory();
         } else {
@@ -221,16 +221,16 @@ public enum Masks implements RPFeatureSpigot {
     private void armorEquipEvent(ArmorEquipEvent event) {
         final Player player = event.getPlayer();
         if(!equippedMasks.containsKey(player)) {
-            final ItemStack i = event.getItem();
-            final Mask m = getMaskOnItem(i);
-            if(m != null) {
-                final MaskEquipEvent e = new MaskEquipEvent(player, m, i, event.getReason());
-                PLUGIN_MANAGER.callEvent(e);
-                CustomEnchants.INSTANCE.trigger(e, m.getAttributes());
-                if(!e.isCancelled()) {
-                    equippedMasks.put(player, i.clone());
+            final ItemStack item = event.getItem();
+            final Mask mask = getMaskOnItem(item);
+            if(mask != null) {
+                final MaskEquipEvent equip_event = new MaskEquipEvent(player, mask, item, event.getReason());
+                PLUGIN_MANAGER.callEvent(equip_event);
+                CustomEnchants.INSTANCE.trigger(equip_event, mask.getAttributes());
+                if(!equip_event.isCancelled()) {
+                    equippedMasks.put(player, item.clone());
                     SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                        player.getInventory().setHelmet(m.getItem().clone());
+                        player.getInventory().setHelmet(mask.getItem().clone());
                         player.updateInventory();
                     }, 0);
                 }
@@ -259,20 +259,18 @@ public enum Masks implements RPFeatureSpigot {
         }
     }
 
-    public void apply(Mask m, ItemStack is) {
-        if(m != null && is != null) {
-            final ItemMeta itemMeta = is.getItemMeta();
-            final List<String> lore = new ArrayList<>();
-            if(itemMeta.hasLore()) {
-                lore.addAll(itemMeta.getLore());
-            }
-            lore.add(m.getApplied());
-            itemMeta.setLore(lore); lore.clear();
-            is.setItemMeta(itemMeta);
+    public void apply(@NotNull Mask m, @NotNull ItemStack is) {
+        final ItemMeta itemMeta = is.getItemMeta();
+        final List<String> lore = new ArrayList<>();
+        if(itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
         }
+        lore.add(m.getApplied());
+        itemMeta.setLore(lore); lore.clear();
+        is.setItemMeta(itemMeta);
     }
 
-    public void tryToProcMask(Player player, Event event) {
+    public void tryToProcMask(@NotNull Player player, Event event) {
         final ItemStack hel = player.getInventory().getHelmet();
         final Mask m = valueOfMask(hel);
         if(m != null) {

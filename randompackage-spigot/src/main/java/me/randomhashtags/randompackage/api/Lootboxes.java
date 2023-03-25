@@ -42,7 +42,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
     private int countdownStart = 0;
     private ItemStack background;
     private List<String> opened, rewardFormat;
-    private HashMap<Integer, Lootbox> guiLootboxes;
+    private HashMap<Integer, Lootbox> gui_lootboxes;
     private HashMap<Player, Lootbox> redeeming;
     private List<Player> viewing;
     private HashMap<Player, List<Integer>> tasks;
@@ -72,7 +72,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         opened = getStringList(config, "messages.opened");
         rewardFormat = getStringList(config, "messages.reward format");
 
-        guiLootboxes = new HashMap<>();
+        gui_lootboxes = new HashMap<>();
         redeeming = new HashMap<>();
         viewing = new ArrayList<>();
         tasks = new HashMap<>();
@@ -105,7 +105,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                 final int slot = config.getInt("gui." + s + ".slot");
                 final Lootbox l = valueOfLootbox(is);
                 if(l != null) {
-                    guiLootboxes.put(slot, l);
+                    gui_lootboxes.put(slot, l);
                 }
                 gi.setItem(slot, is);
             }
@@ -119,7 +119,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
 
         final ConfigurationSection section = OTHER_YML.getConfigurationSection("lootboxes.started");
         if(section == null) {
-            for(Lootbox l : guiLootboxes.values()) {
+            for(Lootbox l : gui_lootboxes.values()) {
                 this.started.put(l, started);
             }
         } else {
@@ -153,8 +153,8 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                 final ItemStack item = top.getItem(i);
             }
             final List<String> available = getStringList(config, "lores.available"), expired = getStringList(config, "lores.expired"), preview = getStringList(config, "lores.preview");
-            for(int i : guiLootboxes.keySet()) {
-                final Lootbox lootbox = guiLootboxes.get(i);
+            for(int i : gui_lootboxes.keySet()) {
+                final Lootbox lootbox = gui_lootboxes.get(i);
                 final long startTime = started.get(lootbox), expirationTime = startTime+lootbox.getAvailableFor()*1000;
                 final String n = lootbox.getName();
                 final ItemStack item = top.getItem(i);
@@ -317,7 +317,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
             final int rawSlot = event.getRawSlot();
             if(rawSlot < 0 || rawSlot >= top.getSize() || currentItem == null || currentItem.getType().equals(Material.AIR)) return;
             if(title.equals(gui.getTitle())) {
-                final Lootbox lootbox = guiLootboxes.getOrDefault(rawSlot, null);
+                final Lootbox lootbox = gui_lootboxes.getOrDefault(rawSlot, null);
                 final String click = event.getClick().name();
                 if(lootbox != null) {
                     if(click.contains("LEFT")) tryClaiming(player, lootbox);

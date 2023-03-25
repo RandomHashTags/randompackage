@@ -6,7 +6,6 @@ import me.randomhashtags.randompackage.addon.file.FileGlobalChallenge;
 import me.randomhashtags.randompackage.addon.living.ActiveGlobalChallenge;
 import me.randomhashtags.randompackage.addon.obj.GlobalChallengePrizeObject;
 import me.randomhashtags.randompackage.attribute.IncreaseGlobalChallenge;
-import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
@@ -34,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -45,9 +45,9 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	INSTANCE;
 	
 	public YamlConfiguration config;
-	private MCMMOChallenges mcmmoChallenges;
-	private UInventory inv, leaderboard, claimPrizes;
-	private int topPlayersSize = 54, max;
+	private MCMMOChallenges mcmmo_challenges;
+	private UInventory inv, leaderboard, claim_prizes;
+	private int top_players_size = 54, max;
 
 	private File dataF;
 	private YamlConfiguration data;
@@ -65,12 +65,12 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 			switch (a) {
 				case "stop":
 					if(l >= 2 && hasPermission(player, GlobalChallengePermission.COMMAND_STOP_CHALLENGE, true)) {
-						stopChallenge(getGlobalChallenge(args[1].replace("_", " ")), false);
+						stop_challenge(getGlobalChallenge(args[1].replace("_", " ")), false);
 					}
 					break;
 				case "claim":
 					if(player != null) {
-						viewPrizes(player);
+						view_prizes(player);
 					}
 					break;
 				case "reload":
@@ -121,9 +121,9 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 
 		max = config.getInt("challenge settings.max at once");
 		inv = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
-		topPlayersSize = config.getInt("challenge leaderboard.how many");
-		leaderboard = new UInventory(null, ((topPlayersSize+9)/9)*9, colorize(config.getString("challenge leaderboard.title")));
-		claimPrizes = new UInventory(null, 9, colorize(config.getString("rewards.title")));
+		top_players_size = config.getInt("challenge leaderboard.how many");
+		leaderboard = new UInventory(null, ((top_players_size +9)/9)*9, colorize(config.getString("challenge leaderboard.title")));
+		claim_prizes = new UInventory(null, 9, colorize(config.getString("rewards.title")));
 
 		final List<ItemStack> list = new ArrayList<>();
 		for(String s : getConfigurationSectionKeys(config, "rewards", false)) {
@@ -135,8 +135,8 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		addGivedpCategory(list, UMaterial.CHEST, "Global Challenge Prizes", "Givedp: GlobalChallenge Prizes");
 
 		if(RPFeatureSpigot.mcmmoIsEnabled()) {
-		    mcmmoChallenges = new MCMMOChallenges();
-		    PLUGIN_MANAGER.registerEvents(mcmmoChallenges, RANDOM_PACKAGE);
+		    mcmmo_challenges = new MCMMOChallenges();
+		    PLUGIN_MANAGER.registerEvents(mcmmo_challenges, RANDOM_PACKAGE);
         }
 
 		sendConsoleDidLoadFeature(getAll(Feature.GLOBAL_CHALLENGE).size() + " global challenges and " + getAll(Feature.GLOBAL_CHALLENGE_PRIZE).size() + " prizes", started);
@@ -158,8 +158,8 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		}
 
 		save();
-		if(mcmmoChallenges != null) {
-            HandlerList.unregisterAll(mcmmoChallenges);
+		if(mcmmo_challenges != null) {
+            HandlerList.unregisterAll(mcmmo_challenges);
         }
 		unregister(Feature.GLOBAL_CHALLENGE, Feature.GLOBAL_CHALLENGE_PRIZE);
 		ActiveGlobalChallenge.ACTIVE = null;
@@ -250,12 +250,12 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		}
 	}
 
-	public void viewPrizes(@NotNull Player player) {
+	public void view_prizes(@NotNull Player player) {
 		if(hasPermission(player, GlobalChallengePermission.VIEW_PRIZES, true)) {
 			final HashMap<GlobalChallengePrize, Integer> prizes = FileRPPlayer.get(player.getUniqueId()).getGlobalChallengeData().getPrizes();
 			int size = (prizes.size()/9)*9;
 			size = size == 0 ? 9 : Math.min(size, 54);
-			player.openInventory(Bukkit.createInventory(player, size, claimPrizes.getTitle()));
+			player.openInventory(Bukkit.createInventory(player, size, claim_prizes.getTitle()));
 			final Inventory top = player.getOpenInventory().getTopInventory();
 			player.updateInventory();
 			for(GlobalChallengePrize prize : prizes.keySet()) {
@@ -265,11 +265,11 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 			}
 		}
 	}
-	public void claimPrize(@NotNull Player player, @NotNull GlobalChallengePrize prize, boolean sendMessage) {
+	public void claim_prize(@NotNull Player player, @NotNull GlobalChallengePrize prize, boolean sendMessage) {
 		final RPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
 		final HashMap<GlobalChallengePrize, Integer> prizes = pdata.getGlobalChallengeData().getPrizes();
 		if(prizes.containsKey(prize)) {
-			final int amount = prizes.get(prize)-1;
+			final int amount = prizes.get(prize) - 1;
 			if(amount <= 0) {
 				prizes.remove(prize);
 			} else {
@@ -287,9 +287,11 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 			}
 		}
 	}
+	@NotNull
 	public Map<UUID, BigDecimal> getPlacing(@NotNull HashMap<UUID, BigDecimal> participants) {
 		return participants.entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
+	@NotNull
 	public Map<UUID, BigDecimal> getPlacing(@NotNull HashMap<UUID, BigDecimal> participants, int returnFirst) {
 		final HashMap<UUID, BigDecimal> map = new HashMap<>();
 		final HashMap<UUID, BigDecimal> d = participants.entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -301,17 +303,20 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	}
 	public int getRanking(@NotNull UUID player, @NotNull ActiveGlobalChallenge challenge) {
 		final Map<UUID, BigDecimal> byValue = challenge.getParticipants().entrySet().stream().sorted(Map.Entry.<UUID, BigDecimal> comparingByValue().reversed()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-		int placement = indexOf(byValue.keySet(), player);
-		placement = placement == -1 ? byValue.keySet().size() : placement+1;
+		final Set<UUID> keys = byValue.keySet();
+		int placement = indexOf(keys, player);
+		placement = placement == -1 ? keys.size() : placement+1;
 		return placement;
 	}
+	@NotNull
 	public String getRanking(int rank) {
 		String ranking = formatInt(rank);
 		ranking = ranking + (ranking.endsWith("1") ? "st" : ranking.endsWith("2") ? "nd" : ranking.endsWith("3") ? "rd" : ranking.equals("0") ? "" : "th");
 		return ranking;
 	}
+	@NotNull
 	public HashMap<Integer, UUID> getRankings(@NotNull ActiveGlobalChallenge challenge) {
-		final List<UUID> participants = new ArrayList<>(challenge.getParticipants().keySet());
+		final Set<UUID> participants = challenge.getParticipants().keySet();
 		final HashMap<Integer, UUID> rankings = new HashMap<>();
 		for(UUID u : participants) {
 			rankings.put(getRanking(u, challenge), u);
@@ -359,7 +364,8 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 									lore.add(string);
 								}
 							}
-							itemMeta.setLore(lore); lore.clear();
+							itemMeta.setLore(lore);
+							lore.clear();
 							item.setItemMeta(itemMeta);
 						}
 					}
@@ -368,10 +374,10 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 			player.updateInventory();
 		}
 	}
-	public void stopChallenge(@NotNull GlobalChallenge chall, boolean giveRewards) {
+	public void stop_challenge(@NotNull GlobalChallenge challenge, boolean giveRewards) {
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> challenges = ActiveGlobalChallenge.ACTIVE;
-		if(challenges != null && challenges.containsKey(chall)) {
-			challenges.get(chall).end(giveRewards, 3);
+		if(challenges != null && challenges.containsKey(challenge)) {
+			challenges.get(challenge).end(giveRewards, 3);
 		}
 	}
 	public void viewTopPlayers(@NotNull Player player, @NotNull ActiveGlobalChallenge active) {
@@ -382,7 +388,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		final HashMap<Integer, UUID> rankings = getRankings(active);
 		final List<String> leaderboardLore = getStringList(config, "challenge leaderboard.lore");
 		final ItemStack item = UMaterial.PLAYER_HEAD_ITEM.getItemStack();
-		for(int i = 0; i < topPlayersSize && i < rankings.size(); i++) {
+		for(int i = 0; i < top_players_size && i < rankings.size(); i++) {
 			final UUID uuid = rankings.get(i+1);
 			final OfflinePlayer OP = Bukkit.getOfflinePlayer(uuid);
 			final String ranking = getRanking(i+1), playerName = OP.getName(), value = formatBigDecimal(active.getValue(uuid));
@@ -400,6 +406,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		}
 		player.updateInventory();
 	}
+	@Nullable
 	public GlobalChallenge getRandomChallenge() {
 		final HashMap<String, GlobalChallenge> list = getAllGlobalChallenges();
 		final int size = list.size();
@@ -412,7 +419,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		final Inventory top = player.getOpenInventory().getTopInventory();
 		if(player == top.getHolder()) {
 			final String title = event.getView().getTitle();
-			final boolean isInventory = title.equals(inv.getTitle()), isClaimPrizes = title.equals(claimPrizes.getTitle());
+			final boolean isInventory = title.equals(inv.getTitle()), isClaimPrizes = title.equals(claim_prizes.getTitle());
 			if(isInventory || title.equals(leaderboard.getTitle()) || isClaimPrizes) {
 				event.setCancelled(true);
 				player.updateInventory();
@@ -431,7 +438,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 				} else if(isClaimPrizes) {
 					final GlobalChallengePrize prize = valueOfGlobalChallengePrize(current);
 					if(prize != null) {
-						claimPrize(player, prize, true);
+						claim_prize(player, prize, true);
 					}
 					final int amount = current.getAmount();
 					if(amount == 1) {

@@ -39,14 +39,14 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     private UInventory gui, preview;
     public ItemStack ticket;
 
-    private ItemStack ticketLocked, ticketUnlocked, spinnerMissingTickets, spinnerReadyToSpin, rewardSlot, withdrawTickets;
+    private ItemStack ticketLocked, ticketUnlocked, spinnerMissingTickets, spinner_ready_to_spin, rewardSlot, withdraw_tickets;
     private ItemStack randomizedLootPlaceholder, randomizedLootReadyToRoll, previewRewards, background;
-    private int withdrawTicketsSlot, spinnerSlot, previewRewardsSlot;
-    private List<Integer> ticketSlots;
+    private int withdrawTicketsSlot, spinnerSlot, preview_rewards_slot;
+    private List<Integer> ticket_slots;
     private List<String> rewards;
 
-    private HashMap<Player, HashMap<Integer, List<Integer>>> rollingTasks;
-    private HashMap<Player, List<Integer>> pendingRewardSlots, unrolledTickets;
+    private HashMap<Player, HashMap<Integer, List<Integer>>> rolling_tasks;
+    private HashMap<Player, List<Integer>> pending_reward_slots, unrolled_tickets;
     private HashMap<Integer, List<Integer>> slots;
 
     private HashMap<String, CustomSound> sounds;
@@ -55,7 +55,7 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     private Collection<CustomItem> customItems;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         final boolean isPlayer = sender instanceof Player;
         final int length = args.length;
         if(length >= 1) {
@@ -129,9 +129,9 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         ticketLocked = createItemStack(config, "items.ticket locked");
         ticketUnlocked = createItemStack(config, "items.ticket unlocked");
         rewardSlot = createItemStack(config, "items.reward slot");
-        withdrawTickets = createItemStack(config, "items.withdraw tickets");
+        withdraw_tickets = createItemStack(config, "items.withdraw tickets");
         spinnerMissingTickets = createItemStack(config, "items.spinner missing ticket");
-        spinnerReadyToSpin = createItemStack(config, "items.spinner ready to spin");
+        spinner_ready_to_spin = createItemStack(config, "items.spinner ready to spin");
         spinnerSlot = config.getInt("items.spinner missing ticket.slot");
 
         preview = new UInventory(null, config.getInt("preview rewards.size"), colorize(config.getString("preview rewards.title")));
@@ -144,13 +144,13 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         inv.setItem(spinnerSlot, spinnerMissingTickets);
 
         slots = new HashMap<>();
-        ticketSlots = new ArrayList<>();
+        ticket_slots = new ArrayList<>();
         int ticketAmount = 0;
         for(String s : config.getStringList("items.ticket.slots")) {
             ticketAmount++;
             final int slot = Integer.parseInt(s);
             inv.setItem(slot, getTicketLocked(ticketAmount));
-            ticketSlots.add(slot);
+            ticket_slots.add(slot);
         }
 
         for(String key : getConfigurationSectionKeys(config, "gui.reward slots", false)) {
@@ -186,12 +186,12 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
             }
         }
 
-        rollingTasks = new HashMap<>();
-        pendingRewardSlots = new HashMap<>();
-        unrolledTickets = new HashMap<>();
+        rolling_tasks = new HashMap<>();
+        pending_reward_slots = new HashMap<>();
+        unrolled_tickets = new HashMap<>();
         rewards = config.getStringList("rewards");
 
-        previewRewardsSlot = config.getInt("items.preview rewards.slot");
+        preview_rewards_slot = config.getInt("items.preview rewards.slot");
         previewRewards = createItemStack(config, "items.preview rewards");
         final ItemMeta itemMeta = previewRewards.getItemMeta();
 
@@ -214,7 +214,7 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         }
         itemMeta.setLore(lore);
         previewRewards.setItemMeta(itemMeta);
-        inv.setItem(previewRewardsSlot, previewRewards);
+        inv.setItem(preview_rewards_slot, previewRewards);
         rewards = actualRewards;
 
         final Inventory previewInv = preview.getInventory();
@@ -224,11 +224,12 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     }
     @Override
     public void unload() {
-        for(Player player : new ArrayList<>(pendingRewardSlots.keySet())) {
+        for(Player player : new ArrayList<>(pending_reward_slots.keySet())) {
             player.closeInventory();
         }
     }
 
+    @Nullable
     private CustomItem valueOfCustomItem(ItemStack item) {
         if(item != null && customItems != null) {
             for(CustomItem customItem : customItems) {
@@ -254,7 +255,7 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         return settings.getOrDefault(setting, false);
     }
 
-
+    @NotNull
     private ItemStack getTicketLocked(int ticketAmount) {
         final ItemStack item = ticketLocked.clone();
         final ItemMeta itemMeta = item.getItemMeta();
@@ -283,17 +284,17 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     public void tryWithdrawingTickets(@NotNull Player player) {
         final Inventory top = player.getOpenInventory().getTopInventory();
         int ticketAmount = 0;
-        final boolean isUnrolled = unrolledTickets.containsKey(player);
-        final List<Integer> unrolledSlots = isUnrolled ? unrolledTickets.get(player) : null;
+        final boolean is_unrolled = unrolled_tickets.containsKey(player);
+        final List<Integer> unrolled_slots = is_unrolled ? unrolled_tickets.get(player) : null;
         final List<Integer> keySet = new ArrayList<>(slots.keySet());
-        for(int i : ticketSlots) {
-            final int rewardSlot = keySet.get(ticketAmount);
+        for(int i : ticket_slots) {
+            final int reward_slot = keySet.get(ticketAmount);
             ticketAmount++;
-            final boolean isActuallyUnrolled = isUnrolled && unrolledSlots.contains(rewardSlot);
+            final boolean isActuallyUnrolled = is_unrolled && unrolled_slots.contains(reward_slot);
             if(ticketUnlocked.isSimilar(top.getItem(i)) && isActuallyUnrolled) {
                 giveItem(player, ticket);
-                top.setItem(i, getTicketLocked(keySet.indexOf(rewardSlot)+1));
-                for(int slot : slots.get(rewardSlot)) {
+                top.setItem(i, getTicketLocked(keySet.indexOf(reward_slot)+1));
+                for(int slot : slots.get(reward_slot)) {
                     top.setItem(slot, randomizedLootPlaceholder);
                 }
             }
@@ -302,12 +303,12 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         top.setItem(spinnerSlot, spinnerMissingTickets);
         player.updateInventory();
         playSound(player, "withdraw tickets");
-        unrolledTickets.remove(player);
+        unrolled_tickets.remove(player);
     }
     public int getInsertedTickets(@NotNull Player player) {
         final Inventory top = player.getOpenInventory().getTopInventory();
         int total = 0;
-        for(int slot : ticketSlots) {
+        for(int slot : ticket_slots) {
             if(ticketUnlocked.isSimilar(top.getItem(slot))) {
                 total++;
             }
@@ -316,41 +317,41 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     }
     public void tryInsertingTicket(@NotNull Player player) {
         final Inventory top = player.getOpenInventory().getTopInventory();
-        final int inserted = getInsertedTickets(player), maxAllowed = ticketSlots.size();
+        final int inserted = getInsertedTickets(player), maxAllowed = ticket_slots.size();
         if(inserted < maxAllowed) {
             final ItemStack withdraw = top.getItem(withdrawTicketsSlot), spin = top.getItem(spinnerSlot);
-            if(!withdrawTickets.isSimilar(withdraw)) {
-                top.setItem(withdrawTicketsSlot, withdrawTickets);
+            if(!withdraw_tickets.isSimilar(withdraw)) {
+                top.setItem(withdrawTicketsSlot, withdraw_tickets);
             }
-            if(!spinnerReadyToSpin.isSimilar(spin)) {
-                top.setItem(spinnerSlot, spinnerReadyToSpin);
+            if(!spinner_ready_to_spin.isSimilar(spin)) {
+                top.setItem(spinnerSlot, spinner_ready_to_spin);
             }
             for(int slot : slots.get(slots.keySet().toArray()[inserted])) {
                 top.setItem(slot, randomizedLootReadyToRoll);
             }
             removeItem(player, ticket, 1);
-            final int slot = ticketSlots.get(inserted);
+            final int slot = ticket_slots.get(inserted);
             final ItemStack item = getClone(ticketUnlocked);
             item.setAmount(inserted+1);
             top.setItem(slot, item);
             player.updateInventory();
             playSound(player, "insert ticket");
 
-            if(!unrolledTickets.containsKey(player)) {
-                unrolledTickets.put(player, new ArrayList<>());
+            if(!unrolled_tickets.containsKey(player)) {
+                unrolled_tickets.put(player, new ArrayList<>());
             }
-            unrolledTickets.get(player).add(slots.keySet().toArray(new Integer[slots.size()])[inserted]);
+            unrolled_tickets.get(player).add(slots.keySet().toArray(new Integer[slots.size()])[inserted]);
         }
     }
     public boolean trySpinning(@NotNull Player player, int slot, @NotNull ItemStack targetItem) {
-        if(spinnerReadyToSpin.isSimilar(targetItem)) {
+        if(spinner_ready_to_spin.isSimilar(targetItem)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
             top.setItem(withdrawTicketsSlot, background);
             List<Integer> insertedTickets = new ArrayList<>();
-            final boolean isUnrolled = unrolledTickets.containsKey(player);
-            final List<Integer> unrolledSlots = isUnrolled ? unrolledTickets.get(player) : null;
+            final boolean isUnrolled = unrolled_tickets.containsKey(player);
+            final List<Integer> unrolledSlots = isUnrolled ? unrolled_tickets.get(player) : null;
             int ticket = 0;
-            for(int ticketSlot : ticketSlots) {
+            for(int ticketSlot : ticket_slots) {
                 if(ticketUnlocked.isSimilar(top.getItem(ticketSlot))) {
                     final int rewardSlot = (int) slots.keySet().toArray()[ticket];
                     if(isUnrolled && unrolledSlots.contains(rewardSlot)) {
@@ -359,7 +360,7 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
                     ticket++;
                 }
             }
-            unrolledTickets.remove(player);
+            unrolled_tickets.remove(player);
             if(!insertedTickets.isEmpty()) {
                 for(int rewardSlot : insertedTickets) {
                     startRolling(player, top, rewardSlot);
@@ -367,9 +368,9 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
                 playSound(player, "started spinning");
                 return true;
             }
-        } else if(ticketSlots.contains(slot) && !ticketUnlocked.isSimilar(targetItem)) {
+        } else if(ticket_slots.contains(slot) && !ticketUnlocked.isSimilar(targetItem)) {
             final HashMap<String, String> replacements = new HashMap<>();
-            final int index = ticketSlots.indexOf(slot);
+            final int index = ticket_slots.indexOf(slot);
             replacements.put("{AMOUNT}", Integer.toString(index+1));
             sendStringListMessage(player, getStringList(config, "messages.slot requires ticket"), replacements);
             playSound(player, "cancelled");
@@ -409,19 +410,19 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         player.updateInventory();
     }
     private void startRolling(Player player, Inventory top, int rewardSlot) {
-        if(!rollingTasks.containsKey(player)) {
-            rollingTasks.put(player, new HashMap<>());
+        if(!rolling_tasks.containsKey(player)) {
+            rolling_tasks.put(player, new HashMap<>());
         }
-        if(!pendingRewardSlots.containsKey(player)) {
-            pendingRewardSlots.put(player, new ArrayList<>());
+        if(!pending_reward_slots.containsKey(player)) {
+            pending_reward_slots.put(player, new ArrayList<>());
         }
-        final HashMap<Integer, List<Integer>> slotTasks = rollingTasks.get(player);
+        final HashMap<Integer, List<Integer>> slotTasks = rolling_tasks.get(player);
         if(!slotTasks.containsKey(rewardSlot)) {
             slotTasks.put(rewardSlot, new ArrayList<>());
         }
 
         final List<Integer> tasks = slotTasks.get(rewardSlot);
-        pendingRewardSlots.get(player).add(rewardSlot);
+        pending_reward_slots.get(player).add(rewardSlot);
 
         final boolean isRandom = isSlotBotSettingEnabled(SlotBotSetting.ALWAYS_RANDOM_LOOT);
 
@@ -448,9 +449,9 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
         playSound(player, "finished spinning");
     }
     public void stopRolling(@NotNull Player player, int rewardSlot, boolean playSound) {
-        final List<Integer> pendingSlots = pendingRewardSlots.getOrDefault(player, null);
-        if(pendingSlots != null && pendingSlots.contains(rewardSlot) && rollingTasks.containsKey(player)) {
-            final HashMap<Integer, List<Integer>> tasks = rollingTasks.get(player);
+        final List<Integer> pendingSlots = pending_reward_slots.getOrDefault(player, null);
+        if(pendingSlots != null && pendingSlots.contains(rewardSlot) && rolling_tasks.containsKey(player)) {
+            final HashMap<Integer, List<Integer>> tasks = rolling_tasks.get(player);
             if(tasks.containsKey(rewardSlot)) {
                 for(int task : tasks.get(rewardSlot)) {
                     SCHEDULER.cancelTask(task);
@@ -470,12 +471,12 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     public boolean isCustomItemThatInstantlyExecutesCommands(@Nullable CustomItem customItem) {
         return customItem != null && isSlotBotSettingEnabled(SlotBotSetting.INSTANT_CUSTOM_ITEM_COMMAND_EXECUTION) && customItem.doesExecuteCommands();
     }
-    private void giveLoot(Player player) {
+    private void giveLoot(@NotNull Player player) {
         final List<ItemStack> items = new ArrayList<>();
         final List<CustomItem> executeCustomItemCommands = new ArrayList<>();
         final int slotsSize = slots.size();
         int tickets = 0;
-        if(pendingRewardSlots.containsKey(player)) {
+        if(pending_reward_slots.containsKey(player)) {
             final Inventory top = player.getOpenInventory().getTopInventory();
             int ticketsInserted = getInsertedTickets(player);
             tickets += ticketsInserted;
@@ -491,16 +492,16 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
                     }
                 }
             }
-            pendingRewardSlots.remove(player);
+            pending_reward_slots.remove(player);
         }
-        if(unrolledTickets.containsKey(player)) {
-            final List<Integer> unrolledPlayerTickets = unrolledTickets.get(player);
+        if(unrolled_tickets.containsKey(player)) {
+            final List<Integer> unrolledPlayerTickets = unrolled_tickets.get(player);
             final int size = unrolledPlayerTickets.size();
             tickets += size;
             for(int i = 1; i <= size; i++) {
                 items.add(getRandomReward(slotsSize));
             }
-            unrolledTickets.remove(player);
+            unrolled_tickets.remove(player);
         }
 
         if(!items.isEmpty()) {
@@ -539,15 +540,15 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
     @EventHandler
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
-        final boolean isSpinning = rollingTasks.containsKey(player);
-        final boolean isInSlotBot = isSpinning || unrolledTickets.containsKey(player);
+        final boolean isSpinning = rolling_tasks.containsKey(player);
+        final boolean isInSlotBot = isSpinning || unrolled_tickets.containsKey(player);
         if(isInSlotBot) {
             if(isSpinning) {
-                final int size = rollingTasks.get(player).size();
+                final int size = rolling_tasks.get(player).size();
                 if(size > 0) {
                     if(isSlotBotSettingEnabled(SlotBotSetting.INVENTORY_IS_CLOSEABLE_WHEN_SPINNING)) {
                         stopRolling(player);
-                        rollingTasks.remove(player);
+                        rolling_tasks.remove(player);
                     } else {
                         final Inventory inv = event.getInventory();
                         SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
@@ -594,19 +595,19 @@ public enum SlotBot implements RPFeatureSpigot, CommandExecutor, ChatUtils {
                     if(current.isSimilar(ticket)) {
                         tryInsertingTicket(player);
                     }
-                } else if(slot == previewRewardsSlot) {
-                    if(!rollingTasks.containsKey(player) || rollingTasks.get(player).size() == 0) {
+                } else if(slot == preview_rewards_slot) {
+                    if(!rolling_tasks.containsKey(player) || rolling_tasks.get(player).size() == 0) {
                         viewPreview(player);
                     }
                 } else if(current.isSimilar(spinnerMissingTickets)) {
                     sendStringListMessage(player, getStringList(config, "messages.missing tickets"), null);
-                } else if(current.isSimilar(spinnerReadyToSpin)) {
-                    for(int i : ticketSlots) {
-                        trySpinning(player, i, spinnerReadyToSpin);
+                } else if(current.isSimilar(spinner_ready_to_spin)) {
+                    for(int i : ticket_slots) {
+                        trySpinning(player, i, spinner_ready_to_spin);
                     }
-                } else if(current.isSimilar(withdrawTickets)) {
+                } else if(current.isSimilar(withdraw_tickets)) {
                     tryWithdrawingTickets(player);
-                } else if(ticketSlots.contains(slot)) {
+                } else if(ticket_slots.contains(slot)) {
                     trySpinning(player, slot, current);
                 }
             }

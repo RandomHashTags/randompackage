@@ -148,7 +148,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 		final Player player = (Player) event.getPlayer();
 		pages.remove(player);
 	}
-	private void viewTitles(Player player, RPPlayer pdata, int page) {
+	private void viewTitles(@NotNull Player player, @NotNull RPPlayer pdata, int page) {
 		if(hasPermission(player, TitlePermission.COMMAND, true)) {
 			final TitleData data = pdata.getTitleData();
 			final List<Title> owned = data.getOwned();
@@ -196,6 +196,7 @@ public enum Titles implements RPFeatureSpigot, CommandExecutor {
 		}
 		player.updateInventory();
 	}
+	@NotNull
 	private ItemStack getTitle(@Nullable String activetitle, @NotNull Title input) {
 		final String title = input.getIdentifier();
 		final ItemStack item = (title.equals(activetitle) ? active : inactive).clone();

@@ -43,9 +43,9 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	public int defaultMax;
 	public ItemStack maxHomeIncreaser;
 
-	private List<Player> viewingHomes;
-	private HashMap<Player, Home> editingIcons;
-	private UInventory editicon;
+	private List<Player> viewing_homes;
+	private HashMap<Player, Home> editing_icons;
+	private UInventory edit_icon;
 
 	@Override
 	public void load() {
@@ -56,11 +56,11 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 		maxHomeIncreaser = createItemStack(config, "items.max home increaser");
 		GivedpItem.INSTANCE.items.put("maxhomeincrease", maxHomeIncreaser);
 
-		viewingHomes = new ArrayList<>();
-		editingIcons = new HashMap<>();
+		viewing_homes = new ArrayList<>();
+		editing_icons = new HashMap<>();
 
-		editicon = new UInventory(null, config.getInt("edit icon.size"), colorize(config.getString("edit icon.title")));
-		final Inventory eii = editicon.getInventory();
+		edit_icon = new UInventory(null, config.getInt("edit icon.size"), colorize(config.getString("edit icon.title")));
+		final Inventory eii = edit_icon.getInventory();
 		final List<String> addedLore = colorizeListString(config.getStringList("edit icon.added lore"));
 		for(String string : getConfigurationSectionKeys(config, "edit icon", false)) {
 			if(!string.equals("title") && !string.equals("size") && !string.equals("added lore")) {
@@ -82,10 +82,10 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	@Override
 	public void unload() {
 		GivedpItem.INSTANCE.items.remove("maxhomeincreaser");
-		for(Player player : new ArrayList<>(viewingHomes)) {
+		for(Player player : new ArrayList<>(viewing_homes)) {
 			player.closeInventory();
 		}
-		for(Player player : new ArrayList<>(editingIcons.keySet())) {
+		for(Player player : new ArrayList<>(editing_icons.keySet())) {
 			player.closeInventory();
 		}
 	}
@@ -128,8 +128,9 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 		}
 		return true;
 	}
-	
-	private String getArguments(String[] args) {
+
+	@NotNull
+	private String getArguments(@NotNull String[] args) {
 		final StringBuilder builder = new StringBuilder();
 		final int length = args.length;
 		for(int i = 0; i < length; i++) {
@@ -139,7 +140,7 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	}
 	public void viewHomes(@NotNull Player opener, @NotNull RPPlayer target) {
 		if(hasPermission(opener, HomePermission.VIEW_HOMES, true)) {
-			viewingHomes.add(opener);
+			viewing_homes.add(opener);
 			final HomeData data = target.getHomeData();
 			final List<Home> homes = data.getHomes();
 			final String name = getString(config, "menu.name");
@@ -170,22 +171,22 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 	}
 	public void editIcon(@NotNull Player player, @NotNull Home home) {
 		player.closeInventory();
-		player.openInventory(Bukkit.createInventory(player, editicon.getSize(), editicon.getTitle()));
-		player.getOpenInventory().getTopInventory().setContents(editicon.getInventory().getContents());
+		player.openInventory(Bukkit.createInventory(player, edit_icon.getSize(), edit_icon.getTitle()));
+		player.getOpenInventory().getTopInventory().setContents(edit_icon.getInventory().getContents());
 		player.updateInventory();
-		editingIcons.put(player, home);
+		editing_icons.put(player, home);
 	}
 	@EventHandler
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
 		final Player player = (Player) event.getPlayer();
-		viewingHomes.remove(player);
-		editingIcons.remove(player);
+		viewing_homes.remove(player);
+		editing_icons.remove(player);
 	}
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
-		final boolean isViewingHomes = viewingHomes.contains(player);
-		if(isViewingHomes || editingIcons.containsKey(player)) {
+		final boolean isViewingHomes = viewing_homes.contains(player);
+		if(isViewingHomes || editing_icons.containsKey(player)) {
 			event.setCancelled(true);
 			player.updateInventory();
 			final int slot = event.getRawSlot();
@@ -212,7 +213,7 @@ public enum Homes implements RPFeatureSpigot, CommandExecutor {
 					editIcon(player, home);
 				}
 			} else {
-				final Home home = editingIcons.get(player);
+				final Home home = editing_icons.get(player);
 				final UMaterial um = UMaterial.match(current);
 				final String name = home.getName();
 				final String material = um.name();

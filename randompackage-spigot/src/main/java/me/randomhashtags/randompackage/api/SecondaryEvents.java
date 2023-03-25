@@ -44,9 +44,9 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, String[] args) {
         final Player player = sender instanceof Player ? (Player) sender : null;
-        final String cmdName = cmd.getName();
+        final String command_name = cmd.getName();
         final int length = args.length;
-        if(cmdName.equals("balance")) {
+        if(command_name.equals("balance")) {
             String type, qq = "", bal = player != null ? formatNumber(BigDecimal.valueOf(ECONOMY.getBalance(player)), true) : "0.00";
             if(player != null && length == 0 && hasPermission(sender, SecondaryPermission.BALANCE, true)) {
                 type = "self";
@@ -80,49 +80,67 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
                 }
             }
         } else if(player != null) {
-            if(cmdName.equals("bless") && hasPermission(player, SecondaryPermission.BLESS, true)) {
-                bless(player);
-            } else if(cmdName.equals("bump") && hasPermission(sender, SecondaryPermission.BUMP, true)) {
-                player.damage(1.0);
-            } else if(cmdName.equals("confirm") && hasPermission(sender, SecondaryPermission.CONFIRM, true)) {
-                final RPPlayer pdata = FileRPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
-                if(pdata != null) {
-                    final List<ItemStack> unclaimedPurchases = pdata.getUnclaimedPurchases();
-                    if(unclaimedPurchases == null || unclaimedPurchases.isEmpty()) {
-                        sendStringListMessage(player, getStringList(config, "confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
-                    } else {
-                        confirm(player, pdata);
+            switch (command_name) {
+                case "bless":
+                    if(hasPermission(player, SecondaryPermission.BLESS, true)) {
+                        bless(player);
                     }
-                }
-            } else if(cmdName.equals("roll") && hasPermission(sender, SecondaryPermission.ROLL, true)) {
-                roll(player, args.toString());
-            } else if(cmdName.equals("withdraw") && hasPermission(player, SecondaryPermission.WITHDRAW, true)) {
-                if(length == 0) {
-                    sendStringListMessage(player, getStringList(config, "withdraw.argument 0"), null);
-                } else {
-                    BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[0]));
-                    final double amountDouble = amount.doubleValue();
-                    String msg = null, formattedAmount = formatNumber(amount, true);
-                    formattedAmount = formattedAmount.contains("E") ? formattedAmount.split("E")[0] : formattedAmount;
-                    if(ECONOMY == null) {
-                        player.sendMessage("[RandomPackage] You need an Economy plugin installed and enabled to use this feature!");
-                        return true;
-                    } else if(amountDouble <= 0.00) {
-                        msg = "withdraw.cannot withdraw zero";
-                    } else if(ECONOMY.getBalance(player) < amountDouble) {
-                        msg = "withdraw.cannot withdraw more than balance";
-                    } else if(ECONOMY.withdrawPlayer(player, amountDouble).transactionSuccess()) {
-                        final ItemStack item = getBanknote(amount, player.getName());
-                        giveItem(player, item);
-                        msg = "withdraw.success";
-                    } else {
-                        return true;
+                    break;
+                case "bump":
+                    if(hasPermission(sender, SecondaryPermission.BUMP, true)) {
+                        player.damage(1.0);
                     }
-                    final HashMap<String, String> replacements = new HashMap<>();
-                    replacements.put("{VALUE}", formattedAmount);
-                    replacements.put("{BALANCE}", formatDouble(ECONOMY.getBalance(player)));
-                    sendStringListMessage(player, getStringList(config, msg), replacements);
-                }
+                    break;
+                case "confirm":
+                    if(hasPermission(sender, SecondaryPermission.CONFIRM, true)) {
+                        final RPPlayer pdata = FileRPPlayer.get(length == 0 ? player.getUniqueId() : Bukkit.getOfflinePlayer(args[0]).getUniqueId());
+                        if(pdata != null) {
+                            final List<ItemStack> unclaimedPurchases = pdata.getUnclaimedPurchases();
+                            if(unclaimedPurchases == null || unclaimedPurchases.isEmpty()) {
+                                sendStringListMessage(player, getStringList(config, "confirm." + (pdata.getOfflinePlayer().equals(player) ? "self " : "other") + "no unclaimed items"), null);
+                            } else {
+                                confirm(player, pdata);
+                            }
+                        }
+                    }
+                    break;
+                case "roll":
+                    if(hasPermission(sender, SecondaryPermission.ROLL, true)) {
+                        roll(player, args.toString());
+                    }
+                    break;
+                case "withdraw":
+                    if(hasPermission(player, SecondaryPermission.WITHDRAW, true)) {
+                        if(length == 0) {
+                            sendStringListMessage(player, getStringList(config, "withdraw.argument 0"), null);
+                        } else {
+                            BigDecimal amount = BigDecimal.valueOf(getRemainingDouble(args[0]));
+                            final double amountDouble = amount.doubleValue();
+                            String msg = null, formattedAmount = formatNumber(amount, true);
+                            formattedAmount = formattedAmount.contains("E") ? formattedAmount.split("E")[0] : formattedAmount;
+                            if(ECONOMY == null) {
+                                player.sendMessage("[RandomPackage] You need an Economy plugin installed and enabled to use this feature!");
+                                return true;
+                            } else if(amountDouble <= 0.00) {
+                                msg = "withdraw.cannot withdraw zero";
+                            } else if(ECONOMY.getBalance(player) < amountDouble) {
+                                msg = "withdraw.cannot withdraw more than balance";
+                            } else if(ECONOMY.withdrawPlayer(player, amountDouble).transactionSuccess()) {
+                                final ItemStack item = getBanknote(amount, player.getName());
+                                giveItem(player, item);
+                                msg = "withdraw.success";
+                            } else {
+                                return true;
+                            }
+                            final HashMap<String, String> replacements = new HashMap<>();
+                            replacements.put("{VALUE}", formattedAmount);
+                            replacements.put("{BALANCE}", formatDouble(ECONOMY.getBalance(player)));
+                            sendStringListMessage(player, getStringList(config, msg), replacements);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         return true;
@@ -186,7 +204,7 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
         opener.updateInventory();
     }
     public void roll(@NotNull Player player, @NotNull String arg0) {
-        final int radius = config.getInt("roll.block radius"), maxroll = getRemainingInt(arg0), roll = RANDOM.nextInt(maxroll);
+        final int radius = config.getInt("roll.block radius"), max_roll = getRemainingInt(arg0), roll = RANDOM.nextInt(max_roll);
         final List<Entity> nearby = player.getNearbyEntities(radius, radius, radius);
         final List<Player> players = new ArrayList<>();
         for(Entity entity : nearby) {
@@ -195,7 +213,7 @@ public enum SecondaryEvents implements RPFeatureSpigot, CommandExecutor {
             }
         }
         if(!players.isEmpty()) {
-            final HashMap<String, String> replacements = getReplacements("{MAX}", formatInt(maxroll), "{PLAYER}", player.getName(), "{ROLLED}", formatInt(roll));
+            final HashMap<String, String> replacements = getReplacements("{MAX}", formatInt(max_roll), "{PLAYER}", player.getName(), "{ROLLED}", formatInt(roll));
             final List<String> msg = getStringList(config, "roll.message");
             for(Player target : players) {
                 sendStringListMessage(target, msg, replacements);

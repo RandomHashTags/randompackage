@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +67,7 @@ public final class LivingEnvoyCrate implements UVersionableSpigot {
             LIVING = null;
         }
     }
-    public void shootFirework() {
+    public void shoot_firework() {
         final Firework firework = type.getFirework();
         if(firework != null) {
             final World world = location.getWorld();
@@ -74,6 +75,7 @@ public final class LivingEnvoyCrate implements UVersionableSpigot {
             world.playEffect(location, Effect.STEP_SOUND, location.getBlock().getType());
         }
     }
+    @Nullable
     public static LivingEnvoyCrate valueOf(Location location) {
         if(LIVING != null) {
             for(Map.Entry<Integer, HashMap<Location, LivingEnvoyCrate>> entry : LIVING.entrySet()) {

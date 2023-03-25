@@ -86,7 +86,6 @@ public enum ArmorSockets implements RPFeatureSpigot {
         if(current == null || current.getType().equals(Material.AIR) || cursor == null || cursor.getType().equals(Material.AIR)) {
             return;
         }
-
         final ArmorSocket socket = valueOfArmorSocket(cursor);
         if(socket != null) {
             final String material = current.getType().name();

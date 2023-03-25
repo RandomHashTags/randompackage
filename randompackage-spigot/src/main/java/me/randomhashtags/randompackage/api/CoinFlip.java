@@ -321,6 +321,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
             }
         }
     }
+    @NotNull
     private ItemStack getSelection(OfflinePlayer player, OfflinePlayer target, CoinFlipMatch m) {
         final boolean isCreator = target.equals(m.getCreator());
         final CoinFlipOption o = isCreator ? m.getCreatorOption() : m.getChallengerOption();
@@ -330,7 +331,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
         item.setItemMeta(itemMeta);
         return item;
     }
-    private void start(CoinFlipMatch match) {
+    private void start(@NotNull CoinFlipMatch match) {
         available.remove(match);
         match.setActive(true);
         tasks.put(match, new ArrayList<>());
@@ -456,7 +457,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
             }, 20L * i));
         }
     }
-    private void chooseWinner(CoinFlipMatch match) {
+    private void chooseWinner(@NotNull CoinFlipMatch match) {
         available.remove(match);
         match.setActive(false);
         final OfflinePlayer creator = match.getCreator(), challenger = match.getChallenger();
@@ -526,7 +527,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
         final CoinFlipEndEvent endEvent = new CoinFlipEndEvent(winner, loser, wager, BigDecimal.valueOf(this.tax));
         PLUGIN_MANAGER.callEvent(endEvent);
     }
-    private void stopTasks(CoinFlipMatch match) {
+    private void stopTasks(@NotNull CoinFlipMatch match) {
         if(tasks.containsKey(match)) {
             for(int i : tasks.get(match)) {
                 SCHEDULER.cancelTask(i);
@@ -534,7 +535,7 @@ public enum CoinFlip implements RPFeatureSpigot, CommandExecutor {
             tasks.remove(match);
         }
     }
-    private void delete(CoinFlipMatch match) {
+    private void delete(@NotNull CoinFlipMatch match) {
         stopTasks(match);
         available.remove(match);
         match.delete();

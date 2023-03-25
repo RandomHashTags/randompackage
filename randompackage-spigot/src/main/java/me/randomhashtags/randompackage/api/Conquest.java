@@ -169,6 +169,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
         lastLocation = l;
         lastConquerer = null;
     }
+    @Nullable
     public Location getRandomLocation(@NotNull ConquestChest chest) {
         final String[] spawnRegion = chest.getSpawnRegion().split(";");
         final String[] xValues = spawnRegion[1].split(":"), zValues = spawnRegion[2].split(":");

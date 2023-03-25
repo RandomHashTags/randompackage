@@ -33,6 +33,7 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
         return true;
     }
 
+    @Override
     public void load() {
         save(null, "combine.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "combine.yml"));
@@ -41,6 +42,7 @@ public enum Combine implements RPFeatureSpigot, CommandExecutor {
             combineores.add(string.toUpperCase());
         }
     }
+    @Override
     public void unload() {
     }
 

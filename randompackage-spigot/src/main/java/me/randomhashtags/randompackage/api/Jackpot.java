@@ -36,10 +36,10 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
     public List<Integer> countdownTasks;
 
     private UInventory gui;
-    private List<Integer> confirmSlots, cancelSlots;
-    public BigDecimal tax, ticketCost, maxTickets, minTickets, playersPerPage, value;
-    public long winnerPickedEvery, pickNextWinner;
-    public HashMap<UUID, BigInteger> ticketsSold, top, purchasing;
+    private List<Integer> confirm_slots, cancel_slots;
+    public BigDecimal tax, ticket_cost, maxTickets, minTickets, playersPerPage, value;
+    public long winnerPickedEvery, pick_next_winner;
+    public HashMap<UUID, BigInteger> tickets_sold, top, purchasing;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
@@ -48,11 +48,10 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         if(l == 0) {
             view(sender);
         } else {
-            final String a = args[0];
-            switch (a) {
+            switch (args[0]) {
                 case "pickwinner":
                     if(hasPermission(sender, JackpotPermission.COMMAND_PICK_WINNER, true)) {
-                        pickWinner();
+                        pick_winner();
                     }
                     break;
                 case "stats":
@@ -100,17 +99,17 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
         final Inventory gi = gui.getInventory();
         final ItemStack confirm = createItemStack(config, "gui.confirm"), cancel = createItemStack(config, "gui.cancel");
-        confirmSlots = new ArrayList<>();
-        cancelSlots = new ArrayList<>();
+        confirm_slots = new ArrayList<>();
+        cancel_slots = new ArrayList<>();
         for(String s : getConfigurationSectionKeys(config, "gui", false)) {
             if(!s.equals("title") && !s.equals("size") && !s.equals("confirm") && !s.equals("cancel")) {
                 final int slot = config.getInt("gui." + s + ".slot");
                 final String i = config.getString("gui." + s + ".item").toLowerCase();
                 final boolean isConfirm = i.equals("confirm"), isCancel = i.equals("cancel");
                 if(isConfirm) {
-                    confirmSlots.add(slot);
+                    confirm_slots.add(slot);
                 } else if(isCancel) {
-                    cancelSlots.add(slot);
+                    cancel_slots.add(slot);
                 }
                 final ItemStack item = isConfirm ? confirm : isCancel ? cancel : createItemStack(config, "gui." + s);
                 gi.setItem(slot, item);
@@ -118,24 +117,24 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         }
 
         tax = BigDecimal.valueOf(config.getDouble("settings.tax"));
-        ticketCost = BigDecimal.valueOf(config.getInt("settings.ticket cost"));
+        ticket_cost = BigDecimal.valueOf(config.getInt("settings.ticket cost"));
         maxTickets = BigDecimal.valueOf(config.getInt("settings.max tickets"));
         minTickets = BigDecimal.valueOf(config.getInt("settings.min tickets"));
         playersPerPage = BigDecimal.valueOf(config.getInt("messages.players per page"));
         winnerPickedEvery = config.getInt("settings.winner picked every");
-        ticketsSold = new HashMap<>();
+        tickets_sold = new HashMap<>();
         top = new HashMap<>();
         purchasing = new HashMap<>();
 
         final long e = OTHER_YML.getLong("jackpot.pick next winner");
-        pickNextWinner = e == 0 ? started + winnerPickedEvery*1000 : e;
+        pick_next_winner = e == 0 ? started + winnerPickedEvery*1000 : e;
 
         value = BigDecimal.valueOf(OTHER_YML.getDouble("jackpot.value"));
         for(String s : getConfigurationSectionKeys(OTHER_YML, "jackpot", false)) {
             if(!s.equals("value") && !s.equals("pick next winner")) {
                 final UUID uuid = UUID.fromString(s);
                 final BigInteger b = BigInteger.valueOf(OTHER_YML.getInt("jackpot." + s));
-                ticketsSold.put(uuid, b);
+                tickets_sold.put(uuid, b);
             }
         }
         startTask(started);
@@ -143,10 +142,10 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
     @Override
     public void unload() {
         OTHER_YML.set("jackpot", null);
-        OTHER_YML.set("jackpot.pick next winner", pickNextWinner);
+        OTHER_YML.set("jackpot.pick next winner", pick_next_winner);
         OTHER_YML.set("jackpot.value", value);
-        for(UUID uuid : ticketsSold.keySet()) {
-            OTHER_YML.set("jackpot." + uuid.toString(), ticketsSold.get(uuid).intValue());
+        for(UUID uuid : tickets_sold.keySet()) {
+            OTHER_YML.set("jackpot." + uuid.toString(), tickets_sold.get(uuid).intValue());
         }
         saveOtherData();
         SCHEDULER.cancelTask(task);
@@ -155,14 +154,14 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         }
     }
 
-    public void pickWinner() {
+    public void pick_winner() {
         final List<UUID> tickets = getTickets();
         final int size = tickets.size();
         if(size > 0) {
             final UUID winner = tickets.get(RANDOM.nextInt(size));
             final OfflinePlayer op = Bukkit.getOfflinePlayer(winner);
             final HashMap<String, String> replacements = new HashMap<>();
-            final BigInteger winnerTickets = ticketsSold.get(winner);
+            final BigInteger winnerTickets = tickets_sold.get(winner);
             final BigDecimal taxed = value.multiply(tax), total = value.subtract(taxed);
             ECONOMY.depositPlayer(op, total.doubleValue());
 
@@ -187,16 +186,16 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
                 }
             }
             value = BigDecimal.ZERO;
-            ticketsSold.clear();
+            tickets_sold.clear();
         }
         final long time = System.currentTimeMillis();
-        pickNextWinner = time+winnerPickedEvery*1000;
+        pick_next_winner = time + winnerPickedEvery * 1000;
         startTask(time);
     }
     public List<UUID> getTickets() {
         final List<UUID> list = new ArrayList<>();
-        for(UUID uuid : ticketsSold.keySet()) {
-            for(int i = 1; i <= ticketsSold.get(uuid).intValue(); i++) {
+        for(UUID uuid : tickets_sold.keySet()) {
+            for(int i = 1; i <= tickets_sold.get(uuid).intValue(); i++) {
                 list.add(uuid);
             }
         }
@@ -218,13 +217,13 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         }
     }
     private void startTask(long time) {
-        final long pick = ((pickNextWinner-time)/1000)*20;
+        final long pick = ((pick_next_winner -time)/1000)*20;
         if(countdownTasks != null) {
             for(int i : countdownTasks) {
                 SCHEDULER.cancelTask(i);
             }
         }
-        task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::pickWinner, pick);
+        task = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, this::pick_winner, pick);
         countdownTasks = new ArrayList<>();
         for(String s : getStringList(config, "messages.countdowns")) {
             final long delay = (getDelay(s)/1000)*20;
@@ -237,7 +236,7 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         if(hasPermission(player, JackpotPermission.BUY_TICKETS, true)) {
             player.closeInventory();
             purchasing.put(player.getUniqueId(), tickets);
-            final String amount = formatNumber(tickets, false), cost = formatBigDecimal(ticketCost.multiply(new BigDecimal(tickets)));
+            final String amount = formatNumber(tickets, false), cost = formatBigDecimal(ticket_cost.multiply(new BigDecimal(tickets)));
             final int size = gui.getSize();
             player.openInventory(Bukkit.createInventory(player, size, gui.getTitle().replace("{AMOUNT}", amount)));
             final Inventory top = player.getOpenInventory().getTopInventory();
@@ -260,7 +259,7 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
         }
     }
     public void purchaseTickets(@NotNull Player player, @NotNull BigInteger tickets) {
-        final BigDecimal cost = ticketCost.multiply(new BigDecimal(tickets));
+        final BigDecimal cost = ticket_cost.multiply(new BigDecimal(tickets));
         final HashMap<String, String> replacements = new HashMap<>();
         replacements.put("{AMOUNT}", formatNumber(tickets, false));
         replacements.put("{$}", formatBigDecimal(cost));
@@ -271,7 +270,7 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
                 final UUID uuid = player.getUniqueId();
                 final JackpotData pdata = FileRPPlayer.get(uuid).getJackpotData();
                 pdata.setTotalTicketsBought(pdata.getTotalTicketsBought().add(tickets));
-                ticketsSold.put(uuid, ticketsSold.getOrDefault(uuid, BigInteger.ZERO).add(tickets));
+                tickets_sold.put(uuid, tickets_sold.getOrDefault(uuid, BigInteger.ZERO).add(tickets));
                 value = value.add(cost);
                 sendStringListMessage(player, getStringList(config, "messages.purchased"), replacements);
             }
@@ -282,9 +281,9 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
 
     public void view(@NotNull CommandSender sender) {
         if(hasPermission(sender, JackpotPermission.VIEW, true)) {
-            final String time = getRemainingTime(pickNextWinner-System.currentTimeMillis());
+            final String time = getRemainingTime(pick_next_winner -System.currentTimeMillis());
             final HashMap<String, String> replacements = new HashMap<>();
-            final BigInteger playerTickets = sender instanceof Player ? ticketsSold.getOrDefault(((Player) sender).getUniqueId(), BigInteger.ZERO) : BigInteger.ZERO;
+            final BigInteger playerTickets = sender instanceof Player ? tickets_sold.getOrDefault(((Player) sender).getUniqueId(), BigInteger.ZERO) : BigInteger.ZERO;
             final int s = getTickets().size();
             replacements.put("{VALUE}", formatBigDecimal(value));
             replacements.put("{TICKETS}", formatDouble(getTickets().size()));
@@ -351,9 +350,9 @@ public enum Jackpot implements RPFeatureSpigot, CommandExecutor {
                 return;
             }
 
-            if(confirmSlots.contains(slot)) {
+            if(confirm_slots.contains(slot)) {
                 purchaseTickets(player, purchasing.get(uuid));
-            } else if(cancelSlots.contains(slot)) {
+            } else if(cancel_slots.contains(slot)) {
             } else {
                 return;
             }

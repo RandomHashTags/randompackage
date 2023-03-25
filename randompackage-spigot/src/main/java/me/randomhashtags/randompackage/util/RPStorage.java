@@ -10,6 +10,7 @@ import me.randomhashtags.randompackage.dev.Dungeon;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -47,10 +48,13 @@ public interface RPStorage extends RPValues {
         }
     }
 
-    default Identifiable get(Feature f, @NotNull String identifier) {
-        return FEATURES.containsKey(f) ? FEATURES.get(f).getOrDefault(identifier, null) : null;
+    @Nullable
+    default Identifiable get(Feature feature, @NotNull String identifier) {
+        return FEATURES.containsKey(feature) ? FEATURES.get(feature).getOrDefault(identifier, null) : null;
     }
-    default LinkedHashMap<String, Identifiable> getAll(Feature f) { return FEATURES.getOrDefault(f, new LinkedHashMap<>()); }
+    default LinkedHashMap<String, Identifiable> getAll(@NotNull Feature feature) {
+        return FEATURES.getOrDefault(feature, new LinkedHashMap<>());
+    }
 
     static void unregisterAll(@NotNull Feature...features) {
         for(Feature f : features) {
@@ -63,180 +67,180 @@ public interface RPStorage extends RPValues {
         }
     }
 
+    @Nullable
     default ArmorSet getArmorSet(@NotNull String identifier) {
-        final Identifiable o = get(Feature.ARMOR_SET, identifier);
-        return o != null ? (ArmorSet) o : null;
+        return (ArmorSet) get(Feature.ARMOR_SET, identifier);
     }
+    @Nullable
     default ArmorSocket getArmorSocket(@NotNull String identifier) {
-        final Identifiable o = get(Feature.ARMOR_SOCKET, identifier);
-        return o != null ? (ArmorSocket) o : null;
+        return (ArmorSocket) get(Feature.ARMOR_SOCKET, identifier);
     }
+    @Nullable
     default BlackScroll getBlackScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SCROLL_BLACK, identifier);
-        return o != null ? (BlackScroll) o : null;
+        return (BlackScroll) get(Feature.SCROLL_BLACK, identifier);
     }
+    @Nullable
     default Booster getBooster(@NotNull String identifier) {
-        final Identifiable o = get(Feature.BOOSTER, identifier);
-        return o != null ? (Booster) o : null;
+        return (Booster) get(Feature.BOOSTER, identifier);
     }
+    @Nullable
     default ConquestChest getConquestChest(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CONQUEST_CHEST, identifier);
-        return o != null ? (ConquestChest) o : null;
+        return (ConquestChest) get(Feature.CONQUEST_CHEST, identifier);
     }
+    @Nullable
     default CustomBoss getCustomBoss(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_BOSS, identifier);
-        return o != null ? (CustomBoss) o : null;
+        return (CustomBoss) get(Feature.CUSTOM_BOSS, identifier);
     }
+    @Nullable
     default CustomEnchantSpigot getCustomEnchant(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_ENCHANT_ENABLED, identifier);
-        return o != null ? (CustomEnchantSpigot) o : null;
+        return (CustomEnchantSpigot) get(Feature.CUSTOM_ENCHANT_ENABLED, identifier);
     }
+    @Nullable
     default EnchantRarity getCustomEnchantRarity(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_ENCHANT_RARITY, identifier);
-        return o != null ? (EnchantRarity) o : null;
+        return (EnchantRarity) get(Feature.CUSTOM_ENCHANT_RARITY, identifier);
     }
+    @Nullable
     default CustomExplosion getCustomExplosion(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_EXPLOSION, identifier);
-        return o != null ? (CustomExplosion) o : null;
+        return (CustomExplosion) get(Feature.CUSTOM_EXPLOSION, identifier);
     }
+    @Nullable
     default CustomKit getCustomKit(@NotNull String identifier) {
-        final Identifiable o = get(Feature.CUSTOM_KIT, identifier);
-        return o != null ? (CustomKit) o : null;
+        return (CustomKit) get(Feature.CUSTOM_KIT, identifier);
     }
+    @Nullable
     default Disguise getDisguise(@NotNull String identifier) {
-        final Identifiable o = get(Feature.DISGUISE, identifier);
-        return o != null ? (Disguise) o : null;
+        return (Disguise) get(Feature.DISGUISE, identifier);
     }
+    @Nullable
     default DuelArena getDuelArena(@NotNull String identifier) {
-        final Identifiable o = get(Feature.DUEL_ARENA, identifier);
-        return o != null ? (DuelArena) o : null;
+        return (DuelArena) get(Feature.DUEL_ARENA, identifier);
     }
+    @Nullable
     default Dungeon getDungeon(@NotNull String identifier) {
-        final Identifiable o = get(Feature.DUNGEON, identifier);
-        return o != null ? (Dungeon) o : null;
+        return (Dungeon) get(Feature.DUNGEON, identifier);
     }
+    @Nullable
     default EnchantmentOrb getEnchantmentOrb(@NotNull String identifier) {
-        final Identifiable o = get(Feature.ENCHANTMENT_ORB, identifier);
-        return o != null ? (EnchantmentOrb) o : null;
+        return (EnchantmentOrb) get(Feature.ENCHANTMENT_ORB, identifier);
     }
+    @Nullable
     default EnvoyCrate getEnvoyCrate(@NotNull String identifier) {
-        final Identifiable o = get(Feature.ENVOY_CRATE, identifier);
-        return o != null ? (EnvoyCrate) o : null;
+        return (EnvoyCrate) get(Feature.ENVOY_CRATE, identifier);
     }
+    @Nullable
     default EventAttribute getEventAttribute(@NotNull String identifier) {
-        final Identifiable o = get(Feature.EVENT_ATTRIBUTE, identifier);
-        return o != null ? (EventAttribute) o : null;
+        return (EventAttribute) get(Feature.EVENT_ATTRIBUTE, identifier);
     }
+    @Nullable
     default EventCondition getEventCondition(@NotNull String identifier) {
-        final Identifiable o = get(Feature.EVENT_CONDITION, identifier);
-        return o != null ? (EventCondition) o : null;
+        return (EventCondition) get(Feature.EVENT_CONDITION, identifier);
     }
+    @Nullable
     default FactionUpgrade getFactionUpgrade(@NotNull String identifier) {
-        final Identifiable o = get(Feature.FACTION_UPGRADE, identifier);
-        return o != null ? (FactionUpgrade) o : null;
+        return (FactionUpgrade) get(Feature.FACTION_UPGRADE, identifier);
     }
+    @Nullable
     default FactionUpgradeType getFactionUpgradeType(@NotNull String identifier) {
-        final Identifiable o = get(Feature.FACTION_UPGRADE_TYPE, identifier);
-        return o != null ? (FactionUpgradeType) o : null;
+        return (FactionUpgradeType) get(Feature.FACTION_UPGRADE_TYPE, identifier);
     }
+    @Nullable
     default FallenHero getFallenHero(@NotNull String identifier) {
-        final Identifiable o = get(Feature.FALLEN_HERO, identifier);
-        return o != null ? (FallenHero) o : null;
+        return (FallenHero) get(Feature.FALLEN_HERO, identifier);
     }
+    @Nullable
     default FatBucket getFatBucket(@NotNull String identifier) {
-        final Identifiable o = get(Feature.FAT_BUCKET, identifier);
-        return o != null ? (FatBucket) o : null;
+        return (FatBucket) get(Feature.FAT_BUCKET, identifier);
     }
+    @Nullable
     default FilterCategory getFilterCategory(@NotNull String identifier) {
-        final Identifiable o = get(Feature.FILTER_CATEGORY, identifier);
-        return o != null ? (FilterCategory) o : null;
+        return (FilterCategory) get(Feature.FILTER_CATEGORY, identifier);
     }
+    @Nullable
     default GlobalChallenge getGlobalChallenge(@NotNull String identifier) {
-        final Identifiable o = get(Feature.GLOBAL_CHALLENGE, identifier);
-        return o != null ? (GlobalChallenge) o : null;
+        return (GlobalChallenge) get(Feature.GLOBAL_CHALLENGE, identifier);
     }
+    @Nullable
     default InventoryPet getInventoryPet(@NotNull String identifier) {
-        final Identifiable o = get(Feature.INVENTORY_PET, identifier);
-        return o != null ? (InventoryPet) o : null;
+        return (InventoryPet) get(Feature.INVENTORY_PET, identifier);
     }
+    @Nullable
     default ItemSkin getItemSkin(@NotNull String identifier) {
-        final Identifiable o = get(Feature.ITEM_SKIN, identifier);
-        return o != null ? (ItemSkin) o : null;
+        return (ItemSkin) get(Feature.ITEM_SKIN, identifier);
     }
+    @Nullable
     default KOTH getKingOfTheHill(@NotNull String identifier) {
-        final Identifiable o = get(Feature.KING_OF_THE_HILL, identifier);
-        return o != null ? (KOTH) o : null;
+        return (KOTH) get(Feature.KING_OF_THE_HILL, identifier);
     }
+    @Nullable
     default Lootbag getLootbag(@NotNull String identifier) {
-        final Identifiable o = get(Feature.LOOTBAG, identifier);
-        return o != null ? (Lootbag) o : null;
+        return (Lootbag) get(Feature.LOOTBAG, identifier);
     }
+    @Nullable
     default Lootbox getLootbox(@NotNull String identifier) {
-        final Identifiable o = get(Feature.LOOTBOX, identifier);
-        return o != null ? (Lootbox) o : null;
+        return (Lootbox) get(Feature.LOOTBOX, identifier);
     }
+    @Nullable
     default MagicDust getMagicDust(@NotNull String identifier) {
-        final Identifiable o = get(Feature.MAGIC_DUST, identifier);
-        return o != null ? (MagicDust) o : null;
+        return (MagicDust) get(Feature.MAGIC_DUST, identifier);
     }
+    @Nullable
     default Mask getMask(@NotNull String identifier) {
-        final Identifiable o = get(Feature.MASK, identifier);
-        return o != null ? (Mask) o : null;
+        return (Mask) get(Feature.MASK, identifier);
     }
+    @Nullable
     default MonthlyCrate getMonthlyCrate(@NotNull String identifier) {
-        final Identifiable o = get(Feature.MONTHLY_CRATE, identifier);
-        return o != null ? (MonthlyCrate) o : null;
+        return  (MonthlyCrate) get(Feature.MONTHLY_CRATE, identifier);
     }
+    @Nullable
     default Outpost getOutpost(@NotNull String identifier) {
-        final Identifiable o = get(Feature.OUTPOST, identifier);
-        return o != null ? (Outpost) o : null;
+        return (Outpost) get(Feature.OUTPOST, identifier);
     }
+    @Nullable
     default PlayerQuest getPlayerQuest(@NotNull String identifier) {
-        final Identifiable o = get(Feature.PLAYER_QUEST, identifier);
-        return o != null ? (PlayerQuest) o : null;
+        return (PlayerQuest) get(Feature.PLAYER_QUEST, identifier);
     }
+    @Nullable
     default RandomizationScroll getRandomizationScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SCROLL_RANDOMIZATION, identifier);
-        return o != null ? (RandomizationScroll) o : null;
+        return (RandomizationScroll) get(Feature.SCROLL_RANDOMIZATION, identifier);
     }
+    @Nullable
     default RarityFireball getRarityFireball(@NotNull String identifier) {
-        final Identifiable o = get(Feature.RARITY_FIREBALL, identifier);
-        return o != null ? (RarityFireball) o : null;
+        return (RarityFireball) get(Feature.RARITY_FIREBALL, identifier);
     }
+    @Nullable
     default RarityGem getRarityGem(@NotNull String identifier) {
-        final Identifiable o = get(Feature.RARITY_GEM, identifier);
-        return o != null ? (RarityGem) o : null;
+        return (RarityGem) get(Feature.RARITY_GEM, identifier);
     }
+    @Nullable
     default ServerCrate getServerCrate(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SERVER_CRATE, identifier);
-        return o != null ? (ServerCrate) o : null;
+        return (ServerCrate) get(Feature.SERVER_CRATE, identifier);
     }
+    @Nullable
     default ShopCategory getShopCategory(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SHOP_CATEGORY, identifier);
-        return o != null ? (ShopCategory) o : null;
+        return (ShopCategory) get(Feature.SHOP_CATEGORY, identifier);
     }
+    @Nullable
     default SoulTracker getSoulTracker(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SOUL_TRACKER, identifier);
-        return o != null ? (SoulTracker) o : null;
+        return (SoulTracker) get(Feature.SOUL_TRACKER, identifier);
     }
+    @Nullable
     default TitanAttribute getTitanAttribute(@NotNull String identifier) {
-        final Identifiable o = get(Feature.TITAN_ATTRIBUTE, identifier);
-        return o != null ? (TitanAttribute) o : null;
+        return (TitanAttribute) get(Feature.TITAN_ATTRIBUTE, identifier);
     }
+    @Nullable
     default Title getTitle(@NotNull String identifier) {
-        final Identifiable o = get(Feature.TITLE, identifier);
-        return o != null ? (Title) o : null;
+        return (Title) get(Feature.TITLE, identifier);
     }
+    @Nullable
     default TransmogScroll getTransmogScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SCROLL_TRANSMOG, identifier);
-        return o != null ? (TransmogScroll) o : null;
+        return (TransmogScroll) get(Feature.SCROLL_TRANSMOG, identifier);
     }
+    @Nullable
     default Trinket getTrinket(@NotNull String identifier) {
-        final Identifiable o = get(Feature.TRINKET, identifier);
-        return o != null ? (Trinket) o : null;
+        return (Trinket) get(Feature.TRINKET, identifier);
     }
+    @Nullable
     default WhiteScroll getWhiteScroll(@NotNull String identifier) {
-        final Identifiable o = get(Feature.SCROLL_WHITE, identifier);
-        return o != null ? (WhiteScroll) o : null;
+        return (WhiteScroll) get(Feature.SCROLL_WHITE, identifier);
     }
 }

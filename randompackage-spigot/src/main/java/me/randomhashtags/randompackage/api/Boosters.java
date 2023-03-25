@@ -3,7 +3,6 @@ package me.randomhashtags.randompackage.api;
 import me.randomhashtags.randompackage.addon.Booster;
 import me.randomhashtags.randompackage.addon.file.FileBooster;
 import me.randomhashtags.randompackage.addon.living.ActiveBooster;
-import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -47,7 +46,7 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 
 	public File dataF;
 	public YamlConfiguration data;
-	private MCMMOBoosterEvents mcmmoboosters;
+	private MCMMOBoosterEvents mcmmo_booster_events;
 
 	@Override
 	public @NotNull Feature get_feature() {
@@ -56,7 +55,6 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 
 	@Override
 	public void load() {
-
 		save("_Data", "boosters.yml");
 		dataF = new File(DATA_FOLDER + SEPARATOR + "_Data", "boosters.yml");
 		data = YamlConfiguration.loadConfiguration(dataF);
@@ -67,8 +65,8 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 		}
 
 		if(RPFeatureSpigot.mcmmoIsEnabled()) {
-			mcmmoboosters = new MCMMOBoosterEvents();
-			PLUGIN_MANAGER.registerEvents(mcmmoboosters, RANDOM_PACKAGE);
+			mcmmo_booster_events = new MCMMOBoosterEvents();
+			PLUGIN_MANAGER.registerEvents(mcmmo_booster_events, RANDOM_PACKAGE);
 		}
 
 		ACTIVE_REGIONAL_BOOSTERS = new HashMap<>();
@@ -86,8 +84,8 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 	public void unload() {
 		backup();
 		if(RPFeatureSpigot.mcmmoIsEnabled()) {
-			HandlerList.unregisterAll(mcmmoboosters);
-			mcmmoboosters = null;
+			HandlerList.unregisterAll(mcmmo_booster_events);
+			mcmmo_booster_events = null;
 		}
 		ACTIVE_REGIONAL_BOOSTERS = null;
 		ACTIVE_PLAYER_BOOSTERS = null;
@@ -155,11 +153,11 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 		}
 		return !cancelled;
 	}
-	private boolean finish(BoosterActivateEvent event) {
+	private boolean finish(@NotNull BoosterActivateEvent event) {
 		final Booster booster = event.booster;
 		if(booster instanceof FileBooster) {
 			final OfflinePlayer player = event.activator;
-			final UUID u = player.getUniqueId();
+			final UUID uuid = player.getUniqueId();
 			final double multiplier = event.multiplier;
 			final long duration = event.duration;
 			final HashMap<String, String> replacements = new HashMap<>();
@@ -171,11 +169,11 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 				case FACTION_MEMBERS:
 					if(regions.hookedFactionsUUID()) {
 						final FactionsUUID factions = FactionsUUID.INSTANCE;
-						final String faction = regions.getFactionTag(u);
+						final String faction = regions.getFactionTag(uuid);
 						if(faction != null) {
 							final ActiveBooster activeBooster = new ActiveBooster(event, faction, System.currentTimeMillis()+duration);
 							replacements.put("{TIME}", getRemainingTime(activeBooster.getRemainingTime()));
-							final List<Player> members = factions.getOnlineAssociates(u);
+							final List<Player> members = factions.getOnlineAssociates(uuid);
 							if(members != null) {
 								final List<String> msg = booster.getActivateMsg();
 								for(Player p : members) {
@@ -195,10 +193,10 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 					if(player.isOnline()) {
 						sendStringListMessage(player.getPlayer(), booster.getActivateMsg(), replacements);
 					}
-					if(!ACTIVE_PLAYER_BOOSTERS.containsKey(u)) {
-						ACTIVE_PLAYER_BOOSTERS.put(u, new ArrayList<>());
+					if(!ACTIVE_PLAYER_BOOSTERS.containsKey(uuid)) {
+						ACTIVE_PLAYER_BOOSTERS.put(uuid, new ArrayList<>());
 					}
-					ACTIVE_PLAYER_BOOSTERS.get(u).add(activeBooster);
+					ACTIVE_PLAYER_BOOSTERS.get(uuid).add(activeBooster);
 					return true;
 				default:
 					return false;
@@ -222,14 +220,14 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 		}
 	}
 	private void triggerBoosters(@NotNull Player player, Event event) {
-		final UUID u = player.getUniqueId();
+		final UUID uuid = player.getUniqueId();
 		final HashMap<String, String> replacements = new HashMap<>();
 		final List<ActiveBooster> boosters = new ArrayList<>();
-		boosters.addAll(getFactionBoosters(u));
-		boosters.addAll(getSelfBoosters(u));
+		boosters.addAll(getFactionBoosters(uuid));
+		boosters.addAll(getSelfBoosters(uuid));
 		for(ActiveBooster booster : boosters) {
-			final BoosterTriggerEvent e = new BoosterTriggerEvent(event, player, booster);
-			PLUGIN_MANAGER.callEvent(e);
+			final BoosterTriggerEvent trigger_event = new BoosterTriggerEvent(event, player, booster);
+			PLUGIN_MANAGER.callEvent(trigger_event);
 			final String multiplier = Double.toString(booster.getMultiplier()), duration = Long.toString(booster.getDuration());
 			if(trigger(event, booster.getBooster().getAttributes(), "multiplier", multiplier, "duration", duration)) {
 				replacements.put("multiplier", multiplier);

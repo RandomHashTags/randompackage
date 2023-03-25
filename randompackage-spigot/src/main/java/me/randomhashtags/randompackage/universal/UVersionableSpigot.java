@@ -99,7 +99,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
     }
 
-    default List<String> getStringList(FileConfiguration yml, String identifier) {
+    default List<String> getStringList(@NotNull FileConfiguration yml, @NotNull String identifier) {
         FEATURE_MESSAGES.putIfAbsent(yml, new HashMap<>());
         final HashMap<String, List<String>> messages = FEATURE_MESSAGES.get(yml);
         messages.putIfAbsent(identifier, colorizeListString(yml.getStringList(identifier)));
@@ -207,9 +207,9 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
             final Player player = isPlayer ? (Player) sender : null;
             for(String s : message) {
                 if(replacements != null) {
-                    for(String r : replacements.keySet()) {
-                        final String replacement = replacements.get(r);
-                        s = s.replace(r, replacement != null ? replacement : "null");
+                    for(Map.Entry<String, String> entry : replacements.entrySet()) {
+                        final String replacement = entry.getValue();
+                        s = s.replace(entry.getKey(), replacement != null ? replacement : "null");
                     }
                 }
                 if(s != null) {
@@ -648,14 +648,12 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         return null;
     }
 
-    default void playParticle(FileConfiguration config, String path, Location location, int count) {
-        if(config != null && config.get(path) != null) {
-            final String target = config.getString(path);
-            if(target != null) {
-                final UParticleSpigot up = UParticleSpigot.matchParticle(target.toUpperCase());
-                if(up != null) {
-                    up.play(location, count);
-                }
+    default void playParticle(@NotNull FileConfiguration config, @NotNull String path, @NotNull Location location, int count) {
+        final String target = config.getString(path);
+        if(target != null) {
+            final UParticleSpigot up = UParticleSpigot.matchParticle(target.toUpperCase());
+            if(up != null) {
+                up.play(location, count);
             }
         }
     }
@@ -687,15 +685,15 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
 
     @NotNull
     default List<Location> getChunkLocations(@NotNull Chunk chunk) {
-        final List<Location> l = new ArrayList<>();
-        final int x = chunk.getX() * 16, z = chunk.getZ() * 16;
+        final List<Location> locations = new ArrayList<>();
+        final int chunk_x = chunk.getX() * 16, chunk_z = chunk.getZ() * 16;
         final World world = chunk.getWorld();
-        for(int xx = x; xx < x+16; xx++) {
-            for(int zz = z; zz < z+16; zz++) {
-                l.add(new Location(world, xx, 0, zz));
+        for(int x = chunk_x; x < chunk_x+16; x++) {
+            for(int z = chunk_z; z < chunk_z+16; z++) {
+                locations.add(new Location(world, x, 0, z));
             }
         }
-        return l;
+        return locations;
     }
     @NotNull
     default List<Player> getWorldPlayers(@NotNull Location location) {

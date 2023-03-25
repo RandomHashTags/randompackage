@@ -35,7 +35,7 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
     private UInventory gui, viewInventory;
     private ItemStack enterQueue, request;
-    private List<String> blockedCommands;
+    private List<String> blocked_commands;
     private boolean isLegacy = false;
     private HashMap<Player, HashSet<Integer>> tasks;
     private HashSet<Player> viewing;
@@ -74,9 +74,9 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
 
         isLegacy = EIGHT || NINE || TEN || ELEVEN;
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "wild pvp.yml"));
-        blockedCommands = new ArrayList<>();
+        blocked_commands = new ArrayList<>();
         for(String s : config.getStringList("settings.blocked commands")) {
-            blockedCommands.add(s.toLowerCase());
+            blocked_commands.add(s.toLowerCase());
         }
 
         gui = new UInventory(null, config.getInt("gui.size"), colorize(config.getString("gui.title")));
@@ -249,7 +249,7 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
             delete(match);
         }
     }
-    private void delete(PvPMatch match) {
+    private void delete(@NotNull PvPMatch match) {
         final int slot = match.slot;
         final Inventory inv = gui.getInventory();
         inv.setItem(slot, new ItemStack(Material.AIR));
@@ -285,9 +285,9 @@ public enum WildPvP implements RPFeatureSpigot, CommandExecutor {
         final Player player = event.getPlayer();
         final PvPMatch match = PvPMatch.valueOf(player);
         if(match != null) {
-            final String msg = event.getMessage();
-            for(String command : blockedCommands) {
-                if(msg.toLowerCase().startsWith(command)) {
+            final String msg = event.getMessage(), msg_lowercase = msg.toLowerCase();
+            for(String command : blocked_commands) {
+                if(msg_lowercase.startsWith(command)) {
                     event.setCancelled(true);
                     sendStringListMessage(player, getStringList(config, "messages.cannot use blocked command"), null);
                     return;

@@ -68,8 +68,8 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
                             if(length == 0) {
                                 editFilter(player, null);
                             } else {
-                                Material f = Material.getMaterial(arg.toUpperCase());
-                                if(f != null) {
+                                final Material material = Material.getMaterial(arg.toUpperCase());
+                                if(material != null) {
                                     setFilter(player, q, itemType.replace("{ITEM}", toMaterial(arg, false)));
                                 } else {
                                     sendStringListMessage(player, getStringList(config, "messages.invalid filter type"), null);
@@ -142,7 +142,7 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
     }
     @Override
     public void unload() {
-        for(UUID u : new ArrayList<>(editingfilter.keySet())) {
+        for(UUID u : editingfilter.keySet()) {
             final OfflinePlayer o = Bukkit.getOfflinePlayer(u);
             if(o.isOnline()) {
                 o.getPlayer().closeInventory();

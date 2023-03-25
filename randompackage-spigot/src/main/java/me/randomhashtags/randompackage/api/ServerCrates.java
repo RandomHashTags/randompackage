@@ -24,7 +24,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,11 +34,11 @@ import java.util.UUID;
 public enum ServerCrates implements RPFeatureSpigot {
 	INSTANCE;
 
-	private List<UUID> canRevealRarities;
-	private HashMap<UUID, ServerCrate> revealingLoot;
+	private List<UUID> can_reveal_rarities;
+	private HashMap<UUID, ServerCrate> revealing_loot;
 	private HashMap<UUID, HashMap<Integer, ServerCrate>> selectedSlots;
 	private HashMap<UUID, List<ItemStack>> revealingloot;
-	private HashMap<UUID, List<Integer>> tasks, revealedslots;
+	private HashMap<UUID, List<Integer>> tasks, revealed_slots;
 
 	@Override
 	public @NotNull Feature get_feature() {
@@ -48,12 +47,12 @@ public enum ServerCrates implements RPFeatureSpigot {
 
 	@Override
 	public void load() {
-		canRevealRarities = new ArrayList<>();
-		revealingLoot = new HashMap<>();
+		can_reveal_rarities = new ArrayList<>();
+		revealing_loot = new HashMap<>();
 		selectedSlots = new HashMap<>();
 		revealingloot = new HashMap<>();
 		tasks = new HashMap<>();
-		revealedslots = new HashMap<>();
+		revealed_slots = new HashMap<>();
 
 		if(!OTHER_YML.getBoolean("saved default server crates")) {
 			generateDefaultServerCrates();
@@ -71,7 +70,7 @@ public enum ServerCrates implements RPFeatureSpigot {
 	}
 	@Override
 	public void unload() {
-		for(UUID uuid : new ArrayList<>(revealingLoot.keySet())) {
+		for(UUID uuid : new ArrayList<>(revealing_loot.keySet())) {
 			final OfflinePlayer o = Bukkit.getOfflinePlayer(uuid);
 			if(o.isOnline()) {
 				o.getPlayer().closeInventory();
@@ -84,16 +83,16 @@ public enum ServerCrates implements RPFeatureSpigot {
 	}
 
 	public void openCrate(@NotNull Player player, @NotNull ServerCrate crate) {
-		final ServerCrateOpenEvent e = new ServerCrateOpenEvent(player, crate);
-		PLUGIN_MANAGER.callEvent(e);
-		if(!e.isCancelled()) {
+		final ServerCrateOpenEvent event = new ServerCrateOpenEvent(player, crate);
+		PLUGIN_MANAGER.callEvent(event);
+		if(!event.isCancelled()) {
 			final UInventory i = crate.getInventory();
 			player.openInventory(Bukkit.createInventory(player, i.getSize(), i.getTitle()));
 			player.getOpenInventory().getTopInventory().setContents(i.getInventory().getContents());
 			player.updateInventory();
-			final UUID u = player.getUniqueId();
-			revealingLoot.put(u, crate);
-			selectedSlots.put(u, new HashMap<>());
+			final UUID uuid = player.getUniqueId();
+			revealing_loot.put(uuid, crate);
+			selectedSlots.put(uuid, new HashMap<>());
 		}
 	}
 	private void stopTasks(UUID uuid) {
@@ -106,7 +105,7 @@ public enum ServerCrates implements RPFeatureSpigot {
 	}
 	private void revealBackgroundLoot(Player player) {
 		final UUID uuid = player.getUniqueId();
-		final ServerCrate crate = revealingLoot.get(uuid);
+		final ServerCrate crate = revealing_loot.get(uuid);
 		tasks.put(uuid, new ArrayList<>());
 		final List<Integer> tasks = this.tasks.get(uuid);
 		final List<Integer> background = new ArrayList<>();
@@ -148,7 +147,7 @@ public enum ServerCrates implements RPFeatureSpigot {
 									revealSlotRarity.setItemMeta(itemMeta);
 									top.setItem(selectedSlot, revealSlotRarity);
 								}
-								canRevealRarities.add(uuid);
+								can_reveal_rarities.add(uuid);
 							}
 							player.updateInventory();
 						}, n* 5L);
@@ -164,11 +163,11 @@ public enum ServerCrates implements RPFeatureSpigot {
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
 		final Player player = (Player) event.getPlayer();
 		final UUID uuid = player.getUniqueId();
-		if(revealingLoot.containsKey(uuid)) {
-			canRevealRarities.remove(uuid);
+		if(revealing_loot.containsKey(uuid)) {
+			can_reveal_rarities.remove(uuid);
 			stopTasks(uuid);
-			final ServerCrate crate = revealingLoot.get(uuid);
-			revealingLoot.remove(uuid);
+			final ServerCrate crate = revealing_loot.get(uuid);
+			revealing_loot.remove(uuid);
 			revealingloot.putIfAbsent(uuid, new ArrayList<>());
 			final HashMap<String, List<String>> crateRewards = crate.getRewards();
 			final List<ItemStack> lootRevealed = revealingloot.get(uuid);
@@ -178,14 +177,14 @@ public enum ServerCrates implements RPFeatureSpigot {
 			}
 			selectedSlots.remove(uuid);
 			if(player.isOnline()) {
-				final ServerCrateCloseEvent e = new ServerCrateCloseEvent(player, crate, lootRevealed);
-				PLUGIN_MANAGER.callEvent(e);
+				final ServerCrateCloseEvent close_event = new ServerCrateCloseEvent(player, crate, lootRevealed);
+				PLUGIN_MANAGER.callEvent(close_event);
 				for(ItemStack is : lootRevealed) {
 					giveItem(player, is);
 				}
 			}
 			revealingloot.remove(uuid);
-			revealedslots.remove(uuid);
+			revealed_slots.remove(uuid);
 		}
 	}
 	@EventHandler
@@ -221,9 +220,9 @@ public enum ServerCrates implements RPFeatureSpigot {
 		if(event.getCurrentItem() != null && player.getOpenInventory().getTopInventory().getHolder() == player) {
 			final ItemStack current = event.getCurrentItem();
 			final UUID uuid = player.getUniqueId();
-			if(revealingLoot.containsKey(uuid))  {
+			if(revealing_loot.containsKey(uuid))  {
 				final int slot = event.getRawSlot();
-				final ServerCrate crate = revealingLoot.get(uuid);
+				final ServerCrate crate = revealing_loot.get(uuid);
 				event.setCancelled(true);
 				player.updateInventory();
 				final Inventory top = player.getOpenInventory().getTopInventory();
@@ -257,7 +256,7 @@ public enum ServerCrates implements RPFeatureSpigot {
 						if(!tasks.containsKey(uuid) && selectedSlots.size() == crate.getRedeemableItems()) {
 							revealBackgroundLoot(player);
 						}
-					} else if(canRevealRarities.contains(uuid) && selectedSlots.containsKey(slot) && selectedSlots.get(slot) == null) {
+					} else if(can_reveal_rarities.contains(uuid) && selectedSlots.containsKey(slot) && selectedSlots.get(slot) == null) {
 						final ServerCrate sc = crate.getRandomRarity(true);
 						selectedSlots.put(slot, sc);
 						item = sc.getDisplay().clone();
@@ -281,14 +280,14 @@ public enum ServerCrates implements RPFeatureSpigot {
 						top.setItem(slot, item);
 						player.updateInventory();
 					} else if(selectedSlots.containsKey(slot) && selectedSlots.get(slot) != null) {
-						if(!revealedslots.containsKey(uuid) || !revealedslots.get(uuid).contains(slot)) {
-							final ItemStack reward = revealingLoot.get(uuid).getRandomReward(selectedSlots.get(slot).getIdentifier());
+						if(!revealed_slots.containsKey(uuid) || !revealed_slots.get(uuid).contains(slot)) {
+							final ItemStack reward = revealing_loot.get(uuid).getRandomReward(selectedSlots.get(slot).getIdentifier());
 							top.setItem(slot, reward);
 							player.updateInventory();
 							revealingloot.putIfAbsent(uuid, new ArrayList<>());
 							revealingloot.get(uuid).add(reward);
-							revealedslots.putIfAbsent(uuid, new ArrayList<>());
-							revealedslots.get(uuid).add(slot);
+							revealed_slots.putIfAbsent(uuid, new ArrayList<>());
+							revealed_slots.get(uuid).add(slot);
 						}
 					}
 				}

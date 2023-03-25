@@ -4,7 +4,6 @@ import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.addon.file.FilePlayerQuest;
 import me.randomhashtags.randompackage.addon.living.ActivePlayerQuest;
 import me.randomhashtags.randompackage.attribute.IncreasePQuest;
-import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
 import me.randomhashtags.randompackage.attributesys.EventAttributeListener;
 import me.randomhashtags.randompackage.attributesys.EventExecutor;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
@@ -32,7 +31,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -49,8 +47,8 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
     private ItemStack returnToQuests, active, locked, background, claim, claimed;
     public List<Integer> questSlots;
     private int questMasterShopSlot;
-    private HashMap<Integer, ItemStack> shopitems;
-    private HashMap<Integer, Integer> tokencost;
+    private HashMap<Integer, ItemStack> shop_items;
+    private HashMap<Integer, Integer> token_cost;
     private int returnToQuestsSlot;
 
     @Override
@@ -95,8 +93,8 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         claimed = createItemStack(config, "gui.claimed");
         locked = createItemStack(config, "gui.locked");
 
-        shopitems = new HashMap<>();
-        tokencost = new HashMap<>();
+        shop_items = new HashMap<>();
+        token_cost = new HashMap<>();
 
         questMasterShopSlot = config.getInt("gui.quest master shop.slot");
         final Inventory gi = gui.getInventory();
@@ -132,8 +130,8 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
                         }
                         itemMeta.setLore(lore); lore.clear();
                         item.setItemMeta(itemMeta);
-                        shopitems.put(slot, r);
-                        tokencost.put(slot, cost);
+                        shop_items.put(slot, r);
+                        token_cost.put(slot, cost);
                     }
                     shopInv.setItem(slot, item);
                 }
@@ -303,27 +301,24 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         }
     }
 
-    @Nullable
-    private ItemStack getReturnToQuests(Player player) {
-        if(player != null) {
-            final String t = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
-            final ItemStack item = returnToQuests.clone();
-            final ItemMeta itemMeta = item.getItemMeta();
-            if(itemMeta != null) {
-                final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
-                if(itemLore != null) {
-                    for(String string : itemLore) {
-                        lore.add(string.replace("{TOKENS}", t));
-                    }
+    @NotNull
+    private ItemStack getReturnToQuests(@NotNull Player player) {
+        final String t = formatInt(FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getTokens().intValue());
+        final ItemStack item = returnToQuests.clone();
+        final ItemMeta itemMeta = item.getItemMeta();
+        if(itemMeta != null) {
+            final List<String> lore = new ArrayList<>(), itemLore = itemMeta.getLore();
+            if(itemLore != null) {
+                for(String string : itemLore) {
+                    lore.add(string.replace("{TOKENS}", t));
                 }
-                itemMeta.setLore(lore);
-                item.setItemMeta(itemMeta);
             }
-            return item;
+            itemMeta.setLore(lore);
+            item.setItemMeta(itemMeta);
         }
-        return null;
+        return item;
     }
-    private void updateReturnToQuests(Player player) {
+    private void updateReturnToQuests(@NotNull Player player) {
         final ItemStack is = getReturnToQuests(player);
         player.getOpenInventory().getTopInventory().setItem(returnToQuestsSlot, is);
         player.updateInventory();
@@ -331,11 +326,11 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void inventoryClickEvent(InventoryClickEvent event) {
-        final String t = event.getView().getTitle(), s = shop.getTitle();
-        if(t.equals(gui.getTitle()) || t.equals(s)) {
+        final String title = event.getView().getTitle(), shop_title = shop.getTitle();
+        if(title.equals(gui.getTitle()) || title.equals(shop_title)) {
             final Player player = (Player) event.getWhoClicked();
             event.setCancelled(true);
-            final boolean inShop = t.equals(s);
+            final boolean inShop = title.equals(shop_title);
             final int slot = event.getRawSlot();
             final ItemStack c = event.getCurrentItem();
             if(!inShop) {
@@ -365,11 +360,11 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
                 } else if(slot == questMasterShopSlot) {
                     viewShop(player);
                 }
-            } else if(shopitems.containsKey(slot)) {
+            } else if(shop_items.containsKey(slot)) {
                 final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
                 final PlayerQuestData data = pdata.getPlayerQuestData();
                 final BigInteger current = data.getTokens();
-                final int cost = tokencost.get(slot), currentInt = current.intValue();
+                final int cost = token_cost.get(slot), currentInt = current.intValue();
                 final HashMap<String, String> replacements = new HashMap<>();
                 replacements.put("{TOKENS}", formatInt(currentInt));
                 replacements.put("{COST}", Integer.toString(cost));
@@ -378,7 +373,7 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
                 if(isEnough) {
                     final BigInteger newAmount = current.subtract(BigInteger.valueOf(cost));
                     data.setTokens(newAmount);
-                    giveItem(player, shopitems.get(slot));
+                    giveItem(player, shop_items.get(slot));
                     updateReturnToQuests(player);
                     replacements.put("{TOKENS}", formatInt(newAmount.intValue()));
                 }
@@ -390,14 +385,12 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         }
     }
 
-    private void triggerPlayerQuests(Event event, Player player) {
-        if(player != null) {
-            final HashMap<String, Entity> entities = getEntities(event);
-            final Collection<ActivePlayerQuest> quests = FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getQuests().values();
-            final String[] replacements = getReplacements(event);
-            for(ActivePlayerQuest quest : quests) {
-                trigger(event, entities, quest.getQuest().getTrigger(), replacements);
-            }
+    private void triggerPlayerQuests(@NotNull Event event, @NotNull Player player) {
+        final HashMap<String, Entity> entities = getEntities(event);
+        final Collection<ActivePlayerQuest> quests = FileRPPlayer.get(player.getUniqueId()).getPlayerQuestData().getQuests().values();
+        final String[] replacements = getReplacements(event);
+        for(ActivePlayerQuest quest : quests) {
+            trigger(event, entities, quest.getQuest().getTrigger(), replacements);
         }
     }
     @EventHandler

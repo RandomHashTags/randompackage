@@ -234,12 +234,15 @@ public enum RegionalAPI implements UVersionableSpigot {
         return getRelation(player, 4);
     }
 
+    @Nullable
     public String getFactionTagAt(@NotNull Location l) {
         return FACTIONS_UUID ? FactionsUUID.INSTANCE.getRegionalIdentifierAt(l) : null;
     }
+    @Nullable
     public String getFactionTag(@NotNull UUID player) {
         return FACTIONS_UUID ? FactionsUUID.INSTANCE.getRegionalIdentifier(player) : null;
     }
+    @Nullable
     public String getFactionTag(@NotNull OfflinePlayer player) {
         return getFactionTag(player.getUniqueId());
     }

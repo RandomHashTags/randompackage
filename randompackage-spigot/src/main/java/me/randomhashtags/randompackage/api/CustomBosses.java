@@ -31,7 +31,7 @@ import java.util.UUID;
 public enum CustomBosses implements EventAttributes {
 	INSTANCE;
 
-	private HashMap<UUID, LivingCustomBoss> deadBosses;
+	private HashMap<UUID, LivingCustomBoss> dead_bosses;
 
 	@Override
 	public @NotNull Feature get_feature() {
@@ -40,7 +40,7 @@ public enum CustomBosses implements EventAttributes {
 
 	@Override
 	public void load() {
-		deadBosses = new HashMap<>();
+		dead_bosses = new HashMap<>();
 
 		if(!OTHER_YML.getBoolean("saved default custom bosses")) {
 			generateDefaultCustomBosses();
@@ -129,14 +129,14 @@ public enum CustomBosses implements EventAttributes {
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void slimeSplitEvent(SlimeSplitEvent event) {
 		final UUID uuid = event.getEntity().getUniqueId();
-		if(deadBosses.containsKey(uuid)) {
-			for(String attribute : deadBosses.get(uuid).type.getAttributes()) {
+		if(dead_bosses.containsKey(uuid)) {
+			for(String attribute : dead_bosses.get(uuid).type.getAttributes()) {
 				if(attribute.toLowerCase().startsWith("split=false")) {
 					event.setCancelled(true);
 					break;
 				}
 			}
-			deadBosses.remove(uuid);
+			dead_bosses.remove(uuid);
 		}
 	}
 	@EventHandler
@@ -146,14 +146,14 @@ public enum CustomBosses implements EventAttributes {
 		final HashMap<UUID, LivingCustomBoss> living = LivingCustomBoss.LIVING;
 		if(living != null) {
 			final LivingCustomBoss boss = living.get(uuid);
-			final HashMap<UUID, LivingCustomMinion> minions = LivingCustomMinion.living;
+			final HashMap<UUID, LivingCustomMinion> minions = LivingCustomMinion.LIVING;
 			final LivingCustomMinion minion = boss == null && minions != null ? minions.get(uuid) : null;
 			if(boss != null || minion != null) {
 				final EntityDamageEvent ede = entity.getLastDamageCause();
 				event.setDroppedExp(0);
 				event.getDrops().clear();
 				if(boss != null) {
-					deadBosses.put(uuid, boss);
+					dead_bosses.put(uuid, boss);
 					boss.kill(entity, ede);
 				} else {
 					minion.kill(event);

@@ -37,6 +37,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -156,11 +157,13 @@ public enum FactionUpgrades implements EventAttributes {
         }
     }
 
-    public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction) {
+    @NotNull
+    public FactionUpgradeInfo getFactionUpgradeInfo(@NotNull FactionUpgrade upgrade, @Nullable String faction) {
         return getFactionUpgradeInfo(upgrade, faction, getDefaultUpgradeInfo(upgrade));
     }
-    public FactionUpgradeInfo getFactionUpgradeInfo(FactionUpgrade upgrade, String faction, FactionUpgradeInfo def) {
-        if(upgrade != null && faction != null && FACTION_UPGRADES.containsKey(faction)) {
+    @NotNull
+    public FactionUpgradeInfo getFactionUpgradeInfo(@NotNull FactionUpgrade upgrade, @Nullable String faction, FactionUpgradeInfo def) {
+        if(FACTION_UPGRADES.containsKey(faction)) {
             for(FactionUpgradeInfo info : FACTION_UPGRADES.get(faction)) {
                 if(info.getType().equals(upgrade)) {
                     return info;
@@ -169,138 +172,136 @@ public enum FactionUpgrades implements EventAttributes {
         }
         return def;
     }
+    @NotNull
     public FactionUpgradeInfo getDefaultUpgradeInfo(FactionUpgrade upgrade) {
         return new FactionUpgradeInfo(upgrade, upgrade.getLevels().get(0));
     }
-    public void tryToUpgrade(@NotNull Player player, @NotNull FactionUpgrade upgrade) {
+    public void try_upgrading(@NotNull Player player, @NotNull FactionUpgrade upgrade) {
         final RegionalAPI regions = RegionalAPI.INSTANCE;
         final GivedpItem givedpItem = GivedpItem.INSTANCE;
         final String faction = regions.getFactionTag(player.getUniqueId());
         final FactionUpgradeInfo info = getFactionUpgradeInfo(upgrade, faction);
-        if(info != null) {
-            final FactionUpgradeLevel level = info.getLevel();
-            final int tier = level.asInt();
-            if(tier >= upgrade.getMaxLevel()) {
-                return;
-            }
-            final FactionUpgradeLevel nextLevel = upgrade.getLevels().get(tier+1);
-            BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
-            ItemStack requiredItem = null;
-            final HashMap<String, String> replacements = new HashMap<>();
-            final List<FactionUpgradeInfo> upgrades = FACTION_UPGRADES.get(faction);
-            for(String costString : nextLevel.getCost()) {
-                costString = costString.toLowerCase();
-                if(costString.startsWith("cash{")) {
-                    final double amount = getRemainingDouble(costString.split("\\{")[1]);
-                    requiredCash = BigDecimal.valueOf(Double.parseDouble(costString.split("\\{")[1].split("}")[0]));
-                    if(ECONOMY.getBalance(player) < amount) {
-                        replacements.put("{COST}", formatBigDecimal(requiredCash));
-                        sendStringListMessage(player, getStringList(config, "messages.dont have enough cash"), replacements);
-                        return;
-                    }
-                } else if(costString.startsWith("item{")) {
-                    final String value = costString.split("\\{")[1];
-                    final ItemStack item = givedpItem.valueOfRPItem(value.split(";")[0]);
-                    requiredItem = item;
-                    item.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
-                    if(!player.getInventory().containsAtLeast(item, item.getAmount())) {
-                        replacements.put("{ITEM}", costString.split("};")[1]);
-                        sendStringListMessage(player, getStringList(config, "messages.dont have item"), replacements);
-                        return;
-                    }
-                } else if(costString.startsWith("spawnervalue{")) {
-                    replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(getRemainingDouble(costString.split("\\{")[1].split("}")[0]))));
-                    sendStringListMessage(player, getStringList(config, "messages.dont have enough spawner value"), replacements);
+        final FactionUpgradeLevel level = info.getLevel();
+        final int tier = level.asInt();
+        if(tier >= upgrade.getMaxLevel()) {
+            return;
+        }
+        final FactionUpgradeLevel nextLevel = upgrade.getLevels().get(tier+1);
+        BigDecimal requiredCash = BigDecimal.ZERO, requiredSpawnerValue = BigDecimal.ZERO;
+        ItemStack requiredItem = null;
+        final HashMap<String, String> replacements = new HashMap<>();
+        final List<FactionUpgradeInfo> upgrades = FACTION_UPGRADES.get(faction);
+        for(String costString : nextLevel.getCost()) {
+            costString = costString.toLowerCase();
+            if(costString.startsWith("cash{")) {
+                final double amount = getRemainingDouble(costString.split("\\{")[1]);
+                requiredCash = BigDecimal.valueOf(Double.parseDouble(costString.split("\\{")[1].split("}")[0]));
+                if(ECONOMY.getBalance(player) < amount) {
+                    replacements.put("{COST}", formatBigDecimal(requiredCash));
+                    sendStringListMessage(player, getStringList(config, "messages.dont have enough cash"), replacements);
                     return;
-                } else if(costString.startsWith("factionupgrade{")) {
-                    final String[] values = costString.split("\\{")[1].split("}")[0].split(":");
-                    final FactionUpgrade target = getFactionUpgrade(values[0]);
-                    final int lvl = Integer.parseInt(values[1].split("=")[1]);
-                    if(!upgrades.contains(getFactionUpgradeInfo(target, faction))) {
-                        final String name = ChatColor.stripColor(target.getItem().getItemMeta().getDisplayName());
-                        replacements.put("{UPGRADE}", name + " " + toRoman(lvl));
-                        sendStringListMessage(player, getStringList(config, "messages.dont have f upgrade"), replacements);
-                        return;
-                    }
+                }
+            } else if(costString.startsWith("item{")) {
+                final String value = costString.split("\\{")[1];
+                final ItemStack item = givedpItem.valueOfRPItem(value.split(";")[0]);
+                requiredItem = item;
+                item.setAmount(Integer.parseInt(value.split("amount=")[1].split("}")[0]));
+                if(!player.getInventory().containsAtLeast(item, item.getAmount())) {
+                    replacements.put("{ITEM}", costString.split("};")[1]);
+                    sendStringListMessage(player, getStringList(config, "messages.dont have item"), replacements);
+                    return;
+                }
+            } else if(costString.startsWith("spawnervalue{")) {
+                replacements.put("{COST}", formatBigDecimal(BigDecimal.valueOf(getRemainingDouble(costString.split("\\{")[1].split("}")[0]))));
+                sendStringListMessage(player, getStringList(config, "messages.dont have enough spawner value"), replacements);
+                return;
+            } else if(costString.startsWith("factionupgrade{")) {
+                final String[] values = costString.split("\\{")[1].split("}")[0].split(":");
+                final FactionUpgrade target = getFactionUpgrade(values[0]);
+                final int lvl = Integer.parseInt(values[1].split("=")[1]);
+                if(!upgrades.contains(getFactionUpgradeInfo(target, faction))) {
+                    final String name = ChatColor.stripColor(target.getItem().getItemMeta().getDisplayName());
+                    replacements.put("{UPGRADE}", name + " " + toRoman(lvl));
+                    sendStringListMessage(player, getStringList(config, "messages.dont have f upgrade"), replacements);
+                    return;
                 }
             }
-            final FactionUpgradeLevelupEvent upgradeEvent = new FactionUpgradeLevelupEvent(player, upgrade, tier);
-            PLUGIN_MANAGER.callEvent(upgradeEvent);
-            if(upgradeEvent.isCancelled()) {
-                return;
-            }
-            if(!requiredCash.equals(BigDecimal.ZERO)) {
-                ECONOMY.withdrawPlayer(player, requiredCash.doubleValue());
-            }
-            if(requiredItem != null) {
-                removeItem(player, requiredItem, requiredItem.getAmount());
-            }
-            info.setLevel(nextLevel);
-            final int slot = upgrade.getSlot();
-            player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, getString(config, "gui.tier"), getString(config, "gui.locked.tier")));
-            player.updateInventory();
         }
+        final FactionUpgradeLevelupEvent upgradeEvent = new FactionUpgradeLevelupEvent(player, upgrade, tier);
+        PLUGIN_MANAGER.callEvent(upgradeEvent);
+        if(upgradeEvent.isCancelled()) {
+            return;
+        }
+        if(!requiredCash.equals(BigDecimal.ZERO)) {
+            ECONOMY.withdrawPlayer(player, requiredCash.doubleValue());
+        }
+        if(requiredItem != null) {
+            removeItem(player, requiredItem, requiredItem.getAmount());
+        }
+        info.setLevel(nextLevel);
+        final int slot = upgrade.getSlot();
+        player.getOpenInventory().getTopInventory().setItem(slot, getUpgrade(faction, slot, getString(config, "gui.tier"), getString(config, "gui.locked.tier")));
+        player.updateInventory();
     }
+    @Nullable
     private ItemStack getUpgrade(String faction, int slot, String W, String L) {
         final FactionUpgrade upgrade = valueOfFactionUpgrade(slot);
         if(upgrade != null) {
             final FactionUpgradeInfo info = getFactionUpgradeInfo(upgrade, faction);
-            if(info != null) {
-                final HashMap<Integer, FactionUpgradeLevel> levels = upgrade.getLevels();
-                final FactionUpgradeLevel level = info.getLevel();
-                final int tier = level.asInt(), max = upgrade.getMaxLevel();
-                final boolean isTierZero = tier == 0;
-                ItemStack item = upgrade.getItem();
-                ItemMeta itemMeta = item.getItemMeta();
-                final FactionUpgradeType type = upgrade.getType();
-                final String perkAchieved = type.getPerkAchievedPrefix(), perkUnachieved = type.getPerkUnachievedPrefix(), requirementsPrefix = type.getRequirementsPrefix();
-                final List<String> achievedPerks = new ArrayList<>(), unachievedPerks = new ArrayList<>();
-                for(int i = 1; i <= max; i++) {
-                    final boolean achieved = tier >= i;
-                    (achieved ? achievedPerks : unachievedPerks).add(colorize((achieved ? perkAchieved : perkUnachieved) + levels.get(i).getString()));
-                }
-                if(item.hasItemMeta() && itemMeta.hasLore()) {
-                    final List<String> lore = new ArrayList<>();
-                    for(String string : itemMeta.getLore()) {
-                        if(string.equals("{TIER}")) {
-                            lore.add(isTierZero ? L : W.replace("{MAX_TIER}", Integer.toString(max)).replace("{TIER}", Integer.toString(tier)));
-                        } else {
-                            if(string.equals("{PERKS}")) {
-                                lore.addAll(achievedPerks);
-                                lore.addAll(unachievedPerks);
-                            } else if(string.equals("{REQUIREMENTS}")) {
-                                final FactionUpgradeLevel next = levels.getOrDefault(tier+1, null);
-                                if(next != null) {
-                                    for(String r : next.getCost()) {
-                                        lore.add(colorize(requirementsPrefix + r.split("};")[1]));
-                                    }
+            final HashMap<Integer, FactionUpgradeLevel> levels = upgrade.getLevels();
+            final FactionUpgradeLevel level = info.getLevel();
+            final int tier = level.asInt(), max = upgrade.getMaxLevel();
+            final boolean isTierZero = tier == 0;
+            ItemStack item = upgrade.getItem();
+            ItemMeta itemMeta = item.getItemMeta();
+            final FactionUpgradeType type = upgrade.getType();
+            final String perkAchieved = type.getPerkAchievedPrefix(), perkUnachieved = type.getPerkUnachievedPrefix(), requirementsPrefix = type.getRequirementsPrefix();
+            final List<String> achievedPerks = new ArrayList<>(), unachievedPerks = new ArrayList<>();
+            for(int i = 1; i <= max; i++) {
+                final boolean achieved = tier >= i;
+                (achieved ? achievedPerks : unachievedPerks).add(colorize((achieved ? perkAchieved : perkUnachieved) + levels.get(i).getString()));
+            }
+            if(item.hasItemMeta() && itemMeta.hasLore()) {
+                final List<String> lore = new ArrayList<>();
+                for(String string : itemMeta.getLore()) {
+                    if(string.equals("{TIER}")) {
+                        lore.add(isTierZero ? L : W.replace("{MAX_TIER}", Integer.toString(max)).replace("{TIER}", Integer.toString(tier)));
+                    } else {
+                        if(string.equals("{PERKS}")) {
+                            lore.addAll(achievedPerks);
+                            lore.addAll(unachievedPerks);
+                        } else if(string.equals("{REQUIREMENTS}")) {
+                            final FactionUpgradeLevel next = levels.getOrDefault(tier+1, null);
+                            if(next != null) {
+                                for(String r : next.getCost()) {
+                                    lore.add(colorize(requirementsPrefix + r.split("};")[1]));
                                 }
-                            } else {
-                                lore.add(string);
                             }
+                        } else {
+                            lore.add(string);
                         }
                     }
-                    for(String string : isTierZero ? type.getUnlock() : type.getUpgrade()) {
-                        lore.add(colorize(string));
-                    }
-                    itemMeta.setLore(lore);
-                    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
-                    item.setItemMeta(itemMeta);
-                    if(isTierZero) {
-                        final String displayName = itemMeta.getDisplayName();
-                        final ItemStack lockedItem = locked.clone();
-                        itemMeta = lockedItem.getItemMeta();
-                        itemMeta.setDisplayName(displayName);
-                        itemMeta.setLore(lore);
-                        lockedItem.setItemMeta(itemMeta);
-                        item = lockedItem;
-                    }
-                    if(upgrade.itemAmountEqualsTier()) {
-                        item.setAmount(isTierZero ? 1 : tier);
-                    }
                 }
-                return item;
+                for(String string : isTierZero ? type.getUnlock() : type.getUpgrade()) {
+                    lore.add(colorize(string));
+                }
+                itemMeta.setLore(lore);
+                itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
+                item.setItemMeta(itemMeta);
+                if(isTierZero) {
+                    final String displayName = itemMeta.getDisplayName();
+                    final ItemStack lockedItem = locked.clone();
+                    itemMeta = lockedItem.getItemMeta();
+                    itemMeta.setDisplayName(displayName);
+                    itemMeta.setLore(lore);
+                    lockedItem.setItemMeta(itemMeta);
+                    item = lockedItem;
+                }
+                if(upgrade.itemAmountEqualsTier()) {
+                    item.setAmount(isTierZero ? 1 : tier);
+                }
             }
+            return item;
         }
         return null;
     }
@@ -402,7 +403,7 @@ public enum FactionUpgrades implements EventAttributes {
             }
             final FactionUpgrade f = valueOfFactionUpgrade(slot);
             if(f != null) {
-                tryToUpgrade(player, f);
+                try_upgrading(player, f);
             }
         }
     }

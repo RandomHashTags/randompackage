@@ -57,6 +57,7 @@ public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
     public boolean isFatBucket(@NotNull ItemStack is) {
         return getRPItemStackValue(is, "FatBucketInfo") != null;
     }
+    @Nullable
     public HashMap<FatBucket, String> getFatBucketInfo(@NotNull ItemStack is) {
         final String info = getRPItemStackValue(is, "FatBucketInfo");
         if(info != null) {
@@ -92,41 +93,42 @@ public enum FatBuckets implements RPFeatureSpigot, RPItemStack {
     private void playerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
         final Player player = event.getPlayer();
         final ItemStack is = player.getItemInHand();
-        final HashMap<FatBucket, String> fb = getFatBucketInfo(is);
-        if(fb != null) {
+        final HashMap<FatBucket, String> bucket = getFatBucketInfo(is);
+        if(bucket != null) {
             event.setCancelled(true);
-            final Location l = event.getBlockClicked().getLocation();
-            final World w = l.getWorld();
-            final FatBucket target = (FatBucket) fb.keySet().toArray()[0];
-            if(target.getEnabledWorlds().contains(w.getName())) {
+            final Location location = event.getBlockClicked().getLocation();
+            final World world = location.getWorld();
+            final FatBucket target = (FatBucket) bucket.keySet().toArray()[0];
+            if(target.getEnabledWorlds().contains(world.getName())) {
                 target.didPlace(is);
-                w.getBlockAt(getPlacedLocation(l, event.getBlockFace())).setType(Material.LAVA);
+                world.getBlockAt(getPlacedLocation(location, event.getBlockFace())).setType(Material.LAVA);
             }
             player.updateInventory();
         }
     }
-    private int getDirectionX(BlockFace b) {
-        switch (b) {
+    private int getDirectionX(@NotNull BlockFace direction) {
+        switch (direction) {
             case WEST: return -1;
             case EAST: return 1;
             default: return 0;
         }
     }
-    private int getDirectionY(BlockFace b) {
-        switch (b) {
+    private int getDirectionY(@NotNull BlockFace direction) {
+        switch (direction) {
             case DOWN: return -1;
             case UP: return 1;
             default: return 0;
         }
     }
-    private int getDirectionZ(BlockFace b) {
-        switch (b) {
+    private int getDirectionZ(@NotNull BlockFace direction) {
+        switch (direction) {
             case SOUTH: return 1;
             case NORTH: return -1;
             default: return 0;
         }
     }
-    private Location getPlacedLocation(Location l, BlockFace b) {
+    @NotNull
+    private Location getPlacedLocation(@NotNull Location l, @NotNull BlockFace b) {
         return new Location(l.getWorld(), l.getBlockX()+getDirectionX(b), l.getBlockY()+getDirectionY(b), l.getBlockZ()+getDirectionZ(b));
     }
 }

@@ -15,6 +15,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public enum MobStacker implements RPFeatureSpigot {
             }
         }
     }
-    public void stackEntities(World world) {
+    public void stackEntities(@NotNull World world) {
         final List<EntityType> types = new ArrayList<>();
         for(LivingEntity entity : world.getLivingEntities()) {
             final EntityType type = entity.getType();
@@ -141,7 +142,7 @@ public enum MobStacker implements RPFeatureSpigot {
             }
         }
     }
-    public void stackEntities(World world, EntityType type) {
+    public void stackEntities(@NotNull World world, @NotNull EntityType type) {
         if(!stackable.contains(type)) {
             return;
         }
@@ -160,23 +161,24 @@ public enum MobStacker implements RPFeatureSpigot {
         final String name = customNames.get(type);
         for(Entity entity : entities) {
             final UUID entity_uuid = entity.getUniqueId();
-            StackedEntity stackedEntity = StackedEntity.valueOf(entity_uuid);
+            StackedEntity stacked_entity = StackedEntity.valueOf(entity_uuid);
+            final int stacked_entity_size = stacked_entity == null ? 1 : stacked_entity.size;
             final EntityType entity_type = entity.getType();
             final List<Entity> nearby_entities = entity.getNearbyEntities(radius, radius, radius);
-            for(Entity nearbyEntity : nearby_entities) {
-                final StackedEntity se = StackedEntity.valueOf(nearbyEntity.getUniqueId());
-                if(!entity.isDead() && !nearbyEntity.isDead() && nearbyEntity.getType().equals(entity_type) && (se != null || nearbyEntity.getCustomName() == null)) {
-                    if(se != null) {
-                        if(max == -1 || se.size+(stackedEntity == null ? 1 : stackedEntity.size) <= max) {
-                            se.merge((LivingEntity) entity);
+            for(Entity nearby_entity : nearby_entities) {
+                final StackedEntity nearby_stacked_entity = StackedEntity.valueOf(nearby_entity.getUniqueId());
+                if(!entity.isDead() && !nearby_entity.isDead() && nearby_entity.getType().equals(entity_type) && (nearby_stacked_entity != null || nearby_entity.getCustomName() == null)) {
+                    if(nearby_stacked_entity != null) {
+                        if(max == -1 || nearby_stacked_entity.size + stacked_entity_size <= max) {
+                            nearby_stacked_entity.merge((LivingEntity) entity);
                         }
-                    } else if(stackedEntity != null) {
-                        if(max == -1 || stackedEntity.size+1 <= max) {
-                            stackedEntity.merge((LivingEntity) nearbyEntity);
+                    } else if(stacked_entity != null) {
+                        if(max == -1 || stacked_entity_size + 1 <= max) {
+                            stacked_entity.merge((LivingEntity) nearby_entity);
                         }
                     } else {
-                        stackedEntity = new StackedEntity(System.currentTimeMillis(), (LivingEntity) entity, name, 1);
-                        stackedEntity.merge((LivingEntity) nearbyEntity);
+                        stacked_entity = new StackedEntity(System.currentTimeMillis(), (LivingEntity) entity, name, 1);
+                        stacked_entity.merge((LivingEntity) nearby_entity);
                     }
                 }
             }
@@ -184,8 +186,7 @@ public enum MobStacker implements RPFeatureSpigot {
     }
     @EventHandler
     private void entityDeathEvent(EntityDeathEvent event) {
-        final UUID uuid = event.getEntity().getUniqueId();
-        final StackedEntity stacked_entity = StackedEntity.valueOf(uuid);
+        final StackedEntity stacked_entity = StackedEntity.valueOf(event.getEntity().getUniqueId());
         if(stacked_entity != null) {
             stacked_entity.kill(null, 1);
         }
@@ -193,34 +194,33 @@ public enum MobStacker implements RPFeatureSpigot {
     @EventHandler
     private void entityDamageEvent(EntityDamageEvent event) {
         final String cause = event.getCause().name();
-        final Entity e = event.getEntity();
-        final UUID u = e.getUniqueId();
-        final StackedEntity s = StackedEntity.valueOf(u);
-        if(s != null && (cause.contains("LAVA") || cause.contains("FIRE"))) {
-            final LivingEntity le = (LivingEntity) e;
-            if(le.getHealth() - event.getFinalDamage() <= 0.000) {
-                le.setHealth(le.getMaxHealth());
-                le.setFireTicks(0);
-                s.kill(null, 1);
+        final Entity entity = event.getEntity();
+        final StackedEntity stacked_entity = StackedEntity.valueOf(entity.getUniqueId());
+        if(stacked_entity != null && (cause.contains("LAVA") || cause.contains("FIRE"))) {
+            final LivingEntity living_entity = (LivingEntity) entity;
+            if(living_entity.getHealth() - event.getFinalDamage() <= 0.000) {
+                living_entity.setHealth(living_entity.getMaxHealth());
+                living_entity.setFireTicks(0);
+                stacked_entity.kill(null, 1);
             }
-            if(s.size == 1) {
-                StackedEntity.STACKED_ENTITIES.remove(s);
+            if(stacked_entity.size == 1) {
+                StackedEntity.STACKED_ENTITIES.remove(stacked_entity);
             }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity(), dam = event.getDamager();
-        final LivingEntity e = entity instanceof LivingEntity ? (LivingEntity) entity : null, damager = e != null && dam instanceof LivingEntity ? (LivingEntity) dam : null;
-        if(e != null && !event.getEntityType().equals(EntityType.PLAYER)) {
-            final StackedEntity s = StackedEntity.valueOf(e.getUniqueId());
-            if(s != null && e.getHealth()-event.getFinalDamage() <= 0.000) {
+        final LivingEntity living_entity = entity instanceof LivingEntity ? (LivingEntity) entity : null, damager = living_entity != null && dam instanceof LivingEntity ? (LivingEntity) dam : null;
+        if(living_entity != null && !event.getEntityType().equals(EntityType.PLAYER)) {
+            final StackedEntity stacked_entity = StackedEntity.valueOf(living_entity.getUniqueId());
+            if(stacked_entity != null && living_entity.getHealth()-event.getFinalDamage() <= 0.000) {
                 event.setDamage(0);
-                e.setHealth(e.getMaxHealth());
-                s.kill(damager, 1);
+                living_entity.setHealth(living_entity.getMaxHealth());
+                stacked_entity.kill(damager, 1);
             }
-            if(s != null && s.size == 1) {
-                StackedEntity.STACKED_ENTITIES.remove(s);
+            if(stacked_entity != null && stacked_entity.size == 1) {
+                StackedEntity.STACKED_ENTITIES.remove(stacked_entity);
             }
         }
     }

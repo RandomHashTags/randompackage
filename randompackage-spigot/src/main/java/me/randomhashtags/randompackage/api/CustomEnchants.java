@@ -51,6 +51,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -210,18 +211,18 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
         final Object[] enchants = enabled.values().toArray();
         final int size = enabled.size(), maxpage = size/10;
         page = Math.min(page, maxpage);
-        final int starting = page*10;
-        final String max = Integer.toString(maxpage), p = Integer.toString(page);
+        final int starting = page * 10;
+        final String max = Integer.toString(maxpage), page_string = Integer.toString(page);
         for(String s : getStringList(RP_CONFIG, "enchants.msg")) {
             if(s.equals("{ENCHANTS}")) {
                 for(int i = starting; i <= starting+10; i++) {
                     if(size > i) {
-                        final CustomEnchantSpigot ce = (CustomEnchantSpigot) enchants[i];
-                        final EnchantRarity rarity = valueOfCustomEnchantRarity(ce);
+                        final CustomEnchantSpigot enchant = (CustomEnchantSpigot) enchants[i];
+                        final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
                         final HashMap<String, List<String>> replacements = new HashMap<>();
                         replacements.put("{TIER}", List.of(rarity.getApplyColors() + rarity.getIdentifier()));
-                        replacements.put("{DESC}", ce.getLore());
-                        final String msg = colorize(format.replace("{MAX}", Integer.toString(ce.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + ce.getName()));
+                        replacements.put("{DESC}", enchant.getLore());
+                        final String msg = colorize(format.replace("{MAX}", Integer.toString(enchant.getMaxLevel())).replace("{ENCHANT}", rarity.getApplyColors() + ChatColor.BOLD + enchant.getName()));
                         if(sender instanceof Player) {
                             chatEvents.sendHoverMessage((Player) sender, msg, hoverLore, replacements);
                         } else {
@@ -230,11 +231,11 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                     }
                 }
             } else {
-                sender.sendMessage(s.replace("{MAX_PAGE}", max).replace("{PAGE}", p));
+                sender.sendMessage(s.replace("{MAX_PAGE}", max).replace("{PAGE}", page_string));
             }
         }
     }
-    public boolean canProcOn(Entity e) {
+    public boolean canProcOn(@NotNull Entity e) {
         return getStringList(config, "settings.can proc on").contains(e.getType().name());
     }
     public int getLevelCap(@NotNull Player player) {
@@ -252,16 +253,14 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
     private void projectileHitEvent(EntityDamageByEntityEvent event) {
         final Entity damager = event.getDamager();
         final UUID damagerUUID = damager.getUniqueId();
-        if(PROJECTILE_EVENTS.containsKey(damagerUUID)) {
-            final Projectile e = (Projectile) damager;
-            final EntityShootBowEvent p = PROJECTILE_EVENTS.getOrDefault(damagerUUID, null);
-            if(p != null) {
-                final ProjectileSource shooter = e.getShooter();
-                if(shooter instanceof Player) {
-                    final Player player = (Player) shooter;
-                    if(allowsPvP(player, damager.getLocation())) {
-                        triggerEnchants(event, getEnchants(player));
-                    }
+        final EntityShootBowEvent shoot_bow_event = PROJECTILE_EVENTS.getOrDefault(damagerUUID, null);
+        if(shoot_bow_event != null) {
+            final Projectile projectile = (Projectile) damager;
+            final ProjectileSource shooter = projectile.getShooter();
+            if(shooter instanceof Player) {
+                final Player player = (Player) shooter;
+                if(allowsPvP(player, damager.getLocation())) {
+                    triggerEnchants(event, getEnchants(player));
                 }
             }
         }
@@ -292,36 +291,36 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
     private void entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity();
         if(entity instanceof LivingEntity && canProcOn(entity)) {
-            final Entity damagerr = event.getDamager();
-            Player damager = damagerr instanceof Player ? (Player) damagerr : null;
-            if(damager != null && allowsPvP(damager, entity.getLocation())) {
-                final PvAnyEvent e = new PvAnyEvent(damager, (LivingEntity) entity, event.getDamage());
+            final Entity damager = event.getDamager();
+            Player player = damager instanceof Player ? (Player) damager : null;
+            if(player != null && allowsPvP(player, entity.getLocation())) {
+                final PvAnyEvent e = new PvAnyEvent(player, (LivingEntity) entity, event.getDamage());
                 PLUGIN_MANAGER.callEvent(e);
-                triggerEnchants(e, getEnchants(damager));
+                triggerEnchants(e, getEnchants(player));
                 event.setDamage(e.getDamage());
             }
-            if(entity instanceof Player && damagerr instanceof LivingEntity && !(damagerr instanceof TNTPrimed) && !(damagerr instanceof Creeper)) {
+            if(entity instanceof Player && damager instanceof LivingEntity && !(damager instanceof TNTPrimed) && !(damager instanceof Creeper)) {
                 final Player victim = (Player) entity;
-                if(allowsPvP(victim, damagerr.getLocation())) {
-                    final LivingEntity d = (LivingEntity) damagerr;
-                    final isDamagedEvent e = new isDamagedEvent(victim, d, event.getDamage());
-                    PLUGIN_MANAGER.callEvent(e);
-                    triggerEnchants(e, getEnchants(victim));
-                    event.setDamage(e.getDamage());
+                if(allowsPvP(victim, damager.getLocation())) {
+                    final LivingEntity d = (LivingEntity) damager;
+                    final isDamagedEvent damaged_event = new isDamagedEvent(victim, d, event.getDamage());
+                    PLUGIN_MANAGER.callEvent(damaged_event);
+                    triggerEnchants(damaged_event, getEnchants(victim));
+                    event.setDamage(damaged_event.getDamage());
                 }
             }
             final HashMap<UUID, LivingCustomEnchantEntity> living = LivingCustomEnchantEntity.LIVING;
             if(living != null) {
                 final LivingCustomEnchantEntity cee = living.getOrDefault(entity.getUniqueId(), null);
                 if(cee != null) {
-                    final CustomEnchantEntityDamageByEntityEvent e = new CustomEnchantEntityDamageByEntityEvent(cee, damagerr, event.getFinalDamage(), event.getDamage());
-                    PLUGIN_MANAGER.callEvent(e);
-                    if(!e.isCancelled()) {
-                        event.setDamage(e.initialdamage);
-                        final LivingEntity le = cee.getSummoner();
-                        final Player player = le instanceof Player ? (Player) le : null;
-                        if(player != null) {
-                            triggerEnchants(event, getEnchants(player));
+                    final CustomEnchantEntityDamageByEntityEvent entity_damage_by_entity_event = new CustomEnchantEntityDamageByEntityEvent(cee, damager, event.getFinalDamage(), event.getDamage());
+                    PLUGIN_MANAGER.callEvent(entity_damage_by_entity_event);
+                    if(!entity_damage_by_entity_event.isCancelled()) {
+                        event.setDamage(entity_damage_by_entity_event.initial_damage);
+                        final LivingEntity summoner = cee.getSummoner();
+                        final Player summoner_player = summoner instanceof Player ? (Player) summoner : null;
+                        if(summoner_player != null) {
+                            triggerEnchants(event, getEnchants(summoner_player));
                         }
                     }
                 }
@@ -343,6 +342,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
         }
     }
 
+    @Nullable
     public ItemStack getRevealedItemFromString(String input) {
         // ce:<enchant>:<level>:<success>:<destroy>
         final String[] values = input.split(":");
@@ -372,14 +372,13 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                     destroy = parseInt(values[4]);
                     break;
                 default:
-                    level = 1+RANDOM.nextInt(enchant.getMaxLevel());
-                    success = 0;
-                    destroy = 0;
+                    level = 1 + RANDOM.nextInt(enchant.getMaxLevel());
                     break;
             }
         }
         return enchant != null ? getRevealedItem(enchant, level, success, destroy, true, true) : null;
     }
+    @NotNull
     public ItemStack getRevealedItem(CustomEnchantSpigot enchant, int level, int success, int destroy, boolean showEnchantType, boolean showOtherLore) {
         final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
         final ItemStack item = rarity.getRevealedItem().clone();
@@ -408,6 +407,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
         item.setItemMeta(itemMeta);
         return item;
     }
+    @NotNull
     public ItemStack getRandomEnabledEnchant(@NotNull EnchantRarity rarity) {
         final String[] rarities = rarity.getRevealedEnchantRarities();
         final int l = rarities.length;
@@ -660,25 +660,25 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                         }
                         //
                         if(RANDOM.nextInt(100) <= success) {
-                            final String a = enchant_rarity.getApplyColors(), en = enchant.getName(), e = a + en + " " + toRoman(level);
+                            final String enchant_rarity_apply_colors = enchant_rarity.getApplyColors(), enchant_name = enchant.getName(), enchant_tag = enchant_rarity_apply_colors + enchant_name + " " + toRoman(level);
                             if(lore.isEmpty()) {
-                                lore.add(e);
+                                lore.add(enchant_tag);
                             } else if(prevlevel == -1 && prevslot == -1) {
                                 String replacedEnchant = null;
                                 final ArrayList<String> newlore = new ArrayList<>();
                                 for(String s : lore) {
-                                    final CustomEnchantSpigot ce = valueOfCustomEnchant(s);
-                                    if(ce != null) {
-                                        if(ce.equals(replaces)) {
-                                            newlore.add(e);
+                                    final CustomEnchantSpigot custom_enchant = valueOfCustomEnchant(s);
+                                    if(custom_enchant != null) {
+                                        if(custom_enchant.equals(replaces)) {
+                                            newlore.add(enchant_tag);
                                             replacedEnchant = s;
                                         } else {
                                             newlore.add(s);
                                         }
                                     }
                                 }
-                                if(!newlore.contains(e)) {
-                                    newlore.add(e);
+                                if(!newlore.contains(enchant_tag)) {
+                                    newlore.add(enchant_tag);
                                 }
                                 for(String s : lore) {
                                     if(!newlore.contains(s) && !s.equals(replacedEnchant)) {
@@ -687,7 +687,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                                 }
                                 lore = newlore;
                             } else {
-                                lore.set(prevslot, a + en + " " + toRoman(level > prevlevel ? level : prevlevel+1));
+                                lore.set(prevslot, enchant_rarity_apply_colors + enchant_name + " " + toRoman(level > prevlevel ? level : prevlevel+1));
                             }
                             result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
                         } else if(RANDOM.nextInt(100) <= destroy) {

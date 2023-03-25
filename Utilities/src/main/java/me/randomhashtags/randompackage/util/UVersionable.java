@@ -14,15 +14,18 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
     String SEPARATOR = File.separator;
     Random RANDOM = new Random();
 
-    default String toReadableDate(Date date, String format) {
+    @NotNull
+    default String toReadableDate(@NotNull Date date, @NotNull String format) {
         return new SimpleDateFormat(format).format(date);
     }
 
+    @NotNull
     default File[] getFilesInFolder(@NotNull String folder) {
         final File file = new File(folder);
         return file.exists() ? file.listFiles() : new File[]{};
     }
 
+    @NotNull
     default String getRemainingTime(long time) {
         int sec = (int) TimeUnit.MILLISECONDS.toSeconds(time), min = sec/60, hr = min/60, d = hr/24;
         hr -= d*24;
@@ -148,9 +151,15 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
     }
 
     default String toMaterial(String input, boolean realitem) {
-        if(input.contains(":")) input = input.split(":")[0];
-        if(input.contains(" ")) input = input.replace(" ", "");
-        if(input.contains("_")) input = input.replace("_", " ");
+        if(input.contains(":")) {
+            input = input.split(":")[0];
+        }
+        if(input.contains(" ")) {
+            input = input.replace(" ", "");
+        }
+        if(input.contains("_")) {
+            input = input.replace("_", " ");
+        }
         StringBuilder builder = new StringBuilder();
         if(input.contains(" ")) {
             final String[] spaces = input.split(" ");

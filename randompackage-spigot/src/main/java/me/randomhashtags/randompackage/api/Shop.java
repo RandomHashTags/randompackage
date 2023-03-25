@@ -80,18 +80,19 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
     public void unload() {
     }
 
-	public BigDecimal getDiscount(Player player) {
+    @NotNull
+	public BigDecimal getDiscount(@NotNull Player player) {
 	    final BigDecimal zero = BigDecimal.ZERO;
 	    if(player.hasPermission(ShopPermission.CANCEL_DISCOUNT)) {
 	        return zero;
         }
-	    BigDecimal d = zero;
+	    BigDecimal value = zero;
         for(int k = 1; k <= 100; k++) {
             if(player.hasPermission(ShopPermission.DISCOUNT_PREFIX + k)) {
-                d = BigDecimal.valueOf(k);
+                value = BigDecimal.valueOf(k);
             }
         }
-        return BigDecimal.valueOf(d.doubleValue()/100);
+        return BigDecimal.valueOf(value.doubleValue()/100);
     }
 	public void view(@NotNull Player player) {
 	    if(hasPermission(player, ShopPermission.COMMAND, true)) {

@@ -32,7 +32,7 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
     public YamlConfiguration config;
     public ItemStack bottle;
     private int xpbottleValueSlot;
-    private List<String> teleportCauses;
+    private List<String> teleport_causes;
     private HashMap<String, Integer> minbottles, expexhaustion;
     private HashMap<String, Double> teleportationDelay, teleportMinDelay, teleportationVariable;
     private HashMap<Player, String> delayed;
@@ -97,7 +97,7 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
             teleportationVariable.put(values[0], Double.parseDouble(values[1]));
         }
 
-        teleportCauses = config.getStringList("xpbottle.teleport causes");
+        teleport_causes = config.getStringList("xpbottle.teleport causes");
         delayed = new HashMap<>();
     }
     @Override
@@ -210,15 +210,14 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void playerTeleportEvent(PlayerTeleportEvent event) {
         final Player player = event.getPlayer();
-        if(teleportCauses.contains(event.getCause().name()) && delayed.containsKey(player)) {
+        if(teleport_causes.contains(event.getCause().name()) && delayed.containsKey(player)) {
             delayed.remove(player);
             final World world = player.getWorld();
             double delay = getTeleportationDelay(world);
             if(hasPermission(player, XpbottlePermission.BYPASS_DELAY, false) || delay <= 0) {
                 return;
             }
-            final UUID uuid = player.getUniqueId();
-            final FileRPPlayer pdata = FileRPPlayer.get(uuid);
+            final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
             final SecondaryData secondaryData = pdata.getSecondaryData();
             if(secondaryData.isXPExhausted()) {
                 final String remaining = getRemainingTime(secondaryData.getXPExhaustionExpiration() - System.currentTimeMillis());
@@ -230,29 +229,33 @@ public enum Xpbottle implements RPFeatureSpigot, CommandExecutor {
                 final HashMap<Player, PlayerTeleportDelayEvent> events = PlayerTeleportDelayEvent.TELEPORTING;
                 final PlayerTeleportDelayEvent previous = events.getOrDefault(player, null);
                 final boolean hasPrevious = previous != null;
-                final double mindelay = getTeleportMinDelay(world);
+                final double min_delay = getTeleportMinDelay(world);
                 delay -= getTotalExperience(player) / getTeleportationVariable(world);
                 delay = round(delay, 3);
-                if(delay < mindelay) delay = mindelay;
+                if(delay < min_delay) {
+                    delay = min_delay;
+                }
                 if(hasPrevious) {
                     previous.setCancelled(true);
                     SCHEDULER.cancelTask(previous.getTask());
                     events.remove(player);
                 }
-                final PlayerTeleportDelayEvent e = new PlayerTeleportDelayEvent(player, delay, event.getFrom(), event.getTo());
-                PLUGIN_MANAGER.callEvent(e);
-                if(!e.isCancelled()) {
-                    final long de = (long) ((((long) delay * 20)) + (20 * Double.parseDouble("0." + Double.toString(e.getDelay()).split("\\.")[1])));
-                    final int t = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
-                        player.teleport(e.getTo(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                final PlayerTeleportDelayEvent teleport_delay_event = new PlayerTeleportDelayEvent(player, delay, event.getFrom(), event.getTo());
+                PLUGIN_MANAGER.callEvent(teleport_delay_event);
+                if(!teleport_delay_event.isCancelled()) {
+                    final long de = (long) ((((long) delay * 20)) + (20 * Double.parseDouble("0." + Double.toString(teleport_delay_event.getDelay()).split("\\.")[1])));
+                    final int task_id = SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> {
+                        player.teleport(teleport_delay_event.getTo(), PlayerTeleportEvent.TeleportCause.PLUGIN);
                         events.remove(player);
                     }, de);
-                    e.setTask(t);
-                    events.put(player, e);
-                    final HashMap<String, String> replacements = new HashMap<String, String>() {{ put("{SECS", roundDoubleString(e.getDelay(), 3)); }};
+                    teleport_delay_event.setTask(task_id);
+                    events.put(player, teleport_delay_event);
+                    final HashMap<String, String> replacements = new HashMap<>() {{
+                        put("{SECS", roundDoubleString(teleport_delay_event.getDelay(), 3));
+                    }};
                     sendStringListMessage(player, getStringList(config, "messages.pending teleport"), replacements);
                 } else {
-                    SCHEDULER.cancelTask(e.getTask());
+                    SCHEDULER.cancelTask(teleport_delay_event.getTask());
                     events.remove(player);
                 }
             }

@@ -86,28 +86,26 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 	public void unload() {
 	}
 
+	@NotNull
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
 		final String p = Integer.toString(percent), n = set.getName();
-		ItemStack item = null;
-		if(n != null) {
-			final List<String> perks = set.getCrystalPerks();
-			item = crystal.clone();
-			final ItemMeta itemMeta = item.getItemMeta();
-			itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", n));
-			final List<String> lore = new ArrayList<>();
-			for(String s : itemMeta.getLore()) {
-				if(s.equals("{PERKS}")) {
-					lore.addAll(perks);
-				} else {
-					lore.add(s.replace("{PERCENT}", p).replace("{NAME}", n));
-				}
+		final List<String> perks = set.getCrystalPerks();
+		final ItemStack item = crystal.clone();
+		final ItemMeta itemMeta = item.getItemMeta();
+		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", n));
+		final List<String> lore = new ArrayList<>();
+		for(String s : itemMeta.getLore()) {
+			if(s.equals("{PERKS}")) {
+				lore.addAll(perks);
+			} else {
+				lore.add(s.replace("{PERCENT}", p).replace("{NAME}", n));
 			}
-			itemMeta.setLore(lore);
-			item.setItemMeta(itemMeta);
 		}
+		itemMeta.setLore(lore);
+		item.setItemMeta(itemMeta);
 		return item;
 	}
-	private void tryTriggeringCustomArmor(Player player, Event event) {
+	private void tryTriggeringCustomArmor(@NotNull Player player, Event event) {
 		tryArmorCrystal(player, event);
 		final ArmorSet set = valueOfArmorSet(player, true);
 		if(set != null) {
@@ -115,7 +113,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		}
 	}
 	@NotNull
-	private List<ItemStack> getArmor(Player player) {
+	private List<ItemStack> getArmor(@NotNull Player player) {
 		final List<ItemStack> list = new ArrayList<>();
 		for(ItemStack is : player.getInventory().getArmorContents()) {
 			if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
@@ -124,7 +122,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		}
 		return list;
 	}
-	private void tryArmorCrystal(Player player, Event event) {
+	private void tryArmorCrystal(@NotNull Player player, Event event) {
 		for(ItemStack is : getArmor(player)) {
 			final ArmorSet crystal = getArmorCrystalOnItem(is);
 			if(crystal != null) {
@@ -132,7 +130,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 			}
 		}
 	}
-	public byte tryApplyingArmorCrystal(Player player, ArmorSet type, int percent, ItemStack is) {
+	public byte tryApplyingArmorCrystal(@NotNull Player player, ArmorSet type, int percent, ItemStack is) {
 		final String mat = is != null ? is.getType().name() : null;
 		if(mat != null && (mat.endsWith("HELMET") || mat.endsWith("CHESTPLATE") || mat.endsWith("LEGGINGS") || mat.endsWith("BOOTS"))) {
 			final ArmorSet set = valueOfArmorSet(is), crystal = getArmorCrystalOnItem(is);
@@ -165,6 +163,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		return 0;
 	}
 
+	@Nullable
 	public ItemStack getRandomEquipmentLootboxLoot() {
 		final List<String> rewards = getStringList(config, "items.equipment lootbox.rewards");
 		String reward = rewards.get(RANDOM.nextInt(rewards.size()));

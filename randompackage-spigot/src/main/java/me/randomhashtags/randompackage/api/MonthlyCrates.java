@@ -237,13 +237,13 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
     public void openMonthlyCrate(@NotNull Player player, @NotNull MonthlyCrate crate) {
         final String identifier = crate.getIdentifier();
         final UInventory inv = crate.getRegular();
-        final List<Integer> rewardSlots = crate.getRewardSlots(), bonusRewardSlots = crate.getBonusRewardSlots();
+        final List<Integer> reward_slots = crate.getRewardSlots(), bonusRewardSlots = crate.getBonusRewardSlots();
         player.openInventory(Bukkit.createInventory(player, inv.getSize(), inv.getTitle()));
         final Inventory top = player.getOpenInventory().getTopInventory();
         top.setContents(inv.getInventory().getContents());
-        regularRewardsLeft.put(player, new ArrayList<>(rewardSlots));
+        regularRewardsLeft.put(player, new ArrayList<>(reward_slots));
         for(int i = 0; i < top.getSize(); i++) {
-            if(rewardSlots.contains(i) || bonusRewardSlots.contains(i)) {
+            if(reward_slots.contains(i) || bonusRewardSlots.contains(i)) {
                 final ItemStack item = top.getItem(i);
                 if(item != null) {
                     final ItemMeta itemMeta = item.getItemMeta();
@@ -332,7 +332,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
         MonthlyCrate.REVEALED_REGULAR.remove(player);
         MonthlyCrate.REVEALED_BONUS.remove(player);
     }
-    private void stopTimers(Player player) {
+    private void stopTimers(@NotNull Player player) {
         if(playerTimers.containsKey(player)) {
             for(int i : playerTimers.get(player)) {
                 SCHEDULER.cancelTask(i);
@@ -402,7 +402,7 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
             player.updateInventory();
         }
     }
-    public int valueOfCategory(String title) {
+    public int valueOfCategory(@NotNull String title) {
         for(int i : categoriez.keySet()) {
             final UInventory in = categoriez.get(i);
             if(title.equals(in.getTitle())) {
@@ -508,7 +508,9 @@ public enum MonthlyCrates implements RPFeatureSpigot, CommandExecutor {
                         final List<String> lore = new ArrayList<>(), itemLore = itemstackMeta.getLore();
                         if(itemLore != null) {
                             for(String string : itemLore) {
-                                if(string.contains("{UNLOCKED_BY}")) string = string.replace("{UNLOCKED_BY}", playerName);
+                                if(string.contains("{UNLOCKED_BY}")) {
+                                    string = string.replace("{UNLOCKED_BY}", playerName);
+                                }
                                 lore.add(string);
                             }
                         }

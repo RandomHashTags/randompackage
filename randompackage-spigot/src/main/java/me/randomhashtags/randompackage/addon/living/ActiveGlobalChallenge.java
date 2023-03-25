@@ -8,6 +8,7 @@ import me.randomhashtags.randompackage.event.GlobalChallengeEndEvent;
 import me.randomhashtags.randompackage.util.RPStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -54,13 +55,13 @@ public final class ActiveGlobalChallenge implements RPStorage {
     }
     public void increaseValue(UUID player, BigDecimal value) {
         final GlobalChallenges global_challenges = GlobalChallenges.INSTANCE;
-        final Map<UUID, BigDecimal> a = global_challenges.getPlacing(participants, 1);
+        final Map<UUID, BigDecimal> placing = global_challenges.getPlacing(participants, 1);
         final BigDecimal before = participants.getOrDefault(player, BigDecimal.ZERO), after = before.add(value);
-        if(!a.isEmpty()) {
-            final UUID first = (UUID) a.keySet().toArray()[0];
+        if(!placing.isEmpty()) {
+            final UUID first = (UUID) placing.keySet().toArray()[0];
             if(!first.equals(player)) {
-                final double v = ((BigDecimal) a.values().toArray()[0]).doubleValue();
-                if(before.doubleValue() <= v && after.doubleValue() > v) {
+                final double value_double = ((BigDecimal) placing.values().toArray()[0]).doubleValue();
+                if(before.doubleValue() <= value_double && after.doubleValue() > value_double) {
                     final HashMap<String, String> replacements = new HashMap<>();
                     final String time = global_challenges.getRemainingTime(getRemainingTime());
                     replacements.put("{TIME}", time);
@@ -79,17 +80,19 @@ public final class ActiveGlobalChallenge implements RPStorage {
     }
 
     public void end(boolean giveRewards, int recordPlacements) {
-        final GlobalChallengeEndEvent e = new GlobalChallengeEndEvent(this, giveRewards);
-        PLUGIN_MANAGER.callEvent(e);
+        final GlobalChallengeEndEvent event = new GlobalChallengeEndEvent(this, giveRewards);
+        PLUGIN_MANAGER.callEvent(event);
         final GlobalChallenges global_challenges = GlobalChallenges.INSTANCE;
         global_challenges.reloadInventory();
         final Map<UUID, BigDecimal> placements = global_challenges.getPlacing(participants);
-        if(task != -1) SCHEDULER.cancelTask(task);
+        if(task != -1) {
+            SCHEDULER.cancelTask(task);
+        }
         ACTIVE.remove(type);
         if(giveRewards) {
             int i = 1;
-            for(UUID p : placements.keySet()) {
-                final FileRPPlayer pdata = FileRPPlayer.get(p);
+            for(UUID participant_uuid : placements.keySet()) {
+                final FileRPPlayer pdata = FileRPPlayer.get(participant_uuid);
                 if(i <= recordPlacements) {
                     final GlobalChallengePrize prize = valueOfGlobalChallengePrize(i);
                     pdata.getGlobalChallengeData().addPrize(prize);
@@ -99,12 +102,13 @@ public final class ActiveGlobalChallenge implements RPStorage {
         }
     }
 
-    public static ActiveGlobalChallenge valueOf(ItemStack display) {
-        if(ACTIVE !=  null && display != null && display.hasItemMeta() && display.getItemMeta().hasDisplayName()) {
-            final String d = display.getItemMeta().getDisplayName();
-            for(ActiveGlobalChallenge g : ACTIVE.values()) {
-                if(g.getType().getItem().getItemMeta().getDisplayName().equals(d)) {
-                    return g;
+    @Nullable
+    public static ActiveGlobalChallenge valueOf(@Nullable ItemStack display) {
+        if(ACTIVE != null && display != null && display.hasItemMeta() && display.getItemMeta().hasDisplayName()) {
+            final String name = display.getItemMeta().getDisplayName();
+            for(ActiveGlobalChallenge challenge : ACTIVE.values()) {
+                if(challenge.getType().getItem().getItemMeta().getDisplayName().equals(name)) {
+                    return challenge;
                 }
             }
         }

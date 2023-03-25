@@ -28,7 +28,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -42,7 +41,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     private String enablePrefix, disabledPrefix;
     private List<String> enable, disable, addedLore;
     private HashMap<Integer, String> categorySlots;
-    private HashMap<String, FileFilterCategory> categories, categoryTitles;
+    private HashMap<String, FileFilterCategory> categories, category_titles;
 
     @Override
     public @NotNull Feature get_feature() {
@@ -50,7 +49,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         if(!(sender instanceof Player)) {
             return true;
         }
@@ -80,7 +79,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
 
         categorySlots = new HashMap<>();
         categories = new HashMap<>();
-        categoryTitles = new HashMap<>();
+        category_titles = new HashMap<>();
 
         addedLore = colorizeListString(config.getStringList("settings.categories added lore"));
         enablePrefix = colorize(config.getString("settings.enabled prefix"));
@@ -113,7 +112,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileFilterCategory fc = new FileFilterCategory(f);
                 categories.put(f.getName(), fc);
-                categoryTitles.put(fc.getTitle(), fc);
+                category_titles.put(fc.getTitle(), fc);
             }
         }
     }
@@ -134,7 +133,8 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
             player.updateInventory();
         }
     }
-    private ItemStack getStatus(List<UMaterial> filtered, ItemStack is) {
+    @NotNull
+    private ItemStack getStatus(@NotNull List<UMaterial> filtered, @NotNull ItemStack is) {
         final ItemMeta itemMeta = is.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
         final UMaterial u = UMaterial.match(is);
@@ -180,7 +180,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
         final Player player = (Player) event.getWhoClicked();
         final Inventory top = player.getOpenInventory().getTopInventory();
         final String title = event.getView().getTitle();
-        final FileFilterCategory category = categoryTitles.getOrDefault(title, null);
+        final FileFilterCategory category = category_titles.getOrDefault(title, null);
         if(title.equals(gui.getTitle()) || category != null) {
             event.setCancelled(true);
             player.updateInventory();
@@ -209,7 +209,7 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
             }
         }
     }
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     private void playerPickupItemEvent(PlayerPickupItemEvent event) {
         final ItemFilterData data = FileRPPlayer.get(event.getPlayer().getUniqueId()).getItemFilterData();
         if(data != null && data.isActive() && !data.getFilteredItems().contains(UMaterial.match(event.getItem().getItemStack()))) {
@@ -219,8 +219,8 @@ public enum ItemFilter implements RPFeatureSpigot, CommandExecutor {
     @EventHandler
     private void inventoryCloseEvent(InventoryCloseEvent event) {
         final Player player = (Player) event.getPlayer();
-        final FileFilterCategory c = categoryTitles.getOrDefault(event.getView().getTitle(), null);
-        if(c != null) {
+        final FileFilterCategory category = category_titles.getOrDefault(event.getView().getTitle(), null);
+        if(category != null) {
             SCHEDULER.scheduleSyncDelayedTask(RANDOM_PACKAGE, () -> viewCategories(player), 0);
         }
     }

@@ -31,29 +31,26 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack {
 	INSTANCE;
 
 	private String bragDisplay, itemDisplay, chatformat;
 	private HashMap<UUID, PlayerInventory> bragInventories;
-	private List<UUID> viewingBrag;
+	private List<UUID> viewing_brag;
 
 	@Override
 	public void load() {
 		bragDisplay = colorize(RP_CONFIG.getString("chat cmds.brag.display"));
 		itemDisplay = colorize(RP_CONFIG.getString("chat cmds.item.display"));
-		viewingBrag = new ArrayList<>();
+		viewing_brag = new ArrayList<>();
 		bragInventories = new HashMap<>();
 		chatformat = RP_CONFIG.getString("chat cmds.format");
 	}
 	@Override
 	public void unload() {
-		for(UUID id : viewingBrag) {
+		for(UUID id : new ArrayList<>(viewing_brag)) {
 			final Player player = Bukkit.getPlayer(id);
 			if(player != null) {
 				player.closeInventory();
@@ -107,36 +104,37 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
 	}
 	public void sendItemMessage(Player player, String message, TextComponent prefix, TextComponent suffix, List<Player> recipients) {
-		final TextComponent m = new TextComponent(message);
+		final TextComponent component = new TextComponent(message);
 		final ItemStack i = getItemInHand(player);
-		final String u = asNMSCopy(i);
-		if(u == null || u.isEmpty()) return;
-		m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(u).create()));
-		for(Player p : recipients) {
-			send(player, p, prefix, m, suffix);
+		final String nms_item_to_string = asNMSCopy(i);
+		if(nms_item_to_string == null || nms_item_to_string.isEmpty()) {
+			return;
 		}
-		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + m.getText() + suffix.getText());
+		component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new ComponentBuilder(nms_item_to_string).create()));
+		for(Player p : recipients) {
+			send(player, p, prefix, component, suffix);
+		}
+		sendConsoleMessage(prefix.getText().replace("{F_TAG}", "") + component.getText() + suffix.getText());
 	}
 	public void sendHoverMessage(@NotNull Player player, String message, @NotNull List<String> hoverMessage, @NotNull HashMap<String, List<String>> replacements) {
 	    String hover = "";
 	    for(int i = 0; i < hoverMessage.size(); i++) {
 	        hover = hover + (i != 0 ? "\n" : "") + hoverMessage.get(i);
         }
-        for(int i = 0; i < replacements.size(); i++) {
-            final String s = (String) replacements.keySet().toArray()[i];
-            final StringBuilder b = new StringBuilder();
-            for(int j = 0; j < replacements.get(s).size(); j++) {
-                final String r = replacements.get(s).get(j);
-                b.append(j != 0 ? "\n" : "").append(r);
-            }
-            hover = hover.replace(s, b.toString());
-        }
-        final TextComponent m = new TextComponent(message);
-	    m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(hover)).create()));
-	    player.spigot().sendMessage(m);
+		for(Map.Entry<String, List<String>> entry : replacements.entrySet()) {
+			final List<String> value = entry.getValue();
+			final StringBuilder builder = new StringBuilder();
+			for(int j = 0; j < value.size(); j++) {
+				builder.append(j != 0 ? "\n" : "").append(value.get(j));
+			}
+			hover = hover.replace(entry.getKey(), builder.toString());
+		}
+        final TextComponent component = new TextComponent(message);
+	    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize(hover)).create()));
+	    player.spigot().sendMessage(component);
     }
 	
-	private void send(Player sender, Player recipient, TextComponent prefix, TextComponent m, TextComponent suffix) {
+	private void send(@NotNull Player sender, @NotNull Player recipient, @NotNull TextComponent prefix, @NotNull TextComponent m, @NotNull TextComponent suffix) {
 		final UUID uuid = sender.getUniqueId();
 		final String tag = RegionalAPI.INSTANCE.getFactionTag(uuid);
 		String text = prefix.toPlainText();
@@ -186,7 +184,7 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 				top.setItem(41, bragInv.getLeggings());
 				top.setItem(42, bragInv.getBoots());
 			}
-			viewingBrag.add(player.getUniqueId());
+			viewing_brag.add(player.getUniqueId());
 		} else {
 			sendStringListMessage(sender, getStringList(RP_CONFIG, "chat cmds.brag.invalid"), null);
 		}
@@ -196,17 +194,17 @@ public enum ChatEvents implements RPFeatureSpigot, CommandExecutor, RPItemStack 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	private void inventoryClickEvent(InventoryClickEvent event) {
 		final Player player = (Player) event.getWhoClicked();
-		if(viewingBrag.contains(player.getUniqueId())) {
+		if(viewing_brag.contains(player.getUniqueId())) {
 			event.setCancelled(true);
 			player.updateInventory();
 		}
 	}
 	@EventHandler
 	private void inventoryCloseEvent(InventoryCloseEvent event) {
-		viewingBrag.remove(event.getPlayer().getUniqueId());
+		viewing_brag.remove(event.getPlayer().getUniqueId());
 	}
 	@EventHandler
 	private void playerQuitEvent(PlayerQuitEvent event) {
-		viewingBrag.remove(event.getPlayer().getUniqueId());
+		viewing_brag.remove(event.getPlayer().getUniqueId());
 	}
 }

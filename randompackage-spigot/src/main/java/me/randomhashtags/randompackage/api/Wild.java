@@ -113,6 +113,7 @@ public enum Wild implements RPFeatureSpigot, CommandExecutor {
         return !expirations.containsKey(player) ? "" : getRemainingTime(getCooldownExpireTime(player)-System.currentTimeMillis());
     }
 
+    @NotNull
     private Location getRandomLocation(@NotNull World w, BigDecimal minx, BigDecimal maxx, BigDecimal minz, BigDecimal maxz) {
         final int x = getRandomBigDecimal(minx, maxx).intValue(), z = getRandomBigDecimal(minz, maxz).intValue();
         final Location l = new Location(w, x, 256, z);

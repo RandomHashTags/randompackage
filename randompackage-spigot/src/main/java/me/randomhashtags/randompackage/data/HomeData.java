@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.obj.Home;
 import me.randomhashtags.randompackage.api.Homes;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public interface HomeData {
         }
         return Homes.INSTANCE.defaultMax + addedMaxHomes;
     }
+    @Nullable
     default Home getHome(@NotNull String identifier) {
         for(Home h : getHomes()) {
             if(h.getName().equals(identifier)) {

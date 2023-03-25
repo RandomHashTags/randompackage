@@ -65,15 +65,15 @@ public final class ReflectedCraftItemStack {
         return returned_version;
     }
 
-    public final String version;
-    public final Class<?> clazz;
-    public final Class<?> net_class;
-    public final Method as_nms_copy_function;
-    public final Method as_craft_mirror_function;
-    public final Class<?> tag_compound_class;
-    public final Constructor<?> tag_compound_constructor;
-    public final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
-    public final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
+    @NotNull public final String version;
+    @NotNull public final Class<?> clazz;
+    @NotNull public final Class<?> net_class;
+    @NotNull public final Method as_nms_copy_function;
+    @NotNull public final Method as_craft_mirror_function;
+    @NotNull public final Class<?> tag_compound_class;
+    @NotNull public final Constructor<?> tag_compound_constructor;
+    @NotNull public final Method tag_compound_remove_function, tag_compound_set_string_function, tag_compound_to_string_function, tag_compound_has_key_function, tag_compound_get_string_function;
+    @NotNull public final Method get_item_meta_function, has_tag_function, get_tag_function, save_function;
 
     private ReflectedCraftItemStack(@NotNull ClassLoader class_loader, @NotNull String version) throws Exception {
         this.version = version;

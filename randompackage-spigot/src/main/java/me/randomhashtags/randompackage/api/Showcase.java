@@ -39,6 +39,7 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 	private List<Player> inSelf, inOther;
 	private HashMap<Player, Integer> deleteSlot;
 
+	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		final Player player = sender instanceof Player ? (Player) sender : null;
 		final int l = args.length;
@@ -251,19 +252,19 @@ public enum Showcase implements RPFeatureSpigot, CommandExecutor {
 	}
 	@EventHandler
 	private void playerInteractEvent(PlayerInteractEvent event) {
-		final ItemStack i = event.getItem();
-		if(i != null && i.isSimilar(expansion)) {
+		final ItemStack item = event.getItem();
+		if(item != null && item.isSimilar(expansion)) {
 			final Player player = event.getPlayer();
 			final FileRPPlayer pdata = FileRPPlayer.get(player.getUniqueId());
 			final HashMap<Integer, Integer> sizes = pdata.getShowcaseData().getSizes();
 			event.setCancelled(true);
 			player.updateInventory();
-			for(int o = 1; o <= 10; o++) {
-				if(sizes.containsKey(o)) {
-					final int size = sizes.get(o);
+			for(int i = 1; i <= 10; i++) {
+				if(sizes.containsKey(i)) {
+					final int size = sizes.get(i);
 					if(size != 54) {
-						sizes.put(o, size + (addedRows * 9));
-						removeItem(player, i, 1);
+						sizes.put(i, size + (addedRows * 9));
+						removeItem(player, item, 1);
 						return;
 					}
 				}
