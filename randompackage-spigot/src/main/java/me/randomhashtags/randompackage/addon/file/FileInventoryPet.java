@@ -39,7 +39,7 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
         if(cooldowns == null) {
             cooldowns = new HashMap<>();
             for(String s : getConfigurationSectionKeys(yml, "settings.cooldown", false)) {
-                final int cooldown = yml.getInt("settings.cooldown." + s)*1000;
+                final int cooldown = yml.getInt("settings.cooldown." + s) * 1000;
                 if(s.equals("all")) {
                     cooldowns.put(-1, cooldown);
                 } else {

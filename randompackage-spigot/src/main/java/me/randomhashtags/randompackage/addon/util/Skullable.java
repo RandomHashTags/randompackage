@@ -51,9 +51,9 @@ public interface Skullable extends UVersionableSpigot {
                 if(shared_instance != null) {
                     try {
                         final Field serialized_profile_variable = head_meta_class.getDeclaredField("serializedProfile");
-                        serialized_profile_variable.setAccessible(true);
                         final Object tag_compound = shared_instance.tag_compound_constructor.newInstance();
                         shared_instance.tag_compound_set_string_function.invoke(tag_compound, "textures", skin_value);
+                        serialized_profile_variable.setAccessible(true);
                         serialized_profile_variable.set(headMeta, tag_compound);
                         serialized_profile_variable.setAccessible(false);
                     } catch (Exception ignored) {
