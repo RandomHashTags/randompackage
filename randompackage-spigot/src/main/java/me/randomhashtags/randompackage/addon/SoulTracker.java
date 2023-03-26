@@ -13,8 +13,7 @@ public interface SoulTracker extends Applyable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final SoulTracker tracker = getSoulTracker(originalInput.split(":")[1]);
-        final ItemStack target = tracker != null ? tracker.getItem() : null;
-        return target != null ? target : AIR;
+        return tracker != null ? tracker.getItem() : null;
     }
 
     String getTracks();

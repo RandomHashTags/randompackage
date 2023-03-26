@@ -30,8 +30,12 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         register(Feature.CUSTOM_BOSS, this);
     }
 
-    public String getType() { return yml.getString("type").toUpperCase(); }
-    public @NotNull String getName() { return colorize(yml.getString("name")); }
+    public String getType() {
+        return yml.getString("type").toUpperCase();
+    }
+    public @NotNull String getName() {
+        return colorize(yml.getString("name"));
+    }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
             scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
@@ -64,7 +68,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     }
     public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
     public List<String> getRewards() { return yml.getStringList("rewards"); }
-    public List<CustomBossAttack> getAttacks() {
+    public @NotNull List<CustomBossAttack> getAttacks() {
         if(attacks == null) {
             attacks = new ArrayList<>();
             final ConfigurationSection cs = yml.getConfigurationSection("attacks");
@@ -76,7 +80,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         }
         return attacks;
     }
-    public HashMap<Integer, List<String>> getMessages() {
+    public @NotNull HashMap<Integer, List<String>> getMessages() {
         if(messages == null) {
             messages = new HashMap<>();
             messages.put(-5, yml.getStringList("messages.summon"));

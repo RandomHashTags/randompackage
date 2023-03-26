@@ -28,7 +28,7 @@ public interface EnchantmentOrb extends Applyable, Percentable, GivedpItemableSp
         }
         final boolean hasHyphen = percent.contains("-");
         final int min = hasHyphen ? Integer.parseInt(percent.split("-")[0]) : Integer.parseInt(percent), P = hasHyphen ? min+RANDOM.nextInt(Integer.parseInt(percent.split("-")[1])-min+1) : min;
-        return orb != null ? orb.getItem(P) : AIR;
+        return orb != null ? orb.getItem(P) : null;
     }
 
     int getMaxAllowableEnchants();

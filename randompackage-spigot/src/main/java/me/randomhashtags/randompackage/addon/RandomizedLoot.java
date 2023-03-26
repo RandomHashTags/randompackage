@@ -17,8 +17,7 @@ public interface RandomizedLoot extends Itemable, Rewardable, RewardSizeable, Gi
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final me.randomhashtags.randompackage.api.RandomizedLoot loot = me.randomhashtags.randompackage.api.RandomizedLoot.INSTANCE;
         final HashMap<String, RandomizedLootItem> items = loot.isEnabled() ? loot.items : null;
-        final ItemStack target = items != null && items.containsKey(originalInput) ? items.get(originalInput).getItem() : null;
-        return target != null ? target : AIR;
+        return items != null && items.containsKey(originalInput) ? items.get(originalInput).getItem() : null;
     }
 
 }

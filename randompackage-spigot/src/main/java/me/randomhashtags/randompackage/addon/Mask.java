@@ -14,6 +14,6 @@ public interface Mask extends Applyable, Attributable, GivedpItemableSpigot {
         final boolean isMulti = lowercaseInput.startsWith("multi");
         final Mask mask = getMask(originalInput.split(":")[1]);
         final ItemStack target = mask != null ? mask.getItem() : null;
-        return target != null ? isMulti ? AIR : target : AIR;
+        return target != null ? isMulti ? null : target : null;
     }
 }

@@ -20,8 +20,7 @@ public interface ServerCrate extends Itemable, GivedpItemableSpigot {
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final boolean isFlare = lowercaseInput.contains("flare");
         final ServerCrate crate = getServerCrate(originalInput.split(":")[1]);
-        final ItemStack target = crate != null ? isFlare ? crate.getFlare().getItem() : crate.getItem() : null;
-        return target != null ? target : AIR;
+        return crate != null ? isFlare ? crate.getFlare().getItem() : crate.getItem() : null;
     }
 
     int getRedeemableItems();

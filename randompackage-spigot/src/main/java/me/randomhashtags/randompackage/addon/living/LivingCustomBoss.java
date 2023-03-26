@@ -58,7 +58,7 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
         for(PotionEffect t : entity.getActivePotionEffects()) {
             entity.removePotionEffect(t.getType());
         }
-        entity.setCustomName(type.getName());
+        entity.setCustomName(getLocalizedName(type));
         entity.setCustomNameVisible(true);
         for(String s : type.getAttributes()) {
             final String d = s.toLowerCase();
@@ -232,8 +232,9 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
                 if(i-1 < top.size()) {
                     final OfflinePlayer p = Bukkit.getOfflinePlayer((UUID) top.keySet().toArray()[i-1]);
                     if(p.isOnline()) {
+                        final Player player = p.getPlayer();
                         for(ItemStack re : rewards.get(i)) {
-                            giveItem(p.getPlayer(), re);
+                            giveItem(player, re);
                         }
                     }
                 }
@@ -264,9 +265,11 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
             }
             for(String s : messages.get(-3)) {
                 s = ChatColor.translateAlternateColorCodes('&', s);
-                for(Entity e : l.getNearbyEntities(messageRadius, messageRadius, messageRadius))
-                    if(e instanceof Player)
+                for(Entity e : l.getNearbyEntities(messageRadius, messageRadius, messageRadius)) {
+                    if(e instanceof Player) {
                         e.sendMessage(s);
+                    }
+                }
             }
         }
     }
@@ -322,10 +325,12 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
     public double getDamagePercentDone(UUID damager) {
         double total = 0.00, dmg = 0.00;
         if(damagers.containsKey(damager)) {
-            for(UUID u : damagers.keySet()) {
-                final double d = damagers.get(u);
+            for(Map.Entry<UUID, Double> entry : damagers.entrySet()) {
+                final double d = entry.getValue();
                 total += d;
-                if(u.equals(damager)) dmg = d;
+                if(entry.getKey().equals(damager)) {
+                    dmg = d;
+                }
             }
         }
         return total != 0.00 ? (dmg/total)*100 : 0.00;

@@ -18,8 +18,7 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
         Trinket trinket = getTrinket(originalInput.contains(":") ? originalInput.split(":")[1] : "random");
         if(trinket == null) {
         }
-        final ItemStack target = trinket != null ? trinket.getItem() : null;
-        return target != null ? target : AIR;
+        return trinket != null ? trinket.getItem() : null;
     }
 
     HashMap<String, String> getSettings();

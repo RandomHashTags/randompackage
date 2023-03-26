@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.util.Applyable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface WhiteScroll extends Scroll, Applyable, GivedpItemableSpigot {
 
@@ -13,10 +14,9 @@ public interface WhiteScroll extends Scroll, Applyable, GivedpItemableSpigot {
         WhiteScroll scroll = getWhiteScroll(originalInput.contains(":") ? originalInput.split(":")[1] : "REGULAR");
         if(scroll == null) {
         }
-        final ItemStack target = scroll != null ? scroll.getItem() : null;
-        return target != null ? target : AIR;
+        return scroll != null ? scroll.getItem() : null;
     }
 
-    String getRequiredWhiteScroll();
+    @Nullable String getRequiredWhiteScroll();
     boolean removesRequiredAfterApplication();
 }

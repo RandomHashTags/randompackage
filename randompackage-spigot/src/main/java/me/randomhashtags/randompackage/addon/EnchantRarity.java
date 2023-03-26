@@ -14,8 +14,7 @@ public interface EnchantRarity extends Identifiable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final EnchantRarity rarity = getCustomEnchantRarity(originalInput.split(":")[1]);
-        final ItemStack target = rarity != null ? rarity.getRevealItem() : null;
-        return target != null ? target : AIR;
+        return rarity != null ? rarity.getRevealItem() : null;
     }
 
     String[] getRevealedEnchantRarities();

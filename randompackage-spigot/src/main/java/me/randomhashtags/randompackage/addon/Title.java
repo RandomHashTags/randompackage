@@ -21,8 +21,7 @@ public interface Title extends Itemable, GivedpItemableSpigot {
                 System.out.println("[RandomPackage] That title doesn't exist!");
             }
         }
-        final ItemStack target = title != null ? title.getItem() : null;
-        return target != null ? target : AIR;
+        return title != null ? title.getItem() : null;
     }
 
     String getChatTitle();

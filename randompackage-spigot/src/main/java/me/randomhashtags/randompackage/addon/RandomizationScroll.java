@@ -11,7 +11,6 @@ public interface RandomizationScroll extends Scroll, AppliesToRarities, Itemable
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final RandomizationScroll scroll = getRandomizationScroll(originalInput.split(":")[1]);
-        final ItemStack target = scroll != null ? scroll.getItem() : null;
-        return target != null ? target : AIR;
+        return scroll != null ? scroll.getItem() : null;
     }
 }

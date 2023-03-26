@@ -37,7 +37,7 @@ public interface FallenHero extends Spawnable, GivedpItemableSpigot {
             kit = (CustomKit) kits.toArray()[RANDOM.nextInt(kits.size())];
         }
         final FallenHero f = kit != null ? kit.getFallenHero() : null;
-        return f != null ? kit.getFallenHeroItem(kit, isSpawnItem) : AIR;
+        return f != null ? kit.getFallenHeroItem(kit, isSpawnItem) : null;
     }
 
     @NotNull ItemStack getSpawnItem();

@@ -15,10 +15,9 @@ public interface MagicDust extends AppliesToRarities, Itemable, Percentable, Giv
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
-        final MagicDust d = getMagicDust(values[1]);
+        final MagicDust dust = getMagicDust(values[1]);
         final int percent = values.length >= 3 ? Integer.parseInt(values[2]) : -1;
-        final ItemStack target = d != null ? percent == -1 ? d.getRandomPercentItem(RANDOM) : d.getItem(percent) : null;
-        return target != null ? target : AIR;
+        return dust != null ? percent == -1 ? dust.getRandomPercentItem(RANDOM) : dust.getItem(percent) : null;
     }
 
     int getChance();

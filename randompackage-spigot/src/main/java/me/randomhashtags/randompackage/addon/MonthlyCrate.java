@@ -20,8 +20,7 @@ public interface MonthlyCrate extends Itemable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final MonthlyCrate crate = getMonthlyCrate(originalInput.split(":")[1]);
-        final ItemStack target = crate != null ? crate.getItem() : null;
-        return target != null ? target : AIR;
+        return crate != null ? crate.getItem() : null;
     }
 
     int getCategory();

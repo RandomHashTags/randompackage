@@ -27,7 +27,7 @@ public interface CustomExplosion extends Attributable, Itemable, GivedpItemableS
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomExplosion explosion = getCustomExplosion(originalInput.split(":")[1]);
-        return explosion != null ? explosion.getItem() : AIR;
+        return explosion != null ? explosion.getItem() : null;
     }
 
     void didExplode(UUID uuid, List<Block> blockList);

@@ -18,8 +18,7 @@ public interface RarityGem extends Itemable, GivedpItemableSpigot {
         final String three = values.length == 3 ? values[2] : null;
         final int min = three != null ? Integer.parseInt(three.contains("-") ? three.split("-")[0] : three) : 0;
         final int amount = three != null && three.contains("-") ? min+RANDOM.nextInt(Integer.parseInt(three.split("-")[1])-min+1) : min;
-        final ItemStack target = gem != null ? gem.getItem(amount) : null;
-        return target != null ? target : AIR;
+        return gem != null ? gem.getItem(amount) : null;
     }
 
     ItemStack getItem(int souls);

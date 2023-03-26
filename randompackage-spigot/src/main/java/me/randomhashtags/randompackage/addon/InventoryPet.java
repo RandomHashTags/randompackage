@@ -20,8 +20,7 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final boolean isEgg = lowercaseInput.startsWith("inventorypetegg") || lowercaseInput.startsWith("petegg");
         final InventoryPet pet = getInventoryPet(originalInput.split(":")[1]);
-        final ItemStack target = pet != null ? isEgg ? pet.getEgg() : pet.getItem(1) : null;
-        return target != null ? target  : AIR;
+        return pet != null ? isEgg ? pet.getEgg() : pet.getItem(1) : null;
     }
 
     HashMap<Integer, String> getValues();

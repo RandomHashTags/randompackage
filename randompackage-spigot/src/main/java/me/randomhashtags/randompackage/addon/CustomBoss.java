@@ -25,12 +25,13 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpI
     }
 
     @NotNull ItemStack getSpawnItem();
-    List<CustomBossAttack> getAttacks();
-    HashMap<Integer, List<String>> getMessages();
+    @NotNull List<CustomBossAttack> getAttacks();
+    @NotNull HashMap<Integer, List<String>> getMessages();
     int getMessageRadius();
     int getMaxMinions();
     @Nullable CustomMinion getMinion();
 
+    @NotNull
     default LivingCustomBoss spawn(LivingEntity summoner, Location location) {
         return new LivingCustomBoss(summoner, RandomPackageAPI.INSTANCE.getEntity(getType(), location, true), this);
     }

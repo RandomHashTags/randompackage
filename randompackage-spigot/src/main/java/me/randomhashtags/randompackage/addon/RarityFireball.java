@@ -13,8 +13,7 @@ public interface RarityFireball extends Itemable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final RarityFireball f = getRarityFireball(originalInput.split(":")[1]);
-        final ItemStack target = f != null ? f.getItem() : null;
-        return target != null ? target : AIR;
+        return f != null ? f.getItem() : null;
     }
 
     ItemStack getRevealedItem(boolean usesChances);
