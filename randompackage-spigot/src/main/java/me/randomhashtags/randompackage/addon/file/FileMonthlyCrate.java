@@ -30,7 +30,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     public int getCategorySlot() {
         return yml.getInt("category slot");
     }
-    public String getGuiTitle() {
+    public @NotNull String getGuiTitle() {
         return getString(yml, "title");
     }
     @NotNull
@@ -39,10 +39,10 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
-    public List<String> getRewards() {
+    public @NotNull List<String> getRewards() {
         return getStringList(yml, "rewards");
     }
-    public List<String> getBonusRewards() {
+    public @NotNull List<String> getBonusRewards() {
         return getStringList(yml, "bonus");
     }
     public List<String> getRedeemFormat() {

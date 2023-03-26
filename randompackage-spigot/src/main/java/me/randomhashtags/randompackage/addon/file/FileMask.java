@@ -17,7 +17,9 @@ public final class FileMask extends RPAddonSpigot implements Mask, Skullable {
         super(f);
         register(Feature.MASK, this);
     }
-    public @NotNull String getIdentifier() { return getYamlName(); }
+    public @NotNull String getIdentifier() {
+        return identifier;
+    }
 
     public String getOwner() {
         final String tex = yml.getString("texture");
@@ -45,6 +47,10 @@ public final class FileMask extends RPAddonSpigot implements Mask, Skullable {
         else string = (String) o;
         return colorize(string);
     }
-    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
-    public List<String> getAppliesTo() { return null; }
+    public @NotNull List<String> getAttributes() {
+        return yml.getStringList("attributes");
+    }
+    public List<String> getAppliesTo() {
+        return null;
+    }
 }

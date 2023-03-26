@@ -17,8 +17,7 @@ public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpI
         return new String[] { "customenchant", "ce" };
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
-        final ItemStack target = CustomEnchants.INSTANCE.getRevealedItemFromString(originalInput);
-        return target != null ? target : AIR;
+        return CustomEnchants.INSTANCE.getRevealedItemFromString(originalInput);
     }
 
     default boolean canProcInWorld(@NotNull World world) {

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
-	public static HashMap<Integer, String> defaultColors;
+	public static HashMap<Integer, String> DEFAULT_COLORS;
 	private ItemStack item;
 	private List<EnchantRarity> worksFor;
 	private HashMap<Integer, String> colors;
@@ -23,7 +23,9 @@ public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 		super(f);
 		register(Feature.RARITY_GEM, this);
 	}
-	public @NotNull String getIdentifier() { return getYamlName(); }
+	public @NotNull String getIdentifier() {
+		return identifier;
+	}
 
 	public @NotNull ItemStack getItem() {
 		if(item == null) item = createItemStack(yml, "item");
@@ -70,14 +72,20 @@ public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 	public List<String> getToggleOffRanOutMsg() { return getStringList(yml, "messages.toggle off.ran out"); }
 	public String getColors(int soulsCollected) {
 		HashMap<Integer, String> colors = getColors();
-		if(colors == null) colors = defaultColors;
-		if(soulsCollected < 100) return colors.get(0);
+		if(colors == null) {
+			colors = DEFAULT_COLORS;
+		}
+		if(soulsCollected < 100) {
+			return colors.get(0);
+		}
 		int last = -1;
 		for(int i = 100; i <= 1000000; i += 100) {
 			if(soulsCollected >= i && soulsCollected < i + 100) {
 				final String c = colors.get(i);
 				final boolean d = c != null;
-				if(d) last += 1;
+				if(d) {
+					last += 1;
+				}
 				return d ? c : colors.get(last);
 			}
 		}

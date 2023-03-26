@@ -18,7 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -37,8 +36,8 @@ public enum RarityGems implements RPFeatureSpigot {
         save("rarity gems", "_settings.yml");
         final YamlConfiguration config = getRPConfig("rarity gems", "_settings.yml");
 
-        FileRarityGem.defaultColors = new HashMap<>();
-        final HashMap<Integer, String> defaultColors = FileRarityGem.defaultColors;
+        FileRarityGem.DEFAULT_COLORS = new HashMap<>();
+        final HashMap<Integer, String> defaultColors = FileRarityGem.DEFAULT_COLORS;
         defaultColors.put(-1, colorize(config.getString("default colors.else")));
         defaultColors.put(0, colorize(config.getString("default colors.less than 100")));
         for(String s : getConfigurationSectionKeys(config, "default colors", false)) {
@@ -64,7 +63,7 @@ public enum RarityGems implements RPFeatureSpigot {
     }
     @Override
     public void unload() {
-        FileRarityGem.defaultColors = null;
+        FileRarityGem.DEFAULT_COLORS = null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

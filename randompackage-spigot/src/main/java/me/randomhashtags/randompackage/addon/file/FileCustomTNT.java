@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,13 +19,17 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
     public static HashMap<Location, FileCustomTNT> PLACED;
     public static HashMap<UUID, FileCustomTNT> PRIMED;
 
-    private ItemStack item;
+    private final ItemStack item;
+    private final List<String> attributes;
     public FileCustomTNT(File f) {
         super(f);
         if(PLACED == null) {
             PLACED = new HashMap<>();
             PRIMED = new HashMap<>();
         }
+        final JSONObject json = parse_json_from_file(f);
+        item = create_item_stack(json, "item");
+        attributes = parse_list_string_in_json(json, "attributes");
         register(Feature.CUSTOM_EXPLOSION, this);
     }
 
@@ -37,13 +42,13 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
     @Override
     public @NotNull ItemStack getItem() {
         if(item == null) {
-            item = createItemStack(yml, "item");
+
         }
         return getClone(item);
     }
     @Override
     public @NotNull List<String> getAttributes() {
-        return getStringList(yml, "attributes");
+        return attributes;
     }
     @Override
     public void didExplode(@NotNull UUID uuid, List<Block> blockList) {

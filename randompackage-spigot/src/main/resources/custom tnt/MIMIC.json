@@ -1,0 +1,16 @@
+{
+  "item": {
+    "item": "tnt",
+    "name": "&aMimic TNT",
+    "lore": [
+      "&a&oRepeats the same explosion many times.",
+      " ",
+      "&7Spawns a TNT explosion at",
+      "&7same location every 5s",
+      "&7for 15s total, or 3 explosions."
+    ]
+  },
+  "attributes": [
+    "REPEAT_EXPLODE;5;3"
+  ]
+}

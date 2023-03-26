@@ -35,6 +35,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,10 +56,6 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
 
     static boolean mcmmoIsEnabled() {
         return PLUGIN_MANAGER.isPluginEnabled("mcMMO");
-    }
-
-    default @NotNull String getLocalizedName(Nameable nameable) {
-        return nameable.getName(RandomPackage.LOCALIZATION);
     }
 
     @Override
@@ -204,6 +201,17 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         final String name = config != null ? colorize(config.getString(path + ".name")) : null;
         final List<String> lore = config != null ? config.getStringList(path + ".lore") : null;
         return create_item_stack(path, item_path_lowercase, amount, name, lore, tier, enchantMultiplier);
+    }
+
+    default ItemStack create_item_stack(@NotNull JSONObject json, String key) {
+        return create_item_stack(json, key, 0, 0);
+    }
+    default ItemStack create_item_stack(@NotNull JSONObject json, String key, int tier, float enchantMultiplier) {
+        final JSONObject item_json = json.getJSONObject(key);
+        final String item_path_lowercase = item_json.optString("item");
+        final String name = parse_string_in_json(item_json, "name");
+        final List<String> lore = parse_list_string_in_json(item_json, "lore");
+        return create_item_stack(null, item_path_lowercase, 1, name, lore, tier, enchantMultiplier);
     }
     default ItemStack create_item_stack(@NotNull String path, @NotNull String item_path_lowercase, int amount, String name, List<String> lore, int tier, float enchantMultiplier) {
         ItemStack item;

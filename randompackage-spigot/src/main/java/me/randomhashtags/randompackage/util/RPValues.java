@@ -233,9 +233,9 @@ public interface RPValues extends UVersionableSpigot {
             if(armor.isEnabled()) {
                 final String added = armor.crystalAddedLore;
                 final List<String> l = is.getItemMeta().getLore();
-                for(ArmorSet a : getAllArmorSets().values()) {
-                    if(l.contains(added.replace("{NAME}", a.getName()))) {
-                        return a;
+                for(ArmorSet armor_set : getAllArmorSets().values()) {
+                    if(l.contains(added.replace("{NAME}", getLocalizedName(armor_set)))) {
+                        return armor_set;
                     }
                 }
             }
@@ -364,15 +364,15 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default CustomEnchantSpigot valueOfCustomEnchant(@NotNull String string, boolean checkDisabledEnchants) {
         string = ChatColor.stripColor(string);
-        for(CustomEnchantSpigot ce : getAllCustomEnchants(true).values()) {
-            if(string.startsWith(ce.getIdentifier()) || string.startsWith(ChatColor.stripColor(ce.getName()))) {
-                return ce;
+        for(CustomEnchantSpigot enchant : getAllCustomEnchants(true).values()) {
+            if(string.startsWith(enchant.getIdentifier()) || string.startsWith(ChatColor.stripColor(getLocalizedName(enchant)))) {
+                return enchant;
             }
         }
         if(checkDisabledEnchants) {
-            for(CustomEnchantSpigot ce : getAllCustomEnchants(false).values()) {
-                if(string.startsWith(ce.getIdentifier()) || string.startsWith(ChatColor.stripColor(ce.getName()))) {
-                    return ce;
+            for(CustomEnchantSpigot enchant : getAllCustomEnchants(false).values()) {
+                if(string.startsWith(enchant.getIdentifier()) || string.startsWith(ChatColor.stripColor(getLocalizedName(enchant)))) {
+                    return enchant;
                 }
             }
         }

@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.universal;
 
 import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.util.Identifiable;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.mechanics.SpawnerAPI;
@@ -95,6 +96,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         if(folder == null || !folder.equals("_Data")) {
             YamlUpdater.INSTANCE.updateYaml(folder, f);
         }
+    }
+
+    default @NotNull String getLocalizedName(Nameable nameable) {
+        return nameable.getName(RandomPackage.LOCALIZATION);
     }
 
     default List<String> getStringList(@NotNull FileConfiguration yml, @NotNull String identifier) {

@@ -1,0 +1,15 @@
+{
+  "item": {
+    "item": "tnt",
+    "name": "&4Lethal TNT",
+    "lore": [
+      "&4&oA more dense, dangerous explosion.",
+      " ",
+      "&7Creates 4x extra TNT explosions at",
+      "&7same location as the original."
+    ]
+  },
+  "attributes": [
+    "instant_explode;loc;4"
+  ]
+}

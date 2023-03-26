@@ -25,9 +25,9 @@ public interface MonthlyCrate extends Itemable, GivedpItemableSpigot {
 
     int getCategory();
     int getCategorySlot();
-    String getGuiTitle();
-    List<String> getRewards();
-    List<String> getBonusRewards();
+    @NotNull String getGuiTitle();
+    @NotNull List<String> getRewards();
+    @NotNull List<String> getBonusRewards();
     ItemStack getBackground();
     ItemStack getRedeem();
     ItemStack getBonus1();
@@ -38,6 +38,7 @@ public interface MonthlyCrate extends Itemable, GivedpItemableSpigot {
     List<Integer> getBonusRewardSlots();
     ItemStack getRandomReward(Player player, List<String> excluding, boolean canRepeatRewards);
     ItemStack getRandomBonusReward(Player player, List<String> excluding, boolean canRepeatRewards);
+    @NotNull
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
         final RandomPackageAPI api = RandomPackageAPI.INSTANCE;

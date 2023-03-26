@@ -176,7 +176,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("custom creepers", "ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL");
     }
     default void generateDefaultCustomTNT() {
-        generateAllDefault("custom tnt", "GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL");
+        generate_all_default_json("custom tnt", "GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL");
     }
     default void generateDefaultDuelArenas() {
         generateAllDefault("duel arenas", "DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID");
