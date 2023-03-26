@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ import java.util.List;
 public final class FileCustomEnchantSpigot extends RPAddonSpigot implements CustomEnchantSpigot {
 
     private final boolean enabled;
-    private final String name;
+    private final MultilingualString name;
     private final List<String> lore;
     private final int max_level;
     private final List<String> enabled_worlds, applies_to, attributes;
@@ -24,7 +25,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         super(file);
         final JSONObject json = parse_json_from_file(file);
         enabled = parse_boolean_in_json(json, "enabled");
-        name = parse_string_in_json(json, "name", identifier);
+        name = parse_multilingual_string_in_json(json, "name");
         lore = parse_list_string_in_json(json, "lore");
         max_level = parse_int_in_json(json, "max level", 1);
 
@@ -60,7 +61,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         return enabled_worlds;
     }
 
-    public @NotNull String getName() {
+    public @NotNull MultilingualString getName() {
         return name;
     }
     public @NotNull List<String> getLore() {

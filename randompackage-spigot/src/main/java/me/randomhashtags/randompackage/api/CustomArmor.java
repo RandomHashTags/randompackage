@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.api;
 
+import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
@@ -75,9 +76,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 		for(File f : getFilesInFolder(DATA_FOLDER + SEPARATOR + "custom armor")) {
 			if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
 				final ItemStack is = getCrystal(new FileArmorSet(f), 100);
-				if(is != null) {
-					crystals.add(is);
-				}
+				crystals.add(is);
 			}
 		}
 		addGivedpCategory(crystals, UMaterial.NETHER_STAR, "Armor Set Crystals", "Givedp: ArmorSet Crystals");
@@ -88,17 +87,17 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 
 	@NotNull
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
-		final String p = Integer.toString(percent), n = set.getName();
+		final String p = Integer.toString(percent), name = set.getName(RandomPackage.LOCALIZATION);
 		final List<String> perks = set.getCrystalPerks();
 		final ItemStack item = crystal.clone();
 		final ItemMeta itemMeta = item.getItemMeta();
-		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", n));
+		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));
 		final List<String> lore = new ArrayList<>();
 		for(String s : itemMeta.getLore()) {
 			if(s.equals("{PERKS}")) {
 				lore.addAll(perks);
 			} else {
-				lore.add(s.replace("{PERCENT}", p).replace("{NAME}", n));
+				lore.add(s.replace("{PERCENT}", p).replace("{NAME}", name));
 			}
 		}
 		itemMeta.setLore(lore);
@@ -148,7 +147,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 					if(itemLore != null) {
 						lore.addAll(itemLore);
 					}
-					lore.add(crystalAddedLore.replace("{NAME}", type.getName()));
+					lore.add(crystalAddedLore.replace("{NAME}", type.getName(RandomPackage.LOCALIZATION)));
 					itemMeta.setLore(lore);
 					is.setItemMeta(itemMeta);
 				}

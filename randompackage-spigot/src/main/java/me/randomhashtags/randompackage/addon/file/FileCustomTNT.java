@@ -31,7 +31,7 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
     @NotNull
     @Override
     public String getIdentifier() {
-        return "TNT_" + getYamlName();
+        return "TNT_" + identifier;
     }
 
     @Override

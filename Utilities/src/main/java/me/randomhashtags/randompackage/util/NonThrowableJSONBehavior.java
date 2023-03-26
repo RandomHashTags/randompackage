@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.util;
 
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -42,16 +43,18 @@ public interface NonThrowableJSONBehavior {
         return parse_string_in_json(json, key, "");
     }
     @Nullable
-    default String parse_string_in_json(@NotNull JSONObject json, @NotNull String key, @Nullable String default_value) {
-        final Object obj = json.opt(key);
-        return obj instanceof String ? (String) obj : default_value;
-    }
+    String parse_string_in_json(@NotNull JSONObject json, @NotNull String key, @Nullable String default_value);
+
+    @NotNull
+    MultilingualString parse_multilingual_string_in_json(@NotNull JSONObject json, @NotNull String key);
 
     @NotNull
     default List<String> parse_list_string_in_json(@NotNull JSONObject json, @NotNull String key) {
-        final JSONArray array = json.optJSONArray(key);
-        return array != null ? array.toList().stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList()) : List.of();
+        return parse_list_string_in_json(json, key, List.of());
     }
+
+    @NotNull
+    List<String> parse_list_string_in_json(@NotNull JSONObject json, @NotNull String key, @NotNull List<String> default_value);
 
     @NotNull
     default List<BigDecimal> parse_big_decimal_in_json(@NotNull JSONObject json, @NotNull String key) {

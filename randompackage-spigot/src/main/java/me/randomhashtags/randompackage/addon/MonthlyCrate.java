@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public interface MonthlyCrate extends Itemable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "monthlycrate" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final MonthlyCrate crate = getMonthlyCrate(originalInput.split(":")[1]);
         final ItemStack target = crate != null ? crate.getItem() : null;
         return target != null ? target : AIR;

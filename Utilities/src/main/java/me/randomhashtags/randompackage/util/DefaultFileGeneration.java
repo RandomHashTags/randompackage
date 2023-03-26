@@ -21,7 +21,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("boosters", "FACTION_MCMMO", "FACTION_XP");
     }
     default void generateDefaultCustomArmor() {
-        generateAllDefault("custom armor", "DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI");
+        generate_all_default_json("custom armor", "DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI");
     }
     default void generateDefaultConquests() {
         generateAllDefault("conquests", "NORMAL");

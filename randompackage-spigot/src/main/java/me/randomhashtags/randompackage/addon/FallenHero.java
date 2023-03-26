@@ -16,7 +16,7 @@ public interface FallenHero extends Spawnable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "fallenherogem", "fallenhero" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final boolean isSpawnItem = !lowercaseInput.startsWith("fallenherogem");
         final String type = originalInput.contains(":") ? originalInput.split(":")[1] : null;
         CustomKit kit = type != null ? getCustomKit(type) : null;

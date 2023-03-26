@@ -141,7 +141,8 @@ public interface UVersionable extends RomanNumerals, DefaultFileGeneration {
         return buider.toString();
     }
 
-    String colorize(String input);
+    @NotNull String colorize(@NotNull String input);
+    @NotNull
     default List<String> colorizeListString(@NotNull List<String> input) {
         final List<String> i = new ArrayList<>();
         for(String s : input) {

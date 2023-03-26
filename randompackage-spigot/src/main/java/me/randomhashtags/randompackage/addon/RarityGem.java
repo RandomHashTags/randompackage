@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ public interface RarityGem extends Itemable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "raritygem" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         final RarityGem gem = getRarityGem(values[1]);
         final String three = values.length == 3 ? values[2] : null;

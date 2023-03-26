@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.RewardSizeable;
 import me.randomhashtags.randompackage.addon.util.Rewardable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ public interface RandomizedLoot extends Itemable, Rewardable, RewardSizeable, Gi
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "randomizedloot" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final me.randomhashtags.randompackage.api.RandomizedLoot loot = me.randomhashtags.randompackage.api.RandomizedLoot.INSTANCE;
         final HashMap<String, RandomizedLootItem> items = loot.isEnabled() ? loot.items : null;
         final ItemStack target = items != null && items.containsKey(originalInput) ? items.get(originalInput).getItem() : null;

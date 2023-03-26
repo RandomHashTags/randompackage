@@ -45,11 +45,17 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
         }
         return getClone(item);
     }
-    public FactionUpgradeType getType() { return getFactionUpgradeType(yml.getString("settings.type")); }
-    public int getSlot() { return yml.getInt("settings.slot"); }
-    public boolean itemAmountEqualsTier() { return yml.getBoolean("settings.item amount=tier"); }
+    public @NotNull FactionUpgradeType getType() {
+        return getFactionUpgradeType(yml.getString("settings.type"));
+    }
+    public int getSlot() {
+        return yml.getInt("settings.slot");
+    }
+    public boolean itemAmountEqualsTier() {
+        return yml.getBoolean("settings.item amount=tier");
+    }
 
-    public LinkedHashMap<Integer, FactionUpgradeLevel> getLevels() {
+    public @NotNull LinkedHashMap<Integer, FactionUpgradeLevel> getLevels() {
         if(levels == null) {
             levels = new LinkedHashMap<>();
             final ConfigurationSection c = yml.getConfigurationSection("levels");

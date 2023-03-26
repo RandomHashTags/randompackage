@@ -13,7 +13,7 @@ public interface ItemSkin extends Nameable, Attributable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "itemskin" };
     }
-    default ItemStack valueOfInput(String originalInput, @NotNull String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final ItemSkin skin = getItemSkin(originalInput.split(":")[1]);
         final ItemStack target = ItemSkins.INSTANCE.getItemSkinItem(skin, true);
         return target != null ? target : AIR;

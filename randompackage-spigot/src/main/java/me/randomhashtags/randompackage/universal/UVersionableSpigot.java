@@ -181,7 +181,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
 
     @Override
-    default String colorize(String input) {
+    default @NotNull String colorize(@NotNull String input) {
         return ChatColor.translateAlternateColorCodes('&', input);
     }
 

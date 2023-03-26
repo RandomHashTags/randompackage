@@ -46,7 +46,6 @@ public enum CustomExplosions implements RPFeatureSpigot {
 
 	@Override
 	public void load() {
-		final long started = System.currentTimeMillis();
 		save(null, "custom explosions.yml");
 		config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "custom explosions.yml"));
 		cannotBreakTNT = new ArrayList<>();

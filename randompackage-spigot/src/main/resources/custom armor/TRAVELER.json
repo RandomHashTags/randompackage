@@ -1,0 +1,76 @@
+{
+  "name": {
+    "en" : "&5&lDimensional Traveler"
+  },
+  "armor lore": [
+    " ",
+    "&5&lTRAVELER SET BONUS",
+    "&5&l*&r &5You deal 30% more damage.",
+    "&5&l*&r &5Dimensional Shift Passive Ability",
+    "&7&o(Requires all 4 dimensional traveler items.)"
+  ],
+  "helmet": {
+    "item": "diamond_helmet",
+    "name": "&5&lInterdimensional Hood&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Alient Implants;Planetary Deathbringer;Enlighted;Drunk;Armored;Dodge;Guardians;Sticky;Valor;Angelic;Tank;Repair Guard;Hardened}",
+      "&7A hood that fades in and out of",
+      "&7existence inside the dimension of the owner."
+    ]
+  },
+  "chestplate": {
+    "item": "diamond_chestplate",
+    "name": "&5&lChestplate of Ad Infinitum&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Paladin Armored;Godly Overload;Enlighted;Deathbringer;Aegis;Leadership;Blood Lust;Dodge;Arrow Deflect;Valor;Angelic;Tank;Spirit Link}",
+      "&7A cross-dimensional chestplate",
+      "&7with impossibly infinite density",
+      "&7and defensive properties."
+    ]
+  },
+  "leggings": {
+    "item": "diamond_leggings",
+    "name": "&5&lTimeless Robes&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Paladin Armored;Natures Wrath;Enlighted;Deathbringer;Clarity;Dodge;Obsidianshield;Lucky;Valor;Angelic;Cactus}",
+      "&7Robes that evade the 4th dimension and",
+      "&7are in a state of constant existence",
+      "&7across all planets of reality."
+    ]
+  },
+  "boots": {
+    "item": "diamond_boots",
+    "name": "&5&lWarp Speed Sandals&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;;Unbreaking3}",
+      "RPEnchants{Divine Enlighted;Ethereal Dodge;Deathbringer;Gears;Sticky;Ender Walker;Valor;Angelic;Tank;Springs;Hardened;Rocket Escape}",
+      "&7Sandals capable of breaking through",
+      "&7dimensional barriers to allow the barer",
+      "&7to perform impossible feats."
+    ]
+  },
+  "attributes": {
+    "armor": [
+      "PvAny;SetDamage=dmg*1.30"
+    ],
+    "weapon": [
+      ""
+    ],
+    "crystal": [
+      "PvAny;SetDamage=dmg*1.075"
+    ]
+  },
+  "crystal perks": [
+    "  &5&l*&r &5+7.5% Outgoing DMG",
+    "  &5&l*&r &520% Dimensional Shift Ability"
+  ],
+  "crystal applied msg": [
+    "&6&l(!) Armor Crystal (&r&5&lDimension Traveler&r&6&l)",
+    "&6&lCrystal Bonus:",
+    " &6&l*&r &6+7.5% Outgoing DMG",
+    " &6&l*&r &6+20% Dimensional Shift Ability"
+  ]
+}

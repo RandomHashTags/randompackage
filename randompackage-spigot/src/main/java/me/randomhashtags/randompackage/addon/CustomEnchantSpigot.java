@@ -1,5 +1,6 @@
 package me.randomhashtags.randompackage.addon;
 
+import me.randomhashtags.randompackage.addon.file.NonThrowableJSONBehaviorSpigot;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.event.armor.ArmorEvent;
 import me.randomhashtags.randompackage.util.Versionable;
@@ -10,9 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpItemableSpigot {
+public interface CustomEnchantSpigot extends CustomEnchant, Versionable, GivedpItemableSpigot, NonThrowableJSONBehaviorSpigot {
 
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "customenchant", "ce" };

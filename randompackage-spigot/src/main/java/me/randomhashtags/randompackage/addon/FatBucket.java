@@ -16,7 +16,7 @@ public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "fatbucket" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         final FatBucket bucket = getFatBucket(values[1]);
         final ItemStack target = bucket != null ? values.length > 2 ? bucket.getItem(Integer.parseInt(values[1])) : bucket.getItem(0) : null;

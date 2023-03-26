@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Toggleable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "trinket" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         Trinket trinket = getTrinket(originalInput.contains(":") ? originalInput.split(":")[1] : "random");
         if(trinket == null) {
         }

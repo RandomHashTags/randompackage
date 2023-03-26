@@ -7,6 +7,7 @@ import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public interface ArmorSet extends Identifiable, Nameable, GivedpItemableSpigot {
     @NotNull ItemStack getLeggings();
     @NotNull ItemStack getBoots();
     @NotNull List<ArmorSetWeaponInfo> getWeapons();
+    @Nullable
     default ArmorSetWeaponInfo getWeapon(@NotNull String identifier) {
         final List<ArmorSetWeaponInfo> weapons = getWeapons();
         for(ArmorSetWeaponInfo weapon : weapons) {
@@ -64,10 +66,10 @@ public interface ArmorSet extends Identifiable, Nameable, GivedpItemableSpigot {
         }
         return null;
     }
-    List<String> getArmorLore();
-    List<String> getCrystalPerks();
-    List<String> getArmorAttributes();
-    List<String> getCrystalAttributes();
-    List<String> getActivateMessage();
-    List<String> getCrystalAppliedMsg();
+    @NotNull List<String> getArmorLore();
+    @NotNull List<String> getCrystalPerks();
+    @NotNull List<String> getArmorAttributes();
+    @NotNull List<String> getCrystalAttributes();
+    @NotNull List<String> getActivateMessage();
+    @NotNull List<String> getCrystalAppliedMsg();
 }

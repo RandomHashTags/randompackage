@@ -1,0 +1,93 @@
+{
+  "name": {
+    "en" : "&b&lYeti"
+  },
+  "armor lore": [
+    " ",
+    "&b&lYETI SET BONUS",
+    "&b&l*&r &bDeal +10% damage to all enemies.",
+    "&b&l*&r &bEnemies deal 10% less damage to you.",
+    "&7&o(Requires all 4 yeti items.)"
+  ],
+  "helmet": {
+    "item": "diamond_helmet",
+    "name": "&b&lYeti Facemask&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Drunk;Armored;Enlighted;Deathbringer;Implants;Angelic;Tank;Protection;Valor;Arrow Deflect;Hardened;Ender Shift}",
+      "&bThe savage mask of the Yeti."
+    ]
+  },
+  "chestplate": {
+    "item": "diamond_chestplate",
+    "name": "&b&lBloody Yeti Torso&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Godly Overload;Enlighted;Armored;Aegis;Dodge;Angelic;Tank;Leadership;Blood Link;Blood Lust;Guardians;Spirit Link}",
+      "&bThe impermeable chestplate of the Yeti."
+    ]
+  },
+  "leggings": {
+    "item": "diamond_leggings",
+    "name": "&b&lFuzzy Yeti Leggings&R {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Obsidianshield;Tank;Angelic;Cactus;Lucky;Valor;Sticky;Dodge;Repair Guard}",
+      "&bThe cozy yet monstrous legs of the Yeti."
+    ]
+  },
+  "boots": {
+    "item": "diamond_boots",
+    "name": "&b&lBig-Yeti Boots&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Armored;Enlighted;Deathbringer;Gears;Tank;Springs;Rocket Escape;Ender Walker;Repair Guard;Hardened;Valor;Angelic}",
+      "&bBigfoot has nothing on these boots."
+    ]
+  },
+  "weapons": {
+    "axe": {
+      "item": "diamond_axe",
+      "name": "&b&lYeti Maul",
+      "lore": [
+        "VEnchants{Sharpness5;Unbreaking3}",
+        "RPEnchants{Lifesteal;Silence}",
+        "&7A penetrating axe used by a Yeti."
+      ],
+      "set lore": [
+        " ",
+        "&b&lYETI WEAPON BONUS",
+        "&bDeal +75% Durability Damage",
+        "&bDeal +7.5% DMG to enemies",
+        "&bBypass 50% of Heroic Armor",
+        "&7&o(Requires all 4 yeti items.)"
+      ]
+    }
+  },
+  "attributes": {
+    "armor": [
+      "PvAny;SetDamage=dmg*1.10",
+      "isDamaged;SetDamage=dmg*0.90"
+    ],
+    "axe": [
+      "PvAny;SetDamage=dmg*1.075"
+    ],
+    "crystal": [
+      "PvAny;SetDamage=dmg*1.025",
+      "isDamaged=SetDamage=dmg*0.975"
+    ]
+  },
+  "crystal perks": [
+    "  &b&l*&r &b+2.5% DMG",
+    "  &b&l*&r &b-2.5% Incoming DMG"
+  ],
+  "activate message": [
+    "&b&lYETI SET BONUS: &b+10% ATK / -10% DMG"
+  ],
+  "crystal applied msg": [
+    "&6&l(!) Armor Crystal (&r&b&lYeti&r&6&l)",
+    "&6&lCrystal Bonus:",
+    " &6&l*&r &6+2.5% DMG",
+    " &6&l*&r &6-2.5% Incoming DMG"
+  ]
+}

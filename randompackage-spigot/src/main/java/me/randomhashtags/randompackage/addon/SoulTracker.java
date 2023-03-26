@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon;
 
 import me.randomhashtags.randompackage.addon.util.Applyable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface SoulTracker extends Applyable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "soultracker" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final SoulTracker tracker = getSoulTracker(originalInput.split(":")[1]);
         final ItemStack target = tracker != null ? tracker.getItem() : null;
         return target != null ? target : AIR;

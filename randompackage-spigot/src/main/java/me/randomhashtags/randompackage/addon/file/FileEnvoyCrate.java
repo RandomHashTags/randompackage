@@ -27,7 +27,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
     @NotNull
     @Override
     public String getIdentifier() {
-        return getYamlName();
+        return identifier;
     }
 
     public Firework getFirework() {
@@ -115,7 +115,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         }
         return actualrewards;
     }
-    public List<ItemStack> getRandomizedRewards() {
+    public @NotNull List<ItemStack> getRandomizedRewards() {
         final List<String> r = getRandomRewards();
         final List<ItemStack> a = new ArrayList<>();
         for(String s : r) {

@@ -1,0 +1,98 @@
+{
+  "name": {
+    "en": "&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;"
+  },
+  "armor lore": [
+    " ",
+    "&d&lKOTH SET BONUS",
+    "&d&l*&r &d+20% PvP Damage",
+    "&d&l*&r &d+50% PvE Damage",
+    "&d&l*&r &dAuto Bless",
+    "&d&l*&r &dNo Fall Damage",
+    "&7&o(Requires all 4 koth items)"
+  ],
+  "helmet": {
+    "item": "leather_helmet",
+    "name": "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nHelmet&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection5;Unbreaking3}",
+      "RPEnchants{Armored;Enlighted;Deathbringer;Drunk;Angelic;Tank;Implants}"
+    ]
+  },
+  "chestplate": {
+    "item": "leather_chestplate",
+    "name": "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nChestplate&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Armored;Enlighted;Deathbringer;Overload;Blood Lust;Dodge;Tank;Angelic}"
+    ]
+  },
+  "leggings": {
+    "item": "leather_leggings",
+    "name": "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nLeggings&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;Unbreaking3}",
+      "RPEnchants{Armored;Enlighted;Clarity;Deathbringer;Valor;Angelic;Tank;Cactus}"
+    ]
+  },
+  "boots": {
+    "item": "leather_boots",
+    "name": "&f&l&k:&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k:&r &f&l&nBoots&r {ENCHANT_SIZE}",
+    "lore": [
+      "VEnchants{Protection4;;Unbreaking3}",
+      "RPEnchants{Armored;Gears;Enlighted;Deathbringer;Angelic;Tank;Rocket Escape}"
+    ]
+  },
+  "weapons": {
+    "axe": {
+      "item": "gold_axe",
+      "lore": [
+        "VEnchants{Sharpness5;Unbreaking3}",
+        "RPEnchants{Demonic Lifesteal;Silence}"
+      ],
+      "set lore": [
+        " ",
+        "&c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&lWEAPON BONUS",
+        " &f&l*&r &fDeal +50% Durability Damage",
+        "&7&o(Requires all 4 koth armor items)"
+      ]
+    },
+    "sword": {
+      "item": "gold_sword",
+      "lore": [
+        "VEnchants{Sharpness5;Unbreaking3}",
+        "RPEnchants{Demonic Lifesteal;Silence}"
+      ],
+      "set lore": [
+        " ",
+        "&c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&lWEAPON BONUS",
+        " &f&l*&r &fDeal +7.5% damage to all enemies",
+        "&7&o(Requires all 4 koth armor items)"
+      ]
+    }
+  },
+  "crystal perks": [
+    "  &b&l*&r &b+5% PvP DMG",
+    "  &b&l*&r &b+12.5% PvE DMG"
+  ],
+  "attributes": {
+    "armor attributes": [
+      "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.20",
+      "PvAny;VictimisMob=true;SetDamage=dmg*1.50",
+      "EntityDamage;cause=FALL;SetCancelled=true"
+    ],
+    "weapon attributes": [
+      ""
+    ],
+    "crystal": [
+      "PvAny;VictimIsPlayer=true;SetDamage=dmg*1.05",
+      "PvAny;VictimIsMob=true;SetDamage=dmg*1.125"
+    ]
+  },
+  "crystal applied msg": [
+    "&6&l(!) Armor Crystal (&r&&f&l&k;&r &c&lK&6&l.&e&lO&a&l.&b&lT&5&l.&d&lH&r &f&l&k;&r&6&l)",
+    "&6&lCrystal Bonus:",
+    " &6&l*&r &6+5% PvP DMG",
+    " &6&l*&r &6+12.5% PvE DMG"
+  ]
+}

@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.enums.LootboxRewardType;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Nameable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "lootbox" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final Lootbox lootbox = getLootbox(originalInput.split(":")[1]);
         final ItemStack target = lootbox != null ? lootbox.getItem() : null;
         return target != null ? target : AIR;

@@ -13,6 +13,7 @@ import me.randomhashtags.randompackage.supported.RegionalAPI;
 import me.randomhashtags.randompackage.supported.economy.Vault;
 import me.randomhashtags.randompackage.supported.standalone.ClipPAPI;
 import me.randomhashtags.randompackage.util.CommandManager;
+import me.randomhashtags.randompackage.util.Language;
 import me.randomhashtags.randompackage.util.listener.RPEventsSpigot;
 import me.randomhashtags.randompackage.util.obj.Backup;
 import org.bukkit.Bukkit;
@@ -43,9 +44,11 @@ public final class RandomPackage extends JavaPlugin {
 
     public FileConfiguration config;
 
+
     private RandomPackageAPI api;
     private RPEventsSpigot rpevents;
     public static String SPAWNER_PLUGIN_NAME;
+    public static Language LOCALIZATION;
     public static Plugin SPAWNER_PLUGIN, MCMMO;
     public boolean placeholder_api = false;
 
@@ -181,6 +184,7 @@ public final class RandomPackage extends JavaPlugin {
     private void check_files() {
         RandomPackageAPI.INSTANCE.save(null, "config.yml");
         config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+        LOCALIZATION = Language.ENGLISH;
     }
     private void load_soft_dependencies() {
         try_loading_mcmmo();

@@ -15,7 +15,7 @@ public interface Booster extends Attributable, Itemable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "booster" };
     }
-    default ItemStack valueOfInput(String originalInput, @NotNull String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         final Booster booster = getBooster(values[1]);
         return booster != null ? booster.getItem(Long.parseLong(values[3])*1000, Double.parseDouble(values[2])) : AIR;

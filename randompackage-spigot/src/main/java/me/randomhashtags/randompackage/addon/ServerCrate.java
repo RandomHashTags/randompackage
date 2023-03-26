@@ -5,6 +5,7 @@ import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.universal.UInventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public interface ServerCrate extends Itemable, GivedpItemableSpigot {
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "serverflare", "spaceflare", "servercrateflare", "servercrate", "spacecrate", "spacechest", "serverchest" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final boolean isFlare = lowercaseInput.contains("flare");
         final ServerCrate crate = getServerCrate(originalInput.split(":")[1]);
         final ItemStack target = crate != null ? isFlare ? crate.getFlare().getItem() : crate.getItem() : null;

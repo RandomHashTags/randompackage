@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon;
 import me.randomhashtags.randompackage.addon.util.Applyable;
 import me.randomhashtags.randompackage.addon.util.Percentable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public interface EnchantmentOrb extends Applyable, Percentable, GivedpItemableSp
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "enchantmentorb" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         String path = values[1], percent = values.length == 3 ? values[2] : Integer.toString(RANDOM.nextInt(101));
         EnchantmentOrb orb = getEnchantmentOrb(path);

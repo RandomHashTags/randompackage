@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.util;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
+import me.randomhashtags.randompackage.addon.file.NonThrowableJSONBehaviorSpigot;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
@@ -39,7 +40,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener, RPStorage {
+public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener, RPStorage, NonThrowableJSONBehaviorSpigot {
     HashSet<String> ENABLED_RP_FEATURES = new HashSet<>();
 
     Economy ECONOMY = Vault.INSTANCE.getEconomy();
@@ -138,7 +139,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     }
 
     @Override
-    default String colorize(String input) {
+    default @NotNull String colorize(@NotNull String input) {
         return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL";
     }
 

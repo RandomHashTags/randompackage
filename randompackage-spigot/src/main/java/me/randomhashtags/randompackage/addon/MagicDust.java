@@ -4,6 +4,7 @@ import me.randomhashtags.randompackage.addon.util.AppliesToRarities;
 import me.randomhashtags.randompackage.addon.util.Itemable;
 import me.randomhashtags.randompackage.addon.util.Percentable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
@@ -12,7 +13,7 @@ public interface MagicDust extends AppliesToRarities, Itemable, Percentable, Giv
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "dust" };
     }
-    default ItemStack valueOfInput(String originalInput, String lowercaseInput) {
+    default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final String[] values = originalInput.split(":");
         final MagicDust d = getMagicDust(values[1]);
         final int percent = values.length >= 3 ? Integer.parseInt(values[2]) : -1;

@@ -1,47 +1,66 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.ArmorSet;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.util.obj.ArmorSetWeaponInfo;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
-	private ItemStack helmet, chestplate, leggings, boots;
+	private final MultilingualString name;
+	private final ItemStack helmet, chestplate, leggings, boots;
 	private List<ArmorSetWeaponInfo> weapons;
+	private final List<String> armor_lore, crystal_perks, armor_attributes, crystal_attributes, activate_message, crystal_applied_message;
 
 	public FileArmorSet(File f) {
 		super(f);
+		final JSONObject json = parse_json_from_file(f);
+		name = parse_multilingual_string_in_json(json, "name");
+		armor_lore = parse_list_string_in_json(json, "armor lore");
+		crystal_perks = parse_list_string_in_json(json, "crystal perks");
+		armor_attributes = parse_list_string_in_json(json, "attributes.armor");
+		crystal_attributes = parse_list_string_in_json(json, "attributes.crystal");
+		activate_message = parse_list_string_in_json(json, "activate msg");
+		crystal_applied_message = parse_list_string_in_json(json, "crystal applied msg");
 		register(Feature.ARMOR_SET, this);
 	}
 
-	public @NotNull String getName() {
-		final String s = yml.getString("name");
-		return s != null ? colorize(s) : getIdentifier() + " name doesn't exist!";
+	public @NotNull MultilingualString getName() {
+		return name;
 	}
 	@NotNull
 	public ItemStack getHelmet() {
-		if(helmet == null) helmet = createItemStack(yml, "helmet");
+		if(helmet == null) {
+			helmet = createItemStack(yml, "helmet");
+		}
 		return getClone(helmet);
 	}
 	@NotNull
 	public ItemStack getChestplate() {
-		if(chestplate == null) chestplate = createItemStack(yml, "chestplate");
+		if(chestplate == null) {
+			chestplate = createItemStack(yml, "chestplate");
+		}
 		return getClone(chestplate);
 	}
 	@NotNull
 	public ItemStack getLeggings() {
-		if(leggings == null) leggings = createItemStack(yml, "leggings");
+		if(leggings == null) {
+			leggings = createItemStack(yml, "leggings");
+		}
 		return getClone(leggings);
 	}
 	@NotNull
 	public ItemStack getBoots() {
-		if(boots == null) boots = createItemStack(yml, "boots");
+		if(boots == null) {
+			boots = createItemStack(yml, "boots");
+		}
 		return getClone(boots);
 	}
 	@NotNull
@@ -57,22 +76,22 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 		}
 		return weapons;
 	}
-	public List<String> getArmorLore() {
-		return getStringList(yml, "armor lore");
+	public @NotNull List<String> getArmorLore() {
+		return armor_lore;
 	}
-	public List<String> getCrystalPerks() {
-		return getStringList(yml, "crystal perks");
+	public @NotNull List<String> getCrystalPerks() {
+		return crystal_perks;
 	}
-	public List<String> getArmorAttributes() {
-		return getStringList(yml, "attributes.armor");
+	public @NotNull List<String> getArmorAttributes() {
+		return armor_attributes;
 	}
-	public List<String> getCrystalAttributes() {
-		return getStringList(yml, "attributes.crystal");
+	public @NotNull List<String> getCrystalAttributes() {
+		return crystal_attributes;
 	}
-	public List<String> getActivateMessage() {
-		return getStringList(yml, "activate message");
+	public @NotNull List<String> getActivateMessage() {
+		return activate_message;
 	}
-	public List<String> getCrystalAppliedMsg() {
-		return getStringList(yml, "crystal applied msg");
+	public @NotNull List<String> getCrystalAppliedMsg() {
+		return crystal_applied_message;
 	}
 }
