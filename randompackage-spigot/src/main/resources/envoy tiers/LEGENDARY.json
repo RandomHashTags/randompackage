@@ -1,0 +1,43 @@
+{
+  "firework": "star:black:black:1",
+  "chance": 40,
+  "settings": {
+    "block": "ender_chest",
+    "drops from sky": false,
+    "falling block": "beacon",
+    "can repeat rewards": false,
+    "reward size": "4-7",
+    "cannot land above": [
+      "lava"
+    ],
+    "cannot land in": [
+      "lava",
+      "water",
+      "snow"
+    ]
+  },
+  "item": {
+    "item": "chest",
+    "name": "&e&lEnvoy Legendary Tier",
+    "lore": [
+      " ",
+      "&6Can contain the following...",
+      " ",
+      "&7* Soul Enchantment Book",
+      "&7* Legendary Enchantment Book",
+      "&7* Ultimate Enchantment Book"
+    ]
+  },
+  "rewards": [
+    "raritybook:LEGENDARY;amount=1-2;chance=50",
+    "randomizationscroll:LEGENDARY;chance=50",
+    "spaceflare:LEGENDARY;chance=50",
+    "spacechest:LEGENDARY;chance=50",
+    "rarityfireball:LEGENDARY;chance=50",
+    "equipmentlootbox;chance=50",
+    "customarmor:PHANTOM:helmet;chance=30",
+    "customarmor:PHANTOM:chestplate;chance=30",
+    "customarmor:PHANTOM:leggings;chance=30",
+    "customarmor:PHANTOM:boots;chance=30"
+  ]
+}

@@ -13,7 +13,7 @@ public interface EnvoyCrate extends Itemable, Placeable {
     @Nullable Firework getFirework();
     int getChance();
     boolean canRepeatRewards();
-    String getRewardSize();
-    List<String> getRandomRewards();
+    @NotNull String getRewardSize();
+    @NotNull List<String> getRandomRewards();
     @NotNull List<ItemStack> getRandomizedRewards();
 }

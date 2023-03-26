@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,13 +17,43 @@ import java.util.List;
 import java.util.Random;
 
 public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
-    private UMaterial block, fallingblock;
-    private List<UMaterial> cannotLandAbove, cannotLandIn;
+    private final Firework firework;
+    private final int chance;
+    private final UMaterial block, falling_block;
+    private final String reward_size;
+    private final boolean can_repeat_rewards, drops_from_sky;
+    private final List<UMaterial> cannotLandAbove, cannotLandIn;
+    private final List<String> rewards;
     private ItemStack item;
-    private Firework fw;
 
-    public FileEnvoyCrate(File f) {
-        super(f);
+    public FileEnvoyCrate(File file) {
+        super(file);
+        final JSONObject json = parse_json_from_file(file);
+
+        final String[] f = json.getString("firework").split(":");
+        firework = createFirework(FireworkEffect.Type.valueOf(f[0].toUpperCase()), getColor(f[1]), getColor(f[2]), Integer.parseInt(f[3]));
+
+        chance = parse_int_in_json(json, "chance");
+        rewards = parse_list_string_in_json(json, "rewards");
+
+        final JSONObject settings_json = json.getJSONObject("settings");
+        final String target_block = parse_string_in_json(settings_json, "block"), target_falling_block = parse_string_in_json(settings_json, "falling block");
+        block = UMaterial.match(target_block);
+        falling_block = UMaterial.match(target_falling_block);
+        reward_size = parse_string_in_json(settings_json, "reward size");
+        can_repeat_rewards = parse_boolean_in_json(settings_json, "can repeat rewards");
+        drops_from_sky = parse_boolean_in_json(settings_json, "drops from sky");
+
+        cannotLandAbove = new ArrayList<>();
+        for(String s : parse_list_string_in_json(settings_json, "cannot land above")) {
+            cannotLandAbove.add(UMaterial.match(s));
+        }
+
+        cannotLandIn = new ArrayList<>();
+        for(String s : parse_list_string_in_json(settings_json, "cannot land in")) {
+            cannotLandIn.add(UMaterial.match(s));
+        }
+
         register(Feature.ENVOY_CRATE, this);
     }
     @NotNull
@@ -30,51 +62,32 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         return identifier;
     }
 
+    @Nullable
     public Firework getFirework() {
-        if(fw == null) {
-            final String[] f = yml.getString("firework").split(":");
-            fw = createFirework(FireworkEffect.Type.valueOf(f[0].toUpperCase()), getColor(f[1]), getColor(f[2]), Integer.parseInt(f[3]));
-        }
-        return fw;
+        return firework;
     }
     public int getChance() {
-        return yml.getInt("chance");
+        return chance;
     }
-    public UMaterial getBlock() {
-        if(block == null) {
-            block = UMaterial.match(yml.getString("settings.block"));
-        }
+    public @NotNull UMaterial getBlock() {
         return block;
     }
     public boolean canRepeatRewards() {
-        return yml.getBoolean("settings.can repeat rewards");
+        return can_repeat_rewards;
     }
     public boolean dropsFromSky() {
-        return yml.getBoolean("settings.drops from sky");
+        return drops_from_sky;
     }
     public UMaterial getFallingBlock() {
-        if(fallingblock == null) fallingblock = UMaterial.match(yml.getString("settings.falling block"));
-        return fallingblock;
+        return falling_block;
     }
-    public String getRewardSize() {
-        return yml.getString("settings.reward size");
+    public @NotNull String getRewardSize() {
+        return reward_size;
     }
-    public List<UMaterial> cannotLandAbove() {
-        if(cannotLandAbove == null) {
-            cannotLandAbove = new ArrayList<>();
-            for(String s : yml.getStringList("settings.cannot land above")) {
-                cannotLandAbove.add(UMaterial.match(s));
-            }
-        }
+    public @NotNull List<UMaterial> cannotLandAbove() {
         return cannotLandAbove;
     }
-    public List<UMaterial> cannotLandIn() {
-        if(cannotLandIn == null) {
-            cannotLandIn = new ArrayList<>();
-            for(String s : yml.getStringList("settings.cannot land in")) {
-                cannotLandIn.add(UMaterial.match(s));
-            }
-        }
+    public @NotNull List<UMaterial> cannotLandIn() {
         return cannotLandIn;
     }
     public @NotNull ItemStack getItem() {
@@ -83,19 +96,19 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         }
         return getClone(item);
     }
+    @NotNull
     public List<String> getRewards() {
-        return yml.getStringList("rewards");
+        return rewards;
     }
 
     public int getRandomRewardSize() {
-        final String rewardSize = getRewardSize();
-        final String[] s = rewardSize.split("-");
-        final boolean c = rewardSize.contains("-");
-        final int min = c ? Integer.parseInt(s[0]) : Integer.parseInt(rewardSize), max = c ? Integer.parseInt(s[1]) : -1;
+        final String[] s = reward_size.split("-");
+        final boolean c = reward_size.contains("-");
+        final int min = c ? Integer.parseInt(s[0]) : Integer.parseInt(reward_size), max = c ? Integer.parseInt(s[1]) : -1;
         return min + (max == -1 ? 0 : new Random().nextInt(max-min+1));
     }
-    public List<String> getRandomRewards() {
-        final List<String> rewards = new ArrayList<>(this.getRewards()), actualrewards = new ArrayList<>();
+    public @NotNull List<String> getRandomRewards() {
+        final List<String> rewards = new ArrayList<>(this.getRewards()), actual_rewards = new ArrayList<>();
         final Random random = new Random();
         final boolean canRepeatRewards = canRepeatRewards();
         for(int i = 1; i <= getRandomRewardSize(); i++) {
@@ -104,7 +117,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
                 final boolean hasChance = reward.toLowerCase().contains(";chance=");
                 final String[] a = reward.split(";chance=");
                 if(!hasChance || random.nextInt(100) <= getRemainingInt(a[1])) {
-                    actualrewards.add(a[0]);
+                    actual_rewards.add(a[0]);
                     if(!canRepeatRewards) {
                         rewards.remove(reward);
                     }
@@ -113,7 +126,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
                 }
             }
         }
-        return actualrewards;
+        return actual_rewards;
     }
     public @NotNull List<ItemStack> getRandomizedRewards() {
         final List<String> r = getRandomRewards();

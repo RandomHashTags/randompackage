@@ -3,19 +3,20 @@ package me.randomhashtags.randompackage.addon.util;
 import me.randomhashtags.randompackage.universal.UMaterial;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public interface Placeable extends Identifiable, Rewardable {
-    UMaterial getBlock();
+    @NotNull UMaterial getBlock();
     boolean dropsFromSky();
     UMaterial getFallingBlock();
-    List<UMaterial> cannotLandAbove();
-    List<UMaterial> cannotLandIn();
-    default boolean canLand(Location spawnLocation) {
-        final World w = spawnLocation.getWorld();
+    @NotNull List<UMaterial> cannotLandAbove();
+    @NotNull List<UMaterial> cannotLandIn();
+    default boolean canLand(@NotNull Location spawnLocation) {
+        final World world = spawnLocation.getWorld();
         final int x = spawnLocation.getBlockX(), y = spawnLocation.getBlockY(), z = spawnLocation.getBlockZ();
-        final UMaterial above = UMaterial.match(w.getBlockAt(new Location(w, x, y-1, z)).getType().name()), in = UMaterial.match(w.getBlockAt(spawnLocation).getType().name());
+        final UMaterial above = UMaterial.match(world.getBlockAt(new Location(world, x, y-1, z)).getType().name()), in = UMaterial.match(world.getBlockAt(spawnLocation).getType().name());
         return !cannotLandAbove().contains(above) && !cannotLandIn().contains(in);
     }
 }

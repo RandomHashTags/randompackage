@@ -33,7 +33,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 	private YamlConfiguration getYaml() {
 		return crate.getYaml();
 	}
-	public UMaterial getBlock() {
+	public @NotNull UMaterial getBlock() {
 		return UMaterial.match(crate.getItem().getType().name());
 	}
 	public boolean dropsFromSky() {
@@ -43,7 +43,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 		return null;
 	}
 
-	public List<UMaterial> cannotLandAbove() {
+	public @NotNull List<UMaterial> cannotLandAbove() {
 		if(cannotLandAbove == null) {
 			cannotLandAbove = new ArrayList<>();
 			for(String s : getYaml().getStringList("flare.settings.cannot land above")) {
@@ -52,7 +52,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 		}
 		return cannotLandAbove;
 	}
-	public List<UMaterial> cannotLandIn() {
+	public @NotNull List<UMaterial> cannotLandIn() {
 		if(cannotLandIn == null) {
 			cannotLandIn = new ArrayList<>();
 			for(String s : getYaml().getStringList("flare.settings.cannot land in")) {

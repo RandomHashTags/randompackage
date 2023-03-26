@@ -1,0 +1,39 @@
+{
+  "firework": "star:yellow:yellow:1",
+  "chance": 45,
+  "settings": {
+    "block": "ender_chest",
+    "drops from sky": false,
+    "falling block": "beacon",
+    "can repeat rewards": false,
+    "reward size": "4-7",
+    "cannot land above": [
+      "lava"
+    ],
+    "cannot land in": [
+      "lava",
+      "water",
+      "snow"
+    ]
+  },
+  "item": {
+    "item": "chest",
+    "name": "&e&lEnvoy Ultimate Tier",
+    "lore": [
+      " ",
+      "&6Can contain the following...",
+      " ",
+      "&7* Soul Enchantment Book",
+      "&7* Legendary Enchantment Book",
+      "&7* Ultimate Enchantment Book"
+    ]
+  },
+  "rewards": [
+    "raritybook:ULTIMATE;amount=1-2;chance=50",
+    "randomizationscroll:ULTIMATE;chance=50",
+    "soultracker:ULTIMATE;chance=50",
+    "spaceflare:ULTIMATE;chance=50",
+    "spacechest:ULTIMATE;chance=50",
+    "rarityfireball:ULTIMATE;chance=50"
+  ]
+}

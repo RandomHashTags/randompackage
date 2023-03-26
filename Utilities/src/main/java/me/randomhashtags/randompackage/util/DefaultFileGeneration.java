@@ -182,7 +182,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("duel arenas", "DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID");
     }
     default void generateDefaultEnvoyTiers() {
-        generateAllDefault("envoy tiers", "ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
+        generate_all_default_json("envoy tiers", "ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
     }
     default void generateDefaultFactionQuests() {
         generateAllDefault("faction quests",

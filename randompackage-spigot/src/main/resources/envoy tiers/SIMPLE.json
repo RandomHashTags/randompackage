@@ -1,0 +1,48 @@
+{
+  "firework": "star:white:white:1",
+  "chance": 60,
+  "settings": {
+    "block": "ender_chest",
+    "drops from sky": false,
+    "falling block": "beacon",
+    "can repeat rewards": false,
+    "reward size": "4-7",
+    "cannot land above": [
+      "lava"
+    ],
+    "cannot land in": [
+      "lava",
+      "water",
+      "snow"
+    ]
+  },
+  "item": {
+    "item": "chest",
+    "name": "&6&lEnvoy Simple Tier",
+    "lore": [
+      " ",
+      "&6Can contain the following...",
+      " ",
+      "&7* Simple Enchantment Books",
+      "&7* Simple Randomization Scrolls",
+      "&7* Simple Space Flares",
+      "&7* Simple Space Chests",
+      "&7* Simple Fireballs",
+      "&7* Vanilla Items",
+      "&7* Diamond Enchanted Armor/Weapons/Tools"
+    ]
+  },
+  "rewards": [
+    "raritybook:SIMPLE;amount=1-2;chance=50",
+    "randomizationscroll:SIMPLE;chance=50",
+    "soultracker:SIMPLE;chance=50",
+    "spaceflare:SIMPLE;chance=50",
+    "spacechest:SIMPLE;chance=50",
+    "rarityfireball:SIMPLE;chance=50",
+    "tnt;amount=32;chance=60",
+    "cooked_beef;amount=32;chance=60",
+    "obsidian;amount=32;chance=60",
+    "torch;amount=32;chance=60",
+    "apple;amount=16;chance=60"
+  ]
+}
