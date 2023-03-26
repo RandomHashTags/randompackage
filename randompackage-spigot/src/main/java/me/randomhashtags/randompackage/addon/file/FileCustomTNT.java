@@ -42,7 +42,7 @@ public final class FileCustomTNT extends RPAddonSpigot implements CustomExplosio
         return getClone(item);
     }
     @Override
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return getStringList(yml, "attributes");
     }
     @Override

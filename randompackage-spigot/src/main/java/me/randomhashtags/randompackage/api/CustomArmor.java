@@ -87,7 +87,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 
 	@NotNull
 	public ItemStack getCrystal(@NotNull ArmorSet set, int percent) {
-		final String p = Integer.toString(percent), name = set.getName(RandomPackage.LOCALIZATION);
+		final String p = Integer.toString(percent), name = getLocalizedName(set);
 		final List<String> perks = set.getCrystalPerks();
 		final ItemStack item = crystal.clone();
 		final ItemMeta itemMeta = item.getItemMeta();
@@ -147,7 +147,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 					if(itemLore != null) {
 						lore.addAll(itemLore);
 					}
-					lore.add(crystalAddedLore.replace("{NAME}", type.getName(RandomPackage.LOCALIZATION)));
+					lore.add(crystalAddedLore.replace("{NAME}", getLocalizedName(type)));
 					itemMeta.setLore(lore);
 					is.setItemMeta(itemMeta);
 				}

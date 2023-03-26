@@ -41,5 +41,5 @@ public final class FileTrinket extends RPAddonSpigot implements Trinket {
         }
         return settings;
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

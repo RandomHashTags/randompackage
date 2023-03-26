@@ -1,0 +1,12 @@
+{
+  "name": {
+    "en" : "&e&lFlaming&r &6&lHalo"
+  },
+  "material": "HELMET",
+  "lore": [
+    "&c+4% Outgoing Damage"
+  ],
+  "attributes": [
+    "PvAny;SetDamage=dmg*1.04"
+  ]
+}

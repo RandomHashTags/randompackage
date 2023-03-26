@@ -271,7 +271,9 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
         }
     }
     public void spawnMinions(LivingEntity boss, int amount) {
-        if(boss == null || boss.isDead() || minions.size() + amount > type.getMaxMinions()) return;
+        if(boss == null || boss.isDead() || minions.size() + amount > type.getMaxMinions()) {
+            return;
+        }
         final int messageRadius = type.getMessageRadius();
         LivingEntity target = entity instanceof Creature ? ((Creature) entity).getTarget() : null;
         if(target == null) {
@@ -281,9 +283,9 @@ public final class LivingCustomBoss implements RPFeatureSpigot, UVersionableSpig
                 }
             }
         }
-        final CustomMinion t = type.getMinion();
+        final CustomMinion minion = type.getMinion();
         if(target != null) {
-            final LivingCustomMinion l = new LivingCustomMinion(getEntity(t.type, entity.getLocation(), true), target, t, this);
+            final LivingCustomMinion l = new LivingCustomMinion(getEntity(minion.type, entity.getLocation(), true), target, minion, this);
             minions.add(l);
         }
     }

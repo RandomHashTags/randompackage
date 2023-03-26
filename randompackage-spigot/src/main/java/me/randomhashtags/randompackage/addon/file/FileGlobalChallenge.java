@@ -37,7 +37,7 @@ public final class FileGlobalChallenge extends RPAddonSpigot implements GlobalCh
         return yml.getString("settings.type");
     }
     @Override
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return yml.getStringList("attributes");
     }
 }

@@ -277,7 +277,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultItemSkins() {
-        generateAllDefault("item skins",
+        generate_all_default_json("item skins",
                 "DEATH_KNIGHT_SKULL_BLADE",
                 "FLAMING_HALO",
                 "JOLLY_CANDY_SWORD",

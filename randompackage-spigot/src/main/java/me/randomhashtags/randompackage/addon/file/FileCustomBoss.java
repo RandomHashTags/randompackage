@@ -58,11 +58,11 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         return scores;
     }
 
-    public ItemStack getSpawnItem() {
+    public @NotNull ItemStack getSpawnItem() {
         if(spawnitem == null) spawnitem = createItemStack(yml, "spawn item");
         return spawnitem.clone();
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
     public List<String> getRewards() { return yml.getStringList("rewards"); }
     public List<CustomBossAttack> getAttacks() {
         if(attacks == null) {

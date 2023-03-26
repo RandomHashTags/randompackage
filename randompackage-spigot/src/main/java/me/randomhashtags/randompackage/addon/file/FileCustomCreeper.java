@@ -32,7 +32,7 @@ public final class FileCustomCreeper extends RPAddonSpigot implements CustomExpl
     public String getCreeperName() {
         return getString(yml, "creeper name");
     }
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return getStringList(yml, "attributes");
     }
     public @NotNull ItemStack getItem() {

@@ -15,10 +15,9 @@ public interface ItemSkin extends Nameable, Attributable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final ItemSkin skin = getItemSkin(originalInput.split(":")[1]);
-        final ItemStack target = ItemSkins.INSTANCE.getItemSkinItem(skin, true);
-        return target != null ? target : AIR;
+        return skin != null ? ItemSkins.INSTANCE.getItemSkinItem(skin, true) : null;
     }
 
-    String getMaterial();
-    List<String> getLore();
+    @NotNull String getMaterial();
+    @NotNull List<String> getLore();
 }

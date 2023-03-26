@@ -18,8 +18,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final Lootbox lootbox = getLootbox(originalInput.split(":")[1]);
-        final ItemStack target = lootbox != null ? lootbox.getItem() : null;
-        return target != null ? target : AIR;
+        return lootbox != null ? lootbox.getItem() : null;
     }
 
     int getPriority();

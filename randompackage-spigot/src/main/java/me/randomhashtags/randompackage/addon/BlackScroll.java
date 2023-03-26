@@ -16,6 +16,6 @@ public interface BlackScroll extends Scroll, AppliesToRarities, Percentable, Giv
         if(scroll != null) {
             amount = values.length == 3 ? getIntegerFromString(values[2], scroll.getMinPercent()) : scroll.getRandomPercent(RANDOM);
         }
-        return scroll != null ? scroll.getItem(amount) : AIR;
+        return scroll != null ? scroll.getItem(amount) : null;
     }
 }

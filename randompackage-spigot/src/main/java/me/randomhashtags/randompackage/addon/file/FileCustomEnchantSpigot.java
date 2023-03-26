@@ -88,7 +88,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
     public String getEnchantProcValue() {
         return enchant_proc_value;
     }
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return attributes;
     }
 }

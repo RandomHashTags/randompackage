@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,15 +21,15 @@ public interface CustomBoss extends RPEntity, Scoreboardable, Spawnable, GivedpI
     }
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         final CustomBoss boss = getCustomBoss(originalInput.split(":")[1]);
-        return boss != null ? boss.getSpawnItem() : AIR;
+        return boss != null ? boss.getSpawnItem() : null;
     }
 
-    ItemStack getSpawnItem();
+    @NotNull ItemStack getSpawnItem();
     List<CustomBossAttack> getAttacks();
     HashMap<Integer, List<String>> getMessages();
     int getMessageRadius();
     int getMaxMinions();
-    CustomMinion getMinion();
+    @Nullable CustomMinion getMinion();
 
     default LivingCustomBoss spawn(LivingEntity summoner, Location location) {
         return new LivingCustomBoss(summoner, RandomPackageAPI.INSTANCE.getEntity(getType(), location, true), this);

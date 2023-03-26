@@ -87,7 +87,7 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
     public LinkedHashMap<InventoryPet, Integer> getEggRequiredPets() {
         return null;
     }
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return getStringList(yml, "attributes");
     }
 }

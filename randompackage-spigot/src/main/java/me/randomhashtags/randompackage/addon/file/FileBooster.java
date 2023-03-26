@@ -18,7 +18,7 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
         register(Feature.BOOSTER, this);
     }
 
-    public BoosterRecipients getRecipients() {
+    public @NotNull BoosterRecipients getRecipients() {
         if(recipients == null) {
             final String target = yml.getString("settings.recipients");
             recipients = target != null && !target.isEmpty() ? BoosterRecipients.valueOf(target.toUpperCase()) : BoosterRecipients.SELF;
@@ -45,16 +45,16 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
         }
         return -1;
     }
-    public List<String> getActivateMsg() {
+    public @NotNull List<String> getActivateMsg() {
         return getStringList(yml, "messages.activate");
     }
-    public List<String> getExpireMsg() {
+    public @NotNull List<String> getExpireMsg() {
         return getStringList(yml, "messages.expire");
     }
-    public List<String> getNotifyMsg() {
+    public @NotNull List<String> getNotifyMsg() {
         return getStringList(yml, "messages.notify");
     }
-    public List<String> getAttributes() {
+    public @NotNull List<String> getAttributes() {
         return getStringList(yml, "attributes");
     }
 }

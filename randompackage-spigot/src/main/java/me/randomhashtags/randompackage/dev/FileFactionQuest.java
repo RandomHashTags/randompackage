@@ -31,5 +31,5 @@ public class FileFactionQuest extends RPAddonSpigot implements FactionQuest {
 
     public List<String> getLore() { return getStringList(yml, "lore"); }
     public List<String> getRewards() { return getStringList(yml, "rewards"); }
-    public List<String> getAttributes() { return getStringList(yml, "attributes"); }
+    public @NotNull List<String> getAttributes() { return getStringList(yml, "attributes"); }
 }

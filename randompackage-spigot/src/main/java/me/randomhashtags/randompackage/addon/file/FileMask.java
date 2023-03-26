@@ -45,6 +45,6 @@ public final class FileMask extends RPAddonSpigot implements Mask, Skullable {
         else string = (String) o;
         return colorize(string);
     }
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
     public List<String> getAppliesTo() { return null; }
 }

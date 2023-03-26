@@ -47,8 +47,6 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     ScoreboardManager SCOREBOARD_MANAGER = Bukkit.getScoreboardManager();
     ConsoleCommandSender CONSOLE = Bukkit.getConsoleSender();
 
-    ItemStack AIR = new ItemStack(Material.AIR);
-
     BlockFace[] BLOCK_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
     EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.HAND, EIGHT ? null : EquipmentSlot.OFF_HAND };
     Set<String> INTERACTABLE_MATERIALS = new HashSet<>() {{
@@ -201,23 +199,21 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
         }
         return replacements;
     }
-    default void sendStringListMessage(@NotNull CommandSender sender, @Nullable List<String> message, @Nullable HashMap<String, String> replacements) {
-        if(message != null && message.size() > 0 && !message.get(0).equals("")) {
-            final boolean papi = RANDOM_PACKAGE.placeholder_api, isPlayer = sender instanceof Player;
-            final Player player = isPlayer ? (Player) sender : null;
-            for(String s : message) {
-                if(replacements != null) {
-                    for(Map.Entry<String, String> entry : replacements.entrySet()) {
-                        final String replacement = entry.getValue();
-                        s = s.replace(entry.getKey(), replacement != null ? replacement : "null");
-                    }
+    default void sendStringListMessage(@NotNull CommandSender sender, @NotNull List<String> message, @Nullable HashMap<String, String> replacements) {
+        final boolean placeholder_api = RANDOM_PACKAGE.placeholder_api, isPlayer = sender instanceof Player;
+        final Player player = isPlayer ? (Player) sender : null;
+        for(String string : message) {
+            if(replacements != null) {
+                for(Map.Entry<String, String> entry : replacements.entrySet()) {
+                    final String replacement = entry.getValue();
+                    string = string.replace(entry.getKey(), replacement != null ? replacement : "null");
                 }
-                if(s != null) {
-                    if(papi && isPlayer) {
-                        s = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, s);
-                    }
-                    sender.sendMessage(colorize(s));
+            }
+            if(string != null) {
+                if(placeholder_api && isPlayer) {
+                    string = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, string);
                 }
+                sender.sendMessage(colorize(string));
             }
         }
     }

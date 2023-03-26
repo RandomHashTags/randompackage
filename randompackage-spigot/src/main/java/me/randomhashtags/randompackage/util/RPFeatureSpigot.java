@@ -1,9 +1,11 @@
 package me.randomhashtags.randompackage.util;
 
+import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.addon.file.NonThrowableJSONBehaviorSpigot;
+import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;
@@ -53,6 +55,10 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
 
     static boolean mcmmoIsEnabled() {
         return PLUGIN_MANAGER.isPluginEnabled("mcMMO");
+    }
+
+    default @NotNull String getLocalizedName(Nameable nameable) {
+        return nameable.getName(RandomPackage.LOCALIZATION);
     }
 
     @Override
@@ -191,89 +197,91 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         return createItemStack(config, path, 0, 0.00f);
     }
     default ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
-        ItemStack item = null;
-        if(config == null && path != null || config != null && config.get(path + ".item") != null) {
-            final String itemPath = config == null ? path : config.getString(path + ".item");
-            String itemPathLC = itemPath.toLowerCase();
+        final String item_path = config == null ? path : config.getString(path + ".item");
+        String item_path_lowercase = item_path.toLowerCase();
 
-            int amount = config != null && config.get(path + ".amount") != null ? config.getInt(path + ".amount") : 1;
-            if(itemPathLC.contains(";amount=")) {
-                final String amountString = itemPathLC.split("=")[1];
-                final boolean isRange = itemPathLC.contains("-");
-                final int min = isRange ? Integer.parseInt(amountString.split("-")[0]) : 0;
-                amount = isRange ? min+RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : Integer.parseInt(amountString);
-                path = path.split(";amount=")[0];
-                itemPathLC = itemPathLC.split(";")[0];
-            }
-            final boolean hasChance = itemPathLC.contains("chance=");
-            if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(itemPathLC.split("chance=")[1].split(";")[0])) {
-                return null;
-            }
-            if(itemPathLC.contains("spawner") && !itemPathLC.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
-                return getSpawner(itemPathLC);
-            } else if(itemPathLC.startsWith("enchantedbook:")) {
-                final String[] values = itemPathLC.split(":");
-                final Enchantment enchant = getEnchantment(values[1]);
-                if(enchant != null) {
-                    int level = 1;
-                    if(values.length == 3) {
-                        final String[] ints = values[2].split("-");
-                        final boolean isRandom = ints[0].equalsIgnoreCase("random");
-                        final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
-                        level = isRandom ? 1+RANDOM.nextInt(enchant.getMaxLevel()) : ints[2].contains("-") ? min+RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
-                    }
-                    item = new ItemStack(Material.ENCHANTED_BOOK, amount);
-                    final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-                    meta.addStoredEnchant(enchant, level, true);
-                    item.setItemMeta(meta);
-                    return item;
+        int amount = config != null && config.get(path + ".amount") != null ? config.getInt(path + ".amount") : 1;
+        final String name = config != null ? colorize(config.getString(path + ".name")) : null;
+        final List<String> lore = config != null ? config.getStringList(path + ".lore") : null;
+        return create_item_stack(path, item_path_lowercase, amount, name, lore, tier, enchantMultiplier);
+    }
+    default ItemStack create_item_stack(@NotNull String path, @NotNull String item_path_lowercase, int amount, String name, List<String> lore, int tier, float enchantMultiplier) {
+        ItemStack item;
+        if(item_path_lowercase.contains(";amount=")) {
+            final String amountString = item_path_lowercase.split("=")[1];
+            final boolean isRange = item_path_lowercase.contains("-");
+            final int min = isRange ? Integer.parseInt(amountString.split("-")[0]) : 0;
+            amount = isRange ? min+RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : Integer.parseInt(amountString);
+            path = path.split(";amount=")[0];
+            item_path_lowercase = item_path_lowercase.split(";")[0];
+        }
+        final boolean hasChance = item_path_lowercase.contains("chance=");
+        if(hasChance && RANDOM.nextInt(100) > Integer.parseInt(item_path_lowercase.split("chance=")[1].split(";")[0])) {
+            return null;
+        }
+        if(item_path_lowercase.contains("spawner") && !item_path_lowercase.startsWith("mob_spawner") && !path.equals("mysterymobspawner")) {
+            return getSpawner(item_path_lowercase);
+        } else if(item_path_lowercase.startsWith("enchantedbook:")) {
+            final String[] values = item_path_lowercase.split(":");
+            final Enchantment enchant = getEnchantment(values[1]);
+            if(enchant != null) {
+                int level = 1;
+                if(values.length == 3) {
+                    final String[] ints = values[2].split("-");
+                    final boolean isRandom = ints[0].equalsIgnoreCase("random");
+                    final int min = isRandom ? 0 : Integer.parseInt(ints[0]);
+                    level = isRandom ? 1+RANDOM.nextInt(enchant.getMaxLevel()) : ints[2].contains("-") ? min+RANDOM.nextInt(Integer.parseInt(ints[1])) : min;
                 }
-                return null;
-            }
-            ItemStack parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(itemPath);
-            if(parsedGivedpItem == null) {
-                parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(itemPathLC);
-            }
-            if(parsedGivedpItem != null) {
-                item = parsedGivedpItem.clone();
-                item.setAmount(amount);
+                item = new ItemStack(Material.ENCHANTED_BOOK, amount);
+                final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+                meta.addStoredEnchant(enchant, level, true);
+                item.setItemMeta(meta);
                 return item;
             }
-            String name = config != null ? config.getString(path + ".name") : null;
-            final String[] material = itemPathLC.toUpperCase().split(":");
-            final String mat = material[0];
-            final byte data = material.length == 2 ? Byte.parseByte(material[1]) : 0;
-            final UMaterial umaterial = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
-            try {
-                item = umaterial.getItemStack();
-            } catch (Exception e) {
-                System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getMaterial().name() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
-                return null;
+            return null;
+        }
+        ItemStack parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(path);
+        if(parsedGivedpItem == null) {
+            parsedGivedpItem = GivedpItem.INSTANCE.valueOfRPItem(item_path_lowercase);
+        }
+        if(parsedGivedpItem != null) {
+            item = parsedGivedpItem.clone();
+            item.setAmount(amount);
+            return item;
+        }
+        final String[] material = item_path_lowercase.toUpperCase().split(":");
+        final String mat = material[0];
+        final byte data = material.length == 2 ? Byte.parseByte(material[1]) : 0;
+        final UMaterial umaterial = UMaterial.match(mat + (data != 0 ? ":" + data : ""));
+        try {
+            item = umaterial.getItemStack();
+        } catch (Exception e) {
+            System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getMaterial().name() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
+            return null;
+        }
+        if(item == null) {
+            sendConsoleMessage("&6[RandomPackage] &cERROR: Material=" + mat + ";umaterial=" + umaterial);
+        }
+        final Material skull_item = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
+        if(!i.equals(Material.AIR)) {
+            item.setAmount(amount);
+            ItemMeta itemMeta = item.getItemMeta();
+            if(i.equals(skull_item)) {
+                final String owner = item_path_lowercase.contains(";owner=") ? item_path_lowercase.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
+                final SkullMeta m = (SkullMeta) itemMeta;
+                m.setOwner(owner);
+                itemMeta = m;
             }
-            if(item == null) {
-                sendConsoleMessage("&6[RandomPackage] &cERROR: Material=" + mat + ";umaterial=" + umaterial);
-            }
-            final Material skullitem = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
-            if(!i.equals(Material.AIR)) {
-                item.setAmount(amount);
-                ItemMeta itemMeta = item.getItemMeta();
-                if(i.equals(skullitem)) {
-                    final String owner = itemPathLC.contains(";owner=") ? itemPathLC.split("=")[1].split("}")[0].split(";")[0] : "RandomHashTags";
-                    final SkullMeta m = (SkullMeta) itemMeta;
-                    m.setOwner(owner);
-                    itemMeta = m;
-                }
-                itemMeta.setDisplayName(name != null ? colorize(name) : null);
-                item.setItemMeta(itemMeta);
+            itemMeta.setDisplayName(name != null ? colorize(name) : null);
+            item.setItemMeta(itemMeta);
 
-                if(config != null && config.get(path + ".lore") != null) {
-                    item = updateLore(item, config.getStringList(path + ".lore"), tier, enchantMultiplier, CustomEnchants.INSTANCE.levelZeroRemoval, "null");
-                    itemMeta = item.getItemMeta();
-                }
-                item.setItemMeta(itemMeta);
-                if(name != null && name.contains("{ENCHANT_SIZE}")) {
-                    applyTransmogScroll(item, getTransmogScroll("REGULAR"));
-                }
+            if(lore != null) {
+                item = updateLore(item, lore, tier, enchantMultiplier, CustomEnchants.INSTANCE.levelZeroRemoval, "null");
+                itemMeta = item.getItemMeta();
+            }
+            item.setItemMeta(itemMeta);
+            if(name != null && name.contains("{ENCHANT_SIZE}")) {
+                applyTransmogScroll(item, getTransmogScroll("REGULAR"));
             }
         }
         return item;

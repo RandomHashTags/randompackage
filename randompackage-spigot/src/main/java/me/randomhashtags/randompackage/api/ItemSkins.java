@@ -86,7 +86,7 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
         if(fromCache) {
             return cache.getOrDefault(skin, null);
         }
-        final String name = skin.getName(), material = getItemSkinMaterialString(skin);
+        final String name = getLocalizedName(skin), material = getItemSkinMaterialString(skin);
         final ItemStack is = getClone(this.skin);
         final ItemMeta itemMeta = is.getItemMeta();
         itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name).replace("{MATERIAL}", material));
@@ -111,7 +111,7 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
         if(is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> lore = is.getItemMeta().getLore();
             for(ItemSkin skin : getAllItemSkins().values()) {
-                if(lore.contains(appliedLore.replace("{NAME}", skin.getName()))) {
+                if(lore.contains(appliedLore.replace("{NAME}", getLocalizedName(skin)))) {
                     return skin;
                 }
             }
@@ -126,7 +126,7 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
         if(isItemSkin(is) && is.getType().name().endsWith(skin.getMaterial())) {
             final ItemMeta meta = is.getItemMeta();
             final List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
-            lore.add(appliedLore.replace("{NAME}", skin.getName()));
+            lore.add(appliedLore.replace("{NAME}", getLocalizedName(skin)));
             meta.setLore(lore); lore.clear();
             is.setItemMeta(meta);
             addRPItemStackValue(is, "AppliedItemSkin", skin.getIdentifier());
@@ -138,7 +138,7 @@ public enum ItemSkins implements RPFeatureSpigot, CommandExecutor, RPItemStack {
         if(!isItemSkin(is)) {
             final ItemMeta meta = is.getItemMeta();
             final List<String> lore = meta.getLore();
-            lore.remove(appliedLore.replace("{NAME}", appliedSkin.getName()));
+            lore.remove(appliedLore.replace("{NAME}", getLocalizedName(appliedSkin)));
             meta.setLore(lore);
             removeRPItemStackValue(is, "AppliedItemSkin");
             return true;

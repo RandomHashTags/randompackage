@@ -72,5 +72,5 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
         return levels;
     }
 
-    public List<String> getAttributes() { return yml.getStringList("attributes"); }
+    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
 }
