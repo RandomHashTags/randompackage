@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.CustomBoss;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.addon.obj.CustomBossAttack;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -10,6 +11,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,24 +19,45 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBoss {
+    private final String type;
+    private final MultilingualString name;
+
     private Scoreboard scoreboard;
 
-    private ItemStack spawnitem;
+    private final ItemStack spawn_item;
+    private final List<String> attributes, rewards;
     private HashMap<Integer, List<String>> messages;
     private List<CustomBossAttack> attacks;
+    private final int message_radius;
+    private final int max_minions;
     private CustomMinion minion;
     private List<String> scores;
 
     public FileCustomBoss(File f) {
         super(f);
+        final JSONObject json = parse_json_from_file(f);
+        type = parse_string_in_json(json, "type").toUpperCase();
+        name = parse_multilingual_string_in_json(json, "name");
+        spawn_item = create_item_stack(json, "spawn item");
+        attributes = parse_list_string_in_json(json, "attributes");
+        rewards = parse_list_string_in_json(json, "rewards");
+
+        final JSONObject minion_json = json.optJSONObject("minion");
+        if(minion_json != null) {
+            message_radius = parse_int_in_json(minion_json, "radius");
+            max_minions = parse_int_in_json(minion_json, "max");
+        } else {
+            message_radius = 100;
+            max_minions = 10;
+        }
         register(Feature.CUSTOM_BOSS, this);
     }
 
-    public String getType() {
-        return yml.getString("type").toUpperCase();
+    public @NotNull String getType() {
+        return type;
     }
-    public @NotNull String getName() {
-        return colorize(yml.getString("name"));
+    public @NotNull MultilingualString getName() {
+        return name;
     }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
@@ -55,19 +78,26 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         }
         return scoreboard;
     }
-    public int getScoreboardRadius() { return getMessageRadius(); }
-    public int getScoreboardUpdateInterval() { return 20; }
+    public int getScoreboardRadius() {
+        return getMessageRadius();
+    }
+    public int getScoreboardUpdateInterval() {
+        return 20;
+    }
     public List<String> getScores() {
         getScoreboard();
         return scores;
     }
 
     public @NotNull ItemStack getSpawnItem() {
-        if(spawnitem == null) spawnitem = createItemStack(yml, "spawn item");
-        return spawnitem.clone();
+        return spawn_item.clone();
     }
-    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
+    public @NotNull List<String> getAttributes() {
+        return attributes;
+    }
+    public List<String> getRewards() {
+        return rewards;
+    }
     public @NotNull List<CustomBossAttack> getAttacks() {
         if(attacks == null) {
             attacks = new ArrayList<>();
@@ -96,8 +126,14 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         }
         return messages;
     }
-    public int getMessageRadius() { return yml.getInt("messages.radius"); }
-    public int getMaxMinions() { return yml.getInt("minion.max"); }
+    @Override
+    public int getMessageRadius() {
+        return message_radius;
+    }
+    @Override
+    public int getMaxMinions() {
+        return max_minions;
+    }
     public CustomMinion getMinion() {
         if(minion == null) minion = new CustomMinion(yml.getString("minion.type").toUpperCase(), colorize(yml.getString("minion.name")), yml.getStringList("minion.attributes"));
         return minion;

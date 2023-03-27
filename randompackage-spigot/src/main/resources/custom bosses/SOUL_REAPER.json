@@ -1,0 +1,84 @@
+{
+  "spawnable regions": {
+    "faction claims": [
+      "world;warzone",
+      "world_nether;warzone",
+      "world_the_end;warzone"
+    ],
+    "skyblock": {
+      "own island": true,
+      "coop islands": true,
+      "while visiting": false
+    }
+  },
+  "type": "ENDERMAN",
+  "name": {
+    "en": "&d&lSoul Reaper"
+  },
+  "spawn item": {
+    "item": "monster_egg:58",
+    "name": "&d&lSoul Reaper",
+    "lore": [
+      "&7This monster egg contains a",
+      "&c&ndangerous&r &7warzone boss",
+      " ",
+      "&d&lLORE",
+      "&7&oA mythical alien creature rumored",
+      "&7&oto only exist in the deepest",
+      "&7&opockets of space, consuming the",
+      "&7&osouls of all who gaze upon it.",
+      "&7&ofollows.",
+      " ",
+      "&d&lDIFFICULTY",
+      "&dOutpost Exclusive"
+    ]
+  },
+  "scoreboard": {
+    "title": "&d&lSoul Reaper",
+    "score start": 15,
+    "display slot": "SIDEBAR",
+    "scores": [
+      "&a",
+      "&c&lHealth",
+      "&c{HEALTH}",
+      "&b",
+      "&e&lMinions",
+      "&e{MINIONS}",
+      "&c",
+      "&a&lDamage Dealt",
+      "&a{DAMAGE_DEALT} &7[{DAMAGE_DEALT%}%]"
+    ]
+  },
+  "messages": {
+    "radius": 100,
+    "summon": [
+      "&2&lPlague Bloater >>&r &f&oYour presence irritates me, I shall turn you to dust!"
+    ],
+    "summon broadcast": [
+      " ",
+      "&2&l(!)&r &5A &l&nPlague Bloater&r &2Boss has been summoned to the /spawn WarZone, at {X}x, {Y}y, {Z}z&r &2defend the planet!",
+      " "
+    ],
+    "defeated": [
+      "d&lSoul Reaper >>&r &dYou can never truly defeat me, I am the reaper of souls, and I shall return."
+    ],
+    "defeated broadcast": [
+      " ",
+      "&c&lThe Plague Bloater has been defeated!",
+      "&cDefeated by {TOP_PLAYERS}",
+      " ",
+      "&c&lTOP DAMAGE DEALT",
+      "&a&l1.&r &a{TOP1} - &l{TOP1%}%&r &a- {REWARDS}",
+      "&a&l2.&r &a{TOP2} - &l{TOP2%}%&r &a- {REWARDS}",
+      "&a&l3.&r &a{TOP3} - &l{TOP3%}%&r &a- {REWARDS}",
+      "&a&l4.&r &a{TOP4} - &l{TOP4%}%&r &a- {REWARDS}",
+      "&a&l5.&r &a{TOP5} - &l{TOP5%}%",
+      " "
+    ]
+  },
+  "minion": {
+    "max": 14,
+    "type": "ENDERMAN",
+    "name": "&d&lSoul Reaper Minion"
+  }
+}
