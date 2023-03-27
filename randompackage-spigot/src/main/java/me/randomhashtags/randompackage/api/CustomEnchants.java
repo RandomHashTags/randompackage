@@ -660,7 +660,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                         }
                         //
                         if(RANDOM.nextInt(100) <= success) {
-                            final String enchant_rarity_apply_colors = enchant_rarity.getApplyColors(), enchant_name = enchant.getName(), enchant_tag = enchant_rarity_apply_colors + enchant_name + " " + toRoman(level);
+                            final String enchant_rarity_apply_colors = enchant_rarity.getApplyColors(), enchant_name = getLocalizedName(enchant), enchant_tag = enchant_rarity_apply_colors + enchant_name + " " + toRoman(level);
                             if(lore.isEmpty()) {
                                 lore.add(enchant_tag);
                             } else if(prevlevel == -1 && prevslot == -1) {

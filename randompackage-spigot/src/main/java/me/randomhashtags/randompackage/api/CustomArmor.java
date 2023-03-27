@@ -1,6 +1,5 @@
 package me.randomhashtags.randompackage.api;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.ArmorSet;
 import me.randomhashtags.randompackage.addon.file.FileArmorSet;
 import me.randomhashtags.randompackage.attributesys.EventAttributes;
@@ -178,7 +177,7 @@ public enum CustomArmor implements EventAttributes, RPItemStack {
 	}
 	@NotNull
 	public ItemStack getHeroicUpgrade(@NotNull ArmorSet set, int percent) {
-		final String name = set.getName(), percentString = Integer.toString(percent);
+		final String name = getLocalizedName(set), percentString = Integer.toString(percent);
 		final ItemStack item = heroicUpgrade.clone();
 		final ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", name));

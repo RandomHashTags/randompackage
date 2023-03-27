@@ -1,0 +1,13 @@
+{
+  "creeper name": "&c&lStun Creeper",
+  "item": {
+    "item": "creeper_spawn_egg",
+    "name": "&cStun Creeper",
+    "lore": [
+      "&7&oExplosion freezes ALL players",
+      "&7&owithin a 6x6 area for 4s."
+    ]
+  },
+  "attributes": [
+  ]
+}

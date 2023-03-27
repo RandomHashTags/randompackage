@@ -1,0 +1,13 @@
+{
+  "creeper name": "&9&lTactical Creeper",
+  "item": {
+    "item": "creeper_spawn_egg",
+    "name": "&9Tactical Creeper",
+    "lore": [
+      "&7&oExplosion only affects mob spawners."
+    ]
+  },
+  "attributes": [
+    "AFFECTS_ONLY;mob_spawner"
+  ]
+}

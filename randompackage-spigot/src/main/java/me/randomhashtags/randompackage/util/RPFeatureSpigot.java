@@ -1,11 +1,9 @@
 package me.randomhashtags.randompackage.util;
 
-import me.randomhashtags.randompackage.RandomPackage;
 import me.randomhashtags.randompackage.addon.CustomEnchantSpigot;
 import me.randomhashtags.randompackage.addon.EnchantRarity;
 import me.randomhashtags.randompackage.addon.TransmogScroll;
 import me.randomhashtags.randompackage.addon.file.NonThrowableJSONBehaviorSpigot;
-import me.randomhashtags.randompackage.addon.util.Nameable;
 import me.randomhashtags.randompackage.api.CustomEnchants;
 import me.randomhashtags.randompackage.api.addon.Scrolls;
 import me.randomhashtags.randompackage.attributesys.EventAttributeCoreListener;

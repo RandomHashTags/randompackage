@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,28 +16,34 @@ import java.util.UUID;
 
 public final class FileCustomCreeper extends RPAddonSpigot implements CustomExplosion {
     public static HashMap<UUID, FileCustomCreeper> LIVING;
-    private ItemStack item;
+
+    private final String name;
+    private final List<String> attributes;
+    private final ItemStack item;
     public FileCustomCreeper(File file) {
         super(file);
         if(LIVING == null) {
             LIVING = new HashMap<>();
         }
+        final JSONObject json = parse_json_from_file(file);
+        name = parse_string_in_json(json, "creeper name");
+        attributes = parse_list_string_in_json(json, "attributes");
+        item = create_item_stack(json, "item");
         register(Feature.CUSTOM_EXPLOSION, this);
     }
     @NotNull
     @Override
     public String getIdentifier() {
-        return "CREEPER_" + getYamlName();
+        return "CREEPER_" + identifier;
     }
 
     public String getCreeperName() {
-        return getString(yml, "creeper name");
+        return name;
     }
     public @NotNull List<String> getAttributes() {
-        return getStringList(yml, "attributes");
+        return attributes;
     }
     public @NotNull ItemStack getItem() {
-        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
 

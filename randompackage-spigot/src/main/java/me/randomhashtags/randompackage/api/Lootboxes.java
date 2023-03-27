@@ -156,14 +156,14 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
             for(int i : gui_lootboxes.keySet()) {
                 final Lootbox lootbox = gui_lootboxes.get(i);
                 final long startTime = started.get(lootbox), expirationTime = startTime+lootbox.getAvailableFor()*1000;
-                final String n = lootbox.getName();
+                final String name = getLocalizedName(lootbox);
                 final ItemStack item = top.getItem(i);
                 if(item != null) {
                     final ItemMeta itemMeta = item.getItemMeta();
                     if(itemMeta != null) {
                         final List<String> lore = itemMeta.getLore();
                         for(String s : time < expirationTime ? available : expired) {
-                            lore.add(s.replace("{NAME}", n).replace("{TIME}", getRemainingTime(expirationTime-time)));
+                            lore.add(s.replace("{NAME}", name).replace("{TIME}", getRemainingTime(expirationTime-time)));
                         }
                         lore.addAll(preview);
                         itemMeta.setLore(lore);
@@ -176,7 +176,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
         }
     }
     public boolean isAvailable(@NotNull Lootbox lootbox) {
-        return started.containsKey(lootbox) && started.get(lootbox)+(lootbox.getAvailableFor()*1000)-System.currentTimeMillis() > 0;
+        return started.containsKey(lootbox) && started.get(lootbox) + (lootbox.getAvailableFor()*1000) - System.currentTimeMillis() > 0;
     }
     public void tryClaiming(@NotNull Player player, @NotNull Lootbox lootbox) {
         final String identifier = lootbox.getIdentifier();
@@ -357,7 +357,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                     giveItem(player, is);
                 }
             }
-            final String playerName = player.getName(), lootboxName = l.getName();
+            final String player_name = player.getName(), lootbox_name = getLocalizedName(l);
             for(String s : opened) {
                 if(s.equals("{REWARDS}")) {
                     for(ItemStack is : rewards) {
@@ -367,7 +367,7 @@ public enum Lootboxes implements RPFeatureSpigot, CommandExecutor {
                         }
                     }
                 } else {
-                    Bukkit.broadcastMessage(s.replace("{PLAYER}", playerName).replace("{NAME}", lootboxName));
+                    Bukkit.broadcastMessage(s.replace("{PLAYER}", player_name).replace("{NAME}", lootbox_name));
                 }
             }
             redeeming.remove(player);

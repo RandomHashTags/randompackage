@@ -173,7 +173,7 @@ public interface DefaultFileGeneration {
         }
     }
     default void generateDefaultCustomCreepers() {
-        generateAllDefault("custom creepers", "ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL");
+        generate_all_default_json("custom creepers", "ARCANE", "GIGANTIC", "LUCKY", "STUN", "TACTICAL");
     }
     default void generateDefaultCustomTNT() {
         generate_all_default_json("custom tnt", "GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL");
