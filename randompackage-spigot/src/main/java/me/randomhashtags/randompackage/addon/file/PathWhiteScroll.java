@@ -47,11 +47,11 @@ public final class PathWhiteScroll extends RPAddonSpigot implements WhiteScroll 
         if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "white scrolls." + path);
         return getClone(item);
     }
-    public String getApplied() {
+    public @NotNull String getAppliedString() {
         if(apply == null) apply = colorize(getAddonConfig("scrolls.yml").getString("white scrolls." + path + ".apply"));
         return apply;
     }
-    public List<String> getAppliesTo() {
+    public @NotNull List<String> getAppliesTo() {
         return getStringList(getAddonConfig("scrolls.yml"), "white scrolls." + path + ".applies to");
     }
 }

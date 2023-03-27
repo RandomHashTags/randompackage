@@ -34,13 +34,13 @@ public final class PathTransmogScroll extends RPAddonSpigot implements TransmogS
         if(item == null) item = createItemStack(getAddonConfig("scrolls.yml"), "transmog scrolls." + path);
         return getClone(item);
     }
-    public String getApplied() {
+    public @NotNull String getAppliedString() {
         return getString(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".apply");
     }
     public List<String> getRarityOrganization() {
         return getStringList(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".rarity organization");
     }
-    public List<String> getAppliesTo() {
+    public @NotNull List<String> getAppliesTo() {
         return getStringList(getAddonConfig("scrolls.yml"), "transmog scrolls." + path + ".applies to");
     }
 }

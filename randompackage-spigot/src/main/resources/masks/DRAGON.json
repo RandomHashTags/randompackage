@@ -1,0 +1,19 @@
+{
+  "texture": "http://textures.minecraft.net/texture/74ecc040785e54663e855ef0486da72154d69bb4b7424b7381ccf95b095a",
+  "item": {
+    "item": "player_head_item",
+    "name": "&4&lDragon Mask",
+    "lore": [
+      "&c+5% DMG",
+      "&cImmune to Fire and Lava damage",
+      "&7The decapitated skull of the slain",
+      "&7Timeless Dragon from the Ender Dimension.",
+      " &6&l*&r &6Timeless Dragon Update"
+    ]
+  },
+  "attributes": [
+    "PvAny;SetDamage=dmg*1.05",
+    "isDamaged;cause=FIRE||FIRE_TICK||LAVA;SetCancelled=true"
+  ],
+  "added lore": "&7&lATTACHED:&r &4&lDragon Mask&r &f(&c+5% DMG&f)"
+}

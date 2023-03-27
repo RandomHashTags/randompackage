@@ -1,0 +1,18 @@
+{
+  "texture": "http://textures.minecraft.net/texture/5f8aebcf4b72d73d1d5dc3ccbded532ce4ec3d585ce72154c42229638b45c4de",
+  "item": {
+    "item": "player_head_item",
+    "name": "&9&lDeath Knight Mask",
+    "lore": [
+      "&c50% chance to negate enemy's Phoenix",
+      "&c+2.5% DMG",
+      "&7The cursed mask of runeforged",
+      "&7Death Knight armor.",
+      " &6&l*&r &6Death Knight Mastery Kit"
+    ]
+  },
+  "attributes": [
+    "PvAny;SetDamage=dmg*1.025"
+  ],
+  "added lore": "&7&lATTACHED:&r &9&lDeath Knight Mask&r &f(&c50% chance to negate enemy's Phoenix&f)"
+}

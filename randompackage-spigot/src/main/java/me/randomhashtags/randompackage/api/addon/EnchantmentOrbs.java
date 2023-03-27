@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,11 +82,11 @@ public enum EnchantmentOrbs implements RPFeatureSpigot {
             }
         }
         if(RANDOM.nextInt(100) < percent) {
-            final String applied = orb.getApplied();
+            final String applied = orb.getAppliedString();
             if(appliedOrb == null) {
                 lore.add(applied);
             } else {
-                final String prev = appliedOrb.getApplied();
+                final String prev = appliedOrb.getAppliedString();
                 boolean did = false;
                 for(int i = 0; i < lore.size(); i++) {
                     if(lore.get(i).equals(prev)) {

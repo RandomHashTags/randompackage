@@ -47,8 +47,8 @@ public final class PathEnchantmentOrb extends RPAddonSpigot implements Enchantme
 		i.setItemMeta(m);
 		return i;
 	}
-	public String getApplied() { return appliedlore; }
-	public List<String> getAppliesTo() { return appliesto; }
+	public @NotNull String getAppliedString() { return appliedlore; }
+	public @NotNull List<String> getAppliesTo() { return appliesto; }
 	public int getMaxAllowableEnchants() { return maxenchants; }
 	public int getPercentLoreSlot() { return percentlore; }
 	public int getIncrement() { return increment; }

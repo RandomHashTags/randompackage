@@ -302,7 +302,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultMasks() {
-        generateAllDefault("masks",
+        generate_all_default_json("masks",
                 "BUNNY", "DEATH_KNIGHT", "DRAGON", "DUNGEON", "GHOST", "GLITCH", "HEADLESS", "JOKER",
                 "LOVER", "MONOPOLY", "NECROMANCER", "PARTY_HAT", "PILGRIM", "PUMPKIN_MONSTER",
                 "PURGE", "REINDEER", "RIFT", "SANTA", "SCARECROW", "SPECTRAL", "TURKEY", "ZEUS"

@@ -307,7 +307,7 @@ public interface RPValues extends UVersionableSpigot {
     default EnchantmentOrb valueOfEnchantmentOrb(String appliedlore) {
         if(appliedlore != null) {
             for(EnchantmentOrb orb : getAllEnchantmentOrbs().values()) {
-                if(orb.getApplied().equals(appliedlore))
+                if(orb.getAppliedString().equals(appliedlore))
                     return orb;
             }
         }
@@ -318,7 +318,7 @@ public interface RPValues extends UVersionableSpigot {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasLore()) {
             final List<String> l = is.getItemMeta().getLore();
             for(EnchantmentOrb e : getAllEnchantmentOrbs().values()) {
-                if(l.contains(e.getApplied())) {
+                if(l.contains(e.getAppliedString())) {
                     return e;
                 }
             }
@@ -563,7 +563,7 @@ public interface RPValues extends UVersionableSpigot {
             if(im.hasLore()) {
                 final List<String> l = im.getLore();
                 for(Mask m : getAllMasks().values()) {
-                    if(l.contains(m.getApplied())) {
+                    if(l.contains(m.getAppliedString())) {
                         return m;
                     }
                 }
@@ -734,7 +734,7 @@ public interface RPValues extends UVersionableSpigot {
             int slot = 0;
             for(String s : itemLore) {
                 for(SoulTracker tracker : trackers) {
-                    final String applied = tracker.getApplied().replace("{SOULS}", "");
+                    final String applied = tracker.getAppliedString().replace("{SOULS}", "");
                     if(s.startsWith(applied)) {
                         final HashMap<Integer, SoulTracker> map = new HashMap<>();
                         map.put(slot, tracker);
@@ -749,7 +749,7 @@ public interface RPValues extends UVersionableSpigot {
     @Nullable
     default SoulTracker valueOfSoulTrackerApplied(@NotNull String trackerAppliedString) {
         for(SoulTracker tracker : getAllSoulTrackers().values()) {
-            if(trackerAppliedString.startsWith(tracker.getApplied().replace("{SOULS}", ""))) {
+            if(trackerAppliedString.startsWith(tracker.getAppliedString().replace("{SOULS}", ""))) {
                 return tracker;
             }
         }
@@ -784,7 +784,7 @@ public interface RPValues extends UVersionableSpigot {
             if(enchants.isEnabled()) {
                 final String size = Integer.toString(enchants.getEnchantsOnItem(is).size()), d = is.getItemMeta().getDisplayName();
                 for(TransmogScroll t : getAllTransmogScrolls().values()) {
-                    if(d.endsWith(t.getApplied().replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size))) {
+                    if(d.endsWith(t.getAppliedString().replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size))) {
                         return t;
                     }
                 }
@@ -807,7 +807,7 @@ public interface RPValues extends UVersionableSpigot {
     default WhiteScroll valueOfWhiteScroll(@Nullable String apply) {
         if(apply != null && !apply.isEmpty()) {
             for(WhiteScroll w : getAllWhiteScrolls().values()) {
-                if(w.getApplied().equals(apply)) {
+                if(w.getAppliedString().equals(apply)) {
                     return w;
                 }
             }

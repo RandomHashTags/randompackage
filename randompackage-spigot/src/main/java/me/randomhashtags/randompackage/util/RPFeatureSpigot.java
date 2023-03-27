@@ -188,9 +188,11 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         return false;
     }
 
+    @Nullable
     default ItemStack createItemStack(FileConfiguration config, String path) {
         return createItemStack(config, path, 0, 0.00f);
     }
+    @Nullable
     default ItemStack createItemStack(FileConfiguration config, String path, int tier, float enchantMultiplier) {
         final String item_path = config == null ? path : config.getString(path + ".item");
         String item_path_lowercase = item_path.toLowerCase();
@@ -201,9 +203,11 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         return create_item_stack(path, item_path_lowercase, amount, name, lore, tier, enchantMultiplier);
     }
 
+    @Nullable
     default ItemStack create_item_stack(@NotNull JSONObject json, String key) {
         return create_item_stack(json, key, 0, 0);
     }
+    @Nullable
     default ItemStack create_item_stack(@NotNull JSONObject json, String key, int tier, float enchantMultiplier) {
         final JSONObject item_json = json.getJSONObject(key);
         final String item_path_lowercase = item_json.optString("item");
@@ -211,6 +215,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         final List<String> lore = parse_list_string_in_json(item_json, "lore");
         return create_item_stack(null, item_path_lowercase, 1, name, lore, tier, enchantMultiplier);
     }
+    @Nullable
     default ItemStack create_item_stack(@NotNull String path, @NotNull String item_path_lowercase, int amount, String name, List<String> lore, int tier, float enchantMultiplier) {
         ItemStack item;
         if(item_path_lowercase.contains(";amount=")) {

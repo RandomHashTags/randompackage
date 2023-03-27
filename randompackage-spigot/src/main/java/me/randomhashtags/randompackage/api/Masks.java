@@ -126,7 +126,7 @@ public enum Masks implements RPFeatureSpigot {
             item = current;
             final ItemMeta itemMeta = item.getItemMeta();
             final List<String> lore = itemMeta.getLore();
-            lore.remove(mask_on_item.getApplied());
+            lore.remove(mask_on_item.getAppliedString());
             itemMeta.setLore(lore); lore.clear();
             item.setItemMeta(itemMeta);
             event.setCancelled(true);
@@ -265,7 +265,7 @@ public enum Masks implements RPFeatureSpigot {
         if(itemMeta.hasLore()) {
             lore.addAll(itemMeta.getLore());
         }
-        lore.add(m.getApplied());
+        lore.add(m.getAppliedString());
         itemMeta.setLore(lore); lore.clear();
         is.setItemMeta(itemMeta);
     }

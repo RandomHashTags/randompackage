@@ -1,0 +1,17 @@
+{
+  "texture": "http://textures.minecraft.net/texture/e9eb9da26cf2d3341397a7f4913ba3d37d1ad10eae30ab25fa39ceb84bc",
+  "item": {
+    "item": "player_head_item",
+    "name": "&f&lGlitch Mask",
+    "lore": [
+      "&cImmune to Teleblock, Bidirectional Teleport",
+      "&7The aura around this mask",
+      "&7is electrified and encoded.",
+      " &6&l*&r &6St. Patrick's Day 2019"
+    ]
+  },
+  "attributes": [
+    "isDamaged;"
+  ],
+  "added lore": "&7&lATTACHED:&r &f&lGlitch Mask&r &f(&cImmune to Teleblock, Bidirectional Teleport&f)"
+}

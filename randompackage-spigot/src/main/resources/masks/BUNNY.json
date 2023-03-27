@@ -1,7 +1,7 @@
 {
   "texture": "http://textures.minecraft.net/texture/234cd6bbec5b4976f93e3f2415567248626877f17baf89a37220506f5957b97c",
   "item": {
-    "material": "player_head_item",
+    "item": "player_head_item",
     "name": "&d&lBunny Mask",
     "lore": [
       "&c1.65x Mobs from Spawners in Chunk",
@@ -12,7 +12,7 @@
     ]
   },
   "attributes": [
-
+    ""
   ],
-  "added lore": ""
+  "added lore": "&7&lATTACHED:&r &d&lBunny Mask&r &f(&c1.65x Mobs from Spawners in Chunk&f)"
 }

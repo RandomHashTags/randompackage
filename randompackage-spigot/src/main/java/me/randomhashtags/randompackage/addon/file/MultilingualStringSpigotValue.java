@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.*;
 
 public final class MultilingualStringSpigotValue implements MultilingualString, UVersionableSpigot {
 
@@ -15,25 +15,21 @@ public final class MultilingualStringSpigotValue implements MultilingualString, 
 
     public MultilingualStringSpigotValue(@Nullable JSONObject json) {
         values = new HashMap<>();
-        if (json != null) {
-            String english;
-            try {
-                english = json.getString("en");
-                english = colorize(english);
-            } catch (Exception ignored) {
-                english = null;
+        if(json != null) {
+            final List<Language> supported_languages = List.of(
+                    Language.ENGLISH,
+                    Language.SPANISH
+            );
+            for(Language language : supported_languages) {
+                String string;
+                try {
+                    string = json.getString(language.code);
+                    string = colorize(string);
+                } catch (Exception ignored) {
+                    string = null;
+                }
+                values.put(language, string);
             }
-
-            String spanish;
-            try {
-                spanish = json.getString("es");
-                spanish = colorize(spanish);
-            } catch (Exception ignored) {
-                spanish = null;
-            }
-
-            values.put(Language.ENGLISH, english);
-            values.put(Language.SPANISH, spanish);
         }
     }
 

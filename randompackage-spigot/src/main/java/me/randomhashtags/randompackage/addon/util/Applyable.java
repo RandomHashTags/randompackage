@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface Applyable extends Itemable {
-    String getApplied();
-    List<String> getAppliesTo();
+    @NotNull String getAppliedString();
+    @NotNull List<String> getAppliesTo();
     boolean canBeApplied(@NotNull ItemStack is);
 }

@@ -277,7 +277,7 @@ public enum Scrolls implements RPFeatureSpigot {
                 final int size = enchants.size();
                 final ItemMeta itemMeta = is.getItemMeta();
                 final List<String> lore = new ArrayList<>();
-                final String apply = scroll.getApplied(), previous = apply.replace("{LORE_COUNT}", Integer.toString(size));
+                final String apply = scroll.getAppliedString(), previous = apply.replace("{LORE_COUNT}", Integer.toString(size));
                 int newsize = 0;
                 if(itemMeta.hasLore()) {
                     final List<String> itemLore = itemMeta.getLore();
@@ -330,7 +330,7 @@ public enum Scrolls implements RPFeatureSpigot {
         if(is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) {
             final String size = Integer.toString(prevSize), newsize = Integer.toString(newSize), name = is.getItemMeta().getDisplayName();
             for(TransmogScroll scroll : getAllTransmogScrolls().values()) {
-                final String applied = scroll.getApplied(), actual = applied.replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size);
+                final String applied = scroll.getAppliedString(), actual = applied.replace("{LORE_COUNT}", size).replace("{ENCHANT_SIZE}", size);
                 if(name.endsWith(actual)) {
                     final ItemMeta itemMeta = is.getItemMeta();
                     itemMeta.setDisplayName(itemMeta.getDisplayName().replace(actual, applied.replace("{LORE_COUNT}", newsize).replace("{ENCHANT_SIZE}", newsize)));
@@ -355,9 +355,9 @@ public enum Scrolls implements RPFeatureSpigot {
             if(is.hasItemMeta() && itemMeta.hasLore()) {
                 lore.addAll(itemMeta.getLore());
             }
-            lore.add(scroll.getApplied());
+            lore.add(scroll.getAppliedString());
             if(required != null && scroll.removesRequiredAfterApplication()) {
-                lore.remove(required.getApplied());
+                lore.remove(required.getAppliedString());
             }
             itemMeta.setLore(lore);
             is.setItemMeta(itemMeta);

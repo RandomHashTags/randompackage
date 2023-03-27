@@ -35,7 +35,7 @@ public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker 
     public String getTracks() {
         return getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".tracks");
     }
-    public List<String> getAppliesTo() {
+    public @NotNull List<String> getAppliesTo() {
         return getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".applies to");
     }
     public String getSoulsPerKill() {
@@ -54,7 +54,7 @@ public final class PathSoulTracker extends RPAddonSpigot implements SoulTracker 
         if(is == null) is = createItemStack(getAddonConfig("soul trackers.yml"), "soul trackers." + path);
         return getClone(is);
     }
-    public String getApplied() { return colorize(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }
+    public @NotNull String getAppliedString() { return colorize(getAddonConfig("soul trackers.yml").getString("soul trackers." + path + ".apply")); }
     public List<String> getApplyMsg() {
         if(apply == null) apply = colorizeListString(getAddonConfig("soul trackers.yml").getStringList("soul trackers." + path + ".apply msg"));
         return apply;

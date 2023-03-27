@@ -692,7 +692,7 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                             result = lore.isEmpty() || prevlevel == -1 && prevslot == -1 ? "SUCCESS_APPLY" : "SUCCESS_UPGRADE";
                         } else if(RANDOM.nextInt(100) <= destroy) {
                             final WhiteScroll w = getWhiteScroll("REGULAR");
-                            final String applied = w != null ? w.getApplied() : null;
+                            final String applied = w != null ? w.getAppliedString() : null;
                             result = applied != null && lore.contains(applied) ? "DESTROY_WHITE_SCROLL" : "DESTROY";
                             if(lore.contains(applied)) {
                                 lore.remove(applied);

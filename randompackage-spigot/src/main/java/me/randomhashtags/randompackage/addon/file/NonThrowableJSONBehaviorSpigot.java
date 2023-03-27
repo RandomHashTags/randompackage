@@ -16,21 +16,29 @@ public interface NonThrowableJSONBehaviorSpigot extends UVersionableSpigot, NonT
 
     @Nullable
     default String parse_string_in_json(@NotNull JSONObject json, @NotNull String key, @Nullable String default_value) {
-        final Object obj = json.opt(key);
-        final String string = obj instanceof String ? (String) obj : default_value;
-        return string != null ? colorize(string) : null;
+        final String string = json.optString(key);
+        if(string == null) { // TODO: print to console
+            return default_value != null ? colorize(default_value) : null;
+        }
+        return colorize(string);
     }
 
     @NotNull
     default List<String> parse_list_string_in_json(@NotNull JSONObject json, @NotNull String key, @NotNull List<String> default_value) {
         final JSONArray array = json.optJSONArray(key);
-        final List<String> list = array != null ? array.toList().stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList()) : default_value;
+        if(array == null) { // TODO: print to console
+            return default_value;
+        }
+        final List<String> list = array.toList().stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList());
         return colorizeListString(list);
     }
 
     @NotNull
     default MultilingualString parse_multilingual_string_in_json(@NotNull JSONObject json, @NotNull String key) {
-        final JSONObject value = json.optJSONObject(key, new JSONObject());
+        final JSONObject value = json.optJSONObject(key);
+        if(value == null) { // TODO: print to console
+            return new MultilingualStringSpigotValue(null);
+        }
         return new MultilingualStringSpigotValue(value);
     }
 }

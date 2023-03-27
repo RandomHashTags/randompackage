@@ -22,7 +22,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,7 +69,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
                 lore.addAll(itemMeta.getLore());
             }
             boolean did = false;
-            final String applied = soultracker.getApplied(), material = is.getType().name();
+            final String applied = soultracker.getAppliedString(), material = is.getType().name();
             final Collection<SoulTracker> trackers = getAllSoulTrackers().values();
             for(String targetMaterial : soultracker.getAppliesTo()) {
                 if(material.endsWith(targetMaterial)) {
@@ -78,7 +77,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
                         for(int i = 0; i < lore.size(); i++) {
                             final String targetLore = lore.get(i);
                             for(SoulTracker tracker : trackers) {
-                                if(targetLore.startsWith(tracker.getApplied().replace("{SOULS}", ""))) {
+                                if(targetLore.startsWith(tracker.getAppliedString().replace("{SOULS}", ""))) {
                                     lore.set(i, applied.replace("{SOULS}", "0"));
                                     itemMeta.setLore(lore);
                                     is.setItemMeta(itemMeta);
@@ -132,7 +131,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
                 int slot = -1;
                 for(String string : lore) {
                     slot += 1;
-                    final String a = st.getApplied();
+                    final String a = st.getAppliedString();
                     if(string.startsWith(a.replace("{SOULS}", ""))) {
                         appliedTracker = st;
                         appliedSlot = slot;
@@ -162,7 +161,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
                     sendStringListMessage(player, getStringList(config, "messages.need to collect more souls"), null);
                     return;
                 } else {
-                    lore.set(appliedSlot, appliedTracker.getApplied().replace("{SOULS}", Integer.toString(totalsouls-amount)));
+                    lore.set(appliedSlot, appliedTracker.getAppliedString().replace("{SOULS}", Integer.toString(totalsouls-amount)));
                     itemMeta.setLore(lore);
                     item.setItemMeta(itemMeta);
                     player.updateInventory();
@@ -237,7 +236,7 @@ public enum SoulTrackers implements RPFeatureSpigot, CommandExecutor {
     public void addSouls(@NotNull Player player, @NotNull ItemStack is, int loreSlot, @NotNull SoulTracker tracker) {
         final ItemMeta itemMeta = is.getItemMeta();
         final List<String> lore = new ArrayList<>(itemMeta.getLore());
-        lore.set(loreSlot, tracker.getApplied().replace("{SOULS}", Integer.toString(getRemainingInt(ChatColor.stripColor(lore.get(loreSlot)))+1)));
+        lore.set(loreSlot, tracker.getAppliedString().replace("{SOULS}", Integer.toString(getRemainingInt(ChatColor.stripColor(lore.get(loreSlot)))+1)));
         itemMeta.setLore(lore);
         is.setItemMeta(itemMeta);
         player.updateInventory();

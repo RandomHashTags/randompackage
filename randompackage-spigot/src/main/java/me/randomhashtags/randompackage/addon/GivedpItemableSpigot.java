@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 public interface GivedpItemableSpigot extends RPStorage {
     HashMap<String, GivedpItemableSpigot> GIVEDP_ITEMS = new HashMap<>();
-    @NotNull
-    String[] getGivedpItemIdentifiers();
-    @Nullable
-    ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput);
+    @NotNull String[] getGivedpItemIdentifiers();
+    @Nullable ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput);
 }

@@ -1,0 +1,17 @@
+{
+  "texture": "http://textures.minecraft.net/texture/1171baa5ad167bd33e419fe745f7b01840cb6d7e8d7aec6cda31ce2d5cf61",
+  "item": {
+    "item": "player_head_item",
+    "name": "&e&lScarecrow Mask",
+    "lore": [
+      "&cInfinite Food",
+      "&7An empty husk of a",
+      "&7once tortured soul left to rot.",
+      " &6&l*&r &7November 2018 CC"
+    ]
+  },
+  "attributes": [
+    "FoodLevelLost;SetCancelled=true"
+  ],
+  "added lore": "&7&lATTACHED:&r &e&lScarecrow Mask&r &f(&cInfinite Food&f)"
+}

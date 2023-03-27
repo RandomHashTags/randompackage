@@ -17,7 +17,7 @@ public interface SoulTracker extends Applyable, GivedpItemableSpigot {
     }
 
     String getTracks();
-    List<String> getAppliesTo();
+    @NotNull List<String> getAppliesTo();
     String getSoulsPerKill();
     double getSoulsCollected();
     RarityGem getConvertsTo();

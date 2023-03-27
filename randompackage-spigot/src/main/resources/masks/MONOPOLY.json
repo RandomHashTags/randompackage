@@ -1,0 +1,18 @@
+{
+  "texture": "http://textures.minecraft.net/texture/3179b084321cd656c619e8825fbdda92bfebf2e5ad9d2be52a90a53a69c629",
+  "item": {
+    "item": "player_head_item",
+    "name": "&b&lMonopoly Mask",
+    "lore": [
+      "&c33% Holy White Scroll negation",
+      "&c-5% ENEMY DMG",
+      "&7The mask of a man who has it all,",
+      "&7a truly powerful entity to contest with.",
+      " &6&l*&r &6Black Friday 2018"
+    ]
+  },
+  "attributes": [
+    "isDamaged;SetDamage=dmg*0.95"
+  ],
+  "added lore": "&7&lATTACHED:&r &b&lMonopoly Mask&r &f(&c33% Holy White Scroll negation&f)"
+}
