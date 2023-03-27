@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Hold Trainee Outpost I"
+    },
+    "completion": "3h"
+  },
+  "lore": [
+    "&7Hold Trainee Outpost for 3h"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

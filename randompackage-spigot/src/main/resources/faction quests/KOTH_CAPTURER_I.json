@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Koth Capturer I"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Capture a KOTH"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    "KothCapture;PlayerIncreaseFQuest=KOTH_CAPTURER_I:1"
+  ]
+}

@@ -27,7 +27,7 @@ public final class RandomizedLootItem implements RandomizedLoot, UVersionableSpi
     public String getRewardSize() {
         return rewardSize;
     }
-    public List<String> getRewards() {
+    public @NotNull List<String> getRewards() {
         return rewards;
     }
 

@@ -1,0 +1,36 @@
+{
+  "messages": {
+    "activate": [
+      "&a&l(!)&r &a{PLAYER} used a &n{MULTIPLIER} XP&r &aFaction Booster! &7[{TIME} left]"
+    ],
+    "expire": [
+      "&c&l(!) {MULTIPLIER}x&r &cXP Booster from &l{PLAYER}&r &chas expired!",
+      "&cPurchase another booster at &nbuy.yourserver.com!"
+    ],
+    "notify": [
+      "&a&l+ {MULTIPLIER}x XP&r &a({PLAYER}'s Faction Booster &7[{TIME}]&a)"
+    ]
+  },
+  "settings": {
+    "recipients": "FACTION_MEMBERS"
+  },
+  "item": {
+    "item": "emerald",
+    "name": "&b&lFaction &nXP&r &b&lBooster",
+    "lore": [
+      "&7Multiplies XP gained by all faction",
+      "&7members from killing mobs while active.",
+      " ",
+      "&7Right-Click to activate.",
+      " ",
+      "&d&lMULTIPLIER",
+      "&7{MULTIPLIER}x",
+      " ",
+      "&d&lDURATION",
+      "&7{TIME}"
+    ]
+  },
+  "attributes": [
+    "EntityDeath;VictimIsMob=true;setDroppedExp=xp*multiplier"
+  ]
+}

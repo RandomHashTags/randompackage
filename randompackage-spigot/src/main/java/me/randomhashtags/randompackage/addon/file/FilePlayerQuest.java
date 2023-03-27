@@ -44,6 +44,6 @@ public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest 
         return c;
     }
     public List<String> getLore() { return colorizeListString(yml.getStringList("lore")); }
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
+    public @NotNull List<String> getRewards() { return yml.getStringList("rewards"); }
     public List<String> getTrigger() { return yml.getStringList("trigger"); }
 }

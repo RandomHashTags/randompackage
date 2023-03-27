@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Kill Boss King Slime"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Kill a &e&lKing Slime"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Kill Boss Plague Bloater"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Kill a &2&lPlague Bloater"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

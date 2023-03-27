@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Hold Hero Outpost I"
+    },
+    "completion": "3h"
+  },
+  "lore": [
+    "&7Hold Hero Outpost for 3h"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Kill Blaze I"
+    },
+    "completion": 1500
+  },
+  "lore": [
+    "&7Kill 1500 Blazes inside your claims"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    "EntityDeath;VictimIsType=BLAZE;KillerIncreaseFQuest=KILL_BLAZE_I:1"
+  ]
+}

@@ -27,7 +27,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("conquests", "NORMAL");
     }
     default void generateDefaultCustomBosses() {
-        generateAllDefault("custom bosses", "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER");
+        generate_all_default_json("custom bosses", "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER");
     }
     default void generateDefaultCustomEnchants() {
         final String[] mastery = new String[] {
@@ -185,7 +185,7 @@ public interface DefaultFileGeneration {
         generate_all_default_json("envoy tiers", "ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
     }
     default void generateDefaultFactionQuests() {
-        generateAllDefault("faction quests",
+        generate_all_default_json("faction quests",
                 "CONQUEST_BREAKER_I",
                 "DAILY_CHALLENGE_MASTER_I",
                 "DUNGEON_MASTER_I",

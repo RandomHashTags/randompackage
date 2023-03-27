@@ -47,7 +47,7 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
     }
     public List<String> getLimits() { return yml.getStringList("limits"); }
     public List<String> getUnallowedItems() { return yml.getStringList("unallowed items"); }
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
+    public @NotNull List<String> getRewards() { return yml.getStringList("rewards"); }
     public Scoreboard getScoreboard() {
         if(scoreboard == null) {
             scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();

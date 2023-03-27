@@ -24,7 +24,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
     private final boolean can_repeat_rewards, drops_from_sky;
     private final List<UMaterial> cannotLandAbove, cannotLandIn;
     private final List<String> rewards;
-    private ItemStack item;
+    private final ItemStack item;
 
     public FileEnvoyCrate(File file) {
         super(file);
@@ -53,6 +53,8 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         for(String s : parse_list_string_in_json(settings_json, "cannot land in")) {
             cannotLandIn.add(UMaterial.match(s));
         }
+
+        item = create_item_stack(json, "item");
 
         register(Feature.ENVOY_CRATE, this);
     }
@@ -91,9 +93,6 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         return cannotLandIn;
     }
     public @NotNull ItemStack getItem() {
-        if(item == null) {
-            item = createItemStack(yml, "item");
-        }
         return getClone(item);
     }
     @NotNull

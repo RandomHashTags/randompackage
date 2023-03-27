@@ -32,7 +32,7 @@ public final class FileCustomEnchantSpigot extends RPAddonSpigot implements Cust
         enabled_worlds = parse_list_string_in_json(json, "enabled in worlds");
         applies_to = parse_list_string_in_json(json, "applies to");
         required_enchant = parse_string_in_json(json, "requires", null);
-        alchemist = parse_big_decimal_in_json(json, "alchemist upgrade costs", null);
+        alchemist = parse_list_big_decimal_in_json(json, "alchemist upgrade costs", null);
         final String tinkerer_value = parse_string_in_json(json, "tinkerer", null);
         if(tinkerer_value != null && !tinkerer_value.isEmpty()) {
             final String[] tinkerer_values = tinkerer_value.split(":");

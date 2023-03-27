@@ -37,7 +37,7 @@ public final class GlobalChallengePrizeObject extends RPAddonSpigot implements G
     public int getPlacement() {
         return placement;
     }
-    public List<String> getRewards() {
+    public @NotNull List<String> getRewards() {
         return rewards;
     }
     public LinkedHashMap<String, ItemStack> getRandomRewards() {

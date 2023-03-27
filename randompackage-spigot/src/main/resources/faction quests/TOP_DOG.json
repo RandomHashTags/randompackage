@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Top Dog"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Get top damage on a WarZone Boss"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

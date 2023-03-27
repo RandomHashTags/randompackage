@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Kill Conquest Bosses I"
+    },
+    "completion": 5
+  },
+  "lore": [
+    "&7Kill 5x Conquest Bosses"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

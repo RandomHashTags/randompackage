@@ -95,7 +95,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     public @NotNull List<String> getAttributes() {
         return attributes;
     }
-    public List<String> getRewards() {
+    public @NotNull List<String> getRewards() {
         return rewards;
     }
     public @NotNull List<CustomBossAttack> getAttacks() {

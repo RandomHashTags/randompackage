@@ -61,5 +61,5 @@ public abstract class FileStronghold extends RPAddonSpigot implements Stronghold
     public List<String> getNoLongerControllingMsg() { return getStringList(yml, "messages.no longer controlling"); }
     public List<String> getTakenControlMsg() { return getStringList(yml, "messages.taken control"); }
 
-    public List<String> getRewards() { return yml.getStringList("rewards"); }
+    public @NotNull List<String> getRewards() { return yml.getStringList("rewards"); }
 }

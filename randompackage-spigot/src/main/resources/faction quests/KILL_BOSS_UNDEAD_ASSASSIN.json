@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Kill Boss Undead Assassin"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Kill a &c&lUndead Assassin"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

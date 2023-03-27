@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Daily Challenge Master I"
+    },
+    "completion": 1
+  },
+  "lore": [
+    "&7Place $1 in a Daily Challenge"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    ""
+  ]
+}

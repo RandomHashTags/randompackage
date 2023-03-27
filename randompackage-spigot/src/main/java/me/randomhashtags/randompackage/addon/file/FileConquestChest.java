@@ -57,7 +57,7 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
         }
         return placedBlock;
     }
-    public List<String> getRewards() { return getStringList(yml, "rewards"); }
+    public @NotNull List<String> getRewards() { return getStringList(yml, "rewards"); }
     public List<String> getHitAttributes() { return getStringList(yml, "hit attributes"); }
     public List<String> getSpawnMsg() { return getStringList(yml, "messages.spawn"); }
     public List<String> getWillSpawnMsg() { return getStringList(yml, "messages.will spawn"); }

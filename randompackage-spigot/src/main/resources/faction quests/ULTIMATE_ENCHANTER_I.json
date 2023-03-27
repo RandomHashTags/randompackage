@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "name": {
+      "en": "Ultimate Enchanter I"
+    },
+    "completion": 30
+  },
+  "lore": [
+    "&7Purchase 30 Ultimate Books in a Day"
+  ],
+  "rewards": [
+    ""
+  ],
+  "attributes": [
+    "EnchanterPurchase;IsRarityBook=true;rarity=ULTIMATE;PlayerIncreaseFQuest=ULTIMATE_ENCHANTER_I:1"
+  ]
+}

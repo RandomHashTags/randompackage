@@ -68,7 +68,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 		}
 		return getClone(is);
 	}
-	public List<String> getRewards() {
+	public @NotNull List<String> getRewards() {
 		return null;
 	}
 
