@@ -66,7 +66,7 @@ public interface FatBucket extends Itemable, RPItemStack, GivedpItemableSpigot {
         final int usesLeft = Integer.parseInt(info[1]);
         setItem(is, usesLeft-1, 0);
     }
-    default void didFill(ItemStack is) {
+    default void didFill(@NotNull ItemStack is) {
         final String[] info = getValues(is).split(":");
         final int sourcesRequired = Integer.parseInt(info[2]);
         final boolean isFull = sourcesRequired+1 == getSourcesRequired();

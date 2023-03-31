@@ -228,7 +228,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultFatBuckets() {
-        generateAllDefault("fat buckets", "LAVA");
+        generate_all_default_json("fat buckets", "LAVA");
     }
     default void generateDefaultGlobalChallenges() {
         generate_all_default_json("global challenges",
