@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Heroic Envoy Looter II"
+    },
+    "completion": 3,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Loot 3 Heroic Envoy Chests in a Day"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "PlayerClaimEnvoyCrate;tier=LEGENDARY;PlayerIncreasePQuest=HEROIC_ENVOY_LOOTER_II:1"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Ultimate Looter"
+    },
+    "completion": 10,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Open 10 Ultimate Chests"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "ServerCrateOpen;rarity=ULTIMATE;PlayerIncreasePQuest=ULTIMATE_LOOTER:1"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": false,
+    "name": {
+      "en": "Ender Lord"
+    },
+    "completion": "1h30m",
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Spend 1h 30m in The End"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    ""
+  ]
+}

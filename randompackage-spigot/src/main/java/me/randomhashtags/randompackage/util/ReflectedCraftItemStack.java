@@ -29,7 +29,7 @@ public final class ReflectedCraftItemStack {
                 if(!SENT_ERROR) {
                     SENT_ERROR = true;
                     e.printStackTrace();
-                    RandomPackageAPI.INSTANCE.sendConsoleMessage("&6[RandomPackage] &cFailed to find craftbukkit version, some features will not work properly!");
+                    RandomPackageAPI.INSTANCE.sendConsoleMessage("&cFailed to find craftbukkit version, some features will not work properly!");
                 }
             }
         }

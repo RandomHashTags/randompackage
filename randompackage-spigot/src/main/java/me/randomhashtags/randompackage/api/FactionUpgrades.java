@@ -66,7 +66,7 @@ public enum FactionUpgrades implements EventAttributes {
     public boolean canBeEnabled() {
         final boolean enabled = RegionalAPI.INSTANCE.hookedFactionsUUID();
         if(!enabled) {
-            sendConsoleMessage("&6[RandomPackage] &cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
+            sendConsoleMessage("&cDidn't load FactionUpgrades due to no supported Faction plugin installed!");
         }
         return enabled;
     }

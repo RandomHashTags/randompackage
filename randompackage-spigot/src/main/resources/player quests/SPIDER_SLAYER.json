@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": false,
+    "name": {
+      "en": "Spider Slayer"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Get top damage on a Brood Mother"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    ""
+  ]
+}

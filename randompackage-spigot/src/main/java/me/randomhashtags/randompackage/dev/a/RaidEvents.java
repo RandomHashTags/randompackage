@@ -45,7 +45,7 @@ public enum RaidEvents implements RPFeatureSpigot, CommandExecutor {
         canRepeatRewards = config.getBoolean("can repeat rewards");
         rewards = config.getStringList("rewards");
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Raid Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Raid Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

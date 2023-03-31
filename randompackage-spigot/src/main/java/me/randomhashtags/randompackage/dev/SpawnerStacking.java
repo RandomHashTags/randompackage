@@ -70,7 +70,7 @@ public enum SpawnerStacking implements RPFeatureSpigot {
         stacks = new HashMap<>();
         loadBackup(true);
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Spawner Stacking &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Spawner Stacking &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {
@@ -93,7 +93,7 @@ public enum SpawnerStacking implements RPFeatureSpigot {
                 stacks.put(string_to_location(s), new StackedSpawner(EntityType.valueOf(values[0]), Integer.parseInt(values[1])));
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "&6[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
+        sendConsoleMessage("&aLoaded " + stacks.size() + " Stacked Spawners " + (async ? "&6[async]" : "&e(took " + (System.currentTimeMillis()-started) + "ms)"));
     }
     public void backup() {
         data.set("locations", null);

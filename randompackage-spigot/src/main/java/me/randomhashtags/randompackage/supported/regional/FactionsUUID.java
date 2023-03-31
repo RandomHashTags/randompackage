@@ -159,7 +159,7 @@ public enum FactionsUUID implements Reflect, Regional {
 
     public String getRole(UUID player) {
         if(isLegacy) {
-            sendConsoleMessage("&6[RandomPackage] &cERROR. Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
+            sendConsoleMessage("&cERROR. Make sure you're using a supported FactionsUUID version! Messages sent may appear inaccurate to others!");
             return "";
         }
         return getFPlayer(player).getRole().getPrefix();

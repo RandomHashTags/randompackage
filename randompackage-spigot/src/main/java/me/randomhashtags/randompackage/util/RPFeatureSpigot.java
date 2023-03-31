@@ -134,7 +134,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
                     EventAttributeCoreListener.unregisterEventAttributeListener(event_attribute_listener);
                 }
                 HandlerList.unregisterAll(this);
-                sendConsoleMessage("&6[RandomPackage] &cDisabled RandomPackage Feature " + identifier + " (took " + (System.currentTimeMillis()-started) + "ms)");
+                sendConsoleMessage("&cDisabled RandomPackage Feature " + identifier + " (took " + (System.currentTimeMillis()-started) + "ms)");
             }
         }
     }
@@ -160,7 +160,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     default void addGivedpCategory(List<ItemStack> items, @NotNull UMaterial material, @NotNull String what, String invtitle) {
         final ItemStack item = material.getItemStack();
         if(item == null) {
-            sendConsoleMessage("&6[RandomPackage] &cERROR: Caught by adding a Givedp Category: &f" + what);
+            sendConsoleMessage("&cERROR: Caught by adding a Givedp Category: &f" + what);
         } else {
             final ItemMeta itemMeta = item.getItemMeta();
             if(itemMeta != null) {
@@ -271,7 +271,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
             return null;
         }
         if(item == null) {
-            sendConsoleMessage("&6[RandomPackage] &cERROR: Material=" + mat + ";umaterial=" + umaterial);
+            sendConsoleMessage("&cERROR: Material=" + mat + ";umaterial=" + umaterial);
         }
         final Material skull_item = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
         if(!i.equals(Material.AIR)) {

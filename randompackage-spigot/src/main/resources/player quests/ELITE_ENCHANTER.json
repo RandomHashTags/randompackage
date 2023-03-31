@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Elite Enchanter"
+    },
+    "completion": 60,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Purchase 60 Elite Books"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Tokens"
+  ],
+  "trigger": [
+    "EnchanterPurchase;IsRarityBook=true;rarity=ELITE;PlayerIncreasePQuest=1"
+  ]
+}

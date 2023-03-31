@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Beginners Luck"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Apply an enchant book with less than 10% success rate"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "CustomEnchantApply;success<=10;PlayerIncreasePQuest=BEGINNERS_LUCK:1"
+  ]
+}

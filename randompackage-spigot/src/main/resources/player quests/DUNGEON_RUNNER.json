@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": false,
+    "name": {
+      "en": "Dungeon Runner"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Complete a Dungeon"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    ""
+  ]
+}

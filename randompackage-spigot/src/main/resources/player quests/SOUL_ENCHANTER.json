@@ -1,0 +1,20 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Soul Enchanter"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Successfully apply 1 Soul Book"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "CustomEnchantApply;result=SUCCESS_APPLY;rarity=SOUL;PlayerIncreasePQuest=SOUL_ENCHANTER:1",
+    "CustomEnchantApply;result=SUCCESS_UPGRADE;rarity=SOUL;PlayerIncreasePQuest=SOUL_ENCHANTER:1"
+  ]
+}

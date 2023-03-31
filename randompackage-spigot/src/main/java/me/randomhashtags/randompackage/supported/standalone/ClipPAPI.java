@@ -20,7 +20,7 @@ public final class ClipPAPI extends PlaceholderExpansion implements UVersionable
     private ClipPAPI() {
         final long started = System.currentTimeMillis();
         register();
-        sendConsoleMessage("&6[RandomPackage] &aHooked PlaceholderAPI &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aHooked PlaceholderAPI &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public String getIdentifier() {

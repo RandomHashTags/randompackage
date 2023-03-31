@@ -74,7 +74,7 @@ public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
                 di.setItem(i, background);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUNGEON).size() + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + getAll(Feature.DUNGEON).size() + " Dungeons &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

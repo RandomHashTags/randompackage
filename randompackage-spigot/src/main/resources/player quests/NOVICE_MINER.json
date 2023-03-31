@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Novice Miner"
+    },
+    "completion": 5000,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Mine 5,000 blocks with a pickaxe"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreasePQuest=NOVICE_MINER:1"
+  ]
+}

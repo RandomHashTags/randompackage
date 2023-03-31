@@ -11,7 +11,7 @@ public enum WaterLavaMechanics implements RPFeatureSpigot {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Water/Lava Mechanics &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Water/Lava Mechanics &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

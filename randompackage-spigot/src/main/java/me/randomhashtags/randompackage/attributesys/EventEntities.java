@@ -73,7 +73,7 @@ public interface EventEntities extends EventConditions, UVersionableSpigot {
                 } else if(event instanceof PlayerEvent) {
                     return getEntities((PlayerEvent) event);
                 } else {
-                    sendConsoleMessage("&6[RandomPackage] &cMissing Event Entities for event &f" + name);
+                    sendConsoleMessage("&cMissing Event Entities for event &f" + name);
                     return new HashMap<>();
                 }
         }

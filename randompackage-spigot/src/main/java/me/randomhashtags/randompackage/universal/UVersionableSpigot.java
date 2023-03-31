@@ -154,10 +154,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
     }
 
     default void sendConsoleDidLoadFeature(String what, long started) {
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + what + " &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     default void sendConsoleDidLoadAsyncFeature(String what) {
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + what + " &e[async]");
+        sendConsoleMessage("&aLoaded " + what + " &e[async]");
     }
 
     default EquipmentSlot getRespectiveSlot(@NotNull String material) {
@@ -170,7 +170,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
 
     @Override
     default void sendConsoleMessage(String msg) {
-        CONSOLE.sendMessage(colorize(msg));
+        CONSOLE.sendMessage(colorize("&6[RandomPackage]&r " + msg));
     }
     @Override
     default int getRemainingInt(@NotNull String string) {
@@ -676,10 +676,10 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
                         location.getWorld().playSound(location, sound, v, pp);
                     }
                 } else {
-                    sendConsoleMessage("&6[RandomPackage] &cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                    sendConsoleMessage("&cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
                 }
             } catch (Exception e) {
-                sendConsoleMessage("&6[RandomPackage] &cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
+                sendConsoleMessage("&cERROR! Invalid sound name: &f" + s + "&c! Try using the actual sound name for your Server version! (" + VERSION + ")");
             }
         }
     }

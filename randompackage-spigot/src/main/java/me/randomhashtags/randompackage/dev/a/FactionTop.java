@@ -36,7 +36,7 @@ public enum FactionTop implements RPFeatureSpigot, CommandExecutor {
         topFactions = new HashMap<>();
         topFactionPlacements = new HashMap<>();
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Faction Top &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Faction Top &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

@@ -34,9 +34,9 @@ public enum CommandManager implements Reflect {
                 } else if(SIXTEEN) {
                     versionDispatcher = net.minecraft.server.v1_16_R3.MinecraftServer.getServer().vanillaCommandDispatcher.a();
                 } else {
-                    sendConsoleMessage("&6[RandomPackage &3CommandManager&6] &3attempting to support a Spigot version >= 1.17.0...");
+                    sendConsoleMessage("&6[&3CommandManager&6] &3attempting to support a Spigot version >= 1.17.0...");
                     versionDispatcher = net.minecraft.server.MinecraftServer.getServer().vanillaCommandDispatcher.a();
-                    sendConsoleMessage("&6[RandomPackage &3CommandManager&6] &asuccessful integration");
+                    sendConsoleMessage("&6[&3CommandManager&6] &asuccessful integration");
                 }
                 if(versionDispatcher != null) {
                     dispatcher = versionDispatcher;
@@ -48,7 +48,7 @@ public enum CommandManager implements Reflect {
                 }
             }
         } catch (Exception e) {
-            sendConsoleMessage("&6[RandomPackage &cWARNING&6] &c&lYou're running an unsupported Spigot version! Custom commands won't work, and disabled commands won't disable!");
+            sendConsoleMessage("&6[&cWARNING&6] &c&lYou're running an unsupported Spigot version! Custom commands won't work, and disabled commands won't disable!");
             e.printStackTrace();
         }
 
@@ -155,8 +155,7 @@ public enum CommandManager implements Reflect {
                 }
             }
         } catch (Exception e) {
-            sendConsoleMessage("&6[RandomPackage &cERROR&6] &c&lError trying to update the Brigadier command(s) for feature:&r &f" + featureIdentifier);
-
+            sendConsoleMessage("&6[&cERROR&6] &c&lError trying to update the Brigadier command(s) for feature:&r &f" + featureIdentifier);
             e.printStackTrace();
         }
     }

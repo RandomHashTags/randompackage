@@ -45,7 +45,7 @@ public enum MCMMOAPI implements Reflect {
 
 		final String version = PLUGIN_MANAGER.getPlugin("mcMMO").getDescription().getVersion();
 		isClassic = version.startsWith("1.");
-		sendConsoleMessage("&6[RandomPackage] &aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " (" + version + ") &e(took " + (System.currentTimeMillis()-started) + "ms)");
+		sendConsoleMessage("&aHooked MCMMO " + (isClassic ? "Classic" : "Overhaul") + " (" + version + ") &e(took " + (System.currentTimeMillis()-started) + "ms)");
 	}
 	@Override
 	public void unload() {

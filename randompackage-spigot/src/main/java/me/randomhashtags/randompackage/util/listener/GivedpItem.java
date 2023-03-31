@@ -43,8 +43,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
     private HashMap<String, ItemStack> customitems;
 
     public HashMap<String, ItemStack> items;
-    private ItemStack air;
-    private List<Player> itemnametag, itemlorecrystal, explosive_snowball_throwers;
+    private List<Player> item_name_tag, itemlorecrystal, explosive_snowball_throwers;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -99,9 +98,8 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         items.put("spacedrink", createItemStack(itemsConfig, "space drink"));
         items.put("spacefirework", createItemStack(itemsConfig, "space firework"));
         items.put("xpbottle", createItemStack(itemsConfig, "xpbottle"));
-        air = new ItemStack(Material.AIR);
 
-        itemnametag = new ArrayList<>();
+        item_name_tag = new ArrayList<>();
         itemlorecrystal = new ArrayList<>();
         explosive_snowball_throwers = new ArrayList<>();
 
@@ -127,8 +125,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         final HashMap<String, GivedpItemableSpigot> givedpitems = GivedpItemableSpigot.GIVEDP_ITEMS;
         for(String key : givedpitems.keySet()) {
             if(targetString.startsWith(key) || input.startsWith(key)) {
-                final ItemStack target = givedpitems.get(key).valueOfInput(targetString, key);
-                return target != null ? target : air;
+                return givedpitems.get(key).valueOfInput(targetString, key);
             }
         }
 
@@ -137,16 +134,16 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
             return getBanknote(BigDecimal.valueOf(getIntegerFromString(values[1], 0)), values.length == 3 ? values[2] : null);
         } else if(input.equals("collectionchest")) {
             final CollectionFilter cf = CollectionFilter.INSTANCE;
-            return cf.isEnabled() ? cf.getCollectionChest("all") : air;
+            return cf.isEnabled() ? cf.getCollectionChest("all") : null;
 
         } else if(input.startsWith("equipmentlootbox:")) {
-            return air;
+            return null;
 
         } else if(input.startsWith("omnigem:")) {
-            return air;
+            return null;
 
         } else if(input.startsWith("inventorypetegghatchingkit:")) {
-            return air;
+            return null;
 
         } else if(input.startsWith("mcmmocreditvoucher") || input.startsWith("mcmmolevelvoucher") || input.startsWith("mcmmoxpvoucher")) {
             if(RPFeatureSpigot.mcmmoIsEnabled() && MCMMOAPI.INSTANCE.isEnabled()) {
@@ -168,7 +165,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
                 item.setItemMeta(itemMeta);
                 return item;
             }
-            return air;
+            return null;
         } else if(input.startsWith("xpbottle:")) {
             final String[] values = targetString.split(":");
             final boolean hasHyphen = values[1].contains("-");
@@ -176,7 +173,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
             return getXPBottle(BigDecimal.valueOf(amt), values.length == 3 ? values[2] : null);
         } else if(input.startsWith("mkitredeem:")) {
             final CustomKit kit = getCustomKit("MKIT_" + targetString.split(":")[1]);
-            return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : air;
+            return kit instanceof CustomKitMastery ? ((CustomKitMastery) kit).getRedeem() : null;
         }
         return null;
     }
@@ -186,12 +183,13 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         final ItemStack item = items.get("banknote").clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();
+        final String value_string = formatBigDecimal(value);
         for(String string : itemMeta.getLore()) {
             if(string.contains("{SIGNER}")) {
                 string = signer != null ? string.replace("{SIGNER}", signer) : null;
             }
             if(string != null) {
-                lore.add(string.replace("{VALUE}", formatBigDecimal(value)));
+                lore.add(string.replace("{VALUE}", value_string));
             }
         }
         itemMeta.setLore(lore);
@@ -203,12 +201,13 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
         final ItemStack item = items.get("xpbottle").clone();
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();
+        final String value_string = formatBigDecimal(value);
         for(String string : itemMeta.getLore()) {
             if(string.contains("{ENCHANTER}")) {
                 string = enchanter != null ? string.replace("{ENCHANTER}", enchanter) : null;
             }
             if(string != null) {
-                lore.add(string.replace("{VALUE}", formatBigDecimal(value)));
+                lore.add(string.replace("{VALUE}", value_string));
             }
         }
         itemMeta.setLore(lore);
@@ -226,9 +225,9 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
                 event.setCancelled(true);
                 final List<String> rewards = getStringList(itemsConfig, "mystery mob spawner.reward"), receivemsg = getStringList(itemsConfig, "mystery mob spawner.receive message");
                 final String spawner = rewards.get(RANDOM.nextInt(rewards.size()));
-                final MysteryMobSpawnerOpenEvent e = new MysteryMobSpawnerOpenEvent(player, spawner);
-                PLUGIN_MANAGER.callEvent(e);
-                if(!e.isCancelled()) {
+                final MysteryMobSpawnerOpenEvent mystery_mob_spawner_open_event = new MysteryMobSpawnerOpenEvent(player, spawner);
+                PLUGIN_MANAGER.callEvent(mystery_mob_spawner_open_event);
+                if(!mystery_mob_spawner_open_event.isCancelled()) {
                     removeItem(player, is, 1);
                     final ItemStack r = createItemStack(null, spawner);
                     giveItem(player, r);
@@ -241,10 +240,10 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
                     }
                 }
             } else if(is.isSimilar(items.get("itemnametag"))) {
-                if(itemnametag.contains(player)) {
+                if(item_name_tag.contains(player)) {
                     sendStringListMessage(player, getStringList(itemsConfig, "item name tag.already in rename process"), null);
                 } else {
-                    itemnametag.add(player);
+                    item_name_tag.add(player);
                     sendStringListMessage(player, getStringList(itemsConfig, "item name tag.enter rename"), null);
                     removeItem(player, is, 1);
                 }
@@ -289,12 +288,12 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
     private void playerChatEvent(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         final String msg = event.getMessage();
-        if(itemnametag.contains(player)) {
-            itemnametag.remove(player);
+        if(item_name_tag.contains(player)) {
+            item_name_tag.remove(player);
             event.setCancelled(true);
             final String message = colorize(msg);
             final ItemStack item = getItemInHand(player);
-            if(item == null || item.getType().equals(Material.AIR)) {
+            if(item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, getStringList(itemsConfig, "item name tag.cannot rename air"), null);
                 giveItem(player, items.get("itemnametag").clone());
             } else if(isEquipment(item)) {
@@ -321,7 +320,7 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
             final ItemStack item = getItemInHand(player);
             event.setCancelled(true);
             itemlorecrystal.remove(player);
-            if(item == null || item.getType().equals(Material.AIR)) {
+            if(item.getType().equals(Material.AIR)) {
                 sendStringListMessage(player, getStringList(itemsConfig, "item lore crystal.cannot addlore air"), null);
                 giveItem(player, items.get("itemlorecrystal").clone());
             } else if(isEquipment(item)) {

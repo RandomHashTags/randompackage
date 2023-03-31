@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Rigged"
+    },
+    "completion": 25000000,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Win $25,000,000 in /coinflip"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "CoinFlipEnd;WinnerIncreasePQuest=RIGGED:woncash"
+  ]
+}

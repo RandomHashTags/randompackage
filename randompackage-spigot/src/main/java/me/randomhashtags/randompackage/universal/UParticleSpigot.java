@@ -109,7 +109,7 @@ public enum UParticleSpigot implements UVersionableSpigot {
                         this.particle = Effect.valueOf(versionName);
                     } catch (Exception ee) {
                         if(!versionName.equals("ITEM_TAKE")) {
-                            sendConsoleMessage("[RandomPackage.UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + VERSION + "!");
+                            sendConsoleMessage("[UParticle] Particle/Effect \"" + versionName + "\" doesn't exist in " + VERSION + "!");
                         }
                     }
                 }
@@ -178,7 +178,9 @@ public enum UParticleSpigot implements UVersionableSpigot {
     }
     public static UParticleSpigot matchParticle(@NotNull String name) {
         name = name.toUpperCase();
-        if(CACHE.containsKey(name)) return CACHE.get(name);
+        if(CACHE.containsKey(name)) {
+            return CACHE.get(name);
+        }
         for(UParticleSpigot particle : UParticleSpigot.values()) {
             for(String target : particle.names) {
                 if(name.equals(target)) {

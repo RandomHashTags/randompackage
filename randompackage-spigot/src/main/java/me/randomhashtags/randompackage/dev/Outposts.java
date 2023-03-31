@@ -86,7 +86,7 @@ public enum Outposts implements RPFeatureSpigot, CommandExecutor {
             if(is == null) gi.setItem(i, background);
             i++;
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.OUTPOST).size() + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + getAll(Feature.OUTPOST).size() + " Outposts &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

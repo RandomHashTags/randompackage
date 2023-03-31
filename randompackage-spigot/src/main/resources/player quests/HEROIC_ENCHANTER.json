@@ -1,0 +1,20 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Heroic Enchanter"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Successfully apply a Heroic book"
+  ],
+  "rewards": [
+    "questtokens=3: 3x Quest Tokens"
+  ],
+  "trigger": [
+    "CustomEnchantApplied;result=SUCCESS_APPLY;rarity=HEROIC;PlayerIncreasePQuest=HEROIC_ENCHANTER:1",
+    "CustomEnchantApplied;result=SUCCESS_UPGRADE;rarity=HEROIC;PlayerIncreasePQuest=HEROIC_ENCHANTER:1"
+  ]
+}

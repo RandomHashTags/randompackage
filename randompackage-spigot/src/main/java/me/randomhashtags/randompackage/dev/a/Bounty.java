@@ -11,7 +11,7 @@ public enum Bounty implements RPFeatureSpigot {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Bounty &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Bounty &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

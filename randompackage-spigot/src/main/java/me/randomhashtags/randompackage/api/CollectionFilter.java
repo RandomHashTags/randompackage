@@ -225,7 +225,9 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
             sendStringListMessage(player, getStringList(config, "messages.placed"), null);
             final String f = material == null ? defaultType : toMaterial(material.getMaterial().name(), false);
             for(String s : getStringList(config, "messages.set")) {
-                if(s.contains("{ITEM}")) s = s.replace("{ITEM}", f);
+                if(s.contains("{ITEM}")) {
+                    s = s.replace("{ITEM}", f);
+                }
                 player.sendMessage(colorize(s));
             }
         }
@@ -319,6 +321,7 @@ public enum CollectionFilter implements RPFeatureSpigot, CommandExecutor {
         }
         player.updateInventory();
     }
+    @NotNull
     public ItemStack getCollectionChest(@NotNull String filter) {
         filter = filter.toLowerCase();
         filter = filter.equals("all") ? allType : filter.equals("default") ? defaultType : toMaterial(filter, false);

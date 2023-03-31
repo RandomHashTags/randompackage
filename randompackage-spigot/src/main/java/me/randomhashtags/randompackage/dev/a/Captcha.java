@@ -15,7 +15,7 @@ public enum Captcha implements RPFeatureSpigot {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Captcha &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Captcha &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

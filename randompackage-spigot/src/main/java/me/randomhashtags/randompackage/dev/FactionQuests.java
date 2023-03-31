@@ -38,7 +38,7 @@ public enum FactionQuests implements RPFeatureSpigot, EventExecutor, CommandExec
                 new FileFactionQuest(f);
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FACTION_QUEST).size() + " Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + getAll(Feature.FACTION_QUEST).size() + " Faction Quests &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     public void unload() {
         unregister(Feature.FACTION_QUEST);

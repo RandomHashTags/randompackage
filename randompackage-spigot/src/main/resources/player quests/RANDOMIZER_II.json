@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Randomizer II"
+    },
+    "completion": 10,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Use 10 Randomization Scrolls"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "RandomizationScrollUse;PlayerIncreasePQuest=RANDOMIZER_II:1"
+  ]
+}

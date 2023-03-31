@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Slaughter House II"
+    },
+    "completion": 10,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Kill 10 enemy faction players"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "EntityDeath;VictimIsPlayer=true;VictimIsEnemy=true;KillerIncreasePQuest=SLAUGHTER_HOUSE_II:1"
+  ]
+}

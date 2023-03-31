@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Gambler I"
+    },
+    "completion": 250,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Buy 250 Jackpot Tickets"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    "JackpotPurchaseTicket;PlayerIncreasePQuest=GAMBLER_I:tickets"
+  ]
+}

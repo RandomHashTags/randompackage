@@ -98,7 +98,7 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
                 new FileFallenHero(f);
             }
             PREVIEWING = new ArrayList<>();
-            sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+            sendConsoleMessage("&aLoaded " + getAll(Feature.FALLEN_HERO).size() + " Fallen Heroes &e(took " + (System.currentTimeMillis()-started) + "ms)");
         }
     }
 

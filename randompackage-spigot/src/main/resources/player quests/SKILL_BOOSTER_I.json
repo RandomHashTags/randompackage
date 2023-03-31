@@ -1,0 +1,20 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Skill Booster I"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Successfully use 1 mcMMO Booster"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    "ActivateBooster;booster=FACTION_MCMMO;PlayerIncreasePQuest=SKILL_BOOSTER_I:1",
+    "ActivateBooster;booster=FACTION_XP;PlayerIncreasePQuest=SKILL_BOOSTER_I:1"
+  ]
+}

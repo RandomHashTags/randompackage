@@ -113,7 +113,7 @@ public enum MobStacker implements RPFeatureSpigot {
                 loaded += 1;
             }
         }
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " stacked mobs &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + loaded + " stacked mobs &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

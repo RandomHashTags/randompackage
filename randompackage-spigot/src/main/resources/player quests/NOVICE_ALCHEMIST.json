@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Novice Alchemist"
+    },
+    "completion": 25,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Make 25 trades with the Alchemist"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    "AlchemistExchange;PlayerIncreasePQuest=NOVICE_ALCHEMIST:1"
+  ]
+}

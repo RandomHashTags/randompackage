@@ -129,7 +129,7 @@ public enum Boosters implements RPFeatureSpigot, EventAttributeListener, EventEx
 					}
 				}
 			}
-			sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " and expired " + expired + " existing Boosters &e[async]");
+			sendConsoleMessage("&aLoaded " + loaded + " and expired " + expired + " existing Boosters &e[async]");
 		});
 	}
 	private void save() {

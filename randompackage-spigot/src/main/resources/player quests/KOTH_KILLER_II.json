@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "KOTH Killer II"
+    },
+    "completion": 5,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Kill 5 players in KOTH arena"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "EntityDeath;VictimIsPlayer=true;VictimWorld=koth;KillerIncreasePQuest=KOTH_KILLER_II:1"
+  ]
+}

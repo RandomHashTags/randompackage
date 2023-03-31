@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Master Miner"
+    },
+    "completion": 20000,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Mine 20,000 blocks with a pickaxe"
+  ],
+  "rewards": [
+    "questtokens=3: 3x Quest Tokens"
+  ],
+  "trigger": [
+    "BlockBreak;PlayerIsHolding=_PICKAXE;PlayerIncreasePQuest=MASTER_MINER:1"
+  ]
+}

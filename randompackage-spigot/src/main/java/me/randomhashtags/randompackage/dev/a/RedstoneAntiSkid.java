@@ -8,7 +8,7 @@ public enum RedstoneAntiSkid implements RPFeatureSpigot {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Redstone Anti Skid &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Redstone Anti Skid &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

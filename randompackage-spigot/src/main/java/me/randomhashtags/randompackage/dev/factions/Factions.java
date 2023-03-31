@@ -65,7 +65,7 @@ public enum Factions implements RPFeatureSpigot, CommandExecutor {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Factions &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Factions &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

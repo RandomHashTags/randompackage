@@ -94,7 +94,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 				}
 			}
 			if(loadedPlaced != 0) {
-				sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedPlaced + " existing placed tnt");
+				sendConsoleMessage("&aLoaded " + loadedPlaced + " existing placed tnt");
 			}
 		}
 		if(!primedtnt.isEmpty()) {
@@ -108,7 +108,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 				}
 			}
 			if(loadedPrimed != 0) {
-				sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedPrimed + " existing primed tnt");
+				sendConsoleMessage("&aLoaded " + loadedPrimed + " existing primed tnt");
 			}
 		}
 		if(!livingcreepers.isEmpty()) {
@@ -122,7 +122,7 @@ public enum CustomExplosions implements RPFeatureSpigot {
 				}
 			}
 			if(loadedLiving != 0) {
-				sendConsoleMessage("&6[RandomPackage] &aLoaded " + loadedLiving + " custom living creepers");
+				sendConsoleMessage("&aLoaded " + loadedLiving + " custom living creepers");
 			}
 		}
 	}

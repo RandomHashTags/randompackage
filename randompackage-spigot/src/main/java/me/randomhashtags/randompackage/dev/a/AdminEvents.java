@@ -11,7 +11,7 @@ public enum AdminEvents implements RPFeatureSpigot {
     @Override
     public void load() {
         final long started = System.currentTimeMillis();
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Admin Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Admin Events &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Definitely AFK"
+    },
+    "completion": 500000,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Earn a total of 500,000 EXP from grinding."
+  ],
+  "rewards": [
+    "questtokens=3: 3x Quest Tokens"
+  ],
+  "trigger": [
+    "EntityDeath;VictimIsMob=true;KillerIncreasePQuest=DEFINITELY_AFK:xp"
+  ]
+}

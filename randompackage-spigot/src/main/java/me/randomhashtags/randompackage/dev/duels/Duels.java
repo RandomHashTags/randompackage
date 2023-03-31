@@ -95,7 +95,7 @@ public enum Duels implements RPFeatureSpigot, CommandExecutor {
         godset = new UInventory(null, config.getInt("godset.size"), colorize(config.getString("godset.title")));
         activeDuels = new ArrayList<>();
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.DUEL_ARENA).size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + getAll(Feature.DUEL_ARENA).size() + " Duel Arenas &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

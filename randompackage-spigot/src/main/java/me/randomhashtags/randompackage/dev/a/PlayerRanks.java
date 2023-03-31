@@ -23,7 +23,7 @@ public enum PlayerRanks implements RPFeatureSpigot {
             saveOtherData();
         }
         int loaded = 0;
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + loaded + " Player Ranks &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + loaded + " Player Ranks &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

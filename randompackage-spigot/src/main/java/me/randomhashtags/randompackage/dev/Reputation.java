@@ -27,7 +27,7 @@ public enum Reputation implements RPFeatureSpigot {
         final long started = System.currentTimeMillis();
         save(null, "reputation.yml");
         config = YamlConfiguration.loadConfiguration(new File(DATA_FOLDER, "reputation.yml"));
-        sendConsoleMessage("&6[RandomPackage] &aLoaded Reputation &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded Reputation &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

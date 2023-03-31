@@ -334,7 +334,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("outposts", "HERO", "SERVONAUT", "TRAINEE", "VANILLA");
     }
     default void generateDefaultPlayerQuests() {
-        generateAllDefault("player quests",
+        generate_all_default_json("player quests",
                 "A_LITTLE_GRIND", "A_MEDIUM_GRIND", "A_BIG_GRIND",
                 "BEGINNERS_LUCK",
                 "BIGGER_SPENDER", "BIGGEST_SPENDER",

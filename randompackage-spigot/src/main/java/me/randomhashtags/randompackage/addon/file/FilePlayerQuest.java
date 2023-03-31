@@ -1,26 +1,59 @@
 package me.randomhashtags.randompackage.addon.file;
 
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.addon.PlayerQuest;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
 
 public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest {
+
+    private final boolean is_enabled;
+    private final MultilingualString name;
+    private final long expiration;
+    private final String completion;
+    private final List<String> lore, rewards, trigger;
+
     public FilePlayerQuest(File f) {
         super(f);
-        if(isEnabled()) {
+        final JSONObject json = parse_json_from_file(f);
+        final JSONObject settings_json = json.getJSONObject("settings");
+        is_enabled = parse_boolean_in_json(settings_json, "enabled");
+        if(is_enabled) {
+            name = parse_multilingual_string_in_json(settings_json, "name");
+            expiration = parse_long_in_json(settings_json, "expiration");
+            completion = parse_string_in_json(settings_json, "completion");
+            lore = parse_list_string_in_json(json, "lore");
+            rewards = parse_list_string_in_json(json, "rewards");
+            trigger = parse_list_string_in_json(json, "trigger");
             register(Feature.PLAYER_QUEST, this);
+        } else {
+            name = null;
+            expiration = 0;
+            completion = null;
+            lore = null;
+            rewards = null;
+            trigger = null;
         }
     }
-    public boolean isEnabled() { return yml.getBoolean("settings.enabled"); }
-    public @NotNull String getName() { return colorize(yml.getString("settings.name")); }
-    public long getExpiration() { return yml.getLong("settings.expiration"); }
-    public String getCompletion() { return yml.getString("settings.completion"); }
+    public boolean isEnabled() {
+        return is_enabled;
+    }
+    public @NotNull MultilingualString getName() {
+        return name;
+    }
+    public long getExpiration() {
+        return expiration;
+    }
+    public @NotNull String getCompletion() {
+        return completion;
+    }
     public boolean isTimeBased() {
-        final String c = getCompletion().toLowerCase();
-        return c.contains("d") || c.contains("h") || c.contains("m") || c.contains("s");
+        final String completion_lowercase = getCompletion().toLowerCase();
+        return completion_lowercase.contains("d") || completion_lowercase.contains("h") || completion_lowercase.contains("m") || completion_lowercase.contains("s");
     }
     public double getTimedCompletion() {
         String s = getCompletion().toLowerCase().replaceAll("\\p{Z}", "").replaceAll("\\p{S}", "").replaceAll("\\p{Nl}", "").replaceAll("\\p{No}", "").replaceAll("\\p{M}", "");
@@ -43,7 +76,13 @@ public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest 
         }
         return c;
     }
-    public List<String> getLore() { return colorizeListString(yml.getStringList("lore")); }
-    public @NotNull List<String> getRewards() { return yml.getStringList("rewards"); }
-    public List<String> getTrigger() { return yml.getStringList("trigger"); }
+    public @NotNull List<String> getLore() {
+        return lore;
+    }
+    public @NotNull List<String> getRewards() {
+        return rewards;
+    }
+    public @NotNull List<String> getTrigger() {
+        return trigger;
+    }
 }

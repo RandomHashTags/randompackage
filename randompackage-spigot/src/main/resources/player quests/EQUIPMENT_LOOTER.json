@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Equipment Looter"
+    },
+    "completion": 1,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Open an Equipment Lootbox"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "EquipmentLootboxOpen;PlayerIncreasePQuest=EQUIPMENT_LOOTER:1"
+  ]
+}

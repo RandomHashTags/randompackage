@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Novice Tinkerer"
+    },
+    "completion": 50,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Tinker 50 items"
+  ],
+  "rewards": [
+    "questtokens=1: 1x Quest Token"
+  ],
+  "trigger": [
+    "TinkererTrade;PlayerIncreasePQuest=NOVICE_TINKERER:tradesize"
+  ]
+}

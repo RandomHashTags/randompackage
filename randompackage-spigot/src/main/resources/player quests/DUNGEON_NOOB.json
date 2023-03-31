@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": false,
+    "name": {
+      "en": "Dungeon Noob"
+    },
+    "completion": 3,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Die in a dungeon 3 times"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    ""
+  ]
+}

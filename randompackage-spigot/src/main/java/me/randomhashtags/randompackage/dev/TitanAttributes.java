@@ -44,7 +44,7 @@ public enum TitanAttributes implements RPFeatureSpigot, CommandExecutor {
             }
         }
 
-        sendConsoleMessage("&6[RandomPackage] &aLoaded " + getAll(Feature.TITAN_ATTRIBUTE).size() + " Titan Attributes &e(took " + (System.currentTimeMillis()-started) + "ms)");
+        sendConsoleMessage("&aLoaded " + getAll(Feature.TITAN_ATTRIBUTE).size() + " Titan Attributes &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

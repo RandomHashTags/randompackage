@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "A Medium Grind"
+    },
+    "completion": 5000,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Kill 5,000 Blazes"
+  ],
+  "rewards": [
+    "questtokens=2: 2x Quest Tokens"
+  ],
+  "trigger": [
+    "EntityDeath;VictimIsType=BLAZE;KillerIncreasePQuest=A_MEDIUM_GRIND:1"
+  ]
+}

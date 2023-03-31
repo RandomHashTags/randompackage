@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": false,
+    "name": {
+      "en": "Last Master Standing"
+    },
+    "completion": "1h",
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Hold LMS for 1h in a row"
+  ],
+  "rewards": [
+    "questtokens=3: 3x Quest Tokens"
+  ],
+  "trigger": [
+    ""
+  ]
+}

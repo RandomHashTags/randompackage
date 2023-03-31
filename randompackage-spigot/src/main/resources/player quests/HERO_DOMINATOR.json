@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "name": {
+      "en": "Hero Dominator"
+    },
+    "completion": 5,
+    "expiration": 86400
+  },
+  "lore": [
+    "&7Kill 5 Fallen Heroes"
+  ],
+  "rewards": [
+    "questtokens=3: 3x Quest Tokens"
+  ],
+  "trigger": [
+    "FallenHeroSlain;KillerIncreasePQuest=HERO_DOMINATOR:1"
+  ]
+}

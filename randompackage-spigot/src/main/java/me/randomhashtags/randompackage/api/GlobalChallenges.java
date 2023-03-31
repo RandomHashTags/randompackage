@@ -197,7 +197,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 						}
 					}
 				}
-				sendConsoleMessage("&6[RandomPackage] &aStarted " + loaded + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
+				sendConsoleMessage("&aStarted " + loaded + " pre-existing global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 			}
 			if(maxAtOnce > 0) {
 				final long started = System.currentTimeMillis();
@@ -209,7 +209,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 						i-=1;
 					}
 				}
-				sendConsoleMessage("&6[RandomPackage] &aStarted " + maxAtOnce + " new global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
+				sendConsoleMessage("&aStarted " + maxAtOnce + " new global challenges &e(took " + (System.currentTimeMillis()-started) + "ms)");
 			}
 		}
 		reloadInventory();

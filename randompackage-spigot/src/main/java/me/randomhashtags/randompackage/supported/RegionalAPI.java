@@ -72,7 +72,7 @@ public enum RegionalAPI implements UVersionableSpigot {
         }
     }
     private void hooked(String plugin) {
-        sendConsoleMessage("&6[RandomPackage] &aHooked Regional Plugin: " + plugin);
+        sendConsoleMessage("&aHooked Regional Plugin: " + plugin);
     }
     public boolean hookedFactionsUUID() {
         return FACTIONS_UUID;
