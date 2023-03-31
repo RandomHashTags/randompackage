@@ -26,7 +26,7 @@ public final class FileServerCrateFlareObj implements UVersionableSpigot, Server
 	}
 
 	@Override
-	public String getIdentifier() {
+	public @NotNull String getIdentifier() {
 		return crate.getYamlName();
 	}
 

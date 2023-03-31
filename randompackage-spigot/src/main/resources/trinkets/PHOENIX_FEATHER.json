@@ -1,0 +1,26 @@
+{
+  "settings": {
+    "enabled": true,
+    "passive": true
+  },
+  "item": {
+    "item": "feather",
+    "name": "&c&lPhoenix Feather&r &7(1 use)",
+    "lore": [
+      "&7An extremely rare consumable",
+      "&7that contains the power of &c&lPhoenix III.",
+      " ",
+      "&7An attack that would normally kill you",
+      "&7will heal you to full HP instead, and this",
+      "&7item will be automatically destroyed as a result.",
+      " ",
+      "&7This trinket will only attempt to activate",
+      "&7if your Phoenix is on cooldown, or if you",
+      "&7do not have the Phoenix enchantment equipped."
+    ]
+  },
+  "attributes": [
+    "isDamaged;VictimDoesDieFromDamage=true;VictimHasCustomEnchantEquipped=PHOENIX:false;SetDamage=0;VictimSetHealth=getVictimMaxHP;VictimRemoveItem=trinket:PHOENIX_FEATHER",
+    "isDamaged;VictimDoesDieFromDamage=true;VictimHasCustomEnchantEquipped=PHOENIX:true;SetDamage=0;VictimSetHealth=getVictimMaxHP;VictimRemoveItem=trinket:PHOENIX_FEATHER"
+  ]
+}

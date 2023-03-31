@@ -17,7 +17,7 @@ public final class PathCustomItem implements CustomItem {
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return path;
     }
 

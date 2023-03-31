@@ -407,6 +407,6 @@ public interface DefaultFileGeneration {
         generateAllDefault("titan attributes", "ATLAS", "KRONOS", "OURANOS");
     }
     default void generateDefaultTrinkets() {
-        generateAllDefault("trinkets", "ANTI_PROJECTILE_FORCEFIELD", "BATTLESTAFF_OF_YIJKI", "EMP_PULSE", "FACTION_BANNER", "PHOENIX_FEATHER", "SOUL_ANVIL", "SOUL_PEARL", "SPEED");
+        generate_all_default_json("trinkets", "ANTI_PROJECTILE_FORCEFIELD", "BATTLESTAFF_OF_YIJKI", "EMP_PULSE", "FACTION_BANNER", "PHOENIX_FEATHER", "SOUL_ANVIL", "SOUL_PEARL", "SPEED");
     }
 }

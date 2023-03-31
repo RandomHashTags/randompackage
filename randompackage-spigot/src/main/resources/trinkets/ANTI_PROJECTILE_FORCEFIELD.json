@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "enabled": false,
+    "cooldown": 40
+  },
+  "item": {
+    "item": "",
+    "name": "&3&lAnti Projectile Forcefield&r &7(Right Click)",
+    "lore": [
+      "&7Generates a protective forcefield around",
+      "&7the player, negating incoming &nPROJECTILE",
+      "&7damage by &3-50% for 15 seconds.",
+      " ",
+      "&3&nSoul Cost:&r &b100 souls",
+      "&3&nCooldown:&r &b40s"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerAddToList=TRINKET_ANTI_PROJECTILE_FORCEFIELD;Wait=20*15;PlayerRemoveFromList=TRINKET_ANTI_PROJECTILE_FORCEFIELD"
+  ]
+}

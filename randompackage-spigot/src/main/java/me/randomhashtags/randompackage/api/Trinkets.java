@@ -82,8 +82,7 @@ public enum Trinkets implements EventAttributes, RPItemStack {
             if(is != null) {
                 final HashMap<Trinket, String> trinkets = get_applied_trinkets(is);
                 for(Trinket trinket : trinkets.keySet()) {
-                    final String s = trinket.getSetting("passive");
-                    if(s != null && s.equalsIgnoreCase("true") && trigger(event, trinket.getAttributes())) {
+                    if(trinket.isPassive() && trigger(event, trinket.getAttributes())) {
                         trinket.didUse(is, trinket.getIdentifier());
                     }
                 }

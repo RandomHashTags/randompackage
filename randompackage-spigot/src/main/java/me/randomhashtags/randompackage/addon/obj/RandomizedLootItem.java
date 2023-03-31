@@ -18,7 +18,7 @@ public final class RandomizedLootItem implements RandomizedLoot, UVersionableSpi
         this.rewardSize = rewardSize;
         this.rewards = rewards;
     }
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return key;
     }
     public @NotNull ItemStack getItem() {

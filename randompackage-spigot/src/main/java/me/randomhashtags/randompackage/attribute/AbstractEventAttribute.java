@@ -15,7 +15,7 @@ public abstract class AbstractEventAttribute implements EventAttribute, EventRep
     private boolean cancelled;
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         final String[] className = getClass().getName().split("\\.");
         return className[className.length-1].toUpperCase();
     }

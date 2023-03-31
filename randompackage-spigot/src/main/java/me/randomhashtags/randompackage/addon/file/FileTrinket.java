@@ -4,42 +4,58 @@ import me.randomhashtags.randompackage.addon.Trinket;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
 public final class FileTrinket extends RPAddonSpigot implements Trinket {
-    private ItemStack item;
-    private HashMap<String, String> settings;
+    private final boolean is_enabled, passive;
+    private final long cooldown;
+    private final ItemStack item;
+    private final List<String> attributes;
 
     public FileTrinket(File f) {
         super(f);
-        if(isEnabled()) {
+        final JSONObject json = parse_json_from_file(f);
+        final JSONObject settings_json = json.getJSONObject("settings");
+        is_enabled = parse_boolean_in_json(settings_json, "enabled");
+        if(is_enabled) {
+            passive = parse_boolean_in_json(settings_json, "passive");
+            cooldown = parse_long_in_json(settings_json, "cooldown");
+            item = create_item_stack(json, "item");
+            attributes = parse_list_string_in_json(json, "attributes");
             register(Feature.TRINKET, this);
+        } else {
+            passive = false;
+            cooldown = 0;
+            item = null;
+            attributes = null;
         }
     }
-    @NotNull
+
     @Override
-    public String getIdentifier() {
-        return getYamlName();
+    public boolean isEnabled() {
+        return is_enabled;
     }
 
-    public boolean isEnabled() { return Boolean.parseBoolean(getSetting("enabled", "false")); }
+    @Override
+    public boolean isPassive() {
+        return passive;
+    }
+
+    @Override
+    public long getCooldown() {
+        return cooldown;
+    }
+
     @NotNull
     @Override
     public ItemStack getItem() {
-        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
-    public HashMap<String, String> getSettings() {
-        if(settings == null) {
-            settings = new HashMap<>();
-            for(String s : yml.getConfigurationSection("settings").getKeys(false)) {
-                settings.put(s, yml.getString("settings." + s));
-            }
-        }
-        return settings;
+    public @NotNull List<String> getAttributes() {
+        return attributes;
     }
-    public @NotNull List<String> getAttributes() { return yml.getStringList("attributes"); }
 }

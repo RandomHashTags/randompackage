@@ -6,6 +6,7 @@ import me.randomhashtags.randompackage.addon.util.Toggleable;
 import me.randomhashtags.randompackage.util.RPItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
@@ -14,6 +15,7 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
     default String[] getGivedpItemIdentifiers() {
         return new String[] { "trinket" };
     }
+    @Nullable
     default ItemStack valueOfInput(@NotNull String originalInput, @NotNull String lowercaseInput) {
         Trinket trinket = getTrinket(originalInput.contains(":") ? originalInput.split(":")[1] : "random");
         if(trinket == null) {
@@ -21,18 +23,10 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
         return trinket != null ? trinket.getItem() : null;
     }
 
-    HashMap<String, String> getSettings();
-    default String getSetting(String identifier) {
-        return getSetting(identifier, "");
-    }
-    default String getSetting(String identifier, String def) {
-        return getSettings().getOrDefault(identifier, def);
-    }
-    default long getCooldown() {
-        final String s = getSetting("cooldown");
-        return !s.isEmpty() ? Long.parseLong(s)*1000 : 0;
-    }
+    boolean isPassive();
+    long getCooldown();
 
+    @NotNull
     default ItemStack getItem(long cooldownExpiration) {
         final ItemStack i = getItem();
         setItem(i, getIdentifier(), cooldownExpiration);
@@ -44,6 +38,6 @@ public interface Trinket extends Itemable, Attributable, Toggleable, RPItemStack
         }});
     }
     default void didUse(ItemStack is, String identifier) {
-        setItem(is, identifier, System.currentTimeMillis()+getCooldown());
+        setItem(is, identifier, System.currentTimeMillis() + (getCooldown()*1000));
     }
 }
