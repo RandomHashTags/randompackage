@@ -1,0 +1,94 @@
+{
+  "category": 2016,
+  "category slot": 15,
+  "title": "Server Crate: HOLIDAY_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&a&l*&4&l*&a&l*&r &4&lSERVER CRATE:&r &a&l&nHOLIDAY 2016&r &a&l*&4&l*&a&l*",
+    "lore": [
+      "&aUnlocked by &l{UNLOCKED_BY}&r &aat &4&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fHoliday Spirit",
+      "&f&l*&r &fExplosive Snowballs",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eJolly Titles",
+      "&e&l*&r &e3x Item Nametags",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &62-3x 75-100% Armor Enchantment Orbs",
+      "&6&l*&r &61-2x 75-100% Weapon Enchantment Orbs",
+      "&6&l*&r &63x Heroic Fallen Hero",
+      "&6&l*&r &6Phoenix Evolution Kit",
+      "&6&l*&r &6Rank Quest",
+      " ",
+      "&4&l&nBONUS ITEMS",
+      "&4&l*&r &4Heroic Rank Crystal",
+      "&4&l*&r &4High-Tier Rank Quest",
+      "&4&l*&r &4Godly Space Flare"
+    ]
+  },
+  "rewards": [
+    "Holiday Spirit",
+    "explosivesnowball;amount=10",
+    "itemnametag;amount=3",
+    "title:47||title:150",
+    "enchantmentorb:armor:random:75-100;amount=2-3",
+    "enchantmentorb:weapon:random:75-100;amount=1-2",
+    "fallenhero:GKIT;amount=3",
+    "fallenherogem:VKIT_PHOENIX",
+    "paper"
+  ],
+  "bonus": [
+    "spaceflare:GODLY"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "lime_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "red_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

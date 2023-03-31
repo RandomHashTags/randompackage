@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -21,13 +22,17 @@ public enum TitanAttributes implements RPFeatureSpigot, CommandExecutor {
     private ItemStack extractor;
 
     @Override
+    public @NotNull Feature get_feature() {
+        return Feature.TITAN_ATTRIBUTE;
+    }
+
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         return true;
     }
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         final String folder = DATA_FOLDER + SEPARATOR + "titan attributes";
         save("titan attributes", "_settings.yml");
         config = YamlConfiguration.loadConfiguration(new File(folder, "_settings.yml"));
@@ -44,8 +49,6 @@ public enum TitanAttributes implements RPFeatureSpigot, CommandExecutor {
                 //new FileTitanAttribute(f);
             }
         }
-
-        sendConsoleMessage("&aLoaded " + getAll(Feature.TITAN_ATTRIBUTE).size() + " Titan Attributes &e(took " + (System.currentTimeMillis()-started) + "ms)");
     }
     @Override
     public void unload() {

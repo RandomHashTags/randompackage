@@ -1,0 +1,95 @@
+{
+  "category": 2016,
+  "category slot": 6,
+  "title": "Server Crate: JULY_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&c&l*&f&l*&9&l*&r &c&lSERVER CRATE:&r &f&l&nJULY &r&9&l&n2016&r &c&l*&f&l*&9&l*",
+    "lore": [
+      "&fUnlocked by &l{UNLOCKED_BY}&r &fat &9&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fIndependence Flag",
+      "&f&l*&r &fDeclaration of Freedom",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eTransmog Scroll",
+      "&e&l*&r &eExclusive Freedom Titles",
+      "&e&l*&r &eSpace Fireworks",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &6Fallen Hero #1",
+      "&6&l*&r &6Fallen Hero #2",
+      "&6&l*&r &6Heroic Fallen Hero",
+      "&6&l*&r &6Legendary Space Flare",
+      " ",
+      "&9&l&nBONUS ITEMS",
+      "&9&l*&r &9Legendary Boss Egg",
+      "&9&l*&r &9Rank Quest",
+      "&9&l*&r &9Server Envoy Summon"
+    ]
+  },
+  "rewards": [
+    "Independence Flag",
+    "Declaration of Freedom",
+    "transmogscroll",
+    "title:110",
+    "spacefirework;amount=8",
+    "fallenhero:GKIT_SPOOKY",
+    "fallenhero:GKIT_HYPERDRIVE",
+    "fallenhero:GKIT",
+    "spaceflare:LEGENDARY"
+  ],
+  "bonus": [
+    "customboss:BROOD_MOTHER",
+    "envoysummon"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

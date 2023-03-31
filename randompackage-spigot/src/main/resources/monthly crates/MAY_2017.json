@@ -1,0 +1,96 @@
+{
+  "category": 2017,
+  "category slot": 4,
+  "title": "Server Crate: MAY_2017",
+  "item": {
+    "item": "ender_chest",
+    "name": "&2&l*&a&l*&2&l*&r &2&lSERVER CRATE:&r &a&l&nMAY 2017&r &2&l*&a&l*&2&l*",
+    "lore": [
+      "&aUnlocked by &l{UNLOCKED_BY}&r &aat &2&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fSpring... is coming.",
+      "&f&l*&r &fVitamin D",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &e2-4x Transmog Scrolls",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &62x Random Weapon/Armor Orb",
+      "&6&l*&r &61-2x /vkit Fallen Hero",
+      "&6&l*&r &61-2x /gkit Fallen Hero",
+      "&6&l*&r &62-3x Randomization Scrolls",
+      "&6&l*&r &65-15x Faction Crystals",
+      " ",
+      "&2&l&nBONUS ITEMS",
+      "&2&l*&r &2Godly Space Flare",
+      "&2&l*&r &2Random /gkit Crystal",
+      "&2&l*&r &250-100x Faction Crystals"
+    ]
+  },
+  "rewards": [
+    "Spring is coming",
+    "Vitamin D",
+    "title:145||title:191",
+    "transmogscroll;amount=2-4",
+    "enchantmentorb:armor:random:50-75;amount=2||enchantmentorb:weapon:random:50-75;amount=2",
+    "fallenhero:VKIT;amount=1-2",
+    "fallenhero:GKIT;amount=1-2",
+    "randomizationscroll;amount=2-3",
+    "factioncrystal;amount=5-15"
+  ],
+  "bonus": [
+    "spaceflare:GODLY",
+    "fallenherogem:GKIT",
+    "factioncrystal;amount=50-100"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "lime_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "green_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

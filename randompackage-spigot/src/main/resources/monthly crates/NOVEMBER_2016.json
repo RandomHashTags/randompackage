@@ -1,0 +1,100 @@
+{
+  "category": 2016,
+  "category slot": 10,
+  "title": "Server Crate: NOVEMBER_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&5&l*&d&l*&5&l*&r &d&lSERVER CRATE: &5&l&nNOVEMBER 2016&r &5&l*&d&l*&5&l*",
+    "lore": [
+      "&5Unlocked by &l{UNLOCKED_BY}&r &5at &d&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fThanksgiving Horn",
+      "&f&l*&r &fPilgram Hat",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eThanksgiving Titles",
+      "&e&l*&r &e2-3x Transmog Scrolls",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &62.0x11m Faction XP/mcMMO Booster",
+      "&6&l*&r &62x Heroic Fallen Hero",
+      "&6&l*&r &6Legendary Space Flare",
+      "&6&l*&r &699% Black Scroll (3x)",
+      "&6&l*&r &615X High-Tier Secret Dust",
+      " ",
+      "&5&l&nBONUS ITEMS",
+      "&5&l*&r &58.0x30m Faction XP Booster",
+      "&5&l*&r &5Godly Space Flare",
+      "&5&l*&r &5Legendary Boss Egg",
+      "&5&l*&r &5Rank Quest"
+    ]
+  },
+  "rewards": [
+    "Thanksgiving Horn",
+    "Pilgram Hat",
+    "title:153||title:164",
+    "transmogscroll;amount=2-3",
+    "factionxpbooster:4.0:660",
+    "factionmcmmobooster:4.0:660",
+    "fallenhero:GKIT_TRICKSTER;amount=2",
+    "fallenhero:GKIT_TEMPLAR;amount=2",
+    "spaceflare:LEGENDARY",
+    "blackscroll:REGULAR:99;amount=3",
+    "rarityfireball:ULTIMATE;amount=15",
+    "rarityfireball:LEGENDARY;amount=15"
+  ],
+  "bonus": [
+    "factionxpbooster:8.0:1800",
+    "spaceflare:GODLY",
+    "customboss:BROOD_MOTHER"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

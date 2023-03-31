@@ -1,0 +1,95 @@
+{
+  "category": 2017,
+  "category slot": 12,
+  "title": "Server Crate: VALENTINES_2017",
+  "item": {
+    "item": "ender_chest",
+    "name": "&c&l*&4&l*&c&l*&r &4&lSERVER CRATE:&r &c&l&nVALENTINE 2017&r &c&l*&4&l*&c&l*",
+    "lore": [
+      "&4Unlocked by &l{UNLOCKED_BY}&r &4at &c&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fForever Alone Card",
+      "&f&l*&r &fBox of Memes",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &e1-3x Item Nametags",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &6Troll Evolution Kit",
+      "&6&l*&r &62x Fallen Hero",
+      "&6&l*&r &61-4x White Scroll",
+      "&6&l*&r &62-4x Mystery Soul Dust",
+      "&6&l*&r &61-2x 90-100% Weapon/Armor Enchantment Orbs",
+      " ",
+      "&4&l&nBONUS ITEMS",
+      "&4&l*&r &4Godly Space Flare",
+      "&4&l*&r &4Rank Quest",
+      "&4&l*&r &4Heroic Rank Crystal"
+    ]
+  },
+  "rewards": [
+    "Forever Alone Card",
+    "Box of Memes",
+    "title:40||title:44",
+    "itemnametag;amount=1-3",
+    "fallenherogem:VKIT_TROLL",
+    "fallenhero:GKIT_VIKING;amount=2",
+    "fallenhero:GKIT_BUTCHER;amount=2",
+    "whitescroll;amount=1-4",
+    "rarityfireball:SOUL;amount=2-4",
+    "enchantmentorb:armor:90-100;amount=1-2||enchantmentorb:weapon:90-100;amount=1-2"
+  ],
+  "bonus": [
+    "spaceflare:GODLY"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

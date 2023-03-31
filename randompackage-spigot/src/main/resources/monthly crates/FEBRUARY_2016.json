@@ -1,0 +1,97 @@
+{
+  "category": 2016,
+  "category slot": 1,
+  "title": "Server Crate: FEBRUARY_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&4&l*&c&l*&4&l*&r &c&lSERVER CRATE:&r &4&l&nFEBRUARY 2016&r &4&l*&c&l*&4&l*",
+    "lore": [
+      "&cUnlocked by &l{UNLOCKED_BY}&r &cat &4&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fValentine's Day Card",
+      "&f&l*&r &fBox of Chocolates",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eSpace Drinks",
+      "&e&l*&r &eLovely Item Nametag",
+      "&e&l*&r &eLimited Edition Titles",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &6Mystery Mob Spawner",
+      "&6&l*&r &6EXP Bottles",
+      "&6&l*&r &6mcMMO Voucher",
+      "&6&l*&r &6Bank Note",
+      " ",
+      "&4&l&nBONUS ITEMS",
+      "&4&l*&r &4Nether Spawner",
+      "&4&l*&r &4Explosive Snowballs",
+      "&4&l*&r &4Limited Edition Kits"
+    ]
+  },
+  "rewards": [
+    "Valentines Day Card",
+    "Box of Chocolates",
+    "spacedrink;amount=44",
+    "itemnametag",
+    "title:37",
+    "mysterymobspawner",
+    "xpbottle:37039",
+    "mcmmocreditvoucher:20-100",
+    "banknote:226316"
+  ],
+  "bonus": [
+    "blazespawner",
+    "ghastspawner",
+    "explosivesnowball",
+    "fallenherogem:GKIT_SPOOKY"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

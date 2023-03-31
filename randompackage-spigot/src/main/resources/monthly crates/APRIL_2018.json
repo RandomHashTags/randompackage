@@ -1,0 +1,96 @@
+{
+  "category": 2018,
+  "category slot": 3,
+  "title": "Server Crate: APRIL_2018",
+  "item": {
+    "item": "ender_chest",
+    "name": "&d&l*&e&l*&d&l*&r &e&lSERVER CRATE:&r &d&l&nAPRIL 2018&r &d&l*&a&l*&d&l*",
+    "lore": [
+      "&dUnlocked by &l{UNLOCKED_BY}&r &2at &a&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fChocolate Bunny",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &eMushroom Cow &l&nOR&r &ePig Zombie Disguise",
+      "&e&l*&r &e2-3 Legendary+ Randomization Scrolls",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &61-2 100% Armor/Weapon Enchantment Orb (&l12 Slot&r&6)",
+      "&6&l*&r &62-3x /gkit &l&nOR&r &6/vkit Fallen Hero",
+      "&6&l*&r &6Random Heroic Enchantment Book",
+      "&6&l*&r &6Mystery Server Crate",
+      "&6&l*&r &6Rank Quest",
+      " ",
+      "&a&l&nBONUS ITEMS",
+      "&a&l*&r &aApril 2016 &l&nOR&r &a2017 Server Crate",
+      "&a&l*&r &aAbandoned Spaceship Dungeons Lootbag",
+      "&a&l*&r &aJudgement /vkit Gem"
+    ]
+  },
+  "rewards": [
+    "bread",
+    "title",
+    "bone",
+    "randomizationscroll:GODLY;amount=1-3||randomizationscroll:SOUL;amount=1-3||randomizationscroll:LEGENDARY;amount=1-3",
+    "enchantmentorb:armor12:100;amount=1-2||enchantmentorb:weapon12:100;amount=1-2",
+    "fallenhero:GKIT;amount=2-3||fallenhero:VKIT;amount=2-3",
+    "raritybook:HEROIC",
+    "mysterycrate",
+    "paper"
+  ],
+  "bonus": [
+    "monthlycrate:APRIL_2016||monthlycrate:APRIL_2017",
+    "dungeonlootbag",
+    "fallenherogem:VKIT_JUDGEMENT"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "lime_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "green_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

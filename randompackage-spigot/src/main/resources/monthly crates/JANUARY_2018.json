@@ -1,0 +1,96 @@
+{
+  "category": 2018,
+  "category slot": 0,
+  "title": "Server Crate: JANUARY_2018",
+  "item": {
+    "item": "ender_chest",
+    "name": "&3&l*&b&l*&3&l*&r &b&lSERVER CRATE:&r &3&l&nJANUARY 2018&r &3&l*&b&l*&3&l*",
+    "lore": [
+      "&bUnlocked by &l{UNLOCKED_BY}&r &bat &3&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fOld Christmas Cookies",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &e2-5x Transmog Scrolls",
+      "&e&l*&r &e2-5x Lore Crystals",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &6Random Heroic Enchantment Book",
+      "&6&l*&r &6Random Phantom &nOR&r &6Yeti Armor Set Piece",
+      "&6&l*&r &61-2x 75-100% Weapon/Armor Orb (&l12 slot&r&6)",
+      "&6&l*&r &62-3x Legendary &nOR&r &6Godly Space Chests",
+      "&6&l*&r &6January 2016 &nOR&r &62017 Server Crate",
+      " ",
+      "&b&l&nBONUS ITEMS",
+      "&b&l*&r &bHoliday 2017 Server Crate",
+      "&b&l*&r &bHeroic Fallen Hero Bundle",
+      "&b&l*&r &bAbandoned Spaceship Dungeons Lootbag"
+    ]
+  },
+  "rewards": [
+    "Old Christmas Cookies",
+    "title:199||title:200",
+    "transmogscroll;amount=2-5",
+    "itemlorecrystal;amount=2-5",
+    "raritybook:HEROIC",
+    "customarmor:PHANTOM||customarmor:YETI",
+    "enchantmentorb:armor12:75-90;amount=1-2||enchantmentorb:armor12:75-90;amount=1-2",
+    "spacechest:GODLY;amount=2-3||spacechest:LEGENDARY;amount=2-3",
+    "monthlycrate:JANUARY_2016||monthlycrate:JANUARY_2017"
+  ],
+  "bonus": [
+    "monthlycrate:HOLIDAY_2017",
+    "gkitfallenherobundle",
+    "dungeonlootbag:ABANDONED_SPACESHIP"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "cyan_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

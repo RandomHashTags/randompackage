@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,62 +16,78 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrate {
-    private ItemStack item, background, redeem, bonus1, bonus2;
+    private final int category, category_slot;
+    private final String gui_title;
+    private final ItemStack item, background, redeem, bonus1, bonus2;
+    private final List<String> rewards, rewards_bonus;
     private UInventory regular, bonus;
+    private final int inventory_size;
+    private final List<String> redeem_format, redeem_bonus_format;
     private List<Integer> rewardSlots, bonusRewardSlots;
 
     public FileMonthlyCrate(File f) {
         super(f);
+        final JSONObject json = parse_json_from_file(f);
+        category = parse_int_in_json(json, "category");
+        category_slot = parse_int_in_json(json, "category slot");
+        gui_title = parse_string_in_json(json, "title");
+        item = create_item_stack(json, "item");
+        rewards = parse_list_string_in_json(json, "rewards");
+        rewards_bonus = parse_list_string_in_json(json, "bonus");
+
+        final JSONObject inventory_json = json.getJSONObject("inventory");
+        inventory_size = parse_int_in_json(inventory_json, "size");
+        redeem_format = parse_list_string_in_json(inventory_json, "redeem format");
+        redeem_bonus_format = parse_list_string_in_json(inventory_json, "redeem bonus format");
+        background = create_item_stack(inventory_json, "background");
+        redeem = create_item_stack(inventory_json, "redeem");
+        bonus1 = create_item_stack(inventory_json, "bonus 1");
+        bonus2 = create_item_stack(inventory_json, "bonus 2");
         register(Feature.MONTHLY_CRATE, this);
     }
 
     public int getCategory() {
-        return yml.getInt("category");
+        return category;
     }
     public int getCategorySlot() {
-        return yml.getInt("category slot");
+        return category_slot;
     }
     public @NotNull String getGuiTitle() {
-        return getString(yml, "title");
+        return gui_title;
     }
     @NotNull
     @Override
     public ItemStack getItem() {
-        if(item == null) item = createItemStack(yml, "item");
         return getClone(item);
     }
     public @NotNull List<String> getRewards() {
-        return getStringList(yml, "rewards");
+        return rewards;
     }
     public @NotNull List<String> getBonusRewards() {
-        return getStringList(yml, "bonus");
+        return rewards_bonus;
     }
     public List<String> getRedeemFormat() {
-        return getStringList(yml, "inventory.redeem format");
+        return redeem_format;
     }
     public List<String> getBonusFormat() {
-        return getStringList(yml, "inventory.bonus format");
+        return redeem_bonus_format;
     }
     public ItemStack getBackground() {
-        if(background == null) background = createItemStack(yml, "inventory.background");
         return getClone(background);
     }
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = createItemStack(yml, "inventory.redeem");
         return getClone(redeem);
     }
     public ItemStack getBonus1() {
-        if(bonus1 == null) bonus1 = createItemStack(yml, "inventory.bonus 1");
         return getClone(bonus1);
     }
     public ItemStack getBonus2() {
-        if(bonus2 == null) bonus2 = createItemStack(yml, "inventory.bonus 2");
         return getClone(bonus2);
     }
     public UInventory getRegular() {
         if(regular == null) {
             final ItemStack air = new ItemStack(Material.AIR);
-            regular = new UInventory(null, yml.getInt("inventory.size"), getGuiTitle());
+            regular = new UInventory(null, inventory_size, getGuiTitle());
             final Inventory ri = regular.getInventory();
             final List<String> f = getRedeemFormat();
             for(int i = 0; i < f.size(); i++) {
@@ -87,7 +104,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     public UInventory getBonus() {
         if(bonus == null) {
             final ItemStack air = new ItemStack(Material.AIR);
-            bonus = new UInventory(null, yml.getInt("inventory.size"), getGuiTitle());
+            bonus = new UInventory(null, inventory_size, getGuiTitle());
             final Inventory bi = bonus.getInventory();
             final List<String> f = getBonusFormat();
             for(int i = 0; i < f.size(); i++) {

@@ -1,0 +1,96 @@
+{
+  "category": 2016,
+  "category slot": 14,
+  "title": "Server Crate: BLACK_FRIDAY_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&8&l*&f&l*&8&l*&r &f&lSERVER CRATE:&r &8&l&nBLACK FRIDAY 2016&r &8&l*&f&l*&8&l*",
+    "lore": [
+      "&8Unlocked by &l{UNLOCKED_BY}&r &7at &8&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fA Good Deal",
+      "&f&l*&r &fFake 100%-Off Coupon",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eCapitalism Titles",
+      "&e&l*&r &e3x Item Nametags",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &670-95% Enchantment Orb",
+      "&6&l*&r &69.99x5m Faction XP/mcMMO Booster",
+      "&6&l*&r &61-2x White Scroll",
+      "&6&l*&r &610X High-Tier Secret Dust",
+      "&6&l*&r &6Lower Tier Rank Quest",
+      " ",
+      "&8&l&nBONUS ITEMS",
+      "&8&l*&r &83x 100% Enchantment Orbs",
+      "&8&l*&r &8Legendary Boss Egg",
+      "&8&l*&r &8Godly Space Flare"
+    ]
+  },
+  "rewards": [
+    "A Good Deal",
+    "Fake 100% Off Coupon",
+    "title:123||title:149",
+    "itemnametag;amount=3",
+    "enchantmentorb:armor:70-95||enchantmentorb:weapon:70-95",
+    "factionxpbooster:9.99:300||factionmcmmobooster:9.99:300",
+    "whitescroll;amount=1-2",
+    "rarityfireball:ULTIMATE;amount=10",
+    "rarityfireball:LEGENDARY;amount=10"
+  ],
+  "bonus": [
+    "enchantmentorb:armor:100;amount=3||enchantmentorb:weapon:100;amount=3",
+    "customboss:BROOD_MOTHER",
+    "spaceflare:GODLY"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_gray_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "black_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "category": 2018,
+  "category slot": 8,
+  "title": "Server Crate: SEPTEMBER_2018",
+  "item": {
+    "item": "ender_chest",
+    "name": "&b&l*&1&l*&b&l*&r &b&lSERVER CRATE:&r &1&l&nSEPTEMBER &r&b&l&n2018&r &b&l*&1&l*&b&l*",
+    "lore": [
+      "&bUnlocked by &l{UNLOCKED_BY}&r &bat &1&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fHappy Memories",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &e2-3x Godly Randomization Scrolls",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &61-2x Heroic G-Kit Generator",
+      "&6&l*&r &61-3x Random Heroic Enchantment Books",
+      "&6&l*&r &61x Evolution &l&nOR&r &6Heroic Fallen Hero Bundle",
+      "&6&l*&r &61x Heroic &l&nOR&r &6Superior Mystery Server Crate",
+      "&6&l*&r &6Back to School 2017 &l&nOR&r &62016 CC",
+      " ",
+      "&b&l&nBONUS ITEMS",
+      "&b&l*&r &bInfinite Luck Enchantment Book",
+      "&b&l*&r &bTop-tier Rank Quest",
+      "&b&l*&r &bDimensional Traveler Set Piece"
+    ]
+  },
+  "rewards": [
+    "paper",
+    "paper",
+    "title",
+    "randomizationscroll:GODLY;amount=2-3",
+    "bone",
+    "raritybook:HEROIC;amount=1-3",
+    "gkitfallenherobundle||vkitfallenherobundle",
+    "heroicmysterycrate||superiorcrate",
+    "monthlycrate:SCHOOL_2016||monthlycrate:SCHOOL_2017"
+  ],
+  "bonus": [
+    "customarmor:TRAVELER"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "lime_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "green_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "category": 2018,
+  "category slot": 6,
+  "title": "Server Crate: JULY_2018",
+  "item": {
+    "item": "ender_chest",
+    "name": "&c&l*&f&l*&3&l*&r &c&lSERVER CRATE:&r &f&l&nJULY &r&3&l&n2018&r &c&l*&f&l*&3&l*",
+    "lore": [
+      "&fUnlocked by &l{UNLOCKED_BY}&r &fat &3&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fSummer Vibes",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eLimited Edition Titles",
+      "&e&l*&r &eBlaze &l&nOR&r &eGhast Disguise",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &61-2x Equipment Lootbox",
+      "&6&l*&r &61-2x Heroic &l&nOR&r &6Superior Mystery Crate",
+      "&6&l*&r &61-3x Random Heroic Enchantment",
+      "&6&l*&r &61x Heroic Blackscroll &l&nOR&r &6July 2016 CC",
+      "&6&l*&r &6Dungeon Portal Ingredient",
+      " ",
+      "&3&l&nBONUS ITEMS",
+      "&3&l*&r &3Destroyed Outpost Dungeons Portal",
+      "&3&l*&r &3Heroic Armor",
+      "&3&l*&r &3Dimensional Traveler Set Piece",
+      "&3&l*&r &3Abandoned Spaceship Lootbag"
+    ]
+  },
+  "rewards": [
+    "paper",
+    "paper",
+    "title",
+    "bone",
+    "equipmentlootbox;amount=1-2",
+    "mysterycrate",
+    "raritybook:HEROIC;amount=1-3",
+    "blackscroll:HEROIC||monthlycrate:JULY_2016",
+    "cobweb||obsidian",
+    "dimensionweb||fuelcell||enchantedobsidian"
+  ],
+  "bonus": [
+    "customarmor:TRAVELER"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "lime_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "green_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

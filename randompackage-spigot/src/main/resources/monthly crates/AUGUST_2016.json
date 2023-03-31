@@ -1,0 +1,96 @@
+{
+  "category": 2016,
+  "category slot": 8,
+  "title": "Server Crate: AUGUST_2016",
+  "item": {
+    "item": "ender_chest",
+    "name": "&3&l*&b&l*&3&l*&r &b&lSERVER CRATE:&r &3&l&nAUGUST 2016&r &3&l*&b&l*&3&l*",
+    "lore": [
+      "&bUnlocked by &l{UNLOCKED_BY}&r &bat &3&nbuy.yourserver.com",
+      " ",
+      "&f&l&nADMIN ITEMS",
+      "&f&l*&r &fMojang #EULA",
+      "&f&l*&r &fFreshly Squeezed Lemonade",
+      " ",
+      "&e&l&nCOSMETIC ITEMS",
+      "&e&l*&r &eEULA Violating Titles",
+      "&e&l*&r &eItem Nametag #1",
+      "&e&l*&r &eItem Nametag #2",
+      " ",
+      "&6&l&nTREASURE ITEMS",
+      "&6&l*&r &6Rank Quest",
+      "&6&l*&r &6Heroic Fallen Hero",
+      "&6&l*&r &6Legendary Space Flare",
+      "&6&l*&r &6100% Black Scroll (2x)",
+      " ",
+      "&3&l&nBONUS ITEMS",
+      "&3&l*&r &3Godly Space Flare",
+      "&3&l*&r &3Legendary Boss Egg",
+      "&3&l*&r &3Soul Enchantment Book"
+    ]
+  },
+  "rewards": [
+    "Mojang EULA",
+    "Freshly Squeezed Lemonade",
+    "title:96||title:201",
+    "itemnametag",
+    "itemnametag",
+    "paper",
+    "fallenhero:GKIT_ARCANE||fallenhero:GKIT_TRICKSTER",
+    "spaceflare:LEGENDARY",
+    "blackscroll:REGULAR:100;amount=2"
+  ],
+  "bonus": [
+    "spaceflare:GODLY",
+    "customboss:BROOD_MOTHER",
+    "ce:SOUL"
+  ],
+  "inventory": {
+    "size": 54,
+    "redeem format": [
+      "=========",
+      "===---===",
+      "===---===",
+      "===---===",
+      "=========",
+      "====+===="
+    ],
+    "redeem bonus format": [
+      "=-=-=-=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-+++=-=",
+      "-=-=-=-=-",
+      "=-=-x=-=-"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": "&7..."
+    },
+    "redeem": {
+      "item": "ender_chest",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus": {
+      "item": "red_stained_glass_pane",
+      "name": "&f&l???",
+      "lore": [
+        "&7Click to redeem an item from",
+        "&7your &n{PATH}&r &7Monthly Crate!"
+      ]
+    },
+    "bonus 1": {
+      "item": "light_blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "bonus 2": {
+      "item": "blue_stained_glass_pane",
+      "name": "&a&lUNLOCKING..."
+    },
+    "unlocking name": "&a&lUNLOCKING..."
+  }
+}

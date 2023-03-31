@@ -309,7 +309,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultMonthlyCrates() {
-        generateAllDefault("monthly crates",
+        generate_all_default_json("monthly crates",
                 "APRIL_2016", "APRIL_2017", "APRIL_2018",
                 "AUGUST_2016", "AUGUST_2017", "AUGUST_2018",
                 "BLACK_FRIDAY_2016",
