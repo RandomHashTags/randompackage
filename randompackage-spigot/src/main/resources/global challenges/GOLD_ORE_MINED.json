@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Gold Ore Mined"
+  },
+  "item": {
+    "item": "gold_ore",
+    "name": "&a&lMost Gold Ore Mined"
+  },
+  "attributes": [
+    "BlockBreak;material=GOLD_ORE;PlayerIncreaseGlobalChallenge=GOLD_ORE_MINED:1"
+  ]
+}

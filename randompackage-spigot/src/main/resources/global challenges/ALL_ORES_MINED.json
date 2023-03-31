@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Most Ores Mined"
+  },
+  "item": {
+    "item": "stone",
+    "name": "&a&lMost Ores Mined"
+  },
+  "attributes": [
+    "BlockBreak;material=_ORE;PlayerIncreaseGlobalChallenge=ALL_ORES_MINED:1"
+  ]
+}

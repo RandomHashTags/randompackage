@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Mobs Killed"
+  },
+  "item": {
+    "item": "bone",
+    "name": "&a&lMost Mobs Killed"
+  },
+  "attributes": [
+    "EntityDeath;VictimIsMob=true;KillerIncreaseGlobalChallenge=MOBS_KILLED:1"
+  ]
+}

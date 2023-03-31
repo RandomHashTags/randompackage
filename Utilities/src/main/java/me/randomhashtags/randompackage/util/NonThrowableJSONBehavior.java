@@ -39,6 +39,14 @@ public interface NonThrowableJSONBehavior {
         return obj instanceof Integer ? (Integer) obj : default_value;
     }
 
+    default long parse_long_in_json(@NotNull JSONObject json, @NotNull String key) {
+        return parse_long_in_json(json, key, 0);
+    }
+    default long parse_long_in_json(@NotNull JSONObject json, @NotNull String key, long default_value) {
+        final Object obj = json.opt(key);
+        return obj instanceof Long ? (Long) obj : default_value;
+    }
+
     default double parse_double_in_json(@NotNull JSONObject json, @NotNull String key) {
         return parse_double_in_json(json, key, 0);
     }

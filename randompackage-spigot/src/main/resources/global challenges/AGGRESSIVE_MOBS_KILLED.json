@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Mobs Killed"
+  },
+  "item": {
+    "item": "diamond_sword",
+    "name": "&a&lMost Aggressive Mobs Killed"
+  },
+  "attributes": [
+    "EntityDeath;VictimIsMonster=true;KillerIncreaseGlobalChallenge=AGGRESSIVE_MOBS_KILLED:1"
+  ]
+}

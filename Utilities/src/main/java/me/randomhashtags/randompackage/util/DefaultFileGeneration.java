@@ -231,7 +231,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("fat buckets", "LAVA");
     }
     default void generateDefaultGlobalChallenges() {
-        generateAllDefault("global challenges",
+        generate_all_default_json("global challenges",
                 "AGGRESSIVE_MOBS_KILLED", "ALCHEMIST_EXCHANGES", "ALL_ORES_MINED",
                 "BIRCH_LOGS_CUT", "BLOCKS_MINED_BY_PICKAXE", "BLOCKS_PLACED",
                 "COINFLIPS_WON", "CUSTOM_ENCHANTS_REVEALED",

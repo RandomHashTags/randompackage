@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Envoy Chests Broken"
+  },
+  "item": {
+    "item": "chest",
+    "name": "&a&lMost Envoy Chests Broken"
+  },
+  "attributes": [
+    "PlayerClaimEnvoyCrate;PlayerIncreaseGlobalChallenge=ENVOY_CHESTS_LOOTED:1"
+  ]
+}

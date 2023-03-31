@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Mobs Killed"
+  },
+  "item": {
+    "item": "ender_portal_frame",
+    "name": "&a&lMost Ender Monsters Killed"
+  },
+  "attributes": [
+    "EntityDeath;VictimInWorld=world_the_end;KillerIncreaseGlobalChallenge=END_MOBS_KILLED:1"
+  ]
+}

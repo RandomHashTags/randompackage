@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Money Put in Jackpot"
+  },
+  "item": {
+    "item": "gold_ingot",
+    "name": "&a&lMost Money Put in Jackpot"
+  },
+  "attributes": [
+    "JackpotPurchaseTickets;PlayerIncreaseGlobalChallenge=JACKPOT_MONEY_SPENT:moneySpent"
+  ]
+}

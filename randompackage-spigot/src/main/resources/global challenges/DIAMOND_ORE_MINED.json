@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Diamond ore Mined"
+  },
+  "item": {
+    "item": "diamond_ore",
+    "name": "&a&lMost Diamond Ore Mined"
+  },
+  "attributes": [
+    "BlockBreak;material=DIAMOND_ORE;PlayerIncreaseGlobalChallenge=DIAMOND_ORE_MINED:1"
+  ]
+}

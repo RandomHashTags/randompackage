@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Coinflips Won"
+  },
+  "item": {
+    "item": "emerald",
+    "name": "&a&lMost Coinflips Won"
+  },
+  "attributes": [
+    "CoinFlipEnd;WinnerIncreaseGlobalChallenge=COINFLIPS_WON:1"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Mobs Killed"
+  },
+  "item": {
+    "item": "feather",
+    "name": "&a&lMost Passive Mobs Killed"
+  },
+  "attributes": [
+    "EntityDeath;VictimIsPassive=true;KillerIncreaseGlobalChallenge=PASSIVE_MOBS_KILLED:1"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "enabled": true,
+    "duration": 86400,
+    "type": "Money Lost in Coinflips"
+  },
+  "item": {
+    "item": "emerald",
+    "name": "&a&lMost Money Lost in Coinflips"
+  },
+  "attributes": [
+    "CoinFlipEnd;LoserIncreaseGlobalChallenge=MONEY_LOST_IN_COINFLIPS:wager"
+  ]
+}
