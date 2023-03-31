@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface GlobalChallenge extends Attributable, Itemable, Toggleable {
     long getDuration();
-    String getType();
+    String getType(); // TODO: change to MultilingualString
 
     default ActiveGlobalChallenge start() {
         return start(System.currentTimeMillis(), new HashMap<>());

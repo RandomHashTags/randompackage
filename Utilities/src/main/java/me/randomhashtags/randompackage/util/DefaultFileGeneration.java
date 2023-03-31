@@ -288,7 +288,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultLootboxes() {
-        generateAllDefault("lootboxes",
+        generate_all_default_json("lootboxes",
                 "BAKED",
                 "BOX_OF_CHOCOLATES",
                 "DETENTION",

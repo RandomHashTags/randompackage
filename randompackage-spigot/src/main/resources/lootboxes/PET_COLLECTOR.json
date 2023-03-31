@@ -1,0 +1,80 @@
+{
+  "priority": 26,
+  "name": {
+    "en": "&f&lLootbox:&r &3&lPet&r &5&lCollector"
+  },
+  "available for": 259200,
+  "gui": {
+    "title": "Lootbox: &3&lPet&r &5&lCollector",
+    "size": 9,
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": " "
+    },
+    "format": [
+      "CXLLLBBXC"
+    ]
+  },
+  "preview title": "Lootbox: &3&lPet&r &5&lCollector",
+  "lore formats": {
+    "regular loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ],
+    "jackpot loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ],
+    "bonus loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ]
+  },
+  "lootbox": {
+    "item": "beacon",
+    "name": "&f&lLootbox:&r &3&lPet&r &5&lCollector",
+    "lore": [
+      "&7The time has come...to collect the &4&lSkrrt Pet!",
+      "&7&oI thought you collect Masks?",
+      "&7NO MOM! I collect pets now!",
+      "&7&oJust clean up your mess after you open your Lootbox!",
+      " ",
+      "&f&lRandom Loot (&r&74 items&f&l)",
+      "{REGULAR_LOOT}",
+      " ",
+      "&f&lJackpot Loot",
+      "{JACKPOT_LOOT}",
+      " ",
+      "&f&lBonus Loot (&r&71 item&f&l)",
+      "{BONUS_LOOT}"
+    ]
+  },
+  "regular loot size": 4,
+  "regular loot": [
+    "inventorypet:BLESS",
+    "inventorypet:TESLA",
+    "inventorypet:FEIGN_DEATH",
+    "maskgenerator",
+    "omnigem:VKIT",
+    "equipmentlootbox;amount=2",
+    "crystalextractor",
+    "enchantedobsidian;amount=4",
+    "inventorypet:STRONGHOLD",
+    "trinket:EMP_PULSE",
+    "blackscroll:REGULAR;amount=3",
+    "mysterypetbox",
+    "multimask:ZEUS,DUNGEON",
+    "equipmentlootbox:DIMENSIONAL_TRAVELER",
+    "equipmentlootbox:YETI",
+    "transmogscroll:GODLY;amount=2"
+  ],
+  "jackpot loot": [
+    "multicustomarmorcrystal:DRAGON,YETI",
+    "multimask:ZEUS,REINDEER,ANONYMOUS",
+    "petleash",
+    "inventorypetegghatchingkit:SKRRT",
+    "inventorypetegg:SKRRT",
+    "rarecandy;amount=2"
+  ],
+  "bonus loot size": 1,
+  "bonus loot": [
+    "Pet Food Bowl"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "priority": 3,
+  "name": {
+    "en": "&f&lLootbox:&r &3&lIcy Adventures"
+  },
+  "available for": 259200,
+  "gui": {
+    "title": "Lootbox: &3&lIcy Adventures",
+    "size": 9,
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": " "
+    },
+    "format": [
+      "CXLLLBBXC"
+    ]
+  },
+  "preview title": "Lootbox: &3&lIcy Adventures",
+  "lore formats": {
+    "regular loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ],
+    "jackpot loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ],
+    "bonus loot": [
+      " &f&l*&r &f{AMOUNT}x {ITEM}"
+    ]
+  },
+  "lootbox": {
+    "item": "beacon",
+    "name": "&f&lLootbox:&r &3&lIcy Adventures",
+    "lore": [
+      "&7The freezing cold weather",
+      "&7can't keep you from playing!",
+      " ",
+      "&f&lRandom Loot (&r&73 items&f&l)",
+      "{REGULAR_LOOT}",
+      " ",
+      "&f&lJackpot Loot",
+      "{JACKPOT_LOOT}",
+      " ",
+      "&f&lBonus Loot (&r&72 items&f&l)",
+      "{BONUS_LOOT}"
+    ]
+  },
+  "regular loot size": 3,
+  "regular loot": [
+    "servercrate:GODLY",
+    "raritybook:SOUL;amount=3",
+    "mysterymobspawner;amount=3",
+    "customexplosion:CREEPER_STUN;amount=8",
+    "Holiday Spirit",
+    "fuelcell",
+    "whitescroll:HEROIC",
+    "heroicequipmentlootbox",
+    "fallenhero:VKIT_LUCKY;amount=2",
+    "heroicmysterycrate",
+    "kitbundle:NECROMANCER"
+  ],
+  "jackpot loot": [
+    "trinket:SPEED",
+    "fatbucket:LAVA"
+  ],
+  "bonus loot size": 2,
+  "bonus loot": [
+    "customexplosion:CREEPER_STUN;amount=2",
+    "Special Snowflakes"
+  ]
+}

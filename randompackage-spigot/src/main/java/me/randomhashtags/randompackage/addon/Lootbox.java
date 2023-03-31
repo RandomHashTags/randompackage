@@ -24,8 +24,8 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
     int getPriority();
     long getAvailableFor();
     int getGuiSize();
-    String getGuiTitle();
-    String getPreviewTitle();
+    String getGuiTitle(); // TODO: change to MultilingualString
+    String getPreviewTitle(); // TODO: change to MultilingualString
     String getRegularLootSize();
     String getBonusLootSize();
 
@@ -38,6 +38,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
     List<String> getBonusLoot();
     ItemStack getBackground();
 
+    @NotNull
     default List<String> getRewards(final LootboxRewardType type) {
         switch (type) {
             case REGULAR: return getRegularLoot();
@@ -46,6 +47,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
             default: return new ArrayList<>();
         }
     }
+    @NotNull
     default List<ItemStack> getAllRewards(final LootboxRewardType type) {
         final List<ItemStack> items = new ArrayList<>();
         final List<String> rewards = getRewards(type);
@@ -55,6 +57,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
         }
         return items;
     }
+    @NotNull
     default String getRandomLoot(final LootboxRewardType type, final Random random, final List<String> excluding) {
         final List<String> loot = new ArrayList<>(getRewards(type));
         for(String s : excluding) {
@@ -63,6 +66,7 @@ public interface Lootbox extends Itemable, Nameable, GivedpItemableSpigot {
         return loot.get(random.nextInt(loot.size()));
     }
 
+    @NotNull
     default List<ItemStack> getAllRewards() {
         final List<ItemStack> items = new ArrayList<>();
         final RandomPackageAPI api = RandomPackageAPI.INSTANCE;
