@@ -46,12 +46,15 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         register(Feature.MONTHLY_CRATE, this);
     }
 
+    @Override
     public int getCategory() {
         return category;
     }
+    @Override
     public int getCategorySlot() {
         return category_slot;
     }
+    @Override
     public @NotNull String getGuiTitle() {
         return gui_title;
     }
@@ -60,9 +63,11 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     public ItemStack getItem() {
         return getClone(item);
     }
+    @Override
     public @NotNull List<String> getRewards() {
         return rewards;
     }
+    @Override
     public @NotNull List<String> getBonusRewards() {
         return rewards_bonus;
     }
@@ -72,18 +77,23 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
     public List<String> getBonusFormat() {
         return redeem_bonus_format;
     }
+    @Override
     public ItemStack getBackground() {
         return getClone(background);
     }
+    @Override
     public ItemStack getRedeem() {
         return getClone(redeem);
     }
+    @Override
     public ItemStack getBonus1() {
         return getClone(bonus1);
     }
+    @Override
     public ItemStack getBonus2() {
         return getClone(bonus2);
     }
+    @Override
     public UInventory getRegular() {
         if(regular == null) {
             final ItemStack air = new ItemStack(Material.AIR);
@@ -101,6 +111,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         }
         return regular;
     }
+    @Override
     public UInventory getBonus() {
         if(bonus == null) {
             final ItemStack air = new ItemStack(Material.AIR);
@@ -118,6 +129,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         }
         return bonus;
     }
+    @Override
     public List<Integer> getRewardSlots() {
         if(rewardSlots == null) {
             rewardSlots = new ArrayList<>();
@@ -133,6 +145,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         }
         return rewardSlots;
     }
+    @Override
     public List<Integer> getBonusRewardSlots() {
         if(bonusRewardSlots == null) {
             bonusRewardSlots = new ArrayList<>();
@@ -148,9 +161,11 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         }
         return bonusRewardSlots;
     }
+    @Override
     public ItemStack getRandomReward(Player player, List<String> excluding, boolean canRepeatRewards) {
         return getReward(player, REVEALED_REGULAR, excluding, canRepeatRewards, new ArrayList<>(getRewards()));
     }
+    @Override
     public ItemStack getRandomBonusReward(Player player, List<String> excluding, boolean canRepeatRewards) {
         return getReward(player, REVEALED_BONUS, excluding, canRepeatRewards, new ArrayList<>(getBonusRewards()));
     }

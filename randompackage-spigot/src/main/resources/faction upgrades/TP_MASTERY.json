@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 8,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "book",
+    "name": "&b&lTP Mastery",
+    "lore": [
+      "&7Decreases teleportation casting time."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 0.9,
+      "string": "-10% Teleport Delay",
+      "cost": [
+        "Item{factioncrystal;amount=40};40x Faction Crystals",
+        "Cash{2500000};$2,500,000"
+      ]
+    },
+    "2": {
+      "value": 0.85,
+      "string": "-15% Teleport Delay",
+      "cost": [
+        null
+      ]
+    },
+    "3": {
+      "value": 0.75,
+      "string": "-25% Teleport Delay",
+      "cost": [
+        null
+      ]
+    },
+    "4": {
+      "value": 0.65,
+      "string": "-35% Teleport Delay",
+      "cost": [
+        null
+      ]
+    }
+  },
+  "attributes": [
+    "PlayerTeleportDelay;SetDelay=delay*value"
+  ]
+}

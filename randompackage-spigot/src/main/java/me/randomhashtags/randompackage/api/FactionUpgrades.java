@@ -57,10 +57,15 @@ public enum FactionUpgrades implements EventAttributes {
 
     private UInventory gui;
     private ItemStack background, locked;
-    public ItemStack heroicFactionCrystal, factionCrystal;
+    public ItemStack heroic_faction_crystal, faction_crystal;
     private List<String> aliases;
 
-    private HashMap<String, HashMap<Location, Double>> cropGrowthRate;
+    private HashMap<String, HashMap<Location, Double>> crop_growth_rate;
+
+    @Override
+    public @NotNull Feature get_feature() {
+        return Feature.FACTION_UPGRADE;
+    }
 
     @Override
     public boolean canBeEnabled() {
@@ -73,7 +78,6 @@ public enum FactionUpgrades implements EventAttributes {
 
     @Override
     public void load() {
-        final long started = System.currentTimeMillis();
         save("faction upgrades", "_settings.yml");
         save("_Data", "faction upgrades.yml");
 
@@ -94,18 +98,18 @@ public enum FactionUpgrades implements EventAttributes {
             }
         }
 
-        cropGrowthRate = new HashMap<>();
+        crop_growth_rate = new HashMap<>();
         fupgradesF = new File(DATA_FOLDER + SEPARATOR + "_Data", "faction upgrades.yml");
         fupgrades = YamlConfiguration.loadConfiguration(fupgradesF);
         aliases = RandomPackage.INSTANCE.getConfig().getStringList("faction upgrades.cmds");
-        heroicFactionCrystal = createItemStack(config, "items.heroic faction crystal");
-        factionCrystal = createItemStack(config, "items.faction crystal");
+        heroic_faction_crystal = createItemStack(config, "items.heroic faction crystal");
+        faction_crystal = createItemStack(config, "items.faction crystal");
         background = createItemStack(config, "gui.background");
         locked = createItemStack(config, "gui.locked");
-        addGivedpCategory(List.of(factionCrystal, heroicFactionCrystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
+        addGivedpCategory(List.of(faction_crystal, heroic_faction_crystal), UMaterial.DIAMOND_SWORD, "Faction Items", "Givedp: Faction Items");
 
-        GivedpItem.INSTANCE.items.put("heroicfactioncrystal", heroicFactionCrystal);
-        GivedpItem.INSTANCE.items.put("factioncrystal", factionCrystal);
+        GivedpItem.INSTANCE.items.put("heroicfactioncrystal", heroic_faction_crystal);
+        GivedpItem.INSTANCE.items.put("factioncrystal", faction_crystal);
 
         for(int i = 0; i < gui.getSize(); i++) {
             if(fi.getItem(i) == null) {
@@ -114,7 +118,6 @@ public enum FactionUpgrades implements EventAttributes {
         }
 
         loadBackup();
-        sendConsoleDidLoadFeature(getAll(Feature.FACTION_UPGRADE).size() + " Faction Upgrades", started);
     }
     @Override
     public void unload() {
@@ -441,8 +444,8 @@ public enum FactionUpgrades implements EventAttributes {
     private void blockBreakEvent(BlockBreakEvent event) {
         final Location location = event.getBlock().getLocation();
         final String factionTag = RegionalAPI.INSTANCE.getFactionTagAt(location);
-        if(factionTag != null && cropGrowthRate.containsKey(factionTag)) {
-            cropGrowthRate.get(factionTag).remove(location);
+        if(factionTag != null && crop_growth_rate.containsKey(factionTag)) {
+            crop_growth_rate.get(factionTag).remove(location);
         }
     }
 }

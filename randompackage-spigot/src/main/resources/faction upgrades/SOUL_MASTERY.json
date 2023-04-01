@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 12,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "nether_star",
+    "name": "&b&lSoul Mastery",
+    "lore": [
+      "&7Decreases soul cost of passive soul enchantment."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 0.95,
+      "string": "-5% Soul Cost",
+      "cost": [
+        "Item{factioncrystal;amount=40};40x Faction Crystals",
+        "Cash{10000000};$10,000,000"
+      ]
+    },
+    "2": {
+      "value": 0.9,
+      "string": "-10% Soul Cost",
+      "cost": [
+        "Item{factioncrystal;amount=80};80x Faction Crystals",
+        "Cash{20000000};$20,000,000"
+      ]
+    },
+    "3": {
+      "value": 0.75,
+      "string": "-25% Soul Cost",
+      "cost": [
+        null
+      ]
+    }
+  },
+  "attributes": [
+    "DepleteRarityGem;rarity=SOUL;SetDepleted=amount*value"
+  ]
+}

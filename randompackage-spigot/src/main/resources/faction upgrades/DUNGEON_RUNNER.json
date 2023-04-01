@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "HEROIC",
+    "slot": 32,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "eye_of_ender",
+    "name": "&6&lDungeon Runner",
+    "lore": [
+      "&7Reduces the time it takes for",
+      "&7a Dungeons Portal to close."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 90,
+      "string": "90s Dungeons Portal Close Time",
+      "cost": [
+        "SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value",
+        "Item{heroicfactioncrystal;amount=5};5x Heroic Faction Crystals",
+        "Cash{25000000};$25,000,000"
+      ]
+    },
+    "2": {
+      "value": 80,
+      "string": "80s Dungeons Portal Close Time",
+      "cost": [
+        "SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+      ]
+    },
+    "3": {
+      "value": 45,
+      "string": "45s Dungeons Portal Close Time",
+      "cost": [
+        "SpawnerValue{500000000};$500,000,000 &nFaction Spawner Value"
+      ]
+    }
+  },
+  "attributes": [
+    "DungeonPortalOpen;SetOpenDuration=value*20"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "HEROIC",
+    "slot": 29,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "cooked_beef",
+    "name": "&6&lHeroic Well Fed",
+    "lore": [
+      "&7Reduces rate at which faction members",
+      "&7get hungry and need to /feed."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 30,
+      "string": "-30% Hunger increase rate",
+      "cost": [
+        "FactionUpgrade{WELL_FED:level=4};Well Fed IV /f upgrade",
+        "SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value",
+        "Cash{5000000};$5,000,000"
+      ]
+    },
+    "2": {
+      "value": 35,
+      "string": "-35% Hunger increase rate",
+      "cost": [
+        "SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      ]
+    },
+    "3": {
+      "value": 45,
+      "string": "-45% Hunger increase rate",
+      "cost": [
+        "SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      ]
+    },
+    "4": {
+      "value": 50,
+      "string": "-50% Hunger increase rate",
+      "cost": [
+        "SpawnerValue{50000000};$50,000,000 &nFaction Spawner Value"
+      ]
+    }
+  },
+  "attributes": [
+    "FoodLevelLost;chance=value;SetCancelled=true"
+  ]
+}

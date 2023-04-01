@@ -209,7 +209,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultFactionUpgrades() {
-        generateAllDefault("faction upgrades",
+        generate_all_default_json("faction upgrades",
                 "BOSS_MASTERY",
                 "CONQUEST_MASTERY",
                 "DUNGEON_LOOTER", "DUNGEON_MASTER", "DUNGEON_RUNNER",

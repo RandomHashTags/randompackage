@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 17,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "player_head_item",
+    "name": "&b&lBoss Mastery",
+    "lore": [
+      "&7Increases damage dealt to Boss monsters."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 1.25,
+      "string": "+25% Boss Damage",
+      "cost": [
+        "Item{factioncrystal;amount=32};32x Faction Crystals",
+        "Cash{5000000};$5,000,000"
+      ]
+    },
+    "2": {
+      "value": 1.5,
+      "string": "+50% Boss Damage",
+      "cost": [
+        "Item{factioncrystal;amount=64};64x Faction Crystals",
+        "Cash{10000000};$10,000,000"
+      ]
+    },
+    "3": {
+      "value": 1.75,
+      "string": "+75% Boss Damage"
+    },
+    "4": {
+      "value": 2,
+      "string": "+100% Boss Damage"
+    }
+  },
+  "attributes": [
+    "CustomBossDamageByEntity;DamagerIsType=PLAYER;VictimIsCustomBoss=true;SetDamage=dmg*value"
+  ]
+}

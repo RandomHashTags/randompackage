@@ -1,0 +1,51 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 9,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "cooked_beef",
+    "name": "&b&lWell Fed",
+    "lore": [
+      "&7Reduces rate at which faction members",
+      "&7get hungry and need to /feed."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 5,
+      "string": "-5% Hunger increase rate",
+      "cost": [
+        "Item{factioncrystal;amount=16};16x Faction Crystal",
+        "Cash{500000};$500,000"
+      ]
+    },
+    "2": {
+      "value": 10,
+      "string": "-10% Hunger increase rate",
+      "cost": [
+        "Item{factioncrystal;amount=32};32x Faction Crystal",
+        "Cash{2000000};$2,000,000"
+      ]
+    },
+    "3": {
+      "value": 15,
+      "string": "-15% Hunger increase rate",
+      "cost": [
+        null
+      ]
+    },
+    "4": {
+      "value": 25,
+      "string": "-25% Hunger increase rate",
+      "cost": [
+        null
+      ]
+    }
+  },
+  "attributes": [
+    "FoodLevelLost;chance=value;SetCancelled=true"
+  ]
+}

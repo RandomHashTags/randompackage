@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 7,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "exp_bottle",
+    "name": "&b&lXP Harvest",
+    "lore": [
+      "&7Increases Vanilla XP gained from monsters."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 1.05,
+      "string": "1.05x XP Drops",
+      "cost": [
+        "Item{factioncrystal;amount=80};80x Faction Crystals",
+        "Cash{15000000};$15,000,000"
+      ]
+    },
+    "2": {
+      "value": 1.1,
+      "string": "1.10x XP Drops",
+      "cost": [
+        "Item{factioncrystal;amount=160};160x Faction Crystals",
+        "Cash{25000000};$25,000,000"
+      ]
+    },
+    "3": {
+      "value": 1.15,
+      "string": "1.15x XP Drops",
+      "cost": [
+        null
+      ]
+    }
+  },
+  "attributes": [
+    "EntityDeath;VictimIsMob=true;SetDroppedXp=xp*value"
+  ]
+}

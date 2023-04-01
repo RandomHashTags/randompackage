@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "DEFAULT",
+    "slot": 13,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "diamond_sword",
+    "name": "&b&lWarzone Control",
+    "lore": [
+      "&7Increases /warzone \"Last Man Standing\"",
+      "&7$ and XP payouts."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 1.25,
+      "string": "+1.25x LMS Rewards",
+      "cost": [
+        "Item{factioncrystal;amount=32};32x Faction Crystals",
+        "Cash{10000000};$10,000,000"
+      ]
+    },
+    "2": {
+      "value": 1.5,
+      "string": "+1.50x LMS Rewards",
+      "cost": [
+        "Item{factioncrystal;amount=64};64x Faction Crystals",
+        "Cash{20000000};$20,000,000"
+      ]
+    },
+    "3": {
+      "value": 2,
+      "string": "+2.00x LMS Rewards",
+      "cost": [
+        null
+      ]
+    }
+  },
+  "perks": [
+    "Tier1;LMSMultiplier{1.25};+1.25x LMS Rewards",
+    "Tier2;LMSMultiplier{1.50};+1.50x LMS Rewards",
+    "Tier3;LMSMultiplier{2.00};+2.00x LMS Rewards"
+  ],
+  "attributes": [
+    "LMSReceiveRewards;SetAmount=amount*value"
+  ]
+}

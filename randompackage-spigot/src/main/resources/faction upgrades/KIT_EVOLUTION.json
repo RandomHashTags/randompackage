@@ -1,0 +1,57 @@
+{
+  "settings": {
+    "enabled": true,
+    "type": "HEROIC",
+    "slot": 39,
+    "item amount=tier": true
+  },
+  "item": {
+    "item": "diamond_axe",
+    "name": "&6&lKit Evolution",
+    "lore": [
+      "&7Increases the chance to level up a /vkit."
+    ]
+  },
+  "levels": {
+    "1": {
+      "value": 10,
+      "string": "+10% chance of leveling /vkit",
+      "cost": [
+        "SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value",
+        "Cash{50000000};$50,000,000"
+      ]
+    },
+    "2": {
+      "value": 15,
+      "string": "+15% chance of leveling /vkit",
+      "cost": [
+        "SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value",
+        null
+      ]
+    },
+    "3": {
+      "value": 20,
+      "string": "+20% chance of leveling /vkit",
+      "cost": [
+        "SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      ]
+    },
+    "4": {
+      "value": 30,
+      "string": "+30% chance of leveling /vkit",
+      "cost": [
+        "SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      ]
+    },
+    "5": {
+      "value": 45,
+      "string": "+45% chance of leveling /vkit",
+      "cost": [
+        "SpawnerValue{775000000};$775,000,000 &nFaction Spawner Value"
+      ]
+    }
+  },
+  "attributes": [
+    "KitPreClaim;KitType=VKIT;SetLevelupChance=chance+value"
+  ]
+}
