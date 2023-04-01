@@ -384,7 +384,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultServerCrates() {
-        generateAllDefault("server crates", "ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
+        generate_all_default_json("server crates", "ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
     }
     default void generateDefaultShopCategories() {
         generateAllDefault("shops",

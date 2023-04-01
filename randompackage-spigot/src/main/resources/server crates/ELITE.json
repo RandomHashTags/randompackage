@@ -1,0 +1,241 @@
+{
+  "boss reward": "&b&l{AMOUNT}x ELITE",
+  "settings": {
+    "title": "Elite Space Chest",
+    "size": 45,
+    "redeemable items": 5,
+    "format": [
+      "---------",
+      "-+++++++-",
+      "-+++++++-",
+      "-+++++++-",
+      "---------"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": " "
+    },
+    "background 2": {
+      "item": "black_stained_glass",
+      "name": " "
+    }
+  },
+  "reveal chances": {
+    "LEGENDARY": 5,
+    "ULTIMATE": 10,
+    "ELITE": 15,
+    "UNIQUE": 20,
+    "SIMPLE": 25
+  },
+  "item": {
+    "item": "trapped_chest",
+    "name": "&b&lElite Server Chest &7(Right Click)",
+    "lore": [
+      "&7A cache of equipment packed by",
+      "&7the Intergalactic Server Station.",
+      " ",
+      "&7Contains &b&n5 Elite rarity&r &7items...",
+      "&b&l* &r&7Elite Equipment",
+      "&b&l* &r&7Elite Custom TNT",
+      "&b&l* &r&7Creeper Eggs",
+      "&b&l* &r&7Hoppers",
+      "&b&l* &r&7Zombie, Skeleton Spawners",
+      "&b&l* &r&7Spider, Wolf Spawners",
+      "&b&l* &r&730 Level (Secondary) Skill Vouchers",
+      "&b&l* &r&715 Level mcMMO Voucher",
+      "&b&l* &r&7$100,000 Money Notes",
+      "&b&l* &r&75,000-20,000XP Bottles",
+      "&b&l* &r&7Elite Player Titles",
+      "&b&l* &r&7Elite Secret Dust",
+      "&b&l* &r&7Elite Enchantment Book",
+      "&b&l* &r&7Elite Randomization Scroll",
+      "&b&l* &r&7Elite /gkit Fallen Heroes",
+      "&b&l* &r&7Tier #3 Rank Quest",
+      "&b... and more!"
+    ]
+  },
+  "flare": {
+    "settings": {
+      "spawn radius": 12,
+      "spawn in delay": 6,
+      "nearby radius": 50,
+      "cannot land above": [
+        "lava"
+      ],
+      "cannot land in": [
+        "lava",
+        "water",
+        "snow"
+      ]
+    },
+    "item": "torch",
+    "name": "&b&lElite Space Flare&r &7(Right Click)",
+    "lore": [
+      "&7Drops a cache of equipment packaged by",
+      "&7the &nIntergalactic Cosmonaut Station,",
+      "&7near your character's current position."
+    ],
+    "request msg": [
+      "&b&l** Elite Space Flare **",
+      "&7Your request for &61x Loot Cache(s) &7has been received",
+      "&7Transmitting coordinates... &ax:{X} y:{Y} z:{Z}"
+    ],
+    "nearby spawn msg": [
+      "&3&l(!)&r &3A &b&nElite Space Flare&r &3has been launched nearby!"
+    ]
+  },
+  "display": {
+    "rarity": "&bElite",
+    "item": "stained_glass_pane:3",
+    "name": "&b&lElite Mystery Item",
+    "lore": [
+      "&7Click here to reveal a",
+      "{LOOT_RARITY} &7item from the &b{SC_RARITY}",
+      "&7loot table.",
+      " ",
+      "&b&l+35%&r &bRare Loot Chance"
+    ]
+  },
+  "open gui": {
+    "item": "stained_glass:3",
+    "name": "&b&l???&r &7#{SLOT}",
+    "lore": [
+      "&7Choose &b&n5 mystery items&r &7and,",
+      "&7your &b&lElite&r &7loot will be revealed."
+    ]
+  },
+  "selected": {
+    "item": "trapped_chest",
+    "name": "&b&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item."
+    ]
+  },
+  "reveal slot rarity": {
+    "item": "trapped_chest",
+    "name": "&b&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item.",
+      " ",
+      "&7&nClick to reveal slot rarity...",
+      "&f&l*&r &fSimple",
+      "&a&l*&r &aUnique",
+      "&b&l*&r &bElite",
+      "&e&l*&r &eUltimate",
+      "&6&l*&r &6Legendary"
+    ]
+  },
+  "rewards": {
+    "LEGENDARY": [
+      "hopper;amount=16",
+      "hopper;amount=32",
+      "zombiespawner",
+      "skeletonspawner",
+      "spiderspawner",
+      "wolfspawner",
+      "mcmmolevelvoucher:random:15",
+      "banknote:100000",
+      "xpbottle:5000-20000",
+      "rarityfireball:ELITE;amount=1-32",
+      "customexplosion:TNT_LETHAL;amount=64",
+      "customexplosion:TNT_GIGANTIC;amount=64",
+      "customexplosion:CREEPER_TACTICAL;amount=1-6",
+      "fallenherogem:GKIT_PARTY_ANIMAL",
+      "raritybook:ELITE",
+      "rarityfireball:ELITE;amount=1-32",
+      "randomizationscroll:ELITE",
+      "soultracker:ELITE",
+      "soultracker:UNIQUE",
+      "mcmmocreditvoucher:15"
+    ],
+    "ULTIMATE": [
+      "hopper;amount=16",
+      "hopper;amount=32",
+      "zombiespawner",
+      "skeletonspawner",
+      "spiderspawner",
+      "wolfspawner",
+      "mcmmolevelvoucher:random:15",
+      "banknote:100000",
+      "xpbottle:5000-20000",
+      "rarityfireball:ELITE;amount=1-32",
+      "customexplosion:TNT_LETHAL;amount=64",
+      "customexplosion:TNT_GIGANTIC;amount=64",
+      "customexplosion:CREEPER_TACTICAL;amount=1-6",
+      "fallenherogem:GKIT_PARTY_ANIMAL",
+      "raritybook:ELITE",
+      "rarityfireball:ELITE;amount=1-32",
+      "randomizationscroll:ELITE",
+      "soultracker:ELITE",
+      "soultracker:UNIQUE",
+      "mcmmocreditvoucher:15"
+    ],
+    "ELITE": [
+      "hopper;amount=16",
+      "hopper;amount=32",
+      "zombiespawner",
+      "skeletonspawner",
+      "spiderspawner",
+      "wolfspawner",
+      "mcmmolevelvoucher:random:15",
+      "banknote:100000",
+      "xpbottle:5000-20000",
+      "rarityfireball:ELITE;amount=1-32",
+      "customexplosion:TNT_LETHAL;amount=64",
+      "customexplosion:TNT_GIGANTIC;amount=64",
+      "customexplosion:CREEPER_TACTICAL;amount=1-6",
+      "fallenherogem:GKIT_PARTY_ANIMAL",
+      "raritybook:ELITE",
+      "rarityfireball:ELITE;amount=1-32",
+      "randomizationscroll:ELITE",
+      "soultracker:ELITE",
+      "soultracker:UNIQUE",
+      "mcmmocreditvoucher:15"
+    ],
+    "UNIQUE": [
+      "hopper;amount=16",
+      "hopper;amount=32",
+      "zombiespawner",
+      "skeletonspawner",
+      "spiderspawner",
+      "wolfspawner",
+      "mcmmolevelvoucher:random:15",
+      "banknote:100000",
+      "xpbottle:5000-20000",
+      "rarityfireball:ELITE;amount=1-32",
+      "customexplosion:TNT_LETHAL;amount=64",
+      "customexplosion:TNT_GIGANTIC;amount=64",
+      "customexplosion:CREEPER_TACTICAL;amount=1-6",
+      "fallenherogem:GKIT_PARTY_ANIMAL",
+      "raritybook:ELITE",
+      "rarityfireball:ELITE;amount=1-32",
+      "randomizationscroll:ELITE",
+      "soultracker:ELITE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "mcmmocreditvoucher:15"
+    ],
+    "SIMPLE": [
+      "hopper;amount=16",
+      "hopper;amount=32",
+      "zombiespawner",
+      "skeletonspawner",
+      "spiderspawner",
+      "wolfspawner",
+      "mcmmolevelvoucher:random:15",
+      "banknote:100000",
+      "xpbottle:5000-20000",
+      "rarityfireball:ELITE;amount=1-32",
+      "customexplosion:TNT_LETHAL;amount=64",
+      "customexplosion:TNT_GIGANTIC;amount=64",
+      "customexplosion:CREEPER_TACTICAL;amount=1-6",
+      "fallenherogem:GKIT_PARTY_ANIMAL",
+      "raritybook:ELITE",
+      "rarityfireball:ELITE;amount=1-32",
+      "randomizationscroll:ELITE",
+      "soultracker:ELITE",
+      "soultracker:UNIQUE",
+      "mcmmocreditvoucher:15"
+    ]
+  }
+}

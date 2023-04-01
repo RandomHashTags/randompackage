@@ -1,0 +1,281 @@
+{
+  "boss reward": "&e&l{AMOUNT}x ULTIMATE",
+  "settings": {
+    "title": "Ultimate Space Chest",
+    "size": 45,
+    "redeemable items": 5,
+    "format": [
+      "---------",
+      "-+++++++-",
+      "-+++++++-",
+      "-+++++++-",
+      "---------"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": " "
+    },
+    "background 2": {
+      "item": "black_stained_glass",
+      "name": " "
+    }
+  },
+  "reveal chances": {
+    "LEGENDARY": 5,
+    "ULTIMATE": 10,
+    "ELITE": 15,
+    "UNIQUE": 20,
+    "SIMPLE": 25
+  },
+  "item": {
+    "item": "trapped_chest",
+    "name": "&e&lUltimate Server Chest &7(Right Click)",
+    "lore": [
+      "&7A cache of equipment packed by",
+      "&7the Intergalactic Server Station.",
+      " ",
+      "&7Contains &e&n5 Ultimate rarity&r &7items...",
+      "&e&l* &r&7Ultimate Equipment",
+      "&e&l* &r&7Ultimate /gkit Items",
+      "&e&l* &r&7Ultimate Boss Eggs",
+      "&e&l* &r&730 Level (Primary) Skill Vouchers",
+      "&e&l* &r&725 Level mcMMO Voucher",
+      "&e&l* &r&7$250,000 Money Notes",
+      "&e&l* &r&725,000-75,000XP Bottles",
+      "&e&l* &r&7Item Nametags",
+      "&e&l* &r&7Transmog Scrolls",
+      "&e&l* &r&7White & 50% Black Scrolls",
+      "&e&l* &r&7Blaze/IG Spawners",
+      "&e&l* &r&7Mystery Soul Book",
+      "&e&l* &r&7Mystery Mob Spawners",
+      "&e&l* &r&7XP Boosters",
+      "&e&l* &r&7Ultimate /gkit Fallen Heroes",
+      "&e&l* &r&7Custom Creeper Eggs",
+      "&e&l* &r&7Tier #4 Rank Quest",
+      "&e... and more!"
+    ]
+  },
+  "flare": {
+    "settings": {
+      "spawn radius": 12,
+      "spawn in delay": 6,
+      "nearby radius": 50,
+      "cannot land above": [
+        "lava"
+      ],
+      "cannot land in": [
+        "lava",
+        "water",
+        "snow"
+      ]
+    },
+    "item": "torch",
+    "name": "&e&lUltimate Space Flare&r &7(Right Click)",
+    "lore": [
+      "&7Drops a cache of equipment packaged by",
+      "&7the &nIntergalactic Cosmonaut Station,",
+      "&7near your character's current position."
+    ],
+    "request msg": [
+      "&e&l** Ultimate Space Flare **",
+      "&7Your request for &61x Loot Cache(s) &7has been received",
+      "&7Transmitting coordinates... &ax:{X} y:{Y} z:{Z}"
+    ],
+    "nearby spawn msg": [
+      "&3&l(!)&r &3A &e&nUltimate Space Flare&r &3has been launched nearby!"
+    ]
+  },
+  "display": {
+    "rarity": "&eUltimate",
+    "item": "yellow_stained_glass_pane",
+    "name": "&e&lUltimate Mystery Item",
+    "lore": [
+      "&7Click here to reveal a",
+      "{LOOT_RARITY} &7item from the {SC_RARITY}",
+      "&7loot table.",
+      " ",
+      "&e&l+55%&r &eRare Loot Chance"
+    ]
+  },
+  "open gui": {
+    "item": "yellow_stained_glass",
+    "name": "&e&l???&r &7#{SLOT}",
+    "lore": [
+      "&7Choose &e&n5 mystery items&r &7and,",
+      "&7your &e&lUltimate&r &7loot will be revealed."
+    ]
+  },
+  "selected": {
+    "item": "trapped_chest",
+    "name": "&e&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item."
+    ]
+  },
+  "reveal slot rarity": {
+    "item": "trapped_chest",
+    "name": "&e&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item.",
+      " ",
+      "&7&nClick to reveal slot rarity...",
+      "&f&l*&r &fSimple",
+      "&a&l*&r &aUnique",
+      "&b&l*&r &bElite",
+      "&e&l*&r &eUltimate",
+      "&6&l*&r &6Legendary"
+    ]
+  },
+  "rewards": {
+    "LEGENDARY": [
+      "customboss:BROOD_MOTHER",
+      "customboss:KING_SLIME",
+      "mcmmolevelvoucher:random:25",
+      "banknote:250000",
+      "xpbottle:25000-75000",
+      "itemnametag;amount=1-3",
+      "transmogscroll;amount=1-3",
+      "whitescroll;amount=1-3",
+      "blackscroll:REGULAR:50;amount=1-3",
+      "blazespawner",
+      "irongolemspawner",
+      "raritybook:SOUL",
+      "mysterymobspawner;amount=1-2",
+      "fallenhero:GKIT",
+      "customexplosion:CREEPER_GIGANTIC;amount=4",
+      "customexplosion:CREEPER_LUCKY;amount=10",
+      "customexplosion:CREEPER_TACTICAL;amount=8",
+      "customexplosion:TNT_LUCKY;amount=16",
+      "enchantmentorb:armor11:75",
+      "rarityfireball:ULTIMATE;amount=1-32",
+      "raritybook:ULTIMATE",
+      "factionmcmmobooster:1.5:10",
+      "factionxpbooster:1.5:10",
+      "itemnametag",
+      "fallenherogem:GKIT_DIABLO",
+      "title:59",
+      "randomizationscroll:ELITE",
+      "soultracker:ULTIMATE"
+    ],
+    "ULTIMATE": [
+      "customboss:BROOD_MOTHER",
+      "customboss:KING_SLIME",
+      "mcmmolevelvoucher:random:25",
+      "banknote:250000",
+      "xpbottle:25000-75000",
+      "itemnametag;amount=1-3",
+      "transmogscroll;amount=1-3",
+      "whitescroll;amount=1-3",
+      "blackscroll:REGULAR:50;amount=1-3",
+      "blazespawner",
+      "irongolemspawner",
+      "raritybook:SOUL",
+      "mysterymobspawner;amount=1-2",
+      "fallenhero:GKIT",
+      "customexplosion:CREEPER_GIGANTIC;amount=4",
+      "customexplosion:CREEPER_LUCKY;amount=10",
+      "customexplosion:CREEPER_TACTICAL;amount=8",
+      "customexplosion:TNT_LUCKY;amount=16",
+      "enchantmentorb:armor11:75",
+      "rarityfireball:ULTIMATE;amount=1-32",
+      "raritybook:ULTIMATE",
+      "factionmcmmobooster:1.5:10",
+      "factionxpbooster:1.5:10",
+      "itemnametag",
+      "fallenherogem:GKIT_DIABLO",
+      "title:59",
+      "randomizationscroll:ELITE",
+      "soultracker:ULTIMATE"
+    ],
+    "ELITE": [
+      "customboss:BROOD_MOTHER",
+      "customboss:KING_SLIME",
+      "mcmmolevelvoucher:random:25",
+      "banknote:250000",
+      "xpbottle:25000-75000",
+      "itemnametag;amount=1-3",
+      "transmogscroll;amount=1-3",
+      "whitescroll;amount=1-3",
+      "blackscroll:REGULAR:50;amount=1-3",
+      "blazespawner",
+      "irongolemspawner",
+      "raritybook:SOUL",
+      "mysterymobspawner;amount=1-2",
+      "fallenhero:GKIT",
+      "customexplosion:CREEPER_GIGANTIC;amount=4",
+      "customexplosion:CREEPER_LUCKY;amount=10",
+      "customexplosion:CREEPER_TACTICAL;amount=8",
+      "customexplosion:TNT_LUCKY;amount=16",
+      "enchantmentorb:armor11:75",
+      "rarityfireball:ULTIMATE;amount=1-32",
+      "raritybook:ULTIMATE",
+      "factionmcmmobooster:1.5:10",
+      "factionxpbooster:1.5:10",
+      "itemnametag",
+      "fallenherogem:GKIT_DIABLO",
+      "title:59",
+      "randomizationscroll:ELITE",
+      "soultracker:ULTIMATE"
+    ],
+    "UNIQUE": [
+      "customboss:BROOD_MOTHER",
+      "customboss:KING_SLIME",
+      "mcmmolevelvoucher:random:25",
+      "banknote:250000",
+      "xpbottle:25000-75000",
+      "itemnametag;amount=1-3",
+      "transmogscroll;amount=1-3",
+      "whitescroll;amount=1-3",
+      "blackscroll:REGULAR:50;amount=1-3",
+      "blazespawner",
+      "irongolemspawner",
+      "raritybook:SOUL",
+      "mysterymobspawner;amount=1-2",
+      "fallenhero:GKIT",
+      "customexplosion:CREEPER_GIGANTIC;amount=4",
+      "customexplosion:CREEPER_LUCKY;amount=10",
+      "customexplosion:CREEPER_TACTICAL;amount=8",
+      "customexplosion:TNT_LUCKY;amount=16",
+      "enchantmentorb:armor11:75",
+      "rarityfireball:ULTIMATE;amount=1-32",
+      "raritybook:ULTIMATE",
+      "factionmcmmobooster:1.5:10",
+      "factionxpbooster:1.5:10",
+      "itemnametag",
+      "fallenherogem:GKIT_DIABLO",
+      "title:59",
+      "randomizationscroll:ELITE",
+      "soultracker:ULTIMATE"
+    ],
+    "SIMPLE": [
+      "customboss:BROOD_MOTHER",
+      "customboss:KING_SLIME",
+      "mcmmolevelvoucher:random:25",
+      "banknote:250000",
+      "xpbottle:25000-75000",
+      "itemnametag;amount=1-3",
+      "transmogscroll;amount=1-3",
+      "whitescroll;amount=1-3",
+      "blackscroll:REGULAR:50;amount=1-3",
+      "blazespawner",
+      "irongolemspawner",
+      "raritybook:SOUL",
+      "mysterymobspawner;amount=1-2",
+      "fallenhero:GKIT",
+      "customexplosion:CREEPER_GIGANTIC;amount=4",
+      "customexplosion:CREEPER_LUCKY;amount=10",
+      "customexplosion:CREEPER_TACTICAL;amount=8",
+      "customexplosion:TNT_LUCKY;amount=16",
+      "enchantmentorb:armor11:75",
+      "rarityfireball:ULTIMATE;amount=1-32",
+      "raritybook:ULTIMATE",
+      "factionmcmmobooster:1.5:10",
+      "factionxpbooster:1.5:10",
+      "itemnametag",
+      "fallenherogem:GKIT_DIABLO",
+      "title:59",
+      "randomizationscroll:ELITE",
+      "soultracker:ULTIMATE"
+    ]
+  }
+}

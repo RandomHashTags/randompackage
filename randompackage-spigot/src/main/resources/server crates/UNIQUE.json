@@ -1,0 +1,199 @@
+{
+  "boss reward": "&a&l{AMOUNT}x UNIQUE",
+  "settings": {
+    "title": "Unique Space Chest",
+    "size": 45,
+    "redeemable items": 5,
+    "format": [
+      "---------",
+      "-+++++++-",
+      "-+++++++-",
+      "-+++++++-",
+      "---------"
+    ],
+    "background": {
+      "item": "black_stained_glass_pane",
+      "name": " "
+    },
+    "background 2": {
+      "item": "black_stained_glass",
+      "name": " "
+    }
+  },
+  "reveal chances": {
+    "LEGENDARY": 5,
+    "ULTIMATE": 10,
+    "ELITE": 15,
+    "UNIQUE": 20,
+    "SIMPLE": 25
+  },
+  "item": {
+    "item": "trapped_chest",
+    "name": "&a&lUnique Server Chest &7(Right Click)",
+    "lore": [
+      "&7A cache of equipment packed by",
+      "&7the Intergalactic Server Station.",
+      " ",
+      "&7Contains &a&n5 Unique rarity&r &7items...",
+      "&a&l* &r&7Unique Equipment",
+      "&a&l* &r&7Unique Custom TNT",
+      "&a&l* &r&7Pig/Chicken Spawners",
+      "&a&l* &r&7Hopper",
+      "&a&l* &r&7Cosmic Crackers",
+      "&a&l* &r&710 Level Skill Vouchers",
+      "&a&l* &r&75 Level mcMMO Voucher",
+      "&a&l* &r&7$50,000 Money Notes",
+      "&a&l* &r&72,000-5,000XP Bottles",
+      "&a&l* &r&7Unique Player Titles",
+      "&a&l* &r&7Unique Secret Dust",
+      "&a&l* &r&7Unique Enchantment Book",
+      "&a&l* &r&7Simple/Unique Kill Tracker",
+      "&a&l* &r&7Unique Randomization Scroll",
+      "&a&l* &r&7Tier #2 Rank Quest",
+      "&a... and more!"
+    ]
+  },
+  "flare": {
+    "settings": {
+      "spawn radius": 12,
+      "spawn in delay": 6,
+      "nearby radius": 50,
+      "cannot land above": [
+        "lava"
+      ],
+      "cannot land in": [
+        "lava",
+        "water",
+        "snow"
+      ]
+    },
+    "item": "torch",
+    "name": "&a&lUnique Space Flare&r &7(Right Click)",
+    "lore": [
+      "&7Drops a cache of equipment packaged by",
+      "&7the &nIntergalactic Cosmonaut Station,",
+      "&7near your character's current position."
+    ],
+    "request msg": [
+      "&a&l** Unique Space Flare **",
+      "&7Your request for &61x Loot Cache(s) &7has been received",
+      "&7Transmitting coordinates... &ax:{X} y:{Y} z:{Z}"
+    ],
+    "nearby spawn msg": [
+      "&3&l(!)&r &3A &a&nUnique Space Flare&r &3has been launched nearby!"
+    ]
+  },
+  "display": {
+    "rarity": "&aUnique",
+    "item": "stained_glass_pane:5",
+    "name": "&a&lUnique Mystery Item",
+    "lore": [
+      "&7Click here to reveal a",
+      "{LOOT_RARITY} &7item from the {SC_RARITY}",
+      "&7loot table.",
+      " ",
+      "&a&l+20%&r &fRare Loot Chance"
+    ]
+  },
+  "open gui": {
+    "item": "stained_glass:5",
+    "name": "&a&l???&r &7#{SLOT}",
+    "lore": [
+      "&7Choose &a&n5 mystery items&r &7and,",
+      "&7your &a&lUnique&r &7loot will be revealed."
+    ]
+  },
+  "selected": {
+    "item": "trapped_chest",
+    "name": "&a&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item."
+    ]
+  },
+  "reveal slot rarity": {
+    "item": "trapped_chest",
+    "name": "&a&lMystery Item &n#{SLOT}",
+    "lore": [
+      "&7You have selected this mystery item.",
+      " ",
+      "&7&nClick to reveal slot rarity...",
+      "&f&l*&r &fSimple",
+      "&a&l*&r &aUnique",
+      "&b&l*&r &bElite",
+      "&e&l*&r &eUltimate",
+      "&6&l*&r &6Legendary"
+    ]
+  },
+  "rewards": {
+    "LEGENDARY": [
+      "pigspawner",
+      "chickenspawner",
+      "hopper;amount=1-8",
+      "mcmmocreditvoucher:10",
+      "mcmmolevelvoucher:random:5",
+      "banknote:50000",
+      "xpbottle:2000-5000",
+      "rarityfireball:UNIQUE;amount=1-32",
+      "raritybook:UNIQUE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "randomizationscroll:UNIQUE"
+    ],
+    "ULTIMATE": [
+      "pigspawner",
+      "chickenspawner",
+      "hopper;amount=1-8",
+      "mcmmocreditvoucher:10",
+      "mcmmolevelvoucher:random:5",
+      "banknote:50000",
+      "xpbottle:2000-5000",
+      "rarityfireball:UNIQUE;amount=1-32",
+      "raritybook:UNIQUE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "randomizationscroll:UNIQUE"
+    ],
+    "ELITE": [
+      "pigspawner",
+      "chickenspawner",
+      "hopper;amount=1-8",
+      "mcmmocreditvoucher:10",
+      "mcmmolevelvoucher:random:5",
+      "banknote:50000",
+      "xpbottle:2000-5000",
+      "rarityfireball:UNIQUE;amount=1-32",
+      "raritybook:UNIQUE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "randomizationscroll:UNIQUE"
+    ],
+    "UNIQUE": [
+      "pigspawner",
+      "chickenspawner",
+      "hopper;amount=1-8",
+      "mcmmocreditvoucher:10",
+      "mcmmolevelvoucher:random:5",
+      "banknote:50000",
+      "xpbottle:2000-5000",
+      "rarityfireball:UNIQUE;amount=1-32",
+      "raritybook:UNIQUE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "randomizationscroll:UNIQUE"
+    ],
+    "SIMPLE": [
+      "pigspawner",
+      "chickenspawner",
+      "hopper;amount=1-8",
+      "mcmmocreditvoucher:10",
+      "mcmmolevelvoucher:random:5",
+      "banknote:50000",
+      "xpbottle:2000-5000",
+      "rarityfireball:UNIQUE;amount=1-32",
+      "raritybook:UNIQUE",
+      "soultracker:UNIQUE",
+      "soultracker:SIMPLE",
+      "randomizationscroll:UNIQUE"
+    ]
+  }
+}

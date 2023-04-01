@@ -8,133 +8,162 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.*;
 
 public final class FileServerCrate extends RPAddonSpigot implements ServerCrate {
-	private UInventory inv;
-	private LinkedHashMap<String, Integer> revealChances;
-	private ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
-	private HashMap<String, List<String>> rewards;
-	private List<Integer> selectableslots;
-	private FileServerCrateFlareObj flare;
+	private final String boss_reward;
+	private final UInventory inventory;
+	private final LinkedHashMap<String, Integer> revealChances;
+	private final ItemStack physicalItem, display, opengui, selected, revealSlotRarity, background, background2;
+	private final int redeemable_items;
+	private final List<String> format;
+	private final String display_rarity;
+	private final HashMap<String, List<String>> rewards;
+	private final List<Integer> selectable_slots;
+	private final FileServerCrateFlareObj flare;
 	public FileServerCrate(File f) {
 		super(f);
+		final JSONObject json = parse_json_from_file(f);
+
+		boss_reward = parse_string_in_json(json, "boss reward");
+
+		physicalItem = create_item_stack(json, "item");
+		display = create_item_stack(json, "display");
+		opengui = create_item_stack(json, "open gui");
+		selected = create_item_stack(json, "selected");
+		revealSlotRarity = create_item_stack(json, "reveal slot rarity");
+
+		final JSONObject display_json = json.getJSONObject("display");
+		display_rarity = parse_string_in_json(display_json, "rarity");
+
+		final JSONObject settings_json = json.getJSONObject("settings");
+		redeemable_items = parse_int_in_json(settings_json, "redeemable items");
+		format = parse_list_string_in_json(settings_json, "format");
+		background = create_item_stack(settings_json, "background");
+		background2 = create_item_stack(settings_json, "background 2");
+
+		inventory = new UInventory(null, settings_json.getInt("size"), colorize(settings_json.getString("title")));
+		final Inventory inventory_inv = inventory.getInventory();
+		final ItemStack background = this.background, air = new ItemStack(Material.AIR), opengui = this.opengui.clone();
+		selectable_slots = new ArrayList<>();
+		for(int i = 0; i < format.size(); i++) {
+			final String s = format.get(i);
+			for(int o = 0; o < s.length(); o++) {
+				final int slot = i*9+o;
+				final String t = s.substring(o, o+1);
+				final boolean plus = t.equals("+");
+				final ItemStack item = plus ? opengui : t.equals("-") ? background : air;
+				if(plus) {
+					selectable_slots.add(slot);
+					final ItemMeta m = item.getItemMeta();
+					if(m.hasDisplayName()) {
+						m.setDisplayName(m.getDisplayName().replace("{SLOT}", Integer.toString(selectable_slots.size())));
+					}
+					item.setItemMeta(m);
+				}
+				inventory_inv.setItem(slot, item);
+			}
+		}
+
+		revealChances = new LinkedHashMap<>();
+		final JSONObject reveal_chances_json = json.getJSONObject("reveal chances");
+		for(String s : reveal_chances_json.keySet()) {
+			revealChances.put(s, parse_int_in_json(reveal_chances_json, s));
+		}
+
+		flare = new FileServerCrateFlareObj(this, json);
+
+		rewards = new HashMap<>();
+		final JSONObject rewards_json = json.getJSONObject("rewards");
+		for(String s : rewards_json.keySet()) {
+			rewards.put(s, parse_list_string_in_json(rewards_json, s));
+		}
+
 		register(Feature.SERVER_CRATE, this);
 	}
 
 	public String getBossReward() {
-		return colorize(yml.getString("boss reward"));
+		return boss_reward;
 	}
+	@Override
 	public int getRedeemableItems() {
-		return yml.getInt("settings.redeemable items");
+		return redeemable_items;
 	}
+	@Override
 	public String getDisplayRarity() {
-		return getString(yml, "display.rarity");
+		return display_rarity;
 	}
-	public List<Integer> getSelectableSlots() {
-		return selectableslots;
+	@Override
+	public @NotNull List<Integer> getSelectableSlots() {
+		return selectable_slots;
 	}
+	@Override
 	public UInventory getInventory() {
-		if(inv == null) {
-			inv = new UInventory(null, yml.getInt("settings.size"), colorize(yml.getString("settings.title")));
-			final Inventory ii = inv.getInventory();
-			final List<String> f = getFormat();
-			final ItemStack BG = getBackground(), air = new ItemStack(Material.AIR), O = getOpenGui();
-			selectableslots = new ArrayList<>();
-			for(int i = 0; i < f.size(); i++) {
-				final String s = f.get(i);
-				for(int o = 0; o < s.length(); o++) {
-					final int slot = i*9+o;
-					final String t = s.substring(o, o+1);
-					final boolean plus = t.equals("+");
-					final ItemStack item = plus ? O.clone() : t.equals("-") ? BG : air;
-					if(plus) {
-						selectableslots.add(slot);
-						final ItemMeta m = item.getItemMeta();
-						if(m.hasDisplayName()) m.setDisplayName(m.getDisplayName().replace("{SLOT}", Integer.toString(selectableslots.size())));
-						item.setItemMeta(m);
-					}
-					ii.setItem(slot, item);
-				}
-			}
-		}
-		return inv;
+		return inventory;
 	}
-	public List<String> getFormat() {
-		return getStringList(yml, "settings.format");
+	public @NotNull List<String> getFormat() {
+		return format;
 	}
-	public LinkedHashMap<String, Integer> getRevealChances() {
-		if(revealChances == null) {
-			revealChances = new LinkedHashMap<>();
-			for(String s : yml.getConfigurationSection("reveal chances").getKeys(false)) {
-				revealChances.put(s, yml.getInt("reveal chances." + s));
-			}
-		}
+	@Override
+	public @NotNull LinkedHashMap<String, Integer> getRevealChances() {
 		return revealChances;
 	}
 	@NotNull
 	@Override
 	public ItemStack getItem() {
-		if(physicalItem == null) physicalItem = createItemStack(yml, "item");
 		return getClone(physicalItem);
 	}
-	public ItemStack getDisplay() {
-		if(display == null) display = createItemStack(yml, "display");
+	public @NotNull ItemStack getDisplay() {
 		return getClone(display);
 	}
-	public ItemStack getOpenGui() {
-		if(opengui == null) opengui = createItemStack(yml, "open gui");
+	public @NotNull ItemStack getOpenGui() {
 		return getClone(opengui);
 	}
-	public ItemStack getSelected() {
-		if(selected == null) selected = createItemStack(yml, "selected");
+	public @NotNull ItemStack getSelected() {
 		return getClone(selected);
 	}
-	public ItemStack getRevealSlotRarity() {
-		if(revealSlotRarity == null) revealSlotRarity = createItemStack(yml, "reveal slot rarity");
+	public @NotNull ItemStack getRevealSlotRarity() {
 		return getClone(revealSlotRarity);
 	}
-	public HashMap<String, List<String>> getRewards() {
-		if(rewards == null) {
-			rewards = new HashMap<>();
-			for(String s : yml.getConfigurationSection("rewards").getKeys(false)) {
-				rewards.put(s, yml.getStringList("rewards." + s));
-			}
-		}
+	@Override
+	public @NotNull HashMap<String, List<String>> getRewards() {
 		return rewards;
 	}
-	public ItemStack getBackground() {
-		if(background == null) background = createItemStack(yml, "settings.background");
+	@Override
+	public @NotNull ItemStack getBackground() {
 		return getClone(background);
 	}
-	public ItemStack getBackground2() {
-		if(background2 == null) background2 = createItemStack(yml, "settings.background 2");
+	@Override
+	public @NotNull ItemStack getBackground2() {
 		return getClone(background2);
 	}
-	public FileServerCrateFlareObj getFlare() {
-		if(flare == null) flare = new FileServerCrateFlareObj(this);
+	@Override
+	public @NotNull FileServerCrateFlareObj getFlare() {
 		return flare;
 	}
+	@Override
 	public ServerCrate getRandomRarity(boolean useChances) {
 		String rarity = null;
 		final Collection<String> key = getRewards().keySet();
 		if(!useChances) {
 			rarity = (String) key.toArray()[RANDOM.nextInt(key.size())];
 		} else {
-			final LinkedHashMap<String, Integer> r = getRevealChances();
+			final LinkedHashMap<String, Integer> reveal_chances = getRevealChances();
 			for(String s : key) {
-				if(RANDOM.nextInt(100) <= r.get(s)) {
+				if(RANDOM.nextInt(100) <= reveal_chances.get(s)) {
 					rarity = s;
 				}
 			}
 			if(rarity == null) {
-				rarity = (String) r.keySet().toArray()[r.keySet().size()-1];
+				rarity = (String) reveal_chances.keySet().toArray()[reveal_chances.keySet().size()-1];
 			}
 		}
 		return getServerCrate(rarity);
 	}
+	@Override
 	public ItemStack getRandomReward(@NotNull String rarity) {
 		final List<String> rewards = getRewards().get(rarity);
 		final String reward = rewards.get(RANDOM.nextInt(rewards.size()));
