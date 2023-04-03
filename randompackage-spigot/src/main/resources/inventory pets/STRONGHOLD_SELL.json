@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "exp gained per use": 50,
+    "values": {
+      "1": 15,
+      "2": 20,
+      "3": 25,
+      "4": 30,
+      "5": 35,
+      "6": 40,
+      "7": 45,
+      "8": 50,
+      "9": 55,
+      "10": 60
+    },
+    "cooldown": {
+      "all": 1800
+    },
+    "exp to level": {
+      "all": 500
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/d04719b3b97d195a205718b6ee21f5c95cafa167e7abca88a2103d52b37d722",
+    "item": "player_head_item",
+    "name": "&e&lStronghold Sell Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A beast born from the chaos of",
+      "&7the contested strongholds of this planet.",
+      " ",
+      "&f&lAbility",
+      "&7Enable /sh sell for: &f{VALUE}s",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerAddToList=INVENTORY_PET_STRONGHOLD_SELL;Wait=20*{VALUE};PlayerRemoveFromList=INVENTORY_PET_STRONGHOLD_SELL"
+  ]
+}

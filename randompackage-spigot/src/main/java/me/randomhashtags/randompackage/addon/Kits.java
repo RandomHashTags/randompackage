@@ -126,13 +126,13 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
         return kitData != null && (kitData.getLevels().containsKey(kit) || player.hasPermission("RandomPackage.kit." + kit.getIdentifier()));
     }
     public final void trySpawningFallenHero(Player player, ItemStack is, CustomKit kit, Location l) {
-        final FallenHero h = kit.getFallenHero();
-        if(h.canSpawnAt(l)) {
+        final FallenHero fallen_hero = kit.getFallenHero();
+        if(fallen_hero.canSpawnAt(l)) {
             removeItem(player, is, 1);
-            h.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), kit);
+            fallen_hero.spawn(player, new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), kit);
             final HashMap<String, String> r = new HashMap<>();
             r.put("{NAME}", kit.getFallenHeroName());
-            sendStringListMessage(player, h.getSummonMsg(), r);
+            sendStringListMessage(player, fallen_hero.getSummonMsg(), r);
         } else {
             sendStringListMessage(player, getNotInWarzoneMsg(), null);
         }

@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "cooldown": {
+      "1": 720,
+      "2": 660,
+      "3": 600,
+      "4": 540,
+      "5": 480,
+      "6": 360,
+      "7": 300,
+      "8": 240,
+      "9": 180,
+      "10": 120
+    },
+    "exp to level": {
+      "all": 1000
+    }
+  },
+  "item": {
+    "texture": "",
+    "item": "player_head_item",
+    "name": "&e&lBanner Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A rally entity that",
+      "&7has the magical power to",
+      "&7summon /f banners at its",
+      "&7owner's location at will.",
+      " ",
+      "&f&lAbility",
+      "&7Spawn, Place /f banner",
+      "&7at current location.",
+      "&7(no soul cost)",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;"
+  ]
+}

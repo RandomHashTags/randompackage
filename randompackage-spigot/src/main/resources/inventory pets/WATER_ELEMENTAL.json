@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "cooldown": {
+      "all": 300
+    },
+    "exp to level": {
+      "2": 1000,
+      "3": 1500,
+      "4": 2000,
+      "5": 2500,
+      "6": 3000,
+      "7": 3500,
+      "8": 4000,
+      "9": 4500,
+      "10": 5000,
+      "11": 5500
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/bd37285793131ed755f1b0098f29dd413d67656b6208728935492b49b1d0d4ba",
+    "item": "player_head_item",
+    "name": "&e&lWater Elemental Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A watery pet that is",
+      "&7capable of extracting water",
+      "&7from the air and condensing it.",
+      " ",
+      "&f&lAbility",
+      "&7Fills up to 32x",
+      "&7empty buckets in your",
+      "&7inventory into water!",
+      "     &f&l+",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;"
+  ]
+}

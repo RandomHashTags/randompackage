@@ -1,0 +1,47 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 4,
+    "values": {
+      "1": 1.5,
+      "2": 3,
+      "3": 4.5,
+      "4": 6
+    },
+    "cooldown": {
+      "all": 600
+    },
+    "exp to level": {
+      "2": 1500,
+      "3": 2250,
+      "4": 3000,
+      "5": 3750
+    }
+  },
+  "item": {
+    "texture": "",
+    "item": "player_head_item",
+    "name": "&e&lFeign Death Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A ghastly pet that can",
+      "&7control death itself.",
+      " ",
+      "&f&lAbility",
+      "&7Fake your own death.",
+      "&7Removes [&4Feign Death&7]",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerGivePetExp=FEIGN_DEATH:1-50;PlayerAddPotionEffect=Invisibility:1:20*{VALUE}"
+  ]
+}

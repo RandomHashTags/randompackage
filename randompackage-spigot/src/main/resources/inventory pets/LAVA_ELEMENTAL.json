@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "cooldown": {
+      "all": 300
+    },
+    "exp to level": {
+      "2": 2000,
+      "3": 3000,
+      "4": 4000,
+      "5": 5000,
+      "6": 6000,
+      "7": 7000,
+      "8": 8000,
+      "9": 9000,
+      "10": 10000,
+      "11": 11000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/a6747f0f5a7a27c5f10e99b158d7311d283372e1b7e6bfec51c8629ee97f8d",
+    "item": "player_head_item",
+    "name": "&e&lLava Elemental Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A fiery pet that is",
+      "&7capable of conjuring lava",
+      "&7and giving it to its owner.",
+      " ",
+      "&f&lAbility",
+      "&7Fills up to 32x",
+      "&7empty buckets in your",
+      "&7inventory into lava!",
+      "     &f&l+",
+      "&7Adds 25x Fat Bucket",
+      "&7charges to all Fat Buckets!",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerGivePetExp=LAVA_ELEMENTAL:getPlayerEmptyFatBuckets"
+  ]
+}

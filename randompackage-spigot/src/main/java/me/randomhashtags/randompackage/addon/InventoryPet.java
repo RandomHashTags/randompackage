@@ -23,13 +23,14 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         return pet != null ? isEgg ? pet.getEgg() : pet.getItem(1) : null;
     }
 
-    HashMap<Integer, String> getValues();
+    @NotNull HashMap<Integer, String> getValues();
+    @NotNull
     default String getValue(int level) {
         final HashMap<Integer, String> values = getValues();
-        return values != null ? values.getOrDefault(level, "null") : "null";
+        return values.getOrDefault(level, "null");
     }
 
-    HashMap<Integer, Integer> getCooldowns();
+    @NotNull HashMap<Integer, Integer> getCooldowns();
     default long getCooldown(int level) {
         final HashMap<Integer, Integer> cooldowns = getCooldowns();
         return cooldowns.getOrDefault(-1, cooldowns.getOrDefault(level, 3600));
@@ -39,7 +40,7 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         return v != null ? Long.parseLong(v.split(":")[3]) : -1;
     }
 
-    HashMap<Integer, Integer> getRequiredXp();
+    @NotNull HashMap<Integer, Integer> getRequiredXp();
     default int getRequiredXp(int level) {
         final HashMap<Integer, Integer> r = getRequiredXp();
         return r.getOrDefault(-1, r.getOrDefault(level, 1000));
@@ -90,6 +91,6 @@ public interface InventoryPet extends Itemable, Attributable, Skullable, MaxLeve
         set_inventory_pet_values(is, identifier, level, exp, System.currentTimeMillis() + getCooldown(level));
     }
 
-    ItemStack getEgg();
+    @NotNull ItemStack getEgg();
     LinkedHashMap<InventoryPet, Integer> getEggRequiredPets();
 }

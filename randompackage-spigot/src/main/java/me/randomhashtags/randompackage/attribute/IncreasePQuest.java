@@ -33,7 +33,7 @@ public final class IncreasePQuest extends AbstractEventAttribute {
                                 final PlayerQuestCompleteEvent e = new PlayerQuestCompleteEvent(player, quest);
                                 PLUGIN_MANAGER.callEvent(e);
                                 final HashMap<String, String> replacements = new HashMap<>();
-                                replacements.put("{NAME}", q.getName());
+                                replacements.put("{NAME}", getLocalizedName(q));
                                 sendStringListMessage(player, msg, replacements);
                             }
                         }

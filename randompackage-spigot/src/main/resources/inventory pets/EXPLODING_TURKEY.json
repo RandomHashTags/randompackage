@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 5,
+    "cooldown": {
+      "1": 300,
+      "2": 240,
+      "3": 180,
+      "4": 120,
+      "5": 60
+    },
+    "exp to level": {
+      "2": 1000,
+      "3": 1500,
+      "4": 2000,
+      "5": 2500,
+      "6": 3000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/cb7d29b52ba58255798a77ff286c58894e3093b36b75844ab9c3517df3f2492b",
+    "item": "player_head_item",
+    "name": "&e&lExploding Turkey Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7An extremely unstable and manic",
+      "&7EXPLOSIVE Thanksgiving Turkey.",
+      " ",
+      "&f&lAbility",
+      "&7Shoots an &eExplosive Turkey",
+      "&7that will detonate upon contact,",
+      "&7applying &eKnockback I &7and a &eFreeze (2s) &7to enemies",
+      "&7within a &e{LEVEL}x{LEVEL} &7radius of the explosion.",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;"
+  ]
+}

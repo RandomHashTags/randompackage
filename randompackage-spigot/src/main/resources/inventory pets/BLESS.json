@@ -1,0 +1,46 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "exp gained per use": 50,
+    "cooldown": {
+      "1": 540,
+      "2": 480,
+      "3": 420,
+      "4": 360,
+      "5": 300
+    },
+    "exp to level": {
+      "2": 2000,
+      "3": 3000,
+      "4": 4000,
+      "5": 5000,
+      "6": 6000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/f9a384c572bc1be0774a943935fddc6ae537eca866daddb636dea0bcfc4f",
+    "item": "player_head_item",
+    "name": "&e&lBless Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A strange and foreign creature",
+      "&7made entirely of penetrating light.",
+      " ",
+      "&f&lAbility",
+      "&7Instant /bless",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerRemovePotionEffect=Blindness,Slowness,Wither,Poison,Weakness,Slow_Falling,Mining_Fatigue;PlayerSendMessage=&e&l*** BLESSED ***"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "cooldown": {
+      "all": 172800
+    },
+    "exp to level": {
+      "all": 1000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/a6cc486c2be1cb9dfcb2e53dd9a3e9a883bfadb27cb956f1896d602b4067",
+    "item": "player_head_item",
+    "name": "&e&lEvolution Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7One of the more helpful members",
+      "&7of the mystical Mimic race,",
+      "&7this object has the power to",
+      "&7grant its owner extreme power!",
+      " ",
+      "&f&lAbility",
+      "&7Increases level of lowest /vkit by 1,",
+      "&7and a {LEVEL}% chance to double level up.",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;"
+  ]
+}

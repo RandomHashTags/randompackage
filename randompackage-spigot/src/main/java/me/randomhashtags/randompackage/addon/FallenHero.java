@@ -44,8 +44,8 @@ public interface FallenHero extends Spawnable, GivedpItemableSpigot {
     @NotNull ItemStack getGem();
     List<PotionEffect> getPotionEffects();
     int getGemDropChance();
-    List<String> getSummonMsg();
-    List<String> getReceiveKitMsg();
+    @NotNull List<String> getSummonMsg();
+    @NotNull List<String> getReceiveKitMsg();
     String getType();
     void spawn(LivingEntity summoner, Location loc, CustomKit kit);
 }

@@ -1,0 +1,70 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "exp earned per use": "4-5",
+    "values": {
+      "1": 5,
+      "2": 8,
+      "3": 11,
+      "4": 14,
+      "5": 17,
+      "6": 19,
+      "7": 21,
+      "8": 23,
+      "9": 25,
+      "10": 27
+    },
+    "cooldown": {
+      "1": 300,
+      "2": 270,
+      "3": 240,
+      "4": 210,
+      "5": 180,
+      "6": 150,
+      "7": 120,
+      "8": 90,
+      "9": 60,
+      "10": 27
+    },
+    "exp to level": {
+      "2": 3000,
+      "3": 4500,
+      "4": 6000,
+      "5": 7500,
+      "6": 9000,
+      "7": 10500,
+      "8": 12000,
+      "9": 13500,
+      "10": 15000,
+      "11": 16500
+    }
+  },
+  "item": {
+    "texture": "",
+    "item": "player_head_item",
+    "name": "&e&lTesla Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A legendary creature of myth",
+      "&7that acts as a temporarily",
+      "&7infinite source of player souls.",
+      " ",
+      "&f&lAbility",
+      "&7Remove all soul costs from",
+      "&7any action for {VALUE}s.",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerAddToList=INVENTORY_PET_TESLA;Wait=20*{VALUE};PlayerRemoveFromList=INVENTORY_PET_TESLA"
+  ]
+}

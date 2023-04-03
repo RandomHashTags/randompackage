@@ -16,7 +16,7 @@ import java.util.List;
 public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 	private final MultilingualString name;
 	private final ItemStack helmet, chestplate, leggings, boots;
-	private List<ArmorSetWeaponInfo> weapons;
+	private final List<ArmorSetWeaponInfo> weapons;
 	private final List<String> armor_lore, crystal_perks, armor_attributes, crystal_attributes, activate_message, crystal_applied_message;
 
 	public FileArmorSet(File f) {
@@ -25,10 +25,26 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 		name = parse_multilingual_string_in_json(json, "name");
 		armor_lore = parse_list_string_in_json(json, "armor lore");
 		crystal_perks = parse_list_string_in_json(json, "crystal perks");
-		armor_attributes = parse_list_string_in_json(json, "attributes.armor");
-		crystal_attributes = parse_list_string_in_json(json, "attributes.crystal");
+		final JSONObject attributes_json = json.getJSONObject("attributes");
+		armor_attributes = parse_list_string_in_json(attributes_json, "armor");
+		crystal_attributes = parse_list_string_in_json(attributes_json, "crystal");
 		activate_message = parse_list_string_in_json(json, "activate msg");
 		crystal_applied_message = parse_list_string_in_json(json, "crystal applied msg");
+
+		helmet = create_item_stack(json, "helmet");
+		chestplate = create_item_stack(json, "chestplate");
+		leggings = create_item_stack(json, "leggings");
+		boots = create_item_stack(json, "boots");
+
+		weapons = new ArrayList<>();
+		final JSONObject weapons_json = json.optJSONObject("weapons");
+		if(weapons_json != null) {
+			for(String s : weapons_json.keySet()) {
+				final JSONObject weapon_json = weapons_json.getJSONObject(s);
+				final List<String> weapon_set_lore = parse_list_string_in_json(weapon_json, "set lore"), weapon_attributes = parse_list_string_in_json(attributes_json, s);
+				weapons.add(new ArmorSetWeaponInfo(s, create_item_stack(weapons_json, s),  weapon_set_lore, weapon_attributes));
+			}
+		}
 		register(Feature.ARMOR_SET, this);
 	}
 
@@ -37,43 +53,22 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 	}
 	@NotNull
 	public ItemStack getHelmet() {
-		if(helmet == null) {
-			helmet = createItemStack(yml, "helmet");
-		}
 		return getClone(helmet);
 	}
 	@NotNull
 	public ItemStack getChestplate() {
-		if(chestplate == null) {
-			chestplate = createItemStack(yml, "chestplate");
-		}
 		return getClone(chestplate);
 	}
 	@NotNull
 	public ItemStack getLeggings() {
-		if(leggings == null) {
-			leggings = createItemStack(yml, "leggings");
-		}
 		return getClone(leggings);
 	}
 	@NotNull
 	public ItemStack getBoots() {
-		if(boots == null) {
-			boots = createItemStack(yml, "boots");
-		}
 		return getClone(boots);
 	}
 	@NotNull
 	public List<ArmorSetWeaponInfo> getWeapons() {
-		if(weapons == null) {
-			weapons = new ArrayList<>();
-			final ConfigurationSection c = yml.getConfigurationSection("weapons");
-			if(c != null) {
-				for(String s : c.getKeys(false)) {
-					weapons.add(new ArmorSetWeaponInfo(s, createItemStack(yml, "weapons." + s), colorizeListString(yml.getStringList("weapons." + s + ".set lore")), yml.getStringList("attributes." + s)));
-				}
-			}
-		}
 		return weapons;
 	}
 	public @NotNull List<String> getArmorLore() {

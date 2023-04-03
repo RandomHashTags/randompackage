@@ -1,0 +1,49 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 5,
+    "exp gained per use": 40,
+    "cooldown": {
+      "1": 600,
+      "2": 525,
+      "3": 450,
+      "4": 375,
+      "5": 300
+    },
+    "exp to level": {
+      "2": 5000,
+      "3": 7500,
+      "4": 10000,
+      "5": 12500,
+      "6": 15000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/740c8779973c348e3f74ce4facaf173a73d7cd2db7dba31c295a33bddf9e67e5",
+    "item": "player_head_item",
+    "name": "&e&lRaid Creeper Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7A mythical hybrid creeper,",
+      "&7a rare cross between the",
+      "&7Lucky and Tactical species.",
+      " ",
+      "&f&lAbility",
+      "&7Spawn a &4Raid Creeper",
+      "&7(Lucky + Tactical)",
+      "&7(100% Spawn Drop Rate)",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;"
+  ]
+}

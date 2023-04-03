@@ -254,7 +254,7 @@ public interface DefaultFileGeneration {
         generateAllDefault("filter categories", "EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY");
     }
     default void generateDefaultInventoryPets() {
-        generateAllDefault("inventory pets",
+        generate_all_default_json("inventory pets",
                 "ABOMINABLE_SNOWMAN",
                 "ALCHEMIST",
                 "ANTI_TELEBLOCK",

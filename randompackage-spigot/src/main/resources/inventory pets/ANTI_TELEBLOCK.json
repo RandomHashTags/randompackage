@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "enabled": true,
+    "max level": 10,
+    "cooldown": {
+      "1": 120,
+      "2": 110,
+      "3": 100,
+      "4": 90,
+      "5": 80,
+      "6": 70,
+      "7": 60,
+      "8": 50,
+      "9": 40,
+      "10": 30
+    },
+    "exp to level": {
+      "all": 1000
+    }
+  },
+  "item": {
+    "texture": "https://textures.minecraft.net/texture/7a59bb0a7a32965b3d90d8eafa899d1835f424509eadd4e6b709ada50b9cf",
+    "item": "player_head_item",
+    "name": "&e&lAnti Teleblock Pet&r &7[LVL {LEVEL}]",
+    "lore": [
+      "&7An elusive creature that",
+      "&7has the power to negate",
+      "&7curses that prevent the use",
+      "&7of enderpearl teleportation.",
+      " ",
+      "&f&lAbility",
+      "&7Removes [&cTeleblock&7]",
+      " ",
+      "&f&lCooldown",
+      " &7{COOLDOWN}",
+      " ",
+      "&f&lLevel",
+      " &7{LEVEL}",
+      " ",
+      "&f&lEXP",
+      "{EXP}",
+      " &7({XP}/{COMPLETION})"
+    ]
+  },
+  "attributes": [
+    "PlayerInteract;PlayerRemoveFromList=TELEBLOCKED"
+  ]
+}
