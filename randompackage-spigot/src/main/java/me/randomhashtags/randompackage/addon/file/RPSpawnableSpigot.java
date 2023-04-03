@@ -25,9 +25,9 @@ public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnab
         final RegionalAPI regional = RegionalAPI.INSTANCE;
         if(regional.hookedFactionsUUID()) {
             final String own = summoner != null ? regional.getFactionTag(summoner.getUniqueId()) : null, world_name = l.getWorld().getName(), f = FactionsUUID.INSTANCE.getRegionalIdentifierAt(l);
-            for(String s : getSpawnableFactionClaims()) {
-                if(s.startsWith(world_name + ";")) {
-                    for(String r : s.split(world_name + ";")[1].split(";")) {
+            for(String spawnable_faction_claim : getSpawnableFactionClaims()) {
+                if(spawnable_faction_claim.startsWith(world_name + ";")) {
+                    for(String r : spawnable_faction_claim.split(world_name + ";")[1].split(";")) {
                         if(r.equalsIgnoreCase(f) || r.equalsIgnoreCase("own") && f.equals(own)) {
                             return true;
                         }

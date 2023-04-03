@@ -190,7 +190,7 @@ public interface EventReplacements extends EventEntities {
         return new String[] {"woncash", total.toPlainString(), "wager", wager.toPlainString()};
     }
     default String[] getReplacements(@NotNull CustomEnchantProcEvent event) {
-        final String[] a = getReplacements(event.getEvent()), b = new String[] {"@Player", location_to_string(event.getHolder().getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", event.getEnchant().getName()};
+        final String[] a = getReplacements(event.getEvent()), b = new String[] { "@Player", location_to_string(event.getHolder().getLocation()), "level", Integer.toString(event.getEnchantLevel()), "{ENCHANT}", getLocalizedName(event.getEnchant()) };
         return getReplacements(a, b);
     }
     default String[] getReplacements(@NotNull DepleteRarityGemEvent event) {

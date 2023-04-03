@@ -3,6 +3,7 @@ package me.randomhashtags.randompackage.addon.obj;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
@@ -37,9 +38,11 @@ public final class PvPMatch {
         chunk = null;
     }
 
+    @Nullable
     public static PvPMatch valueOf(Player player) {
         return MATCHES != null ? MATCHES.getOrDefault(player, null) : null;
     }
+    @Nullable
     public static PvPMatch valueOf(int slot) {
         if(MATCHES != null) {
             for(PvPMatch m : MATCHES.values()) {

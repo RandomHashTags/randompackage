@@ -2,6 +2,7 @@ package me.randomhashtags.randompackage.addon.obj;
 
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitItem;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.util.RPFeatureSpigot;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     private final CustomKit kit;
-    private final String path, item, amount, name;
+    private final String path, item, amount;
+    private final MultilingualString name;
     private final int chance, requiredLevel;
     private final List<String> lore;
 
@@ -27,13 +29,13 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     public void unload() {
     }
 
-    public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore) {
+    public KitItem(CustomKit kit, String path, String item, String amount, MultilingualString name, List<String> lore) {
         this(kit, path, item, amount, name, lore, 100, 0);
     }
-    public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore, int chance) {
+    public KitItem(CustomKit kit, String path, String item, String amount, MultilingualString name, List<String> lore, int chance) {
         this(kit, path, item, amount, name, lore, chance, 0);
     }
-    public KitItem(CustomKit kit, String path, String item, String amount, String name, List<String> lore, int chance, int requiredLevel) {
+    public KitItem(CustomKit kit, String path, String item, String amount, MultilingualString name, List<String> lore, int chance, int requiredLevel) {
         this.kit = kit;
         this.path = path;
         this.item = item;
@@ -44,7 +46,7 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
         this.requiredLevel = requiredLevel;
     }
 
-    public CustomKit getKit() {
+    public @NotNull CustomKit getKit() {
         return kit;
     }
     public String getItem() {
@@ -53,7 +55,7 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
     public String getAmount() {
         return amount;
     }
-    public @NotNull String getName() {
+    public @NotNull MultilingualString getName() {
         return name;
     }
     public List<String> getLore() {
@@ -74,7 +76,7 @@ public final class KitItem implements RPFeatureSpigot, CustomKitItem {
                 final String lvl = Integer.toString(level), max = Integer.toString(kit.getMaxLevel());
                 final ItemMeta m = i.getItemMeta();
                 if(name != null) {
-                    m.setDisplayName(ChatColor.translateAlternateColorCodes('&', name.replace("{PLAYER}", player).replace("{LEVEL}", lvl).replace("{TIER}", lvl).replace("{MAX_TIER}", max)));
+                    m.setDisplayName(ChatColor.translateAlternateColorCodes('&', getLocalizedName(this).replace("{PLAYER}", player).replace("{LEVEL}", lvl).replace("{TIER}", lvl).replace("{MAX_TIER}", max)));
                     i.setItemMeta(m);
                 }
                 if(lore != null) {

@@ -10,6 +10,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +109,8 @@ public final class CollectionChest {
 	public void delete() {
 		CHESTS.remove(uuid);
 	}
-	
+
+	@Nullable
 	public static CollectionChest valueOf(Block block) {
 		if(CHESTS != null) {
 			for(CollectionChest cc : CHESTS.values()) {

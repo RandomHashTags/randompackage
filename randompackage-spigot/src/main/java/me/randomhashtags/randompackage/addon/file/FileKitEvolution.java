@@ -16,7 +16,7 @@ public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvol
         super(f);
         register(Feature.CUSTOM_KIT, this);
     }
-    public Kits getKitClass() {
+    public @NotNull Kits getKitClass() {
         return KitsEvolution.getKitsEvolution();
     }
 

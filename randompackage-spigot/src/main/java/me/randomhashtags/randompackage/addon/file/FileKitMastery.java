@@ -22,7 +22,7 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         super(f);
         register(Feature.CUSTOM_KIT, this);
     }
-    public Kits getKitClass() { return KitsMastery.getKitsMastery(); }
+    public @NotNull Kits getKitClass() { return KitsMastery.getKitsMastery(); }
 
     public @NotNull String getName() {
         return getString(yml, "settings.name");

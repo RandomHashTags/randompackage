@@ -6,28 +6,28 @@ import java.util.HashMap;
 import java.util.List;
 
 public final class EditedKit {
-    public static HashMap<Player, EditedKit> editing;
+    public static HashMap<Player, EditedKit> EDITING;
 
     public Player player;
     public List<KitItem> original, edited;
     public int selected = -1;
     public EditedKit(Player player, List<KitItem> original, List<KitItem> edited) {
-        if(editing == null) {
-            editing = new HashMap<>();
+        if(EDITING == null) {
+            EDITING = new HashMap<>();
         }
         this.player = player;
         this.original = original;
         this.edited = edited;
-        editing.put(player, this);
+        EDITING.put(player, this);
     }
     public void delete() {
-        editing.remove(player);
+        EDITING.remove(player);
         player = null;
         original = null;
         edited = null;
         selected = 0;
-        if(editing.isEmpty()) {
-            editing = null;
+        if(EDITING.isEmpty()) {
+            EDITING = null;
         }
     }
 }

@@ -643,14 +643,14 @@ public enum AuctionHouse implements RPFeatureSpigot, CommandExecutor {
             if(!auctions.containsKey(uuid)) {
                 auctions.put(uuid, new ArrayList<>());
             }
-            final long l = System.currentTimeMillis();
-            final UMaterial um = UMaterial.match(item);
-            final AuctionedItem a = new AuctionedItem(l, uuid, item, price);
+            final long now = System.currentTimeMillis();
+            final UMaterial material = UMaterial.match(item);
+            final AuctionedItem a = new AuctionedItem(now, uuid, item, price);
             auctions.get(uuid).add(a);
-            auctionHouse.put(l, a);
-            addToCategoryView(a, um);
+            auctionHouse.put(now, a);
+            addToCategoryView(a, material);
             organizeAH();
-            final String p = formatBigDecimal(price), i = item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : toMaterial(um.name(), false);
+            final String p = formatBigDecimal(price), i = item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : toMaterial(material.name(), false);
             final HashMap<String, String> replacements = new HashMap<>();
             replacements.put("{PRICE}", p);
             replacements.put("{ITEM}", i);

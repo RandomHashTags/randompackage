@@ -216,11 +216,11 @@ public abstract class Kits implements RPFeatureSpigot, CommandExecutor {
             final KitPreClaimEvent event = new KitPreClaimEvent(pdata, player, kit, tier, chanceOfGiving);
             PLUGIN_MANAGER.callEvent(event);
             if(RANDOM.nextInt(100) < event.getChance()) {
-                final String pn = player.getName();
+                final String player_name = player.getName();
                 final float multiplier = kit.getKitClass().getCustomEnchantLevelMultipliers().getOrDefault(tier, 1f);
                 final List<ItemStack> loot = new ArrayList<>();
                 for(KitItem ki : kit.getItems()) {
-                    final ItemStack is = ki.getItemStack(pn, tier, multiplier);
+                    final ItemStack is = ki.getItemStack(player_name, tier, multiplier);
                     if(is != null) {
                         loot.add(is);
                     }

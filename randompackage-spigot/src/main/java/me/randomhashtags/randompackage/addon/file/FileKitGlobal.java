@@ -19,7 +19,7 @@ public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal 
         register(Feature.CUSTOM_KIT, this);
     }
     @Override
-    public Kits getKitClass() {
+    public @NotNull Kits getKitClass() {
         return KitsGlobal.getKitsGlobal();
     }
 

@@ -76,21 +76,21 @@ public final class StackedEntity implements UVersionableSpigot {
             }
         }
     }
-    public void merge(LivingEntity target) {
-        final StackedEntity se = valueOf(target.getUniqueId());
-        final MobStackMergeEvent e = new MobStackMergeEvent(this, se != null ? size+se.size : size+1);
-        PLUGIN_MANAGER.callEvent(e);
-        if(!e.isCancelled()) {
-            size += se != null ? se.size : 1;
-            if(se != null && creationTime > se.creationTime) {
+    public void merge(@NotNull LivingEntity target) {
+        final StackedEntity stacked_entity = valueOf(target.getUniqueId());
+        final MobStackMergeEvent merge_event = new MobStackMergeEvent(this, stacked_entity != null ? size+stacked_entity.size : size+1);
+        PLUGIN_MANAGER.callEvent(merge_event);
+        if(!merge_event.isCancelled()) {
+            size += stacked_entity != null ? stacked_entity.size : 1;
+            if(stacked_entity != null && creationTime > stacked_entity.creationTime) {
                 remove(false, null);
-                se.size = size;
-                se.entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
+                stacked_entity.size = size;
+                stacked_entity.entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
             } else {
                 entity.setCustomName(customname.replace("{SS}", Integer.toString(size)));
                 target.remove();
-                if(se != null) {
-                    se.remove(false, null);
+                if(stacked_entity != null) {
+                    stacked_entity.remove(false, null);
                 }
             }
         }

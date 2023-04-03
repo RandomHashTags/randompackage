@@ -6,25 +6,28 @@ import me.randomhashtags.randompackage.addon.util.MaxLevelable;
 import me.randomhashtags.randompackage.addon.util.Slotable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface CustomKit extends Itemable, MaxLevelable, Slotable {
-    Kits getKitClass();
+    @NotNull Kits getKitClass();
     long getCooldown();
     List<KitItem> getItems();
-    FallenHero getFallenHero();
-    default String getFallenHeroName() {
+    @Nullable FallenHero getFallenHero();
+    @Nullable default String getFallenHeroName() {
         final FallenHero f = getFallenHero();
         return f != null ? f.getSpawnItem().getItemMeta().getDisplayName().replace("{NAME}", getItem().getItemMeta().getDisplayName()) : null;
     }
-    default ItemStack getFallenHeroItem(CustomKit kit, boolean isSpawnItem) {
-        final FallenHero f = kit.getFallenHero();
-        final ItemStack is = f != null ? isSpawnItem ? f.getSpawnItem() : f.getGem() : null;
-        if(is != null) {
+    @Nullable
+    default ItemStack getFallenHeroItem(@NotNull CustomKit kit, boolean isSpawnItem) {
+        final FallenHero hero = kit.getFallenHero();
+        final ItemStack item = hero != null ? isSpawnItem ? hero.getSpawnItem() : hero.getGem() : null;
+        if(item != null) {
             final String n = kit.getItem().getItemMeta().getDisplayName();
-            final ItemMeta m = is.getItemMeta();
+            final ItemMeta m = item.getItemMeta();
             if(m.hasDisplayName()) {
                 m.setDisplayName(m.getDisplayName().replace("{NAME}", n));
             }
@@ -35,8 +38,8 @@ public interface CustomKit extends Itemable, MaxLevelable, Slotable {
                 }
             }
             m.setLore(l);
-            is.setItemMeta(m);
+            item.setItemMeta(m);
         }
-        return is;
+        return item;
     }
 }
