@@ -122,10 +122,10 @@ public enum CustomEnchants implements EventAttributes, CommandExecutor, Listener
                 final File[] files = new File(folderString + SEPARATOR + enchant_rarity_file.getName()).listFiles();
                 if(files != null) {
                     FileEnchantRarity rarity = null;
-                    final File[] F = files;
-                    for(File k : F) {
-                        if(k.getName().contains("_settings")) {
-                            rarity = new FileEnchantRarity(enchant_rarity_file, k);
+                    final File[] all_files = files;
+                    for(File f : all_files) {
+                        if(f.getName().contains("_settings")) {
+                            rarity = new FileEnchantRarity(enchant_rarity_file, f);
                             raritybooks.add(rarity.getRevealItem());
                         }
                     }

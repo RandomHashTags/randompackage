@@ -165,7 +165,7 @@ public interface DefaultFileGeneration {
         }};
         for(Map.Entry<String, String[]> types : rarity_types.entrySet()) {
             final String rarity_type = types.getKey();
-            generateAllDefault("custom enchants" + SEPARATOR + rarity_type, "_settings");
+            generate_all_default_json("custom enchants" + SEPARATOR + rarity_type, "_settings");
             final String[] enchants = types.getValue();
             if(enchants != null) {
                 generate_all_default_json("custom enchants" + SEPARATOR + rarity_type, enchants);

@@ -1,0 +1,18 @@
+{
+  "reveal item": {
+    "item": "book",
+    "name": "&d&lRandom Enchantment Book &7(Right Click)",
+    "lore": [
+      "&7Examine to receive a random",
+      "&drandom &7enchantment book."
+    ]
+  },
+  "reveals enchant rarities": "HEROIC;SOUL;LEGENDARY;ULTIMATE;ELITE;UNIQUE;SIMPLE",
+  "reveal enchant msg": [
+    "&e&l(!) &eYou examine the &d&lRandom Enchantment Book...",
+    "&eand discovered {ENCHANT}"
+  ],
+  "revealed item": {
+    "firework": "ball:purple:fuchsia:3"
+  }
+}

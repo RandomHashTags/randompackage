@@ -7,6 +7,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,14 +15,39 @@ import java.util.List;
 
 public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRarity {
     private final File folder;
-    private ItemStack revealItem, revealedItem;
-    private Firework firework;
+    private final String[] revealed_enchant_rarities;
+    private final List<String> revealed_enchant_message;
+    private final ItemStack revealItem, revealedItem;
+    private final String name_colors, apply_colors;
+    private final boolean percents_add_up_to_100;
+    private final String success, destroy;
+    private final List<String> lore_format;
+    private final Firework firework;
     protected List<CustomEnchantSpigot> enchants;
 
     public FileEnchantRarity(File folder, File f) {
         super(f);
         this.folder = folder;
         enchants = new ArrayList<>();
+
+        final JSONObject json = parse_json_from_file(f);
+        revealed_enchant_rarities = parse_string_in_json(json, "reveals enchant rarities").split(";");
+        revealed_enchant_message = parse_list_string_in_json(json, "reveal enchant msg");
+        revealItem = create_item_stack(json, "reveal item");
+        revealedItem = create_item_stack(json, "revealed item");
+        final JSONObject revealed_item_json = json.getJSONObject("revealed item");
+        name_colors = parse_string_in_json(revealed_item_json, "name colors");
+        apply_colors = parse_string_in_json(revealed_item_json, "apply colors");
+
+        final JSONObject settings_json = json.getJSONObject("settings");
+        percents_add_up_to_100 = parse_boolean_in_json(settings_json, "success+destroy=100");
+        success = parse_string_in_json(settings_json, "success");
+        destroy = parse_string_in_json(settings_json, "destroy");
+        lore_format = parse_list_string_in_json(settings_json, "lore format");
+
+        final String[] values = parse_string_in_json(revealed_item_json, "firework").split(":");
+        firework = createFirework(FireworkEffect.Type.valueOf(values[0].toUpperCase()), getColor(values[1]), getColor(values[2]), Integer.parseInt(values[3]));
+
         register(Feature.CUSTOM_ENCHANT_RARITY, this);
     }
 
@@ -32,37 +58,35 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
     }
 
     public String[] getRevealedEnchantRarities() {
-        return yml.getString("reveals enchant rarities").split(";");
+        return revealed_enchant_rarities;
     }
     public List<String> getRevealedEnchantMsg() {
-        return getStringList(yml, "reveal enchant msg");
+        return revealed_enchant_message;
     }
     public ItemStack getRevealItem() {
-        if(revealItem == null) revealItem = createItemStack(yml, "reveal item");
         return getClone(revealItem);
     }
     @NotNull
     public ItemStack getRevealedItem() {
-        if(revealedItem == null) revealedItem = createItemStack(yml, "revealed item");
         return getClone(revealedItem);
     }
     public String getNameColors() {
-        return getString(yml, "revealed item.name colors");
+        return name_colors;
     }
     public String getApplyColors() {
-        return getString(yml, "revealed item.apply colors");
+        return apply_colors;
     }
     public boolean percentsAddUpto100() {
-        return yml.getBoolean("settings.success+destroy=100");
+        return percents_add_up_to_100;
     }
     public String getSuccess() {
-        return getString(yml, "settings.success");
+        return success;
     }
     public String getDestroy() {
-        return getString(yml, "settings.destroy");
+        return destroy;
     }
     public List<String> getLoreFormat() {
-        return getStringList(yml, "settings.lore format");
+        return lore_format;
     }
     public int getSuccessSlot() {
         return getLoreFormat().indexOf("{SUCCESS}");
@@ -71,10 +95,6 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
         return getLoreFormat().indexOf("{DESTROY}");
     }
     public Firework getFirework() {
-        if(firework == null) {
-            final String[] values = yml.getString("revealed item.firework").split(":");
-            firework = createFirework(FireworkEffect.Type.valueOf(values[0].toUpperCase()), getColor(values[1]), getColor(values[2]), Integer.parseInt(values[3]));
-        }
         return firework;
     }
     public List<CustomEnchantSpigot> getEnchants() {
