@@ -24,7 +24,7 @@ public interface DefaultFileGeneration {
         generate_all_default_json("custom armor", "DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI");
     }
     default void generateDefaultConquests() {
-        generateAllDefault("conquests", "NORMAL");
+        generate_all_default_json("conquests", "NORMAL");
     }
     default void generateDefaultCustomBosses() {
         generate_all_default_json("custom bosses", "BROOD_MOTHER", "KING_SLIME", "PLAGUE_BLOATER", "SOUL_REAPER");

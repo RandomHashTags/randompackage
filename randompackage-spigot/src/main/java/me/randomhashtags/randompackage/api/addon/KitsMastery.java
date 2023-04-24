@@ -284,7 +284,7 @@ public class KitsMastery extends Kits {
                     }
                     removeItem(player, is, 1);
                     levels.put(mkit, 1);
-                    replacements.put("{KIT}", mkit.getName());
+                    replacements.put("{KIT}", getLocalizedName(mkit));
                     sendStringListMessage(player, getStringList(KITS_CONFIG, "mkits.messages.unlocked"), replacements);
                     player.updateInventory();
                 }

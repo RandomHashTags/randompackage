@@ -95,7 +95,7 @@ public enum Conquest implements RPFeatureSpigot, CommandExecutor {
         for(File f : getFilesInFolder(folder)) {
             if(!f.getAbsoluteFile().getName().equals("_settings.yml")) {
                 final FileConquestChest c = new FileConquestChest(f);
-                final int spawninterval = c.getSpawnInterval()*20;
+                final int spawninterval = c.getSpawnInterval() * 20;
                 tasks.add(SCHEDULER.scheduleSyncRepeatingTask(RANDOM_PACKAGE, () -> {
                     spawn(c, getRandomLocation(c));
                 }, spawninterval, spawninterval));
