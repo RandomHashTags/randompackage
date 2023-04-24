@@ -54,7 +54,7 @@ public class KitsMastery extends Kits {
         if(!OTHER_YML.getBoolean("saved default mkits")) {
             final String[] v = new String[] {"DEATH_KNIGHT", "GHOST", "NECROMANCER"};
             for(String s : v) {
-                save("kits", "MKIT_" + s + ".yml");
+                save("kits", "MKIT_" + s + ".json");
             }
             OTHER_YML.set("saved default mkits", true);
             saveOtherData();

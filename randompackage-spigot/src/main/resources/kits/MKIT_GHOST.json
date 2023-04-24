@@ -1,0 +1,123 @@
+{
+  "settings": {
+    "loses required kits": true,
+    "name": "&3&lGhost",
+    "cooldown": 259200
+  },
+  "gui settings": {
+    "slot": 3,
+    "item": "sugar",
+    "name": "&3&lGhost Mastery Kit",
+    "lore": [
+      " ",
+      "&7The armor of an eternal entity known",
+      "&7only as the Ghost. It will haunt you",
+      "&7until you meet your inevitable fate.",
+      " ",
+      "&6&lRequirements:",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}"
+    ]
+  },
+  "redeem": {
+    "item": "cyan_dye",
+    "name": "&d&lMastery Kit&r &d(&3&lGhost&r&d)",
+    "lore": [
+      " ",
+      "&c&lNOTE:&r &7Once unlocked, you will lose",
+      "&7access to the required Global Kits",
+      "&7in exchange for access to this Mastery Kit!",
+      " ",
+      "&6&l/gkit Requirements:",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}",
+      " &6&l*&r {REQUIREMENT}&r &6&lTier {TIER}",
+      " ",
+      "&7Right-click to unlock this Mastery Kit!"
+    ]
+  },
+  "shard": {
+    "item": "light_gray_dye",
+    "name": "&d&lMastery Shard&r &d(&3&lGhost&r&d)",
+    "lore": [
+      "&7Apply to an enchantment book",
+      "&7to imbue it with the power to",
+      "&7affect &3&lGhost&r &7Mastery Kit items."
+    ],
+    "applied lore": [
+      "&6&l* Mastery Shard&r &6(&3&lGhost&r&6)"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "leather_helmet",
+      "name": "&3&lGhostly Hood&r {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Feign Death;Mark of the Beast;Paladin Armored;Protection;Death God;Drunk;Angelic;Valor;Arrow Deflect;Implants;Frozen;Resilience}"
+      ]
+    },
+    "chestplate": {
+      "item": "leather_chestplate",
+      "name": "&3&lGhostly Shroud&r {ENCHANT_SIZE}"
+    },
+    "leggings": {
+      "item": "leather_leggings",
+      "name": "&3&lGhostly Robes&r {ENCHANT_SIZE}"
+    },
+    "boots": {
+      "item": "leather_boots",
+      "name": "&3&lGhostly Whisp&r {ENCHANT_SIZE}"
+    },
+    "mask": {
+      "item": "mask:GHOST"
+    }
+  },
+  "kit bundle": {
+    "item": "chest",
+    "name": "&3&lGhost Kit Bundle",
+    "lore": [
+      "&7Right-click to reveal the",
+      "&7following Fallen Heroes!",
+      " ",
+      "&6Contains the following...",
+      "&7* 5x {REQUIREMENT}",
+      "&7* 5x {REQUIREMENT}",
+      "&7* 5x {REQUIREMENT}"
+    ],
+    "rewards": [
+      "gkitfallenhero:{REQUIREMENT_NAME};amount=5",
+      "gkitfallenhero:{REQUIREMENT_NAME};amount=5",
+      "gkitfallenhero:{REQUIREMENT_NAME};amount=5"
+    ]
+  },
+  "required kits": [
+    "GKIT_SPOOKY;3",
+    "GKIT_BUTCHER;3",
+    "GKIT_GRIM_REAPER;3"
+  ],
+  "anti crystal": {
+    "item": "yellow_dye",
+    "name": "&6&lAnti M-Kit Crystal (&r&3&lGhost&r&6&l)",
+    "lore": [
+      "&a{PERCENT}% Success Rate",
+      "&7Apply to any piece of armor",
+      "&7to negate the following",
+      "&7custom Mastery Enchantments:",
+      " &6&l*&r &4Horrify",
+      " &6&l*&r &4Poltergeist",
+      " &6&l*&r &4Mark of the Beast",
+      " &6&l*&r &4Feign Death"
+    ],
+    "added lore": [
+      "&6&lAnti M-Kit Crystal (&r&3&lGhost&r&6&l)"
+    ],
+    "negate enchants": [
+      "HORRIFY",
+      "POLTERGEIST",
+      "MARK OF THE BEAST",
+      "FEIGN DEATH"
+    ]
+  }
+}

@@ -64,7 +64,7 @@ public enum ArmorSockets implements RPFeatureSpigot {
     }
 
     public ItemStack getArmorSocketItem(@NotNull ArmorSocket socket, int chance) {
-        final String name = socket.getName(), nameLC = name.toLowerCase(), itemType = itemTypes.get(socket.getItemType()), limit = Integer.toString(socket.getLimit()), chanceString = Integer.toString(Math.min(chance, 100));
+        final String name = getLocalizedName(socket), nameLC = name.toLowerCase(), itemType = itemTypes.get(socket.getItemType()), limit = Integer.toString(socket.getLimit()), chanceString = Integer.toString(Math.min(chance, 100));
         final ItemStack item = getClone(this.socket);
         final ItemMeta itemMeta = item.getItemMeta();
         final List<String> lore = new ArrayList<>();

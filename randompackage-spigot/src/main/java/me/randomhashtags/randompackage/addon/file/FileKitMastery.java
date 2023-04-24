@@ -3,11 +3,13 @@ package me.randomhashtags.randompackage.addon.file;
 import me.randomhashtags.randompackage.addon.CustomKit;
 import me.randomhashtags.randompackage.addon.CustomKitMastery;
 import me.randomhashtags.randompackage.addon.Kits;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.api.addon.KitsMastery;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,25 +18,50 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public final class FileKitMastery extends RPKitSpigot implements CustomKitMastery {
-    private ItemStack item, redeem, shard, antiCrystal;
-    private LinkedHashMap<CustomKit, Integer> requiredKits;
+    private final MultilingualString name;
+    private final ItemStack item, redeem, shard, antiCrystal;
+    private final boolean loses_required_kits;
+    private final LinkedHashMap<CustomKit, Integer> requiredKits;
+    private final List<String> anti_crystal_negated_enchants;
+    private final String anti_crystal_applied;
     public FileKitMastery(File f) {
         super(f);
+        final JSONObject json = parse_json_from_file(f);
+        final JSONObject settings_json = json.getJSONObject("settings");
+        name = parse_multilingual_string_in_json(settings_json, "name");
+        loses_required_kits = parse_boolean_in_json(settings_json, "loses required kits");
+
+        item = set(create_item_stack(json, "gui settings"));
+        redeem = set(create_item_stack(json, "redeem"));
+        shard = set(create_item_stack(json, "shard"));
+        antiCrystal = set(create_item_stack(json, "anti crystal"));
+        final JSONObject anti_crystal_json = json.getJSONObject("anti crystal");
+        anti_crystal_negated_enchants = parse_list_string_in_json(anti_crystal_json, "negate enchants");
+        anti_crystal_applied = parse_string_in_json(anti_crystal_json, "applied");
+
+        requiredKits = new LinkedHashMap<>();
+        final List<String> required = parse_list_string_in_json(json, "required kits");
+        for(String s : required) {
+            final String[] a = s.split(";");
+            requiredKits.put(getCustomKit(a[0]), Integer.parseInt(a[1]));
+        }
+
         register(Feature.CUSTOM_KIT, this);
     }
-    public @NotNull Kits getKitClass() { return KitsMastery.getKitsMastery(); }
+    public @NotNull Kits getKitClass() {
+        return KitsMastery.getKitsMastery();
+    }
 
-    public @NotNull String getName() {
-        return getString(yml, "settings.name");
+    public @NotNull MultilingualString getName() {
+        return name;
     }
     @NotNull
     @Override
     public ItemStack getItem() {
-        if(item == null) item = set(createItemStack(yml, "gui settings"));
         return getClone(item);
     }
+    @Override
     public ItemStack getRedeem() {
-        if(redeem == null) redeem = set(createItemStack(yml, "redeem"));
         return getClone(redeem);
     }
     private ItemStack set(ItemStack is) {
@@ -58,26 +85,28 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         }
         return is;
     }
+    @Override
     public LinkedHashMap<CustomKit, Integer> getRequiredKits() {
-        if(requiredKits == null) {
-            requiredKits = new LinkedHashMap<>();
-            final List<String> R = yml.getStringList("required kits");
-            for(String s : R) {
-                final String[] a = s.split(";");
-                requiredKits.put(getCustomKit(a[0]), Integer.parseInt(a[1]));
-            }
-        }
         return requiredKits;
     }
-    public boolean losesRequiredKits() { return yml.getBoolean("settings.loses required kits"); }
+    @Override
+    public boolean losesRequiredKits() {
+        return loses_required_kits;
+    }
+    @Override
     public ItemStack getShard() {
-        if(shard == null) shard = createItemStack(yml, "shard");
         return getClone(shard);
     }
+    @Override
     public ItemStack getAntiCrystal() {
-        if(antiCrystal == null) antiCrystal = createItemStack(yml, "anti crystal");
         return getClone(antiCrystal);
     }
-    public List<String> getAntiCrystalNegatedEnchants() { return yml.getStringList("anti crystal.negate enchants"); }
-    public String getAntiCrystalApplied() { return yml.getString("anti crystal.applied"); }
+    @Override
+    public List<String> getAntiCrystalNegatedEnchants() {
+        return anti_crystal_negated_enchants;
+    }
+    @Override
+    public String getAntiCrystalApplied() {
+        return anti_crystal_applied;
+    }
 }
