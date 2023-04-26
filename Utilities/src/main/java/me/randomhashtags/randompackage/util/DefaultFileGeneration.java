@@ -251,7 +251,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultFilterCategories() {
-        generateAllDefault("filter categories", "EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY");
+        generate_all_default_json("filter categories", "EQUIPMENT", "FOOD", "ORES", "OTHER", "POTION_SUPPLIES", "RAIDING", "SPECIALTY");
     }
     default void generateDefaultInventoryPets() {
         generate_all_default_json("inventory pets",
