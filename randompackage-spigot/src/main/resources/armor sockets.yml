@@ -15,7 +15,7 @@ item:
     - " "
     - "&7To learn more about Armor Sockets, use &3/help socket"
 #
-item types: # <allowed materials separated by semi-colons>: <appears on item that replaces {ITEM_TYPE}>
+item types: # <allowed materials separated by semicolons>: <appears on item that replaces {ITEM_TYPE}>
   chestplate: CHESTPLATE
   leggings: LEGGINGS
 #

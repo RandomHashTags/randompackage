@@ -135,7 +135,9 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         return max_minions;
     }
     public CustomMinion getMinion() {
-        if(minion == null) minion = new CustomMinion(yml.getString("minion.type").toUpperCase(), colorize(yml.getString("minion.name")), yml.getStringList("minion.attributes"));
+        if(minion == null) {
+            minion = new CustomMinion(yml.getString("minion.type").toUpperCase(), colorize(yml.getString("minion.name")), yml.getStringList("minion.attributes"));
+        }
         return minion;
     }
 }

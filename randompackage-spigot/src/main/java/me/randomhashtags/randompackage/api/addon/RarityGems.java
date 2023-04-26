@@ -49,7 +49,7 @@ public enum RarityGems implements RPFeatureSpigot {
         if(!OTHER_YML.getBoolean("saved default rarity gems")) {
             final String[] g = new String[]{ "SOUL" };
             for(String s : g) {
-                save("rarity gems", s + ".yml");
+                save("rarity gems", s + ".json");
             }
             OTHER_YML.set("saved default rarity gems", true);
             saveOtherData();
