@@ -61,7 +61,7 @@ public class KitsEvolution extends Kits {
         if(!OTHER_YML.getBoolean("saved default vkits")) {
             final String[] defaultFiles = new String[] {"ALCHEMIST", "JUDGEMENT", "LUCKY", "MIMIC", "OGRE", "PHOENIX", "SLAYER", "TROLL"};
             for(String s : defaultFiles) {
-                save("kits", "VKIT_" + s + ".yml");
+                save("kits", "VKIT_" + s + ".json");
             }
             OTHER_YML.set("saved default vkits", true);
             saveOtherData();

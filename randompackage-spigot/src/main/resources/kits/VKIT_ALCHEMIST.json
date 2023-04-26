@@ -1,0 +1,159 @@
+{
+  "settings": {
+    "max level": 10,
+    "upgrade chance": 10,
+    "cooldown": 259200,
+    "fallen hero": "VKIT"
+  },
+  "gui settings": {
+    "slot": 2,
+    "item": "potion",
+    "name": "&6&lAlchemist Kit",
+    "lore": [
+      "&e&lKit Level: &e&n{LEVEL}&r &e/ 10",
+      " ",
+      "&6&l* A randomized bundle of...",
+      "&6  - &eEnchantment Books",
+      "&6  - &eEnchantment Dust",
+      "&6  - &ePlayer Souls",
+      "&6  - &eBlack Scrolls",
+      "&6  - &eMystery Mob Spawners",
+      "&6  - &eWhite Scrolls",
+      "&6  - &eRandomization Scrolls",
+      "&6  - &eTransmog Scrolls",
+      "&6  - &eItem Nametags",
+      "&6  - &eEnchantment Orbs",
+      "&6  - &ePlayer Titles",
+      " ",
+      "&7All the ingredients to forge your own equipment!",
+      "&6* Spring BREAK 2017"
+    ]
+  },
+  "items": {
+    "soul book": {
+      "item": "raritybook:SOUL;amount=0-3",
+      "chance": 25
+    },
+    "legendary book": {
+      "item": "raritybook:LEGENDARY;amount=0-3",
+      "chance": 25
+    },
+    "ultimate book": {
+      "item": "raritybook:ULTIMATE;amount=0-3",
+      "chance": 25
+    },
+    "elite book": {
+      "item": "raritybook:ELITE;amount=0-3",
+      "chance": 25
+    },
+    "unique book": {
+      "item": "raritybook:UNIQUE;amount=0-3",
+      "chance": 25
+    },
+    "simple book": {
+      "item": "raritybook:SIMPLE;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 0": {
+      "item": "rarityfireball:SOUL;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 1": {
+      "item": "rarityfireball:LEGENDARY;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 2": {
+      "item": "rarityfireball:ULTIMATE;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 3": {
+      "item": "rarityfireball:ELITE;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 4": {
+      "item": "rarityfireball:UNIQUE;amount=0-3",
+      "chance": 25
+    },
+    "rarity fireball 5": {
+      "item": "rarityfireball:SIMPLE;amount=0-3",
+      "chance": 25
+    },
+    "soul gem": {
+      "item": "raritygem:SOUL:500-1200",
+      "chance": 75
+    },
+    "black scroll 0": {
+      "item": "blackscroll:REGULAR;amount=1-3",
+      "chance": 75
+    },
+    "mystery mob spawner": {
+      "item": "mysterymobspawner;amount=1-3",
+      "chance": 75,
+      "reqlevel": 4
+    },
+    "white scroll": {
+      "item": "whitescroll;amount=1-3",
+      "chance": 75,
+      "reqlevel": 5
+    },
+    "randomization scroll 0": {
+      "item": "randomizationscroll:GODLY;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 1": {
+      "item": "randomizationscroll:SOUL;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 2": {
+      "item": "randomizationscroll:LEGENDARY;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 3": {
+      "item": "randomizationscroll:ULTIMATE;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 4": {
+      "item": "randomizationscroll:ELITE;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 5": {
+      "item": "randomizationscroll:UNIQUE;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "randomization scroll 6": {
+      "item": "randomizationscroll:SIMPLE;amount=1-2",
+      "chance": 20,
+      "reqlevel": 6
+    },
+    "transmog scroll": {
+      "item": "transmogscroll;amount=1-2",
+      "chance": 55,
+      "reqlevel": 7
+    },
+    "item name tag": {
+      "item": "itemnametag;amount=1-3",
+      "chance": 55,
+      "reqlevel": 8
+    },
+    "enchantment orb 0 0": {
+      "item": "enchantmentorb:armor10:100",
+      "chance": 35,
+      "reqlevel": 9
+    }
+  },
+  "upgrade gem": {
+    "item": "red_dye",
+    "name": "&2&lEvolution Gem &r&2(&6&lAlchemist&r&2)",
+    "lore": [
+      "&7Right-click this evolution gem to",
+      "&7increase the power of the",
+      "&6&lAlchemistl&r &7/vkit by 1 level."
+    ]
+  }
+}

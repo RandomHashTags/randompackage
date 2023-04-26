@@ -6,14 +6,24 @@ import me.randomhashtags.randompackage.api.addon.KitsEvolution;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 
 public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvolution {
-    private ItemStack item, upgradeGem;
+    private final ItemStack item, upgradeGem;
+    private final int upgrade_chance;
 
     public FileKitEvolution(File f) {
         super(f);
+
+        final JSONObject json = parse_json_from_file(f);
+        item = create_item_stack(json, "gui settings");
+        upgradeGem = create_item_stack(json, "upgrade gem");
+
+        final JSONObject settings_json = json.getJSONObject("settings");
+        upgrade_chance = parse_int_in_json(settings_json, "upgrade chance");
+
         register(Feature.CUSTOM_KIT, this);
     }
     public @NotNull Kits getKitClass() {
@@ -23,14 +33,13 @@ public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvol
     @NotNull
     @Override
     public ItemStack getItem() {
-        if(item == null) item = createItemStack(yml, "gui settings");
         return getClone(item);
     }
     public int getUpgradeChance() {
-        return yml.getInt("settings.upgrade chance");
+        return upgrade_chance;
     }
+    @Override
     public ItemStack getUpgradeGem() {
-        if(upgradeGem == null) upgradeGem = createItemStack(yml, "upgrade gem");
         return getClone(upgradeGem);
     }
 }
