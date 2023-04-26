@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "heroic": true,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 23,
+    "item": "gold_helmet",
+    "name": "Paladin Kit",
+    "lore": [
+      " ",
+      "&f&l* &6&lHeroic Divine Paladin Chestplate",
+      "&f&l* &6&lHeroic Platelegs of Athena",
+      "&f&l* &eHeroic Shroud of the Holy Order",
+      "&f&l* &eHeroic Boots of the Holy Order",
+      "&f&l* &e3x Randomization Scrolls",
+      "&f&l* &e0-1x Enchantment Orb",
+      " ",
+      "&7The best offense is a perfect defense.",
+      "&6* Ice Planet Reset"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&6Heroic Shroud of the Holy Order {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;Unbreaking3}",
+        "RPEnchants{Enlighted;Tank;Angelic;Armored;Valor}",
+        "&6&oA shiny, elegant silk shroud,",
+        "&6&olinked together with chainmail."
+      ]
+    },
+    "chestplate": {
+      "item": "diamond_chestplate",
+      "name": "&6Heroic Divine Paladin Chestplate {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;Unbreaking3}",
+        "RPEnchants{Overload;Tank;Guardians;Spirits;Armored;Shockwave}",
+        "&6&oA blessed pair of indestructible platemail."
+      ]
+    },
+    "leggings": {
+      "item": "diamond_leggings",
+      "name": "&6&lHeroic Platelegs of Athena {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;Unbreaking3}",
+        "RPEnchants{Enlighted;Tank;Angelic;Creeper Armor;Armored;Valor;Nutrition}",
+        "&6&oForged in the depths of Hephasteus,",
+        "&6&oimmuned to the weapons of mere mortals."
+      ]
+    },
+    "boots": {
+      "item": "diamond_boots",
+      "name": "&6Heroic Boots of the Holy Order {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;Unbreaking3}",
+        "RPEnchants{Gears;Tank;Angelic;Armored;Rocket Escape;Valor;Springs}",
+        "&6&oSmelted out of pure holy essence."
+      ]
+    },
+    "randomization scroll": {
+      "chances": "25:25:25:25",
+      "items": "randomizationscroll:GODLY||randomizationscroll:SOUL||randomizationscroll:LEGENDARY||randomizationscroll:ULTIMATE",
+      "amount": 3
+    },
+    "enchantment orb": {
+      "chance": 50,
+      "item": "enchantmentorb:armor:80-100||enchantmentorb:weapon:80-100"
+    }
+  }
+}

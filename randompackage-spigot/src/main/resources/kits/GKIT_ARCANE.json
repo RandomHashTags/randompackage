@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "heroic": true,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 6,
+    "item": "enchantment_table",
+    "name": "Arcane Kit",
+    "lore": [
+      " ",
+      "&f&l* &6&lApollo's Longbow of the Abyss",
+      "&f&l* &6&lHeroic Arcanist Hat",
+      "&f&l* &6&lHeroic Arcanist Elf Shoes",
+      "&f&l* &eArcanist Robeset",
+      "&f&l* &eArcanist Pantaloons",
+      " ",
+      "&7Embrace the power of magic!",
+      "&6* Magic Planet Release"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&6&lHeroic Arcanist Hat {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Overload;Protection;Clarity;Enlighted;Angelic;Glowing}",
+        "&6&oA pointy, star speckled wizard hat."
+      ]
+    },
+    "chestplate": {
+      "item": "diamond_chestplate",
+      "name": "&eArcanist Robeset {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Enlighted;Angelic;Spirits;Shockwave;Spirit Link}",
+        "&e&oA bright, colorful silk robe."
+      ]
+    },
+    "leggings": {
+      "item": "diamond_leggings",
+      "name": "&eArcanist Pantaloons {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Enlighted;Angelic;Undead Ruse;Lifebloom}",
+        "&e&oBrightly colored, puffy pantaloons."
+      ]
+    },
+    "boots": {
+      "item": "diamond_boots",
+      "name": "&6&lHeroic Arcanist Elf Shoes {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Ghost;Enlighted;Angelic;Ender Walker;Anti Gravity;Ender Shift}",
+        "&6&oPointy, jolly, and absolutely magical."
+      ]
+    },
+    "bow": {
+      "item": "bow",
+      "name": "&6&lApollo's Longbow of the Abyss {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Power5;Flame1;Unbreaking3;Infinity1}",
+        "RPEnchants{Sniper;Longbow;Unfocus;Piercing;Virus;Snare;Blind}",
+        "&6&oA translucent, abyssal longbow."
+      ]
+    },
+    "arrow": {
+      "item": "arrow"
+    }
+  }
+}

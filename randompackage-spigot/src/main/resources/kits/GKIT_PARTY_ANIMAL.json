@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "heroic": true,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 13,
+    "item": "cake",
+    "name": "Party Animal Kit",
+    "lore": [
+      " ",
+      "&f&l* &6&lThe Jug of Dionysus",
+      "&f&l* &6&lCosmic Year #2 Party Hat",
+      " ",
+      "&7Fight hard, party even harder.",
+      "&6* Cosmic #1 Year Anniversary"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&6&lCosmic Year #2 Party Hat {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3;BlastProtection4}",
+        "RPEnchants{Ghost;Overload;Drunk;Deathbringer;Clarity;Enlighted;Lucky;Implants;Valor;Dodge;Aquatic}",
+        "&6&oAn extremely rare party hat, only",
+        "&6&oobtainable on the #2 anniversary weekend.",
+        "&6&oNow, party like it is 1999... again!"
+      ]
+    },
+    "sword": {
+      "item": "diamond_sword",
+      "name": "&6&lThe Jug of Dionusus {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Sharpness5;BaneOfArthropods4;Unbreaking3;FireAspect2}",
+        "RPEnchants{Disarmor;Rage;Lifesteal;Double Strike;Enrage;Paralyze;Featherweight}",
+        "&6&oThe legendary, marble forged drinking",
+        "&6&oJug of Dionysus, the god of partying."
+      ]
+    },
+    "space drinks": {
+      "item": "spacedrink;amount=64"
+    },
+    "explosive cakes": {
+      "item": "explosivecake;amount=16"
+    },
+    "space fireworks": {
+      "item": "spacefirework;amount=8"
+    }
+  }
+}

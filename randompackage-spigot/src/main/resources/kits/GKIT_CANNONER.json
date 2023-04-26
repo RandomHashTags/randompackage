@@ -1,0 +1,87 @@
+{
+  "settings": {
+    "heroic": false,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 21,
+    "item": "tnt",
+    "name": "&c&lCannoner Kit",
+    "lore": [
+      "&7No amount of defenses can stop you.",
+      "&6* Castle Planet Reset"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&6&lEnchanted Mining Helmet {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;ProjectileProtection4;Unbreaking3}",
+        "RPEnchants{Clarity;Obsidianshield;Creeper Armor;Molten;Aquatic}",
+        "&6&oAn enhanced v of the famous,",
+        "&6&omining helmet, your vision penetrates all."
+      ]
+    },
+    "chestplate": {
+      "item": "diamond_chestplate",
+      "name": "&eOnyx Cloak of the Grandmaster {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;ProjectileProtection4;Unbreaking3}",
+        "RPEnchants{Overload;Shockwave;Ragdoll}",
+        "&e&oA well kept, leather black cloak."
+      ]
+    },
+    "leggings": {
+      "item": "diamond_leggings",
+      "name": "&eReinforced Leather Combat Leggings {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;ProjectileProtection4;Unbreaking3}",
+        "RPEnchants{Enlighted;Nutrition;Lifebloom}",
+        "&e&oAbsolute mobility, complete security."
+      ]
+    },
+    "boots": {
+      "item": "diamond_boots",
+      "name": "&6&lGhost Sandals {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection5;ProjectileProtection3;Unbreaking3}",
+        "RPEnchants{Ghost;Gears;Ender Walker;Lucky;Rocket Escape;Springs}",
+        "&6&oA pair of sandals from the depths of the",
+        "&6&ovoid, wear these and become undetectable."
+      ]
+    },
+    "bow": {
+      "item": "bow",
+      "name": "&6&lCrystal Bow of Athena {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Power5;Punch2;Unbreaking3;Infinity1}",
+        "RPEnchants{Sniper;Silence;Piercing;Snare;Teleportation;Explosive;Lightning}",
+        "&6&oWhen you get your target within",
+        "&6&oyour sights, their journey ends."
+      ]
+    },
+    "arrow": {
+      "item": "arrow"
+    },
+    "custom tnt 1": {
+      "chances": "50:50",
+      "items": "customexplosion:TNT_LUCKY;customexplosion:TNT_GIGANTIC",
+      "amount": 8
+    },
+    "custom tnt 2": {
+      "chances": "50:50",
+      "items": "customexplosion:TNT_MIMIC;customtnt:TNT_TACTICAL",
+      "amount": 16
+    },
+    "creeper spawn egg": {
+      "item": "creeper_spawn_egg"
+    },
+    "sponge": {
+      "item": "sponge",
+      "amount": 2
+    }
+  }
+}

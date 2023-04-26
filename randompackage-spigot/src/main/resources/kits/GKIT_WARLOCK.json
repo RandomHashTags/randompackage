@@ -1,0 +1,91 @@
+{
+  "settings": {
+    "heroic": true,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 24,
+    "item": "dragon_egg",
+    "name": "Warlock Kit",
+    "lore": [
+      " ",
+      "&f&l*&r &c&lThe Fiend",
+      "&f&l*&r &6&lMaster Warlock Hat",
+      "&f&l*&r &6&lGhostly Call of the Banshee",
+      "&f&l*&r &eHeroic Warlock Robe",
+      "&f&l*&r &eHeroic Warlock Bottoms",
+      "&f&l*&r &e32x Enderpearls",
+      "&f&l*&r &e9x Mystery Dust",
+      " ",
+      "&7Become a master of the dark arts.",
+      "&6* Enchantment Tracking"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&6&lMaster Warlock Hat {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Immortal;Deathbringer;Clarity;Enlighted;Destruction;Overload;Marksman;Armored;Lucky;resilience;Trickster}",
+        "&6&oYou are a master of the demonic world."
+      ]
+    },
+    "chestplate": {
+      "item": "diamond_chestplate",
+      "name": "&eHeroic Warlock Robe {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Deathbringer;Overload;Marksman;Armored;Spirits;Spirit Link;Shockwave;Curse}",
+        "&e&oA chillingly cold, dark robeset."
+      ]
+    },
+    "leggings": {
+      "item": "diamond_leggings",
+      "name": "&eHeroic Warlock Bottoms {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Deathbringer;Marksman;Armored;Wither;Dodge;Undead Ruse;Nutrition;Plague Carrier}",
+        "&e&oA light set of dark silk robe bottoms."
+      ]
+    },
+    "boots": {
+      "item": "diamond_boots",
+      "name": "&6&lGhostly Call of the Banshee {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3}",
+        "RPEnchants{Deathbringer;Ghost;Gears;Marksman;Armored;Undead Ruse;Anti Gravity;Rocket Escape;Metaphysical;Nimble;Ender Shift}",
+        "&6&oSilence.. then, suddenly, death."
+      ]
+    },
+    "bow": {
+      "item": "bow",
+      "name": "&c&lThe Fiend {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Power5;Flame1;Unbreaking3;Infinity1}",
+        "RPEnchants{Sniper;Rage;Eagle Eye;Silence;Dimension Rift;Piercing;Pacify;Hijack;Blind}",
+        "&c&oA fabled entity, cursed with impossibly",
+        "&c&oancient and descrictive demonic power.",
+        "&c&oancient and powerful dark magicks."
+      ]
+    },
+    "arrow": {
+      "item": "arrow"
+    },
+    "ender pearl 1": {
+      "item": "ender_pearl",
+      "amount": 16
+    },
+    "ender pearl 2": {
+      "item": "ender_pearl",
+      "amount": 16
+    },
+    "dust": {
+      "chance": "10:30:60",
+      "items": "dust:LEGENDARY_REGULAR||dust:ULTIMATE_REGULAR||dust:ELITE_REGULAR",
+      "amount": 9
+    }
+  }
+}

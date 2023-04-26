@@ -71,7 +71,7 @@ public class KitsGlobal extends Kits {
                     "TEMPLAR", "TINKERMASTER", "TRICKSTER", "VALENTINES", "VIKING", "VOIDWALKER", "WARLOCK",
             };
             for(String s : g) {
-                save("kits", "GKIT_" + s + ".yml");
+                save("kits", "GKIT_" + s + ".json");
             }
             OTHER_YML.set("saved default gkits", true);
             saveOtherData();

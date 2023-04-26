@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "heroic": true,
+    "max level": 3,
+    "cooldown": 259200,
+    "fallen hero": "GKIT"
+  },
+  "gui settings": {
+    "slot": 11,
+    "item": "brewing_stand_item",
+    "name": "Tinkermaster Kit",
+    "lore": [
+      " ",
+      "&f&l* &6&lGlycon's Bow",
+      "&f&l* &6&lHeroic Clockwork Armor",
+      "&f&l* &e&lHeroic Gnomish Tinkerer Hat",
+      "&f&l* &e&lHeroic Pants of Steel",
+      "&f&l* &e&lHeroic Gnome Escapist Shoes",
+      " ",
+      "&7Cunning, mischievous, legendary puppet master.",
+      "&6* Bounty Hunter Update"
+    ]
+  },
+  "items": {
+    "helmet": {
+      "item": "diamond_helmet",
+      "name": "&eHeroic Gnomish Tinkerer Hat {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3;BlastProtection4;ProjectileProtection4}",
+        "RPEnchants{Lucky;Implants;Glowing}",
+        "&e&oThe latest and greatest in gnome technology!"
+      ]
+    },
+    "chestplate": {
+      "item": "diamond_chestplate",
+      "name": "&6&lMaster Clockwork Armor {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3;BlastProtection4;ProjectileProtection4}",
+        "RPEnchants{Overload;Clarity;Guardians;Heavy;Shockwave}",
+        "&6&oA true technological masterpiece,",
+        "&6&oturn the strength of your enemies against them."
+      ]
+    },
+    "leggings": {
+      "item": "diamond_leggings",
+      "name": "&eHeroic Pants of Steel {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3;BlastProtection4;ProjectileProtection4}",
+        "RPEnchants{Heavy;Frozen;Nutrition;Self Destruct}",
+        "&e&oSaturating pants made of steel. Gnomes, man."
+      ]
+    },
+    "boots": {
+      "item": "diamond_boots",
+      "name": "&eHeroic Gnome Escapist Shoes {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Protection4;Unbreaking3;BlastProtection4;ProjectileProtection4}",
+        "RPEnchants{Ghost;Gears;Rocket Escape;Anti Gravity}",
+        "&e&oGet out of the stickiest of situations!"
+      ]
+    },
+    "bow": {
+      "item": "bow",
+      "name": "&e&lGlycon's Bow {ENCHANT_SIZE}",
+      "lore": [
+        "VEnchants{Power5;Flame1;Unbreaking3;Infinity1}",
+        "RPEnchants{Sniper;Arrow Lifesteal;Farcast;Snare;Hijack}",
+        "&6&oGlycon, the snake god of puppets...",
+        "&6&oWhy destroy your enemies when",
+        "&6&oyou can control them?"
+      ]
+    },
+    "arrow": {
+      "item": "arrow"
+    }
+  }
+}
