@@ -26,11 +26,15 @@ public final class MultilingualStringSpigotValue implements MultilingualString, 
                     string = json.getString(language.code);
                     string = colorize(string);
                 } catch (Exception ignored) {
-                    string = null;
+                    string = null; // TODO: print to console
                 }
                 values.put(language, string);
             }
         }
+    }
+    public MultilingualStringSpigotValue(@NotNull String english) {
+        values = new HashMap<>();
+        values.put(Language.ENGLISH, english);
     }
 
     public @NotNull String get(@NotNull Language language) {

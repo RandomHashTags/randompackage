@@ -1,0 +1,46 @@
+{
+  "messages": {
+    "no longer controlling": [
+      "&c&l(!)&r &f{FACTION} &cis no longer controlling &lInfernal&r&c!"
+    ],
+    "taken control": [
+      " ",
+      "&c&l(Stronghold)&r &f{FACTION} &chas taken control of &lInfernal&r&c!",
+      "&7use &c&l/strongholds&r &7to view more information.",
+      " "
+    ]
+  },
+  "gui": {
+    "slot": 3,
+    "item": "blaze_powder",
+    "name": "&c&lInfernal Stronghold",
+    "lore": [
+      " ",
+      "&c{X}&lx&r &c{Y}&ly&r &c{Z}&lz&r &c(&l{DISTANCE}m&r &caway)",
+      " ",
+      "&6&lStatus",
+      "{STATUS}",
+      " ",
+      "&6&lRewards When Captured",
+      " &c&l*&r &fFly everywhere regardless of rank",
+      " &c&l*&r &fNo Keys for &a/dungeons &f(>24 hours in faction)",
+      " &c&l*&r &a10% &f/enchanter discount",
+      " &c&l*&r &fNo &a/ah &fTax",
+      " &c&l*&r &fFaction Points / Loot every &a2 &fhours",
+      " ",
+      "&7Control the Stronghold to gain access to",
+      "&7these rewards for you and your faction!"
+    ]
+  },
+  "settings": {
+    "center": "world;5001;68;5000;0;0",
+    "capture type": "SQUARE",
+    "capture radius": 50,
+    "allows afk capturing": true
+  },
+  "rewards": [
+    "",
+    "EnchanterEcoMultiplier=0.90",
+    "AHTaxMultiplier=0.00"
+  ]
+}

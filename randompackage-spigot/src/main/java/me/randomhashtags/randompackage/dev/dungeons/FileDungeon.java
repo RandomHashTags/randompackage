@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
     private final int slot;
-    private final ItemStack display, key, keyLocked, portal, lootbag;
+    private final ItemStack display, key, key_locked, portal, lootbag;
     private final List<String> lootbag_rewards;
     private final Location warp_location;
     private long fastestCompletion;
@@ -32,7 +32,7 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
 
         final JSONObject gui_json = json.getJSONObject("gui");
         slot = parse_int_in_json(gui_json, "slot");
-        keyLocked = create_item_stack(gui_json, "key locked");
+        key_locked = create_item_stack(gui_json, "key locked");
 
         final JSONObject settings_json = json.getJSONObject("settings");
         warp_location = string_to_location(parse_string_in_json(settings_json, "warp location"));
@@ -51,7 +51,7 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
         return getClone(key);
     }
     public ItemStack getKeyLocked() {
-        return getClone(keyLocked);
+        return getClone(key_locked);
     }
     public ItemStack getPortal() {
         return getClone(portal);

@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.dev;
 
 import me.randomhashtags.randompackage.addon.dev.Disguise;
+import me.randomhashtags.randompackage.addon.file.MultilingualStringSpigotValue;
 import me.randomhashtags.randompackage.data.DisguiseData;
 import me.randomhashtags.randompackage.data.FileRPPlayer;
 import me.randomhashtags.randompackage.enums.Feature;
@@ -65,7 +66,9 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
         for(String s : getConfigurationSectionKeys(config, "entity types", false)) {
             final String path = "entity types." + s + ".";
             final int slot = config.getInt(path + "slot");
-            final Disguise disguise = new PathDisguise(s, slot, colorize(config.getString(path + "name")));
+            final String target_name = colorize(config.getString(path + "name"));
+            final MultilingualStringSpigotValue name = new MultilingualStringSpigotValue(target_name);
+            final Disguise disguise = new PathDisguise(s, slot, name);
             slots.put(slot, getDisguise(s));
             inv.setItem(slot, getDisguiseItem(disguise));
         }

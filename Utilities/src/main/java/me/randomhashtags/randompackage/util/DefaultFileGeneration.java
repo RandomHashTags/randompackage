@@ -401,7 +401,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultStrongholds() {
-        generateAllDefault("strongholds", "FROZEN", "INFERNAL");
+        generate_all_default_json("strongholds", "FROZEN", "INFERNAL");
     }
     default void generateDefaultTitanAttributes() {
         generate_all_default_json("titan attributes", "ATLAS", "KRONOS", "OURANOS");

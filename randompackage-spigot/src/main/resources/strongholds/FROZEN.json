@@ -1,0 +1,45 @@
+{
+  "messages": {
+    "no longer controlling": [
+      "&b&l(!)&r &f{FACTION} &cis no longer controlling &lFrozen&r&c!"
+    ],
+    "taken control": [
+      " ",
+      "&b&l(Stronghold)&r &f{FACTION} &bhas taken control of &lFrozen&r&c!",
+      "&7use &b&l/strongholds&r &7to view more information.",
+      " "
+    ]
+  },
+  "gui": {
+    "slot": 5,
+    "item": "bone_meal",
+    "name": "&b&lFrozen Stronghold",
+    "lore": [
+      " ",
+      "&b{X}&lx&r &b{Y}&ly&r &b{Z}&lz&r &b(&l{DISTANCE}m&r &baway)",
+      " ",
+      "&6&lStatus",
+      "{STATUS}",
+      " ",
+      "&6&lRewards When Captured",
+      " &b&l*&r &f&a+20% &fFaction Point multiplier",
+      " &b&l*&r &f/stronghold sell &a(Emerald, Gold, Iron Blocks)",
+      " &b&l*&r &fNo Coin Flip Tax",
+      " &b&l*&r &f&a+10% &fbonus /jackpot tickets",
+      " &b&l*&r &fFaction Points / Loot every &a2 &fhours",
+      " ",
+      "&7Control the Stronghold to gain access to",
+      "&7these rewards for you and your faction!"
+    ]
+  },
+  "settings": {
+    "center": "world;-5001;67;-5000;0;0",
+    "capture type": "SQUARE",
+    "capture radius": 50,
+    "allows afk capturing": true
+  },
+  "rewards": [
+    "CFTaxMultiplier=0.00",
+    "JackpotTicketMultiplier=1.10"
+  ]
+}

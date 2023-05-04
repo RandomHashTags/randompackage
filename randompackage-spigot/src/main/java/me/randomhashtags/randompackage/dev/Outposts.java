@@ -99,7 +99,7 @@ public enum Outposts implements RPFeatureSpigot, CommandExecutor {
             for(String s : msg) {
                 if(s.contains("{OUTPOST}")) {
                     for(Outpost o : getAllOutposts().values()) {
-                        sender.sendMessage(s.replace("{OUTPOST}", o.getName()).replace("{STATUS}", o.getStatus()));
+                        sender.sendMessage(s.replace("{OUTPOST}", getLocalizedName(o)).replace("{STATUS}", o.getStatus()));
                     }
                 } else {
                     sender.sendMessage(s);
