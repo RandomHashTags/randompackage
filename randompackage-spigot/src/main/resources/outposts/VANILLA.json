@@ -1,0 +1,88 @@
+{
+  "settings": {
+    "name": "Vanilla",
+    "warp location": "outpost_1;100;200;100;0;0",
+    "center": "outpost_1;0;165;0;0;0",
+    "claim radius": 5,
+    "claim radius type": "CIRCLE"
+  },
+  "messages": {
+    "lost control": [
+      " ",
+      "&c&l(!) &n{FACTION}&r &c&lhave lost the &nVanilla Outpost!&r &c&lThey had control for &n{TIME}!",
+      "&7Use &c&l/outpost&r &7to view more information.",
+      " "
+    ],
+    "claimed": [
+      " ",
+      "&a&l(!) &n{FACTION}&r &a&lhave claimed the &nVanilla Outpost!",
+      "&7Use &a&/outpost&r &7to view more information.",
+      " "
+    ]
+  },
+  "gui": {
+    "slot": 1,
+    "item": "leather_chestplate",
+    "name": "&c&l&nVanilla Outpost",
+    "lore": [
+      " ",
+      "&c&l(!)&r &fClick to {TYPE}&r &fthis outpost!",
+      " ",
+      "&c&lStatus:&r {STATUS}",
+      "&c&lAttacking:&r &f{ATTACKING}",
+      "&c&lControlling:&r &f{CONTROLLING} &7[&f{TIME}&7]",
+      "&c&lCap %:&r &f{CAP%}",
+      " ",
+      "&c&lLimits:",
+      "&c&l*&r &fNo Custom Enchantments",
+      "&c&l*&r &fNo mcMMO",
+      "&c&l*&r &fNo Golden Apples",
+      "&c&l*&r &fNo Armor Set Bonuses",
+      " ",
+      "&c&lRewards:",
+      "&c&l*&r &f1.75x XP",
+      "&c&l*&r &f1.75x mcMMO",
+      "&c&l*&r &f1.5x Mobs from Spawners",
+      "&c&l*&r &f200% Tinkerer XP Payout",
+      "&c&l*&r &f+10% Black Scroll Return",
+      "&c&l*&r &fCustom Monster Spawns",
+      "&c&l*&r &fOP Custom Sell Signs",
+      "&c&l*&r &f5x Faction Points per hour"
+    ]
+  },
+  "limits": [
+    "AllowedEnchantRarities{}",
+    "mcmmo=false"
+  ],
+  "unallowed items": [
+    "golden_apple"
+  ],
+  "rewards": [
+    "XPBoostMultiplier=1.75",
+    "MCMMOBoostMultiplier=1.75",
+    "SpawnerRateMultiplier=1.50",
+    "TinkererXPMultiplier=2.00",
+    "BlackScrollPercentAddition=10"
+  ],
+  "scoreboard": {
+    "title": "&b&l&nServer&r &d&l&nOutpost",
+    "score start": 15,
+    "scores": [
+      "&a",
+      "&c&lAttacking",
+      "&f{ATTACKING}",
+      "&b",
+      "&c&lControlling",
+      "&f{CONTROLLING}",
+      "&c",
+      "&c&lCap %",
+      "&f{CAP%}%",
+      "&d",
+      "&c&lStatus",
+      "{STATUS}",
+      "&e",
+      "&c&lLimits",
+      "&fVanilla PvP"
+    ]
+  }
+}

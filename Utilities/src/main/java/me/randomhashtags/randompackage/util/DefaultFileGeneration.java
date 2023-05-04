@@ -331,7 +331,7 @@ public interface DefaultFileGeneration {
         );
     }
     default void generateDefaultOutposts() {
-        generateAllDefault("outposts", "HERO", "SERVONAUT", "TRAINEE", "VANILLA");
+        generate_all_default_json("outposts", "HERO", "SERVONAUT", "TRAINEE", "VANILLA");
     }
     default void generateDefaultPlayerQuests() {
         generate_all_default_json("player quests",
