@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+/*
 public class FileFaction extends RPAddonSpigot implements Faction {
     public static HashMap<UUID, FileFaction> FACTIONS = new HashMap<>();
 
@@ -171,4 +172,4 @@ public class FileFaction extends RPAddonSpigot implements Faction {
     }
 
     public HashMap<UUID, Relationship> getRelations() { return null; }
-}
+}*/

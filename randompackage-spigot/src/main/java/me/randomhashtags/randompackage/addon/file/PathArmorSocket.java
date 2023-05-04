@@ -1,15 +1,18 @@
 package me.randomhashtags.randompackage.addon.file;
 
 import me.randomhashtags.randompackage.addon.ArmorSocket;
+import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket {
     private final String identifier;
-    public PathArmorSocket(String identifier) {
+    private final MultilingualString name;
+    public PathArmorSocket(String identifier, @NotNull MultilingualString name) {
         super(null);
         this.identifier = identifier;
+        this.name = name;
         register(Feature.ARMOR_SOCKET, this);
     }
     @NotNull
@@ -21,8 +24,8 @@ public final class PathArmorSocket extends RPAddonSpigot implements ArmorSocket 
     private YamlConfiguration getArmorSocketsConfig() {
         return getRPConfig(null, "armor sockets.yml");
     }
-    public @NotNull String getName() {
-        return getString(getArmorSocketsConfig(), "types." + identifier + ".name");
+    public @NotNull MultilingualString getName() {
+        return name;
     }
     public String getItemType() {
         return getString(getArmorSocketsConfig(), "types." + identifier + ".item type");

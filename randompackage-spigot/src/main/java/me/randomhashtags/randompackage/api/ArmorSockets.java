@@ -1,6 +1,7 @@
 package me.randomhashtags.randompackage.api;
 
 import me.randomhashtags.randompackage.addon.ArmorSocket;
+import me.randomhashtags.randompackage.addon.file.MultilingualStringSpigotValue;
 import me.randomhashtags.randompackage.addon.file.PathArmorSocket;
 import me.randomhashtags.randompackage.enums.Feature;
 import me.randomhashtags.randompackage.universal.UMaterial;
@@ -54,7 +55,9 @@ public enum ArmorSockets implements RPFeatureSpigot {
 
         final List<ItemStack> list = new ArrayList<>();
         for(String key : getConfigurationSectionKeys(config, "types", false)) {
-            final ArmorSocket socket = new PathArmorSocket(key);
+            final String target_name = config.getConfigurationSection(key).getString("name");
+            final MultilingualStringSpigotValue name = new MultilingualStringSpigotValue(target_name);
+            final ArmorSocket socket = new PathArmorSocket(key, name);
             list.add(getArmorSocketItem(socket, 100));
         }
         addGivedpCategory(list, UMaterial.TRIPWIRE_HOOK, "Armor Sockets", "Givedp: Armor Sockets");

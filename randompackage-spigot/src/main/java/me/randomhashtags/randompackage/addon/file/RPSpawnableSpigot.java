@@ -7,19 +7,32 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnable {
+
+    private final List<String> spawnable_faction_claims;
+    private final boolean can_spawn_at_owned_island, can_spawn_on_coop_island, can_spawn_while_visiting_island;
     public static RegionPlugin SPAWN_TYPE = null;
 
     public RPSpawnableSpigot(@Nullable File file) {
         super(file);
+        final JSONObject json = file != null ? parse_json_from_file(file) : new JSONObject(); // TODO: print to console?
+
+        final JSONObject spawnable_regions_json = json.getJSONObject("spawnable regions");
+        spawnable_faction_claims = parse_list_string_in_json(spawnable_regions_json, "faction claims");
+        final JSONObject spawnable_regions_skyblock_json = spawnable_regions_json.getJSONObject("skyblock");
+        can_spawn_at_owned_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "own island");
+        can_spawn_on_coop_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "coop island");
+        can_spawn_while_visiting_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "while visiting");
     }
 
     public List<String> getSpawnableFactionClaims() {
-        return yml.getStringList("spawnable regions.faction claims");
+        return spawnable_faction_claims;
     }
     public boolean canSpawnAtFactionClaim(@Nullable Player summoner, @NotNull Location l) {
         final RegionalAPI regional = RegionalAPI.INSTANCE;
@@ -52,13 +65,13 @@ public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnab
     }
     // Skyblock
     public boolean canSpawnAtOwnedIsland() {
-        return yml.getBoolean("spawnable regions.skyblock.own island");
+        return can_spawn_at_owned_island;
     }
     public boolean canSpawnAtCoopIsland() {
-        return yml.getBoolean("spawnable regions.skyblock.coop island");
+        return can_spawn_on_coop_island;
     }
     public boolean canSpawnAtVisitingIsland() {
-        return yml.getBoolean("spawnable regions.skyblock.while visiting");
+        return can_spawn_while_visiting_island;
     }
 
     public boolean canSpawnSkyblock(RegionPlugin type, Location l) {
