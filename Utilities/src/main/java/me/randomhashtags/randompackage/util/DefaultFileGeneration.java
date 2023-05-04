@@ -7,18 +7,13 @@ import java.util.Map;
 public interface DefaultFileGeneration {
     void save(String folder, String file);
 
-    default void generateAllDefault(String folder, String...values) {
-        for(String s : values) {
-            save(folder, s + ".yml");
-        }
-    }
     default void generate_all_default_json(String folder, String...values) {
         for(String s : values) {
             save(folder, s + ".json");
         }
     }
     default void generateDefaultBoosters() {
-        generateAllDefault("boosters", "FACTION_MCMMO", "FACTION_XP");
+        generate_all_default_json("boosters", "FACTION_MCMMO", "FACTION_XP");
     }
     default void generateDefaultCustomArmor() {
         generate_all_default_json("custom armor", "DRAGON", "ENGINEER", "KOTH", "PHANTOM", "RANGER", "SUPREME", "TRAVELER", "YETI", "YIJKI");

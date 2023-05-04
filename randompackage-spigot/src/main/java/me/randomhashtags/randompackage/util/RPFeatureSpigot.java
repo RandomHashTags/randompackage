@@ -140,7 +140,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     }
 
     @Override
-    default @NotNull String colorize(@NotNull String input) {
+    default @NotNull String colorize(@Nullable String input) {
         return input != null ? ChatColor.translateAlternateColorCodes('&', input) : "NULL";
     }
 
@@ -209,20 +209,23 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     }
     @Nullable
     default ItemStack create_item_stack(@NotNull JSONObject json, String key, int tier, float enchantMultiplier) {
-        final JSONObject item_json = json.getJSONObject(key);
+        final JSONObject item_json = json.optJSONObject(key);
+        if(item_json == null) {
+            return null;
+        }
         final String item_path_lowercase = item_json.optString("item");
         final String name = parse_string_in_json(item_json, "name");
         final List<String> lore = parse_list_string_in_json(item_json, "lore");
         return create_item_stack(null, item_path_lowercase, 1, name, lore, tier, enchantMultiplier);
     }
     @Nullable
-    default ItemStack create_item_stack(@NotNull String path, @NotNull String item_path_lowercase, int amount, String name, List<String> lore, int tier, float enchantMultiplier) {
+    default ItemStack create_item_stack(@Nullable String path, @NotNull String item_path_lowercase, int amount, String name, List<String> lore, int tier, float enchantMultiplier) {
         ItemStack item;
         if(item_path_lowercase.contains(";amount=")) {
             final String amountString = item_path_lowercase.split("=")[1];
             final boolean isRange = item_path_lowercase.contains("-");
             final int min = isRange ? Integer.parseInt(amountString.split("-")[0]) : 0;
-            amount = isRange ? min+RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : Integer.parseInt(amountString);
+            amount = isRange ? min + RANDOM.nextInt(Integer.parseInt(amountString.split("-")[1])-min+1) : Integer.parseInt(amountString);
             path = path.split(";amount=")[0];
             item_path_lowercase = item_path_lowercase.split(";")[0];
         }
@@ -267,11 +270,12 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
         try {
             item = umaterial.getItemStack();
         } catch (Exception e) {
-            System.out.println("UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getMaterial().name() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
+            sendConsoleMessage("&cERROR: UMaterial null itemstack. mat=" + mat + ";data=" + data + ";versionName=" + (umaterial != null ? umaterial.getMaterial().name() : null) + ";getMaterial()=" + (umaterial != null ? umaterial.getMaterial() : null));
             return null;
         }
         if(item == null) {
             sendConsoleMessage("&cERROR: Material=" + mat + ";umaterial=" + umaterial);
+            return null;
         }
         final Material skull_item = UMaterial.PLAYER_HEAD_ITEM.getMaterial(), i = item.getType();
         if(!i.equals(Material.AIR)) {
@@ -324,12 +328,12 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
                             if(enchant != null && enchant.isEnabled()) {
                                 final EnchantRarity rarity = valueOfCustomEnchantRarity(enchant);
                                 if(rarity != null) {
-                                    int l = getRemainingInt(s), x = (int) (enchant.getMaxLevel()*enchantMultiplier);
-                                    l = l != -1 ? l : x+ RANDOM.nextInt(enchant.getMaxLevel()-x+1);
-                                    if(l != 0 || !levelzeroremoval)
-                                        lore.add(rarity.getApplyColors() + enchant.getName() + " " + toRoman(l != 0 ? l : 1));
+                                    int target_enchant_level = getRemainingInt(s), x = (int) (enchant.getMaxLevel() * enchantMultiplier);
+                                    target_enchant_level = target_enchant_level != -1 ? target_enchant_level : x+ RANDOM.nextInt(enchant.getMaxLevel()-x+1);
+                                    if(target_enchant_level != 0 || !levelzeroremoval)
+                                        lore.add(rarity.getApplyColors() + enchant.getName() + " " + toRoman(target_enchant_level != 0 ? target_enchant_level : 1));
                                 } else {
-                                    System.out.println("[RandomPackage] WARNING: No EnchantRarity found for enchant \"" + enchant.getName() + "\"!");
+                                    sendConsoleMessage("&cWARNING&e: No EnchantRarity found for enchant \"" + enchant.getName() + "\"!");
                                 }
                             }
                         }

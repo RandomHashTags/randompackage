@@ -83,7 +83,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         this.scores = scores;
 
         attacks = new ArrayList<>();
-        final JSONObject attacks_json = json.getJSONObject("attacks");
+        final JSONObject attacks_json = json.optJSONObject("attacks", new JSONObject());
         final Iterator<String> attack_keys = attacks_json.keys();
         for(; attack_keys.hasNext(); ) {
             String s = attack_keys.next();

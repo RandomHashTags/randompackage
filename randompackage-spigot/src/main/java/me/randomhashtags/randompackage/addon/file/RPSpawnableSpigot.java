@@ -23,9 +23,9 @@ public abstract class RPSpawnableSpigot extends RPAddonSpigot implements Spawnab
         super(file);
         final JSONObject json = file != null ? parse_json_from_file(file) : new JSONObject(); // TODO: print to console?
 
-        final JSONObject spawnable_regions_json = json.getJSONObject("spawnable regions");
+        final JSONObject spawnable_regions_json = json.optJSONObject("spawnable regions", new JSONObject());
         spawnable_faction_claims = parse_list_string_in_json(spawnable_regions_json, "faction claims");
-        final JSONObject spawnable_regions_skyblock_json = spawnable_regions_json.getJSONObject("skyblock");
+        final JSONObject spawnable_regions_skyblock_json = spawnable_regions_json.optJSONObject("skyblock", new JSONObject());
         can_spawn_at_owned_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "own island");
         can_spawn_on_coop_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "coop island");
         can_spawn_while_visiting_island = parse_boolean_in_json(spawnable_regions_skyblock_json, "while visiting");

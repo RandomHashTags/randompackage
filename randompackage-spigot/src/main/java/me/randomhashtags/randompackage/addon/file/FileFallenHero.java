@@ -26,9 +26,13 @@ public final class FileFallenHero extends RPFallenHeroSpigot implements FallenHe
         final JSONObject json = parse_json_from_file(f);
         spawn_item = create_item_stack(json, "spawn item");
         gem = create_item_stack(json, "gem");
-        final JSONObject gem_json = json.getJSONObject("gem"), messages_json = json.getJSONObject("messages"), settings_json = json.getJSONObject("settings");
+        final JSONObject gem_json = json.optJSONObject("gem", new JSONObject());
         gem_drop_chance = parse_int_in_json(gem_json, "chance");
+
+        final JSONObject settings_json = json.optJSONObject("settings", new JSONObject());
         type = parse_string_in_json(settings_json, "type").toUpperCase();
+
+        final JSONObject messages_json = json.optJSONObject("messages", new JSONObject());
         summon_message = parse_list_string_in_json(messages_json, "summon");
         receive_kit_message = parse_list_string_in_json(messages_json, "receive kit");
         register(Feature.FALLEN_HERO, this);

@@ -31,6 +31,13 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         name = parse_multilingual_string_in_json(settings_json, "name");
         loses_required_kits = parse_boolean_in_json(settings_json, "loses required kits");
 
+        requiredKits = new LinkedHashMap<>();
+        final List<String> required = parse_list_string_in_json(json, "required kits");
+        for(String s : required) {
+            final String[] a = s.split(";");
+            requiredKits.put(getCustomKit(a[0]), Integer.parseInt(a[1]));
+        }
+
         item = set(create_item_stack(json, "gui settings"));
         redeem = set(create_item_stack(json, "redeem"));
         shard = set(create_item_stack(json, "shard"));
@@ -38,13 +45,6 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         final JSONObject anti_crystal_json = json.getJSONObject("anti crystal");
         anti_crystal_negated_enchants = parse_list_string_in_json(anti_crystal_json, "negate enchants");
         anti_crystal_applied = parse_string_in_json(anti_crystal_json, "applied");
-
-        requiredKits = new LinkedHashMap<>();
-        final List<String> required = parse_list_string_in_json(json, "required kits");
-        for(String s : required) {
-            final String[] a = s.split(";");
-            requiredKits.put(getCustomKit(a[0]), Integer.parseInt(a[1]));
-        }
 
         register(Feature.CUSTOM_KIT, this);
     }

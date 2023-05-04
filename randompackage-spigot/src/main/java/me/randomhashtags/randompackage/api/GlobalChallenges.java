@@ -219,13 +219,14 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 		final Inventory inv = this.inv.getInventory();
 		int f = 0;
 		final HashMap<GlobalChallenge, ActiveGlobalChallenge> active = ActiveGlobalChallenge.ACTIVE;
+		final ActiveGlobalChallenge[] active_challenges = (ActiveGlobalChallenge[]) active.values().toArray();
 		final List<String> addedLore = colorizeListString(config.getStringList("challenge settings.added lore"));
 		for(int i = 0; i < inv.getSize(); i++) {
 			if(config.get("gui." + i) != null) {
 				final String targetItem = config.getString("gui." + i + ".item");
 				ItemStack item = null;
 				if(targetItem != null && targetItem.equalsIgnoreCase("{CHALLENGE}")) {
-					ActiveGlobalChallenge targetChallenge = f < active.size() ? (ActiveGlobalChallenge) active.values().toArray()[f] : null;
+					ActiveGlobalChallenge targetChallenge = f < active.size() ? active_challenges[f] : null;
 					if(targetChallenge == null && f < max) {
 						targetChallenge = getRandomChallenge().start();
 					}
@@ -238,7 +239,8 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 						for(String string : addedLore) {
 							lore.add(string.replace("{TYPE}", type));
 						}
-						itemMeta.setLore(lore); lore.clear();
+						itemMeta.setLore(lore);
+						lore.clear();
 						item.setItemMeta(itemMeta);
 						f += 1;
 					}

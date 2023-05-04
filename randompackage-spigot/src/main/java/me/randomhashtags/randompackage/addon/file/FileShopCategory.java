@@ -46,7 +46,7 @@ public final class FileShopCategory extends ShopCategory {
                 buy_price = BigDecimal.ZERO;
                 sell_price = BigDecimal.ZERO;
             }
-            final JSONObject custom_json = gui_item_json.getJSONObject("custom");
+            final JSONObject custom_json = gui_item_json.optJSONObject("custom", new JSONObject());
             final String custom = parse_string_in_json(custom_json, "item"), item_string = parse_string_in_json(gui_item_json, "item"), item_string_uppercased = item_string.toUpperCase();
             final boolean isBack = item_string_uppercased.equals("BACK");
             final ItemStack display = isBack ? back : shop.create_item_stack(gui_json, s);
@@ -58,8 +58,8 @@ public final class FileShopCategory extends ShopCategory {
                 }
                 final int slot = parse_int_in_json(gui_item_json, "slot");
                 final String opens_category = parse_string_in_json(gui_item_json, "opens", null);
-                final List<String> commands = parse_list_string_in_json(gui_item_json, "commands", null);
-                items.add(new ShopItem(s, slot, opens_category, display, purchased, buy_price, sell_price, commands));
+                final List<String> commands = parse_list_string_in_json(gui_item_json, "commands", List.of());
+                items.add(new ShopItem(s, slot, opens_category, display, purchased, buy_price, sell_price, commands.isEmpty() ? null : commands));
                 inventory.setItem(slot, display);
             }
         }

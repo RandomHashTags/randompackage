@@ -39,7 +39,7 @@ public final class FileEnchantRarity extends RPAddonSpigot implements EnchantRar
         name_colors = parse_string_in_json(revealed_item_json, "name colors");
         apply_colors = parse_string_in_json(revealed_item_json, "apply colors");
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = json.optJSONObject("settings", new JSONObject());
         percents_add_up_to_100 = parse_boolean_in_json(settings_json, "success+destroy=100");
         success = parse_string_in_json(settings_json, "success");
         destroy = parse_string_in_json(settings_json, "destroy");

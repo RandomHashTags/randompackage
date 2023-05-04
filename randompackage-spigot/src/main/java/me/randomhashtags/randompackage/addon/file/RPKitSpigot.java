@@ -31,7 +31,7 @@ public abstract class RPKitSpigot extends RPAddonSpigot implements CustomKit {
         final JSONObject items_json = json.getJSONObject("items");
         for(String i : items_json.keySet()) {
             final JSONObject item_json = items_json.getJSONObject(i);
-            final String t = item_json.getString("item");
+            final String t = item_json.optString("item");
             if(t != null) {
                 final String item_string = parse_string_in_json(item_json, "item");
                 final String amount = parse_string_in_json(item_json, "amount");

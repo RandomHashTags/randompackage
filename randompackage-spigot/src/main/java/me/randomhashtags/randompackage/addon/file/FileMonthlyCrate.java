@@ -35,7 +35,7 @@ public final class FileMonthlyCrate extends RPAddonSpigot implements MonthlyCrat
         rewards = parse_list_string_in_json(json, "rewards");
         rewards_bonus = parse_list_string_in_json(json, "bonus");
 
-        final JSONObject inventory_json = json.getJSONObject("inventory");
+        final JSONObject inventory_json = json.optJSONObject("inventory", new JSONObject());
         inventory_size = parse_int_in_json(inventory_json, "size");
         redeem_format = parse_list_string_in_json(inventory_json, "redeem format");
         redeem_bonus_format = parse_list_string_in_json(inventory_json, "redeem bonus format");

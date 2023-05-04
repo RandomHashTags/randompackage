@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -39,17 +40,19 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
 
             item = create_item_stack(json, "item");
             if(item != null) {
-                final List<String> lore = item.getItemMeta().getLore(), format = getType().getFormat(), l = new ArrayList<>();
-                final ItemMeta m = item.getItemMeta();
-                for(String s : format) {
-                    if(s.equals("{LORE}")) {
-                        if(lore != null) l.addAll(lore);
+                final List<String> lore = item.getItemMeta().getLore(), format = getType().getFormat(), formatted_lore = new ArrayList<>();
+                final ItemMeta meta = item.getItemMeta();
+                for(String format_string : format) {
+                    if(format_string.equals("{LORE}")) {
+                        if(lore != null) {
+                            formatted_lore.addAll(lore);
+                        }
                     } else {
-                        l.add(s);
+                        formatted_lore.add(format_string);
                     }
                 }
-                m.setLore(l);
-                item.setItemMeta(m);
+                meta.setLore(formatted_lore);
+                item.setItemMeta(meta);
             }
 
             levels = new LinkedHashMap<>();
@@ -84,8 +87,8 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
         return is_enabled;
     }
 
-    @NotNull
     @Override
+    @Nullable
     public ItemStack getItem() {
         return getClone(item);
     }

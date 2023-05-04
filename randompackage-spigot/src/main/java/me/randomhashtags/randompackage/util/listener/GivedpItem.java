@@ -112,7 +112,10 @@ public enum GivedpItem implements RPFeatureSpigot, CommandExecutor {
     }
 
     @Nullable
-    public final ItemStack valueOfRPItem(@NotNull String input) {
+    public final ItemStack valueOfRPItem(@Nullable String input) {
+        if(input == null) {
+            return null;
+        }
         final String targetString = input.split(";")[0];
         input = input.toLowerCase();
 

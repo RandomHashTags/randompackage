@@ -23,6 +23,7 @@ public interface Skullable extends UVersionableSpigot {
     @NotNull
     default ItemStack getSkull(String name, List<String> lore, boolean isLegacy) {
         final String skinURL = getOwner();
+
         if(CACHED_SKULLS.containsKey(skinURL)) {
             return CACHED_SKULLS.get(skinURL);
         }
@@ -31,6 +32,9 @@ public interface Skullable extends UVersionableSpigot {
         headMeta.setDisplayName(name);
         headMeta.setLore(lore);
         head.setItemMeta(headMeta);
+        if(skinURL == null) {
+            return head;
+        }
 
         if(skinURL.isEmpty()) {
             return head;
