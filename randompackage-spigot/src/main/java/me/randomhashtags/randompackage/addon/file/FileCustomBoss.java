@@ -22,7 +22,7 @@ import java.util.List;
 public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBoss {
     private final String type;
     private final MultilingualString name;
-    
+
     private final Scoreboard scoreboard;
 
     private final ItemStack spawn_item;
