@@ -6,45 +6,70 @@ import me.randomhashtags.randompackage.enums.Feature;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
 
 public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
-    private ItemStack display, key, keyLocked, portal, lootbag;
+    private final int slot;
+    private final ItemStack display, key, keyLocked, portal, lootbag;
+    private final List<String> lootbag_rewards;
+    private final Location warp_location;
     private long fastestCompletion;
 
     public FileDungeon(File f) {
         super(f);
+
+        final JSONObject json = parse_json_from_file(f);
+        display = create_item_stack(json, "gui");
+        key = create_item_stack(json, "key");
+        portal = create_item_stack(json, "portal");
+
+        final JSONObject lootbag_json = json.getJSONObject("lootbag");
+        lootbag = create_item_stack(json, "lootbag");
+        lootbag_rewards = parse_list_string_in_json(lootbag_json, "rewards");
+
+        final JSONObject gui_json = json.getJSONObject("gui");
+        slot = parse_int_in_json(gui_json, "slot");
+        keyLocked = create_item_stack(gui_json, "key locked");
+
+        final JSONObject settings_json = json.getJSONObject("settings");
+        warp_location = string_to_location(parse_string_in_json(settings_json, "warp location"));
+
         register(Feature.DUNGEON, this);
     }
 
-    public int getSlot() { return yml.getInt("gui.slot"); }
+    @Override
+    public int getSlot() {
+        return slot;
+    }
     public @NotNull ItemStack getItem() {
-        if(display == null) display = createItemStack(yml, "gui");
         return getClone(display);
     }
     public ItemStack getKey() {
-        if(key == null) key = createItemStack(yml, "key");
         return getClone(key);
     }
     public ItemStack getKeyLocked() {
-        if(keyLocked == null) keyLocked = createItemStack(yml, "gui.key locked");
         return getClone(keyLocked);
     }
     public ItemStack getPortal() {
-        if(portal == null) portal = createItemStack(yml, "portal");
         return getClone(portal);
     }
     public ItemStack getLootbag() {
-        if(lootbag == null) lootbag = createItemStack(yml, "lootbag");
         return getClone(lootbag);
     }
     public List<String> getLootbagRewards() {
-        return yml.getStringList("lootbag.rewards");
+        return lootbag_rewards;
     }
 
-    public Location getTeleportLocation() { return string_to_location(yml.getString("settings.warp location")); }
-    public long getFastestCompletion() { return fastestCompletion; }
-    public void setFastestCompletion(long fastestCompletion) { this.fastestCompletion = fastestCompletion; }
+    public Location getTeleportLocation() {
+        return warp_location;
+    }
+    public long getFastestCompletion() {
+        return fastestCompletion;
+    }
+    public void setFastestCompletion(long fastestCompletion) {
+        this.fastestCompletion = fastestCompletion;
+    }
 }

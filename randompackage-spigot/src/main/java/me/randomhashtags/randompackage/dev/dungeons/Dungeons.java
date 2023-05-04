@@ -104,14 +104,10 @@ public enum Dungeons implements RPFeatureSpigot, CommandExecutor {
         if(i != null && i.hasItemMeta()) {
             final Player player = event.getPlayer();
             final Dungeon key = valueOfDungeonFromKey(i), portal = key == null ? valueOfDungeonFromPortal(i) : null;
-            if(key != null) {
-            } else if(portal != null) {
-            } else if(i.isSimilar(dimensionweb) || i.isSimilar(enchantedobsidian) || i.isSimilar(fuelcell)) {
-            } else {
-                return;
+            if(key != null || portal != null || i.isSimilar(dimensionweb) || i.isSimilar(enchantedobsidian) || i.isSimilar(fuelcell)) {
+                event.setCancelled(true);
+                player.updateInventory();
             }
-            event.setCancelled(true);
-            player.updateInventory();
         }
     }
 
