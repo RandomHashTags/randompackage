@@ -1,0 +1,118 @@
+{
+  "title": "Shop Items (Food and Farming)",
+  "size": 27,
+  "gui": {
+    "melon seeds": {
+      "slot": 0,
+      "item": "melon_seeds",
+      "name": "&e&lMelon Seeds",
+      "prices": "3.44;0"
+    },
+    "pumpkin seeds": {
+      "slot": 1,
+      "item": "pumpkin_seeds",
+      "name": "&e&lPumpkin Seeds",
+      "prices": "3.44;0"
+    },
+    "wheat seeds": {
+      "slot": 2,
+      "item": "wheat_seeds",
+      "name": "&e&lSeeds",
+      "prices": "2.19;0"
+    },
+    "cactus": {
+      "slot": 3,
+      "item": "cactus",
+      "name": "&e&lCactus",
+      "prices": "18.75;3.75"
+    },
+    "sugar cane": {
+      "slot": 4,
+      "item": "sugar_cane",
+      "name": "&e&lSugar Cane",
+      "prices": "16.25;3.12"
+    },
+    "carrot": {
+      "slot": 5,
+      "item": "carrot_item",
+      "name": "&e&lCarrots",
+      "prices": "25;1.56"
+    },
+    "melon": {
+      "slot": 6,
+      "item": "melon",
+      "name": "&e&lMelon",
+      "prices": "20.31;6.25"
+    },
+    "pumpkin": {
+      "slot": 7,
+      "item": "pumpkin",
+      "name": "&e&lPumpkin",
+      "prices": "325;5.31"
+    },
+    "wheat": {
+      "slot": 8,
+      "item": "wheat",
+      "name": "&e&lWheat",
+      "prices": "11.88;6.25"
+    },
+    "apple": {
+      "slot": 9,
+      "item": "apple",
+      "name": "&e&lApple",
+      "prices": "25;10"
+    },
+    "golden apple": {
+      "slot": 10,
+      "item": "golden_apple",
+      "name": "&e&lGold Apple",
+      "prices": "1500;0"
+    },
+    "cake": {
+      "slot": 11,
+      "item": "cake",
+      "name": "&e&lCake",
+      "prices": "50;0"
+    },
+    "bread": {
+      "slot": 12,
+      "item": "bread",
+      "name": "&e&lBread",
+      "prices": "31.25;0"
+    },
+    "cookie": {
+      "slot": 13,
+      "item": "cookie",
+      "name": "&e&lCookie",
+      "prices": "5.94;0"
+    },
+    "raw beef": {
+      "slot": 14,
+      "item": "raw_beef",
+      "name": "&e&lRaw Beef",
+      "prices": "9.38;2.19"
+    },
+    "steak": {
+      "slot": 15,
+      "item": "cooked_beef",
+      "name": "&e&lSteak",
+      "prices": "11.88;2.81"
+    },
+    "raw porkchop": {
+      "slot": 16,
+      "item": "pork",
+      "name": "&e&lRaw Porkchop",
+      "prices": "10;1.25"
+    },
+    "cooked porkchop": {
+      "slot": 17,
+      "item": "grilled_pork",
+      "name": "&e&lCooked Porkchop",
+      "prices": "11.88;1.88"
+    },
+    "back": {
+      "slot": 26,
+      "item": "back"
+    }
+  }
+}

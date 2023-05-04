@@ -387,16 +387,20 @@ public interface DefaultFileGeneration {
         generate_all_default_json("server crates", "ELITE", "GODLY", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");
     }
     default void generateDefaultShopCategories() {
-        generateAllDefault("shops",
-                "BASE_GRIND", "BREWING", "BUILDING_BLOCKS",
+        generate_all_default_json("shops",
+                "BASE_GRIND",
+                "BREWING",
+                "BUILDING_BLOCKS",
                 "CLAY",
-                "FLOWERS", "FOOD_AND_FARMING",
+                "FLOWERS",
+                "FOOD_AND_FARMING",
                 "GLASS",
                 "MENU", "MOB_DROPS",
                 "ORES_AND_GEMS",
                 "POTIONS",
                 "RAID",
-                "SPAWNERS", "SPECIALTY",
+                "SPAWNERS",
+                "SPECIALTY",
                 "WOOL"
         );
     }

@@ -171,7 +171,7 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
             if(!quests.isEmpty()) {
                 for(ActivePlayerQuest quest : quests.values()) {
                     final String targetName = (quest.isCompleted() ? quest.hasClaimedRewards() ? claimed : claim : active).getItemMeta().getDisplayName();
-                    if(targetName.replace("{NAME}", quest.getQuest().getName()).equals(name)) {
+                    if(targetName.replace("{NAME}", getLocalizedName(quest.getQuest())).equals(name)) {
                         return quest;
                     }
                 }
@@ -185,7 +185,7 @@ public enum PlayerQuests implements RPFeatureSpigot, EventExecutor, CommandExecu
         final String completion = getCompletion(quest), p = Double.toString(round(a.getProgress(), 2)), expiration = getRemainingTime(a.getExpirationTime()-time);
         final ItemStack item = (isCompleted ? hasClaimed ? this.claimed : claim : active).clone();
         final ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", quest.getName()));
+        itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{NAME}", getLocalizedName(quest)));
         final List<String> lore = new ArrayList<>(), questLore = quest.getLore(), rewards = quest.getRewards();
         for(String string : itemMeta.getLore()) {
             if(string.equals("{LORE}")) {

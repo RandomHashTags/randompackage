@@ -1,0 +1,138 @@
+{
+  "title": "Shop Items (Specialty)",
+  "size": 27,
+  "gui": {
+    "chest": {
+      "slot": 0,
+      "item": "chest",
+      "name": "&e&lChest",
+      "prices": "15;0"
+    },
+    "trapped chest": {
+      "slot": 1,
+      "item": "trapped_chest",
+      "name": "&e&lTrapped Chest",
+      "prices": "150;0"
+    },
+    "enchantment table": {
+      "slot": 2,
+      "item": "enchantment_table",
+      "name": "&e&lEnchantment Table",
+      "prices": "793;0"
+    },
+    "anvil": {
+      "slot": 3,
+      "item": "anvil",
+      "name": "&e&lAnvil",
+      "prices": "3543;0"
+    },
+    "ender chest": {
+      "slot": 4,
+      "item": "ender_chest",
+      "name": "&e&lEnder Chest",
+      "prices": "6430;0"
+    },
+    "beacon": {
+      "slot": 5,
+      "item": "beacon",
+      "name": "&e&lBeacon Block",
+      "prices": "250000;0"
+    },
+    "flint and steel": {
+      "slot": 6,
+      "item": "flint_and_steel",
+      "name": "&e&lFlint and Steel",
+      "prices": "145;0"
+    },
+    "daylight sensor": {
+      "slot": 7,
+      "item": "daylight_detector",
+      "name": "&e&lDaylight Sensor",
+      "prices": "640;0"
+    },
+    "tripwire hook": {
+      "slot": 8,
+      "item": "tripwire_hook",
+      "name": "&e&lTripwire Hook",
+      "prices": "100;0"
+    },
+    "hopper": {
+      "slot": 9,
+      "item": "hopper",
+      "name": "&e&lHopper",
+      "prices": "22750;0"
+    },
+    "sticky piston": {
+      "slot": 10,
+      "item": "piston_sticky_base",
+      "name": "&e&lSticky Piston",
+      "prices": "325;0"
+    },
+    "piston": {
+      "slot": 11,
+      "item": "piston_base",
+      "name": "&e&lPiston",
+      "prices": "195;0"
+    },
+    "redstone lamp": {
+      "slot": 12,
+      "item": "redstone_lamp_off",
+      "name": "&e&lRedstone Lamp",
+      "prices": "730;0"
+    },
+    "web": {
+      "slot": 13,
+      "item": "web",
+      "name": "&e&lWeb",
+      "prices": "40;0"
+    },
+    "dispenser": {
+      "slot": 14,
+      "item": "dispenser",
+      "name": "&e&lDispenser",
+      "prices": "819;0"
+    },
+    "ice": {
+      "slot": 15,
+      "item": "ice",
+      "name": "&e&lIce",
+      "prices": "50;0"
+    },
+    "packed ice": {
+      "slot": 16,
+      "item": "packed_ice",
+      "name": "&e&lPacked Ice",
+      "prices": "75;0"
+    },
+    "snow block": {
+      "slot": 17,
+      "item": "snow_block",
+      "name": "&e&lSnow Block",
+      "prices": "250;0"
+    },
+    "sponge": {
+      "slot": 18,
+      "item": "sponge",
+      "name": "&e&lSponge",
+      "prices": "2000;0"
+    },
+    "nether fence": {
+      "slot": 19,
+      "item": "nether_fence",
+      "name": "&e&lNether Brick Fence",
+      "prices": "4.06;1.41"
+    },
+    "collection chest": {
+      "slot": 20,
+      "item": "collectionchest",
+      "custom": {
+        "item": "collectionchest"
+      },
+      "prices": "100;0"
+    },
+    "back": {
+      "slot": 26,
+      "item": "back"
+    }
+  }
+}
