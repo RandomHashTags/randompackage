@@ -6,61 +6,84 @@
       "slot": 0,
       "item": "spider_eye",
       "name": "&e&lSpider Eye",
-      "prices": "130;7.50"
+      "prices": {
+        "buy": 130,
+        "sell": 7.50
+      }
     },
     "ghast tear": {
       "slot": 1,
       "item": "ghast_tear",
       "name": "&e&lGhast Tear",
-      "prices": "97.50;40"
+      "prices": {
+        "buy": 97.50,
+        "sell": 40
+      }
     },
     "brewing stand": {
       "slot": 2,
       "item": "brewing_stand_item",
       "name": "&e&lBrewing Stand",
-      "prices": "315;0"
+      "prices": {
+        "buy": 315
+      }
     },
     "potion": {
       "slot": 3,
       "item": "potion_water",
       "name": "&e&lWater Bottle",
-      "prices": "10.44;0"
+      "prices": {
+        "buy": 10.44
+      }
     },
     "golden carrot": {
       "slot": 4,
       "item": "golden_carrot",
       "name": "&e&lGolden Carrot",
-      "prices": "73.12;0"
+      "prices": {
+        "buy": 73.12
+      }
     },
     "glowstone dust": {
       "slot": 5,
       "item": "glowstone_dust",
       "name": "&e&lGlowstone Dust",
-      "prices": "5;0"
+      "prices": {
+        "buy": 5
+      }
     },
     "sugar": {
       "slot": 6,
       "item": "sugar",
       "name": "&e&lSugar",
-      "prices": "5;0"
+      "prices": {
+        "buy": 5
+      }
     },
     "slime ball": {
       "slot": 7,
       "item": "slime_ball",
       "name": "&e&lSlime Ball",
-      "prices": "200;0"
+      "prices": {
+        "buy": 200
+      }
     },
     "nether wart": {
       "slot": 8,
       "item": "nether_stalk",
       "name": "&e&lNether Wart",
-      "prices": "16.25;4.06"
+      "prices": {
+        "buy": 16.25,
+        "sell": 4.06
+      }
     },
     "glistering melon": {
       "slot": 9,
       "item": "speckled_melon",
       "name": "&e&lGlistering Melon",
-      "prices": "38.75;0"
+      "prices": {
+        "buy": 38.75
+      }
     },
     "back": {
       "slot": 17,

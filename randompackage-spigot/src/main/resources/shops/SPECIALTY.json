@@ -6,121 +6,162 @@
       "slot": 0,
       "item": "chest",
       "name": "&e&lChest",
-      "prices": "15;0"
+      "prices": {
+        "buy": 15
+      }
     },
     "trapped chest": {
       "slot": 1,
       "item": "trapped_chest",
       "name": "&e&lTrapped Chest",
-      "prices": "150;0"
+      "prices": {
+        "buy": 150
+      }
     },
     "enchantment table": {
       "slot": 2,
       "item": "enchantment_table",
       "name": "&e&lEnchantment Table",
-      "prices": "793;0"
+      "prices": {
+        "buy": 793
+      }
     },
     "anvil": {
       "slot": 3,
       "item": "anvil",
       "name": "&e&lAnvil",
-      "prices": "3543;0"
+      "prices": {
+        "buy": 3543
+      }
     },
     "ender chest": {
       "slot": 4,
       "item": "ender_chest",
       "name": "&e&lEnder Chest",
-      "prices": "6430;0"
+      "prices": {
+        "buy": 6430
+      }
     },
     "beacon": {
       "slot": 5,
       "item": "beacon",
       "name": "&e&lBeacon Block",
-      "prices": "250000;0"
+      "prices": {
+        "buy": 250000
+      }
     },
     "flint and steel": {
       "slot": 6,
       "item": "flint_and_steel",
       "name": "&e&lFlint and Steel",
-      "prices": "145;0"
+      "prices": {
+        "buy": 145
+      }
     },
     "daylight sensor": {
       "slot": 7,
       "item": "daylight_detector",
       "name": "&e&lDaylight Sensor",
-      "prices": "640;0"
+      "prices": {
+        "buy": 640
+      }
     },
     "tripwire hook": {
       "slot": 8,
       "item": "tripwire_hook",
       "name": "&e&lTripwire Hook",
-      "prices": "100;0"
+      "prices": {
+        "buy": 100
+      }
     },
     "hopper": {
       "slot": 9,
       "item": "hopper",
       "name": "&e&lHopper",
-      "prices": "22750;0"
+      "prices": {
+        "buy": 22750
+      }
     },
     "sticky piston": {
       "slot": 10,
       "item": "piston_sticky_base",
       "name": "&e&lSticky Piston",
-      "prices": "325;0"
+      "prices": {
+        "buy": 325
+      }
     },
     "piston": {
       "slot": 11,
       "item": "piston_base",
       "name": "&e&lPiston",
-      "prices": "195;0"
+      "prices": {
+        "buy": 195
+      }
     },
     "redstone lamp": {
       "slot": 12,
       "item": "redstone_lamp_off",
       "name": "&e&lRedstone Lamp",
-      "prices": "730;0"
+      "prices": {
+        "buy": 730
+      }
     },
     "web": {
       "slot": 13,
       "item": "web",
       "name": "&e&lWeb",
-      "prices": "40;0"
+      "prices": {
+        "buy": 40
+      }
     },
     "dispenser": {
       "slot": 14,
       "item": "dispenser",
       "name": "&e&lDispenser",
-      "prices": "819;0"
+      "prices": {
+        "buy": 819
+      }
     },
     "ice": {
       "slot": 15,
       "item": "ice",
       "name": "&e&lIce",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "packed ice": {
       "slot": 16,
       "item": "packed_ice",
       "name": "&e&lPacked Ice",
-      "prices": "75;0"
+      "prices": {
+        "buy": 75
+      }
     },
     "snow block": {
       "slot": 17,
       "item": "snow_block",
       "name": "&e&lSnow Block",
-      "prices": "250;0"
+      "prices": {
+        "buy": 250
+      }
     },
     "sponge": {
       "slot": 18,
       "item": "sponge",
       "name": "&e&lSponge",
-      "prices": "2000;0"
+      "prices": {
+        "buy": 2000
+      }
     },
     "nether fence": {
       "slot": 19,
       "item": "nether_fence",
       "name": "&e&lNether Brick Fence",
-      "prices": "4.06;1.41"
+      "prices": {
+        "buy": 4.06,
+        "sell": 1.41
+      }
     },
     "collection chest": {
       "slot": 20,
@@ -128,7 +169,9 @@
       "custom": {
         "item": "collectionchest"
       },
-      "prices": "100;0"
+      "prices": {
+        "buy": 100
+      }
     },
     "back": {
       "slot": 26,

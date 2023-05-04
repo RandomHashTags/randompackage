@@ -17,7 +17,7 @@ import java.util.List;
 
 public final class FileShopCategory extends ShopCategory {
     private final String title;
-    private final UInventory inventory;
+    private final UInventory universal_inventory;
     private final List<ShopItem> items;
 
     public FileShopCategory(File f) {
@@ -27,18 +27,25 @@ public final class FileShopCategory extends ShopCategory {
         title = parse_string_in_json(json, "title");
 
         final int size = parse_int_in_json(json, "size");
-        inventory = new UInventory(null, size, title);
-        final Inventory ii = inventory.getInventory();
+        universal_inventory = new UInventory(null, size, title);
+        final Inventory inventory = universal_inventory.getInventory();
         items = new ArrayList<>();
         final Shop shop = Shop.INSTANCE;
         final ItemStack back = shop.back;
-        final BigDecimal zero = BigDecimal.ZERO;
         final JSONObject gui_json = json.getJSONObject("gui");
         final Iterator<String> gui_keys = gui_json.keys();
         for(Iterator<String> it = gui_keys; it.hasNext(); ) {
             String s = it.next();
             final JSONObject gui_item_json = gui_json.getJSONObject(s);
-            final String[] prices = parse_string_in_json(gui_item_json, "prices").split(";");
+            final JSONObject prices_json = gui_item_json.optJSONObject("prices");
+            final BigDecimal buy_price, sell_price;
+            if(prices_json != null) {
+                buy_price = BigDecimal.valueOf(parse_double_in_json(prices_json, "buy", 0));
+                sell_price = BigDecimal.valueOf(parse_double_in_json(prices_json, "sell", 0));
+            } else {
+                buy_price = BigDecimal.ZERO;
+                sell_price = BigDecimal.ZERO;
+            }
             final JSONObject custom_json = gui_item_json.getJSONObject("custom");
             final String custom = parse_string_in_json(custom_json, "item"), item_string = parse_string_in_json(gui_item_json, "item"), item_string_uppercased = item_string.toUpperCase();
             final boolean isBack = item_string_uppercased.equals("BACK");
@@ -52,8 +59,8 @@ public final class FileShopCategory extends ShopCategory {
                 final int slot = parse_int_in_json(gui_item_json, "slot");
                 final String opens_category = parse_string_in_json(gui_item_json, "opens", null);
                 final List<String> commands = parse_list_string_in_json(gui_item_json, "commands", null);
-                items.add(new ShopItem(s, slot, opens_category, display, purchased, prices != null ? BigDecimal.valueOf(Double.parseDouble(prices[0])) : zero, prices != null ? BigDecimal.valueOf(Double.parseDouble(prices[1])): zero, commands));
-                ii.setItem(slot, display);
+                items.add(new ShopItem(s, slot, opens_category, display, purchased, buy_price, sell_price, commands));
+                inventory.setItem(slot, display);
             }
         }
 
@@ -64,7 +71,7 @@ public final class FileShopCategory extends ShopCategory {
         return title;
     }
     public UInventory getInventory() {
-        return inventory;
+        return universal_inventory;
     }
     public List<ShopItem> getShopItems() {
         return items;

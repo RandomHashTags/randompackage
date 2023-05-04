@@ -10,85 +10,113 @@
       "slot": 0,
       "item": "red_rose",
       "name": "&e&lRose",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "blue orchid": {
       "slot": 1,
       "item": "blue_orchid",
       "name": "&e&lBlue Orchid",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "allium": {
       "slot": 2,
       "item": "allium",
       "name": "&e&lAllium",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "azure bluet": {
       "slot": 3,
       "item": "azure_bluet",
       "name": "&e&lAzure Bluet",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "red tulip": {
       "slot": 4,
       "item": "red_tulip",
       "name": "&e&lRed Tulip",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "orange tulip": {
       "slot": 5,
       "item": "orange_tulip",
       "name": "&e&lOrange Tulip",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "white tulip": {
       "slot": 6,
       "item": "white_tulip",
       "name": "&e&lWhite Tulip",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "pink tulip": {
       "slot": 7,
       "item": "pink_tulip",
       "name": "&e&lPink Tulip",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "sunflower": {
       "slot": 8,
       "item": "sunflower",
       "name": "&e&lSunflower",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "lilac": {
       "slot": 9,
       "item": "lilac",
       "name": "&e&lLilac",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "rose bush": {
       "slot": 10,
       "item": "rose_bush",
       "name": "&e&lRose Bush",
-      "prices": "18.75;0"
+      "prices": {
+        "buy": 18.75
+      }
     },
     "vines": {
       "slot": 11,
       "item": "vine",
       "name": "&e&lVines",
-      "prices": "75;0"
+      "prices": {
+        "buy": 75
+      }
     },
     "red mushroom": {
       "slot": 12,
       "item": "red_mushroom",
       "name": "&e&lRed Mushroom",
-      "prices": "10;0"
+      "prices": {
+        "buy": 10
+      }
     },
     "flower pot": {
       "slot": 13,
       "item": "flower_pot_item",
       "name": "&e&lFlower Pot",
-      "prices": "300;0"
+      "prices": {
+        "buy": 300
+      }
     }
   }
 }

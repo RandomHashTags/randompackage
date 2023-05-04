@@ -6,97 +6,129 @@
       "slot": 0,
       "item": "irongolemspawner",
       "name": "&e&lIron Golem Spawner",
-      "prices": "2000000;0"
+      "prices": {
+        "buy": 2000000
+      }
     },
     "blaze": {
       "slot": 1,
       "item": "blazespawner",
       "name": "&e&lBlaze Spawner",
-      "prices": "390000;0"
+      "prices": {
+        "buy": 390000
+      }
     },
     "creeper": {
       "slot": 2,
       "item": "creeperspawner",
       "name": "&e&lCreeper Spawner",
-      "prices": "390000;0"
+      "prices": {
+        "buy": 390000
+      }
     },
     "enderman": {
       "slot": 3,
       "item": "endermanspawner",
       "name": "&e&lEnderman Spawner",
-      "prices": "390000;0"
+      "prices": {
+        "buy": 390000
+      }
     },
     "zombie pigman": {
       "slot": 4,
       "item": "zombiepigmanspawner",
       "name": "&e&lZombie Pigman Spawner",
-      "prices": "390000;0"
+      "prices": {
+        "buy": 390000
+      }
     },
     "slime": {
       "slot": 5,
       "item": "slimespawner",
       "name": "&e&lSlime Spawner",
-      "prices": "1300000;0"
+      "prices": {
+        "buy": 1300000
+      }
     },
     "cave spider": {
       "slot": 6,
       "item": "cavespiderspawner",
       "name": "&e&lCave Spider Spawner",
-      "prices": "90000;0"
+      "prices": {
+        "buy": 90000
+      }
     },
     "spider": {
       "slot": 7,
       "item": "spiderspawner",
       "name": "&e&lSpider Spawner",
-      "prices": "95000;0"
+      "prices": {
+        "buy": 95000
+      }
     },
     "skeleton": {
       "slot": 8,
       "item": "skeletonspawner",
       "name": "&e&lSkeleton Spawner",
-      "prices": "115000;0"
+      "prices": {
+        "buy": 115000
+      }
     },
     "zombie": {
       "slot": 9,
       "item": "zombiespawner",
       "name": "&e&lZombie Spawner",
-      "prices": "115000;0"
+      "prices": {
+        "buy": 115000
+      }
     },
     "cow": {
       "slot": 10,
       "item": "cowspawner",
       "name": "&e&lCow Spawner",
-      "prices": "162500;0"
+      "prices": {
+        "buy": 162500
+      }
     },
     "sheep": {
       "slot": 11,
       "item": "sheepspawner",
       "name": "&e&lSheep Spawner",
-      "prices": "95000;0"
+      "prices": {
+        "buy": 95000
+      }
     },
     "chicken": {
       "slot": 12,
       "item": "chickenspawner",
       "name": "&e&lChicken Spawner",
-      "prices": "390000;0"
+      "prices": {
+        "buy": 390000
+      }
     },
     "pig": {
       "slot": 13,
       "item": "pigspawner",
       "name": "&e&lPig Spawner",
-      "prices": "65000;0"
+      "prices": {
+        "buy": 65000
+      }
     },
     "wolf": {
       "slot": 14,
       "item": "wolfspawner",
       "name": "&e&lWolf Spawner",
-      "prices": "97500;0"
+      "prices": {
+        "buy": 97500
+      }
     },
     "mystery": {
       "slot": 15,
       "item": "mysterymobspawner",
       "name": "&6&lMystery Mob Spawner",
-      "prices": "3000000;0"
+      "prices": {
+        "buy": 3000000
+      }
     },
     "back": {
       "slot": 17,

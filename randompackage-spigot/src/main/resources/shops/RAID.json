@@ -6,181 +6,250 @@
       "slot": 0,
       "item": "redstone",
       "name": "&e&lRedstone",
-      "prices": "16.25;0.23"
+      "prices": {
+        "buy": 16.25,
+        "sell": 0.23
+      }
     },
     "redstone block": {
       "slot": 1,
       "item": "redstone_block",
       "name": "&e&lRedstone Block",
-      "prices": "195;10"
+      "prices": {
+        "buy": 195,
+        "sell": 10
+      }
     },
     "redstone torch": {
       "slot": 2,
       "item": "redstone_torch_on",
       "name": "&e&lRedstone Torch",
-      "prices": "25;0"
+      "prices": {
+        "buy": 25
+      }
     },
     "comparator": {
       "slot": 3,
       "item": "redstone_comparator",
       "name": "&e&lRedstone Comparator",
-      "prices": "100;0"
+      "prices": {
+        "buy": 100
+      }
     },
     "repeater": {
       "slot": 4,
       "item": "repeater",
       "name": "&e&lRedstone Repeater",
-      "prices": "85;0"
+      "prices": {
+        "buy": 85
+      }
     },
     "wood button": {
       "slot": 5,
       "item": "oak_button",
       "name": "&e&lButton",
-      "prices": "5.50;0"
+      "prices": {
+        "buy": 5.50
+      }
     },
     "stone button": {
       "slot": 6,
       "item": "stone_button",
       "name": "&e&lButton",
-      "prices": "5.50;0"
+      "prices": {
+        "buy": 5.50
+      }
     },
     "tnt": {
       "slot": 7,
       "item": "tnt",
       "name": "&e&lTNT",
-      "prices": "81.25;8.12"
+      "prices": {
+        "buy": 81.25,
+        "sell": 8.12
+      }
     },
     "dispenser": {
       "slot": 8,
       "item": "dispenser",
       "name": "&e&lDispenser",
-      "prices": "819;0"
+      "prices": {
+        "buy": 819
+      }
     },
     "sticky piston": {
       "slot": 9,
       "item": "piston_sticky_base",
       "name": "&e&lSticky Piston",
-      "prices": "325;0"
+      "prices": {
+        "buy": 325
+      }
     },
     "piston": {
       "slot": 10,
       "item": "piston_base",
       "name": "&e&lPiston",
-      "prices": "195;0"
+      "prices": {
+        "buy": 195
+      }
     },
     "glowstone": {
       "slot": 11,
       "item": "glowstone",
       "name": "&e&lGlowstone",
-      "prices": "20;2.50"
+      "prices": {
+        "buy": 20,
+        "sell": 2.50
+      }
     },
     "glass": {
       "slot": 12,
       "item": "glass",
       "name": "&e&lGlass",
-      "prices": "4.06;0"
+      "prices": {
+        "buy": 4.06
+      }
     },
     "ladder": {
       "slot": 13,
       "item": "ladder",
       "name": "&e&lLadder",
-      "prices": "10;0"
+      "prices": {
+        "buy": 10
+      }
     },
     "web": {
       "slot": 14,
       "item": "web",
       "name": "&e&lWeb",
-      "prices": "40;0"
+      "prices": {
+        "buy": 40
+      }
     },
     "sponge": {
       "slot": 15,
       "item": "sponge",
       "name": "&e&lSponge",
-      "prices": "2000;0"
+      "prices": {
+        "buy": 2000
+      }
     },
     "lever": {
       "slot": 16,
       "item": "lever",
       "name": "&e&lLever",
-      "prices": "20;0"
+      "prices": {
+        "buy": 20
+      }
     },
     "wooden trapdoor": {
       "slot": 17,
       "item": "oak_trapdoor",
       "name": "&e&lWooden Trapdoor",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "stone": {
       "slot": 18,
       "item": "stone",
       "name": "&e&lStone",
-      "prices": "5.47;1.48"
+      "prices": {
+        "buy": 5.47,
+        "sell": 1.48
+      }
     },
     "oak planks": {
       "slot": 19,
       "item": "oak_planks",
       "name": "&e&lOak Wood Planks",
-      "prices": "5;0.01"
+      "prices": {
+        "buy": 5,
+        "sell": 0.01
+      }
     },
     "sand": {
       "slot": 20,
       "item": "sand",
       "name": "&e&lSand",
-      "prices": "4.06;0.01"
+      "prices": {
+        "buy": 4.06,
+        "sell": 0.01
+      }
     },
     "red sand": {
       "slot": 21,
       "item": "red_sand",
       "name": "&e&lRed Sand",
-      "prices": "4.06;0.01"
+      "prices": {
+        "buy": 4.06,
+        "sell": 0.01
+      }
     },
     "gravel": {
       "slot": 22,
       "item": "gravel",
       "name": "&e&lGravel",
-      "prices": "3.52;0.01"
+      "prices": {
+        "buy": 3.52,
+        "sell": 0.01
+      }
     },
     "ice": {
       "slot": 23,
       "item": "ice",
       "name": "&e&lIce",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "water bucket": {
       "slot": 24,
       "item": "water_bucket",
       "name": "&e&lWater Bucket",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "lava bucket": {
       "slot": 25,
       "item": "lava_bucket",
       "name": "&e&lLava Bucket",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "stone slab": {
       "slot": 26,
       "item": "stone_slab",
       "name": "&e&lStone Slab",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "spawn creeper": {
       "slot": 27,
       "item": "creeper_spawn_egg",
       "name": "&e&lSpawn Creeper",
-      "prices": "250000;0"
+      "prices": {
+        "buy": 250000
+      }
     },
     "flint and steel": {
       "slot": 28,
       "item": "flint_and_steel",
       "name": "&e&lFlint and Steel",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "fishing rod": {
       "slot": 29,
       "item": "fishing_rod",
       "name": "&e&lFishing Rod",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "back": {
       "slot": 35,

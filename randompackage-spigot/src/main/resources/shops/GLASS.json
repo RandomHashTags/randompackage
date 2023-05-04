@@ -6,205 +6,273 @@
       "slot": 0,
       "item": "glass",
       "name": "&e&lGlass",
-      "prices": "4.06;0"
+      "prices": {
+        "buy": 4.06
+      }
     },
     "white stained glass": {
       "slot": 1,
       "item": "white_stained_glass",
       "name": "&e&lWhite Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "orange stained glass": {
       "slot": 2,
       "item": "orange_stained_glass",
       "name": "&e&lOrange Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "magenta stained glass": {
       "slot": 3,
       "item": "magenta_stained_glass",
       "name": "&e&lMagenta Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "light blue stained glass": {
       "slot": 4,
       "item": "light_blue_stained_glass",
       "name": "&e&lLight Blue Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "yellow stained glass": {
       "slot": 5,
       "item": "yellow_stained_glass",
       "name": "&e&lYellow Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "lime stained glass": {
       "slot": 6,
       "item": "lime_stained_glass",
       "name": "&e&lLime Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "pink stained glass": {
       "slot": 7,
       "item": "pink_stained_glass",
       "name": "&e&lPink Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "gray stained glass": {
       "slot": 8,
       "item": "gray_stained_glass",
       "name": "&e&lGray Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "light gray stained glass": {
       "slot": 9,
       "item": "light_gray_stained_glass",
       "name": "&e&lLight Gray Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "cyan stained glass": {
       "slot": 10,
       "item": "cyan_stained_glass",
       "name": "&e&lCyan Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "purple stained glass": {
       "slot": 11,
       "item": "purple_stained_glass",
       "name": "&e&lPurple Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "blue stained glass": {
       "slot": 12,
       "item": "blue_stained_glass",
       "name": "&e&lBlue Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "brown stained glass": {
       "slot": 13,
       "item": "brown_stained_glass",
       "name": "&e&lBrown Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "green stained glass": {
       "slot": 14,
       "item": "green_stained_glass",
       "name": "&e&lGreen Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "red stained glass": {
       "slot": 15,
       "item": "red_stained_glass",
       "name": "&e&lRed Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "black stained glass": {
       "slot": 16,
       "item": "black_stained_glass",
       "name": "&e&lBlack Stained Glass",
-      "prices": "6.25;0"
+      "prices": {
+        "buy": 6.25
+      }
     },
     "glass pane": {
       "slot": 17,
       "item": "thin_glass",
       "name": "&e&lGlass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "white stained glass pane": {
       "slot": 18,
       "item": "white_stained_glass_pane",
       "name": "&e&lWhite Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "orange stained glass pane": {
       "slot": 19,
       "item": "orange_stained_glass_pane",
       "name": "&e&lOrange Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "magenta stained glass pane": {
       "slot": 20,
       "item": "magenta_stained_glass_pane",
       "name": "&e&lMagenta Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "light blue stained glass pane": {
       "slot": 21,
       "item": "light_blue_stained_glass_pane",
       "name": "&e&lLight Blue Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "yellow stained glass pane": {
       "slot": 22,
       "item": "yellow_stained_glass_pane",
       "name": "&e&lYellow Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "lime stained glass pane": {
       "slot": 23,
       "item": "lime_stained_glass_pane",
       "name": "&e&lLime Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "pink stained glass pane": {
       "slot": 24,
       "item": "pink_stained_glass_pane",
       "name": "&e&lPink Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "gray stained glass pane": {
       "slot": 25,
       "item": "gray_stained_glass_pane",
       "name": "&e&lGray Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "light gray stained glass pane": {
       "slot": 26,
       "item": "light_gray_stained_glass_pane",
       "name": "&e&lLight Gray Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "cyan stained glass pane": {
       "slot": 27,
       "item": "cyan_stained_glass_pane",
       "name": "&e&lCyan Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "purple stained glass pane": {
       "slot": 28,
       "item": "purple_stained_glass_pane",
       "name": "&e&lPurple Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "blue stained glass pane": {
       "slot": 29,
       "item": "blue_stained_glass_pane",
       "name": "&e&lBlue Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "brown stained glass pane": {
       "slot": 30,
       "item": "brown_stained_glass_pane",
       "name": "&e&lBrown Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "green stained glass pane": {
       "slot": 31,
       "item": "green_stained_glass_pane",
       "name": "&e&lGreen Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "red stained glass pane": {
       "slot": 32,
       "item": "red_stained_glass_pane",
       "name": "&e&lRed Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "black stained glass pane": {
       "slot": 33,
       "item": "black_stained_glass_pane",
       "name": "&e&lBlack Stained Glass Pane",
-      "prices": "2.34;0"
+      "prices": {
+        "buy": 2.34
+      }
     },
     "back": {
       "slot": 35,

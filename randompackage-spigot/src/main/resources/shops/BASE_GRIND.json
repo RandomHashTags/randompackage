@@ -6,127 +6,179 @@
       "slot": 0,
       "item": "obsidian",
       "name": "&e&lObsidian",
-      "prices": "14.84;5.47"
+      "prices": {
+        "buy": 14.84,
+        "sell": 5.47
+      }
     },
     "stone": {
       "slot": 1,
       "item": "stone",
       "name": "&e&lStone",
-      "prices": "5.47;1.48"
+      "prices": {
+        "buy": 5.47,
+        "sell": 1.48
+      }
     },
     "cobblestone": {
       "slot": 2,
       "item": "cobblestone",
       "name": "&e&lCobblestone",
-      "prices": "4.06;1.02"
+      "prices": {
+        "buy": 4.06,
+        "sell": 1.02
+      }
     },
     "tnt": {
       "slot": 3,
       "item": "tnt",
       "name": "&e&lTNT",
-      "prices": "81.25;8.12"
+      "prices": {
+        "buy": 81.25,
+        "sell": 8.12
+      }
     },
     "lava bucket": {
       "slot": 4,
       "item": "lava_bucket",
       "name": "&e&lLava Bucket",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "water bucket": {
       "slot": 5,
       "item": "water_bucket",
       "name": "&e&lWater Bucket",
-      "prices": "500;0"
+      "prices": {
+        "buy": 500
+      }
     },
     "ice": {
       "slot": 6,
       "item": "ice",
       "name": "&e&lIce",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "packed cie": {
       "slot": 7,
       "item": "packed_ice",
       "name": "&e&lPacked Ice",
-      "prices": "75;0"
+      "prices": {
+        "buy": 75
+      }
     },
     "sandstone": {
       "slot": 8,
       "item": "sandstone",
       "name": "&e&lSandstone",
-      "prices": "12.19;0.01"
+      "prices": {
+        "buy": 12.19,
+        "sell": 0.01
+      }
     },
     "sand": {
       "slot": 9,
       "item": "sand",
       "name": "&e&lSand",
-      "prices": "4.06;0.01"
+      "prices": {
+        "buy": 4.06,
+        "sell": 0.01
+      }
     },
     "red sand": {
       "slot": 10,
       "item": "red_sand",
       "name": "&e&lRed Sand",
-      "prices": "4.06;0.01"
+      "prices": {
+        "buy": 4.06,
+        "sell": 0.01
+      }
     },
     "gravel": {
       "slot": 11,
       "item": "gravel",
       "name": "&e&lGravel",
-      "prices": "3.52;0.01"
+      "prices": {
+        "buy": 3.52,
+        "sell": 0.01
+      }
     },
     "dirt": {
       "slot": 12,
       "item": "dirt",
       "name": "&e&lDirt",
-      "prices": "3;0.69"
+      "prices": {
+        "buy": 3,
+        "sell": 0.69
+      }
     },
     "netherrack": {
       "slot": 13,
       "item": "netherrack",
       "name": "&e&lNetherrack",
-      "prices": "2.34;0.94"
+      "prices": {
+        "buy": 2.34,
+        "sell": 0.94
+      }
     },
     "end stone": {
       "slot": 14,
       "item": "end_stone",
       "name": "&e&lEnd Stone",
-      "prices": "7.03;0"
+      "prices": {
+        "buy": 7.03
+      }
     },
     "stone slab": {
       "slot": 15,
       "item": "stone_slab",
       "name": "&e&lStone Slab",
-      "prices": "50;0"
+      "prices": {
+        "buy": 50
+      }
     },
     "stone pressure plate": {
       "slot": 16,
       "item": "stone_pressure_plate",
       "name": "&e&lPressure Plate",
-      "prices": "25;0"
+      "prices": {
+        "buy": 25
+      }
     },
     "ender chest": {
       "slot": 17,
       "item": "ender_chest",
       "name": "&e&lEnder Chest",
-      "prices": "6430;0"
+      "prices": {
+        "buy": 6430
+      }
     },
     "diamond pickaxe": {
       "slot": 18,
       "item": "diamond_pickaxe",
       "name": "&e&lDiamond Pickaxe",
-      "prices": "1500;0"
+      "prices": {
+        "buy": 1500
+      }
     },
     "diamond shovel": {
       "slot": 19,
       "item": "diamond_shovel",
       "name": "&e&lDiamond Shovel",
-      "prices": "1500;0"
+      "prices": {
+        "buy": 1500
+      }
     },
     "diamond axe": {
       "slot": 20,
       "item": "diamond_axe",
       "name": "&e&lDiamond Axe",
-      "prices": "1500;0"
+      "prices": {
+        "buy": 1500
+      }
     },
     "back": {
       "slot": 26,

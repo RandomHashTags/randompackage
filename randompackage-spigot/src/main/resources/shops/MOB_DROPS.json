@@ -6,91 +6,135 @@
       "slot": 0,
       "item": "sulphur",
       "name": "&e&lGunpowder",
-      "prices": "25;4.38"
+      "prices": {
+        "buy": 25,
+        "sell": 4.38
+      }
     },
     "bow": {
       "slot": 1,
       "item": "bow",
       "name": "&e&lBow",
-      "prices": "40;20"
+      "prices": {
+        "buy": 40,
+        "sell": 20
+      }
     },
     "arrow": {
       "slot": 2,
       "item": "arrow",
       "name": "&e&lArrow",
-      "prices": "6.25;2.19"
+      "prices": {
+        "buy": 6.25,
+        "sell": 2.19
+      }
     },
     "feather": {
       "slot": 3,
       "item": "feather",
       "name": "&e&lFeather",
-      "prices": "8.12;1.09"
+      "prices": {
+        "buy": 8.12,
+        "sell": 1.09
+      }
     },
     "blaze rod": {
       "slot": 4,
       "item": "blaze_rod",
       "name": "&e&lBlaze Rod",
-      "prices": "62.50;28.75"
+      "prices": {
+        "buy": 62.50,
+        "sell": 28.75
+      }
     },
     "lily pad": {
       "slot": 5,
       "item": "water_lily",
       "name": "&e&lLily Pad",
-      "prices": "20;0"
+      "prices": {
+        "buy": 20
+      }
     },
     "rotten flesh": {
       "slot": 6,
       "item": "rotten_flesh",
       "name": "&e&lRotten Flesh",
-      "prices": "2.50;1.09"
+      "prices": {
+        "buy": 2.50,
+        "sell": 1.09
+      }
     },
     "string": {
       "slot": 7,
       "item": "string",
       "name": "&e&lString",
-      "prices": "8.12;1.88"
+      "prices": {
+        "buy": 8.12,
+        "sell": 1.88
+      }
     },
     "leather": {
       "slot": 8,
       "item": "leather",
       "name": "&e&lLeather",
-      "prices": "16.25;5.62"
+      "prices": {
+        "buy": 16.25,
+        "sell": 5.62
+      }
     },
     "ender pearl": {
       "slot": 9,
       "item": "ender_pearl",
       "name": "&e&lEnder Pearl",
-      "prices": "50;25"
+      "prices": {
+        "buy": 50,
+        "sell": 25
+      }
     },
     "bone": {
       "slot": 10,
       "item": "bone",
       "name": "&e&lBone",
-      "prices": "6.25;.50"
+      "prices": {
+        "buy": 6.25,
+        "sell": 0.50
+      }
     },
     "iron ingot": {
       "slot": 11,
       "item": "iron_ingot",
       "name": "&e&lIron Ingot",
-      "prices": "130;40"
+      "prices": {
+        "buy": 130,
+        "sell": 40
+      }
     },
     "emerald": {
       "slot": 12,
       "item": "emerald",
       "name": "&e&lEmerald",
-      "prices": "1150;200"
+      "prices": {
+        "buy": 1150,
+        "sell": 200
+      }
     },
     "diamond": {
       "slot": 13,
       "item": "diamond",
       "name": "&e&lDiamond",
-      "prices": "390;100"
+      "prices": {
+        "buy": 390,
+        "sell": 100
+      }
     },
     "gold ingot": {
       "slot": 14,
       "item": "gold_ingot",
       "name": "&e&lGold Ingot",
-      "prices": "100;50"
+      "prices": {
+        "buy": 100,
+        "sell": 50
+      }
     },
     "back": {
       "slot": 17,

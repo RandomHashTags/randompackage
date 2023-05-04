@@ -6,76 +6,100 @@
       "slot": 0,
       "item": "potion_regeneration_2",
       "name": "&e&lRegeneration Potion II (0:22)",
-      "prices": "120;0"
+      "prices": {
+        "buy": 120
+      }
     },
     "regeneration splash": {
       "slot": 1,
       "item": "splash_potion_regeneration_2",
       "name": "&e&lRegeneration Splash II (0:22)",
-      "prices": "145;0"
+      "prices": {
+        "buy": 145
+      }
     },
     "swiftness": {
       "slot": 2,
       "item": "potion_swiftness_2",
       "name": "&e&lSwiftness Potion II (1:30)",
-      "prices": "30;0"
+      "prices": {
+        "buy": 30
+      }
     },
     "swiftness splash": {
       "slot": 3,
       "item": "splash_potion_swiftness_2",
       "name": "&e&lSwiftness Splash II (1:30)",
-      "prices": "55;0"
+      "prices": {
+        "buy": 55
+      }
     },
     "water breathing": {
       "slot": 4,
       "item": "potion_water_breathing_extended",
       "name": "&e&lWater Breathing Potion (8:00)",
-      "prices": "225;0"
+      "prices": {
+        "buy": 225
+      }
     },
     "strength splash": {
       "slot": 5,
       "item": "splash_potion_strength_2",
       "name": "&e&lStrength Splash II (1:30)",
-      "prices": "110;0"
+      "prices": {
+        "buy": 110
+      }
     },
     "strength": {
       "slot": 6,
       "item": "potion_strength_2",
       "name": "&e&lStrength Potion II (1:30)",
-      "prices": "85;0"
+      "prices": {
+        "buy": 85
+      }
     },
     "instant health": {
       "slot": 7,
       "item": "potion_healing_2",
       "name": "&e&lInstant Health II",
-      "prices": "75;0"
+      "prices": {
+        "buy": 75
+      }
     },
     "fire resistance": {
       "slot": 8,
       "item": "potion_fire_resistance_extended",
       "name": "&e&lFire Resistance Potion (8:00)",
-      "prices": "1000;0"
+      "prices": {
+        "buy": 1000
+      }
     },
     "2x instant health II": {
       "slot": 9,
       "item": "splash_potion_healing_2",
       "amount": 2,
       "name": "&e&l2x Instant Health II",
-      "prices": "5000;0"
+      "prices": {
+        "buy": 5000
+      }
     },
     "4x instant health II": {
       "slot": 10,
       "item": "splash_potion_healing_2",
       "amount": 4,
       "name": "&e&l4x Instant Health II",
-      "prices": "25000;0"
+      "prices": {
+        "buy": 25000
+      }
     },
     "8x instant health II": {
       "slot": 11,
       "item": "splash_potion_healing_2",
       "amount": 8,
       "name": "&e&l8x Instant Health II",
-      "prices": "100000;0"
+      "prices": {
+        "buy": 100000
+      }
     },
     "back": {
       "slot": 17,
