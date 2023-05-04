@@ -5,33 +5,34 @@ import me.randomhashtags.randompackage.addon.MultilingualString;
 import me.randomhashtags.randompackage.addon.obj.CustomBossAttack;
 import me.randomhashtags.randompackage.addon.obj.CustomMinion;
 import me.randomhashtags.randompackage.enums.Feature;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBoss {
     private final String type;
     private final MultilingualString name;
-
-    private Scoreboard scoreboard;
+    
+    private final Scoreboard scoreboard;
 
     private final ItemStack spawn_item;
     private final List<String> attributes, rewards;
-    private HashMap<Integer, List<String>> messages;
-    private List<CustomBossAttack> attacks;
+    private final HashMap<Integer, List<String>> messages;
+    private final List<CustomBossAttack> attacks;
     private final int message_radius;
     private final int max_minions;
-    private CustomMinion minion;
-    private List<String> scores;
+    private final CustomMinion minion;
+    private final List<String> scores;
 
     public FileCustomBoss(File f) {
         super(f);
@@ -42,14 +43,56 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         attributes = parse_list_string_in_json(json, "attributes");
         rewards = parse_list_string_in_json(json, "rewards");
 
-        final JSONObject minion_json = json.optJSONObject("minion");
+        final JSONObject minion_json = json.optJSONObject("minion"), messages_json = json.getJSONObject("messages");
         if(minion_json != null) {
+            final String minion_type = parse_string_in_json(minion_json, "type").toUpperCase(), minion_name = parse_string_in_json(minion_json, "name");
+            final List<String> minion_attributes = parse_list_string_in_json(minion_json, "attributes");
+            minion = new CustomMinion(minion_type, minion_name, minion_attributes);
             message_radius = parse_int_in_json(minion_json, "radius");
             max_minions = parse_int_in_json(minion_json, "max");
         } else {
+            minion = null;
             message_radius = 100;
             max_minions = 10;
         }
+        messages = new HashMap<>();
+        messages.put(-5, parse_list_string_in_json(messages_json, "summon"));
+        messages.put(-4, parse_list_string_in_json(messages_json, "summon broadcast"));
+        messages.put(-3, parse_list_string_in_json(messages_json, "defeated"));
+        messages.put(-2, parse_list_string_in_json(messages_json, "defeated broadcast"));
+        for(int i = 0; i <= 100; i++) {
+            final List<String> s = parse_list_string_in_json(messages_json, Integer.toString(i));
+            if(!s.isEmpty()) {
+                messages.put(i, s);
+            }
+        }
+
+        final JSONObject scoreboard_json = json.getJSONObject("scoreboard");
+        scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
+        scoreboard.registerNewObjective("dummy", "dummy");
+        final Objective o = scoreboard.getObjective("dummy");
+        o.setDisplayName(parse_string_in_json(scoreboard_json, "title"));
+        o.setDisplaySlot(DisplaySlot.valueOf( parse_string_in_json(scoreboard_json, "display slot").toUpperCase()));
+        int i = 15;
+        final List<String> scores = new ArrayList<>(), scores_list = parse_list_string_in_json(scoreboard_json, "scores");
+        for(String score : scores_list) {
+            o.getScore(score).setScore(i);
+            i--;
+            scores.add(score);
+        }
+        this.scores = scores;
+
+        attacks = new ArrayList<>();
+        final JSONObject attacks_json = json.getJSONObject("attacks");
+        final Iterator<String> attack_keys = attacks_json.keys();
+        for(; attack_keys.hasNext(); ) {
+            String s = attack_keys.next();
+            final JSONObject attack_json = attacks_json.getJSONObject(s);
+            final int chance = parse_int_in_json(attack_json, "chance"), radius = parse_int_in_json(attack_json, "radius");
+            final List<String> attack = parse_list_string_in_json(attack_json, "attack");
+            attacks.add(new CustomBossAttack(chance, radius, attack));
+        }
+
         register(Feature.CUSTOM_BOSS, this);
     }
 
@@ -59,33 +102,20 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     public @NotNull MultilingualString getName() {
         return name;
     }
+    @Override
     public Scoreboard getScoreboard() {
-        if(scoreboard == null) {
-            scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
-            scoreboard.registerNewObjective("dummy", "dummy");
-            final Objective o = scoreboard.getObjective("dummy");
-            o.setDisplayName(colorize(yml.getString("scoreboard.title")));
-            o.setDisplaySlot(DisplaySlot.valueOf(yml.getString("scoreboard.display slot").toUpperCase()));
-            int i = 15;
-            final List<String> scores = new ArrayList<>();
-            for(String sc : yml.getStringList("scoreboard.scores")) {
-                final String score = colorize(sc);
-                o.getScore(score).setScore(i);
-                i--;
-                scores.add(score);
-            }
-            this.scores = scores;
-        }
         return scoreboard;
     }
+    @Override
     public int getScoreboardRadius() {
         return getMessageRadius();
     }
+    @Override
     public int getScoreboardUpdateInterval() {
         return 20;
     }
+    @Override
     public List<String> getScores() {
-        getScoreboard();
         return scores;
     }
 
@@ -98,32 +128,12 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     public @NotNull List<String> getRewards() {
         return rewards;
     }
+    @Override
     public @NotNull List<CustomBossAttack> getAttacks() {
-        if(attacks == null) {
-            attacks = new ArrayList<>();
-            final ConfigurationSection cs = yml.getConfigurationSection("attacks");
-            if(cs != null) {
-                for(String s : cs.getKeys(false)) {
-                    attacks.add(new CustomBossAttack(yml.getInt("attacks." + s + ".chance"), yml.getInt("attacks." + s + ".radius"), yml.getStringList("attacks." + s + ".attack")));
-                }
-            }
-        }
         return attacks;
     }
+    @Override
     public @NotNull HashMap<Integer, List<String>> getMessages() {
-        if(messages == null) {
-            messages = new HashMap<>();
-            messages.put(-5, yml.getStringList("messages.summon"));
-            messages.put(-4, yml.getStringList("messages.summon broadcast"));
-            messages.put(-3, yml.getStringList("messages.defeated"));
-            messages.put(-2, yml.getStringList("messages.defeated broadcast"));
-            for(int i = 0; i <= 100; i++) {
-                final List<String> s = yml.getStringList("messages." + i);
-                if(!s.isEmpty()) {
-                    messages.put(i, s);
-                }
-            }
-        }
         return messages;
     }
     @Override
@@ -134,10 +144,9 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
     public int getMaxMinions() {
         return max_minions;
     }
+    @Override
+    @Nullable
     public CustomMinion getMinion() {
-        if(minion == null) {
-            minion = new CustomMinion(yml.getString("minion.type").toUpperCase(), colorize(yml.getString("minion.name")), yml.getStringList("minion.attributes"));
-        }
         return minion;
     }
 }
