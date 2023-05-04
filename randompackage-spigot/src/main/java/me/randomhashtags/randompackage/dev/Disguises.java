@@ -79,11 +79,12 @@ public enum Disguises implements RPFeatureSpigot, CommandExecutor {
         }
     }
 
+    @Nullable
     public ItemStack getDisguiseItem(@NotNull Disguise disguise) {
         final String entityType = disguise.getEntityType();
         if(entityType != null) {
             final ItemStack is = disguiseItem.clone();
-            final String name = disguise.getName();
+            final String name = getLocalizedName(disguise);
             final ItemMeta itemMeta = is.getItemMeta();
             if(itemMeta.hasDisplayName()) {
                 itemMeta.setDisplayName(itemMeta.getDisplayName().replace("{TYPE}", name));
