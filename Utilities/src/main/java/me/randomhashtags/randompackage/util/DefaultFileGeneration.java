@@ -179,7 +179,7 @@ public interface DefaultFileGeneration {
         generate_all_default_json("custom tnt", "GIGANTIC", "LETHAL", "LUCKY", "MIMIC", "TACTICAL");
     }
     default void generateDefaultDuelArenas() {
-        generateAllDefault("duel arenas", "DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID");
+        generate_all_default_json("duel arenas", "DEMON", "DRAGON", "FORGOTTEN", "ICE", "JUNGLE", "MAGIC", "MONSTER", "PIRATE", "VOID");
     }
     default void generateDefaultEnvoyTiers() {
         generate_all_default_json("envoy tiers", "ELITE", "LEGENDARY", "SIMPLE", "ULTIMATE", "UNIQUE");

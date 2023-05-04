@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "slot": 6
+  },
+  "teleport locations": [
+    "world;100;100;100;0;0",
+    "world;100;100;-100;90;0"
+  ],
+  "item": {
+    "item": "emerald",
+    "name": "&a&lForgotten Arena"
+  }
+}
