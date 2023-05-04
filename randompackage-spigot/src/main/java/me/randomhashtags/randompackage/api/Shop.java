@@ -158,15 +158,16 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
         }
     }
     public void tryPurchasing(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
-        final BigDecimal buy = shopItem.buyPrice, discount = getDiscount(player);
-        if(buy.doubleValue() > 0.00) {
-            BigDecimal cost = buy, dis = discount.multiply(buy);
+        final BigDecimal inital_cost = shopItem.buyPrice;
+        if(inital_cost.doubleValue() > 0.00) {
+            final BigDecimal discount = getDiscount(player);
+            BigDecimal cost = inital_cost, dis = discount.multiply(cost);
             cost = cost.subtract(dis);
             final ItemStack is = shopItem.getPurchased();
             int amountPurchased = clickType.equals("LEFT") ? 1 : is.getMaxStackSize();
             cost = cost.multiply(BigDecimal.valueOf(amountPurchased));
             ItemStack item = is;
-            item.setAmount(is.getAmount()*amountPurchased);
+            item.setAmount(is.getAmount() * amountPurchased);
             final ShopPurchaseEvent purchaseEvent = new ShopPurchaseEvent(player, shopItem, item, amountPurchased, cost);
             PLUGIN_MANAGER.callEvent(purchaseEvent);
             if(purchaseEvent.isCancelled()) {
@@ -190,7 +191,7 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
             }
             playSound(config, "sounds." + (purchased ? "buy" : "not enough balance"), player, player.getLocation(), false);
             final HashMap<String, String> replacements = new HashMap<>();
-            replacements.put("{PRICE}", formatBigDecimal(buy));
+            replacements.put("{PRICE}", formatBigDecimal(cost));
             replacements.put("{TOTAL}", formatBigDecimal(cost));
             replacements.put("{AMOUNT}", Integer.toString(amountPurchased));
             replacements.put("{ITEM}", item.getType().name());
@@ -200,12 +201,11 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
         }
     }
     public void trySelling(@NotNull Player player, @NotNull ShopItem shopItem, @NotNull String clickType) {
-        final BigDecimal sell = shopItem.sellPrice;
-        if(sell.doubleValue() > 0.00) {
+        final BigDecimal price = shopItem.sellPrice;
+        if(price.doubleValue() > 0.00) {
             ItemStack purchasedItem = shopItem.getPurchased();
             final Inventory inv = player.getInventory();
             String msg = "messages.sell" + (!inv.containsAtLeast(purchasedItem, 1) ? " incomplete" : "");
-            final BigDecimal price = shopItem.sellPrice;
             int amountSold = clickType.equals("RIGHT") ? purchasedItem.getAmount() : purchasedItem.getMaxStackSize();
 
             if(!inv.containsAtLeast(purchasedItem, 1)) {
@@ -230,7 +230,7 @@ public enum Shop implements RPFeatureSpigot, CommandExecutor {
                 }
             }
             final String item = UMaterial.match(purchasedItem).name(), priceString = formatBigDecimal(price), amount = formatInt(amountSold), total = formatBigDecimal(price.multiply(BigDecimal.valueOf(amountSold)));
-            final HashMap<String, String> replacements = new HashMap<String, String>() {{
+            final HashMap<String, String> replacements = new HashMap<>() {{
                 put("{TOTAL", total);
                 put("{AMOUNT}", amount);
                 put("{PRICE}", priceString);
