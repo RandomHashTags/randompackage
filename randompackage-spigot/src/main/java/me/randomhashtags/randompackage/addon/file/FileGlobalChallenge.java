@@ -39,7 +39,6 @@ public final class FileGlobalChallenge extends RPAddonSpigot implements GlobalCh
     public boolean isEnabled() {
         return is_enabled;
     }
-    @NotNull
     @Override
     public ItemStack getItem() {
         return getClone(display);

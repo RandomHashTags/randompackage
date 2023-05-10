@@ -181,7 +181,7 @@ public interface UVersionableSpigot extends Versionable, UVersionable {
 
     @Override
     default void sendConsoleErrorMessage(@NotNull String sender, String msg) {
-        sendConsoleMessage("&e[&6" + sender + " &cERROR&e]&r &c" + msg);
+        sendConsoleMessage("&e[&5" + sender + " &cERROR&e]&r &c" + msg);
     }
 
     @Override

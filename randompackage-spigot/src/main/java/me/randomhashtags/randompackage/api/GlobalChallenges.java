@@ -176,14 +176,14 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	}
 	public void reloadChallenges() {
 		int maxAtOnce = max;
-		final ConfigurationSection challengeData = data.getConfigurationSection("active global challenges");
 		if(getAll(Feature.GLOBAL_CHALLENGE).size() > 0) {
+			final ConfigurationSection challengeData = data.getConfigurationSection("active global challenges");
 			if(challengeData != null) {
 				final long started = System.currentTimeMillis();
 				int loaded = 0;
 				for(String string : challengeData.getKeys(false)) {
 					final GlobalChallenge challenge = getGlobalChallenge(string);
-					if(challenge != null) {
+					if(challenge != null && challenge.isEnabled()) {
 						loaded += 1;
 						final HashMap<UUID, BigDecimal> participants = new HashMap<>();
 						for(String u : getConfigurationSectionKeys(data, "active global challenges." + string + ".participants", false)) {
@@ -203,7 +203,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 				final long started = System.currentTimeMillis();
 				for(int i = 1; i <= maxAtOnce; i++) {
 					final GlobalChallenge challenge = getRandomChallenge();
-					if(!challenge.isActive()) {
+					if(challenge != null && challenge.isEnabled() && !challenge.isActive()) {
 						challenge.start();
 					} else {
 						i-=1;
@@ -342,18 +342,21 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 				if(item != null) {
 					final ActiveGlobalChallenge challenge = ActiveGlobalChallenge.valueOf(item);
 					if(challenge != null) {
-						final HashMap<UUID, BigDecimal> participants = challenge.getParticipants();
-						final Map<UUID, BigDecimal> placings = getPlacing(participants);
-						int topp = 0;
-						UUID ranked = topp < placings.size() ? (UUID) placings.keySet().toArray()[topp] : null;
-						final String remainingtime = getRemainingTime(challenge.getRemainingTime());
 						final ItemMeta itemMeta = item.getItemMeta();
-						final List<String> lore = new ArrayList<>();
 						if(itemMeta != null) {
+							final List<String> lore = new ArrayList<>();
 							if(itemMeta.hasLore()) {
+								final HashMap<UUID, BigDecimal> participants = challenge.getParticipants();
+								final Map<UUID, BigDecimal> placings = getPlacing(participants);
+								final int placing_size = placings.size();
+								final UUID[] placing_uuids = placings.keySet().toArray(new UUID[placing_size]);
+								int top_player_index = 0;
+								UUID ranked = top_player_index < placing_size ? placing_uuids[top_player_index] : null;
+								final String remaining_time = getRemainingTime(challenge.getRemainingTime());
+
 								final String ranking = getRanking(getRanking(playerUUID, challenge)), date = toReadableDate(new Date(challenge.getStartedTime()), dateFormat), value = formatBigDecimal(challenge.getValue(playerUUID));
 								for(String string : itemMeta.getLore()) {
-									string = string.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remainingtime);
+									string = string.replace("{DATE}", date).replace("{YOUR_VALUE}", value).replace("{YOUR_RANKING}", ranking).replace("{TIME_LEFT}", remaining_time);
 									if(string.contains("{TOP}")) {
 										if(ranked == null) {
 											string = string.replace("{TOP}", "None").replace("{VALUE}", "0");
@@ -364,14 +367,13 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 												string = string.replace("{VALUE}", d.doubleValue() > 0.00 ? formatBigDecimal(d) : "0");
 											}
 										}
-										topp += 1;
-										ranked = topp < placings.size() ? (UUID) placings.keySet().toArray()[topp] : null;
+										top_player_index += 1;
+										ranked = top_player_index < placing_size ? placing_uuids[top_player_index] : null;
 									}
 									lore.add(string);
 								}
 							}
 							itemMeta.setLore(lore);
-							lore.clear();
 							item.setItemMeta(itemMeta);
 						}
 					}
