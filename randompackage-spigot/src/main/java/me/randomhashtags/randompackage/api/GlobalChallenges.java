@@ -317,7 +317,7 @@ public enum GlobalChallenges implements RPFeatureSpigot, EventExecutor, CommandE
 	@NotNull
 	public String getRanking(int rank) {
 		String ranking = formatInt(rank);
-		ranking = ranking + (ranking.endsWith("1") ? "st" : ranking.endsWith("2") ? "nd" : ranking.endsWith("3") ? "rd" : ranking.equals("0") ? "" : "th");
+		ranking = ranking + (ranking.endsWith("11") ? "th" : ranking.endsWith("1") ? "st" : ranking.endsWith("2") ? "nd" : ranking.endsWith("3") ? "rd" : ranking.equals("0") ? "" : "th");
 		return ranking;
 	}
 	@NotNull
