@@ -27,7 +27,7 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
     public FileKitMastery(File f) {
         super(f);
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         name = parse_multilingual_string_in_json(settings_json, "name");
         loses_required_kits = parse_boolean_in_json(settings_json, "loses required kits");
 
@@ -42,7 +42,7 @@ public final class FileKitMastery extends RPKitSpigot implements CustomKitMaster
         redeem = set(create_item_stack(json, "redeem"));
         shard = set(create_item_stack(json, "shard"));
         antiCrystal = set(create_item_stack(json, "anti crystal"));
-        final JSONObject anti_crystal_json = json.getJSONObject("anti crystal");
+        final JSONObject anti_crystal_json = parse_json_in_json(json, "anti crystal");
         anti_crystal_negated_enchants = parse_list_string_in_json(anti_crystal_json, "negate enchants");
         anti_crystal_applied = parse_string_in_json(anti_crystal_json, "applied");
 

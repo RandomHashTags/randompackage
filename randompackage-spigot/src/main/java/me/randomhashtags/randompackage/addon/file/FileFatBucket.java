@@ -18,7 +18,7 @@ public final class FileFatBucket extends RPAddonSpigot implements FatBucket {
         super(f);
         final JSONObject json = parse_json_from_file(f);
         bucket = create_item_stack(json, "item");
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         uses = parse_int_in_json(settings_json, "uses");
         sources_required = parse_int_in_json(settings_json, "sources required");
         final JSONObject status_json = settings_json.getJSONObject("status");
@@ -26,7 +26,7 @@ public final class FileFatBucket extends RPAddonSpigot implements FatBucket {
         percent_full_status = parse_string_in_json(status_json, "percent full");
         enabled_worlds = parse_list_string_in_json(settings_json, "enabled worlds");
         fillable_in_worlds = parse_list_string_in_json(settings_json, "fillable in worlds");
-        final JSONObject messages_json = json.getJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         only_fillable_in_worlds_message = parse_list_string_in_json(messages_json, "only fillable in worlds");
         register(Feature.FAT_BUCKET, this);
     }

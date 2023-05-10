@@ -35,7 +35,7 @@ public interface NonThrowableJSONBehaviorSpigot extends UVersionableSpigot, NonT
 
     @NotNull
     default MultilingualString parse_multilingual_string_in_json(@NotNull JSONObject json, @NotNull String key) {
-        final JSONObject value = json.optJSONObject(key);
+        final JSONObject value = parse_json_in_json(json, key, null);
         if(value == null) { // TODO: print to console
             return new MultilingualStringSpigotValue((JSONObject) null);
         }

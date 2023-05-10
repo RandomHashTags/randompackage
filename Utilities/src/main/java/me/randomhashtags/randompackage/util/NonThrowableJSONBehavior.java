@@ -26,6 +26,16 @@ public interface NonThrowableJSONBehavior {
             return new JSONObject();
         }
     }
+
+    @NotNull
+    default JSONObject parse_json_in_json(@NotNull JSONObject json, @NotNull String key) {
+        return parse_json_in_json(json, key, new JSONObject());
+    }
+    @Nullable
+    default JSONObject parse_json_in_json(@NotNull JSONObject json, @NotNull String key, @Nullable JSONObject default_value) {
+        return json.optJSONObject(key, default_value);
+    }
+
     default boolean parse_boolean_in_json(@NotNull JSONObject json, @NotNull String key) {
         final Object obj = json.opt(key);
         return obj instanceof Boolean && (Boolean) obj;

@@ -32,7 +32,7 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
         availability_duration = parse_long_in_json(json, "available for");
         name = parse_multilingual_string_in_json(json, "name");
 
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         gui_size = parse_int_in_json(gui_json, "size");
         gui_title = parse_string_in_json(gui_json, "title");
         preview_title = parse_string_in_json(json, "preview title");
@@ -40,7 +40,7 @@ public final class FileLootbox extends RPAddonSpigot implements Lootbox {
         bonus_loot_size = parse_string_in_json(json, "bonus loot size");
         gui_format = parse_list_string_in_json(gui_json, "format");
 
-        final JSONObject lore_format_json = json.getJSONObject("lore formats");
+        final JSONObject lore_format_json = parse_json_in_json(json, "lore formats");
         lore_format_regular = parse_list_string_in_json(lore_format_json, "regular loot");
         lore_format_jackpot = parse_list_string_in_json(lore_format_json, "jackpot loot");
         lore_format_bonus = parse_list_string_in_json(lore_format_json, "bonus loot");

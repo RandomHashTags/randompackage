@@ -36,7 +36,7 @@ public final class FileEnvoyCrate extends RPAddonSpigot implements EnvoyCrate {
         chance = parse_int_in_json(json, "chance");
         rewards = parse_list_string_in_json(json, "rewards");
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         final String target_block = parse_string_in_json(settings_json, "block"), target_falling_block = parse_string_in_json(settings_json, "falling block");
         block = UMaterial.match(target_block);
         falling_block = UMaterial.match(target_falling_block);

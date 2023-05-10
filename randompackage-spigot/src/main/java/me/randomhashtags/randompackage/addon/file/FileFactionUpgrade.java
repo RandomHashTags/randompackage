@@ -28,7 +28,7 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
     public FileFactionUpgrade(File f) {
         super(f);
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         is_enabled = parse_boolean_in_json(settings_json, "enabled");
         if(is_enabled) {
             final String type_string = parse_string_in_json(settings_json, "type");
@@ -56,11 +56,11 @@ public final class FileFactionUpgrade extends RPAddonSpigot implements FactionUp
             }
 
             levels = new LinkedHashMap<>();
-            final JSONObject levels_json = json.optJSONObject("levels");
+            final JSONObject levels_json = parse_json_in_json(json, "levels", null);
             if(levels_json != null) {
                 levels.put(0, new FactionUpgradeLevelObj(0, -1, "", new ArrayList<>()));
                 for(int level = 1; level <= 100; level++) {
-                    final JSONObject level_json = levels_json.optJSONObject(Integer.toString(level));
+                    final JSONObject level_json = parse_json_in_json(levels_json, Integer.toString(level), null);
                     if(level_json != null) {
                         final double value = parse_double_in_json(level_json, "value");
                         final String string = parse_string_in_json(level_json, "string");

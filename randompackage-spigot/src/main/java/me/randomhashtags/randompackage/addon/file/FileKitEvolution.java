@@ -21,7 +21,7 @@ public final class FileKitEvolution extends RPKitSpigot implements CustomKitEvol
         item = create_item_stack(json, "gui settings");
         upgradeGem = create_item_stack(json, "upgrade gem");
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         upgrade_chance = parse_int_in_json(settings_json, "upgrade chance");
 
         register(Feature.CUSTOM_KIT, this);

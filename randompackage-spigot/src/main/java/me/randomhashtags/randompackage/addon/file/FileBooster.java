@@ -21,10 +21,10 @@ public final class FileBooster extends RPAddonSpigot implements Booster {
         item = create_item_stack(json, "item");
         attributes = parse_list_string_in_json(json, "attributes");
 
-        final JSONObject settings_json = json.optJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         recipients = parse_booster_recipients_in_json(settings_json, "recipients");
 
-        final JSONObject messages_json = json.optJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         activate_message = parse_list_string_in_json(messages_json, "activate");
         expire_message = parse_list_string_in_json(messages_json, "expire");
         notify_message = parse_list_string_in_json(messages_json, "notify");

@@ -16,12 +16,12 @@ public abstract class AbstractBattlefield extends RPAddonSpigot implements Battl
         super(file);
 
         final JSONObject json = parse_json_from_file(file);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         final String warp_location_string = parse_string_in_json(settings_json, "warp location");
         warp_location = string_to_location(warp_location_string);
 
         allowed_commands = parse_list_string_in_json(json, "allowed commands");
-        final JSONObject messages_json = json.getJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         started_message = parse_list_string_in_json(messages_json, "started");
     }
 

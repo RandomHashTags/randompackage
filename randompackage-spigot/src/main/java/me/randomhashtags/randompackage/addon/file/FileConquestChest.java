@@ -30,7 +30,7 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
         super(f);
 
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         spawn_region = parse_string_in_json(settings_json, "spawn region").toUpperCase();
         reward_size = parse_string_in_json(settings_json, "reward size");
         spawn_interval = parse_int_in_json(settings_json, "spawn interval");
@@ -53,7 +53,7 @@ public final class FileConquestChest extends RPAddonSpigot implements ConquestCh
             spawned_bosses.put(ConquestMob.BOSSES.get(a[0]), a[1]);
         }
 
-        final JSONObject messages_json = json.getJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         announce_interval_after_spawned = parse_int_in_json(messages_json, "announce interval after spawned");
         despawn_delay = parse_int_in_json(messages_json, "despawn delay");
 

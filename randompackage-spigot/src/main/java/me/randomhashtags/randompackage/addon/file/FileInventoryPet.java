@@ -24,7 +24,7 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
         super(f);
 
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         is_enabled = parse_boolean_in_json(settings_json, "enabled");
         max_level = parse_int_in_json(settings_json, "max level");
         ItemStack item = create_item_stack(json, "item");
@@ -34,7 +34,7 @@ public final class FileInventoryPet extends RPAddonSpigot implements InventoryPe
         }
         this.item = item;
 
-        final JSONObject item_json = json.getJSONObject("item");
+        final JSONObject item_json = parse_json_in_json(json, "item");
         owner = parse_string_in_json(item_json, "texture", parse_string_in_json(item_json, "owner", "null"));
         egg = create_item_stack(json, "egg");
 

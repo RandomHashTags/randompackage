@@ -32,17 +32,17 @@ public abstract class FileStronghold extends RPAddonSpigot implements Stronghold
         final JSONObject json = parse_json_from_file(f);
         is = create_item_stack(json, "gui");
 
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         slot = parse_int_in_json(gui_json, "slot");
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         allows_afk_capturing = parse_boolean_in_json(settings_json, "allows afk capturing");
 
         center = string_to_location(parse_string_in_json(settings_json, "center"));
         captureType = CaptureType.valueOf(parse_string_in_json(settings_json, "capture type").toUpperCase());
         capture_radius = parse_double_in_json(settings_json, "capture radius");
 
-        final JSONObject messages_json = json.getJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         message_no_longer_controlling = parse_list_string_in_json(messages_json, "no longer controlling");
         message_taken_control = parse_list_string_in_json(messages_json, "taken control");
 

@@ -32,12 +32,12 @@ public final class FileShopCategory extends ShopCategory {
         items = new ArrayList<>();
         final Shop shop = Shop.INSTANCE;
         final ItemStack back = shop.back;
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         final Iterator<String> gui_keys = gui_json.keys();
         for(Iterator<String> it = gui_keys; it.hasNext(); ) {
             String s = it.next();
-            final JSONObject gui_item_json = gui_json.getJSONObject(s);
-            final JSONObject prices_json = gui_item_json.optJSONObject("prices");
+            final JSONObject gui_item_json = parse_json_in_json(gui_json, s);
+            final JSONObject prices_json = parse_json_in_json(gui_item_json, "prices", null);
             final BigDecimal buy_price, sell_price;
             if(prices_json != null) {
                 buy_price = BigDecimal.valueOf(parse_double_in_json(prices_json, "buy", 0));
@@ -46,7 +46,7 @@ public final class FileShopCategory extends ShopCategory {
                 buy_price = BigDecimal.ZERO;
                 sell_price = BigDecimal.ZERO;
             }
-            final JSONObject custom_json = gui_item_json.optJSONObject("custom", new JSONObject());
+            final JSONObject custom_json = parse_json_in_json(gui_item_json, "custom");
             final String custom = parse_string_in_json(custom_json, "item"), item_string = parse_string_in_json(gui_item_json, "item"), item_string_uppercased = item_string.toUpperCase();
             final boolean isBack = item_string_uppercased.equals("BACK");
             final ItemStack display = isBack ? back : shop.create_item_stack(gui_json, s);

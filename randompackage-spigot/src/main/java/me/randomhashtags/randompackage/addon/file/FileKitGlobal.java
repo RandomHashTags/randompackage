@@ -19,7 +19,7 @@ public final class FileKitGlobal extends RPKitSpigot implements CustomKitGlobal 
     public FileKitGlobal(File f) {
         super(f);
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         is_heroic = parse_boolean_in_json(settings_json, "heroic");
 
         item = create_item_stack(json, "gui settings");

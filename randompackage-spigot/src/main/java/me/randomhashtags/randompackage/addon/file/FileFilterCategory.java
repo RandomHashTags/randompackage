@@ -22,7 +22,7 @@ public final class FileFilterCategory extends RPAddonSpigot implements FilterCat
 
         gui = new UInventory(null, parse_int_in_json(json, "size", 9), title);
         final Inventory i = gui.getInventory();
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         final Iterator<String> gui_keys = gui_json.keys();
         for(Iterator<String> it = gui_keys; it.hasNext(); ) {
             final String key = it.next();

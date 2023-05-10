@@ -34,16 +34,16 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
 
         final JSONObject json = parse_json_from_file(f);
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         name = parse_multilingual_string_in_json(settings_json, "name");
         warp_location = string_to_location(parse_string_in_json(settings_json, "warp location"));
 
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         slot = parse_int_in_json(gui_json, "slot");
 
         item = create_item_stack(json, "gui");
 
-        final JSONObject messages_json = json.getJSONObject("messages");
+        final JSONObject messages_json = parse_json_in_json(json, "messages");
         lostControl = parse_list_string_in_json(messages_json, "lost control");
         claimed = parse_list_string_in_json(messages_json, "claimed");
 
@@ -51,7 +51,7 @@ public abstract class FileOutpost extends RPAddonSpigot implements Outpost {
         unallowed_items = parse_list_string_in_json(json, "unallowed items");
         rewards = parse_list_string_in_json(json, "rewards");
 
-        final JSONObject scoreboard_json = json.getJSONObject("scoreboard");
+        final JSONObject scoreboard_json = parse_json_in_json(json, "scoreboard");
         scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
         final Objective o = scoreboard.registerNewObjective("dummy", "dummy");
         o.setDisplayName(parse_string_in_json(scoreboard_json, "title"));

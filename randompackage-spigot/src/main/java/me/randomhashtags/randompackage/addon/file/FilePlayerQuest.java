@@ -20,7 +20,7 @@ public final class FilePlayerQuest extends RPAddonSpigot implements PlayerQuest 
     public FilePlayerQuest(File f) {
         super(f);
         final JSONObject json = parse_json_from_file(f);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         is_enabled = parse_boolean_in_json(settings_json, "enabled");
         if(is_enabled) {
             name = parse_multilingual_string_in_json(settings_json, "name");

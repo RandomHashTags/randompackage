@@ -209,7 +209,7 @@ public interface RPFeatureSpigot extends RPFeature, UVersionableSpigot, Listener
     }
     @Nullable
     default ItemStack create_item_stack(@NotNull JSONObject json, String key, int tier, float enchantMultiplier) {
-        final JSONObject item_json = json.optJSONObject(key);
+        final JSONObject item_json = parse_json_in_json(json, key, null);
         if(item_json == null) {
             return null;
         }

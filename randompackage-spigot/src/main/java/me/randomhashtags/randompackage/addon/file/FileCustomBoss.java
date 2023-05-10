@@ -43,7 +43,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         attributes = parse_list_string_in_json(json, "attributes");
         rewards = parse_list_string_in_json(json, "rewards");
 
-        final JSONObject minion_json = json.optJSONObject("minion"), messages_json = json.getJSONObject("messages");
+        final JSONObject minion_json = parse_json_in_json(json, "minion", null), messages_json = parse_json_in_json(json, "messages");
         if(minion_json != null) {
             final String minion_type = parse_string_in_json(minion_json, "type").toUpperCase(), minion_name = parse_string_in_json(minion_json, "name");
             final List<String> minion_attributes = parse_list_string_in_json(minion_json, "attributes");
@@ -67,7 +67,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
             }
         }
 
-        final JSONObject scoreboard_json = json.getJSONObject("scoreboard");
+        final JSONObject scoreboard_json = parse_json_in_json(json, "scoreboard");
         scoreboard = SCOREBOARD_MANAGER.getNewScoreboard();
         scoreboard.registerNewObjective("dummy", "dummy");
         final Objective o = scoreboard.getObjective("dummy");
@@ -83,7 +83,7 @@ public final class FileCustomBoss extends RPSpawnableSpigot implements CustomBos
         this.scores = scores;
 
         attacks = new ArrayList<>();
-        final JSONObject attacks_json = json.optJSONObject("attacks", new JSONObject());
+        final JSONObject attacks_json = parse_json_in_json(json, "attacks");
         final Iterator<String> attack_keys = attacks_json.keys();
         for(; attack_keys.hasNext(); ) {
             String s = attack_keys.next();

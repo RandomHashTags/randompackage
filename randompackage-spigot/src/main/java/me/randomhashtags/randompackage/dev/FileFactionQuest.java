@@ -21,7 +21,7 @@ public class FileFactionQuest extends RPAddonSpigot implements FactionQuest {
         lore = parse_list_string_in_json(json, "lore");
         rewards = parse_list_string_in_json(json, "rewards");
         attributes = parse_list_string_in_json(json, "attributes");
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         name = parse_multilingual_string_in_json(settings_json, "name");
         completion = parse_big_decimal_in_json(settings_json, "completion");
         register(Feature.FACTION_QUEST, this);

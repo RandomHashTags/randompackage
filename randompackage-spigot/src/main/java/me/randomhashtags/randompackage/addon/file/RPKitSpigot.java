@@ -20,15 +20,15 @@ public abstract class RPKitSpigot extends RPAddonSpigot implements CustomKit {
     public RPKitSpigot(@Nullable File file) {
         super(file);
         final JSONObject json = parse_json_from_file(file);
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         max_level = parse_int_in_json(settings_json, "max level");
         cooldown = parse_long_in_json(settings_json, "cooldown");
         fallen_hero = getFallenHero(parse_string_in_json(settings_json, "fallen hero"));
-        final JSONObject gui_settings_json = json.getJSONObject("gui settings");
+        final JSONObject gui_settings_json = parse_json_in_json(json, "gui settings");
         slot = parse_int_in_json(gui_settings_json, "slot");
 
         items = new ArrayList<>();
-        final JSONObject items_json = json.getJSONObject("items");
+        final JSONObject items_json = parse_json_in_json(json, "items");
         for(String i : items_json.keySet()) {
             final JSONObject item_json = items_json.getJSONObject(i);
             final String t = item_json.optString("item");

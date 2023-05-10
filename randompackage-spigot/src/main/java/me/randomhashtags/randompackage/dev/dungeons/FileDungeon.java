@@ -26,15 +26,15 @@ public abstract class FileDungeon extends RPAddonSpigot implements Dungeon {
         key = create_item_stack(json, "key");
         portal = create_item_stack(json, "portal");
 
-        final JSONObject lootbag_json = json.getJSONObject("lootbag");
+        final JSONObject lootbag_json = parse_json_in_json(json, "lootbag");
         lootbag = create_item_stack(json, "lootbag");
         lootbag_rewards = parse_list_string_in_json(lootbag_json, "rewards");
 
-        final JSONObject gui_json = json.getJSONObject("gui");
+        final JSONObject gui_json = parse_json_in_json(json, "gui");
         slot = parse_int_in_json(gui_json, "slot");
         key_locked = create_item_stack(gui_json, "key locked");
 
-        final JSONObject settings_json = json.getJSONObject("settings");
+        final JSONObject settings_json = parse_json_in_json(json, "settings");
         warp_location = string_to_location(parse_string_in_json(settings_json, "warp location"));
 
         register(Feature.DUNGEON, this);

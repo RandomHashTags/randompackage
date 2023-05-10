@@ -26,7 +26,7 @@ public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 		super(f);
 
 		final JSONObject json = parse_json_from_file(f);
-		final JSONObject messages_json = json.getJSONObject("messages");
+		final JSONObject messages_json = parse_json_in_json(json, "messages");
 		split_msg = parse_list_string_in_json(messages_json, "split");
 		toggle_on = parse_list_string_in_json(messages_json, "toggle on");
 		final JSONObject toggle_off_messages = messages_json.getJSONObject("toggle off");
@@ -37,14 +37,14 @@ public final class FileRarityGem extends RPAddonSpigot implements RarityGem {
 
 		item = create_item_stack(json, "item");
 
-		final JSONObject settings_json = json.getJSONObject("settings");
+		final JSONObject settings_json = parse_json_in_json(json, "settings");
 		time_between_same_kills = parse_long_in_json(settings_json, "time between same kills", 18000);
 		worksFor = new ArrayList<>();
 		final String[] works_for_rarities = parse_string_in_json(settings_json, "works for rarities").split(";");
 		for(String s : works_for_rarities) {
 			worksFor.add(getCustomEnchantRarity(s));
 		}
-		final JSONObject colors_json = json.optJSONObject("colors");
+		final JSONObject colors_json = parse_json_in_json(json, "colors", null);
 		if(colors_json != null) {
 			colors = new HashMap<>();
 			final String _else = parse_string_in_json(colors_json, "else"), less_than_100 = parse_string_in_json(colors_json, "less than 100");

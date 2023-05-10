@@ -25,7 +25,7 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 		name = parse_multilingual_string_in_json(json, "name");
 		armor_lore = parse_list_string_in_json(json, "armor lore");
 		crystal_perks = parse_list_string_in_json(json, "crystal perks");
-		final JSONObject attributes_json = json.getJSONObject("attributes");
+		final JSONObject attributes_json = parse_json_in_json(json, "attributes");
 		armor_attributes = parse_list_string_in_json(attributes_json, "armor");
 		crystal_attributes = parse_list_string_in_json(attributes_json, "crystal");
 		activate_message = parse_list_string_in_json(json, "activate msg");
@@ -37,7 +37,7 @@ public final class FileArmorSet extends RPAddonSpigot implements ArmorSet {
 		boots = create_item_stack(json, "boots");
 
 		weapons = new ArrayList<>();
-		final JSONObject weapons_json = json.optJSONObject("weapons");
+		final JSONObject weapons_json = parse_json_in_json(json, "weapons");
 		if(weapons_json != null) {
 			for(String s : weapons_json.keySet()) {
 				final JSONObject weapon_json = weapons_json.getJSONObject(s);

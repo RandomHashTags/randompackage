@@ -36,10 +36,10 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 		selected = create_item_stack(json, "selected");
 		revealSlotRarity = create_item_stack(json, "reveal slot rarity");
 
-		final JSONObject display_json = json.getJSONObject("display");
+		final JSONObject display_json = parse_json_in_json(json, "display");
 		display_rarity = parse_string_in_json(display_json, "rarity");
 
-		final JSONObject settings_json = json.getJSONObject("settings");
+		final JSONObject settings_json = parse_json_in_json(json, "settings");
 		redeemable_items = parse_int_in_json(settings_json, "redeemable items");
 		format = parse_list_string_in_json(settings_json, "format");
 		background = create_item_stack(settings_json, "background");
@@ -69,7 +69,7 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 		}
 
 		revealChances = new LinkedHashMap<>();
-		final JSONObject reveal_chances_json = json.getJSONObject("reveal chances");
+		final JSONObject reveal_chances_json = parse_json_in_json(json, "reveal chances");
 		for(String s : reveal_chances_json.keySet()) {
 			revealChances.put(s, parse_int_in_json(reveal_chances_json, s));
 		}
@@ -77,7 +77,7 @@ public final class FileServerCrate extends RPAddonSpigot implements ServerCrate 
 		flare = new FileServerCrateFlareObj(this, json);
 
 		rewards = new HashMap<>();
-		final JSONObject rewards_json = json.getJSONObject("rewards");
+		final JSONObject rewards_json = parse_json_in_json(json, "rewards");
 		for(String s : rewards_json.keySet()) {
 			rewards.put(s, parse_list_string_in_json(rewards_json, s));
 		}
